@@ -1,0 +1,23 @@
+[package]
+name = "ankiforge"
+version = "0.1.0"
+edition = "2021"
+description = "A modern, type-safe library for generating Anki decks (.apkg) compatible with FSRS."
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+rust-version = "1.81"
+repository = "https://github.com/morehardy/anki-forge"
+
+[features]
+default = []
+strict = []
+compat = []
+bench = []
+fuzzing = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[lints.rust]
+unsafe_code = "forbid"
