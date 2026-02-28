@@ -21,4 +21,24 @@ impl Diagnostic {
             severity,
         }
     }
+
+    #[must_use]
+    pub fn error(path: impl Into<String>, reason: impl Into<String>) -> Self {
+        Self::new(path, reason, Severity::Error)
+    }
+
+    #[must_use]
+    pub fn warning(path: impl Into<String>, reason: impl Into<String>) -> Self {
+        Self::new(path, reason, Severity::Warning)
+    }
+
+    #[must_use]
+    pub fn info(path: impl Into<String>, reason: impl Into<String>) -> Self {
+        Self::new(path, reason, Severity::Info)
+    }
+
+    #[must_use]
+    pub const fn is_error(&self) -> bool {
+        matches!(self.severity, Severity::Error)
+    }
 }

@@ -19,6 +19,24 @@ impl Model {
             templates: Vec::new(),
         }
     }
+
+    #[must_use]
+    pub fn with_id(mut self, id: ModelId) -> Self {
+        self.id = id;
+        self
+    }
+
+    #[must_use]
+    pub fn with_field(mut self, field_name: impl Into<String>) -> Self {
+        self.fields.push(field_name.into());
+        self
+    }
+
+    #[must_use]
+    pub fn with_template(mut self, template: Template) -> Self {
+        self.templates.push(template);
+        self
+    }
 }
 
 impl Default for Model {

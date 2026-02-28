@@ -18,6 +18,6 @@ pub mod scheduler;
 pub mod test_support;
 pub mod validate;
 
-pub use crate::error::{AnkiForgeError, Result};
+pub use crate::error::{AnkiForgeError, Result, SpecError};
 pub use crate::options::{BuildMode, BuildOptions, ValidationMode};
 pub use crate::package_builder::PackageBuilder;

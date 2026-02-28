@@ -14,6 +14,12 @@ impl Deck {
             name: name.into(),
         }
     }
+
+    #[must_use]
+    pub fn with_id(mut self, id: DeckId) -> Self {
+        self.id = id;
+        self
+    }
 }
 
 impl Default for Deck {

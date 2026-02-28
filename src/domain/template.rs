@@ -14,4 +14,9 @@ impl Template {
             back: back.into(),
         }
     }
+
+    #[must_use]
+    pub fn basic() -> Self {
+        Self::new("Card 1", "{{Front}}", "{{Back}}")
+    }
 }
