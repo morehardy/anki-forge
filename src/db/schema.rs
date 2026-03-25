@@ -1,1 +1,0 @@
-pub const DEFAULT_SCHEMA_VERSION: i32 = 1;
