@@ -18,6 +18,13 @@ This plan covers a single coherent subsystem: `Phase 1: Foundation Platform`. Do
 - executable verification tooling
 - CI/release automation
 
+## Execution Rules
+
+- `contracts/manifest.yaml` is updated incrementally only. Every manifest snippet below is a patch fragment to merge into the existing file, never a full-file overwrite.
+- All contract asset paths declared inside `contracts/manifest.yaml` are resolved relative to the manifest directory.
+- Tests and tooling must use the same manifest-driven path resolution helpers. Do not hardcode ad hoc `../contracts/...` paths once the resolver exists.
+- Avoid implicit cross-file JSON Schema `$ref` resolution. Use local `$defs` or explicit resolver setup so schema validation remains deterministic.
+
 ## File Structure Map
 
 ### Repository root
@@ -68,6 +75,7 @@ This plan covers a single coherent subsystem: `Phase 1: Foundation Platform`. Do
 - Create: `contract_tools/src/semantics.rs` - semantics document metadata loading and consistency checks
 - Create: `contract_tools/src/registry.rs` - error registry loading and lifecycle checks
 - Create: `contract_tools/src/fixtures.rs` - fixture catalog loading and pairing logic
+- Create: `contract_tools/src/versioning.rs` - compatibility-class and upgrade-rule loading plus evolution-case checks
 - Create: `contract_tools/src/gates.rs` - top-level verification gates
 - Create: `contract_tools/src/package.rs` - bundle packaging and artifact manifesting
 - Create: `contract_tools/src/summary.rs` - change and compatibility summary rendering
@@ -76,6 +84,7 @@ This plan covers a single coherent subsystem: `Phase 1: Foundation Platform`. Do
 - Create: `contract_tools/tests/schema_gate_tests.rs` - schema integrity tests
 - Create: `contract_tools/tests/registry_gate_tests.rs` - registry consistency tests
 - Create: `contract_tools/tests/fixture_gate_tests.rs` - fixture conformance tests
+- Create: `contract_tools/tests/versioning_gate_tests.rs` - compatibility-class and evolution-case tests
 - Create: `contract_tools/tests/cli_tests.rs` - internal CLI tests
 - Create: `contract_tools/tests/package_tests.rs` - package artifact tests
 
@@ -107,7 +116,7 @@ This plan covers a single coherent subsystem: `Phase 1: Foundation Platform`. Do
 // contract_tools/tests/workspace_smoke_tests.rs
 #[test]
 fn repository_exposes_a_contract_bundle_entrypoint() {
-    assert!(std::path::Path::new("../contracts/manifest.yaml").exists());
+    assert!(contract_tools::contract_manifest_path().exists());
 }
 ```
 
@@ -147,7 +156,11 @@ edition = "2021"
 
 ```rust
 // contract_tools/src/lib.rs
-pub const CONTRACT_MANIFEST_PATH: &str = "../contracts/manifest.yaml";
+use std::path::PathBuf;
+
+pub fn contract_manifest_path() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../contracts/manifest.yaml")
+}
 ```
 
 ```rust
@@ -218,14 +231,24 @@ git commit -m "chore: bootstrap phase 1 contract workspace"
 
 ```rust
 // contract_tools/tests/manifest_tests.rs
-use contract_tools::manifest::load_manifest;
+use contract_tools::{
+    contract_manifest_path,
+    manifest::{load_manifest, resolve_asset_path},
+};
 
 #[test]
 fn manifest_uses_bundle_version_as_the_only_public_axis() {
-    let manifest = load_manifest("../contracts/manifest.yaml").expect("manifest loads");
-    assert_eq!(manifest.bundle_version, "0.1.0");
-    assert_eq!(manifest.compatibility.public_axis, "bundle_version");
-    assert!(manifest.component_versions.contains_key("schema"));
+    let manifest = load_manifest(contract_manifest_path()).expect("manifest loads");
+    assert_eq!(manifest.data.bundle_version, "0.1.0");
+    assert_eq!(manifest.data.compatibility.public_axis, "bundle_version");
+    assert!(manifest.data.component_versions.contains_key("schema"));
+}
+
+#[test]
+fn manifest_resolves_asset_paths_relative_to_manifest_directory() {
+    let manifest = load_manifest(contract_manifest_path()).expect("manifest loads");
+    let schema_path = resolve_asset_path(&manifest, "manifest_schema").unwrap();
+    assert!(schema_path.ends_with("contracts/schema/manifest.schema.json"));
 }
 ```
 
@@ -239,8 +262,14 @@ Expected: FAIL with unresolved import or missing loader implementation.
 
 ```rust
 // contract_tools/src/manifest.rs
+use anyhow::{Context, ensure};
 use serde::Deserialize;
-use std::{collections::BTreeMap, fs, path::Path};
+use serde_json::Value;
+use std::{
+    collections::BTreeMap,
+    fs,
+    path::{Path, PathBuf},
+};
 
 #[derive(Debug, Deserialize)]
 pub struct Compatibility {
@@ -255,9 +284,37 @@ pub struct Manifest {
     pub assets: BTreeMap<String, String>,
 }
 
-pub fn load_manifest(path: impl AsRef<Path>) -> anyhow::Result<Manifest> {
-    let raw = fs::read_to_string(path)?;
-    Ok(serde_yaml::from_str(&raw)?)
+pub struct LoadedManifest {
+    pub path: PathBuf,
+    pub contracts_root: PathBuf,
+    pub data: Manifest,
+}
+
+pub fn load_manifest(path: impl AsRef<Path>) -> anyhow::Result<LoadedManifest> {
+    let path = path.as_ref().canonicalize()?;
+    let contracts_root = path.parent().context("manifest must live under contracts/")?.to_path_buf();
+    let raw = fs::read_to_string(&path)?;
+
+    let schema_raw = fs::read_to_string(contracts_root.join("schema/manifest.schema.json"))?;
+    let schema: Value = serde_json::from_str(&schema_raw)?;
+    let validator = jsonschema::validator_for(&schema)?;
+    let yaml_value: serde_yaml::Value = serde_yaml::from_str(&raw)?;
+    let json_value = serde_json::to_value(yaml_value)?;
+    validator.validate(&json_value)?;
+
+    let data: Manifest = serde_yaml::from_str(&raw)?;
+    let loaded = LoadedManifest { path, contracts_root, data };
+    for key in loaded.data.assets.keys() {
+        let _ = resolve_asset_path(&loaded, key)?;
+    }
+    Ok(loaded)
+}
+
+pub fn resolve_asset_path(manifest: &LoadedManifest, key: &str) -> anyhow::Result<PathBuf> {
+    let rel = manifest.data.assets.get(key).context("missing asset key")?;
+    let path = manifest.contracts_root.join(rel);
+    ensure!(path.exists(), "asset path does not exist: {}", path.display());
+    Ok(path)
 }
 ```
 
@@ -265,7 +322,9 @@ pub fn load_manifest(path: impl AsRef<Path>) -> anyhow::Result<Manifest> {
 # contract_tools/Cargo.toml
 [dependencies]
 anyhow = "1"
+jsonschema = "0.18"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 serde_yaml = "0.9"
 
 [dev-dependencies]
@@ -305,10 +364,10 @@ component_versions:
 compatibility:
   public_axis: bundle_version
 assets:
-  manifest_schema: contracts/schema/manifest.schema.json
-  version_policy: contracts/versioning/policy.md
-  compatibility_classes: contracts/versioning/compatibility-classes.yaml
-  upgrade_rules: contracts/versioning/upgrade-rules.yaml
+  manifest_schema: schema/manifest.schema.json
+  version_policy: versioning/policy.md
+  compatibility_classes: versioning/compatibility-classes.yaml
+  upgrade_rules: versioning/upgrade-rules.yaml
 ```
 
 ```yaml
@@ -361,12 +420,17 @@ git commit -m "feat: add bundle manifest and versioning assets"
 
 ```rust
 // contract_tools/tests/schema_gate_tests.rs
-use contract_tools::schema::{load_schema, validate_value};
+use contract_tools::{
+    contract_manifest_path,
+    manifest::{load_manifest, resolve_asset_path},
+    schema::{load_schema, validate_value},
+};
 use serde_json::json;
 
 #[test]
 fn authoring_ir_schema_accepts_the_minimal_valid_shape() {
-    let schema = load_schema("../contracts/schema/authoring-ir.schema.json").unwrap();
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema = load_schema(resolve_asset_path(&manifest, "authoring_ir_schema").unwrap()).unwrap();
     let value = json!({
         "kind": "authoring-ir",
         "schema_version": "0.1.0",
@@ -379,7 +443,8 @@ fn authoring_ir_schema_accepts_the_minimal_valid_shape() {
 
 #[test]
 fn validation_report_schema_requires_a_diagnostics_array() {
-    let schema = load_schema("../contracts/schema/validation-report.schema.json").unwrap();
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema = load_schema(resolve_asset_path(&manifest, "validation_report_schema").unwrap()).unwrap();
     let value = json!({ "kind": "validation-report", "status": "invalid" });
     assert!(validate_value(&schema, &value).is_err());
 }
@@ -420,7 +485,7 @@ pub fn run_schema_gates(manifest_path: &str) -> anyhow::Result<()> {
         "service_envelope_schema",
         "error_registry_schema"
     ] {
-        let path = manifest.assets.get(key).context("missing schema asset in manifest")?;
+        let path = manifest.data.assets.get(key).context("missing schema asset in manifest")?;
         load_schema(path)?;
     }
     Ok(())
@@ -479,13 +544,25 @@ jsonschema = "0.18"
 // contracts/schema/validation-report.schema.json
 {
   "type": "object",
+  "$defs": {
+    "diagnostic_item": {
+      "type": "object",
+      "required": ["level", "code", "path", "message"],
+      "properties": {
+        "level": { "enum": ["warning", "error"] },
+        "code": { "type": "string" },
+        "path": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  },
   "required": ["kind", "status", "diagnostics"],
   "properties": {
     "kind": { "const": "validation-report" },
     "status": { "enum": ["valid", "invalid"] },
     "diagnostics": {
       "type": "array",
-      "items": { "$ref": "diagnostic-item.schema.json" }
+      "items": { "$ref": "#/$defs/diagnostic_item" }
     }
   }
 }
@@ -531,15 +608,15 @@ jsonschema = "0.18"
 ```yaml
 # contracts/manifest.yaml
 assets:
-  manifest_schema: contracts/schema/manifest.schema.json
-  version_policy: contracts/versioning/policy.md
-  compatibility_classes: contracts/versioning/compatibility-classes.yaml
-  upgrade_rules: contracts/versioning/upgrade-rules.yaml
-  authoring_ir_schema: contracts/schema/authoring-ir.schema.json
-  diagnostic_item_schema: contracts/schema/diagnostic-item.schema.json
-  validation_report_schema: contracts/schema/validation-report.schema.json
-  service_envelope_schema: contracts/schema/service-envelope.schema.json
-  error_registry_schema: contracts/schema/error-registry.schema.json
+  manifest_schema: schema/manifest.schema.json
+  version_policy: versioning/policy.md
+  compatibility_classes: versioning/compatibility-classes.yaml
+  upgrade_rules: versioning/upgrade-rules.yaml
+  authoring_ir_schema: schema/authoring-ir.schema.json
+  diagnostic_item_schema: schema/diagnostic-item.schema.json
+  validation_report_schema: schema/validation-report.schema.json
+  service_envelope_schema: schema/service-envelope.schema.json
+  error_registry_schema: schema/error-registry.schema.json
 ```
 
 Run: `cargo test -p contract_tools --test schema_gate_tests -v`
@@ -576,20 +653,26 @@ git commit -m "feat: add phase 1 core contract schemas"
 
 ```rust
 // contract_tools/tests/registry_gate_tests.rs
-use contract_tools::registry::load_registry;
-use contract_tools::semantics::load_semantics_doc;
+use contract_tools::{
+    contract_manifest_path,
+    manifest::{load_manifest, resolve_asset_path},
+    registry::load_registry,
+    semantics::load_semantics_doc,
+};
 
 #[test]
 fn error_registry_codes_are_unique_and_lifecycle_states_are_known() {
-    let registry = load_registry("../contracts/errors/error-registry.yaml").unwrap();
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let registry = load_registry(resolve_asset_path(&manifest, "error_registry").unwrap()).unwrap();
     assert!(registry.codes.iter().any(|code| code.id == "AF0001"));
     assert!(registry.codes.iter().all(|code| matches!(code.status.as_str(), "active" | "deprecated" | "removed")));
 }
 
 #[test]
 fn semantics_docs_declare_asset_references() {
-    let doc = load_semantics_doc("../contracts/semantics/path-conventions.md").unwrap();
-    assert!(doc.asset_refs.iter().any(|item| item == "contracts/schema/diagnostic-item.schema.json"));
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let doc = load_semantics_doc(resolve_asset_path(&manifest, "path_semantics").unwrap()).unwrap();
+    assert!(doc.asset_refs.iter().any(|item| item == "schema/diagnostic-item.schema.json"));
 }
 ```
 
@@ -625,7 +708,7 @@ pub fn load_registry(path: impl AsRef<Path>) -> anyhow::Result<ErrorRegistry> {
 
 pub fn run_registry_gates(manifest_path: &str) -> anyhow::Result<()> {
     let manifest = crate::manifest::load_manifest(manifest_path)?;
-    let registry_path = manifest.assets.get("error_registry").expect("manifest includes error_registry");
+    let registry_path = manifest.data.assets.get("error_registry").expect("manifest includes error_registry");
     let registry = load_registry(registry_path)?;
     anyhow::ensure!(!registry.codes.is_empty(), "registry must contain at least one error code");
     Ok(())
@@ -634,6 +717,7 @@ pub fn run_registry_gates(manifest_path: &str) -> anyhow::Result<()> {
 
 ```rust
 // contract_tools/src/semantics.rs
+use anyhow::Context;
 use std::{fs, path::Path};
 
 #[derive(Debug)]
@@ -655,13 +739,27 @@ pub fn load_semantics_doc(path: impl AsRef<Path>) -> anyhow::Result<SemanticsDoc
         .collect();
     Ok(SemanticsDoc { asset_refs: refs })
 }
+
+pub fn run_semantics_gates(manifest_path: &str) -> anyhow::Result<()> {
+    let manifest = crate::manifest::load_manifest(manifest_path)?;
+    for key in ["validation_semantics", "path_semantics", "compatibility_semantics"] {
+        let doc = load_semantics_doc(crate::manifest::resolve_asset_path(&manifest, key)?)?;
+        for asset_ref in doc.asset_refs {
+            let asset_path = manifest.contracts_root.join(&asset_ref);
+            anyhow::ensure!(asset_path.exists(), "semantic asset ref missing: {}", asset_ref);
+        }
+    }
+    let _ = manifest.data.assets.get("compatibility_classes").context("missing compatibility_classes asset")?;
+    let _ = manifest.data.assets.get("upgrade_rules").context("missing upgrade_rules asset")?;
+    Ok(())
+}
 ```
 
 ```markdown
 <!-- contracts/semantics/path-conventions.md -->
 ---
 asset_refs:
-  - contracts/schema/diagnostic-item.schema.json
+  - schema/diagnostic-item.schema.json
 ---
 
 # Path Conventions
@@ -685,10 +783,10 @@ codes:
 ```yaml
 # contracts/manifest.yaml
 assets:
-  error_registry: contracts/errors/error-registry.yaml
-  validation_semantics: contracts/semantics/validation.md
-  path_semantics: contracts/semantics/path-conventions.md
-  compatibility_semantics: contracts/semantics/compatibility.md
+  error_registry: errors/error-registry.yaml
+  validation_semantics: semantics/validation.md
+  path_semantics: semantics/path-conventions.md
+  compatibility_semantics: semantics/compatibility.md
 ```
 
 ```markdown
@@ -734,14 +832,19 @@ git commit -m "feat: add semantics, registry, and governance assets"
 
 ```rust
 // contract_tools/tests/fixture_gate_tests.rs
-use contract_tools::fixtures::load_fixture_catalog;
+use contract_tools::{
+    contract_manifest_path,
+    fixtures::load_fixture_catalog,
+    manifest::{load_manifest, resolve_asset_path},
+};
 
 #[test]
 fn fixture_catalog_pairs_invalid_inputs_with_expected_reports() {
-    let catalog = load_fixture_catalog("../contracts/fixtures/index.yaml").unwrap();
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let catalog = load_fixture_catalog(resolve_asset_path(&manifest, "fixture_catalog").unwrap()).unwrap();
     let case = catalog.cases.iter().find(|case| case.id == "missing-document-id").unwrap();
-    assert_eq!(case.input, "contracts/fixtures/invalid/missing-document-id.json");
-    assert_eq!(case.expected, Some("contracts/fixtures/expected/missing-document-id.report.json".into()));
+    assert_eq!(case.input, "fixtures/invalid/missing-document-id.json");
+    assert_eq!(case.expected, Some("fixtures/expected/missing-document-id.report.json".into()));
 }
 ```
 
@@ -764,6 +867,8 @@ pub struct FixtureCase {
     pub input: String,
     pub expected: Option<String>,
     pub category: String,
+    pub compatibility_class: Option<String>,
+    pub upgrade_rules: Option<Vec<String>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -778,9 +883,14 @@ pub fn load_fixture_catalog(path: impl AsRef<Path>) -> anyhow::Result<FixtureCat
 
 pub fn run_fixture_gates(manifest_path: &str) -> anyhow::Result<()> {
     let manifest = crate::manifest::load_manifest(manifest_path)?;
-    let fixture_catalog = manifest.assets.get("fixture_catalog").expect("manifest includes fixture_catalog");
+    let fixture_catalog = crate::manifest::resolve_asset_path(&manifest, "fixture_catalog")?;
     let catalog = load_fixture_catalog(fixture_catalog)?;
     anyhow::ensure!(!catalog.cases.is_empty(), "fixture catalog must not be empty");
+    anyhow::ensure!(
+        catalog.cases.iter().any(|case| case.id == "additive-compatible") &&
+        catalog.cases.iter().any(|case| case.id == "incompatible-path-change"),
+        "fixture catalog must include compatible and incompatible evolution cases"
+    );
     Ok(())
 }
 ```
@@ -792,17 +902,24 @@ pub fn run_fixture_gates(manifest_path: &str) -> anyhow::Result<()> {
 cases:
   - id: minimal-authoring-ir
     category: valid
-    input: contracts/fixtures/valid/minimal-authoring-ir.json
+    input: fixtures/valid/minimal-authoring-ir.json
   - id: missing-document-id
     category: invalid
-    input: contracts/fixtures/invalid/missing-document-id.json
-    expected: contracts/fixtures/expected/missing-document-id.report.json
+    input: fixtures/invalid/missing-document-id.json
+    expected: fixtures/expected/missing-document-id.report.json
   - id: minimal-service-envelope
     category: service-envelope
-    input: contracts/fixtures/service-envelope/minimal-success.json
+    input: fixtures/service-envelope/minimal-success.json
   - id: additive-compatible
     category: evolution
-    input: contracts/fixtures/evolution/additive-compatible.yaml
+    compatibility_class: additive_compatible
+    upgrade_rules: [fixture_updates_required]
+    input: fixtures/evolution/additive-compatible.yaml
+  - id: incompatible-path-change
+    category: evolution
+    compatibility_class: behavior_changing_incompatible
+    upgrade_rules: [migration_notes_required, executable_checks_required]
+    input: fixtures/evolution/incompatible-path-change.yaml
 ```
 
 ```json
@@ -835,7 +952,7 @@ cases:
 ```yaml
 # contracts/manifest.yaml
 assets:
-  fixture_catalog: contracts/fixtures/index.yaml
+  fixture_catalog: fixtures/index.yaml
 ```
 
 - [ ] **Step 5: Run fixture tests and the full test suite**
@@ -861,8 +978,10 @@ git commit -m "feat: add normative phase 1 fixtures"
 - Modify: `contract_tools/Cargo.toml`
 - Create: `contract_tools/src/gates.rs`
 - Create: `contract_tools/src/summary.rs`
+- Create: `contract_tools/src/versioning.rs`
 - Modify: `contract_tools/src/main.rs`
 - Modify: `contract_tools/src/lib.rs`
+- Create: `contract_tools/tests/versioning_gate_tests.rs`
 - Create: `contract_tools/tests/cli_tests.rs`
 
 - [ ] **Step 1: Write the failing CLI verification tests**
@@ -875,9 +994,19 @@ use assert_cmd::Command;
 fn verify_command_succeeds_for_the_repo_contract_bundle() {
     Command::cargo_bin("contract_tools")
         .unwrap()
-        .args(["verify", "--manifest", "contracts/manifest.yaml"])
+        .args(["verify", "--manifest", contract_tools::contract_manifest_path().to_str().unwrap()])
         .assert()
         .success();
+}
+```
+
+```rust
+// contract_tools/tests/versioning_gate_tests.rs
+use contract_tools::{contract_manifest_path, versioning::run_versioning_gates};
+
+#[test]
+fn versioning_gates_accept_known_evolution_classes_and_rules() {
+    run_versioning_gates(contract_manifest_path().to_str().unwrap()).unwrap();
 }
 ```
 
@@ -886,6 +1015,10 @@ fn verify_command_succeeds_for_the_repo_contract_bundle() {
 Run: `cargo test -p contract_tools --test cli_tests -v`
 
 Expected: FAIL because the CLI does not expose the `verify` command yet.
+
+Run: `cargo test -p contract_tools --test versioning_gate_tests -v`
+
+Expected: FAIL because semantics/versioning/evolution verification is not implemented yet.
 
 - [ ] **Step 3: Implement verification gates and the internal CLI**
 
@@ -922,8 +1055,10 @@ fn main() -> anyhow::Result<()> {
 pub fn run_all(manifest_path: &str) -> anyhow::Result<()> {
     super::manifest::load_manifest(manifest_path)?;
     super::schema::run_schema_gates(manifest_path)?;
+    super::semantics::run_semantics_gates(manifest_path)?;
     super::registry::run_registry_gates(manifest_path)?;
     super::fixtures::run_fixture_gates(manifest_path)?;
+    super::versioning::run_versioning_gates(manifest_path)?;
     Ok(())
 }
 ```
@@ -934,8 +1069,60 @@ pub fn render(manifest_path: &str) -> anyhow::Result<String> {
     let manifest = crate::manifest::load_manifest(manifest_path)?;
     Ok(format!(
         "bundle_version: {}\npublic_axis: {}",
-        manifest.bundle_version, manifest.compatibility.public_axis
+        manifest.data.bundle_version, manifest.data.compatibility.public_axis
     ))
+}
+```
+
+```rust
+// contract_tools/src/versioning.rs
+use serde::Deserialize;
+use std::{collections::BTreeSet, fs};
+
+#[derive(Debug, Deserialize)]
+pub struct CompatibilityClasses {
+    pub classes: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpgradeRules {
+    pub rules: Vec<UpgradeRule>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpgradeRule {
+    pub id: String,
+}
+
+pub fn run_versioning_gates(manifest_path: &str) -> anyhow::Result<()> {
+    let manifest = crate::manifest::load_manifest(manifest_path)?;
+    let classes: CompatibilityClasses = serde_yaml::from_str(&fs::read_to_string(
+        crate::manifest::resolve_asset_path(&manifest, "compatibility_classes")?,
+    )?)?;
+    let rules: UpgradeRules = serde_yaml::from_str(&fs::read_to_string(
+        crate::manifest::resolve_asset_path(&manifest, "upgrade_rules")?,
+    )?)?;
+    let catalog = crate::fixtures::load_fixture_catalog(
+        crate::manifest::resolve_asset_path(&manifest, "fixture_catalog")?,
+    )?;
+
+    let class_ids = classes.classes.iter().map(String::as_str).collect::<BTreeSet<_>>();
+    let rule_ids = rules.rules.iter().map(|rule| rule.id.as_str()).collect::<BTreeSet<_>>();
+
+    for case in catalog.cases.iter().filter(|case| case.category == "evolution") {
+        let class_id = case.compatibility_class.as_deref().expect("evolution cases require compatibility_class");
+        anyhow::ensure!(class_ids.contains(class_id), "unknown compatibility class: {class_id}");
+        for rule_id in case.upgrade_rules.clone().unwrap_or_default() {
+            anyhow::ensure!(rule_ids.contains(rule_id.as_str()), "unknown upgrade rule: {rule_id}");
+        }
+    }
+
+    anyhow::ensure!(
+        catalog.cases.iter().any(|case| case.compatibility_class.as_deref() == Some("additive_compatible")) &&
+        catalog.cases.iter().any(|case| case.compatibility_class.as_deref() == Some("behavior_changing_incompatible")),
+        "catalog must include both compatible and incompatible evolution examples"
+    );
+    Ok(())
 }
 ```
 
@@ -973,14 +1160,14 @@ Expected: PASS
 
 - [ ] **Step 5: Run a repository-level verify command**
 
-Run: `cargo run -p contract_tools -- verify --manifest contracts/manifest.yaml`
+Run: `cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"`
 
 Expected: exit code `0` with a short verification success summary.
 
 - [ ] **Step 6: Commit the verification library and CLI**
 
 ```bash
-git add contract_tools/Cargo.toml contract_tools/src/gates.rs contract_tools/src/summary.rs contract_tools/src/main.rs contract_tools/src/lib.rs contract_tools/tests/cli_tests.rs
+git add contract_tools/Cargo.toml contract_tools/src/gates.rs contract_tools/src/summary.rs contract_tools/src/versioning.rs contract_tools/src/main.rs contract_tools/src/lib.rs contract_tools/tests/versioning_gate_tests.rs contract_tools/tests/cli_tests.rs
 git commit -m "feat: add contract verification cli"
 ```
 
@@ -1008,7 +1195,7 @@ use tempfile::tempdir;
 #[test]
 fn package_command_emits_a_bundle_artifact_with_manifest_and_contract_assets() {
     let dir = tempdir().unwrap();
-    contract_tools::package::build_artifact("contracts/manifest.yaml", dir.path()).unwrap();
+    contract_tools::package::build_artifact(contract_tools::contract_manifest_path().to_str().unwrap(), dir.path()).unwrap();
     let artifact = dir.path().join("anki-forge-contract-bundle-0.1.0.tar.gz");
     let file = File::open(artifact).unwrap();
     let mut archive = Archive::new(GzDecoder::new(file));
@@ -1040,13 +1227,14 @@ enum Commands {
 // contract_tools/src/package.rs
 pub fn build_artifact(manifest_path: &str, out_dir: &std::path::Path) -> anyhow::Result<()> {
     let manifest = crate::manifest::load_manifest(manifest_path)?;
-    let out = out_dir.join(format!("anki-forge-contract-bundle-{}.tar.gz", manifest.bundle_version));
+    let out = out_dir.join(format!("anki-forge-contract-bundle-{}.tar.gz", manifest.data.bundle_version));
     let file = std::fs::File::create(out)?;
     let encoder = flate2::write::GzEncoder::new(file, flate2::Compression::default());
     let mut builder = tar::Builder::new(encoder);
-    builder.append_path(manifest_path)?;
-    for asset_path in manifest.assets.values() {
-        builder.append_path(asset_path)?;
+    builder.append_path_with_name(&manifest.path, "contracts/manifest.yaml")?;
+    for asset_path in manifest.data.assets.values() {
+        let source = manifest.contracts_root.join(asset_path);
+        builder.append_path_with_name(&source, format!("contracts/{asset_path}"))?;
     }
     builder.finish()?;
     Ok(())
@@ -1091,7 +1279,7 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy -p contract_tools --all-targets -- -D warnings
       - run: cargo test -p contract_tools
-      - run: cargo run -p contract_tools -- verify --manifest contracts/manifest.yaml
+      - run: cargo run -p contract_tools -- verify --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
 ```
 
 ```yaml
@@ -1107,7 +1295,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo run -p contract_tools -- package --manifest contracts/manifest.yaml --out-dir dist
+      - run: cargo run -p contract_tools -- package --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml" --out-dir dist
 ```
 
 - [ ] **Step 5: Run packaging and the full repository verification sequence**
@@ -1128,7 +1316,7 @@ Run: `cargo test -p contract_tools -v`
 
 Expected: PASS
 
-Run: `cargo run -p contract_tools -- package --manifest contracts/manifest.yaml --out-dir dist`
+Run: `cargo run -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yaml" --out-dir dist`
 
 Expected: package artifact created in `dist/`
 
@@ -1147,6 +1335,7 @@ git commit -m "feat: add contract packaging and ci workflows"
 - Modify: `docs/process/contract-change-policy.md`
 - Create: `docs/superpowers/checklists/phase-1-exit-evidence.md`
 - Modify: `.github/workflows/contract-ci.yml`
+- Modify: `contract_tools/src/summary.rs`
 
 - [ ] **Step 1: Write the failing readiness smoke check**
 
@@ -1158,11 +1347,13 @@ fn summary_command_prints_bundle_version_and_public_axis() {
 
     Command::cargo_bin("contract_tools")
         .unwrap()
-        .args(["summary", "--manifest", "contracts/manifest.yaml"])
+        .args(["summary", "--manifest", contract_tools::contract_manifest_path().to_str().unwrap()])
         .assert()
         .success()
         .stdout(predicates::str::contains("bundle_version: 0.1.0"))
-        .stdout(predicates::str::contains("public_axis: bundle_version"));
+        .stdout(predicates::str::contains("public_axis: bundle_version"))
+        .stdout(predicates::str::contains("component_versions:"))
+        .stdout(predicates::str::contains("fixture_catalog: fixtures/index.yaml"));
 }
 ```
 
@@ -1170,9 +1361,31 @@ fn summary_command_prints_bundle_version_and_public_axis() {
 
 Run: `cargo test -p contract_tools --test cli_tests summary_command_prints_bundle_version_and_public_axis -v`
 
-Expected: FAIL until the summary output is stable and the evidence docs exist.
+Expected: FAIL because Task 6 summary output does not yet include component versions or key asset entries.
 
 - [ ] **Step 3: Stabilize release evidence and exit-criteria documentation**
+
+```rust
+// contract_tools/src/summary.rs
+pub fn render(manifest_path: &str) -> anyhow::Result<String> {
+    let manifest = crate::manifest::load_manifest(manifest_path)?;
+    let component_versions = manifest
+        .data
+        .component_versions
+        .iter()
+        .map(|(name, version)| format!("{name}={version}"))
+        .collect::<Vec<_>>()
+        .join(", ");
+
+    Ok(format!(
+        "bundle_version: {}\npublic_axis: {}\ncomponent_versions: {}\nfixture_catalog: {}",
+        manifest.data.bundle_version,
+        manifest.data.compatibility.public_axis,
+        component_versions,
+        manifest.data.assets.get("fixture_catalog").cloned().unwrap_or_default()
+    ))
+}
+```
 
 ```markdown
 # docs/superpowers/checklists/phase-1-exit-evidence.md
@@ -1181,7 +1394,7 @@ Expected: FAIL until the summary output is stable and the evidence docs exist.
 - [ ] all schema files validate
 - [ ] registry gates pass
 - [ ] fixture conformance passes
-- [ ] `cargo run -p contract_tools -- verify --manifest contracts/manifest.yaml` passes
+- [ ] `cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"` passes
 - [ ] package artifact can be built
 ```
 
@@ -1192,7 +1405,7 @@ Expected: FAIL until the summary output is stable and the evidence docs exist.
 
 Run:
 
-`cargo run -p contract_tools -- verify --manifest contracts/manifest.yaml`
+`cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"`
 ```
 
 - [ ] **Step 4: Run the full release-readiness sequence**
@@ -1205,14 +1418,14 @@ Run: `cargo test -p contract_tools -v`
 
 Expected: PASS
 
-Run: `cargo run -p contract_tools -- summary --manifest contracts/manifest.yaml`
+Run: `cargo run -p contract_tools -- summary --manifest "$(pwd)/contracts/manifest.yaml"`
 
 Expected: prints bundle version, component versions, and public compatibility axis.
 
 - [ ] **Step 5: Commit the exit-evidence pass**
 
 ```bash
-git add contracts/manifest.yaml README.md docs/process/contract-change-policy.md docs/superpowers/checklists/phase-1-exit-evidence.md .github/workflows/contract-ci.yml contract_tools/tests/cli_tests.rs
+git add contracts/manifest.yaml README.md docs/process/contract-change-policy.md docs/superpowers/checklists/phase-1-exit-evidence.md .github/workflows/contract-ci.yml contract_tools/src/summary.rs contract_tools/tests/cli_tests.rs
 git commit -m "docs: record phase 1 exit evidence"
 ```
 
@@ -1224,9 +1437,9 @@ Run these commands before calling `Phase 1` complete:
 cargo fmt --all -- --check
 cargo clippy -p contract_tools --all-targets -- -D warnings
 cargo test -p contract_tools -v
-cargo run -p contract_tools -- verify --manifest contracts/manifest.yaml
-cargo run -p contract_tools -- summary --manifest contracts/manifest.yaml
-cargo run -p contract_tools -- package --manifest contracts/manifest.yaml --out-dir dist
+cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"
+cargo run -p contract_tools -- summary --manifest "$(pwd)/contracts/manifest.yaml"
+cargo run -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yaml" --out-dir dist
 ```
 
 Expected final state:
