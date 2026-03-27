@@ -14,7 +14,6 @@ The repository is currently at an early stage:
 
 - top-level implementation code is not present on `main`
 - `docs/source/rslib` is the primary reference baseline
-- prior commits already explored a Rust crate layout with `domain`, `validate`, `io`, `guid`, `compat`, and CI workflow skeletons
 
 That means this design must solve two problems at once:
 
