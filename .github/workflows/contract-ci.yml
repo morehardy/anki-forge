@@ -16,3 +16,5 @@ jobs:
       - run: cargo clippy -p contract_tools --all-targets -- -D warnings
       - run: cargo test -p contract_tools -v
       - run: cargo run -p contract_tools -- verify --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
+      - run: cargo run -p contract_tools -- summary --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
+      - run: cargo run -p contract_tools -- package --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml" --out-dir "$GITHUB_WORKSPACE/dist"

@@ -10,3 +10,8 @@ the way contract assets are validated.
 - Keep bundle changes incremental and update the manifest in the same change.
 - Use the contract tooling to validate the bundle after every contract-affecting
   edit.
+- For Phase 1 readiness and release evidence, record the verification commands
+  and outputs in `docs/superpowers/checklists/phase-1-exit-evidence.md`.
+- The release-readiness bar is `verify`, `summary`, and `package` against
+  `contracts/manifest.yaml`; contract-affecting changes should not merge without
+  that evidence path being satisfied.
