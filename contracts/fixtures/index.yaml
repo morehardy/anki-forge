@@ -14,6 +14,10 @@ cases:
     compatibility_class: additive_compatible
     upgrade_rules:
       - fixture_updates_required
+    target_asset: fixtures/index.yaml
+    affected_paths:
+      - fixtures/valid/minimal-authoring-ir.json
+    expected_bundle_bump: minor
     input: fixtures/evolution/additive-compatible.yaml
   - id: incompatible-path-change
     category: evolution
@@ -21,4 +25,9 @@ cases:
     upgrade_rules:
       - migration_notes_required
       - executable_checks_required
+    target_asset: fixtures/index.yaml
+    affected_paths:
+      - fixtures/invalid/missing-document-id.json
+      - fixtures/expected/missing-document-id.report.json
+    expected_bundle_bump: major
     input: fixtures/evolution/incompatible-path-change.yaml

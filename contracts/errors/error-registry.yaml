@@ -1,10 +1,16 @@
 codes:
   - id: AF0001
     status: active
-    summary: manifest self-validation failed
+    summary: document_id is required
   - id: AF0002
     status: active
-    summary: contract-relative path escaped the bundle
+    summary: diagnostics array is required
   - id: AF0003
+    status: active
+    summary: manifest self-validation failed
+  - id: AF0004
+    status: active
+    summary: contract-relative path escaped the bundle
+  - id: AF0005
     status: active
     summary: semantics frontmatter is missing asset references

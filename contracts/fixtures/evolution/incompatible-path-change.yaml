@@ -3,6 +3,8 @@ compatibility_class: behavior_changing_incompatible
 upgrade_rules:
   - migration_notes_required
   - executable_checks_required
-change:
-  kind: incompatible
-  detail: changes a contract path in a way that breaks existing consumers
+target_asset: fixtures/index.yaml
+affected_paths:
+  - fixtures/invalid/missing-document-id.json
+  - fixtures/expected/missing-document-id.report.json
+expected_bundle_bump: major
