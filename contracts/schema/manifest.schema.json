@@ -55,7 +55,11 @@
         "diagnostic_item_schema",
         "validation_report_schema",
         "service_envelope_schema",
-        "error_registry_schema"
+        "error_registry_schema",
+        "error_registry",
+        "validation_semantics",
+        "path_semantics",
+        "compatibility_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -92,6 +96,22 @@
           "minLength": 1
         },
         "error_registry_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "error_registry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compatibility_semantics": {
           "type": "string",
           "minLength": 1
         }

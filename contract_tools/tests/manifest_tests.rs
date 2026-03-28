@@ -25,6 +25,8 @@ fn temp_contract_root(label: &str) -> PathBuf {
 fn write_bundle(root: &Path, bundle_version: &str, schema_bundle_version: &str) -> PathBuf {
     fs::create_dir_all(root.join("schema")).expect("create schema dir");
     fs::create_dir_all(root.join("versioning")).expect("create versioning dir");
+    fs::create_dir_all(root.join("errors")).expect("create errors dir");
+    fs::create_dir_all(root.join("semantics")).expect("create semantics dir");
 
     fs::write(root.join("manifest.yaml"), manifest_yaml(bundle_version)).expect("write manifest");
     fs::write(
@@ -43,6 +45,26 @@ fn write_bundle(root: &Path, bundle_version: &str, schema_bundle_version: &str) 
         "rules:\n  - id: migration_notes_required\n",
     )
     .expect("write upgrade rules");
+    fs::write(
+        root.join("errors/error-registry.yaml"),
+        "codes:\n  - id: AF0001\n    status: active\n    summary: example\n",
+    )
+    .expect("write error registry");
+    fs::write(
+        root.join("semantics/validation.md"),
+        "---\nasset_refs:\n  - schema/diagnostic-item.schema.json\n---\n# Validation\n",
+    )
+    .expect("write validation semantics");
+    fs::write(
+        root.join("semantics/path-conventions.md"),
+        "---\nasset_refs:\n  - schema/diagnostic-item.schema.json\n---\n# Path Conventions\n",
+    )
+    .expect("write path semantics");
+    fs::write(
+        root.join("semantics/compatibility.md"),
+        "---\nasset_refs:\n  - versioning/compatibility-classes.yaml\n---\n# Compatibility\n",
+    )
+    .expect("write compatibility semantics");
 
     root.join("manifest.yaml")
 }
@@ -62,6 +84,10 @@ assets:
   version_policy: versioning/policy.md
   compatibility_classes: versioning/compatibility-classes.yaml
   upgrade_rules: versioning/upgrade-rules.yaml
+  error_registry: errors/error-registry.yaml
+  validation_semantics: semantics/validation.md
+  path_semantics: semantics/path-conventions.md
+  compatibility_semantics: semantics/compatibility.md
 "#
     )
 }
@@ -97,13 +123,26 @@ fn manifest_schema(bundle_version: &str) -> String {
             },
             "assets": {
                 "type": "object",
-                "required": ["manifest_schema", "version_policy", "compatibility_classes", "upgrade_rules"],
+                "required": [
+                    "manifest_schema",
+                    "version_policy",
+                    "compatibility_classes",
+                    "upgrade_rules",
+                    "error_registry",
+                    "validation_semantics",
+                    "path_semantics",
+                    "compatibility_semantics"
+                ],
                 "additionalProperties": false,
                 "properties": {
                     "manifest_schema": { "type": "string" },
                     "version_policy": { "type": "string" },
                     "compatibility_classes": { "type": "string" },
-                    "upgrade_rules": { "type": "string" }
+                    "upgrade_rules": { "type": "string" },
+                    "error_registry": { "type": "string" },
+                    "validation_semantics": { "type": "string" },
+                    "path_semantics": { "type": "string" },
+                    "compatibility_semantics": { "type": "string" }
                 }
             }
         }
