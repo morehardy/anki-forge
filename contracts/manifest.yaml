@@ -1,5 +1,13 @@
 bundle_version: "0.1.0"
-component_versions: {}
+component_versions:
+  schema: "0.1.0"
+  fixtures: "0.1.0"
+  service_envelope: "0.1.0"
+  error_registry: "0.1.0"
 compatibility:
   public_axis: bundle_version
-assets: {}
+assets:
+  manifest_schema: schema/manifest.schema.json
+  version_policy: versioning/policy.md
+  compatibility_classes: versioning/compatibility-classes.yaml
+  upgrade_rules: versioning/upgrade-rules.yaml
