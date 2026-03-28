@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["kind", "schema_version", "metadata", "notetypes", "notes"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "authoring-ir"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["document_id"],
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "notetypes": {
+      "type": "array"
+    },
+    "notes": {
+      "type": "array"
+    }
+  }
+}

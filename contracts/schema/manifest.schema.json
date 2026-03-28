@@ -50,7 +50,12 @@
         "manifest_schema",
         "version_policy",
         "compatibility_classes",
-        "upgrade_rules"
+        "upgrade_rules",
+        "authoring_ir_schema",
+        "diagnostic_item_schema",
+        "validation_report_schema",
+        "service_envelope_schema",
+        "error_registry_schema"
       ],
       "additionalProperties": false,
       "properties": {
@@ -67,6 +72,26 @@
           "minLength": 1
         },
         "upgrade_rules": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authoring_ir_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diagnostic_item_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "service_envelope_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "error_registry_schema": {
           "type": "string",
           "minLength": 1
         }

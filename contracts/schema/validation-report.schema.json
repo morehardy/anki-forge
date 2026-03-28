@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "$defs": {
+    "diagnostic_item": {
+      "type": "object",
+      "required": ["level", "code", "path", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "enum": ["warning", "error"]
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "required": ["kind", "status", "diagnostics"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "validation-report"
+    },
+    "status": {
+      "enum": ["valid", "invalid"]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic_item"
+      }
+    }
+  }
+}
