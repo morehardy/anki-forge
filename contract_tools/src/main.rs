@@ -18,6 +18,12 @@ enum Command {
         #[arg(long)]
         manifest: String,
     },
+    Package {
+        #[arg(long)]
+        manifest: String,
+        #[arg(long)]
+        out_dir: String,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
@@ -30,6 +36,10 @@ fn main() -> anyhow::Result<()> {
         }
         Command::Summary { manifest } => {
             println!("{}", contract_tools::summary::render(&manifest)?);
+        }
+        Command::Package { manifest, out_dir } => {
+            let artifact_path = contract_tools::package::build_artifact(&manifest, &out_dir)?;
+            println!("{}", artifact_path.display());
         }
     }
 

@@ -1,8 +1,9 @@
 use std::path::PathBuf;
 
+pub mod fixtures;
 pub mod gates;
 pub mod manifest;
-pub mod fixtures;
+pub mod package;
 pub mod registry;
 pub mod schema;
 pub mod semantics;

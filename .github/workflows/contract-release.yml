@@ -1,0 +1,23 @@
+name: contract-release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy -p contract_tools --all-targets -- -D warnings
+      - run: cargo test -p contract_tools -v
+      - run: cargo run -p contract_tools -- verify --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
+      - id: package
+        run: |
+          artifact_path="$(cargo run --quiet -p contract_tools -- package --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml" --out-dir dist)"
+          echo "artifact_path=$artifact_path" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contract-bundle
+          path: ${{ steps.package.outputs.artifact_path }}

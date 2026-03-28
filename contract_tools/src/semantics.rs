@@ -1,9 +1,6 @@
 use anyhow::{ensure, Context};
 use serde::Deserialize;
-use std::{
-    fs,
-    path::Path,
-};
+use std::{fs, path::Path};
 
 use crate::manifest::{load_manifest, resolve_asset_path, resolve_contract_relative_path};
 
@@ -23,8 +20,13 @@ pub fn load_semantics_doc(path: impl AsRef<Path>) -> anyhow::Result<SemanticsDoc
         .with_context(|| format!("failed to read semantics doc: {}", path.display()))?;
     let frontmatter = extract_frontmatter(&raw)
         .with_context(|| format!("failed to parse semantics frontmatter: {}", path.display()))?;
-    let frontmatter: SemanticsFrontmatter = serde_yaml::from_str(&frontmatter)
-        .with_context(|| format!("semantics frontmatter must be valid YAML: {}", path.display()))?;
+    let frontmatter: SemanticsFrontmatter =
+        serde_yaml::from_str(&frontmatter).with_context(|| {
+            format!(
+                "semantics frontmatter must be valid YAML: {}",
+                path.display()
+            )
+        })?;
 
     Ok(SemanticsDoc {
         asset_refs: frontmatter.asset_refs,
@@ -33,7 +35,11 @@ pub fn load_semantics_doc(path: impl AsRef<Path>) -> anyhow::Result<SemanticsDoc
 
 pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
-    for key in ["validation_semantics", "path_semantics", "compatibility_semantics"] {
+    for key in [
+        "validation_semantics",
+        "path_semantics",
+        "compatibility_semantics",
+    ] {
         let doc_path = resolve_asset_path(&manifest, key)?;
         let doc = load_semantics_doc(&doc_path)
             .with_context(|| format!("failed semantics gate for {}", doc_path.display()))?;
@@ -46,18 +52,23 @@ pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()
 
         for asset_ref in &doc.asset_refs {
             ensure!(
-                manifest.data.assets.values().any(|candidate| candidate == asset_ref),
+                manifest
+                    .data
+                    .assets
+                    .values()
+                    .any(|candidate| candidate == asset_ref),
                 "semantic asset ref must be declared in manifest: {}",
                 asset_ref
             );
-            resolve_contract_relative_path(&manifest.contracts_root, &asset_ref)
-                .with_context(|| {
+            resolve_contract_relative_path(&manifest.contracts_root, asset_ref).with_context(
+                || {
                     format!(
                         "failed to resolve semantics asset reference `{}` from {}",
                         asset_ref,
                         doc_path.display()
                     )
-                })?;
+                },
+            )?;
         }
     }
 
@@ -81,7 +92,10 @@ fn extract_frontmatter(raw: &str) -> anyhow::Result<String> {
         frontmatter.push(line);
     }
 
-    ensure!(found_closing, "semantics docs must end YAML frontmatter with ---");
+    ensure!(
+        found_closing,
+        "semantics docs must end YAML frontmatter with ---"
+    );
 
     Ok(frontmatter.join("\n"))
 }
