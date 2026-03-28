@@ -5,8 +5,8 @@ use serde_json::Value;
 use std::{
     collections::BTreeMap,
     fs,
-    path::{Component, Path, PathBuf},
-    sync::OnceLock,
+    path::{Path, PathBuf},
+    sync::{Mutex, OnceLock},
 };
 
 #[derive(Debug, Deserialize)]
@@ -79,17 +79,33 @@ pub fn load_manifest(path: impl AsRef<Path>) -> anyhow::Result<LoadedManifest> {
 }
 
 fn manifest_schema(schema_path: &Path) -> anyhow::Result<&'static Value> {
-    static MANIFEST_SCHEMA: OnceLock<&'static Value> = OnceLock::new();
+    static MANIFEST_SCHEMAS: OnceLock<Mutex<BTreeMap<PathBuf, &'static Value>>> = OnceLock::new();
 
-    if let Some(schema) = MANIFEST_SCHEMA.get() {
-        return Ok(*schema);
+    let schema_path = schema_path.canonicalize().with_context(|| {
+        format!(
+            "failed to resolve manifest schema: {}",
+            schema_path.display()
+        )
+    })?;
+    let cache = MANIFEST_SCHEMAS.get_or_init(|| Mutex::new(BTreeMap::new()));
+
+    if let Some(schema) = cache
+        .lock()
+        .expect("schema cache poisoned")
+        .get(&schema_path)
+        .copied()
+    {
+        return Ok(schema);
     }
 
-    let schema_raw = fs::read_to_string(schema_path)
+    let schema_raw = fs::read_to_string(&schema_path)
         .with_context(|| format!("failed to read manifest schema: {}", schema_path.display()))?;
     let schema: Value =
         serde_json::from_str(&schema_raw).context("manifest schema must be valid JSON")?;
-    Ok(*MANIFEST_SCHEMA.get_or_init(|| Box::leak(Box::new(schema))))
+    let schema = Box::leak(Box::new(schema));
+
+    let mut cache = cache.lock().expect("schema cache poisoned");
+    Ok(*cache.entry(schema_path).or_insert(schema))
 }
 
 pub fn resolve_contract_relative_path(
@@ -98,6 +114,13 @@ pub fn resolve_contract_relative_path(
 ) -> anyhow::Result<PathBuf> {
     let contracts_root = contracts_root.as_ref();
     let relative = relative.as_ref();
+
+    let contracts_root = contracts_root.canonicalize().with_context(|| {
+        format!(
+            "failed to resolve contracts root: {}",
+            contracts_root.display()
+        )
+    })?;
 
     ensure!(
         !relative.as_os_str().is_empty(),
@@ -108,18 +131,19 @@ pub fn resolve_contract_relative_path(
         "asset path must be relative: {}",
         relative.display()
     );
-    ensure!(
-        relative
-            .components()
-            .all(|component| matches!(component, Component::Normal(_))),
-        "asset path must not escape contracts/: {}",
-        relative.display()
-    );
 
     let path = contracts_root.join(relative);
+    let path = path
+        .canonicalize()
+        .with_context(|| format!("asset path does not exist: {}", path.display()))?;
     ensure!(
-        path.exists(),
-        "asset path does not exist: {}",
+        path.starts_with(&contracts_root),
+        "asset path must stay within contracts/: {}",
+        path.display()
+    );
+    ensure!(
+        path.is_file(),
+        "asset path must resolve to a file: {}",
         path.display()
     );
     Ok(path)
