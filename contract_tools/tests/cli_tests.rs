@@ -41,10 +41,12 @@ fn verify_command_fails_when_manifest_is_missing() {
 
 #[test]
 fn summary_command_prints_bundle_version_and_public_axis() {
+    let manifest = contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+        .expect("repo manifest should load");
     let output = run_cli(&[
         "summary",
         "--manifest",
-        contract_tools::contract_manifest_path().to_str().unwrap(),
+        manifest.path.to_str().unwrap(),
     ]);
 
     assert!(
@@ -58,5 +60,9 @@ fn summary_command_prints_bundle_version_and_public_axis() {
     assert!(stdout.contains("bundle_version: 0.1.0"), "stdout: {stdout}");
     assert!(stdout.contains("public_axis: bundle_version"), "stdout: {stdout}");
     assert!(stdout.contains("component_versions:"), "stdout: {stdout}");
-    assert!(stdout.contains("fixture_catalog: fixtures/index.yaml"), "stdout: {stdout}");
+
+    for (name, asset) in &manifest.data.assets {
+        let entry = format!("  {name}: {asset}");
+        assert!(stdout.contains(&entry), "stdout: {stdout}");
+    }
 }
