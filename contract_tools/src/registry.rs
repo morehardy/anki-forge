@@ -1,11 +1,7 @@
 use anyhow::{ensure, Context};
 use serde::Deserialize;
 use serde_json::Value as JsonValue;
-use std::{
-    collections::HashSet,
-    fs,
-    path::Path,
-};
+use std::{collections::HashSet, fs, path::Path};
 
 use crate::{
     manifest::{load_manifest, resolve_asset_path},
@@ -41,8 +37,12 @@ pub fn run_registry_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()>
 
     let raw = fs::read_to_string(&registry_path)
         .with_context(|| format!("failed to read error registry: {}", registry_path.display()))?;
-    let yaml_value: serde_yaml::Value = serde_yaml::from_str(&raw)
-        .with_context(|| format!("error registry must be valid YAML: {}", registry_path.display()))?;
+    let yaml_value: serde_yaml::Value = serde_yaml::from_str(&raw).with_context(|| {
+        format!(
+            "error registry must be valid YAML: {}",
+            registry_path.display()
+        )
+    })?;
     let json_value: JsonValue = serde_json::to_value(yaml_value).with_context(|| {
         format!(
             "error registry YAML must be convertible to JSON for validation: {}",

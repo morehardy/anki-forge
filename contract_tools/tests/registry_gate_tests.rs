@@ -1,7 +1,5 @@
 use contract_tools::{
-    contract_manifest_path,
-    manifest::load_manifest,
-    registry::run_registry_gates,
+    contract_manifest_path, manifest::load_manifest, registry::run_registry_gates,
     semantics::run_semantics_gates,
 };
 use serde_json::json;
@@ -86,11 +84,8 @@ fn write_bundle(
     fs::create_dir_all(root.join("semantics")).expect("create semantics dir");
 
     fs::write(root.join("manifest.yaml"), manifest_yaml()).expect("write manifest");
-    fs::write(
-        root.join("schema/manifest.schema.json"),
-        manifest_schema(),
-    )
-    .expect("write manifest schema");
+    fs::write(root.join("schema/manifest.schema.json"), manifest_schema())
+        .expect("write manifest schema");
     fs::write(
         root.join("schema/error-registry.schema.json"),
         error_registry_schema(),
@@ -115,9 +110,7 @@ fn write_bundle(
     .expect("write validation semantics");
     fs::write(
         root.join("semantics/path-conventions.md"),
-        format!(
-            "---\nasset_refs:\n  - {semantics_ref}\n---\n# Path Conventions\n"
-        ),
+        format!("---\nasset_refs:\n  - {semantics_ref}\n---\n# Path Conventions\n"),
     )
     .expect("write path semantics");
     fs::write(
@@ -126,7 +119,8 @@ fn write_bundle(
     )
     .expect("write compatibility semantics");
     if include_undeclared_asset {
-        fs::write(root.join(semantics_ref), "# undeclared asset\n").expect("write undeclared asset");
+        fs::write(root.join(semantics_ref), "# undeclared asset\n")
+            .expect("write undeclared asset");
     }
 
     root.join("manifest.yaml")

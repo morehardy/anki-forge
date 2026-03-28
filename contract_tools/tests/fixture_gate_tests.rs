@@ -1,4 +1,6 @@
-use contract_tools::{contract_manifest_path, fixtures::run_fixture_gates, manifest::load_manifest};
+use contract_tools::{
+    contract_manifest_path, fixtures::run_fixture_gates, manifest::load_manifest,
+};
 use serde_json::json;
 use std::{
     fs,
@@ -23,7 +25,9 @@ fn fixture_gates_reject_unknown_error_codes_in_expected_reports() {
     .expect("temp manifest loads");
 
     let err = run_fixture_gates(&manifest.path).expect_err("unknown diagnostic codes should fail");
-    assert!(err.to_string().contains("diagnostic code must exist in registry"));
+    assert!(err
+        .to_string()
+        .contains("diagnostic code must exist in registry"));
 }
 
 #[test]
@@ -69,16 +73,23 @@ fn write_bundle(
     fs::create_dir_all(root.join("fixtures/valid")).expect("create valid fixtures dir");
     fs::create_dir_all(root.join("fixtures/invalid")).expect("create invalid fixtures dir");
     fs::create_dir_all(root.join("fixtures/expected")).expect("create expected fixtures dir");
-    fs::create_dir_all(root.join("fixtures/service-envelope")).expect("create envelope fixtures dir");
+    fs::create_dir_all(root.join("fixtures/service-envelope"))
+        .expect("create envelope fixtures dir");
     fs::create_dir_all(root.join("fixtures/evolution")).expect("create evolution fixtures dir");
 
     fs::write(root.join("manifest.yaml"), manifest_yaml()).expect("write manifest");
     fs::write(root.join("schema/manifest.schema.json"), manifest_schema())
         .expect("write manifest schema");
-    fs::write(root.join("schema/diagnostic-item.schema.json"), diagnostic_item_schema())
-        .expect("write diagnostic item schema");
-    fs::write(root.join("schema/authoring-ir.schema.json"), authoring_ir_schema())
-        .expect("write authoring schema");
+    fs::write(
+        root.join("schema/diagnostic-item.schema.json"),
+        diagnostic_item_schema(),
+    )
+    .expect("write diagnostic item schema");
+    fs::write(
+        root.join("schema/authoring-ir.schema.json"),
+        authoring_ir_schema(),
+    )
+    .expect("write authoring schema");
     fs::write(
         root.join("schema/service-envelope.schema.json"),
         service_envelope_schema(),
@@ -89,16 +100,22 @@ fn write_bundle(
         validation_report_schema(),
     )
     .expect("write validation report schema");
-    fs::write(root.join("schema/error-registry.schema.json"), error_registry_schema())
-        .expect("write error registry schema");
+    fs::write(
+        root.join("schema/error-registry.schema.json"),
+        error_registry_schema(),
+    )
+    .expect("write error registry schema");
     fs::write(root.join("versioning/policy.md"), "# policy\n").expect("write policy");
     fs::write(
         root.join("versioning/compatibility-classes.yaml"),
         compatibility_classes_yaml(),
     )
     .expect("write compatibility classes");
-    fs::write(root.join("versioning/upgrade-rules.yaml"), upgrade_rules_yaml())
-        .expect("write upgrade rules");
+    fs::write(
+        root.join("versioning/upgrade-rules.yaml"),
+        upgrade_rules_yaml(),
+    )
+    .expect("write upgrade rules");
     fs::write(root.join("errors/error-registry.yaml"), registry_yaml).expect("write registry");
     fs::write(
         root.join("semantics/validation.md"),

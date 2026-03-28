@@ -19,21 +19,21 @@ fn versioning_gates_reject_unknown_compatibility_classes() {
     .expect("temp manifest loads");
 
     let err = run_versioning_gates(&manifest.path).expect_err("unknown classes should fail");
-    assert!(err.to_string().contains("unknown compatibility class in evolution fixture"));
+    assert!(err
+        .to_string()
+        .contains("unknown compatibility class in evolution fixture"));
 }
 
 #[test]
 fn versioning_gates_reject_missing_compatible_or_incompatible_coverage() {
-    let manifest = load_manifest(write_bundle(
-        "additive_compatible",
-        "additive_compatible",
-    ))
-    .expect("temp manifest loads");
+    let manifest = load_manifest(write_bundle("additive_compatible", "additive_compatible"))
+        .expect("temp manifest loads");
 
-    let err = run_versioning_gates(&manifest.path).expect_err("missing incompatible coverage should fail");
-    assert!(err
-        .to_string()
-        .contains("fixture catalog must include both compatible and incompatible evolution examples"));
+    let err = run_versioning_gates(&manifest.path)
+        .expect_err("missing incompatible coverage should fail");
+    assert!(err.to_string().contains(
+        "fixture catalog must include both compatible and incompatible evolution examples"
+    ));
 }
 
 fn temp_contract_root(label: &str) -> PathBuf {
@@ -62,10 +62,16 @@ fn write_bundle(incompatible_class: &str, additive_class: &str) -> PathBuf {
         compatibility_classes_yaml(),
     )
     .expect("write compatibility classes");
-    fs::write(root.join("versioning/upgrade-rules.yaml"), upgrade_rules_yaml())
-        .expect("write upgrade rules");
-    fs::write(root.join("fixtures/index.yaml"), fixture_catalog_yaml(incompatible_class, additive_class))
-        .expect("write catalog");
+    fs::write(
+        root.join("versioning/upgrade-rules.yaml"),
+        upgrade_rules_yaml(),
+    )
+    .expect("write upgrade rules");
+    fs::write(
+        root.join("fixtures/index.yaml"),
+        fixture_catalog_yaml(incompatible_class, additive_class),
+    )
+    .expect("write catalog");
     fs::write(root.join("fixtures/target.yaml"), "target: true\n").expect("write target");
     fs::write(root.join("fixtures/a.yaml"), "a: true\n").expect("write affected path");
     fs::write(root.join("fixtures/b.yaml"), "b: true\n").expect("write affected path");

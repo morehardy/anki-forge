@@ -103,11 +103,10 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
         "fixture catalog must not be empty"
     );
 
-    let registry_codes: HashSet<String> = registry.codes.iter().map(|code| code.id.clone()).collect();
-    let compatibility_class_ids: HashSet<String> = compatibility_classes
-        .classes
-        .into_iter()
-        .collect();
+    let registry_codes: HashSet<String> =
+        registry.codes.iter().map(|code| code.id.clone()).collect();
+    let compatibility_class_ids: HashSet<String> =
+        compatibility_classes.classes.into_iter().collect();
     let upgrade_rule_ids: HashSet<String> = upgrade_rules
         .rules
         .into_iter()
@@ -149,7 +148,10 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
             "valid" => {
                 let input_value = load_json_value(&input_path)?;
                 validate_value(&authoring_ir_schema, &input_value).with_context(|| {
-                    format!("valid fixture must satisfy authoring_ir_schema: {}", case.id)
+                    format!(
+                        "valid fixture must satisfy authoring_ir_schema: {}",
+                        case.id
+                    )
                 })?;
             }
             "invalid" => {
@@ -222,11 +224,11 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                 }
                 resolve_contract_relative_path(&manifest.contracts_root, &evolution.target_asset)
                     .with_context(|| {
-                        format!(
-                            "evolution fixture target asset must resolve safely: {}",
-                            case.id
-                        )
-                    })?;
+                    format!(
+                        "evolution fixture target asset must resolve safely: {}",
+                        case.id
+                    )
+                })?;
                 ensure!(
                     !evolution.affected_paths.is_empty(),
                     "evolution fixture affected_paths must not be empty: {}",
@@ -290,7 +292,10 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                 })?;
             let expected_value = load_json_value(&expected_path)?;
             validate_value(&validation_report_schema, &expected_value).with_context(|| {
-                format!("expected report must satisfy validation_report_schema: {}", case.id)
+                format!(
+                    "expected report must satisfy validation_report_schema: {}",
+                    case.id
+                )
             })?;
 
             let diagnostics = expected_value

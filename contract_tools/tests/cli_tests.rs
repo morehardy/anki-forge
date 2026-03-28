@@ -36,18 +36,18 @@ fn verify_command_succeeds_for_the_repo_contract_bundle() {
 fn verify_command_fails_when_manifest_is_missing() {
     let output = run_cli(&["verify", "--manifest", "contracts/missing.yaml"]);
 
-    assert!(!output.status.success(), "expected failure but command succeeded");
+    assert!(
+        !output.status.success(),
+        "expected failure but command succeeded"
+    );
 }
 
 #[test]
 fn summary_command_prints_bundle_version_and_public_axis() {
-    let manifest = contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
-        .expect("repo manifest should load");
-    let output = run_cli(&[
-        "summary",
-        "--manifest",
-        manifest.path.to_str().unwrap(),
-    ]);
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let output = run_cli(&["summary", "--manifest", manifest.path.to_str().unwrap()]);
 
     assert!(
         output.status.success(),
@@ -58,7 +58,10 @@ fn summary_command_prints_bundle_version_and_public_axis() {
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("bundle_version: 0.1.0"), "stdout: {stdout}");
-    assert!(stdout.contains("public_axis: bundle_version"), "stdout: {stdout}");
+    assert!(
+        stdout.contains("public_axis: bundle_version"),
+        "stdout: {stdout}"
+    );
     assert!(stdout.contains("component_versions:"), "stdout: {stdout}");
 
     for (name, asset) in &manifest.data.assets {

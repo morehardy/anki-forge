@@ -1,10 +1,6 @@
 use anyhow::{ensure, Context};
 use serde::Deserialize;
-use std::{
-    collections::HashSet,
-    fs,
-    path::Path,
-};
+use std::{collections::HashSet, fs, path::Path};
 
 use crate::{
     fixtures::load_fixture_catalog,
@@ -51,7 +47,10 @@ pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<(
         !classes.classes.is_empty(),
         "compatibility class catalog must not be empty"
     );
-    ensure!(!rules.rules.is_empty(), "upgrade rule catalog must not be empty");
+    ensure!(
+        !rules.rules.is_empty(),
+        "upgrade rule catalog must not be empty"
+    );
     ensure!(
         !catalog.cases.is_empty(),
         "fixture catalog must not be empty for versioning checks"
@@ -87,11 +86,14 @@ pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<(
     let mut saw_compatible = false;
     let mut saw_incompatible = false;
 
-    for case in catalog.cases.iter().filter(|case| case.category == "evolution") {
-        let class = case
-            .compatibility_class
-            .as_deref()
-            .with_context(|| format!("evolution case is missing compatibility_class: {}", case.id))?;
+    for case in catalog
+        .cases
+        .iter()
+        .filter(|case| case.category == "evolution")
+    {
+        let class = case.compatibility_class.as_deref().with_context(|| {
+            format!("evolution case is missing compatibility_class: {}", case.id)
+        })?;
         ensure!(
             class_ids.contains(class),
             "unknown compatibility class in evolution fixture: {} ({})",
@@ -100,7 +102,10 @@ pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<(
         );
 
         let expected_bump = case.expected_bundle_bump.as_deref().with_context(|| {
-            format!("evolution case is missing expected_bundle_bump: {}", case.id)
+            format!(
+                "evolution case is missing expected_bundle_bump: {}",
+                case.id
+            )
         })?;
         ensure!(
             matches!(expected_bump, "minor" | "major"),
@@ -147,7 +152,12 @@ pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<(
             .as_deref()
             .with_context(|| format!("evolution case is missing target_asset: {}", case.id))?;
         resolve_contract_relative_path(&manifest.contracts_root, target_asset).with_context(
-            || format!("failed to resolve evolution target asset for case {}", case.id),
+            || {
+                format!(
+                    "failed to resolve evolution target asset for case {}",
+                    case.id
+                )
+            },
         )?;
 
         ensure!(
@@ -157,7 +167,12 @@ pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<(
         );
         for affected_path in &case.affected_paths {
             resolve_contract_relative_path(&manifest.contracts_root, affected_path).with_context(
-                || format!("failed to resolve evolution affected path for case {}", case.id),
+                || {
+                    format!(
+                        "failed to resolve evolution affected path for case {}",
+                        case.id
+                    )
+                },
             )?;
         }
     }
