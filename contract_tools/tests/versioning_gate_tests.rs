@@ -2,7 +2,7 @@ use contract_tools::{contract_manifest_path, versioning::run_versioning_gates};
 use std::{
     fs,
     path::PathBuf,
-    time::{SystemTime, UNIX_EPOCH},
+    sync::atomic::{AtomicU64, Ordering},
 };
 
 #[test]
@@ -37,10 +37,8 @@ fn versioning_gates_reject_missing_compatible_or_incompatible_coverage() {
 }
 
 fn temp_contract_root(label: &str) -> PathBuf {
-    let unique = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("clock should be monotonic")
-        .as_nanos();
+    static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
+    let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);
     std::env::temp_dir().join(format!(
         "anki-forge-contract-tools-{}-{}-{}",
         label,
