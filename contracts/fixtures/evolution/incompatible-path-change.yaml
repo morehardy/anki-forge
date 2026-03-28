@@ -1,0 +1,8 @@
+kind: evolution-case
+compatibility_class: behavior_changing_incompatible
+upgrade_rules:
+  - migration_notes_required
+  - executable_checks_required
+change:
+  kind: incompatible
+  detail: changes a contract path in a way that breaks existing consumers

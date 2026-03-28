@@ -1,0 +1,7 @@
+kind: evolution-case
+compatibility_class: additive_compatible
+upgrade_rules:
+  - fixture_updates_required
+change:
+  kind: additive
+  detail: adds optional fixture fields without changing existing paths

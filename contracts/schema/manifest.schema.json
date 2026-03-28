@@ -57,6 +57,7 @@
         "service_envelope_schema",
         "error_registry_schema",
         "error_registry",
+        "fixture_catalog",
         "validation_semantics",
         "path_semantics",
         "compatibility_semantics"
@@ -100,6 +101,10 @@
           "minLength": 1
         },
         "error_registry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fixture_catalog": {
           "type": "string",
           "minLength": 1
         },

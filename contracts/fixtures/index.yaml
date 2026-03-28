@@ -1,0 +1,24 @@
+cases:
+  - id: minimal-authoring-ir
+    category: valid
+    input: fixtures/valid/minimal-authoring-ir.json
+  - id: missing-document-id
+    category: invalid
+    input: fixtures/invalid/missing-document-id.json
+    expected: fixtures/expected/missing-document-id.report.json
+  - id: minimal-service-envelope
+    category: service-envelope
+    input: fixtures/service-envelope/minimal-success.json
+  - id: additive-compatible
+    category: evolution
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/evolution/additive-compatible.yaml
+  - id: incompatible-path-change
+    category: evolution
+    compatibility_class: behavior_changing_incompatible
+    upgrade_rules:
+      - migration_notes_required
+      - executable_checks_required
+    input: fixtures/evolution/incompatible-path-change.yaml
