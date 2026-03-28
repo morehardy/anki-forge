@@ -1,4 +1,4 @@
-use anyhow::{bail, Context};
+use anyhow::{anyhow, bail, Context};
 use jsonschema::JSONSchema;
 use serde_json::Value;
 use std::{fs, path::Path};
@@ -10,8 +10,8 @@ pub fn load_schema(path: impl AsRef<Path>) -> anyhow::Result<JSONSchema> {
     let raw = fs::read_to_string(path)
         .with_context(|| format!("failed to read schema: {}", path.display()))?;
     let schema: Value = serde_json::from_str(&raw).context("schema file must be valid JSON")?;
-    let schema = Box::leak(Box::new(schema));
-    JSONSchema::compile(schema).context("failed to compile schema")
+    JSONSchema::compile(&schema)
+        .map_err(|error| anyhow!("failed to compile schema: {}: {}", path.display(), error))
 }
 
 pub fn validate_value(schema: &JSONSchema, value: &Value) -> anyhow::Result<()> {
@@ -28,15 +28,20 @@ pub fn validate_value(schema: &JSONSchema, value: &Value) -> anyhow::Result<()> 
 
 pub fn run_schema_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
-    for key in [
-        "authoring_ir_schema",
-        "diagnostic_item_schema",
-        "validation_report_schema",
-        "service_envelope_schema",
-        "error_registry_schema",
-    ] {
+    for (key, _) in manifest
+        .data
+        .assets
+        .iter()
+        .filter(|(key, _)| key.as_str() != "manifest_schema" && key.ends_with("_schema"))
+    {
         let schema_path = resolve_asset_path(&manifest, key)?;
-        load_schema(schema_path)?;
+        load_schema(&schema_path).with_context(|| {
+            format!(
+                "failed schema gate for asset `{}` at {}",
+                key,
+                schema_path.display()
+            )
+        })?;
     }
 
     Ok(())
