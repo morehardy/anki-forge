@@ -36,6 +36,11 @@ fn write_bundle(root: &Path, bundle_version: &str, schema_bundle_version: &str) 
     .expect("write manifest schema");
     fs::write(root.join("versioning/policy.md"), "# policy\n").expect("write policy");
     fs::write(
+        root.join("schema/diagnostic-item.schema.json"),
+        "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\"\n}\n",
+    )
+    .expect("write diagnostic item schema");
+    fs::write(
         root.join("versioning/compatibility-classes.yaml"),
         "classes:\n  - additive_compatible\n",
     )
@@ -84,6 +89,7 @@ assets:
   version_policy: versioning/policy.md
   compatibility_classes: versioning/compatibility-classes.yaml
   upgrade_rules: versioning/upgrade-rules.yaml
+  diagnostic_item_schema: schema/diagnostic-item.schema.json
   error_registry: errors/error-registry.yaml
   validation_semantics: semantics/validation.md
   path_semantics: semantics/path-conventions.md
@@ -128,6 +134,7 @@ fn manifest_schema(bundle_version: &str) -> String {
                     "version_policy",
                     "compatibility_classes",
                     "upgrade_rules",
+                    "diagnostic_item_schema",
                     "error_registry",
                     "validation_semantics",
                     "path_semantics",
@@ -139,6 +146,7 @@ fn manifest_schema(bundle_version: &str) -> String {
                     "version_policy": { "type": "string" },
                     "compatibility_classes": { "type": "string" },
                     "upgrade_rules": { "type": "string" },
+                    "diagnostic_item_schema": { "type": "string" },
                     "error_registry": { "type": "string" },
                     "validation_semantics": { "type": "string" },
                     "path_semantics": { "type": "string" },

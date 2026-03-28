@@ -44,7 +44,12 @@ pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()
             doc_path.display()
         );
 
-        for asset_ref in doc.asset_refs {
+        for asset_ref in &doc.asset_refs {
+            ensure!(
+                manifest.data.assets.values().any(|candidate| candidate == asset_ref),
+                "semantic asset ref must be declared in manifest: {}",
+                asset_ref
+            );
             resolve_contract_relative_path(&manifest.contracts_root, &asset_ref)
                 .with_context(|| {
                     format!(
