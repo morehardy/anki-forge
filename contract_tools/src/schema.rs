@@ -9,7 +9,8 @@ pub fn load_schema(path: impl AsRef<Path>) -> anyhow::Result<JSONSchema> {
     let path = path.as_ref();
     let raw = fs::read_to_string(path)
         .with_context(|| format!("failed to read schema: {}", path.display()))?;
-    let schema: Value = serde_json::from_str(&raw).context("schema file must be valid JSON")?;
+    let schema: Value = serde_json::from_str(&raw)
+        .with_context(|| format!("schema file must be valid JSON: {}", path.display()))?;
     JSONSchema::compile(&schema)
         .map_err(|error| anyhow!("failed to compile schema: {}: {}", path.display(), error))
 }
