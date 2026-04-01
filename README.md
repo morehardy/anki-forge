@@ -19,5 +19,3 @@ cargo run -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yam
 `package` writes the versioned contract artifact into `dist/` for release validation.
 
 Before a Phase 1 release or merge that affects contracts, capture the checklist in `docs/superpowers/checklists/phase-1-exit-evidence.md` and make sure the same commands pass locally and in CI.
-
-<!-- smoke-test: final codex trigger validation -->
