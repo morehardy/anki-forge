@@ -23,6 +23,8 @@ jobs:
       && startsWith(github.event.comment.body, '/codex-fix')
     runs-on: self-hosted
     timeout-minutes: 45
+    env:
+      CODEX_BIN: ${{ vars.CODEX_BIN }}
 
     steps:
       - name: Resolve PR metadata and gather Gemini feedback
@@ -126,7 +128,8 @@ jobs:
       - name: Verify runtime dependencies
         run: |
           set -euo pipefail
-          command -v codex >/dev/null
+          codex_cmd="${CODEX_BIN:-codex}"
+          command -v "$codex_cmd" >/dev/null
           command -v jq >/dev/null
 
       - name: Configure Git identity
@@ -134,16 +137,14 @@ jobs:
           git config user.name "codex-autofix[bot]"
           git config user.email "codex-autofix[bot]@users.noreply.github.com"
 
-      - name: Ensure Codex auth is available
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Ensure local Codex session is available
+        id: codex_env
         run: |
           set -euo pipefail
-          if [ -n "${OPENAI_API_KEY:-}" ]; then
-            printenv OPENAI_API_KEY | codex login --with-api-key
-          else
-            codex login status >/dev/null
-          fi
+          codex_cmd="${CODEX_BIN:-codex}"
+          command -v "$codex_cmd" >/dev/null
+          "$codex_cmd" login status >/dev/null
+          echo "codex_cmd=$codex_cmd" >> "$GITHUB_OUTPUT"
 
       - name: Build prompt artifacts
         env:
@@ -223,12 +224,13 @@ jobs:
           CODEX_MODEL: ${{ vars.CODEX_MODEL }}
         run: |
           set -euo pipefail
+          codex_cmd="${{ steps.codex_env.outputs.codex_cmd }}"
           MODEL_ARGS=()
           if [ -n "${CODEX_MODEL:-}" ]; then
             MODEL_ARGS=(-m "$CODEX_MODEL")
           fi
 
-          codex -a never -s workspace-write exec \
+          "$codex_cmd" -a never -s workspace-write exec \
             "${MODEL_ARGS[@]}" \
             -C "$GITHUB_WORKSPACE" \
             --output-schema .codex_result.schema.json \
