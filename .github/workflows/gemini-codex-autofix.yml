@@ -1,0 +1,338 @@
+name: gemini-codex-autofix
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: read
+  issues: write
+
+concurrency:
+  group: gemini-codex-autofix-${{ github.repository }}-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  autofix:
+    if: >-
+      github.event_name == 'issue_comment'
+      && github.event.issue.pull_request
+      && github.event.comment.user.login == 'morehardy'
+      && github.event.comment.user.id == 30150764
+      && startsWith(github.event.comment.body, '/codex-fix')
+    runs-on: self-hosted
+    timeout-minutes: 45
+
+    steps:
+      - name: Resolve PR metadata and gather Gemini feedback
+        id: meta
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.issue?.number ?? context.payload.pull_request?.number;
+            if (!prNumber) {
+              core.setFailed("No pull request number found in event payload.");
+              return;
+            }
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+
+            const sameRepo = pr.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}`;
+
+            const [issueComments, reviewComments] = await Promise.all([
+              github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+              }),
+              github.paginate(github.rest.pulls.listReviewComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100,
+              }),
+            ]);
+
+            const bot = "gemini-code-assist[bot]";
+            const feedback = [];
+
+            for (const comment of issueComments) {
+              if (comment.user?.login !== bot) continue;
+              feedback.push({
+                type: "issue_comment",
+                id: comment.id,
+                created_at: comment.created_at,
+                url: comment.html_url,
+                body: comment.body ?? "",
+              });
+            }
+
+            for (const comment of reviewComments) {
+              if (comment.user?.login !== bot) continue;
+              feedback.push({
+                type: "review_comment",
+                id: comment.id,
+                created_at: comment.created_at,
+                url: comment.html_url,
+                path: comment.path ?? null,
+                line: comment.line ?? comment.original_line ?? null,
+                body: comment.body ?? "",
+              });
+            }
+
+            feedback.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+            core.setOutput("pr_number", String(prNumber));
+            core.setOutput("head_ref", pr.head.ref);
+            core.setOutput("head_sha", pr.head.sha);
+            core.setOutput("same_repo", sameRepo ? "true" : "false");
+            core.setOutput("feedback_count", String(feedback.length));
+            core.setOutput("feedback_json", JSON.stringify(feedback));
+            core.setOutput("trigger_comment", context.payload.comment?.body ?? "");
+
+      - name: Skip fork PRs (no safe push path with secrets)
+        if: steps.meta.outputs.same_repo != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number("${{ steps.meta.outputs.pr_number }}"),
+              body: [
+                "Codex auto-fix skipped.",
+                "",
+                "- Reason: this PR head branch comes from a fork.",
+                "- This workflow is configured to push fixes only to branches in this repository."
+              ].join("\n")
+            });
+
+      - name: Stop after fork check
+        if: steps.meta.outputs.same_repo != 'true'
+        run: exit 0
+
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.meta.outputs.head_ref }}
+          fetch-depth: 0
+
+      - name: Verify runtime dependencies
+        run: |
+          set -euo pipefail
+          command -v codex >/dev/null
+          command -v jq >/dev/null
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "codex-autofix[bot]"
+          git config user.email "codex-autofix[bot]@users.noreply.github.com"
+
+      - name: Login Codex
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "Missing required secret OPENAI_API_KEY." >&2
+            exit 1
+          fi
+          printenv OPENAI_API_KEY | codex login --with-api-key
+
+      - name: Build prompt artifacts
+        env:
+          FEEDBACK_JSON: ${{ steps.meta.outputs.feedback_json }}
+          PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.meta.outputs.head_sha }}
+          TRIGGER_COMMENT: ${{ steps.meta.outputs.trigger_comment }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$FEEDBACK_JSON" > .gemini_feedback.json
+
+          jq -r '
+            if length == 0 then
+              "No Gemini feedback was found."
+            else
+              to_entries[] |
+              (
+                "### Comment #" + ((.key + 1)|tostring) + "\n"
+                + "- Type: " + .value.type + "\n"
+                + (if .value.path then "- File: `" + .value.path + "`\n" else "" end)
+                + (if .value.line then "- Line: " + (.value.line|tostring) + "\n" else "" end)
+                + "- URL: " + .value.url + "\n\n"
+                + (.value.body // "") + "\n"
+              )
+            end
+          ' .gemini_feedback.json > .gemini_feedback.md
+
+          cat > .codex_result.schema.json <<'EOF'
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["summary", "fixed", "unresolved", "commands"],
+            "properties": {
+              "summary": { "type": "string" },
+              "fixed": { "type": "boolean" },
+              "unresolved": { "type": "array", "items": { "type": "string" } },
+              "commands": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+          EOF
+
+          cat > .codex_prompt.md <<'EOF'
+          You are running in CI on a pull request branch and must address Gemini Code Assist feedback.
+
+          Context:
+          - Pull request: #__PR_NUMBER__
+          - Head SHA: __HEAD_SHA__
+          - Feedback file: .gemini_feedback.md
+          - Trigger command: __TRIGGER_COMMENT__
+
+          Tasks:
+          1. Read `.gemini_feedback.md` and implement only valid, safe, minimal fixes in this repository.
+          2. Do not invent issues that are not in Gemini feedback.
+          3. If a comment is not actionable or conflicts with project rules, leave code unchanged for that item.
+          4. Run and report these commands after edits:
+             - cargo fmt --all
+             - cargo clippy -p contract_tools --all-targets -- -D warnings
+             - cargo test -p contract_tools -v
+          5. Return JSON only matching the provided output schema:
+             - summary: short summary of what you changed or why no change
+             - fixed: true if you changed files, else false
+             - unresolved: list of remaining Gemini issues you did not fix and why
+             - commands: commands you ran
+
+          Keep changes focused and preserve existing repository behavior.
+          EOF
+
+          trigger_comment_single_line="$(printf '%s' "$TRIGGER_COMMENT" | tr '\n' ' ')"
+          trigger_comment_escaped="$(printf '%s' "$trigger_comment_single_line" | sed -e 's/[\/&]/\\&/g')"
+          sed -i.bak "s/__PR_NUMBER__/${PR_NUMBER}/g; s/__HEAD_SHA__/${HEAD_SHA}/g; s/__TRIGGER_COMMENT__/${trigger_comment_escaped}/g" .codex_prompt.md
+          rm -f .codex_prompt.md.bak
+
+      - name: Run Codex auto-fix
+        id: codex
+        continue-on-error: true
+        env:
+          CODEX_MODEL: ${{ vars.CODEX_MODEL }}
+        run: |
+          set -euo pipefail
+          MODEL_ARGS=()
+          if [ -n "${CODEX_MODEL:-}" ]; then
+            MODEL_ARGS=(-m "$CODEX_MODEL")
+          fi
+
+          codex -a never -s workspace-write exec \
+            "${MODEL_ARGS[@]}" \
+            -C "$GITHUB_WORKSPACE" \
+            --output-schema .codex_result.schema.json \
+            --output-last-message .codex_result.json \
+            - < .codex_prompt.md
+
+      - name: Cleanup workflow artifacts
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ -f .codex_result.json ]; then
+            cp .codex_result.json "$RUNNER_TEMP/codex_result.json"
+          fi
+          rm -f \
+            .gemini_feedback.json \
+            .gemini_feedback.md \
+            .codex_result.schema.json \
+            .codex_prompt.md \
+            .codex_result.json
+
+      - name: Detect and commit changes
+        id: commit
+        if: steps.codex.outcome == 'success'
+        env:
+          PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git add -A
+          git commit -m "fix: address Gemini review comments for PR #${PR_NUMBER}"
+          git push origin "HEAD:${{ steps.meta.outputs.head_ref }}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment result on PR
+        if: always() && steps.meta.outputs.same_repo == 'true'
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
+          CODEX_OUTCOME: ${{ steps.codex.outcome }}
+          CHANGED: ${{ steps.commit.outputs.changed }}
+          COMMIT_SHA: ${{ steps.commit.outputs.commit_sha }}
+          RESULT_PATH: ${{ runner.temp }}/codex_result.json
+        with:
+          script: |
+            const fs = require("fs");
+
+            let result = {
+              summary: "No Codex summary available.",
+              fixed: false,
+              unresolved: [],
+              commands: []
+            };
+
+            try {
+              const raw = fs.readFileSync(process.env.RESULT_PATH, "utf8");
+              result = JSON.parse(raw);
+            } catch (_) {}
+
+            const outcome = process.env.CODEX_OUTCOME;
+            const changed = process.env.CHANGED === "true";
+            const commitSha = process.env.COMMIT_SHA;
+            const prNumber = Number(process.env.PR_NUMBER);
+
+            let body;
+            if (outcome !== "success") {
+              body = [
+                "Codex auto-fix finished with failure.",
+                "",
+                "- No commit was pushed.",
+                "- Check workflow logs for details."
+              ].join("\n");
+            } else if (changed) {
+              body = [
+                "Codex auto-fix applied updates from Gemini feedback.",
+                "",
+                `- Commit: \`${commitSha}\``,
+                `- Summary: ${result.summary || "Applied requested fixes."}`,
+                "",
+                "Unresolved items:",
+                ...(result.unresolved?.length
+                  ? result.unresolved.map((x) => `- ${x}`)
+                  : ["- None"])
+              ].join("\n");
+            } else {
+              body = [
+                "Codex reviewed Gemini feedback but did not push code changes.",
+                "",
+                `- Summary: ${result.summary || "No safe/applicable fixes found."}`,
+                "",
+                "Unresolved items:",
+                ...(result.unresolved?.length
+                  ? result.unresolved.map((x) => `- ${x}`)
+                  : ["- None"])
+              ].join("\n");
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body
+            });
