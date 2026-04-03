@@ -75,6 +75,7 @@ This plan targets one coherent subsystem: `Phase 2 Core Authoring Model` (contra
 
 **Files:**
 - Modify: `Cargo.toml`
+- Modify: `contract_tools/Cargo.toml`
 - Modify: `contract_tools/tests/workspace_smoke_tests.rs`
 - Create: `authoring_core/Cargo.toml`
 - Create: `authoring_core/src/lib.rs`
@@ -126,6 +127,13 @@ serde_json = "1"
 workspace = true
 ```
 
+```toml
+# contract_tools/Cargo.toml
+[dev-dependencies]
+tempfile = "=3.17.1"
+authoring_core = { path = "../authoring_core" }
+```
+
 ```rust
 // authoring_core/src/lib.rs
 pub fn tool_contract_version() -> &'static str {
@@ -141,7 +149,7 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Cargo.toml contract_tools/tests/workspace_smoke_tests.rs authoring_core/Cargo.toml authoring_core/src/lib.rs
+git add Cargo.toml contract_tools/Cargo.toml contract_tools/tests/workspace_smoke_tests.rs authoring_core/Cargo.toml authoring_core/src/lib.rs
 git commit -m "feat: bootstrap authoring_core workspace crate"
 ```
 
@@ -211,11 +219,34 @@ assets:
     "result_status": { "enum": ["success", "invalid", "error"] },
     "tool_contract_version": { "type": "string", "minLength": 1 },
     "policy_refs": { "type": "object", "minProperties": 1 },
-    "comparison_context": { "type": ["string", "object"] },
+    "comparison_context": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "comparison-context.schema.json" }
+      ]
+    },
     "diagnostics": { "$ref": "normalization-diagnostics.schema.json" },
     "normalized_ir": { "$ref": "normalized-ir.schema.json" },
     "merge_risk_report": { "$ref": "merge-risk-report.schema.json" }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "comparison_context": { "type": "null" } }
+      },
+      "then": {
+        "not": { "required": ["merge_risk_report"] }
+      }
+    },
+    {
+      "if": {
+        "properties": { "comparison_context": { "type": "object" } }
+      },
+      "then": {
+        "required": ["merge_risk_report"]
+      }
+    }
+  ]
 }
 ```
 
@@ -368,11 +399,12 @@ git commit -m "feat: add policy contracts and policy gate checks"
 - Modify: `authoring_core/src/lib.rs`
 - Create: `authoring_core/tests/normalization_pipeline_tests.rs`
 
-- [ ] **Step 1: Write failing pipeline tests for success/invalid status behavior**
+- [ ] **Step 1: Write failing pipeline tests for status behavior and contract-json envelope fields**
 
 ```rust
 // authoring_core/tests/normalization_pipeline_tests.rs
 use authoring_core::{normalize, AuthoringDocument, NormalizationRequest};
+use serde_json::Value;
 
 #[test]
 fn normalize_returns_invalid_when_document_id_is_missing() {
@@ -388,7 +420,7 @@ fn normalize_returns_invalid_when_document_id_is_missing() {
 }
 
 #[test]
-fn normalize_returns_success_for_minimal_valid_document() {
+fn normalize_success_includes_required_contract_envelope_fields() {
     let input = AuthoringDocument {
         kind: "authoring-ir".into(),
         schema_version: "0.1.0".into(),
@@ -398,6 +430,21 @@ fn normalize_returns_success_for_minimal_valid_document() {
     let result = normalize(NormalizationRequest::new(input));
     assert_eq!(result.result_status, "success");
     assert!(result.normalized_ir.is_some());
+
+    let value: Value = serde_json::to_value(result).unwrap();
+    for key in [
+        "kind",
+        "result_status",
+        "tool_contract_version",
+        "policy_refs",
+        "comparison_context",
+        "diagnostics",
+    ] {
+        assert!(value.get(key).is_some(), "missing key: {key}");
+    }
+
+    assert!(value.get("comparison_context").unwrap().is_null());
+    assert!(value.get("merge_risk_report").unwrap().is_null());
 }
 ```
 
@@ -419,14 +466,27 @@ pub struct AuthoringDocument {
     pub metadata_document_id: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ComparisonContext {
+    pub kind: String,
+    pub baseline_kind: String,
+    pub baseline_artifact_fingerprint: String,
+    pub risk_policy_ref: String,
+    pub comparison_mode: String,
+}
+
 #[derive(Debug, Clone)]
 pub struct NormalizationRequest {
     pub input: AuthoringDocument,
+    pub comparison_context: Option<ComparisonContext>,
 }
 
 impl NormalizationRequest {
     pub fn new(input: AuthoringDocument) -> Self {
-        Self { input }
+        Self {
+            input,
+            comparison_context: None,
+        }
     }
 }
 
@@ -452,12 +512,32 @@ pub struct NormalizationDiagnostics {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PolicyRefs {
+    pub identity_policy_ref: String,
+    pub risk_policy_ref: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MergeRiskReport {
+    pub kind: String,
+    pub comparison_status: String,
+    pub overall_level: String,
+    pub policy_version: String,
+    pub baseline_artifact_fingerprint: String,
+    pub current_artifact_fingerprint: String,
+    pub comparison_reasons: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NormalizationResult {
     pub kind: String,
     pub result_status: String,
     pub tool_contract_version: String,
+    pub policy_refs: PolicyRefs,
+    pub comparison_context: Option<ComparisonContext>,
     pub diagnostics: NormalizationDiagnostics,
     pub normalized_ir: Option<NormalizedIr>,
+    pub merge_risk_report: Option<MergeRiskReport>,
 }
 ```
 
@@ -466,11 +546,21 @@ pub struct NormalizationResult {
 use crate::model::*;
 
 pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
+    let policy_refs = PolicyRefs {
+        identity_policy_ref: "identity-policy.default@1.0.0".into(),
+        risk_policy_ref: request
+            .comparison_context
+            .as_ref()
+            .map(|ctx| ctx.risk_policy_ref.clone()),
+    };
+
     if request.input.metadata_document_id.trim().is_empty() {
         return NormalizationResult {
             kind: "normalization-result".into(),
             result_status: "invalid".into(),
             tool_contract_version: crate::tool_contract_version().into(),
+            policy_refs,
+            comparison_context: request.comparison_context,
             diagnostics: NormalizationDiagnostics {
                 kind: "normalization-diagnostics".into(),
                 status: "invalid".into(),
@@ -481,6 +571,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
                 }],
             },
             normalized_ir: None,
+            merge_risk_report: None,
         };
     }
 
@@ -488,6 +579,8 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         kind: "normalization-result".into(),
         result_status: "success".into(),
         tool_contract_version: crate::tool_contract_version().into(),
+        policy_refs,
+        comparison_context: request.comparison_context,
         diagnostics: NormalizationDiagnostics {
             kind: "normalization-diagnostics".into(),
             status: "valid".into(),
@@ -498,6 +591,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
             schema_version: request.input.schema_version,
             document_id: request.input.metadata_document_id,
         }),
+        merge_risk_report: None,
     }
 }
 ```
@@ -507,7 +601,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
 pub mod model;
 pub mod normalize;
 
-pub use model::{AuthoringDocument, NormalizationRequest};
+pub use model::{AuthoringDocument, ComparisonContext, NormalizationRequest};
 pub use normalize::normalize;
 
 pub fn tool_contract_version() -> &'static str {
@@ -524,7 +618,7 @@ Expected: PASS.
 
 ```bash
 git add authoring_core/src/lib.rs authoring_core/src/model.rs authoring_core/src/normalize.rs authoring_core/tests/normalization_pipeline_tests.rs
-git commit -m "feat: add phase2 normalization result model and skeleton pipeline"
+git commit -m "feat: add phase2 normalization result envelope skeleton"
 ```
 
 ## Task 5: Implement `target_selector` grammar parser and resolver behavior
@@ -532,27 +626,50 @@ git commit -m "feat: add phase2 normalization result model and skeleton pipeline
 **Files:**
 - Create: `authoring_core/src/selector.rs`
 - Modify: `authoring_core/src/lib.rs`
+- Modify: `authoring_core/src/normalize.rs`
 - Create: `authoring_core/tests/selector_tests.rs`
 - Create: `contracts/semantics/target-selector-grammar.md`
 - Modify: `contracts/manifest.yaml`
 
-- [ ] **Step 1: Write failing selector tests for index prohibition and ambiguity errors**
+- [ ] **Step 1: Write failing selector tests for index prohibition, zero-match, and multi-match errors**
 
 ```rust
 // authoring_core/tests/selector_tests.rs
-use authoring_core::selector::{parse_selector, SelectorError};
+use std::collections::BTreeMap;
+use authoring_core::selector::{
+    parse_selector, resolve_selector, SelectorError, SelectorResolveError, SelectorTarget,
+};
 
 #[test]
 fn selector_rejects_array_index_segments() {
-    let err = parse_selector("note[id='n1']/fields[3]").unwrap_err();
+    let err = parse_selector("note[id='n1']/fields[12]").unwrap_err();
     assert!(matches!(err, SelectorError::ArrayIndexNotAllowed));
 }
 
 #[test]
-fn selector_accepts_kind_and_key_predicate() {
+fn selector_accepts_kind_and_predicates() {
     let sel = parse_selector("note[id='n1']").unwrap();
     assert_eq!(sel.kind, "note");
     assert_eq!(sel.predicates.len(), 1);
+}
+
+#[test]
+fn resolver_reports_zero_match() {
+    let selector = parse_selector("note[id='missing']").unwrap();
+    let targets = vec![SelectorTarget::new("note", [("id", "n1")])];
+    let err = resolve_selector(&selector, &targets).unwrap_err();
+    assert!(matches!(err, SelectorResolveError::Unmatched));
+}
+
+#[test]
+fn resolver_reports_multi_match() {
+    let selector = parse_selector("note[id='n1']").unwrap();
+    let targets = vec![
+        SelectorTarget::new("note", [("id", "n1")]),
+        SelectorTarget::new("note", [("id", "n1")]),
+    ];
+    let err = resolve_selector(&selector, &targets).unwrap_err();
+    assert!(matches!(err, SelectorResolveError::Ambiguous));
 }
 ```
 
@@ -561,10 +678,12 @@ fn selector_accepts_kind_and_key_predicate() {
 Run: `cargo test -p authoring_core --test selector_tests -v`
 Expected: FAIL because selector module does not exist.
 
-- [ ] **Step 3: Implement parser and register grammar semantics asset**
+- [ ] **Step 3: Implement parser, resolver, and normalization error mapping**
 
 ```rust
 // authoring_core/src/selector.rs
+use std::collections::BTreeMap;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum SelectorError {
     Empty,
@@ -573,16 +692,45 @@ pub enum SelectorError {
 }
 
 #[derive(Debug, PartialEq, Eq)]
+pub enum SelectorResolveError {
+    Unmatched,
+    Ambiguous,
+}
+
+#[derive(Debug, PartialEq, Eq)]
 pub struct Selector {
     pub kind: String,
     pub predicates: Vec<(String, String)>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SelectorTarget {
+    pub kind: String,
+    pub keys: BTreeMap<String, String>,
+}
+
+impl SelectorTarget {
+    pub fn new<const N: usize>(kind: &str, pairs: [(&str, &str); N]) -> Self {
+        let mut keys = BTreeMap::new();
+        for (k, v) in pairs {
+            keys.insert(k.to_string(), v.to_string());
+        }
+        Self {
+            kind: kind.to_string(),
+            keys,
+        }
+    }
 }
 
 pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
     if raw.trim().is_empty() {
         return Err(SelectorError::Empty);
     }
-    if raw.contains("[") && raw.contains("]") && raw.contains("[3]") {
+
+    if raw
+        .split(['/', '.'])
+        .any(|segment| segment.starts_with('[') && segment.ends_with(']') && segment[1..segment.len() - 1].chars().all(|c| c.is_ascii_digit()))
+    {
         return Err(SelectorError::ArrayIndexNotAllowed);
     }
 
@@ -590,15 +738,57 @@ pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
         .split_once('[')
         .ok_or(SelectorError::InvalidPredicate)?;
     let predicate = rest.strip_suffix(']').ok_or(SelectorError::InvalidPredicate)?;
-    let (k, v) = predicate
-        .split_once('=')
-        .ok_or(SelectorError::InvalidPredicate)?;
-    let value = v.trim().trim_matches('\'').to_string();
+    let predicates = predicate
+        .split(',')
+        .map(|part| {
+            let (k, v) = part
+                .split_once('=')
+                .ok_or(SelectorError::InvalidPredicate)?;
+            let value = v.trim().trim_matches('\'').to_string();
+            Ok((k.trim().to_string(), value))
+        })
+        .collect::<Result<Vec<_>, SelectorError>>()?;
 
     Ok(Selector {
-        kind: kind.to_string(),
-        predicates: vec![(k.to_string(), value)],
+        kind: kind.trim().to_string(),
+        predicates,
     })
+}
+
+pub fn resolve_selector(
+    selector: &Selector,
+    targets: &[SelectorTarget],
+) -> Result<usize, SelectorResolveError> {
+    let matches: Vec<usize> = targets
+        .iter()
+        .enumerate()
+        .filter(|(_, target)| {
+            target.kind == selector.kind
+                && selector
+                    .predicates
+                    .iter()
+                    .all(|(k, v)| target.keys.get(k) == Some(v))
+        })
+        .map(|(idx, _)| idx)
+        .collect();
+
+    match matches.as_slice() {
+        [single] => Ok(*single),
+        [] => Err(SelectorResolveError::Unmatched),
+        _ => Err(SelectorResolveError::Ambiguous),
+    }
+}
+```
+
+```rust
+// authoring_core/src/normalize.rs (selector error mapping excerpt)
+use crate::selector::SelectorResolveError;
+
+fn selector_error_code(err: &SelectorResolveError) -> &'static str {
+    match err {
+        SelectorResolveError::Unmatched => "PHASE2.SELECTOR_UNMATCHED",
+        SelectorResolveError::Ambiguous => "PHASE2.SELECTOR_AMBIGUOUS",
+    }
 }
 ```
 
@@ -611,11 +801,11 @@ asset_refs:
 
 # Target Selector Grammar
 
-Valid selector shape is `kind[key='value']`.
+Valid selector shape is `kind[key='value']` or `kind[k1='v1',k2='v2']`.
 
 - array index selectors are forbidden
 - selectors must be deterministic
-- zero-match and multi-match are normalization errors
+- zero-match and multi-match are normalization errors (`PHASE2.SELECTOR_UNMATCHED`, `PHASE2.SELECTOR_AMBIGUOUS`)
 ```
 
 - [ ] **Step 4: Run selector tests to verify pass**
@@ -626,13 +816,14 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add authoring_core/src/selector.rs authoring_core/src/lib.rs authoring_core/tests/selector_tests.rs contracts/semantics/target-selector-grammar.md contracts/manifest.yaml
-git commit -m "feat: add target_selector grammar parser and semantics contract"
+git add authoring_core/src/selector.rs authoring_core/src/lib.rs authoring_core/src/normalize.rs authoring_core/tests/selector_tests.rs contracts/semantics/target-selector-grammar.md contracts/manifest.yaml
+git commit -m "feat: add target_selector parser and resolver contract semantics"
 ```
 
 ## Task 6: Implement identity policy resolution and canonicalization rules
 
 **Files:**
+- Modify: `authoring_core/Cargo.toml`
 - Create: `authoring_core/src/identity.rs`
 - Create: `authoring_core/src/canonical_json.rs`
 - Modify: `authoring_core/src/model.rs`
@@ -643,7 +834,7 @@ git commit -m "feat: add target_selector grammar parser and semantics contract"
 - Modify: `contracts/manifest.yaml`
 - Modify: `authoring_core/tests/normalization_pipeline_tests.rs`
 
-- [ ] **Step 1: Write failing tests for deterministic/default and random warning behavior**
+- [ ] **Step 1: Write failing tests for deterministic default, random non-deterministic path, and required reason_code**
 
 ```rust
 // authoring_core/tests/normalization_pipeline_tests.rs (add)
@@ -665,6 +856,12 @@ fn random_override_emits_warning_and_success() {
         .items
         .iter()
         .any(|d| d.code == "PHASE2.IDENTITY_RANDOM_OVERRIDE"));
+    assert!(result
+        .normalized_ir
+        .as_ref()
+        .unwrap()
+        .resolved_identity
+        .starts_with("rnd:"));
 }
 
 #[test]
@@ -680,6 +877,45 @@ fn missing_reason_code_for_override_is_invalid() {
     let result = normalize(req);
     assert_eq!(result.result_status, "invalid");
 }
+
+#[test]
+fn external_override_requires_external_id() {
+    let input = AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc-1".into(),
+    };
+    let mut req = NormalizationRequest::new(input);
+    req.identity_override_mode = Some("external".into());
+    req.reason_code = Some("migration_keep_id".into());
+
+    let result = normalize(req);
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|d| d.code == "PHASE2.EXTERNAL_ID_REQUIRED"));
+}
+
+#[test]
+fn unmatched_target_selector_is_normalization_error() {
+    let input = AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc-1".into(),
+    };
+    let mut req = NormalizationRequest::new(input);
+    req.target_selector = Some("note[id='missing']".into());
+
+    let result = normalize(req);
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|d| d.code == "PHASE2.SELECTOR_UNMATCHED"));
+}
 ```
 
 - [ ] **Step 2: Run tests to verify failure**
@@ -687,14 +923,25 @@ fn missing_reason_code_for_override_is_invalid() {
 Run: `cargo test -p authoring_core --test normalization_pipeline_tests -v`
 Expected: FAIL because override fields/behavior are not implemented.
 
-- [ ] **Step 3: Implement identity policy handling and canonical serialization helper**
+- [ ] **Step 3: Implement identity policy handling (with real non-deterministic random path) and canonical serialization helper**
+
+```toml
+# authoring_core/Cargo.toml (dependencies excerpt)
+[dependencies]
+anyhow = "1"
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+```
 
 ```rust
 // authoring_core/src/model.rs (request fields excerpt)
 #[derive(Debug, Clone)]
 pub struct NormalizationRequest {
     pub input: AuthoringDocument,
+    pub comparison_context: Option<ComparisonContext>,
     pub identity_override_mode: Option<String>,
+    pub target_selector: Option<String>,
     pub external_id: Option<String>,
     pub reason_code: Option<String>,
     pub reason: Option<String>,
@@ -704,12 +951,22 @@ impl NormalizationRequest {
     pub fn new(input: AuthoringDocument) -> Self {
         Self {
             input,
+            comparison_context: None,
             identity_override_mode: None,
+            target_selector: None,
             external_id: None,
             reason_code: None,
             reason: None,
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NormalizedIr {
+    pub kind: String,
+    pub schema_version: String,
+    pub document_id: String,
+    pub resolved_identity: String,
 }
 ```
 
@@ -717,12 +974,31 @@ impl NormalizationRequest {
 // authoring_core/src/identity.rs
 use crate::model::{DiagnosticItem, NormalizationRequest};
 
-pub fn resolve_identity(request: &NormalizationRequest, diagnostics: &mut Vec<DiagnosticItem>) -> anyhow::Result<String> {
+pub trait NonceSource {
+    fn next_u64(&mut self) -> u64;
+}
+
+pub struct DefaultNonceSource;
+
+impl NonceSource for DefaultNonceSource {
+    fn next_u64(&mut self) -> u64 {
+        rand::random::<u64>()
+    }
+}
+
+pub fn resolve_identity(
+    request: &NormalizationRequest,
+    diagnostics: &mut Vec<DiagnosticItem>,
+    nonce_source: &mut dyn NonceSource,
+) -> anyhow::Result<String> {
     match request.identity_override_mode.as_deref() {
         None => Ok(format!("det:{}", request.input.metadata_document_id)),
         Some("external") => {
             anyhow::ensure!(request.reason_code.as_deref().is_some(), "reason_code required");
-            let external = request.external_id.clone().ok_or_else(|| anyhow::anyhow!("external_id required"))?;
+            let external = request
+                .external_id
+                .clone()
+                .ok_or_else(|| anyhow::anyhow!("external_id required"))?;
             Ok(format!("ext:{external}"))
         }
         Some("random") => {
@@ -732,11 +1008,114 @@ pub fn resolve_identity(request: &NormalizationRequest, diagnostics: &mut Vec<Di
                 code: "PHASE2.IDENTITY_RANDOM_OVERRIDE".into(),
                 summary: "random override disables reproducible identity for targeted objects".into(),
             });
-            Ok(format!("rnd:{}", request.input.metadata_document_id.len()))
+            let nonce = nonce_source.next_u64();
+            Ok(format!("rnd:{nonce:016x}"))
         }
         Some(other) => anyhow::bail!("unsupported identity override mode: {other}"),
     }
 }
+```
+
+```rust
+// authoring_core/src/normalize.rs (identity integration excerpt)
+use crate::selector::{parse_selector, resolve_selector, SelectorResolveError, SelectorTarget};
+use crate::identity::{resolve_identity, DefaultNonceSource};
+
+let mut diagnostics = vec![];
+let policy_refs = PolicyRefs {
+    identity_policy_ref: "identity-policy.default@1.0.0".into(),
+    risk_policy_ref: request
+        .comparison_context
+        .as_ref()
+        .map(|ctx| ctx.risk_policy_ref.clone()),
+};
+
+if let Some(raw_selector) = request.target_selector.as_deref() {
+    let selector = match parse_selector(raw_selector) {
+        Ok(sel) => sel,
+        Err(_) => {
+            diagnostics.push(DiagnosticItem {
+                level: "error".into(),
+                code: "PHASE2.SELECTOR_INVALID".into(),
+                summary: "target_selector does not match grammar".into(),
+            });
+            return NormalizationResult {
+                kind: "normalization-result".into(),
+                result_status: "invalid".into(),
+                tool_contract_version: crate::tool_contract_version().into(),
+                policy_refs,
+                comparison_context: request.comparison_context.clone(),
+                diagnostics: NormalizationDiagnostics {
+                    kind: "normalization-diagnostics".into(),
+                    status: "invalid".into(),
+                    items: diagnostics,
+                },
+                normalized_ir: None,
+                merge_risk_report: None,
+            };
+        }
+    };
+
+    let targets = vec![SelectorTarget::new("document", [("id", request.input.metadata_document_id.as_str())])];
+    if let Err(err) = resolve_selector(&selector, &targets) {
+        let code = match err {
+            SelectorResolveError::Unmatched => "PHASE2.SELECTOR_UNMATCHED",
+            SelectorResolveError::Ambiguous => "PHASE2.SELECTOR_AMBIGUOUS",
+        };
+        diagnostics.push(DiagnosticItem {
+            level: "error".into(),
+            code: code.into(),
+            summary: "target_selector resolution failed".into(),
+        });
+        return NormalizationResult {
+            kind: "normalization-result".into(),
+            result_status: "invalid".into(),
+            tool_contract_version: crate::tool_contract_version().into(),
+            policy_refs,
+            comparison_context: request.comparison_context.clone(),
+            diagnostics: NormalizationDiagnostics {
+                kind: "normalization-diagnostics".into(),
+                status: "invalid".into(),
+                items: diagnostics,
+            },
+            normalized_ir: None,
+            merge_risk_report: None,
+        };
+    }
+}
+
+let mut nonce_source = DefaultNonceSource;
+let resolved_identity = match resolve_identity(&request, &mut diagnostics, &mut nonce_source) {
+    Ok(id) => id,
+    Err(_) => {
+        diagnostics.push(DiagnosticItem {
+            level: "error".into(),
+            code: "PHASE2.EXTERNAL_ID_REQUIRED".into(),
+            summary: "external override requires external_id and reason_code".into(),
+        });
+        return NormalizationResult {
+            kind: "normalization-result".into(),
+            result_status: "invalid".into(),
+            tool_contract_version: crate::tool_contract_version().into(),
+            policy_refs,
+            comparison_context: request.comparison_context.clone(),
+            diagnostics: NormalizationDiagnostics {
+                kind: "normalization-diagnostics".into(),
+                status: "invalid".into(),
+                items: diagnostics,
+            },
+            normalized_ir: None,
+            merge_risk_report: None,
+        };
+    }
+};
+
+let normalized = NormalizedIr {
+    kind: "normalized-ir".into(),
+    schema_version: request.input.schema_version.clone(),
+    document_id: request.input.metadata_document_id.clone(),
+    resolved_identity,
+};
 ```
 
 ```rust
@@ -780,7 +1159,7 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add authoring_core/src/model.rs authoring_core/src/normalize.rs authoring_core/src/identity.rs authoring_core/src/canonical_json.rs authoring_core/src/lib.rs authoring_core/tests/normalization_pipeline_tests.rs contracts/semantics/identity.md contracts/semantics/canonical-serialization.md contracts/manifest.yaml
+git add authoring_core/Cargo.toml authoring_core/src/model.rs authoring_core/src/normalize.rs authoring_core/src/identity.rs authoring_core/src/canonical_json.rs authoring_core/src/lib.rs authoring_core/tests/normalization_pipeline_tests.rs contracts/semantics/identity.md contracts/semantics/canonical-serialization.md contracts/manifest.yaml
 git commit -m "feat: implement identity policy semantics and canonical serialization"
 ```
 
@@ -810,6 +1189,54 @@ fn risk_is_unavailable_without_comparison_context() {
     };
     let result = normalize(NormalizationRequest::new(input));
     assert!(result.merge_risk_report.is_none());
+}
+
+#[test]
+fn risk_report_is_partial_for_best_effort_identity_index_context() {
+    let input = AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc-1".into(),
+    };
+    let mut req = NormalizationRequest::new(input);
+    req.comparison_context = Some(ComparisonContext {
+        kind: "comparison-context".into(),
+        baseline_kind: "identity_index".into(),
+        baseline_artifact_fingerprint: "idx-1".into(),
+        risk_policy_ref: "risk-policy.default@1.0.0".into(),
+        comparison_mode: "best_effort".into(),
+    });
+
+    let report = normalize(req).merge_risk_report.expect("report required");
+    assert_eq!(report.comparison_status, "partial");
+    assert!(report
+        .comparison_reasons
+        .iter()
+        .any(|r| r == "BASELINE_IDENTITY_INDEX_ONLY"));
+}
+
+#[test]
+fn risk_report_is_unavailable_when_strict_context_lacks_baseline_fingerprint() {
+    let input = AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc-1".into(),
+    };
+    let mut req = NormalizationRequest::new(input);
+    req.comparison_context = Some(ComparisonContext {
+        kind: "comparison-context".into(),
+        baseline_kind: "normalized_ir".into(),
+        baseline_artifact_fingerprint: "".into(),
+        risk_policy_ref: "risk-policy.default@1.0.0".into(),
+        comparison_mode: "strict".into(),
+    });
+
+    let report = normalize(req).merge_risk_report.expect("report required");
+    assert_eq!(report.comparison_status, "unavailable");
+    assert!(report
+        .comparison_reasons
+        .iter()
+        .any(|r| r == "BASELINE_UNAVAILABLE"));
 }
 
 #[test]
@@ -865,6 +1292,7 @@ pub struct MergeRiskReport {
     pub policy_version: String,
     pub baseline_artifact_fingerprint: String,
     pub current_artifact_fingerprint: String,
+    pub comparison_reasons: Vec<String>,
     pub findings: Vec<MergeRiskFinding>,
 }
 
@@ -884,20 +1312,43 @@ use crate::model::{ComparisonContext, MergeRiskFinding, MergeRiskReport, Normali
 
 pub fn assess_risk(current: &NormalizedIr, comparison: Option<&ComparisonContext>) -> Option<MergeRiskReport> {
     let ctx = comparison?;
+    let (comparison_status, overall_level, comparison_reasons) = if ctx.comparison_mode == "strict"
+        && ctx.baseline_artifact_fingerprint.trim().is_empty()
+    {
+        ("unavailable", "high", vec!["BASELINE_UNAVAILABLE".to_string()])
+    } else if ctx.baseline_kind == "identity_index" {
+        ("partial", "medium", vec!["BASELINE_IDENTITY_INDEX_ONLY".to_string()])
+    } else {
+        ("complete", "low", vec![])
+    };
+
+    let findings = if comparison_status == "unavailable" {
+        vec![MergeRiskFinding {
+            level: "high".into(),
+            code: "PHASE2.RISK.BASELINE_UNAVAILABLE".into(),
+            dimension: "references".into(),
+            target_selector: "document[id='root']".into(),
+            summary: "baseline context unavailable for strict comparison".into(),
+        }]
+    } else {
+        vec![MergeRiskFinding {
+            level: overall_level.into(),
+            code: "PHASE2.RISK.COMPARISON_COMPLETE".into(),
+            dimension: "structure".into(),
+            target_selector: "document[id='root']".into(),
+            summary: "risk comparison computed from provided context".into(),
+        }]
+    };
+
     Some(MergeRiskReport {
         kind: "merge-risk-report".into(),
-        comparison_status: "complete".into(),
-        overall_level: "low".into(),
+        comparison_status: comparison_status.into(),
+        overall_level: overall_level.into(),
         policy_version: ctx.risk_policy_ref.clone(),
         baseline_artifact_fingerprint: ctx.baseline_artifact_fingerprint.clone(),
         current_artifact_fingerprint: format!("current:{}", current.document_id),
-        findings: vec![MergeRiskFinding {
-            level: "low".into(),
-            code: "PHASE2.RISK.NO_BREAKING_CHANGE".into(),
-            dimension: "structure".into(),
-            target_selector: "document[id='root']".into(),
-            summary: "no breaking structural differences detected".into(),
-        }],
+        comparison_reasons,
+        findings,
     })
 }
 ```
@@ -1029,19 +1480,23 @@ git commit -m "feat: add contract_tools normalize command with contract-json mod
 
 **Files:**
 - Modify: `contracts/fixtures/index.yaml`
-- Create: `contracts/fixtures/phase2/normalization/minimal-success.yaml`
-- Create: `contracts/fixtures/phase2/normalization/identity-random-warning.yaml`
-- Create: `contracts/fixtures/phase2/risk/complete-low.yaml`
-- Create: `contracts/fixtures/phase2/risk/partial-high.yaml`
+- Create: `contracts/fixtures/phase2/normalization/minimal-success.case.yaml`
+- Create: `contracts/fixtures/phase2/normalization/identity-random-warning.case.yaml`
+- Create: `contracts/fixtures/phase2/risk/complete-low.case.yaml`
+- Create: `contracts/fixtures/phase2/risk/partial-high.case.yaml`
+- Create: `contracts/fixtures/phase2/inputs/minimal-authoring-ir.json`
+- Create: `contracts/fixtures/phase2/expected/minimal-success.result.json`
+- Create: `contracts/fixtures/phase2/expected/complete-low.risk.json`
 - Modify: `contract_tools/src/fixtures.rs`
 - Modify: `contract_tools/tests/fixture_gate_tests.rs`
+- Modify: `contract_tools/Cargo.toml`
 
-- [ ] **Step 1: Write failing fixture gate tests for catalog-style phase2 entries**
+- [ ] **Step 1: Write failing fixture gate tests for executable phase2 regression**
 
 ```rust
 // contract_tools/tests/fixture_gate_tests.rs (add)
 #[test]
-fn fixture_catalog_accepts_phase2_case_paths_with_policy_refs() {
+fn fixture_gate_executes_phase2_normalize_cases_and_compares_expected_output() {
     let manifest = contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path()).unwrap();
     contract_tools::fixtures::run_fixture_gates(&manifest.path).unwrap();
 }
@@ -1050,45 +1505,108 @@ fn fixture_catalog_accepts_phase2_case_paths_with_policy_refs() {
 - [ ] **Step 2: Run fixture tests to verify failure**
 
 Run: `cargo test -p contract_tools --test fixture_gate_tests -v`
-Expected: FAIL once phase2 catalog fields are added but parser/gates are not updated.
+Expected: FAIL once phase2 case files are added but executable runner is not implemented.
 
-- [ ] **Step 3: Add phase2 fixtures and update fixture gate model**
+- [ ] **Step 3: Add phase2 case files and executable fixture runner**
 
 ```yaml
 # contracts/fixtures/index.yaml (phase2 excerpt)
 cases:
   - id: phase2-normalization-minimal-success
     category: phase2-normalization
-    input: fixtures/phase2/normalization/minimal-success.yaml
-    target_asset: schema/normalization-result.schema.json
+    input: fixtures/phase2/normalization/minimal-success.case.yaml
     compatibility_class: additive_compatible
     upgrade_rules: [fixture_updates_required]
   - id: phase2-risk-complete-low
     category: phase2-risk
-    input: fixtures/phase2/risk/complete-low.yaml
-    target_asset: schema/merge-risk-report.schema.json
+    input: fixtures/phase2/risk/complete-low.case.yaml
     compatibility_class: additive_compatible
     upgrade_rules: [fixture_updates_required]
 ```
 
+```yaml
+# contracts/fixtures/phase2/normalization/minimal-success.case.yaml
+kind: phase2-normalization-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context: null
+expected_result: fixtures/phase2/expected/minimal-success.result.json
+```
+
+```json
+// contracts/fixtures/phase2/inputs/minimal-authoring-ir.json
+{
+  "kind": "authoring-ir",
+  "schema_version": "0.1.0",
+  "metadata": { "document_id": "demo-doc" },
+  "notetypes": [],
+  "notes": []
+}
+```
+
+```json
+// contracts/fixtures/phase2/expected/minimal-success.result.json
+{
+  "kind": "normalization-result",
+  "result_status": "success",
+  "tool_contract_version": "phase2-v1",
+  "policy_refs": {
+    "identity_policy_ref": "identity-policy.default@1.0.0",
+    "risk_policy_ref": null
+  },
+  "comparison_context": null,
+  "diagnostics": {
+    "kind": "normalization-diagnostics",
+    "status": "valid",
+    "items": []
+  },
+  "normalized_ir": {
+    "kind": "normalized-ir",
+    "schema_version": "0.1.0",
+    "document_id": "demo-doc",
+    "resolved_identity": "det:demo-doc"
+  },
+  "merge_risk_report": null
+}
+```
+
 ```rust
-// contract_tools/src/fixtures.rs (category handling excerpt)
-match case.category.as_str() {
-    "phase2-normalization" => {
-        let input_path = resolve_contract_relative_path(&manifest.contracts_root, &case.input)?;
-        let yaml_value: serde_yaml::Value = serde_yaml::from_str(&std::fs::read_to_string(input_path)?)?;
-        let json_value = serde_json::to_value(yaml_value)?;
-        let schema = load_schema(resolve_asset_path(&manifest, "normalization_result_schema")?)?;
-        validate_value(&schema, &json_value)?;
+// contract_tools/src/fixtures.rs (phase2 execution excerpt)
+#[derive(Debug, serde::Deserialize)]
+struct Phase2NormalizationCase {
+    kind: String,
+    authoring_input: String,
+    comparison_context: Option<serde_json::Value>,
+    expected_result: String,
+}
+
+fn run_phase2_normalization_case(
+    manifest: &crate::manifest::LoadedManifest,
+    case_path: &std::path::Path,
+) -> anyhow::Result<()> {
+    let raw = std::fs::read_to_string(case_path)?;
+    let case: Phase2NormalizationCase = serde_yaml::from_str(&raw)?;
+    anyhow::ensure!(case.kind == "phase2-normalization-case", "unexpected case kind");
+
+    let input_path = resolve_contract_relative_path(&manifest.contracts_root, &case.authoring_input)?;
+    let input_json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(input_path)?)?;
+    let authoring = authoring_core::AuthoringDocument {
+        kind: input_json["kind"].as_str().unwrap_or_default().to_string(),
+        schema_version: input_json["schema_version"].as_str().unwrap_or_default().to_string(),
+        metadata_document_id: input_json["metadata"]["document_id"].as_str().unwrap_or_default().to_string(),
+    };
+    let mut req = authoring_core::NormalizationRequest::new(authoring);
+    if let Some(ctx) = case.comparison_context {
+        req.comparison_context = Some(serde_json::from_value(ctx)?);
     }
-    "phase2-risk" => {
-        let input_path = resolve_contract_relative_path(&manifest.contracts_root, &case.input)?;
-        let yaml_value: serde_yaml::Value = serde_yaml::from_str(&std::fs::read_to_string(input_path)?)?;
-        let json_value = serde_json::to_value(yaml_value)?;
-        let schema = load_schema(resolve_asset_path(&manifest, "merge_risk_report_schema")?)?;
-        validate_value(&schema, &json_value)?;
-    }
-    _ => anyhow::bail!("unsupported fixture category: {}", case.category),
+
+    let actual = authoring_core::normalize(req);
+    let actual_text = authoring_core::canonical_json::to_canonical_json(&actual)?;
+    let expected_path = resolve_contract_relative_path(&manifest.contracts_root, &case.expected_result)?;
+    let expected_value: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(expected_path)?)?;
+    let expected_text = authoring_core::canonical_json::to_canonical_json(&expected_value)?;
+
+    anyhow::ensure!(actual_text == expected_text, "phase2 normalization output mismatch");
+    Ok(())
 }
 ```
 
@@ -1100,21 +1618,21 @@ Expected: PASS with new phase2 catalog entries.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add contracts/fixtures/index.yaml contracts/fixtures/phase2/normalization/minimal-success.yaml contracts/fixtures/phase2/normalization/identity-random-warning.yaml contracts/fixtures/phase2/risk/complete-low.yaml contracts/fixtures/phase2/risk/partial-high.yaml contract_tools/src/fixtures.rs contract_tools/tests/fixture_gate_tests.rs
-git commit -m "feat: add phase2 fixture catalog entries and gate validation"
+git add contracts/fixtures/index.yaml contracts/fixtures/phase2/normalization/minimal-success.case.yaml contracts/fixtures/phase2/normalization/identity-random-warning.case.yaml contracts/fixtures/phase2/risk/complete-low.case.yaml contracts/fixtures/phase2/risk/partial-high.case.yaml contracts/fixtures/phase2/inputs/minimal-authoring-ir.json contracts/fixtures/phase2/expected/minimal-success.result.json contracts/fixtures/phase2/expected/complete-low.risk.json contract_tools/Cargo.toml contract_tools/src/fixtures.rs contract_tools/tests/fixture_gate_tests.rs
+git commit -m "feat: add executable phase2 fixture regression gates"
 ```
 
 ## Task 10: End-to-end contract verification and release-readiness proof
 
 **Files:**
 - Modify: `README.md`
-- Modify: `docs/superpowers/checklists/phase-1-exit-evidence.md`
+- Create: `docs/superpowers/checklists/phase-2-exit-evidence.md`
 
 - [ ] **Step 1: Add normalize command to operator docs**
 
 ```markdown
 <!-- README.md (command excerpt) -->
-cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/valid/minimal-authoring-ir.json" --output contract-json
+cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase2/inputs/minimal-authoring-ir.json" --output contract-json
 ```
 
 - [ ] **Step 2: Run focused crate tests**
@@ -1130,25 +1648,27 @@ Expected: PASS.
 Run: `cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"`
 Expected: `verification passed`.
 
-Run: `cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/valid/minimal-authoring-ir.json" --output contract-json`
+Run: `cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase2/inputs/minimal-authoring-ir.json" --output contract-json`
 Expected: valid JSON with required top-level keys.
 
 - [ ] **Step 4: Update checklist evidence with exact command outputs and dates**
 
 ```markdown
-<!-- docs/superpowers/checklists/phase-1-exit-evidence.md (new entry excerpt) -->
-## 2026-04-03 Phase 2 contract closure pre-planning verification
+<!-- docs/superpowers/checklists/phase-2-exit-evidence.md -->
+# Phase 2 Exit Evidence
+
+## 2026-04-03 Phase 2 core authoring model verification
 
 - `cargo test -p authoring_core -v` : PASS
 - `cargo test -p contract_tools -v` : PASS
 - `cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"` : PASS
-- `cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/valid/minimal-authoring-ir.json" --output contract-json` : PASS
+- `cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase2/inputs/minimal-authoring-ir.json" --output contract-json` : PASS
 ```
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add README.md docs/superpowers/checklists/phase-1-exit-evidence.md
+git add README.md docs/superpowers/checklists/phase-2-exit-evidence.md
 git commit -m "docs: record phase2 contract verification workflow"
 ```
 
@@ -1162,6 +1682,7 @@ git commit -m "docs: record phase2 contract verification workflow"
 - target-selector grammar: Task 5
 - contract-json required fields: Task 2 + Task 8
 - canonical serialization specification: Task 6 + Task 9
+- executable fixture regression gating (not schema-only): Task 9
 - contract-first ownership and synchronized updates: Tasks 2/3/9/10
 
 No uncovered requirements from the approved Phase 2 spec.
