@@ -69,7 +69,8 @@
         "fixture_catalog",
         "validation_semantics",
         "path_semantics",
-        "compatibility_semantics"
+        "compatibility_semantics",
+        "target_selector_grammar"
       ],
       "additionalProperties": false,
       "properties": {
@@ -162,6 +163,10 @@
           "minLength": 1
         },
         "compatibility_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_selector_grammar": {
           "type": "string",
           "minLength": 1
         }

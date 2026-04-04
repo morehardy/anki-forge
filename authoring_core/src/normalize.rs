@@ -2,6 +2,14 @@ use crate::model::{
     DiagnosticItem, MergeRiskReport, NormalizationDiagnostics, NormalizationRequest,
     NormalizationResult, NormalizedIr, PolicyRefs,
 };
+use crate::selector::SelectorResolveError;
+
+pub fn selector_resolve_error_code(error: &SelectorResolveError) -> &'static str {
+    match error {
+        SelectorResolveError::Unmatched => "PHASE2.SELECTOR_UNMATCHED",
+        SelectorResolveError::Ambiguous => "PHASE2.SELECTOR_AMBIGUOUS",
+    }
+}
 
 pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
     let NormalizationRequest {
