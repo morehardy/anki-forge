@@ -54,6 +54,11 @@
         "authoring_ir_schema",
         "diagnostic_item_schema",
         "validation_report_schema",
+        "normalized_ir_schema",
+        "normalization_diagnostics_schema",
+        "comparison_context_schema",
+        "merge_risk_report_schema",
+        "normalization_result_schema",
         "service_envelope_schema",
         "error_registry_schema",
         "error_registry",
@@ -89,6 +94,26 @@
           "minLength": 1
         },
         "validation_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalized_ir_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalization_diagnostics_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_context_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merge_risk_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalization_result_schema": {
           "type": "string",
           "minLength": 1
         },

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "comparison_status",
+    "overall_level",
+    "policy_version",
+    "baseline_artifact_fingerprint",
+    "current_artifact_fingerprint",
+    "comparison_reasons"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "merge-risk-report"
+    },
+    "comparison_status": {
+      "enum": ["complete", "partial", "unavailable"]
+    },
+    "overall_level": {
+      "enum": ["low", "medium", "high", "unknown"]
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_artifact_fingerprint": {
+      "type": "string"
+    },
+    "current_artifact_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "comparison_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

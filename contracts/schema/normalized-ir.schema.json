@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["kind", "schema_version", "document_id", "resolved_identity"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "normalized-ir"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "document_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolved_identity": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
