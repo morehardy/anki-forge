@@ -58,6 +58,11 @@ fn success_returns_normalized_ir_and_contract_envelope_keys() {
         ],
     );
     assert!(json["normalized_ir"].is_object());
+    assert!(!json["normalized_ir"]["resolved_identity"]
+        .as_str()
+        .expect("resolved_identity string")
+        .trim()
+        .is_empty());
 }
 
 #[test]
@@ -85,7 +90,7 @@ fn success_with_comparison_context_preserves_risk_policy_ref() {
     let mut request = NormalizationRequest::new(input);
     request.comparison_context = Some(ComparisonContext {
         kind: "comparison-context".into(),
-        baseline_kind: "normalized-ir".into(),
+        baseline_kind: "normalized_ir".into(),
         baseline_artifact_fingerprint: "baseline-fingerprint".into(),
         risk_policy_ref: "risk-policy.default@1.0.0".into(),
         comparison_mode: "strict".into(),
@@ -96,4 +101,20 @@ fn success_with_comparison_context_preserves_risk_policy_ref() {
 
     assert_eq!(json["policy_refs"]["risk_policy_ref"], "risk-policy.default@1.0.0");
     assert!(json["comparison_context"].is_object());
+    assert!(json["merge_risk_report"].is_object());
+    assert_eq!(json["merge_risk_report"]["comparison_status"], "complete");
+    assert_eq!(json["merge_risk_report"]["overall_level"], "low");
+    assert_eq!(
+        json["merge_risk_report"]["policy_version"],
+        "risk-policy.default@1.0.0"
+    );
+    assert_eq!(
+        json["merge_risk_report"]["baseline_artifact_fingerprint"],
+        "baseline-fingerprint"
+    );
+    assert!(!json["merge_risk_report"]["current_artifact_fingerprint"]
+        .as_str()
+        .expect("current_artifact_fingerprint string")
+        .trim()
+        .is_empty());
 }

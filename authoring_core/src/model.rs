@@ -36,6 +36,7 @@ pub struct NormalizedIr {
     pub kind: String,
     pub schema_version: String,
     pub document_id: String,
+    pub resolved_identity: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
