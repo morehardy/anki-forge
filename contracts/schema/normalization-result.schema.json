@@ -6,7 +6,6 @@
     "result_status",
     "tool_contract_version",
     "policy_refs",
-    "comparison_context",
     "diagnostics"
   ],
   "additionalProperties": false,
@@ -99,8 +98,7 @@
         }
       },
       "then": {
-        "required": ["merge_risk_report"]
-        ,
+        "required": ["merge_risk_report"],
         "properties": {
           "merge_risk_report": {
             "$ref": "merge-risk-report.schema.json"
