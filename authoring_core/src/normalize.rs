@@ -136,19 +136,23 @@ fn selector_invalid_summary(error: &SelectorError) -> &'static str {
 }
 
 fn identity_error_diagnostic(error: &anyhow::Error) -> (&'static str, String) {
-    let message = error.to_string();
-    if message == "reason_code required" {
-        (
-            "PHASE2.REASON_CODE_REQUIRED",
-            "override modes require reason_code".into(),
-        )
-    } else if message == "external_id required" {
-        (
-            "PHASE2.EXTERNAL_ID_REQUIRED",
-            "external override requires external_id".into(),
-        )
+    if let Some(identity_error) = error.downcast_ref::<crate::identity::IdentityError>() {
+        match identity_error {
+            crate::identity::IdentityError::ReasonCodeRequired => (
+                "PHASE2.REASON_CODE_REQUIRED",
+                "override modes require reason_code".into(),
+            ),
+            crate::identity::IdentityError::ExternalIdRequired => (
+                "PHASE2.EXTERNAL_ID_REQUIRED",
+                "external override requires external_id".into(),
+            ),
+            crate::identity::IdentityError::UnsupportedOverride(mode) => (
+                "PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED",
+                format!("unsupported identity override mode: {mode}"),
+            ),
+        }
     } else {
-        ("PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED", message)
+        ("PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED", error.to_string())
     }
 }
 

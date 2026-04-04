@@ -81,13 +81,10 @@ struct Phase2AuthoringMetadata {
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
-struct Phase2NormalizationCase {
-    kind: String,
+struct Phase2RequestParams {
     authoring_input: String,
     #[serde(default)]
     comparison_context: Option<Value>,
-    #[serde(default)]
-    expected_result: Option<String>,
     #[serde(default)]
     identity_override_mode: Option<String>,
     #[serde(default)]
@@ -98,6 +95,16 @@ struct Phase2NormalizationCase {
     reason_code: Option<String>,
     #[serde(default)]
     reason: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase2NormalizationCase {
+    kind: String,
+    #[serde(flatten)]
+    request: Phase2RequestParams,
+    #[serde(default)]
+    expected_result: Option<String>,
     #[serde(default)]
     expected_result_status: Option<String>,
     #[serde(default)]
@@ -110,21 +117,10 @@ struct Phase2NormalizationCase {
 #[serde(deny_unknown_fields)]
 struct Phase2RiskCase {
     kind: String,
-    authoring_input: String,
-    #[serde(default)]
-    comparison_context: Option<Value>,
+    #[serde(flatten)]
+    request: Phase2RequestParams,
     #[serde(default)]
     expected_result: Option<String>,
-    #[serde(default)]
-    identity_override_mode: Option<String>,
-    #[serde(default)]
-    target_selector: Option<String>,
-    #[serde(default)]
-    external_id: Option<String>,
-    #[serde(default)]
-    reason_code: Option<String>,
-    #[serde(default)]
-    reason: Option<String>,
     #[serde(default)]
     expected_result_status: Option<String>,
     #[serde(default)]
@@ -473,13 +469,7 @@ fn run_phase2_normalization_case(
     let request = build_phase2_request(
         manifest,
         authoring_ir_schema,
-        &case.authoring_input,
-        case.comparison_context,
-        case.identity_override_mode,
-        case.target_selector,
-        case.external_id,
-        case.reason_code,
-        case.reason,
+        &case.request,
     )?;
     let actual = authoring_core::normalize(request);
 
@@ -554,13 +544,7 @@ fn run_phase2_risk_case(
     let request = build_phase2_request(
         manifest,
         authoring_ir_schema,
-        &case.authoring_input,
-        case.comparison_context,
-        case.identity_override_mode,
-        case.target_selector,
-        case.external_id,
-        case.reason_code,
-        case.reason,
+        &case.request,
     )?;
     let actual = authoring_core::normalize(request);
     let report = actual.merge_risk_report.as_ref().with_context(|| {
@@ -611,29 +595,23 @@ fn run_phase2_risk_case(
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments)]
 fn build_phase2_request(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
-    authoring_input: &str,
-    comparison_context: Option<Value>,
-    identity_override_mode: Option<String>,
-    target_selector: Option<String>,
-    external_id: Option<String>,
-    reason_code: Option<String>,
-    reason: Option<String>,
+    params: &Phase2RequestParams,
 ) -> anyhow::Result<authoring_core::NormalizationRequest> {
-    let input = load_phase2_authoring_input(manifest, authoring_ir_schema, authoring_input)?;
+    let input =
+        load_phase2_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
     let mut request = authoring_core::NormalizationRequest::new(input);
-    if let Some(context) = comparison_context {
+    if let Some(context) = params.comparison_context.clone() {
         request.comparison_context =
             Some(serde_json::from_value(context).context("phase2 comparison_context must match the contract model")?);
     }
-    request.identity_override_mode = identity_override_mode;
-    request.target_selector = target_selector;
-    request.external_id = external_id;
-    request.reason_code = reason_code;
-    request.reason = reason;
+    request.identity_override_mode = params.identity_override_mode.clone();
+    request.target_selector = params.target_selector.clone();
+    request.external_id = params.external_id.clone();
+    request.reason_code = params.reason_code.clone();
+    request.reason = params.reason.clone();
     Ok(request)
 }
 
