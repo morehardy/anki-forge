@@ -4,12 +4,20 @@ use crate::{
 };
 use anyhow::{Context, Result};
 use flate2::{write::GzEncoder, Compression};
+use serde::Deserialize;
 use std::{
     collections::BTreeMap,
     fs::{self, File},
     path::{Path, PathBuf},
 };
 use tar::Builder;
+
+#[derive(Debug, Deserialize)]
+struct Phase2FixtureCaseTransitivePaths {
+    authoring_input: String,
+    #[serde(default)]
+    expected_result: Option<String>,
+}
 
 fn artifact_name(bundle_version: &str) -> String {
     format!("anki-forge-contract-bundle-{bundle_version}.tar.gz")
@@ -80,17 +88,18 @@ fn package_entries(
                 })?;
         let fixture_catalog = load_fixture_catalog(&fixture_catalog_path)?;
 
-        for case in fixture_catalog.cases {
+        for case in &fixture_catalog.cases {
             add_relative_entry(&mut entries, &manifest.contracts_root, &case.input)?;
-            if let Some(expected) = case.expected {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &expected)?;
+            if let Some(expected) = &case.expected {
+                add_relative_entry(&mut entries, &manifest.contracts_root, expected)?;
             }
-            if let Some(target_asset) = case.target_asset {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &target_asset)?;
+            if let Some(target_asset) = &case.target_asset {
+                add_relative_entry(&mut entries, &manifest.contracts_root, target_asset)?;
             }
-            for affected_path in case.affected_paths {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &affected_path)?;
+            for affected_path in &case.affected_paths {
+                add_relative_entry(&mut entries, &manifest.contracts_root, affected_path)?;
             }
+            add_case_transitive_entries(&mut entries, &manifest.contracts_root, case)?;
         }
     }
 
@@ -105,5 +114,44 @@ fn add_relative_entry(
     let source_path = resolve_contract_relative_path(contracts_root, relative_path)
         .with_context(|| format!("failed to resolve transitive package entry: {relative_path}"))?;
     entries.insert(PathBuf::from("contracts").join(relative_path), source_path);
+    Ok(())
+}
+
+fn add_case_transitive_entries(
+    entries: &mut BTreeMap<PathBuf, PathBuf>,
+    contracts_root: &Path,
+    case: &crate::fixtures::FixtureCase,
+) -> Result<()> {
+    match case.category.as_str() {
+        "phase2-normalization" | "phase2-risk" => {
+            let case_path = resolve_contract_relative_path(contracts_root, &case.input)
+                .with_context(|| {
+                    format!(
+                        "failed to resolve phase2 fixture case for packaging: {}",
+                        case.input
+                    )
+                })?;
+            let raw = fs::read_to_string(&case_path).with_context(|| {
+                format!(
+                    "failed to read phase2 fixture case for packaging: {}",
+                    case_path.display()
+                )
+            })?;
+            let transitive: Phase2FixtureCaseTransitivePaths = serde_yaml::from_str(&raw)
+                .with_context(|| {
+                    format!(
+                        "phase2 fixture case must be valid YAML for packaging: {}",
+                        case_path.display()
+                    )
+                })?;
+
+            add_relative_entry(entries, contracts_root, &transitive.authoring_input)?;
+            if let Some(expected_result) = transitive.expected_result {
+                add_relative_entry(entries, contracts_root, &expected_result)?;
+            }
+        }
+        _ => {}
+    }
+
     Ok(())
 }

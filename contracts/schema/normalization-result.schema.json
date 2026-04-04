@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "result_status",
+    "tool_contract_version",
+    "policy_refs",
+    "diagnostics"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "normalization-result"
+    },
+    "result_status": {
+      "enum": ["success", "invalid", "error"]
+    },
+    "tool_contract_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy_refs": {
+      "type": "object",
+      "required": ["identity_policy_ref", "risk_policy_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "identity_policy_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_policy_ref": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        }
+      }
+    },
+    "comparison_context": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "comparison-context.schema.json"
+        }
+      ]
+    },
+    "diagnostics": {
+      "$ref": "normalization-diagnostics.schema.json"
+    },
+    "normalized_ir": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "normalized-ir.schema.json"
+        }
+      ]
+    },
+    "merge_risk_report": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "merge-risk-report.schema.json"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["comparison_context"],
+        "properties": {
+          "comparison_context": {
+            "type": "null"
+          }
+        }
+      },
+      "then": {}
+    },
+    {
+      "if": {
+        "required": ["comparison_context"],
+        "properties": {
+          "comparison_context": {
+            "type": "object"
+          }
+        }
+      },
+      "then": {
+        "required": ["merge_risk_report"],
+        "properties": {
+          "merge_risk_report": {
+            "$ref": "merge-risk-report.schema.json"
+          }
+        }
+      }
+    }
+  ]
+}

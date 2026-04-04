@@ -1,0 +1,13 @@
+kind: phase2-risk-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context:
+  kind: comparison-context
+  baseline_kind: identity_index
+  baseline_artifact_fingerprint: baseline-identity-only
+  risk_policy_ref: risk-policy.default@1.0.0
+  comparison_mode: best_effort
+expected_result_status: success
+expected_comparison_status: partial
+expected_overall_level: medium
+expected_comparison_reasons:
+  - BASELINE_IDENTITY_INDEX_ONLY

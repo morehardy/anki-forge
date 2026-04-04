@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "baseline_kind",
+    "baseline_artifact_fingerprint",
+    "risk_policy_ref",
+    "comparison_mode"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "comparison-context"
+    },
+    "baseline_kind": {
+      "enum": ["normalized_ir", "identity_index"]
+    },
+    "baseline_artifact_fingerprint": {
+      "type": "string"
+    },
+    "risk_policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "comparison_mode": {
+      "enum": ["strict", "best_effort"]
+    }
+  }
+}

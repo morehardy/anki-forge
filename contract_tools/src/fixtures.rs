@@ -1,4 +1,5 @@
 use anyhow::{ensure, Context};
+use jsonschema::JSONSchema;
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use serde_json::Value;
@@ -65,6 +66,71 @@ struct UpgradeRule {
     id: String,
 }
 
+#[derive(Debug, Deserialize)]
+struct Phase2AuthoringInput {
+    kind: String,
+    schema_version: String,
+    metadata: Phase2AuthoringMetadata,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase2AuthoringMetadata {
+    document_id: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase2RequestParams {
+    authoring_input: String,
+    #[serde(default)]
+    comparison_context: Option<Value>,
+    #[serde(default)]
+    identity_override_mode: Option<String>,
+    #[serde(default)]
+    target_selector: Option<String>,
+    #[serde(default)]
+    external_id: Option<String>,
+    #[serde(default)]
+    reason_code: Option<String>,
+    #[serde(default)]
+    reason: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase2NormalizationCase {
+    kind: String,
+    #[serde(flatten)]
+    request: Phase2RequestParams,
+    #[serde(default)]
+    expected_result: Option<String>,
+    #[serde(default)]
+    expected_result_status: Option<String>,
+    #[serde(default)]
+    expected_diagnostic_codes: Vec<String>,
+    #[serde(default)]
+    resolved_identity_prefix: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase2RiskCase {
+    kind: String,
+    #[serde(flatten)]
+    request: Phase2RequestParams,
+    #[serde(default)]
+    expected_result: Option<String>,
+    #[serde(default)]
+    expected_result_status: Option<String>,
+    #[serde(default)]
+    expected_comparison_status: Option<String>,
+    #[serde(default)]
+    expected_overall_level: Option<String>,
+    #[serde(default)]
+    expected_comparison_reasons: Vec<String>,
+}
+
 pub fn load_fixture_catalog(path: impl AsRef<Path>) -> anyhow::Result<FixtureCatalog> {
     let path = path.as_ref();
     let raw = fs::read_to_string(path)
@@ -119,6 +185,10 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
         "minimal-service-envelope",
         "additive-compatible",
         "incompatible-path-change",
+        "phase2-normalization-minimal-success",
+        "phase2-normalization-identity-random-warning",
+        "phase2-risk-complete-low",
+        "phase2-risk-partial-high",
     ];
     for case_id in required_case_ids {
         ensure!(
@@ -143,6 +213,21 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
     for case in &catalog.cases {
         let input_path = resolve_contract_relative_path(&manifest.contracts_root, &case.input)
             .with_context(|| format!("fixture input must resolve safely for case {}", case.id))?;
+
+        if let Some(compatibility_class) = &case.compatibility_class {
+            ensure!(
+                compatibility_class_ids.contains(compatibility_class.as_str()),
+                "unknown compatibility class in fixture catalog: {}",
+                compatibility_class
+            );
+        }
+        for rule_id in &case.upgrade_rules {
+            ensure!(
+                upgrade_rule_ids.contains(rule_id.as_str()),
+                "unknown upgrade rule in fixture catalog: {}",
+                rule_id
+            );
+        }
 
         match case.category.as_str() {
             "valid" => {
@@ -170,6 +255,22 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                         case.id
                     )
                 })?;
+            }
+            "phase2-normalization" => {
+                run_phase2_normalization_case(
+                    &manifest,
+                    &authoring_ir_schema,
+                    &input_path,
+                    case.id.as_str(),
+                )?;
+            }
+            "phase2-risk" => {
+                run_phase2_risk_case(
+                    &manifest,
+                    &authoring_ir_schema,
+                    &input_path,
+                    case.id.as_str(),
+                )?;
             }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;
@@ -347,4 +448,223 @@ fn load_json_value(path: impl AsRef<Path>) -> anyhow::Result<Value> {
         .with_context(|| format!("failed to read JSON asset: {}", path.display()))?;
     serde_json::from_str(&raw)
         .with_context(|| format!("JSON asset must be valid JSON: {}", path.display()))
+}
+
+fn run_phase2_normalization_case(
+    manifest: &crate::manifest::LoadedManifest,
+    authoring_ir_schema: &JSONSchema,
+    case_path: &Path,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let case: Phase2NormalizationCase = load_yaml_model(case_path)?;
+    ensure!(
+        case.kind == "phase2-normalization-case",
+        "phase2 normalization fixture must declare kind=phase2-normalization-case: {}",
+        case_id
+    );
+    ensure!(
+        case.expected_result.is_some()
+            || case.expected_result_status.is_some()
+            || !case.expected_diagnostic_codes.is_empty()
+            || case.resolved_identity_prefix.is_some(),
+        "phase2 normalization fixture must declare executable expectations: {}",
+        case_id
+    );
+
+    let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
+    let actual = authoring_core::normalize(request);
+
+    if let Some(expected_result) = &case.expected_result {
+        compare_canonical_json(
+            manifest,
+            &actual,
+            expected_result,
+            case_id,
+            "phase2 normalization output mismatch",
+        )?;
+    }
+    if let Some(expected_status) = &case.expected_result_status {
+        ensure!(
+            actual.result_status == *expected_status,
+            "phase2 normalization result_status mismatch: {}",
+            case_id
+        );
+    }
+    for expected_code in &case.expected_diagnostic_codes {
+        ensure!(
+            actual
+                .diagnostics
+                .items
+                .iter()
+                .any(|item| item.code == *expected_code),
+            "phase2 normalization fixture missing expected diagnostic code {}: {}",
+            expected_code,
+            case_id
+        );
+    }
+    if let Some(expected_prefix) = &case.resolved_identity_prefix {
+        let normalized_ir = actual.normalized_ir.as_ref().with_context(|| {
+            format!(
+                "phase2 normalization fixture must emit normalized_ir for case {}",
+                case_id
+            )
+        })?;
+        ensure!(
+            normalized_ir.resolved_identity.starts_with(expected_prefix),
+            "phase2 normalization fixture resolved_identity must start with {}: {}",
+            expected_prefix,
+            case_id
+        );
+    }
+
+    Ok(())
+}
+
+fn run_phase2_risk_case(
+    manifest: &crate::manifest::LoadedManifest,
+    authoring_ir_schema: &JSONSchema,
+    case_path: &Path,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let case: Phase2RiskCase = load_yaml_model(case_path)?;
+    ensure!(
+        case.kind == "phase2-risk-case",
+        "phase2 risk fixture must declare kind=phase2-risk-case: {}",
+        case_id
+    );
+    ensure!(
+        case.expected_result.is_some()
+            || case.expected_result_status.is_some()
+            || case.expected_comparison_status.is_some()
+            || case.expected_overall_level.is_some()
+            || !case.expected_comparison_reasons.is_empty(),
+        "phase2 risk fixture must declare executable expectations: {}",
+        case_id
+    );
+
+    let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
+    let actual = authoring_core::normalize(request);
+    let report = actual.merge_risk_report.as_ref().with_context(|| {
+        format!(
+            "phase2 risk fixture must emit merge_risk_report for case {}",
+            case_id
+        )
+    })?;
+
+    if let Some(expected_result) = &case.expected_result {
+        compare_canonical_json(
+            manifest,
+            report,
+            expected_result,
+            case_id,
+            "phase2 risk output mismatch",
+        )?;
+    }
+    if let Some(expected_status) = &case.expected_result_status {
+        ensure!(
+            actual.result_status == *expected_status,
+            "phase2 risk normalization result_status mismatch: {}",
+            case_id
+        );
+    }
+    if let Some(expected_status) = &case.expected_comparison_status {
+        ensure!(
+            report.comparison_status == *expected_status,
+            "phase2 risk comparison_status mismatch: {}",
+            case_id
+        );
+    }
+    if let Some(expected_level) = &case.expected_overall_level {
+        ensure!(
+            report.overall_level == *expected_level,
+            "phase2 risk overall_level mismatch: {}",
+            case_id
+        );
+    }
+    if !case.expected_comparison_reasons.is_empty() {
+        ensure!(
+            report.comparison_reasons == case.expected_comparison_reasons,
+            "phase2 risk comparison_reasons mismatch: {}",
+            case_id
+        );
+    }
+
+    Ok(())
+}
+
+fn build_phase2_request(
+    manifest: &crate::manifest::LoadedManifest,
+    authoring_ir_schema: &JSONSchema,
+    params: &Phase2RequestParams,
+) -> anyhow::Result<authoring_core::NormalizationRequest> {
+    let input =
+        load_phase2_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
+    let mut request = authoring_core::NormalizationRequest::new(input);
+    if let Some(context) = params.comparison_context.clone() {
+        request.comparison_context = Some(
+            serde_json::from_value(context)
+                .context("phase2 comparison_context must match the contract model")?,
+        );
+    }
+    request.identity_override_mode = params.identity_override_mode.clone();
+    request.target_selector = params.target_selector.clone();
+    request.external_id = params.external_id.clone();
+    request.reason_code = params.reason_code.clone();
+    request.reason = params.reason.clone();
+    Ok(request)
+}
+
+fn load_phase2_authoring_input(
+    manifest: &crate::manifest::LoadedManifest,
+    authoring_ir_schema: &JSONSchema,
+    authoring_input: &str,
+) -> anyhow::Result<authoring_core::AuthoringDocument> {
+    let input_path = resolve_contract_relative_path(&manifest.contracts_root, authoring_input)?;
+    let input_value = load_json_value(&input_path)?;
+    validate_value(authoring_ir_schema, &input_value).with_context(|| {
+        format!(
+            "phase2 authoring input must satisfy authoring_ir_schema: {}",
+            input_path.display()
+        )
+    })?;
+    let input: Phase2AuthoringInput = serde_json::from_value(input_value).with_context(|| {
+        format!(
+            "phase2 authoring input must map into the execution model: {}",
+            input_path.display()
+        )
+    })?;
+
+    Ok(authoring_core::AuthoringDocument {
+        kind: input.kind,
+        schema_version: input.schema_version,
+        metadata_document_id: input.metadata.document_id,
+    })
+}
+
+fn compare_canonical_json(
+    manifest: &crate::manifest::LoadedManifest,
+    actual: &impl serde::Serialize,
+    expected_relative_path: &str,
+    case_id: &str,
+    mismatch_message: &str,
+) -> anyhow::Result<()> {
+    let actual_text = authoring_core::to_canonical_json(actual)?;
+    let expected_path =
+        resolve_contract_relative_path(&manifest.contracts_root, expected_relative_path)
+            .with_context(|| {
+                format!(
+                    "phase2 expected artifact must resolve safely for case {}",
+                    case_id
+                )
+            })?;
+    let expected_value = load_json_value(&expected_path)?;
+    let expected_text = authoring_core::to_canonical_json(&expected_value)?;
+
+    ensure!(
+        actual_text == expected_text,
+        "{}: {}",
+        mismatch_message,
+        case_id
+    );
+    Ok(())
 }

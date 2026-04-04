@@ -49,18 +49,31 @@
       "required": [
         "manifest_schema",
         "version_policy",
+        "identity_policy_schema",
+        "risk_policy_schema",
         "compatibility_classes",
         "upgrade_rules",
+        "identity_policy",
+        "risk_policy",
         "authoring_ir_schema",
         "diagnostic_item_schema",
         "validation_report_schema",
+        "normalized_ir_schema",
+        "normalization_diagnostics_schema",
+        "comparison_context_schema",
+        "merge_risk_report_schema",
+        "normalization_result_schema",
         "service_envelope_schema",
         "error_registry_schema",
         "error_registry",
         "fixture_catalog",
         "validation_semantics",
         "path_semantics",
-        "compatibility_semantics"
+        "compatibility_semantics",
+        "target_selector_grammar",
+        "identity_semantics",
+        "merge_risk_semantics",
+        "canonical_serialization_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -72,11 +85,27 @@
           "type": "string",
           "minLength": 1
         },
+        "identity_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
         "compatibility_classes": {
           "type": "string",
           "minLength": 1
         },
         "upgrade_rules": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_policy": {
           "type": "string",
           "minLength": 1
         },
@@ -89,6 +118,26 @@
           "minLength": 1
         },
         "validation_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalized_ir_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalization_diagnostics_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_context_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merge_risk_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalization_result_schema": {
           "type": "string",
           "minLength": 1
         },
@@ -117,6 +166,22 @@
           "minLength": 1
         },
         "compatibility_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_selector_grammar": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merge_risk_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_serialization_semantics": {
           "type": "string",
           "minLength": 1
         }

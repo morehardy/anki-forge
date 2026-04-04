@@ -9,11 +9,20 @@ compatibility:
 assets:
   manifest_schema: schema/manifest.schema.json
   version_policy: versioning/policy.md
+  identity_policy_schema: schema/identity-policy.schema.json
+  risk_policy_schema: schema/risk-policy.schema.json
   compatibility_classes: versioning/compatibility-classes.yaml
   upgrade_rules: versioning/upgrade-rules.yaml
+  identity_policy: policies/identity-policy.default.yaml
+  risk_policy: policies/risk-policy.default.yaml
   authoring_ir_schema: schema/authoring-ir.schema.json
   diagnostic_item_schema: schema/diagnostic-item.schema.json
   validation_report_schema: schema/validation-report.schema.json
+  normalized_ir_schema: schema/normalized-ir.schema.json
+  normalization_diagnostics_schema: schema/normalization-diagnostics.schema.json
+  comparison_context_schema: schema/comparison-context.schema.json
+  merge_risk_report_schema: schema/merge-risk-report.schema.json
+  normalization_result_schema: schema/normalization-result.schema.json
   service_envelope_schema: schema/service-envelope.schema.json
   error_registry_schema: schema/error-registry.schema.json
   error_registry: errors/error-registry.yaml
@@ -21,3 +30,7 @@ assets:
   validation_semantics: semantics/validation.md
   path_semantics: semantics/path-conventions.md
   compatibility_semantics: semantics/compatibility.md
+  target_selector_grammar: semantics/target-selector-grammar.md
+  identity_semantics: semantics/identity.md
+  merge_risk_semantics: semantics/merge-risk.md
+  canonical_serialization_semantics: semantics/canonical-serialization.md

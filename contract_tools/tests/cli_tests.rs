@@ -1,4 +1,6 @@
-use std::process::Command;
+use serde_json::Value;
+use std::{fs, process::Command};
+use tempfile::tempdir;
 
 fn cargo_bin() -> &'static str {
     env!("CARGO_BIN_EXE_contract_tools")
@@ -68,4 +70,77 @@ fn summary_command_prints_bundle_version_and_public_axis() {
         let entry = format!("  {name}: {asset}");
         assert!(stdout.contains(&entry), "stdout: {stdout}");
     }
+}
+
+#[test]
+fn normalize_contract_json_includes_required_top_level_fields() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let input = manifest
+        .contracts_root
+        .join("fixtures/valid/minimal-authoring-ir.json");
+
+    let output = run_cli(&[
+        "normalize",
+        "--manifest",
+        manifest.path.to_str().unwrap(),
+        "--input",
+        input.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let value: Value = serde_json::from_str(&stdout).expect("stdout should be valid JSON");
+    let object = value.as_object().expect("stdout should be a JSON object");
+
+    for key in [
+        "kind",
+        "result_status",
+        "tool_contract_version",
+        "policy_refs",
+        "comparison_context",
+        "diagnostics",
+    ] {
+        assert!(object.contains_key(key), "missing key {key} in {stdout}");
+    }
+}
+
+#[test]
+fn normalize_command_rejects_invalid_authoring_input_shape() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let temp = tempdir().expect("tempdir");
+    let input = temp.path().join("invalid-authoring.json");
+    fs::write(
+        &input,
+        r#"{"kind":"authoring-ir","schema_version":"0.1.0","metadata":{"document_id":"doc-bad"}}"#,
+    )
+    .expect("write invalid input");
+
+    let output = run_cli(&[
+        "normalize",
+        "--manifest",
+        manifest.path.to_str().unwrap(),
+        "--input",
+        input.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        !output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
 }
