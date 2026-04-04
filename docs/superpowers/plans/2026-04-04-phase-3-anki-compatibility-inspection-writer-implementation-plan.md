@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Deliver a contract-first Phase 3 pipeline that turns writer-ready normalized data into `.apkg` artifacts, stable inspection reports, diff reports, and fixture-driven compatibility evidence.
+**Goal:** Deliver a contract-first Phase 3 pipeline that turns writer-ready normalized data into materialized staging artifacts, modern-Anki-compatible `.apkg` artifacts, stable inspection reports, diff reports, and fixture-driven compatibility evidence backed by a controlled compatibility oracle.
 
-**Architecture:** Extend the current minimal Phase 2 normalization contracts just enough to produce writer-ready `Normalized IR` for stock `Basic`, `Cloze`, and scoped `Image Occlusion` lanes, then add a new `writer_core` crate for staging, package emission, inspection, and diffing. Keep `contracts/` as the normative source of truth, `writer_core` as the artifact engine, and `contract_tools` as the CLI/gate layer that runs Tier A and Tier B fixtures plus the controlled compatibility oracle.
+**Architecture:** Extend the current minimal Phase 2 normalization contracts just enough to produce writer-ready `Normalized IR` for stock `Basic`, `Cloze`, and scoped `Image Occlusion` lanes, then add a new `writer_core` crate for staging, package emission, inspection, and diffing. Keep `contracts/` as the normative source of truth, `writer_core` as the artifact engine, and `contract_tools` as the CLI/gate layer that runs Tier A and Tier B fixtures, staging-first inspection, staging/apkg semantic consistency checks, and the controlled compatibility oracle.
 
-**Tech Stack:** Rust workspace (`cargo`), `serde`, `serde_json`, `serde_yaml`, `clap`, `jsonschema`, `rusqlite`, `zip`, `zstd`, `sha1`, JSON Schema contracts, YAML policies, contract fixtures, local `docs/source/rslib` reference source
+**Tech Stack:** Rust workspace (`cargo`), `serde`, `serde_json`, `serde_yaml`, `clap`, `jsonschema`, `rusqlite`, `zip`, `zstd`, `sha1`, `prost`, JSON Schema contracts, YAML policies and contexts, contract fixtures, local `docs/source/rslib` reference source
 
 ---
 
@@ -77,6 +77,7 @@ However, the current repository only has a minimal `Normalized IR` (`document_id
 - Create: `contracts/schema/build-context.schema.json`
 - Create: `contracts/policies/writer-policy.default.yaml`
 - Create: `contracts/policies/verification-policy.default.yaml`
+- Create: `contracts/contexts/build-context.default.yaml`
 - Create: `contracts/semantics/build.md`
 - Create: `contracts/semantics/inspect.md`
 - Create: `contracts/semantics/diff.md`
@@ -133,7 +134,12 @@ However, the current repository only has a minimal `Normalized IR` (`document_id
 - `package-build-result` must include both `writer_policy_ref` and `build_context_ref`.
 - `inspect-report` and `diff-report` must carry degradation/comparison completeness explicitly in schema-governed fields.
 - `build`, `inspect`, and `diff` must expose stable `contract-json` surfaces.
-- `.apkg` emission must follow the source-grounded package layout from local `rslib` references; do not invent filenames, media-map structure, or collection version names.
+- Do not replace the existing `contracts/manifest.yaml` asset map with abbreviated excerpts. Every manifest step in this plan means “append these keys while preserving all existing entries”.
+- `writer_core/src/lib.rs` must be extended incrementally. Do not declare or re-export modules before the backing files exist.
+- Materialized `staging_ref` and `apkg_ref` must point into caller-owned artifact roots, not into tempdirs that are dropped when a helper returns.
+- Writer fast gate is staging-first: `build -> inspect(staging) -> diff`. `.apkg` inspection is added for staging/apkg semantic consistency and compatibility acceptance.
+- Goldens must be captured from actual deterministic outputs. Do not hand-author placeholder fingerprints, refs, or hashes and then compare them as if they were real outputs.
+- `.apkg` emission must follow the source-grounded package layout from local `rslib` references; do not invent filenames, media-map structure, collection version names, `meta` encoding, or dummy-collection behavior.
 
 ### Task 1: Bootstrap `writer_core` in the workspace
 
@@ -348,7 +354,8 @@ Expected: FAIL because the current schemas reject the richer notetype/note/media
 - [ ] **Step 3: Expand the manifest and schemas**
 
 ```yaml
-# contracts/manifest.yaml (assets excerpt)
+# contracts/manifest.yaml
+# Append these keys to the existing assets map without removing current entries.
 assets:
   authoring_ir_schema: schema/authoring-ir.schema.json
   normalized_ir_schema: schema/normalized-ir.schema.json
@@ -1026,6 +1033,7 @@ git commit -m "feat: emit writer-ready normalized stock lanes"
 - Create: `contracts/schema/build-context.schema.json`
 - Create: `contracts/policies/writer-policy.default.yaml`
 - Create: `contracts/policies/verification-policy.default.yaml`
+- Create: `contracts/contexts/build-context.default.yaml`
 - Create: `contracts/semantics/build.md`
 - Create: `contracts/semantics/inspect.md`
 - Create: `contracts/semantics/diff.md`
@@ -1049,6 +1057,7 @@ fn manifest_registers_phase3_schema_and_semantics_assets() {
         "writer_policy_schema",
         "verification_policy_schema",
         "build_context_schema",
+        "build_context_default",
         "build_semantics",
         "inspect_semantics",
         "diff_semantics",
@@ -1078,7 +1087,8 @@ Expected: FAIL because the Phase 3 schemas, policies, and semantics docs do not 
 - [ ] **Step 3: Add the Phase 3 assets and register them in the manifest**
 
 ```yaml
-# contracts/manifest.yaml (Phase 3 excerpt)
+# contracts/manifest.yaml
+# Append these keys to the existing assets map without removing current entries.
 assets:
   package_build_result_schema: schema/package-build-result.schema.json
   inspect_report_schema: schema/inspect-report.schema.json
@@ -1088,10 +1098,22 @@ assets:
   build_context_schema: schema/build-context.schema.json
   writer_policy: policies/writer-policy.default.yaml
   verification_policy: policies/verification-policy.default.yaml
+  build_context_default: contexts/build-context.default.yaml
   build_semantics: semantics/build.md
   inspect_semantics: semantics/inspect.md
   diff_semantics: semantics/diff.md
   golden_regression_semantics: semantics/golden-regression.md
+```
+
+```yaml
+# contracts/contexts/build-context.default.yaml
+id: build-context.default
+version: 1.0.0
+emit_apkg: true
+materialize_staging: true
+media_resolution_mode: inline-only
+unresolved_asset_behavior: fail
+fingerprint_mode: canonical
 ```
 
 ```json
@@ -1447,6 +1469,12 @@ pub fn run_policy_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
         "verification_policy",
         "verification policy",
     )?;
+    validate_policy_asset(
+        &manifest,
+        "build_context_schema",
+        "build_context_default",
+        "build context",
+    )?;
 
     Ok(())
 }
@@ -1476,7 +1504,7 @@ Expected: PASS, including the new Phase 3 manifest asset and policy validation t
 - [ ] **Step 5: Commit**
 
 ```bash
-git add contracts/manifest.yaml contracts/schema/package-build-result.schema.json contracts/schema/inspect-report.schema.json contracts/schema/diff-report.schema.json contracts/schema/writer-policy.schema.json contracts/schema/verification-policy.schema.json contracts/schema/build-context.schema.json contracts/policies/writer-policy.default.yaml contracts/policies/verification-policy.default.yaml contracts/semantics/build.md contracts/semantics/inspect.md contracts/semantics/diff.md contracts/semantics/golden-regression.md contract_tools/src/policies.rs contract_tools/src/semantics.rs contract_tools/tests/schema_gate_tests.rs contract_tools/tests/policy_gate_tests.rs
+git add contracts/manifest.yaml contracts/schema/package-build-result.schema.json contracts/schema/inspect-report.schema.json contracts/schema/diff-report.schema.json contracts/schema/writer-policy.schema.json contracts/schema/verification-policy.schema.json contracts/schema/build-context.schema.json contracts/policies/writer-policy.default.yaml contracts/policies/verification-policy.default.yaml contracts/contexts/build-context.default.yaml contracts/semantics/build.md contracts/semantics/inspect.md contracts/semantics/diff.md contracts/semantics/golden-regression.md contract_tools/src/policies.rs contract_tools/src/semantics.rs contract_tools/tests/schema_gate_tests.rs contract_tools/tests/policy_gate_tests.rs
 git commit -m "feat: add phase3 report contracts and policy assets"
 ```
 
@@ -1677,24 +1705,20 @@ fn normalize(value: serde_json::Value) -> serde_json::Value {
 
 ```rust
 // writer_core/src/lib.rs
-pub mod build;
 pub mod canonical_json;
-pub mod diff;
-pub mod inspect;
 pub mod model;
 pub mod policy;
-pub mod staging;
 
-pub use build::build;
 pub use canonical_json::to_canonical_json;
-pub use diff::diff_reports;
-pub use inspect::{inspect_apkg, inspect_build_result, inspect_staging, InspectObservations, InspectReport};
 pub use model::*;
+pub use policy::{build_context_ref, policy_ref};
 
 pub fn tool_contract_version() -> &'static str {
     "phase3-v1"
 }
 ```
+
+Keep `writer_core/src/lib.rs` minimal in this task. Do not declare `build`, `staging`, `apkg`, `inspect`, or `diff` modules until the corresponding files are created in later tasks.
 
 - [ ] **Step 4: Run the writer_core tests to verify they pass**
 
@@ -1708,7 +1732,7 @@ git add writer_core/src/model.rs writer_core/src/policy.rs writer_core/src/canon
 git commit -m "feat: add phase3 writer report models"
 ```
 
-### Task 6: Implement staging build for Basic and Cloze plus media diagnostics
+### Task 6: Implement deterministic staging build for Basic and Cloze plus materialized staging artifacts
 
 **Files:**
 - Create: `writer_core/src/staging.rs`
@@ -1718,549 +1742,158 @@ git commit -m "feat: add phase3 writer report models"
 
 - [ ] **Step 1: Write failing build tests for Basic and Cloze staging**
 
+Add tests that prove three things before any implementation lands:
+
+1. `writer_core::build()` materializes a reusable staging artifact into a caller-owned artifact root.
+2. `staging_ref` is a stable ref into that artifact root, not an ephemeral temp path.
+3. `artifact_fingerprint` is derived from canonical staging contents, not from a path string.
+
+Representative assertions:
+
 ```rust
-// writer_core/tests/build_tests.rs
-fn sample_writer_policy() -> writer_core::WriterPolicy {
-    writer_core::WriterPolicy {
-        id: "writer-policy.default".into(),
-        version: "1.0.0".into(),
-        compatibility_target: "latest-only".into(),
-        stock_notetype_mode: "source-grounded".into(),
-        media_entry_mode: "inline".into(),
-        apkg_version: "latest".into(),
-    }
-}
+let temp = tempfile::tempdir().unwrap();
+let target = writer_core::BuildArtifactTarget::new(
+    temp.path().join("phase3/basic"),
+    "artifacts/phase3/basic".into(),
+);
 
-fn sample_build_context(emit_apkg: bool) -> writer_core::BuildContext {
-    writer_core::BuildContext {
-        emit_apkg,
-        materialize_staging: true,
-        media_resolution_mode: "inline-only".into(),
-        unresolved_asset_behavior: "fail".into(),
-        fingerprint_mode: "canonical".into(),
-    }
-}
+let result = writer_core::build(
+    &sample_basic_normalized_ir(),
+    &sample_writer_policy(),
+    &sample_build_context(false),
+    &target,
+)
+.unwrap();
 
-fn sample_basic_normalized_ir() -> authoring_core::NormalizedIr {
-    authoring_core::NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: "demo-doc".into(),
-        resolved_identity: "det:demo-doc".into(),
-        notetypes: vec![authoring_core::NormalizedNotetype {
-            id: "basic-main".into(),
-            kind: "basic".into(),
-            name: "Basic".into(),
-            fields: vec!["Front".into(), "Back".into()],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Card 1".into(),
-                question_format: "{{Front}}".into(),
-                answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
-            }],
-            css: String::new(),
-        }],
-        notes: vec![authoring_core::NormalizedNote {
-            id: "note-1".into(),
-            notetype_id: "basic-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Front".into(), "front".into()),
-                ("Back".into(), "back <img src=\"sample.jpg\">".into()),
-            ]),
-            tags: vec!["demo".into()],
-        }],
-        media: vec![authoring_core::NormalizedMedia {
-            filename: "sample.jpg".into(),
-            mime: "image/jpeg".into(),
-            data_base64: "MQ==".into(),
-        }],
-    }
-}
-
-fn sample_cloze_normalized_ir() -> authoring_core::NormalizedIr {
-    authoring_core::NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: "demo-doc".into(),
-        resolved_identity: "det:demo-doc".into(),
-        notetypes: vec![authoring_core::NormalizedNotetype {
-            id: "cloze-main".into(),
-            kind: "cloze".into(),
-            name: "Cloze".into(),
-            fields: vec!["Text".into(), "Back Extra".into()],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Cloze".into(),
-                question_format: "{{cloze:Text}}".into(),
-                answer_format: "{{cloze:Text}}<br>\n{{Back Extra}}".into(),
-            }],
-            css: ".cloze { font-weight: bold; }".into(),
-        }],
-        notes: vec![authoring_core::NormalizedNote {
-            id: "note-1".into(),
-            notetype_id: "cloze-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Text".into(), "{{c1::front}}".into()),
-                ("Back Extra".into(), "extra".into()),
-            ]),
-            tags: vec![],
-        }],
-        media: vec![],
-    }
-}
-
-#[test]
-fn build_creates_staging_for_basic_note_with_media_reference() {
-    let normalized = sample_basic_normalized_ir();
-    let writer_policy = sample_writer_policy();
-    let build_context = sample_build_context(false);
-
-    let result = writer_core::build(&normalized, &writer_policy, &build_context).unwrap();
-
-    assert_eq!(result.result_status, "success");
-    assert!(result.staging_ref.as_ref().unwrap().starts_with("staging:"));
-    assert!(result.artifact_fingerprint.as_ref().unwrap().starts_with("artifact:"));
-}
-
-#[test]
-fn build_marks_missing_required_field_as_invalid_diagnostic() {
-    let mut normalized = sample_basic_normalized_ir();
-    normalized.notes[0].fields.remove("Back");
-
-    let result = writer_core::build(&normalized, &sample_writer_policy(), &sample_build_context(false)).unwrap();
-
-    assert_eq!(result.result_status, "invalid");
-    assert!(result
-        .diagnostics
-        .items
-        .iter()
-        .any(|item| item.code == "PHASE3.MISSING_REQUIRED_FIELD"));
-}
-
-#[test]
-fn build_preserves_cloze_template_lane() {
-    let normalized = sample_cloze_normalized_ir();
-    let result = writer_core::build(&normalized, &sample_writer_policy(), &sample_build_context(false)).unwrap();
-
-    assert_eq!(result.result_status, "success");
-    assert!(result
-        .staging_ref
-        .as_ref()
-        .expect("staging ref")
-        .starts_with("staging:"));
-}
+assert_eq!(result.result_status, "success");
+assert_eq!(
+    result.staging_ref.as_deref(),
+    Some("artifacts/phase3/basic/staging/manifest.json")
+);
+assert!(temp.path().join("phase3/basic/staging/manifest.json").exists());
+assert!(result.artifact_fingerprint.as_deref().unwrap().starts_with("artifact:"));
 ```
+
+Keep the existing invalid-build test, but require `invalid` diagnostics to include selector/path-level context.
 
 - [ ] **Step 2: Run the build tests to verify they fail**
 
 Run: `cargo test -p writer_core --test build_tests -v`
-Expected: FAIL because `writer_core::build()` and the staging representation do not exist yet.
+Expected: FAIL because the staging representation, materialization target, and build engine do not exist yet.
 
 - [ ] **Step 3: Implement deterministic staging and semantic build validation**
 
-```rust
-// writer_core/src/staging.rs
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct StagingPackage {
-    pub notetypes: Vec<StagingNotetype>,
-    pub notes: Vec<StagingNote>,
-    pub media: Vec<StagingMediaFile>,
-}
+Implement the writer-side staging model with two distinct layers:
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct StagingNotetype {
-    pub id: String,
-    pub kind: String,
-    pub name: String,
-    pub fields: Vec<String>,
-    pub templates: Vec<authoring_core::NormalizedTemplate>,
-    pub css: String,
-}
+1. `StagingPackage`: the canonical in-memory package representation.
+2. `MaterializedStaging`: the caller-owned on-disk staging tree, including a stable manifest file plus any media payloads needed by later `inspect` and `.apkg` emission.
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct StagingNote {
-    pub id: String,
-    pub notetype_id: String,
-    pub deck_name: String,
-    pub fields: std::collections::BTreeMap<String, String>,
-    pub tags: Vec<String>,
-}
+Key implementation requirements:
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct StagingMediaFile {
-    pub filename: String,
-    pub mime: String,
-    pub data_base64: String,
-    pub sha1_hex: String,
-}
+- Add `BuildArtifactTarget { root_dir, stable_ref_prefix }` so the caller, not a tempdir helper, owns artifact lifetime.
+- `build()` becomes `build(normalized, writer_policy, build_context, artifact_target)`.
+- `StagingPackage::from_normalized()` performs semantic validation for required fields, stock lane shape, and unresolved assets according to `build_context`.
+- `materialize_staging()` writes a deterministic staging tree, with a canonical `staging/manifest.json` entry as the primary inspectable artifact.
+- `artifact_fingerprint` is computed from canonical staging content bytes, not from any filesystem path.
+- `staging_ref` is the stable ref returned by `artifact_target`, for example `artifacts/phase3/basic/staging/manifest.json`.
+- `PackageBuildResult` remains `invalid` for semantic precondition failures and `error` for execution failures. `invalid` items must carry `domain`, `path`, and `target_selector` whenever possible.
 
-impl StagingPackage {
-    pub fn from_normalized(normalized: &authoring_core::NormalizedIr) -> anyhow::Result<Self> {
-        Ok(Self {
-            notetypes: normalized
-                .notetypes
-                .iter()
-                .map(|nt| StagingNotetype {
-                    id: nt.id.clone(),
-                    kind: nt.kind.clone(),
-                    name: nt.name.clone(),
-                    fields: nt.fields.clone(),
-                    templates: nt.templates.clone(),
-                    css: nt.css.clone(),
-                })
-                .collect(),
-            notes: normalized
-                .notes
-                .iter()
-                .map(|note| StagingNote {
-                    id: note.id.clone(),
-                    notetype_id: note.notetype_id.clone(),
-                    deck_name: note.deck_name.clone(),
-                    fields: note.fields.clone(),
-                    tags: note.tags.clone(),
-                })
-                .collect(),
-            media: normalized
-                .media
-                .iter()
-                .map(|media| StagingMediaFile {
-                    filename: media.filename.clone(),
-                    mime: media.mime.clone(),
-                    data_base64: media.data_base64.clone(),
-                    sha1_hex: hex::encode(sha1::Sha1::digest(media.data_base64.as_bytes())),
-                })
-                .collect(),
-        })
-    }
-}
-```
+Now that the files exist, extend `writer_core/src/lib.rs` to export:
 
 ```rust
-// writer_core/src/build.rs
-pub fn build(
-    normalized: &authoring_core::NormalizedIr,
-    writer_policy: &crate::WriterPolicy,
-    build_context: &crate::BuildContext,
-) -> anyhow::Result<crate::PackageBuildResult> {
-    let mut diagnostics = Vec::new();
+pub mod build;
+pub mod canonical_json;
+pub mod model;
+pub mod policy;
+pub mod staging;
 
-    for note in &normalized.notes {
-        let notetype = normalized
-            .notetypes
-            .iter()
-            .find(|nt| nt.id == note.notetype_id)
-            .ok_or_else(|| anyhow::anyhow!("missing normalized notetype {}", note.notetype_id))?;
-
-        for field in &notetype.fields {
-            if !note.fields.contains_key(field) {
-                diagnostics.push(crate::BuildDiagnosticItem {
-                    level: "error".into(),
-                    code: "PHASE3.MISSING_REQUIRED_FIELD".into(),
-                    summary: format!("note {} is missing field {}", note.id, field),
-                    domain: Some("fields".into()),
-                    path: Some(format!("notes/{}", note.id)),
-                    target_selector: Some(format!("note[id='{}']", note.id)),
-                    stage: Some("build".into()),
-                    operation: Some("validate_fields".into()),
-                });
-            }
-        }
-    }
-
-    if diagnostics.iter().any(|item| item.level == "error") {
-        return Ok(crate::PackageBuildResult {
-            kind: "package-build-result".into(),
-            result_status: "invalid".into(),
-            tool_contract_version: crate::tool_contract_version().into(),
-            writer_policy_ref: crate::policy::policy_ref(&writer_policy.id, &writer_policy.version),
-            build_context_ref: crate::policy::build_context_ref(build_context)?,
-            staging_ref: None,
-            artifact_fingerprint: None,
-            package_fingerprint: None,
-            apkg_ref: None,
-            diagnostics: crate::BuildDiagnostics {
-                kind: "build-diagnostics".into(),
-                items: diagnostics,
-            },
-        });
-    }
-
-    let staging = crate::staging::StagingPackage::from_normalized(normalized)?;
-    let canonical = crate::to_canonical_json(&staging)?;
-    let artifact_fingerprint = format!("artifact:{}", hex::encode(sha1::Sha1::digest(canonical.as_bytes())));
-    let staging_ref = format!("staging:{artifact_fingerprint}");
-
-    Ok(crate::PackageBuildResult {
-        kind: "package-build-result".into(),
-        result_status: "success".into(),
-        tool_contract_version: crate::tool_contract_version().into(),
-        writer_policy_ref: crate::policy::policy_ref(&writer_policy.id, &writer_policy.version),
-        build_context_ref: crate::policy::build_context_ref(build_context)?,
-        staging_ref: Some(staging_ref),
-        artifact_fingerprint: Some(artifact_fingerprint),
-        package_fingerprint: None,
-        apkg_ref: None,
-        diagnostics: crate::BuildDiagnostics {
-            kind: "build-diagnostics".into(),
-            items: vec![],
-        },
-    })
-}
+pub use build::{build, BuildArtifactTarget};
+pub use canonical_json::to_canonical_json;
+pub use model::*;
+pub use policy::{build_context_ref, policy_ref};
+pub use staging::{MaterializedStaging, StagingPackage};
 ```
 
 - [ ] **Step 4: Run the build tests to verify they pass**
 
 Run: `cargo test -p writer_core --test build_tests -v`
-Expected: PASS for the Basic/Cloze staging and missing-field diagnostic tests.
+Expected: PASS for Basic/Cloze staging materialization and missing-field diagnostic tests.
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add writer_core/src/staging.rs writer_core/src/build.rs writer_core/src/lib.rs writer_core/tests/build_tests.rs
-git commit -m "feat: build deterministic staging for basic and cloze"
+git commit -m "feat: build deterministic staging artifacts for basic and cloze"
 ```
 
-### Task 7: Add the scoped Image Occlusion lane and `.apkg` emission grounded in local `rslib`
+### Task 7: Add the scoped Image Occlusion lane and source-grounded `.apkg` materialization
 
 **Files:**
 - Create: `writer_core/src/apkg.rs`
 - Modify: `writer_core/src/build.rs`
+- Modify: `writer_core/src/lib.rs`
 - Modify: `writer_core/tests/build_tests.rs`
 - Modify: `writer_core/Cargo.toml`
 
 - [ ] **Step 1: Write failing tests for Image Occlusion build and `.apkg` emission**
 
-```rust
-// writer_core/tests/build_tests.rs
-fn sample_image_occlusion_normalized_ir() -> authoring_core::NormalizedIr {
-    authoring_core::NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: "demo-doc".into(),
-        resolved_identity: "det:demo-doc".into(),
-        notetypes: vec![authoring_core::NormalizedNotetype {
-            id: "io-main".into(),
-            kind: "image_occlusion".into(),
-            name: "Image Occlusion".into(),
-            fields: vec![
-                "Occlusion".into(),
-                "Image".into(),
-                "Header".into(),
-                "Back Extra".into(),
-                "Comments".into(),
-            ],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Image Occlusion".into(),
-                question_format: "{{cloze:Occlusion}}".into(),
-                answer_format: "{{cloze:Occlusion}}<br>\n{{Back Extra}}".into(),
-            }],
-            css: "#image-occlusion-container {}".into(),
-        }],
-        notes: vec![authoring_core::NormalizedNote {
-            id: "note-1".into(),
-            notetype_id: "io-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Occlusion".into(), "{{c1::mask}}".into()),
-                ("Image".into(), "<img src=\"mask.png\">".into()),
-                ("Header".into(), "header".into()),
-                ("Back Extra".into(), "extra".into()),
-                ("Comments".into(), "comment".into()),
-            ]),
-            tags: vec![],
-        }],
-        media: vec![authoring_core::NormalizedMedia {
-            filename: "mask.png".into(),
-            mime: "image/png".into(),
-            data_base64: "MQ==".into(),
-        }],
-    }
-}
+Add tests that verify:
 
-#[test]
-fn build_emits_apkg_for_scoped_image_occlusion_lane() {
-    let normalized = sample_image_occlusion_normalized_ir();
-    let result = writer_core::build(
-        &normalized,
-        &sample_writer_policy(),
-        &sample_build_context(true),
-    )
-    .unwrap();
-
-    assert_eq!(result.result_status, "success");
-    assert!(result.package_fingerprint.as_ref().unwrap().starts_with("package:"));
-    assert!(result.apkg_ref.as_ref().unwrap().ends_with(".apkg"));
-}
-
-#[test]
-fn emitted_apkg_contains_meta_collection_and_media_entries() {
-    let normalized = sample_basic_normalized_ir();
-    let result = writer_core::build(
-        &normalized,
-        &sample_writer_policy(),
-        &sample_build_context(true),
-    )
-    .unwrap();
-    let apkg_path = std::path::PathBuf::from(result.apkg_ref.expect("apkg path"));
-    let file = std::fs::File::open(apkg_path).unwrap();
-    let mut archive = zip::ZipArchive::new(file).unwrap();
-
-    assert!(archive.by_name("meta").is_ok());
-    assert!(archive.by_name("collection.anki21b").is_ok());
-    assert!(archive.by_name("collection.anki2").is_ok());
-    assert!(archive.by_name("media").is_ok());
-}
-```
+1. The scoped Image Occlusion normalized lane builds successfully into staging and `.apkg`.
+2. The emitted `.apkg` lives under the caller-owned artifact root and still exists after `build()` returns.
+3. Latest-lane `.apkg` layout matches the local `rslib` references:
+   - `meta` exists and encodes the latest package lane
+   - `collection.anki21b` exists
+   - `collection.anki2` exists as the legacy dummy collection lane
+   - `media` exists
+4. Media-map encoding for latest packages follows `docs/source/rslib/src/import_export/package/media.rs` and `colpkg/export.rs`, not an ad-hoc JSON map.
 
 - [ ] **Step 2: Run the build tests to verify they fail**
 
 Run: `cargo test -p writer_core --test build_tests -v`
-Expected: FAIL because `.apkg` emission does not exist yet.
+Expected: FAIL because `.apkg` emission and the IO lane do not exist yet.
 
 - [ ] **Step 3: Add package emission using the source-grounded layout**
 
-```toml
-# writer_core/Cargo.toml
-[dependencies]
-anyhow = "1"
-authoring_core = { path = "../authoring_core" }
-base64 = "0.22"
-hex = "0.4"
-rusqlite = { version = "0.32", features = ["bundled"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-sha1 = "0.10"
-tempfile = "=3.17.1"
-zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
-zstd = "0.13"
-```
+Implementation requirements for `writer_core/src/apkg.rs`:
+
+- Use caller-owned artifact roots from `BuildArtifactTarget`; never create the returned `.apkg` inside a tempdir that is dropped before the caller can inspect it.
+- Ground package layout in these local sources:
+  - `docs/source/rslib/src/import_export/package/apkg/export.rs`
+  - `docs/source/rslib/src/import_export/package/colpkg/export.rs`
+  - `docs/source/rslib/src/import_export/package/meta.rs`
+  - `docs/source/rslib/src/import_export/package/media.rs`
+  - `docs/source/rslib/src/import_export/package/apkg/tests.rs`
+- Materialize the latest lane with `collection.anki21b` plus `meta` semantics from `meta.rs`.
+- Write the legacy `collection.anki2` lane as the source-backed dummy collection behavior from `write_dummy_collection()`, not by copying the latest collection bytes.
+- Follow the latest-lane media behavior from `media.rs` / `colpkg/export.rs`:
+  - media payload files are stored as numbered zip entries
+  - media map is encoded in the latest format expected by `Meta::new()` packages
+  - compression choices follow the latest-lane rules, rather than a handwritten approximation
+- `package_fingerprint` is computed from the final `.apkg` bytes after materialization.
+- `apkg_ref` is a stable ref into the artifact root, for example `artifacts/phase3/basic/package.apkg`.
+
+Update `build.rs` so that when `build_context.emit_apkg == true`, the build:
+
+1. Starts from the already materialized staging artifact.
+2. Emits the `.apkg` into the same caller-owned artifact root.
+3. Stores both `apkg_ref` and `package_fingerprint` in `PackageBuildResult`.
+
+Now that the file exists, extend `writer_core/src/lib.rs` with:
 
 ```rust
-// writer_core/src/apkg.rs
-pub fn emit_apkg(
-    staging: &crate::staging::StagingPackage,
-    build_context: &crate::BuildContext,
-) -> anyhow::Result<(String, String)> {
-    use std::{fs::File, io::Write};
-
-    let tempdir = tempfile::tempdir()?;
-    let collection_path = tempdir.path().join("collection.anki21b");
-    seed_collection_db(&collection_path, staging)?;
-    let legacy_collection_path = tempdir.path().join("collection.anki2");
-    std::fs::copy(&collection_path, &legacy_collection_path)?;
-
-    let apkg_path = tempdir.path().join("phase3-output.apkg");
-    let mut zip = zip::ZipWriter::new(File::create(&apkg_path)?);
-    zip.start_file("meta", zip::write::SimpleFileOptions::default())?;
-    zip.write_all(&latest_package_meta_bytes()?)?;
-    zip.start_file("collection.anki21b", zip::write::SimpleFileOptions::default())?;
-    let mut collection_file = File::open(&collection_path)?;
-    zstd::stream::copy_encode(&mut collection_file, &mut zip, 0)?;
-    zip.start_file("collection.anki2", zip::write::SimpleFileOptions::default())?;
-    let mut legacy_file = File::open(&legacy_collection_path)?;
-    std::io::copy(&mut legacy_file, &mut zip)?;
-    write_media_entries(&mut zip, &staging.media)?;
-    zip.finish()?;
-
-    let package_bytes = std::fs::read(&apkg_path)?;
-    let package_fingerprint = format!("package:{}", hex::encode(sha1::Sha1::digest(&package_bytes)));
-    Ok((apkg_path.display().to_string(), package_fingerprint))
-}
-
-fn latest_package_meta_bytes() -> anyhow::Result<Vec<u8>> {
-    // Match the local rslib "Latest" package lane (`collection.anki21b` + zstd media map).
-    Ok(vec![0x08, 0x03])
-}
-
-fn seed_collection_db(path: &std::path::Path, staging: &crate::staging::StagingPackage) -> anyhow::Result<()> {
-    let conn = rusqlite::Connection::open(path)?;
-    conn.execute_batch(include_str!("../../docs/source/rslib/src/storage/schema11.sql"))?;
-    conn.execute_batch(include_str!("../../docs/source/rslib/src/storage/upgrades/schema18_upgrade.sql"))?;
-    insert_collection_row(&conn)?;
-    insert_stock_notetypes(&conn, &staging.notetypes)?;
-    insert_notes_and_cards(&conn, &staging.notes)?;
-    Ok(())
-}
-
-fn insert_collection_row(conn: &rusqlite::Connection) -> anyhow::Result<()> {
-    conn.execute(
-        "insert or replace into col values (1, 0, 0, 0, '{}', '{}', '{}', '{}', '{}', 0, 0, '')",
-        [],
-    )?;
-    Ok(())
-}
-
-fn insert_stock_notetypes(
-    conn: &rusqlite::Connection,
-    notetypes: &[crate::staging::StagingNotetype],
-) -> anyhow::Result<()> {
-    for (idx, notetype) in notetypes.iter().enumerate() {
-        conn.execute(
-            "insert into notetypes (id, name, mtime_secs, usn, config, fields, templates) values (?1, ?2, 0, 0, '{}', ?3, ?4)",
-            rusqlite::params![
-                (idx + 1) as i64,
-                notetype.name,
-                serde_json::to_string(&notetype.fields)?,
-                serde_json::to_string(&notetype.templates)?,
-            ],
-        )?;
-    }
-    Ok(())
-}
-
-fn insert_notes_and_cards(
-    conn: &rusqlite::Connection,
-    notes: &[crate::staging::StagingNote],
-) -> anyhow::Result<()> {
-    for (idx, note) in notes.iter().enumerate() {
-        let flds = note.fields.values().cloned().collect::<Vec<_>>().join("\u{1f}");
-        conn.execute(
-            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, 1, 0, 0, ?3, ?4, '', 0, 0, '')",
-            rusqlite::params![(idx + 1) as i64, note.id, note.tags.join(" "), flds],
-        )?;
-        conn.execute(
-            "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '')",
-            rusqlite::params![(idx + 1) as i64, (idx + 1) as i64],
-        )?;
-    }
-    Ok(())
-}
-
-fn write_media_entries(
-    zip: &mut zip::ZipWriter<std::fs::File>,
-    media: &[crate::staging::StagingMediaFile],
-) -> anyhow::Result<()> {
-    let mut media_map = serde_json::Map::new();
-    for (idx, entry) in media.iter().enumerate() {
-        zip.start_file(idx.to_string(), zip::write::SimpleFileOptions::default())?;
-        let bytes = base64::decode(&entry.data_base64)?;
-        zip.write_all(&bytes)?;
-        media_map.insert(idx.to_string(), serde_json::Value::String(entry.filename.clone()));
-    }
-    zip.start_file("media", zip::write::SimpleFileOptions::default())?;
-    zip.write_all(serde_json::to_string(&media_map)?.as_bytes())?;
-    Ok(())
-}
-```
-
-```rust
-// writer_core/src/build.rs
-if build_context.emit_apkg {
-    let (apkg_ref, package_fingerprint) = crate::apkg::emit_apkg(&staging, build_context)?;
-    result.package_fingerprint = Some(package_fingerprint);
-    result.apkg_ref = Some(apkg_ref);
-}
+pub mod apkg;
 ```
 
 - [ ] **Step 4: Run the build tests to verify they pass**
 
 Run: `cargo test -p writer_core --test build_tests -v`
-Expected: PASS for Image Occlusion build and the `.apkg` layout test.
+Expected: PASS for Image Occlusion build and source-grounded `.apkg` layout/materialization tests.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add writer_core/Cargo.toml writer_core/src/apkg.rs writer_core/src/build.rs writer_core/tests/build_tests.rs
+git add writer_core/Cargo.toml writer_core/src/apkg.rs writer_core/src/build.rs writer_core/src/lib.rs writer_core/tests/build_tests.rs
 git commit -m "feat: emit source-grounded phase3 apkg artifacts"
 ```
 
@@ -2275,366 +1908,56 @@ git commit -m "feat: emit source-grounded phase3 apkg artifacts"
 
 - [ ] **Step 1: Write failing inspect and diff tests**
 
-```rust
-// writer_core/tests/inspect_tests.rs
-fn sample_basic_staging_package() -> writer_core::staging::StagingPackage {
-    writer_core::staging::StagingPackage {
-        notetypes: vec![writer_core::staging::StagingNotetype {
-            id: "basic-main".into(),
-            kind: "basic".into(),
-            name: "Basic".into(),
-            fields: vec!["Front".into(), "Back".into()],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Card 1".into(),
-                question_format: "{{Front}}".into(),
-                answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
-            }],
-            css: String::new(),
-        }],
-        notes: vec![writer_core::staging::StagingNote {
-            id: "note-1".into(),
-            notetype_id: "basic-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Front".into(), "front".into()),
-                ("Back".into(), "back".into()),
-            ]),
-            tags: vec!["demo".into()],
-        }],
-        media: vec![],
-    }
-}
+Add tests for the inspection-first guarantees we actually need:
 
-fn sample_basic_apkg_path() -> std::path::PathBuf {
-    let normalized = authoring_core::NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: "demo-doc".into(),
-        resolved_identity: "det:demo-doc".into(),
-        notetypes: vec![authoring_core::NormalizedNotetype {
-            id: "basic-main".into(),
-            kind: "basic".into(),
-            name: "Basic".into(),
-            fields: vec!["Front".into(), "Back".into()],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Card 1".into(),
-                question_format: "{{Front}}".into(),
-                answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
-            }],
-            css: String::new(),
-        }],
-        notes: vec![authoring_core::NormalizedNote {
-            id: "note-1".into(),
-            notetype_id: "basic-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Front".into(), "front".into()),
-                ("Back".into(), "back".into()),
-            ]),
-            tags: vec![],
-        }],
-        media: vec![],
-    };
-    let result = writer_core::build(
-        &normalized,
-        &writer_core::WriterPolicy {
-            id: "writer-policy.default".into(),
-            version: "1.0.0".into(),
-            compatibility_target: "latest-only".into(),
-            stock_notetype_mode: "source-grounded".into(),
-            media_entry_mode: "inline".into(),
-            apkg_version: "latest".into(),
-        },
-        &writer_core::BuildContext {
-            emit_apkg: true,
-            materialize_staging: true,
-            media_resolution_mode: "inline-only".into(),
-            unresolved_asset_behavior: "fail".into(),
-            fingerprint_mode: "canonical".into(),
-        },
-    )
-    .unwrap();
-    std::path::PathBuf::from(result.apkg_ref.expect("apkg path"))
-}
-
-#[test]
-fn inspect_staging_emits_complete_observation_report() {
-    let staging = sample_basic_staging_package();
-    let report = writer_core::inspect_staging(&staging).unwrap();
-
-    assert_eq!(report.observation_status, "complete");
-    assert_eq!(report.source_kind, "staging");
-    assert!(report.missing_domains.is_empty());
-}
-
-#[test]
-fn inspect_apkg_emits_apkg_source_kind() {
-    let apkg_path = sample_basic_apkg_path();
-    let report = writer_core::inspect_apkg(&apkg_path).unwrap();
-
-    assert_eq!(report.source_kind, "apkg");
-}
-```
-
-```rust
-// writer_core/tests/diff_tests.rs
-fn sample_basic_inspect_report() -> writer_core::InspectReport {
-    writer_core::InspectReport {
-        kind: "inspect-report".into(),
-        observation_model_version: "phase3-inspect-v1".into(),
-        source_kind: "staging".into(),
-        source_ref: "staging:demo".into(),
-        artifact_fingerprint: "artifact:demo".into(),
-        observation_status: "complete".into(),
-        missing_domains: vec![],
-        degradation_reasons: vec![],
-        observations: writer_core::InspectObservations {
-            notetypes: vec![serde_json::json!({"id": "basic-main"})],
-            templates: vec![],
-            fields: vec![],
-            media: vec![],
-            metadata: vec![],
-            references: vec![],
-        },
-    }
-}
-
-#[test]
-fn diff_marks_matching_reports_as_complete_with_no_changes() {
-    let left = sample_basic_inspect_report();
-    let right = sample_basic_inspect_report();
-    let diff = writer_core::diff_reports(&left, &right).unwrap();
-
-    assert_eq!(diff.comparison_status, "complete");
-    assert!(diff.changes.is_empty());
-}
-
-#[test]
-fn diff_marks_unavailable_observation_as_partial() {
-    let left = sample_basic_inspect_report();
-    let mut right = sample_basic_inspect_report();
-    right.observation_status = "degraded".into();
-    right.missing_domains = vec!["media".into()];
-    right.degradation_reasons = vec!["media file omitted".into()];
-
-    let diff = writer_core::diff_reports(&left, &right).unwrap();
-
-    assert_eq!(diff.comparison_status, "partial");
-    assert_eq!(diff.uncompared_domains, vec!["media"]);
-}
-```
+1. `inspect_build_result()` prefers staging inspection when `staging_ref` is present, and only falls back to `.apkg` when staging is unavailable.
+2. `inspect_staging()` emits a `complete` report with populated `notetypes`, `templates`, `fields`, `media`, `metadata`, and `references` domains.
+3. `inspect_apkg()` reconstructs those same observation domains from archive contents and reports `degraded` or `unavailable` only when a domain truly cannot be read.
+4. `artifact_fingerprint` is derived from canonical observation content or canonical staging content, never from a filesystem path string.
+5. `diff_reports()` yields domain-specific changes with stable `selector` + `evidence_refs`, rather than a single generic “metadata changed” message.
+6. A dedicated semantic-consistency test compares `inspect(staging)` and `inspect(apkg)` on a comparable fixture and expects `comparison_status=complete` with no compatibility-significant changes.
 
 - [ ] **Step 2: Run the inspect and diff tests to verify they fail**
 
 Run: `cargo test -p writer_core --test inspect_tests --test diff_tests -v`
-Expected: FAIL because inspection and diff code does not exist yet.
+Expected: FAIL because inspection and diff code do not exist yet.
 
 - [ ] **Step 3: Implement the stable observation model and comparison engine**
 
-```rust
-// writer_core/src/inspect.rs
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InspectReport {
-    pub kind: String,
-    pub observation_model_version: String,
-    pub source_kind: String,
-    pub source_ref: String,
-    pub artifact_fingerprint: String,
-    pub observation_status: String,
-    pub missing_domains: Vec<String>,
-    pub degradation_reasons: Vec<String>,
-    pub observations: InspectObservations,
-}
+Implementation requirements for `writer_core/src/inspect.rs`:
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InspectObservations {
-    pub notetypes: Vec<serde_json::Value>,
-    pub templates: Vec<serde_json::Value>,
-    pub fields: Vec<serde_json::Value>,
-    pub media: Vec<serde_json::Value>,
-    pub metadata: Vec<serde_json::Value>,
-    pub references: Vec<serde_json::Value>,
-}
+- Keep `observations` domain-structured: `notetypes`, `templates`, `fields`, `media`, `metadata`, `references`.
+- `inspect_staging()` must read the materialized staging manifest/tree, not an ephemeral in-memory value, so the same artifact can drive fixture gates and CLI inspection.
+- `inspect_build_result()` must inspect staging first for the writer fast gate, then use `.apkg` only for semantic consistency checks and compat acceptance.
+- `inspect_apkg()` must do real archive inspection:
+  - decode `meta`
+  - validate latest-lane collection filename expectations from `meta.rs`
+  - decode the media map according to the current lane from `media.rs`
+  - extract/read the collection database and surface note type, note, card, and media-reference observations
+- `observation_status`, `missing_domains`, and `degradation_reasons` must be populated from actual read limitations.
+- `artifact_fingerprint` must be derived from canonicalized observation content or canonical staging bytes, not from the input path.
 
-pub fn inspect_staging(staging: &crate::staging::StagingPackage) -> anyhow::Result<InspectReport> {
-    Ok(InspectReport {
-        kind: "inspect-report".into(),
-        observation_model_version: "phase3-inspect-v1".into(),
-        source_kind: "staging".into(),
-        source_ref: "staging:in-memory".into(),
-        artifact_fingerprint: format!(
-            "artifact:{}",
-            hex::encode(sha1::Sha1::digest(crate::to_canonical_json(staging)?.as_bytes()))
-        ),
-        observation_status: "complete".into(),
-        missing_domains: vec![],
-        degradation_reasons: vec![],
-        observations: build_observations_from_staging(staging),
-    })
-}
+Implementation requirements for `writer_core/src/diff.rs`:
 
-fn build_observations_from_staging(
-    staging: &crate::staging::StagingPackage,
-) -> InspectObservations {
-    InspectObservations {
-        notetypes: staging
-            .notetypes
-            .iter()
-            .map(|nt| serde_json::json!({ "id": nt.id, "kind": nt.kind, "name": nt.name }))
-            .collect(),
-        templates: staging
-            .notetypes
-            .iter()
-            .flat_map(|nt| nt.templates.iter().map(|tmpl| serde_json::json!({
-                "notetype_id": nt.id,
-                "name": tmpl.name,
-                "question_format": tmpl.question_format,
-                "answer_format": tmpl.answer_format
-            })))
-            .collect(),
-        fields: staging
-            .notetypes
-            .iter()
-            .flat_map(|nt| nt.fields.iter().map(|field| serde_json::json!({
-                "notetype_id": nt.id,
-                "field": field
-            })))
-            .collect(),
-        media: staging
-            .media
-            .iter()
-            .map(|media| serde_json::json!({
-                "filename": media.filename,
-                "mime": media.mime,
-                "sha1_hex": media.sha1_hex
-            }))
-            .collect(),
-        metadata: vec![serde_json::json!({
-            "note_count": staging.notes.len(),
-            "notetype_count": staging.notetypes.len()
-        })],
-        references: staging
-            .notes
-            .iter()
-            .map(|note| serde_json::json!({
-                "note_id": note.id,
-                "notetype_id": note.notetype_id,
-                "deck_name": note.deck_name
-            }))
-            .collect(),
-    }
-}
+- Compare each observation domain separately.
+- Produce `DiffChange` entries with stable `category`, `domain`, `severity`, `selector`, `compatibility_hint`, and `evidence_refs`.
+- Use `comparison_status`, `uncompared_domains`, and `comparison_limitations` only for actual partial/unavailable comparisons.
+- Treat “no changes” as a true empty change list, not as a special-case message hiding domain mismatches.
 
-pub fn inspect_build_result(result: &crate::PackageBuildResult) -> anyhow::Result<InspectReport> {
-    if let Some(apkg_ref) = &result.apkg_ref {
-        return inspect_apkg(apkg_ref);
-    }
-    anyhow::bail!("build result does not contain an inspectable artifact reference")
-}
-
-pub fn inspect_apkg(path: impl AsRef<std::path::Path>) -> anyhow::Result<InspectReport> {
-    let file = std::fs::File::open(path.as_ref())?;
-    let mut archive = zip::ZipArchive::new(file)?;
-    let mut missing_domains = vec![];
-    if archive.by_name("media").is_err() {
-        missing_domains.push("media".to_string());
-    }
-    Ok(InspectReport {
-        kind: "inspect-report".into(),
-        observation_model_version: "phase3-inspect-v1".into(),
-        source_kind: "apkg".into(),
-        source_ref: path.as_ref().display().to_string(),
-        artifact_fingerprint: format!("artifact:{}", path.as_ref().display()),
-        observation_status: if missing_domains.is_empty() {
-            "complete".into()
-        } else {
-            "degraded".into()
-        },
-        missing_domains,
-        degradation_reasons: vec![],
-        observations: InspectObservations {
-            notetypes: vec![],
-            templates: vec![],
-            fields: vec![],
-            media: vec![],
-            metadata: vec![],
-            references: vec![],
-        },
-    })
-}
-```
+Now that the files exist, extend `writer_core/src/lib.rs` with:
 
 ```rust
-// writer_core/src/diff.rs
-pub fn diff_reports(
-    left: &crate::InspectReport,
-    right: &crate::InspectReport,
-) -> anyhow::Result<crate::DiffReport> {
-    let mut comparison_status = "complete".to_string();
-    let mut uncompared_domains = vec![];
-    let mut comparison_limitations = vec![];
+pub mod diff;
+pub mod inspect;
 
-    if left.observation_status != "complete" || right.observation_status != "complete" {
-        comparison_status = "partial".into();
-        for domain in left
-            .missing_domains
-            .iter()
-            .chain(right.missing_domains.iter())
-        {
-            if !uncompared_domains.contains(domain) {
-                uncompared_domains.push(domain.clone());
-            }
-        }
-        comparison_limitations.extend(left.degradation_reasons.clone());
-        comparison_limitations.extend(right.degradation_reasons.clone());
-    }
-
-    let changes = compare_observations(left, right)?;
-
-    Ok(crate::DiffReport {
-        kind: "diff-report".into(),
-        comparison_status,
-        left_fingerprint: left.artifact_fingerprint.clone(),
-        right_fingerprint: right.artifact_fingerprint.clone(),
-        left_observation_model_version: left.observation_model_version.clone(),
-        right_observation_model_version: right.observation_model_version.clone(),
-        summary: if changes.is_empty() { "no changes".into() } else { "changes detected".into() },
-        uncompared_domains,
-        comparison_limitations,
-        changes,
-    })
-}
-
-fn compare_observations(
-    left: &crate::InspectReport,
-    right: &crate::InspectReport,
-) -> anyhow::Result<Vec<crate::DiffChange>> {
-    if left.observations.notetypes == right.observations.notetypes
-        && left.observations.templates == right.observations.templates
-        && left.observations.fields == right.observations.fields
-        && left.observations.media == right.observations.media
-        && left.observations.metadata == right.observations.metadata
-        && left.observations.references == right.observations.references
-    {
-        return Ok(vec![]);
-    }
-
-    Ok(vec![crate::DiffChange {
-        category: "changed".into(),
-        domain: "metadata".into(),
-        severity: "medium".into(),
-        selector: "package".into(),
-        message: "inspection observations differ".into(),
-        compatibility_hint: "review before accepting".into(),
-        evidence_refs: vec!["observations.metadata".into()],
-    }])
-}
+pub use diff::diff_reports;
+pub use inspect::{inspect_apkg, inspect_build_result, inspect_staging, InspectObservations, InspectReport};
 ```
 
 - [ ] **Step 4: Run the inspect and diff tests to verify they pass**
 
 Run: `cargo test -p writer_core --test inspect_tests --test diff_tests -v`
-Expected: PASS for the observation status and comparison completeness tests.
+Expected: PASS for observation status, comparison completeness, and staging/apkg semantic consistency tests.
 
 - [ ] **Step 5: Commit**
 
@@ -2706,6 +2029,8 @@ fn build_command_emits_contract_json_with_policy_and_context_refs() {
         "default",
         "--build-context",
         "default",
+        "--artifacts-dir",
+        temp.path().join("artifacts").to_str().unwrap(),
         "--output",
         "contract-json",
     ]);
@@ -2720,7 +2045,8 @@ fn build_command_emits_contract_json_with_policy_and_context_refs() {
 #[test]
 fn inspect_command_emits_stable_contract_json() {
     let temp = tempdir().unwrap();
-    let staging = temp.path().join("basic.staging.json");
+    let staging = temp.path().join("basic/staging/manifest.json");
+    std::fs::create_dir_all(staging.parent().unwrap()).unwrap();
     fs::write(
         &staging,
         serde_json::to_string_pretty(&serde_json::json!({
@@ -2803,6 +2129,7 @@ enum Command {
         #[arg(long)] input: String,
         #[arg(long, default_value = "default")] writer_policy: String,
         #[arg(long, default_value = "default")] build_context: String,
+        #[arg(long)] artifacts_dir: String,
         #[arg(long, default_value = "contract-json")] output: String,
     },
     Inspect {
@@ -2835,8 +2162,8 @@ fn main() -> anyhow::Result<()> {
         Command::Normalize { manifest, input, output } => {
             print!("{}", contract_tools::normalize_cmd::run(&manifest, &input, &output)?);
         }
-        Command::Build { manifest, input, writer_policy, build_context, output } => {
-            print!("{}", contract_tools::build_cmd::run(&manifest, &input, &writer_policy, &build_context, &output)?);
+        Command::Build { manifest, input, writer_policy, build_context, artifacts_dir, output } => {
+            print!("{}", contract_tools::build_cmd::run(&manifest, &input, &writer_policy, &build_context, &artifacts_dir, &output)?);
         }
         Command::Inspect { staging, apkg, output } => {
             print!("{}", contract_tools::inspect_cmd::run(staging.as_deref(), apkg.as_deref(), &output)?);
@@ -2857,6 +2184,7 @@ pub fn run(
     input: &str,
     writer_policy: &str,
     build_context: &str,
+    artifacts_dir: &str,
     output: &str,
 ) -> anyhow::Result<String> {
     let manifest = crate::manifest::load_manifest(manifest)?;
@@ -2869,8 +2197,12 @@ pub fn run(
 
     let normalized: authoring_core::NormalizedIr = serde_json::from_value(input_value)?;
     let writer_policy = crate::policies::load_writer_policy_asset(&manifest, writer_policy)?;
-    let build_context = crate::policies::default_build_context(build_context)?;
-    let result = writer_core::build(&normalized, &writer_policy, &build_context)?;
+    let build_context = crate::policies::load_build_context_asset(&manifest, build_context)?;
+    let artifact_target = writer_core::BuildArtifactTarget::new(
+        std::path::PathBuf::from(artifacts_dir),
+        "artifacts".into(),
+    );
+    let result = writer_core::build(&normalized, &writer_policy, &build_context, &artifact_target)?;
 
     match output {
         "contract-json" => writer_core::to_canonical_json(&result),
@@ -2893,15 +2225,15 @@ pub fn load_writer_policy_asset(
     Ok(policy)
 }
 
-pub fn default_build_context(selector: &str) -> anyhow::Result<writer_core::BuildContext> {
+pub fn load_build_context_asset(
+    manifest: &crate::manifest::LoadedManifest,
+    selector: &str,
+) -> anyhow::Result<writer_core::BuildContext> {
     anyhow::ensure!(selector == "default", "only default build_context selector is supported initially");
-    Ok(writer_core::BuildContext {
-        emit_apkg: true,
-        materialize_staging: true,
-        media_resolution_mode: "inline-only".into(),
-        unresolved_asset_behavior: "fail".into(),
-        fingerprint_mode: "canonical".into(),
-    })
+    let context_path = resolve_asset_path(manifest, "build_context_default")?;
+    let raw = fs::read_to_string(context_path)?;
+    let context: writer_core::BuildContext = serde_yaml::from_str(&raw)?;
+    Ok(context)
 }
 ```
 
@@ -2909,11 +2241,7 @@ pub fn default_build_context(selector: &str) -> anyhow::Result<writer_core::Buil
 // contract_tools/src/inspect_cmd.rs
 pub fn run(staging: Option<&str>, apkg: Option<&str>, output: &str) -> anyhow::Result<String> {
     let report = match (staging, apkg) {
-        (Some(path), None) => {
-            let staging: writer_core::staging::StagingPackage =
-                serde_json::from_str(&std::fs::read_to_string(path)?)?;
-            writer_core::inspect_staging(&staging)?
-        }
+        (Some(path), None) => writer_core::inspect_staging(path)?,
         (None, Some(path)) => writer_core::inspect_apkg(path)?,
         _ => anyhow::bail!("inspect requires exactly one of --staging or --apkg"),
     };
@@ -2960,6 +2288,8 @@ pub mod semantics;
 pub mod summary;
 pub mod versioning;
 ```
+
+Do not hardcode `BuildContext` defaults in the command layer. `contract_tools` must load the declared build-context asset from `contracts/` and combine it with a caller-supplied `--artifacts-dir` so materialized refs survive process exit.
 
 - [ ] **Step 4: Run the CLI tests to verify they pass**
 
@@ -3045,616 +2375,65 @@ fn fixture_gates_reject_phase3_inspect_golden_mismatch() {
 Run: `cargo test -p contract_tools --test fixture_gate_tests -v`
 Expected: FAIL because the Phase 3 fixtures and gate execution paths do not exist yet.
 
-- [ ] **Step 3: Add case-first fixtures and expected golden artifacts**
+- [ ] **Step 3: Add case-first fixtures, deterministic artifact roots, and generated goldens**
 
-```yaml
-# contracts/fixtures/index.yaml (Phase 3 excerpt)
-  - id: phase3-writer-basic-minimal
-    category: phase3-writer
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/writer/basic-minimal.case.yaml
-  - id: phase3-e2e-basic-minimal
-    category: phase3-e2e
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/e2e/basic-minimal.case.yaml
-  - id: phase3-writer-cloze-minimal
-    category: phase3-writer
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/writer/cloze-minimal.case.yaml
-  - id: phase3-writer-image-occlusion-minimal
-    category: phase3-writer
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/writer/image-occlusion-minimal.case.yaml
-  - id: phase3-e2e-cloze-minimal
-    category: phase3-e2e
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/e2e/cloze-minimal.case.yaml
-  - id: phase3-e2e-image-occlusion-minimal
-    category: phase3-e2e
-    compatibility_class: additive_compatible
-    upgrade_rules:
-      - fixture_updates_required
-    input: fixtures/phase3/e2e/image-occlusion-minimal.case.yaml
-```
+Each Phase 3 fixture case must own:
+
+- its input (`authoring` or `normalized`)
+- its declared `writer_policy_ref`
+- its declared `build_context_ref` or inline build-context payload
+- its deterministic `artifacts_dir`
+- its expected build/inspect/diff outputs
+
+Representative writer case:
 
 ```yaml
 # contracts/fixtures/phase3/writer/basic-minimal.case.yaml
 kind: phase3-writer-case
 normalized_input: fixtures/phase3/inputs/basic-normalized-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
+writer_policy_selector: default
+build_context_selector: default
+artifacts_dir: artifacts/phase3-writer-basic-minimal
 expected_build: fixtures/phase3/expected/basic.build.json
 expected_inspect: fixtures/phase3/expected/basic.inspect.json
 expected_diff: fixtures/phase3/expected/basic.diff.json
 ```
 
+Representative e2e case:
+
 ```yaml
 # contracts/fixtures/phase3/e2e/basic-minimal.case.yaml
 kind: phase3-e2e-case
 authoring_input: fixtures/phase3/inputs/basic-authoring-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
+writer_policy_selector: default
+build_context_selector: default
+artifacts_dir: artifacts/phase3-e2e-basic-minimal
 expected_build: fixtures/phase3/expected/basic.build.json
 expected_inspect: fixtures/phase3/expected/basic.inspect.json
+expected_diff: fixtures/phase3/expected/basic.diff.json
 ```
 
-```json
-// contracts/fixtures/phase3/inputs/basic-authoring-ir.json
-{
-  "kind": "authoring-ir",
-  "schema_version": "0.1.0",
-  "metadata": { "document_id": "demo-doc" },
-  "notetypes": [
-    { "id": "basic-main", "kind": "basic", "name": "Basic" }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "basic-main",
-      "deck_name": "Default",
-      "fields": {
-        "Front": "front",
-        "Back": "back"
-      },
-      "tags": ["demo"]
-    }
-  ],
-  "media": []
-}
-```
+Do not hand-author placeholder `build_context_ref`, `staging_ref`, `artifact_fingerprint`, or `package_fingerprint` values. Instead:
 
-```json
-// contracts/fixtures/phase3/inputs/cloze-authoring-ir.json
-{
-  "kind": "authoring-ir",
-  "schema_version": "0.1.0",
-  "metadata": { "document_id": "demo-doc" },
-  "notetypes": [
-    { "id": "cloze-main", "kind": "cloze", "name": "Cloze" }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "cloze-main",
-      "deck_name": "Default",
-      "fields": {
-        "Text": "{{c1::front}}",
-        "Back Extra": "extra"
-      },
-      "tags": []
-    }
-  ],
-  "media": []
-}
-```
+1. Implement a small fixture-golden capture helper in `contract_tools/src/fixtures.rs` or the corresponding tests.
+2. Materialize each case into its declared `artifacts_dir`.
+3. Capture canonical `package-build-result`, `inspect-report`, and optional `diff-report` from the real deterministic outputs.
+4. Review the generated files and check them in as the expected goldens.
 
-```json
-// contracts/fixtures/phase3/inputs/image-occlusion-authoring-ir.json
-{
-  "kind": "authoring-ir",
-  "schema_version": "0.1.0",
-  "metadata": { "document_id": "demo-doc" },
-  "notetypes": [
-    { "id": "io-main", "kind": "image_occlusion", "name": "Image Occlusion" }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "io-main",
-      "deck_name": "Default",
-      "fields": {
-        "Occlusion": "{{c1::mask}}",
-        "Image": "<img src=\"mask.png\">",
-        "Header": "header",
-        "Back Extra": "extra",
-        "Comments": "comment"
-      },
-      "tags": []
-    }
-  ],
-  "media": [
-    {
-      "filename": "mask.png",
-      "mime": "image/png",
-      "data_base64": "MQ=="
-    }
-  ]
-}
-```
+Because `artifacts_dir` is case-local and deterministic, `staging_ref` / `apkg_ref` can also be stable deterministic refs instead of temp paths.
 
-```json
-// contracts/fixtures/phase3/inputs/basic-normalized-ir.json
-{
-  "kind": "normalized-ir",
-  "schema_version": "0.1.0",
-  "document_id": "demo-doc",
-  "resolved_identity": "det:demo-doc",
-  "notetypes": [
-    {
-      "id": "basic-main",
-      "kind": "basic",
-      "name": "Basic",
-      "fields": ["Front", "Back"],
-      "templates": [
-        {
-          "name": "Card 1",
-          "question_format": "{{Front}}",
-          "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
-        }
-      ],
-      "css": ""
-    }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "basic-main",
-      "deck_name": "Default",
-      "fields": {
-        "Front": "front",
-        "Back": "back"
-      },
-      "tags": ["demo"]
-    }
-  ],
-  "media": []
-}
-```
+Update `contract_tools/src/fixtures.rs` so that:
 
-```json
-// contracts/fixtures/phase3/inputs/cloze-normalized-ir.json
-{
-  "kind": "normalized-ir",
-  "schema_version": "0.1.0",
-  "document_id": "demo-doc",
-  "resolved_identity": "det:demo-doc",
-  "notetypes": [
-    {
-      "id": "cloze-main",
-      "kind": "cloze",
-      "name": "Cloze",
-      "fields": ["Text", "Back Extra"],
-      "templates": [
-        {
-          "name": "Cloze",
-          "question_format": "{{cloze:Text}}",
-          "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}"
-        }
-      ],
-      "css": ".cloze { font-weight: bold; }"
-    }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "cloze-main",
-      "deck_name": "Default",
-      "fields": {
-        "Text": "{{c1::front}}",
-        "Back Extra": "extra"
-      },
-      "tags": []
-    }
-  ],
-  "media": []
-}
-```
-
-```json
-// contracts/fixtures/phase3/inputs/image-occlusion-normalized-ir.json
-{
-  "kind": "normalized-ir",
-  "schema_version": "0.1.0",
-  "document_id": "demo-doc",
-  "resolved_identity": "det:demo-doc",
-  "notetypes": [
-    {
-      "id": "io-main",
-      "kind": "image_occlusion",
-      "name": "Image Occlusion",
-      "fields": ["Occlusion", "Image", "Header", "Back Extra", "Comments"],
-      "templates": [
-        {
-          "name": "Image Occlusion",
-          "question_format": "{{cloze:Occlusion}}",
-          "answer_format": "{{cloze:Occlusion}}<br>\n{{Back Extra}}"
-        }
-      ],
-      "css": "#image-occlusion-container {}"
-    }
-  ],
-  "notes": [
-    {
-      "id": "note-1",
-      "notetype_id": "io-main",
-      "deck_name": "Default",
-      "fields": {
-        "Occlusion": "{{c1::mask}}",
-        "Image": "<img src=\"mask.png\">",
-        "Header": "header",
-        "Back Extra": "extra",
-        "Comments": "comment"
-      },
-      "tags": []
-    }
-  ],
-  "media": [
-    {
-      "filename": "mask.png",
-      "mime": "image/png",
-      "data_base64": "MQ=="
-    }
-  ]
-}
-```
-
-```yaml
-# contracts/fixtures/phase3/writer/cloze-minimal.case.yaml
-kind: phase3-writer-case
-normalized_input: fixtures/phase3/inputs/cloze-normalized-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
-expected_build: fixtures/phase3/expected/cloze.build.json
-expected_inspect: fixtures/phase3/expected/cloze.inspect.json
-```
-
-```yaml
-# contracts/fixtures/phase3/writer/image-occlusion-minimal.case.yaml
-kind: phase3-writer-case
-normalized_input: fixtures/phase3/inputs/image-occlusion-normalized-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
-expected_build: fixtures/phase3/expected/image-occlusion.build.json
-expected_inspect: fixtures/phase3/expected/image-occlusion.inspect.json
-```
-
-```yaml
-# contracts/fixtures/phase3/e2e/cloze-minimal.case.yaml
-kind: phase3-e2e-case
-authoring_input: fixtures/phase3/inputs/cloze-authoring-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
-expected_build: fixtures/phase3/expected/cloze.build.json
-expected_inspect: fixtures/phase3/expected/cloze.inspect.json
-```
-
-```yaml
-# contracts/fixtures/phase3/e2e/image-occlusion-minimal.case.yaml
-kind: phase3-e2e-case
-authoring_input: fixtures/phase3/inputs/image-occlusion-authoring-ir.json
-writer_policy_ref: writer-policy.default@1.0.0
-build_context:
-  emit_apkg: true
-  materialize_staging: true
-  media_resolution_mode: inline-only
-  unresolved_asset_behavior: fail
-  fingerprint_mode: canonical
-expected_build: fixtures/phase3/expected/image-occlusion.build.json
-expected_inspect: fixtures/phase3/expected/image-occlusion.inspect.json
-```
-
-```json
-// contracts/fixtures/phase3/expected/basic.build.json
-{
-  "kind": "package-build-result",
-  "result_status": "success",
-  "tool_contract_version": "phase3-v1",
-  "writer_policy_ref": "writer-policy.default@1.0.0",
-  "build_context_ref": "build-context:expected",
-  "staging_ref": "staging:expected",
-  "artifact_fingerprint": "artifact:expected",
-  "package_fingerprint": "package:expected",
-  "apkg_ref": "phase3-output.apkg",
-  "diagnostics": {
-    "kind": "build-diagnostics",
-    "items": []
-  }
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/basic.inspect.json
-{
-  "kind": "inspect-report",
-  "observation_model_version": "phase3-inspect-v1",
-  "source_kind": "apkg",
-  "source_ref": "phase3-output.apkg",
-  "artifact_fingerprint": "artifact:expected",
-  "observation_status": "complete",
-  "missing_domains": [],
-  "degradation_reasons": [],
-  "observations": {
-    "notetypes": [],
-    "templates": [],
-    "fields": [],
-    "media": [],
-    "metadata": [],
-    "references": []
-  }
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/basic.diff.json
-{
-  "kind": "diff-report",
-  "comparison_status": "complete",
-  "left_fingerprint": "artifact:expected",
-  "right_fingerprint": "artifact:expected",
-  "left_observation_model_version": "phase3-inspect-v1",
-  "right_observation_model_version": "phase3-inspect-v1",
-  "summary": "no changes",
-  "uncompared_domains": [],
-  "comparison_limitations": [],
-  "changes": []
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/cloze.build.json
-{
-  "kind": "package-build-result",
-  "result_status": "success",
-  "tool_contract_version": "phase3-v1",
-  "writer_policy_ref": "writer-policy.default@1.0.0",
-  "build_context_ref": "build-context:expected",
-  "staging_ref": "staging:cloze",
-  "artifact_fingerprint": "artifact:cloze",
-  "package_fingerprint": "package:cloze",
-  "apkg_ref": "phase3-output.apkg",
-  "diagnostics": {
-    "kind": "build-diagnostics",
-    "items": []
-  }
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/cloze.inspect.json
-{
-  "kind": "inspect-report",
-  "observation_model_version": "phase3-inspect-v1",
-  "source_kind": "apkg",
-  "source_ref": "phase3-output.apkg",
-  "artifact_fingerprint": "artifact:cloze",
-  "observation_status": "complete",
-  "missing_domains": [],
-  "degradation_reasons": [],
-  "observations": {
-    "notetypes": [],
-    "templates": [],
-    "fields": [],
-    "media": [],
-    "metadata": [],
-    "references": []
-  }
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/image-occlusion.build.json
-{
-  "kind": "package-build-result",
-  "result_status": "success",
-  "tool_contract_version": "phase3-v1",
-  "writer_policy_ref": "writer-policy.default@1.0.0",
-  "build_context_ref": "build-context:expected",
-  "staging_ref": "staging:io",
-  "artifact_fingerprint": "artifact:io",
-  "package_fingerprint": "package:io",
-  "apkg_ref": "phase3-output.apkg",
-  "diagnostics": {
-    "kind": "build-diagnostics",
-    "items": []
-  }
-}
-```
-
-```json
-// contracts/fixtures/phase3/expected/image-occlusion.inspect.json
-{
-  "kind": "inspect-report",
-  "observation_model_version": "phase3-inspect-v1",
-  "source_kind": "apkg",
-  "source_ref": "phase3-output.apkg",
-  "artifact_fingerprint": "artifact:io",
-  "observation_status": "complete",
-  "missing_domains": [],
-  "degradation_reasons": [],
-  "observations": {
-    "notetypes": [],
-    "templates": [],
-    "fields": [],
-    "media": [],
-    "metadata": [],
-    "references": []
-  }
-}
-```
-
-```rust
-// contract_tools/src/fixtures.rs
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Phase3WriterCase {
-    kind: String,
-    normalized_input: String,
-    writer_policy_ref: String,
-    build_context: writer_core::BuildContext,
-    expected_build: String,
-    expected_inspect: String,
-    expected_diff: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Phase3E2eCase {
-    kind: String,
-    authoring_input: String,
-    writer_policy_ref: String,
-    build_context: writer_core::BuildContext,
-    expected_build: String,
-    expected_inspect: String,
-}
-
-match case.category.as_str() {
-    "phase3-writer" => {
-        run_phase3_writer_case(&manifest, &input_path, case.id.as_str())?;
-    }
-    "phase3-e2e" => {
-        run_phase3_e2e_case(&manifest, &input_path, case.id.as_str())?;
-    }
-    other => { /* existing cases stay as they are */ }
-}
-
-fn run_phase3_writer_case(
-    manifest: &crate::manifest::LoadedManifest,
-    case_path: &Path,
-    case_id: &str,
-) -> anyhow::Result<()> {
-    let case: Phase3WriterCase = load_yaml_model(case_path)?;
-    anyhow::ensure!(
-        case.kind == "phase3-writer-case",
-        "phase3 writer fixture must declare kind=phase3-writer-case: {}",
-        case_id
-    );
-    let normalized = load_phase3_normalized_input(manifest, &case.normalized_input)?;
-    let writer_policy =
-        crate::policies::load_writer_policy_asset(manifest, case.writer_policy_ref.as_str())?;
-    let result = writer_core::build(&normalized, &writer_policy, &case.build_context)?;
-    compare_canonical_json(manifest, &result, &case.expected_build, case_id, "phase3 build output mismatch")?;
-    let inspect = writer_core::inspect_build_result(&result)?;
-    compare_canonical_json(manifest, &inspect, &case.expected_inspect, case_id, "phase3 inspect output mismatch")?;
-    Ok(())
-}
-
-fn run_phase3_e2e_case(
-    manifest: &crate::manifest::LoadedManifest,
-    case_path: &Path,
-    case_id: &str,
-) -> anyhow::Result<()> {
-    let case: Phase3E2eCase = load_yaml_model(case_path)?;
-    anyhow::ensure!(
-        case.kind == "phase3-e2e-case",
-        "phase3 e2e fixture must declare kind=phase3-e2e-case: {}",
-        case_id
-    );
-    let authoring =
-        load_phase3_authoring_input(manifest, &case.authoring_input)?;
-    let normalized = authoring_core::normalize(authoring_core::NormalizationRequest::new(authoring))
-        .normalized_ir
-        .context("phase3 e2e case must produce normalized_ir")?;
-    let writer_policy =
-        crate::policies::load_writer_policy_asset(manifest, case.writer_policy_ref.as_str())?;
-    let result = writer_core::build(&normalized, &writer_policy, &case.build_context)?;
-    compare_canonical_json(manifest, &result, &case.expected_build, case_id, "phase3 build output mismatch")?;
-    let inspect = writer_core::inspect_build_result(&result)?;
-    compare_canonical_json(manifest, &inspect, &case.expected_inspect, case_id, "phase3 inspect output mismatch")?;
-    Ok(())
-}
-
-fn load_phase3_normalized_input(
-    manifest: &crate::manifest::LoadedManifest,
-    relative_path: &str,
-) -> anyhow::Result<authoring_core::NormalizedIr> {
-    let path = resolve_contract_relative_path(&manifest.contracts_root, relative_path)?;
-    let value: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(path)?)?;
-    Ok(serde_json::from_value(value)?)
-}
-
-fn load_phase3_authoring_input(
-    manifest: &crate::manifest::LoadedManifest,
-    relative_path: &str,
-) -> anyhow::Result<authoring_core::AuthoringDocument> {
-    let path = resolve_contract_relative_path(&manifest.contracts_root, relative_path)?;
-    let value: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(path)?)?;
-    #[derive(Deserialize)]
-    struct InputDoc {
-        kind: String,
-        schema_version: String,
-        metadata: InputMeta,
-        #[serde(default)]
-        notetypes: Vec<authoring_core::AuthoringNotetype>,
-        #[serde(default)]
-        notes: Vec<authoring_core::AuthoringNote>,
-        #[serde(default)]
-        media: Vec<authoring_core::AuthoringMedia>,
-    }
-    #[derive(Deserialize)]
-    struct InputMeta {
-        document_id: String,
-    }
-    let input: InputDoc = serde_json::from_value(value)?;
-    Ok(authoring_core::AuthoringDocument {
-        kind: input.kind,
-        schema_version: input.schema_version,
-        metadata_document_id: input.metadata.document_id,
-        notetypes: input.notetypes,
-        notes: input.notes,
-        media: input.media,
-    })
-}
-```
+- Tier A writer fixtures call `writer_core::build(..., artifact_target)` directly from normalized input.
+- Tier B e2e fixtures call `normalize -> build(..., artifact_target) -> inspect(staging) -> diff`.
+- Fixture execution asserts the referenced staging and `.apkg` artifacts actually exist before comparing goldens.
+- Writer fast gate compares staging inspection against the case golden.
+- Compat-oriented fixture execution also runs `inspect(apkg)` and checks staging/apkg semantic consistency on comparable domains.
 
 - [ ] **Step 4: Run the fixture gate tests to verify they pass**
 
 Run: `cargo test -p contract_tools --test fixture_gate_tests -v`
-Expected: PASS for the Phase 3 writer and e2e fixture execution.
+Expected: PASS for Phase 3 writer/e2e fixture execution, deterministic golden comparison, and staging/apkg semantic consistency checks.
 
 - [ ] **Step 5: Run the repository verify gate to confirm the full loop is wired in**
 
@@ -3684,58 +2463,28 @@ git commit -m "feat: add phase3 fixture and verify gate coverage"
 ```rust
 // contract_tools/tests/compat_oracle_tests.rs
 #[test]
-fn compat_oracle_accepts_supported_basic_package_layout() {
-    let normalized = authoring_core::NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: "demo-doc".into(),
-        resolved_identity: "det:demo-doc".into(),
-        notetypes: vec![authoring_core::NormalizedNotetype {
-            id: "basic-main".into(),
-            kind: "basic".into(),
-            name: "Basic".into(),
-            fields: vec!["Front".into(), "Back".into()],
-            templates: vec![authoring_core::NormalizedTemplate {
-                name: "Card 1".into(),
-                question_format: "{{Front}}".into(),
-                answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
-            }],
-            css: String::new(),
-        }],
-        notes: vec![authoring_core::NormalizedNote {
-            id: "note-1".into(),
-            notetype_id: "basic-main".into(),
-            deck_name: "Default".into(),
-            fields: std::collections::BTreeMap::from([
-                ("Front".into(), "front".into()),
-                ("Back".into(), "back".into()),
-            ]),
-            tags: vec![],
-        }],
-        media: vec![],
-    };
-    let writer_policy = writer_core::WriterPolicy {
-        id: "writer-policy.default".into(),
-        version: "1.0.0".into(),
-        compatibility_target: "latest-only".into(),
-        stock_notetype_mode: "source-grounded".into(),
-        media_entry_mode: "inline".into(),
-        apkg_version: "latest".into(),
-    };
-    let build_context = writer_core::BuildContext {
-        emit_apkg: true,
-        materialize_staging: true,
-        media_resolution_mode: "inline-only".into(),
-        unresolved_asset_behavior: "fail".into(),
-        fingerprint_mode: "canonical".into(),
-    };
-    let result = writer_core::build(&normalized, &writer_policy, &build_context).unwrap();
-    let apkg = std::path::PathBuf::from(result.apkg_ref.expect("apkg path"));
+fn compat_oracle_accepts_supported_basic_package_layout_and_semantics() {
+    let temp = tempfile::tempdir().unwrap();
+    let target = writer_core::BuildArtifactTarget::new(
+        temp.path().join("phase3/basic"),
+        "artifacts/phase3/basic".into(),
+    );
+    let result = writer_core::build(
+        &sample_basic_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+    let apkg = temp.path().join("phase3/basic/package.apkg");
+    let inspect = writer_core::inspect_apkg(&apkg).unwrap();
 
-    contract_tools::compat_oracle::validate_supported_package(&apkg)
+contract_tools::compat_oracle::validate_supported_package(&apkg, &inspect)
         .expect("basic package should satisfy the controlled compatibility oracle");
 }
 ```
+
+Reuse the normalized/policy/build-context fixture helpers introduced earlier in the Phase 3 tests, or define local equivalents in this test file.
 
 - [ ] **Step 2: Run the compatibility-oracle test to verify it fails**
 
@@ -3744,45 +2493,26 @@ Expected: FAIL because the oracle does not exist yet.
 
 - [ ] **Step 3: Implement the source-grounded compatibility oracle and wire it into `compat gate`**
 
-```rust
-// contract_tools/src/compat_oracle.rs
-pub fn validate_supported_package(path: &std::path::Path) -> anyhow::Result<()> {
-    let file = std::fs::File::open(path)?;
-    let mut archive = zip::ZipArchive::new(file)?;
+Implementation requirements for `contract_tools/src/compat_oracle.rs`:
 
-    archive.by_name("meta")?;
-    archive.by_name("collection.anki21b")?;
-    archive.by_name("collection.anki2")?;
-    archive.by_name("media")?;
+- Keep the oracle source-grounded and stronger than a zip-entry smoke test.
+- Validate package behavior against these local anchors:
+  - `docs/source/rslib/src/import_export/package/meta.rs`
+  - `docs/source/rslib/src/import_export/package/media.rs`
+  - `docs/source/rslib/src/import_export/package/colpkg/export.rs`
+  - `docs/source/rslib/src/import_export/package/apkg/tests.rs`
+  - `docs/source/rslib/src/notetype/stock.rs`
+  - `docs/source/rslib/src/image_occlusion/notetype.rs`
+- The oracle must inspect at least:
+  - `meta` lane and collection filename expectations
+  - latest-lane media-map encoding/decoding behavior
+  - collection DB readability plus note/card/notetype counts
+  - stock-lane notetype/template invariants for supported fixtures
+  - media reference consistency between collection content and media map
+- Prefer comparing the package against the already generated `inspect-report`, so the oracle checks real archive semantics instead of reimplementing a second ad-hoc model.
+- If a direct import smoke helper becomes feasible later, it is an additive lane. The controlled oracle remains the minimum acceptance requirement in this plan.
 
-    // Source anchors for these checks:
-    // - docs/source/rslib/src/import_export/package/meta.rs
-    // - docs/source/rslib/src/import_export/package/colpkg/export.rs
-    // - docs/source/rslib/src/import_export/package/media.rs
-
-    Ok(())
-}
-
-pub fn run_compat_oracle_gates(manifest_path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
-    let manifest = crate::manifest::load_manifest(manifest_path)?;
-    let basic_case = manifest
-        .contracts_root
-        .join("fixtures/phase3/inputs/basic-normalized-ir.json");
-    if basic_case.exists() {
-        let normalized: authoring_core::NormalizedIr =
-            serde_json::from_str(&std::fs::read_to_string(&basic_case)?)?;
-        let result = writer_core::build(
-            &normalized,
-            &crate::policies::load_writer_policy_asset(&manifest, "default")?,
-            &crate::policies::default_build_context("default")?,
-        )?;
-        if let Some(apkg_ref) = result.apkg_ref {
-            validate_supported_package(std::path::Path::new(&apkg_ref))?;
-        }
-    }
-    Ok(())
-}
-```
+`run_compat_oracle_gates()` should reuse the declared writer fixtures, rebuild them into case-local artifact roots, inspect the resulting `.apkg`, and validate each supported core case through the oracle.
 
 ```toml
 # contract_tools/Cargo.toml
@@ -3843,6 +2573,7 @@ pub mod versioning;
 `build --output contract-json` writes the schema-governed Phase 3 `package-build-result`.
 `inspect --output contract-json` writes the stable observation model used by golden regressions.
 `diff --output contract-json` writes the stable comparison report used by verification policies.
+These three `contract-json` surfaces are stable machine interfaces, not informal debug output.
 
 For Phase 3 readiness, capture the commands and evidence in `docs/superpowers/checklists/phase-3-exit-evidence.md`.
 ```
@@ -3855,9 +2586,11 @@ For Phase 3 readiness, capture the commands and evidence in `docs/superpowers/ch
 - [ ] `cargo test -p writer_core -v`
 - [ ] `cargo test -p contract_tools -v`
 - [ ] `cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"`
-- [ ] `cargo run -p contract_tools -- build --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase3/inputs/basic-normalized-ir.json" --writer-policy default --build-context default --output contract-json`
-- [ ] `cargo run -p contract_tools -- inspect --apkg "$(pwd)/tmp/phase3/basic-minimal.apkg" --output contract-json`
+- [ ] `cargo run -p contract_tools -- build --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase3/inputs/basic-normalized-ir.json" --writer-policy default --build-context default --artifacts-dir "$(pwd)/tmp/phase3/basic-minimal" --output contract-json`
+- [ ] `cargo run -p contract_tools -- inspect --staging "$(pwd)/tmp/phase3/basic-minimal/staging/manifest.json" --output contract-json`
+- [ ] `cargo run -p contract_tools -- inspect --apkg "$(pwd)/tmp/phase3/basic-minimal/package.apkg" --output contract-json`
 - [ ] `cargo run -p contract_tools -- diff --left "$(pwd)/contracts/fixtures/phase3/expected/basic.inspect.json" --right "$(pwd)/contracts/fixtures/phase3/expected/basic.inspect.json" --output contract-json`
+- [ ] package-build-result, inspect-report, and diff-report outputs are schema-valid and stable under repeated runs for the same fixture inputs
 ```
 
 - [ ] **Step 4: Run the compatibility-oracle and full contract_tools tests**
