@@ -214,6 +214,7 @@ Required top-level fields:
 - `result_status: success | invalid | error`
 - `tool_contract_version`
 - `writer_policy_ref`
+- `build_context_ref`
 - `diagnostics`
 
 Conditionally required fields:
@@ -227,6 +228,7 @@ Field roles are distinct:
 - `artifact_fingerprint`: fingerprint of the build observation domain, aligned with staging and inspection
 - `package_fingerprint`: fingerprint of the final `.apkg` payload
 - `staging_ref`: stable reference to the staging representation, not an arbitrary path string
+- `build_context_ref`: stable reference to the build-time runtime/materialization context that produced this result
 
 ### 7.3 Diagnostic split
 
@@ -332,12 +334,14 @@ Required top-level fields are:
 Each change entry includes at minimum:
 
 - `category`
+- `domain`
 - `severity`
 - `selector`
 - `message`
 - `compatibility_hint`
 
 Optional evidence fields should prefer stable logical references over raw large payload copies.
+Preferred fields include stable `evidence_refs[]` or equivalent logical evidence references tied to observation domains.
 
 ### 9.4 Incomplete comparison
 
@@ -399,9 +403,9 @@ In practical terms:
 `contract_tools` adds or extends these command-facing contract surfaces:
 
 - `normalize` - existing upstream contract-facing normalization step
-- `build` - emits `package-build-result`
-- `inspect` - emits `inspect-report` from `staging` or `.apkg`
-- `diff` - emits `diff-report`
+- `build` - emits `package-build-result` via a stable `contract-json` surface
+- `inspect` - emits `inspect-report` from `staging` or `.apkg` via a stable `contract-json` surface
+- `diff` - emits `diff-report` via a stable `contract-json` surface
 - `verify` - orchestrates the full system loop or the writer-focused sub-loop depending on fixture tier
 
 Each command must support a machine-stable mode suitable for fixtures and CI.
@@ -443,7 +447,7 @@ Core compatibility fixtures must cover at least:
 
 - Basic writer behavior
 - Cloze writer behavior
-- Image Occlusion writer behavior
+- Image Occlusion writer behavior for a scoped supported compatibility lane, not the full future feature matrix
 - media-manifest and media-reference behavior
 - structured failure explanation for import-relevant mismatches
 
@@ -469,6 +473,7 @@ Core compatibility fixtures must cover at least:
 
 - executes Tier B full compatibility coverage
 - checks that staging and `.apkg` are semantically consistent across comparable observation domains
+- includes at least one controlled import validation path or compatibility oracle for each supported core scenario
 - is appropriate for nightly or release-preparation validation
 
 ### 13.2 Semantic consistency rule
@@ -512,10 +517,11 @@ This keeps `Phase 3` aligned with the same contract-first discipline already est
 
 1. the full `normalize -> build -> inspect -> diff` loop is operational for the core fixture set
 2. the direct writer `build -> inspect -> diff` loop is operational for Tier A fixtures
-3. `package-build-result`, `inspect-report`, and `diff-report` are schema-governed and stable for machine consumption
+3. `package-build-result`, `inspect-report`, and `diff-report` are schema-governed and exposed through stable `contract-json` command surfaces for machine consumption
 4. staging is a first-class inspectable writer output, not only an internal temporary artifact
 5. `writer-policy`, `verification-policy`, and `build-context` are separated by responsibility and governed by contracts
 6. inspection degradation and diff incompleteness are represented explicitly in schema-governed status fields
 7. staging and `.apkg` observation surfaces can be checked for semantic consistency across comparable domains
 8. compatibility fixtures cover the core modern-Anki writer behaviors required by this phase
 9. import failures and compatibility mismatches produce structured evidence suitable for CI and downstream tooling
+10. supported core scenarios have at least one controlled import validation path or compatibility oracle in the acceptance story
