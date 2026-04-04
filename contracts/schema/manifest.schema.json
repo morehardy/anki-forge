@@ -49,8 +49,12 @@
       "required": [
         "manifest_schema",
         "version_policy",
+        "identity_policy_schema",
+        "risk_policy_schema",
         "compatibility_classes",
         "upgrade_rules",
+        "identity_policy",
+        "risk_policy",
         "authoring_ir_schema",
         "diagnostic_item_schema",
         "validation_report_schema",
@@ -77,11 +81,27 @@
           "type": "string",
           "minLength": 1
         },
+        "identity_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
         "compatibility_classes": {
           "type": "string",
           "minLength": 1
         },
         "upgrade_rules": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_policy": {
           "type": "string",
           "minLength": 1
         },

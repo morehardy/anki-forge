@@ -9,8 +9,12 @@ compatibility:
 assets:
   manifest_schema: schema/manifest.schema.json
   version_policy: versioning/policy.md
+  identity_policy_schema: schema/identity-policy.schema.json
+  risk_policy_schema: schema/risk-policy.schema.json
   compatibility_classes: versioning/compatibility-classes.yaml
   upgrade_rules: versioning/upgrade-rules.yaml
+  identity_policy: policies/identity-policy.default.yaml
+  risk_policy: policies/risk-policy.default.yaml
   authoring_ir_schema: schema/authoring-ir.schema.json
   diagnostic_item_schema: schema/diagnostic-item.schema.json
   validation_report_schema: schema/validation-report.schema.json

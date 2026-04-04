@@ -1,0 +1,88 @@
+use anyhow::{ensure, Context};
+use serde_json::Value as JsonValue;
+use std::{fs, path::Path};
+
+use crate::{
+    manifest::{load_manifest, resolve_asset_path},
+    schema::{load_schema, validate_value},
+};
+
+pub fn run_policy_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
+    let manifest = load_manifest(manifest_path)?;
+
+    validate_policy_asset(
+        &manifest,
+        "identity_policy_schema",
+        "identity_policy",
+        "identity policy",
+    )?;
+    validate_policy_asset(
+        &manifest,
+        "risk_policy_schema",
+        "risk_policy",
+        "risk policy",
+    )?;
+
+    Ok(())
+}
+
+fn validate_policy_asset(
+    manifest: &crate::manifest::LoadedManifest,
+    schema_key: &str,
+    policy_key: &str,
+    policy_label: &str,
+) -> anyhow::Result<()> {
+    let schema_path = resolve_asset_path(manifest, schema_key)?;
+    let policy_path = resolve_asset_path(manifest, policy_key)?;
+
+    let schema = load_schema(&schema_path).with_context(|| {
+        format!(
+            "failed to load {policy_label} schema: {}",
+            schema_path.display()
+        )
+    })?;
+    let policy_value = load_yaml_value(&policy_path)?;
+
+    validate_value(&schema, &policy_value).with_context(|| {
+        format!(
+            "{policy_label} schema validation failed: {} against {}",
+            policy_path.display(),
+            schema_path.display()
+        )
+    })?;
+
+    ensure!(
+        non_empty_string(&policy_value, "id"),
+        "{policy_label} id must not be empty: {}",
+        policy_path.display()
+    );
+    ensure!(
+        non_empty_string(&policy_value, "version"),
+        "{policy_label} version must not be empty: {}",
+        policy_path.display()
+    );
+
+    Ok(())
+}
+
+fn load_yaml_value(path: impl AsRef<Path>) -> anyhow::Result<JsonValue> {
+    let path = path.as_ref();
+    let raw = fs::read_to_string(path)
+        .with_context(|| format!("failed to read YAML asset: {}", path.display()))?;
+    let yaml_value: serde_yaml::Value = serde_yaml::from_str(&raw)
+        .with_context(|| format!("YAML asset must be valid YAML: {}", path.display()))?;
+    serde_json::to_value(yaml_value).with_context(|| {
+        format!(
+            "YAML asset must be convertible to JSON for validation: {}",
+            path.display()
+        )
+    })
+}
+
+fn non_empty_string(value: &JsonValue, key: &str) -> bool {
+    value
+        .get(key)
+        .and_then(JsonValue::as_str)
+        .map(|text| !text.trim().is_empty())
+        .unwrap_or(false)
+}

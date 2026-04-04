@@ -1,0 +1,7 @@
+id: identity-policy.default
+version: 1.0.0
+default_mode: deterministic
+override_modes:
+  - external
+  - random
+require_reason_code: true

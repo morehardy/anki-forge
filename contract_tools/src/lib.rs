@@ -4,6 +4,7 @@ pub mod fixtures;
 pub mod gates;
 pub mod manifest;
 pub mod package;
+pub mod policies;
 pub mod registry;
 pub mod schema;
 pub mod semantics;

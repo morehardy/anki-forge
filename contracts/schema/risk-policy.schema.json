@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "version", "default_gate"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_gate": {
+      "type": "object",
+      "required": ["high", "medium", "low"],
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "enum": ["fail"]
+        },
+        "medium": {
+          "enum": ["warn"]
+        },
+        "low": {
+          "enum": ["allow"]
+        }
+      }
+    }
+  }
+}
