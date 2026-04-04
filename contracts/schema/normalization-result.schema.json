@@ -87,9 +87,25 @@
           }
         }
       },
-      "then": {},
-      "else": {
+      "then": {}
+    },
+    {
+      "if": {
+        "required": ["comparison_context"],
+        "properties": {
+          "comparison_context": {
+            "type": "object"
+          }
+        }
+      },
+      "then": {
         "required": ["merge_risk_report"]
+        ,
+        "properties": {
+          "merge_risk_report": {
+            "$ref": "merge-risk-report.schema.json"
+          }
+        }
       }
     }
   ]

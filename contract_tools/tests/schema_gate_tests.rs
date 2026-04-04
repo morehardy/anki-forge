@@ -120,6 +120,76 @@ fn normalization_result_schema_requires_merge_risk_report_when_comparison_contex
 }
 
 #[test]
+fn normalization_result_schema_rejects_null_merge_risk_report_when_comparison_context_is_present() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalization_result_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "normalization-result",
+        "result_status": "success",
+        "tool_contract_version": "phase2-v1",
+        "policy_refs": {
+            "identity_policy_ref": "identity-policy.default@1.0.0",
+            "risk_policy_ref": "risk-policy.default@1.0.0"
+        },
+        "comparison_context": {
+            "kind": "comparison-context",
+            "baseline_kind": "normalized_ir",
+            "baseline_artifact_fingerprint": "baseline-1",
+            "risk_policy_ref": "risk-policy.default@1.0.0",
+            "comparison_mode": "strict"
+        },
+        "diagnostics": {
+            "kind": "normalization-diagnostics",
+            "status": "valid",
+            "items": []
+        },
+        "merge_risk_report": null
+    });
+
+    assert!(validate_value(&schema, &value).is_err());
+}
+
+#[test]
+fn normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_context_is_present() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalization_result_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "normalization-result",
+        "result_status": "success",
+        "tool_contract_version": "phase2-v1",
+        "policy_refs": {
+            "identity_policy_ref": "identity-policy.default@1.0.0",
+            "risk_policy_ref": "risk-policy.default@1.0.0"
+        },
+        "comparison_context": {
+            "kind": "comparison-context",
+            "baseline_kind": "normalized_ir",
+            "baseline_artifact_fingerprint": "baseline-1",
+            "risk_policy_ref": "risk-policy.default@1.0.0",
+            "comparison_mode": "strict"
+        },
+        "diagnostics": {
+            "kind": "normalization-diagnostics",
+            "status": "valid",
+            "items": []
+        },
+        "merge_risk_report": {
+            "kind": "merge-risk-report",
+            "comparison_status": "complete",
+            "overall_level": "low",
+            "policy_version": "risk-policy.default@1.0.0",
+            "baseline_artifact_fingerprint": "baseline-1",
+            "current_artifact_fingerprint": "current-1",
+            "comparison_reasons": []
+        }
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
 fn diagnostic_item_schema_matches_the_validation_report_local_definition() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let diagnostic_item_path = resolve_asset_path(&manifest, "diagnostic_item_schema").unwrap();

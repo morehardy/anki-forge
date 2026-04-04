@@ -2,6 +2,7 @@ use anyhow::{anyhow, bail, Context};
 use jsonschema::JSONSchema;
 use serde_json::Value;
 use std::{fs, path::Path};
+use url::Url;
 
 use crate::manifest::{load_manifest, resolve_asset_path};
 
@@ -99,5 +100,7 @@ fn file_uri(path: &Path) -> anyhow::Result<String> {
     let path = path
         .canonicalize()
         .with_context(|| format!("failed to resolve schema path: {}", path.display()))?;
-    Ok(format!("file://{}", path.display()))
+    Url::from_file_path(&path)
+        .map(|url| url.into())
+        .map_err(|()| anyhow!("failed to convert schema path to file URI: {}", path.display()))
 }
