@@ -31,3 +31,27 @@ cases:
       - fixtures/expected/missing-document-id.report.json
     expected_bundle_bump: major
     input: fixtures/evolution/incompatible-path-change.yaml
+  - id: phase2-normalization-minimal-success
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/minimal-success.case.yaml
+  - id: phase2-normalization-identity-random-warning
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/identity-random-warning.case.yaml
+  - id: phase2-risk-complete-low
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/complete-low.case.yaml
+  - id: phase2-risk-partial-high
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/partial-high.case.yaml

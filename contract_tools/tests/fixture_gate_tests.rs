@@ -47,6 +47,48 @@ fn fixture_gates_reject_evolution_metadata_drift() {
         .contains("evolution fixture metadata must match catalog"));
 }
 
+#[test]
+fn fixture_gates_execute_phase2_cases_and_compare_expected_output() {
+    let manifest = load_manifest(write_bundle(
+        &registry_yaml(),
+        &catalog_yaml_with_phase2(),
+        &expected_report_json("AF0001"),
+        &additive_evolution_yaml("additive_compatible", "minor"),
+        &incompatible_evolution_yaml("behavior_changing_incompatible", "major"),
+    ))
+    .expect("temp manifest loads");
+
+    run_fixture_gates(&manifest.path).expect("phase2 executable fixtures should pass");
+}
+
+#[test]
+fn fixture_gates_reject_phase2_expected_output_mismatch() {
+    let manifest = load_manifest(write_bundle(
+        &registry_yaml(),
+        &catalog_yaml_with_phase2(),
+        &expected_report_json("AF0001"),
+        &additive_evolution_yaml("additive_compatible", "minor"),
+        &incompatible_evolution_yaml("behavior_changing_incompatible", "major"),
+    ))
+    .expect("temp manifest loads");
+
+    let bundle_root = manifest
+        .path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    fs::write(
+        bundle_root.join("fixtures/phase2/expected/minimal-success.result.json"),
+        phase2_minimal_success_result_mismatch_json(),
+    )
+    .expect("overwrite phase2 expected result");
+
+    let err = run_fixture_gates(&manifest.path).expect_err("phase2 mismatches should fail");
+    assert!(err
+        .to_string()
+        .contains("phase2 normalization output mismatch"));
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);
@@ -76,6 +118,13 @@ fn write_bundle(
     fs::create_dir_all(root.join("fixtures/service-envelope"))
         .expect("create envelope fixtures dir");
     fs::create_dir_all(root.join("fixtures/evolution")).expect("create evolution fixtures dir");
+    fs::create_dir_all(root.join("fixtures/phase2/normalization"))
+        .expect("create phase2 normalization fixtures dir");
+    fs::create_dir_all(root.join("fixtures/phase2/risk")).expect("create phase2 risk fixtures dir");
+    fs::create_dir_all(root.join("fixtures/phase2/inputs"))
+        .expect("create phase2 input fixtures dir");
+    fs::create_dir_all(root.join("fixtures/phase2/expected"))
+        .expect("create phase2 expected fixtures dir");
 
     fs::write(root.join("manifest.yaml"), manifest_yaml()).expect("write manifest");
     fs::write(root.join("schema/manifest.schema.json"), manifest_schema())
@@ -163,6 +212,41 @@ fn write_bundle(
         incompatible_evolution_yaml,
     )
     .expect("write incompatible evolution fixture");
+    fs::write(
+        root.join("fixtures/phase2/normalization/minimal-success.case.yaml"),
+        phase2_minimal_success_case_yaml(),
+    )
+    .expect("write phase2 minimal success case");
+    fs::write(
+        root.join("fixtures/phase2/risk/complete-low.case.yaml"),
+        phase2_complete_low_case_yaml(),
+    )
+    .expect("write phase2 complete low case");
+    fs::write(
+        root.join("fixtures/phase2/normalization/identity-random-warning.case.yaml"),
+        phase2_identity_random_warning_case_yaml(),
+    )
+    .expect("write phase2 random warning case");
+    fs::write(
+        root.join("fixtures/phase2/risk/partial-high.case.yaml"),
+        phase2_partial_high_case_yaml(),
+    )
+    .expect("write phase2 partial risk case");
+    fs::write(
+        root.join("fixtures/phase2/inputs/minimal-authoring-ir.json"),
+        phase2_minimal_authoring_ir_json(),
+    )
+    .expect("write phase2 input fixture");
+    fs::write(
+        root.join("fixtures/phase2/expected/minimal-success.result.json"),
+        phase2_minimal_success_result_json(),
+    )
+    .expect("write phase2 expected normalization result");
+    fs::write(
+        root.join("fixtures/phase2/expected/complete-low.risk.json"),
+        phase2_complete_low_risk_json(),
+    )
+    .expect("write phase2 expected risk report");
 
     root.join("manifest.yaml")
 }
@@ -435,6 +519,30 @@ fn catalog_yaml() -> String {
       - fixtures/expected/missing-document-id.report.json
     expected_bundle_bump: major
     input: fixtures/evolution/incompatible-path-change.yaml
+  - id: phase2-normalization-minimal-success
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/minimal-success.case.yaml
+  - id: phase2-normalization-identity-random-warning
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/identity-random-warning.case.yaml
+  - id: phase2-risk-complete-low
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/complete-low.case.yaml
+  - id: phase2-risk-partial-high
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/partial-high.case.yaml
 "#
     .to_string()
 }
@@ -473,6 +581,92 @@ fn catalog_yaml_with_drift() -> String {
       - fixtures/expected/missing-document-id.report.json
     expected_bundle_bump: major
     input: fixtures/evolution/incompatible-path-change.yaml
+  - id: phase2-normalization-minimal-success
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/minimal-success.case.yaml
+  - id: phase2-normalization-identity-random-warning
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/identity-random-warning.case.yaml
+  - id: phase2-risk-complete-low
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/complete-low.case.yaml
+  - id: phase2-risk-partial-high
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/partial-high.case.yaml
+"#
+    .to_string()
+}
+
+fn catalog_yaml_with_phase2() -> String {
+    r#"cases:
+  - id: minimal-authoring-ir
+    category: valid
+    input: fixtures/valid/minimal-authoring-ir.json
+  - id: missing-document-id
+    category: invalid
+    input: fixtures/invalid/missing-document-id.json
+    expected: fixtures/expected/missing-document-id.report.json
+  - id: minimal-service-envelope
+    category: service-envelope
+    input: fixtures/service-envelope/minimal-success.json
+  - id: additive-compatible
+    category: evolution
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    target_asset: fixtures/index.yaml
+    affected_paths:
+      - fixtures/valid/minimal-authoring-ir.json
+    expected_bundle_bump: minor
+    input: fixtures/evolution/additive-compatible.yaml
+  - id: incompatible-path-change
+    category: evolution
+    compatibility_class: behavior_changing_incompatible
+    upgrade_rules:
+      - migration_notes_required
+      - executable_checks_required
+    target_asset: fixtures/index.yaml
+    affected_paths:
+      - fixtures/invalid/missing-document-id.json
+      - fixtures/expected/missing-document-id.report.json
+    expected_bundle_bump: major
+    input: fixtures/evolution/incompatible-path-change.yaml
+  - id: phase2-normalization-minimal-success
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/minimal-success.case.yaml
+  - id: phase2-risk-complete-low
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/complete-low.case.yaml
+  - id: phase2-normalization-identity-random-warning
+    category: phase2-normalization
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/normalization/identity-random-warning.case.yaml
+  - id: phase2-risk-partial-high
+    category: phase2-risk
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase2/risk/partial-high.case.yaml
 "#
     .to_string()
 }
@@ -528,6 +722,143 @@ fn minimal_service_envelope_json() -> String {
 }
 "#
     .to_string()
+}
+
+fn phase2_minimal_success_case_yaml() -> String {
+    r#"kind: phase2-normalization-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context: null
+expected_result: fixtures/phase2/expected/minimal-success.result.json
+"#
+    .to_string()
+}
+
+fn phase2_complete_low_case_yaml() -> String {
+    r#"kind: phase2-risk-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context:
+  kind: comparison-context
+  baseline_kind: normalized_ir
+  baseline_artifact_fingerprint: baseline-minimal-success
+  risk_policy_ref: risk-policy.default@1.0.0
+  comparison_mode: strict
+expected_result: fixtures/phase2/expected/complete-low.risk.json
+"#
+    .to_string()
+}
+
+fn phase2_identity_random_warning_case_yaml() -> String {
+    r#"kind: phase2-normalization-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context: null
+identity_override_mode: random
+reason_code: manual_randomization
+expected_result_status: success
+expected_diagnostic_codes:
+  - PHASE2.IDENTITY_RANDOM_OVERRIDE
+resolved_identity_prefix: "rnd:"
+"#
+    .to_string()
+}
+
+fn phase2_partial_high_case_yaml() -> String {
+    r#"kind: phase2-risk-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context:
+  kind: comparison-context
+  baseline_kind: identity_index
+  baseline_artifact_fingerprint: baseline-identity-only
+  risk_policy_ref: risk-policy.default@1.0.0
+  comparison_mode: best_effort
+expected_result_status: success
+expected_comparison_status: partial
+expected_overall_level: medium
+expected_comparison_reasons:
+  - BASELINE_IDENTITY_INDEX_ONLY
+"#
+    .to_string()
+}
+
+fn phase2_minimal_authoring_ir_json() -> String {
+    r#"{
+  "kind": "authoring-ir",
+  "schema_version": "0.1.0",
+  "metadata": {
+    "document_id": "demo-doc"
+  },
+  "notetypes": [],
+  "notes": []
+}
+"#
+    .to_string()
+}
+
+fn phase2_minimal_success_result_json() -> String {
+    let result = json!({
+        "kind": "normalization-result",
+        "result_status": "success",
+        "tool_contract_version": "phase2-v1",
+        "policy_refs": {
+            "identity_policy_ref": "identity-policy.default@1.0.0",
+            "risk_policy_ref": null
+        },
+        "comparison_context": null,
+        "diagnostics": {
+            "kind": "normalization-diagnostics",
+            "status": "valid",
+            "items": []
+        },
+        "normalized_ir": {
+            "kind": "normalized-ir",
+            "schema_version": "0.1.0",
+            "document_id": "demo-doc",
+            "resolved_identity": "det:demo-doc"
+        },
+        "merge_risk_report": null
+    });
+
+    serde_json::to_string_pretty(&result).expect("serialize phase2 normalization result")
+}
+
+fn phase2_minimal_success_result_mismatch_json() -> String {
+    let result = json!({
+        "kind": "normalization-result",
+        "result_status": "success",
+        "tool_contract_version": "phase2-v1",
+        "policy_refs": {
+            "identity_policy_ref": "identity-policy.default@1.0.0",
+            "risk_policy_ref": null
+        },
+        "comparison_context": null,
+        "diagnostics": {
+            "kind": "normalization-diagnostics",
+            "status": "valid",
+            "items": []
+        },
+        "normalized_ir": {
+            "kind": "normalized-ir",
+            "schema_version": "0.1.0",
+            "document_id": "demo-doc",
+            "resolved_identity": "det:not-the-same"
+        },
+        "merge_risk_report": null
+    });
+
+    serde_json::to_string_pretty(&result).expect("serialize mismatched phase2 result")
+}
+
+fn phase2_complete_low_risk_json() -> String {
+    let report = json!({
+        "kind": "merge-risk-report",
+        "comparison_status": "complete",
+        "overall_level": "low",
+        "policy_version": "risk-policy.default@1.0.0",
+        "baseline_artifact_fingerprint": "baseline-minimal-success",
+        "current_artifact_fingerprint": "det:demo-doc",
+        "comparison_reasons": []
+    });
+
+    serde_json::to_string_pretty(&report).expect("serialize phase2 risk report")
 }
 
 fn compatibility_classes_yaml() -> String {

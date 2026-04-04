@@ -1,0 +1,9 @@
+kind: phase2-normalization-case
+authoring_input: fixtures/phase2/inputs/minimal-authoring-ir.json
+comparison_context: null
+identity_override_mode: random
+reason_code: manual_randomization
+expected_result_status: success
+expected_diagnostic_codes:
+  - PHASE2.IDENTITY_RANDOM_OVERRIDE
+resolved_identity_prefix: "rnd:"
