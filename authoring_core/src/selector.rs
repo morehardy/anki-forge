@@ -187,10 +187,7 @@ fn parse_predicate_list(raw: &str) -> Result<Vec<(String, String)>, SelectorErro
     Ok(predicates)
 }
 
-fn push_predicate(
-    predicates: &mut Vec<(String, String)>,
-    raw: &str,
-) -> Result<(), SelectorError> {
+fn push_predicate(predicates: &mut Vec<(String, String)>, raw: &str) -> Result<(), SelectorError> {
     let item = raw.trim();
     if item.is_empty() {
         return Err(SelectorError::InvalidPredicate);
@@ -206,7 +203,10 @@ fn push_predicate(
     }
     let value = parse_quoted_value(value)?;
 
-    if predicates.iter().any(|(existing_key, _)| existing_key == key) {
+    if predicates
+        .iter()
+        .any(|(existing_key, _)| existing_key == key)
+    {
         return Err(SelectorError::InvalidPredicate);
     }
 

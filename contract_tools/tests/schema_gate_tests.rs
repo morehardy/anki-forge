@@ -181,7 +181,8 @@ fn normalization_result_schema_rejects_null_merge_risk_report_when_comparison_co
 }
 
 #[test]
-fn normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_context_is_present() {
+fn normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_context_is_present()
+{
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
         load_schema(resolve_asset_path(&manifest, "normalization_result_schema").unwrap()).unwrap();

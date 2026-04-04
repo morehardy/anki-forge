@@ -79,7 +79,10 @@ fn register_sibling_schemas(
         .with_context(|| format!("failed to read schema directory: {}", schema_dir.display()))?
     {
         let entry = entry.with_context(|| {
-            format!("failed to read schema directory entry: {}", schema_dir.display())
+            format!(
+                "failed to read schema directory entry: {}",
+                schema_dir.display()
+            )
         })?;
         let sibling_path = entry.path();
         if sibling_path.extension().and_then(|ext| ext.to_str()) != Some("json") {
@@ -88,8 +91,9 @@ fn register_sibling_schemas(
 
         let raw = fs::read_to_string(&sibling_path)
             .with_context(|| format!("failed to read schema: {}", sibling_path.display()))?;
-        let schema: Value = serde_json::from_str(&raw)
-            .with_context(|| format!("schema file must be valid JSON: {}", sibling_path.display()))?;
+        let schema: Value = serde_json::from_str(&raw).with_context(|| {
+            format!("schema file must be valid JSON: {}", sibling_path.display())
+        })?;
         options.with_document(file_uri(&sibling_path)?, schema);
     }
 
@@ -102,5 +106,10 @@ fn file_uri(path: &Path) -> anyhow::Result<String> {
         .with_context(|| format!("failed to resolve schema path: {}", path.display()))?;
     Url::from_file_path(&path)
         .map(|url| url.into())
-        .map_err(|()| anyhow!("failed to convert schema path to file URI: {}", path.display()))
+        .map_err(|()| {
+            anyhow!(
+                "failed to convert schema path to file URI: {}",
+                path.display()
+            )
+        })
 }

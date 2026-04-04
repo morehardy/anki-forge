@@ -1,3 +1,4 @@
+use serde_json::Value;
 use std::process::Command;
 
 fn cargo_bin() -> &'static str {
@@ -67,5 +68,47 @@ fn summary_command_prints_bundle_version_and_public_axis() {
     for (name, asset) in &manifest.data.assets {
         let entry = format!("  {name}: {asset}");
         assert!(stdout.contains(&entry), "stdout: {stdout}");
+    }
+}
+
+#[test]
+fn normalize_contract_json_includes_required_top_level_fields() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let input = manifest
+        .contracts_root
+        .join("fixtures/valid/minimal-authoring-ir.json");
+
+    let output = run_cli(&[
+        "normalize",
+        "--manifest",
+        manifest.path.to_str().unwrap(),
+        "--input",
+        input.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let value: Value = serde_json::from_str(&stdout).expect("stdout should be valid JSON");
+    let object = value.as_object().expect("stdout should be a JSON object");
+
+    for key in [
+        "kind",
+        "result_status",
+        "tool_contract_version",
+        "policy_refs",
+        "comparison_context",
+        "diagnostics",
+    ] {
+        assert!(object.contains_key(key), "missing key {key} in {stdout}");
     }
 }

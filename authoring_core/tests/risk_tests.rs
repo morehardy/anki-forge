@@ -53,7 +53,11 @@ fn best_effort_identity_index_is_partial_with_identity_only_reason() {
 
 #[test]
 fn strict_with_empty_baseline_fingerprint_is_unavailable() {
-    let result = normalize(request_with_comparison_context("strict", "normalized_ir", ""));
+    let result = normalize(request_with_comparison_context(
+        "strict",
+        "normalized_ir",
+        "",
+    ));
     let report = result.merge_risk_report.expect("merge risk report");
 
     assert_eq!(report.comparison_status, "unavailable");

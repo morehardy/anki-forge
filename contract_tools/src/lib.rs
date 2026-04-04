@@ -3,6 +3,7 @@ use std::path::PathBuf;
 pub mod fixtures;
 pub mod gates;
 pub mod manifest;
+pub mod normalize_cmd;
 pub mod package;
 pub mod policies;
 pub mod registry;
