@@ -72,6 +72,7 @@
         "compatibility_semantics",
         "target_selector_grammar",
         "identity_semantics",
+        "merge_risk_semantics",
         "canonical_serialization_semantics"
       ],
       "additionalProperties": false,
@@ -173,6 +174,10 @@
           "minLength": 1
         },
         "identity_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merge_risk_semantics": {
           "type": "string",
           "minLength": 1
         },

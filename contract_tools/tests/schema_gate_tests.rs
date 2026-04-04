@@ -51,6 +51,7 @@ fn manifest_registers_phase2_schema_assets() {
         "comparison_context_schema",
         "merge_risk_report_schema",
         "normalization_result_schema",
+        "merge_risk_semantics",
     ] {
         assert!(
             resolve_asset_path(&manifest, asset_key).is_ok(),

@@ -1,8 +1,9 @@
 use crate::identity::{resolve_identity, DefaultNonceSource};
 use crate::model::{
-    DiagnosticItem, MergeRiskReport, NormalizationDiagnostics, NormalizationRequest,
-    NormalizationResult, NormalizedIr, PolicyRefs,
+    DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
+    NormalizedIr, PolicyRefs,
 };
+use crate::risk::{assess_risk, unavailable_report};
 use crate::selector::{
     parse_selector, resolve_selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
@@ -101,6 +102,15 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         }
     };
 
+    let normalized_ir = NormalizedIr {
+        kind: "normalized-ir".into(),
+        schema_version: request.input.schema_version,
+        document_id: metadata_document_id,
+        resolved_identity: resolved_identity.clone(),
+    };
+
+    let merge_risk_report = assess_risk(&normalized_ir, request.comparison_context.as_ref());
+
     NormalizationResult {
         kind: "normalization-result".into(),
         result_status: "success".into(),
@@ -112,16 +122,8 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
             status: "valid".into(),
             items: diagnostics,
         },
-        normalized_ir: Some(NormalizedIr {
-            kind: "normalized-ir".into(),
-            schema_version: request.input.schema_version,
-            document_id: metadata_document_id,
-            resolved_identity: resolved_identity.clone(),
-        }),
-        merge_risk_report: success_merge_risk_report(
-            request.comparison_context.as_ref(),
-            resolved_identity,
-        ),
+        normalized_ir: Some(normalized_ir),
+        merge_risk_report,
     }
 }
 
@@ -152,7 +154,7 @@ fn invalid_result(
     current_artifact_fingerprint: String,
     comparison_reason: String,
 ) -> NormalizationResult {
-    let merge_risk_report = unavailable_merge_risk_report(
+    let merge_risk_report = unavailable_report(
         comparison_context.as_ref(),
         current_artifact_fingerprint,
         comparison_reason,
@@ -172,35 +174,4 @@ fn invalid_result(
         normalized_ir: None,
         merge_risk_report,
     }
-}
-
-fn unavailable_merge_risk_report(
-    comparison_context: Option<&crate::model::ComparisonContext>,
-    current_artifact_fingerprint: String,
-    comparison_reason: String,
-) -> Option<MergeRiskReport> {
-    comparison_context.map(|context| MergeRiskReport {
-        kind: "merge-risk-report".into(),
-        comparison_status: "unavailable".into(),
-        overall_level: "unknown".into(),
-        policy_version: context.risk_policy_ref.clone(),
-        baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
-        current_artifact_fingerprint,
-        comparison_reasons: vec![comparison_reason],
-    })
-}
-
-fn success_merge_risk_report(
-    comparison_context: Option<&crate::model::ComparisonContext>,
-    current_artifact_fingerprint: String,
-) -> Option<MergeRiskReport> {
-    comparison_context.map(|context| MergeRiskReport {
-        kind: "merge-risk-report".into(),
-        comparison_status: "complete".into(),
-        overall_level: "low".into(),
-        policy_version: context.risk_policy_ref.clone(),
-        baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
-        current_artifact_fingerprint,
-        comparison_reasons: vec!["comparison completed".into()],
-    })
 }

@@ -16,6 +16,18 @@ pub struct ComparisonContext {
     pub comparison_mode: String,
 }
 
+impl ComparisonContext {
+    pub fn normalized(fingerprint: impl Into<String>, policy_ref: impl Into<String>) -> Self {
+        Self {
+            kind: "comparison-context".into(),
+            baseline_kind: "normalized_ir".into(),
+            baseline_artifact_fingerprint: fingerprint.into(),
+            risk_policy_ref: policy_ref.into(),
+            comparison_mode: "strict".into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NormalizationRequest {
     pub input: AuthoringDocument,
