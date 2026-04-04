@@ -54,24 +54,8 @@ pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
         return Err(SelectorError::ArrayIndexNotAllowed);
     }
 
-    let Some(open_bracket) = raw.find('[') else {
-        return Err(SelectorError::InvalidPredicate);
-    };
-
-    if !raw.ends_with(']') {
-        return Err(SelectorError::InvalidPredicate);
-    }
-
-    let kind = raw[..open_bracket].trim();
+    let (kind, inner) = split_selector(raw)?;
     validate_kind(kind)?;
-
-    let predicate_block = raw[open_bracket..].trim();
-    let Some(inner) = predicate_block
-        .strip_prefix('[')
-        .and_then(|value| value.strip_suffix(']'))
-    else {
-        return Err(SelectorError::InvalidPredicate);
-    };
 
     if inner.trim().is_empty() {
         return Err(SelectorError::InvalidPredicate);
@@ -82,6 +66,52 @@ pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
         kind: kind.to_string(),
         predicates,
     })
+}
+
+fn split_selector(raw: &str) -> Result<(&str, &str), SelectorError> {
+    let mut quote: Option<char> = None;
+    let mut open_bracket: Option<usize> = None;
+    let mut close_bracket: Option<usize> = None;
+
+    for (idx, ch) in raw.char_indices() {
+        match quote {
+            Some(active_quote) => {
+                if ch == active_quote {
+                    quote = None;
+                }
+            }
+            None => match ch {
+                '\'' | '"' => quote = Some(ch),
+                '[' => {
+                    if open_bracket.is_some() {
+                        return Err(SelectorError::InvalidPredicate);
+                    }
+                    open_bracket = Some(idx);
+                }
+                ']' => {
+                    if open_bracket.is_none() || close_bracket.is_some() {
+                        return Err(SelectorError::InvalidPredicate);
+                    }
+                    close_bracket = Some(idx);
+                }
+                _ => {}
+            },
+        }
+    }
+
+    if quote.is_some() {
+        return Err(SelectorError::InvalidPredicate);
+    }
+
+    let open_bracket = open_bracket.ok_or(SelectorError::InvalidPredicate)?;
+    let close_bracket = close_bracket.ok_or(SelectorError::InvalidPredicate)?;
+    if !raw[close_bracket + 1..].trim().is_empty() {
+        return Err(SelectorError::InvalidPredicate);
+    }
+
+    let kind = raw[..open_bracket].trim();
+    let inner = raw[open_bracket + 1..close_bracket].trim();
+    Ok((kind, inner))
 }
 
 pub fn resolve_selector(

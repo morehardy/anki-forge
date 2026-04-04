@@ -137,10 +137,15 @@ fn selector_invalid_summary(error: &SelectorError) -> &'static str {
 
 fn identity_error_diagnostic(error: &anyhow::Error) -> (&'static str, String) {
     let message = error.to_string();
-    if message == "reason_code required" || message == "external_id required" {
+    if message == "reason_code required" {
+        (
+            "PHASE2.REASON_CODE_REQUIRED",
+            "override modes require reason_code".into(),
+        )
+    } else if message == "external_id required" {
         (
             "PHASE2.EXTERNAL_ID_REQUIRED",
-            "override modes require reason_code, and external overrides require external_id".into(),
+            "external override requires external_id".into(),
         )
     } else {
         ("PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED", message)

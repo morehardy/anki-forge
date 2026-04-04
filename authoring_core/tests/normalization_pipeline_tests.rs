@@ -168,6 +168,32 @@ fn missing_reason_code_for_override_is_invalid() {
     let result = normalize(request);
 
     assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE2.REASON_CODE_REQUIRED"));
+}
+
+#[test]
+fn random_override_missing_reason_code_is_invalid_with_reason_code_diagnostic() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-document",
+            "schema_version": "1.0",
+            "metadata_document_id": "doc-random-missing-reason"
+        },
+        "identity_override_mode": "random"
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE2.REASON_CODE_REQUIRED"));
 }
 
 #[test]

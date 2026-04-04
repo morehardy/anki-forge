@@ -35,6 +35,13 @@ fn kind_only_selector_is_rejected() {
 }
 
 #[test]
+fn chained_predicate_blocks_are_rejected() {
+    let err =
+        parse_selector("note[id='n1'][deck='d1']").expect_err("selector should be invalid");
+    assert_eq!(err, SelectorError::InvalidPredicate);
+}
+
+#[test]
 fn resolver_returns_unmatched_for_zero_matches() {
     let selector = parse_selector("note[id='n1']").expect("selector should parse");
     let targets = vec![SelectorTarget::new("note", [("id", "n2")])];
