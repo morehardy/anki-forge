@@ -20,6 +20,11 @@ pub struct ComparisonContext {
 pub struct NormalizationRequest {
     pub input: AuthoringDocument,
     pub comparison_context: Option<ComparisonContext>,
+    pub identity_override_mode: Option<String>,
+    pub target_selector: Option<String>,
+    pub external_id: Option<String>,
+    pub reason_code: Option<String>,
+    pub reason: Option<String>,
 }
 
 impl NormalizationRequest {
@@ -27,6 +32,11 @@ impl NormalizationRequest {
         Self {
             input,
             comparison_context: None,
+            identity_override_mode: None,
+            target_selector: None,
+            external_id: None,
+            reason_code: None,
+            reason: None,
         }
     }
 }

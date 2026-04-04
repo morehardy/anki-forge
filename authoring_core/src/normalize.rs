@@ -1,8 +1,11 @@
+use crate::identity::{resolve_identity, DefaultNonceSource};
 use crate::model::{
     DiagnosticItem, MergeRiskReport, NormalizationDiagnostics, NormalizationRequest,
     NormalizationResult, NormalizedIr, PolicyRefs,
 };
-use crate::selector::SelectorResolveError;
+use crate::selector::{
+    parse_selector, resolve_selector, SelectorError, SelectorResolveError, SelectorTarget,
+};
 
 pub fn selector_resolve_error_code(error: &SelectorResolveError) -> &'static str {
     match error {
@@ -12,11 +15,8 @@ pub fn selector_resolve_error_code(error: &SelectorResolveError) -> &'static str
 }
 
 pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
-    let NormalizationRequest {
-        input,
-        comparison_context,
-    } = request;
-    let risk_policy_ref = comparison_context
+    let risk_policy_ref = request
+        .comparison_context
         .as_ref()
         .map(|context| context.risk_policy_ref.clone());
 
@@ -25,70 +25,182 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         risk_policy_ref,
     };
 
-    let metadata_document_id = input.metadata_document_id.trim().to_string();
-    let current_artifact_fingerprint = format!("det:{metadata_document_id}");
-    let merge_risk_report = comparison_context.as_ref().map(|context| {
-        if metadata_document_id.is_empty() {
-            MergeRiskReport {
-                kind: "merge-risk-report".into(),
-                comparison_status: "unavailable".into(),
-                overall_level: "unknown".into(),
-                policy_version: context.risk_policy_ref.clone(),
-                baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
-                current_artifact_fingerprint: "det:unavailable".into(),
-                comparison_reasons: vec!["missing document id".into()],
-            }
-        } else {
-            MergeRiskReport {
-                kind: "merge-risk-report".into(),
-                comparison_status: "complete".into(),
-                overall_level: "low".into(),
-                policy_version: context.risk_policy_ref.clone(),
-                baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
-                current_artifact_fingerprint: current_artifact_fingerprint.clone(),
-                comparison_reasons: vec!["comparison completed".into()],
-            }
-        }
-    });
+    let metadata_document_id = request.input.metadata_document_id.trim().to_string();
 
     if metadata_document_id.is_empty() {
-        return NormalizationResult {
-            kind: "normalization-result".into(),
-            result_status: "invalid".into(),
-            tool_contract_version: crate::tool_contract_version().into(),
+        return invalid_result(
             policy_refs,
-            comparison_context,
-            diagnostics: NormalizationDiagnostics {
-                kind: "normalization-diagnostics".into(),
-                status: "invalid".into(),
-                items: vec![DiagnosticItem {
-                    level: "error".into(),
-                    code: "PHASE2.MISSING_DOCUMENT_ID".into(),
-                    summary: "metadata_document_id cannot be blank".into(),
-                }],
-            },
-            normalized_ir: None,
-            merge_risk_report,
-        };
+            request.comparison_context,
+            vec![DiagnosticItem {
+                level: "error".into(),
+                code: "PHASE2.MISSING_DOCUMENT_ID".into(),
+                summary: "metadata_document_id cannot be blank".into(),
+            }],
+            "det:unavailable".into(),
+            "missing document id".into(),
+        );
     }
+
+    if let Some(raw_selector) = request.target_selector.as_deref() {
+        let selector = match parse_selector(raw_selector) {
+            Ok(selector) => selector,
+            Err(error) => {
+                return invalid_result(
+                    policy_refs,
+                    request.comparison_context,
+                    vec![DiagnosticItem {
+                        level: "error".into(),
+                        code: "PHASE2.SELECTOR_INVALID".into(),
+                        summary: selector_invalid_summary(&error).into(),
+                    }],
+                    format!("det:{metadata_document_id}"),
+                    "target selector did not match any resolvable object".into(),
+                );
+            }
+        };
+
+        let targets = vec![SelectorTarget::new(
+            request.input.kind.clone(),
+            [("id", metadata_document_id.clone())],
+        )];
+
+        if let Err(error) = resolve_selector(&selector, &targets) {
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                vec![DiagnosticItem {
+                    level: "error".into(),
+                    code: selector_resolve_error_code(&error).into(),
+                    summary: "target_selector resolution failed".into(),
+                }],
+                format!("det:{metadata_document_id}"),
+                "target selector did not match any resolvable object".into(),
+            );
+        }
+    }
+
+    let mut diagnostics = Vec::new();
+    let mut nonce_source = DefaultNonceSource;
+    let resolved_identity = match resolve_identity(&request, &mut diagnostics, &mut nonce_source) {
+        Ok(identity) => identity,
+        Err(error) => {
+            let (code, summary) = identity_error_diagnostic(&error);
+            diagnostics.push(DiagnosticItem {
+                level: "error".into(),
+                code: code.into(),
+                summary,
+            });
+
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                diagnostics,
+                format!("det:{metadata_document_id}"),
+                "identity resolution failed".into(),
+            );
+        }
+    };
 
     NormalizationResult {
         kind: "normalization-result".into(),
         result_status: "success".into(),
         tool_contract_version: crate::tool_contract_version().into(),
         policy_refs,
-        comparison_context,
+        comparison_context: request.comparison_context.clone(),
         diagnostics: NormalizationDiagnostics {
             kind: "normalization-diagnostics".into(),
             status: "valid".into(),
-            items: Vec::new(),
+            items: diagnostics,
         },
         normalized_ir: Some(NormalizedIr {
             kind: "normalized-ir".into(),
-            schema_version: input.schema_version,
+            schema_version: request.input.schema_version,
             document_id: metadata_document_id,
-            resolved_identity: current_artifact_fingerprint,
+            resolved_identity: resolved_identity.clone(),
         }),
+        merge_risk_report: success_merge_risk_report(
+            request.comparison_context.as_ref(),
+            resolved_identity,
+        ),
+    }
+}
+
+fn selector_invalid_summary(error: &SelectorError) -> &'static str {
+    match error {
+        SelectorError::Empty => "target_selector cannot be blank",
+        SelectorError::ArrayIndexNotAllowed => "target_selector cannot use array index segments",
+        SelectorError::InvalidPredicate => "target_selector does not match selector grammar",
+    }
+}
+
+fn identity_error_diagnostic(error: &anyhow::Error) -> (&'static str, String) {
+    let message = error.to_string();
+    if message == "reason_code required" || message == "external_id required" {
+        (
+            "PHASE2.EXTERNAL_ID_REQUIRED",
+            "override modes require reason_code, and external overrides require external_id".into(),
+        )
+    } else {
+        ("PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED", message)
+    }
+}
+
+fn invalid_result(
+    policy_refs: PolicyRefs,
+    comparison_context: Option<crate::model::ComparisonContext>,
+    diagnostics: Vec<DiagnosticItem>,
+    current_artifact_fingerprint: String,
+    comparison_reason: String,
+) -> NormalizationResult {
+    let merge_risk_report = unavailable_merge_risk_report(
+        comparison_context.as_ref(),
+        current_artifact_fingerprint,
+        comparison_reason,
+    );
+
+    NormalizationResult {
+        kind: "normalization-result".into(),
+        result_status: "invalid".into(),
+        tool_contract_version: crate::tool_contract_version().into(),
+        policy_refs,
+        comparison_context,
+        diagnostics: NormalizationDiagnostics {
+            kind: "normalization-diagnostics".into(),
+            status: "invalid".into(),
+            items: diagnostics,
+        },
+        normalized_ir: None,
         merge_risk_report,
     }
+}
+
+fn unavailable_merge_risk_report(
+    comparison_context: Option<&crate::model::ComparisonContext>,
+    current_artifact_fingerprint: String,
+    comparison_reason: String,
+) -> Option<MergeRiskReport> {
+    comparison_context.map(|context| MergeRiskReport {
+        kind: "merge-risk-report".into(),
+        comparison_status: "unavailable".into(),
+        overall_level: "unknown".into(),
+        policy_version: context.risk_policy_ref.clone(),
+        baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
+        current_artifact_fingerprint,
+        comparison_reasons: vec![comparison_reason],
+    })
+}
+
+fn success_merge_risk_report(
+    comparison_context: Option<&crate::model::ComparisonContext>,
+    current_artifact_fingerprint: String,
+) -> Option<MergeRiskReport> {
+    comparison_context.map(|context| MergeRiskReport {
+        kind: "merge-risk-report".into(),
+        comparison_status: "complete".into(),
+        overall_level: "low".into(),
+        policy_version: context.risk_policy_ref.clone(),
+        baseline_artifact_fingerprint: context.baseline_artifact_fingerprint.clone(),
+        current_artifact_fingerprint,
+        comparison_reasons: vec!["comparison completed".into()],
+    })
 }

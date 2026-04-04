@@ -70,7 +70,9 @@
         "validation_semantics",
         "path_semantics",
         "compatibility_semantics",
-        "target_selector_grammar"
+        "target_selector_grammar",
+        "identity_semantics",
+        "canonical_serialization_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -167,6 +169,14 @@
           "minLength": 1
         },
         "target_selector_grammar": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_serialization_semantics": {
           "type": "string",
           "minLength": 1
         }
