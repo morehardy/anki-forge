@@ -91,13 +91,13 @@ fn package_entries(
         for case in &fixture_catalog.cases {
             add_relative_entry(&mut entries, &manifest.contracts_root, &case.input)?;
             if let Some(expected) = &case.expected {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &expected)?;
+                add_relative_entry(&mut entries, &manifest.contracts_root, expected)?;
             }
             if let Some(target_asset) = &case.target_asset {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &target_asset)?;
+                add_relative_entry(&mut entries, &manifest.contracts_root, target_asset)?;
             }
             for affected_path in &case.affected_paths {
-                add_relative_entry(&mut entries, &manifest.contracts_root, &affected_path)?;
+                add_relative_entry(&mut entries, &manifest.contracts_root, affected_path)?;
             }
             add_case_transitive_entries(&mut entries, &manifest.contracts_root, case)?;
         }
