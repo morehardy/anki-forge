@@ -36,8 +36,7 @@ fn kind_only_selector_is_rejected() {
 
 #[test]
 fn chained_predicate_blocks_are_rejected() {
-    let err =
-        parse_selector("note[id='n1'][deck='d1']").expect_err("selector should be invalid");
+    let err = parse_selector("note[id='n1'][deck='d1']").expect_err("selector should be invalid");
     assert_eq!(err, SelectorError::InvalidPredicate);
 }
 

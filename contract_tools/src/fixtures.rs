@@ -265,7 +265,12 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                 )?;
             }
             "phase2-risk" => {
-                run_phase2_risk_case(&manifest, &authoring_ir_schema, &input_path, case.id.as_str())?;
+                run_phase2_risk_case(
+                    &manifest,
+                    &authoring_ir_schema,
+                    &input_path,
+                    case.id.as_str(),
+                )?;
             }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;
@@ -466,11 +471,7 @@ fn run_phase2_normalization_case(
         case_id
     );
 
-    let request = build_phase2_request(
-        manifest,
-        authoring_ir_schema,
-        &case.request,
-    )?;
+    let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
     let actual = authoring_core::normalize(request);
 
     if let Some(expected_result) = &case.expected_result {
@@ -541,11 +542,7 @@ fn run_phase2_risk_case(
         case_id
     );
 
-    let request = build_phase2_request(
-        manifest,
-        authoring_ir_schema,
-        &case.request,
-    )?;
+    let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
     let actual = authoring_core::normalize(request);
     let report = actual.merge_risk_report.as_ref().with_context(|| {
         format!(
@@ -604,8 +601,10 @@ fn build_phase2_request(
         load_phase2_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
     let mut request = authoring_core::NormalizationRequest::new(input);
     if let Some(context) = params.comparison_context.clone() {
-        request.comparison_context =
-            Some(serde_json::from_value(context).context("phase2 comparison_context must match the contract model")?);
+        request.comparison_context = Some(
+            serde_json::from_value(context)
+                .context("phase2 comparison_context must match the contract model")?,
+        );
     }
     request.identity_override_mode = params.identity_override_mode.clone();
     request.target_selector = params.target_selector.clone();
@@ -661,6 +660,11 @@ fn compare_canonical_json(
     let expected_value = load_json_value(&expected_path)?;
     let expected_text = authoring_core::to_canonical_json(&expected_value)?;
 
-    ensure!(actual_text == expected_text, "{}: {}", mismatch_message, case_id);
+    ensure!(
+        actual_text == expected_text,
+        "{}: {}",
+        mismatch_message,
+        case_id
+    );
     Ok(())
 }

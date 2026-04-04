@@ -137,8 +137,8 @@ fn add_case_transitive_entries(
                     case_path.display()
                 )
             })?;
-            let transitive: Phase2FixtureCaseTransitivePaths =
-                serde_yaml::from_str(&raw).with_context(|| {
+            let transitive: Phase2FixtureCaseTransitivePaths = serde_yaml::from_str(&raw)
+                .with_context(|| {
                     format!(
                         "phase2 fixture case must be valid YAML for packaging: {}",
                         case_path.display()
