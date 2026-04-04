@@ -54,16 +54,13 @@ pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
         return Err(SelectorError::ArrayIndexNotAllowed);
     }
 
-    if raw.contains('/') {
+    let Some(open_bracket) = raw.find('[') else {
+        return Err(SelectorError::InvalidPredicate);
+    };
+
+    if !raw.ends_with(']') {
         return Err(SelectorError::InvalidPredicate);
     }
-
-    let Some(open_bracket) = raw.find('[') else {
-        return validate_kind(raw).map(|kind| Selector {
-            kind,
-            predicates: Vec::new(),
-        });
-    };
 
     let kind = raw[..open_bracket].trim();
     validate_kind(kind)?;
@@ -77,9 +74,6 @@ pub fn parse_selector(raw: &str) -> Result<Selector, SelectorError> {
     };
 
     if inner.trim().is_empty() {
-        return Err(SelectorError::InvalidPredicate);
-    }
-    if inner.contains('[') || inner.contains(']') {
         return Err(SelectorError::InvalidPredicate);
     }
 
@@ -119,17 +113,29 @@ pub fn resolve_selector(
 }
 
 fn contains_array_index(raw: &str) -> bool {
-    for (open_offset, ch) in raw.char_indices() {
-        if ch != '[' {
-            continue;
-        }
+    let mut quote: Option<char> = None;
+    let mut bracket_start: Option<usize> = None;
 
-        let Some(close_offset) = raw[open_offset + 1..].find(']') else {
-            break;
-        };
-        let inner = raw[open_offset + 1..open_offset + 1 + close_offset].trim();
-        if !inner.is_empty() && inner.chars().all(|ch| ch.is_ascii_digit()) {
-            return true;
+    for (idx, ch) in raw.char_indices() {
+        match quote {
+            Some(active_quote) => {
+                if ch == active_quote {
+                    quote = None;
+                }
+            }
+            None => match ch {
+                '\'' | '"' => quote = Some(ch),
+                '[' => bracket_start = Some(idx + 1),
+                ']' => {
+                    if let Some(start) = bracket_start.take() {
+                        let inner = raw[start..idx].trim();
+                        if !inner.is_empty() && inner.chars().all(|value| value.is_ascii_digit()) {
+                            return true;
+                        }
+                    }
+                }
+                _ => {}
+            },
         }
     }
 

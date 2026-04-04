@@ -17,6 +17,24 @@ fn accepts_kind_with_predicates() {
 }
 
 #[test]
+fn accepts_slash_inside_quoted_value() {
+    let selector = parse_selector("note[id='a/b']").expect("selector should parse");
+    assert_eq!(selector.predicates, vec![("id".into(), "a/b".into())]);
+}
+
+#[test]
+fn quoted_bracket_digits_are_not_treated_as_array_index() {
+    let selector = parse_selector("note[id='x[12]y']").expect("selector should parse");
+    assert_eq!(selector.predicates, vec![("id".into(), "x[12]y".into())]);
+}
+
+#[test]
+fn kind_only_selector_is_rejected() {
+    let err = parse_selector("note").expect_err("kind-only selector should be invalid");
+    assert_eq!(err, SelectorError::InvalidPredicate);
+}
+
+#[test]
 fn resolver_returns_unmatched_for_zero_matches() {
     let selector = parse_selector("note[id='n1']").expect("selector should parse");
     let targets = vec![SelectorTarget::new("note", [("id", "n2")])];
