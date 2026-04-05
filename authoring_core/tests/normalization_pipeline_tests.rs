@@ -480,3 +480,84 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
     assert_eq!(media.mime, "image/png");
     assert_eq!(media.data_base64, "MQ==");
 }
+
+#[test]
+fn unknown_notetype_id_returns_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "missing-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.UNKNOWN_NOTETYPE_ID"));
+}
+
+#[test]
+fn unexpected_extra_field_on_stock_note_returns_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "basic-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back",
+                        "Hint": "unexpected"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.NOTE_FIELD_MISMATCH"));
+}

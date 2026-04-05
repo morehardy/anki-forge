@@ -1,3 +1,5 @@
+use std::collections::{BTreeMap, BTreeSet};
+
 use crate::identity::{resolve_identity, DefaultNonceSource};
 use crate::model::{
     DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
@@ -126,18 +128,61 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         }
     };
 
-    let normalized_notes = request
-        .input
-        .notes
-        .iter()
-        .map(|note| NormalizedNote {
+    let normalized_notetype_by_id: BTreeMap<&str, &crate::model::NormalizedNotetype> =
+        normalized_notetypes
+            .iter()
+            .map(|notetype| (notetype.id.as_str(), notetype))
+            .collect();
+
+    let mut normalized_notes = Vec::with_capacity(request.input.notes.len());
+    for note in &request.input.notes {
+        let Some(notetype) = normalized_notetype_by_id.get(note.notetype_id.as_str()) else {
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                vec![DiagnosticItem {
+                    level: "error".into(),
+                    code: "PHASE3.UNKNOWN_NOTETYPE_ID".into(),
+                    summary: format!(
+                        "note {} references unknown notetype_id {}",
+                        note.id, note.notetype_id
+                    ),
+                }],
+                format!("det:{metadata_document_id}"),
+                "writer-ready note references an unknown notetype".into(),
+            );
+        };
+
+        let expected_fields: BTreeSet<&str> = notetype.fields.iter().map(String::as_str).collect();
+        let actual_fields: BTreeSet<&str> = note.fields.keys().map(String::as_str).collect();
+        if actual_fields != expected_fields {
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                vec![DiagnosticItem {
+                    level: "error".into(),
+                    code: "PHASE3.NOTE_FIELD_MISMATCH".into(),
+                    summary: format!(
+                        "note {} fields must exactly match resolved stock fields for notetype_id {}; expected {:?}, got {:?}",
+                        note.id,
+                        note.notetype_id,
+                        expected_fields,
+                        actual_fields,
+                    ),
+                }],
+                format!("det:{metadata_document_id}"),
+                "writer-ready note fields do not match the resolved stock lane".into(),
+            );
+        }
+
+        normalized_notes.push(NormalizedNote {
             id: note.id.clone(),
             notetype_id: note.notetype_id.clone(),
             deck_name: note.deck_name.clone(),
             fields: note.fields.clone(),
             tags: note.tags.clone(),
-        })
-        .collect::<Vec<_>>();
+        });
+    }
 
     let normalized_media = request
         .input
