@@ -60,6 +60,7 @@ Every checkpoint should produce the same review packet:
 
 **Primary files:**
 - `Cargo.toml`
+- `Cargo.lock`
 - `contract_tools/Cargo.toml`
 - `contract_tools/tests/workspace_smoke_tests.rs`
 - `writer_core/Cargo.toml`
@@ -67,6 +68,7 @@ Every checkpoint should produce the same review packet:
 
 - [ ] Land Task 1 exactly as written in the main plan.
 - [ ] Run `cargo test -p contract_tools --test workspace_smoke_tests -v`
+- [ ] Verify the resulting `Cargo.lock` delta only reflects the new `writer_core` workspace member and its direct dependency graph.
 - [ ] Verify `writer_core::tool_contract_version()` is the only new public surface.
 - [ ] Stop for review.
 

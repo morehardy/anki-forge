@@ -145,6 +145,7 @@ However, the current repository only has a minimal `Normalized IR` (`document_id
 
 **Files:**
 - Modify: `Cargo.toml`
+- Modify: `Cargo.lock`
 - Modify: `contract_tools/Cargo.toml`
 - Modify: `contract_tools/tests/workspace_smoke_tests.rs`
 - Create: `writer_core/Cargo.toml`
@@ -217,6 +218,11 @@ tar = "=0.4.42"
 url = "2.5.2"
 ```
 
+```toml
+# Cargo.lock
+# Expected to update when the new workspace member and dependency edges are introduced.
+```
+
 ```rust
 // writer_core/src/lib.rs
 pub fn tool_contract_version() -> &'static str {
@@ -232,7 +238,7 @@ Expected: PASS, including `workspace_exposes_writer_core_contract_version`.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Cargo.toml contract_tools/Cargo.toml contract_tools/tests/workspace_smoke_tests.rs writer_core/Cargo.toml writer_core/src/lib.rs
+git add Cargo.toml Cargo.lock contract_tools/Cargo.toml contract_tools/tests/workspace_smoke_tests.rs writer_core/Cargo.toml writer_core/src/lib.rs
 git commit -m "feat: bootstrap writer_core workspace crate"
 ```
 
