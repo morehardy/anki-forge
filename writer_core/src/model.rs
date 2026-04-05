@@ -123,10 +123,7 @@ pub struct DiffReport {
     pub left_observation_model_version: String,
     pub right_observation_model_version: String,
     pub summary: String,
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub uncompared_domains: Vec<String>,
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub comparison_limitations: Vec<String>,
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub changes: Vec<DiffChange>,
 }

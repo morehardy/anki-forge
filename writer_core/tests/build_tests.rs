@@ -1,6 +1,6 @@
 use writer_core::{
     build_context_ref, policy_ref, to_canonical_json, BuildContext, BuildDiagnosticItem,
-    BuildDiagnostics, InspectObservations, InspectReport, PackageBuildResult,
+    BuildDiagnostics, DiffReport, InspectObservations, InspectReport, PackageBuildResult,
     VerificationGateRule, VerificationPolicy, WriterPolicy,
 };
 
@@ -141,4 +141,25 @@ fn inspect_report_serializes_with_expected_fixed_domains() {
     assert_eq!(json["source_kind"], "staging");
     assert_eq!(json["observations"]["notetypes"], serde_json::json!([]));
     assert_eq!(json["observations"]["references"], serde_json::json!([]));
+}
+
+#[test]
+fn diff_report_keeps_required_empty_arrays_when_no_changes_exist() {
+    let report = DiffReport {
+        kind: "diff-report".into(),
+        comparison_status: "complete".into(),
+        left_fingerprint: "artifact:left".into(),
+        right_fingerprint: "artifact:right".into(),
+        left_observation_model_version: "phase3-v1".into(),
+        right_observation_model_version: "phase3-v1".into(),
+        summary: "no changes".into(),
+        uncompared_domains: vec![],
+        comparison_limitations: vec![],
+        changes: vec![],
+    };
+
+    let json = serde_json::to_value(report).unwrap();
+    assert_eq!(json["uncompared_domains"], serde_json::json!([]));
+    assert_eq!(json["comparison_limitations"], serde_json::json!([]));
+    assert_eq!(json["changes"], serde_json::json!([]));
 }
