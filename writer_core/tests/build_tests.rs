@@ -2,7 +2,10 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
-use authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
+use authoring_core::stock::resolve_stock_notetype;
+use authoring_core::{
+    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
+};
 use writer_core::{
     build,
     build_context_ref, policy_ref, to_canonical_json, BuildContext, BuildDiagnosticItem,
@@ -221,6 +224,23 @@ fn build_materializes_cloze_staging_into_caller_owned_root() {
 }
 
 #[test]
+fn build_materializes_media_payloads_into_staging_tree() {
+    let root = unique_artifact_root("basic-media");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-media");
+
+    let result = build(
+        &sample_basic_normalized_ir_with_media(),
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert_eq!(fs::read(root.join("staging/media/sample.jpg")).unwrap(), b"hello");
+}
+
+#[test]
 fn build_artifact_fingerprint_is_stable_across_roots() {
     let left_root = unique_artifact_root("fingerprint-left");
     let right_root = unique_artifact_root("fingerprint-right");
@@ -273,7 +293,133 @@ fn build_rejects_unknown_notetype_with_selector_and_path_diagnostics() {
     assert_eq!(diag.code, "PHASE3.UNKNOWN_NOTETYPE_ID");
     assert_eq!(diag.domain.as_deref(), Some("notes"));
     assert_eq!(diag.path.as_deref(), Some("notes[0].notetype_id"));
-    assert_eq!(diag.target_selector.as_deref(), Some("notetype_id=missing-main"));
+    assert_eq!(diag.target_selector.as_deref(), Some("note[id='note-1']"));
+}
+
+#[test]
+fn build_rejects_basic_notetype_that_drifts_from_source_grounded_shape() {
+    let root = unique_artifact_root("basic-shape-drift");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/basic-shape-drift");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notetypes[0].templates[0].answer_format = "{{Back}}".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.STOCK_NOTETYPE_SHAPE_MISMATCH")
+        .expect("stock mismatch diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("notetypes"));
+    assert_eq!(
+        diag.path.as_deref(),
+        Some("notetypes[0].templates[0].answer_format")
+    );
+    assert_eq!(diag.target_selector.as_deref(), Some("notetype[id='basic-main']"));
+}
+
+#[test]
+fn build_rejects_cloze_notetype_that_drifts_from_source_grounded_css() {
+    let root = unique_artifact_root("cloze-shape-drift");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/cloze-shape-drift");
+
+    let mut normalized = sample_cloze_normalized_ir();
+    normalized.notetypes[0].css.clear();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.STOCK_NOTETYPE_SHAPE_MISMATCH")
+        .expect("stock mismatch diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("notetypes"));
+    assert_eq!(diag.path.as_deref(), Some("notetypes[0].css"));
+    assert_eq!(diag.target_selector.as_deref(), Some("notetype[id='cloze-main']"));
+}
+
+#[test]
+fn build_rejects_unresolved_media_refs_when_behavior_is_fail() {
+    let root = unique_artifact_root("media-fail");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-fail");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="missing.png">"#.into());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE")
+        .expect("unresolved media diagnostic");
+    assert_eq!(diag.level, "error");
+    assert_eq!(diag.domain.as_deref(), Some("notes"));
+    assert_eq!(diag.path.as_deref(), Some(r#"notes[0].fields["Back"]"#));
+    assert_eq!(diag.target_selector.as_deref(), Some("note[id='note-1']"));
+}
+
+#[test]
+fn build_warns_on_unresolved_media_refs_when_behavior_is_warn() {
+    let root = unique_artifact_root("media-warn");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-warn");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), "[sound:missing.mp3]".into());
+
+    let mut build_context = sample_build_context(false);
+    build_context.unresolved_asset_behavior = "warn".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &build_context,
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert_eq!(
+        result.staging_ref.as_deref(),
+        Some("artifacts/phase3/media-warn/staging/manifest.json")
+    );
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE")
+        .expect("warning diagnostic");
+    assert_eq!(diag.level, "warning");
+    assert!(root.join("staging/manifest.json").exists());
 }
 
 fn sample_writer_policy() -> WriterPolicy {
@@ -305,18 +451,7 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
         schema_version: "0.1.0".into(),
         document_id: "demo-doc".into(),
         resolved_identity: "document:demo-doc".into(),
-        notetypes: vec![NormalizedNotetype {
-            id: "basic-main".into(),
-            kind: "basic".into(),
-            name: "Basic".into(),
-            fields: vec!["Front".into(), "Back".into()],
-            templates: vec![NormalizedTemplate {
-                name: "Card 1".into(),
-                question_format: "{{Front}}".into(),
-                answer_format: "{{Back}}".into(),
-            }],
-            css: "".into(),
-        }],
+        notetypes: vec![resolved_stock_notetype("basic-main", "basic", "Basic")],
         notes: vec![NormalizedNote {
             id: "note-1".into(),
             notetype_id: "basic-main".into(),
@@ -337,18 +472,7 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
         schema_version: "0.1.0".into(),
         document_id: "demo-doc".into(),
         resolved_identity: "document:demo-doc".into(),
-        notetypes: vec![NormalizedNotetype {
-            id: "cloze-main".into(),
-            kind: "cloze".into(),
-            name: "Cloze".into(),
-            fields: vec!["Text".into(), "Back Extra".into()],
-            templates: vec![NormalizedTemplate {
-                name: "Cloze".into(),
-                question_format: "{{cloze:Text}}".into(),
-                answer_format: "{{cloze:Text}}<br>\n{{Back Extra}}".into(),
-            }],
-            css: "".into(),
-        }],
+        notetypes: vec![resolved_stock_notetype("cloze-main", "cloze", "Cloze")],
         notes: vec![NormalizedNote {
             id: "note-1".into(),
             notetype_id: "cloze-main".into(),
@@ -361,6 +485,30 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
         }],
         media: vec![],
     }
+}
+
+fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
+    normalized.media.push(NormalizedMedia {
+        filename: "sample.jpg".into(),
+        mime: "image/jpeg".into(),
+        data_base64: "aGVsbG8=".into(),
+    });
+    normalized
+}
+
+fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotetype {
+    let mut notetype = resolve_stock_notetype(&AuthoringNotetype {
+        id: id.into(),
+        kind: kind.into(),
+        name: Some(name.into()),
+    })
+    .expect("resolve stock notetype");
+    notetype.id = id.into();
+    notetype
 }
 
 fn unique_artifact_root(case: &str) -> PathBuf {

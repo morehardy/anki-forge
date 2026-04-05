@@ -45,5 +45,10 @@ pub fn build(
         }
     };
 
-    Ok(success_result(writer_policy, build_context, materialized))
+    Ok(success_result(
+        writer_policy,
+        build_context,
+        materialized,
+        package.diagnostics().to_vec(),
+    ))
 }
