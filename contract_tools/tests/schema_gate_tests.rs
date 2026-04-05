@@ -107,6 +107,29 @@ fn manifest_registers_phase2_schema_assets() {
 }
 
 #[test]
+fn manifest_registers_phase3_schema_and_semantics_assets() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+
+    for asset_key in [
+        "package_build_result_schema",
+        "inspect_report_schema",
+        "diff_report_schema",
+        "writer_policy_schema",
+        "verification_policy_schema",
+        "build_context_schema",
+        "build_semantics",
+        "inspect_semantics",
+        "diff_semantics",
+        "golden_regression_semantics",
+    ] {
+        assert!(
+            resolve_asset_path(&manifest, asset_key).is_ok(),
+            "manifest is missing asset key {asset_key}"
+        );
+    }
+}
+
+#[test]
 fn normalization_result_schema_allows_null_comparison_context_without_merge_risk_report() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =

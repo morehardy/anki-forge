@@ -10,56 +10,74 @@ use crate::{
 pub fn run_policy_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
 
-    validate_policy_asset(
+    validate_yaml_asset(
         &manifest,
         "identity_policy_schema",
         "identity_policy",
         "identity policy",
     )?;
-    validate_policy_asset(
+    validate_yaml_asset(
         &manifest,
         "risk_policy_schema",
         "risk_policy",
         "risk policy",
     )?;
+    validate_yaml_asset(
+        &manifest,
+        "writer_policy_schema",
+        "writer_policy",
+        "writer policy",
+    )?;
+    validate_yaml_asset(
+        &manifest,
+        "verification_policy_schema",
+        "verification_policy",
+        "verification policy",
+    )?;
+    validate_yaml_asset(
+        &manifest,
+        "build_context_schema",
+        "build_context_default",
+        "build context",
+    )?;
 
     Ok(())
 }
 
-fn validate_policy_asset(
+fn validate_yaml_asset(
     manifest: &crate::manifest::LoadedManifest,
     schema_key: &str,
-    policy_key: &str,
-    policy_label: &str,
+    asset_key: &str,
+    asset_label: &str,
 ) -> anyhow::Result<()> {
     let schema_path = resolve_asset_path(manifest, schema_key)?;
-    let policy_path = resolve_asset_path(manifest, policy_key)?;
+    let asset_path = resolve_asset_path(manifest, asset_key)?;
 
     let schema = load_schema(&schema_path).with_context(|| {
         format!(
-            "failed to load {policy_label} schema: {}",
+            "failed to load {asset_label} schema: {}",
             schema_path.display()
         )
     })?;
-    let policy_value = load_yaml_value(&policy_path)?;
+    let asset_value = load_yaml_value(&asset_path)?;
 
-    validate_value(&schema, &policy_value).with_context(|| {
+    validate_value(&schema, &asset_value).with_context(|| {
         format!(
-            "{policy_label} schema validation failed: {} against {}",
-            policy_path.display(),
+            "{asset_label} schema validation failed: {} against {}",
+            asset_path.display(),
             schema_path.display()
         )
     })?;
 
     ensure!(
-        non_empty_string(&policy_value, "id"),
-        "{policy_label} id must not be empty: {}",
-        policy_path.display()
+        non_empty_string(&asset_value, "id"),
+        "{asset_label} id must not be empty: {}",
+        asset_path.display()
     );
     ensure!(
-        non_empty_string(&policy_value, "version"),
-        "{policy_label} version must not be empty: {}",
-        policy_path.display()
+        non_empty_string(&asset_value, "version"),
+        "{asset_label} version must not be empty: {}",
+        asset_path.display()
     );
 
     Ok(())

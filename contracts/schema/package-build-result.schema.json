@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "result_status",
+    "tool_contract_version",
+    "writer_policy_ref",
+    "build_context_ref",
+    "diagnostics"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "package-build-result"
+    },
+    "result_status": {
+      "enum": ["success", "invalid", "error"]
+    },
+    "tool_contract_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "writer_policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "build_context_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "staging_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "apkg_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "diagnostics": {
+      "type": "object",
+      "required": ["kind", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "build-diagnostics"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["level", "code", "summary"],
+            "additionalProperties": false,
+            "properties": {
+              "level": {
+                "enum": ["warning", "error"]
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "domain": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "target_selector": {
+                "type": "string"
+              },
+              "stage": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "result_status": {
+            "const": "success"
+          }
+        }
+      },
+      "then": {
+        "required": ["staging_ref", "artifact_fingerprint"]
+      }
+    }
+  ]
+}
