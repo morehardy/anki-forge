@@ -1,7 +1,7 @@
 use crate::identity::{resolve_identity, DefaultNonceSource};
 use crate::model::{
     DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
-    NormalizedIr, PolicyRefs,
+    NormalizedIr, NormalizedMedia, NormalizedNote, PolicyRefs,
 };
 use crate::risk::{assess_risk, unavailable_report};
 use crate::selector::{
@@ -102,11 +102,59 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         }
     };
 
+    let normalized_notetypes = match request
+        .notetypes
+        .iter()
+        .map(crate::stock::resolve_stock_notetype)
+        .collect::<anyhow::Result<Vec<_>>>()
+    {
+        Ok(normalized_notetypes) => normalized_notetypes,
+        Err(error) => {
+            diagnostics.push(DiagnosticItem {
+                level: "error".into(),
+                code: "PHASE3.UNSUPPORTED_STOCK_KIND".into(),
+                summary: error.to_string(),
+            });
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                diagnostics,
+                format!("det:{metadata_document_id}"),
+                "stock notetype resolution failed".into(),
+            );
+        }
+    };
+
+    let normalized_notes = request
+        .notes
+        .iter()
+        .map(|note| NormalizedNote {
+            id: note.id.clone(),
+            notetype_id: note.notetype_id.clone(),
+            deck_name: note.deck_name.clone(),
+            fields: note.fields.clone(),
+            tags: note.tags.clone(),
+        })
+        .collect::<Vec<_>>();
+
+    let normalized_media = request
+        .media
+        .iter()
+        .map(|media| NormalizedMedia {
+            filename: media.filename.clone(),
+            mime: media.mime.clone(),
+            data_base64: media.data_base64.clone(),
+        })
+        .collect::<Vec<_>>();
+
     let normalized_ir = NormalizedIr {
         kind: "normalized-ir".into(),
         schema_version: request.input.schema_version,
         document_id: metadata_document_id,
         resolved_identity: resolved_identity.clone(),
+        notetypes: normalized_notetypes,
+        notes: normalized_notes,
+        media: normalized_media,
     };
 
     let merge_risk_report = assess_risk(&normalized_ir, request.comparison_context.as_ref());
