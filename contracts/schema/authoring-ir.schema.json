@@ -23,10 +23,96 @@
       }
     },
     "notetypes": {
-      "type": "array"
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authoring_notetype"
+      }
     },
     "notes": {
-      "type": "array"
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authoring_note"
+      }
+    },
+    "media": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/authoring_media"
+      }
+    }
+  },
+  "$defs": {
+    "authoring_notetype": {
+      "type": "object",
+      "required": ["id", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": ["basic", "cloze", "image_occlusion"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "authoring_note": {
+      "type": "object",
+      "required": ["id", "notetype_id", "deck_name", "fields"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notetype_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deck_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "authoring_media": {
+      "type": "object",
+      "required": ["filename", "mime", "data_base64"],
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "data_base64": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }
