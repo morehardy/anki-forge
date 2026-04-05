@@ -107,7 +107,7 @@ fn manifest_registers_phase2_schema_assets() {
 }
 
 #[test]
-fn manifest_registers_phase3_schema_and_semantics_assets() {
+fn manifest_registers_phase3_schema_policy_and_semantics_assets() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
 
     for asset_key in [
@@ -117,6 +117,9 @@ fn manifest_registers_phase3_schema_and_semantics_assets() {
         "writer_policy_schema",
         "verification_policy_schema",
         "build_context_schema",
+        "writer_policy",
+        "verification_policy",
+        "build_context_default",
         "build_semantics",
         "inspect_semantics",
         "diff_semantics",

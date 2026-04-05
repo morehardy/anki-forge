@@ -7,29 +7,32 @@ asset_refs:
 
 # Build
 
-Source anchors:
+Local reference source anchors under `docs/source/rslib`:
 
 - `docs/source/rslib/src/import_export/package/apkg/export.rs`
 - `docs/source/rslib/src/import_export/package/colpkg/export.rs`
 - `docs/source/rslib/src/import_export/package/meta.rs`
 - `docs/source/rslib/src/import_export/package/media.rs`
 
-Build first materializes a staging collection and then packages `.apkg` output.
+Phase 3 build semantics use a staging-first materialization flow before optional
+`.apkg` packaging. The reference source below constrains how package metadata,
+collection payloads, and media payloads should align with modern Anki package
+format behavior.
 
-The source shows two packaging paths:
+The reference source defines two closely related package export paths:
 
-- `export_apkg` writes a temporary collection, gathers media, and then packages
-  the collection and media into an archive before atomically renaming the
-  temporary package into place.
-- `export_colpkg` closes the collection at the appropriate schema version,
-  writes the collection file into a zip archive, includes the package metadata,
-  writes a dummy legacy collection, and emits the media payload and media map.
+- `export_apkg` creates a temporary collection file, gathers media filenames,
+  packages the collection and media through `export_collection()`, and
+  atomically renames the temporary archive into place.
+- `export_colpkg` closes the collection at the legacy or latest schema version,
+  then calls `export_collection_file()`, which writes `meta`, the versioned
+  collection payload, a dummy legacy `collection.anki2`, media files, and the
+  `media` map into the archive.
 
-The meta helpers show the package distinguishes legacy and latest modes through
-its versioned metadata, including whether the media list is encoded as a
-hashmap or as structured media entries and whether the archive is zstd
-compressed.
+In `meta.rs`, package version determines the collection filename, supported
+schema version, zstd compression usage, and whether the `media` listing is
+encoded as a legacy JSON hashmap or as structured media entries.
 
-The media helpers show filenames are normalized and validated during import,
-and that a missing media map in older archives is treated as a legacy-compatible
-case rather than an error.
+In `media.rs`, imported media filenames are safety-checked and normalized, and
+archives that omit the `media` entry are treated as a legacy-compatible empty
+media map during import rather than as an immediate error.
