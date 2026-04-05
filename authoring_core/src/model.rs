@@ -6,6 +6,12 @@ pub struct AuthoringDocument {
     pub kind: String,
     pub schema_version: String,
     pub metadata_document_id: String,
+    #[serde(default)]
+    pub notetypes: Vec<AuthoringNotetype>,
+    #[serde(default)]
+    pub notes: Vec<AuthoringNote>,
+    #[serde(default)]
+    pub media: Vec<AuthoringMedia>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -57,12 +63,6 @@ impl ComparisonContext {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NormalizationRequest {
     pub input: AuthoringDocument,
-    #[serde(default)]
-    pub notetypes: Vec<AuthoringNotetype>,
-    #[serde(default)]
-    pub notes: Vec<AuthoringNote>,
-    #[serde(default)]
-    pub media: Vec<AuthoringMedia>,
     pub comparison_context: Option<ComparisonContext>,
     pub identity_override_mode: Option<String>,
     pub target_selector: Option<String>,
@@ -75,9 +75,6 @@ impl NormalizationRequest {
     pub fn new(input: AuthoringDocument) -> Self {
         Self {
             input,
-            notetypes: Vec::new(),
-            notes: Vec::new(),
-            media: Vec::new(),
             comparison_context: None,
             identity_override_mode: None,
             target_selector: None,

@@ -50,12 +50,11 @@ pub fn run(manifest: &str, input: &str, output: &str) -> anyhow::Result<String> 
         kind: input_document.kind,
         schema_version: input_document.schema_version,
         metadata_document_id: input_document.metadata.document_id,
+        notetypes: input_document.notetypes,
+        notes: input_document.notes,
+        media: input_document.media,
     };
-    let mut request = authoring_core::NormalizationRequest::new(document);
-    request.notetypes = input_document.notetypes;
-    request.notes = input_document.notes;
-    request.media = input_document.media;
-    let result = authoring_core::normalize(request);
+    let result = authoring_core::normalize(authoring_core::NormalizationRequest::new(document));
 
     match output {
         "contract-json" => authoring_core::to_canonical_json(&result),

@@ -103,6 +103,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
     };
 
     let normalized_notetypes = match request
+        .input
         .notetypes
         .iter()
         .map(crate::stock::resolve_stock_notetype)
@@ -126,6 +127,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
     };
 
     let normalized_notes = request
+        .input
         .notes
         .iter()
         .map(|note| NormalizedNote {
@@ -138,6 +140,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         .collect::<Vec<_>>();
 
     let normalized_media = request
+        .input
         .media
         .iter()
         .map(|media| NormalizedMedia {

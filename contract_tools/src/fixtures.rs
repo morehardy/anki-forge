@@ -5,6 +5,8 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::{collections::HashSet, fs, path::Path};
 
+use authoring_core::{AuthoringMedia, AuthoringNote, AuthoringNotetype};
+
 use crate::{
     manifest::{load_manifest, resolve_asset_path, resolve_contract_relative_path},
     registry::load_registry,
@@ -71,6 +73,12 @@ struct Phase2AuthoringInput {
     kind: String,
     schema_version: String,
     metadata: Phase2AuthoringMetadata,
+    #[serde(default)]
+    notetypes: Vec<AuthoringNotetype>,
+    #[serde(default)]
+    notes: Vec<AuthoringNote>,
+    #[serde(default)]
+    media: Vec<AuthoringMedia>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -638,6 +646,9 @@ fn load_phase2_authoring_input(
         kind: input.kind,
         schema_version: input.schema_version,
         metadata_document_id: input.metadata.document_id,
+        notetypes: input.notetypes,
+        notes: input.notes,
+        media: input.media,
     })
 }
 

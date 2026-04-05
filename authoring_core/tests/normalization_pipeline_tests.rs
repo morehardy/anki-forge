@@ -22,6 +22,9 @@ fn missing_document_id_returns_invalid_result_with_diagnostics() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "   ".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -46,6 +49,9 @@ fn success_returns_normalized_ir_and_contract_envelope_keys() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-123".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -79,6 +85,9 @@ fn success_without_comparison_context_serializes_null_comparison_and_merge_repor
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-456".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -94,6 +103,9 @@ fn success_with_comparison_context_preserves_risk_policy_ref() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-789".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
     let mut request = NormalizationRequest::new(input);
     request.comparison_context = Some(ComparisonContext {
@@ -136,7 +148,10 @@ fn random_override_emits_warning_success_and_random_identity_prefix() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-random"
+            "metadata_document_id": "doc-random",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "random",
         "reason_code": "manual_randomization"
@@ -164,7 +179,10 @@ fn missing_reason_code_for_override_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-external"
+            "metadata_document_id": "doc-external",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "external"
     }));
@@ -185,7 +203,10 @@ fn random_override_missing_reason_code_is_invalid_with_reason_code_diagnostic() 
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-random-missing-reason"
+            "metadata_document_id": "doc-random-missing-reason",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "random"
     }));
@@ -206,7 +227,10 @@ fn external_override_missing_external_id_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-external"
+            "metadata_document_id": "doc-external",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "external",
         "reason_code": "preserve_external_identity"
@@ -228,7 +252,10 @@ fn unmatched_target_selector_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-selector"
+            "metadata_document_id": "doc-selector",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "target_selector": "note[id='missing']"
     }));
@@ -249,28 +276,28 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
         "input": {
             "kind": "authoring-ir",
             "schema_version": "0.1.0",
-            "metadata_document_id": "demo-doc"
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "basic-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back"
+                    },
+                    "tags": ["demo"]
+                }
+            ],
+            "media": []
         },
-        "notetypes": [
-            {
-                "id": "basic-main",
-                "kind": "basic",
-                "name": "Basic"
-            }
-        ],
-        "notes": [
-            {
-                "id": "note-1",
-                "notetype_id": "basic-main",
-                "deck_name": "Default",
-                "fields": {
-                    "Front": "front",
-                    "Back": "back"
-                },
-                "tags": ["demo"]
-            }
-        ],
-        "media": []
     }));
 
     let result = normalize(request);
@@ -314,28 +341,28 @@ fn cloze_authoring_input_expands_to_source_grounded_cloze_template() {
         "input": {
             "kind": "authoring-ir",
             "schema_version": "0.1.0",
-            "metadata_document_id": "demo-doc"
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "cloze-main",
+                    "kind": "cloze",
+                    "name": "Cloze"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "cloze-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Text": "A {{c1::cloze}} example",
+                        "Back Extra": "extra"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
         },
-        "notetypes": [
-            {
-                "id": "cloze-main",
-                "kind": "cloze",
-                "name": "Cloze"
-            }
-        ],
-        "notes": [
-            {
-                "id": "note-1",
-                "notetype_id": "cloze-main",
-                "deck_name": "Default",
-                "fields": {
-                    "Text": "A {{c1::cloze}} example",
-                    "Back Extra": "extra"
-                },
-                "tags": []
-            }
-        ],
-        "media": []
     }));
 
     let result = normalize(request);
@@ -366,37 +393,37 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
         "input": {
             "kind": "authoring-ir",
             "schema_version": "0.1.0",
-            "metadata_document_id": "demo-doc"
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "io-main",
+                    "kind": "image_occlusion",
+                    "name": "Image Occlusion"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "io-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Occlusion": "mask",
+                        "Image": "<img src=\"mask.png\">",
+                        "Header": "header",
+                        "Back Extra": "extra",
+                        "Comments": "comment"
+                    },
+                    "tags": ["demo"]
+                }
+            ],
+            "media": [
+                {
+                    "filename": "mask.png",
+                    "mime": "image/png",
+                    "data_base64": "MQ=="
+                }
+            ]
         },
-        "notetypes": [
-            {
-                "id": "io-main",
-                "kind": "image_occlusion",
-                "name": "Image Occlusion"
-            }
-        ],
-        "notes": [
-            {
-                "id": "note-1",
-                "notetype_id": "io-main",
-                "deck_name": "Default",
-                "fields": {
-                    "Occlusion": "mask",
-                    "Image": "<img src=\"mask.png\">",
-                    "Header": "header",
-                    "Back Extra": "extra",
-                    "Comments": "comment"
-                },
-                "tags": ["demo"]
-            }
-        ],
-        "media": [
-            {
-                "filename": "mask.png",
-                "mime": "image/png",
-                "data_base64": "MQ=="
-            }
-        ]
     }));
 
     let result = normalize(request);
