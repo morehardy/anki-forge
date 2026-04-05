@@ -812,7 +812,10 @@ fn phase2_minimal_success_result_json() -> String {
             "kind": "normalized-ir",
             "schema_version": "0.1.0",
             "document_id": "demo-doc",
-            "resolved_identity": "det:demo-doc"
+            "resolved_identity": "det:demo-doc",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "merge_risk_report": null
     });
@@ -839,7 +842,10 @@ fn phase2_minimal_success_result_mismatch_json() -> String {
             "kind": "normalized-ir",
             "schema_version": "0.1.0",
             "document_id": "demo-doc",
-            "resolved_identity": "det:not-the-same"
+            "resolved_identity": "det:not-the-same",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "merge_risk_report": null
     });
