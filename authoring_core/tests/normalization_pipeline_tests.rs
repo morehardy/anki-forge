@@ -561,3 +561,37 @@ fn unexpected_extra_field_on_stock_note_returns_invalid_result() {
         .iter()
         .any(|item| item.code == "PHASE3.NOTE_FIELD_MISMATCH"));
 }
+
+#[test]
+fn duplicate_notetype_ids_return_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "dup-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                },
+                {
+                    "id": "dup-main",
+                    "kind": "cloze",
+                    "name": "Cloze"
+                }
+            ],
+            "notes": [],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.DUPLICATE_NOTETYPE_ID"));
+}

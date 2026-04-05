@@ -104,6 +104,23 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         }
     };
 
+    let mut seen_notetype_ids = BTreeSet::new();
+    for notetype in &request.input.notetypes {
+        if !seen_notetype_ids.insert(notetype.id.as_str()) {
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                vec![DiagnosticItem {
+                    level: "error".into(),
+                    code: "PHASE3.DUPLICATE_NOTETYPE_ID".into(),
+                    summary: format!("duplicate notetype id: {}", notetype.id),
+                }],
+                format!("det:{metadata_document_id}"),
+                "writer-ready normalization requires unique notetype ids".into(),
+            );
+        }
+    }
+
     let normalized_notetypes = match request
         .input
         .notetypes
