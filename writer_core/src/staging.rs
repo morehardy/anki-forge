@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use authoring_core::stock::resolve_stock_notetype;
@@ -65,6 +65,14 @@ struct StagingManifest {
     writer_policy_ref: String,
     build_context_ref: String,
     normalized_ir: NormalizedIr,
+}
+
+pub(crate) fn load_normalized_ir_from_staging_manifest(path: &Path) -> Result<NormalizedIr> {
+    let manifest_json = fs::read_to_string(path)
+        .with_context(|| format!("read staging manifest {}", path.display()))?;
+    let manifest: StagingManifest = serde_json::from_str(&manifest_json)
+        .with_context(|| format!("decode staging manifest {}", path.display()))?;
+    Ok(manifest.normalized_ir)
 }
 
 impl StagingPackage {

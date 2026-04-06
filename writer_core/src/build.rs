@@ -47,10 +47,13 @@ pub fn build(
         }
     };
 
+    let apkg = if build_context.emit_apkg {
+        Some(emit_apkg(&materialized, artifact_target)?)
+    } else {
+        None
+    };
     let mut result = success_result(writer_policy, build_context, materialized, diagnostics);
-
-    if build_context.emit_apkg {
-        let apkg = emit_apkg(normalized_ir, artifact_target)?;
+    if let Some(apkg) = apkg {
         result.apkg_ref = Some(apkg.apkg_ref);
         result.package_fingerprint = Some(apkg.package_fingerprint);
     }

@@ -4,15 +4,17 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype};
-use base64::Engine;
+use authoring_core::stock::resolve_stock_notetype;
+use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
 use prost::Message;
 use rusqlite::Connection;
 use sha1::{Digest, Sha1};
 use zip::write::FileOptions;
 use zip::{CompressionMethod, ZipWriter};
 
-use crate::staging::BuildArtifactTarget;
+use crate::staging::{
+    load_normalized_ir_from_staging_manifest, BuildArtifactTarget, MaterializedStaging,
+};
 
 pub struct ApkgMaterialization {
     pub apkg_ref: String,
@@ -45,9 +47,15 @@ struct MediaEntry {
 }
 
 pub fn emit_apkg(
-    normalized_ir: &NormalizedIr,
+    materialized: &MaterializedStaging,
     artifact_target: &BuildArtifactTarget,
 ) -> Result<ApkgMaterialization> {
+    let normalized_ir = load_normalized_ir_from_staging_manifest(&materialized.manifest_path)?;
+    let staging_dir = materialized
+        .manifest_path
+        .parent()
+        .context("materialized staging manifest should live under a staging directory")?;
+
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
             "create artifact root {}",
@@ -64,12 +72,13 @@ pub fn emit_apkg(
     let mut zip = ZipWriter::new(file);
 
     write_meta(&mut zip)?;
-    let latest_collection = create_latest_collection_bytes(&artifact_target.root_dir, normalized_ir)?;
+    let latest_collection =
+        create_latest_collection_bytes(&artifact_target.root_dir, &normalized_ir)?;
     write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
 
-    write_media_payloads_and_map(&mut zip, normalized_ir, artifact_target)?;
+    write_media_payloads_and_map(&mut zip, &normalized_ir, staging_dir)?;
 
     zip.finish()?;
     fs::rename(&temp_path, &apkg_path).with_context(|| {
@@ -120,13 +129,13 @@ fn package_fingerprint(bytes: &[u8]) -> String {
 fn write_media_payloads_and_map(
     zip: &mut ZipWriter<File>,
     normalized_ir: &NormalizedIr,
-    artifact_target: &BuildArtifactTarget,
+    staging_dir: &Path,
 ) -> Result<()> {
     let mut entries = Vec::new();
-    let media_dir = artifact_target.staging_dir().join("media");
+    let media_dir = staging_dir.join("media");
 
     for (index, media) in normalized_ir.media.iter().enumerate() {
-        let payload = read_media_payload(&media_dir, media)?;
+        let payload = read_media_payload(&media_dir, &media.filename)?;
         let sha1 = Sha1::digest(&payload).to_vec();
         let encoded = zstd::stream::encode_all(payload.as_slice(), 0)
             .context("compress media payload for apkg")?;
@@ -147,17 +156,9 @@ fn write_media_payloads_and_map(
     Ok(())
 }
 
-fn read_media_payload(media_dir: &Path, media: &NormalizedMedia) -> Result<Vec<u8>> {
-    let path = media_dir.join(&media.filename);
-    if path.exists() {
-        return fs::read(&path)
-            .with_context(|| format!("read materialized media {}", path.display()));
-    }
-
-    let payload = base64::engine::general_purpose::STANDARD
-        .decode(media.data_base64.as_bytes())
-        .with_context(|| format!("decode media payload {}", media.filename))?;
-    Ok(payload)
+fn read_media_payload(media_dir: &Path, filename: &str) -> Result<Vec<u8>> {
+    let path = media_dir.join(filename);
+    fs::read(&path).with_context(|| format!("read materialized media {}", path.display()))
 }
 
 fn write_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Result<()> {
@@ -304,32 +305,93 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
 }
 
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {
+    let front_text = legacy_dummy_front_text();
+    let fields = format!("{front_text}\u{1f}");
+
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
         rusqlite::params![
             "{}",
-            serde_json::json!({
-                "1": {
-                    "name": "Basic",
-                    "fields": ["Front", "Back"],
-                    "templates": ["Card 1"]
-                }
-            })
-            .to_string(),
+            legacy_basic_models_json()?,
             "{}",
             "{}",
             "{}"
         ],
     )?;
     conn.execute(
-        "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (1, 'legacy-dummy', 1, 0, 0, '', ?1, 0, 0, 0, '{}')",
-        [String::from("legacy front\u{1f}legacy back")],
+        "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (1, 'legacy-dummy', 1, 0, 0, '', ?1, ?2, 0, 0, '{}')",
+        rusqlite::params![fields, front_text],
     )?;
     conn.execute(
         "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '{}')",
         [],
     )?;
     Ok(())
+}
+
+fn legacy_basic_models_json() -> Result<String> {
+    let basic = resolve_stock_notetype(&AuthoringNotetype {
+        id: "legacy-basic".into(),
+        kind: "basic".into(),
+        name: Some("Basic".into()),
+    })
+    .context("resolve source-grounded basic notetype for legacy dummy collection")?;
+
+    let field_entries: Vec<_> = basic
+        .fields
+        .iter()
+        .enumerate()
+        .map(|(ord, name)| {
+            serde_json::json!({
+                "name": name,
+                "ord": ord,
+                "sticky": false,
+                "rtl": false,
+                "font": "Arial",
+                "size": 20
+            })
+        })
+        .collect();
+    let template_entries: Vec<_> = basic
+        .templates
+        .iter()
+        .enumerate()
+        .map(|(ord, template)| {
+            serde_json::json!({
+                "name": template.name,
+                "ord": ord,
+                "qfmt": template.question_format,
+                "afmt": template.answer_format,
+                "bqfmt": "",
+                "bafmt": ""
+            })
+        })
+        .collect();
+    let models = serde_json::json!({
+        "1": {
+            "id": 1,
+            "name": basic.name,
+            "type": 0,
+            "mod": 0,
+            "usn": 0,
+            "sortf": 0,
+            "did": serde_json::Value::Null,
+            "tmpls": template_entries,
+            "flds": field_entries,
+            "css": basic.css,
+            "latexPre": "",
+            "latexPost": "",
+            "latexsvg": false,
+            "req": [[0, "all", [0]]],
+            "originalStockKind": 0
+        }
+    });
+
+    serde_json::to_string(&models).context("serialize schema11 legacy models")
+}
+
+fn legacy_dummy_front_text() -> &'static str {
+    "This package requires a newer version of Anki."
 }
 
 fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {

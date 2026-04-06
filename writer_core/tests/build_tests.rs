@@ -4,6 +4,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
+use rusqlite::Connection;
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
     AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
@@ -13,7 +14,7 @@ use writer_core::{
     build,
     build_context_ref, policy_ref, to_canonical_json, BuildContext, BuildDiagnosticItem,
     BuildDiagnostics, BuildArtifactTarget, DiffReport, InspectObservations, InspectReport,
-    PackageBuildResult, VerificationGateRule, VerificationPolicy, WriterPolicy,
+    PackageBuildResult, StagingPackage, VerificationGateRule, VerificationPolicy, WriterPolicy,
 };
 
 #[test]
@@ -174,6 +175,43 @@ fn diff_report_keeps_required_empty_arrays_when_no_changes_exist() {
     assert_eq!(json["uncompared_domains"], serde_json::json!([]));
     assert_eq!(json["comparison_limitations"], serde_json::json!([]));
     assert_eq!(json["changes"], serde_json::json!([]));
+}
+
+#[test]
+fn emit_apkg_materializes_basic_package_from_staging_artifact() {
+    let root = unique_artifact_root("basic-apkg");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-apkg");
+    let package = StagingPackage::from_normalized(
+        &sample_basic_normalized_ir_with_media(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+    )
+    .unwrap();
+    let materialized = package.materialize(&target).unwrap();
+
+    let apkg = writer_core::apkg::emit_apkg(&materialized, &target).unwrap();
+
+    assert_eq!(apkg.apkg_ref, "artifacts/phase3/basic-apkg/package.apkg");
+    assert!(apkg.apkg_path.exists());
+    assert!(apkg.package_fingerprint.starts_with("package:"));
+
+    let mut archive = open_zip(&apkg.apkg_path);
+    let names = archive_names(&mut archive);
+    for expected in [
+        "meta",
+        "collection.anki21b",
+        "collection.anki2",
+        "media",
+        "0",
+    ] {
+        assert!(
+            names.contains(expected),
+            "missing expected apkg entry {expected}: {names:?}"
+        );
+    }
+
+    let legacy_collection = read_zip_entry_bytes(&mut archive, "collection.anki2");
+    assert_legacy_models_use_schema11_shape(&legacy_collection);
 }
 
 #[test]
@@ -785,6 +823,35 @@ fn decode_package_metadata(bytes: Vec<u8>) -> TestPackageMetadata {
 
 fn decode_media_entries(bytes: Vec<u8>) -> TestMediaEntries {
     TestMediaEntries::decode(bytes.as_slice()).unwrap()
+}
+
+fn assert_legacy_models_use_schema11_shape(bytes: &[u8]) {
+    let root = unique_artifact_root("legacy-models");
+    let db_path = root.join("collection.anki2");
+    fs::write(&db_path, bytes).unwrap();
+
+    let conn = Connection::open(&db_path).unwrap();
+    let models_json: String = conn
+        .query_row("select models from col where id = 1", [], |row| row.get(0))
+        .unwrap();
+    let models: serde_json::Value = serde_json::from_str(&models_json).unwrap();
+    let first_notetype = models
+        .as_object()
+        .and_then(|items| items.values().next())
+        .expect("legacy models should contain one stock notetype");
+
+    assert!(
+        first_notetype
+            .get("flds")
+            .is_some_and(serde_json::Value::is_array),
+        "legacy models should use schema11 field entries"
+    );
+    assert!(
+        first_notetype
+            .get("tmpls")
+            .is_some_and(serde_json::Value::is_array),
+        "legacy models should use schema11 template entries"
+    );
 }
 
 #[derive(Clone, PartialEq, Message)]
