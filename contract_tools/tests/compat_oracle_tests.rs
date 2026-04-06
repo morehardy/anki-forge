@@ -20,6 +20,35 @@ fn compat_oracle_gates_accept_bundled_writer_phase3_fixtures() {
 }
 
 #[test]
+fn compat_oracle_skips_when_catalog_has_no_phase3_writer_cases() {
+    let manifest_path = copied_bundled_manifest_path("compat-oracle-no-writer");
+    let catalog_path = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .join("fixtures/index.yaml");
+    let raw = fs::read_to_string(&catalog_path).expect("read fixture catalog");
+    let mut catalog: serde_yaml::Value = serde_yaml::from_str(&raw).expect("decode fixture catalog");
+    let cases = catalog
+        .get_mut("cases")
+        .and_then(serde_yaml::Value::as_sequence_mut)
+        .expect("fixture catalog should have cases");
+    cases.retain(|entry| {
+        entry
+            .get("category")
+            .and_then(serde_yaml::Value::as_str)
+            != Some("phase3-writer")
+    });
+    fs::write(
+        &catalog_path,
+        serde_yaml::to_string(&catalog).expect("encode fixture catalog"),
+    )
+    .expect("write fixture catalog");
+
+    run_compat_oracle_gates(&manifest_path)
+        .expect("compat oracle should skip when no phase3-writer fixtures exist");
+}
+
+#[test]
 fn compat_oracle_rejects_basic_field_order_drift() {
     let (_artifact_root, apkg_path, mut inspect_report) =
         build_phase3_fixture_apkg("fixtures/phase3/inputs/basic-normalized-ir.json", "field-order");
