@@ -115,14 +115,10 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
     let left_root = unique_artifact_root("inspect-fingerprint-left");
     let right_root = unique_artifact_root("inspect-fingerprint-right");
 
-    let left_target = BuildArtifactTarget::new(
-        left_root.clone(),
-        "artifacts/phase3/inspect-fingerprint",
-    );
-    let right_target = BuildArtifactTarget::new(
-        right_root.clone(),
-        "artifacts/phase3/inspect-fingerprint",
-    );
+    let left_target =
+        BuildArtifactTarget::new(left_root.clone(), "artifacts/phase3/inspect-fingerprint");
+    let right_target =
+        BuildArtifactTarget::new(right_root.clone(), "artifacts/phase3/inspect-fingerprint");
 
     build(
         &sample_basic_normalized_ir_with_media(),
@@ -142,16 +138,16 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
     let left_report = inspect_staging(&left_target.staging_manifest_path()).unwrap();
     let right_report = inspect_staging(&right_target.staging_manifest_path()).unwrap();
 
-    assert_eq!(left_report.artifact_fingerprint, right_report.artifact_fingerprint);
+    assert_eq!(
+        left_report.artifact_fingerprint,
+        right_report.artifact_fingerprint
+    );
 }
 
 #[test]
 fn inspect_apkg_marks_missing_media_map_as_degraded() {
     let root = unique_artifact_root("inspect-apkg-degraded");
-    let target = BuildArtifactTarget::new(
-        root.clone(),
-        "artifacts/phase3/inspect-apkg-degraded",
-    );
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg-degraded");
 
     build(
         &sample_basic_normalized_ir_with_media(),
@@ -166,7 +162,10 @@ fn inspect_apkg_marks_missing_media_map_as_degraded() {
 
     let report = inspect_apkg(&degraded_apkg).unwrap();
     assert_eq!(report.observation_status, "degraded");
-    assert!(report.missing_domains.iter().any(|domain| domain == "media"));
+    assert!(report
+        .missing_domains
+        .iter()
+        .any(|domain| domain == "media"));
     assert!(!report.degradation_reasons.is_empty());
 }
 

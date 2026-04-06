@@ -42,7 +42,12 @@ pub fn build(
                 err.to_string(),
                 "materialize_staging",
                 "write_manifest",
-                Some(artifact_target.staging_manifest_path().display().to_string()),
+                Some(
+                    artifact_target
+                        .staging_manifest_path()
+                        .display()
+                        .to_string(),
+                ),
             ))
         }
     };

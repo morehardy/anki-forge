@@ -16,10 +16,8 @@ use writer_core::{
 #[test]
 fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fixture() {
     let root = unique_artifact_root("diff-semantic-consistency");
-    let target = BuildArtifactTarget::new(
-        root.clone(),
-        "artifacts/phase3/diff-semantic-consistency",
-    );
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/diff-semantic-consistency");
 
     build(
         &sample_basic_normalized_ir_with_media(),

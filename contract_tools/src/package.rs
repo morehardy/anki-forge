@@ -182,8 +182,8 @@ fn add_case_transitive_entries(
                     case_path.display()
                 )
             })?;
-            let transitive: Phase3WriterCaseTransitivePaths =
-                serde_yaml::from_str(&raw).with_context(|| {
+            let transitive: Phase3WriterCaseTransitivePaths = serde_yaml::from_str(&raw)
+                .with_context(|| {
                     format!(
                         "phase3 writer fixture case must be valid YAML for packaging: {}",
                         case_path.display()
@@ -211,8 +211,8 @@ fn add_case_transitive_entries(
                     case_path.display()
                 )
             })?;
-            let transitive: Phase3E2ECaseTransitivePaths =
-                serde_yaml::from_str(&raw).with_context(|| {
+            let transitive: Phase3E2ECaseTransitivePaths = serde_yaml::from_str(&raw)
+                .with_context(|| {
                     format!(
                         "phase3 e2e fixture case must be valid YAML for packaging: {}",
                         case_path.display()

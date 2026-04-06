@@ -93,7 +93,9 @@ fn load_declared_writer_policy_ref() -> String {
     writer_core::policy_ref(&policy.id, &policy.version)
 }
 
-fn build_basic_package(temp_dir: &std::path::Path) -> (Value, std::path::PathBuf, std::path::PathBuf) {
+fn build_basic_package(
+    temp_dir: &std::path::Path,
+) -> (Value, std::path::PathBuf, std::path::PathBuf) {
     let manifest = contract_tools::contract_manifest_path();
     let input = write_basic_normalized_ir(temp_dir);
     let artifacts_dir = temp_dir.join("artifacts");
@@ -121,7 +123,11 @@ fn build_basic_package(temp_dir: &std::path::Path) -> (Value, std::path::PathBuf
     );
 
     let build_result: Value = serde_json::from_slice(&output.stdout).expect("build JSON");
-    (build_result, artifacts_dir.join("staging/manifest.json"), artifacts_dir.join("package.apkg"))
+    (
+        build_result,
+        artifacts_dir.join("staging/manifest.json"),
+        artifacts_dir.join("package.apkg"),
+    )
 }
 
 fn build_basic_package_with_default_selectors(
@@ -150,7 +156,11 @@ fn build_basic_package_with_default_selectors(
     );
 
     let build_result: Value = serde_json::from_slice(&output.stdout).expect("build JSON");
-    (build_result, artifacts_dir.join("staging/manifest.json"), artifacts_dir.join("package.apkg"))
+    (
+        build_result,
+        artifacts_dir.join("staging/manifest.json"),
+        artifacts_dir.join("package.apkg"),
+    )
 }
 
 #[test]
@@ -300,20 +310,19 @@ fn build_command_emits_contract_json_with_manifest_backed_refs() {
         build_result["build_context_ref"],
         load_declared_build_context_ref()
     );
-    assert_eq!(build_result["staging_ref"], "artifacts/staging/manifest.json");
+    assert_eq!(
+        build_result["staging_ref"],
+        "artifacts/staging/manifest.json"
+    );
     assert_eq!(build_result["apkg_ref"], "artifacts/package.apkg");
-    assert!(
-        build_result["artifact_fingerprint"]
-            .as_str()
-            .expect("artifact fingerprint")
-            .starts_with("artifact:")
-    );
-    assert!(
-        build_result["package_fingerprint"]
-            .as_str()
-            .expect("package fingerprint")
-            .starts_with("package:")
-    );
+    assert!(build_result["artifact_fingerprint"]
+        .as_str()
+        .expect("artifact fingerprint")
+        .starts_with("artifact:"));
+    assert!(build_result["package_fingerprint"]
+        .as_str()
+        .expect("package fingerprint")
+        .starts_with("package:"));
     assert!(staging_manifest.exists(), "staging manifest should exist");
     assert!(apkg_path.exists(), "apkg should exist");
 }
@@ -326,12 +335,19 @@ fn build_command_defaults_writer_policy_and_build_context() {
 
     assert_eq!(build_result["kind"], "package-build-result");
     assert_eq!(build_result["result_status"], "success");
-    assert_eq!(build_result["staging_ref"], "artifacts/staging/manifest.json");
-    assert_eq!(build_result["apkg_ref"], "artifacts/package.apkg");
-    assert!(
-        build_result["writer_policy_ref"].as_str().unwrap().starts_with("writer-policy.default@")
+    assert_eq!(
+        build_result["staging_ref"],
+        "artifacts/staging/manifest.json"
     );
-    assert!(build_result["build_context_ref"].as_str().unwrap().starts_with("build-context:"));
+    assert_eq!(build_result["apkg_ref"], "artifacts/package.apkg");
+    assert!(build_result["writer_policy_ref"]
+        .as_str()
+        .unwrap()
+        .starts_with("writer-policy.default@"));
+    assert!(build_result["build_context_ref"]
+        .as_str()
+        .unwrap()
+        .starts_with("build-context:"));
     assert!(staging_manifest.exists(), "staging manifest should exist");
     assert!(apkg_path.exists(), "apkg should exist");
 }
@@ -406,14 +422,19 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
         String::from_utf8_lossy(&apkg_output.stdout),
         String::from_utf8_lossy(&apkg_output.stderr)
     );
-    let apkg_report: Value = serde_json::from_slice(&apkg_output.stdout).expect("apkg inspect JSON");
+    let apkg_report: Value =
+        serde_json::from_slice(&apkg_output.stdout).expect("apkg inspect JSON");
     assert_eq!(apkg_report["kind"], "inspect-report");
     assert_eq!(apkg_report["source_kind"], "apkg");
     assert_eq!(apkg_report["observation_status"], "complete");
 
     let left = temp.path().join("left.inspect.json");
     let right = temp.path().join("right.inspect.json");
-    fs::write(&left, serde_json::to_string_pretty(&staging_report).unwrap()).unwrap();
+    fs::write(
+        &left,
+        serde_json::to_string_pretty(&staging_report).unwrap(),
+    )
+    .unwrap();
     fs::write(&right, serde_json::to_string_pretty(&apkg_report).unwrap()).unwrap();
 
     let diff_output = run_cli(&[

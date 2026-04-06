@@ -131,8 +131,8 @@ pub fn inspect_build_result(
 
 pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
     let path = path.as_ref();
-    let raw_manifest = fs::read(path)
-        .with_context(|| format!("read staging manifest {}", path.display()))?;
+    let raw_manifest =
+        fs::read(path).with_context(|| format!("read staging manifest {}", path.display()))?;
     let manifest: StagingManifest = serde_json::from_slice(&raw_manifest)
         .with_context(|| format!("decode staging manifest {}", path.display()))?;
     let media_root = path
@@ -156,8 +156,8 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
 pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     let path = path.as_ref();
     let file = File::open(path).with_context(|| format!("open apkg {}", path.display()))?;
-    let mut archive = ZipArchive::new(file)
-        .with_context(|| format!("open apkg archive {}", path.display()))?;
+    let mut archive =
+        ZipArchive::new(file).with_context(|| format!("open apkg archive {}", path.display()))?;
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
     let mut normalized_ir = NormalizedIr {
@@ -198,7 +198,8 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     };
 
     let observations = build_observations(&normalized_ir, &media);
-    limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), has_core_data);
+    limitations.observation_status =
+        derive_status(limitations.missing_domains.is_empty(), has_core_data);
 
     Ok(build_report(
         "apkg",
@@ -259,7 +260,10 @@ fn fingerprint_report(
         }
     });
     let canonical = to_canonical_json(&payload).expect("canonical inspection payload");
-    format!("artifact:{}", hex::encode(sha1::Sha1::digest(canonical.as_bytes())))
+    format!(
+        "artifact:{}",
+        hex::encode(sha1::Sha1::digest(canonical.as_bytes()))
+    )
 }
 
 fn strip_evidence_refs(observations: &InspectObservations) -> Value {
@@ -442,10 +446,9 @@ fn resolve_staging_media(
             Ok(bytes) => bytes,
             Err(err) => {
                 limitations.missing_domains.insert(DOMAIN_MEDIA.into());
-                limitations.degradation_reasons.push(format!(
-                    "missing staged media {}: {err}",
-                    media.filename
-                ));
+                limitations
+                    .degradation_reasons
+                    .push(format!("missing staged media {}: {err}", media.filename));
                 continue;
             }
         };
@@ -472,10 +475,11 @@ fn resolve_staging_media(
     Ok((resolved, limitations))
 }
 
-fn read_package_version(archive: &mut ZipArchive<File>) -> Result<(PackageVersion, ReadLimitations)> {
+fn read_package_version(
+    archive: &mut ZipArchive<File>,
+) -> Result<(PackageVersion, ReadLimitations)> {
     if let Some(meta_bytes) = read_zip_entry_bytes(archive, "meta")? {
-        let meta = PackageMetadata::decode(meta_bytes.as_slice())
-            .context("decode package meta")?;
+        let meta = PackageMetadata::decode(meta_bytes.as_slice()).context("decode package meta")?;
         Ok((
             match meta.version {
                 3 => PackageVersion::Latest,
@@ -485,7 +489,10 @@ fn read_package_version(archive: &mut ZipArchive<File>) -> Result<(PackageVersio
             ReadLimitations::default(),
         ))
     } else {
-        Ok((infer_version_from_archive(archive), ReadLimitations::default()))
+        Ok((
+            infer_version_from_archive(archive),
+            ReadLimitations::default(),
+        ))
     }
 }
 
@@ -508,7 +515,9 @@ fn read_expected_collection_bytes(
         return Ok(None);
     };
     if version.zstd_compressed() {
-        Ok(Some(decode_all(raw_bytes.as_slice()).context("decode zstd collection")?))
+        Ok(Some(
+            decode_all(raw_bytes.as_slice()).context("decode zstd collection")?,
+        ))
     } else {
         Ok(Some(raw_bytes))
     }
@@ -578,18 +587,21 @@ fn read_media_entries(
 
 fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<NormalizedNote>)> {
     with_temp_sqlite(bytes, |conn| {
-        let mut notetype_rows = conn.prepare("select id, name, config from notetypes order by id")?;
+        let mut notetype_rows =
+            conn.prepare("select id, name, config from notetypes order by id")?;
         let notetypes = notetype_rows
             .query_map([], |row| {
                 let id: i64 = row.get(0)?;
                 let _name: String = row.get(1)?;
                 let config: Vec<u8> = row.get(2)?;
-                let notetype: NormalizedNotetype = serde_json::from_slice(&config)
-                    .map_err(|err| rusqlite::Error::FromSqlConversionFailure(
-                        config.len(),
-                        rusqlite::types::Type::Blob,
-                        Box::new(err),
-                    ))?;
+                let notetype: NormalizedNotetype =
+                    serde_json::from_slice(&config).map_err(|err| {
+                        rusqlite::Error::FromSqlConversionFailure(
+                            config.len(),
+                            rusqlite::types::Type::Blob,
+                            Box::new(err),
+                        )
+                    })?;
                 Ok((id, notetype))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
@@ -601,7 +613,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
             notetype_values.push(notetype);
         }
 
-        let mut note_rows = conn.prepare("select id, guid, mid, tags, flds from notes order by id")?;
+        let mut note_rows =
+            conn.prepare("select id, guid, mid, tags, flds from notes order by id")?;
         let notes = note_rows
             .query_map([], |row| {
                 let _id: i64 = row.get(0)?;
@@ -651,10 +664,7 @@ fn with_temp_sqlite<T>(bytes: &[u8], f: impl FnOnce(&Connection) -> Result<T>) -
     result
 }
 
-fn read_zip_entry_bytes(
-    archive: &mut ZipArchive<File>,
-    name: &str,
-) -> Result<Option<Vec<u8>>> {
+fn read_zip_entry_bytes(archive: &mut ZipArchive<File>, name: &str) -> Result<Option<Vec<u8>>> {
     match archive.by_name(name) {
         Ok(mut file) => {
             let mut buf = vec![];
@@ -695,10 +705,7 @@ fn unique_temp_path(name: &str) -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    std::env::temp_dir().join(format!(
-        "anki-forge-{name}-{}-{nanos}",
-        std::process::id()
-    ))
+    std::env::temp_dir().join(format!("anki-forge-{name}-{}-{nanos}", std::process::id()))
 }
 
 fn extract_media_references(field: &str) -> Vec<String> {

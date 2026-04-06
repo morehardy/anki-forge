@@ -149,8 +149,8 @@ fn write_media_payloads_and_map(
     }
 
     let media_map = MediaEntries { entries }.encode_to_vec();
-    let encoded_media_map = zstd::stream::encode_all(media_map.as_slice(), 0)
-        .context("compress apkg media map")?;
+    let encoded_media_map =
+        zstd::stream::encode_all(media_map.as_slice(), 0).context("compress apkg media map")?;
     write_stored_entry(zip, "media", &encoded_media_map)?;
 
     Ok(())
@@ -175,7 +175,10 @@ fn write_zstd_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) 
     write_stored_entry(zip, name, &compressed)
 }
 
-fn create_latest_collection_bytes(root_dir: &Path, normalized_ir: &NormalizedIr) -> Result<Vec<u8>> {
+fn create_latest_collection_bytes(
+    root_dir: &Path,
+    normalized_ir: &NormalizedIr,
+) -> Result<Vec<u8>> {
     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
@@ -267,12 +270,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             .find(|candidate| candidate.id == note.notetype_id)
             .expect("normalized note should reference a known notetype");
         let fields = serialize_fields(note, notetype)?;
-        let sfld = note
-            .fields
-            .values()
-            .next()
-            .cloned()
-            .unwrap_or_default();
+        let sfld = note.fields.values().next().cloned().unwrap_or_default();
         let note_row = note_row_id;
         conn.execute(
             "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, 0, 0, ?4, ?5, ?6, 0, 0, ?7)",
@@ -310,13 +308,7 @@ fn populate_legacy_collection(conn: &Connection) -> Result<()> {
 
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
-        rusqlite::params![
-            "{}",
-            legacy_basic_models_json()?,
-            "{}",
-            "{}",
-            "{}"
-        ],
+        rusqlite::params!["{}", legacy_basic_models_json()?, "{}", "{}", "{}"],
     )?;
     conn.execute(
         "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (1, 'legacy-dummy', 1, 0, 0, '', ?1, ?2, 0, 0, '{}')",

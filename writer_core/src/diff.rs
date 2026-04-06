@@ -6,7 +6,14 @@ use serde_json::Value;
 use crate::model::{DiffChange, DiffReport, InspectReport};
 use crate::to_canonical_json;
 
-const DOMAINS: [&str; 6] = ["notetypes", "templates", "fields", "media", "metadata", "references"];
+const DOMAINS: [&str; 6] = [
+    "notetypes",
+    "templates",
+    "fields",
+    "media",
+    "metadata",
+    "references",
+];
 
 pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
     let mut uncompared_domains = BTreeSet::new();
@@ -21,7 +28,11 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
             comparison_limitations.insert(format!("left report missing {domain} domain"));
             continue;
         }
-        if right.missing_domains.iter().any(|missing| missing == domain) {
+        if right
+            .missing_domains
+            .iter()
+            .any(|missing| missing == domain)
+        {
             uncompared_domains.insert(domain.to_string());
             comparison_limitations.insert(format!("right report missing {domain} domain"));
             continue;

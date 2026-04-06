@@ -11,7 +11,7 @@ use sha1::Digest;
 
 use crate::canonical_json::to_canonical_json;
 use crate::model::{
-    BuildDiagnosticItem, BuildDiagnostics, BuildContext, PackageBuildResult, WriterPolicy,
+    BuildContext, BuildDiagnosticItem, BuildDiagnostics, PackageBuildResult, WriterPolicy,
 };
 use crate::policy::{build_context_ref, policy_ref};
 
@@ -112,8 +112,9 @@ impl StagingPackage {
 
         if !self.manifest.normalized_ir.media.is_empty() {
             let media_dir = staging_dir.join("media");
-            fs::create_dir_all(&media_dir)
-                .with_context(|| format!("create staging media directory {}", media_dir.display()))?;
+            fs::create_dir_all(&media_dir).with_context(|| {
+                format!("create staging media directory {}", media_dir.display())
+            })?;
             for media in &self.manifest.normalized_ir.media {
                 let payload = base64::engine::general_purpose::STANDARD
                     .decode(media.data_base64.as_bytes())
@@ -258,7 +259,10 @@ fn validate_normalized_ir(
 
         diagnostics.extend(validate_stock_notetype_shape(index, notetype));
 
-        if !matches!(notetype.kind.as_str(), "basic" | "cloze" | "image_occlusion") {
+        if !matches!(
+            notetype.kind.as_str(),
+            "basic" | "cloze" | "image_occlusion"
+        ) {
             diagnostics.push(BuildDiagnosticItem {
                 level: "error".into(),
                 code: "PHASE3.UNSUPPORTED_NOTETYPE_KIND".into(),
@@ -316,7 +320,8 @@ fn validate_normalized_ir(
         if build_context.media_resolution_mode == "inline-only" {
             for (field_name, field_value) in &note.fields {
                 for media_ref in extract_media_references(field_value) {
-                    if media_ref.starts_with("data:") || media_filenames.contains(media_ref.as_str())
+                    if media_ref.starts_with("data:")
+                        || media_filenames.contains(media_ref.as_str())
                     {
                         continue;
                     }

@@ -216,12 +216,18 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
         .any(|case| matches!(case.category.as_str(), "phase3-writer" | "phase3-e2e"));
     let phase3_resources = if has_phase3_cases {
         Some(Phase3FixtureResources {
-            normalized_ir_schema: load_schema(&resolve_asset_path(&manifest, "normalized_ir_schema")?)?,
+            normalized_ir_schema: load_schema(&resolve_asset_path(
+                &manifest,
+                "normalized_ir_schema",
+            )?)?,
             package_build_result_schema: load_schema(&resolve_asset_path(
                 &manifest,
                 "package_build_result_schema",
             )?)?,
-            inspect_report_schema: load_schema(&resolve_asset_path(&manifest, "inspect_report_schema")?)?,
+            inspect_report_schema: load_schema(&resolve_asset_path(
+                &manifest,
+                "inspect_report_schema",
+            )?)?,
             diff_report_schema: load_schema(&resolve_asset_path(&manifest, "diff_report_schema")?)?,
         })
     } else {
@@ -783,14 +789,20 @@ fn execute_phase3_case(
     expected_diff: Option<&str>,
     case_id: &str,
 ) -> anyhow::Result<()> {
-    let writer_policy = crate::policies::load_writer_policy_asset(manifest, writer_policy_selector)?;
-    let build_context = crate::policies::load_build_context_asset(manifest, build_context_selector)?;
+    let writer_policy =
+        crate::policies::load_writer_policy_asset(manifest, writer_policy_selector)?;
+    let build_context =
+        crate::policies::load_build_context_asset(manifest, build_context_selector)?;
     let artifact_root = resolve_contract_relative_dir(&manifest.contracts_root, artifacts_dir)
         .with_context(|| format!("phase3 artifacts_dir must resolve safely for case {case_id}"))?;
     let artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, "artifacts");
 
-    let build_result =
-        writer_core::build(normalized_ir, &writer_policy, &build_context, &artifact_target)?;
+    let build_result = writer_core::build(
+        normalized_ir,
+        &writer_policy,
+        &build_context,
+        &artifact_target,
+    )?;
     let staging_ref = build_result.staging_ref.as_deref().with_context(|| {
         format!(
             "phase3 fixture build must reference a staging artifact before golden checks: {}",
@@ -963,11 +975,7 @@ fn resolve_contract_relative_dir(
                 );
             }
             Component::RootDir | Component::Prefix(_) => {
-                ensure!(
-                    false,
-                    "asset path must be relative: {}",
-                    relative.display()
-                );
+                ensure!(false, "asset path must be relative: {}", relative.display());
             }
         }
     }
@@ -1032,6 +1040,11 @@ fn compare_expected_json(
 ) -> anyhow::Result<()> {
     let actual_text = authoring_core::to_canonical_json(actual)?;
     let expected_text = authoring_core::to_canonical_json(expected)?;
-    ensure!(actual_text == expected_text, "{}: {}", mismatch_message, case_id);
+    ensure!(
+        actual_text == expected_text,
+        "{}: {}",
+        mismatch_message,
+        case_id
+    );
     Ok(())
 }

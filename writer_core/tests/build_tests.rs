@@ -1,19 +1,18 @@
+use authoring_core::stock::resolve_stock_notetype;
+use authoring_core::{
+    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
+};
+use prost::Message;
+use rusqlite::Connection;
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
-use rusqlite::Connection;
-use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{
-    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
-};
-use prost::Message;
 use writer_core::{
-    build,
-    build_context_ref, policy_ref, to_canonical_json, BuildContext, BuildDiagnosticItem,
-    BuildDiagnostics, BuildArtifactTarget, DiffReport, InspectObservations, InspectReport,
+    build, build_context_ref, policy_ref, to_canonical_json, BuildArtifactTarget, BuildContext,
+    BuildDiagnosticItem, BuildDiagnostics, DiffReport, InspectObservations, InspectReport,
     PackageBuildResult, StagingPackage, VerificationGateRule, VerificationPolicy, WriterPolicy,
 };
 
@@ -125,7 +124,10 @@ fn phase3_models_serialize_with_expected_fields() {
     let verification_policy_json = serde_json::to_value(verification_policy).unwrap();
 
     assert_eq!(writer_policy_json["compatibility_target"], "latest-only");
-    assert_eq!(verification_policy_json["writer_fast_gate"]["minimum_comparison_status"], "complete");
+    assert_eq!(
+        verification_policy_json["writer_fast_gate"]["minimum_comparison_status"],
+        "complete"
+    );
 }
 
 #[test]
@@ -236,7 +238,11 @@ fn build_materializes_basic_staging_into_caller_owned_root() {
         Some("artifacts/phase3/basic/staging/manifest.json")
     );
     assert!(root.join("staging/manifest.json").exists());
-    assert!(result.artifact_fingerprint.as_deref().unwrap().starts_with("artifact:"));
+    assert!(result
+        .artifact_fingerprint
+        .as_deref()
+        .unwrap()
+        .starts_with("artifact:"));
 }
 
 #[test]
@@ -261,7 +267,11 @@ fn build_materializes_cloze_staging_into_caller_owned_root() {
         Some("artifacts/phase3/cloze/staging/manifest.json")
     );
     assert!(root.join("staging/manifest.json").exists());
-    assert!(result.artifact_fingerprint.as_deref().unwrap().starts_with("artifact:"));
+    assert!(result
+        .artifact_fingerprint
+        .as_deref()
+        .unwrap()
+        .starts_with("artifact:"));
 }
 
 #[test]
@@ -278,7 +288,10 @@ fn build_materializes_media_payloads_into_staging_tree() {
     .unwrap();
 
     assert_eq!(result.result_status, "success");
-    assert_eq!(fs::read(root.join("staging/media/sample.jpg")).unwrap(), b"hello");
+    assert_eq!(
+        fs::read(root.join("staging/media/sample.jpg")).unwrap(),
+        b"hello"
+    );
 }
 
 #[test]
@@ -344,10 +357,9 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
         "legacy dummy collection should be a SQLite database"
     );
 
-    let media_entries = decode_media_entries(zstd::stream::decode_all(
-        read_zip_entry_bytes(&mut archive, "media").as_slice(),
-    )
-    .unwrap());
+    let media_entries = decode_media_entries(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "media").as_slice()).unwrap(),
+    );
     assert_eq!(media_entries.entries.len(), 1);
     assert_eq!(media_entries.entries[0].name, "occlusion.png");
     assert_eq!(media_entries.entries[0].size, 5);
@@ -356,10 +368,7 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
 #[test]
 fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape() {
     let root = unique_artifact_root("image-occlusion-shape-drift");
-    let target = BuildArtifactTarget::new(
-        root,
-        "artifacts/phase3/image-occlusion-shape-drift",
-    );
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/image-occlusion-shape-drift");
 
     let mut normalized = sample_image_occlusion_normalized_ir();
     normalized.notetypes[0].templates[0].answer_format = "{{Image}}".into();
@@ -499,7 +508,10 @@ fn build_rejects_basic_notetype_that_drifts_from_source_grounded_shape() {
         diag.path.as_deref(),
         Some("notetypes[0].templates[0].answer_format")
     );
-    assert_eq!(diag.target_selector.as_deref(), Some("notetype[id='basic-main']"));
+    assert_eq!(
+        diag.target_selector.as_deref(),
+        Some("notetype[id='basic-main']")
+    );
 }
 
 #[test]
@@ -527,7 +539,10 @@ fn build_rejects_cloze_notetype_that_drifts_from_source_grounded_css() {
         .expect("stock mismatch diagnostic");
     assert_eq!(diag.domain.as_deref(), Some("notetypes"));
     assert_eq!(diag.path.as_deref(), Some("notetypes[0].css"));
-    assert_eq!(diag.target_selector.as_deref(), Some("notetype[id='cloze-main']"));
+    assert_eq!(
+        diag.target_selector.as_deref(),
+        Some("notetype[id='cloze-main']")
+    );
 }
 
 #[test]
@@ -639,13 +654,11 @@ fn build_accepts_html_entity_encoded_media_refs_when_payload_exists() {
     .unwrap();
 
     assert_eq!(result.result_status, "success");
-    assert!(
-        !result
-            .diagnostics
-            .items
-            .iter()
-            .any(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE")
-    );
+    assert!(!result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE"));
 }
 
 fn sample_writer_policy() -> WriterPolicy {
@@ -704,7 +717,10 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
             notetype_id: "cloze-main".into(),
             deck_name: "Default".into(),
             fields: BTreeMap::from([
-                ("Text".into(), "The capital of France is {{c1::Paris}}.".into()),
+                (
+                    "Text".into(),
+                    "The capital of France is {{c1::Paris}}.".into(),
+                ),
                 ("Back Extra".into(), "".into()),
             ]),
             tags: vec!["demo".into()],
@@ -756,10 +772,7 @@ fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
             deck_name: "Default".into(),
             fields: BTreeMap::from([
                 ("Occlusion".into(), "{{c1::Mask 1}}".into()),
-                (
-                    "Image".into(),
-                    r#"<img src="occlusion.png">"#.into(),
-                ),
+                ("Image".into(), r#"<img src="occlusion.png">"#.into()),
                 ("Header".into(), "Header".into()),
                 ("Back Extra".into(), "Extra".into()),
                 ("Comments".into(), "Comments".into()),

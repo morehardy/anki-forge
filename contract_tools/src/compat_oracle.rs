@@ -121,32 +121,18 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
         let normalized_ir_path =
             resolve_contract_relative_path(&manifest.contracts_root, &case_data.normalized_input)
                 .with_context(|| {
-                    format!(
-                        "phase3 normalized input must resolve for compat oracle case {}",
-                        case.id
-                    )
-                })?;
+                format!(
+                    "phase3 normalized input must resolve for compat oracle case {}",
+                    case.id
+                )
+            })?;
         let normalized_ir = load_normalized_ir(&normalized_ir_schema, &normalized_ir_path)
             .with_context(|| format!("load normalized input for compat oracle case {}", case.id))?;
 
-        let writer_policy =
-            load_writer_policy_asset(&manifest, &case_data.writer_policy_selector).with_context(
-                || {
-                    format!(
-                        "load writer policy for compat oracle case {}",
-                        case.id
-                    )
-                },
-            )?;
-        let build_context =
-            load_build_context_asset(&manifest, &case_data.build_context_selector).with_context(
-                || {
-                    format!(
-                        "load build context for compat oracle case {}",
-                        case.id
-                    )
-                },
-            )?;
+        let writer_policy = load_writer_policy_asset(&manifest, &case_data.writer_policy_selector)
+            .with_context(|| format!("load writer policy for compat oracle case {}", case.id))?;
+        let build_context = load_build_context_asset(&manifest, &case_data.build_context_selector)
+            .with_context(|| format!("load build context for compat oracle case {}", case.id))?;
 
         let artifact_root = manifest
             .contracts_root
@@ -155,15 +141,13 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
             .join(&case.id);
         if artifact_root.exists() {
             fs::remove_dir_all(&artifact_root).with_context(|| {
-                format!(
-                    "remove previous compat oracle artifacts for {}",
-                    case.id
-                )
+                format!("remove previous compat oracle artifacts for {}", case.id)
             })?;
         }
 
         let stable_ref_prefix = format!("artifacts/compat-oracle/{}", case.id);
-        let artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, stable_ref_prefix);
+        let artifact_target =
+            writer_core::BuildArtifactTarget::new(artifact_root, stable_ref_prefix);
         let build_result = writer_core::build(
             &normalized_ir,
             &writer_policy,
@@ -230,7 +214,8 @@ pub fn validate_supported_package(
     read_required_zip_entry(&mut archive, REQUIRED_COLLECTION_LATEST)?;
     read_required_zip_entry(&mut archive, REQUIRED_COLLECTION_LEGACY_DUMMY)?;
 
-    let latest_collection_encoded = read_required_zip_entry(&mut archive, REQUIRED_COLLECTION_LATEST)?;
+    let latest_collection_encoded =
+        read_required_zip_entry(&mut archive, REQUIRED_COLLECTION_LATEST)?;
     let latest_collection = decode_all(latest_collection_encoded.as_slice())
         .context("decode zstd collection.anki21b")?;
     let collection_counts = read_collection_counts(&latest_collection)?;
@@ -260,7 +245,8 @@ pub fn validate_supported_package(
         serde_json::from_slice::<HashMap<String, String>>(&media_bytes).is_err(),
         "latest media map must not decode as legacy hashmap JSON"
     );
-    let media_entries = MediaEntries::decode(media_bytes.as_slice()).context("decode media map proto")?;
+    let media_entries =
+        MediaEntries::decode(media_bytes.as_slice()).context("decode media map proto")?;
     let package_media = read_media_payload_entries(&mut archive, &media_entries)?;
 
     let inspect_media = read_inspect_media_entries(inspect_report)?;
@@ -289,7 +275,9 @@ pub fn validate_supported_package(
     Ok(())
 }
 
-fn validate_stock_lane_invariants(inspect_report: &writer_core::InspectReport) -> anyhow::Result<()> {
+fn validate_stock_lane_invariants(
+    inspect_report: &writer_core::InspectReport,
+) -> anyhow::Result<()> {
     for notetype in &inspect_report.observations.notetypes {
         let notetype_id = required_str_field(notetype, "id")?;
         let kind = required_str_field(notetype, "kind")?;
@@ -490,7 +478,9 @@ fn read_collection_counts(collection_bytes: &[u8]) -> anyhow::Result<CollectionC
     })
 }
 
-fn read_inspect_counts(inspect_report: &writer_core::InspectReport) -> anyhow::Result<InspectCounts> {
+fn read_inspect_counts(
+    inspect_report: &writer_core::InspectReport,
+) -> anyhow::Result<InspectCounts> {
     let counts = inspect_report
         .observations
         .metadata
@@ -512,7 +502,10 @@ fn count_rows(conn: &Connection, table: &str) -> anyhow::Result<usize> {
     Ok(count as usize)
 }
 
-fn with_temp_sqlite<T>(bytes: &[u8], f: impl FnOnce(&Connection) -> anyhow::Result<T>) -> anyhow::Result<T> {
+fn with_temp_sqlite<T>(
+    bytes: &[u8],
+    f: impl FnOnce(&Connection) -> anyhow::Result<T>,
+) -> anyhow::Result<T> {
     let path = unique_temp_path("compat-oracle.sqlite");
     fs::write(&path, bytes).with_context(|| format!("write temp sqlite {}", path.display()))?;
     let result = (|| {
@@ -529,16 +522,10 @@ fn unique_temp_path(name: &str) -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .expect("unix epoch")
         .as_nanos();
-    std::env::temp_dir().join(format!(
-        "anki-forge-{name}-{}-{nanos}",
-        std::process::id()
-    ))
+    std::env::temp_dir().join(format!("anki-forge-{name}-{}-{nanos}", std::process::id()))
 }
 
-fn read_required_zip_entry(
-    archive: &mut ZipArchive<File>,
-    name: &str,
-) -> anyhow::Result<Vec<u8>> {
+fn read_required_zip_entry(archive: &mut ZipArchive<File>, name: &str) -> anyhow::Result<Vec<u8>> {
     read_optional_zip_entry(archive, name)?
         .with_context(|| format!("required zip entry is missing: {}", name))
 }
@@ -580,15 +567,22 @@ fn load_yaml_model<T: serde::de::DeserializeOwned>(path: impl AsRef<Path>) -> an
         .with_context(|| format!("YAML asset must match its model: {}", path.display()))
 }
 
-fn load_normalized_ir(schema: &jsonschema::JSONSchema, path: &Path) -> anyhow::Result<NormalizedIr> {
+fn load_normalized_ir(
+    schema: &jsonschema::JSONSchema,
+    path: &Path,
+) -> anyhow::Result<NormalizedIr> {
     let raw = fs::read_to_string(path)
         .with_context(|| format!("read normalized input {}", path.display()))?;
     let value: Value =
         serde_json::from_str(&raw).with_context(|| format!("decode JSON {}", path.display()))?;
     validate_value(schema, &value)
         .with_context(|| format!("normalized input must satisfy schema: {}", path.display()))?;
-    serde_json::from_value(value)
-        .with_context(|| format!("normalized input must map to execution model: {}", path.display()))
+    serde_json::from_value(value).with_context(|| {
+        format!(
+            "normalized input must map to execution model: {}",
+            path.display()
+        )
+    })
 }
 
 fn required_str_field<'a>(value: &'a Value, field: &str) -> anyhow::Result<&'a str> {

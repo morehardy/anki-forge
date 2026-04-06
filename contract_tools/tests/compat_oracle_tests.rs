@@ -27,16 +27,14 @@ fn compat_oracle_skips_when_catalog_has_no_phase3_writer_cases() {
         .expect("manifest parent")
         .join("fixtures/index.yaml");
     let raw = fs::read_to_string(&catalog_path).expect("read fixture catalog");
-    let mut catalog: serde_yaml::Value = serde_yaml::from_str(&raw).expect("decode fixture catalog");
+    let mut catalog: serde_yaml::Value =
+        serde_yaml::from_str(&raw).expect("decode fixture catalog");
     let cases = catalog
         .get_mut("cases")
         .and_then(serde_yaml::Value::as_sequence_mut)
         .expect("fixture catalog should have cases");
     cases.retain(|entry| {
-        entry
-            .get("category")
-            .and_then(serde_yaml::Value::as_str)
-            != Some("phase3-writer")
+        entry.get("category").and_then(serde_yaml::Value::as_str) != Some("phase3-writer")
     });
     fs::write(
         &catalog_path,
@@ -50,8 +48,10 @@ fn compat_oracle_skips_when_catalog_has_no_phase3_writer_cases() {
 
 #[test]
 fn compat_oracle_rejects_basic_field_order_drift() {
-    let (_artifact_root, apkg_path, mut inspect_report) =
-        build_phase3_fixture_apkg("fixtures/phase3/inputs/basic-normalized-ir.json", "field-order");
+    let (_artifact_root, apkg_path, mut inspect_report) = build_phase3_fixture_apkg(
+        "fixtures/phase3/inputs/basic-normalized-ir.json",
+        "field-order",
+    );
 
     inspect_report.observations.fields.swap(0, 1);
 
@@ -66,8 +66,10 @@ fn compat_oracle_rejects_basic_field_order_drift() {
 
 #[test]
 fn compat_oracle_rejects_dangling_media_refs_derived_from_note_fields() {
-    let (_artifact_root, apkg_path, mut inspect_report) =
-        build_phase3_fixture_apkg("fixtures/phase3/inputs/image-occlusion-normalized-ir.json", "dangling-media");
+    let (_artifact_root, apkg_path, mut inspect_report) = build_phase3_fixture_apkg(
+        "fixtures/phase3/inputs/image-occlusion-normalized-ir.json",
+        "dangling-media",
+    );
 
     let note_entry = inspect_report
         .observations
@@ -112,8 +114,7 @@ fn compat_oracle_rejects_image_occlusion_template_drift() {
     let err = validate_supported_package(&apkg_path, &inspect_report)
         .expect_err("template drift should be rejected");
     assert!(
-        err.to_string().contains("must match stock")
-            || err.to_string().contains("template"),
+        err.to_string().contains("must match stock") || err.to_string().contains("template"),
         "unexpected error: {err}"
     );
 }
@@ -159,10 +160,12 @@ fn build_phase3_fixture_apkg(
     label: &str,
 ) -> (TempDir, PathBuf, writer_core::InspectReport) {
     let manifest = load_manifest(contract_manifest_path()).expect("load bundled manifest");
-    let normalized_path = resolve_contract_relative_path(&manifest.contracts_root, normalized_fixture)
-        .expect("resolve normalized fixture");
+    let normalized_path =
+        resolve_contract_relative_path(&manifest.contracts_root, normalized_fixture)
+            .expect("resolve normalized fixture");
     let raw = fs::read_to_string(&normalized_path).expect("read normalized fixture");
-    let normalized_ir: NormalizedIr = serde_json::from_str(&raw).expect("decode normalized fixture");
+    let normalized_ir: NormalizedIr =
+        serde_json::from_str(&raw).expect("decode normalized fixture");
 
     let writer_policy = load_writer_policy_asset(&manifest, "default").expect("load writer policy");
     let build_context = load_build_context_asset(&manifest, "default").expect("load build context");
