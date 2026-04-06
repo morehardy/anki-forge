@@ -387,6 +387,34 @@ fn build_rejects_unresolved_media_refs_when_behavior_is_fail() {
 }
 
 #[test]
+fn build_rejects_unquoted_src_media_refs_when_behavior_is_fail() {
+    let root = unique_artifact_root("media-fail-unquoted");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-fail-unquoted");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), "<img src=missing.png>".into());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE")
+        .expect("unresolved media diagnostic");
+    assert_eq!(diag.path.as_deref(), Some(r#"notes[0].fields["Back"]"#));
+}
+
+#[test]
 fn build_warns_on_unresolved_media_refs_when_behavior_is_warn() {
     let root = unique_artifact_root("media-warn");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-warn");
@@ -420,6 +448,29 @@ fn build_warns_on_unresolved_media_refs_when_behavior_is_warn() {
         .expect("warning diagnostic");
     assert_eq!(diag.level, "warning");
     assert!(root.join("staging/manifest.json").exists());
+}
+
+#[test]
+fn build_accepts_html_entity_encoded_media_refs_when_payload_exists() {
+    let root = unique_artifact_root("media-encoded");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-encoded");
+
+    let result = build(
+        &sample_basic_normalized_ir_with_encoded_media_ref(),
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert!(
+        !result
+            .diagnostics
+            .items
+            .iter()
+            .any(|item| item.code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE")
+    );
 }
 
 fn sample_writer_policy() -> WriterPolicy {
@@ -494,6 +545,19 @@ fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
         .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
     normalized.media.push(NormalizedMedia {
         filename: "sample.jpg".into(),
+        mime: "image/jpeg".into(),
+        data_base64: "aGVsbG8=".into(),
+    });
+    normalized
+}
+
+fn sample_basic_normalized_ir_with_encoded_media_ref() -> NormalizedIr {
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="a&amp;b.jpg">"#.into());
+    normalized.media.push(NormalizedMedia {
+        filename: "a&b.jpg".into(),
         mime: "image/jpeg".into(),
         data_base64: "aGVsbG8=".into(),
     });
