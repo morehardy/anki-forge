@@ -316,6 +316,43 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
 }
 
 #[test]
+fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape() {
+    let root = unique_artifact_root("image-occlusion-shape-drift");
+    let target = BuildArtifactTarget::new(
+        root,
+        "artifacts/phase3/image-occlusion-shape-drift",
+    );
+
+    let mut normalized = sample_image_occlusion_normalized_ir();
+    normalized.notetypes[0].templates[0].answer_format = "{{Image}}".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.STOCK_NOTETYPE_SHAPE_MISMATCH")
+        .expect("stock mismatch diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("notetypes"));
+    assert_eq!(
+        diag.path.as_deref(),
+        Some("notetypes[0].templates[0].answer_format")
+    );
+    assert_eq!(
+        diag.target_selector.as_deref(),
+        Some("notetype[id='io-main']")
+    );
+}
+
+#[test]
 fn build_apkg_package_fingerprint_is_stable_across_roots() {
     let left_root = unique_artifact_root("image-occlusion-left");
     let right_root = unique_artifact_root("image-occlusion-right");
