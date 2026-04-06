@@ -1,5 +1,5 @@
 use anyhow::{ensure, Context};
-use authoring_core::NormalizedIr;
+use authoring_core::{AuthoringNotetype, NormalizedIr};
 use prost::Message;
 use rusqlite::Connection;
 use serde::Deserialize;
@@ -276,7 +276,7 @@ pub fn validate_supported_package(
         package_media.len()
     );
 
-    let referenced_media = read_media_references_from_inspect(inspect_report)?;
+    let referenced_media = read_media_references_from_notes(inspect_report)?;
     for referenced in &referenced_media {
         ensure!(
             package_media.contains_key(referenced.as_str()),
@@ -291,121 +291,69 @@ pub fn validate_supported_package(
 }
 
 fn validate_stock_lane_invariants(inspect_report: &writer_core::InspectReport) -> anyhow::Result<()> {
-    let templates_by_notetype = templates_by_notetype(inspect_report)?;
-    let fields_by_notetype = fields_by_notetype(inspect_report)?;
-
     for notetype in &inspect_report.observations.notetypes {
         let notetype_id = required_str_field(notetype, "id")?;
         let kind = required_str_field(notetype, "kind")?;
         let name = required_str_field(notetype, "name")?;
+        ensure!(
+            matches!(kind, "basic" | "cloze" | "image_occlusion"),
+            "compat oracle currently supports only basic/cloze/image_occlusion notetypes, found {}",
+            kind
+        );
+        let observed_css = required_str_field(notetype, "css")?;
+        let expected_stock = authoring_core::stock::resolve_stock_notetype(&AuthoringNotetype {
+            id: notetype_id.to_string(),
+            kind: kind.to_string(),
+            name: Some(name.to_string()),
+        })
+        .with_context(|| format!("resolve stock notetype shape for {}", notetype_id))?;
 
-        match kind {
-            "basic" => {
-                ensure!(name == "Basic", "basic notetype must be named Basic");
-                let fields = fields_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing fields for notetype {}", notetype_id))?;
-                ensure!(
-                    fields == &["Back".to_string(), "Front".to_string()],
-                    "basic notetype fields must be Front/Back"
-                );
-                let templates = templates_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing templates for notetype {}", notetype_id))?;
-                ensure!(templates.len() == 1, "basic notetype must have exactly one template");
-                let template = &templates[0];
-                ensure!(
-                    required_str_field(template, "name")? == "Card 1",
-                    "basic template name must be Card 1"
-                );
-                ensure!(
-                    required_str_field(template, "question_format")? == "{{Front}}",
-                    "basic template question format must match stock basic front"
-                );
-                ensure!(
-                    required_str_field(template, "answer_format")?
-                        == "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
-                    "basic template answer format must match stock basic back"
-                );
-            }
-            "cloze" => {
-                ensure!(name == "Cloze", "cloze notetype must be named Cloze");
-                let fields = fields_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing fields for notetype {}", notetype_id))?;
-                ensure!(
-                    fields == &["Back Extra".to_string(), "Text".to_string()],
-                    "cloze notetype fields must be Text/Back Extra"
-                );
-                let templates = templates_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing templates for notetype {}", notetype_id))?;
-                ensure!(templates.len() == 1, "cloze notetype must have exactly one template");
-                let template = &templates[0];
-                ensure!(
-                    required_str_field(template, "name")? == "Cloze",
-                    "cloze template name must be Cloze"
-                );
-                ensure!(
-                    required_str_field(template, "question_format")? == "{{cloze:Text}}",
-                    "cloze template question format must match stock cloze"
-                );
-                ensure!(
-                    required_str_field(template, "answer_format")? == "{{cloze:Text}}<br>\n{{Back Extra}}",
-                    "cloze template answer format must match stock cloze"
-                );
-            }
-            "image_occlusion" => {
-                ensure!(
-                    name == "Image Occlusion",
-                    "image occlusion notetype must be named Image Occlusion"
-                );
-                let fields = fields_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing fields for notetype {}", notetype_id))?;
-                for required in ["Back Extra", "Header", "Image", "Occlusion"] {
-                    ensure!(
-                        fields.contains(&required.to_string()),
-                        "image occlusion notetype must include field {}",
-                        required
-                    );
-                }
-                ensure!(
-                    fields.len() >= 4,
-                    "image occlusion notetype must have at least four fields"
-                );
-                let templates = templates_by_notetype
-                    .get(notetype_id)
-                    .with_context(|| format!("missing templates for notetype {}", notetype_id))?;
-                ensure!(
-                    templates.len() == 1,
-                    "image occlusion notetype must have exactly one template"
-                );
-                let template = &templates[0];
-                ensure!(
-                    required_str_field(template, "name")? == "Image Occlusion",
-                    "image occlusion template name must be Image Occlusion"
-                );
-                let question = required_str_field(template, "question_format")?;
-                let answer = required_str_field(template, "answer_format")?;
-                ensure!(
-                    question.contains("{{cloze:Occlusion}}")
-                        && question.contains("{{Image}}")
-                        && question.contains("anki.imageOcclusion.setup()"),
-                    "image occlusion question format must include cloze, image, and setup script"
-                );
-                ensure!(
-                    answer.contains("id=\"toggle\""),
-                    "image occlusion answer format must include the toggle masks control"
-                );
-            }
-            other => {
-                ensure!(
-                    false,
-                    "compat oracle currently supports only basic/cloze/image_occlusion notetypes, found {}",
-                    other
-                );
-            }
+        ensure!(
+            expected_stock.name == name,
+            "notetype {} name must match stock",
+            notetype_id
+        );
+        ensure!(
+            expected_stock.css == observed_css,
+            "notetype {} css must match stock",
+            notetype_id
+        );
+
+        let observed_fields = fields_for_notetype_in_order(inspect_report, notetype_id)?;
+        ensure!(
+            observed_fields == expected_stock.fields,
+            "notetype {} fields must match stock order",
+            notetype_id
+        );
+
+        let observed_templates = templates_for_notetype_in_order(inspect_report, notetype_id)?;
+        ensure!(
+            observed_templates.len() == expected_stock.templates.len(),
+            "notetype {} template count must match stock",
+            notetype_id
+        );
+        for (index, expected) in expected_stock.templates.iter().enumerate() {
+            let observed = observed_templates
+                .get(index)
+                .with_context(|| format!("missing template {} for {}", index, notetype_id))?;
+            ensure!(
+                observed.name == expected.name,
+                "notetype {} template {} name must match stock",
+                notetype_id,
+                index
+            );
+            ensure!(
+                observed.question_format == expected.question_format,
+                "notetype {} template {} question_format must match stock",
+                notetype_id,
+                index
+            );
+            ensure!(
+                observed.answer_format == expected.answer_format,
+                "notetype {} template {} answer_format must match stock",
+                notetype_id,
+                index
+            );
         }
     }
 
@@ -459,11 +407,21 @@ fn read_inspect_media_entries(
     Ok(media)
 }
 
-fn read_media_references_from_inspect(
+fn read_media_references_from_notes(
     inspect_report: &writer_core::InspectReport,
 ) -> anyhow::Result<BTreeSet<String>> {
     let mut references = BTreeSet::new();
     for entry in &inspect_report.observations.references {
+        if let Some(fields) = entry.get("fields").and_then(Value::as_object) {
+            for field_value in fields.values() {
+                let field_text = field_value
+                    .as_str()
+                    .context("inspect note field values must be strings")?;
+                for media_ref in extract_media_references(field_text) {
+                    references.insert(media_ref);
+                }
+            }
+        }
         if let Some(reference) = entry.get("reference").and_then(Value::as_str) {
             references.insert(reference.to_string());
         }
@@ -471,42 +429,41 @@ fn read_media_references_from_inspect(
     Ok(references)
 }
 
-fn templates_by_notetype(
+fn fields_for_notetype_in_order(
     inspect_report: &writer_core::InspectReport,
-) -> anyhow::Result<BTreeMap<String, Vec<Value>>> {
-    let mut templates: BTreeMap<String, Vec<Value>> = BTreeMap::new();
-    for template in &inspect_report.observations.templates {
-        let notetype_id = required_str_field(template, "notetype_id")?.to_string();
-        templates
-            .entry(notetype_id)
-            .or_default()
-            .push(template.clone());
-    }
-
-    for values in templates.values_mut() {
-        values.sort_by(|left, right| {
-            required_str_field(left, "name")
-                .unwrap_or("")
-                .cmp(required_str_field(right, "name").unwrap_or(""))
-        });
-    }
-
-    Ok(templates)
-}
-
-fn fields_by_notetype(
-    inspect_report: &writer_core::InspectReport,
-) -> anyhow::Result<BTreeMap<String, Vec<String>>> {
-    let mut fields: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    notetype_id: &str,
+) -> anyhow::Result<Vec<String>> {
+    let mut fields = Vec::new();
     for field in &inspect_report.observations.fields {
-        let notetype_id = required_str_field(field, "notetype_id")?.to_string();
-        let name = required_str_field(field, "name")?.to_string();
-        fields.entry(notetype_id).or_default().push(name);
-    }
-    for values in fields.values_mut() {
-        values.sort();
+        if required_str_field(field, "notetype_id")? == notetype_id {
+            fields.push(required_str_field(field, "name")?.to_string());
+        }
     }
     Ok(fields)
+}
+
+#[derive(Debug, Clone)]
+struct ObservedTemplate {
+    name: String,
+    question_format: String,
+    answer_format: String,
+}
+
+fn templates_for_notetype_in_order(
+    inspect_report: &writer_core::InspectReport,
+    notetype_id: &str,
+) -> anyhow::Result<Vec<ObservedTemplate>> {
+    let mut templates = Vec::new();
+    for template in &inspect_report.observations.templates {
+        if required_str_field(template, "notetype_id")? == notetype_id {
+            templates.push(ObservedTemplate {
+                name: required_str_field(template, "name")?.to_string(),
+                question_format: required_str_field(template, "question_format")?.to_string(),
+                answer_format: required_str_field(template, "answer_format")?.to_string(),
+            });
+        }
+    }
+    Ok(templates)
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -656,4 +613,77 @@ fn hex_lower(bytes: &[u8]) -> String {
         let _ = write!(&mut out, "{:02x}", byte);
     }
     out
+}
+
+fn extract_media_references(field: &str) -> Vec<String> {
+    let mut refs = extract_sound_media_references(field);
+    refs.extend(extract_html_media_references(field, "src"));
+    refs.extend(extract_html_media_references(field, "data"));
+    refs
+}
+
+fn extract_sound_media_references(field: &str) -> Vec<String> {
+    let mut refs = vec![];
+    let mut remaining = field;
+
+    while let Some(start) = remaining.find("[sound:") {
+        let after = &remaining[start + "[sound:".len()..];
+        if let Some(end) = after.find(']') {
+            refs.push(decode_html_entities(&after[..end]));
+            remaining = &after[end + 1..];
+        } else {
+            break;
+        }
+    }
+
+    refs
+}
+
+fn extract_html_media_references(field: &str, attribute: &str) -> Vec<String> {
+    let mut refs = vec![];
+    let marker = format!("{attribute}=");
+    let mut remaining = field;
+
+    while let Some(start) = remaining.find(&marker) {
+        let after = &remaining[start + marker.len()..];
+        let Some(first_char) = after.chars().next() else {
+            break;
+        };
+
+        let (raw_ref, rest) = match first_char {
+            '"' | '\'' => {
+                let content = &after[first_char.len_utf8()..];
+                if let Some(end) = content.find(first_char) {
+                    (&content[..end], &content[end + first_char.len_utf8()..])
+                } else {
+                    break;
+                }
+            }
+            _ => {
+                let end = after
+                    .find(|ch: char| ch.is_whitespace() || ch == '>')
+                    .unwrap_or(after.len());
+                (&after[..end], &after[end..])
+            }
+        };
+
+        refs.push(decode_html_entities(raw_ref));
+        remaining = rest;
+    }
+
+    refs
+}
+
+fn decode_html_entities(value: &str) -> String {
+    if !value.contains('&') {
+        return value.to_string();
+    }
+
+    value
+        .replace("&amp;", "&")
+        .replace("&quot;", "\"")
+        .replace("&#39;", "'")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&nbsp;", " ")
 }
