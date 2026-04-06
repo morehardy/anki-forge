@@ -19,6 +19,24 @@ struct Phase2FixtureCaseTransitivePaths {
     expected_result: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+struct Phase3WriterCaseTransitivePaths {
+    normalized_input: String,
+    expected_build: String,
+    expected_inspect: String,
+    #[serde(default)]
+    expected_diff: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct Phase3E2ECaseTransitivePaths {
+    authoring_input: String,
+    expected_build: String,
+    expected_inspect: String,
+    #[serde(default)]
+    expected_diff: Option<String>,
+}
+
 fn artifact_name(bundle_version: &str) -> String {
     format!("anki-forge-contract-bundle-{bundle_version}.tar.gz")
 }
@@ -148,6 +166,64 @@ fn add_case_transitive_entries(
             add_relative_entry(entries, contracts_root, &transitive.authoring_input)?;
             if let Some(expected_result) = transitive.expected_result {
                 add_relative_entry(entries, contracts_root, &expected_result)?;
+            }
+        }
+        "phase3-writer" => {
+            let case_path = resolve_contract_relative_path(contracts_root, &case.input)
+                .with_context(|| {
+                    format!(
+                        "failed to resolve phase3 writer fixture case for packaging: {}",
+                        case.input
+                    )
+                })?;
+            let raw = fs::read_to_string(&case_path).with_context(|| {
+                format!(
+                    "failed to read phase3 writer fixture case for packaging: {}",
+                    case_path.display()
+                )
+            })?;
+            let transitive: Phase3WriterCaseTransitivePaths =
+                serde_yaml::from_str(&raw).with_context(|| {
+                    format!(
+                        "phase3 writer fixture case must be valid YAML for packaging: {}",
+                        case_path.display()
+                    )
+                })?;
+
+            add_relative_entry(entries, contracts_root, &transitive.normalized_input)?;
+            add_relative_entry(entries, contracts_root, &transitive.expected_build)?;
+            add_relative_entry(entries, contracts_root, &transitive.expected_inspect)?;
+            if let Some(expected_diff) = transitive.expected_diff {
+                add_relative_entry(entries, contracts_root, &expected_diff)?;
+            }
+        }
+        "phase3-e2e" => {
+            let case_path = resolve_contract_relative_path(contracts_root, &case.input)
+                .with_context(|| {
+                    format!(
+                        "failed to resolve phase3 e2e fixture case for packaging: {}",
+                        case.input
+                    )
+                })?;
+            let raw = fs::read_to_string(&case_path).with_context(|| {
+                format!(
+                    "failed to read phase3 e2e fixture case for packaging: {}",
+                    case_path.display()
+                )
+            })?;
+            let transitive: Phase3E2ECaseTransitivePaths =
+                serde_yaml::from_str(&raw).with_context(|| {
+                    format!(
+                        "phase3 e2e fixture case must be valid YAML for packaging: {}",
+                        case_path.display()
+                    )
+                })?;
+
+            add_relative_entry(entries, contracts_root, &transitive.authoring_input)?;
+            add_relative_entry(entries, contracts_root, &transitive.expected_build)?;
+            add_relative_entry(entries, contracts_root, &transitive.expected_inspect)?;
+            if let Some(expected_diff) = transitive.expected_diff {
+                add_relative_entry(entries, contracts_root, &expected_diff)?;
             }
         }
         _ => {}
