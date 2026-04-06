@@ -105,6 +105,7 @@ Its responsibilities are constrained to two roles:
 
 The facade adds organization and runtime access value.
 It does not redefine the core semantic model.
+Its normative path orchestrates `authoring_core` and `writer_core` directly rather than shelling out to the CLI.
 
 ### 4.4 CLI protocol and orchestration layer
 
@@ -189,6 +190,9 @@ The Rust facade must support two valid calling styles.
 - caller supplies file paths, bundle selectors, or asset selectors
 - facade performs manifest discovery, asset lookup, and file IO orchestration
 - best for repository tooling and higher-level future SDK layers
+
+For its normative path, this layer invokes Rust core crates directly.
+It does not rely on shelling out to `contract_tools`.
 
 ### 5.3 Stable CLI protocol commands
 
@@ -376,6 +380,16 @@ Wrapper failure must be split into at least two categories.
 
 These categories must be surfaced distinctly in Node and Python.
 
+Node and Python must also expose stable minimum structured failure objects for these categories.
+At minimum those failure objects must preserve, where applicable:
+
+- command
+- exit status
+- stdout
+- stderr
+- resolved runtime metadata
+- parse phase
+
 ### 6.5 Raw-layer conformance obligations
 
 The raw layers do not participate in stable business-result fields, but they do participate in a minimal conformance surface for call authenticity.
@@ -446,6 +460,7 @@ Runtime resolution should follow this priority order:
 - detected bundle root
 
 Wrappers must not confuse runtime-detected metadata with result-embedded protocol versions.
+Wrapper API version is a separate concern from both contract bundle version and tool contract version, and those three version axes must not be conflated.
 
 ## 7. Examples, Docs, Packaging Boundaries, and Exit Criteria
 
@@ -496,6 +511,7 @@ That means:
 - it has its own directory or clearly marked test layer
 - it has its own entry command or runner identity
 - it can be executed intentionally rather than only by "run everything"
+- it publishes one canonical suite runner or command identity even if that runner delegates to language-specific sub-runners
 
 Its coverage split is:
 
@@ -526,10 +542,12 @@ Its coverage split is:
 - Node and Python wrappers provide raw, structured, and helper/view layers
 - Node and Python structured layers cover `normalize`, `build`, `inspect`, and `diff`
 - shared conformance exists as a distinct, independently runnable suite and passes
+- shared conformance exposes a clear runner or command identity rather than existing only as scattered per-language tests
 - Rust facade, CLI, Node structured, and Python structured layers align on result semantics
 - Node and Python raw layers align on runtime metadata truth, invocation-failure classification, and stdout/stderr/exit-status preservation
 - Node and Python structured layers return structured results for result-level states such as `invalid`, `degraded`, and `partial` rather than turning those states into invocation exceptions
 - runtime invocation failure and protocol-or-parse failure are classified distinctly and consistently across Node and Python
+- Node and Python expose stable minimum structured failure objects that preserve command, exit status, stdout, stderr, resolved runtime metadata, and parse phase where applicable
 - runtime locator behavior is explicit and inspectable, including resolved mode, manifest, and bundle root, plus launcher or executable information where applicable
 - every supported language surface includes a minimal authoring-flow example that exposes structured diagnostics or status reading
 - naming, directory boundaries, and version hooks are compatible with future package publishing even though publishing itself is out of scope for this phase
