@@ -1,11 +1,14 @@
 use std::collections::BTreeMap;
 use std::fs;
+use std::fs::File;
+use std::io::Read;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
     AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
 };
+use prost::Message;
 use writer_core::{
     build,
     build_context_ref, policy_ref, to_canonical_json, BuildContext, BuildDiagnosticItem,
@@ -238,6 +241,103 @@ fn build_materializes_media_payloads_into_staging_tree() {
 
     assert_eq!(result.result_status, "success");
     assert_eq!(fs::read(root.join("staging/media/sample.jpg")).unwrap(), b"hello");
+}
+
+#[test]
+fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
+    let root = unique_artifact_root("image-occlusion");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/image-occlusion");
+
+    let result = build(
+        &sample_image_occlusion_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert_eq!(
+        result.apkg_ref.as_deref(),
+        Some("artifacts/phase3/image-occlusion/package.apkg")
+    );
+    assert!(result
+        .package_fingerprint
+        .as_deref()
+        .unwrap()
+        .starts_with("package:"));
+
+    let apkg_path = root.join("package.apkg");
+    assert!(apkg_path.exists(), "expected caller-owned apkg artifact");
+
+    let mut archive = open_zip(&apkg_path);
+    let names = archive_names(&mut archive);
+    for expected in [
+        "meta",
+        "collection.anki21b",
+        "collection.anki2",
+        "media",
+        "0",
+    ] {
+        assert!(
+            names.contains(expected),
+            "missing expected apkg entry {expected}: {names:?}"
+        );
+    }
+
+    assert_eq!(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "0").as_slice()).unwrap(),
+        b"hello"
+    );
+
+    let meta = decode_package_metadata(read_zip_entry_bytes(&mut archive, "meta"));
+    assert!(meta.version > 0);
+
+    let latest_collection = zstd::stream::decode_all(
+        read_zip_entry_bytes(&mut archive, "collection.anki21b").as_slice(),
+    )
+    .expect("decode latest collection");
+    assert!(
+        latest_collection.starts_with(b"SQLite format 3"),
+        "latest collection should be a SQLite database"
+    );
+    assert!(
+        read_zip_entry_bytes(&mut archive, "collection.anki2").starts_with(b"SQLite format 3"),
+        "legacy dummy collection should be a SQLite database"
+    );
+
+    let media_entries = decode_media_entries(zstd::stream::decode_all(
+        read_zip_entry_bytes(&mut archive, "media").as_slice(),
+    )
+    .unwrap());
+    assert_eq!(media_entries.entries.len(), 1);
+    assert_eq!(media_entries.entries[0].name, "occlusion.png");
+    assert_eq!(media_entries.entries[0].size, 5);
+}
+
+#[test]
+fn build_apkg_package_fingerprint_is_stable_across_roots() {
+    let left_root = unique_artifact_root("image-occlusion-left");
+    let right_root = unique_artifact_root("image-occlusion-right");
+    let target_prefix = "artifacts/phase3/image-occlusion";
+
+    let left = build(
+        &sample_image_occlusion_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &BuildArtifactTarget::new(left_root, target_prefix),
+    )
+    .unwrap();
+    let right = build(
+        &sample_image_occlusion_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &BuildArtifactTarget::new(right_root, target_prefix),
+    )
+    .unwrap();
+
+    assert_eq!(left.apkg_ref, right.apkg_ref);
+    assert_eq!(left.package_fingerprint, right.package_fingerprint);
 }
 
 #[test]
@@ -564,6 +664,41 @@ fn sample_basic_normalized_ir_with_encoded_media_ref() -> NormalizedIr {
     normalized
 }
 
+fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
+    NormalizedIr {
+        kind: "normalized-ir".into(),
+        schema_version: "0.1.0".into(),
+        document_id: "demo-doc".into(),
+        resolved_identity: "document:demo-doc".into(),
+        notetypes: vec![resolved_stock_notetype(
+            "io-main",
+            "image_occlusion",
+            "Image Occlusion",
+        )],
+        notes: vec![NormalizedNote {
+            id: "note-io-1".into(),
+            notetype_id: "io-main".into(),
+            deck_name: "Default".into(),
+            fields: BTreeMap::from([
+                ("Occlusion".into(), "{{c1::Mask 1}}".into()),
+                (
+                    "Image".into(),
+                    r#"<img src="occlusion.png">"#.into(),
+                ),
+                ("Header".into(), "Header".into()),
+                ("Back Extra".into(), "Extra".into()),
+                ("Comments".into(), "Comments".into()),
+            ]),
+            tags: vec!["demo".into()],
+        }],
+        media: vec![NormalizedMedia {
+            filename: "occlusion.png".into(),
+            mime: "image/png".into(),
+            data_base64: "aGVsbG8=".into(),
+        }],
+    }
+}
+
 fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotetype {
     let mut notetype = resolve_stock_notetype(&AuthoringNotetype {
         id: id.into(),
@@ -587,4 +722,52 @@ fn unique_artifact_root(case: &str) -> PathBuf {
     let _ = fs::remove_dir_all(&root);
     fs::create_dir_all(&root).unwrap();
     root
+}
+
+fn open_zip(path: &PathBuf) -> zip::ZipArchive<File> {
+    let file = File::open(path).unwrap();
+    zip::ZipArchive::new(file).unwrap()
+}
+
+fn archive_names(archive: &mut zip::ZipArchive<File>) -> std::collections::BTreeSet<String> {
+    (0..archive.len())
+        .map(|index| archive.by_index(index).unwrap().name().to_string())
+        .collect()
+}
+
+fn read_zip_entry_bytes(archive: &mut zip::ZipArchive<File>, name: &str) -> Vec<u8> {
+    let mut file = archive.by_name(name).unwrap();
+    let mut buf = vec![];
+    file.read_to_end(&mut buf).unwrap();
+    buf
+}
+
+fn decode_package_metadata(bytes: Vec<u8>) -> TestPackageMetadata {
+    TestPackageMetadata::decode(bytes.as_slice()).unwrap()
+}
+
+fn decode_media_entries(bytes: Vec<u8>) -> TestMediaEntries {
+    TestMediaEntries::decode(bytes.as_slice()).unwrap()
+}
+
+#[derive(Clone, PartialEq, Message)]
+struct TestPackageMetadata {
+    #[prost(int32, tag = "1")]
+    version: i32,
+}
+
+#[derive(Clone, PartialEq, Message)]
+struct TestMediaEntries {
+    #[prost(message, repeated, tag = "1")]
+    entries: Vec<TestMediaEntry>,
+}
+
+#[derive(Clone, PartialEq, Message)]
+struct TestMediaEntry {
+    #[prost(string, tag = "1")]
+    name: String,
+    #[prost(uint32, tag = "2")]
+    size: u32,
+    #[prost(bytes, tag = "3")]
+    sha1: Vec<u8>,
 }

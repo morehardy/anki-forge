@@ -1,3 +1,4 @@
+pub mod apkg;
 pub mod build;
 pub mod canonical_json;
 pub mod model;
