@@ -119,6 +119,25 @@ fn compat_oracle_rejects_image_occlusion_template_drift() {
     );
 }
 
+#[test]
+fn compat_oracle_accepts_numeric_html_entity_media_references() {
+    let (_artifact_root, apkg_path, mut inspect_report) = build_phase3_fixture_apkg(
+        "fixtures/phase3/inputs/image-occlusion-normalized-ir.json",
+        "html-entity-media",
+    );
+
+    let note_entry = inspect_report
+        .observations
+        .references
+        .iter_mut()
+        .find(|entry| entry.get("selector").and_then(Value::as_str) == Some("note[id='note-io-1']"))
+        .expect("image occlusion inspect report should include note entry");
+    note_entry["fields"]["Image"] = Value::String("<img src=\"occlusion&#46;png\">".to_string());
+
+    validate_supported_package(&apkg_path, &inspect_report)
+        .expect("numeric html entities should resolve to the bundled media filename");
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);

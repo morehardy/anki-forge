@@ -10,8 +10,8 @@ use authoring_core::{
     AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
 };
 use writer_core::{
-    build, inspect_apkg, inspect_build_result, inspect_staging, BuildArtifactTarget, BuildContext,
-    WriterPolicy,
+    build, extract_media_references, inspect_apkg, inspect_build_result, inspect_staging,
+    BuildArtifactTarget, BuildContext, WriterPolicy,
 };
 
 #[test]
@@ -167,6 +167,15 @@ fn inspect_apkg_marks_missing_media_map_as_degraded() {
         .iter()
         .any(|domain| domain == "media"));
     assert!(!report.degradation_reasons.is_empty());
+}
+
+#[test]
+fn extract_media_references_decodes_html_entities_across_reference_forms() {
+    let refs = extract_media_references(
+        r#"<img src="sample&#46;jpg"> [sound:voice&#46;mp3] <object data="extra&#46;svg"></object>"#,
+    );
+
+    assert_eq!(refs, vec!["voice.mp3", "sample.jpg", "extra.svg"]);
 }
 
 fn sample_writer_policy() -> WriterPolicy {

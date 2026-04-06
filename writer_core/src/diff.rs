@@ -67,14 +67,12 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         }
     }
 
-    if comparison_status == "complete" {
-        if !uncompared_domains.is_empty() {
-            comparison_status = if has_unavailable(left, right) {
-                "unavailable".into()
-            } else {
-                "partial".into()
-            };
-        }
+    if comparison_status == "complete" && !uncompared_domains.is_empty() {
+        comparison_status = if has_unavailable(left, right) {
+            "unavailable".into()
+        } else {
+            "partial".into()
+        };
     }
 
     let summary = if changes.is_empty() {

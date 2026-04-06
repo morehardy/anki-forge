@@ -8,6 +8,7 @@ rust-version.workspace = true
 anyhow = "1"
 clap = { version = "=4.5.20", features = ["derive"] }
 flate2 = "=1.0.35"
+html-escape = "0.2"
 jsonschema = { version = "0.18.3", default-features = false }
 authoring_core = { path = "../authoring_core" }
 writer_core = { path = "../writer_core" }

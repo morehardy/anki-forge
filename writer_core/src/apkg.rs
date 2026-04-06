@@ -16,6 +16,22 @@ use crate::staging::{
     load_normalized_ir_from_staging_manifest, BuildArtifactTarget, MaterializedStaging,
 };
 
+// The local docs/source/rslib tree is an ignored reference mirror that CI does
+// not receive, so writer_core snapshots the exact SQL anchors it needs under
+// writer_core/assets/rslib/.
+const SCHEMA11_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/schema11.sql"
+));
+const SCHEMA15_UPGRADE_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/upgrades/schema15_upgrade.sql"
+));
+const SCHEMA18_UPGRADE_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/upgrades/schema18_upgrade.sql"
+));
+
 pub struct ApkgMaterialization {
     pub apkg_ref: String,
     pub apkg_path: PathBuf,
@@ -183,18 +199,9 @@ fn create_latest_collection_bytes(
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
         .with_context(|| format!("open collection database {}", path.display()))?;
-    execute_source_schema(
-        &conn,
-        include_str!("../../../../docs/source/rslib/src/storage/schema11.sql"),
-    )?;
-    execute_source_schema(
-        &conn,
-        include_str!("../../../../docs/source/rslib/src/storage/upgrades/schema15_upgrade.sql"),
-    )?;
-    execute_source_schema(
-        &conn,
-        include_str!("../../../../docs/source/rslib/src/storage/upgrades/schema18_upgrade.sql"),
-    )?;
+    execute_source_schema(&conn, SCHEMA11_SQL)?;
+    execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL)?;
+    execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
     populate_latest_collection(&conn, normalized_ir)?;
     conn.execute_batch("VACUUM;")?;
     drop(conn);
@@ -208,10 +215,7 @@ fn create_legacy_collection_bytes(root_dir: &Path) -> Result<Vec<u8>> {
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
         .with_context(|| format!("open legacy collection database {}", path.display()))?;
-    execute_source_schema(
-        &conn,
-        include_str!("../../../../docs/source/rslib/src/storage/schema11.sql"),
-    )?;
+    execute_source_schema(&conn, SCHEMA11_SQL)?;
     populate_legacy_collection(&conn)?;
     conn.execute_batch("VACUUM;")?;
     drop(conn);

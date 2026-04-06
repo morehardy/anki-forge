@@ -246,6 +246,45 @@ fn build_materializes_basic_staging_into_caller_owned_root() {
 }
 
 #[test]
+fn tracked_rslib_storage_sql_snapshots_exist() {
+    for relative in [
+        "assets/rslib/storage/schema11.sql",
+        "assets/rslib/storage/upgrades/schema15_upgrade.sql",
+        "assets/rslib/storage/upgrades/schema18_upgrade.sql",
+    ] {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(relative);
+        assert!(
+            path.exists(),
+            "expected tracked rslib storage snapshot at {}",
+            path.display()
+        );
+    }
+}
+
+#[test]
+fn build_accepts_numeric_html_entity_media_references() {
+    let root = unique_artifact_root("html-entity-media");
+    let target = BuildArtifactTarget {
+        root_dir: root,
+        stable_ref_prefix: "artifacts/phase3/html-entity-media".into(),
+    };
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), "<img src=\"sample&#46;jpg\">".into());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .expect("build should accept numeric html entity media references");
+
+    assert_eq!(result.result_status, "success");
+}
+
+#[test]
 fn build_materializes_cloze_staging_into_caller_owned_root() {
     let root = unique_artifact_root("cloze");
     let target = BuildArtifactTarget {
