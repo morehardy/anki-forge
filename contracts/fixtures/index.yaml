@@ -55,3 +55,39 @@ cases:
     upgrade_rules:
       - fixture_updates_required
     input: fixtures/phase2/risk/partial-high.case.yaml
+  - id: phase3-writer-basic-minimal
+    category: phase3-writer
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/writer/basic-minimal.case.yaml
+  - id: phase3-writer-cloze-minimal
+    category: phase3-writer
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/writer/cloze-minimal.case.yaml
+  - id: phase3-writer-image-occlusion-minimal
+    category: phase3-writer
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/writer/image-occlusion-minimal.case.yaml
+  - id: phase3-e2e-basic-minimal
+    category: phase3-e2e
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/e2e/basic-minimal.case.yaml
+  - id: phase3-e2e-cloze-minimal
+    category: phase3-e2e
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/e2e/cloze-minimal.case.yaml
+  - id: phase3-e2e-image-occlusion-minimal
+    category: phase3-e2e
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/phase3/e2e/image-occlusion-minimal.case.yaml

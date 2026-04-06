@@ -1,0 +1,97 @@
+{
+  "artifact_fingerprint": "artifact:929959d3ba88be903b51e11fe3d3f54b63f7e9bd",
+  "degradation_reasons": [],
+  "kind": "inspect-report",
+  "missing_domains": [],
+  "observation_model_version": "phase3-inspect-v1",
+  "observation_status": "complete",
+  "observations": {
+    "fields": [
+      {
+        "evidence_refs": [
+          "field:basic-main:Front"
+        ],
+        "name": "Front",
+        "notetype_id": "basic-main",
+        "selector": "notetype[id='basic-main']::field[Front]"
+      },
+      {
+        "evidence_refs": [
+          "field:basic-main:Back"
+        ],
+        "name": "Back",
+        "notetype_id": "basic-main",
+        "selector": "notetype[id='basic-main']::field[Back]"
+      }
+    ],
+    "media": [],
+    "metadata": [
+      {
+        "card_count": 1,
+        "evidence_refs": [
+          "counts"
+        ],
+        "field_count": 2,
+        "media_count": 0,
+        "note_count": 1,
+        "notetype_count": 1,
+        "selector": "counts",
+        "template_count": 1
+      }
+    ],
+    "notetypes": [
+      {
+        "css": "",
+        "evidence_refs": [
+          "notetype:basic-main"
+        ],
+        "field_count": 2,
+        "id": "basic-main",
+        "kind": "basic",
+        "name": "Basic",
+        "selector": "notetype[id='basic-main']",
+        "template_count": 1
+      }
+    ],
+    "references": [
+      {
+        "evidence_refs": [
+          "note:note-1"
+        ],
+        "fields": {
+          "Back": "back",
+          "Front": "front"
+        },
+        "id": "note-1",
+        "notetype_id": "basic-main",
+        "selector": "note[id='note-1']",
+        "tags": [
+          "demo"
+        ]
+      },
+      {
+        "evidence_refs": [
+          "card:note-1:0"
+        ],
+        "note_id": "note-1",
+        "ord": 0,
+        "selector": "card[note_id='note-1'][ord=0]",
+        "template_name": "Card 1"
+      }
+    ],
+    "templates": [
+      {
+        "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
+        "evidence_refs": [
+          "template:basic-main:Card 1"
+        ],
+        "name": "Card 1",
+        "notetype_id": "basic-main",
+        "question_format": "{{Front}}",
+        "selector": "notetype[id='basic-main']::template[Card 1]"
+      }
+    ]
+  },
+  "source_kind": "staging",
+  "source_ref": "artifacts/staging/manifest.json"
+}

@@ -1,0 +1,8 @@
+kind: phase3-writer-case
+normalized_input: fixtures/phase3/inputs/basic-normalized-ir.json
+writer_policy_selector: default
+build_context_selector: default
+artifacts_dir: artifacts/phase3-writer-basic-minimal
+expected_build: fixtures/phase3/expected/basic.build.json
+expected_inspect: fixtures/phase3/expected/basic.inspect.json
+expected_diff: fixtures/phase3/expected/basic.diff.json

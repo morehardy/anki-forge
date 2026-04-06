@@ -1,0 +1,97 @@
+{
+  "artifact_fingerprint": "artifact:e6b075905f0026320083f73d8760dc66b4b35f24",
+  "degradation_reasons": [],
+  "kind": "inspect-report",
+  "missing_domains": [],
+  "observation_model_version": "phase3-inspect-v1",
+  "observation_status": "complete",
+  "observations": {
+    "fields": [
+      {
+        "evidence_refs": [
+          "field:cloze-main:Text"
+        ],
+        "name": "Text",
+        "notetype_id": "cloze-main",
+        "selector": "notetype[id='cloze-main']::field[Text]"
+      },
+      {
+        "evidence_refs": [
+          "field:cloze-main:Back Extra"
+        ],
+        "name": "Back Extra",
+        "notetype_id": "cloze-main",
+        "selector": "notetype[id='cloze-main']::field[Back Extra]"
+      }
+    ],
+    "media": [],
+    "metadata": [
+      {
+        "card_count": 1,
+        "evidence_refs": [
+          "counts"
+        ],
+        "field_count": 2,
+        "media_count": 0,
+        "note_count": 1,
+        "notetype_count": 1,
+        "selector": "counts",
+        "template_count": 1
+      }
+    ],
+    "notetypes": [
+      {
+        "css": ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n",
+        "evidence_refs": [
+          "notetype:cloze-main"
+        ],
+        "field_count": 2,
+        "id": "cloze-main",
+        "kind": "cloze",
+        "name": "Cloze",
+        "selector": "notetype[id='cloze-main']",
+        "template_count": 1
+      }
+    ],
+    "references": [
+      {
+        "evidence_refs": [
+          "note:note-1"
+        ],
+        "fields": {
+          "Back Extra": "extra",
+          "Text": "A {{c1::cloze}} example"
+        },
+        "id": "note-1",
+        "notetype_id": "cloze-main",
+        "selector": "note[id='note-1']",
+        "tags": [
+          "demo"
+        ]
+      },
+      {
+        "evidence_refs": [
+          "card:note-1:0"
+        ],
+        "note_id": "note-1",
+        "ord": 0,
+        "selector": "card[note_id='note-1'][ord=0]",
+        "template_name": "Cloze"
+      }
+    ],
+    "templates": [
+      {
+        "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}",
+        "evidence_refs": [
+          "template:cloze-main:Cloze"
+        ],
+        "name": "Cloze",
+        "notetype_id": "cloze-main",
+        "question_format": "{{cloze:Text}}",
+        "selector": "notetype[id='cloze-main']::template[Cloze]"
+      }
+    ]
+  },
+  "source_kind": "staging",
+  "source_ref": "artifacts/staging/manifest.json"
+}

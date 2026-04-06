@@ -1,0 +1,8 @@
+kind: phase3-e2e-case
+authoring_input: fixtures/phase3/inputs/basic-authoring-ir.json
+writer_policy_selector: default
+build_context_selector: default
+artifacts_dir: artifacts/phase3-e2e-basic-minimal
+expected_build: fixtures/phase3/expected/basic.build.json
+expected_inspect: fixtures/phase3/expected/basic.inspect.json
+expected_diff: fixtures/phase3/expected/basic.diff.json
