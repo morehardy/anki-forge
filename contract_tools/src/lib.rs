@@ -1,7 +1,10 @@
 use std::path::PathBuf;
 
+pub mod build_cmd;
+pub mod diff_cmd;
 pub mod fixtures;
 pub mod gates;
+pub mod inspect_cmd;
 pub mod manifest;
 pub mod normalize_cmd;
 pub mod package;

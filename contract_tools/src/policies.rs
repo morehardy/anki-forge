@@ -44,6 +44,38 @@ pub fn run_policy_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     Ok(())
 }
 
+pub fn load_writer_policy_asset(
+    manifest: &crate::manifest::LoadedManifest,
+    selector: &str,
+) -> anyhow::Result<writer_core::WriterPolicy> {
+    ensure!(
+        selector == "default",
+        "only default writer_policy selector is supported initially"
+    );
+    let policy_path = resolve_asset_path(manifest, "writer_policy")?;
+    let raw = fs::read_to_string(&policy_path)
+        .with_context(|| format!("failed to read writer policy: {}", policy_path.display()))?;
+    let policy = serde_yaml::from_str(&raw)
+        .with_context(|| format!("failed to decode writer policy: {}", policy_path.display()))?;
+    Ok(policy)
+}
+
+pub fn load_build_context_asset(
+    manifest: &crate::manifest::LoadedManifest,
+    selector: &str,
+) -> anyhow::Result<writer_core::BuildContext> {
+    ensure!(
+        selector == "default",
+        "only default build_context selector is supported initially"
+    );
+    let context_path = resolve_asset_path(manifest, "build_context_default")?;
+    let raw = fs::read_to_string(&context_path)
+        .with_context(|| format!("failed to read build context: {}", context_path.display()))?;
+    let context = serde_yaml::from_str(&raw)
+        .with_context(|| format!("failed to decode build context: {}", context_path.display()))?;
+    Ok(context)
+}
+
 fn validate_yaml_asset(
     manifest: &crate::manifest::LoadedManifest,
     schema_key: &str,
