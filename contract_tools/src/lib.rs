@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 pub mod build_cmd;
+pub mod compat_oracle;
 pub mod diff_cmd;
 pub mod fixtures;
 pub mod gates;
