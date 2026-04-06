@@ -181,7 +181,63 @@
           "type": "string",
           "minLength": 1
         },
+        "normalization_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
         "canonical_serialization_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "package_build_result_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inspect_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diff_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writer_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_policy_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_context_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writer_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_context_default": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inspect_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diff_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "golden_regression_semantics": {
           "type": "string",
           "minLength": 1
         }

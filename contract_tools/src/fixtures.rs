@@ -3,7 +3,13 @@ use jsonschema::JSONSchema;
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
 use serde_json::Value;
-use std::{collections::HashSet, fs, path::Path};
+use std::{
+    collections::HashSet,
+    fs,
+    path::{Component, Path, PathBuf},
+};
+
+use authoring_core::{AuthoringMedia, AuthoringNote, AuthoringNotetype};
 
 use crate::{
     manifest::{load_manifest, resolve_asset_path, resolve_contract_relative_path},
@@ -71,6 +77,12 @@ struct Phase2AuthoringInput {
     kind: String,
     schema_version: String,
     metadata: Phase2AuthoringMetadata,
+    #[serde(default)]
+    notetypes: Vec<AuthoringNotetype>,
+    #[serde(default)]
+    notes: Vec<AuthoringNote>,
+    #[serde(default)]
+    media: Vec<AuthoringMedia>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -131,6 +143,41 @@ struct Phase2RiskCase {
     expected_comparison_reasons: Vec<String>,
 }
 
+struct Phase3FixtureResources {
+    normalized_ir_schema: JSONSchema,
+    package_build_result_schema: JSONSchema,
+    inspect_report_schema: JSONSchema,
+    diff_report_schema: JSONSchema,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase3WriterCase {
+    kind: String,
+    normalized_input: String,
+    writer_policy_selector: String,
+    build_context_selector: String,
+    artifacts_dir: String,
+    expected_build: String,
+    expected_inspect: String,
+    #[serde(default)]
+    expected_diff: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Phase3E2ECase {
+    kind: String,
+    authoring_input: String,
+    writer_policy_selector: String,
+    build_context_selector: String,
+    artifacts_dir: String,
+    expected_build: String,
+    expected_inspect: String,
+    #[serde(default)]
+    expected_diff: Option<String>,
+}
+
 pub fn load_fixture_catalog(path: impl AsRef<Path>) -> anyhow::Result<FixtureCatalog> {
     let path = path.as_ref();
     let raw = fs::read_to_string(path)
@@ -163,6 +210,29 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
     let authoring_ir_schema = load_schema(&authoring_ir_schema_path)?;
     let service_envelope_schema = load_schema(&service_envelope_schema_path)?;
     let validation_report_schema = load_schema(&validation_report_schema_path)?;
+    let has_phase3_cases = catalog
+        .cases
+        .iter()
+        .any(|case| matches!(case.category.as_str(), "phase3-writer" | "phase3-e2e"));
+    let phase3_resources = if has_phase3_cases {
+        Some(Phase3FixtureResources {
+            normalized_ir_schema: load_schema(&resolve_asset_path(
+                &manifest,
+                "normalized_ir_schema",
+            )?)?,
+            package_build_result_schema: load_schema(&resolve_asset_path(
+                &manifest,
+                "package_build_result_schema",
+            )?)?,
+            inspect_report_schema: load_schema(&resolve_asset_path(
+                &manifest,
+                "inspect_report_schema",
+            )?)?,
+            diff_report_schema: load_schema(&resolve_asset_path(&manifest, "diff_report_schema")?)?,
+        })
+    } else {
+        None
+    };
 
     ensure!(
         !catalog.cases.is_empty(),
@@ -268,6 +338,24 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                 run_phase2_risk_case(
                     &manifest,
                     &authoring_ir_schema,
+                    &input_path,
+                    case.id.as_str(),
+                )?;
+            }
+            "phase3-writer" => {
+                let phase3_resources = phase3_resources
+                    .as_ref()
+                    .context("phase3 fixture resources must be loaded")?;
+                run_phase3_writer_case(&manifest, phase3_resources, &input_path, case.id.as_str())?;
+            }
+            "phase3-e2e" => {
+                let phase3_resources = phase3_resources
+                    .as_ref()
+                    .context("phase3 fixture resources must be loaded")?;
+                run_phase3_e2e_case(
+                    &manifest,
+                    &authoring_ir_schema,
+                    phase3_resources,
                     &input_path,
                     case.id.as_str(),
                 )?;
@@ -450,6 +538,25 @@ fn load_json_value(path: impl AsRef<Path>) -> anyhow::Result<Value> {
         .with_context(|| format!("JSON asset must be valid JSON: {}", path.display()))
 }
 
+fn load_validated_json_model<T>(
+    manifest: &crate::manifest::LoadedManifest,
+    schema: &JSONSchema,
+    relative_path: &str,
+    case_id: &str,
+    label: &str,
+) -> anyhow::Result<T>
+where
+    T: DeserializeOwned,
+{
+    let path = resolve_contract_relative_path(&manifest.contracts_root, relative_path)
+        .with_context(|| format!("{label} must resolve safely for case {case_id}"))?;
+    let value = load_json_value(&path)?;
+    validate_value(schema, &value)
+        .with_context(|| format!("{label} must satisfy its schema: {case_id}"))?;
+    serde_json::from_value(value)
+        .with_context(|| format!("{label} must map into the execution model: {case_id}"))
+}
+
 fn run_phase2_normalization_case(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
@@ -592,13 +699,203 @@ fn run_phase2_risk_case(
     Ok(())
 }
 
+fn run_phase3_writer_case(
+    manifest: &crate::manifest::LoadedManifest,
+    resources: &Phase3FixtureResources,
+    case_path: &Path,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let case: Phase3WriterCase = load_yaml_model(case_path)?;
+    ensure!(
+        case.kind == "phase3-writer-case",
+        "phase3 writer fixture must declare kind=phase3-writer-case: {}",
+        case_id
+    );
+
+    let normalized_ir = load_validated_json_model(
+        manifest,
+        &resources.normalized_ir_schema,
+        &case.normalized_input,
+        case_id,
+        "phase3 normalized input",
+    )?;
+
+    execute_phase3_case(
+        manifest,
+        resources,
+        &normalized_ir,
+        &case.writer_policy_selector,
+        &case.build_context_selector,
+        &case.artifacts_dir,
+        &case.expected_build,
+        &case.expected_inspect,
+        case.expected_diff.as_deref(),
+        case_id,
+    )
+}
+
+fn run_phase3_e2e_case(
+    manifest: &crate::manifest::LoadedManifest,
+    authoring_ir_schema: &JSONSchema,
+    resources: &Phase3FixtureResources,
+    case_path: &Path,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let case: Phase3E2ECase = load_yaml_model(case_path)?;
+    ensure!(
+        case.kind == "phase3-e2e-case",
+        "phase3 e2e fixture must declare kind=phase3-e2e-case: {}",
+        case_id
+    );
+
+    let input = load_authoring_input(manifest, authoring_ir_schema, &case.authoring_input)?;
+    let normalization = authoring_core::normalize(authoring_core::NormalizationRequest::new(input));
+    ensure!(
+        normalization.result_status == "success",
+        "phase3 e2e normalization must succeed: {}",
+        case_id
+    );
+    let normalized_ir = normalization.normalized_ir.as_ref().with_context(|| {
+        format!(
+            "phase3 e2e normalization must emit normalized_ir for case {}",
+            case_id
+        )
+    })?;
+
+    execute_phase3_case(
+        manifest,
+        resources,
+        normalized_ir,
+        &case.writer_policy_selector,
+        &case.build_context_selector,
+        &case.artifacts_dir,
+        &case.expected_build,
+        &case.expected_inspect,
+        case.expected_diff.as_deref(),
+        case_id,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn execute_phase3_case(
+    manifest: &crate::manifest::LoadedManifest,
+    resources: &Phase3FixtureResources,
+    normalized_ir: &authoring_core::NormalizedIr,
+    writer_policy_selector: &str,
+    build_context_selector: &str,
+    artifacts_dir: &str,
+    expected_build: &str,
+    expected_inspect: &str,
+    expected_diff: Option<&str>,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let writer_policy =
+        crate::policies::load_writer_policy_asset(manifest, writer_policy_selector)?;
+    let build_context =
+        crate::policies::load_build_context_asset(manifest, build_context_selector)?;
+    let artifact_root = resolve_contract_relative_dir(&manifest.contracts_root, artifacts_dir)
+        .with_context(|| format!("phase3 artifacts_dir must resolve safely for case {case_id}"))?;
+    let artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, "artifacts");
+
+    let build_result = writer_core::build(
+        normalized_ir,
+        &writer_policy,
+        &build_context,
+        &artifact_target,
+    )?;
+    let staging_ref = build_result.staging_ref.as_deref().with_context(|| {
+        format!(
+            "phase3 fixture build must reference a staging artifact before golden checks: {}",
+            case_id
+        )
+    })?;
+    let apkg_ref = build_result.apkg_ref.as_deref().with_context(|| {
+        format!(
+            "phase3 fixture build must reference an apkg artifact before golden checks: {}",
+            case_id
+        )
+    })?;
+    let staging_path = resolve_phase3_artifact_path(&artifact_target, staging_ref)
+        .with_context(|| format!("phase3 staging artifact reference is invalid: {}", case_id))?;
+    let apkg_path = resolve_phase3_artifact_path(&artifact_target, apkg_ref)
+        .with_context(|| format!("phase3 apkg artifact reference is invalid: {}", case_id))?;
+    ensure!(
+        staging_path.exists(),
+        "phase3 staging artifact must exist before golden checks: {}",
+        case_id
+    );
+    ensure!(
+        apkg_path.exists(),
+        "phase3 apkg artifact must exist before golden checks: {}",
+        case_id
+    );
+
+    let expected_build_result: writer_core::PackageBuildResult = load_validated_json_model(
+        manifest,
+        &resources.package_build_result_schema,
+        expected_build,
+        case_id,
+        "phase3 expected build artifact",
+    )?;
+    compare_expected_json(
+        &build_result,
+        &expected_build_result,
+        case_id,
+        "phase3 build output mismatch",
+    )?;
+
+    let expected_inspect_report: writer_core::InspectReport = load_validated_json_model(
+        manifest,
+        &resources.inspect_report_schema,
+        expected_inspect,
+        case_id,
+        "phase3 expected inspect artifact",
+    )?;
+    let mut staging_report = writer_core::inspect_staging(&staging_path)?;
+    staging_report.source_ref = staging_ref.to_string();
+    compare_expected_json(
+        &staging_report,
+        &expected_inspect_report,
+        case_id,
+        "phase3 inspect output mismatch",
+    )?;
+
+    let mut apkg_report = writer_core::inspect_apkg(&apkg_path)?;
+    apkg_report.source_ref = apkg_ref.to_string();
+    let diff_report = writer_core::diff_reports(&staging_report, &apkg_report)?;
+    if let Some(expected_diff) = expected_diff {
+        let expected_diff_report: writer_core::DiffReport = load_validated_json_model(
+            manifest,
+            &resources.diff_report_schema,
+            expected_diff,
+            case_id,
+            "phase3 expected diff artifact",
+        )?;
+        compare_expected_json(
+            &diff_report,
+            &expected_diff_report,
+            case_id,
+            "phase3 diff output mismatch",
+        )?;
+    }
+
+    ensure!(
+        diff_report.comparison_status == "complete"
+            && diff_report.uncompared_domains.is_empty()
+            && diff_report.changes.is_empty(),
+        "phase3 staging/apkg semantic consistency mismatch: {}",
+        case_id
+    );
+
+    Ok(())
+}
+
 fn build_phase2_request(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
     params: &Phase2RequestParams,
 ) -> anyhow::Result<authoring_core::NormalizationRequest> {
-    let input =
-        load_phase2_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
+    let input = load_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
     let mut request = authoring_core::NormalizationRequest::new(input);
     if let Some(context) = params.comparison_context.clone() {
         request.comparison_context = Some(
@@ -614,7 +911,7 @@ fn build_phase2_request(
     Ok(request)
 }
 
-fn load_phase2_authoring_input(
+fn load_authoring_input(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
     authoring_input: &str,
@@ -623,13 +920,13 @@ fn load_phase2_authoring_input(
     let input_value = load_json_value(&input_path)?;
     validate_value(authoring_ir_schema, &input_value).with_context(|| {
         format!(
-            "phase2 authoring input must satisfy authoring_ir_schema: {}",
+            "authoring input must satisfy authoring_ir_schema: {}",
             input_path.display()
         )
     })?;
     let input: Phase2AuthoringInput = serde_json::from_value(input_value).with_context(|| {
         format!(
-            "phase2 authoring input must map into the execution model: {}",
+            "authoring input must map into the execution model: {}",
             input_path.display()
         )
     })?;
@@ -638,6 +935,72 @@ fn load_phase2_authoring_input(
         kind: input.kind,
         schema_version: input.schema_version,
         metadata_document_id: input.metadata.document_id,
+        notetypes: input.notetypes,
+        notes: input.notes,
+        media: input.media,
+    })
+}
+
+fn resolve_contract_relative_dir(
+    contracts_root: impl AsRef<Path>,
+    relative: impl AsRef<Path>,
+) -> anyhow::Result<PathBuf> {
+    let contracts_root = contracts_root.as_ref().canonicalize().with_context(|| {
+        format!(
+            "failed to resolve contracts root: {}",
+            contracts_root.as_ref().display()
+        )
+    })?;
+    let relative = relative.as_ref();
+    ensure!(
+        !relative.as_os_str().is_empty(),
+        "asset path must not be empty"
+    );
+    ensure!(
+        !relative.is_absolute(),
+        "asset path must be relative: {}",
+        relative.display()
+    );
+
+    let mut path = contracts_root.clone();
+    for component in relative.components() {
+        match component {
+            Component::Normal(value) => path.push(value),
+            Component::CurDir => {}
+            Component::ParentDir => {
+                ensure!(
+                    false,
+                    "asset path must stay within contracts/: {}",
+                    relative.display()
+                );
+            }
+            Component::RootDir | Component::Prefix(_) => {
+                ensure!(false, "asset path must be relative: {}", relative.display());
+            }
+        }
+    }
+
+    Ok(path)
+}
+
+fn resolve_phase3_artifact_path(
+    artifact_target: &writer_core::BuildArtifactTarget,
+    artifact_ref: &str,
+) -> anyhow::Result<PathBuf> {
+    let stable_prefix = artifact_target.stable_ref_prefix.trim_end_matches('/');
+    ensure!(
+        artifact_ref == stable_prefix || artifact_ref.starts_with(&format!("{stable_prefix}/")),
+        "artifact ref must stay within the declared artifacts_dir: {}",
+        artifact_ref
+    );
+    let relative = artifact_ref
+        .strip_prefix(stable_prefix)
+        .unwrap_or("")
+        .trim_start_matches('/');
+    Ok(if relative.is_empty() {
+        artifact_target.root_dir.clone()
+    } else {
+        artifact_target.root_dir.join(relative)
     })
 }
 
@@ -660,6 +1023,23 @@ fn compare_canonical_json(
     let expected_value = load_json_value(&expected_path)?;
     let expected_text = authoring_core::to_canonical_json(&expected_value)?;
 
+    ensure!(
+        actual_text == expected_text,
+        "{}: {}",
+        mismatch_message,
+        case_id
+    );
+    Ok(())
+}
+
+fn compare_expected_json(
+    actual: &impl serde::Serialize,
+    expected: &impl serde::Serialize,
+    case_id: &str,
+    mismatch_message: &str,
+) -> anyhow::Result<()> {
+    let actual_text = authoring_core::to_canonical_json(actual)?;
+    let expected_text = authoring_core::to_canonical_json(expected)?;
     ensure!(
         actual_text == expected_text,
         "{}: {}",

@@ -24,6 +24,51 @@ fn authoring_ir_schema_accepts_the_minimal_valid_shape() {
 }
 
 #[test]
+fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "authoring_ir_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "authoring-ir",
+        "schema_version": "0.1.0",
+        "metadata": { "document_id": "demo-doc" },
+        "notetypes": [
+            {
+                "id": "basic-main",
+                "kind": "basic",
+                "name": "Basic"
+            }
+        ],
+        "notes": [
+            {
+                "id": "note-1",
+                "notetype_id": "basic-main",
+                "deck_name": "Default",
+                "fields": {
+                    "Front": "front",
+                    "Back": "back <img src=\"sample.jpg\"> [sound:sample.mp3]"
+                },
+                "tags": ["demo"]
+            }
+        ],
+        "media": [
+            {
+                "filename": "sample.jpg",
+                "mime": "image/jpeg",
+                "data_base64": "MQ=="
+            },
+            {
+                "filename": "sample.mp3",
+                "mime": "audio/mpeg",
+                "data_base64": "Mg=="
+            }
+        ]
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
 fn validation_report_schema_requires_a_diagnostics_array() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
@@ -51,7 +96,34 @@ fn manifest_registers_phase2_schema_assets() {
         "comparison_context_schema",
         "merge_risk_report_schema",
         "normalization_result_schema",
+        "normalization_semantics",
         "merge_risk_semantics",
+    ] {
+        assert!(
+            resolve_asset_path(&manifest, asset_key).is_ok(),
+            "manifest is missing asset key {asset_key}"
+        );
+    }
+}
+
+#[test]
+fn manifest_registers_phase3_schema_policy_and_semantics_assets() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+
+    for asset_key in [
+        "package_build_result_schema",
+        "inspect_report_schema",
+        "diff_report_schema",
+        "writer_policy_schema",
+        "verification_policy_schema",
+        "build_context_schema",
+        "writer_policy",
+        "verification_policy",
+        "build_context_default",
+        "build_semantics",
+        "inspect_semantics",
+        "diff_semantics",
+        "golden_regression_semantics",
     ] {
         assert!(
             resolve_asset_path(&manifest, asset_key).is_ok(),
@@ -79,12 +151,7 @@ fn normalization_result_schema_allows_null_comparison_context_without_merge_risk
             "status": "valid",
             "items": []
         },
-        "normalized_ir": {
-            "kind": "normalized-ir",
-            "schema_version": "0.1.0",
-            "document_id": "demo-doc",
-            "resolved_identity": "det:demo-doc"
-        }
+        "normalized_ir": writer_ready_normalized_ir_value()
     });
 
     assert!(validate_value(&schema, &value).is_ok());
@@ -108,12 +175,7 @@ fn normalization_result_schema_allows_omitting_comparison_context_and_merge_risk
             "status": "valid",
             "items": []
         },
-        "normalized_ir": {
-            "kind": "normalized-ir",
-            "schema_version": "0.1.0",
-            "document_id": "demo-doc",
-            "resolved_identity": "det:demo-doc"
-        }
+        "normalized_ir": writer_ready_normalized_ir_value()
     });
 
     assert!(validate_value(&schema, &value).is_ok());
@@ -206,6 +268,7 @@ fn normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_c
             "status": "valid",
             "items": []
         },
+        "normalized_ir": writer_ready_normalized_ir_value(),
         "merge_risk_report": {
             "kind": "merge-risk-report",
             "comparison_status": "complete",
@@ -215,6 +278,61 @@ fn normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_c
             "current_artifact_fingerprint": "current-1",
             "comparison_reasons": []
         }
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
+fn normalized_ir_schema_accepts_resolved_writer_ready_shape() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalized_ir_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "normalized-ir",
+        "schema_version": "0.1.0",
+        "document_id": "demo-doc",
+        "resolved_identity": "det:demo-doc",
+        "notetypes": [
+            {
+                "id": "basic-main",
+                "kind": "basic",
+                "name": "Basic",
+                "fields": ["Front", "Back"],
+                "templates": [
+                    {
+                        "name": "Card 1",
+                        "question_format": "{{Front}}",
+                        "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
+                    }
+                ],
+                "css": ""
+            }
+        ],
+        "notes": [
+            {
+                "id": "note-1",
+                "notetype_id": "basic-main",
+                "deck_name": "Default",
+                "fields": {
+                    "Front": "front",
+                    "Back": "back <img src=\"sample.jpg\"> [sound:sample.mp3]"
+                },
+                "tags": ["demo"]
+            }
+        ],
+        "media": [
+            {
+                "filename": "sample.jpg",
+                "mime": "image/jpeg",
+                "data_base64": "MQ=="
+            },
+            {
+                "filename": "sample.mp3",
+                "mime": "audio/mpeg",
+                "data_base64": "Mg=="
+            }
+        ]
     });
 
     assert!(validate_value(&schema, &value).is_ok());
@@ -248,4 +366,53 @@ fn normalized_schema_value(path: &std::path::Path) -> Value {
         map.remove("$schema");
     }
     value
+}
+
+fn writer_ready_normalized_ir_value() -> Value {
+    json!({
+        "kind": "normalized-ir",
+        "schema_version": "0.1.0",
+        "document_id": "demo-doc",
+        "resolved_identity": "det:demo-doc",
+        "notetypes": [
+            {
+                "id": "basic-main",
+                "kind": "basic",
+                "name": "Basic",
+                "fields": ["Front", "Back"],
+                "templates": [
+                    {
+                        "name": "Card 1",
+                        "question_format": "{{Front}}",
+                        "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
+                    }
+                ],
+                "css": ""
+            }
+        ],
+        "notes": [
+            {
+                "id": "note-1",
+                "notetype_id": "basic-main",
+                "deck_name": "Default",
+                "fields": {
+                    "Front": "front",
+                    "Back": "back <img src=\"sample.jpg\"> [sound:sample.mp3]"
+                },
+                "tags": ["demo"]
+            }
+        ],
+        "media": [
+            {
+                "filename": "sample.jpg",
+                "mime": "image/jpeg",
+                "data_base64": "MQ=="
+            },
+            {
+                "filename": "sample.mp3",
+                "mime": "audio/mpeg",
+                "data_base64": "Mg=="
+            }
+        ]
+    })
 }

@@ -1,10 +1,42 @@
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuthoringDocument {
     pub kind: String,
     pub schema_version: String,
     pub metadata_document_id: String,
+    #[serde(default)]
+    pub notetypes: Vec<AuthoringNotetype>,
+    #[serde(default)]
+    pub notes: Vec<AuthoringNote>,
+    #[serde(default)]
+    pub media: Vec<AuthoringMedia>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuthoringNotetype {
+    pub id: String,
+    pub kind: String,
+    #[serde(default)]
+    pub name: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuthoringNote {
+    pub id: String,
+    pub notetype_id: String,
+    pub deck_name: String,
+    pub fields: BTreeMap<String, String>,
+    #[serde(default)]
+    pub tags: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuthoringMedia {
+    pub filename: String,
+    pub mime: String,
+    pub data_base64: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -59,6 +91,42 @@ pub struct NormalizedIr {
     pub schema_version: String,
     pub document_id: String,
     pub resolved_identity: String,
+    pub notetypes: Vec<NormalizedNotetype>,
+    pub notes: Vec<NormalizedNote>,
+    pub media: Vec<NormalizedMedia>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NormalizedNotetype {
+    pub id: String,
+    pub kind: String,
+    pub name: String,
+    pub fields: Vec<String>,
+    pub templates: Vec<NormalizedTemplate>,
+    pub css: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NormalizedTemplate {
+    pub name: String,
+    pub question_format: String,
+    pub answer_format: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NormalizedNote {
+    pub id: String,
+    pub notetype_id: String,
+    pub deck_name: String,
+    pub fields: BTreeMap<String, String>,
+    pub tags: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NormalizedMedia {
+    pub filename: String,
+    pub mime: String,
+    pub data_base64: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

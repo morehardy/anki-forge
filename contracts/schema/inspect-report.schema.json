@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "observation_model_version",
+    "source_kind",
+    "source_ref",
+    "artifact_fingerprint",
+    "observation_status",
+    "missing_domains",
+    "degradation_reasons",
+    "observations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "inspect-report"
+    },
+    "observation_model_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_kind": {
+      "enum": ["staging", "apkg"]
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observation_status": {
+      "enum": ["complete", "degraded", "unavailable"]
+    },
+    "missing_domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "degradation_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "observations": {
+      "type": "object",
+      "required": ["notetypes", "templates", "fields", "media", "metadata", "references"],
+      "additionalProperties": false,
+      "properties": {
+        "notetypes": {
+          "type": "array"
+        },
+        "templates": {
+          "type": "array"
+        },
+        "fields": {
+          "type": "array"
+        },
+        "media": {
+          "type": "array"
+        },
+        "metadata": {
+          "type": "array"
+        },
+        "references": {
+          "type": "array"
+        }
+      }
+    }
+  }
+}

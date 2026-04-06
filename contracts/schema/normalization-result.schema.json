@@ -79,6 +79,23 @@
   "allOf": [
     {
       "if": {
+        "properties": {
+          "result_status": {
+            "const": "success"
+          }
+        }
+      },
+      "then": {
+        "required": ["normalized_ir"],
+        "properties": {
+          "normalized_ir": {
+            "$ref": "normalized-ir.schema.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
         "required": ["comparison_context"],
         "properties": {
           "comparison_context": {

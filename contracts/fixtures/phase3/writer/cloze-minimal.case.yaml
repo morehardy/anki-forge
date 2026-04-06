@@ -1,0 +1,7 @@
+kind: phase3-writer-case
+normalized_input: fixtures/phase3/inputs/cloze-normalized-ir.json
+writer_policy_selector: default
+build_context_selector: default
+artifacts_dir: artifacts/phase3-writer-cloze-minimal
+expected_build: fixtures/phase3/expected/cloze.build.json
+expected_inspect: fixtures/phase3/expected/cloze.inspect.json

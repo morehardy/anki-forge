@@ -13,3 +13,8 @@ fn repository_exposes_a_contract_bundle_entrypoint() {
 fn workspace_exposes_authoring_core_contract_version() {
     assert_eq!(authoring_core::tool_contract_version(), "phase2-v1");
 }
+
+#[test]
+fn workspace_exposes_writer_core_contract_version() {
+    assert_eq!(writer_core::tool_contract_version(), "phase3-v1");
+}

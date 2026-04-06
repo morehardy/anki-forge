@@ -12,12 +12,19 @@ fn request_from_json(value: Value) -> NormalizationRequest {
     serde_json::from_value(value).expect("deserialize normalization request")
 }
 
+fn string_map(value: Value) -> std::collections::BTreeMap<String, String> {
+    serde_json::from_value(value).expect("deserialize string map")
+}
+
 #[test]
 fn missing_document_id_returns_invalid_result_with_diagnostics() {
     let input = AuthoringDocument {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "   ".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -42,6 +49,9 @@ fn success_returns_normalized_ir_and_contract_envelope_keys() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-123".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -75,6 +85,9 @@ fn success_without_comparison_context_serializes_null_comparison_and_merge_repor
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-456".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));
@@ -90,6 +103,9 @@ fn success_with_comparison_context_preserves_risk_policy_ref() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-789".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
     let mut request = NormalizationRequest::new(input);
     request.comparison_context = Some(ComparisonContext {
@@ -132,7 +148,10 @@ fn random_override_emits_warning_success_and_random_identity_prefix() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-random"
+            "metadata_document_id": "doc-random",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "random",
         "reason_code": "manual_randomization"
@@ -160,7 +179,10 @@ fn missing_reason_code_for_override_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-external"
+            "metadata_document_id": "doc-external",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "external"
     }));
@@ -181,7 +203,10 @@ fn random_override_missing_reason_code_is_invalid_with_reason_code_diagnostic() 
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-random-missing-reason"
+            "metadata_document_id": "doc-random-missing-reason",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "random"
     }));
@@ -202,7 +227,10 @@ fn external_override_missing_external_id_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-external"
+            "metadata_document_id": "doc-external",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "identity_override_mode": "external",
         "reason_code": "preserve_external_identity"
@@ -224,7 +252,10 @@ fn unmatched_target_selector_is_invalid() {
         "input": {
             "kind": "authoring-document",
             "schema_version": "1.0",
-            "metadata_document_id": "doc-selector"
+            "metadata_document_id": "doc-selector",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "target_selector": "note[id='missing']"
     }));
@@ -237,4 +268,330 @@ fn unmatched_target_selector_is_invalid() {
         .items
         .iter()
         .any(|item| item.code == "PHASE2.SELECTOR_UNMATCHED"));
+}
+
+#[test]
+fn basic_authoring_input_expands_to_resolved_basic_notetype() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "basic-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back"
+                    },
+                    "tags": ["demo"]
+                }
+            ],
+            "media": []
+        },
+    }));
+
+    let result = normalize(request);
+    let normalized = result.normalized_ir.expect("normalized_ir");
+
+    assert_eq!(normalized.notetypes.len(), 1);
+    assert_eq!(normalized.notes.len(), 1);
+    assert!(normalized.media.is_empty());
+
+    let notetype = &normalized.notetypes[0];
+    assert_eq!(notetype.id, "basic-main");
+    assert_eq!(notetype.kind, "basic");
+    assert_eq!(notetype.name, "Basic");
+    assert_eq!(notetype.fields, vec!["Front", "Back"]);
+    assert_eq!(notetype.templates.len(), 1);
+    assert_eq!(notetype.templates[0].name, "Card 1");
+    assert_eq!(notetype.templates[0].question_format, "{{Front}}");
+    assert_eq!(
+        notetype.templates[0].answer_format,
+        "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
+    );
+    assert_eq!(notetype.css, "");
+
+    let note = &normalized.notes[0];
+    assert_eq!(note.id, "note-1");
+    assert_eq!(note.notetype_id, "basic-main");
+    assert_eq!(note.deck_name, "Default");
+    assert_eq!(
+        note.fields,
+        string_map(json!({
+            "Front": "front",
+            "Back": "back"
+        }))
+    );
+    assert_eq!(note.tags, vec!["demo"]);
+}
+
+#[test]
+fn cloze_authoring_input_expands_to_source_grounded_cloze_template() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "cloze-main",
+                    "kind": "cloze",
+                    "name": "Cloze"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "cloze-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Text": "A {{c1::cloze}} example",
+                        "Back Extra": "extra"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
+        },
+    }));
+
+    let result = normalize(request);
+    let normalized = result.normalized_ir.expect("normalized_ir");
+
+    assert_eq!(normalized.notetypes.len(), 1);
+    let notetype = &normalized.notetypes[0];
+    assert_eq!(notetype.id, "cloze-main");
+    assert_eq!(notetype.kind, "cloze");
+    assert_eq!(notetype.name, "Cloze");
+    assert_eq!(notetype.fields, vec!["Text", "Back Extra"]);
+    assert_eq!(notetype.templates.len(), 1);
+    assert_eq!(notetype.templates[0].name, "Cloze");
+    assert_eq!(notetype.templates[0].question_format, "{{cloze:Text}}");
+    assert_eq!(
+        notetype.templates[0].answer_format,
+        "{{cloze:Text}}<br>\n{{Back Extra}}"
+    );
+    assert_eq!(
+        notetype.css,
+        ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n"
+    );
+}
+
+#[test]
+fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "io-main",
+                    "kind": "image_occlusion",
+                    "name": "Image Occlusion"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "io-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Occlusion": "mask",
+                        "Image": "<img src=\"mask.png\">",
+                        "Header": "header",
+                        "Back Extra": "extra",
+                        "Comments": "comment"
+                    },
+                    "tags": ["demo"]
+                }
+            ],
+            "media": [
+                {
+                    "filename": "mask.png",
+                    "mime": "image/png",
+                    "data_base64": "MQ=="
+                }
+            ]
+        },
+    }));
+
+    let result = normalize(request);
+    let normalized = result.normalized_ir.expect("normalized_ir");
+
+    assert_eq!(normalized.notetypes.len(), 1);
+    assert_eq!(normalized.notes.len(), 1);
+    assert_eq!(normalized.media.len(), 1);
+
+    let notetype = &normalized.notetypes[0];
+    assert_eq!(notetype.id, "io-main");
+    assert_eq!(notetype.kind, "image_occlusion");
+    assert_eq!(notetype.name, "Image Occlusion");
+    assert_eq!(
+        notetype.fields,
+        vec!["Occlusion", "Image", "Header", "Back Extra", "Comments"]
+    );
+    assert_eq!(notetype.templates.len(), 1);
+    assert_eq!(notetype.templates[0].name, "Image Occlusion");
+    assert!(notetype.templates[0]
+        .question_format
+        .contains("{{cloze:Occlusion}}"));
+    assert!(notetype.templates[0]
+        .question_format
+        .contains("anki.imageOcclusion.setup();"));
+    assert!(notetype.templates[0]
+        .question_format
+        .contains("id=\"image-occlusion-container\""));
+    assert!(notetype.templates[0]
+        .answer_format
+        .contains("{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}"));
+    assert_eq!(
+        notetype.css,
+        "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n"
+    );
+
+    let note = &normalized.notes[0];
+    assert_eq!(note.id, "note-1");
+    assert_eq!(note.notetype_id, "io-main");
+    assert_eq!(note.tags, vec!["demo"]);
+    assert_eq!(
+        note.fields,
+        string_map(json!({
+            "Occlusion": "mask",
+            "Image": "<img src=\"mask.png\">",
+            "Header": "header",
+            "Back Extra": "extra",
+            "Comments": "comment"
+        }))
+    );
+
+    let media = &normalized.media[0];
+    assert_eq!(media.filename, "mask.png");
+    assert_eq!(media.mime, "image/png");
+    assert_eq!(media.data_base64, "MQ==");
+}
+
+#[test]
+fn unknown_notetype_id_returns_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "missing-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.UNKNOWN_NOTETYPE_ID"));
+}
+
+#[test]
+fn unexpected_extra_field_on_stock_note_returns_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "basic-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                }
+            ],
+            "notes": [
+                {
+                    "id": "note-1",
+                    "notetype_id": "basic-main",
+                    "deck_name": "Default",
+                    "fields": {
+                        "Front": "front",
+                        "Back": "back",
+                        "Hint": "unexpected"
+                    },
+                    "tags": []
+                }
+            ],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.NOTE_FIELD_MISMATCH"));
+}
+
+#[test]
+fn duplicate_notetype_ids_return_invalid_result() {
+    let request = request_from_json(json!({
+        "input": {
+            "kind": "authoring-ir",
+            "schema_version": "0.1.0",
+            "metadata_document_id": "demo-doc",
+            "notetypes": [
+                {
+                    "id": "dup-main",
+                    "kind": "basic",
+                    "name": "Basic"
+                },
+                {
+                    "id": "dup-main",
+                    "kind": "cloze",
+                    "name": "Cloze"
+                }
+            ],
+            "notes": [],
+            "media": []
+        }
+    }));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "PHASE3.DUPLICATE_NOTETYPE_ID"));
 }

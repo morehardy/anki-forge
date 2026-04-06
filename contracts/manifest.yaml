@@ -33,4 +33,18 @@ assets:
   target_selector_grammar: semantics/target-selector-grammar.md
   identity_semantics: semantics/identity.md
   merge_risk_semantics: semantics/merge-risk.md
+  normalization_semantics: semantics/normalization.md
   canonical_serialization_semantics: semantics/canonical-serialization.md
+  package_build_result_schema: schema/package-build-result.schema.json
+  inspect_report_schema: schema/inspect-report.schema.json
+  diff_report_schema: schema/diff-report.schema.json
+  writer_policy_schema: schema/writer-policy.schema.json
+  verification_policy_schema: schema/verification-policy.schema.json
+  build_context_schema: schema/build-context.schema.json
+  writer_policy: policies/writer-policy.default.yaml
+  verification_policy: policies/verification-policy.default.yaml
+  build_context_default: contexts/build-context.default.yaml
+  build_semantics: semantics/build.md
+  inspect_semantics: semantics/inspect.md
+  diff_semantics: semantics/diff.md
+  golden_regression_semantics: semantics/golden-regression.md

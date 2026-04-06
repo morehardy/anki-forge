@@ -1,16 +1,61 @@
 use contract_tools::{
-    contract_manifest_path, fixtures::run_fixture_gates, manifest::load_manifest,
+    contract_manifest_path,
+    fixtures::{load_fixture_catalog, run_fixture_gates},
+    manifest::{load_manifest, resolve_asset_path},
 };
 use serde_json::json;
 use std::{
     fs,
-    path::PathBuf,
+    path::{Path, PathBuf},
     sync::atomic::{AtomicU64, Ordering},
 };
 
 #[test]
 fn fixture_gates_accept_the_bundled_catalog_and_fixtures() {
-    run_fixture_gates(contract_manifest_path()).expect("bundled fixture gate should pass");
+    run_fixture_gates(copied_bundled_manifest_path("bundled-fixture-gates"))
+        .expect("bundled fixture gate should pass");
+}
+
+#[test]
+fn bundled_catalog_declares_phase3_writer_cases() {
+    let manifest = load_manifest(contract_manifest_path()).expect("load bundled manifest");
+    let catalog_path = resolve_asset_path(&manifest, "fixture_catalog").expect("fixture catalog");
+    let catalog = load_fixture_catalog(&catalog_path).expect("load bundled fixture catalog");
+
+    for case_id in [
+        "phase3-writer-basic-minimal",
+        "phase3-writer-cloze-minimal",
+        "phase3-writer-image-occlusion-minimal",
+    ] {
+        assert!(
+            catalog
+                .cases
+                .iter()
+                .any(|case| case.id == case_id && case.category == "phase3-writer"),
+            "expected bundled catalog to declare phase3 writer case {case_id}"
+        );
+    }
+}
+
+#[test]
+fn bundled_catalog_declares_phase3_e2e_cases() {
+    let manifest = load_manifest(contract_manifest_path()).expect("load bundled manifest");
+    let catalog_path = resolve_asset_path(&manifest, "fixture_catalog").expect("fixture catalog");
+    let catalog = load_fixture_catalog(&catalog_path).expect("load bundled fixture catalog");
+
+    for case_id in [
+        "phase3-e2e-basic-minimal",
+        "phase3-e2e-cloze-minimal",
+        "phase3-e2e-image-occlusion-minimal",
+    ] {
+        assert!(
+            catalog
+                .cases
+                .iter()
+                .any(|case| case.id == case_id && case.category == "phase3-e2e"),
+            "expected bundled catalog to declare phase3 e2e case {case_id}"
+        );
+    }
 }
 
 #[test]
@@ -89,6 +134,37 @@ fn fixture_gates_reject_phase2_expected_output_mismatch() {
         .contains("phase2 normalization output mismatch"));
 }
 
+#[test]
+fn fixture_gates_execute_phase3_writer_and_e2e_cases() {
+    let manifest_path = copied_bundled_manifest_path("phase3-fixture-gates");
+
+    run_fixture_gates(&manifest_path).expect("phase3 executable fixtures should pass");
+}
+
+#[test]
+fn fixture_gates_reject_phase3_inspect_golden_mismatch() {
+    let manifest_path = copied_bundled_manifest_path("phase3-fixture-mismatch");
+    let bundle_root = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    let expected_path = bundle_root.join("fixtures/phase3/expected/basic.inspect.json");
+    let mut expected: serde_json::Value = serde_json::from_str(
+        &fs::read_to_string(&expected_path).expect("read phase3 inspect golden"),
+    )
+    .expect("decode phase3 inspect golden");
+    expected["observations"]["metadata"][0]["card_count"] = serde_json::json!(999);
+
+    fs::write(
+        &expected_path,
+        serde_json::to_string_pretty(&expected).expect("encode corrupted inspect golden"),
+    )
+    .expect("overwrite phase3 inspect golden");
+
+    let err = run_fixture_gates(&manifest_path).expect_err("phase3 mismatches should fail");
+    assert!(err.to_string().contains("phase3 inspect output mismatch"));
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);
@@ -98,6 +174,37 @@ fn temp_contract_root(label: &str) -> PathBuf {
         std::process::id(),
         unique
     ))
+}
+
+fn copy_tree(src: &Path, dst: &Path) {
+    fs::create_dir_all(dst).expect("create destination tree");
+    for entry in fs::read_dir(src).expect("read source tree") {
+        let entry = entry.expect("read source entry");
+        let src_path = entry.path();
+        let dst_path = dst.join(entry.file_name());
+        if src_path.is_dir() {
+            copy_tree(&src_path, &dst_path);
+        } else {
+            fs::copy(&src_path, &dst_path).expect("copy source file");
+        }
+    }
+}
+
+fn copied_bundled_manifest_path(label: &str) -> PathBuf {
+    let root = temp_contract_root(label);
+    copy_tree(
+        contract_manifest_path()
+            .parent()
+            .expect("contracts root for bundled manifest"),
+        &root,
+    );
+
+    let artifacts_root = root.join("artifacts");
+    if artifacts_root.exists() {
+        fs::remove_dir_all(&artifacts_root).expect("remove generated artifact tree");
+    }
+
+    root.join("manifest.yaml")
 }
 
 fn write_bundle(
@@ -812,7 +919,10 @@ fn phase2_minimal_success_result_json() -> String {
             "kind": "normalized-ir",
             "schema_version": "0.1.0",
             "document_id": "demo-doc",
-            "resolved_identity": "det:demo-doc"
+            "resolved_identity": "det:demo-doc",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "merge_risk_report": null
     });
@@ -839,7 +949,10 @@ fn phase2_minimal_success_result_mismatch_json() -> String {
             "kind": "normalized-ir",
             "schema_version": "0.1.0",
             "document_id": "demo-doc",
-            "resolved_identity": "det:not-the-same"
+            "resolved_identity": "det:not-the-same",
+            "notetypes": [],
+            "notes": [],
+            "media": []
         },
         "merge_risk_report": null
     });

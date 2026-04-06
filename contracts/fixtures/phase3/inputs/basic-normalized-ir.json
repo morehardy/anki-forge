@@ -1,0 +1,40 @@
+{
+  "document_id": "demo-doc",
+  "kind": "normalized-ir",
+  "media": [],
+  "notes": [
+    {
+      "deck_name": "Default",
+      "fields": {
+        "Back": "back",
+        "Front": "front"
+      },
+      "id": "note-1",
+      "notetype_id": "basic-main",
+      "tags": [
+        "demo"
+      ]
+    }
+  ],
+  "notetypes": [
+    {
+      "css": "",
+      "fields": [
+        "Front",
+        "Back"
+      ],
+      "id": "basic-main",
+      "kind": "basic",
+      "name": "Basic",
+      "templates": [
+        {
+          "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
+          "name": "Card 1",
+          "question_format": "{{Front}}"
+        }
+      ]
+    }
+  ],
+  "resolved_identity": "det:demo-doc",
+  "schema_version": "0.1.0"
+}

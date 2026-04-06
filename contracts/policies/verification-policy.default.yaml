@@ -1,0 +1,14 @@
+id: verification-policy.default
+version: 1.0.0
+writer_fast_gate:
+  minimum_comparison_status: complete
+  allowed_observation_statuses: [complete]
+  blocking_severities: [high]
+system_gate:
+  minimum_comparison_status: partial
+  allowed_observation_statuses: [complete, degraded]
+  blocking_severities: [high]
+compat_gate:
+  minimum_comparison_status: complete
+  allowed_observation_statuses: [complete]
+  blocking_severities: [medium, high]

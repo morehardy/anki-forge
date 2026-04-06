@@ -32,6 +32,36 @@ enum Command {
         #[arg(long, default_value = "contract-json")]
         output: String,
     },
+    Build {
+        #[arg(long)]
+        manifest: String,
+        #[arg(long)]
+        input: String,
+        #[arg(long, default_value = "default")]
+        writer_policy: String,
+        #[arg(long, default_value = "default")]
+        build_context: String,
+        #[arg(long)]
+        artifacts_dir: String,
+        #[arg(long, default_value = "contract-json")]
+        output: String,
+    },
+    Inspect {
+        #[arg(long)]
+        staging: Option<String>,
+        #[arg(long)]
+        apkg: Option<String>,
+        #[arg(long, default_value = "contract-json")]
+        output: String,
+    },
+    Diff {
+        #[arg(long)]
+        left: String,
+        #[arg(long)]
+        right: String,
+        #[arg(long, default_value = "contract-json")]
+        output: String,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
@@ -58,6 +88,43 @@ fn main() -> anyhow::Result<()> {
                 "{}",
                 contract_tools::normalize_cmd::run(&manifest, &input, &output)?
             );
+        }
+        Command::Build {
+            manifest,
+            input,
+            writer_policy,
+            build_context,
+            artifacts_dir,
+            output,
+        } => {
+            print!(
+                "{}",
+                contract_tools::build_cmd::run(
+                    &manifest,
+                    &input,
+                    &writer_policy,
+                    &build_context,
+                    &artifacts_dir,
+                    &output,
+                )?
+            );
+        }
+        Command::Inspect {
+            staging,
+            apkg,
+            output,
+        } => {
+            print!(
+                "{}",
+                contract_tools::inspect_cmd::run(staging.as_deref(), apkg.as_deref(), &output)?
+            );
+        }
+        Command::Diff {
+            left,
+            right,
+            output,
+        } => {
+            print!("{}", contract_tools::diff_cmd::run(&left, &right, &output)?);
         }
     }
 

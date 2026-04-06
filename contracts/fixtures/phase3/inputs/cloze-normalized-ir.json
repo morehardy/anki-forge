@@ -1,0 +1,40 @@
+{
+  "document_id": "demo-doc",
+  "kind": "normalized-ir",
+  "media": [],
+  "notes": [
+    {
+      "deck_name": "Default",
+      "fields": {
+        "Back Extra": "extra",
+        "Text": "A {{c1::cloze}} example"
+      },
+      "id": "note-1",
+      "notetype_id": "cloze-main",
+      "tags": [
+        "demo"
+      ]
+    }
+  ],
+  "notetypes": [
+    {
+      "css": ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n",
+      "fields": [
+        "Text",
+        "Back Extra"
+      ],
+      "id": "cloze-main",
+      "kind": "cloze",
+      "name": "Cloze",
+      "templates": [
+        {
+          "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}",
+          "name": "Cloze",
+          "question_format": "{{cloze:Text}}"
+        }
+      ]
+    }
+  ],
+  "resolved_identity": "det:demo-doc",
+  "schema_version": "0.1.0"
+}

@@ -3,6 +3,8 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::fs;
 
+use authoring_core::{AuthoringDocument, AuthoringMedia, AuthoringNote, AuthoringNotetype};
+
 use crate::{
     manifest::{load_manifest, resolve_asset_path},
     schema::{load_schema, validate_value},
@@ -13,6 +15,12 @@ struct InputDocument {
     kind: String,
     schema_version: String,
     metadata: InputMetadata,
+    #[serde(default)]
+    notetypes: Vec<AuthoringNotetype>,
+    #[serde(default)]
+    notes: Vec<AuthoringNote>,
+    #[serde(default)]
+    media: Vec<AuthoringMedia>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,10 +46,13 @@ pub fn run(manifest: &str, input: &str, output: &str) -> anyhow::Result<String> 
     let input_document: InputDocument = serde_json::from_value(input_value)
         .context("input must map into normalize execution model")?;
 
-    let document = authoring_core::AuthoringDocument {
+    let document = AuthoringDocument {
         kind: input_document.kind,
         schema_version: input_document.schema_version,
         metadata_document_id: input_document.metadata.document_id,
+        notetypes: input_document.notetypes,
+        notes: input_document.notes,
+        media: input_document.media,
     };
     let result = authoring_core::normalize(authoring_core::NormalizationRequest::new(document));
 

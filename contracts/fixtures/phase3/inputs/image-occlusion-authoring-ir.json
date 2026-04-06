@@ -1,0 +1,38 @@
+{
+  "kind": "authoring-ir",
+  "schema_version": "0.1.0",
+  "metadata": {
+    "document_id": "demo-doc"
+  },
+  "notetypes": [
+    {
+      "id": "io-main",
+      "kind": "image_occlusion",
+      "name": "Image Occlusion"
+    }
+  ],
+  "notes": [
+    {
+      "id": "note-io-1",
+      "notetype_id": "io-main",
+      "deck_name": "Default",
+      "fields": {
+        "Occlusion": "{{c1::Mask 1}}",
+        "Image": "<img src=\"occlusion.png\">",
+        "Header": "Header",
+        "Back Extra": "Extra",
+        "Comments": "Comments"
+      },
+      "tags": [
+        "demo"
+      ]
+    }
+  ],
+  "media": [
+    {
+      "filename": "occlusion.png",
+      "mime": "image/png",
+      "data_base64": "aGVsbG8="
+    }
+  ]
+}

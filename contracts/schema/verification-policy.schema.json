@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "version", "writer_fast_gate", "system_gate", "compat_gate"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "writer_fast_gate": {
+      "$ref": "#/$defs/gate_rule"
+    },
+    "system_gate": {
+      "$ref": "#/$defs/gate_rule"
+    },
+    "compat_gate": {
+      "$ref": "#/$defs/gate_rule"
+    }
+  },
+  "$defs": {
+    "gate_rule": {
+      "type": "object",
+      "required": [
+        "minimum_comparison_status",
+        "allowed_observation_statuses",
+        "blocking_severities"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minimum_comparison_status": {
+          "enum": ["complete", "partial", "unavailable"]
+        },
+        "allowed_observation_statuses": {
+          "type": "array",
+          "items": {
+            "enum": ["complete", "degraded", "unavailable"]
+          }
+        },
+        "blocking_severities": {
+          "type": "array",
+          "items": {
+            "enum": ["low", "medium", "high"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,9 @@ fn request_with_comparison_context(
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-risk".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
     let mut request = NormalizationRequest::new(input);
     request.comparison_context = Some(ComparisonContext {
@@ -27,6 +30,9 @@ fn no_comparison_context_yields_no_merge_risk_report() {
         kind: "authoring-document".into(),
         schema_version: "1.0".into(),
         metadata_document_id: "doc-risk-none".into(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
     };
 
     let result = normalize(NormalizationRequest::new(input));

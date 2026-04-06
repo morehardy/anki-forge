@@ -39,6 +39,11 @@ pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()
         "validation_semantics",
         "path_semantics",
         "compatibility_semantics",
+        "normalization_semantics",
+        "build_semantics",
+        "inspect_semantics",
+        "diff_semantics",
+        "golden_regression_semantics",
     ] {
         let doc_path = resolve_asset_path(&manifest, key)?;
         let doc = load_semantics_doc(&doc_path)

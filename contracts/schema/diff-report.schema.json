@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "kind",
+    "comparison_status",
+    "left_fingerprint",
+    "right_fingerprint",
+    "left_observation_model_version",
+    "right_observation_model_version",
+    "summary",
+    "uncompared_domains",
+    "comparison_limitations",
+    "changes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "diff-report"
+    },
+    "comparison_status": {
+      "enum": ["complete", "partial", "unavailable"]
+    },
+    "left_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "right_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "left_observation_model_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "right_observation_model_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uncompared_domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "comparison_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "category",
+          "domain",
+          "severity",
+          "selector",
+          "message",
+          "compatibility_hint"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "domain": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": ["low", "medium", "high"]
+          },
+          "selector": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "compatibility_hint": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

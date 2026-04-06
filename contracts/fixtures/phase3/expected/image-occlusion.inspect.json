@@ -1,0 +1,143 @@
+{
+  "artifact_fingerprint": "artifact:e82677feac158906debc3b743fd3afe94b4f51c6",
+  "degradation_reasons": [],
+  "kind": "inspect-report",
+  "missing_domains": [],
+  "observation_model_version": "phase3-inspect-v1",
+  "observation_status": "complete",
+  "observations": {
+    "fields": [
+      {
+        "evidence_refs": [
+          "field:io-main:Occlusion"
+        ],
+        "name": "Occlusion",
+        "notetype_id": "io-main",
+        "selector": "notetype[id='io-main']::field[Occlusion]"
+      },
+      {
+        "evidence_refs": [
+          "field:io-main:Image"
+        ],
+        "name": "Image",
+        "notetype_id": "io-main",
+        "selector": "notetype[id='io-main']::field[Image]"
+      },
+      {
+        "evidence_refs": [
+          "field:io-main:Header"
+        ],
+        "name": "Header",
+        "notetype_id": "io-main",
+        "selector": "notetype[id='io-main']::field[Header]"
+      },
+      {
+        "evidence_refs": [
+          "field:io-main:Back Extra"
+        ],
+        "name": "Back Extra",
+        "notetype_id": "io-main",
+        "selector": "notetype[id='io-main']::field[Back Extra]"
+      },
+      {
+        "evidence_refs": [
+          "field:io-main:Comments"
+        ],
+        "name": "Comments",
+        "notetype_id": "io-main",
+        "selector": "notetype[id='io-main']::field[Comments]"
+      }
+    ],
+    "media": [
+      {
+        "evidence_refs": [
+          "media:occlusion.png"
+        ],
+        "filename": "occlusion.png",
+        "selector": "media[filename='occlusion.png']",
+        "sha1": "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+        "size": 5
+      }
+    ],
+    "metadata": [
+      {
+        "card_count": 1,
+        "evidence_refs": [
+          "counts"
+        ],
+        "field_count": 5,
+        "media_count": 1,
+        "note_count": 1,
+        "notetype_count": 1,
+        "selector": "counts",
+        "template_count": 1
+      }
+    ],
+    "notetypes": [
+      {
+        "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+        "evidence_refs": [
+          "notetype:io-main"
+        ],
+        "field_count": 5,
+        "id": "io-main",
+        "kind": "image_occlusion",
+        "name": "Image Occlusion",
+        "selector": "notetype[id='io-main']",
+        "template_count": 1
+      }
+    ],
+    "references": [
+      {
+        "evidence_refs": [
+          "note:note-io-1"
+        ],
+        "fields": {
+          "Back Extra": "Extra",
+          "Comments": "Comments",
+          "Header": "Header",
+          "Image": "<img src=\"occlusion.png\">",
+          "Occlusion": "{{c1::Mask 1}}"
+        },
+        "id": "note-io-1",
+        "notetype_id": "io-main",
+        "selector": "note[id='note-io-1']",
+        "tags": [
+          "demo"
+        ]
+      },
+      {
+        "evidence_refs": [
+          "card:note-io-1:0"
+        ],
+        "note_id": "note-io-1",
+        "ord": 0,
+        "selector": "card[note_id='note-io-1'][ord=0]",
+        "template_name": "Image Occlusion"
+      },
+      {
+        "evidence_refs": [
+          "media-ref:note-io-1:Image:occlusion.png"
+        ],
+        "field": "Image",
+        "note_id": "note-io-1",
+        "reference": "occlusion.png",
+        "selector": "media-ref[note_id='note-io-1'][field='Image'][ref='occlusion.png']"
+      }
+    ],
+    "templates": [
+      {
+        "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",
+        "evidence_refs": [
+          "template:io-main:Image Occlusion"
+        ],
+        "name": "Image Occlusion",
+        "notetype_id": "io-main",
+        "question_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n",
+        "selector": "notetype[id='io-main']::template[Image Occlusion]"
+      }
+    ]
+  },
+  "source_kind": "staging",
+  "source_ref": "artifacts/staging/manifest.json"
+}
