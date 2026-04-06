@@ -37,9 +37,9 @@ enum Command {
         manifest: String,
         #[arg(long)]
         input: String,
-        #[arg(long)]
+        #[arg(long, default_value = "default")]
         writer_policy: String,
-        #[arg(long)]
+        #[arg(long, default_value = "default")]
         build_context: String,
         #[arg(long)]
         artifacts_dir: String,

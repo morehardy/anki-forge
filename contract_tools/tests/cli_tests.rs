@@ -124,6 +124,35 @@ fn build_basic_package(temp_dir: &std::path::Path) -> (Value, std::path::PathBuf
     (build_result, artifacts_dir.join("staging/manifest.json"), artifacts_dir.join("package.apkg"))
 }
 
+fn build_basic_package_with_default_selectors(
+    temp_dir: &std::path::Path,
+) -> (Value, std::path::PathBuf, std::path::PathBuf) {
+    let manifest = contract_tools::contract_manifest_path();
+    let input = write_basic_normalized_ir(temp_dir);
+    let artifacts_dir = temp_dir.join("artifacts-defaults");
+    let output = run_cli(&[
+        "build",
+        "--manifest",
+        manifest.to_str().unwrap(),
+        "--input",
+        input.to_str().unwrap(),
+        "--artifacts-dir",
+        artifacts_dir.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let build_result: Value = serde_json::from_slice(&output.stdout).expect("build JSON");
+    (build_result, artifacts_dir.join("staging/manifest.json"), artifacts_dir.join("package.apkg"))
+}
+
 #[test]
 fn verify_command_succeeds_for_the_repo_contract_bundle() {
     let output = run_cli(&[
@@ -285,6 +314,24 @@ fn build_command_emits_contract_json_with_manifest_backed_refs() {
             .expect("package fingerprint")
             .starts_with("package:")
     );
+    assert!(staging_manifest.exists(), "staging manifest should exist");
+    assert!(apkg_path.exists(), "apkg should exist");
+}
+
+#[test]
+fn build_command_defaults_writer_policy_and_build_context() {
+    let temp = tempdir().expect("tempdir");
+    let (build_result, staging_manifest, apkg_path) =
+        build_basic_package_with_default_selectors(temp.path());
+
+    assert_eq!(build_result["kind"], "package-build-result");
+    assert_eq!(build_result["result_status"], "success");
+    assert_eq!(build_result["staging_ref"], "artifacts/staging/manifest.json");
+    assert_eq!(build_result["apkg_ref"], "artifacts/package.apkg");
+    assert!(
+        build_result["writer_policy_ref"].as_str().unwrap().starts_with("writer-policy.default@")
+    );
+    assert!(build_result["build_context_ref"].as_str().unwrap().starts_with("build-context:"));
     assert!(staging_manifest.exists(), "staging manifest should exist");
     assert!(apkg_path.exists(), "apkg should exist");
 }
