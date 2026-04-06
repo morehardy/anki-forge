@@ -1,5 +1,10 @@
 use serde_json::Value;
-use std::{fs, process::Command};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+    process::Command,
+    sync::atomic::{AtomicU64, Ordering},
+};
 use tempfile::tempdir;
 use writer_core::build_context_ref;
 
@@ -165,11 +170,8 @@ fn build_basic_package_with_default_selectors(
 
 #[test]
 fn verify_command_succeeds_for_the_repo_contract_bundle() {
-    let output = run_cli(&[
-        "verify",
-        "--manifest",
-        contract_tools::contract_manifest_path().to_str().unwrap(),
-    ]);
+    let manifest_path = copied_bundled_manifest_path("cli-verify");
+    let output = run_cli(&["verify", "--manifest", manifest_path.to_str().unwrap()]);
 
     assert!(
         output.status.success(),
@@ -456,4 +458,46 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
     assert_eq!(diff_report["kind"], "diff-report");
     assert_eq!(diff_report["comparison_status"], "complete");
     assert_eq!(diff_report["changes"], serde_json::json!([]));
+}
+
+fn temp_contract_root(label: &str) -> PathBuf {
+    static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
+    let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);
+    std::env::temp_dir().join(format!(
+        "anki-forge-cli-tests-{}-{}-{}",
+        label,
+        std::process::id(),
+        unique
+    ))
+}
+
+fn copy_tree(src: &Path, dst: &Path) {
+    fs::create_dir_all(dst).expect("create destination tree");
+    for entry in fs::read_dir(src).expect("read source tree") {
+        let entry = entry.expect("read source entry");
+        let src_path = entry.path();
+        let dst_path = dst.join(entry.file_name());
+        if src_path.is_dir() {
+            copy_tree(&src_path, &dst_path);
+        } else {
+            fs::copy(&src_path, &dst_path).expect("copy source file");
+        }
+    }
+}
+
+fn copied_bundled_manifest_path(label: &str) -> PathBuf {
+    let root = temp_contract_root(label);
+    copy_tree(
+        contract_tools::contract_manifest_path()
+            .parent()
+            .expect("contracts root for bundled manifest"),
+        &root,
+    );
+
+    let artifacts_root = root.join("artifacts");
+    if artifacts_root.exists() {
+        fs::remove_dir_all(&artifacts_root).expect("remove generated artifact tree");
+    }
+
+    root.join("manifest.yaml")
 }

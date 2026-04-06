@@ -112,8 +112,7 @@ pub fn inspect_build_result(
         }
     }
 
-    if build_result.staging_ref.is_some() {
-        let staging_ref = build_result.staging_ref.as_ref().unwrap();
+    if let Some(staging_ref) = &build_result.staging_ref {
         let staging_path = artifact_path_from_ref(artifact_target, staging_ref);
         let mut report = inspect_staging(&staging_path)?;
         report.source_ref = staging_ref.clone();
