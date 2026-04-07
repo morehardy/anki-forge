@@ -5,8 +5,9 @@ use std::{
 };
 
 use anki_forge::runtime::{
-    build_from_path, discover_workspace_runtime, inspect_apkg_path, load_build_context,
-    load_bundle_from_manifest, load_writer_policy, normalize_from_path, RuntimeMode,
+    build_from_path, diff_from_paths, discover_workspace_runtime, inspect_apkg_path,
+    inspect_staging_path, load_build_context, load_bundle_from_manifest, load_writer_policy,
+    normalize_from_path, RuntimeMode,
 };
 use serde_yaml::Value as YamlValue;
 
@@ -76,6 +77,14 @@ fn write_bundle_fixture(name: &str, manifest: &YamlValue) -> PathBuf {
     contracts_root.join("manifest.yaml")
 }
 
+fn write_json_fixture(path: impl AsRef<Path>, value: &impl serde::Serialize) {
+    fs::write(
+        path,
+        serde_json::to_string_pretty(value).expect("serialize JSON fixture"),
+    )
+    .expect("write JSON fixture");
+}
+
 #[test]
 fn workspace_runtime_discovers_manifest_bundle_root_and_bundle_version() {
     let resolved = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
@@ -142,14 +151,33 @@ fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
     assert_eq!(normalized.result_status, "success");
 
     let build_input = repo_root().join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
-    let artifacts_dir = repo_root().join("tmp/phase4-runtime-facade/basic");
+    let artifacts_dir = temp_bundle_root("runtime_operations").join("artifacts");
     let build_result = build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
         .expect("build from path");
     assert_eq!(build_result.kind, "package-build-result");
     assert_eq!(build_result.result_status, "success");
 
+    let staging_report = inspect_staging_path(artifacts_dir.join("staging/manifest.json"))
+        .expect("inspect staging from path");
+    assert_eq!(staging_report.kind, "inspect-report");
+    assert_eq!(staging_report.source_kind, "staging");
+    assert_eq!(staging_report.observation_status, "complete");
+
     let apkg_report =
         inspect_apkg_path(artifacts_dir.join("package.apkg")).expect("inspect apkg from path");
     assert_eq!(apkg_report.kind, "inspect-report");
+    assert_eq!(apkg_report.source_kind, "apkg");
     assert_eq!(apkg_report.observation_status, "complete");
+
+    let reports_dir = temp_bundle_root("runtime_reports");
+    fs::create_dir_all(&reports_dir).expect("create reports directory");
+    let left = reports_dir.join("left.inspect.json");
+    let right = reports_dir.join("right.inspect.json");
+    write_json_fixture(&left, &staging_report);
+    write_json_fixture(&right, &apkg_report);
+
+    let diff_report = diff_from_paths(&left, &right).expect("diff inspect reports from paths");
+    assert_eq!(diff_report.kind, "diff-report");
+    assert_eq!(diff_report.comparison_status, "complete");
+    assert!(diff_report.changes.is_empty());
 }
