@@ -5,7 +5,10 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+anyhow = "1"
 authoring_core = { path = "../authoring_core" }
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
 writer_core = { path = "../writer_core" }
 
 [lints]

@@ -35,7 +35,10 @@ dependencies = [
 name = "anki_forge"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "authoring_core",
+ "serde",
+ "serde_yaml",
  "writer_core",
 ]
 

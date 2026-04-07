@@ -1,11 +1,12 @@
+pub mod runtime;
+
 pub use authoring_core::{
     assess_risk, normalize, parse_selector, resolve_identity, resolve_selector,
     to_canonical_json as to_authoring_canonical_json, AuthoringDocument, AuthoringMedia,
     AuthoringNote, AuthoringNotetype, ComparisonContext, MergeRiskReport, NormalizationRequest,
-    NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype, NormalizedTemplate, Selector,
-    SelectorError, SelectorResolveError, SelectorTarget,
+    NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+    Selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
-pub use authoring_core::model::NormalizationResult;
 pub use writer_core::{
     build, build_context_ref, diff_reports, extract_media_references, inspect_apkg,
     inspect_build_result, inspect_staging, policy_ref, to_canonical_json as to_writer_canonical_json,
