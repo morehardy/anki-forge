@@ -62,6 +62,26 @@ test('runRaw raises RuntimeInvocationError when launcher executable is missing',
   );
 });
 
+test('runRaw installed mode defaults launcher executable and still classifies spawn failures', async () => {
+  await assert.rejects(
+    () =>
+      runRaw(
+        'normalize',
+        { inputPath: validAuthoringInput },
+        {
+          mode: 'installed',
+          manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'),
+          bundleRoot: path.join(repoRoot, 'contracts'),
+        },
+      ),
+    (error) =>
+      error instanceof RuntimeInvocationError &&
+      error.command === 'normalize' &&
+      error.failurePhase === 'spawn' &&
+      error.resolvedRuntime.mode === 'installed',
+  );
+});
+
 test('runRaw wraps runtime discovery failures as RuntimeInvocationError', async () => {
   const detachedDir = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-detached-'));
 

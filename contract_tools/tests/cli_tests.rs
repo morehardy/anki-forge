@@ -562,7 +562,10 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     ]);
     assert!(cli_staging.status.success());
     let cli_staging_json: serde_json::Value = serde_json::from_slice(&cli_staging.stdout).unwrap();
-    assert_eq!(cli_staging_json, serde_json::to_value(&runtime_staging).unwrap());
+    assert_eq!(
+        cli_staging_json,
+        serde_json::to_value(&runtime_staging).unwrap()
+    );
 
     let cli_apkg = run_cli(&[
         "inspect",
@@ -577,7 +580,11 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
 
     let left = artifacts_dir.path().join("left.inspect.json");
     let right = artifacts_dir.path().join("right.inspect.json");
-    fs::write(&left, serde_json::to_string_pretty(&runtime_staging).unwrap()).unwrap();
+    fs::write(
+        &left,
+        serde_json::to_string_pretty(&runtime_staging).unwrap(),
+    )
+    .unwrap();
     fs::write(&right, serde_json::to_string_pretty(&runtime_apkg).unwrap()).unwrap();
 
     let runtime_diff = anki_forge::runtime::diff_from_paths(&left, &right).unwrap();

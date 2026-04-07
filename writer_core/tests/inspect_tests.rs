@@ -54,7 +54,7 @@ fn inspect_staging_reports_complete_observations() {
     )
     .unwrap();
 
-    let report = inspect_staging(&target.staging_manifest_path()).unwrap();
+    let report = inspect_staging(target.staging_manifest_path()).unwrap();
     assert_eq!(report.source_kind, "staging");
     assert!(report.source_ref.ends_with("staging/manifest.json"));
     assert_eq!(report.observation_status, "complete");
@@ -81,7 +81,7 @@ fn inspect_apkg_reports_complete_observations_and_counts() {
     )
     .unwrap();
 
-    let report = inspect_apkg(&root.join("package.apkg")).unwrap();
+    let report = inspect_apkg(root.join("package.apkg")).unwrap();
     assert_eq!(report.source_kind, "apkg");
     assert!(report.source_ref.ends_with("package.apkg"));
     assert_eq!(report.observation_status, "complete");
@@ -135,8 +135,8 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
     )
     .unwrap();
 
-    let left_report = inspect_staging(&left_target.staging_manifest_path()).unwrap();
-    let right_report = inspect_staging(&right_target.staging_manifest_path()).unwrap();
+    let left_report = inspect_staging(left_target.staging_manifest_path()).unwrap();
+    let right_report = inspect_staging(right_target.staging_manifest_path()).unwrap();
 
     assert_eq!(
         left_report.artifact_fingerprint,

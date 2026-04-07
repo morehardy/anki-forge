@@ -14,7 +14,7 @@ export function resolveRuntime(options = {}) {
       manifestPath: path.resolve(options.manifestPath),
       bundleRoot: path.resolve(options.bundleRoot),
       bundleVersion: readBundleVersion(path.resolve(options.manifestPath)),
-      launcherExecutable: options.launcherExecutable,
+      launcherExecutable: options.launcherExecutable ?? 'contract_tools',
       launcherPrefix: [...(options.launcherPrefix ?? [])],
     };
   }

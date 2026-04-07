@@ -1,4 +1,6 @@
-use anki_forge::{normalize, writer_tool_contract_version, AuthoringDocument, NormalizationRequest};
+use anki_forge::{
+    normalize, writer_tool_contract_version, AuthoringDocument, NormalizationRequest,
+};
 
 #[test]
 fn typed_facade_reexports_phase2_and_phase3_core_surfaces() {

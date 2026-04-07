@@ -152,8 +152,9 @@ fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
 
     let build_input = repo_root().join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
     let artifacts_dir = temp_bundle_root("runtime_operations").join("artifacts");
-    let build_result = build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
-        .expect("build from path");
+    let build_result =
+        build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
+            .expect("build from path");
     assert_eq!(build_result.kind, "package-build-result");
     assert_eq!(build_result.result_status, "success");
 

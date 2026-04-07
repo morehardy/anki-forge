@@ -95,9 +95,9 @@ fn print_json(text: String) {
 }
 
 fn main() -> anyhow::Result<()> {
-    let path = env::args()
-        .nth(1)
-        .context("usage: cargo run -p anki_forge --example conformance_surface -- <request.json>")?;
+    let path = env::args().nth(1).context(
+        "usage: cargo run -p anki_forge --example conformance_surface -- <request.json>",
+    )?;
     let raw = fs::read_to_string(&path)
         .with_context(|| format!("failed to read request file: {path}"))?;
     let envelope: ConformanceEnvelope =
@@ -106,16 +106,16 @@ fn main() -> anyhow::Result<()> {
 
     match envelope.command.as_str() {
         "normalize" => {
-            let request: NormalizeRequest = serde_json::from_value(envelope.request)
-                .context("normalize request is invalid")?;
+            let request: NormalizeRequest =
+                serde_json::from_value(envelope.request).context("normalize request is invalid")?;
             let runtime = resolve_runtime(&envelope.runtime_options)?;
             let input_path = resolve_request_path(&cwd, &request.input_path);
             let result = anki_forge::runtime::normalize_from_path(&runtime, &input_path)?;
             print_json(anki_forge::to_authoring_canonical_json(&result)?);
         }
         "build" => {
-            let request: BuildRequest = serde_json::from_value(envelope.request)
-                .context("build request is invalid")?;
+            let request: BuildRequest =
+                serde_json::from_value(envelope.request).context("build request is invalid")?;
             let runtime = resolve_runtime(&envelope.runtime_options)?;
             let input_path = resolve_request_path(&cwd, &request.input_path);
             let artifacts_dir = resolve_request_path(&cwd, &request.artifacts_dir);
@@ -129,8 +129,8 @@ fn main() -> anyhow::Result<()> {
             print_json(anki_forge::to_writer_canonical_json(&result)?);
         }
         "inspect" => {
-            let request: InspectRequest = serde_json::from_value(envelope.request)
-                .context("inspect request is invalid")?;
+            let request: InspectRequest =
+                serde_json::from_value(envelope.request).context("inspect request is invalid")?;
             let result = match (request.staging_path, request.apkg_path) {
                 (Some(path), None) => {
                     anki_forge::runtime::inspect_staging_path(resolve_request_path(&cwd, &path))?
@@ -143,8 +143,8 @@ fn main() -> anyhow::Result<()> {
             print_json(anki_forge::to_writer_canonical_json(&result)?);
         }
         "diff" => {
-            let request: DiffRequest = serde_json::from_value(envelope.request)
-                .context("diff request is invalid")?;
+            let request: DiffRequest =
+                serde_json::from_value(envelope.request).context("diff request is invalid")?;
             let left_path = resolve_request_path(&cwd, &request.left_path);
             let right_path = resolve_request_path(&cwd, &request.right_path);
             let result = anki_forge::runtime::diff_from_paths(&left_path, &right_path)?;

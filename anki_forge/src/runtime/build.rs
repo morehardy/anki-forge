@@ -25,10 +25,11 @@ pub fn build_from_path(
         .with_context(|| format!("input must be valid JSON: {}", input_path.display()))?;
 
     let schema = load_schema_asset(&bundle, "normalized_ir_schema")?;
-    validate_value(&schema, &input_value).context("build input must satisfy normalized_ir_schema")?;
+    validate_value(&schema, &input_value)
+        .context("build input must satisfy normalized_ir_schema")?;
 
-    let normalized_ir: NormalizedIr =
-        serde_json::from_value(input_value).context("input must map into normalized IR execution model")?;
+    let normalized_ir: NormalizedIr = serde_json::from_value(input_value)
+        .context("input must map into normalized IR execution model")?;
     let writer_policy = load_writer_policy(&bundle, writer_policy_selector)?;
     let build_context = load_build_context(&bundle, build_context_selector)?;
     let artifact_target =

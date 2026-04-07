@@ -12,9 +12,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - run: cargo fmt --all -- --check
-      - run: cargo clippy -p contract_tools --all-targets -- -D warnings
-      - run: cargo test -p contract_tools -v
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace -v
+      - run: cargo test -p anki_forge --example conformance_surface
+      - run: cargo run -p anki_forge --example minimal_flow
+      - run: node --test bindings/node/test/raw.test.js
+      - run: node --test bindings/node/test/structured.test.js
+      - run: npm --prefix bindings/node run example:minimal
+      - run: PYTHONPATH="$GITHUB_WORKSPACE/bindings/python/src" python -m unittest discover -s bindings/python/tests -v
+      - run: PYTHONPATH="$GITHUB_WORKSPACE/bindings/python/src" python bindings/python/examples/minimal_flow.py
       - run: cargo run -p contract_tools -- verify --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
       - run: cargo run -p contract_tools -- summary --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml"
       - run: cargo run -p contract_tools -- package --manifest "$GITHUB_WORKSPACE/contracts/manifest.yaml" --out-dir "$GITHUB_WORKSPACE/dist"

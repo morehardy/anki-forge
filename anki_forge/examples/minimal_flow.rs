@@ -27,7 +27,10 @@ fn main() -> anyhow::Result<()> {
         .normalized_ir
         .as_ref()
         .expect("basic authoring fixture should normalize");
-    fs::write(&normalized_ir_path, serde_json::to_string_pretty(normalized_ir)?)?;
+    fs::write(
+        &normalized_ir_path,
+        serde_json::to_string_pretty(normalized_ir)?,
+    )?;
 
     let build = anki_forge::runtime::build_from_path(
         &runtime,

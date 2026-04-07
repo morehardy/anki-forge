@@ -25,13 +25,17 @@ pub fn discover_workspace_runtime(start: impl AsRef<Path>) -> anyhow::Result<Res
     let mut current = if start.is_dir() {
         start
     } else {
-        start.parent().unwrap_or_else(|| Path::new("/")).to_path_buf()
+        start
+            .parent()
+            .unwrap_or_else(|| Path::new("/"))
+            .to_path_buf()
     };
 
     loop {
         let manifest_path = current.join("contracts/manifest.yaml");
         if manifest_path.is_file() {
-            return super::assets::load_bundle_from_manifest(manifest_path).map(|bundle| bundle.runtime);
+            return super::assets::load_bundle_from_manifest(manifest_path)
+                .map(|bundle| bundle.runtime);
         }
 
         if !current.pop() {

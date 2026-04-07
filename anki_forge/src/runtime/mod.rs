@@ -11,7 +11,7 @@ pub use assets::{
     RuntimeBundle,
 };
 pub use build::build_from_path;
-pub use discovery::{discover_workspace_runtime, ResolvedRuntime, RuntimeMode};
 pub use diff::diff_from_paths;
+pub use discovery::{discover_workspace_runtime, ResolvedRuntime, RuntimeMode};
 pub use inspect::{inspect_apkg_path, inspect_staging_path};
 pub use normalize::normalize_from_path;

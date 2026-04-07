@@ -9,7 +9,9 @@ use crate::{
     NormalizationRequest, NormalizationResult,
 };
 
-use super::{load_bundle_from_manifest, schema::load_schema_asset, schema::validate_value, ResolvedRuntime};
+use super::{
+    load_bundle_from_manifest, schema::load_schema_asset, schema::validate_value, ResolvedRuntime,
+};
 
 #[derive(Debug, Deserialize)]
 struct InputDocument {
@@ -40,7 +42,8 @@ pub fn normalize_from_path(
     let input_value: Value = serde_json::from_str(&input_raw)
         .with_context(|| format!("input must be valid JSON: {}", input_path.display()))?;
     let schema = load_schema_asset(&bundle, "authoring_ir_schema")?;
-    validate_value(&schema, &input_value).context("normalize input must satisfy authoring_ir_schema")?;
+    validate_value(&schema, &input_value)
+        .context("normalize input must satisfy authoring_ir_schema")?;
 
     let input_document: InputDocument = serde_json::from_value(input_value)
         .context("input must map into normalize execution model")?;
