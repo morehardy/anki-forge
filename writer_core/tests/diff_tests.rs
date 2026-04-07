@@ -27,8 +27,8 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
     )
     .unwrap();
 
-    let left = inspect_staging(&target.staging_manifest_path()).unwrap();
-    let right = inspect_apkg(&root.join("package.apkg")).unwrap();
+    let left = inspect_staging(target.staging_manifest_path()).unwrap();
+    let right = inspect_apkg(root.join("package.apkg")).unwrap();
     let diff = diff_reports(&left, &right).unwrap();
 
     assert_eq!(diff.comparison_status, "complete");

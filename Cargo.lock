@@ -32,6 +32,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "anki_forge"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "authoring_core",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "url",
+ "writer_core",
+]
+
+[[package]]
 name = "anstream"
 version = "0.6.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -234,6 +248,7 @@ checksum = "1d07550c9036bf2ae0c684c4297d503f838287c83c53686d05370d0e139ae570"
 name = "contract_tools"
 version = "0.1.0"
 dependencies = [
+ "anki_forge",
  "anyhow",
  "authoring_core",
  "clap",
