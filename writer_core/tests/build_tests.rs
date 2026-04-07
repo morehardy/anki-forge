@@ -249,6 +249,7 @@ fn build_materializes_basic_staging_into_caller_owned_root() {
 fn tracked_rslib_storage_sql_snapshots_exist() {
     for relative in [
         "assets/rslib/storage/schema11.sql",
+        "assets/rslib/storage/upgrades/schema14_upgrade.sql",
         "assets/rslib/storage/upgrades/schema15_upgrade.sql",
         "assets/rslib/storage/upgrades/schema18_upgrade.sql",
     ] {
@@ -391,6 +392,7 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
         latest_collection.starts_with(b"SQLite format 3"),
         "latest collection should be a SQLite database"
     );
+    assert_latest_collection_has_required_system_tables(&latest_collection);
     assert!(
         read_zip_entry_bytes(&mut archive, "collection.anki2").starts_with(b"SQLite format 3"),
         "legacy dummy collection should be a SQLite database"
@@ -904,6 +906,37 @@ fn assert_legacy_models_use_schema11_shape(bytes: &[u8]) {
             .is_some_and(serde_json::Value::is_array),
         "legacy models should use schema11 template entries"
     );
+}
+
+fn assert_latest_collection_has_required_system_tables(bytes: &[u8]) {
+    let root = unique_artifact_root("latest-system-tables");
+    let db_path = root.join("collection.anki21b");
+    fs::write(&db_path, bytes).unwrap();
+
+    let conn = Connection::open(&db_path).unwrap();
+    let table_names: std::collections::BTreeSet<String> = conn
+        .prepare("select name from sqlite_master where type = 'table' order by name")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+
+    for expected in ["config", "deck_config", "tags"] {
+        assert!(
+            table_names.contains(expected),
+            "latest collection should include `{expected}` table: {table_names:?}"
+        );
+    }
+
+    let tags: std::collections::BTreeSet<String> = conn
+        .prepare("select tag from tags order by tag")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    assert_eq!(tags, std::collections::BTreeSet::from(["demo".to_string()]));
 }
 
 #[derive(Clone, PartialEq, Message)]

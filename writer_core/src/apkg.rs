@@ -23,6 +23,10 @@ const SCHEMA11_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/schema11.sql"
 ));
+const SCHEMA14_UPGRADE_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/upgrades/schema14_upgrade.sql"
+));
 const SCHEMA15_UPGRADE_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/upgrades/schema15_upgrade.sql"
@@ -200,6 +204,7 @@ fn create_latest_collection_bytes(
     let conn = Connection::open(&path)
         .with_context(|| format!("open collection database {}", path.display()))?;
     execute_source_schema(&conn, SCHEMA11_SQL)?;
+    execute_source_schema(&conn, SCHEMA14_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
     populate_latest_collection(&conn, normalized_ir)?;
@@ -263,6 +268,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
     }
 
     let mut note_row_id = 1_i64;
+    let mut normalized_tags = std::collections::BTreeSet::new();
     for note in &normalized_ir.notes {
         let ntid = notetype_ids
             .get(&note.notetype_id)
@@ -288,6 +294,9 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
                 "{}"
             ],
         )?;
+        for tag in &note.tags {
+            normalized_tags.insert(tag.clone());
+        }
         for (template_ord, _template) in notetype.templates.iter().enumerate() {
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, 1, ?3, 0, 0, 0, 0, ?4, 0, 0, 0, 0, 0, 0, 0, 0, ?5)",
@@ -301,6 +310,13 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             )?;
         }
         note_row_id += 1;
+    }
+
+    for tag in normalized_tags {
+        conn.execute(
+            "insert into tags (tag, usn) values (?1, 0)",
+            rusqlite::params![tag],
+        )?;
     }
 
     Ok(())
