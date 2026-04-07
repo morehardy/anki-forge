@@ -12,6 +12,10 @@ use sha1::{Digest, Sha1};
 use zip::write::FileOptions;
 use zip::{CompressionMethod, ZipWriter};
 
+use crate::anki_proto::{
+    default_deck_common_bytes, default_deck_config_bytes, default_deck_kind_bytes,
+    encode_field_config, encode_notetype_config, encode_template_config,
+};
 use crate::staging::{
     load_normalized_ir_from_staging_manifest, BuildArtifactTarget, MaterializedStaging,
 };
@@ -236,13 +240,28 @@ fn execute_source_schema(conn: &Connection, sql: &str) -> Result<()> {
 }
 
 fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -> Result<()> {
+    let default_deck_config_id = 1_i64;
+
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
         rusqlite::params!["{}", "{}", "{}", "{}", "{}"],
     )?;
     conn.execute(
+        "insert into deck_config (id, name, mtime_secs, usn, config) values (?1, ?2, 0, 0, ?3)",
+        rusqlite::params![
+            default_deck_config_id,
+            "Default",
+            default_deck_config_bytes()
+        ],
+    )?;
+    conn.execute(
         "insert into decks (id, name, mtime_secs, usn, common, kind) values (?1, ?2, 0, 0, ?3, ?4)",
-        rusqlite::params![1_i64, "Default", "{}", "{}"],
+        rusqlite::params![
+            1_i64,
+            "Default",
+            default_deck_common_bytes(),
+            default_deck_kind_bytes(default_deck_config_id)
+        ],
     )?;
 
     let mut notetype_ids = std::collections::BTreeMap::new();
@@ -251,18 +270,23 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
         notetype_ids.insert(notetype.id.clone(), ntid);
         conn.execute(
             "insert into notetypes (id, name, mtime_secs, usn, config) values (?1, ?2, 0, 0, ?3)",
-            rusqlite::params![ntid, notetype.name, serde_json::to_vec(notetype)?],
+            rusqlite::params![ntid, notetype.name, encode_notetype_config(notetype)?],
         )?;
         for (field_ord, field_name) in notetype.fields.iter().enumerate() {
             conn.execute(
                 "insert into fields (ntid, ord, name, config) values (?1, ?2, ?3, ?4)",
-                rusqlite::params![ntid, field_ord as i64, field_name, "{}"],
+                rusqlite::params![ntid, field_ord as i64, field_name, encode_field_config()],
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
             conn.execute(
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
-                rusqlite::params![ntid, template_ord as i64, template.name, "{}"],
+                rusqlite::params![
+                    ntid,
+                    template_ord as i64,
+                    template.name,
+                    encode_template_config(template)
+                ],
             )?;
         }
     }

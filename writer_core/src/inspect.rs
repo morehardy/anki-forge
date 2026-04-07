@@ -5,7 +5,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype};
+use authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
 use base64::Engine;
 use prost::Message;
 use rusqlite::Connection;
@@ -15,6 +15,10 @@ use sha1::Digest;
 use zip::ZipArchive;
 use zstd::stream::decode_all;
 
+use crate::anki_proto::{
+    decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
+    NotetypeKind, OriginalStockKind,
+};
 use crate::canonical_json::to_canonical_json;
 use crate::media_refs::extract_media_references;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
@@ -589,26 +593,104 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
     with_temp_sqlite(bytes, |conn| {
         let mut notetype_rows =
             conn.prepare("select id, name, config from notetypes order by id")?;
-        let notetypes = notetype_rows
+        let raw_notetypes = notetype_rows
             .query_map([], |row| {
                 let id: i64 = row.get(0)?;
-                let _name: String = row.get(1)?;
+                let name: String = row.get(1)?;
                 let config: Vec<u8> = row.get(2)?;
-                let notetype: NormalizedNotetype =
-                    serde_json::from_slice(&config).map_err(|err| {
-                        rusqlite::Error::FromSqlConversionFailure(
-                            config.len(),
-                            rusqlite::types::Type::Blob,
-                            Box::new(err),
-                        )
-                    })?;
-                Ok((id, notetype))
+                Ok((id, name, config))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
 
+        let mut field_rows =
+            conn.prepare("select ntid, ord, name, config from fields order by ntid, ord")?;
+        let field_values = field_rows
+            .query_map([], |row| {
+                let ntid: i64 = row.get(0)?;
+                let ord: i64 = row.get(1)?;
+                let name: String = row.get(2)?;
+                let config: Vec<u8> = row.get(3)?;
+                decode_field_config(&config).map_err(|err| {
+                    rusqlite::Error::FromSqlConversionFailure(
+                        config.len(),
+                        rusqlite::types::Type::Blob,
+                        Box::new(std::io::Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            err.to_string(),
+                        )),
+                    )
+                })?;
+                Ok((ntid, ord, name))
+            })?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+
+        let mut fields_by_row_id = BTreeMap::<i64, Vec<(i64, String)>>::new();
+        for (ntid, ord, name) in field_values {
+            fields_by_row_id.entry(ntid).or_default().push((ord, name));
+        }
+
+        let mut template_rows =
+            conn.prepare("select ntid, ord, name, config from templates order by ntid, ord")?;
+        let template_values = template_rows
+            .query_map([], |row| {
+                let ntid: i64 = row.get(0)?;
+                let ord: i64 = row.get(1)?;
+                let name: String = row.get(2)?;
+                let config: Vec<u8> = row.get(3)?;
+                let config = decode_template_config(&config).map_err(|err| {
+                    rusqlite::Error::FromSqlConversionFailure(
+                        config.len(),
+                        rusqlite::types::Type::Blob,
+                        Box::new(std::io::Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            err.to_string(),
+                        )),
+                    )
+                })?;
+                Ok((ntid, ord, name, config))
+            })?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+
+        let mut templates_by_row_id =
+            BTreeMap::<i64, Vec<(i64, String, crate::anki_proto::TemplateConfig)>>::new();
+        for (ntid, ord, name, config) in template_values {
+            templates_by_row_id
+                .entry(ntid)
+                .or_default()
+                .push((ord, name, config));
+        }
+
         let mut notetypes_by_row_id = BTreeMap::new();
         let mut notetype_values = vec![];
-        for (row_id, notetype) in notetypes {
+        for (row_id, name, config_bytes) in raw_notetypes {
+            let config = decode_notetype_config(&config_bytes)?;
+            let metadata = decode_notetype_metadata(&config.other)?;
+            let fields = fields_by_row_id
+                .remove(&row_id)
+                .unwrap_or_default()
+                .into_iter()
+                .map(|(_ord, name)| name)
+                .collect::<Vec<_>>();
+            let templates = templates_by_row_id
+                .remove(&row_id)
+                .unwrap_or_default()
+                .into_iter()
+                .map(|(_ord, name, template)| NormalizedTemplate {
+                    name,
+                    question_format: template.q_format,
+                    answer_format: template.a_format,
+                })
+                .collect::<Vec<_>>();
+            let notetype = NormalizedNotetype {
+                id: metadata
+                    .map(|metadata| metadata.anki_forge_notetype_id)
+                    .unwrap_or_else(|| format!("notetype-{row_id}")),
+                kind: normalized_notetype_kind(&config),
+                name,
+                fields,
+                templates,
+                css: config.css,
+            };
             notetypes_by_row_id.insert(row_id, notetype.clone());
             notetype_values.push(notetype);
         }
@@ -650,6 +732,18 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
 
         Ok((notetype_values, notes))
     })
+}
+
+fn normalized_notetype_kind(config: &crate::anki_proto::NotetypeConfig) -> String {
+    match OriginalStockKind::try_from(config.original_stock_kind).ok() {
+        Some(OriginalStockKind::Basic) => "basic".into(),
+        Some(OriginalStockKind::Cloze) => "cloze".into(),
+        Some(OriginalStockKind::ImageOcclusion) => "image_occlusion".into(),
+        _ => match NotetypeKind::try_from(config.kind).ok() {
+            Some(NotetypeKind::Cloze) => "cloze".into(),
+            _ => "basic".into(),
+        },
+    }
 }
 
 fn with_temp_sqlite<T>(bytes: &[u8], f: impl FnOnce(&Connection) -> Result<T>) -> Result<T> {

@@ -929,6 +929,51 @@ fn assert_latest_collection_has_required_system_tables(bytes: &[u8]) {
         );
     }
 
+    let deck_blob_types: (String, String) = conn
+        .query_row(
+            "select typeof(common), typeof(kind) from decks where id = 1",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+    assert_eq!(
+        deck_blob_types,
+        ("blob".to_string(), "blob".to_string()),
+        "latest decks rows should persist protobuf payloads as blob columns"
+    );
+
+    let field_config_types: Vec<String> = conn
+        .prepare("select typeof(config) from fields order by ntid, ord")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    assert!(
+        field_config_types.iter().all(|kind| kind == "blob"),
+        "latest field config rows should persist protobuf payloads as blobs: {field_config_types:?}"
+    );
+
+    let template_config_types: Vec<String> = conn
+        .prepare("select typeof(config) from templates order by ntid, ord")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    assert!(
+        template_config_types.iter().all(|kind| kind == "blob"),
+        "latest template config rows should persist protobuf payloads as blobs: {template_config_types:?}"
+    );
+
+    let deck_config_count: i64 = conn
+        .query_row("select count(*) from deck_config", [], |row| row.get(0))
+        .unwrap();
+    assert!(
+        deck_config_count >= 1,
+        "latest collection should include at least one deck_config row"
+    );
+
     let tags: std::collections::BTreeSet<String> = conn
         .prepare("select tag from tags order by tag")
         .unwrap()
