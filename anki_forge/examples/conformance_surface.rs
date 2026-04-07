@@ -60,19 +60,12 @@ fn default_selector() -> String {
     "default".into()
 }
 
-fn default_workspace_start() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .expect("workspace root")
-        .to_path_buf()
-}
-
 fn resolved_cwd(options: &RuntimeOptions) -> anyhow::Result<PathBuf> {
     let current_dir = env::current_dir().context("resolve current working directory")?;
     Ok(match &options.cwd {
         Some(cwd) if cwd.is_absolute() => cwd.clone(),
         Some(cwd) => current_dir.join(cwd),
-        None => default_workspace_start(),
+        None => bail!("runtimeOptions.cwd is required for workspace runtime discovery"),
     })
 }
 
@@ -205,6 +198,16 @@ mod tests {
         assert_eq!(
             resolve_request_path(&cwd, Path::new("/tmp/absolute.json")),
             PathBuf::from("/tmp/absolute.json")
+        );
+    }
+
+    #[test]
+    fn workspace_runtime_discovery_requires_runtime_cwd() {
+        let err = resolved_cwd(&RuntimeOptions::default()).expect_err("missing cwd should fail");
+
+        assert!(
+            err.to_string().contains("runtimeOptions.cwd"),
+            "unexpected error: {err}"
         );
     }
 }
