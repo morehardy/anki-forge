@@ -355,6 +355,47 @@ fn build_command_defaults_writer_policy_and_build_context() {
 }
 
 #[test]
+fn build_command_matches_anki_forge_runtime_output() {
+    let manifest = contract_tools::contract_manifest_path();
+    let repo_root = manifest.parent().unwrap().parent().unwrap();
+    let build_input = repo_root.join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
+    let artifacts_dir = tempdir().unwrap();
+
+    let runtime = anki_forge::runtime::load_bundle_from_manifest(&manifest)
+        .unwrap()
+        .runtime;
+    let runtime_result = anki_forge::runtime::build_from_path(
+        &runtime,
+        &build_input,
+        "default",
+        "default",
+        artifacts_dir.path(),
+    )
+    .unwrap();
+
+    let cli_output = run_cli(&[
+        "build",
+        "--manifest",
+        manifest.to_str().unwrap(),
+        "--input",
+        build_input.to_str().unwrap(),
+        "--writer-policy",
+        "default",
+        "--build-context",
+        "default",
+        "--artifacts-dir",
+        artifacts_dir.path().to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(cli_output.status.success());
+    let cli_json: serde_json::Value = serde_json::from_slice(&cli_output.stdout).unwrap();
+    let runtime_json = serde_json::to_value(runtime_result).unwrap();
+    assert_eq!(cli_json, runtime_json);
+}
+
+#[test]
 fn build_command_requires_artifacts_dir() {
     let temp = tempdir().expect("tempdir");
     let manifest = contract_tools::contract_manifest_path();

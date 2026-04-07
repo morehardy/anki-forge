@@ -6,6 +6,7 @@ rust-version.workspace = true
 
 [dependencies]
 anyhow = "1"
+anki_forge = { path = "../anki_forge" }
 clap = { version = "=4.5.20", features = ["derive"] }
 flate2 = "=1.0.35"
 html-escape = "0.2"

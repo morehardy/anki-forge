@@ -5,8 +5,8 @@ use std::{
 };
 
 use anki_forge::runtime::{
-    discover_workspace_runtime, load_build_context, load_bundle_from_manifest, load_writer_policy,
-    RuntimeMode,
+    build_from_path, discover_workspace_runtime, inspect_apkg_path, load_build_context,
+    load_bundle_from_manifest, load_writer_policy, normalize_from_path, RuntimeMode,
 };
 use serde_yaml::Value as YamlValue;
 
@@ -131,4 +131,25 @@ fn runtime_bundle_loading_rejects_invalid_asset_paths() {
             || err.to_string().contains("writer_policy"),
         "unexpected error: {err}"
     );
+}
+
+#[test]
+fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
+    let runtime = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
+    let authoring_input = repo_root().join("contracts/fixtures/valid/minimal-authoring-ir.json");
+    let normalized = normalize_from_path(&runtime, &authoring_input).expect("normalize from path");
+    assert_eq!(normalized.kind, "normalization-result");
+    assert_eq!(normalized.result_status, "success");
+
+    let build_input = repo_root().join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
+    let artifacts_dir = repo_root().join("tmp/phase4-runtime-facade/basic");
+    let build_result = build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
+        .expect("build from path");
+    assert_eq!(build_result.kind, "package-build-result");
+    assert_eq!(build_result.result_status, "success");
+
+    let apkg_report =
+        inspect_apkg_path(artifacts_dir.join("package.apkg")).expect("inspect apkg from path");
+    assert_eq!(apkg_report.kind, "inspect-report");
+    assert_eq!(apkg_report.observation_status, "complete");
 }
