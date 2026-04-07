@@ -1,0 +1,12 @@
+[package]
+name = "anki_forge"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+authoring_core = { path = "../authoring_core" }
+writer_core = { path = "../writer_core" }
+
+[lints]
+workspace = true
