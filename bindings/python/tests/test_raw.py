@@ -24,6 +24,23 @@ class RawBindingsTests(unittest.TestCase):
         self.assertEqual(runtime.bundle_version, "0.1.0")
         self.assertIsInstance(WRAPPER_API_VERSION, str)
 
+    def test_resolve_runtime_installed_mode_tolerates_indented_single_quoted_bundle_version(
+        self,
+    ) -> None:
+        temp_root = pathlib.Path(
+            tempfile.mkdtemp(prefix="anki-forge-python-manifest-")
+        ).resolve()
+        manifest_path = temp_root / "manifest.yaml"
+        manifest_path.write_text("  bundle_version: '9.9.9'\n", encoding="utf-8")
+
+        runtime = resolve_runtime(
+            mode="installed",
+            manifest_path=str(manifest_path),
+            bundle_root=str(temp_root),
+        )
+
+        self.assertEqual(runtime.bundle_version, "9.9.9")
+
     def test_run_raw_normalize_preserves_process_result(self) -> None:
         result = run_raw(
             "normalize",

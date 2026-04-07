@@ -29,6 +29,20 @@ test('resolveRuntime discovers workspace metadata and keeps wrapper version sepa
   assert.equal(typeof WRAPPER_API_VERSION, 'string');
 });
 
+test('resolveRuntime installed mode tolerates indented single-quoted bundle versions', () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-manifest-'));
+  const manifestPath = path.join(tempRoot, 'manifest.yaml');
+  fs.writeFileSync(manifestPath, "  bundle_version: '9.9.9'\n", 'utf8');
+
+  const runtime = resolveRuntime({
+    mode: 'installed',
+    manifestPath,
+    bundleRoot: tempRoot,
+  });
+
+  assert.equal(runtime.bundleVersion, '9.9.9');
+});
+
 test('runRaw normalize preserves stdout stderr exit status and argv', async () => {
   const result = await runRaw(
     'normalize',

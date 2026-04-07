@@ -16,8 +16,9 @@ class ResolvedRuntime:
 
 def _read_bundle_version(manifest_path: Path) -> str:
     for line in manifest_path.read_text(encoding="utf-8").splitlines():
-        if line.startswith("bundle_version:"):
-            return line.split(":", 1)[1].strip().strip('"')
+        stripped = line.strip()
+        if stripped.startswith("bundle_version:"):
+            return stripped.split(":", 1)[1].strip().strip("'\"")
     return "unknown"
 
 

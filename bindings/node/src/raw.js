@@ -94,15 +94,17 @@ export async function runRaw(command, request, runtimeOptions = {}) {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
-    let stdout = '';
-    let stderr = '';
+    const stdoutChunks = [];
+    const stderrChunks = [];
     child.stdout.on('data', (chunk) => {
-      stdout += chunk.toString();
+      stdoutChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
     });
     child.stderr.on('data', (chunk) => {
-      stderr += chunk.toString();
+      stderrChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
     });
     child.on('error', (error) => {
+      const stdout = Buffer.concat(stdoutChunks).toString('utf8');
+      const stderr = Buffer.concat(stderrChunks).toString('utf8');
       reject(
         new RuntimeInvocationError(error.message, {
           command,
@@ -115,6 +117,8 @@ export async function runRaw(command, request, runtimeOptions = {}) {
       );
     });
     child.on('close', (code) => {
+      const stdout = Buffer.concat(stdoutChunks).toString('utf8');
+      const stderr = Buffer.concat(stderrChunks).toString('utf8');
       resolve({
         command,
         argv: [resolvedRuntime.launcherExecutable, ...argv],
@@ -122,7 +126,7 @@ export async function runRaw(command, request, runtimeOptions = {}) {
         stdout,
         stderr,
         resolvedRuntime,
-      });
+});
     });
   });
 }

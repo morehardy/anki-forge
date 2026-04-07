@@ -3,7 +3,7 @@ import path from 'node:path';
 
 function readBundleVersion(manifestPath) {
   const raw = fs.readFileSync(manifestPath, 'utf8');
-  const match = raw.match(/^bundle_version:\s*"([^"]+)"/m);
+  const match = raw.match(/^\s*bundle_version:\s*['"]?([^'"\s]+)['"]?/m);
   return match ? match[1] : 'unknown';
 }
 
