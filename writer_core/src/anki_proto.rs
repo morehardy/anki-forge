@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedNotetype, NormalizedTemplate};
+use authoring_core::{NormalizedField, NormalizedNotetype, NormalizedTemplate};
 use prost::{Enumeration, Message};
 use serde::{Deserialize, Serialize};
 
@@ -369,13 +369,13 @@ pub(crate) fn encode_notetype_config(notetype: &NormalizedNotetype) -> Result<Ve
         latex_svg: false,
         reqs: storage_card_requirements(notetype),
         original_stock_kind: storage_original_stock_kind(notetype) as i32,
-        original_id: None,
+        original_id: notetype.original_id,
         other: serde_json::to_vec(&metadata).context("encode notetype storage metadata")?,
     }
     .encode_to_vec())
 }
 
-pub(crate) fn encode_field_config() -> Vec<u8> {
+pub(crate) fn encode_field_config(field: &NormalizedField) -> Vec<u8> {
     NoteFieldConfig {
         sticky: false,
         rtl: false,
@@ -385,9 +385,9 @@ pub(crate) fn encode_field_config() -> Vec<u8> {
         plain_text: false,
         collapsed: false,
         exclude_from_search: false,
-        id: None,
-        tag: None,
-        prevent_deletion: false,
+        id: field.config_id,
+        tag: field.tag,
+        prevent_deletion: field.prevent_deletion,
         other: vec![],
     }
     .encode_to_vec()
@@ -397,12 +397,12 @@ pub(crate) fn encode_template_config(template: &NormalizedTemplate) -> Vec<u8> {
     TemplateConfig {
         q_format: template.question_format.clone(),
         a_format: template.answer_format.clone(),
-        q_format_browser: String::new(),
-        a_format_browser: String::new(),
+        q_format_browser: template.browser_question_format.clone().unwrap_or_default(),
+        a_format_browser: template.browser_answer_format.clone().unwrap_or_default(),
         target_deck_id: 0,
-        browser_font_name: String::new(),
-        browser_font_size: 0,
-        id: None,
+        browser_font_name: template.browser_font_name.clone().unwrap_or_default(),
+        browser_font_size: template.browser_font_size.unwrap_or_default(),
+        id: template.config_id,
         other: vec![],
     }
     .encode_to_vec()
@@ -438,7 +438,7 @@ fn storage_notetype_kind(notetype: &NormalizedNotetype) -> NotetypeKind {
 }
 
 fn storage_original_stock_kind(notetype: &NormalizedNotetype) -> OriginalStockKind {
-    match notetype.kind.as_str() {
+    match notetype.original_stock_kind.as_deref().unwrap_or(notetype.kind.as_str()) {
         "basic" => OriginalStockKind::Basic,
         "cloze" => OriginalStockKind::Cloze,
         "image_occlusion" => OriginalStockKind::ImageOcclusion,
@@ -447,7 +447,7 @@ fn storage_original_stock_kind(notetype: &NormalizedNotetype) -> OriginalStockKi
 }
 
 fn storage_card_requirements(notetype: &NormalizedNotetype) -> Vec<CardRequirement> {
-    match notetype.kind.as_str() {
+    match notetype.original_stock_kind.as_deref().unwrap_or(notetype.kind.as_str()) {
         "basic" => vec![CardRequirement {
             card_ord: 0,
             kind: CardRequirementKind::All as i32,

@@ -292,6 +292,12 @@ fn validate_stock_lane_invariants(
             id: notetype_id.to_string(),
             kind: kind.to_string(),
             name: Some(name.to_string()),
+            original_stock_kind: None,
+            original_id: None,
+            fields: None,
+            templates: None,
+            css: None,
+            field_metadata: vec![],
         })
         .with_context(|| format!("resolve stock notetype shape for {}", notetype_id))?;
 
@@ -308,7 +314,12 @@ fn validate_stock_lane_invariants(
 
         let observed_fields = fields_for_notetype_in_order(inspect_report, notetype_id)?;
         ensure!(
-            observed_fields == expected_stock.fields,
+            observed_fields
+                == expected_stock
+                    .fields
+                    .iter()
+                    .map(|field| field.name.clone())
+                    .collect::<Vec<_>>(),
             "notetype {} fields must match stock order",
             notetype_id
         );

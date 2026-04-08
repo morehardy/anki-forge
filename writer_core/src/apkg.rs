@@ -272,10 +272,15 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             "insert into notetypes (id, name, mtime_secs, usn, config) values (?1, ?2, 0, 0, ?3)",
             rusqlite::params![ntid, notetype.name, encode_notetype_config(notetype)?],
         )?;
-        for (field_ord, field_name) in notetype.fields.iter().enumerate() {
+        for (field_ord, field) in notetype.fields.iter().enumerate() {
             conn.execute(
                 "insert into fields (ntid, ord, name, config) values (?1, ?2, ?3, ?4)",
-                rusqlite::params![ntid, field_ord as i64, field_name, encode_field_config()],
+                rusqlite::params![
+                    ntid,
+                    field.ord.unwrap_or(field_ord as u32) as i64,
+                    field.name,
+                    encode_field_config(field)
+                ],
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
@@ -283,7 +288,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
                 rusqlite::params![
                     ntid,
-                    template_ord as i64,
+                    template.ord.unwrap_or(template_ord as u32) as i64,
                     template.name,
                     encode_template_config(template)
                 ],
@@ -370,6 +375,12 @@ fn legacy_basic_models_json() -> Result<String> {
         id: "legacy-basic".into(),
         kind: "basic".into(),
         name: Some("Basic".into()),
+        original_stock_kind: None,
+        original_id: None,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     })
     .context("resolve source-grounded basic notetype for legacy dummy collection")?;
 
@@ -377,10 +388,10 @@ fn legacy_basic_models_json() -> Result<String> {
         .fields
         .iter()
         .enumerate()
-        .map(|(ord, name)| {
+        .map(|(ord, field)| {
             serde_json::json!({
-                "name": name,
-                "ord": ord,
+                "name": field.name,
+                "ord": field.ord.unwrap_or(ord as u32),
                 "sticky": false,
                 "rtl": false,
                 "font": "Arial",
@@ -432,8 +443,8 @@ fn legacy_dummy_front_text() -> &'static str {
 
 fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {
     let mut values = Vec::with_capacity(notetype.fields.len());
-    for field_name in &notetype.fields {
-        values.push(note.fields.get(field_name).cloned().unwrap_or_default());
+    for field in &notetype.fields {
+        values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
     }
     Ok(values.join("\u{1f}"))
 }

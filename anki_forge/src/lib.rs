@@ -4,9 +4,11 @@ pub mod runtime;
 pub use authoring_core::model::NormalizationResult;
 pub use authoring_core::{
     assess_risk, normalize, parse_selector, resolve_identity, resolve_selector,
-    to_canonical_json as to_authoring_canonical_json, AuthoringDocument, AuthoringMedia,
-    AuthoringNote, AuthoringNotetype, ComparisonContext, MergeRiskReport, NormalizationRequest,
-    NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+    to_canonical_json as to_authoring_canonical_json, AuthoringDocument, AuthoringField,
+    AuthoringFieldMetadata, AuthoringMedia, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
+    ComparisonContext, MergeRiskReport, NormalizationRequest, NormalizedField,
+    NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
+    NormalizedTemplate,
     Selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
 pub use writer_core::{

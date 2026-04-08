@@ -1,8 +1,8 @@
 use super::{
     lowering::lower_document,
     model::{
-        BasicNote, ClozeNote, ClozeNoteType, ImageOcclusionNote, ImageOcclusionNoteType,
-        ProductNote, ProductNoteType,
+        BasicNote, ClozeNote, ClozeNoteType, CustomNote, CustomNoteType, ImageOcclusionNote,
+        ImageOcclusionNoteType, ProductNote, ProductNoteType,
     },
     ProductDocument, ProductLoweringError,
 };
@@ -21,6 +21,11 @@ impl ProductDocument {
                 name: None,
             },
         ));
+        self
+    }
+
+    pub fn with_custom_notetype(mut self, notetype: CustomNoteType) -> Self {
+        self.note_types.push(ProductNoteType::Custom(notetype));
         self
     }
 
@@ -81,6 +86,11 @@ impl ProductDocument {
             back_extra: back_extra.into(),
             comments: comments.into(),
         }));
+        self
+    }
+
+    pub fn add_custom_note(mut self, note: CustomNote) -> Self {
+        self.notes.push(ProductNote::Custom(note));
         self
     }
 

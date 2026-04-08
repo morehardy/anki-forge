@@ -5,7 +5,9 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
+use authoring_core::{
+    NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+};
 use base64::Engine;
 use prost::Message;
 use rusqlite::Connection;
@@ -333,8 +335,8 @@ fn build_observations(
             "evidence_refs": [format!("notetype:{}", notetype_id)],
         }));
 
-        for field_name in &notetype.fields {
-            let field_name = field_name.as_str();
+        for field in &notetype.fields {
+            let field_name = field.name.as_str();
             field_entries.push(json!({
                 "selector": format!("notetype[id='{}']::field[{}]", notetype_id, field_name),
                 "notetype_id": notetype_id,
@@ -610,7 +612,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                 let ord: i64 = row.get(1)?;
                 let name: String = row.get(2)?;
                 let config: Vec<u8> = row.get(3)?;
-                decode_field_config(&config).map_err(|err| {
+                let config = decode_field_config(&config).map_err(|err| {
                     rusqlite::Error::FromSqlConversionFailure(
                         config.len(),
                         rusqlite::types::Type::Blob,
@@ -620,13 +622,17 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                         )),
                     )
                 })?;
-                Ok((ntid, ord, name))
+                Ok((ntid, ord, name, config))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
 
-        let mut fields_by_row_id = BTreeMap::<i64, Vec<(i64, String)>>::new();
-        for (ntid, ord, name) in field_values {
-            fields_by_row_id.entry(ntid).or_default().push((ord, name));
+        let mut fields_by_row_id =
+            BTreeMap::<i64, Vec<(i64, String, crate::anki_proto::NoteFieldConfig)>>::new();
+        for (ntid, ord, name, config) in field_values {
+            fields_by_row_id
+                .entry(ntid)
+                .or_default()
+                .push((ord, name, config));
         }
 
         let mut template_rows =
@@ -669,16 +675,45 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                 .remove(&row_id)
                 .unwrap_or_default()
                 .into_iter()
-                .map(|(_ord, name)| name)
+                .map(|(ord, name, config)| NormalizedField {
+                    name,
+                    ord: Some(ord as u32),
+                    config_id: config.id,
+                    tag: config.tag,
+                    prevent_deletion: config.prevent_deletion,
+                })
                 .collect::<Vec<_>>();
             let templates = templates_by_row_id
                 .remove(&row_id)
                 .unwrap_or_default()
                 .into_iter()
-                .map(|(_ord, name, template)| NormalizedTemplate {
+                .map(|(ord, name, template)| NormalizedTemplate {
                     name,
+                    ord: Some(ord as u32),
+                    config_id: template.id,
                     question_format: template.q_format,
                     answer_format: template.a_format,
+                    browser_question_format: if template.q_format_browser.is_empty() {
+                        None
+                    } else {
+                        Some(template.q_format_browser)
+                    },
+                    browser_answer_format: if template.a_format_browser.is_empty() {
+                        None
+                    } else {
+                        Some(template.a_format_browser)
+                    },
+                    target_deck_name: None,
+                    browser_font_name: if template.browser_font_name.is_empty() {
+                        None
+                    } else {
+                        Some(template.browser_font_name)
+                    },
+                    browser_font_size: if template.browser_font_size == 0 {
+                        None
+                    } else {
+                        Some(template.browser_font_size)
+                    },
                 })
                 .collect::<Vec<_>>();
             let notetype = NormalizedNotetype {
@@ -687,9 +722,12 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                     .unwrap_or_else(|| format!("notetype-{row_id}")),
                 kind: normalized_notetype_kind(&config),
                 name,
+                original_stock_kind: original_stock_kind(&config),
+                original_id: config.original_id,
                 fields,
                 templates,
                 css: config.css,
+                field_metadata: vec![],
             };
             notetypes_by_row_id.insert(row_id, notetype.clone());
             notetype_values.push(notetype);
@@ -713,8 +751,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                     flds.split('\u{1f}').map(|s| s.to_string()).collect()
                 };
                 let mut fields = BTreeMap::new();
-                for (field_name, value) in notetype.fields.iter().cloned().zip(field_values) {
-                    fields.insert(field_name, value);
+                for (field, value) in notetype.fields.iter().zip(field_values) {
+                    fields.insert(field.name.clone(), value);
                 }
                 Ok(NormalizedNote {
                     id: guid,
@@ -741,8 +779,17 @@ fn normalized_notetype_kind(config: &crate::anki_proto::NotetypeConfig) -> Strin
         Some(OriginalStockKind::ImageOcclusion) => "image_occlusion".into(),
         _ => match NotetypeKind::try_from(config.kind).ok() {
             Some(NotetypeKind::Cloze) => "cloze".into(),
-            _ => "basic".into(),
+            _ => "normal".into(),
         },
+    }
+}
+
+fn original_stock_kind(config: &crate::anki_proto::NotetypeConfig) -> Option<String> {
+    match OriginalStockKind::try_from(config.original_stock_kind).ok() {
+        Some(OriginalStockKind::Basic) => Some("basic".into()),
+        Some(OriginalStockKind::Cloze) => Some("cloze".into()),
+        Some(OriginalStockKind::ImageOcclusion) => Some("image_occlusion".into()),
+        _ => None,
     }
 }
 

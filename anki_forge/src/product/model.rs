@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProductDocument {
@@ -12,6 +13,7 @@ pub enum ProductNoteType {
     Basic(BasicNoteType),
     Cloze(ClozeNoteType),
     ImageOcclusion(ImageOcclusionNoteType),
+    Custom(CustomNoteType),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -19,6 +21,7 @@ pub enum ProductNote {
     Basic(BasicNote),
     Cloze(ClozeNote),
     ImageOcclusion(ImageOcclusionNote),
+    Custom(CustomNote),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -37,6 +40,15 @@ pub struct ClozeNoteType {
 pub struct ImageOcclusionNoteType {
     pub id: String,
     pub name: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CustomNoteType {
+    pub id: String,
+    pub name: Option<String>,
+    pub fields: Vec<CustomField>,
+    pub templates: Vec<CustomTemplate>,
+    pub css: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -67,6 +79,27 @@ pub struct ImageOcclusionNote {
     pub header: String,
     pub back_extra: String,
     pub comments: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CustomField {
+    pub name: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CustomTemplate {
+    pub name: String,
+    pub question_format: String,
+    pub answer_format: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CustomNote {
+    pub id: String,
+    pub note_type_id: String,
+    pub deck_name: String,
+    pub fields: BTreeMap<String, String>,
+    pub tags: Vec<String>,
 }
 
 impl ProductDocument {

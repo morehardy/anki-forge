@@ -298,7 +298,8 @@ fn validate_normalized_ir(
             continue;
         };
 
-        let mut expected_fields = notetype.fields.clone();
+        let mut expected_fields: Vec<_> =
+            notetype.fields.iter().map(|field| field.name.clone()).collect();
         let mut actual_fields: Vec<_> = note.fields.keys().cloned().collect();
         expected_fields.sort();
         actual_fields.sort();
@@ -360,19 +361,35 @@ fn validate_stock_notetype_shape(
         id: notetype.id.clone(),
         kind: notetype.kind.clone(),
         name: Some(notetype.name.clone()),
+        original_stock_kind: notetype.original_stock_kind.clone(),
+        original_id: notetype.original_id,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     }) else {
         return vec![];
     };
 
     let mut diagnostics = vec![];
-    if notetype.fields != expected.fields {
+    let actual_fields = notetype
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<Vec<_>>();
+    let expected_fields = expected
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<Vec<_>>();
+    if actual_fields != expected_fields {
         diagnostics.push(stock_shape_mismatch(
             index,
             notetype,
             "fields",
             format!(
                 "notetype fields {:?} do not match source-grounded fields {:?}",
-                notetype.fields, expected.fields
+                actual_fields, expected_fields
             ),
         ));
     }

@@ -1,5 +1,9 @@
-use authoring_core::{normalize, AuthoringDocument, ComparisonContext, NormalizationRequest};
+use authoring_core::{
+    normalize, AuthoringDocument, AuthoringField, AuthoringFieldMetadata, AuthoringNote,
+    AuthoringNotetype, AuthoringTemplate, ComparisonContext, NormalizationRequest,
+};
 use serde_json::{json, Value};
+use std::collections::BTreeMap;
 
 fn assert_json_object_has_keys(value: &Value, keys: &[&str]) {
     let object = value.as_object().expect("expected JSON object");
@@ -14,6 +18,12 @@ fn request_from_json(value: Value) -> NormalizationRequest {
 
 fn string_map(value: Value) -> std::collections::BTreeMap<String, String> {
     serde_json::from_value(value).expect("deserialize string map")
+}
+
+fn normalized_field_names(
+    fields: &[authoring_core::NormalizedField],
+) -> Vec<&str> {
+    fields.iter().map(|field| field.name.as_str()).collect()
 }
 
 #[test]
@@ -311,7 +321,7 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
     assert_eq!(notetype.id, "basic-main");
     assert_eq!(notetype.kind, "basic");
     assert_eq!(notetype.name, "Basic");
-    assert_eq!(notetype.fields, vec!["Front", "Back"]);
+    assert_eq!(normalized_field_names(&notetype.fields), vec!["Front", "Back"]);
     assert_eq!(notetype.templates.len(), 1);
     assert_eq!(notetype.templates[0].name, "Card 1");
     assert_eq!(notetype.templates[0].question_format, "{{Front}}");
@@ -373,7 +383,10 @@ fn cloze_authoring_input_expands_to_source_grounded_cloze_template() {
     assert_eq!(notetype.id, "cloze-main");
     assert_eq!(notetype.kind, "cloze");
     assert_eq!(notetype.name, "Cloze");
-    assert_eq!(notetype.fields, vec!["Text", "Back Extra"]);
+    assert_eq!(
+        normalized_field_names(&notetype.fields),
+        vec!["Text", "Back Extra"]
+    );
     assert_eq!(notetype.templates.len(), 1);
     assert_eq!(notetype.templates[0].name, "Cloze");
     assert_eq!(notetype.templates[0].question_format, "{{cloze:Text}}");
@@ -438,7 +451,7 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
     assert_eq!(notetype.kind, "image_occlusion");
     assert_eq!(notetype.name, "Image Occlusion");
     assert_eq!(
-        notetype.fields,
+        normalized_field_names(&notetype.fields),
         vec!["Occlusion", "Image", "Header", "Back Extra", "Comments"]
     );
     assert_eq!(notetype.templates.len(), 1);
@@ -594,4 +607,100 @@ fn duplicate_notetype_ids_return_invalid_result() {
         .items
         .iter()
         .any(|item| item.code == "PHASE3.DUPLICATE_NOTETYPE_ID"));
+}
+
+#[test]
+fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
+    let input = AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "explicit-io-doc".into(),
+        notetypes: vec![AuthoringNotetype {
+            id: "io-main".into(),
+            kind: "cloze".into(),
+            name: Some("Image Occlusion".into()),
+            original_stock_kind: Some("image_occlusion".into()),
+            original_id: Some(1729000000),
+            fields: Some(vec![
+                AuthoringField {
+                    name: "Occlusion".into(),
+                    ord: Some(0),
+                    config_id: Some(1101),
+                    tag: Some(1),
+                    prevent_deletion: true,
+                },
+                AuthoringField {
+                    name: "Image".into(),
+                    ord: Some(1),
+                    config_id: Some(1102),
+                    tag: Some(2),
+                    prevent_deletion: true,
+                },
+            ]),
+            templates: Some(vec![AuthoringTemplate {
+                name: "Image Occlusion".into(),
+                ord: Some(0),
+                config_id: Some(2101),
+                question_format: "{{cloze:Occlusion}}".into(),
+                answer_format: "{{cloze:Occlusion}}<br>{{Image}}".into(),
+                browser_question_format: Some("{{Image}}".into()),
+                browser_answer_format: Some("{{Image}}<hr>{{Header}}".into()),
+                target_deck_name: Some("Target Deck".into()),
+                browser_font_name: Some("Arial".into()),
+                browser_font_size: Some(18),
+            }]),
+            css: Some(".card { color: black; }".into()),
+            field_metadata: vec![AuthoringFieldMetadata {
+                field_name: "Occlusion".into(),
+                label: Some("Mask".into()),
+                role_hint: Some("occlusion-mask".into()),
+            }],
+        }],
+        notes: vec![AuthoringNote {
+            id: "note-1".into(),
+            notetype_id: "io-main".into(),
+            deck_name: "Default".into(),
+            fields: BTreeMap::from([
+                ("Occlusion".into(), "mask".into()),
+                ("Image".into(), "<img src=\"mask.png\">".into()),
+            ]),
+            tags: vec!["demo".into()],
+        }],
+        media: vec![],
+    };
+
+    let result = normalize(NormalizationRequest::new(input));
+    let normalized = result.normalized_ir.expect("normalized_ir");
+    let notetype = normalized.notetypes.first().expect("normalized notetype");
+
+    assert_eq!(notetype.kind, "cloze");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
+    assert_eq!(notetype.original_id, Some(1729000000));
+
+    assert_eq!(notetype.fields.len(), 2);
+    assert_eq!(notetype.fields[0].name, "Occlusion");
+    assert_eq!(notetype.fields[0].ord, Some(0));
+    assert_eq!(notetype.fields[0].config_id, Some(1101));
+    assert_eq!(notetype.fields[0].tag, Some(1));
+    assert!(notetype.fields[0].prevent_deletion);
+
+    assert_eq!(notetype.templates.len(), 1);
+    assert_eq!(notetype.templates[0].ord, Some(0));
+    assert_eq!(notetype.templates[0].config_id, Some(2101));
+    assert_eq!(
+        notetype.templates[0].target_deck_name.as_deref(),
+        Some("Target Deck")
+    );
+    assert_eq!(
+        notetype.templates[0].browser_font_name.as_deref(),
+        Some("Arial")
+    );
+    assert_eq!(notetype.templates[0].browser_font_size, Some(18));
+
+    assert_eq!(notetype.field_metadata.len(), 1);
+    assert_eq!(notetype.field_metadata[0].field_name, "Occlusion");
+    assert_eq!(
+        notetype.field_metadata[0].role_hint.as_deref(),
+        Some("occlusion-mask")
+    );
 }

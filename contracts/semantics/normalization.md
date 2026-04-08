@@ -29,6 +29,24 @@ The stock notetype lanes are limited to the variants exposed in the local
   source-defined occlusion, image, header, back-extra, and comments fields, and
   it carries the image-occlusion CSS from the source module.
 
+When authoring input already includes explicit lowered notetype payloads
+(`fields`, `templates`, optional `css`, and optional `field_metadata`),
+normalization preserves that lowered shape instead of re-expanding the stock
+lane. The normalized output carries through:
+
+- lowered notetype identity fields such as `kind`, `original_stock_kind`, and
+  `original_id`
+- field ordinals and config metadata such as `ord`, `config_id`, `tag`, and
+  `prevent_deletion`
+- template ordinals and config metadata such as `ord`, `config_id`,
+  `browser_question_format`, `browser_answer_format`, `target_deck_name`,
+  `browser_font_name`, and `browser_font_size`
+- `field_metadata` entries including `field_name`, `label`, and `role_hint`
+
+This explicit-lowered bridge allows upstream product authoring to preserve
+stock-compatible payloads and custom `normal` notetype declarations without
+inventing a separate downstream kind taxonomy.
+
 Authoring notes may reference media entries inline, and normalized output keeps
 those media records inline as well for this contract scope. The media source
 module shows that Anki normalizes filenames during filesystem insertion, but

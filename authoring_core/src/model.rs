@@ -20,6 +20,61 @@ pub struct AuthoringNotetype {
     pub kind: String,
     #[serde(default)]
     pub name: Option<String>,
+    #[serde(default)]
+    pub original_stock_kind: Option<String>,
+    #[serde(default)]
+    pub original_id: Option<i64>,
+    #[serde(default)]
+    pub fields: Option<Vec<AuthoringField>>,
+    #[serde(default)]
+    pub templates: Option<Vec<AuthoringTemplate>>,
+    #[serde(default)]
+    pub css: Option<String>,
+    #[serde(default)]
+    pub field_metadata: Vec<AuthoringFieldMetadata>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AuthoringField {
+    pub name: String,
+    #[serde(default)]
+    pub ord: Option<u32>,
+    #[serde(default)]
+    pub config_id: Option<i64>,
+    #[serde(default)]
+    pub tag: Option<u32>,
+    #[serde(default)]
+    pub prevent_deletion: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AuthoringTemplate {
+    pub name: String,
+    #[serde(default)]
+    pub ord: Option<u32>,
+    #[serde(default)]
+    pub config_id: Option<i64>,
+    pub question_format: String,
+    pub answer_format: String,
+    #[serde(default)]
+    pub browser_question_format: Option<String>,
+    #[serde(default)]
+    pub browser_answer_format: Option<String>,
+    #[serde(default)]
+    pub target_deck_name: Option<String>,
+    #[serde(default)]
+    pub browser_font_name: Option<String>,
+    #[serde(default)]
+    pub browser_font_size: Option<u32>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AuthoringFieldMetadata {
+    pub field_name: String,
+    #[serde(default)]
+    pub label: Option<String>,
+    #[serde(default)]
+    pub role_hint: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -101,16 +156,58 @@ pub struct NormalizedNotetype {
     pub id: String,
     pub kind: String,
     pub name: String,
-    pub fields: Vec<String>,
+    #[serde(default)]
+    pub original_stock_kind: Option<String>,
+    #[serde(default)]
+    pub original_id: Option<i64>,
+    pub fields: Vec<NormalizedField>,
     pub templates: Vec<NormalizedTemplate>,
     pub css: String,
+    #[serde(default)]
+    pub field_metadata: Vec<NormalizedFieldMetadata>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NormalizedField {
+    pub name: String,
+    #[serde(default)]
+    pub ord: Option<u32>,
+    #[serde(default)]
+    pub config_id: Option<i64>,
+    #[serde(default)]
+    pub tag: Option<u32>,
+    #[serde(default)]
+    pub prevent_deletion: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NormalizedTemplate {
     pub name: String,
+    #[serde(default)]
+    pub ord: Option<u32>,
+    #[serde(default)]
+    pub config_id: Option<i64>,
     pub question_format: String,
     pub answer_format: String,
+    #[serde(default)]
+    pub browser_question_format: Option<String>,
+    #[serde(default)]
+    pub browser_answer_format: Option<String>,
+    #[serde(default)]
+    pub target_deck_name: Option<String>,
+    #[serde(default)]
+    pub browser_font_name: Option<String>,
+    #[serde(default)]
+    pub browser_font_size: Option<u32>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NormalizedFieldMetadata {
+    pub field_name: String,
+    #[serde(default)]
+    pub label: Option<String>,
+    #[serde(default)]
+    pub role_hint: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
