@@ -1,5 +1,8 @@
+pub mod builders;
 pub mod diagnostics;
+pub mod lowering;
 pub mod model;
 
 pub use diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError};
-pub use model::{BasicNoteType, ProductDocument, ProductNoteType};
+pub use lowering::{LoweringMapping, LoweringPlan};
+pub use model::{BasicNoteType, ProductDocument, ProductNote, ProductNoteType};

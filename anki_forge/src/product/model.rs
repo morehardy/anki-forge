@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct ProductDocument {
     document_id: String,
     note_types: Vec<ProductNoteType>,
+    pub(super) notes: Vec<ProductNote>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -12,9 +13,23 @@ pub enum ProductNoteType {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ProductNote {
+    Basic(BasicNote),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BasicNoteType {
     pub id: String,
     pub name: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct BasicNote {
+    pub id: String,
+    pub note_type_id: String,
+    pub deck_name: String,
+    pub front: String,
+    pub back: String,
 }
 
 impl ProductDocument {
@@ -22,6 +37,7 @@ impl ProductDocument {
         Self {
             document_id: document_id.into(),
             note_types: Vec::new(),
+            notes: Vec::new(),
         }
     }
 
@@ -39,5 +55,9 @@ impl ProductDocument {
 
     pub fn note_types(&self) -> &[ProductNoteType] {
         &self.note_types
+    }
+
+    pub fn notes(&self) -> &[ProductNote] {
+        &self.notes
     }
 }
