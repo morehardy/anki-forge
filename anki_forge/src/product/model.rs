@@ -4,14 +4,23 @@ use std::collections::BTreeMap;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProductDocument {
     document_id: String,
+    #[serde(default)]
     pub(super) note_types: Vec<ProductNoteType>,
+    #[serde(default)]
     pub(super) notes: Vec<ProductNote>,
+    #[serde(default)]
     pub(super) helpers: Vec<(String, super::helpers::HelperDeclaration)>,
+    #[serde(default)]
     pub(super) assets: Vec<super::assets::AssetSource>,
+    #[serde(default)]
     pub(super) font_bindings: Vec<super::assets::FontBinding>,
+    #[serde(default)]
     pub(super) field_metadata: Vec<(String, super::metadata::FieldMetadataDeclaration)>,
+    #[serde(default)]
     pub(super) browser_appearance: Vec<(String, super::metadata::TemplateBrowserAppearanceDeclaration)>,
+    #[serde(default)]
     pub(super) template_target_decks: Vec<(String, super::metadata::TemplateTargetDeckDeclaration)>,
+    #[serde(default)]
     pub(super) default_deck_name: Option<String>,
 }
 
