@@ -1,3 +1,4 @@
+pub mod product;
 pub mod runtime;
 
 pub use authoring_core::model::NormalizationResult;
