@@ -27,6 +27,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     let mut notetypes: Vec<AuthoringNotetype> = Vec::new();
     let mut notes: Vec<AuthoringNote> = Vec::new();
     let mut mappings: Vec<LoweringMapping> = Vec::new();
+    let mut product_diagnostics: Vec<ProductDiagnostic> = Vec::new();
 
     for notetype in document.note_types() {
         match notetype {
@@ -40,6 +41,30 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     kind: "notetype",
                     product_id: basic.id.clone(),
                     authoring_id: basic.id.clone(),
+                });
+            }
+            ProductNoteType::Cloze(cloze) => {
+                notetypes.push(AuthoringNotetype {
+                    id: cloze.id.clone(),
+                    kind: "cloze".into(),
+                    name: cloze.name.clone(),
+                });
+                mappings.push(LoweringMapping {
+                    kind: "notetype",
+                    product_id: cloze.id.clone(),
+                    authoring_id: cloze.id.clone(),
+                });
+            }
+            ProductNoteType::ImageOcclusion(io) => {
+                notetypes.push(AuthoringNotetype {
+                    id: io.id.clone(),
+                    kind: "cloze".into(),
+                    name: io.name.clone(),
+                });
+                mappings.push(LoweringMapping {
+                    kind: "notetype",
+                    product_id: io.id.clone(),
+                    authoring_id: io.id.clone(),
                 });
             }
         }
@@ -66,7 +91,60 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     authoring_id: basic.id.clone(),
                 });
             }
+            ProductNote::Cloze(cloze) => {
+                let mut fields: BTreeMap<String, String> = BTreeMap::new();
+                fields.insert("Text".into(), cloze.text.clone());
+                fields.insert("Back Extra".into(), cloze.back_extra.clone());
+
+                notes.push(AuthoringNote {
+                    id: cloze.id.clone(),
+                    notetype_id: cloze.note_type_id.clone(),
+                    deck_name: cloze.deck_name.clone(),
+                    fields,
+                    tags: Vec::new(),
+                });
+
+                mappings.push(LoweringMapping {
+                    kind: "note",
+                    product_id: cloze.id.clone(),
+                    authoring_id: cloze.id.clone(),
+                });
+            }
+            ProductNote::ImageOcclusion(io) => {
+                if io.image.trim().is_empty() {
+                    product_diagnostics.push(ProductDiagnostic::io_image_required(&io.id));
+                    continue;
+                }
+
+                let mut fields: BTreeMap<String, String> = BTreeMap::new();
+                fields.insert("Occlusion".into(), io.occlusion.clone());
+                fields.insert("Image".into(), io.image.clone());
+                fields.insert("Header".into(), io.header.clone());
+                fields.insert("Back Extra".into(), io.back_extra.clone());
+                fields.insert("Comments".into(), io.comments.clone());
+
+                notes.push(AuthoringNote {
+                    id: io.id.clone(),
+                    notetype_id: io.note_type_id.clone(),
+                    deck_name: io.deck_name.clone(),
+                    fields,
+                    tags: Vec::new(),
+                });
+
+                mappings.push(LoweringMapping {
+                    kind: "note",
+                    product_id: io.id.clone(),
+                    authoring_id: io.id.clone(),
+                });
+            }
         }
+    }
+
+    if !product_diagnostics.is_empty() {
+        return Err(ProductLoweringError {
+            product_diagnostics,
+            lowering_diagnostics: Vec::new(),
+        });
     }
 
     Ok(LoweringPlan {
@@ -83,4 +161,3 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
         lowering_diagnostics: Vec::new(),
     })
 }
-
