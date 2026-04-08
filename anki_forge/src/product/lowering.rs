@@ -8,6 +8,7 @@ use crate::{
 
 use super::{
     diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
+    helpers::{apply_helpers, HelperDeclaration},
     model::{ProductNote, ProductNoteType},
     ProductDocument,
 };
@@ -36,12 +37,21 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     for notetype in document.note_types() {
         match notetype {
             ProductNoteType::Basic(basic) => {
-                notetypes.push(stock_notetype(
+                let helpers = document.helpers_for(&basic.id);
+                match lower_stock_notetype(
                     &basic.id,
                     basic.name.clone(),
+                    "basic",
                     stock_lowering_defaults("basic")
                         .expect("source-grounded basic lowering defaults"),
-                ));
+                    &helpers,
+                ) {
+                    Ok(notetype) => notetypes.push(notetype),
+                    Err(diagnostic) => {
+                        product_diagnostics.push(diagnostic);
+                        continue;
+                    }
+                }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
                     product_id: basic.id.clone(),
@@ -49,12 +59,21 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
             }
             ProductNoteType::Cloze(cloze) => {
-                notetypes.push(stock_notetype(
+                let helpers = document.helpers_for(&cloze.id);
+                match lower_stock_notetype(
                     &cloze.id,
                     cloze.name.clone(),
+                    "cloze",
                     stock_lowering_defaults("cloze")
                         .expect("source-grounded cloze lowering defaults"),
-                ));
+                    &helpers,
+                ) {
+                    Ok(notetype) => notetypes.push(notetype),
+                    Err(diagnostic) => {
+                        product_diagnostics.push(diagnostic);
+                        continue;
+                    }
+                }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
                     product_id: cloze.id.clone(),
@@ -62,12 +81,21 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
             }
             ProductNoteType::ImageOcclusion(io) => {
-                notetypes.push(stock_notetype(
+                let helpers = document.helpers_for(&io.id);
+                match lower_stock_notetype(
                     &io.id,
                     io.name.clone(),
+                    "image_occlusion",
                     stock_lowering_defaults("image_occlusion")
                         .expect("source-grounded image occlusion lowering defaults"),
-                ));
+                    &helpers,
+                ) {
+                    Ok(notetype) => notetypes.push(notetype),
+                    Err(diagnostic) => {
+                        product_diagnostics.push(diagnostic);
+                        continue;
+                    }
+                }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
                     product_id: io.id.clone(),
@@ -75,6 +103,17 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
             }
             ProductNoteType::Custom(custom) => {
+                let helpers = document.helpers_for(&custom.id);
+                if !helpers.is_empty() {
+                    match apply_helpers("custom", "", "", &helpers) {
+                        Ok(_) => {}
+                        Err(diagnostic) => {
+                            product_diagnostics.push(diagnostic);
+                            continue;
+                        }
+                    }
+                }
+
                 notetypes.push(AuthoringNotetype {
                     id: custom.id.clone(),
                     kind: "normal".into(),
@@ -233,20 +272,48 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     })
 }
 
-fn stock_notetype(
+fn lower_stock_notetype(
     id: &str,
     name_override: Option<String>,
+    note_kind: &str,
     defaults: StockLoweringDefaults,
-) -> AuthoringNotetype {
-    AuthoringNotetype {
+    helpers: &[HelperDeclaration],
+) -> Result<AuthoringNotetype, ProductDiagnostic> {
+    let templates = defaults
+        .templates
+        .into_iter()
+        .map(|template| {
+            let (question_format, answer_format) = apply_helpers(
+                note_kind,
+                &template.question_format,
+                &template.answer_format,
+                helpers,
+            )?;
+
+            Ok(AuthoringTemplate {
+                name: template.name,
+                ord: template.ord,
+                config_id: template.config_id,
+                question_format,
+                answer_format,
+                browser_question_format: template.browser_question_format,
+                browser_answer_format: template.browser_answer_format,
+                target_deck_name: template.target_deck_name,
+                browser_font_name: template.browser_font_name,
+                browser_font_size: template.browser_font_size,
+            })
+        })
+        .collect::<Result<Vec<_>, ProductDiagnostic>>()?;
+
+    Ok(AuthoringNotetype {
         id: id.into(),
         kind: defaults.kind,
         name: Some(name_override.unwrap_or(defaults.name)),
         original_stock_kind: Some(defaults.original_stock_kind),
         original_id: None,
         fields: Some(defaults.fields),
-        templates: Some(defaults.templates),
+        templates: Some(templates),
         css: Some(defaults.css),
         field_metadata: defaults.field_metadata,
-    }
+    })
 }

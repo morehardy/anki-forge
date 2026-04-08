@@ -1,4 +1,5 @@
 use super::{
+    helpers::HelperDeclaration,
     lowering::lower_document,
     model::{
         BasicNote, ClozeNote, ClozeNoteType, CustomNote, CustomNoteType, ImageOcclusionNote,
@@ -92,6 +93,23 @@ impl ProductDocument {
     pub fn add_custom_note(mut self, note: CustomNote) -> Self {
         self.notes.push(ProductNote::Custom(note));
         self
+    }
+
+    pub fn with_helper(
+        mut self,
+        note_type_id: impl Into<String>,
+        helper: HelperDeclaration,
+    ) -> Self {
+        self.helpers.push((note_type_id.into(), helper));
+        self
+    }
+
+    pub fn helpers_for(&self, note_type_id: &str) -> Vec<HelperDeclaration> {
+        self.helpers
+            .iter()
+            .filter(|(target_note_type_id, _)| target_note_type_id == note_type_id)
+            .map(|(_, helper)| helper.clone())
+            .collect()
     }
 
     pub fn lower(&self) -> Result<super::lowering::LoweringPlan, ProductLoweringError> {

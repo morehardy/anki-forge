@@ -6,6 +6,7 @@ pub struct ProductDocument {
     document_id: String,
     pub(super) note_types: Vec<ProductNoteType>,
     pub(super) notes: Vec<ProductNote>,
+    pub(super) helpers: Vec<(String, super::helpers::HelperDeclaration)>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -108,6 +109,7 @@ impl ProductDocument {
             document_id: document_id.into(),
             note_types: Vec::new(),
             notes: Vec::new(),
+            helpers: Vec::new(),
         }
     }
 
