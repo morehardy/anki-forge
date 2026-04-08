@@ -1,4 +1,5 @@
 use super::{
+    assets::{AssetSource, FontBinding},
     helpers::HelperDeclaration,
     lowering::lower_document,
     model::{
@@ -101,6 +102,36 @@ impl ProductDocument {
         helper: HelperDeclaration,
     ) -> Self {
         self.helpers.push((note_type_id.into(), helper));
+        self
+    }
+
+    pub fn bundle_inline_template_asset(
+        mut self,
+        namespace: impl Into<String>,
+        filename: impl Into<String>,
+        mime: impl Into<String>,
+        data_base64: impl Into<String>,
+    ) -> Self {
+        self.assets.push(AssetSource::InlineTemplateStatic {
+            namespace: namespace.into(),
+            filename: filename.into(),
+            mime: mime.into(),
+            data_base64: data_base64.into(),
+        });
+        self
+    }
+
+    pub fn bind_font(
+        mut self,
+        note_type_id: impl Into<String>,
+        family: impl Into<String>,
+        filename: impl Into<String>,
+    ) -> Self {
+        self.font_bindings.push(FontBinding {
+            note_type_id: note_type_id.into(),
+            family: family.into(),
+            filename: filename.into(),
+        });
         self
     }
 

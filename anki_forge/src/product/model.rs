@@ -7,6 +7,8 @@ pub struct ProductDocument {
     pub(super) note_types: Vec<ProductNoteType>,
     pub(super) notes: Vec<ProductNote>,
     pub(super) helpers: Vec<(String, super::helpers::HelperDeclaration)>,
+    pub(super) assets: Vec<super::assets::AssetSource>,
+    pub(super) font_bindings: Vec<super::assets::FontBinding>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -110,6 +112,8 @@ impl ProductDocument {
             note_types: Vec::new(),
             notes: Vec::new(),
             helpers: Vec::new(),
+            assets: Vec::new(),
+            font_bindings: Vec::new(),
         }
     }
 
@@ -131,5 +135,13 @@ impl ProductDocument {
 
     pub fn notes(&self) -> &[ProductNote] {
         &self.notes
+    }
+
+    pub fn assets(&self) -> &[super::assets::AssetSource] {
+        &self.assets
+    }
+
+    pub fn font_bindings(&self) -> &[super::assets::FontBinding] {
+        &self.font_bindings
     }
 }

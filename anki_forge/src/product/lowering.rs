@@ -8,6 +8,7 @@ use crate::{
 
 use super::{
     diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
+    assets::AssetSource,
     helpers::{apply_helpers, HelperDeclaration},
     model::{ProductNote, ProductNoteType},
     ProductDocument,
@@ -16,6 +17,7 @@ use super::{
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LoweringMapping {
     pub kind: &'static str,
+    pub source_kind: &'static str,
     pub product_id: String,
     pub authoring_id: String,
 }
@@ -31,6 +33,8 @@ pub struct LoweringPlan {
 pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, ProductLoweringError> {
     let mut notetypes: Vec<AuthoringNotetype> = Vec::new();
     let mut notes: Vec<AuthoringNote> = Vec::new();
+    let mut media: Vec<crate::AuthoringMedia> = Vec::new();
+    let mut media_filenames: BTreeMap<String, String> = BTreeMap::new();
     let mut mappings: Vec<LoweringMapping> = Vec::new();
     let mut product_diagnostics: Vec<ProductDiagnostic> = Vec::new();
 
@@ -54,6 +58,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
+                    source_kind: "notetype",
                     product_id: basic.id.clone(),
                     authoring_id: basic.id.clone(),
                 });
@@ -76,6 +81,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
+                    source_kind: "notetype",
                     product_id: cloze.id.clone(),
                     authoring_id: cloze.id.clone(),
                 });
@@ -98,6 +104,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 }
                 mappings.push(LoweringMapping {
                     kind: "notetype",
+                    source_kind: "notetype",
                     product_id: io.id.clone(),
                     authoring_id: io.id.clone(),
                 });
@@ -158,6 +165,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
                 mappings.push(LoweringMapping {
                     kind: "notetype",
+                    source_kind: "notetype",
                     product_id: custom.id.clone(),
                     authoring_id: custom.id.clone(),
                 });
@@ -182,6 +190,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 
                 mappings.push(LoweringMapping {
                     kind: "note",
+                    source_kind: "note",
                     product_id: basic.id.clone(),
                     authoring_id: basic.id.clone(),
                 });
@@ -201,6 +210,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 
                 mappings.push(LoweringMapping {
                     kind: "note",
+                    source_kind: "note",
                     product_id: cloze.id.clone(),
                     authoring_id: cloze.id.clone(),
                 });
@@ -228,6 +238,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 
                 mappings.push(LoweringMapping {
                     kind: "note",
+                    source_kind: "note",
                     product_id: io.id.clone(),
                     authoring_id: io.id.clone(),
                 });
@@ -243,11 +254,57 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 
                 mappings.push(LoweringMapping {
                     kind: "note",
+                    source_kind: "note",
                     product_id: note.id.clone(),
                     authoring_id: note.id.clone(),
                 });
             }
         }
+    }
+
+    for asset in document.assets() {
+        match asset {
+            AssetSource::InlineTemplateStatic { .. } => {
+                let lowered_filename = asset.lowered_filename();
+                media_filenames.insert(asset.filename().to_string(), lowered_filename.clone());
+                media.push(crate::AuthoringMedia {
+                    filename: lowered_filename.clone(),
+                    mime: asset.mime().into(),
+                    data_base64: asset.data_base64().into(),
+                });
+                mappings.push(LoweringMapping {
+                    kind: "media",
+                    source_kind: "asset",
+                    product_id: asset.product_id(),
+                    authoring_id: lowered_filename,
+                });
+            }
+        }
+    }
+
+    let mut notetypes_by_id: BTreeMap<String, usize> = BTreeMap::new();
+    for (index, notetype) in notetypes.iter().enumerate() {
+        notetypes_by_id.insert(notetype.id.clone(), index);
+    }
+
+    for binding in document.font_bindings() {
+        let Some(index) = notetypes_by_id.get(&binding.note_type_id).copied() else {
+            continue;
+        };
+        let notetype = &mut notetypes[index];
+        let Some(media_filename) = media_filenames.get(&binding.filename) else {
+            continue;
+        };
+        let css = notetype.css.take().unwrap_or_default();
+        let font_face = format!(
+            "@font-face {{ font-family: '{}'; src: url('{}'); }}",
+            binding.family, media_filename
+        );
+        notetype.css = Some(if css.is_empty() {
+            font_face
+        } else {
+            format!("{css}\n{font_face}")
+        });
     }
 
     if !product_diagnostics.is_empty() {
@@ -264,7 +321,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             metadata_document_id: document.document_id().to_string(),
             notetypes,
             notes,
-            media: Vec::new(),
+            media,
         },
         mappings,
         product_diagnostics: Vec::new(),
