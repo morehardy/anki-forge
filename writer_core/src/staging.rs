@@ -507,15 +507,19 @@ pub(crate) fn resolve_template_target_deck_ids(
         })
         .collect();
     let mut resolved = BTreeMap::new();
+    let mut occupied_ids: BTreeSet<i64> = BTreeSet::from([1_i64]);
 
     if names.remove("Default") {
         resolved.insert("Default".into(), 1);
     }
 
-    let mut next_id = if resolved.contains_key("Default") { 2 } else { 1 };
     for name in names {
+        let mut next_id = 2_i64;
+        while occupied_ids.contains(&next_id) {
+            next_id += 1;
+        }
         resolved.insert(name, next_id);
-        next_id += 1;
+        occupied_ids.insert(next_id);
     }
 
     resolved
