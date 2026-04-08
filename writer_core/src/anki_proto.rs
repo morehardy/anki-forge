@@ -463,10 +463,15 @@ fn storage_card_requirements(notetype: &NormalizedNotetype) -> Vec<CardRequireme
             .templates
             .iter()
             .enumerate()
-            .map(|(ord, _)| CardRequirement {
-                card_ord: ord as u32,
+            .map(|(index, template)| CardRequirement {
+                card_ord: template.ord.unwrap_or(index as u32),
                 kind: CardRequirementKind::Any as i32,
-                field_ords: (0..notetype.fields.len() as u32).collect(),
+                field_ords: notetype
+                    .fields
+                    .iter()
+                    .enumerate()
+                    .map(|(field_index, field)| field.ord.unwrap_or(field_index as u32))
+                    .collect(),
             })
             .collect(),
     }

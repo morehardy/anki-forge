@@ -119,6 +119,13 @@ pub fn stock_lowering_defaults(kind: &str) -> Result<StockLoweringDefaults> {
 }
 
 pub fn resolve_stock_notetype(input: &AuthoringNotetype) -> Result<NormalizedNotetype> {
+    if input.fields.is_some() ^ input.templates.is_some() {
+        bail!(
+            "explicit lowered notetype payloads must provide both fields and templates for {}",
+            input.id
+        );
+    }
+
     if let (Some(fields), Some(templates)) = (input.fields.as_ref(), input.templates.as_ref()) {
         return Ok(NormalizedNotetype {
             id: input.id.clone(),

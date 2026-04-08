@@ -371,15 +371,20 @@ fn normalized_ir_schema_accepts_resolved_writer_ready_shape() {
                 "id": "basic-main",
                 "kind": "basic",
                 "name": "Basic",
-                "fields": ["Front", "Back"],
+                "fields": [
+                    { "name": "Front", "ord": 0, "prevent_deletion": false },
+                    { "name": "Back", "ord": 1, "prevent_deletion": false }
+                ],
                 "templates": [
                     {
                         "name": "Card 1",
+                        "ord": 0,
                         "question_format": "{{Front}}",
                         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
                     }
                 ],
-                "css": ""
+                "css": "",
+                "field_metadata": []
             }
         ],
         "notes": [
@@ -452,15 +457,20 @@ fn writer_ready_normalized_ir_value() -> Value {
                 "id": "basic-main",
                 "kind": "basic",
                 "name": "Basic",
-                "fields": ["Front", "Back"],
+                "fields": [
+                    { "name": "Front", "ord": 0, "prevent_deletion": false },
+                    { "name": "Back", "ord": 1, "prevent_deletion": false }
+                ],
                 "templates": [
                     {
                         "name": "Card 1",
+                        "ord": 0,
                         "question_format": "{{Front}}",
                         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
                     }
                 ],
-                "css": ""
+                "css": "",
+                "field_metadata": []
             }
         ],
         "notes": [

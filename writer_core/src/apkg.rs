@@ -443,7 +443,9 @@ fn legacy_dummy_front_text() -> &'static str {
 
 fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {
     let mut values = Vec::with_capacity(notetype.fields.len());
-    for field in &notetype.fields {
+    let mut ordered_fields = notetype.fields.iter().collect::<Vec<_>>();
+    ordered_fields.sort_by_key(|field| field.ord.unwrap_or(u32::MAX));
+    for field in ordered_fields {
         values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
     }
     Ok(values.join("\u{1f}"))
