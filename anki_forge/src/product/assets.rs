@@ -19,6 +19,12 @@ pub struct FontBinding {
 }
 
 impl AssetSource {
+    pub(super) fn namespace(&self) -> &str {
+        match self {
+            AssetSource::InlineTemplateStatic { namespace, .. } => namespace,
+        }
+    }
+
     pub(super) fn lowered_filename(&self) -> String {
         match self {
             AssetSource::InlineTemplateStatic {
@@ -65,6 +71,10 @@ impl AssetSource {
                 ..
             } => format!("{namespace}/{filename}"),
         }
+    }
+
+    pub(super) fn identity(&self) -> String {
+        format!("{}/{}", self.namespace(), self.filename())
     }
 }
 

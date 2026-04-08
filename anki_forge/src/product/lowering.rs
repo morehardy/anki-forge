@@ -34,9 +34,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     let mut notetypes: Vec<AuthoringNotetype> = Vec::new();
     let mut notes: Vec<AuthoringNote> = Vec::new();
     let mut media: Vec<crate::AuthoringMedia> = Vec::new();
-    let mut media_filenames: BTreeMap<String, String> = BTreeMap::new();
+    let mut media_by_identity: BTreeMap<String, String> = BTreeMap::new();
     let mut mappings: Vec<LoweringMapping> = Vec::new();
     let mut product_diagnostics: Vec<ProductDiagnostic> = Vec::new();
+    let mut lowering_diagnostics: Vec<LoweringDiagnostic> = Vec::new();
 
     for notetype in document.note_types() {
         match notetype {
@@ -266,7 +267,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
         match asset {
             AssetSource::InlineTemplateStatic { .. } => {
                 let lowered_filename = asset.lowered_filename();
-                media_filenames.insert(asset.filename().to_string(), lowered_filename.clone());
+                media_by_identity.insert(asset.identity(), lowered_filename.clone());
                 media.push(crate::AuthoringMedia {
                     filename: lowered_filename.clone(),
                     mime: asset.mime().into(),
@@ -289,16 +290,32 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 
     for binding in document.font_bindings() {
         let Some(index) = notetypes_by_id.get(&binding.note_type_id).copied() else {
+            lowering_diagnostics.push(LoweringDiagnostic {
+                code: "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE",
+                message: format!(
+                    "font binding for note type '{}' could not resolve a lowered notetype",
+                    binding.note_type_id
+                ),
+            });
+            continue;
+        };
+        let asset_identity = format!("{}/{}", binding.note_type_id, binding.filename);
+        let Some(media_filename) = media_by_identity.get(&asset_identity) else {
+            lowering_diagnostics.push(LoweringDiagnostic {
+                code: "PHASE5A.FONT_BINDING_UNKNOWN_ASSET",
+                message: format!(
+                    "font binding for note type '{}' could not resolve bundled asset '{}'",
+                    binding.note_type_id, binding.filename
+                ),
+            });
             continue;
         };
         let notetype = &mut notetypes[index];
-        let Some(media_filename) = media_filenames.get(&binding.filename) else {
-            continue;
-        };
         let css = notetype.css.take().unwrap_or_default();
         let font_face = format!(
             "@font-face {{ font-family: '{}'; src: url('{}'); }}",
-            binding.family, media_filename
+            escape_css_string_literal(&binding.family),
+            escape_css_string_literal(media_filename),
         );
         notetype.css = Some(if css.is_empty() {
             font_face
@@ -325,7 +342,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
         },
         mappings,
         product_diagnostics: Vec::new(),
-        lowering_diagnostics: Vec::new(),
+        lowering_diagnostics,
     })
 }
 
@@ -373,4 +390,8 @@ fn lower_stock_notetype(
         css: Some(defaults.css),
         field_metadata: defaults.field_metadata,
     })
+}
+
+fn escape_css_string_literal(value: &str) -> String {
+    value.replace('\\', "\\\\").replace('\'', "\\'")
 }
