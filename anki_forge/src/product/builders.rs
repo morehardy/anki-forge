@@ -26,8 +26,8 @@ impl ProductDocument {
 
     pub fn add_basic_note(
         mut self,
-        id: impl Into<String>,
         note_type_id: impl Into<String>,
+        id: impl Into<String>,
         deck_name: impl Into<String>,
         front: impl Into<String>,
         back: impl Into<String>,

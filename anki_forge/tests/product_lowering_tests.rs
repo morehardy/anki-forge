@@ -5,8 +5,8 @@ fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
     let plan = ProductDocument::new("demo-doc")
         .with_basic("basic-main")
         .add_basic_note(
-            "note-1",
             "basic-main",
+            "note-1",
             "Default",
             "front".to_string(),
             "back".to_string(),
