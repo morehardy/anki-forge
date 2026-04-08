@@ -9,6 +9,10 @@ pub struct ProductDocument {
     pub(super) helpers: Vec<(String, super::helpers::HelperDeclaration)>,
     pub(super) assets: Vec<super::assets::AssetSource>,
     pub(super) font_bindings: Vec<super::assets::FontBinding>,
+    pub(super) field_metadata: Vec<(String, super::metadata::FieldMetadataDeclaration)>,
+    pub(super) browser_appearance: Vec<(String, super::metadata::TemplateBrowserAppearanceDeclaration)>,
+    pub(super) template_target_decks: Vec<(String, super::metadata::TemplateTargetDeckDeclaration)>,
+    pub(super) default_deck_name: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -114,6 +118,10 @@ impl ProductDocument {
             helpers: Vec::new(),
             assets: Vec::new(),
             font_bindings: Vec::new(),
+            field_metadata: Vec::new(),
+            browser_appearance: Vec::new(),
+            template_target_decks: Vec::new(),
+            default_deck_name: None,
         }
     }
 

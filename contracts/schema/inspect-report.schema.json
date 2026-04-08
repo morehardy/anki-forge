@@ -51,7 +51,17 @@
     },
     "observations": {
       "type": "object",
-      "required": ["notetypes", "templates", "fields", "media", "metadata", "references"],
+      "required": [
+        "notetypes",
+        "templates",
+        "fields",
+        "media",
+        "field_metadata",
+        "browser_templates",
+        "template_target_decks",
+        "metadata",
+        "references"
+      ],
       "additionalProperties": false,
       "properties": {
         "notetypes": {
@@ -64,6 +74,15 @@
           "type": "array"
         },
         "media": {
+          "type": "array"
+        },
+        "field_metadata": {
+          "type": "array"
+        },
+        "browser_templates": {
+          "type": "array"
+        },
+        "template_target_decks": {
           "type": "array"
         },
         "metadata": {

@@ -141,6 +141,9 @@ fn sample_inspect_report(name: &str) -> InspectReport {
                 "filename": "sample.jpg",
                 "evidence_refs": ["staging:manifest", "collection:media"],
             })],
+            field_metadata: vec![],
+            browser_templates: vec![],
+            template_target_decks: vec![],
             metadata: vec![json!({
                 "selector": "counts",
                 "notetype_count": 1,

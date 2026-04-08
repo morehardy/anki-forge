@@ -66,6 +66,15 @@ struct StagingManifest {
     writer_policy_ref: String,
     build_context_ref: String,
     normalized_ir: NormalizedIr,
+    template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub(crate) struct ResolvedTemplateTargetDeck {
+    pub(crate) notetype_id: String,
+    pub(crate) template_name: String,
+    pub(crate) target_deck_name: String,
+    pub(crate) resolved_target_deck_id: i64,
 }
 
 pub(crate) fn load_normalized_ir_from_staging_manifest(path: &Path) -> Result<NormalizedIr> {
@@ -97,6 +106,7 @@ impl StagingPackage {
                 writer_policy_ref: policy_ref(&writer_policy.id, &writer_policy.version),
                 build_context_ref: resolved_build_context_ref(build_context),
                 normalized_ir: normalized_ir.clone(),
+                template_target_decks: resolve_template_target_decks(normalized_ir),
             },
             diagnostics: warnings,
         })
@@ -481,6 +491,61 @@ fn stock_shape_mismatch(
 
 fn resolved_build_context_ref(build_context: &BuildContext) -> String {
     build_context_ref(build_context).expect("build context ref should serialize")
+}
+
+pub(crate) fn resolve_template_target_deck_ids(
+    normalized_ir: &NormalizedIr,
+) -> BTreeMap<String, i64> {
+    let mut names: BTreeSet<String> = normalized_ir
+        .notetypes
+        .iter()
+        .flat_map(|notetype| {
+            notetype
+                .templates
+                .iter()
+                .filter_map(|template| template.target_deck_name.clone())
+        })
+        .collect();
+    let mut resolved = BTreeMap::new();
+
+    if names.remove("Default") {
+        resolved.insert("Default".into(), 1);
+    }
+
+    let mut next_id = if resolved.contains_key("Default") { 2 } else { 1 };
+    for name in names {
+        resolved.insert(name, next_id);
+        next_id += 1;
+    }
+
+    resolved
+}
+
+pub(crate) fn resolve_template_target_decks(
+    normalized_ir: &NormalizedIr,
+) -> Vec<ResolvedTemplateTargetDeck> {
+    let deck_ids = resolve_template_target_deck_ids(normalized_ir);
+    let mut resolved = vec![];
+
+    for notetype in &normalized_ir.notetypes {
+        for template in &notetype.templates {
+            let Some(target_deck_name) = template.target_deck_name.as_ref() else {
+                continue;
+            };
+            let resolved_target_deck_id = deck_ids
+                .get(target_deck_name)
+                .copied()
+                .unwrap_or(1);
+            resolved.push(ResolvedTemplateTargetDeck {
+                notetype_id: notetype.id.clone(),
+                template_name: template.name.clone(),
+                target_deck_name: target_deck_name.clone(),
+                resolved_target_deck_id,
+            });
+        }
+    }
+
+    resolved
 }
 
 fn fingerprint(canonical_json: &str) -> String {

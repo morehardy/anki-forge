@@ -7,7 +7,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
+    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote,
+    NormalizedNotetype,
 };
 use writer_core::{
     build, extract_media_references, inspect_apkg, inspect_build_result, inspect_staging,
@@ -66,6 +67,58 @@ fn inspect_staging_reports_complete_observations() {
     assert!(!report.observations.media.is_empty());
     assert!(!report.observations.metadata.is_empty());
     assert!(!report.observations.references.is_empty());
+}
+
+#[test]
+fn inspect_emits_browser_template_and_field_label_observations() {
+    let root = unique_artifact_root("inspect-browser-metadata");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-browser-metadata",
+    );
+
+    let mut normalized_ir = sample_basic_normalized_ir();
+    normalized_ir.notetypes[0].field_metadata = vec![NormalizedFieldMetadata {
+        field_name: "Front".into(),
+        label: Some("Prompt".into()),
+        role_hint: Some("question".into()),
+    }];
+    normalized_ir.notetypes[0].templates[0].browser_question_format =
+        Some("<span class=\"browser-front\">{{Front}}</span>".into());
+    normalized_ir.notetypes[0].templates[0].browser_answer_format =
+        Some("<span class=\"browser-back\">{{Back}}</span>".into());
+    normalized_ir.notetypes[0].templates[0].browser_font_name = Some("Arial".into());
+    normalized_ir.notetypes[0].templates[0].browser_font_size = Some(18);
+    normalized_ir.notetypes[0].templates[0].target_deck_name = Some("Custom::Deck".into());
+
+    build(
+        &normalized_ir,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_staging(target.staging_manifest_path()).unwrap();
+    assert!(report
+        .observations
+        .field_metadata
+        .iter()
+        .any(|value| value["field_name"] == "Front" && value["label"] == "Prompt"));
+    assert!(report
+        .observations
+        .browser_templates
+        .iter()
+        .any(|value| value["template_name"] == "Card 1"
+            && value["browser_font_name"] == "Arial"
+            && value["browser_font_size"] == 18));
+    assert!(report
+        .observations
+        .template_target_decks
+        .iter()
+        .any(|value| value["template_name"] == "Card 1"
+            && value["target_deck_name"] == "Custom::Deck"
+            && value["resolved_target_deck_id"].is_number()));
 }
 
 #[test]

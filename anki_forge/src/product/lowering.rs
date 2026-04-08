@@ -10,6 +10,7 @@ use super::{
     diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
     assets::AssetSource,
     helpers::{apply_helpers, HelperDeclaration},
+    metadata::FieldMetadataDeclaration,
     model::{ProductNote, ProductNoteType},
     ProductDocument,
 };
@@ -44,6 +45,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             ProductNoteType::Basic(basic) => {
                 let helpers = document.helpers_for(&basic.id);
                 match lower_stock_notetype(
+                    document,
                     &basic.id,
                     basic.name.clone(),
                     "basic",
@@ -67,6 +69,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             ProductNoteType::Cloze(cloze) => {
                 let helpers = document.helpers_for(&cloze.id);
                 match lower_stock_notetype(
+                    document,
                     &cloze.id,
                     cloze.name.clone(),
                     "cloze",
@@ -90,6 +93,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             ProductNoteType::ImageOcclusion(io) => {
                 let helpers = document.helpers_for(&io.id);
                 match lower_stock_notetype(
+                    document,
                     &io.id,
                     io.name.clone(),
                     "image_occlusion",
@@ -147,22 +151,36 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                             .templates
                             .iter()
                             .enumerate()
-                            .map(|(ord, template)| AuthoringTemplate {
-                                name: template.name.clone(),
-                                ord: Some(ord as u32),
-                                config_id: None,
-                                question_format: template.question_format.clone(),
-                                answer_format: template.answer_format.clone(),
-                                browser_question_format: None,
-                                browser_answer_format: None,
-                                target_deck_name: None,
-                                browser_font_name: None,
-                                browser_font_size: None,
-                            })
+                        .map(|(ord, template)| AuthoringTemplate {
+                            name: template.name.clone(),
+                            ord: Some(ord as u32),
+                            config_id: None,
+                            question_format: template.question_format.clone(),
+                            answer_format: template.answer_format.clone(),
+                            browser_question_format: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.question_format),
+                            browser_answer_format: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.answer_format),
+                            target_deck_name: document
+                                .template_target_deck_for(&custom.id, &template.name)
+                                .map(|declaration| declaration.deck_name),
+                            browser_font_name: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.font_name),
+                            browser_font_size: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.font_size),
+                        })
                             .collect(),
                     ),
                     css: Some(custom.css.clone().unwrap_or_default()),
-                    field_metadata: vec![],
+                    field_metadata: document
+                        .field_metadata_for(&custom.id)
+                        .into_iter()
+                        .map(authoring_field_metadata)
+                        .collect(),
                 });
                 mappings.push(LoweringMapping {
                     kind: "notetype",
@@ -175,6 +193,15 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     }
 
     for note in document.notes() {
+        let deck_name = document
+            .default_deck_name()
+            .map(str::to_owned)
+            .unwrap_or_else(|| match note {
+                ProductNote::Basic(basic) => basic.deck_name.clone(),
+                ProductNote::Cloze(cloze) => cloze.deck_name.clone(),
+                ProductNote::ImageOcclusion(io) => io.deck_name.clone(),
+                ProductNote::Custom(custom) => custom.deck_name.clone(),
+            });
         match note {
             ProductNote::Basic(basic) => {
                 let mut fields: BTreeMap<String, String> = BTreeMap::new();
@@ -184,7 +211,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 notes.push(AuthoringNote {
                     id: basic.id.clone(),
                     notetype_id: basic.note_type_id.clone(),
-                    deck_name: basic.deck_name.clone(),
+                    deck_name: deck_name.clone(),
                     fields,
                     tags: Vec::new(),
                 });
@@ -204,7 +231,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 notes.push(AuthoringNote {
                     id: cloze.id.clone(),
                     notetype_id: cloze.note_type_id.clone(),
-                    deck_name: cloze.deck_name.clone(),
+                    deck_name: deck_name.clone(),
                     fields,
                     tags: Vec::new(),
                 });
@@ -232,7 +259,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 notes.push(AuthoringNote {
                     id: io.id.clone(),
                     notetype_id: io.note_type_id.clone(),
-                    deck_name: io.deck_name.clone(),
+                    deck_name: deck_name.clone(),
                     fields,
                     tags: Vec::new(),
                 });
@@ -248,7 +275,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 notes.push(AuthoringNote {
                     id: note.id.clone(),
                     notetype_id: note.note_type_id.clone(),
-                    deck_name: note.deck_name.clone(),
+                    deck_name,
                     fields: note.fields.clone(),
                     tags: note.tags.clone(),
                 });
@@ -347,6 +374,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
 }
 
 fn lower_stock_notetype(
+    document: &ProductDocument,
     id: &str,
     name_override: Option<String>,
     note_kind: &str,
@@ -363,6 +391,8 @@ fn lower_stock_notetype(
                 &template.answer_format,
                 helpers,
             )?;
+            let browser_appearance = document.browser_appearance_for(id, &template.name);
+            let target_deck = document.template_target_deck_for(id, &template.name);
 
             Ok(AuthoringTemplate {
                 name: template.name,
@@ -370,11 +400,26 @@ fn lower_stock_notetype(
                 config_id: template.config_id,
                 question_format,
                 answer_format,
-                browser_question_format: template.browser_question_format,
-                browser_answer_format: template.browser_answer_format,
-                target_deck_name: template.target_deck_name,
-                browser_font_name: template.browser_font_name,
-                browser_font_size: template.browser_font_size,
+                browser_question_format: browser_appearance
+                    .as_ref()
+                    .and_then(|declaration| declaration.question_format.clone())
+                    .or(template.browser_question_format),
+                browser_answer_format: browser_appearance
+                    .as_ref()
+                    .and_then(|declaration| declaration.answer_format.clone())
+                    .or(template.browser_answer_format),
+                target_deck_name: target_deck
+                    .as_ref()
+                    .map(|declaration| declaration.deck_name.clone())
+                    .or(template.target_deck_name),
+                browser_font_name: browser_appearance
+                    .as_ref()
+                    .and_then(|declaration| declaration.font_name.clone())
+                    .or(template.browser_font_name),
+                browser_font_size: browser_appearance
+                    .as_ref()
+                    .and_then(|declaration| declaration.font_size)
+                    .or(template.browser_font_size),
             })
         })
         .collect::<Result<Vec<_>, ProductDiagnostic>>()?;
@@ -388,10 +433,23 @@ fn lower_stock_notetype(
         fields: Some(defaults.fields),
         templates: Some(templates),
         css: Some(defaults.css),
-        field_metadata: defaults.field_metadata,
+        field_metadata: document
+            .field_metadata_for(id)
+            .into_iter()
+            .map(authoring_field_metadata)
+            .chain(defaults.field_metadata)
+            .collect(),
     })
 }
 
 fn escape_css_string_literal(value: &str) -> String {
     value.replace('\\', "\\\\").replace('\'', "\\'")
+}
+
+fn authoring_field_metadata(field: FieldMetadataDeclaration) -> authoring_core::AuthoringFieldMetadata {
+    authoring_core::AuthoringFieldMetadata {
+        field_name: field.field_name,
+        label: field.label,
+        role_hint: field.role_hint,
+    }
 }

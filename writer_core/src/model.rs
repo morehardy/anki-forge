@@ -85,6 +85,9 @@ pub struct InspectObservations {
     pub templates: Vec<Value>,
     pub fields: Vec<Value>,
     pub media: Vec<Value>,
+    pub field_metadata: Vec<Value>,
+    pub browser_templates: Vec<Value>,
+    pub template_target_decks: Vec<Value>,
     pub metadata: Vec<Value>,
     pub references: Vec<Value>,
 }

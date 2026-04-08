@@ -2,6 +2,10 @@ use super::{
     assets::{AssetSource, FontBinding},
     helpers::HelperDeclaration,
     lowering::lower_document,
+    metadata::{
+        FieldMetadataDeclaration, TemplateBrowserAppearanceDeclaration,
+        TemplateTargetDeckDeclaration,
+    },
     model::{
         BasicNote, ClozeNote, ClozeNoteType, CustomNote, CustomNoteType, ImageOcclusionNote,
         ImageOcclusionNoteType, ProductNote, ProductNoteType,
@@ -10,6 +14,15 @@ use super::{
 };
 
 impl ProductDocument {
+    pub fn with_default_deck(mut self, deck_name: impl Into<String>) -> Self {
+        self.default_deck_name = Some(deck_name.into());
+        self
+    }
+
+    pub fn default_deck_name(&self) -> Option<&str> {
+        self.default_deck_name.as_deref()
+    }
+
     pub fn with_cloze(mut self, id: impl Into<String>) -> Self {
         self.note_types
             .push(ProductNoteType::Cloze(ClozeNoteType { id: id.into(), name: None }));
@@ -133,6 +146,67 @@ impl ProductDocument {
             filename: filename.into(),
         });
         self
+    }
+
+    pub fn with_field_metadata(
+        mut self,
+        note_type_id: impl Into<String>,
+        field: FieldMetadataDeclaration,
+    ) -> Self {
+        self.field_metadata.push((note_type_id.into(), field));
+        self
+    }
+
+    pub fn field_metadata_for(&self, note_type_id: &str) -> Vec<FieldMetadataDeclaration> {
+        self.field_metadata
+            .iter()
+            .filter(|(target_note_type_id, _)| target_note_type_id == note_type_id)
+            .map(|(_, field)| field.clone())
+            .collect()
+    }
+
+    pub fn with_browser_appearance(
+        mut self,
+        note_type_id: impl Into<String>,
+        declaration: TemplateBrowserAppearanceDeclaration,
+    ) -> Self {
+        self.browser_appearance.push((note_type_id.into(), declaration));
+        self
+    }
+
+    pub fn browser_appearance_for(
+        &self,
+        note_type_id: &str,
+        template_name: &str,
+    ) -> Option<TemplateBrowserAppearanceDeclaration> {
+        self.browser_appearance
+            .iter()
+            .find(|(target_note_type_id, declaration)| {
+                target_note_type_id == note_type_id && declaration.template_name == template_name
+            })
+            .map(|(_, declaration)| declaration.clone())
+    }
+
+    pub fn with_template_target_deck(
+        mut self,
+        note_type_id: impl Into<String>,
+        declaration: TemplateTargetDeckDeclaration,
+    ) -> Self {
+        self.template_target_decks.push((note_type_id.into(), declaration));
+        self
+    }
+
+    pub fn template_target_deck_for(
+        &self,
+        note_type_id: &str,
+        template_name: &str,
+    ) -> Option<TemplateTargetDeckDeclaration> {
+        self.template_target_decks
+            .iter()
+            .find(|(target_note_type_id, declaration)| {
+                target_note_type_id == note_type_id && declaration.template_name == template_name
+            })
+            .map(|(_, declaration)| declaration.clone())
     }
 
     pub fn helpers_for(&self, note_type_id: &str) -> Vec<HelperDeclaration> {

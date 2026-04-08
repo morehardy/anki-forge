@@ -478,6 +478,9 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
     assert_eq!(staging_report["kind"], "inspect-report");
     assert_eq!(staging_report["source_kind"], "staging");
     assert_eq!(staging_report["observation_status"], "complete");
+    assert!(staging_report["observations"]["field_metadata"].is_array());
+    assert!(staging_report["observations"]["browser_templates"].is_array());
+    assert!(staging_report["observations"]["template_target_decks"].is_array());
 
     let apkg_output = run_cli(&[
         "inspect",
@@ -497,6 +500,9 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
     assert_eq!(apkg_report["kind"], "inspect-report");
     assert_eq!(apkg_report["source_kind"], "apkg");
     assert_eq!(apkg_report["observation_status"], "complete");
+    assert!(apkg_report["observations"]["field_metadata"].is_array());
+    assert!(apkg_report["observations"]["browser_templates"].is_array());
+    assert!(apkg_report["observations"]["template_target_decks"].is_array());
 
     let left = temp.path().join("left.inspect.json");
     let right = temp.path().join("right.inspect.json");

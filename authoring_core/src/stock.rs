@@ -60,7 +60,7 @@ pub struct StockLoweringDefaults {
 pub fn stock_lowering_defaults(kind: &str) -> Result<StockLoweringDefaults> {
     match kind {
         "basic" => Ok(StockLoweringDefaults {
-            kind: "normal".into(),
+            kind: "basic".into(),
             original_stock_kind: "basic".into(),
             name: "Basic".into(),
             fields: vec![

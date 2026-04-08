@@ -23,7 +23,7 @@ fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
         .notetypes
         .first()
         .expect("lower should produce one notetype");
-    assert_eq!(notetype.kind, "normal");
+    assert_eq!(notetype.kind, "basic");
 
     let note = plan
         .authoring_document

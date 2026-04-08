@@ -1,5 +1,7 @@
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedField, NormalizedNotetype, NormalizedTemplate};
+use authoring_core::{
+    NormalizedField, NormalizedFieldMetadata, NormalizedNotetype, NormalizedTemplate,
+};
 use prost::{Enumeration, Message};
 use serde::{Deserialize, Serialize};
 
@@ -285,6 +287,8 @@ pub(crate) struct TemplateConfig {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub(crate) struct NotetypeMetadata {
     pub anki_forge_notetype_id: String,
+    #[serde(default)]
+    pub field_metadata: Vec<NormalizedFieldMetadata>,
 }
 
 pub(crate) fn default_deck_common_bytes() -> Vec<u8> {
@@ -358,6 +362,7 @@ pub(crate) fn default_deck_config_bytes() -> Vec<u8> {
 pub(crate) fn encode_notetype_config(notetype: &NormalizedNotetype) -> Result<Vec<u8>> {
     let metadata = NotetypeMetadata {
         anki_forge_notetype_id: notetype.id.clone(),
+        field_metadata: notetype.field_metadata.clone(),
     };
 
     Ok(NotetypeConfig {
@@ -393,13 +398,16 @@ pub(crate) fn encode_field_config(field: &NormalizedField) -> Vec<u8> {
     .encode_to_vec()
 }
 
-pub(crate) fn encode_template_config(template: &NormalizedTemplate) -> Vec<u8> {
+pub(crate) fn encode_template_config(
+    template: &NormalizedTemplate,
+    target_deck_id: i64,
+) -> Vec<u8> {
     TemplateConfig {
         q_format: template.question_format.clone(),
         a_format: template.answer_format.clone(),
         q_format_browser: template.browser_question_format.clone().unwrap_or_default(),
         a_format_browser: template.browser_answer_format.clone().unwrap_or_default(),
-        target_deck_id: 0,
+        target_deck_id,
         browser_font_name: template.browser_font_name.clone().unwrap_or_default(),
         browser_font_size: template.browser_font_size.unwrap_or_default(),
         id: template.config_id,
