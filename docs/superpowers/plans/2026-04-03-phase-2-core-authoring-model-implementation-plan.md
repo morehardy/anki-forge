@@ -105,7 +105,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-rust-version = "1.81"
+rust-version = "1.92"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

@@ -6,7 +6,7 @@
 
 **Architecture:** The repository becomes contract-first. `contracts/` is the normative source of truth, `contract_tools/` is a Rust workspace member that loads and verifies the bundle, `docs/` holds explanatory and governance material, and `.github/` runs the same checks in CI that local workers run through `contracts/manifest.yaml`. Every contract-affecting change must be represented by assets plus executable gates before it is allowed to merge.
 
-**Tech Stack:** Rust 1.81 workspace, `serde`, `serde_json`, `serde_yaml`, `jsonschema`, `clap`, `thiserror`, `assert_cmd`, JSON Schema files, JSON/YAML fixtures, Markdown normative docs, GitHub Actions
+**Tech Stack:** Rust 1.92 workspace, `serde`, `serde_json`, `serde_yaml`, `jsonschema`, `clap`, `thiserror`, `assert_cmd`, JSON Schema files, JSON/YAML fixtures, Markdown normative docs, GitHub Actions
 
 ---
 
@@ -136,7 +136,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-rust-version = "1.81"
+rust-version = "1.92"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
