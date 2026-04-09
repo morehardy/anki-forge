@@ -1,0 +1,75 @@
+{
+  "document_id": "fixture-io-font-doc",
+  "note_types": [
+    {
+      "Custom": {
+        "id": "io-main",
+        "name": "Image Occlusion",
+        "fields": [
+          { "name": "Occlusion" },
+          { "name": "Image" },
+          { "name": "Header" },
+          { "name": "Back Extra" },
+          { "name": "Comments" }
+        ],
+        "templates": [
+          {
+            "name": "Image Occlusion",
+            "question_format": "{{Occlusion}}",
+            "answer_format": "{{Image}}\n{{Header}}\n{{Back Extra}}\n{{Comments}}"
+          }
+        ],
+        "css": ".card { color: #222; }"
+      }
+    }
+  ],
+  "notes": [
+    {
+      "Custom": {
+        "id": "note-io-1",
+        "note_type_id": "io-main",
+        "deck_name": "Default",
+        "fields": {
+          "Occlusion": "{{c1::Mask}}",
+          "Image": "mask image",
+          "Header": "Header",
+          "Back Extra": "Extra",
+          "Comments": "Comments"
+        },
+        "tags": []
+      }
+    }
+  ],
+  "helpers": [],
+  "assets": [
+    {
+      "InlineTemplateStatic": {
+        "namespace": "io-main",
+        "filename": "card-font.woff2",
+        "mime": "font/woff2",
+        "data_base64": "AA=="
+      }
+    }
+  ],
+  "font_bindings": [
+    {
+      "note_type_id": "io-main",
+      "family": "IO Sans",
+      "filename": "card-font.woff2"
+    }
+  ],
+  "field_metadata": [
+    [
+      "io-main",
+      { "field_name": "Header", "label": "Header", "role_hint": "context" }
+    ]
+  ],
+  "browser_appearance": [],
+  "template_target_decks": [
+    [
+      "io-main",
+      { "template_name": "Image Occlusion", "deck_name": "Custom::Deck" }
+    ]
+  ],
+  "default_deck_name": "Default"
+}

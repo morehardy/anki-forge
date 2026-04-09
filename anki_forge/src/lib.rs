@@ -1,12 +1,14 @@
+pub mod product;
 pub mod runtime;
 
 pub use authoring_core::model::NormalizationResult;
 pub use authoring_core::{
     assess_risk, normalize, parse_selector, resolve_identity, resolve_selector,
-    to_canonical_json as to_authoring_canonical_json, AuthoringDocument, AuthoringMedia,
-    AuthoringNote, AuthoringNotetype, ComparisonContext, MergeRiskReport, NormalizationRequest,
-    NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
-    Selector, SelectorError, SelectorResolveError, SelectorTarget,
+    to_canonical_json as to_authoring_canonical_json, AuthoringDocument, AuthoringField,
+    AuthoringFieldMetadata, AuthoringMedia, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
+    ComparisonContext, MergeRiskReport, NormalizationRequest, NormalizedField,
+    NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
+    NormalizedTemplate, Selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
 pub use writer_core::{
     build, build_context_ref, diff_reports, extract_media_references, inspect_apkg,

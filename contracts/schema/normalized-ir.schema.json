@@ -57,45 +57,133 @@
           "minLength": 1
         },
         "kind": {
-          "enum": ["basic", "cloze", "image_occlusion"]
+          "enum": ["normal", "cloze"]
         },
         "name": {
           "type": "string",
           "minLength": 1
         },
+        "original_stock_kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original_id": {
+          "type": "integer"
+        },
         "fields": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string",
-            "minLength": 1
+            "$ref": "#/$defs/normalized_field"
           }
         },
         "templates": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "object",
-            "required": ["name", "question_format", "answer_format"],
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "question_format": {
-                "type": "string",
-                "minLength": 1
-              },
-              "answer_format": {
-                "type": "string",
-                "minLength": 1
-              }
-            }
+            "$ref": "#/$defs/normalized_template"
           }
         },
         "css": {
           "type": "string"
+        },
+        "field_metadata": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/normalized_field_metadata"
+          }
+        }
+      }
+    },
+    "normalized_field": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ord": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "config_id": {
+          "type": "integer"
+        },
+        "tag": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "prevent_deletion": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "normalized_template": {
+      "type": "object",
+      "required": ["name", "question_format", "answer_format"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ord": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "config_id": {
+          "type": "integer"
+        },
+        "question_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answer_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "browser_question_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "browser_answer_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_deck_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "browser_font_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "browser_font_size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "normalized_field_metadata": {
+      "type": "object",
+      "required": ["field_name"],
+      "additionalProperties": false,
+      "properties": {
+        "field_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role_hint": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },

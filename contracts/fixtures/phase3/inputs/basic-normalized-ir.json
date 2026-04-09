@@ -20,16 +20,18 @@
     {
       "css": "",
       "fields": [
-        "Front",
-        "Back"
+        { "name": "Front", "ord": 0, "prevent_deletion": false },
+        { "name": "Back", "ord": 1, "prevent_deletion": false }
       ],
       "id": "basic-main",
-      "kind": "basic",
+      "kind": "normal",
       "name": "Basic",
+      "original_stock_kind": "basic",
       "templates": [
         {
           "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
           "name": "Card 1",
+          "ord": 0,
           "question_format": "{{Front}}"
         }
       ]

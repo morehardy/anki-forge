@@ -17,7 +17,8 @@ use crate::anki_proto::{
     encode_field_config, encode_notetype_config, encode_template_config,
 };
 use crate::staging::{
-    load_normalized_ir_from_staging_manifest, BuildArtifactTarget, MaterializedStaging,
+    load_normalized_ir_from_staging_manifest, resolve_template_target_deck_ids,
+    BuildArtifactTarget, MaterializedStaging,
 };
 
 // The local docs/source/rslib tree is an ignored reference mirror that CI does
@@ -241,6 +242,7 @@ fn execute_source_schema(conn: &Connection, sql: &str) -> Result<()> {
 
 fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -> Result<()> {
     let default_deck_config_id = 1_i64;
+    let template_target_deck_ids = resolve_template_target_deck_ids(normalized_ir);
 
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
@@ -263,6 +265,20 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             default_deck_kind_bytes(default_deck_config_id)
         ],
     )?;
+    for (deck_name, deck_id) in &template_target_deck_ids {
+        if deck_name == "Default" {
+            continue;
+        }
+        conn.execute(
+            "insert into decks (id, name, mtime_secs, usn, common, kind) values (?1, ?2, 0, 0, ?3, ?4)",
+            rusqlite::params![
+                deck_id,
+                deck_name,
+                default_deck_common_bytes(),
+                default_deck_kind_bytes(default_deck_config_id)
+            ],
+        )?;
+    }
 
     let mut notetype_ids = std::collections::BTreeMap::new();
     for (index, notetype) in normalized_ir.notetypes.iter().enumerate() {
@@ -272,20 +288,27 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             "insert into notetypes (id, name, mtime_secs, usn, config) values (?1, ?2, 0, 0, ?3)",
             rusqlite::params![ntid, notetype.name, encode_notetype_config(notetype)?],
         )?;
-        for (field_ord, field_name) in notetype.fields.iter().enumerate() {
+        for (field_ord, field) in notetype.fields.iter().enumerate() {
             conn.execute(
                 "insert into fields (ntid, ord, name, config) values (?1, ?2, ?3, ?4)",
-                rusqlite::params![ntid, field_ord as i64, field_name, encode_field_config()],
+                rusqlite::params![
+                    ntid,
+                    field.ord.unwrap_or(field_ord as u32) as i64,
+                    field.name,
+                    encode_field_config(field)
+                ],
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
+            let target_deck_id =
+                resolve_template_target_deck_id(template, &template_target_deck_ids, 0_i64);
             conn.execute(
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
                 rusqlite::params![
                     ntid,
-                    template_ord as i64,
+                    template.ord.unwrap_or(template_ord as u32) as i64,
                     template.name,
-                    encode_template_config(template)
+                    encode_template_config(template, target_deck_id)
                 ],
             )?;
         }
@@ -321,12 +344,15 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
         for tag in &note.tags {
             normalized_tags.insert(tag.clone());
         }
-        for (template_ord, _template) in notetype.templates.iter().enumerate() {
+        for (template_ord, template) in notetype.templates.iter().enumerate() {
+            let target_deck_id =
+                resolve_template_target_deck_id(template, &template_target_deck_ids, 1_i64);
             conn.execute(
-                "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, 1, ?3, 0, 0, 0, 0, ?4, 0, 0, 0, 0, 0, 0, 0, 0, ?5)",
+                "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
                     note_row * 10 + template_ord as i64,
                     note_row,
+                    target_deck_id,
                     template_ord as i64,
                     note_row,
                     "{}"
@@ -344,6 +370,19 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
     }
 
     Ok(())
+}
+
+fn resolve_template_target_deck_id(
+    template: &authoring_core::NormalizedTemplate,
+    template_target_deck_ids: &std::collections::BTreeMap<String, i64>,
+    default_id: i64,
+) -> i64 {
+    template
+        .target_deck_name
+        .as_ref()
+        .and_then(|deck_name| template_target_deck_ids.get(deck_name))
+        .copied()
+        .unwrap_or(default_id)
 }
 
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {
@@ -370,6 +409,12 @@ fn legacy_basic_models_json() -> Result<String> {
         id: "legacy-basic".into(),
         kind: "basic".into(),
         name: Some("Basic".into()),
+        original_stock_kind: None,
+        original_id: None,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     })
     .context("resolve source-grounded basic notetype for legacy dummy collection")?;
 
@@ -377,10 +422,10 @@ fn legacy_basic_models_json() -> Result<String> {
         .fields
         .iter()
         .enumerate()
-        .map(|(ord, name)| {
+        .map(|(ord, field)| {
             serde_json::json!({
-                "name": name,
-                "ord": ord,
+                "name": field.name,
+                "ord": field.ord.unwrap_or(ord as u32),
                 "sticky": false,
                 "rtl": false,
                 "font": "Arial",
@@ -432,8 +477,10 @@ fn legacy_dummy_front_text() -> &'static str {
 
 fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {
     let mut values = Vec::with_capacity(notetype.fields.len());
-    for field_name in &notetype.fields {
-        values.push(note.fields.get(field_name).cloned().unwrap_or_default());
+    let mut ordered_fields = notetype.fields.iter().collect::<Vec<_>>();
+    ordered_fields.sort_by_key(|field| field.ord.unwrap_or(u32::MAX));
+    for field in ordered_fields {
+        values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
     }
     Ok(values.join("\u{1f}"))
 }

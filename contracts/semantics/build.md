@@ -36,3 +36,12 @@ encoded as a legacy JSON hashmap or as structured media entries.
 In `media.rs`, imported media filenames are safety-checked and normalized, and
 archives that omit the `media` entry are treated as a legacy-compatible empty
 media map during import rather than as an immediate error.
+
+For `Phase 5A`, the writer also preserves product-layer template metadata:
+
+- field-label metadata lowers into authoring field metadata and is carried into
+  staged and packaged output
+- browser appearance declarations are carried onto matching templates during
+  lowering and preserved through build materialization
+- template target deck names are resolved to stable deck ids during staging and
+  reused when writing template configs and card rows

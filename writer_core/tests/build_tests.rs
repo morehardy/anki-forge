@@ -146,6 +146,9 @@ fn inspect_report_serializes_with_expected_fixed_domains() {
             templates: vec![],
             fields: vec![],
             media: vec![],
+            field_metadata: vec![],
+            browser_templates: vec![],
+            template_target_decks: vec![],
             metadata: vec![],
             references: vec![],
         },
@@ -331,6 +334,41 @@ fn build_materializes_media_payloads_into_staging_tree() {
     assert_eq!(
         fs::read(root.join("staging/media/sample.jpg")).unwrap(),
         b"hello"
+    );
+}
+
+#[test]
+fn build_preserves_bundled_media_entries() {
+    let root = unique_artifact_root("bundled-media");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/bundled-media");
+
+    let result = build(
+        &sample_basic_normalized_ir_with_media(),
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+
+    let manifest_json = fs::read_to_string(root.join("staging/manifest.json")).unwrap();
+    let manifest: serde_json::Value = serde_json::from_str(&manifest_json).unwrap();
+    assert_eq!(
+        manifest["normalized_ir"]["media"].as_array().unwrap().len(),
+        1
+    );
+    assert_eq!(
+        manifest["normalized_ir"]["media"][0]["filename"],
+        serde_json::json!("sample.jpg")
+    );
+    assert_eq!(
+        manifest["normalized_ir"]["media"][0]["mime"],
+        serde_json::json!("image/jpeg")
+    );
+    assert_eq!(
+        manifest["normalized_ir"]["media"][0]["data_base64"],
+        serde_json::json!("aGVsbG8=")
     );
 }
 
@@ -833,6 +871,12 @@ fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotety
         id: id.into(),
         kind: kind.into(),
         name: Some(name.into()),
+        original_stock_kind: None,
+        original_id: None,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     })
     .expect("resolve stock notetype");
     notetype.id = id.into();

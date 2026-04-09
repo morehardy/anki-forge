@@ -66,6 +66,15 @@ struct StagingManifest {
     writer_policy_ref: String,
     build_context_ref: String,
     normalized_ir: NormalizedIr,
+    template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub(crate) struct ResolvedTemplateTargetDeck {
+    pub(crate) notetype_id: String,
+    pub(crate) template_name: String,
+    pub(crate) target_deck_name: String,
+    pub(crate) resolved_target_deck_id: i64,
 }
 
 pub(crate) fn load_normalized_ir_from_staging_manifest(path: &Path) -> Result<NormalizedIr> {
@@ -97,6 +106,7 @@ impl StagingPackage {
                 writer_policy_ref: policy_ref(&writer_policy.id, &writer_policy.version),
                 build_context_ref: resolved_build_context_ref(build_context),
                 normalized_ir: normalized_ir.clone(),
+                template_target_decks: resolve_template_target_decks(normalized_ir),
             },
             diagnostics: warnings,
         })
@@ -260,10 +270,7 @@ fn validate_normalized_ir(
 
         diagnostics.extend(validate_stock_notetype_shape(index, notetype));
 
-        if !matches!(
-            notetype.kind.as_str(),
-            "basic" | "cloze" | "image_occlusion"
-        ) {
+        if !matches!(notetype.kind.as_str(), "normal" | "cloze") {
             diagnostics.push(BuildDiagnosticItem {
                 level: "error".into(),
                 code: "PHASE3.UNSUPPORTED_NOTETYPE_KIND".into(),
@@ -298,7 +305,11 @@ fn validate_normalized_ir(
             continue;
         };
 
-        let mut expected_fields = notetype.fields.clone();
+        let mut expected_fields: Vec<_> = notetype
+            .fields
+            .iter()
+            .map(|field| field.name.clone())
+            .collect();
         let mut actual_fields: Vec<_> = note.fields.keys().cloned().collect();
         expected_fields.sort();
         actual_fields.sort();
@@ -360,19 +371,35 @@ fn validate_stock_notetype_shape(
         id: notetype.id.clone(),
         kind: notetype.kind.clone(),
         name: Some(notetype.name.clone()),
+        original_stock_kind: notetype.original_stock_kind.clone(),
+        original_id: notetype.original_id,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     }) else {
         return vec![];
     };
 
     let mut diagnostics = vec![];
-    if notetype.fields != expected.fields {
+    let actual_fields = notetype
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<Vec<_>>();
+    let expected_fields = expected
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<Vec<_>>();
+    if actual_fields != expected_fields {
         diagnostics.push(stock_shape_mismatch(
             index,
             notetype,
             "fields",
             format!(
                 "notetype fields {:?} do not match source-grounded fields {:?}",
-                notetype.fields, expected.fields
+                actual_fields, expected_fields
             ),
         ));
     }
@@ -464,6 +491,62 @@ fn stock_shape_mismatch(
 
 fn resolved_build_context_ref(build_context: &BuildContext) -> String {
     build_context_ref(build_context).expect("build context ref should serialize")
+}
+
+pub(crate) fn resolve_template_target_deck_ids(
+    normalized_ir: &NormalizedIr,
+) -> BTreeMap<String, i64> {
+    let mut names: BTreeSet<String> = normalized_ir
+        .notetypes
+        .iter()
+        .flat_map(|notetype| {
+            notetype
+                .templates
+                .iter()
+                .filter_map(|template| template.target_deck_name.clone())
+        })
+        .collect();
+    let mut resolved = BTreeMap::new();
+    let mut occupied_ids: BTreeSet<i64> = BTreeSet::from([1_i64]);
+
+    if names.remove("Default") {
+        resolved.insert("Default".into(), 1);
+    }
+
+    for name in names {
+        let mut next_id = 2_i64;
+        while occupied_ids.contains(&next_id) {
+            next_id += 1;
+        }
+        resolved.insert(name, next_id);
+        occupied_ids.insert(next_id);
+    }
+
+    resolved
+}
+
+pub(crate) fn resolve_template_target_decks(
+    normalized_ir: &NormalizedIr,
+) -> Vec<ResolvedTemplateTargetDeck> {
+    let deck_ids = resolve_template_target_deck_ids(normalized_ir);
+    let mut resolved = vec![];
+
+    for notetype in &normalized_ir.notetypes {
+        for template in &notetype.templates {
+            let Some(target_deck_name) = template.target_deck_name.as_ref() else {
+                continue;
+            };
+            let resolved_target_deck_id = deck_ids.get(target_deck_name).copied().unwrap_or(1);
+            resolved.push(ResolvedTemplateTargetDeck {
+                notetype_id: notetype.id.clone(),
+                template_name: template.name.clone(),
+                target_deck_name: target_deck_name.clone(),
+                resolved_target_deck_id,
+            });
+        }
+    }
+
+    resolved
 }
 
 fn fingerprint(canonical_json: &str) -> String {

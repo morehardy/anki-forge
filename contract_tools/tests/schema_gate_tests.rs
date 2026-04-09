@@ -35,7 +35,8 @@ fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic"
             }
         ],
@@ -61,6 +62,79 @@ fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
                 "filename": "sample.mp3",
                 "mime": "audio/mpeg",
                 "data_base64": "Mg=="
+            }
+        ]
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
+fn authoring_ir_schema_accepts_explicit_lowered_stock_compatible_notetype_shape() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "authoring_ir_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "authoring-ir",
+        "schema_version": "0.1.0",
+        "metadata": { "document_id": "demo-doc" },
+        "notetypes": [
+            {
+                "id": "io-main",
+                "kind": "cloze",
+                "name": "Image Occlusion",
+                "original_stock_kind": "image_occlusion",
+                "original_id": 1729000000,
+                "css": ".card { color: black; }",
+                "fields": [
+                    {
+                        "name": "Occlusion",
+                        "ord": 0,
+                        "config_id": 1101,
+                        "tag": 1,
+                        "prevent_deletion": true
+                    },
+                    {
+                        "name": "Image",
+                        "ord": 1,
+                        "config_id": 1102,
+                        "tag": 2,
+                        "prevent_deletion": true
+                    }
+                ],
+                "templates": [
+                    {
+                        "name": "Image Occlusion",
+                        "ord": 0,
+                        "config_id": 2101,
+                        "question_format": "{{cloze:Occlusion}}",
+                        "answer_format": "{{cloze:Occlusion}}<br>{{Image}}",
+                        "browser_question_format": "{{Image}}",
+                        "browser_answer_format": "{{Image}}<hr>{{Header}}",
+                        "target_deck_name": "Target Deck",
+                        "browser_font_name": "Arial",
+                        "browser_font_size": 18
+                    }
+                ],
+                "field_metadata": [
+                    {
+                        "field_name": "Occlusion",
+                        "label": "Mask",
+                        "role_hint": "occlusion-mask"
+                    }
+                ]
+            }
+        ],
+        "notes": [
+            {
+                "id": "note-1",
+                "notetype_id": "io-main",
+                "deck_name": "Default",
+                "fields": {
+                    "Occlusion": "mask",
+                    "Image": "<img src=\"mask.png\">"
+                },
+                "tags": []
             }
         ]
     });
@@ -296,17 +370,23 @@ fn normalized_ir_schema_accepts_resolved_writer_ready_shape() {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic",
-                "fields": ["Front", "Back"],
+                "fields": [
+                    { "name": "Front", "ord": 0, "prevent_deletion": false },
+                    { "name": "Back", "ord": 1, "prevent_deletion": false }
+                ],
                 "templates": [
                     {
                         "name": "Card 1",
+                        "ord": 0,
                         "question_format": "{{Front}}",
                         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
                     }
                 ],
-                "css": ""
+                "css": "",
+                "field_metadata": []
             }
         ],
         "notes": [
@@ -377,17 +457,23 @@ fn writer_ready_normalized_ir_value() -> Value {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic",
-                "fields": ["Front", "Back"],
+                "fields": [
+                    { "name": "Front", "ord": 0, "prevent_deletion": false },
+                    { "name": "Back", "ord": 1, "prevent_deletion": false }
+                ],
                 "templates": [
                     {
                         "name": "Card 1",
+                        "ord": 0,
                         "question_format": "{{Front}}",
                         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
                     }
                 ],
-                "css": ""
+                "css": "",
+                "field_metadata": []
             }
         ],
         "notes": [

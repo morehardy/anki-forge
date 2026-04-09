@@ -1,11 +1,13 @@
 {
-  "artifact_fingerprint": "artifact:e82677feac158906debc3b743fd3afe94b4f51c6",
+  "artifact_fingerprint": "artifact:479c59940d66457571f029d9cc6a608650747128",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
   "observation_model_version": "phase3-inspect-v1",
   "observation_status": "complete",
   "observations": {
+    "browser_templates": [],
+    "field_metadata": [],
     "fields": [
       {
         "evidence_refs": [
@@ -81,8 +83,9 @@
         ],
         "field_count": 5,
         "id": "io-main",
-        "kind": "image_occlusion",
+        "kind": "cloze",
         "name": "Image Occlusion",
+        "original_stock_kind": "image_occlusion",
         "selector": "notetype[id='io-main']",
         "template_count": 1
       }
@@ -125,6 +128,7 @@
         "selector": "media-ref[note_id='note-io-1'][field='Image'][ref='occlusion.png']"
       }
     ],
+    "template_target_decks": [],
     "templates": [
       {
         "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",

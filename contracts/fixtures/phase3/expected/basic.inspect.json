@@ -1,11 +1,13 @@
 {
-  "artifact_fingerprint": "artifact:929959d3ba88be903b51e11fe3d3f54b63f7e9bd",
+  "artifact_fingerprint": "artifact:1ced2f86d6326e6d4929079fe443d219a7e27689",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
   "observation_model_version": "phase3-inspect-v1",
   "observation_status": "complete",
   "observations": {
+    "browser_templates": [],
+    "field_metadata": [],
     "fields": [
       {
         "evidence_refs": [
@@ -47,8 +49,9 @@
         ],
         "field_count": 2,
         "id": "basic-main",
-        "kind": "basic",
+        "kind": "normal",
         "name": "Basic",
+        "original_stock_kind": "basic",
         "selector": "notetype[id='basic-main']",
         "template_count": 1
       }
@@ -79,6 +82,7 @@
         "template_name": "Card 1"
       }
     ],
+    "template_target_decks": [],
     "templates": [
       {
         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",

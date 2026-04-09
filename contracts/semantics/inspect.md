@@ -15,3 +15,10 @@ and the structured observation buckets required by the schema.
 
 Inspection must preserve compatibility-relevant structure and avoid packaging
 noise that does not help compare writer outputs.
+
+`Phase 5A` inspect output includes three additional structured observation
+buckets beyond the existing core note/card/media data:
+
+- `field_metadata` for field labels and role hints
+- `browser_templates` for browser-specific template appearance declarations
+- `template_target_decks` for template deck declarations with resolved deck ids

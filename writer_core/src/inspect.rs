@@ -5,7 +5,9 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
-use authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
+use authoring_core::{
+    NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+};
 use base64::Engine;
 use prost::Message;
 use rusqlite::Connection;
@@ -22,7 +24,7 @@ use crate::anki_proto::{
 use crate::canonical_json::to_canonical_json;
 use crate::media_refs::extract_media_references;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
-use crate::staging::BuildArtifactTarget;
+use crate::staging::{BuildArtifactTarget, ResolvedTemplateTargetDeck};
 
 const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v1";
 const DOMAIN_NOTETYPES: &str = "notetypes";
@@ -94,6 +96,13 @@ struct ResolvedMedia {
     sha1_hex: String,
 }
 
+#[derive(Debug, Clone)]
+struct CollectionData {
+    notetypes: Vec<NormalizedNotetype>,
+    notes: Vec<NormalizedNote>,
+    template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+}
+
 pub fn inspect_build_result(
     build_result: &PackageBuildResult,
     artifact_target: &BuildArtifactTarget,
@@ -145,7 +154,11 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         .unwrap_or_else(|| PathBuf::from("media"));
 
     let (media, mut limitations) = resolve_staging_media(&manifest.normalized_ir, &media_root)?;
-    let observations = build_observations(&manifest.normalized_ir, &media);
+    let observations = build_observations(
+        &manifest.normalized_ir,
+        &media,
+        &manifest.template_target_decks,
+    );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
     Ok(build_report(
@@ -164,32 +177,6 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         ZipArchive::new(file).with_context(|| format!("open apkg archive {}", path.display()))?;
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
-    let mut normalized_ir = NormalizedIr {
-        kind: "normalized-ir".into(),
-        schema_version: "0.1.0".into(),
-        document_id: String::new(),
-        resolved_identity: String::new(),
-        notetypes: vec![],
-        notes: vec![],
-        media: vec![],
-    };
-    let mut has_core_data = false;
-
-    if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
-        let (notetypes, notes) = read_collection_data(&collection_bytes)?;
-        normalized_ir.notetypes = notetypes;
-        normalized_ir.notes = notes;
-        has_core_data = true;
-    } else {
-        limitations.missing_domains.insert(DOMAIN_NOTETYPES.into());
-        limitations.missing_domains.insert(DOMAIN_TEMPLATES.into());
-        limitations.missing_domains.insert(DOMAIN_FIELDS.into());
-        limitations.missing_domains.insert(DOMAIN_REFERENCES.into());
-        limitations
-            .degradation_reasons
-            .push("collection database is unavailable".into());
-    }
-
     let media = match read_media_entries(&mut archive, version) {
         Ok(media) => media,
         Err(err) => {
@@ -201,7 +188,35 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         }
     };
 
-    let observations = build_observations(&normalized_ir, &media);
+    let mut normalized_ir = NormalizedIr {
+        kind: "normalized-ir".into(),
+        schema_version: "0.1.0".into(),
+        document_id: String::new(),
+        resolved_identity: String::new(),
+        notetypes: vec![],
+        notes: vec![],
+        media: vec![],
+    };
+    let mut has_core_data = false;
+    let mut template_target_decks = vec![];
+
+    if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
+        let collection = read_collection_data(&collection_bytes)?;
+        normalized_ir.notetypes = collection.notetypes;
+        normalized_ir.notes = collection.notes;
+        template_target_decks = collection.template_target_decks;
+        has_core_data = true;
+    } else {
+        limitations.missing_domains.insert(DOMAIN_NOTETYPES.into());
+        limitations.missing_domains.insert(DOMAIN_TEMPLATES.into());
+        limitations.missing_domains.insert(DOMAIN_FIELDS.into());
+        limitations.missing_domains.insert(DOMAIN_REFERENCES.into());
+        limitations
+            .degradation_reasons
+            .push("collection database is unavailable".into());
+    }
+
+    let observations = build_observations(&normalized_ir, &media, &template_target_decks);
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
 
@@ -276,6 +291,9 @@ fn strip_evidence_refs(observations: &InspectObservations) -> Value {
         "templates": observations.templates.iter().map(strip_value).collect::<Vec<_>>(),
         "fields": observations.fields.iter().map(strip_value).collect::<Vec<_>>(),
         "media": observations.media.iter().map(strip_value).collect::<Vec<_>>(),
+        "field_metadata": observations.field_metadata.iter().map(strip_value).collect::<Vec<_>>(),
+        "browser_templates": observations.browser_templates.iter().map(strip_value).collect::<Vec<_>>(),
+        "template_target_decks": observations.template_target_decks.iter().map(strip_value).collect::<Vec<_>>(),
         "metadata": observations.metadata.iter().map(strip_value).collect::<Vec<_>>(),
         "references": observations.references.iter().map(strip_value).collect::<Vec<_>>(),
     })
@@ -300,6 +318,7 @@ fn strip_value(value: &Value) -> Value {
 fn build_observations(
     normalized_ir: &NormalizedIr,
     media: &[ResolvedMedia],
+    template_target_decks: &[ResolvedTemplateTargetDeck],
 ) -> InspectObservations {
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
         .notetypes
@@ -314,6 +333,9 @@ fn build_observations(
     let mut notetype_entries = vec![];
     let mut template_entries = vec![];
     let mut field_entries = vec![];
+    let mut field_metadata_entries = vec![];
+    let mut browser_template_entries = vec![];
+    let mut template_target_deck_entries = vec![];
     let mut note_entries = vec![];
     let mut card_entries = vec![];
     let mut media_reference_entries = vec![];
@@ -326,6 +348,7 @@ fn build_observations(
             "selector": format!("notetype[id='{}']", notetype_id),
             "id": notetype_id,
             "kind": notetype_kind,
+            "original_stock_kind": notetype.original_stock_kind,
             "name": notetype_name,
             "field_count": notetype.fields.len(),
             "template_count": notetype.templates.len(),
@@ -333,13 +356,25 @@ fn build_observations(
             "evidence_refs": [format!("notetype:{}", notetype_id)],
         }));
 
-        for field_name in &notetype.fields {
-            let field_name = field_name.as_str();
+        for field in &notetype.fields {
+            let field_name = field.name.as_str();
             field_entries.push(json!({
                 "selector": format!("notetype[id='{}']::field[{}]", notetype_id, field_name),
                 "notetype_id": notetype_id,
                 "name": field_name,
                 "evidence_refs": [format!("field:{}:{}", notetype_id, field_name)],
+            }));
+        }
+
+        for field_metadata in &notetype.field_metadata {
+            let field_name = field_metadata.field_name.as_str();
+            field_metadata_entries.push(json!({
+                "selector": format!("notetype[id='{}']::field-metadata[{}]", notetype_id, field_name),
+                "notetype_id": notetype_id,
+                "field_name": field_name,
+                "label": field_metadata.label,
+                "role_hint": field_metadata.role_hint,
+                "evidence_refs": [format!("field-metadata:{}:{}", notetype_id, field_name)],
             }));
         }
 
@@ -353,7 +388,43 @@ fn build_observations(
                 "answer_format": template.answer_format.as_str(),
                 "evidence_refs": [format!("template:{}:{}", notetype_id, template_name)],
             }));
+
+            if template.browser_question_format.is_some()
+                || template.browser_answer_format.is_some()
+                || template.browser_font_name.is_some()
+                || template.browser_font_size.is_some()
+            {
+                browser_template_entries.push(json!({
+                    "selector": format!("notetype[id='{}']::browser-template[{}]", notetype_id, template_name),
+                    "notetype_id": notetype_id,
+                    "template_name": template_name,
+                    "browser_question_format": template.browser_question_format,
+                    "browser_answer_format": template.browser_answer_format,
+                    "browser_font_name": template.browser_font_name,
+                    "browser_font_size": template.browser_font_size,
+                    "evidence_refs": [format!("browser-template:{}:{}", notetype_id, template_name)],
+                }));
+            }
         }
+    }
+
+    for template_target_deck in template_target_decks {
+        template_target_deck_entries.push(json!({
+            "selector": format!(
+                "notetype[id='{}']::template-target-deck[{}]",
+                template_target_deck.notetype_id,
+                template_target_deck.template_name
+            ),
+            "notetype_id": template_target_deck.notetype_id,
+            "template_name": template_target_deck.template_name,
+            "target_deck_name": template_target_deck.target_deck_name,
+            "resolved_target_deck_id": template_target_deck.resolved_target_deck_id,
+            "evidence_refs": [format!(
+                "template-target-deck:{}:{}",
+                template_target_deck.notetype_id,
+                template_target_deck.template_name
+            )],
+        }));
     }
 
     for note in &normalized_ir.notes {
@@ -428,6 +499,9 @@ fn build_observations(
                 })
             })
             .collect(),
+        field_metadata: field_metadata_entries,
+        browser_templates: browser_template_entries,
+        template_target_decks: template_target_deck_entries,
         metadata: metadata_entries,
         references: note_entries
             .into_iter()
@@ -589,8 +663,18 @@ fn read_media_entries(
     }
 }
 
-fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<NormalizedNote>)> {
+fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
     with_temp_sqlite(bytes, |conn| {
+        let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
+        let deck_values = deck_rows
+            .query_map([], |row| {
+                let id: i64 = row.get(0)?;
+                let name: String = row.get(1)?;
+                Ok((id, name))
+            })?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+        let deck_names_by_id: BTreeMap<i64, String> = deck_values.into_iter().collect();
+
         let mut notetype_rows =
             conn.prepare("select id, name, config from notetypes order by id")?;
         let raw_notetypes = notetype_rows
@@ -610,7 +694,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                 let ord: i64 = row.get(1)?;
                 let name: String = row.get(2)?;
                 let config: Vec<u8> = row.get(3)?;
-                decode_field_config(&config).map_err(|err| {
+                let config = decode_field_config(&config).map_err(|err| {
                     rusqlite::Error::FromSqlConversionFailure(
                         config.len(),
                         rusqlite::types::Type::Blob,
@@ -620,13 +704,17 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                         )),
                     )
                 })?;
-                Ok((ntid, ord, name))
+                Ok((ntid, ord, name, config))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
 
-        let mut fields_by_row_id = BTreeMap::<i64, Vec<(i64, String)>>::new();
-        for (ntid, ord, name) in field_values {
-            fields_by_row_id.entry(ntid).or_default().push((ord, name));
+        let mut fields_by_row_id =
+            BTreeMap::<i64, Vec<(i64, String, crate::anki_proto::NoteFieldConfig)>>::new();
+        for (ntid, ord, name, config) in field_values {
+            fields_by_row_id
+                .entry(ntid)
+                .or_default()
+                .push((ord, name, config));
         }
 
         let mut template_rows =
@@ -662,34 +750,93 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
 
         let mut notetypes_by_row_id = BTreeMap::new();
         let mut notetype_values = vec![];
+        let mut template_target_decks = vec![];
         for (row_id, name, config_bytes) in raw_notetypes {
             let config = decode_notetype_config(&config_bytes)?;
             let metadata = decode_notetype_metadata(&config.other)?;
+            let field_metadata = metadata
+                .as_ref()
+                .map(|metadata| metadata.field_metadata.clone())
+                .unwrap_or_default();
             let fields = fields_by_row_id
                 .remove(&row_id)
                 .unwrap_or_default()
                 .into_iter()
-                .map(|(_ord, name)| name)
+                .map(|(ord, name, config)| NormalizedField {
+                    name,
+                    ord: Some(ord as u32),
+                    config_id: config.id,
+                    tag: config.tag,
+                    prevent_deletion: config.prevent_deletion,
+                })
                 .collect::<Vec<_>>();
             let templates = templates_by_row_id
                 .remove(&row_id)
                 .unwrap_or_default()
                 .into_iter()
-                .map(|(_ord, name, template)| NormalizedTemplate {
-                    name,
-                    question_format: template.q_format,
-                    answer_format: template.a_format,
+                .map(|(ord, name, template)| {
+                    let target_deck_name = if template.target_deck_id == 0 {
+                        None
+                    } else {
+                        deck_names_by_id
+                            .get(&template.target_deck_id)
+                            .cloned()
+                            .or_else(|| Some(format!("deck-{}", template.target_deck_id)))
+                    };
+                    if let Some(target_deck_name) = target_deck_name.as_ref() {
+                        template_target_decks.push(ResolvedTemplateTargetDeck {
+                            notetype_id: metadata
+                                .as_ref()
+                                .map(|metadata| metadata.anki_forge_notetype_id.clone())
+                                .unwrap_or_else(|| format!("notetype-{row_id}")),
+                            template_name: name.clone(),
+                            target_deck_name: target_deck_name.clone(),
+                            resolved_target_deck_id: template.target_deck_id,
+                        });
+                    }
+                    NormalizedTemplate {
+                        name,
+                        ord: Some(ord as u32),
+                        config_id: template.id,
+                        question_format: template.q_format,
+                        answer_format: template.a_format,
+                        browser_question_format: if template.q_format_browser.is_empty() {
+                            None
+                        } else {
+                            Some(template.q_format_browser)
+                        },
+                        browser_answer_format: if template.a_format_browser.is_empty() {
+                            None
+                        } else {
+                            Some(template.a_format_browser)
+                        },
+                        target_deck_name,
+                        browser_font_name: if template.browser_font_name.is_empty() {
+                            None
+                        } else {
+                            Some(template.browser_font_name)
+                        },
+                        browser_font_size: if template.browser_font_size == 0 {
+                            None
+                        } else {
+                            Some(template.browser_font_size)
+                        },
+                    }
                 })
                 .collect::<Vec<_>>();
             let notetype = NormalizedNotetype {
                 id: metadata
-                    .map(|metadata| metadata.anki_forge_notetype_id)
+                    .as_ref()
+                    .map(|metadata| metadata.anki_forge_notetype_id.clone())
                     .unwrap_or_else(|| format!("notetype-{row_id}")),
                 kind: normalized_notetype_kind(&config),
                 name,
+                original_stock_kind: original_stock_kind(&config),
+                original_id: config.original_id,
                 fields,
                 templates,
                 css: config.css,
+                field_metadata,
             };
             notetypes_by_row_id.insert(row_id, notetype.clone());
             notetype_values.push(notetype);
@@ -713,8 +860,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
                     flds.split('\u{1f}').map(|s| s.to_string()).collect()
                 };
                 let mut fields = BTreeMap::new();
-                for (field_name, value) in notetype.fields.iter().cloned().zip(field_values) {
-                    fields.insert(field_name, value);
+                for (field, value) in notetype.fields.iter().zip(field_values) {
+                    fields.insert(field.name.clone(), value);
                 }
                 Ok(NormalizedNote {
                     id: guid,
@@ -730,19 +877,32 @@ fn read_collection_data(bytes: &[u8]) -> Result<(Vec<NormalizedNotetype>, Vec<No
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
 
-        Ok((notetype_values, notes))
+        Ok(CollectionData {
+            notetypes: notetype_values,
+            notes,
+            template_target_decks,
+        })
     })
 }
 
 fn normalized_notetype_kind(config: &crate::anki_proto::NotetypeConfig) -> String {
     match OriginalStockKind::try_from(config.original_stock_kind).ok() {
-        Some(OriginalStockKind::Basic) => "basic".into(),
+        Some(OriginalStockKind::Basic) => "normal".into(),
         Some(OriginalStockKind::Cloze) => "cloze".into(),
-        Some(OriginalStockKind::ImageOcclusion) => "image_occlusion".into(),
+        Some(OriginalStockKind::ImageOcclusion) => "cloze".into(),
         _ => match NotetypeKind::try_from(config.kind).ok() {
             Some(NotetypeKind::Cloze) => "cloze".into(),
-            _ => "basic".into(),
+            _ => "normal".into(),
         },
+    }
+}
+
+fn original_stock_kind(config: &crate::anki_proto::NotetypeConfig) -> Option<String> {
+    match OriginalStockKind::try_from(config.original_stock_kind).ok() {
+        Some(OriginalStockKind::Basic) => Some("basic".into()),
+        Some(OriginalStockKind::Cloze) => Some("cloze".into()),
+        Some(OriginalStockKind::ImageOcclusion) => Some("image_occlusion".into()),
+        _ => None,
     }
 }
 
@@ -805,4 +965,6 @@ fn unique_temp_path(name: &str) -> PathBuf {
 #[derive(Debug, Deserialize)]
 struct StagingManifest {
     normalized_ir: NormalizedIr,
+    #[serde(default)]
+    template_target_decks: Vec<ResolvedTemplateTargetDeck>,
 }

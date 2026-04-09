@@ -19,15 +19,37 @@ Source anchors:
 - `docs/source/rslib/src/media/files.rs`
 
 The stock notetype lanes are limited to the variants exposed in the local
-`stock.rs` source. In normalized output:
+`stock.rs` source. In normalized output, downstream/native-facing kinds stay
+aligned with Anki's real model and only expose `normal` and `cloze`:
 
-- `basic` resolves to the stock Basic notetype with `Front` and `Back` fields
-  and the standard single-card template shape.
-- `cloze` resolves to the stock Cloze notetype with `Text` and `Back Extra`
-  fields and a cloze question format derived from the `Text` field.
-- `image_occlusion` resolves to the stock image occlusion notetype with the
-  source-defined occlusion, image, header, back-extra, and comments fields, and
-  it carries the image-occlusion CSS from the source module.
+- stock Basic resolves to `kind = "normal"` with `original_stock_kind =
+  "basic"`, the stock `Front` and `Back` fields, and the standard single-card
+  template shape.
+- stock Cloze resolves to `kind = "cloze"` with `original_stock_kind =
+  "cloze"`, the stock `Text` and `Back Extra` fields, and the standard cloze
+  question format derived from the `Text` field.
+- stock Image Occlusion resolves to `kind = "cloze"` with
+  `original_stock_kind = "image_occlusion"`, the source-defined occlusion,
+  image, header, back-extra, and comments fields, and the image-occlusion CSS
+  from the source module.
+
+When authoring input already includes explicit lowered notetype payloads
+(`fields`, `templates`, optional `css`, and optional `field_metadata`),
+normalization preserves that lowered shape instead of re-expanding the stock
+lane. The normalized output carries through:
+
+- lowered notetype identity fields such as `kind`, `original_stock_kind`, and
+  `original_id`
+- field ordinals and config metadata such as `ord`, `config_id`, `tag`, and
+  `prevent_deletion`
+- template ordinals and config metadata such as `ord`, `config_id`,
+  `browser_question_format`, `browser_answer_format`, `target_deck_name`,
+  `browser_font_name`, and `browser_font_size`
+- `field_metadata` entries including `field_name`, `label`, and `role_hint`
+
+This explicit-lowered bridge allows upstream product authoring to preserve
+stock-compatible payloads and custom `normal` notetype declarations without
+inventing a separate downstream kind taxonomy.
 
 Authoring notes may reference media entries inline, and normalized output keeps
 those media records inline as well for this contract scope. The media source
