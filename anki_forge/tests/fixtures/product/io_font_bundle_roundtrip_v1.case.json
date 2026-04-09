@@ -1,0 +1,46 @@
+{
+  "document_id": "fixture-io-roundtrip-v1",
+  "note_types": [
+    { "ImageOcclusion": { "id": "io-main", "name": null } }
+  ],
+  "notes": [
+    {
+      "ImageOcclusion": {
+        "id": "note-io-1",
+        "note_type_id": "io-main",
+        "deck_name": "Default",
+        "occlusion": "{{c1::Mask}}",
+        "image": "<img src=\"_io-main_7331921cc6e8.woff2\">",
+        "header": "Header",
+        "back_extra": "Extra",
+        "comments": "Comments"
+      }
+    }
+  ],
+  "helpers": [],
+  "assets": [
+    {
+      "InlineTemplateStatic": {
+        "namespace": "io-main",
+        "filename": "card-font.woff2",
+        "mime": "font/woff2",
+        "data_base64": "AA=="
+      }
+    }
+  ],
+  "font_bindings": [],
+  "field_metadata": [
+    [
+      "io-main",
+      { "field_name": "Header", "label": "Header", "role_hint": "context" }
+    ]
+  ],
+  "browser_appearance": [],
+  "template_target_decks": [
+    [
+      "io-main",
+      { "template_name": "Image Occlusion", "deck_name": "Custom::Deck" }
+    ]
+  ],
+  "default_deck_name": "Default"
+}

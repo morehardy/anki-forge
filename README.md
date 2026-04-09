@@ -28,3 +28,29 @@ cargo run -p contract_tools -- diff --left "$(pwd)/contracts/artifacts/readme-ph
 Before a Phase 1 release or merge that affects contracts, capture the checklist in `docs/superpowers/checklists/phase-1-exit-evidence.md` and make sure the same commands pass locally and in CI.
 For Phase 2 core authoring readiness, capture and update `docs/superpowers/checklists/phase-2-exit-evidence.md`.
 For Phase 3 compatibility readiness, capture and update `docs/superpowers/checklists/phase-3-exit-evidence.md`.
+
+## Phase 5A product authoring
+
+`anki_forge::product` is the author-facing Phase 5A layer in Rust.
+It produces a reviewable `LoweringPlan`, then hands off to the existing `Authoring IR -> normalize -> build -> inspect -> diff` pipeline.
+
+Try the basic flow with:
+
+```bash
+cargo run -p anki_forge --example product_basic_flow
+```
+
+The real upstream importer oracle for Phase 5A also expects a local Anki source tree at
+`docs/source/anki`, Rust `1.92.0` (matching upstream `rust-toolchain.toml`), and `protoc`
+available on `PATH`.
+
+Run that oracle explicitly with:
+
+```bash
+./scripts/run_roundtrip_oracle.sh
+```
+
+It is intentionally not part of the default `cargo test` suite, because it depends on a local
+vendored upstream Anki checkout.
+
+Before calling a Phase 5A change ready, capture the evidence commands in `docs/superpowers/checklists/phase-5a-exit-evidence.md`.

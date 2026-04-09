@@ -20,16 +20,18 @@
     {
       "css": ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n",
       "fields": [
-        "Text",
-        "Back Extra"
+        { "name": "Text", "ord": 0, "tag": 0, "prevent_deletion": true },
+        { "name": "Back Extra", "ord": 1, "tag": 1, "prevent_deletion": false }
       ],
       "id": "cloze-main",
       "kind": "cloze",
       "name": "Cloze",
+      "original_stock_kind": "cloze",
       "templates": [
         {
           "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}",
           "name": "Cloze",
+          "ord": 0,
           "question_format": "{{cloze:Text}}"
         }
       ]

@@ -123,7 +123,8 @@ fn sample_inspect_report(name: &str) -> InspectReport {
             notetypes: vec![json!({
                 "selector": "notetype[id='basic-main']",
                 "name": name,
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "evidence_refs": ["staging:manifest", "collection:notetypes"],
             })],
             templates: vec![json!({
@@ -166,6 +167,12 @@ fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotety
         id: id.into(),
         kind: kind.into(),
         name: Some(name.into()),
+        original_stock_kind: None,
+        original_id: None,
+        fields: None,
+        templates: None,
+        css: None,
+        field_metadata: vec![],
     })
     .expect("resolve stock notetype");
     notetype.id = id.into();

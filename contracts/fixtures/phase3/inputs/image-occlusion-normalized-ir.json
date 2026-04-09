@@ -29,19 +29,21 @@
     {
       "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
       "fields": [
-        "Occlusion",
-        "Image",
-        "Header",
-        "Back Extra",
-        "Comments"
+        { "name": "Occlusion", "ord": 0, "tag": 0, "prevent_deletion": true },
+        { "name": "Image", "ord": 1, "tag": 1, "prevent_deletion": true },
+        { "name": "Header", "ord": 2, "tag": 2, "prevent_deletion": true },
+        { "name": "Back Extra", "ord": 3, "tag": 3, "prevent_deletion": true },
+        { "name": "Comments", "ord": 4, "tag": 4, "prevent_deletion": false }
       ],
       "id": "io-main",
-      "kind": "image_occlusion",
+      "kind": "cloze",
       "name": "Image Occlusion",
+      "original_stock_kind": "image_occlusion",
       "templates": [
         {
           "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",
           "name": "Image Occlusion",
+          "ord": 0,
           "question_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n"
         }
       ]

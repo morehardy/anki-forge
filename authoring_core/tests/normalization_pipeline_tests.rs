@@ -290,7 +290,8 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
             "notetypes": [
                 {
                     "id": "basic-main",
-                    "kind": "basic",
+                    "kind": "normal",
+                    "original_stock_kind": "basic",
                     "name": "Basic"
                 }
             ],
@@ -319,7 +320,8 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
 
     let notetype = &normalized.notetypes[0];
     assert_eq!(notetype.id, "basic-main");
-    assert_eq!(notetype.kind, "basic");
+    assert_eq!(notetype.kind, "normal");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("basic"));
     assert_eq!(notetype.name, "Basic");
     assert_eq!(normalized_field_names(&notetype.fields), vec!["Front", "Back"]);
     assert_eq!(notetype.templates.len(), 1);
@@ -410,7 +412,8 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
             "notetypes": [
                 {
                     "id": "io-main",
-                    "kind": "image_occlusion",
+                    "kind": "cloze",
+                    "original_stock_kind": "image_occlusion",
                     "name": "Image Occlusion"
                 }
             ],
@@ -448,7 +451,8 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
 
     let notetype = &normalized.notetypes[0];
     assert_eq!(notetype.id, "io-main");
-    assert_eq!(notetype.kind, "image_occlusion");
+    assert_eq!(notetype.kind, "cloze");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
     assert_eq!(notetype.name, "Image Occlusion");
     assert_eq!(
         normalized_field_names(&notetype.fields),

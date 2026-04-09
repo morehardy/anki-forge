@@ -1,11 +1,13 @@
 {
-  "artifact_fingerprint": "artifact:e6b075905f0026320083f73d8760dc66b4b35f24",
+  "artifact_fingerprint": "artifact:9fe111575e817efad17f17e9f3f9e47115c1d0da",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
   "observation_model_version": "phase3-inspect-v1",
   "observation_status": "complete",
   "observations": {
+    "browser_templates": [],
+    "field_metadata": [],
     "fields": [
       {
         "evidence_refs": [
@@ -49,6 +51,7 @@
         "id": "cloze-main",
         "kind": "cloze",
         "name": "Cloze",
+        "original_stock_kind": "cloze",
         "selector": "notetype[id='cloze-main']",
         "template_count": 1
       }
@@ -79,6 +82,7 @@
         "template_name": "Cloze"
       }
     ],
+    "template_target_decks": [],
     "templates": [
       {
         "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}",

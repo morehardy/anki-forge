@@ -270,10 +270,7 @@ fn validate_normalized_ir(
 
         diagnostics.extend(validate_stock_notetype_shape(index, notetype));
 
-        if !matches!(
-            notetype.kind.as_str(),
-            "basic" | "cloze" | "image_occlusion"
-        ) {
+        if !matches!(notetype.kind.as_str(), "normal" | "cloze") {
             diagnostics.push(BuildDiagnosticItem {
                 level: "error".into(),
                 code: "PHASE3.UNSUPPORTED_NOTETYPE_KIND".into(),

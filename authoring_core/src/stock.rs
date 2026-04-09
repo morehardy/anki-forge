@@ -60,7 +60,7 @@ pub struct StockLoweringDefaults {
 pub fn stock_lowering_defaults(kind: &str) -> Result<StockLoweringDefaults> {
     match kind {
         "basic" => Ok(StockLoweringDefaults {
-            kind: "basic".into(),
+            kind: "normal".into(),
             original_stock_kind: "basic".into(),
             name: "Basic".into(),
             fields: vec![
@@ -153,7 +153,7 @@ pub fn resolve_stock_notetype(input: &AuthoringNotetype) -> Result<NormalizedNot
 
     Ok(NormalizedNotetype {
         id: input.id.clone(),
-        kind: legacy_normalized_kind(input.kind.as_str(), stock_kind),
+        kind: native_notetype_kind(input.kind.as_str(), stock_kind),
         name: input.name.clone().unwrap_or(defaults.name),
         original_stock_kind: Some(stock_kind.into()),
         original_id: input.original_id,
@@ -172,18 +172,16 @@ pub fn resolve_stock_notetype(input: &AuthoringNotetype) -> Result<NormalizedNot
     })
 }
 
-fn legacy_normalized_kind(input_kind: &str, stock_kind: &str) -> String {
+fn native_notetype_kind(input_kind: &str, stock_kind: &str) -> String {
     match input_kind {
-        "basic" | "image_occlusion" => input_kind.to_string(),
-        "cloze" => {
-            if stock_kind == "image_occlusion" {
-                "image_occlusion".into()
-            } else {
-                "cloze".into()
-            }
-        }
-        "normal" => "basic".into(),
-        _ => stock_kind.to_string(),
+        "normal" => "normal".into(),
+        "cloze" => "cloze".into(),
+        "basic" => "normal".into(),
+        "image_occlusion" => "cloze".into(),
+        _ => match stock_kind {
+            "cloze" | "image_occlusion" => "cloze".into(),
+            _ => "normal".into(),
+        },
     }
 }
 

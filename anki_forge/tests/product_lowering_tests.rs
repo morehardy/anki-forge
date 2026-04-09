@@ -23,7 +23,8 @@ fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
         .notetypes
         .first()
         .expect("lower should produce one notetype");
-    assert_eq!(notetype.kind, "basic");
+    assert_eq!(notetype.kind, "normal");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("basic"));
 
     let note = plan
         .authoring_document
@@ -52,6 +53,7 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
         .first()
         .expect("lower should produce one notetype");
     assert_eq!(notetype.kind, "cloze");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("cloze"));
 
     let note = plan
         .authoring_document
@@ -84,6 +86,7 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
         .first()
         .expect("lower should produce one notetype");
     assert_eq!(notetype.kind, "cloze");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
 
     let note = plan
         .authoring_document

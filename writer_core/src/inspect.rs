@@ -346,6 +346,7 @@ fn build_observations(
             "selector": format!("notetype[id='{}']", notetype_id),
             "id": notetype_id,
             "kind": notetype_kind,
+            "original_stock_kind": notetype.original_stock_kind,
             "name": notetype_name,
             "field_count": notetype.fields.len(),
             "template_count": notetype.templates.len(),
@@ -883,9 +884,9 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
 
 fn normalized_notetype_kind(config: &crate::anki_proto::NotetypeConfig) -> String {
     match OriginalStockKind::try_from(config.original_stock_kind).ok() {
-        Some(OriginalStockKind::Basic) => "basic".into(),
+        Some(OriginalStockKind::Basic) => "normal".into(),
         Some(OriginalStockKind::Cloze) => "cloze".into(),
-        Some(OriginalStockKind::ImageOcclusion) => "image_occlusion".into(),
+        Some(OriginalStockKind::ImageOcclusion) => "cloze".into(),
         _ => match NotetypeKind::try_from(config.kind).ok() {
             Some(NotetypeKind::Cloze) => "cloze".into(),
             _ => "normal".into(),

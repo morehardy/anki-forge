@@ -28,12 +28,17 @@ fn basic_normalized_ir() -> Value {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
                 "name": "Basic",
-                "fields": ["Front", "Back"],
+                "original_stock_kind": "basic",
+                "fields": [
+                    { "name": "Front", "ord": 0, "prevent_deletion": false },
+                    { "name": "Back", "ord": 1, "prevent_deletion": false }
+                ],
                 "templates": [
                     {
                         "name": "Card 1",
+                        "ord": 0,
                         "question_format": "{{Front}}",
                         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
                     }

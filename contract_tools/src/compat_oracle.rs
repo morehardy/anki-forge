@@ -281,10 +281,11 @@ fn validate_stock_lane_invariants(
     for notetype in &inspect_report.observations.notetypes {
         let notetype_id = required_str_field(notetype, "id")?;
         let kind = required_str_field(notetype, "kind")?;
+        let original_stock_kind = optional_str_field(notetype, "original_stock_kind");
         let name = required_str_field(notetype, "name")?;
         ensure!(
-            matches!(kind, "basic" | "cloze" | "image_occlusion"),
-            "compat oracle currently supports only basic/cloze/image_occlusion notetypes, found {}",
+            matches!(kind, "normal" | "cloze"),
+            "compat oracle currently supports only normal/cloze notetypes, found {}",
             kind
         );
         let observed_css = required_str_field(notetype, "css")?;
@@ -292,7 +293,7 @@ fn validate_stock_lane_invariants(
             id: notetype_id.to_string(),
             kind: kind.to_string(),
             name: Some(name.to_string()),
-            original_stock_kind: None,
+            original_stock_kind: original_stock_kind.map(ToOwned::to_owned),
             original_id: None,
             fields: None,
             templates: None,
@@ -601,6 +602,10 @@ fn required_str_field<'a>(value: &'a Value, field: &str) -> anyhow::Result<&'a s
         .get(field)
         .and_then(Value::as_str)
         .with_context(|| format!("missing string field {}", field))
+}
+
+fn optional_str_field<'a>(value: &'a Value, field: &str) -> Option<&'a str> {
+    value.get(field).and_then(Value::as_str)
 }
 
 fn required_u64_field(value: &Value, field: &str) -> anyhow::Result<u64> {

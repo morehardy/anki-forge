@@ -35,7 +35,8 @@ fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic"
             }
         ],
@@ -369,7 +370,8 @@ fn normalized_ir_schema_accepts_resolved_writer_ready_shape() {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic",
                 "fields": [
                     { "name": "Front", "ord": 0, "prevent_deletion": false },
@@ -455,7 +457,8 @@ fn writer_ready_normalized_ir_value() -> Value {
         "notetypes": [
             {
                 "id": "basic-main",
-                "kind": "basic",
+                "kind": "normal",
+                "original_stock_kind": "basic",
                 "name": "Basic",
                 "fields": [
                     { "name": "Front", "ord": 0, "prevent_deletion": false },
