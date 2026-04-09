@@ -86,7 +86,10 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
         .first()
         .expect("lower should produce one notetype");
     assert_eq!(notetype.kind, "cloze");
-    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
+    assert_eq!(
+        notetype.original_stock_kind.as_deref(),
+        Some("image_occlusion")
+    );
 
     let note = plan
         .authoring_document
@@ -171,7 +174,10 @@ fn custom_escape_hatch_lowers_to_explicit_authoring_normal_notetype_shape() {
     assert_eq!(fields[1].name, "Back");
     assert_eq!(fields[1].ord, Some(1));
 
-    let templates = notetype.templates.as_ref().expect("explicit custom templates");
+    let templates = notetype
+        .templates
+        .as_ref()
+        .expect("explicit custom templates");
     assert_eq!(templates.len(), 1);
     assert_eq!(templates[0].name, "Card 1");
     assert_eq!(templates[0].ord, Some(0));

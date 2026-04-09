@@ -14,7 +14,10 @@ fn answer_divider_helper_injects_a_named_divider_into_basic_answer_template() {
         .lower()
         .expect("lower helper-enhanced document");
 
-    let template = &lowering.authoring_document.notetypes[0].templates.as_ref().unwrap()[0];
+    let template = &lowering.authoring_document.notetypes[0]
+        .templates
+        .as_ref()
+        .unwrap()[0];
     assert!(template.answer_format.contains("Answer"));
 }
 

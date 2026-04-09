@@ -23,12 +23,7 @@ fn inline_font_asset_lowers_to_media_and_font_face_css() {
             }],
             css: Some(".card { color: red; }".into()),
         })
-        .bundle_inline_template_asset(
-            "custom-main",
-            "demo.woff2",
-            "font/woff2",
-            "aGVsbG8=",
-        )
+        .bundle_inline_template_asset("custom-main", "demo.woff2", "font/woff2", "aGVsbG8=")
         .bind_font("custom-main", "Demo Font", "demo.woff2")
         .add_custom_note(anki_forge::product::model::CustomNote {
             id: "note-1".into(),

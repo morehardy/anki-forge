@@ -305,8 +305,11 @@ fn validate_normalized_ir(
             continue;
         };
 
-        let mut expected_fields: Vec<_> =
-            notetype.fields.iter().map(|field| field.name.clone()).collect();
+        let mut expected_fields: Vec<_> = notetype
+            .fields
+            .iter()
+            .map(|field| field.name.clone())
+            .collect();
         let mut actual_fields: Vec<_> = note.fields.keys().cloned().collect();
         expected_fields.sort();
         actual_fields.sort();
@@ -533,10 +536,7 @@ pub(crate) fn resolve_template_target_decks(
             let Some(target_deck_name) = template.target_deck_name.as_ref() else {
                 continue;
             };
-            let resolved_target_deck_id = deck_ids
-                .get(target_deck_name)
-                .copied()
-                .unwrap_or(1);
+            let resolved_target_deck_id = deck_ids.get(target_deck_name).copied().unwrap_or(1);
             resolved.push(ResolvedTemplateTargetDeck {
                 notetype_id: notetype.id.clone(),
                 template_name: template.name.clone(),

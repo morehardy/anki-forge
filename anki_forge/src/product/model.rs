@@ -17,7 +17,10 @@ pub struct ProductDocument {
     #[serde(default)]
     pub(super) field_metadata: Vec<(String, super::metadata::FieldMetadataDeclaration)>,
     #[serde(default)]
-    pub(super) browser_appearance: Vec<(String, super::metadata::TemplateBrowserAppearanceDeclaration)>,
+    pub(super) browser_appearance: Vec<(
+        String,
+        super::metadata::TemplateBrowserAppearanceDeclaration,
+    )>,
     #[serde(default)]
     pub(super) template_target_decks: Vec<(String, super::metadata::TemplateTargetDeckDeclaration)>,
     #[serde(default)]

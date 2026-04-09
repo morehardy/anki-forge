@@ -32,12 +32,8 @@ fn main() -> anyhow::Result<()> {
     fs::create_dir_all(work_root)
         .with_context(|| format!("create oracle work root {}", work_root.display()))?;
 
-    let first_package = build_phase5a_case_apkg(
-        &first_case,
-        &label,
-        &work_root.join("first-package"),
-        "v1",
-    )?;
+    let first_package =
+        build_phase5a_case_apkg(&first_case, &label, &work_root.join("first-package"), "v1")?;
     let second_package = build_phase5a_case_apkg(
         &second_case,
         &label,

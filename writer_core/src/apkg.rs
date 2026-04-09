@@ -300,12 +300,8 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
-            let target_deck_id = template
-                .target_deck_name
-                .as_ref()
-                .and_then(|deck_name| template_target_deck_ids.get(deck_name))
-                .copied()
-                .unwrap_or(0_i64);
+            let target_deck_id =
+                resolve_template_target_deck_id(template, &template_target_deck_ids, 0_i64);
             conn.execute(
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
                 rusqlite::params![
@@ -349,12 +345,8 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             normalized_tags.insert(tag.clone());
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
-            let target_deck_id = template
-                .target_deck_name
-                .as_ref()
-                .and_then(|deck_name| template_target_deck_ids.get(deck_name))
-                .copied()
-                .unwrap_or(1_i64);
+            let target_deck_id =
+                resolve_template_target_deck_id(template, &template_target_deck_ids, 1_i64);
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
@@ -378,6 +370,19 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
     }
 
     Ok(())
+}
+
+fn resolve_template_target_deck_id(
+    template: &authoring_core::NormalizedTemplate,
+    template_target_deck_ids: &std::collections::BTreeMap<String, i64>,
+    default_id: i64,
+) -> i64 {
+    template
+        .target_deck_name
+        .as_ref()
+        .and_then(|deck_name| template_target_deck_ids.get(deck_name))
+        .copied()
+        .unwrap_or(default_id)
 }
 
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {

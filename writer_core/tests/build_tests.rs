@@ -354,7 +354,10 @@ fn build_preserves_bundled_media_entries() {
 
     let manifest_json = fs::read_to_string(root.join("staging/manifest.json")).unwrap();
     let manifest: serde_json::Value = serde_json::from_str(&manifest_json).unwrap();
-    assert_eq!(manifest["normalized_ir"]["media"].as_array().unwrap().len(), 1);
+    assert_eq!(
+        manifest["normalized_ir"]["media"].as_array().unwrap().len(),
+        1
+    );
     assert_eq!(
         manifest["normalized_ir"]["media"][0]["filename"],
         serde_json::json!("sample.jpg")

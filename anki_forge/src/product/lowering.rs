@@ -7,8 +7,8 @@ use crate::{
 };
 
 use super::{
-    diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
     assets::AssetSource,
+    diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
     helpers::{apply_helpers, HelperDeclaration},
     metadata::FieldMetadataDeclaration,
     model::{ProductNote, ProductNoteType},
@@ -151,28 +151,28 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                             .templates
                             .iter()
                             .enumerate()
-                        .map(|(ord, template)| AuthoringTemplate {
-                            name: template.name.clone(),
-                            ord: Some(ord as u32),
-                            config_id: None,
-                            question_format: template.question_format.clone(),
-                            answer_format: template.answer_format.clone(),
-                            browser_question_format: document
-                                .browser_appearance_for(&custom.id, &template.name)
-                                .and_then(|declaration| declaration.question_format),
-                            browser_answer_format: document
-                                .browser_appearance_for(&custom.id, &template.name)
-                                .and_then(|declaration| declaration.answer_format),
-                            target_deck_name: document
-                                .template_target_deck_for(&custom.id, &template.name)
-                                .map(|declaration| declaration.deck_name),
-                            browser_font_name: document
-                                .browser_appearance_for(&custom.id, &template.name)
-                                .and_then(|declaration| declaration.font_name),
-                            browser_font_size: document
-                                .browser_appearance_for(&custom.id, &template.name)
-                                .and_then(|declaration| declaration.font_size),
-                        })
+                            .map(|(ord, template)| AuthoringTemplate {
+                                name: template.name.clone(),
+                                ord: Some(ord as u32),
+                                config_id: None,
+                                question_format: template.question_format.clone(),
+                                answer_format: template.answer_format.clone(),
+                                browser_question_format: document
+                                    .browser_appearance_for(&custom.id, &template.name)
+                                    .and_then(|declaration| declaration.question_format),
+                                browser_answer_format: document
+                                    .browser_appearance_for(&custom.id, &template.name)
+                                    .and_then(|declaration| declaration.answer_format),
+                                target_deck_name: document
+                                    .template_target_deck_for(&custom.id, &template.name)
+                                    .map(|declaration| declaration.deck_name),
+                                browser_font_name: document
+                                    .browser_appearance_for(&custom.id, &template.name)
+                                    .and_then(|declaration| declaration.font_name),
+                                browser_font_size: document
+                                    .browser_appearance_for(&custom.id, &template.name)
+                                    .and_then(|declaration| declaration.font_size),
+                            })
                             .collect(),
                     ),
                     css: Some(custom.css.clone().unwrap_or_default()),
@@ -446,7 +446,9 @@ fn escape_css_string_literal(value: &str) -> String {
     value.replace('\\', "\\\\").replace('\'', "\\'")
 }
 
-fn authoring_field_metadata(field: FieldMetadataDeclaration) -> authoring_core::AuthoringFieldMetadata {
+fn authoring_field_metadata(
+    field: FieldMetadataDeclaration,
+) -> authoring_core::AuthoringFieldMetadata {
     authoring_core::AuthoringFieldMetadata {
         field_name: field.field_name,
         label: field.label,

@@ -124,8 +124,7 @@ fn browser_appearance_and_template_target_deck_survive_lower_normalize_and_build
     .expect("build should succeed");
 
     assert_eq!(
-        build_result.result_status,
-        "success",
+        build_result.result_status, "success",
         "build diagnostics: {:#?}",
         build_result.diagnostics
     );

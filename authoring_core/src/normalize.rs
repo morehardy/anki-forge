@@ -170,8 +170,11 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
             );
         };
 
-        let expected_fields: BTreeSet<&str> =
-            notetype.fields.iter().map(|field| field.name.as_str()).collect();
+        let expected_fields: BTreeSet<&str> = notetype
+            .fields
+            .iter()
+            .map(|field| field.name.as_str())
+            .collect();
         let actual_fields: BTreeSet<&str> = note.fields.keys().map(String::as_str).collect();
         if actual_fields != expected_fields {
             return invalid_result(

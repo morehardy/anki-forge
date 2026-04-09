@@ -8,8 +8,7 @@ pub use authoring_core::{
     AuthoringFieldMetadata, AuthoringMedia, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
     ComparisonContext, MergeRiskReport, NormalizationRequest, NormalizedField,
     NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
-    NormalizedTemplate,
-    Selector, SelectorError, SelectorResolveError, SelectorTarget,
+    NormalizedTemplate, Selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
 pub use writer_core::{
     build, build_context_ref, diff_reports, extract_media_references, inspect_apkg,

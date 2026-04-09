@@ -24,18 +24,19 @@ impl ProductDocument {
     }
 
     pub fn with_cloze(mut self, id: impl Into<String>) -> Self {
-        self.note_types
-            .push(ProductNoteType::Cloze(ClozeNoteType { id: id.into(), name: None }));
+        self.note_types.push(ProductNoteType::Cloze(ClozeNoteType {
+            id: id.into(),
+            name: None,
+        }));
         self
     }
 
     pub fn with_image_occlusion(mut self, id: impl Into<String>) -> Self {
-        self.note_types.push(ProductNoteType::ImageOcclusion(
-            ImageOcclusionNoteType {
+        self.note_types
+            .push(ProductNoteType::ImageOcclusion(ImageOcclusionNoteType {
                 id: id.into(),
                 name: None,
-            },
-        ));
+            }));
         self
     }
 
@@ -80,6 +81,7 @@ impl ProductDocument {
         self
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn add_image_occlusion_note(
         mut self,
         note_type_id: impl Into<String>,
@@ -91,16 +93,17 @@ impl ProductDocument {
         back_extra: impl Into<String>,
         comments: impl Into<String>,
     ) -> Self {
-        self.notes.push(ProductNote::ImageOcclusion(ImageOcclusionNote {
-            id: id.into(),
-            note_type_id: note_type_id.into(),
-            deck_name: deck_name.into(),
-            occlusion: occlusion.into(),
-            image: image.into(),
-            header: header.into(),
-            back_extra: back_extra.into(),
-            comments: comments.into(),
-        }));
+        self.notes
+            .push(ProductNote::ImageOcclusion(ImageOcclusionNote {
+                id: id.into(),
+                note_type_id: note_type_id.into(),
+                deck_name: deck_name.into(),
+                occlusion: occlusion.into(),
+                image: image.into(),
+                header: header.into(),
+                back_extra: back_extra.into(),
+                comments: comments.into(),
+            }));
         self
     }
 
@@ -170,7 +173,8 @@ impl ProductDocument {
         note_type_id: impl Into<String>,
         declaration: TemplateBrowserAppearanceDeclaration,
     ) -> Self {
-        self.browser_appearance.push((note_type_id.into(), declaration));
+        self.browser_appearance
+            .push((note_type_id.into(), declaration));
         self
     }
 
@@ -192,7 +196,8 @@ impl ProductDocument {
         note_type_id: impl Into<String>,
         declaration: TemplateTargetDeckDeclaration,
     ) -> Self {
-        self.template_target_decks.push((note_type_id.into(), declaration));
+        self.template_target_decks
+            .push((note_type_id.into(), declaration));
         self
     }
 

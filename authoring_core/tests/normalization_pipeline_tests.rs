@@ -20,9 +20,7 @@ fn string_map(value: Value) -> std::collections::BTreeMap<String, String> {
     serde_json::from_value(value).expect("deserialize string map")
 }
 
-fn normalized_field_names(
-    fields: &[authoring_core::NormalizedField],
-) -> Vec<&str> {
+fn normalized_field_names(fields: &[authoring_core::NormalizedField]) -> Vec<&str> {
     fields.iter().map(|field| field.name.as_str()).collect()
 }
 
@@ -323,7 +321,10 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
     assert_eq!(notetype.kind, "normal");
     assert_eq!(notetype.original_stock_kind.as_deref(), Some("basic"));
     assert_eq!(notetype.name, "Basic");
-    assert_eq!(normalized_field_names(&notetype.fields), vec!["Front", "Back"]);
+    assert_eq!(
+        normalized_field_names(&notetype.fields),
+        vec!["Front", "Back"]
+    );
     assert_eq!(notetype.templates.len(), 1);
     assert_eq!(notetype.templates[0].name, "Card 1");
     assert_eq!(notetype.templates[0].question_format, "{{Front}}");
@@ -452,7 +453,10 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
     let notetype = &normalized.notetypes[0];
     assert_eq!(notetype.id, "io-main");
     assert_eq!(notetype.kind, "cloze");
-    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
+    assert_eq!(
+        notetype.original_stock_kind.as_deref(),
+        Some("image_occlusion")
+    );
     assert_eq!(notetype.name, "Image Occlusion");
     assert_eq!(
         normalized_field_names(&notetype.fields),
@@ -678,7 +682,10 @@ fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
     let notetype = normalized.notetypes.first().expect("normalized notetype");
 
     assert_eq!(notetype.kind, "cloze");
-    assert_eq!(notetype.original_stock_kind.as_deref(), Some("image_occlusion"));
+    assert_eq!(
+        notetype.original_stock_kind.as_deref(),
+        Some("image_occlusion")
+    );
     assert_eq!(notetype.original_id, Some(1729000000));
 
     assert_eq!(notetype.fields.len(), 2);

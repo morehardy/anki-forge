@@ -72,10 +72,8 @@ fn inspect_staging_reports_complete_observations() {
 #[test]
 fn inspect_emits_browser_template_and_field_label_observations() {
     let root = unique_artifact_root("inspect-browser-metadata");
-    let target = BuildArtifactTarget::new(
-        root.clone(),
-        "artifacts/phase3/inspect-browser-metadata",
-    );
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-browser-metadata");
 
     let mut normalized_ir = sample_basic_normalized_ir();
     normalized_ir.notetypes[0].field_metadata = vec![NormalizedFieldMetadata {

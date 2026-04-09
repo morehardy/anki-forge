@@ -446,7 +446,11 @@ fn storage_notetype_kind(notetype: &NormalizedNotetype) -> NotetypeKind {
 }
 
 fn storage_original_stock_kind(notetype: &NormalizedNotetype) -> OriginalStockKind {
-    match notetype.original_stock_kind.as_deref().unwrap_or(notetype.kind.as_str()) {
+    match notetype
+        .original_stock_kind
+        .as_deref()
+        .unwrap_or(notetype.kind.as_str())
+    {
         "basic" => OriginalStockKind::Basic,
         "cloze" => OriginalStockKind::Cloze,
         "image_occlusion" => OriginalStockKind::ImageOcclusion,
@@ -455,7 +459,11 @@ fn storage_original_stock_kind(notetype: &NormalizedNotetype) -> OriginalStockKi
 }
 
 fn storage_card_requirements(notetype: &NormalizedNotetype) -> Vec<CardRequirement> {
-    match notetype.original_stock_kind.as_deref().unwrap_or(notetype.kind.as_str()) {
+    match notetype
+        .original_stock_kind
+        .as_deref()
+        .unwrap_or(notetype.kind.as_str())
+    {
         "basic" => vec![CardRequirement {
             card_ord: 0,
             kind: CardRequirementKind::All as i32,

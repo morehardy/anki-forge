@@ -182,3 +182,33 @@ fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
     assert_eq!(diff_report.comparison_status, "complete");
     assert!(diff_report.changes.is_empty());
 }
+
+#[test]
+fn runtime_build_accepts_serialized_normalized_output_from_normalize() {
+    let runtime = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
+    let authoring_input =
+        repo_root().join("contracts/fixtures/phase3/inputs/basic-authoring-ir.json");
+    let normalized = normalize_from_path(&runtime, &authoring_input).expect("normalize from path");
+    let normalized_ir = normalized
+        .normalized_ir
+        .as_ref()
+        .expect("basic authoring input should normalize");
+
+    let root = temp_bundle_root("runtime_serialized_normalized");
+    fs::create_dir_all(&root).expect("create serialized normalized root");
+    let normalized_path = root.join("normalized-ir.json");
+    write_json_fixture(&normalized_path, normalized_ir);
+
+    let artifacts_dir = root.join("artifacts");
+    let build_result = build_from_path(
+        &runtime,
+        &normalized_path,
+        "default",
+        "default",
+        &artifacts_dir,
+    )
+    .expect("build should accept serialized normalized output");
+
+    assert_eq!(build_result.kind, "package-build-result");
+    assert_eq!(build_result.result_status, "success");
+}

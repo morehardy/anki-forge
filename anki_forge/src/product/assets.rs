@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use sha1::{Digest, Sha1};
 
+const ASSET_HASH_HEX_LEN: usize = 20;
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AssetSource {
     InlineTemplateStatic {
@@ -79,7 +81,7 @@ impl AssetSource {
 }
 
 fn short_hash(input: &str) -> String {
-    hex::encode(Sha1::digest(input.as_bytes()))[..12].to_string()
+    hex::encode(Sha1::digest(input.as_bytes()))[..ASSET_HASH_HEX_LEN].to_string()
 }
 
 fn sanitize_identifier(value: &str) -> String {

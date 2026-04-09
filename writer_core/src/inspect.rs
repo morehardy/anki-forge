@@ -6,8 +6,7 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use authoring_core::{
-    NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype,
-    NormalizedTemplate,
+    NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
 };
 use base64::Engine;
 use prost::Message;
@@ -155,8 +154,11 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         .unwrap_or_else(|| PathBuf::from("media"));
 
     let (media, mut limitations) = resolve_staging_media(&manifest.normalized_ir, &media_root)?;
-    let observations =
-        build_observations(&manifest.normalized_ir, &media, &manifest.template_target_decks);
+    let observations = build_observations(
+        &manifest.normalized_ir,
+        &media,
+        &manifest.template_target_decks,
+    );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
     Ok(build_report(
@@ -776,9 +778,10 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                     let target_deck_name = if template.target_deck_id == 0 {
                         None
                     } else {
-                        deck_names_by_id.get(&template.target_deck_id).cloned().or_else(|| {
-                            Some(format!("deck-{}", template.target_deck_id))
-                        })
+                        deck_names_by_id
+                            .get(&template.target_deck_id)
+                            .cloned()
+                            .or_else(|| Some(format!("deck-{}", template.target_deck_id)))
                     };
                     if let Some(target_deck_name) = target_deck_name.as_ref() {
                         template_target_decks.push(ResolvedTemplateTargetDeck {
