@@ -29,10 +29,7 @@ pub fn apply_helpers(
                     });
                 }
 
-                next_answer = next_answer.replace(
-                    "<hr id=answer>",
-                    &format!("<hr id=answer><div class=\"af-answer-divider\">{title}</div>"),
-                );
+                next_answer = inject_answer_divider(&next_answer, title);
             }
             HelperDeclaration::BackExtraPanel { title } => {
                 if !matches!(note_kind, "cloze" | "image_occlusion") {
@@ -49,19 +46,41 @@ pub fn apply_helpers(
                     "{{{{#Back Extra}}}}<div class=\"af-back-extra-panel\"><h3>{panel_title}</h3>{{{{Back Extra}}}}</div>{{{{/Back Extra}}}}"
                 );
 
-                if next_answer.contains("{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}") {
-                    next_answer = next_answer.replace(
-                        "{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}",
-                        &panel_markup,
-                    );
-                } else if next_answer.contains("{{Back Extra}}") {
-                    next_answer = next_answer.replace("{{Back Extra}}", &panel_markup);
+                if let Some(updated) = replace_once(
+                    &next_answer,
+                    "{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}",
+                    &panel_markup,
+                ) {
+                    next_answer = updated;
+                } else if let Some(updated) =
+                    replace_once(&next_answer, "{{Back Extra}}", &panel_markup)
+                {
+                    next_answer = updated;
                 } else {
-                    next_answer.push_str(&format!("\n{panel_markup}"));
+                    next_answer.push('\n');
+                    next_answer.push_str(&panel_markup);
                 }
             }
         }
     }
 
     Ok((next_question, next_answer))
+}
+
+fn inject_answer_divider(answer: &str, title: &str) -> String {
+    replace_once(
+        answer,
+        "<hr id=answer>",
+        &format!("<hr id=answer><div class=\"af-answer-divider\">{title}</div>"),
+    )
+    .unwrap_or_else(|| answer.to_string())
+}
+
+fn replace_once(input: &str, target: &str, replacement: &str) -> Option<String> {
+    let index = input.find(target)?;
+    let mut updated = String::with_capacity(input.len() - target.len() + replacement.len());
+    updated.push_str(&input[..index]);
+    updated.push_str(replacement);
+    updated.push_str(&input[index + target.len()..]);
+    Some(updated)
 }

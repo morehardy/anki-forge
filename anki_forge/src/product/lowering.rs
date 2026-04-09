@@ -338,17 +338,17 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             continue;
         };
         let notetype = &mut notetypes[index];
-        let css = notetype.css.take().unwrap_or_default();
+        let mut css = notetype.css.take().unwrap_or_default();
         let font_face = format!(
             "@font-face {{ font-family: '{}'; src: url('{}'); }}",
             escape_css_string_literal(&binding.family),
             escape_css_string_literal(media_filename),
         );
-        notetype.css = Some(if css.is_empty() {
-            font_face
-        } else {
-            format!("{css}\n{font_face}")
-        });
+        if !css.is_empty() {
+            css.push('\n');
+        }
+        css.push_str(&font_face);
+        notetype.css = Some(css);
     }
 
     if !product_diagnostics.is_empty() {
