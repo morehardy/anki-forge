@@ -35,6 +35,16 @@ The crate root should expose these default author-facing types:
 6. `MediaRef`
 7. `IoMode`
 
+Supporting root types should also be available for typed authoring and
+diagnostics:
+
+1. `DeckNote`
+2. `BasicNote`
+3. `ClozeNote`
+4. `IoNote`
+5. `ValidationDiagnostic`
+6. `ValidationCode`
+
 ### 2.2 Default versus advanced entry points
 
 The default author-facing root is:
@@ -114,6 +124,19 @@ The lower-level authoring primitive is:
 deck.add(note)
 ```
 
+The internal note model must preserve insertion order in a single container.
+
+The deck-owned note store should therefore be one ordered sequence such as:
+
+```rust
+Vec<DeckNote>
+```
+
+not three parallel collections split by note-type lane.
+
+Lane builders such as `deck.basic()` and `deck.cloze()` are sugar over
+constructing owned note DTOs and calling `deck.add(note)`.
+
 The model must support owned note DTOs so bindings and structured producers can
 construct notes directly.
 
@@ -123,6 +146,7 @@ Planned owned note DTOs:
 2. `ClozeNote`
 3. `IoNote`
 4. `CustomNote`
+5. `DeckNote`
 
 ### 3.3 Stable identity is a default concern
 
@@ -140,6 +164,23 @@ At minimum:
 
 Repeated exports are expected to support stable evolution of authored notes, so
 stable identity cannot be treated as an advanced-only concern.
+
+The first pass keeps `stable_id(...)` user-visible and optional on the shortest
+authoring path, but every added note must still end up with a non-empty internal
+id.
+
+If the user does not provide a `stable_id`, the facade must generate a unique
+ephemeral id instead of lowering an empty string.
+
+`validate_report()` must surface:
+
+1. duplicate explicit stable ids as errors
+2. blank explicit stable ids as errors
+3. generated non-stable ids as diagnostics so users can see they are on a
+   non-update-friendly path
+
+`Package` must also have an optional package-level stable identity so the public
+identity story is not limited to note ids only.
 
 Stable note updates are not the only invariant that matters during evolution.
 
@@ -165,10 +206,15 @@ deck-owned.
 The default layer and the advanced `product` layer must interoperate without
 forcing users to rewrite their work.
 
-The API should therefore support conversions such as:
+The first pass must support:
 
 1. `into_product_document()`
-2. `from_product_document()`
+
+`from_product_document()` remains a follow-up capability.
+
+It should not be part of the first implementation pass until the project has a
+lossless contract for Image Occlusion geometry, media registration, and
+round-trip validation semantics.
 
 ## 4. Standard Note Type Facts
 
@@ -233,6 +279,9 @@ The core abstractions are:
 1. `MediaSource`
 2. `MediaRef`
 
+`MediaRef` should be an opaque reference type, not a public `{ name: String }`
+struct users can forge by hand.
+
 Minimum source constructors:
 
 1. `MediaSource::from_file(...)`
@@ -243,6 +292,16 @@ Existing named-media lookup belongs on the media registry side, for example:
 ```rust
 deck.media().get("heart.png")
 ```
+
+The registry should be keyed by exported filename.
+
+The first-pass conflict rules are:
+
+1. same name + same bytes => reuse existing registration
+2. same name + different bytes => error
+
+This avoids silent basename collisions when two paths resolve to the same media
+filename.
 
 The note side should reference `MediaRef`, not raw paths.
 
@@ -262,6 +321,9 @@ Validation is part of the default layer.
 `ValidationReport` is the structured diagnostics form for bindings, services,
 and IDE-facing integrations.
 
+`ValidationReport.diagnostics()` should yield `ValidationDiagnostic` items keyed
+by typed `ValidationCode`, not ad-hoc string constants.
+
 The explicit preflight entry points are:
 
 ```rust
@@ -278,6 +340,10 @@ Validation should occur at three levels:
 2. explicit optional preflight validation via `validate()` or
    `validate_report()`
 3. full validation during `build()` and export methods
+
+The lightweight checks during `.add()` should still reject local state that is
+unambiguously invalid at insertion time, such as duplicate media registrations
+with conflicting bytes or blank explicit stable ids.
 
 The main happy path should not require calling `validate()` before export.
 
@@ -301,6 +367,14 @@ main path instead of making temp files mandatory.
 `Deck` and `Package` should expose the same export and build surface.
 
 `Deck` methods are sugar over `Package::single(deck)`.
+
+The facade export layer must resolve the default writer policy and build context
+through shared runtime/default-loading helpers instead of hardcoding duplicate
+string configs.
+
+`BuildResult` should wrap the underlying build refs and resolve concrete output
+paths from those refs, not by guessing filenames such as `package.apkg` or
+`staging/manifest.json` in the facade layer.
 
 ### 6.3 BuildResult
 
@@ -506,8 +580,10 @@ let product = deck.into_product_document()?;
 
 // advanced product-layer edits happen here
 
-let deck = Deck::from_product_document(product)?;
-deck.write_apkg("spanish.apkg")?;
+let lowering = product.lower()?;
+let normalized = anki_forge::normalize(anki_forge::NormalizationRequest::new(
+    lowering.authoring_document,
+));
 ```
 
 ## 8. First Implementation Scope
@@ -516,25 +592,29 @@ The first implementation pass of the crate-root API should cover:
 
 1. `Deck::new(...)`
 2. `Deck::builder(...).stable_id(...).build()`
-3. `deck.add_basic(...)`
-4. `deck.basic()` lane with builder `.note(...).tags(...).stable_id(...).add()?`
-5. `deck.cloze()` lane with `.extra(...)`
-6. `deck.image_occlusion()` lane with:
+3. `deck.add(note)`
+4. `deck.add_basic(...)`
+5. `deck.basic()` lane with builder `.note(...).tags(...).stable_id(...).add()?`
+6. `deck.cloze()` lane with `.extra(...)`
+7. `deck.image_occlusion()` lane with:
    - `mode(...)`
    - `header(...)`
    - `back_extra(...)`
    - `comments(...)`
    - `rect(...)` as the intentionally narrowed first-pass geometry helper
-7. `MediaSource`, `MediaRef`, `deck.media().add(...)`, and `deck.media().get(...)`
-8. `validate()`
-9. `validate_report()`
-10. `to_apkg_bytes()`
-11. `write_to(...)`
-12. `write_apkg(...)`
-13. `build(...)`
-14. `BuildResult`
-15. `Package::single(...)`
-16. `into_product_document()` and `from_product_document()`
+8. opaque `MediaRef`, `MediaSource`, `deck.media().add(...)`, and
+   `deck.media().get(...)` with duplicate-name conflict handling
+9. generated non-stable internal ids plus diagnostics for missing or duplicate
+   `stable_id`
+10. `validate()`
+11. `validate_report()`
+12. `to_apkg_bytes()`
+13. `write_to(...)`
+14. `write_apkg(...)`
+15. `build(...)`
+16. `BuildResult`
+17. `Package::single(...)` plus optional package-level stable identity
+18. `into_product_document()`
 
 The following remain advanced-path capabilities in the first pass:
 
@@ -546,6 +626,7 @@ The following remain advanced-path capabilities in the first pass:
 6. template target deck overrides
 7. custom notetype authoring
 8. collection-wide `.colpkg` export
+9. `from_product_document()` reverse bridge
 
 ## 9. Documentation Shape
 
