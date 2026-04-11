@@ -19,7 +19,7 @@ impl Deck {
 
         for note in self.notes {
             product = match note {
-                DeckNote::Basic(note) => product.add_basic_note(
+                DeckNote::Basic(note) => product.add_basic_note_with_tags(
                     STOCK_BASIC_ID,
                     note.id,
                     deck_name.clone(),
@@ -27,7 +27,7 @@ impl Deck {
                     note.back,
                     note.tags,
                 ),
-                DeckNote::Cloze(note) => product.add_cloze_note(
+                DeckNote::Cloze(note) => product.add_cloze_note_with_tags(
                     STOCK_CLOZE_ID,
                     note.id,
                     deck_name.clone(),
@@ -35,7 +35,7 @@ impl Deck {
                     note.extra,
                     note.tags,
                 ),
-                DeckNote::ImageOcclusion(note) => product.add_image_occlusion_note(
+                DeckNote::ImageOcclusion(note) => product.add_image_occlusion_note_with_tags(
                     STOCK_IMAGE_OCCLUSION_ID,
                     note.id,
                     deck_name.clone(),

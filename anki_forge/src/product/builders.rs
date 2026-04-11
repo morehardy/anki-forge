@@ -46,6 +46,17 @@ impl ProductDocument {
     }
 
     pub fn add_basic_note(
+        self,
+        note_type_id: impl Into<String>,
+        id: impl Into<String>,
+        deck_name: impl Into<String>,
+        front: impl Into<String>,
+        back: impl Into<String>,
+    ) -> Self {
+        self.add_basic_note_with_tags(note_type_id, id, deck_name, front, back, std::iter::empty::<String>())
+    }
+
+    pub fn add_basic_note_with_tags(
         mut self,
         note_type_id: impl Into<String>,
         id: impl Into<String>,
@@ -66,6 +77,24 @@ impl ProductDocument {
     }
 
     pub fn add_cloze_note(
+        self,
+        note_type_id: impl Into<String>,
+        id: impl Into<String>,
+        deck_name: impl Into<String>,
+        text: impl Into<String>,
+        back_extra: impl Into<String>,
+    ) -> Self {
+        self.add_cloze_note_with_tags(
+            note_type_id,
+            id,
+            deck_name,
+            text,
+            back_extra,
+            std::iter::empty::<String>(),
+        )
+    }
+
+    pub fn add_cloze_note_with_tags(
         mut self,
         note_type_id: impl Into<String>,
         id: impl Into<String>,
@@ -87,6 +116,31 @@ impl ProductDocument {
 
     #[allow(clippy::too_many_arguments)]
     pub fn add_image_occlusion_note(
+        self,
+        note_type_id: impl Into<String>,
+        id: impl Into<String>,
+        deck_name: impl Into<String>,
+        occlusion: impl Into<String>,
+        image: impl Into<String>,
+        header: impl Into<String>,
+        back_extra: impl Into<String>,
+        comments: impl Into<String>,
+    ) -> Self {
+        self.add_image_occlusion_note_with_tags(
+            note_type_id,
+            id,
+            deck_name,
+            occlusion,
+            image,
+            header,
+            back_extra,
+            comments,
+            std::iter::empty::<String>(),
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub fn add_image_occlusion_note_with_tags(
         mut self,
         note_type_id: impl Into<String>,
         id: impl Into<String>,
