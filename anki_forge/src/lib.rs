@@ -1,5 +1,9 @@
+mod deck;
+
 pub mod product;
 pub mod runtime;
+
+pub use deck::*;
 
 pub use authoring_core::model::NormalizationResult;
 pub use authoring_core::{
