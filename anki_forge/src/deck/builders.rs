@@ -55,7 +55,7 @@ impl Deck {
 
     pub fn validate_report(&self) -> anyhow::Result<ValidationReport> {
         let mut diagnostics = Vec::new();
-        let mut seen_stable_ids = std::collections::BTreeSet::new();
+        let mut seen_ids = std::collections::BTreeSet::new();
 
         for note in &self.notes {
             match note.requested_stable_id().map(str::trim) {
@@ -64,21 +64,21 @@ impl Deck {
                     message: format!("note '{}' has a blank explicit stable_id", note.id()),
                     severity: "error".into(),
                 }),
-                Some(stable_id) => {
-                    if !seen_stable_ids.insert(stable_id.to_string()) {
-                        diagnostics.push(ValidationDiagnostic {
-                            code: ValidationCode::DuplicateStableId,
-                            message: format!("stable_id '{}' is duplicated", stable_id),
-                            severity: "error".into(),
-                        });
-                    }
-                }
                 None if note.generated() => diagnostics.push(ValidationDiagnostic {
                     code: ValidationCode::MissingStableId,
                     message: format!("note '{}' was assigned a generated id", note.id()),
                     severity: "warning".into(),
                 }),
                 None => {}
+                Some(_) => {}
+            }
+
+            if !seen_ids.insert(note.id().to_string()) {
+                diagnostics.push(ValidationDiagnostic {
+                    code: ValidationCode::DuplicateStableId,
+                    message: format!("id '{}' is duplicated", note.id()),
+                    severity: "error".into(),
+                });
             }
 
             if let DeckNote::ImageOcclusion(io) = note {

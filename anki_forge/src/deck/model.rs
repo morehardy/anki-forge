@@ -227,7 +227,7 @@ impl From<&str> for MediaRef {
 }
 
 impl IoNote {
-    pub fn new(image: MediaRef) -> Self {
+    pub(crate) fn new(image: MediaRef) -> Self {
         Self {
             id: String::new(),
             stable_id: None,
