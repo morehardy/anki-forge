@@ -54,3 +54,27 @@ It is intentionally not part of the default `cargo test` suite, because it depen
 vendored upstream Anki checkout.
 
 Before calling a Phase 5A change ready, capture the evidence commands in `docs/superpowers/checklists/phase-5a-exit-evidence.md`.
+
+## Rust Quick Start
+
+```rust
+use anki_forge::Deck;
+
+let mut deck = Deck::builder("Spanish")
+    .stable_id("spanish-v1")
+    .build();
+
+deck.basic()
+    .note("hola", "hello")
+    .stable_id("es-hola")
+    .add()?;
+
+deck.write_apkg("spanish.apkg")?;
+```
+
+`add_basic(...)` remains available for the shortest path, but it generates a non-stable note id.
+Use `stable_id(...)` when you want import-friendly updates.
+
+For advanced authoring, use `anki_forge::product`.
+For file-driven pipeline work, use `anki_forge::runtime`.
+The reverse bridge `from_product_document()` is intentionally deferred until IO/media round-tripping is lossless.

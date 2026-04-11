@@ -3,9 +3,7 @@ use serde_json::json;
 
 #[test]
 fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
-    let mut deck = Deck::builder("Spanish")
-        .stable_id("spanish-v1")
-        .build();
+    let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
     deck.basic()
         .note("hola", "hello")
         .stable_id("es-hola")
@@ -24,10 +22,22 @@ fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
 }
 
 #[test]
+fn deck_basic_flow_example_shape_matches_the_public_happy_path() {
+    let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
+
+    deck.basic()
+        .note("hola", "hello")
+        .stable_id("es-hola")
+        .add()
+        .expect("add basic");
+
+    assert_eq!(deck.notes().len(), 1);
+    assert_eq!(deck.notes()[0].id(), "es-hola");
+}
+
+#[test]
 fn package_single_export_surfaces_support_bytes_and_package_stable_id() {
-    let mut deck = Deck::builder("Spanish")
-        .stable_id("spanish-v1")
-        .build();
+    let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
     deck.basic()
         .note("hola", "hello")
         .stable_id("es-hola")
@@ -65,7 +75,10 @@ fn package_single_export_surfaces_support_bytes_and_package_stable_id() {
         Some("artifacts/package-v1/package.apkg")
     );
     assert_eq!(
-        overridden_build.package_build_result().staging_ref.as_deref(),
+        overridden_build
+            .package_build_result()
+            .staging_ref
+            .as_deref(),
         Some("artifacts/package-v1/staging/manifest.json")
     );
 
@@ -107,19 +120,22 @@ fn deck_export_rejects_invalid_deserialized_deck_during_bytes_export() {
     }))
     .expect("deserialize invalid deck");
 
-    let err = deck.to_apkg_bytes().expect_err("invalid deck should fail export");
+    let err = deck
+        .to_apkg_bytes()
+        .expect_err("invalid deck should fail export");
     assert!(err.to_string().contains("deck validation failed"));
 }
 
 #[test]
 fn package_single_with_stable_id_keeps_root_deck_and_changes_export_identity() {
-    let deck = Deck::builder("Spanish")
-        .stable_id("spanish-v1")
-        .build();
+    let deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
 
     let package = Package::single(deck.clone()).with_stable_id("package-v1");
 
-    assert_eq!(package.root_deck().stable_id().as_deref(), Some("spanish-v1"));
+    assert_eq!(
+        package.root_deck().stable_id().as_deref(),
+        Some("spanish-v1")
+    );
     assert_eq!(
         deck.to_apkg_bytes().expect("deck bytes"),
         Package::single(deck.clone())
