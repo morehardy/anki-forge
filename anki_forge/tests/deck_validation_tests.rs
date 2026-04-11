@@ -183,6 +183,57 @@ fn validate_report_detects_empty_image_occlusion_geometry_and_validate_errors() 
 }
 
 #[test]
+fn validate_report_detects_unknown_media_ref_from_deserialized_note() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Spanish",
+        "stable_id": null,
+        "notes": [
+            {
+                "ImageOcclusion": {
+                    "id": "io-1",
+                    "stable_id": "io-1",
+                    "image": "missing.png",
+                    "mode": "HideAllGuessOne",
+                    "rects": [{"x": 1, "y": 2, "width": 3, "height": 4}],
+                    "header": "",
+                    "back_extra": "",
+                    "comments": "",
+                    "tags": [],
+                    "generated": false
+                }
+            }
+        ],
+        "next_generated_note_id": 1,
+        "media": {}
+    }))
+    .expect("deserialize deck");
+
+    let report = deck.validate_report().expect("validation report");
+    assert!(report
+        .diagnostics()
+        .iter()
+        .any(|item| item.code == ValidationCode::UnknownMediaRef));
+    assert!(deck.validate().is_err());
+}
+
+#[test]
+fn add_time_rejects_forged_unknown_media_ref() {
+    let mut deck = Deck::new("Anatomy");
+    let image: anki_forge::MediaRef =
+        serde_json::from_value(json!("missing.png")).expect("forge media ref");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .stable_id("io-unknown")
+        .rect(1, 2, 3, 4)
+        .add()
+        .expect_err("unknown media ref must fail at add time");
+
+    assert!(err.to_string().contains("unknown media"));
+}
+
+#[test]
 fn media_registry_reuses_same_name_same_content_and_rejects_conflicts() {
     let mut deck = Deck::new("Anatomy");
 

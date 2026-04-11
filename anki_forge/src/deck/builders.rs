@@ -82,6 +82,18 @@ impl Deck {
             }
 
             if let DeckNote::ImageOcclusion(io) = note {
+                if !self.media.contains_key(io.image.name()) {
+                    diagnostics.push(ValidationDiagnostic {
+                        code: ValidationCode::UnknownMediaRef,
+                        message: format!(
+                            "image occlusion note '{}' references unknown media '{}'",
+                            io.id,
+                            io.image.name()
+                        ),
+                        severity: "error".into(),
+                    });
+                }
+
                 if io.rects.is_empty() {
                     diagnostics.push(ValidationDiagnostic {
                         code: ValidationCode::EmptyIoMasks,
@@ -107,7 +119,7 @@ impl Deck {
     pub fn add(&mut self, note: impl Into<DeckNote>) -> anyhow::Result<()> {
         let mut note = note.into();
         assign_identity(self, &mut note)?;
-        validate_note_shape_before_insert(&note)?;
+        validate_note_shape_before_insert(self, &note)?;
         self.notes.push(note);
         Ok(())
     }
@@ -162,8 +174,13 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn validate_note_shape_before_insert(note: &DeckNote) -> anyhow::Result<()> {
+fn validate_note_shape_before_insert(deck: &Deck, note: &DeckNote) -> anyhow::Result<()> {
     if let DeckNote::ImageOcclusion(io) = note {
+        anyhow::ensure!(
+            deck.media.contains_key(io.image.name()),
+            "image occlusion note references unknown media '{}'",
+            io.image.name()
+        );
         anyhow::ensure!(
             !io.rects.is_empty(),
             "image occlusion note requires at least one rect"
