@@ -1,4 +1,4 @@
-use anki_forge::{Deck, Package};
+use anki_forge::{Deck, IoMode, MediaSource, Package};
 use serde_json::json;
 
 #[test]
@@ -31,8 +31,38 @@ fn deck_basic_flow_example_shape_matches_the_public_happy_path() {
         .add()
         .expect("add basic");
 
-    assert_eq!(deck.notes().len(), 1);
+    deck.cloze()
+        .note("La capital de Espana es {{c1::Madrid}}")
+        .extra("Europe")
+        .stable_id("geo-es-capital")
+        .add()
+        .expect("add cloze");
+
+    let heart = deck
+        .media()
+        .add(MediaSource::from_bytes(
+            "heart.png",
+            vec![0x89, 0x50, 0x4E, 0x47],
+        ))
+        .expect("add media");
+
+    deck.image_occlusion()
+        .note(heart)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 80, 40)
+        .header("Heart")
+        .back_extra("Identify the chamber")
+        .comments("Left ventricle")
+        .stable_id("anatomy-heart-1")
+        .add()
+        .expect("add image occlusion");
+
+    deck.validate().expect("deck should validate");
+
+    assert_eq!(deck.notes().len(), 3);
     assert_eq!(deck.notes()[0].id(), "es-hola");
+    assert_eq!(deck.notes()[1].id(), "geo-es-capital");
+    assert_eq!(deck.notes()[2].id(), "anatomy-heart-1");
 }
 
 #[test]

@@ -60,16 +60,19 @@ Before calling a Phase 5A change ready, capture the evidence commands in `docs/s
 ```rust
 use anki_forge::Deck;
 
-let mut deck = Deck::builder("Spanish")
-    .stable_id("spanish-v1")
-    .build();
+fn main() -> anyhow::Result<()> {
+    let mut deck = Deck::builder("Spanish")
+        .stable_id("spanish-v1")
+        .build();
 
-deck.basic()
-    .note("hola", "hello")
-    .stable_id("es-hola")
-    .add()?;
+    deck.basic()
+        .note("hola", "hello")
+        .stable_id("es-hola")
+        .add()?;
 
-deck.write_apkg("spanish.apkg")?;
+    deck.write_apkg("spanish.apkg")?;
+    Ok(())
+}
 ```
 
 `add_basic(...)` remains available for the shortest path, but it generates a non-stable note id.
