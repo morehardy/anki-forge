@@ -36,18 +36,6 @@ impl MediaRef {
     }
 }
 
-impl From<String> for MediaRef {
-    fn from(value: String) -> Self {
-        Self::new(value)
-    }
-}
-
-impl From<&str> for MediaRef {
-    fn from(value: &str) -> Self {
-        Self::new(value.to_owned())
-    }
-}
-
 impl Deck {
     pub fn media(&mut self) -> MediaRegistry<'_> {
         MediaRegistry { deck: self }

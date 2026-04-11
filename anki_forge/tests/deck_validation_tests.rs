@@ -1,4 +1,4 @@
-use anki_forge::{Deck, IoMode, MediaRef, MediaSource, ValidationCode};
+use anki_forge::{Deck, IoMode, MediaSource, ValidationCode};
 use serde_json::json;
 
 #[test]
@@ -49,17 +49,21 @@ fn cloze_lane_sugar_adds_note_with_metadata() {
 #[test]
 fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
     let mut deck = Deck::new("Spanish");
+    let image = deck
+        .media()
+        .add(MediaSource::from_bytes("image.png", vec![1, 2, 3]))
+        .expect("register image");
 
     let err = deck
         .image_occlusion()
-        .note(MediaRef::from("image.png"))
+        .note(image.clone())
         .mode(IoMode::HideOneGuessOne)
         .add()
         .expect_err("image occlusion without rect must fail");
     assert!(err.to_string().contains("rect"));
 
     deck.image_occlusion()
-        .note(MediaRef::from("image.png"))
+        .note(image)
         .mode(IoMode::HideOneGuessOne)
         .rect(10, 20, 30, 40)
         .header("header")
