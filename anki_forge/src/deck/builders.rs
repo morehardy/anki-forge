@@ -247,10 +247,10 @@ impl<'a> ClozeDraft<'a> {
 }
 
 impl<'a> IoLane<'a> {
-    pub fn note(self, image: MediaRef) -> IoDraft<'a> {
+    pub fn note(self, image: impl Into<MediaRef>) -> IoDraft<'a> {
         IoDraft {
             deck: self.deck,
-            note: IoNote::new(image),
+            note: IoNote::new(image.into()),
         }
     }
 }

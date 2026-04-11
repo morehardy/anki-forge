@@ -1,4 +1,4 @@
-use anki_forge::{Deck, IoMode, MediaRef, ValidationCode};
+use anki_forge::{Deck, IoMode, MediaRef, MediaSource, ValidationCode};
 use serde_json::json;
 
 #[test]
@@ -176,4 +176,45 @@ fn validate_report_detects_empty_image_occlusion_geometry_and_validate_errors() 
         .iter()
         .any(|item| item.code == ValidationCode::EmptyIoMasks));
     assert!(deck.validate().is_err());
+}
+
+#[test]
+fn media_registry_reuses_same_name_same_content_and_rejects_conflicts() {
+    let mut deck = Deck::new("Anatomy");
+
+    let first = deck
+        .media()
+        .add(MediaSource::from_bytes("heart.png", vec![1, 2, 3]))
+        .expect("first registration");
+    let second = deck
+        .media()
+        .add(MediaSource::from_bytes("heart.png", vec![1, 2, 3]))
+        .expect("same-bytes registration");
+
+    assert_eq!(first, second);
+
+    let err = deck
+        .media()
+        .add(MediaSource::from_bytes("heart.png", vec![9, 9, 9]))
+        .expect_err("different bytes must fail");
+
+    assert!(err.to_string().contains("heart.png"));
+}
+
+#[test]
+fn image_occlusion_without_rects_fails_at_add_time() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_bytes("heart.png", vec![1, 2, 3]))
+        .expect("register media");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .stable_id("io-1")
+        .add()
+        .expect_err("io note without rects must fail");
+
+    assert!(err.to_string().contains("rect"));
 }

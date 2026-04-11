@@ -72,7 +72,7 @@ pub enum IoMode {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct MediaRef(String);
+pub struct MediaRef(pub(crate) String);
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RegisteredMedia {
@@ -201,28 +201,6 @@ impl From<ClozeNote> for DeckNote {
 impl From<IoNote> for DeckNote {
     fn from(note: IoNote) -> Self {
         Self::ImageOcclusion(note)
-    }
-}
-
-impl MediaRef {
-    pub fn new(value: impl Into<String>) -> Self {
-        Self(value.into())
-    }
-
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
-}
-
-impl From<String> for MediaRef {
-    fn from(value: String) -> Self {
-        Self::new(value)
-    }
-}
-
-impl From<&str> for MediaRef {
-    fn from(value: &str) -> Self {
-        Self::new(value)
     }
 }
 
