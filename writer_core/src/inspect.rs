@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 
-use anyhow::{Context, Result};
+use anyhow::{ensure, Context, Result};
 use authoring_core::{
     NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
 };
@@ -108,7 +108,7 @@ pub fn inspect_build_result(
     artifact_target: &BuildArtifactTarget,
 ) -> Result<InspectReport> {
     if let Some(staging_ref) = &build_result.staging_ref {
-        let staging_path = artifact_path_from_ref(artifact_target, staging_ref);
+        let staging_path = artifact_path_from_ref(artifact_target, staging_ref)?;
         if staging_path.exists() {
             let mut report = inspect_staging(&staging_path)?;
             report.source_ref = staging_ref.clone();
@@ -117,7 +117,7 @@ pub fn inspect_build_result(
     }
 
     if let Some(apkg_ref) = &build_result.apkg_ref {
-        let apkg_path = artifact_path_from_ref(artifact_target, apkg_ref);
+        let apkg_path = artifact_path_from_ref(artifact_target, apkg_ref)?;
         if apkg_path.exists() {
             let mut report = inspect_apkg(&apkg_path)?;
             report.source_ref = apkg_ref.clone();
@@ -126,14 +126,14 @@ pub fn inspect_build_result(
     }
 
     if let Some(staging_ref) = &build_result.staging_ref {
-        let staging_path = artifact_path_from_ref(artifact_target, staging_ref);
+        let staging_path = artifact_path_from_ref(artifact_target, staging_ref)?;
         let mut report = inspect_staging(&staging_path)?;
         report.source_ref = staging_ref.clone();
         return Ok(report);
     }
 
     if let Some(apkg_ref) = &build_result.apkg_ref {
-        let apkg_path = artifact_path_from_ref(artifact_target, apkg_ref);
+        let apkg_path = artifact_path_from_ref(artifact_target, apkg_ref)?;
         let mut report = inspect_apkg(&apkg_path)?;
         report.source_ref = apkg_ref.clone();
         return Ok(report);
@@ -931,16 +931,86 @@ fn read_zip_entry_bytes(archive: &mut ZipArchive<File>, name: &str) -> Result<Op
     }
 }
 
-pub fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> PathBuf {
+pub fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> Result<PathBuf> {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');
-    let trimmed = reference
-        .strip_prefix(prefix)
-        .unwrap_or(reference)
-        .trim_start_matches('/');
-    if trimmed.is_empty() {
+    let reference_path = Path::new(reference);
+    let prefix_path = Path::new(prefix);
+
+    ensure!(
+        reference_path.is_relative(),
+        "artifact reference must be relative: {}",
+        reference
+    );
+    ensure!(
+        !contains_parent_dir(reference_path),
+        "artifact reference must not traverse upward: {}",
+        reference
+    );
+
+    let remainder = if reference_has_component_prefix(reference_path, prefix_path) {
+        reference_path
+            .strip_prefix(prefix_path)
+            .unwrap_or(reference_path)
+            .to_path_buf()
+    } else {
+        reference_path.to_path_buf()
+    };
+
+    ensure!(
+        !contains_parent_dir(&remainder),
+        "artifact reference must not traverse upward: {}",
+        reference
+    );
+
+    Ok(if remainder.as_os_str().is_empty() {
         target.root_dir.clone()
     } else {
-        target.root_dir.join(trimmed)
+        target.root_dir.join(remainder)
+    })
+}
+
+fn reference_has_component_prefix(reference: &Path, prefix: &Path) -> bool {
+    let mut reference_components = reference.components();
+    for prefix_component in prefix.components() {
+        match reference_components.next() {
+            Some(reference_component) if reference_component == prefix_component => {}
+            _ => return false,
+        }
+    }
+    true
+}
+
+fn contains_parent_dir(path: &Path) -> bool {
+    path.components()
+        .any(|component| matches!(component, std::path::Component::ParentDir))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn artifact_path_from_ref_does_not_strip_prefix_collisions() {
+        let target = BuildArtifactTarget::new("/tmp/root", "artifacts/phase3/inspect");
+        let resolved = artifact_path_from_ref(
+            &target,
+            "artifacts/phase3/inspect-apkg/package.apkg",
+        )
+        .expect("resolve path");
+
+        assert_eq!(
+            resolved,
+            PathBuf::from("/tmp/root/artifacts/phase3/inspect-apkg/package.apkg")
+        );
+    }
+
+    #[test]
+    fn artifact_path_from_ref_rejects_path_traversal() {
+        let target = BuildArtifactTarget::new("/tmp/root", "artifacts/phase3/inspect");
+        let err = artifact_path_from_ref(&target, "artifacts/phase3/inspect/../escape.apkg")
+            .expect_err("path traversal must fail");
+
+        assert!(err.to_string().contains("traverse upward"));
     }
 }
 

@@ -40,7 +40,7 @@ impl BuildResult {
 
 impl Package {
     pub fn build(&self, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
-        build_package(self.root_deck.clone(), artifacts_dir)
+        build_package(self, artifacts_dir)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
@@ -81,10 +81,8 @@ impl Deck {
     }
 }
 
-fn build_package(
-    root_deck: Deck,
-    artifacts_dir: impl AsRef<Path>,
-) -> anyhow::Result<BuildResult> {
+fn build_package(package: &Package, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
+    let root_deck = package.root_deck.clone();
     root_deck.validate()?;
     let lowered = root_deck.lower_authoring()?;
     let normalized = normalize(NormalizationRequest::new(lowered));
@@ -100,7 +98,15 @@ fn build_package(
     let current_dir = std::env::current_dir().context("resolve current directory")?;
     let (_runtime, writer_policy, build_context) =
         crate::runtime::load_default_writer_stack(current_dir)?;
-    let artifact_target = BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), "artifacts");
+    let stable_ref_prefix = package
+        .stable_id
+        .as_deref()
+        .map(|stable_id| format!("artifacts/{stable_id}"))
+        .unwrap_or_else(|| "artifacts".into());
+    let artifact_target = BuildArtifactTarget::new(
+        artifacts_dir.as_ref().to_path_buf(),
+        stable_ref_prefix,
+    );
     let package_build_result =
         crate::build(&normalized_ir, &writer_policy, &build_context, &artifact_target)?;
     ensure!(
@@ -119,8 +125,8 @@ fn build_package(
         .context("successful build must include staging_ref")?;
 
     Ok(BuildResult {
-        apkg_path: artifact_path_from_ref(&artifact_target, apkg_ref),
-        staging_manifest_path: artifact_path_from_ref(&artifact_target, staging_ref),
+        apkg_path: artifact_path_from_ref(&artifact_target, apkg_ref)?,
+        staging_manifest_path: artifact_path_from_ref(&artifact_target, staging_ref)?,
         package_build_result,
     })
 }
