@@ -6,10 +6,7 @@ use crate::product::{
 
 impl Deck {
     pub fn into_product_document(self) -> anyhow::Result<ProductDocument> {
-        let document_id = self
-            .stable_id
-            .clone()
-            .unwrap_or_else(|| self.name.clone());
+        let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
         let deck_name = self.name.clone();
         let mut product = ProductDocument::new(document_id)
             .with_default_deck(deck_name.clone())

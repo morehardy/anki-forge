@@ -992,11 +992,9 @@ mod tests {
     #[test]
     fn artifact_path_from_ref_does_not_strip_prefix_collisions() {
         let target = BuildArtifactTarget::new("/tmp/root", "artifacts/phase3/inspect");
-        let resolved = artifact_path_from_ref(
-            &target,
-            "artifacts/phase3/inspect-apkg/package.apkg",
-        )
-        .expect("resolve path");
+        let resolved =
+            artifact_path_from_ref(&target, "artifacts/phase3/inspect-apkg/package.apkg")
+                .expect("resolve path");
 
         assert_eq!(
             resolved,

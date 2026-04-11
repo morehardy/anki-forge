@@ -2,9 +2,7 @@ use anki_forge::{BasicNote, ClozeNote, Deck, DeckNote, Package};
 
 #[test]
 fn deck_add_preserves_mixed_note_order() {
-    let mut deck = Deck::builder("Mixed")
-        .stable_id("mixed-v1")
-        .build();
+    let mut deck = Deck::builder("Mixed").stable_id("mixed-v1").build();
 
     deck.add(BasicNote::new("front 1", "back 1").stable_id("basic-1"))
         .expect("add first basic");
@@ -22,9 +20,7 @@ fn deck_add_preserves_mixed_note_order() {
 
 #[test]
 fn package_single_can_override_package_stable_id_without_changing_root_deck() {
-    let deck = Deck::builder("Mixed")
-        .stable_id("mixed-v1")
-        .build();
+    let deck = Deck::builder("Mixed").stable_id("mixed-v1").build();
 
     let package = Package::single(deck).with_stable_id("package-v1");
 

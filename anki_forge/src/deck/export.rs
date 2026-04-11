@@ -81,7 +81,10 @@ impl Deck {
     }
 }
 
-fn build_package(package: &Package, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
+fn build_package(
+    package: &Package,
+    artifacts_dir: impl AsRef<Path>,
+) -> anyhow::Result<BuildResult> {
     let root_deck = package.root_deck.clone();
     root_deck.validate()?;
     let lowered = root_deck.lower_authoring()?;
@@ -103,12 +106,14 @@ fn build_package(package: &Package, artifacts_dir: impl AsRef<Path>) -> anyhow::
         .as_deref()
         .map(|stable_id| format!("artifacts/{stable_id}"))
         .unwrap_or_else(|| "artifacts".into());
-    let artifact_target = BuildArtifactTarget::new(
-        artifacts_dir.as_ref().to_path_buf(),
-        stable_ref_prefix,
-    );
-    let package_build_result =
-        crate::build(&normalized_ir, &writer_policy, &build_context, &artifact_target)?;
+    let artifact_target =
+        BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), stable_ref_prefix);
+    let package_build_result = crate::build(
+        &normalized_ir,
+        &writer_policy,
+        &build_context,
+        &artifact_target,
+    )?;
     ensure!(
         package_build_result.result_status == "success",
         "build failed with status {}",
@@ -145,12 +150,16 @@ fn with_temp_artifacts_dir<T>(
             .as_nanos()
     );
     path.push(nonce);
-    fs::create_dir_all(&path).with_context(|| format!("create temp artifacts dir {}", path.display()))?;
+    fs::create_dir_all(&path)
+        .with_context(|| format!("create temp artifacts dir {}", path.display()))?;
 
     let result = f(&path);
     let cleanup_result = fs::remove_dir_all(&path);
     if let Err(err) = cleanup_result {
-        eprintln!("warning: failed to clean up temp artifacts dir {}: {err}", path.display());
+        eprintln!(
+            "warning: failed to clean up temp artifacts dir {}: {err}",
+            path.display()
+        );
     }
 
     result

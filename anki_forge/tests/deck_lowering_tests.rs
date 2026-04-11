@@ -33,12 +33,18 @@ fn deck_lowers_notes_in_original_mixed_order() {
         .add()
         .expect("add io");
 
-    let product = deck.clone().into_product_document().expect("product bridge");
+    let product = deck
+        .clone()
+        .into_product_document()
+        .expect("product bridge");
     let lowered = deck.lower_authoring().expect("authoring lowering");
 
     assert!(matches!(&product.notes()[0], ProductNote::Cloze(_)));
     assert!(matches!(&product.notes()[1], ProductNote::Basic(_)));
-    assert!(matches!(&product.notes()[2], ProductNote::ImageOcclusion(_)));
+    assert!(matches!(
+        &product.notes()[2],
+        ProductNote::ImageOcclusion(_)
+    ));
 
     assert_eq!(lowered.notes[0].id, "cloze-1");
     assert_eq!(lowered.notes[1].id, "basic-1");

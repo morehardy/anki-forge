@@ -1,8 +1,8 @@
-use anki_forge::IoRect;
 use anki_forge::product::{
-    render_image_occlusion_cloze, ProductDocument, ProductNote, ProductNoteType,
-    STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
+    render_image_occlusion_cloze, ProductDocument, ProductNote, ProductNoteType, STOCK_BASIC_ID,
+    STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
+use anki_forge::IoRect;
 
 #[test]
 fn product_document_registers_a_basic_notetype() {
@@ -153,5 +153,8 @@ fn stock_image_occlusion_helper_rejects_empty_rects() {
     let err = render_image_occlusion_cloze(anki_forge::IoMode::HideAllGuessOne, &[])
         .expect_err("empty rects should fail");
 
-    assert_eq!(err.to_string(), "image occlusion note requires at least one rect");
+    assert_eq!(
+        err.to_string(),
+        "image occlusion note requires at least one rect"
+    );
 }

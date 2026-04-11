@@ -53,7 +53,14 @@ impl ProductDocument {
         front: impl Into<String>,
         back: impl Into<String>,
     ) -> Self {
-        self.add_basic_note_with_tags(note_type_id, id, deck_name, front, back, std::iter::empty::<String>())
+        self.add_basic_note_with_tags(
+            note_type_id,
+            id,
+            deck_name,
+            front,
+            back,
+            std::iter::empty::<String>(),
+        )
     }
 
     pub fn add_basic_note_with_tags(
