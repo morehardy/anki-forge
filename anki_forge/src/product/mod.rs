@@ -5,6 +5,7 @@ pub mod helpers;
 pub mod lowering;
 pub mod metadata;
 pub mod model;
+pub mod stock;
 
 pub use assets::{AssetSource, FontBinding};
 pub use diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError};
@@ -16,4 +17,7 @@ pub use metadata::{
 pub use model::{
     BasicNoteType, CustomField, CustomNote, CustomNoteType, CustomTemplate, ProductDocument,
     ProductNote, ProductNoteType,
+};
+pub use stock::{
+    render_image_occlusion_cloze, STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
