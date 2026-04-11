@@ -52,13 +52,23 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
             note.assign_stable_id(stable_id.to_string());
         }
         None => {
-            let generated = format!("generated:{}:{}", deck.name(), deck.next_generated_note_id);
-            deck.next_generated_note_id += 1;
+            let generated = generate_unique_generated_id(deck);
             note.assign_generated_id(generated);
         }
     }
 
     Ok(())
+}
+
+fn generate_unique_generated_id(deck: &mut Deck) -> String {
+    loop {
+        let generated = format!("generated:{}:{}", deck.name(), deck.next_generated_note_id);
+        deck.next_generated_note_id += 1;
+
+        if deck.notes.iter().all(|existing| existing.id() != generated) {
+            return generated;
+        }
+    }
 }
 
 impl DeckNote {
