@@ -114,7 +114,7 @@ impl Package {
     }
 
     pub fn with_stable_id(mut self, stable_id: impl Into<String>) -> Self {
-        self.stable_id = Some(stable_id.into());
+        self.stable_id = normalize_stable_id(stable_id.into());
         self
     }
 
@@ -179,4 +179,9 @@ impl From<IoNote> for DeckNote {
     fn from(note: IoNote) -> Self {
         Self::ImageOcclusion(note)
     }
+}
+
+pub(crate) fn normalize_stable_id(stable_id: String) -> Option<String> {
+    let trimmed = stable_id.trim();
+    (!trimmed.is_empty()).then(|| trimmed.to_string())
 }

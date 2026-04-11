@@ -1,4 +1,4 @@
-use crate::deck::model::{Deck, DeckNote};
+use crate::deck::model::{normalize_stable_id, Deck, DeckNote};
 
 pub struct DeckBuilder {
     name: String,
@@ -14,7 +14,7 @@ impl DeckBuilder {
     }
 
     pub fn stable_id(mut self, stable_id: impl Into<String>) -> Self {
-        self.stable_id = Some(stable_id.into());
+        self.stable_id = normalize_stable_id(stable_id.into());
         self
     }
 
@@ -80,7 +80,7 @@ impl DeckNote {
         }
     }
 
-    pub fn requested_stable_id(&self) -> Option<&str> {
+    pub(crate) fn requested_stable_id(&self) -> Option<&str> {
         match self {
             Self::Basic(note) => note.stable_id.as_deref(),
             Self::Cloze(note) => note.stable_id.as_deref(),
@@ -88,7 +88,7 @@ impl DeckNote {
         }
     }
 
-    pub fn assign_stable_id(&mut self, stable_id: String) {
+    pub(crate) fn assign_stable_id(&mut self, stable_id: String) {
         match self {
             Self::Basic(note) => {
                 note.id = stable_id.clone();
@@ -108,28 +108,24 @@ impl DeckNote {
         }
     }
 
-    pub fn assign_generated_id(&mut self, id: String) {
+    pub(crate) fn assign_generated_id(&mut self, id: String) {
         match self {
             Self::Basic(note) => {
                 note.id = id;
+                note.stable_id = None;
                 note.generated = true;
             }
             Self::Cloze(note) => {
                 note.id = id;
+                note.stable_id = None;
                 note.generated = true;
             }
             Self::ImageOcclusion(note) => {
                 note.id = id;
+                note.stable_id = None;
                 note.generated = true;
             }
         }
     }
 
-    pub fn generated(&self) -> bool {
-        match self {
-            Self::Basic(note) => note.generated,
-            Self::Cloze(note) => note.generated,
-            Self::ImageOcclusion(note) => note.generated,
-        }
-    }
 }

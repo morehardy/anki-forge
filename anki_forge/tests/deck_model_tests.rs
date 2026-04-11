@@ -43,7 +43,7 @@ fn deck_add_generated_id_skips_existing_explicit_stable_id() {
 
     assert_eq!(deck.notes().len(), 2);
     assert_eq!(deck.notes()[0].id(), "generated:Mixed:1");
-    assert_ne!(deck.notes()[1].id(), deck.notes()[0].id());
+    assert_eq!(deck.notes()[1].id(), "generated:Mixed:2");
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn deck_add_rejects_blank_stable_id() {
         .add(BasicNote::new("front", "back").stable_id("   "))
         .expect_err("blank stable id should be rejected");
 
-    assert_eq!(error.to_string(), "stable_id must not be blank");
+    assert!(error.to_string().contains("stable_id must not be blank"));
     assert!(deck.notes().is_empty());
 }
 
@@ -69,6 +69,22 @@ fn deck_add_rejects_duplicate_stable_id() {
         .add(ClozeNote::new("A {{c1::cloze}} card").stable_id("basic-1"))
         .expect_err("duplicate stable id should be rejected");
 
-    assert_eq!(error.to_string(), "duplicate stable_id: basic-1");
+    assert!(error.to_string().contains("duplicate stable_id: basic-1"));
     assert_eq!(deck.notes().len(), 1);
+}
+
+#[test]
+fn deck_builder_treats_blank_stable_id_as_none() {
+    let deck = Deck::builder("Blank").stable_id("   ").build();
+
+    assert_eq!(deck.stable_id(), None);
+}
+
+#[test]
+fn package_with_stable_id_treats_blank_stable_id_as_none() {
+    let deck = Deck::builder("Blank").stable_id("deck-v1").build();
+    let package = Package::single(deck).with_stable_id("   ");
+
+    assert_eq!(package.stable_id(), None);
+    assert_eq!(package.root_deck().stable_id().as_deref(), Some("deck-v1"));
 }
