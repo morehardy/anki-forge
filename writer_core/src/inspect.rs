@@ -931,7 +931,7 @@ fn read_zip_entry_bytes(archive: &mut ZipArchive<File>, name: &str) -> Result<Op
     }
 }
 
-fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> PathBuf {
+pub fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> PathBuf {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');
     let trimmed = reference
         .strip_prefix(prefix)

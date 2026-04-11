@@ -14,7 +14,7 @@ pub use build::build;
 pub use build::BuildArtifactTarget;
 pub use canonical_json::to_canonical_json;
 pub use diff::diff_reports;
-pub use inspect::{inspect_apkg, inspect_build_result, inspect_staging};
+pub use inspect::{artifact_path_from_ref, inspect_apkg, inspect_build_result, inspect_staging};
 pub use media_refs::extract_media_references;
 pub use model::*;
 pub use policy::{build_context_ref, policy_ref};

@@ -1,5 +1,6 @@
 pub mod assets;
 pub mod build;
+pub mod defaults;
 pub mod diff;
 pub mod discovery;
 pub mod inspect;
@@ -11,6 +12,7 @@ pub use assets::{
     RuntimeBundle,
 };
 pub use build::build_from_path;
+pub use defaults::load_default_writer_stack;
 pub use diff::diff_from_paths;
 pub use discovery::{discover_workspace_runtime, ResolvedRuntime, RuntimeMode};
 pub use inspect::{inspect_apkg_path, inspect_staging_path};
