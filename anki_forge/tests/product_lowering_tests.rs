@@ -12,6 +12,7 @@ fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
             "Default",
             "front".to_string(),
             "back".to_string(),
+            ["demo"],
         )
         .lower()
         .expect("lower should succeed");
@@ -32,6 +33,7 @@ fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
         .first()
         .expect("lower should produce one note");
     assert_eq!(note.fields.get("Front").map(String::as_str), Some("front"));
+    assert_eq!(note.tags, vec!["demo"]);
 
     assert_eq!(plan.mappings.len(), 2);
     assert!(plan.product_diagnostics.is_empty());
@@ -43,7 +45,14 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
     let cloze_text = "A {{c1::cloze}} card";
     let plan = ProductDocument::new("cloze-doc")
         .with_cloze("cloze-main")
-        .add_cloze_note("cloze-main", "note-1", "Default", cloze_text, "extra")
+        .add_cloze_note(
+            "cloze-main",
+            "note-1",
+            "Default",
+            cloze_text,
+            "extra",
+            ["tagged"],
+        )
         .lower()
         .expect("lower should succeed");
 
@@ -64,6 +73,7 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
         note.fields.get("Text").map(String::as_str),
         Some(cloze_text)
     );
+    assert_eq!(note.tags, vec!["tagged"]);
 
     let plan = ProductDocument::new("io-doc")
         .with_image_occlusion("io-main")
@@ -76,6 +86,7 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
             "Header",
             "back_extra",
             "comments",
+            ["image-tag"],
         )
         .lower()
         .expect("lower should succeed");
@@ -100,6 +111,7 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
         note.fields.get("Header").map(String::as_str),
         Some("Header")
     );
+    assert_eq!(note.tags, vec!["image-tag"]);
 }
 
 #[test]
@@ -115,6 +127,7 @@ fn image_occlusion_missing_image_emits_product_diagnostic() {
             "Header",
             "back_extra",
             "comments",
+            std::iter::empty::<&str>(),
         )
         .lower()
         .expect_err("lower should fail");

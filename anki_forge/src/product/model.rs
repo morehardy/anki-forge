@@ -77,6 +77,8 @@ pub struct BasicNote {
     pub deck_name: String,
     pub front: String,
     pub back: String,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -86,6 +88,8 @@ pub struct ClozeNote {
     pub deck_name: String,
     pub text: String,
     pub back_extra: String,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -98,6 +102,8 @@ pub struct ImageOcclusionNote {
     pub header: String,
     pub back_extra: String,
     pub comments: String,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

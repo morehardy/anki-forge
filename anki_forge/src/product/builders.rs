@@ -52,6 +52,7 @@ impl ProductDocument {
         deck_name: impl Into<String>,
         front: impl Into<String>,
         back: impl Into<String>,
+        tags: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         self.notes.push(ProductNote::Basic(BasicNote {
             id: id.into(),
@@ -59,6 +60,7 @@ impl ProductDocument {
             deck_name: deck_name.into(),
             front: front.into(),
             back: back.into(),
+            tags: tags.into_iter().map(Into::into).collect(),
         }));
         self
     }
@@ -70,6 +72,7 @@ impl ProductDocument {
         deck_name: impl Into<String>,
         text: impl Into<String>,
         back_extra: impl Into<String>,
+        tags: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         self.notes.push(ProductNote::Cloze(ClozeNote {
             id: id.into(),
@@ -77,6 +80,7 @@ impl ProductDocument {
             deck_name: deck_name.into(),
             text: text.into(),
             back_extra: back_extra.into(),
+            tags: tags.into_iter().map(Into::into).collect(),
         }));
         self
     }
@@ -92,6 +96,7 @@ impl ProductDocument {
         header: impl Into<String>,
         back_extra: impl Into<String>,
         comments: impl Into<String>,
+        tags: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         self.notes
             .push(ProductNote::ImageOcclusion(ImageOcclusionNote {
@@ -103,6 +108,7 @@ impl ProductDocument {
                 header: header.into(),
                 back_extra: back_extra.into(),
                 comments: comments.into(),
+                tags: tags.into_iter().map(Into::into).collect(),
             }));
         self
     }

@@ -213,7 +213,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     notetype_id: basic.note_type_id.clone(),
                     deck_name: deck_name.clone(),
                     fields,
-                    tags: Vec::new(),
+                    tags: basic.tags.clone(),
                 });
 
                 mappings.push(LoweringMapping {
@@ -233,7 +233,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     notetype_id: cloze.note_type_id.clone(),
                     deck_name: deck_name.clone(),
                     fields,
-                    tags: Vec::new(),
+                    tags: cloze.tags.clone(),
                 });
 
                 mappings.push(LoweringMapping {
@@ -261,7 +261,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     notetype_id: io.note_type_id.clone(),
                     deck_name: deck_name.clone(),
                     fields,
-                    tags: Vec::new(),
+                    tags: io.tags.clone(),
                 });
 
                 mappings.push(LoweringMapping {
