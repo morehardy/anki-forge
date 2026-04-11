@@ -143,6 +143,15 @@ impl BasicNote {
         self.stable_id = Some(stable_id.into());
         self
     }
+
+    pub fn tags<T, I>(mut self, tags: I) -> Self
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<String>,
+    {
+        self.tags = tags.into_iter().map(Into::into).collect();
+        self
+    }
 }
 
 impl ClozeNote {
@@ -159,6 +168,20 @@ impl ClozeNote {
 
     pub fn stable_id(mut self, stable_id: impl Into<String>) -> Self {
         self.stable_id = Some(stable_id.into());
+        self
+    }
+
+    pub fn extra(mut self, extra: impl Into<String>) -> Self {
+        self.extra = extra.into();
+        self
+    }
+
+    pub fn tags<T, I>(mut self, tags: I) -> Self
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<String>,
+    {
+        self.tags = tags.into_iter().map(Into::into).collect();
         self
     }
 }
@@ -178,6 +201,50 @@ impl From<ClozeNote> for DeckNote {
 impl From<IoNote> for DeckNote {
     fn from(note: IoNote) -> Self {
         Self::ImageOcclusion(note)
+    }
+}
+
+impl MediaRef {
+    pub fn new(value: impl Into<String>) -> Self {
+        Self(value.into())
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl From<String> for MediaRef {
+    fn from(value: String) -> Self {
+        Self::new(value)
+    }
+}
+
+impl From<&str> for MediaRef {
+    fn from(value: &str) -> Self {
+        Self::new(value)
+    }
+}
+
+impl IoNote {
+    pub fn new(image: MediaRef) -> Self {
+        Self {
+            id: String::new(),
+            stable_id: None,
+            image,
+            mode: IoMode::HideAllGuessOne,
+            rects: Vec::new(),
+            header: String::new(),
+            back_extra: String::new(),
+            comments: String::new(),
+            tags: Vec::new(),
+            generated: false,
+        }
+    }
+
+    pub fn stable_id(mut self, stable_id: impl Into<String>) -> Self {
+        self.stable_id = Some(stable_id.into());
+        self
     }
 }
 
