@@ -308,6 +308,15 @@ impl<'a> IoDraft<'a> {
         self
     }
 
+    pub fn tags<T, I>(mut self, tags: I) -> Self
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<String>,
+    {
+        self.note.tags = tags.into_iter().map(Into::into).collect();
+        self
+    }
+
     pub fn add(self) -> anyhow::Result<()> {
         self.deck.add(self.note)
     }

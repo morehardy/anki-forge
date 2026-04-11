@@ -257,6 +257,46 @@ fn media_registry_reuses_same_name_same_content_and_rejects_conflicts() {
 }
 
 #[test]
+fn media_registry_rejects_pathlike_names_at_add_time() {
+    let mut deck = Deck::new("Anatomy");
+
+    for invalid_name in ["../escape.png", "nested/escape.png", "/tmp/escape.png"] {
+        let err = deck
+            .media()
+            .add(MediaSource::from_bytes(invalid_name, vec![1, 2, 3]))
+            .expect_err("path-like media names must fail");
+
+        assert!(
+            err.to_string().contains("media filename"),
+            "unexpected error for {invalid_name}: {err}"
+        );
+    }
+}
+
+#[test]
+fn image_occlusion_lane_accepts_tags() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_bytes("heart.png", vec![1, 2, 3]))
+        .expect("register media");
+
+    deck.image_occlusion()
+        .note(image)
+        .stable_id("io-tags")
+        .rect(1, 2, 3, 4)
+        .tags(["anatomy", "io"])
+        .add()
+        .expect("io note with tags");
+
+    let note_json = serde_json::to_value(&deck.notes()[0]).expect("serialize note");
+    assert_eq!(
+        note_json["ImageOcclusion"]["tags"],
+        json!(["anatomy", "io"])
+    );
+}
+
+#[test]
 fn image_occlusion_without_rects_fails_at_add_time() {
     let mut deck = Deck::new("Anatomy");
     let image = deck

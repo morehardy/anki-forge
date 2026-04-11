@@ -338,6 +338,36 @@ fn build_materializes_media_payloads_into_staging_tree() {
 }
 
 #[test]
+fn build_rejects_media_filenames_that_escape_staging_media_root() {
+    let root = unique_artifact_root("media-traversal");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-traversal");
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.media[0].filename = "../escape.jpg".into();
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="../escape.jpg">"#.into());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .expect("build should surface staging failure as error result");
+
+    assert_eq!(result.result_status, "error");
+    assert_eq!(
+        result.diagnostics.items[0].code,
+        "PHASE3.STAGING_MATERIALIZATION_FAILED"
+    );
+    assert!(result.diagnostics.items[0]
+        .summary
+        .contains("media filename"));
+    assert!(!root.join("staging/escape.jpg").exists());
+    assert!(!root.join("escape.jpg").exists());
+}
+
+#[test]
 fn build_preserves_bundled_media_entries() {
     let root = unique_artifact_root("bundled-media");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/bundled-media");

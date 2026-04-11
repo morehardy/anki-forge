@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use anyhow::{Context, Result};
 use authoring_core::stock::resolve_stock_notetype;
@@ -130,7 +130,7 @@ impl StagingPackage {
                 let payload = base64::engine::general_purpose::STANDARD
                     .decode(media.data_base64.as_bytes())
                     .with_context(|| format!("decode media payload {}", media.filename))?;
-                let media_path = media_dir.join(&media.filename);
+                let media_path = validated_media_output_path(&media_dir, &media.filename)?;
                 fs::write(&media_path, payload)
                     .with_context(|| format!("write staging media {}", media_path.display()))?;
             }
@@ -552,4 +552,26 @@ pub(crate) fn resolve_template_target_decks(
 fn fingerprint(canonical_json: &str) -> String {
     let digest = sha1::Sha1::digest(canonical_json.as_bytes());
     format!("artifact:{}", hex::encode(digest))
+}
+
+fn validated_media_output_path(media_dir: &Path, filename: &str) -> Result<PathBuf> {
+    anyhow::ensure!(!filename.is_empty(), "media filename must not be empty");
+    anyhow::ensure!(
+        !filename.contains(['/', '\\']),
+        "media filename must be a bare filename without path separators: {}",
+        filename
+    );
+
+    let mut components = Path::new(filename).components();
+    let is_bare_filename = matches!(components.next(), Some(Component::Normal(_)))
+        && components.next().is_none()
+        && !Path::new(filename).is_absolute();
+
+    anyhow::ensure!(
+        is_bare_filename,
+        "media filename must be a bare filename without path traversal: {}",
+        filename
+    );
+
+    Ok(media_dir.join(filename))
 }
