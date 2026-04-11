@@ -15,7 +15,7 @@ fn deck_add_preserves_mixed_note_order() {
     assert!(matches!(&deck.notes()[0], DeckNote::Basic(_)));
     assert!(matches!(&deck.notes()[1], DeckNote::Cloze(_)));
     assert!(matches!(&deck.notes()[2], DeckNote::Basic(_)));
-    assert_eq!(deck.stable_id().as_deref(), Some("mixed-v1"));
+    assert_eq!(deck.stable_id(), Some("mixed-v1"));
 }
 
 #[test]
@@ -24,8 +24,8 @@ fn package_single_can_override_package_stable_id_without_changing_root_deck() {
 
     let package = Package::single(deck).with_stable_id("package-v1");
 
-    assert_eq!(package.stable_id().as_deref(), Some("package-v1"));
-    assert_eq!(package.root_deck().stable_id().as_deref(), Some("mixed-v1"));
+    assert_eq!(package.stable_id(), Some("package-v1"));
+    assert_eq!(package.root_deck().stable_id(), Some("mixed-v1"));
 }
 
 #[test]
@@ -82,5 +82,5 @@ fn package_with_stable_id_treats_blank_stable_id_as_none() {
     let package = Package::single(deck).with_stable_id("   ");
 
     assert_eq!(package.stable_id(), None);
-    assert_eq!(package.root_deck().stable_id().as_deref(), Some("deck-v1"));
+    assert_eq!(package.root_deck().stable_id(), Some("deck-v1"));
 }

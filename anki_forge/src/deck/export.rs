@@ -140,27 +140,9 @@ fn with_temp_artifacts_dir<T>(
     label: &str,
     f: impl FnOnce(&Path) -> anyhow::Result<T>,
 ) -> anyhow::Result<T> {
-    let mut path = std::env::temp_dir();
-    let nonce = format!(
-        "anki-forge-{label}-{}-{}",
-        std::process::id(),
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .context("system clock is before UNIX_EPOCH")?
-            .as_nanos()
-    );
-    path.push(nonce);
-    fs::create_dir_all(&path)
-        .with_context(|| format!("create temp artifacts dir {}", path.display()))?;
-
-    let result = f(&path);
-    let cleanup_result = fs::remove_dir_all(&path);
-    if let Err(err) = cleanup_result {
-        eprintln!(
-            "warning: failed to clean up temp artifacts dir {}: {err}",
-            path.display()
-        );
-    }
-
-    result
+    let temp_dir = tempfile::Builder::new()
+        .prefix(&format!("anki-forge-{label}-"))
+        .tempdir()
+        .context("create temp artifacts dir")?;
+    f(temp_dir.path())
 }

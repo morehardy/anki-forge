@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Deck {
@@ -8,6 +8,8 @@ pub struct Deck {
     pub(crate) notes: Vec<DeckNote>,
     pub(crate) next_generated_note_id: u64,
     pub(crate) media: BTreeMap<String, RegisteredMedia>,
+    #[serde(skip, default)]
+    pub(crate) used_note_ids: BTreeSet<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

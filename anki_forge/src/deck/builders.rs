@@ -28,6 +28,7 @@ impl DeckBuilder {
             notes: Vec::new(),
             next_generated_note_id: 1,
             media: Default::default(),
+            used_note_ids: Default::default(),
         }
     }
 }
@@ -120,6 +121,7 @@ impl Deck {
         let mut note = note.into();
         assign_identity(self, &mut note)?;
         validate_note_shape_before_insert(self, &note)?;
+        self.used_note_ids.insert(note.id().to_string());
         self.notes.push(note);
         Ok(())
     }
@@ -153,13 +155,14 @@ pub struct IoDraft<'a> {
 }
 
 fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
+    ensure_note_id_index(deck);
     let requested = note.requested_stable_id().map(str::trim);
 
     match requested {
         Some("") => anyhow::bail!("stable_id must not be blank"),
         Some(stable_id) => {
             anyhow::ensure!(
-                deck.notes.iter().all(|existing| existing.id() != stable_id),
+                !deck.used_note_ids.contains(stable_id),
                 "duplicate stable_id: {}",
                 stable_id,
             );
@@ -194,9 +197,19 @@ fn generate_unique_generated_id(deck: &mut Deck) -> String {
         let generated = format!("generated:{}:{}", deck.name(), deck.next_generated_note_id);
         deck.next_generated_note_id += 1;
 
-        if deck.notes.iter().all(|existing| existing.id() != generated) {
+        if !deck.used_note_ids.contains(&generated) {
             return generated;
         }
+    }
+}
+
+fn ensure_note_id_index(deck: &mut Deck) {
+    if deck.used_note_ids.is_empty() && !deck.notes.is_empty() {
+        deck.used_note_ids = deck
+            .notes
+            .iter()
+            .map(|note| note.id().to_string())
+            .collect();
     }
 }
 

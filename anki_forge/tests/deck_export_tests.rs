@@ -162,10 +162,7 @@ fn package_single_with_stable_id_keeps_root_deck_and_changes_export_identity() {
 
     let package = Package::single(deck.clone()).with_stable_id("package-v1");
 
-    assert_eq!(
-        package.root_deck().stable_id().as_deref(),
-        Some("spanish-v1")
-    );
+    assert_eq!(package.root_deck().stable_id(), Some("spanish-v1"));
     assert_eq!(
         deck.to_apkg_bytes().expect("deck bytes"),
         Package::single(deck.clone())
