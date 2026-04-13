@@ -44,16 +44,19 @@ Out of scope:
 2. If stable id is absent, identity is inferred from recipe components.
 3. If inferred components are empty/invalid, resolution fails with error.
 4. No fallback to `generated:*` when inference is required.
-5. `identity_from_fields` supports notetype-level defaults and note-level
-   overrides.
-6. Custom notetype must declare `identity_from_fields` (note or notetype
-   level). No universal custom default recipe is allowed.
-7. Collision handling:
-   1. same identity + same canonical payload -> duplicate warning
+5. `identity_from_fields` is notetype-scoped by default.
+6. note-level `identity_from_fields` is an escape hatch, not a default design
+   path. It must be auditable.
+7. Custom notetype must declare notetype-level `identity_from_fields`. No
+   universal custom default recipe is allowed.
+8. canonical payload must include stable notetype identity (`notetype_key`) to
+   prevent cross-notetype id collisions.
+9. Collision handling is always blocking:
+   1. same identity + same canonical payload -> duplicate error
    2. same identity + different canonical payload -> collision error
-8. Stable id format is versioned: `afid:v1:<blake3-hex>`.
-9. Identity hash payload must be structured and canonicalized, never
-   string-concatenated ad hoc.
+10. Stable id format is versioned: `afid:v1:<blake3-hex>`.
+11. Identity hash payload must be structured and canonicalized, never
+    string-concatenated ad hoc.
 
 ## 4. Identity Resolution Pipeline
 
@@ -61,7 +64,8 @@ All note additions must pass a unified resolver:
 
 1. If `note.stable_id` exists and non-empty, use it directly.
 2. Else resolve identity recipe source in order:
-   1. `note.identity_from_fields`
+   1. note-level override `note.identity_from_fields` only when explicitly
+      requested as escape hatch (with non-empty `reason_code`)
    2. `notetype.identity_from_fields`
    3. stock recipe for stock notetype families only
 3. Build recipe components from note data.
@@ -72,6 +76,8 @@ All note additions must pass a unified resolver:
 8. Run in-build collision classification using canonical payload.
 
 If any step fails, note insertion fails.
+
+For custom notetypes, step 2.2 is mandatory even if step 2.1 is used.
 
 ## 5. Identity Sources and Provenance
 
@@ -85,8 +91,8 @@ Each resolved note identity records provenance:
 Validation/build reports should summarize:
 
 1. identity counts by source
-2. duplicate warning count
-3. collision error count
+2. duplicate error count (same canonical payload)
+3. collision error count (different canonical payload)
 4. component-empty and field-resolution error count
 
 ## 6. `identity_from_fields` Contract
@@ -95,11 +101,14 @@ Validation/build reports should summarize:
 
 Configuration layers:
 
-1. note-level `identity_from_fields([...])` (override)
-2. notetype-level `identity_from_fields([...])` (default)
+1. notetype-level `identity_from_fields([...])` (default and recommended)
+2. note-level `identity_from_fields([...])` (escape hatch override)
 
 For stock notetypes only, if neither is configured, stock recipe defaults apply.
-For custom notetypes, missing both is an error.
+For custom notetypes, missing notetype-level configuration is an error.
+
+Note-level override is intentionally not a normal path. It is allowed only when
+an explicit reason is provided and should emit an audit diagnostic.
 
 ## 6.2 Validation rules
 
@@ -109,6 +118,7 @@ For custom notetypes, missing both is an error.
 2. each field exists on target notetype
 3. duplicate field names are de-duplicated deterministically
 4. normalized selected values are not all empty
+5. note-level override must include non-empty `reason_code`
 
 Validation failure must produce deterministic error diagnostics.
 
@@ -226,9 +236,10 @@ Canonical sorting/deduplication must run on quantized integer geometry.
 
 ## 7.5 Custom notetype
 
-Custom notetypes must provide `identity_from_fields` at note or notetype level.
-Missing configuration is a hard error. There is no inferred universal custom
-recipe.
+Custom notetypes must provide notetype-level `identity_from_fields`. Missing
+configuration is a hard error. There is no inferred universal custom recipe.
+Note-level override may refine behavior per-note, but cannot replace the
+required notetype baseline.
 
 ## 8. Canonical Normalization Rules
 
@@ -237,23 +248,27 @@ Shared normalization baseline for textual components:
 1. Unicode NFC
 2. newline normalization (`\r\n`/`\r` -> `\n`)
 3. trim outer whitespace
-4. minimal HTML normalization when component is HTML
+4. text-only normalization, regardless of whether source field contains HTML
 
 Defaults must not perform:
 
 1. unconditional lowercasing
 2. punctuation stripping
-3. aggressive semantic rewrites
+3. HTML tree/parser-level canonicalization in `v1`
+4. aggressive semantic rewrites
 
 ## 9. Collision Classification
 
 Within one build/session, if two notes produce the same stable id:
 
-1. if canonical payloads are equal -> emit duplicate warning
-2. if canonical payloads differ -> emit collision error and fail insertion/build
+1. explicit `stable_id` duplication -> `AFID.STABLE_ID_DUPLICATE` error
+2. inferred same id + same canonical payload -> `AFID.IDENTITY_DUPLICATE_PAYLOAD`
+   error
+3. inferred same id + different canonical payload -> `AFID.IDENTITY_COLLISION`
+   error
 
-This rule avoids blocking true duplicates while preventing identity-overwrite
-risk.
+All three are blocking. Build/note insertion fails; the writer must not silently
+drop, merge, or keep both.
 
 ## 10. Diagnostics
 
@@ -261,16 +276,18 @@ Recommended diagnostic codes:
 
 Errors:
 
-1. `AFID.CUSTOM_IDENTITY_FIELDS_REQUIRED`
+1. `AFID.NOTETYPE_IDENTITY_FIELDS_REQUIRED`
 2. `AFID.IDENTITY_FIELD_NOT_FOUND`
 3. `AFID.IDENTITY_FIELDS_EMPTY`
 4. `AFID.IDENTITY_COMPONENT_EMPTY`
-5. `AFID.IDENTITY_COLLISION`
-6. `AFID.STABLE_ID_DUPLICATE`
+5. `AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED`
+6. `AFID.IDENTITY_DUPLICATE_PAYLOAD`
+7. `AFID.IDENTITY_COLLISION`
+8. `AFID.STABLE_ID_DUPLICATE`
 
 Warnings:
 
-1. `AFID.IDENTITY_DUPLICATE_NOTE`
+1. `AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_USED`
 
 Diagnostics should include recipe id, source, and note id context to simplify
 user remediation.
@@ -284,9 +301,16 @@ Identity payload must be structured and include version metadata:
   "algo_version": 1,
   "recipe_id": "cloze.core.v1",
   "notetype_family": "cloze",
+  "notetype_key": "stock.cloze",
   "components": { "..." : "..." }
 }
 ```
+
+`notetype_key` must be stable and machine-oriented:
+
+1. stock examples: `stock.basic`, `stock.basic_reverse`, `stock.cloze`,
+   `stock.image_occlusion`
+2. custom example: `custom:<notetype_stable_id>`
 
 Output id format:
 
@@ -311,7 +335,9 @@ Design is accepted when implementation can satisfy:
 
 1. no generated fallback for inference-required notes
 2. deterministic cross-run ids with unchanged inputs
-3. deterministic collision classification
-4. custom notetype hard-fail without `identity_from_fields`
-5. IO hash payload contains only integers for geometric coordinates
-6. provenance visible in validation/build outputs
+3. deterministic collision classification with blocking duplicate/collision
+   errors
+4. custom notetype hard-fail without notetype-level `identity_from_fields`
+5. hash payload includes stable `notetype_key`
+6. IO hash payload contains only integers for geometric coordinates
+7. provenance visible in validation/build outputs
