@@ -1,64 +1,23 @@
 # anki-forge
 
-`anki-forge` Phase 1 is a contract-first repository.
-`contracts/` is the normative source of truth.
-`contract_tools/` provides internal verification tooling only.
+`anki_forge` provides a minimal Rust API for creating Anki decks and exporting `.apkg` files.
 
-## Verification and release readiness
+If you just want to build decks, add notes/media, and export packages, use the `Deck` API first.
+You do not need to touch normalized IR, writer policies, or build artifacts for common workflows.
 
-Use the contract tooling from the repository root with the bundled manifest:
+## Minimal API (Recommended)
 
-```bash
-cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"
-cargo run -p contract_tools -- summary --manifest "$(pwd)/contracts/manifest.yaml"
-cargo run -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yaml" --out-dir dist
-cargo run -p contract_tools -- normalize --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase2/inputs/minimal-authoring-ir.json" --output contract-json
-cargo run -p contract_tools -- build --manifest "$(pwd)/contracts/manifest.yaml" --input "$(pwd)/contracts/fixtures/phase3/inputs/basic-normalized-ir.json" --writer-policy default --build-context default --artifacts-dir "$(pwd)/contracts/artifacts/readme-phase3" --output contract-json
-cargo run -p contract_tools -- inspect --staging "$(pwd)/contracts/artifacts/readme-phase3/staging/manifest.json" --output contract-json > "$(pwd)/contracts/artifacts/readme-phase3/staging.inspect.json"
-cargo run -p contract_tools -- inspect --apkg "$(pwd)/contracts/artifacts/readme-phase3/package.apkg" --output contract-json > "$(pwd)/contracts/artifacts/readme-phase3/apkg.inspect.json"
-cargo run -p contract_tools -- diff --left "$(pwd)/contracts/artifacts/readme-phase3/staging.inspect.json" --right "$(pwd)/contracts/artifacts/readme-phase3/apkg.inspect.json" --output contract-json
-```
+### What you can do
 
-`verify` checks the contract bundle and all executable gates.
-`summary` prints the release-readiness smoke view of the bundle version, public axis, component versions, and asset inventory.
-`package` writes the versioned contract artifact into `dist/` for release validation.
-`normalize --output contract-json` runs Phase 2 authoring normalization and emits contract-stable machine output for CI/fixtures.
-`build`, `inspect`, and `diff` with `--output contract-json` are stable machine interfaces for Phase 3 compatibility and fixture assertions.
+- Build a deck with a stable identity
+- Add `basic`, `cloze`, and `image occlusion` notes
+- Register media from file or bytes
+- Validate deck shape and export `.apkg`
 
-Before a Phase 1 release or merge that affects contracts, capture the checklist in `docs/superpowers/checklists/phase-1-exit-evidence.md` and make sure the same commands pass locally and in CI.
-For Phase 2 core authoring readiness, capture and update `docs/superpowers/checklists/phase-2-exit-evidence.md`.
-For Phase 3 compatibility readiness, capture and update `docs/superpowers/checklists/phase-3-exit-evidence.md`.
-
-## Phase 5A product authoring
-
-`anki_forge::product` is the author-facing Phase 5A layer in Rust.
-It produces a reviewable `LoweringPlan`, then hands off to the existing `Authoring IR -> normalize -> build -> inspect -> diff` pipeline.
-
-Try the basic flow with:
-
-```bash
-cargo run -p anki_forge --example product_basic_flow
-```
-
-The real upstream importer oracle for Phase 5A also expects a local Anki source tree at
-`docs/source/anki`, Rust `1.92.0` (matching upstream `rust-toolchain.toml`), and `protoc`
-available on `PATH`.
-
-Run that oracle explicitly with:
-
-```bash
-./scripts/run_roundtrip_oracle.sh
-```
-
-It is intentionally not part of the default `cargo test` suite, because it depends on a local
-vendored upstream Anki checkout.
-
-Before calling a Phase 5A change ready, capture the evidence commands in `docs/superpowers/checklists/phase-5a-exit-evidence.md`.
-
-## Rust Quick Start
+### End-to-end example
 
 ```rust
-use anki_forge::Deck;
+use anki_forge::{Deck, IoMode, MediaSource};
 
 fn main() -> anyhow::Result<()> {
     let mut deck = Deck::builder("Spanish")
@@ -68,16 +27,82 @@ fn main() -> anyhow::Result<()> {
     deck.basic()
         .note("hola", "hello")
         .stable_id("es-hola")
+        .tags(["vocab", "a1"])
         .add()?;
 
+    deck.cloze()
+        .note("La capital de Espana es {{c1::Madrid}}")
+        .extra("Europe")
+        .stable_id("geo-es-capital")
+        .tags(["geography"])
+        .add()?;
+
+    let heart = deck.media().add(MediaSource::from_bytes(
+        "heart.png",
+        vec![0x89, 0x50, 0x4E, 0x47],
+    ))?;
+
+    deck.image_occlusion()
+        .note(heart)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 80, 40)
+        .header("Heart")
+        .back_extra("Identify the chamber")
+        .comments("Left ventricle")
+        .stable_id("anatomy-heart-1")
+        .tags(["anatomy"])
+        .add()?;
+
+    deck.validate()?;
     deck.write_apkg("spanish.apkg")?;
+
     Ok(())
 }
 ```
 
-`add_basic(...)` remains available for the shortest path, but it generates a non-stable note id.
-Use `stable_id(...)` when you want import-friendly updates.
+### Identity guidance
 
-For advanced authoring, use `anki_forge::product`.
-For file-driven pipeline work, use `anki_forge::runtime`.
-The reverse bridge `from_product_document()` is intentionally deferred until IO/media round-tripping is lossless.
+- Prefer `stable_id(...)` on notes and deck/package when you want import-friendly updates.
+- `add_basic(front, back)` is available for the shortest path, but it generates a non-stable note id.
+
+## What Happens Under the Hood
+
+The minimal API is a high-level facade over the existing core pipeline:
+
+1. `Deck` model and validation
+2. Lower to product/authoring document
+3. Normalize (`authoring_core`)
+4. Build package (`writer_core`)
+5. Return artifact paths or `.apkg` bytes
+
+This gives you a simple authoring surface while preserving the same core execution path used by lower-level APIs.
+
+## Advanced Surfaces
+
+Use these only if you need tighter control than the minimal API:
+
+- `anki_forge::product`: explicit product/notetype-level authoring
+- `anki_forge::runtime`: file-driven normalize/build/inspect/diff workflows
+- direct re-exports from `authoring_core` and `writer_core`
+
+## Repository Verification (Maintainers)
+
+The repository remains contract-first:
+
+- `contracts/` is the normative source of truth
+- `contract_tools/` is internal verification tooling
+
+Run from repository root:
+
+```bash
+cargo run -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"
+cargo run -p contract_tools -- summary --manifest "$(pwd)/contracts/manifest.yaml"
+cargo run -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yaml" --out-dir dist
+```
+
+Before phase exits or release-related merges, capture evidence in:
+
+- `docs/superpowers/checklists/phase-1-exit-evidence.md`
+- `docs/superpowers/checklists/phase-2-exit-evidence.md`
+- `docs/superpowers/checklists/phase-3-exit-evidence.md`
+- `docs/superpowers/checklists/phase-5a-exit-evidence.md`
