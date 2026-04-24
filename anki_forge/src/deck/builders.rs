@@ -89,9 +89,20 @@ impl Deck {
 
             if !seen_ids.insert(note.id().to_string()) {
                 diagnostics.push(ValidationDiagnostic {
-                    code: ValidationCode::DuplicateStableId,
+                    code: ValidationCode::StableIdDuplicate,
                     message: format!("id '{}' is duplicated", note.id()),
                     severity: "error".into(),
+                });
+            }
+
+            if note
+                .resolved_identity_snapshot()
+                .is_some_and(|snapshot| snapshot.used_override)
+            {
+                diagnostics.push(ValidationDiagnostic {
+                    code: ValidationCode::NoteLevelIdentityOverrideUsed,
+                    message: format!("note '{}' uses a note-level identity override", note.id()),
+                    severity: "warning".into(),
                 });
             }
 

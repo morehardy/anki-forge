@@ -227,7 +227,7 @@ fn legacy_explicit_duplicate_without_snapshots_deserializes_and_validate_report_
     assert!(report
         .diagnostics()
         .iter()
-        .any(|item| item.code == ValidationCode::DuplicateStableId));
+        .any(|item| item.code == ValidationCode::StableIdDuplicate));
 }
 
 #[test]
@@ -374,7 +374,7 @@ fn snapshot_note_id_mismatch_fails_to_deserialize() {
 }
 
 #[test]
-fn inferred_duplicate_payload_fails_to_deserialize() {
+fn load_time_duplicate_payload_is_classified() {
     let payload = "{\"front\":\"hola\",\"back\":\"hello\"}";
     let stable_id = afid(payload);
 
@@ -515,5 +515,5 @@ fn legacy_duplicate_plain_ids_deserialize_and_validate_report_finds_them() {
     assert!(report
         .diagnostics()
         .iter()
-        .any(|item| item.code == ValidationCode::DuplicateStableId));
+        .any(|item| item.code == ValidationCode::StableIdDuplicate));
 }

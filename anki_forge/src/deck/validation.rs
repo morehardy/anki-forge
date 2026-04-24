@@ -5,6 +5,10 @@ pub enum ValidationCode {
     BlankStableId,
     EmptyIoMasks,
     UnknownMediaRef,
+    NoteLevelIdentityOverrideUsed,
+    IdentityDuplicatePayload,
+    IdentityCollision,
+    StableIdDuplicate,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

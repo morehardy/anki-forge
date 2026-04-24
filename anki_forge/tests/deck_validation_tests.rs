@@ -1,4 +1,6 @@
-use anki_forge::{Deck, IoMode, MediaSource, ValidationCode};
+use anki_forge::{
+    BasicIdentityField, BasicIdentityOverride, Deck, IoMode, MediaSource, ValidationCode,
+};
 use serde_json::json;
 use std::path::PathBuf;
 
@@ -24,6 +26,74 @@ fn add_basic_infers_afid_and_validate_report_does_not_warn() {
         .diagnostics()
         .iter()
         .any(|item| item.code == ValidationCode::MissingStableId));
+}
+
+#[test]
+fn validation_code_catalog_includes_note_identity_codes() {
+    let codes = [
+        ValidationCode::MissingStableId,
+        ValidationCode::DuplicateStableId,
+        ValidationCode::BlankStableId,
+        ValidationCode::EmptyIoMasks,
+        ValidationCode::UnknownMediaRef,
+        ValidationCode::NoteLevelIdentityOverrideUsed,
+        ValidationCode::IdentityDuplicatePayload,
+        ValidationCode::IdentityCollision,
+        ValidationCode::StableIdDuplicate,
+    ];
+
+    assert_eq!(codes.len(), 9);
+}
+
+#[test]
+fn note_level_override_emits_warning_diagnostic() {
+    let override_cfg = BasicIdentityOverride::new(
+        [BasicIdentityField::Front, BasicIdentityField::Back],
+        "sense",
+    )
+    .expect("override");
+    let mut deck = Deck::new("Spanish");
+    deck.basic()
+        .note("hola", "hello")
+        .identity_override(override_cfg)
+        .add()
+        .expect("add note with identity override");
+
+    let report = deck.validate_report().expect("validation report");
+    assert!(!report.has_errors());
+    assert!(report.diagnostics().iter().any(|item| {
+        item.code == ValidationCode::NoteLevelIdentityOverrideUsed && item.severity == "warning"
+    }));
+}
+
+#[test]
+fn legacy_generated_note_still_deserializes_and_reports_warning() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Spanish",
+        "stable_id": null,
+        "notes": [
+            {
+                "Basic": {
+                    "id": "generated:Spanish:1",
+                    "stable_id": null,
+                    "front": "hola",
+                    "back": "hello",
+                    "tags": [],
+                    "generated": true
+                }
+            }
+        ],
+        "next_generated_note_id": 2,
+        "media": {}
+    }))
+    .expect("legacy generated deck should deserialize");
+
+    let report = deck.validate_report().expect("validation report");
+    assert!(!report.has_errors());
+    assert!(report
+        .diagnostics()
+        .iter()
+        .any(|item| item.code == ValidationCode::MissingStableId && item.severity == "warning"));
 }
 
 #[test]
@@ -131,7 +201,7 @@ fn validate_report_detects_duplicate_stable_id_even_when_one_note_is_generated()
     assert!(report
         .diagnostics()
         .iter()
-        .any(|item| item.code == ValidationCode::DuplicateStableId));
+        .any(|item| item.code == ValidationCode::StableIdDuplicate));
 }
 
 #[test]

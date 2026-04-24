@@ -283,6 +283,87 @@ fn assert_io_contract_case_matches_expected_output(path: &str) {
     );
 }
 
+fn resolve_fixture_deck(fixture: &NoteIdentityFixture) -> anyhow::Result<Deck> {
+    let mut deck = Deck::new("Fixture Deck");
+    match fixture.note_kind.as_str() {
+        "basic" => {
+            deck.add(BasicNote::new(
+                fixture.input["front"].as_str().expect("fixture front"),
+                fixture.input["back"].as_str().expect("fixture back"),
+            ))?;
+        }
+        "cloze" => {
+            deck.add(ClozeNote::new(
+                fixture.input["text"].as_str().expect("fixture text"),
+            ))?;
+        }
+        "image_occlusion" => {
+            let image_path = repo_root().join(
+                fixture.input["image_path"]
+                    .as_str()
+                    .expect("fixture image path"),
+            );
+            let mode = match fixture.input["mode"].as_str().expect("fixture io mode") {
+                "hide_all_guess_one" => IoMode::HideAllGuessOne,
+                "hide_one_guess_one" => IoMode::HideOneGuessOne,
+                other => panic!("unknown fixture io mode: {other}"),
+            };
+
+            let image = deck.media().add(MediaSource::from_file(&image_path))?;
+            let mut draft = deck.image_occlusion().note(image).mode(mode);
+            for rect in fixture.input["rects"].as_array().expect("fixture io rects") {
+                draft = draft.rect(
+                    rect["x"].as_u64().expect("rect x") as u32,
+                    rect["y"].as_u64().expect("rect y") as u32,
+                    rect["width"].as_u64().expect("rect width") as u32,
+                    rect["height"].as_u64().expect("rect height") as u32,
+                );
+            }
+            draft.add()?;
+        }
+        other => panic!("unknown fixture note kind: {other}"),
+    }
+    Ok(deck)
+}
+
+#[test]
+fn all_cataloged_note_identity_fixtures_match_resolver_output() {
+    for rel in note_identity_catalog_inputs() {
+        let fixture = load_case(&format!("contracts/{rel}"));
+        match fixture.expected["error_code"].as_str() {
+            Some(error_code) => {
+                let err = resolve_fixture_deck(&fixture)
+                    .expect_err("error fixture must be rejected by resolver");
+                assert!(
+                    err.to_string().contains(error_code),
+                    "{rel} expected {error_code}, got {err}"
+                );
+            }
+            None => {
+                let deck = resolve_fixture_deck(&fixture)
+                    .unwrap_or_else(|err| panic!("{rel} should resolve: {err}"));
+                let snapshot = deck.notes()[0]
+                    .resolved_identity()
+                    .expect("resolved identity snapshot");
+                assert_eq!(
+                    snapshot.canonical_payload.as_deref(),
+                    fixture.expected["canonical_payload"].as_str(),
+                    "{rel} canonical payload"
+                );
+                assert_eq!(
+                    snapshot.stable_id, fixture.expected["stable_id"],
+                    "{rel} stable id"
+                );
+                assert_eq!(
+                    snapshot.recipe_id.as_deref(),
+                    Some(fixture.recipe_id.as_str()),
+                    "{rel} recipe id"
+                );
+            }
+        }
+    }
+}
+
 #[test]
 fn io_order_insensitive_contract_case_matches_expected_output() {
     assert_io_contract_case_matches_expected_output(
@@ -498,7 +579,47 @@ fn inferred_basic_note_uses_afid_instead_of_generated_id() {
 }
 
 #[test]
-fn duplicate_inferred_basic_identity_payload_fails_at_add_time() {
+fn new_default_note_no_longer_uses_generated_id() {
+    let mut deck = Deck::new("Spanish");
+    deck.add(BasicNote::new("hola", "hello"))
+        .expect("add default note");
+
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
+    assert!(!deck.notes()[0].id().starts_with("generated:"));
+}
+
+#[test]
+fn explicit_generated_prefix_is_preserved_as_explicit_stable_id() {
+    let mut deck = Deck::new("Spanish");
+    deck.add(BasicNote::new("hola", "hello").stable_id("generated:Spanish:1"))
+        .expect("add explicit generated-prefixed id");
+
+    let snapshot = deck.notes()[0]
+        .resolved_identity()
+        .expect("resolved identity snapshot");
+    assert_eq!(deck.notes()[0].id(), "generated:Spanish:1");
+    assert_eq!(snapshot.stable_id, "generated:Spanish:1");
+    assert_eq!(snapshot.provenance, IdentityProvenance::ExplicitStableId);
+    assert!(snapshot.canonical_payload.is_none());
+}
+
+#[test]
+fn cross_notetype_same_visible_text_produces_different_afids() {
+    let mut basic_deck = Deck::new("Shared Text");
+    basic_deck
+        .add(BasicNote::new("Paris", "France"))
+        .expect("add basic note");
+
+    let mut cloze_deck = Deck::new("Shared Text");
+    cloze_deck
+        .add(ClozeNote::new("{{c1::Paris}}"))
+        .expect("add cloze note");
+
+    assert_ne!(basic_deck.notes()[0].id(), cloze_deck.notes()[0].id());
+}
+
+#[test]
+fn inferred_duplicate_payload_is_error() {
     let mut deck = Deck::new("Spanish");
     deck.add(BasicNote::new("hola", "hello"))
         .expect("add first inferred note");
