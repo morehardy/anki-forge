@@ -161,7 +161,7 @@ fn manifest_schema(bundle_version: &str) -> String {
 #[test]
 fn manifest_uses_bundle_version_as_the_only_public_axis() {
     let manifest = load_manifest(contract_manifest_path()).expect("manifest loads");
-    assert_eq!(manifest.data.bundle_version, "0.1.0");
+    assert_eq!(manifest.data.bundle_version, "0.1.1");
     assert_eq!(manifest.data.compatibility.public_axis, "bundle_version");
     assert!(manifest.data.component_versions.contains_key("schema"));
 }

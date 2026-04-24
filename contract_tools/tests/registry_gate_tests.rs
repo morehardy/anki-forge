@@ -118,6 +118,11 @@ fn write_bundle(
         "---\nasset_refs:\n  - versioning/upgrade-rules.yaml\n---\n# Compatibility\n",
     )
     .expect("write compatibility semantics");
+    fs::write(
+        root.join("semantics/note-stable-id.md"),
+        "---\nasset_refs:\n  - versioning/compatibility-classes.yaml\n---\n# Note Stable ID\n",
+    )
+    .expect("write note stable id semantics");
     if include_undeclared_asset {
         fs::write(root.join(semantics_ref), "# undeclared asset\n")
             .expect("write undeclared asset");
@@ -145,6 +150,7 @@ assets:
   validation_semantics: semantics/validation.md
   path_semantics: semantics/path-conventions.md
   compatibility_semantics: semantics/compatibility.md
+  note_stable_id_semantics: semantics/note-stable-id.md
 "#
     .to_string()
 }
@@ -187,7 +193,8 @@ fn manifest_schema() -> String {
                     "error_registry",
                     "validation_semantics",
                     "path_semantics",
-                    "compatibility_semantics"
+                    "compatibility_semantics",
+                    "note_stable_id_semantics"
                 ],
                 "additionalProperties": false,
                 "properties": {
@@ -199,7 +206,8 @@ fn manifest_schema() -> String {
                     "error_registry": { "type": "string" },
                     "validation_semantics": { "type": "string" },
                     "path_semantics": { "type": "string" },
-                    "compatibility_semantics": { "type": "string" }
+                    "compatibility_semantics": { "type": "string" },
+                    "note_stable_id_semantics": { "type": "string" }
                 }
             }
         }

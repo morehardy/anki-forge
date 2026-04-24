@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["recipe_id", "note_kind", "input", "expected"],
+  "additionalProperties": false,
+  "properties": {
+    "recipe_id": {
+      "enum": ["basic.core.v1", "cloze.core.v2", "io.core.v2"]
+    },
+    "note_kind": {
+      "enum": ["basic", "cloze", "image_occlusion"]
+    },
+    "input": {
+      "type": "object"
+    },
+    "expected": {
+      "$ref": "#/definitions/expected"
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "recipe_id": {
+          "const": "basic.core.v1"
+        },
+        "note_kind": {
+          "const": "basic"
+        },
+        "input": {
+          "$ref": "#/definitions/basic_input"
+        }
+      }
+    },
+    {
+      "properties": {
+        "recipe_id": {
+          "const": "cloze.core.v2"
+        },
+        "note_kind": {
+          "const": "cloze"
+        },
+        "input": {
+          "$ref": "#/definitions/cloze_input"
+        }
+      }
+    },
+    {
+      "properties": {
+        "recipe_id": {
+          "const": "io.core.v2"
+        },
+        "note_kind": {
+          "const": "image_occlusion"
+        },
+        "input": {
+          "$ref": "#/definitions/io_input"
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "basic_input": {
+      "type": "object",
+      "required": ["front"],
+      "additionalProperties": false,
+      "properties": {
+        "front": {
+          "type": "string"
+        },
+        "back": {
+          "type": "string"
+        }
+      }
+    },
+    "cloze_input": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "string"
+        }
+      }
+    },
+    "io_input": {
+      "type": "object",
+      "required": ["image_path", "mode", "rects"],
+      "additionalProperties": false,
+      "properties": {
+        "image_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": ["hide_all_guess_one", "hide_one_guess_one"]
+        },
+        "rects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/io_rect"
+          }
+        }
+      }
+    },
+    "io_rect": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "expected": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["canonical_payload", "stable_id", "provenance"],
+          "additionalProperties": false,
+          "properties": {
+            "canonical_payload": {
+              "type": "string",
+              "minLength": 1
+            },
+            "stable_id": {
+              "type": "string",
+              "pattern": "^afid:v1:[0-9a-f]{64}$"
+            },
+            "provenance": {
+              "enum": ["stock_recipe", "notetype_fields", "note_fields"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["error_code"],
+          "additionalProperties": false,
+          "properties": {
+            "error_code": {
+              "enum": [
+                "AFID.IDENTITY_FIELDS_EMPTY",
+                "AFID.IDENTITY_COMPONENT_EMPTY",
+                "AFID.IDENTITY_FIELD_NOT_FOUND",
+                "AFID.IDENTITY_SNAPSHOT_MISSING",
+                "AFID.IDENTITY_SNAPSHOT_NOTE_ID_MISMATCH",
+                "AFID.IDENTITY_SNAPSHOT_HASH_MISMATCH",
+                "AFID.IDENTITY_SNAPSHOT_INCOMPLETE",
+                "AFID.IDENTITY_DUPLICATE_PAYLOAD",
+                "AFID.IDENTITY_COLLISION",
+                "AFID.STABLE_ID_DUPLICATE",
+                "AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED",
+                "AFID.CLOZE_MALFORMED",
+                "AFID.CLOZE_ORD_INVALID",
+                "AFID.CLOZE_NESTED_UNSUPPORTED",
+                "AFID.IO_IMAGE_DIMENSIONS_MISSING",
+                "AFID.IO_RECT_EMPTY",
+                "AFID.IO_RECT_OUT_OF_BOUNDS",
+                "AFID.IO_RECT_DUPLICATE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

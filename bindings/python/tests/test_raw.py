@@ -14,6 +14,16 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
 VALID_AUTHORING_INPUT = REPO_ROOT / "contracts/fixtures/valid/minimal-authoring-ir.json"
 
 
+def bundled_contract_version() -> str:
+    for line in (REPO_ROOT / "contracts/manifest.yaml").read_text(
+        encoding="utf-8"
+    ).splitlines():
+        stripped = line.strip()
+        if stripped.startswith("bundle_version:"):
+            return stripped.split(":", 1)[1].strip().strip("\"'")
+    raise AssertionError("bundled manifest must declare bundle_version")
+
+
 class RawBindingsTests(unittest.TestCase):
     def test_resolve_runtime_discovers_workspace_metadata(self) -> None:
         runtime = resolve_runtime(cwd=pathlib.Path(__file__).resolve().parents[1])
@@ -21,7 +31,7 @@ class RawBindingsTests(unittest.TestCase):
         self.assertEqual(runtime.mode, "workspace")
         self.assertTrue(str(runtime.manifest_path).endswith("contracts/manifest.yaml"))
         self.assertTrue(str(runtime.bundle_root).endswith("contracts"))
-        self.assertEqual(runtime.bundle_version, "0.1.0")
+        self.assertEqual(runtime.bundle_version, bundled_contract_version())
         self.assertIsInstance(WRAPPER_API_VERSION, str)
 
     def test_resolve_runtime_installed_mode_tolerates_indented_single_quoted_bundle_version(

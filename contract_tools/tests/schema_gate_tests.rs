@@ -207,6 +207,18 @@ fn manifest_registers_phase3_schema_policy_and_semantics_assets() {
 }
 
 #[test]
+fn manifest_registers_note_identity_schema_and_semantics_assets() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+
+    for asset_key in ["note_identity_fixture_schema", "note_stable_id_semantics"] {
+        assert!(
+            resolve_asset_path(&manifest, asset_key).is_ok(),
+            "manifest is missing asset key {asset_key}"
+        );
+    }
+}
+
+#[test]
 fn normalization_result_schema_allows_null_comparison_context_without_merge_risk_report() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =

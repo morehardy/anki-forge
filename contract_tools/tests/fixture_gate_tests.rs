@@ -165,6 +165,89 @@ fn fixture_gates_reject_phase3_inspect_golden_mismatch() {
     assert!(err.to_string().contains("phase3 inspect output mismatch"));
 }
 
+#[test]
+fn fixture_gates_reject_note_identity_stable_id_hash_mismatch() {
+    let manifest_path = copied_bundled_manifest_path("note-identity-hash-mismatch");
+    let bundle_root = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    let fixture_path = bundle_root.join("fixtures/note-identity/basic-front-only.case.json");
+    let mut fixture: serde_json::Value =
+        serde_json::from_str(&fs::read_to_string(&fixture_path).expect("read note fixture"))
+            .expect("decode note fixture");
+    fixture["expected"]["stable_id"] = serde_json::json!(
+        "afid:v1:0000000000000000000000000000000000000000000000000000000000000000"
+    );
+
+    fs::write(
+        &fixture_path,
+        serde_json::to_string_pretty(&fixture).expect("encode corrupted note fixture"),
+    )
+    .expect("overwrite note fixture");
+
+    let err = run_fixture_gates(&manifest_path).expect_err("hash mismatches should fail");
+    assert!(err
+        .to_string()
+        .contains("note-identity stable_id must match canonical_payload hash"));
+}
+
+#[test]
+fn fixture_gates_reject_note_identity_recipe_input_schema_mismatch() {
+    let manifest_path = copied_bundled_manifest_path("note-identity-schema-mismatch");
+    let bundle_root = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    let fixture_path = bundle_root.join("fixtures/note-identity/basic-front-only.case.json");
+    let mut fixture: serde_json::Value =
+        serde_json::from_str(&fs::read_to_string(&fixture_path).expect("read note fixture"))
+            .expect("decode note fixture");
+    fixture["note_kind"] = serde_json::json!("cloze");
+    fixture["input"] = serde_json::json!({
+        "frnot": "hola",
+        "back": "hello"
+    });
+
+    fs::write(
+        &fixture_path,
+        serde_json::to_string_pretty(&fixture).expect("encode corrupted note fixture"),
+    )
+    .expect("overwrite note fixture");
+
+    let err = run_fixture_gates(&manifest_path).expect_err("schema mismatches should fail");
+    assert!(err
+        .to_string()
+        .contains("note-identity fixture must satisfy note_identity_fixture_schema"));
+}
+
+#[test]
+fn fixture_gates_reject_note_identity_noncanonical_payload_string() {
+    let manifest_path = copied_bundled_manifest_path("note-identity-noncanonical-payload");
+    let bundle_root = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    let fixture_path = bundle_root.join("fixtures/note-identity/basic-front-only.case.json");
+    let mut fixture: serde_json::Value =
+        serde_json::from_str(&fs::read_to_string(&fixture_path).expect("read note fixture"))
+            .expect("decode note fixture");
+    fixture["expected"]["canonical_payload"] = serde_json::json!(
+        "{\"recipe_id\":\"basic.core.v1\",\"algo_version\":1,\"notetype_family\":\"stock\",\"notetype_key\":\"basic\",\"components\":{\"selected_fields\":[{\"value\":\"hola\",\"name\":\"front\"}]}}"
+    );
+
+    fs::write(
+        &fixture_path,
+        serde_json::to_string_pretty(&fixture).expect("encode corrupted note fixture"),
+    )
+    .expect("overwrite note fixture");
+
+    let err = run_fixture_gates(&manifest_path).expect_err("noncanonical payloads should fail");
+    assert!(err
+        .to_string()
+        .contains("note-identity canonical_payload must be canonical JSON"));
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);

@@ -178,6 +178,15 @@ struct Phase3E2ECase {
     expected_diff: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct NoteIdentityCase {
+    recipe_id: String,
+    note_kind: String,
+    input: Value,
+    expected: Value,
+}
+
 pub fn load_fixture_catalog(path: impl AsRef<Path>) -> anyhow::Result<FixtureCatalog> {
     let path = path.as_ref();
     let raw = fs::read_to_string(path)
@@ -230,6 +239,18 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
             )?)?,
             diff_report_schema: load_schema(&resolve_asset_path(&manifest, "diff_report_schema")?)?,
         })
+    } else {
+        None
+    };
+    let has_note_identity_cases = catalog
+        .cases
+        .iter()
+        .any(|case| case.category.as_str() == "note-identity");
+    let note_identity_fixture_schema = if has_note_identity_cases {
+        Some(load_schema(&resolve_asset_path(
+            &manifest,
+            "note_identity_fixture_schema",
+        )?)?)
     } else {
         None
     };
@@ -359,6 +380,32 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                     &input_path,
                     case.id.as_str(),
                 )?;
+            }
+            "note-identity" => {
+                let schema = note_identity_fixture_schema
+                    .as_ref()
+                    .context("note-identity fixture schema must be loaded")?;
+                let input_value = load_json_value(&input_path)?;
+                validate_value(schema, &input_value).with_context(|| {
+                    format!(
+                        "note-identity fixture must satisfy note_identity_fixture_schema: {}",
+                        case.id
+                    )
+                })?;
+                let fixture: NoteIdentityCase =
+                    serde_json::from_value(input_value).with_context(|| {
+                        format!(
+                            "note-identity fixture must map into the gate model: {}",
+                            case.id
+                        )
+                    })?;
+                validate_note_identity_stable_id(&fixture, case.id.as_str())?;
+                let _ = (
+                    fixture.recipe_id,
+                    fixture.note_kind,
+                    fixture.input,
+                    fixture.expected,
+                );
             }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;
@@ -515,6 +562,45 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
             );
         }
     }
+
+    Ok(())
+}
+
+fn validate_note_identity_stable_id(
+    fixture: &NoteIdentityCase,
+    case_id: &str,
+) -> anyhow::Result<()> {
+    let Some(canonical_payload) = fixture
+        .expected
+        .get("canonical_payload")
+        .and_then(Value::as_str)
+    else {
+        return Ok(());
+    };
+    let parsed_payload: Value = serde_json::from_str(canonical_payload)
+        .with_context(|| format!("note-identity canonical_payload must be JSON: {case_id}"))?;
+    let canonical_payload_text =
+        authoring_core::to_canonical_json(&parsed_payload).with_context(|| {
+            format!("note-identity canonical_payload must serialize canonically: {case_id}")
+        })?;
+    ensure!(
+        canonical_payload_text == canonical_payload,
+        "note-identity canonical_payload must be canonical JSON: {}",
+        case_id
+    );
+
+    let stable_id = fixture
+        .expected
+        .get("stable_id")
+        .and_then(Value::as_str)
+        .context("successful note-identity fixture must carry stable_id")?;
+    let expected_stable_id = format!("afid:v1:{}", blake3::hash(canonical_payload.as_bytes()));
+
+    ensure!(
+        stable_id == expected_stable_id,
+        "note-identity stable_id must match canonical_payload hash: {}",
+        case_id
+    );
 
     Ok(())
 }

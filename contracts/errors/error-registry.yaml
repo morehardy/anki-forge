@@ -14,3 +14,57 @@ codes:
   - id: AF0005
     status: active
     summary: semantics frontmatter is missing asset references
+  - id: AFID.IDENTITY_FIELDS_EMPTY
+    status: active
+    summary: typed identity selector list is empty
+  - id: AFID.IDENTITY_COMPONENT_EMPTY
+    status: active
+    summary: recipe input did not produce a required identity component
+  - id: AFID.IDENTITY_FIELD_NOT_FOUND
+    status: active
+    summary: requested identity field does not exist for the note kind
+  - id: AFID.IDENTITY_SNAPSHOT_MISSING
+    status: active
+    summary: inferred AFID note is missing its persisted identity snapshot
+  - id: AFID.IDENTITY_SNAPSHOT_NOTE_ID_MISMATCH
+    status: active
+    summary: persisted identity snapshot stable_id does not match the note id
+  - id: AFID.IDENTITY_SNAPSHOT_HASH_MISMATCH
+    status: active
+    summary: persisted identity snapshot hash does not match its canonical payload
+  - id: AFID.IDENTITY_SNAPSHOT_INCOMPLETE
+    status: active
+    summary: inferred identity snapshot must carry both recipe_id and canonical_payload
+  - id: AFID.IDENTITY_DUPLICATE_PAYLOAD
+    status: active
+    summary: two inferred notes resolved to the same AFID from the same canonical payload
+  - id: AFID.IDENTITY_COLLISION
+    status: active
+    summary: two inferred notes resolved to the same AFID from different canonical payloads
+  - id: AFID.STABLE_ID_DUPLICATE
+    status: active
+    summary: explicit or mixed identity records use a duplicate stable id
+  - id: AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED
+    status: active
+    summary: note-level identity override requires a non-empty reason code
+  - id: AFID.CLOZE_MALFORMED
+    status: active
+    summary: cloze text is malformed for identity parsing
+  - id: AFID.CLOZE_ORD_INVALID
+    status: active
+    summary: cloze ordinal must be a non-zero positive integer
+  - id: AFID.CLOZE_NESTED_UNSUPPORTED
+    status: active
+    summary: nested cloze syntax is not supported by the current recipe
+  - id: AFID.IO_IMAGE_DIMENSIONS_MISSING
+    status: active
+    summary: image occlusion identity requires source image dimensions
+  - id: AFID.IO_RECT_EMPTY
+    status: active
+    summary: image occlusion rects must have non-zero width and height
+  - id: AFID.IO_RECT_OUT_OF_BOUNDS
+    status: active
+    summary: image occlusion rects must fit inside source image dimensions
+  - id: AFID.IO_RECT_DUPLICATE
+    status: active
+    summary: image occlusion identity rejects duplicate rect masks

@@ -39,6 +39,7 @@ pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()
         "validation_semantics",
         "path_semantics",
         "compatibility_semantics",
+        "note_stable_id_semantics",
         "normalization_semantics",
         "build_semantics",
         "inspect_semantics",
