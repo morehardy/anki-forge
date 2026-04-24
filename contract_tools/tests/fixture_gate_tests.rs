@@ -248,6 +248,28 @@ fn fixture_gates_reject_note_identity_noncanonical_payload_string() {
         .contains("note-identity canonical_payload must be canonical JSON"));
 }
 
+#[test]
+fn fixture_gates_reject_note_identity_error_codes_missing_from_registry() {
+    let manifest_path = copied_bundled_manifest_path("note-identity-missing-error-code");
+    let bundle_root = manifest_path
+        .parent()
+        .expect("manifest parent")
+        .to_path_buf();
+    let registry_path = bundle_root.join("errors/error-registry.yaml");
+    let registry = fs::read_to_string(&registry_path).expect("read error registry");
+    let registry = registry.replace(
+        "  - id: AFID.CLOZE_MALFORMED\n    status: active\n    summary: cloze text is malformed for identity parsing\n",
+        "",
+    );
+    fs::write(&registry_path, registry).expect("remove note identity error code");
+
+    let err = run_fixture_gates(&manifest_path)
+        .expect_err("note identity error codes missing from registry should fail");
+    assert!(err
+        .to_string()
+        .contains("note-identity error_code must exist in registry"));
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);

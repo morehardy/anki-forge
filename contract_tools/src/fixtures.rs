@@ -399,6 +399,14 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                             case.id
                         )
                     })?;
+                if let Some(error_code) = fixture.expected.get("error_code").and_then(Value::as_str)
+                {
+                    ensure!(
+                        registry_codes.contains(error_code),
+                        "note-identity error_code must exist in registry: {}",
+                        error_code
+                    );
+                }
                 validate_note_identity_stable_id(&fixture, case.id.as_str())?;
                 let _ = (
                     fixture.recipe_id,
