@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::{BTreeMap, BTreeSet};
 
 fn canonicalize_fields<F, I>(fields: I) -> anyhow::Result<Vec<F>>
@@ -127,16 +127,86 @@ fn is_default_identity_policy(policy: &DeckIdentityPolicy) -> bool {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum IdentityProvenance {
+    ExplicitStableId,
+    InferredFromNoteFields,
+    InferredFromNotetypeFields,
+    InferredFromStockRecipe,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ResolvedIdentitySnapshot {
+    pub stable_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub recipe_id: Option<String>,
+    pub provenance: IdentityProvenance,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub canonical_payload: Option<String>,
+    #[serde(default)]
+    pub used_override: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Deck {
     pub(crate) name: String,
     pub(crate) stable_id: Option<String>,
-    #[serde(default, skip_serializing_if = "is_default_identity_policy")]
     pub(crate) identity_policy: DeckIdentityPolicy,
     pub(crate) notes: Vec<DeckNote>,
     pub(crate) next_generated_note_id: u64,
     pub(crate) media: BTreeMap<String, RegisteredMedia>,
-    #[serde(skip, default)]
     pub(crate) used_note_ids: BTreeSet<String>,
+    pub(crate) identity_snapshot_by_id: BTreeMap<String, ResolvedIdentitySnapshot>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct PersistedDeck {
+    name: String,
+    stable_id: Option<String>,
+    #[serde(default, skip_serializing_if = "is_default_identity_policy")]
+    identity_policy: DeckIdentityPolicy,
+    notes: Vec<DeckNote>,
+    next_generated_note_id: u64,
+    media: BTreeMap<String, RegisteredMedia>,
+}
+
+impl Serialize for Deck {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        PersistedDeck {
+            name: self.name.clone(),
+            stable_id: self.stable_id.clone(),
+            identity_policy: self.identity_policy.clone(),
+            notes: self.notes.clone(),
+            next_generated_note_id: self.next_generated_note_id,
+            media: self.media.clone(),
+        }
+        .serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for Deck {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let persisted = PersistedDeck::deserialize(deserializer)?;
+        let mut deck = Self {
+            name: persisted.name,
+            stable_id: persisted.stable_id,
+            identity_policy: persisted.identity_policy,
+            notes: persisted.notes,
+            next_generated_note_id: persisted.next_generated_note_id,
+            media: persisted.media,
+            used_note_ids: BTreeSet::new(),
+            identity_snapshot_by_id: BTreeMap::new(),
+        };
+        deck.rebuild_runtime_indexes()
+            .map_err(serde::de::Error::custom)?;
+        Ok(deck)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -158,6 +228,8 @@ pub struct BasicNote {
     pub(crate) stable_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub(crate) identity_override: Option<BasicIdentityOverride>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) resolved_identity: Option<ResolvedIdentitySnapshot>,
     pub(crate) front: String,
     pub(crate) back: String,
     pub(crate) tags: Vec<String>,
@@ -168,6 +240,8 @@ pub struct BasicNote {
 pub struct ClozeNote {
     pub(crate) id: String,
     pub(crate) stable_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) resolved_identity: Option<ResolvedIdentitySnapshot>,
     pub(crate) text: String,
     pub(crate) extra: String,
     pub(crate) tags: Vec<String>,
@@ -186,6 +260,8 @@ pub struct IoRect {
 pub struct IoNote {
     pub(crate) id: String,
     pub(crate) stable_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) resolved_identity: Option<ResolvedIdentitySnapshot>,
     pub(crate) image: MediaRef,
     pub(crate) mode: IoMode,
     pub(crate) rects: Vec<IoRect>,
@@ -268,6 +344,7 @@ impl BasicNote {
             id: String::new(),
             stable_id: None,
             identity_override: None,
+            resolved_identity: None,
             front: front.into(),
             back: back.into(),
             tags: Vec::new(),
@@ -304,6 +381,7 @@ impl ClozeNote {
         Self {
             id: String::new(),
             stable_id: None,
+            resolved_identity: None,
             text: text.into(),
             extra: String::new(),
             tags: Vec::new(),
@@ -354,6 +432,7 @@ impl IoNote {
         Self {
             id: String::new(),
             stable_id: None,
+            resolved_identity: None,
             image,
             mode: IoMode::HideAllGuessOne,
             rects: Vec::new(),

@@ -47,6 +47,24 @@ fn deck_add_generated_id_skips_existing_explicit_stable_id() {
 }
 
 #[test]
+fn deck_add_rejects_reserved_afid_explicit_stable_id() {
+    let mut deck = Deck::builder("Reserved").build();
+
+    let error = deck
+        .add(
+            BasicNote::new("front", "back").stable_id(
+                "afid:v1:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            ),
+        )
+        .expect_err("reserved AFID explicit stable id should be rejected");
+
+    assert!(error
+        .to_string()
+        .contains("AFID.IDENTITY_SNAPSHOT_INCOMPLETE"));
+    assert!(deck.notes().is_empty());
+}
+
+#[test]
 fn deck_add_rejects_blank_stable_id() {
     let mut deck = Deck::builder("Blank").build();
 
@@ -69,7 +87,9 @@ fn deck_add_rejects_duplicate_stable_id() {
         .add(ClozeNote::new("A {{c1::cloze}} card").stable_id("basic-1"))
         .expect_err("duplicate stable id should be rejected");
 
-    assert!(error.to_string().contains("duplicate stable_id: basic-1"));
+    assert!(error
+        .to_string()
+        .contains("AFID.STABLE_ID_DUPLICATE: basic-1"));
     assert_eq!(deck.notes().len(), 1);
 }
 
