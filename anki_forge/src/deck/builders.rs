@@ -1,11 +1,13 @@
 use crate::deck::model::{
-    normalize_stable_id, BasicNote, ClozeNote, Deck, DeckNote, IoMode, IoNote, IoRect, MediaRef,
+    normalize_stable_id, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
+    DeckIdentityPolicy, DeckNote, IoMode, IoNote, IoRect, MediaRef,
 };
 use crate::deck::validation::{ValidationCode, ValidationDiagnostic, ValidationReport};
 
 pub struct DeckBuilder {
     name: String,
     stable_id: Option<String>,
+    identity_policy: DeckIdentityPolicy,
 }
 
 impl DeckBuilder {
@@ -13,6 +15,7 @@ impl DeckBuilder {
         Self {
             name: name.into(),
             stable_id: None,
+            identity_policy: DeckIdentityPolicy::default(),
         }
     }
 
@@ -21,10 +24,16 @@ impl DeckBuilder {
         self
     }
 
+    pub fn basic_identity(mut self, selection: BasicIdentitySelection) -> Self {
+        self.identity_policy.basic = Some(selection);
+        self
+    }
+
     pub fn build(self) -> Deck {
         Deck {
             name: self.name,
             stable_id: self.stable_id,
+            identity_policy: self.identity_policy,
             notes: Vec::new(),
             next_generated_note_id: 1,
             media: Default::default(),
@@ -234,6 +243,11 @@ impl<'a> BasicDraft<'a> {
         T: Into<String>,
     {
         self.note = self.note.tags(tags);
+        self
+    }
+
+    pub fn identity_override(mut self, override_cfg: BasicIdentityOverride) -> Self {
+        self.note = self.note.identity_override(override_cfg);
         self
     }
 

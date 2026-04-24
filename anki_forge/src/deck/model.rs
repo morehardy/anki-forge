@@ -1,10 +1,137 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
+
+fn canonicalize_fields<F, I>(fields: I) -> anyhow::Result<Vec<F>>
+where
+    F: Copy + Ord,
+    I: IntoIterator<Item = F>,
+{
+    let mut values: Vec<F> = fields.into_iter().collect();
+    values.sort();
+    values.dedup();
+    anyhow::ensure!(!values.is_empty(), "AFID.IDENTITY_FIELDS_EMPTY");
+    Ok(values)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum BasicIdentityField {
+    Front,
+    Back,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct IdentitySelection<F> {
+    fields: Vec<F>,
+}
+
+impl<F> IdentitySelection<F>
+where
+    F: Copy + Ord,
+{
+    pub fn new<I>(fields: I) -> anyhow::Result<Self>
+    where
+        I: IntoIterator<Item = F>,
+    {
+        Ok(Self {
+            fields: canonicalize_fields(fields)?,
+        })
+    }
+
+    pub fn as_slice(&self) -> &[F] {
+        &self.fields
+    }
+}
+
+impl<'de, F> Deserialize<'de> for IdentitySelection<F>
+where
+    F: Copy + Ord + Deserialize<'de>,
+{
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        struct Wire<F> {
+            fields: Vec<F>,
+        }
+
+        let wire = Wire::deserialize(deserializer)?;
+        Self::new(wire.fields).map_err(serde::de::Error::custom)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct IdentityOverride<F> {
+    fields: Vec<F>,
+    reason_code: String,
+}
+
+impl<F> IdentityOverride<F>
+where
+    F: Copy + Ord,
+{
+    pub fn new<I>(fields: I, reason_code: impl Into<String>) -> anyhow::Result<Self>
+    where
+        I: IntoIterator<Item = F>,
+    {
+        let reason_code = reason_code.into().trim().to_string();
+        anyhow::ensure!(
+            !reason_code.is_empty(),
+            "AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED"
+        );
+        Ok(Self {
+            fields: canonicalize_fields(fields)?,
+            reason_code,
+        })
+    }
+
+    pub fn fields(&self) -> &[F] {
+        &self.fields
+    }
+
+    pub fn reason_code(&self) -> &str {
+        &self.reason_code
+    }
+}
+
+impl<'de, F> Deserialize<'de> for IdentityOverride<F>
+where
+    F: Copy + Ord + Deserialize<'de>,
+{
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        struct Wire<F> {
+            fields: Vec<F>,
+            reason_code: String,
+        }
+
+        let wire = Wire::deserialize(deserializer)?;
+        Self::new(wire.fields, wire.reason_code).map_err(serde::de::Error::custom)
+    }
+}
+
+pub type BasicIdentitySelection = IdentitySelection<BasicIdentityField>;
+pub type BasicIdentityOverride = IdentityOverride<BasicIdentityField>;
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DeckIdentityPolicy {
+    pub basic: Option<BasicIdentitySelection>,
+}
+
+fn is_default_identity_policy(policy: &DeckIdentityPolicy) -> bool {
+    policy == &DeckIdentityPolicy::default()
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Deck {
     pub(crate) name: String,
     pub(crate) stable_id: Option<String>,
+    #[serde(default, skip_serializing_if = "is_default_identity_policy")]
+    pub(crate) identity_policy: DeckIdentityPolicy,
     pub(crate) notes: Vec<DeckNote>,
     pub(crate) next_generated_note_id: u64,
     pub(crate) media: BTreeMap<String, RegisteredMedia>,
@@ -29,6 +156,8 @@ pub enum DeckNote {
 pub struct BasicNote {
     pub(crate) id: String,
     pub(crate) stable_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) identity_override: Option<BasicIdentityOverride>,
     pub(crate) front: String,
     pub(crate) back: String,
     pub(crate) tags: Vec<String>,
@@ -101,6 +230,10 @@ impl Deck {
         self.stable_id.as_deref()
     }
 
+    pub fn identity_policy(&self) -> &DeckIdentityPolicy {
+        &self.identity_policy
+    }
+
     pub fn notes(&self) -> &[DeckNote] {
         &self.notes
     }
@@ -134,6 +267,7 @@ impl BasicNote {
         Self {
             id: String::new(),
             stable_id: None,
+            identity_override: None,
             front: front.into(),
             back: back.into(),
             tags: Vec::new(),
@@ -153,6 +287,15 @@ impl BasicNote {
     {
         self.tags = tags.into_iter().map(Into::into).collect();
         self
+    }
+
+    pub fn identity_override(mut self, override_cfg: BasicIdentityOverride) -> Self {
+        self.identity_override = Some(override_cfg);
+        self
+    }
+
+    pub fn identity_override_config(&self) -> Option<&BasicIdentityOverride> {
+        self.identity_override.as_ref()
     }
 }
 

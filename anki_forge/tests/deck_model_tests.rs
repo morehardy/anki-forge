@@ -1,4 +1,8 @@
-use anki_forge::{BasicNote, ClozeNote, Deck, DeckNote, Package};
+use anki_forge::{
+    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
+    DeckNote, Package,
+};
+use serde_json::json;
 
 #[test]
 fn deck_add_preserves_mixed_note_order() {
@@ -83,4 +87,133 @@ fn package_with_stable_id_treats_blank_stable_id_as_none() {
 
     assert_eq!(package.stable_id(), None);
     assert_eq!(package.root_deck().stable_id(), Some("deck-v1"));
+}
+
+#[test]
+fn deck_builder_stores_canonicalized_typed_identity_fields() {
+    let deck = Deck::builder("Spanish")
+        .basic_identity(
+            BasicIdentitySelection::new([
+                BasicIdentityField::Back,
+                BasicIdentityField::Front,
+                BasicIdentityField::Back,
+            ])
+            .expect("selection"),
+        )
+        .build();
+
+    let policy = deck.identity_policy();
+    assert_eq!(
+        policy.basic.as_ref().expect("basic policy").as_slice(),
+        &[BasicIdentityField::Front, BasicIdentityField::Back]
+    );
+}
+
+#[test]
+fn note_level_identity_override_is_constructed_atomically() {
+    let override_cfg =
+        BasicIdentityOverride::new([BasicIdentityField::Front], "homonym-disambiguation")
+            .expect("override");
+
+    let note = BasicNote::new("hola", "hello").identity_override(override_cfg.clone());
+    assert_eq!(note.identity_override_config(), Some(&override_cfg));
+}
+
+#[test]
+fn basic_lane_sets_identity_override() {
+    let override_cfg =
+        BasicIdentityOverride::new([BasicIdentityField::Back], "translation-disambiguation")
+            .expect("override");
+    let mut deck = Deck::builder("Spanish").build();
+
+    deck.basic()
+        .note("hola", "hello")
+        .identity_override(override_cfg.clone())
+        .add()
+        .expect("add note");
+
+    match &deck.notes()[0] {
+        DeckNote::Basic(note) => {
+            assert_eq!(note.identity_override_config(), Some(&override_cfg));
+        }
+        other => panic!("expected basic note, got {other:?}"),
+    }
+}
+
+#[test]
+fn typed_identity_override_uses_stable_wire_names() {
+    let override_cfg = BasicIdentityOverride::new(
+        [BasicIdentityField::Back, BasicIdentityField::Front],
+        "sense-disambiguation",
+    )
+    .expect("override");
+
+    let json_value = serde_json::to_value(&override_cfg).expect("serialize override");
+    assert_eq!(
+        json_value,
+        json!({
+            "fields": ["front", "back"],
+            "reason_code": "sense-disambiguation"
+        })
+    );
+}
+
+#[test]
+fn empty_basic_identity_selection_returns_coded_error() {
+    let error =
+        BasicIdentitySelection::new(std::iter::empty::<BasicIdentityField>()).expect_err("error");
+
+    assert!(error.to_string().contains("AFID.IDENTITY_FIELDS_EMPTY"));
+}
+
+#[test]
+fn blank_basic_identity_override_reason_returns_coded_error() {
+    let error = BasicIdentityOverride::new([BasicIdentityField::Front], "   ").expect_err("error");
+
+    assert!(error
+        .to_string()
+        .contains("AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED"));
+}
+
+#[test]
+fn deserializing_empty_basic_identity_selection_returns_coded_error() {
+    let error = serde_json::from_value::<BasicIdentitySelection>(json!({ "fields": [] }))
+        .expect_err("empty fields should be rejected");
+
+    assert!(error.to_string().contains("AFID.IDENTITY_FIELDS_EMPTY"));
+}
+
+#[test]
+fn deserializing_basic_identity_selection_canonicalizes_fields() {
+    let selection = serde_json::from_value::<BasicIdentitySelection>(json!({
+        "fields": ["back", "front", "back"]
+    }))
+    .expect("deserialize selection");
+
+    assert_eq!(
+        selection.as_slice(),
+        &[BasicIdentityField::Front, BasicIdentityField::Back]
+    );
+}
+
+#[test]
+fn deserializing_blank_basic_identity_override_reason_returns_coded_error() {
+    let error = serde_json::from_value::<BasicIdentityOverride>(json!({
+        "fields": ["front"],
+        "reason_code": "   "
+    }))
+    .expect_err("blank reason should be rejected");
+
+    assert!(error
+        .to_string()
+        .contains("AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED"));
+}
+
+#[test]
+fn default_deck_identity_policy_is_not_serialized() {
+    let deck = Deck::builder("Spanish").build();
+
+    let json_value = serde_json::to_value(&deck).expect("serialize deck");
+
+    assert!(json_value.get("identity_policy").is_none());
 }

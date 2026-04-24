@@ -7,5 +7,9 @@ pub mod validation;
 
 pub use export::BuildResult;
 pub use media::MediaSource;
-pub use model::{BasicNote, ClozeNote, Deck, DeckNote, IoMode, IoNote, IoRect, MediaRef, Package};
+pub use model::{
+    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
+    DeckIdentityPolicy, DeckNote, IdentityOverride, IdentitySelection, IoMode, IoNote, IoRect,
+    MediaRef, Package,
+};
 pub use validation::{ValidationCode, ValidationDiagnostic, ValidationReport};
