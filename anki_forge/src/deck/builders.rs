@@ -230,7 +230,7 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
             });
         }
         None => {
-            if matches!(note, DeckNote::Basic(_)) {
+            if matches!(note, DeckNote::Basic(_) | DeckNote::Cloze(_)) {
                 let resolved = resolve_inferred_identity(deck, note)?;
                 note.assign_inferred_id(resolved.stable_id.clone());
                 note.assign_resolved_identity(ResolvedIdentitySnapshot {

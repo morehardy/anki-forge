@@ -1,5 +1,5 @@
 use anki_forge::{
-    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, Deck,
+    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
     IdentityProvenance,
 };
 use serde::Deserialize;
@@ -148,6 +148,85 @@ fn basic_front_only_contract_case_matches_expected_output() {
 }
 
 #[test]
+fn cloze_hint_ignored_contract_case_matches_expected_output() {
+    let fixture = load_case("contracts/fixtures/note-identity/cloze-hint-ignored.case.json");
+    let text = fixture.input["text"].as_str().expect("fixture text");
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new(text)).expect("add inferred cloze");
+
+    assert_eq!(fixture.note_kind, "cloze");
+
+    let snapshot = deck.notes()[0]
+        .resolved_identity()
+        .expect("resolved identity snapshot");
+    assert_eq!(
+        snapshot.recipe_id.as_deref(),
+        Some(fixture.recipe_id.as_str())
+    );
+    assert_eq!(
+        snapshot.canonical_payload.as_deref(),
+        fixture.expected["canonical_payload"].as_str()
+    );
+    assert_eq!(snapshot.stable_id, fixture.expected["stable_id"]);
+    assert_eq!(
+        contract_provenance(&snapshot.provenance),
+        fixture.expected["provenance"]
+            .as_str()
+            .expect("fixture expected provenance")
+    );
+}
+
+#[test]
+fn cloze_whitespace_significant_contract_case_matches_expected_output() {
+    let fixture =
+        load_case("contracts/fixtures/note-identity/cloze-whitespace-significant.case.json");
+    let text = fixture.input["text"].as_str().expect("fixture text");
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new(text)).expect("add inferred cloze");
+
+    assert_eq!(fixture.note_kind, "cloze");
+
+    let snapshot = deck.notes()[0]
+        .resolved_identity()
+        .expect("resolved identity snapshot");
+    assert_eq!(
+        snapshot.recipe_id.as_deref(),
+        Some(fixture.recipe_id.as_str())
+    );
+    assert_eq!(
+        snapshot.canonical_payload.as_deref(),
+        fixture.expected["canonical_payload"].as_str()
+    );
+    assert_eq!(snapshot.stable_id, fixture.expected["stable_id"]);
+    assert_eq!(
+        contract_provenance(&snapshot.provenance),
+        fixture.expected["provenance"]
+            .as_str()
+            .expect("fixture expected provenance")
+    );
+}
+
+#[test]
+fn cloze_malformed_contract_case_reports_expected_error_code() {
+    let fixture = load_case("contracts/fixtures/note-identity/cloze-malformed.case.json");
+    let text = fixture.input["text"].as_str().expect("fixture text");
+    let mut deck = Deck::new("Geo");
+    let err = deck
+        .add(ClozeNote::new(text))
+        .expect_err("malformed cloze fixture must fail");
+
+    assert_eq!(fixture.note_kind, "cloze");
+    assert!(
+        err.to_string().contains(
+            fixture.expected["error_code"]
+                .as_str()
+                .expect("fixture expected error code")
+        ),
+        "{err}"
+    );
+}
+
+#[test]
 fn inferred_basic_note_uses_afid_instead_of_generated_id() {
     let mut deck = Deck::new("Spanish");
     deck.add(BasicNote::new("hola", "hello"))
@@ -246,4 +325,157 @@ fn basic_identity_keeps_leading_and_trailing_whitespace_significant() {
         .expect("add padded note");
 
     assert_ne!(plain.notes()[0].id(), padded.notes()[0].id());
+}
+
+#[test]
+fn cloze_hint_change_does_not_change_identity() {
+    let mut deck_a = Deck::new("Geo");
+    deck_a
+        .add(ClozeNote::new(
+            "Capital of {{c1::France::country}} is {{c2::Paris::city}}",
+        ))
+        .expect("deck a");
+
+    let mut deck_b = Deck::new("Geo");
+    deck_b
+        .add(ClozeNote::new(
+            "Capital of {{c1::France::nation}} is {{c2::Paris::place}}",
+        ))
+        .expect("deck b");
+
+    assert_eq!(deck_a.notes()[0].id(), deck_b.notes()[0].id());
+}
+
+#[test]
+fn cloze_boundary_whitespace_changes_identity() {
+    let mut deck_a = Deck::new("Geo");
+    deck_a.add(ClozeNote::new("A {{c1::B}} C")).expect("deck a");
+
+    let mut deck_b = Deck::new("Geo");
+    deck_b.add(ClozeNote::new("A{{c1::B}}C")).expect("deck b");
+
+    assert_ne!(deck_a.notes()[0].id(), deck_b.notes()[0].id());
+}
+
+#[test]
+fn literal_cloze_marker_positions_do_not_collide_with_deletion_positions() {
+    let mut deck_a = Deck::new("Geo");
+    deck_a
+        .add(ClozeNote::new("A {{c1::B}} [[CLOZE]] C"))
+        .expect("deck a");
+
+    let mut deck_b = Deck::new("Geo");
+    deck_b
+        .add(ClozeNote::new("A [[CLOZE]] {{c1::B}} C"))
+        .expect("deck b");
+
+    let snapshot_a = deck_a.notes()[0]
+        .resolved_identity()
+        .expect("deck a resolved identity");
+    let snapshot_b = deck_b.notes()[0]
+        .resolved_identity()
+        .expect("deck b resolved identity");
+
+    assert_ne!(snapshot_a.stable_id, snapshot_b.stable_id);
+    assert_ne!(snapshot_a.canonical_payload, snapshot_b.canonical_payload);
+}
+
+#[test]
+fn duplicate_inferred_cloze_identity_payload_fails_at_add_time() {
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new("A {{c1::B}} C"))
+        .expect("add first inferred cloze");
+
+    let err = deck
+        .add(ClozeNote::new("A {{c1::B::ignored hint}} C"))
+        .expect_err("duplicate inferred cloze payload should fail");
+
+    assert!(err.to_string().contains("AFID.IDENTITY_DUPLICATE_PAYLOAD"));
+}
+
+#[test]
+fn malformed_cloze_reports_afid_error() {
+    let mut deck = Deck::new("Geo");
+    let err = deck
+        .add(ClozeNote::new("Capital of {{c1::France is Paris"))
+        .expect_err("malformed cloze must fail");
+
+    assert!(err.to_string().contains("AFID.CLOZE_MALFORMED"));
+}
+
+#[test]
+fn nested_cloze_reports_explicit_unsupported_error() {
+    let mut deck = Deck::new("Geo");
+    let err = deck
+        .add(ClozeNote::new("{{c1::outer {{c2::inner}} body}}"))
+        .expect_err("nested cloze must fail explicitly");
+
+    assert!(err.to_string().contains("AFID.CLOZE_NESTED_UNSUPPORTED"));
+}
+
+#[test]
+fn literal_c_like_braces_are_not_treated_as_malformed_cloze() {
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new("literal {{cat}} before {{c1::Paris}}"))
+        .expect("literal c-like braces plus one valid cloze");
+}
+
+#[test]
+fn overlapping_literal_c_prefix_does_not_hide_valid_cloze_start() {
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new("prefix {{c{{c1::Paris}} suffix"))
+        .expect("literal c prefix plus overlapping valid cloze");
+
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
+}
+
+#[test]
+fn cloze_ordinal_zero_reports_invalid_ordinal() {
+    let mut deck = Deck::new("Geo");
+    let err = deck
+        .add(ClozeNote::new("{{c0::Paris}}"))
+        .expect_err("ordinal zero must fail");
+
+    assert!(err.to_string().contains("AFID.CLOZE_ORD_INVALID"));
+}
+
+#[test]
+fn repeated_cloze_ordinals_are_allowed_and_slot_ordered() {
+    let mut deck = Deck::new("Geo");
+    deck.add(ClozeNote::new("{{c1::Paris}} and {{c1::Lyon}}"))
+        .expect("same ordinal can produce multiple deletions");
+
+    let snapshot = deck.notes()[0]
+        .resolved_identity()
+        .expect("resolved identity snapshot");
+    assert!(snapshot.canonical_payload.as_deref().is_some_and(|payload| {
+        payload.contains(
+            "\"deletions\":[{\"body\":\"Paris\",\"ord\":1,\"slot\":0},{\"body\":\"Lyon\",\"ord\":1,\"slot\":1}]",
+        )
+    }));
+}
+
+#[test]
+fn empty_cloze_body_reports_malformed() {
+    let mut deck = Deck::new("Geo");
+    let err = deck
+        .add(ClozeNote::new("{{c1::}}"))
+        .expect_err("empty cloze body must fail");
+
+    assert!(err.to_string().contains("AFID.CLOZE_MALFORMED"));
+}
+
+#[test]
+fn unicode_and_newline_normalization_are_stable() {
+    let mut deck_a = Deck::new("Geo");
+    deck_a
+        .add(ClozeNote::new("{{c1::Cafe\u{301}\r\nParis}}"))
+        .expect("decomposed");
+
+    let mut deck_b = Deck::new("Geo");
+    deck_b
+        .add(ClozeNote::new("{{c1::Café\nParis}}"))
+        .expect("composed");
+
+    assert_eq!(deck_a.notes()[0].id(), deck_b.notes()[0].id());
 }

@@ -1,5 +1,8 @@
-use crate::deck::model::{BasicIdentityField, BasicNote, Deck, DeckNote, IdentityProvenance};
+use crate::deck::model::{
+    BasicIdentityField, BasicNote, ClozeNote, Deck, DeckNote, IdentityProvenance,
+};
 use serde::Serialize;
+use std::num::NonZeroU32;
 use unicode_normalization::UnicodeNormalization;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -31,7 +34,31 @@ struct BasicComponents {
     selected_fields: Vec<BasicFieldComponent>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum ClozeSegment {
+    Text(String),
+    Deletion {
+        ord: NonZeroU32,
+        body: String,
+        slot: usize,
+    },
+}
+
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+struct ClozeDeletion {
+    ord: u32,
+    body: String,
+    slot: usize,
+}
+
+#[derive(Debug, Serialize)]
+struct ClozeComponents {
+    text_skeleton: String,
+    deletions: Vec<ClozeDeletion>,
+}
+
 const BASIC_RECIPE_ID: &str = "basic.core.v1";
+const CLOZE_RECIPE_ID: &str = "cloze.core.v2";
 const BASIC_DEFAULT_FIELDS: [BasicIdentityField; 1] = [BasicIdentityField::Front];
 
 pub(crate) fn normalize_field_text_for_identity(value: &str) -> String {
@@ -69,9 +96,7 @@ pub(crate) fn resolve_inferred_identity(
 ) -> anyhow::Result<ResolvedIdentity> {
     match note {
         DeckNote::Basic(note) => resolve_basic_identity(deck, note),
-        DeckNote::Cloze(_) => {
-            anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: cloze resolver not implemented")
-        }
+        DeckNote::Cloze(note) => resolve_cloze_identity(note),
         DeckNote::ImageOcclusion(_) => {
             anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: image occlusion resolver not implemented")
         }
@@ -125,4 +150,189 @@ fn resolve_basic_identity(deck: &Deck, note: &BasicNote) -> anyhow::Result<Resol
         provenance,
         used_override,
     })
+}
+
+fn resolve_cloze_identity(note: &ClozeNote) -> anyhow::Result<ResolvedIdentity> {
+    let normalized_text = normalize_field_text_for_identity(&note.text);
+    let segments = parse_cloze_segments(&normalized_text)?;
+    let components = cloze_components_from_segments(&segments)?;
+    let (stable_id, canonical_payload) =
+        hash_payload(CLOZE_RECIPE_ID, "stock", "cloze", components)?;
+
+    Ok(ResolvedIdentity {
+        stable_id,
+        recipe_id: CLOZE_RECIPE_ID.to_string(),
+        canonical_payload,
+        provenance: IdentityProvenance::InferredFromStockRecipe,
+        used_override: false,
+    })
+}
+
+fn parse_cloze_segments(input: &str) -> anyhow::Result<Vec<ClozeSegment>> {
+    let mut segments = Vec::new();
+    let mut cursor = 0;
+    let mut slot = 0;
+
+    while let Some(start) = find_next_cloze_start(input, cursor) {
+        if start > cursor {
+            segments.push(ClozeSegment::Text(input[cursor..start].to_string()));
+        }
+
+        let (segment, next_cursor) = parse_cloze_deletion(input, start, slot)?;
+        segments.push(segment);
+        cursor = next_cursor;
+        slot += 1;
+    }
+
+    if cursor < input.len() {
+        segments.push(ClozeSegment::Text(input[cursor..].to_string()));
+    }
+
+    if slot == 0 {
+        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: cloze deletions");
+    }
+
+    Ok(segments)
+}
+
+fn find_next_cloze_start(input: &str, cursor: usize) -> Option<usize> {
+    let mut search_from = cursor;
+    while search_from < input.len() {
+        let relative = input[search_from..].find("{{c")?;
+        let start = search_from + relative;
+        let digit_index = start + "{{c".len();
+        if input
+            .as_bytes()
+            .get(digit_index)
+            .is_some_and(u8::is_ascii_digit)
+        {
+            return Some(start);
+        }
+        search_from = next_char_boundary(input, start);
+    }
+
+    None
+}
+
+fn parse_cloze_deletion(
+    input: &str,
+    start: usize,
+    slot: usize,
+) -> anyhow::Result<(ClozeSegment, usize)> {
+    let digits_start = start + "{{c".len();
+    let mut digits_end = digits_start;
+    while input
+        .as_bytes()
+        .get(digits_end)
+        .is_some_and(u8::is_ascii_digit)
+    {
+        digits_end += 1;
+    }
+
+    if !input[digits_end..].starts_with("::") {
+        anyhow::bail!("AFID.CLOZE_MALFORMED: expected cloze body delimiter");
+    }
+
+    let ord = input[digits_start..digits_end]
+        .parse::<u32>()
+        .ok()
+        .and_then(NonZeroU32::new)
+        .ok_or_else(|| anyhow::anyhow!("AFID.CLOZE_ORD_INVALID: cloze ordinal"))?;
+
+    let body_start = digits_end + "::".len();
+    let mut cursor = body_start;
+    let mut hint_start = None;
+    let mut close_start = None;
+
+    while cursor < input.len() {
+        if is_cloze_start_at(input, cursor) {
+            anyhow::bail!("AFID.CLOZE_NESTED_UNSUPPORTED: nested cloze deletion");
+        }
+        if input[cursor..].starts_with("::") {
+            hint_start = Some(cursor + "::".len());
+            cursor += "::".len();
+            break;
+        }
+        if input[cursor..].starts_with("}}") {
+            close_start = Some(cursor);
+            break;
+        }
+        cursor = next_char_boundary(input, cursor);
+    }
+
+    if hint_start.is_some() {
+        while cursor < input.len() {
+            if is_cloze_start_at(input, cursor) {
+                anyhow::bail!("AFID.CLOZE_NESTED_UNSUPPORTED: nested cloze deletion");
+            }
+            if input[cursor..].starts_with("}}") {
+                close_start = Some(cursor);
+                break;
+            }
+            cursor = next_char_boundary(input, cursor);
+        }
+    }
+
+    let close_start =
+        close_start.ok_or_else(|| anyhow::anyhow!("AFID.CLOZE_MALFORMED: missing close"))?;
+    let body_end = hint_start
+        .map(|start| start - "::".len())
+        .unwrap_or(close_start);
+    if body_start == body_end {
+        anyhow::bail!("AFID.CLOZE_MALFORMED: empty cloze body");
+    }
+
+    let body = normalize_field_text_for_identity(&input[body_start..body_end]);
+    let next_cursor = close_start + "}}".len();
+
+    Ok((ClozeSegment::Deletion { ord, body, slot }, next_cursor))
+}
+
+fn is_cloze_start_at(input: &str, cursor: usize) -> bool {
+    input[cursor..].starts_with("{{c")
+        && input
+            .as_bytes()
+            .get(cursor + "{{c".len())
+            .is_some_and(u8::is_ascii_digit)
+}
+
+fn next_char_boundary(input: &str, cursor: usize) -> usize {
+    input[cursor..]
+        .chars()
+        .next()
+        .map(|ch| cursor + ch.len_utf8())
+        .unwrap_or(input.len())
+}
+
+fn cloze_components_from_segments(segments: &[ClozeSegment]) -> anyhow::Result<ClozeComponents> {
+    let mut text_skeleton = String::new();
+    let mut deletions = Vec::new();
+
+    for segment in segments {
+        match segment {
+            ClozeSegment::Text(text) => text_skeleton.push_str(&escape_cloze_skeleton_text(text)),
+            ClozeSegment::Deletion { ord, body, slot } => {
+                text_skeleton.push_str("[[CLOZE]]");
+                deletions.push(ClozeDeletion {
+                    ord: ord.get(),
+                    body: normalize_field_text_for_identity(body),
+                    slot: *slot,
+                });
+            }
+        }
+    }
+
+    if deletions.is_empty() {
+        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: cloze deletions");
+    }
+
+    Ok(ClozeComponents {
+        text_skeleton,
+        deletions,
+    })
+}
+
+fn escape_cloze_skeleton_text(text: &str) -> String {
+    text.replace('\\', "\\\\")
+        .replace("[[CLOZE]]", "\\[[CLOZE]]")
 }
