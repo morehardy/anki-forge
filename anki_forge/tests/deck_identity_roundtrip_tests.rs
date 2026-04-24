@@ -1,4 +1,4 @@
-use anki_forge::{BasicNote, Deck, IdentityProvenance, ValidationCode};
+use anki_forge::{BasicNote, Deck, IdentityProvenance};
 use serde_json::json;
 
 fn afid(canonical_payload: &str) -> String {
@@ -191,8 +191,8 @@ fn legacy_explicit_stable_id_cannot_claim_reserved_afid_namespace() {
 }
 
 #[test]
-fn legacy_explicit_duplicate_without_snapshots_deserializes_and_validate_report_finds_it() {
-    let deck = serde_json::from_value::<Deck>(json!({
+fn legacy_explicit_duplicate_without_snapshots_fails_to_deserialize() {
+    let err = serde_json::from_value::<Deck>(json!({
         "name": "Spanish",
         "stable_id": null,
         "notes": [
@@ -220,14 +220,11 @@ fn legacy_explicit_duplicate_without_snapshots_deserializes_and_validate_report_
         "next_generated_note_id": 1,
         "media": {}
     }))
-    .expect("legacy explicit duplicate ids should still deserialize");
+    .expect_err("duplicate explicit ids should fail at load time");
 
-    let report = deck.validate_report().expect("validation report");
-    assert!(report.has_errors());
-    assert!(report
-        .diagnostics()
-        .iter()
-        .any(|item| item.code == ValidationCode::StableIdDuplicate));
+    assert!(err
+        .to_string()
+        .contains("AFID.STABLE_ID_DUPLICATE: es-hola"));
 }
 
 #[test]
@@ -479,8 +476,8 @@ fn inferred_collision_fails_to_deserialize() {
 }
 
 #[test]
-fn legacy_duplicate_plain_ids_deserialize_and_validate_report_finds_them() {
-    let deck = serde_json::from_value::<Deck>(json!({
+fn legacy_duplicate_plain_ids_fail_to_deserialize() {
+    let err = serde_json::from_value::<Deck>(json!({
         "name": "Spanish",
         "stable_id": null,
         "notes": [
@@ -508,12 +505,9 @@ fn legacy_duplicate_plain_ids_deserialize_and_validate_report_finds_them() {
         "next_generated_note_id": 1,
         "media": {}
     }))
-    .expect("legacy plain duplicate ids should still deserialize");
+    .expect_err("duplicate plain ids should fail at load time");
 
-    let report = deck.validate_report().expect("validation report");
-    assert!(report.has_errors());
-    assert!(report
-        .diagnostics()
-        .iter()
-        .any(|item| item.code == ValidationCode::StableIdDuplicate));
+    assert!(err
+        .to_string()
+        .contains("AFID.STABLE_ID_DUPLICATE: legacy-id"));
 }

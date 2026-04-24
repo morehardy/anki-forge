@@ -10,7 +10,7 @@ pub use export::BuildResult;
 pub use media::MediaSource;
 pub use model::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
-    DeckIdentityPolicy, DeckNote, IdentityOverride, IdentityProvenance, IdentitySelection, IoMode,
-    IoNote, IoRect, MediaRef, Package, ResolvedIdentitySnapshot,
+    DeckError, DeckIdentityPolicy, DeckNote, IdentityOverride, IdentityProvenance,
+    IdentitySelection, IoMode, IoNote, IoRect, MediaRef, Package, ResolvedIdentitySnapshot,
 };
 pub use validation::{ValidationCode, ValidationDiagnostic, ValidationReport};

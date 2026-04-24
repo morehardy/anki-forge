@@ -1,6 +1,6 @@
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
-    DeckNote, IoMode, MediaSource, Package,
+    DeckError, DeckNote, IoMode, MediaSource, Package,
 };
 use serde_json::json;
 use std::path::PathBuf;
@@ -109,6 +109,12 @@ fn deck_add_rejects_duplicate_stable_id() {
     assert!(error
         .to_string()
         .contains("AFID.STABLE_ID_DUPLICATE: basic-1"));
+    assert_eq!(
+        error.downcast_ref::<DeckError>(),
+        Some(&DeckError::StableIdDuplicate {
+            stable_id: "basic-1".into(),
+        })
+    );
     assert_eq!(deck.notes().len(), 1);
 }
 

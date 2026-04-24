@@ -2,7 +2,7 @@ use crate::deck::identity::resolve_inferred_identity;
 use crate::deck::media::backfill_missing_raster_image_metadata;
 use crate::deck::model::{
     normalize_stable_id, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
-    DeckIdentityPolicy, DeckNote, IdentityProvenance, IoMode, IoNote, IoRect, MediaRef,
+    DeckError, DeckIdentityPolicy, DeckNote, IdentityProvenance, IoMode, IoNote, IoRect, MediaRef,
     ResolvedIdentitySnapshot,
 };
 use crate::deck::validation::{ValidationCode, ValidationDiagnostic, ValidationReport};
@@ -148,12 +148,7 @@ impl Deck {
         if let Some(snapshot) = note.resolved_identity_snapshot() {
             insert_identity_snapshot(&mut self.identity_snapshot_by_id, snapshot.clone())?;
         }
-        anyhow::ensure!(
-            !self.used_note_ids.contains(note.id()),
-            "AFID.STABLE_ID_DUPLICATE: {}",
-            note.id(),
-        );
-        self.used_note_ids.insert(note.id().to_string());
+        insert_used_note_id(&mut self.used_note_ids, note.id())?;
         self.notes.push(note);
         Ok(())
     }
@@ -164,13 +159,13 @@ impl Deck {
         backfill_missing_raster_image_metadata(&mut self.media);
 
         for note in &mut self.notes {
-            self.used_note_ids.insert(note.id().to_string());
             validate_requested_stable_id_namespace(note)?;
 
             if let Some(snapshot) = note.resolved_identity_snapshot().cloned() {
                 validate_snapshot_for_note(note, &snapshot)?;
                 insert_identity_snapshot(&mut self.identity_snapshot_by_id, snapshot.clone())?;
                 validate_snapshot_hash(&snapshot)?;
+                insert_used_note_id(&mut self.used_note_ids, note.id())?;
                 continue;
             }
 
@@ -179,8 +174,11 @@ impl Deck {
             }
 
             if note.id().starts_with("generated:") {
+                insert_used_note_id(&mut self.used_note_ids, note.id())?;
                 continue;
             }
+
+            insert_used_note_id(&mut self.used_note_ids, note.id())?;
         }
 
         Ok(())
@@ -228,11 +226,12 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
                 "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit stable_id cannot use reserved AFID namespace: {}",
                 stable_id,
             );
-            anyhow::ensure!(
-                !deck.used_note_ids.contains(stable_id),
-                "AFID.STABLE_ID_DUPLICATE: {}",
-                stable_id,
-            );
+            if deck.used_note_ids.contains(stable_id) {
+                return Err(DeckError::StableIdDuplicate {
+                    stable_id: stable_id.to_string(),
+                }
+                .into());
+            }
             note.assign_stable_id(stable_id.to_string());
             note.assign_resolved_identity(ResolvedIdentitySnapshot {
                 stable_id: stable_id.to_string(),
@@ -375,20 +374,40 @@ fn insert_identity_snapshot(
     snapshot: ResolvedIdentitySnapshot,
 ) -> anyhow::Result<()> {
     if let Some(existing) = snapshots.get(&snapshot.stable_id) {
-        let code = match (
+        let error = match (
             existing.canonical_payload.as_deref(),
             snapshot.canonical_payload.as_deref(),
         ) {
             (Some(existing_payload), Some(new_payload)) if existing_payload == new_payload => {
-                "AFID.IDENTITY_DUPLICATE_PAYLOAD"
+                DeckError::IdentityDuplicatePayload {
+                    stable_id: snapshot.stable_id,
+                }
             }
-            (Some(_), Some(_)) => "AFID.IDENTITY_COLLISION",
-            _ => "AFID.STABLE_ID_DUPLICATE",
+            (Some(_), Some(_)) => DeckError::IdentityCollision {
+                stable_id: snapshot.stable_id,
+            },
+            _ => DeckError::StableIdDuplicate {
+                stable_id: snapshot.stable_id,
+            },
         };
-        anyhow::bail!("{}: {}", code, snapshot.stable_id);
+        return Err(error.into());
     }
 
     snapshots.insert(snapshot.stable_id.clone(), snapshot);
+    Ok(())
+}
+
+fn insert_used_note_id(
+    note_ids: &mut std::collections::BTreeSet<String>,
+    note_id: &str,
+) -> anyhow::Result<()> {
+    if !note_ids.insert(note_id.to_string()) {
+        return Err(DeckError::StableIdDuplicate {
+            stable_id: note_id.to_string(),
+        }
+        .into());
+    }
+
     Ok(())
 }
 

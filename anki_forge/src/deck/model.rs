@@ -148,6 +148,39 @@ pub struct ResolvedIdentitySnapshot {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum DeckError {
+    StableIdDuplicate { stable_id: String },
+    IdentityDuplicatePayload { stable_id: String },
+    IdentityCollision { stable_id: String },
+}
+
+impl DeckError {
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::StableIdDuplicate { .. } => "AFID.STABLE_ID_DUPLICATE",
+            Self::IdentityDuplicatePayload { .. } => "AFID.IDENTITY_DUPLICATE_PAYLOAD",
+            Self::IdentityCollision { .. } => "AFID.IDENTITY_COLLISION",
+        }
+    }
+
+    pub fn stable_id(&self) -> &str {
+        match self {
+            Self::StableIdDuplicate { stable_id }
+            | Self::IdentityDuplicatePayload { stable_id }
+            | Self::IdentityCollision { stable_id } => stable_id,
+        }
+    }
+}
+
+impl std::fmt::Display for DeckError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", self.code(), self.stable_id())
+    }
+}
+
+impl std::error::Error for DeckError {}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Deck {
     pub(crate) name: String,
     pub(crate) stable_id: Option<String>,

@@ -430,7 +430,7 @@ fn cloze_components_from_segments(segments: &[ClozeSegment]) -> anyhow::Result<C
                 text_skeleton.push_str("[[CLOZE]]");
                 deletions.push(ClozeDeletion {
                     ord: ord.get(),
-                    body: normalize_field_text_for_identity(body),
+                    body: body.clone(),
                     slot: *slot,
                 });
             }

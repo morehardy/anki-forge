@@ -166,8 +166,8 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
 }
 
 #[test]
-fn validate_report_detects_duplicate_stable_id_even_when_one_note_is_generated() {
-    let deck: Deck = serde_json::from_value(json!({
+fn deserializing_duplicate_stable_id_even_when_one_note_is_generated_fails() {
+    let err = serde_json::from_value::<Deck>(json!({
         "name": "Spanish",
         "stable_id": null,
         "notes": [
@@ -195,13 +195,11 @@ fn validate_report_detects_duplicate_stable_id_even_when_one_note_is_generated()
         "next_generated_note_id": 3,
         "media": {}
     }))
-    .expect("deserialize deck");
+    .expect_err("duplicate stable ids should fail at load time");
 
-    let report = deck.validate_report().expect("validation report");
-    assert!(report
-        .diagnostics()
-        .iter()
-        .any(|item| item.code == ValidationCode::StableIdDuplicate));
+    assert!(err
+        .to_string()
+        .contains("AFID.STABLE_ID_DUPLICATE: generated:Spanish:1"));
 }
 
 #[test]
