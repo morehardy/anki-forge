@@ -60,6 +60,7 @@
         "validation_report_schema",
         "normalized_ir_schema",
         "normalization_diagnostics_schema",
+        "note_identity_fixture_schema",
         "comparison_context_schema",
         "merge_risk_report_schema",
         "normalization_result_schema",
@@ -72,6 +73,7 @@
         "compatibility_semantics",
         "target_selector_grammar",
         "identity_semantics",
+        "note_stable_id_semantics",
         "merge_risk_semantics",
         "canonical_serialization_semantics"
       ],
@@ -129,6 +131,10 @@
           "type": "string",
           "minLength": 1
         },
+        "note_identity_fixture_schema": {
+          "type": "string",
+          "minLength": 1
+        },
         "comparison_context_schema": {
           "type": "string",
           "minLength": 1
@@ -174,6 +180,10 @@
           "minLength": 1
         },
         "identity_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "note_stable_id_semantics": {
           "type": "string",
           "minLength": 1
         },

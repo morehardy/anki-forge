@@ -106,7 +106,37 @@ cargo run -q -p anki_forge --example minimal_flow
 - `product_basic_flow`：Phase 5A product authoring 示例
 - `minimal_flow`：文件驱动 runtime 示例
 
-### 3.4 Node 绑定
+### 3.4 Stable Note Identity
+
+新建 Basic、Cloze 和 Image Occlusion note 默认会使用 AFID（`afid:v1:*`）作为稳定 note id，而不是旧的 `generated:*` id。AFID 来自规范化后的 identity payload：Basic 默认使用 front 字段，Cloze 使用 cloze 结构与文本骨架，Image Occlusion 使用图片内容锚点、尺寸、模式和排序后的遮罩几何。
+
+显式 `stable_id` 仍然优先，并会作为 explicit identity snapshot 保存。`generated:*` 前缀如果由调用方显式传入，会被当作普通显式 stable id 保留；`afid:v1:*` 是保留命名空间，不能作为显式 stable id 传入。
+
+Basic note 可以用类型化 API 改变 identity 字段：
+
+```rust
+use anki_forge::{BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, Deck};
+
+let mut deck = Deck::builder("Spanish")
+    .basic_identity(BasicIdentitySelection::new([BasicIdentityField::Back])?)
+    .build();
+deck.add(BasicNote::new("hola", "hello"))?;
+
+let override_cfg = BasicIdentityOverride::new(
+    [BasicIdentityField::Front, BasicIdentityField::Back],
+    "sense-disambiguation",
+)?;
+deck.basic()
+    .note("banco", "bank / bench")
+    .identity_override(override_cfg)
+    .add()?;
+```
+
+`validate_report()` 会保留旧的 stable id 诊断（blank、missing/generated legacy、unknown media、empty IO masks、duplicate ids），并在 note 使用 note-level identity override 时返回 `NoteLevelIdentityOverrideUsed` warning。AFID duplicate payload、hash collision 和 stable id duplicate 在 add-time 或 load-time rebuild 阶段是 blocking error。
+
+序列化会保留 resolved identity snapshot（`stable_id`、`recipe_id`、`provenance`、`canonical_payload`、`used_override`）。反序列化会重建运行时索引并校验 snapshot 与 note id、payload hash、payload duplicate/collision 是否一致，因此 round-trip 后继续保持相同的 note id 与重复检测行为。
+
+### 3.5 Node 绑定
 
 ```bash
 npm --prefix bindings/node install
@@ -114,7 +144,7 @@ npm --prefix bindings/node run example:minimal
 npm --prefix bindings/node test
 ```
 
-### 3.5 Python 绑定
+### 3.6 Python 绑定
 
 ```bash
 PYTHONPATH=bindings/python/src python3.11 bindings/python/examples/minimal_flow.py

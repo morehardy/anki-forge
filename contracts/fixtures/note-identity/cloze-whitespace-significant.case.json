@@ -1,0 +1,12 @@
+{
+  "recipe_id": "cloze.core.v2",
+  "note_kind": "cloze",
+  "input": {
+    "text": "A {{c1::B}} C"
+  },
+  "expected": {
+    "canonical_payload": "{\"algo_version\":1,\"components\":{\"deletions\":[{\"body\":\"B\",\"ord\":1,\"slot\":0}],\"text_skeleton\":\"A [[CLOZE]] C\"},\"notetype_family\":\"stock\",\"notetype_key\":\"cloze\",\"recipe_id\":\"cloze.core.v2\"}",
+    "stable_id": "afid:v1:a3c267daac1606186f6360b3e41c375c63ac35ccb54ac9b5fb75dc654d042cb6",
+    "provenance": "stock_recipe"
+  }
+}

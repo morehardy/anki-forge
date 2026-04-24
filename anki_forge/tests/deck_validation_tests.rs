@@ -1,18 +1,99 @@
-use anki_forge::{Deck, IoMode, MediaSource, ValidationCode};
+use anki_forge::{
+    BasicIdentityField, BasicIdentityOverride, Deck, IoMode, MediaSource, ValidationCode,
+};
 use serde_json::json;
+use std::path::PathBuf;
+
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..")
+}
+
+fn io_fixture_image_path() -> PathBuf {
+    repo_root().join(
+        "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    )
+}
 
 #[test]
-fn add_basic_generates_non_empty_id_and_validate_report_warns() {
+fn add_basic_infers_afid_and_validate_report_does_not_warn() {
     let mut deck = Deck::new("Spanish");
     deck.add_basic("hola", "hello").expect("add basic note");
 
-    assert!(deck.notes()[0].id().starts_with("generated:"));
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
 
     let report = deck.validate_report().expect("validation report");
-    assert!(report
+    assert!(!report
         .diagnostics()
         .iter()
         .any(|item| item.code == ValidationCode::MissingStableId));
+}
+
+#[test]
+fn validation_code_catalog_includes_note_identity_codes() {
+    let codes = [
+        ValidationCode::MissingStableId,
+        ValidationCode::DuplicateStableId,
+        ValidationCode::BlankStableId,
+        ValidationCode::EmptyIoMasks,
+        ValidationCode::UnknownMediaRef,
+        ValidationCode::NoteLevelIdentityOverrideUsed,
+        ValidationCode::IdentityDuplicatePayload,
+        ValidationCode::IdentityCollision,
+        ValidationCode::StableIdDuplicate,
+    ];
+
+    assert_eq!(codes.len(), 9);
+}
+
+#[test]
+fn note_level_override_emits_warning_diagnostic() {
+    let override_cfg = BasicIdentityOverride::new(
+        [BasicIdentityField::Front, BasicIdentityField::Back],
+        "sense",
+    )
+    .expect("override");
+    let mut deck = Deck::new("Spanish");
+    deck.basic()
+        .note("hola", "hello")
+        .identity_override(override_cfg)
+        .add()
+        .expect("add note with identity override");
+
+    let report = deck.validate_report().expect("validation report");
+    assert!(!report.has_errors());
+    assert!(report.diagnostics().iter().any(|item| {
+        item.code == ValidationCode::NoteLevelIdentityOverrideUsed && item.severity == "warning"
+    }));
+}
+
+#[test]
+fn legacy_generated_note_still_deserializes_and_reports_warning() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Spanish",
+        "stable_id": null,
+        "notes": [
+            {
+                "Basic": {
+                    "id": "generated:Spanish:1",
+                    "stable_id": null,
+                    "front": "hola",
+                    "back": "hello",
+                    "tags": [],
+                    "generated": true
+                }
+            }
+        ],
+        "next_generated_note_id": 2,
+        "media": {}
+    }))
+    .expect("legacy generated deck should deserialize");
+
+    let report = deck.validate_report().expect("validation report");
+    assert!(!report.has_errors());
+    assert!(report
+        .diagnostics()
+        .iter()
+        .any(|item| item.code == ValidationCode::MissingStableId && item.severity == "warning"));
 }
 
 #[test]
@@ -62,6 +143,10 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
         .expect_err("image occlusion without rect must fail");
     assert!(err.to_string().contains("rect"));
 
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register valid image");
     deck.image_occlusion()
         .note(image)
         .mode(IoMode::HideOneGuessOne)
@@ -73,7 +158,7 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
         .expect("image occlusion with rect");
 
     assert_eq!(deck.notes().len(), 1);
-    assert!(deck.notes()[0].id().starts_with("generated:"));
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
     assert!(matches!(
         deck.notes()[0],
         anki_forge::DeckNote::ImageOcclusion(_)
@@ -81,8 +166,8 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
 }
 
 #[test]
-fn validate_report_detects_duplicate_stable_id_even_when_one_note_is_generated() {
-    let deck: Deck = serde_json::from_value(json!({
+fn deserializing_duplicate_stable_id_even_when_one_note_is_generated_fails() {
+    let err = serde_json::from_value::<Deck>(json!({
         "name": "Spanish",
         "stable_id": null,
         "notes": [
@@ -110,13 +195,11 @@ fn validate_report_detects_duplicate_stable_id_even_when_one_note_is_generated()
         "next_generated_note_id": 3,
         "media": {}
     }))
-    .expect("deserialize deck");
+    .expect_err("duplicate stable ids should fail at load time");
 
-    let report = deck.validate_report().expect("validation report");
-    assert!(report
-        .diagnostics()
-        .iter()
-        .any(|item| item.code == ValidationCode::DuplicateStableId));
+    assert!(err
+        .to_string()
+        .contains("AFID.STABLE_ID_DUPLICATE: generated:Spanish:1"));
 }
 
 #[test]

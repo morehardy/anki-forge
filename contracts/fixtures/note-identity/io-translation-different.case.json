@@ -1,0 +1,21 @@
+{
+  "recipe_id": "io.core.v2",
+  "note_kind": "image_occlusion",
+  "input": {
+    "image_path": "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    "mode": "hide_all_guess_one",
+    "rects": [
+      {
+        "x": 11,
+        "y": 20,
+        "width": 30,
+        "height": 40
+      }
+    ]
+  },
+  "expected": {
+    "canonical_payload": "{\"algo_version\":1,\"components\":{\"image_anchor\":\"19b6af3663413eb7104f5c5537d910c6d94d6f6f\",\"image_height_px\":86,\"image_width_px\":228,\"occlusion_mode\":\"hide_all_guess_one\",\"shapes\":[{\"h_px\":40,\"shape\":\"rect\",\"w_px\":30,\"x_px\":11,\"y_px\":20}]},\"notetype_family\":\"stock\",\"notetype_key\":\"image_occlusion\",\"recipe_id\":\"io.core.v2\"}",
+    "stable_id": "afid:v1:0cbc9cf2dd487da11ddb9257de735b0e460fe33026e81401da8bb5dbf415a7a1",
+    "provenance": "stock_recipe"
+  }
+}

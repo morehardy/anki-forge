@@ -1,0 +1,12 @@
+{
+  "recipe_id": "cloze.core.v2",
+  "note_kind": "cloze",
+  "input": {
+    "text": "Capital of {{c1::France::country}} is {{c2::Paris::city}}"
+  },
+  "expected": {
+    "canonical_payload": "{\"algo_version\":1,\"components\":{\"deletions\":[{\"body\":\"France\",\"ord\":1,\"slot\":0},{\"body\":\"Paris\",\"ord\":2,\"slot\":1}],\"text_skeleton\":\"Capital of [[CLOZE]] is [[CLOZE]]\"},\"notetype_family\":\"stock\",\"notetype_key\":\"cloze\",\"recipe_id\":\"cloze.core.v2\"}",
+    "stable_id": "afid:v1:6da7fb8b7dc4709145024214643bcbe40a04f2040ed13c0b01081cc9f1e63042",
+    "provenance": "stock_recipe"
+  }
+}

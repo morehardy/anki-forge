@@ -92,7 +92,7 @@ fn workspace_runtime_discovers_manifest_bundle_root_and_bundle_version() {
     assert_eq!(resolved.mode, RuntimeMode::Workspace);
     assert!(resolved.manifest_path.ends_with("contracts/manifest.yaml"));
     assert!(resolved.bundle_root.ends_with("contracts"));
-    assert_eq!(resolved.bundle_version, "0.1.0");
+    assert_eq!(resolved.bundle_version, "0.1.1");
 }
 
 #[test]

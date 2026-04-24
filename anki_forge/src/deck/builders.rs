@@ -1,11 +1,16 @@
+use crate::deck::identity::resolve_inferred_identity;
+use crate::deck::media::backfill_missing_raster_image_metadata;
 use crate::deck::model::{
-    normalize_stable_id, BasicNote, ClozeNote, Deck, DeckNote, IoMode, IoNote, IoRect, MediaRef,
+    normalize_stable_id, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
+    DeckError, DeckIdentityPolicy, DeckNote, IdentityProvenance, IoMode, IoNote, IoRect, MediaRef,
+    ResolvedIdentitySnapshot,
 };
 use crate::deck::validation::{ValidationCode, ValidationDiagnostic, ValidationReport};
 
 pub struct DeckBuilder {
     name: String,
     stable_id: Option<String>,
+    identity_policy: DeckIdentityPolicy,
 }
 
 impl DeckBuilder {
@@ -13,6 +18,7 @@ impl DeckBuilder {
         Self {
             name: name.into(),
             stable_id: None,
+            identity_policy: DeckIdentityPolicy::default(),
         }
     }
 
@@ -21,14 +27,21 @@ impl DeckBuilder {
         self
     }
 
+    pub fn basic_identity(mut self, selection: BasicIdentitySelection) -> Self {
+        self.identity_policy.basic = Some(selection);
+        self
+    }
+
     pub fn build(self) -> Deck {
         Deck {
             name: self.name,
             stable_id: self.stable_id,
+            identity_policy: self.identity_policy,
             notes: Vec::new(),
             next_generated_note_id: 1,
             media: Default::default(),
             used_note_ids: Default::default(),
+            identity_snapshot_by_id: Default::default(),
         }
     }
 }
@@ -76,9 +89,20 @@ impl Deck {
 
             if !seen_ids.insert(note.id().to_string()) {
                 diagnostics.push(ValidationDiagnostic {
-                    code: ValidationCode::DuplicateStableId,
+                    code: ValidationCode::StableIdDuplicate,
                     message: format!("id '{}' is duplicated", note.id()),
                     severity: "error".into(),
+                });
+            }
+
+            if note
+                .resolved_identity_snapshot()
+                .is_some_and(|snapshot| snapshot.used_override)
+            {
+                diagnostics.push(ValidationDiagnostic {
+                    code: ValidationCode::NoteLevelIdentityOverrideUsed,
+                    message: format!("note '{}' uses a note-level identity override", note.id()),
+                    severity: "warning".into(),
                 });
             }
 
@@ -121,8 +145,42 @@ impl Deck {
         let mut note = note.into();
         assign_identity(self, &mut note)?;
         validate_note_shape_before_insert(self, &note)?;
-        self.used_note_ids.insert(note.id().to_string());
+        if let Some(snapshot) = note.resolved_identity_snapshot() {
+            insert_identity_snapshot(&mut self.identity_snapshot_by_id, snapshot.clone())?;
+        }
+        insert_used_note_id(&mut self.used_note_ids, note.id())?;
         self.notes.push(note);
+        Ok(())
+    }
+
+    pub(crate) fn rebuild_runtime_indexes(&mut self) -> anyhow::Result<()> {
+        self.used_note_ids.clear();
+        self.identity_snapshot_by_id.clear();
+        backfill_missing_raster_image_metadata(&mut self.media);
+
+        for note in &mut self.notes {
+            validate_requested_stable_id_namespace(note)?;
+
+            if let Some(snapshot) = note.resolved_identity_snapshot().cloned() {
+                validate_snapshot_for_note(note, &snapshot)?;
+                insert_identity_snapshot(&mut self.identity_snapshot_by_id, snapshot.clone())?;
+                validate_snapshot_hash(&snapshot)?;
+                insert_used_note_id(&mut self.used_note_ids, note.id())?;
+                continue;
+            }
+
+            if note.id().starts_with("afid:v1:") {
+                anyhow::bail!("AFID.IDENTITY_SNAPSHOT_MISSING: {}", note.id());
+            }
+
+            if note.id().starts_with("generated:") {
+                insert_used_note_id(&mut self.used_note_ids, note.id())?;
+                continue;
+            }
+
+            insert_used_note_id(&mut self.used_note_ids, note.id())?;
+        }
+
         Ok(())
     }
 }
@@ -156,22 +214,198 @@ pub struct IoDraft<'a> {
 
 fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
     ensure_note_id_index(deck);
-    let requested = note.requested_stable_id().map(str::trim);
+    let requested = note
+        .requested_stable_id()
+        .map(|stable_id| stable_id.trim().to_string());
 
-    match requested {
+    match requested.as_deref() {
         Some("") => anyhow::bail!("stable_id must not be blank"),
         Some(stable_id) => {
             anyhow::ensure!(
-                !deck.used_note_ids.contains(stable_id),
-                "duplicate stable_id: {}",
+                !stable_id.starts_with("afid:v1:"),
+                "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit stable_id cannot use reserved AFID namespace: {}",
                 stable_id,
             );
+            if deck.used_note_ids.contains(stable_id) {
+                return Err(DeckError::StableIdDuplicate {
+                    stable_id: stable_id.to_string(),
+                }
+                .into());
+            }
             note.assign_stable_id(stable_id.to_string());
+            note.assign_resolved_identity(ResolvedIdentitySnapshot {
+                stable_id: stable_id.to_string(),
+                recipe_id: None,
+                provenance: IdentityProvenance::ExplicitStableId,
+                canonical_payload: None,
+                used_override: false,
+            });
         }
         None => {
-            let generated = generate_unique_generated_id(deck);
-            note.assign_generated_id(generated);
+            if matches!(
+                note,
+                DeckNote::Basic(_) | DeckNote::Cloze(_) | DeckNote::ImageOcclusion(_)
+            ) {
+                let resolved = resolve_inferred_identity(deck, note)?;
+                note.assign_inferred_id(resolved.stable_id.clone());
+                note.assign_resolved_identity(ResolvedIdentitySnapshot {
+                    stable_id: resolved.stable_id,
+                    recipe_id: Some(resolved.recipe_id),
+                    provenance: resolved.provenance,
+                    canonical_payload: Some(resolved.canonical_payload),
+                    used_override: resolved.used_override,
+                });
+            } else {
+                let generated = generate_unique_generated_id(deck);
+                note.assign_generated_id(generated);
+            }
         }
+    }
+
+    Ok(())
+}
+
+fn validate_requested_stable_id_namespace(note: &DeckNote) -> anyhow::Result<()> {
+    if let Some(stable_id) = note.requested_stable_id().map(str::trim) {
+        anyhow::ensure!(
+            !stable_id.starts_with("afid:v1:"),
+            "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit stable_id cannot use reserved AFID namespace: {}",
+            stable_id
+        );
+    }
+
+    Ok(())
+}
+
+fn validate_snapshot_for_note(
+    note: &DeckNote,
+    snapshot: &ResolvedIdentitySnapshot,
+) -> anyhow::Result<()> {
+    anyhow::ensure!(
+        snapshot.stable_id == note.id(),
+        "AFID.IDENTITY_SNAPSHOT_NOTE_ID_MISMATCH: {} != {}",
+        snapshot.stable_id,
+        note.id()
+    );
+
+    match snapshot.provenance {
+        IdentityProvenance::ExplicitStableId => validate_explicit_snapshot_shape(note, snapshot),
+        IdentityProvenance::InferredFromNoteFields
+        | IdentityProvenance::InferredFromNotetypeFields
+        | IdentityProvenance::InferredFromStockRecipe => {
+            validate_inferred_snapshot_shape(note, snapshot)
+        }
+    }
+}
+
+fn validate_snapshot_hash(snapshot: &ResolvedIdentitySnapshot) -> anyhow::Result<()> {
+    if let Some(canonical_payload) = &snapshot.canonical_payload {
+        let expected = format!("afid:v1:{}", blake3::hash(canonical_payload.as_bytes()));
+        anyhow::ensure!(
+            snapshot.stable_id == expected,
+            "AFID.IDENTITY_SNAPSHOT_HASH_MISMATCH: {}",
+            snapshot.stable_id
+        );
+    }
+
+    Ok(())
+}
+
+fn validate_explicit_snapshot_shape(
+    note: &DeckNote,
+    snapshot: &ResolvedIdentitySnapshot,
+) -> anyhow::Result<()> {
+    let requested = note.requested_stable_id().map(str::trim);
+    anyhow::ensure!(
+        matches!(requested, Some(stable_id) if !stable_id.is_empty() && stable_id == note.id() && stable_id == snapshot.stable_id),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+    anyhow::ensure!(
+        !snapshot.stable_id.starts_with("afid:v1:"),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit provenance cannot use reserved AFID namespace: {}",
+        snapshot.stable_id
+    );
+    anyhow::ensure!(
+        snapshot.recipe_id.is_none() && snapshot.canonical_payload.is_none(),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+
+    Ok(())
+}
+
+fn validate_inferred_snapshot_shape(
+    note: &DeckNote,
+    snapshot: &ResolvedIdentitySnapshot,
+) -> anyhow::Result<()> {
+    anyhow::ensure!(
+        note.requested_stable_id().is_none(),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+    anyhow::ensure!(
+        snapshot.recipe_id.is_some() && snapshot.canonical_payload.is_some(),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+    anyhow::ensure!(
+        snapshot
+            .recipe_id
+            .as_deref()
+            .is_some_and(|recipe_id| !recipe_id.trim().is_empty()),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+    anyhow::ensure!(
+        snapshot
+            .canonical_payload
+            .as_deref()
+            .is_some_and(|payload| !payload.is_empty()),
+        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
+        snapshot.stable_id
+    );
+
+    Ok(())
+}
+
+fn insert_identity_snapshot(
+    snapshots: &mut std::collections::BTreeMap<String, ResolvedIdentitySnapshot>,
+    snapshot: ResolvedIdentitySnapshot,
+) -> anyhow::Result<()> {
+    if let Some(existing) = snapshots.get(&snapshot.stable_id) {
+        let error = match (
+            existing.canonical_payload.as_deref(),
+            snapshot.canonical_payload.as_deref(),
+        ) {
+            (Some(existing_payload), Some(new_payload)) if existing_payload == new_payload => {
+                DeckError::IdentityDuplicatePayload {
+                    stable_id: snapshot.stable_id,
+                }
+            }
+            (Some(_), Some(_)) => DeckError::IdentityCollision {
+                stable_id: snapshot.stable_id,
+            },
+            _ => DeckError::StableIdDuplicate {
+                stable_id: snapshot.stable_id,
+            },
+        };
+        return Err(error.into());
+    }
+
+    snapshots.insert(snapshot.stable_id.clone(), snapshot);
+    Ok(())
+}
+
+fn insert_used_note_id(
+    note_ids: &mut std::collections::BTreeSet<String>,
+    note_id: &str,
+) -> anyhow::Result<()> {
+    if !note_ids.insert(note_id.to_string()) {
+        return Err(DeckError::StableIdDuplicate {
+            stable_id: note_id.to_string(),
+        }
+        .into());
     }
 
     Ok(())
@@ -234,6 +468,11 @@ impl<'a> BasicDraft<'a> {
         T: Into<String>,
     {
         self.note = self.note.tags(tags);
+        self
+    }
+
+    pub fn identity_override(mut self, override_cfg: BasicIdentityOverride) -> Self {
+        self.note = self.note.identity_override(override_cfg);
         self
     }
 
@@ -380,6 +619,27 @@ impl DeckNote {
         }
     }
 
+    #[allow(dead_code)]
+    pub(crate) fn assign_inferred_id(&mut self, id: String) {
+        match self {
+            Self::Basic(note) => {
+                note.id = id;
+                note.stable_id = None;
+                note.generated = false;
+            }
+            Self::Cloze(note) => {
+                note.id = id;
+                note.stable_id = None;
+                note.generated = false;
+            }
+            Self::ImageOcclusion(note) => {
+                note.id = id;
+                note.stable_id = None;
+                note.generated = false;
+            }
+        }
+    }
+
     pub(crate) fn assign_generated_id(&mut self, id: String) {
         match self {
             Self::Basic(note) => {
@@ -397,6 +657,26 @@ impl DeckNote {
                 note.stable_id = None;
                 note.generated = true;
             }
+        }
+    }
+
+    pub(crate) fn resolved_identity_snapshot(&self) -> Option<&ResolvedIdentitySnapshot> {
+        match self {
+            Self::Basic(note) => note.resolved_identity.as_ref(),
+            Self::Cloze(note) => note.resolved_identity.as_ref(),
+            Self::ImageOcclusion(note) => note.resolved_identity.as_ref(),
+        }
+    }
+
+    pub fn resolved_identity(&self) -> Option<&ResolvedIdentitySnapshot> {
+        self.resolved_identity_snapshot()
+    }
+
+    pub(crate) fn assign_resolved_identity(&mut self, snapshot: ResolvedIdentitySnapshot) {
+        match self {
+            Self::Basic(note) => note.resolved_identity = Some(snapshot),
+            Self::Cloze(note) => note.resolved_identity = Some(snapshot),
+            Self::ImageOcclusion(note) => note.resolved_identity = Some(snapshot),
         }
     }
 }

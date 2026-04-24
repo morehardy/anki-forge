@@ -91,3 +91,21 @@ cases:
     upgrade_rules:
       - fixture_updates_required
     input: fixtures/phase3/e2e/image-occlusion-minimal.case.yaml
+  - id: note-identity-basic-front-only
+    category: note-identity
+    input: fixtures/note-identity/basic-front-only.case.json
+  - id: note-identity-cloze-hint-ignored
+    category: note-identity
+    input: fixtures/note-identity/cloze-hint-ignored.case.json
+  - id: note-identity-cloze-whitespace-significant
+    category: note-identity
+    input: fixtures/note-identity/cloze-whitespace-significant.case.json
+  - id: note-identity-cloze-malformed
+    category: note-identity
+    input: fixtures/note-identity/cloze-malformed.case.json
+  - id: note-identity-io-order-insensitive
+    category: note-identity
+    input: fixtures/note-identity/io-order-insensitive.case.json
+  - id: note-identity-io-translation-different
+    category: note-identity
+    input: fixtures/note-identity/io-translation-different.case.json

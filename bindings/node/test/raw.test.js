@@ -19,13 +19,20 @@ const validAuthoringInput = path.join(
   'contracts/fixtures/valid/minimal-authoring-ir.json',
 );
 
+function bundledContractVersion() {
+  const manifest = fs.readFileSync(path.join(repoRoot, 'contracts/manifest.yaml'), 'utf8');
+  const line = manifest.split(/\r?\n/).find((entry) => entry.trim().startsWith('bundle_version:'));
+  assert.ok(line, 'bundled manifest must declare bundle_version');
+  return line.split(':', 2)[1].trim().replace(/^['"]|['"]$/g, '');
+}
+
 test('resolveRuntime discovers workspace metadata and keeps wrapper version separate', () => {
   const runtime = resolveRuntime({ cwd: bindingsNodeRoot });
 
   assert.equal(runtime.mode, 'workspace');
   assert.match(runtime.manifestPath, /contracts\/manifest\.yaml$/);
   assert.match(runtime.bundleRoot, /contracts$/);
-  assert.equal(runtime.bundleVersion, '0.1.0');
+  assert.equal(runtime.bundleVersion, bundledContractVersion());
   assert.equal(typeof WRAPPER_API_VERSION, 'string');
 });
 

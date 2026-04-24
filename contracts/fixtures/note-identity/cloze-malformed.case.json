@@ -1,0 +1,10 @@
+{
+  "recipe_id": "cloze.core.v2",
+  "note_kind": "cloze",
+  "input": {
+    "text": "Capital of {{c1::France is Paris"
+  },
+  "expected": {
+    "error_code": "AFID.CLOZE_MALFORMED"
+  }
+}
