@@ -1,5 +1,16 @@
 use anki_forge::{Deck, IoMode, MediaSource, ValidationCode};
 use serde_json::json;
+use std::path::PathBuf;
+
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..")
+}
+
+fn io_fixture_image_path() -> PathBuf {
+    repo_root().join(
+        "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    )
+}
 
 #[test]
 fn add_basic_infers_afid_and_validate_report_does_not_warn() {
@@ -62,6 +73,10 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
         .expect_err("image occlusion without rect must fail");
     assert!(err.to_string().contains("rect"));
 
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register valid image");
     deck.image_occlusion()
         .note(image)
         .mode(IoMode::HideOneGuessOne)
@@ -73,7 +88,7 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
         .expect("image occlusion with rect");
 
     assert_eq!(deck.notes().len(), 1);
-    assert!(deck.notes()[0].id().starts_with("generated:"));
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
     assert!(matches!(
         deck.notes()[0],
         anki_forge::DeckNote::ImageOcclusion(_)

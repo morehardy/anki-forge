@@ -1,4 +1,5 @@
 use crate::deck::identity::resolve_inferred_identity;
+use crate::deck::media::backfill_missing_raster_image_metadata;
 use crate::deck::model::{
     normalize_stable_id, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
     DeckIdentityPolicy, DeckNote, IdentityProvenance, IoMode, IoNote, IoRect, MediaRef,
@@ -149,6 +150,7 @@ impl Deck {
     pub(crate) fn rebuild_runtime_indexes(&mut self) -> anyhow::Result<()> {
         self.used_note_ids.clear();
         self.identity_snapshot_by_id.clear();
+        backfill_missing_raster_image_metadata(&mut self.media);
 
         for note in &mut self.notes {
             self.used_note_ids.insert(note.id().to_string());
@@ -230,7 +232,10 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
             });
         }
         None => {
-            if matches!(note, DeckNote::Basic(_) | DeckNote::Cloze(_)) {
+            if matches!(
+                note,
+                DeckNote::Basic(_) | DeckNote::Cloze(_) | DeckNote::ImageOcclusion(_)
+            ) {
                 let resolved = resolve_inferred_identity(deck, note)?;
                 note.assign_inferred_id(resolved.stable_id.clone());
                 note.assign_resolved_identity(ResolvedIdentitySnapshot {

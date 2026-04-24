@@ -1,7 +1,8 @@
 use crate::deck::model::{
-    BasicIdentityField, BasicNote, ClozeNote, Deck, DeckNote, IdentityProvenance,
+    BasicIdentityField, BasicNote, ClozeNote, Deck, DeckNote, IdentityProvenance, IoMode, IoNote,
 };
 use serde::Serialize;
+use std::collections::BTreeSet;
 use std::num::NonZeroU32;
 use unicode_normalization::UnicodeNormalization;
 
@@ -57,8 +58,49 @@ struct ClozeComponents {
     deletions: Vec<ClozeDeletion>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum IoModeWire {
+    HideAllGuessOne,
+    HideOneGuessOne,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(tag = "shape", rename_all = "snake_case")]
+enum IoShapeComponent {
+    Rect {
+        x_px: u32,
+        y_px: u32,
+        w_px: u32,
+        h_px: u32,
+    },
+}
+
+impl IoShapeComponent {
+    fn sort_key(&self) -> (u8, u32, u32, u32, u32) {
+        match self {
+            Self::Rect {
+                x_px,
+                y_px,
+                w_px,
+                h_px,
+            } => (0, *x_px, *y_px, *w_px, *h_px),
+        }
+    }
+}
+
+#[derive(Debug, Serialize)]
+struct IoComponents {
+    image_anchor: String,
+    image_width_px: u32,
+    image_height_px: u32,
+    occlusion_mode: IoModeWire,
+    shapes: Vec<IoShapeComponent>,
+}
+
 const BASIC_RECIPE_ID: &str = "basic.core.v1";
 const CLOZE_RECIPE_ID: &str = "cloze.core.v2";
+const IO_RECIPE_ID: &str = "io.core.v2";
 const BASIC_DEFAULT_FIELDS: [BasicIdentityField; 1] = [BasicIdentityField::Front];
 
 pub(crate) fn normalize_field_text_for_identity(value: &str) -> String {
@@ -97,9 +139,7 @@ pub(crate) fn resolve_inferred_identity(
     match note {
         DeckNote::Basic(note) => resolve_basic_identity(deck, note),
         DeckNote::Cloze(note) => resolve_cloze_identity(note),
-        DeckNote::ImageOcclusion(_) => {
-            anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: image occlusion resolver not implemented")
-        }
+        DeckNote::ImageOcclusion(note) => resolve_io_identity(deck, note),
     }
 }
 
@@ -166,6 +206,81 @@ fn resolve_cloze_identity(note: &ClozeNote) -> anyhow::Result<ResolvedIdentity> 
         provenance: IdentityProvenance::InferredFromStockRecipe,
         used_override: false,
     })
+}
+
+fn resolve_io_identity(deck: &Deck, note: &IoNote) -> anyhow::Result<ResolvedIdentity> {
+    if note.rects.is_empty() {
+        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: io rects");
+    }
+
+    let media = deck
+        .media
+        .get(note.image.name())
+        .ok_or_else(|| anyhow::anyhow!("AFID.IDENTITY_COMPONENT_EMPTY: missing io media"))?;
+    let raster_image = media
+        .raster_image
+        .as_ref()
+        .ok_or_else(|| anyhow::anyhow!("AFID.IO_IMAGE_DIMENSIONS_MISSING"))?;
+
+    let mut seen_rects = BTreeSet::new();
+    let mut shapes = Vec::with_capacity(note.rects.len());
+    for rect in &note.rects {
+        if rect.width == 0 || rect.height == 0 {
+            anyhow::bail!("AFID.IO_RECT_EMPTY");
+        }
+
+        let right = rect
+            .x
+            .checked_add(rect.width)
+            .ok_or_else(|| anyhow::anyhow!("AFID.IO_RECT_OUT_OF_BOUNDS"))?;
+        let bottom = rect
+            .y
+            .checked_add(rect.height)
+            .ok_or_else(|| anyhow::anyhow!("AFID.IO_RECT_OUT_OF_BOUNDS"))?;
+        if right > raster_image.width_px || bottom > raster_image.height_px {
+            anyhow::bail!("AFID.IO_RECT_OUT_OF_BOUNDS");
+        }
+
+        let rect_key = (rect.x, rect.y, rect.width, rect.height);
+        if !seen_rects.insert(rect_key) {
+            anyhow::bail!("AFID.IO_RECT_DUPLICATE");
+        }
+
+        shapes.push(IoShapeComponent::Rect {
+            x_px: rect.x,
+            y_px: rect.y,
+            w_px: rect.width,
+            h_px: rect.height,
+        });
+    }
+    shapes.sort_by_key(IoShapeComponent::sort_key);
+
+    let components = IoComponents {
+        image_anchor: media.sha1_hex.clone(),
+        image_width_px: raster_image.width_px,
+        image_height_px: raster_image.height_px,
+        occlusion_mode: IoModeWire::from(note.mode),
+        shapes,
+    };
+    let (stable_id, canonical_payload) =
+        hash_payload(IO_RECIPE_ID, "stock", "image_occlusion", components)?;
+
+    Ok(ResolvedIdentity {
+        stable_id,
+        recipe_id: IO_RECIPE_ID.to_string(),
+        canonical_payload,
+        provenance: IdentityProvenance::InferredFromStockRecipe,
+        used_override: false,
+    })
+}
+
+impl From<IoMode> for IoModeWire {
+    fn from(mode: IoMode) -> Self {
+        match mode {
+            IoMode::HideAllGuessOne => Self::HideAllGuessOne,
+            IoMode::HideOneGuessOne => Self::HideOneGuessOne,
+        }
+    }
 }
 
 fn parse_cloze_segments(input: &str) -> anyhow::Result<Vec<ClozeSegment>> {

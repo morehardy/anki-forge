@@ -3,6 +3,17 @@ use anki_forge::{
     DeckNote, IoMode, MediaSource, Package,
 };
 use serde_json::json;
+use std::path::PathBuf;
+
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..")
+}
+
+fn io_fixture_image_path() -> PathBuf {
+    repo_root().join(
+        "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    )
+}
 
 #[test]
 fn deck_add_preserves_mixed_note_order() {
@@ -33,25 +44,25 @@ fn package_single_can_override_package_stable_id_without_changing_root_deck() {
 }
 
 #[test]
-fn deck_add_generated_image_occlusion_id_skips_existing_explicit_stable_id() {
+fn deck_add_infers_image_occlusion_afid_even_when_generated_like_id_exists() {
     let mut deck = Deck::builder("Mixed").build();
 
     deck.add(BasicNote::new("front 1", "back 1").stable_id("generated:Mixed:1"))
         .expect("add explicit stable id");
     let image = deck
         .media()
-        .add(MediaSource::from_bytes("image.png", vec![1, 2, 3]))
+        .add(MediaSource::from_file(io_fixture_image_path()))
         .expect("register image");
     deck.image_occlusion()
         .note(image)
         .mode(IoMode::HideAllGuessOne)
         .rect(10, 20, 30, 40)
         .add()
-        .expect("add generated image occlusion note");
+        .expect("add inferred image occlusion note");
 
     assert_eq!(deck.notes().len(), 2);
     assert_eq!(deck.notes()[0].id(), "generated:Mixed:1");
-    assert_eq!(deck.notes()[1].id(), "generated:Mixed:2");
+    assert!(deck.notes()[1].id().starts_with("afid:v1:"));
 }
 
 #[test]

@@ -1,6 +1,6 @@
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
-    IdentityProvenance,
+    IdentityProvenance, IoMode, MediaSource,
 };
 use serde::Deserialize;
 use serde_json::Value;
@@ -18,6 +18,12 @@ struct NoteIdentityFixture {
 
 fn repo_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..")
+}
+
+fn io_fixture_image_path() -> PathBuf {
+    repo_root().join(
+        "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    )
 }
 
 fn contracts_root() -> PathBuf {
@@ -224,6 +230,262 @@ fn cloze_malformed_contract_case_reports_expected_error_code() {
         ),
         "{err}"
     );
+}
+
+fn assert_io_contract_case_matches_expected_output(path: &str) {
+    let fixture = load_case(path);
+    let image_path = repo_root().join(
+        fixture.input["image_path"]
+            .as_str()
+            .expect("fixture image path"),
+    );
+    let mode = match fixture.input["mode"].as_str().expect("fixture io mode") {
+        "hide_all_guess_one" => IoMode::HideAllGuessOne,
+        "hide_one_guess_one" => IoMode::HideOneGuessOne,
+        other => panic!("unknown fixture io mode: {other}"),
+    };
+
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("fixture image");
+    let mut draft = deck.image_occlusion().note(image).mode(mode);
+    for rect in fixture.input["rects"].as_array().expect("fixture io rects") {
+        draft = draft.rect(
+            rect["x"].as_u64().expect("rect x") as u32,
+            rect["y"].as_u64().expect("rect y") as u32,
+            rect["width"].as_u64().expect("rect width") as u32,
+            rect["height"].as_u64().expect("rect height") as u32,
+        );
+    }
+    draft.add().expect("add fixture io");
+
+    assert_eq!(fixture.note_kind, "image_occlusion");
+
+    let snapshot = deck.notes()[0]
+        .resolved_identity()
+        .expect("resolved identity snapshot");
+    assert_eq!(
+        snapshot.recipe_id.as_deref(),
+        Some(fixture.recipe_id.as_str())
+    );
+    assert_eq!(
+        snapshot.canonical_payload.as_deref(),
+        fixture.expected["canonical_payload"].as_str()
+    );
+    assert_eq!(snapshot.stable_id, fixture.expected["stable_id"]);
+    assert_eq!(
+        contract_provenance(&snapshot.provenance),
+        fixture.expected["provenance"]
+            .as_str()
+            .expect("fixture expected provenance")
+    );
+}
+
+#[test]
+fn io_order_insensitive_contract_case_matches_expected_output() {
+    assert_io_contract_case_matches_expected_output(
+        "contracts/fixtures/note-identity/io-order-insensitive.case.json",
+    );
+}
+
+#[test]
+fn io_translation_different_contract_case_matches_expected_output() {
+    assert_io_contract_case_matches_expected_output(
+        "contracts/fixtures/note-identity/io-translation-different.case.json",
+    );
+}
+
+#[test]
+fn io_mask_order_does_not_change_identity() {
+    let image_path = io_fixture_image_path();
+
+    let mut deck_a = Deck::new("Anatomy");
+    let image_a = deck_a
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image a");
+    deck_a
+        .image_occlusion()
+        .note(image_a)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 30, 40)
+        .rect(100, 40, 30, 40)
+        .add()
+        .expect("io a");
+
+    let mut deck_b = Deck::new("Anatomy");
+    let image_b = deck_b
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image b");
+    deck_b
+        .image_occlusion()
+        .note(image_b)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(100, 40, 30, 40)
+        .rect(10, 20, 30, 40)
+        .add()
+        .expect("io b");
+
+    assert_eq!(deck_a.notes()[0].id(), deck_b.notes()[0].id());
+}
+
+#[test]
+fn io_translation_changes_identity() {
+    let image_path = io_fixture_image_path();
+
+    let mut deck_a = Deck::new("Anatomy");
+    let image_a = deck_a
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image a");
+    deck_a
+        .image_occlusion()
+        .note(image_a)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 30, 40)
+        .add()
+        .expect("io a");
+
+    let mut deck_b = Deck::new("Anatomy");
+    let image_b = deck_b
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image b");
+    deck_b
+        .image_occlusion()
+        .note(image_b)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(11, 20, 30, 40)
+        .add()
+        .expect("io b");
+
+    assert_ne!(deck_a.notes()[0].id(), deck_b.notes()[0].id());
+}
+
+#[test]
+fn invalid_raster_without_dimensions_fails_identity_resolution() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_bytes("broken.png", vec![1, 2, 3]))
+        .expect("register media");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(1, 2, 3, 4)
+        .add()
+        .expect_err("missing dimensions must fail");
+    assert!(err.to_string().contains("AFID.IO_IMAGE_DIMENSIONS_MISSING"));
+}
+
+#[test]
+fn io_zero_sized_rect_fails_identity_resolution() {
+    let image_path = io_fixture_image_path();
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 0, 40)
+        .add()
+        .expect_err("zero-sized rect must fail");
+    assert!(err.to_string().contains("AFID.IO_RECT_EMPTY"));
+}
+
+#[test]
+fn io_out_of_bounds_rect_fails_identity_resolution() {
+    let image_path = io_fixture_image_path();
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(200, 20, 30, 40)
+        .add()
+        .expect_err("out-of-bounds rect must fail");
+    assert!(err.to_string().contains("AFID.IO_RECT_OUT_OF_BOUNDS"));
+}
+
+#[test]
+fn io_duplicate_rect_fails_identity_resolution() {
+    let image_path = io_fixture_image_path();
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(&image_path))
+        .expect("image");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 30, 40)
+        .rect(10, 20, 30, 40)
+        .add()
+        .expect_err("duplicate rect must fail");
+    assert!(err.to_string().contains("AFID.IO_RECT_DUPLICATE"));
+}
+
+#[test]
+fn io_deserialized_png_media_without_raster_metadata_backfills_dimensions() {
+    let mut deck = Deck::new("Anatomy");
+    deck.media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register image");
+
+    let mut deck_json = serde_json::to_value(&deck).expect("serialize deck");
+    deck_json["media"]["occlusion-heart.png"]
+        .as_object_mut()
+        .expect("serialized media object")
+        .remove("raster_image");
+    let mut restored: Deck = serde_json::from_value(deck_json).expect("deserialize deck");
+
+    let image = restored
+        .media()
+        .get("occlusion-heart.png")
+        .expect("restored media ref");
+    restored
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 30, 40)
+        .add()
+        .expect("io identity should use backfilled dimensions");
+
+    assert!(restored.notes()[0].id().starts_with("afid:v1:"));
+}
+
+#[test]
+fn io_rect_touching_image_right_and_bottom_bounds_is_accepted() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register image");
+
+    deck.image_occlusion()
+        .note(image)
+        .mode(IoMode::HideAllGuessOne)
+        .rect(198, 46, 30, 40)
+        .add()
+        .expect("rect touching right and bottom edge is in bounds");
+
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
 }
 
 #[test]

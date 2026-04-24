@@ -282,11 +282,19 @@ pub enum IoMode {
 pub struct MediaRef(pub(crate) String);
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RasterImageMetadata {
+    pub width_px: u32,
+    pub height_px: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RegisteredMedia {
     pub(crate) name: String,
     pub(crate) mime: String,
     pub(crate) data_base64: String,
     pub(crate) sha1_hex: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(crate) raster_image: Option<RasterImageMetadata>,
 }
 
 impl Deck {
