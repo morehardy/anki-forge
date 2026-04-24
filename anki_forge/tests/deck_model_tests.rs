@@ -33,13 +33,13 @@ fn package_single_can_override_package_stable_id_without_changing_root_deck() {
 }
 
 #[test]
-fn deck_add_generated_id_skips_existing_explicit_stable_id() {
+fn deck_add_generated_cloze_id_skips_existing_explicit_stable_id() {
     let mut deck = Deck::builder("Mixed").build();
 
     deck.add(BasicNote::new("front 1", "back 1").stable_id("generated:Mixed:1"))
         .expect("add explicit stable id");
-    deck.add(BasicNote::new("front 2", "back 2"))
-        .expect("add generated note");
+    deck.add(ClozeNote::new("A {{c1::cloze}} card"))
+        .expect("add generated cloze note");
 
     assert_eq!(deck.notes().len(), 2);
     assert_eq!(deck.notes()[0].id(), "generated:Mixed:1");

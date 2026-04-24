@@ -1,3 +1,4 @@
+use crate::deck::identity::resolve_inferred_identity;
 use crate::deck::model::{
     normalize_stable_id, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
     DeckIdentityPolicy, DeckNote, IdentityProvenance, IoMode, IoNote, IoRect, MediaRef,
@@ -132,11 +133,15 @@ impl Deck {
         let mut note = note.into();
         assign_identity(self, &mut note)?;
         validate_note_shape_before_insert(self, &note)?;
-        self.used_note_ids.insert(note.id().to_string());
         if let Some(snapshot) = note.resolved_identity_snapshot() {
-            self.identity_snapshot_by_id
-                .insert(snapshot.stable_id.clone(), snapshot.clone());
+            insert_identity_snapshot(&mut self.identity_snapshot_by_id, snapshot.clone())?;
         }
+        anyhow::ensure!(
+            !self.used_note_ids.contains(note.id()),
+            "AFID.STABLE_ID_DUPLICATE: {}",
+            note.id(),
+        );
+        self.used_note_ids.insert(note.id().to_string());
         self.notes.push(note);
         Ok(())
     }
@@ -225,8 +230,20 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
             });
         }
         None => {
-            let generated = generate_unique_generated_id(deck);
-            note.assign_generated_id(generated);
+            if matches!(note, DeckNote::Basic(_)) {
+                let resolved = resolve_inferred_identity(deck, note)?;
+                note.assign_inferred_id(resolved.stable_id.clone());
+                note.assign_resolved_identity(ResolvedIdentitySnapshot {
+                    stable_id: resolved.stable_id,
+                    recipe_id: Some(resolved.recipe_id),
+                    provenance: resolved.provenance,
+                    canonical_payload: Some(resolved.canonical_payload),
+                    used_override: resolved.used_override,
+                });
+            } else {
+                let generated = generate_unique_generated_id(deck);
+                note.assign_generated_id(generated);
+            }
         }
     }
 

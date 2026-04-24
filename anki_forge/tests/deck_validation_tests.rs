@@ -2,14 +2,14 @@ use anki_forge::{Deck, IoMode, MediaSource, ValidationCode};
 use serde_json::json;
 
 #[test]
-fn add_basic_generates_non_empty_id_and_validate_report_warns() {
+fn add_basic_infers_afid_and_validate_report_does_not_warn() {
     let mut deck = Deck::new("Spanish");
     deck.add_basic("hola", "hello").expect("add basic note");
 
-    assert!(deck.notes()[0].id().starts_with("generated:"));
+    assert!(deck.notes()[0].id().starts_with("afid:v1:"));
 
     let report = deck.validate_report().expect("validation report");
-    assert!(report
+    assert!(!report
         .diagnostics()
         .iter()
         .any(|item| item.code == ValidationCode::MissingStableId));
