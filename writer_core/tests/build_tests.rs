@@ -475,6 +475,28 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
 }
 
 #[test]
+fn exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename() {
+    let root = unique_artifact_root("media-map-wire-shape");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-map-wire-shape");
+
+    build(
+        &sample_basic_normalized_ir_with_media(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let media_map =
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "media").as_slice()).unwrap();
+    let decoded = RemovedTag4MediaEntries::decode(media_map.as_slice()).unwrap();
+
+    assert_eq!(decoded.entries.len(), 1);
+    assert_eq!(decoded.entries[0].legacy_zip_filename, None);
+}
+
+#[test]
 fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape() {
     let root = unique_artifact_root("image-occlusion-shape-drift");
     let target = BuildArtifactTarget::new(root, "artifacts/phase3/image-occlusion-shape-drift");
@@ -1071,6 +1093,24 @@ struct TestMediaEntries {
 }
 
 #[derive(Clone, PartialEq, Message)]
+struct RemovedTag4MediaEntries {
+    #[prost(message, repeated, tag = "1")]
+    entries: Vec<RemovedTag4MediaEntry>,
+}
+
+#[derive(Clone, PartialEq, Message)]
+struct RemovedTag4MediaEntry {
+    #[prost(string, tag = "1")]
+    name: String,
+    #[prost(uint32, tag = "2")]
+    size: u32,
+    #[prost(bytes, tag = "3")]
+    sha1: Vec<u8>,
+    #[prost(string, optional, tag = "4")]
+    legacy_zip_filename: Option<String>,
+}
+
+#[derive(Clone, PartialEq, Message)]
 struct TestMediaEntry {
     #[prost(string, tag = "1")]
     name: String,
@@ -1078,4 +1118,6 @@ struct TestMediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }

@@ -53,8 +53,8 @@ struct ArchiveMediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
-    #[prost(string, optional, tag = "4")]
-    legacy_zip_filename: Option<String>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

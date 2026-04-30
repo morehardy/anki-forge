@@ -67,8 +67,8 @@ struct MediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
-    #[prost(string, optional, tag = "4")]
-    legacy_zip_filename: Option<String>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }
 
 pub fn emit_apkg(
@@ -483,4 +483,35 @@ fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Res
         values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
     }
     Ok(values.join("\u{1f}"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[derive(Clone, PartialEq, Message)]
+    struct UpstreamShapeMediaEntry {
+        #[prost(string, tag = "1")]
+        name: String,
+        #[prost(uint32, tag = "2")]
+        size: u32,
+        #[prost(bytes, tag = "3")]
+        sha1: Vec<u8>,
+        #[prost(uint32, optional, tag = "255")]
+        legacy_zip_filename: Option<u32>,
+    }
+
+    #[test]
+    fn media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32() {
+        let entry = MediaEntry {
+            name: "sample.jpg".into(),
+            size: 5,
+            sha1: vec![1; 20],
+            legacy_zip_filename: Some(7),
+        };
+
+        let decoded = UpstreamShapeMediaEntry::decode(entry.encode_to_vec().as_slice()).unwrap();
+
+        assert_eq!(decoded.legacy_zip_filename, Some(7));
+    }
 }
