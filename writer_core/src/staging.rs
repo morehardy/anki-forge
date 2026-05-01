@@ -291,6 +291,21 @@ fn validate_normalized_ir(
         .collect();
 
     for (index, note) in normalized_ir.notes.iter().enumerate() {
+        if let Some(mtime_secs) = note.mtime_secs {
+            if mtime_secs < 1 {
+                diagnostics.push(BuildDiagnosticItem {
+                    level: "error".into(),
+                    code: "PHASE3.INVALID_NOTE_MTIME".into(),
+                    summary: format!("note mtime_secs must be positive (>= 1), found {mtime_secs}"),
+                    domain: Some("notes".into()),
+                    path: Some(format!("notes[{index}].mtime_secs")),
+                    target_selector: Some(format!("note[id='{}']", note.id)),
+                    stage: Some("validate".into()),
+                    operation: Some("normalize-lane".into()),
+                });
+            }
+        }
+
         let Some((_, notetype)) = notetype_map.get(note.notetype_id.as_str()) else {
             diagnostics.push(BuildDiagnosticItem {
                 level: "error".into(),

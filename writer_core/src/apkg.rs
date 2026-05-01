@@ -533,49 +533,144 @@ fn field_checksum(text: &str) -> u32 {
 }
 
 fn strip_html_preserving_media_filenames(input: &str) -> String {
-    let preserved = replace_html_media_tags_with_filenames(input);
-    let stripped = strip_html_tags(&preserved);
-    html_escape::decode_html_entities(&stripped).into_owned()
-}
-
-fn replace_html_media_tags_with_filenames(input: &str) -> String {
     let mut output = String::with_capacity(input.len());
-    let mut remaining = input;
+    let mut index = 0;
 
-    while let Some(start) = remaining.find('<') {
-        output.push_str(&remaining[..start]);
-        let after_lt = &remaining[start..];
-        let Some(end) = after_lt.find('>') else {
-            output.push_str(after_lt);
-            return output;
-        };
-        let tag = &after_lt[..=end];
-        if let Some(filename) = media_filename_from_tag(tag) {
-            output.push(' ');
-            output.push_str(&filename);
-            output.push(' ');
-        } else {
-            output.push_str(tag);
+    while index < input.len() {
+        if input[index..].starts_with("<!--") {
+            let Some(end) = input[index + 4..].find("-->") else {
+                break;
+            };
+            index += 4 + end + 3;
+            continue;
         }
-        remaining = &after_lt[end + 1..];
+
+        let ch = input[index..]
+            .chars()
+            .next()
+            .expect("index is within string bounds");
+        if ch == '<' {
+            let Some(tag_end) = find_html_tag_end(input, index) else {
+                break;
+            };
+            let tag = &input[index..=tag_end];
+            if let Some((tag_name, closing)) = html_tag_name(tag) {
+                if !closing && is_raw_text_html_tag(tag_name) {
+                    index = find_raw_text_html_tag_end(input, tag_end + 1, tag_name)
+                        .unwrap_or(input.len());
+                    continue;
+                }
+                if !closing {
+                    if let Some(filename) = media_filename_from_tag(tag) {
+                        output.push(' ');
+                        output.push_str(&filename);
+                        output.push(' ');
+                    }
+                }
+            }
+            index = tag_end + 1;
+        } else {
+            output.push(ch);
+            index += ch.len_utf8();
+        }
     }
 
-    output.push_str(remaining);
-    output
+    html_escape::decode_html_entities(&output).into_owned()
+}
+
+fn find_html_tag_end(input: &str, start: usize) -> Option<usize> {
+    let mut quote = None;
+    let mut index = start + 1;
+
+    while index < input.len() {
+        let ch = input[index..].chars().next()?;
+        match quote {
+            Some(active_quote) if ch == active_quote => quote = None,
+            Some(_) => {}
+            None if ch == '"' || ch == '\'' => quote = Some(ch),
+            None if ch == '>' => return Some(index),
+            None => {}
+        }
+        index += ch.len_utf8();
+    }
+
+    None
+}
+
+fn find_raw_text_html_tag_end(input: &str, from: usize, tag_name: &str) -> Option<usize> {
+    let closing_prefix = format!("</{}", tag_name.to_ascii_lowercase());
+    let mut search_from = from;
+
+    while search_from < input.len() {
+        let lower_remaining = input[search_from..].to_ascii_lowercase();
+        let Some(relative_start) = lower_remaining.find(&closing_prefix) else {
+            break;
+        };
+        let close_start = search_from + relative_start;
+        let Some(close_end) = find_html_tag_end(input, close_start) else {
+            break;
+        };
+        let closing_tag = &input[close_start..=close_end];
+        if let Some((closing_name, true)) = html_tag_name(closing_tag) {
+            if closing_name.eq_ignore_ascii_case(tag_name) {
+                return Some(close_end + 1);
+            }
+        }
+        search_from = close_start + 2;
+    }
+
+    None
+}
+
+fn html_tag_name(tag: &str) -> Option<(&str, bool)> {
+    if !tag.starts_with('<') {
+        return None;
+    }
+
+    let mut index = skip_html_whitespace(tag, 1);
+    let closing = tag[index..].starts_with('/');
+    if closing {
+        index += 1;
+        index = skip_html_whitespace(tag, index);
+    }
+
+    let name_start = index;
+    while index < tag.len() {
+        let ch = tag[index..].chars().next()?;
+        if ch.is_whitespace() || matches!(ch, '>' | '/') {
+            break;
+        }
+        index += ch.len_utf8();
+    }
+
+    if name_start == index {
+        None
+    } else {
+        Some((&tag[name_start..index], closing))
+    }
 }
 
 fn media_filename_from_tag(tag: &str) -> Option<String> {
-    let lower = tag.to_ascii_lowercase();
-    if !(lower.starts_with("<img")
-        || lower.starts_with("<audio")
-        || lower.starts_with("<video")
-        || lower.starts_with("<source")
-        || lower.starts_with("<object"))
-    {
+    let Some((tag_name, false)) = html_tag_name(tag) else {
+        return None;
+    };
+    if !is_media_html_tag(tag_name) {
         return None;
     }
 
     extract_html_attr(tag, "src").or_else(|| extract_html_attr(tag, "data"))
+}
+
+fn is_media_html_tag(tag_name: &str) -> bool {
+    tag_name.eq_ignore_ascii_case("img")
+        || tag_name.eq_ignore_ascii_case("audio")
+        || tag_name.eq_ignore_ascii_case("video")
+        || tag_name.eq_ignore_ascii_case("source")
+        || tag_name.eq_ignore_ascii_case("object")
+}
+
+fn is_raw_text_html_tag(tag_name: &str) -> bool {
+    tag_name.eq_ignore_ascii_case("script") || tag_name.eq_ignore_ascii_case("style")
 }
 
 fn extract_html_attr(tag: &str, attr: &str) -> Option<String> {
@@ -651,22 +746,6 @@ fn skip_html_whitespace(input: &str, mut index: usize) -> usize {
         index += ch.len_utf8();
     }
     index
-}
-
-fn strip_html_tags(input: &str) -> String {
-    let mut output = String::with_capacity(input.len());
-    let mut in_tag = false;
-
-    for ch in input.chars() {
-        match ch {
-            '<' => in_tag = true,
-            '>' if in_tag => in_tag = false,
-            _ if !in_tag => output.push(ch),
-            _ => {}
-        }
-    }
-
-    output
 }
 
 #[cfg(test)]

@@ -556,6 +556,39 @@ fn latest_collection_strips_html_when_deriving_sort_field_and_checksum() {
 }
 
 #[test]
+fn latest_collection_ignores_script_style_and_comment_bodies_for_sfld_and_csum() {
+    let root = unique_artifact_root("note-storage-html-blocks");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-html-blocks");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].fields.insert(
+        "Front".into(),
+        "<script>ignored()</script><style>.ignored{}</style><!-- hidden <b>noise</b> --><b>front</b>"
+            .into(),
+    );
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front");
+    assert_eq!(row.1, 460_909_371);
+}
+
+#[test]
 fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr() {
     let root = unique_artifact_root("note-storage-media-attr");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-media-attr");
@@ -563,6 +596,40 @@ fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr(
     normalized.notes[0]
         .fields
         .insert("Front".into(), r#"<IMG SRC = "sample.jpg">"#.into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, " sample.jpg ");
+    assert_eq!(row.1, 1_786_670_956);
+}
+
+#[test]
+fn latest_collection_preserves_media_filename_when_quoted_attr_contains_gt() {
+    let root = unique_artifact_root("note-storage-media-quoted-gt");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/note-storage-media-quoted-gt",
+    );
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.notes[0].fields.insert(
+        "Front".into(),
+        r#"<img data-note="1 > 0" src="sample.jpg">"#.into(),
+    );
 
     build(
         &normalized,
@@ -608,6 +675,40 @@ fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
         .unwrap();
 
     assert_eq!(mtime_secs, 1_777_777_777);
+}
+
+#[test]
+fn build_rejects_non_positive_explicit_normalized_note_mtime() {
+    let root = unique_artifact_root("note-storage-invalid-mtime");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-invalid-mtime");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].mtime_secs = Some(0);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.INVALID_NOTE_MTIME")
+        .expect("invalid note mtime diagnostic");
+    assert_eq!(diag.level, "error");
+    assert_eq!(diag.domain.as_deref(), Some("notes"));
+    assert_eq!(diag.path.as_deref(), Some("notes[0].mtime_secs"));
+    assert_eq!(diag.target_selector.as_deref(), Some("note[id='note-1']"));
+    assert!(
+        diag.summary.contains("mtime_secs") && diag.summary.contains("positive"),
+        "unexpected summary: {}",
+        diag.summary
+    );
 }
 
 #[test]

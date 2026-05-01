@@ -5,9 +5,12 @@ use contract_tools::{
     manifest::{load_manifest, resolve_contract_relative_path},
     policies::{load_build_context_asset, load_writer_policy_asset},
 };
+use prost::Message;
 use serde_json::Value;
 use std::{
     fs,
+    fs::File,
+    io::{Read, Write},
     path::{Path, PathBuf},
     sync::atomic::{AtomicU64, Ordering},
 };
@@ -138,6 +141,25 @@ fn compat_oracle_accepts_numeric_html_entity_media_references() {
         .expect("numeric html entities should resolve to the bundled media filename");
 }
 
+#[test]
+fn compat_oracle_rejects_media_map_legacy_zip_filename_tag255() {
+    let (_artifact_root, apkg_path, inspect_report) = build_phase3_fixture_apkg(
+        "fixtures/phase3/inputs/image-occlusion-normalized-ir.json",
+        "media-legacy-tag255",
+    );
+    let rewritten_apkg = apkg_path.with_file_name("package-with-legacy-media-tag.apkg");
+
+    rewrite_media_map_with_legacy_zip_filename(&apkg_path, &rewritten_apkg);
+
+    let err = validate_supported_package(&rewritten_apkg, &inspect_report)
+        .expect_err("legacy zip filename tag should be rejected");
+    assert!(
+        err.to_string().contains("legacy_zip_filename")
+            || err.to_string().contains("legacy zip filename"),
+        "unexpected error: {err}"
+    );
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);
@@ -207,6 +229,41 @@ fn build_phase3_fixture_apkg(
     (artifact_root, apkg_path, inspect_report)
 }
 
+fn rewrite_media_map_with_legacy_zip_filename(source: &Path, target: &Path) {
+    let mut archive = zip::ZipArchive::new(File::open(source).unwrap()).unwrap();
+    let mut writer = zip::ZipWriter::new(File::create(target).unwrap());
+
+    for index in 0..archive.len() {
+        let mut file = archive.by_index(index).unwrap();
+        let name = file.name().to_string();
+        let mut bytes = Vec::new();
+        file.read_to_end(&mut bytes).unwrap();
+
+        if name == "media" {
+            let media_map = zstd::stream::decode_all(bytes.as_slice()).unwrap();
+            let mut media_entries =
+                TestMediaEntries::decode(media_map.as_slice()).expect("decode media map");
+            media_entries
+                .entries
+                .first_mut()
+                .expect("fixture should have a media entry")
+                .legacy_zip_filename = Some(7);
+            bytes = zstd::stream::encode_all(media_entries.encode_to_vec().as_slice(), 0).unwrap();
+        }
+
+        writer
+            .start_file(
+                name,
+                zip::write::FileOptions::<'static, ()>::default()
+                    .compression_method(zip::CompressionMethod::Stored),
+            )
+            .unwrap();
+        writer.write_all(&bytes).unwrap();
+    }
+
+    writer.finish().unwrap();
+}
+
 fn artifact_path_from_ref(target: &writer_core::BuildArtifactTarget, reference: &str) -> PathBuf {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');
     let trimmed = reference
@@ -218,4 +275,22 @@ fn artifact_path_from_ref(target: &writer_core::BuildArtifactTarget, reference: 
     } else {
         target.root_dir.join(trimmed)
     }
+}
+
+#[derive(Clone, PartialEq, prost::Message)]
+struct TestMediaEntries {
+    #[prost(message, repeated, tag = "1")]
+    entries: Vec<TestMediaEntry>,
+}
+
+#[derive(Clone, PartialEq, prost::Message)]
+struct TestMediaEntry {
+    #[prost(string, tag = "1")]
+    name: String,
+    #[prost(uint32, tag = "2")]
+    size: u32,
+    #[prost(bytes, tag = "3")]
+    sha1: Vec<u8>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }

@@ -59,8 +59,8 @@ struct ArchiveMediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
-    #[prost(string, optional, tag = "4")]
-    legacy_zip_filename: Option<String>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }
 
 pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
