@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use writer_core::{
     build, build_context_ref, policy_ref, to_canonical_json, BuildArtifactTarget, BuildContext,
@@ -1167,7 +1167,7 @@ fn unique_artifact_root(case: &str) -> PathBuf {
     root
 }
 
-fn open_zip(path: &PathBuf) -> zip::ZipArchive<File> {
+fn open_zip(path: &Path) -> zip::ZipArchive<File> {
     let file = File::open(path).unwrap();
     zip::ZipArchive::new(file).unwrap()
 }
@@ -1185,7 +1185,7 @@ fn read_zip_entry_bytes(archive: &mut zip::ZipArchive<File>, name: &str) -> Vec<
     buf
 }
 
-fn latest_collection_from_built_apkg(root: &PathBuf) -> Connection {
+fn latest_collection_from_built_apkg(root: &Path) -> Connection {
     let mut archive = open_zip(&root.join("package.apkg"));
     let latest_collection = zstd::stream::decode_all(
         read_zip_entry_bytes(&mut archive, "collection.anki21b").as_slice(),
