@@ -556,6 +556,36 @@ fn latest_collection_strips_html_when_deriving_sort_field_and_checksum() {
 }
 
 #[test]
+fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr() {
+    let root = unique_artifact_root("note-storage-media-attr");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-media-attr");
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.notes[0]
+        .fields
+        .insert("Front".into(), r#"<IMG SRC = "sample.jpg">"#.into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, " sample.jpg ");
+    assert_eq!(row.1, 1_786_670_956);
+}
+
+#[test]
 fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
     let root = unique_artifact_root("note-storage-mtime");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-mtime");

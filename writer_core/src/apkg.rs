@@ -579,25 +579,78 @@ fn media_filename_from_tag(tag: &str) -> Option<String> {
 }
 
 fn extract_html_attr(tag: &str, attr: &str) -> Option<String> {
-    let marker = format!("{attr}=");
-    let start = tag.find(&marker)?;
-    let after = &tag[start + marker.len()..];
-    let first = after.chars().next()?;
-    let raw = match first {
-        '"' | '\'' => {
-            let content = &after[first.len_utf8()..];
-            let end = content.find(first)?;
-            &content[..end]
+    let mut index = 0;
+    while index < tag.len() {
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() || tag.as_bytes()[index] == b'>' {
+            break;
         }
-        _ => {
-            let end = after
-                .find(|ch: char| ch.is_whitespace() || ch == '>')
-                .unwrap_or(after.len());
-            &after[..end]
-        }
-    };
 
-    Some(html_escape::decode_html_entities(raw).into_owned())
+        let name_start = index;
+        while index < tag.len() {
+            let ch = tag[index..].chars().next()?;
+            if ch.is_whitespace() || matches!(ch, '=' | '>' | '/') {
+                break;
+            }
+            index += ch.len_utf8();
+        }
+        if name_start == index {
+            index += tag[index..].chars().next()?.len_utf8();
+            continue;
+        }
+        let name = &tag[name_start..index];
+
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() || tag.as_bytes()[index] != b'=' {
+            continue;
+        }
+        index += 1;
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() {
+            break;
+        }
+
+        let first = tag[index..].chars().next()?;
+        let raw = match first {
+            '"' | '\'' => {
+                let content_start = index + first.len_utf8();
+                let end = tag[content_start..].find(first)?;
+                index = content_start + end + first.len_utf8();
+                &tag[content_start..content_start + end]
+            }
+            _ => {
+                let value_start = index;
+                while index < tag.len() {
+                    let ch = tag[index..].chars().next()?;
+                    if ch.is_whitespace() || ch == '>' {
+                        break;
+                    }
+                    index += ch.len_utf8();
+                }
+                &tag[value_start..index]
+            }
+        };
+
+        if name.eq_ignore_ascii_case(attr) {
+            return Some(html_escape::decode_html_entities(raw).into_owned());
+        }
+    }
+
+    None
+}
+
+fn skip_html_whitespace(input: &str, mut index: usize) -> usize {
+    while index < input.len() {
+        let ch = input[index..]
+            .chars()
+            .next()
+            .expect("index is within string bounds");
+        if !ch.is_whitespace() {
+            break;
+        }
+        index += ch.len_utf8();
+    }
+    index
 }
 
 fn strip_html_tags(input: &str) -> String {
