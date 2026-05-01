@@ -254,6 +254,7 @@ fn tracked_rslib_storage_sql_snapshots_exist() {
         "assets/rslib/storage/schema11.sql",
         "assets/rslib/storage/upgrades/schema14_upgrade.sql",
         "assets/rslib/storage/upgrades/schema15_upgrade.sql",
+        "assets/rslib/storage/upgrades/schema17_upgrade.sql",
         "assets/rslib/storage/upgrades/schema18_upgrade.sql",
     ] {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(relative);
@@ -1024,6 +1025,37 @@ fn assert_latest_collection_has_required_system_tables(bytes: &[u8]) {
             "latest collection should include `{expected}` table: {table_names:?}"
         );
     }
+
+    let schema_version: i64 = conn
+        .query_row("select ver from col where id = 1", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(
+        schema_version, 18,
+        "latest collection should advertise schema V18"
+    );
+
+    let tag_columns: std::collections::BTreeSet<String> = conn
+        .prepare("pragma table_info(tags)")
+        .unwrap()
+        .query_map([], |row| row.get::<_, String>(1))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    for expected in ["tag", "usn", "collapsed", "config"] {
+        assert!(
+            tag_columns.contains(expected),
+            "schema17 tags table should contain `{expected}`: {tag_columns:?}"
+        );
+    }
+
+    let tag_row: (i64, i64, Option<Vec<u8>>) = conn
+        .query_row(
+            "select usn, collapsed, config from tags where tag = 'demo'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .unwrap();
+    assert_eq!(tag_row, (0, 0, None));
 
     let deck_blob_types: (String, String) = conn
         .query_row(

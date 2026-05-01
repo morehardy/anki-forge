@@ -36,6 +36,10 @@ const SCHEMA15_UPGRADE_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/upgrades/schema15_upgrade.sql"
 ));
+const SCHEMA17_UPGRADE_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/upgrades/schema17_upgrade.sql"
+));
 const SCHEMA18_UPGRADE_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/upgrades/schema18_upgrade.sql"
@@ -211,6 +215,8 @@ fn create_latest_collection_bytes(
     execute_source_schema(&conn, SCHEMA11_SQL)?;
     execute_source_schema(&conn, SCHEMA14_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL)?;
+    execute_schema16_marker(&conn)?;
+    execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
     populate_latest_collection(&conn, normalized_ir)?;
     conn.execute_batch("VACUUM;")?;
@@ -237,6 +243,11 @@ fn create_legacy_collection_bytes(root_dir: &Path) -> Result<Vec<u8>> {
 fn execute_source_schema(conn: &Connection, sql: &str) -> Result<()> {
     let sql = sql.replace("COLLATE unicase", "");
     conn.execute_batch(&sql)?;
+    Ok(())
+}
+
+fn execute_schema16_marker(conn: &Connection) -> Result<()> {
+    conn.execute_batch("update col set ver = 16;")?;
     Ok(())
 }
 
@@ -364,7 +375,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
 
     for tag in normalized_tags {
         conn.execute(
-            "insert into tags (tag, usn) values (?1, 0)",
+            "insert into tags (tag, usn, collapsed, config) values (?1, 0, 0, null)",
             rusqlite::params![tag],
         )?;
     }
