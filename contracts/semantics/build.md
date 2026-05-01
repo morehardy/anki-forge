@@ -33,6 +33,15 @@ In `meta.rs`, package version determines the collection filename, supported
 schema version, zstd compression usage, and whether the `media` listing is
 encoded as a legacy JSON hashmap or as structured media entries.
 
+For latest APKG output, the writer emits package metadata version 3, a zstd-compressed
+`collection.anki21b`, a schema11 dummy `collection.anki2`, zstd-compressed media
+payloads, and a zstd-compressed protobuf `MediaEntries` map. The latest collection is
+constructed directly as a V18-compatible SQLite database using vendored schema anchors;
+it is not a byte-for-byte replay of Anki's full Rust upgrade path. Note rows derive
+`flds`, `sfld`, and `csum` from notetype field order. `notes.mod` uses explicit
+`notes[].mtime_secs` when supplied and deterministic fallback `1` otherwise; callers
+that need chronological APKG reimport updates must supply `mtime_secs`.
+
 In `media.rs`, imported media filenames are safety-checked and normalized, and
 archives that omit the `media` entry are treated as a legacy-compatible empty
 media map during import rather than as an immediate error.
