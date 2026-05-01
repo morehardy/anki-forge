@@ -498,6 +498,89 @@ fn exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename() {
 }
 
 #[test]
+fn latest_collection_derives_sfld_and_csum_from_first_notetype_field() {
+    let root = unique_artifact_root("note-storage-first-field");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-first-field");
+
+    build(
+        &sample_basic_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, String, u32) = conn
+        .query_row(
+            "select flds, cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front\u{1f}back");
+    assert_eq!(row.1, "front");
+    assert_eq!(row.2, 460_909_371);
+}
+
+#[test]
+fn latest_collection_strips_html_when_deriving_sort_field_and_checksum() {
+    let root = unique_artifact_root("note-storage-html");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-html");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Front".into(), "<b>front</b>".into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front");
+    assert_eq!(row.1, 460_909_371);
+}
+
+#[test]
+fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
+    let root = unique_artifact_root("note-storage-mtime");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-mtime");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].mtime_secs = Some(1_777_777_777);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let mtime_secs: i64 = conn
+        .query_row("select mod from notes where guid = 'note-1'", [], |row| {
+            row.get(0)
+        })
+        .unwrap();
+
+    assert_eq!(mtime_secs, 1_777_777_777);
+}
+
+#[test]
 fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape() {
     let root = unique_artifact_root("image-occlusion-shape-drift");
     let target = BuildArtifactTarget::new(root, "artifacts/phase3/image-occlusion-shape-drift");
@@ -832,6 +915,7 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
                 ("Back".into(), "back".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![],
     }
@@ -856,6 +940,7 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
                 ("Back Extra".into(), "".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![],
     }
@@ -910,6 +995,7 @@ fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
                 ("Comments".into(), "Comments".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![NormalizedMedia {
             filename: "occlusion.png".into(),
@@ -966,6 +1052,19 @@ fn read_zip_entry_bytes(archive: &mut zip::ZipArchive<File>, name: &str) -> Vec<
     let mut buf = vec![];
     file.read_to_end(&mut buf).unwrap();
     buf
+}
+
+fn latest_collection_from_built_apkg(root: &PathBuf) -> Connection {
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let latest_collection = zstd::stream::decode_all(
+        read_zip_entry_bytes(&mut archive, "collection.anki21b").as_slice(),
+    )
+    .unwrap();
+
+    let db_root = unique_artifact_root("latest-note-storage-db");
+    let db_path = db_root.join("collection.anki21b");
+    fs::write(&db_path, latest_collection).unwrap();
+    Connection::open(db_path).unwrap()
 }
 
 fn decode_package_metadata(bytes: Vec<u8>) -> TestPackageMetadata {

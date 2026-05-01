@@ -337,18 +337,19 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             .iter()
             .find(|candidate| candidate.id == note.notetype_id)
             .expect("normalized note should reference a known notetype");
-        let fields = serialize_fields(note, notetype)?;
-        let sfld = note.fields.values().next().cloned().unwrap_or_default();
+        let storage = note_storage_values(note, notetype)?;
         let note_row = note_row_id;
         conn.execute(
-            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, 0, 0, ?4, ?5, ?6, 0, 0, ?7)",
+            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
             rusqlite::params![
                 note_row,
                 note.id,
                 ntid,
+                storage.mtime_secs,
                 note.tags.join(" "),
-                fields,
-                sfld,
+                storage.flds,
+                storage.sfld,
+                storage.csum,
                 "{}"
             ],
         )?;
@@ -486,14 +487,133 @@ fn legacy_dummy_front_text() -> &'static str {
     "This package requires a newer version of Anki."
 }
 
-fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {
-    let mut values = Vec::with_capacity(notetype.fields.len());
-    let mut ordered_fields = notetype.fields.iter().collect::<Vec<_>>();
-    ordered_fields.sort_by_key(|field| field.ord.unwrap_or(u32::MAX));
-    for field in ordered_fields {
-        values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
+struct NoteStorageValues {
+    flds: String,
+    sfld: String,
+    csum: u32,
+    mtime_secs: i64,
+}
+
+fn note_storage_values(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+) -> Result<NoteStorageValues> {
+    let values = ordered_field_values(note, notetype);
+    let first_field = values.first().map(String::as_str).unwrap_or("");
+    let first_field_stripped = strip_html_preserving_media_filenames(first_field);
+    let sort_field = values
+        .first()
+        .map(|field| strip_html_preserving_media_filenames(field))
+        .unwrap_or_default();
+
+    Ok(NoteStorageValues {
+        flds: values.join("\u{1f}"),
+        sfld: sort_field,
+        csum: field_checksum(&first_field_stripped),
+        mtime_secs: note.mtime_secs.unwrap_or(1),
+    })
+}
+
+fn ordered_field_values(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Vec<String> {
+    ordered_notetype_fields(notetype)
+        .into_iter()
+        .map(|field| note.fields.get(&field.name).cloned().unwrap_or_default())
+        .collect()
+}
+
+fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&authoring_core::NormalizedField> {
+    let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
+    fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
+    fields.into_iter().map(|(_, field)| field).collect()
+}
+
+fn field_checksum(text: &str) -> u32 {
+    let digest = Sha1::digest(text.as_bytes());
+    u32::from_be_bytes(digest[..4].try_into().expect("sha1 digest has four bytes"))
+}
+
+fn strip_html_preserving_media_filenames(input: &str) -> String {
+    let preserved = replace_html_media_tags_with_filenames(input);
+    let stripped = strip_html_tags(&preserved);
+    html_escape::decode_html_entities(&stripped).into_owned()
+}
+
+fn replace_html_media_tags_with_filenames(input: &str) -> String {
+    let mut output = String::with_capacity(input.len());
+    let mut remaining = input;
+
+    while let Some(start) = remaining.find('<') {
+        output.push_str(&remaining[..start]);
+        let after_lt = &remaining[start..];
+        let Some(end) = after_lt.find('>') else {
+            output.push_str(after_lt);
+            return output;
+        };
+        let tag = &after_lt[..=end];
+        if let Some(filename) = media_filename_from_tag(tag) {
+            output.push(' ');
+            output.push_str(&filename);
+            output.push(' ');
+        } else {
+            output.push_str(tag);
+        }
+        remaining = &after_lt[end + 1..];
     }
-    Ok(values.join("\u{1f}"))
+
+    output.push_str(remaining);
+    output
+}
+
+fn media_filename_from_tag(tag: &str) -> Option<String> {
+    let lower = tag.to_ascii_lowercase();
+    if !(lower.starts_with("<img")
+        || lower.starts_with("<audio")
+        || lower.starts_with("<video")
+        || lower.starts_with("<source")
+        || lower.starts_with("<object"))
+    {
+        return None;
+    }
+
+    extract_html_attr(tag, "src").or_else(|| extract_html_attr(tag, "data"))
+}
+
+fn extract_html_attr(tag: &str, attr: &str) -> Option<String> {
+    let marker = format!("{attr}=");
+    let start = tag.find(&marker)?;
+    let after = &tag[start + marker.len()..];
+    let first = after.chars().next()?;
+    let raw = match first {
+        '"' | '\'' => {
+            let content = &after[first.len_utf8()..];
+            let end = content.find(first)?;
+            &content[..end]
+        }
+        _ => {
+            let end = after
+                .find(|ch: char| ch.is_whitespace() || ch == '>')
+                .unwrap_or(after.len());
+            &after[..end]
+        }
+    };
+
+    Some(html_escape::decode_html_entities(raw).into_owned())
+}
+
+fn strip_html_tags(input: &str) -> String {
+    let mut output = String::with_capacity(input.len());
+    let mut in_tag = false;
+
+    for ch in input.chars() {
+        match ch {
+            '<' => in_tag = true,
+            '>' if in_tag => in_tag = false,
+            _ if !in_tag => output.push(ch),
+            _ => {}
+        }
+    }
+
+    output
 }
 
 #[cfg(test)]
