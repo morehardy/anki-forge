@@ -14,7 +14,7 @@
 - Rust `1.92.0`（见 `rust-toolchain.toml`）
 - `cargo`
 - `jq`（用于从 normalize 结果中提取 `normalized_ir`）
-- 可选：Node.js（运行 Node 绑定示例/测试）
+- 可选：Node.js `18+`（运行 Node 绑定示例/测试；`make verify-ci` 使用内置 `node --test`）
 - 可选：Python `3.11+`（运行 Python 绑定示例/测试）
 - 可选：`protoc` + 本地 `docs/source/anki`（仅 roundtrip oracle 需要）
 
@@ -40,6 +40,23 @@ cargo run -q -p anki_forge --example minimal_flow
 - 跑通一条最小端到端流程（会在 `tmp/phase4-examples/minimal-flow` 生成输出）
 
 ## 3. 基本操作速查
+
+### 3.0 PR 前验证
+
+PR 前先同步基准分支，然后运行和 GitHub Actions 共用的完整验证入口：
+
+```bash
+git fetch origin main
+make verify-ci
+```
+
+日常开发中可以先跑较快的本地门禁：
+
+```bash
+make verify-fast
+```
+
+`make verify-ci` 是 `.github/workflows/contract-ci.yml` 的本地镜像；PR 只有在本地 `make verify-ci` 和远端 `contract-ci / verify` 都通过后，才算 ready。
 
 ### 3.1 Contract 校验与打包
 
