@@ -508,25 +508,24 @@ fn resolved_build_context_ref(build_context: &BuildContext) -> String {
     build_context_ref(build_context).expect("build context ref should serialize")
 }
 
-pub(crate) fn resolve_template_target_deck_ids(
-    normalized_ir: &NormalizedIr,
-) -> BTreeMap<String, i64> {
+pub(crate) fn resolve_deck_ids(normalized_ir: &NormalizedIr) -> BTreeMap<String, i64> {
     let mut names: BTreeSet<String> = normalized_ir
-        .notetypes
+        .notes
         .iter()
-        .flat_map(|notetype| {
-            notetype
-                .templates
-                .iter()
-                .filter_map(|template| template.target_deck_name.clone())
-        })
+        .map(|note| note.deck_name.clone())
         .collect();
-    let mut resolved = BTreeMap::new();
+
+    names.extend(normalized_ir.notetypes.iter().flat_map(|notetype| {
+        notetype
+            .templates
+            .iter()
+            .filter_map(|template| template.target_deck_name.clone())
+    }));
+
+    let mut resolved = BTreeMap::from([("Default".into(), 1_i64)]);
     let mut occupied_ids: BTreeSet<i64> = BTreeSet::from([1_i64]);
 
-    if names.remove("Default") {
-        resolved.insert("Default".into(), 1);
-    }
+    names.remove("Default");
 
     for name in names {
         let mut next_id = 2_i64;
@@ -543,7 +542,7 @@ pub(crate) fn resolve_template_target_deck_ids(
 pub(crate) fn resolve_template_target_decks(
     normalized_ir: &NormalizedIr,
 ) -> Vec<ResolvedTemplateTargetDeck> {
-    let deck_ids = resolve_template_target_deck_ids(normalized_ir);
+    let deck_ids = resolve_deck_ids(normalized_ir);
     let mut resolved = vec![];
 
     for notetype in &normalized_ir.notetypes {
