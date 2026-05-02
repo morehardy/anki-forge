@@ -217,6 +217,8 @@ pub struct NormalizedNote {
     pub deck_name: String,
     pub fields: BTreeMap<String, String>,
     pub tags: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mtime_secs: Option<i64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

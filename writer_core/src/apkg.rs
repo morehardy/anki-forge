@@ -36,6 +36,10 @@ const SCHEMA15_UPGRADE_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/upgrades/schema15_upgrade.sql"
 ));
+const SCHEMA17_UPGRADE_SQL: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/rslib/storage/upgrades/schema17_upgrade.sql"
+));
 const SCHEMA18_UPGRADE_SQL: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/assets/rslib/storage/upgrades/schema18_upgrade.sql"
@@ -67,8 +71,8 @@ struct MediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
-    #[prost(string, optional, tag = "4")]
-    legacy_zip_filename: Option<String>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }
 
 pub fn emit_apkg(
@@ -211,6 +215,8 @@ fn create_latest_collection_bytes(
     execute_source_schema(&conn, SCHEMA11_SQL)?;
     execute_source_schema(&conn, SCHEMA14_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL)?;
+    execute_schema16_marker(&conn)?;
+    execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
     populate_latest_collection(&conn, normalized_ir)?;
     conn.execute_batch("VACUUM;")?;
@@ -237,6 +243,11 @@ fn create_legacy_collection_bytes(root_dir: &Path) -> Result<Vec<u8>> {
 fn execute_source_schema(conn: &Connection, sql: &str) -> Result<()> {
     let sql = sql.replace("COLLATE unicase", "");
     conn.execute_batch(&sql)?;
+    Ok(())
+}
+
+fn execute_schema16_marker(conn: &Connection) -> Result<()> {
+    conn.execute_batch("update col set ver = 16;")?;
     Ok(())
 }
 
@@ -326,18 +337,19 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             .iter()
             .find(|candidate| candidate.id == note.notetype_id)
             .expect("normalized note should reference a known notetype");
-        let fields = serialize_fields(note, notetype)?;
-        let sfld = note.fields.values().next().cloned().unwrap_or_default();
+        let storage = note_storage_values(note, notetype)?;
         let note_row = note_row_id;
         conn.execute(
-            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, 0, 0, ?4, ?5, ?6, 0, 0, ?7)",
+            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
             rusqlite::params![
                 note_row,
                 note.id,
                 ntid,
+                storage.mtime_secs,
                 note.tags.join(" "),
-                fields,
-                sfld,
+                storage.flds,
+                storage.sfld,
+                storage.csum,
                 "{}"
             ],
         )?;
@@ -364,7 +376,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
 
     for tag in normalized_tags {
         conn.execute(
-            "insert into tags (tag, usn) values (?1, 0)",
+            "insert into tags (tag, usn, collapsed, config) values (?1, 0, 0, null)",
             rusqlite::params![tag],
         )?;
     }
@@ -475,12 +487,294 @@ fn legacy_dummy_front_text() -> &'static str {
     "This package requires a newer version of Anki."
 }
 
-fn serialize_fields(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Result<String> {
-    let mut values = Vec::with_capacity(notetype.fields.len());
-    let mut ordered_fields = notetype.fields.iter().collect::<Vec<_>>();
-    ordered_fields.sort_by_key(|field| field.ord.unwrap_or(u32::MAX));
-    for field in ordered_fields {
-        values.push(note.fields.get(&field.name).cloned().unwrap_or_default());
+struct NoteStorageValues {
+    flds: String,
+    sfld: String,
+    csum: u32,
+    mtime_secs: i64,
+}
+
+fn note_storage_values(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+) -> Result<NoteStorageValues> {
+    let values = ordered_field_values(note, notetype);
+    let first_field = values.first().map(String::as_str).unwrap_or("");
+    let first_field_stripped = strip_html_preserving_media_filenames(first_field);
+    let sort_field = values
+        .first()
+        .map(|field| strip_html_preserving_media_filenames(field))
+        .unwrap_or_default();
+
+    Ok(NoteStorageValues {
+        flds: values.join("\u{1f}"),
+        sfld: sort_field,
+        csum: field_checksum(&first_field_stripped),
+        mtime_secs: note.mtime_secs.unwrap_or(1),
+    })
+}
+
+fn ordered_field_values(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Vec<String> {
+    ordered_notetype_fields(notetype)
+        .into_iter()
+        .map(|field| note.fields.get(&field.name).cloned().unwrap_or_default())
+        .collect()
+}
+
+fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&authoring_core::NormalizedField> {
+    let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
+    fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
+    fields.into_iter().map(|(_, field)| field).collect()
+}
+
+fn field_checksum(text: &str) -> u32 {
+    let digest = Sha1::digest(text.as_bytes());
+    u32::from_be_bytes(digest[..4].try_into().expect("sha1 digest has four bytes"))
+}
+
+fn strip_html_preserving_media_filenames(input: &str) -> String {
+    let mut output = String::with_capacity(input.len());
+    let mut index = 0;
+
+    while index < input.len() {
+        if input[index..].starts_with("<!--") {
+            let Some(end) = input[index + 4..].find("-->") else {
+                break;
+            };
+            index += 4 + end + 3;
+            continue;
+        }
+
+        let ch = input[index..]
+            .chars()
+            .next()
+            .expect("index is within string bounds");
+        if ch == '<' {
+            let Some(tag_end) = find_html_tag_end(input, index) else {
+                break;
+            };
+            let tag = &input[index..=tag_end];
+            if let Some((tag_name, closing)) = html_tag_name(tag) {
+                if !closing && is_raw_text_html_tag(tag_name) {
+                    index = find_raw_text_html_tag_end(input, tag_end + 1, tag_name)
+                        .unwrap_or(input.len());
+                    continue;
+                }
+                if !closing {
+                    if let Some(filename) = media_filename_from_tag(tag) {
+                        output.push(' ');
+                        output.push_str(&filename);
+                        output.push(' ');
+                    }
+                }
+            }
+            index = tag_end + 1;
+        } else {
+            output.push(ch);
+            index += ch.len_utf8();
+        }
     }
-    Ok(values.join("\u{1f}"))
+
+    html_escape::decode_html_entities(&output).into_owned()
+}
+
+fn find_html_tag_end(input: &str, start: usize) -> Option<usize> {
+    let mut quote = None;
+    let mut index = start + 1;
+
+    while index < input.len() {
+        let ch = input[index..].chars().next()?;
+        match quote {
+            Some(active_quote) if ch == active_quote => quote = None,
+            Some(_) => {}
+            None if ch == '"' || ch == '\'' => quote = Some(ch),
+            None if ch == '>' => return Some(index),
+            None => {}
+        }
+        index += ch.len_utf8();
+    }
+
+    None
+}
+
+fn find_raw_text_html_tag_end(input: &str, from: usize, tag_name: &str) -> Option<usize> {
+    let closing_prefix = format!("</{}", tag_name.to_ascii_lowercase());
+    let mut search_from = from;
+
+    while search_from < input.len() {
+        let lower_remaining = input[search_from..].to_ascii_lowercase();
+        let Some(relative_start) = lower_remaining.find(&closing_prefix) else {
+            break;
+        };
+        let close_start = search_from + relative_start;
+        let Some(close_end) = find_html_tag_end(input, close_start) else {
+            break;
+        };
+        let closing_tag = &input[close_start..=close_end];
+        if let Some((closing_name, true)) = html_tag_name(closing_tag) {
+            if closing_name.eq_ignore_ascii_case(tag_name) {
+                return Some(close_end + 1);
+            }
+        }
+        search_from = close_start + 2;
+    }
+
+    None
+}
+
+fn html_tag_name(tag: &str) -> Option<(&str, bool)> {
+    if !tag.starts_with('<') {
+        return None;
+    }
+
+    let mut index = skip_html_whitespace(tag, 1);
+    let closing = tag[index..].starts_with('/');
+    if closing {
+        index += 1;
+        index = skip_html_whitespace(tag, index);
+    }
+
+    let name_start = index;
+    while index < tag.len() {
+        let ch = tag[index..].chars().next()?;
+        if ch.is_whitespace() || matches!(ch, '>' | '/') {
+            break;
+        }
+        index += ch.len_utf8();
+    }
+
+    if name_start == index {
+        None
+    } else {
+        Some((&tag[name_start..index], closing))
+    }
+}
+
+fn media_filename_from_tag(tag: &str) -> Option<String> {
+    let Some((tag_name, false)) = html_tag_name(tag) else {
+        return None;
+    };
+    if !is_media_html_tag(tag_name) {
+        return None;
+    }
+
+    extract_html_attr(tag, "src").or_else(|| extract_html_attr(tag, "data"))
+}
+
+fn is_media_html_tag(tag_name: &str) -> bool {
+    tag_name.eq_ignore_ascii_case("img")
+        || tag_name.eq_ignore_ascii_case("audio")
+        || tag_name.eq_ignore_ascii_case("video")
+        || tag_name.eq_ignore_ascii_case("source")
+        || tag_name.eq_ignore_ascii_case("object")
+}
+
+fn is_raw_text_html_tag(tag_name: &str) -> bool {
+    tag_name.eq_ignore_ascii_case("script") || tag_name.eq_ignore_ascii_case("style")
+}
+
+fn extract_html_attr(tag: &str, attr: &str) -> Option<String> {
+    let mut index = 0;
+    while index < tag.len() {
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() || tag.as_bytes()[index] == b'>' {
+            break;
+        }
+
+        let name_start = index;
+        while index < tag.len() {
+            let ch = tag[index..].chars().next()?;
+            if ch.is_whitespace() || matches!(ch, '=' | '>' | '/') {
+                break;
+            }
+            index += ch.len_utf8();
+        }
+        if name_start == index {
+            index += tag[index..].chars().next()?.len_utf8();
+            continue;
+        }
+        let name = &tag[name_start..index];
+
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() || tag.as_bytes()[index] != b'=' {
+            continue;
+        }
+        index += 1;
+        index = skip_html_whitespace(tag, index);
+        if index >= tag.len() {
+            break;
+        }
+
+        let first = tag[index..].chars().next()?;
+        let raw = match first {
+            '"' | '\'' => {
+                let content_start = index + first.len_utf8();
+                let end = tag[content_start..].find(first)?;
+                index = content_start + end + first.len_utf8();
+                &tag[content_start..content_start + end]
+            }
+            _ => {
+                let value_start = index;
+                while index < tag.len() {
+                    let ch = tag[index..].chars().next()?;
+                    if ch.is_whitespace() || ch == '>' {
+                        break;
+                    }
+                    index += ch.len_utf8();
+                }
+                &tag[value_start..index]
+            }
+        };
+
+        if name.eq_ignore_ascii_case(attr) {
+            return Some(html_escape::decode_html_entities(raw).into_owned());
+        }
+    }
+
+    None
+}
+
+fn skip_html_whitespace(input: &str, mut index: usize) -> usize {
+    while index < input.len() {
+        let ch = input[index..]
+            .chars()
+            .next()
+            .expect("index is within string bounds");
+        if !ch.is_whitespace() {
+            break;
+        }
+        index += ch.len_utf8();
+    }
+    index
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[derive(Clone, PartialEq, Message)]
+    struct UpstreamShapeMediaEntry {
+        #[prost(string, tag = "1")]
+        name: String,
+        #[prost(uint32, tag = "2")]
+        size: u32,
+        #[prost(bytes, tag = "3")]
+        sha1: Vec<u8>,
+        #[prost(uint32, optional, tag = "255")]
+        legacy_zip_filename: Option<u32>,
+    }
+
+    #[test]
+    fn media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32() {
+        let entry = MediaEntry {
+            name: "sample.jpg".into(),
+            size: 5,
+            sha1: vec![1; 20],
+            legacy_zip_filename: Some(7),
+        };
+
+        let decoded = UpstreamShapeMediaEntry::decode(entry.encode_to_vec().as_slice()).unwrap();
+
+        assert_eq!(decoded.legacy_zip_filename, Some(7));
+    }
 }

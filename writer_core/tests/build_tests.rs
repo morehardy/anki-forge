@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use writer_core::{
     build, build_context_ref, policy_ref, to_canonical_json, BuildArtifactTarget, BuildContext,
@@ -254,6 +254,7 @@ fn tracked_rslib_storage_sql_snapshots_exist() {
         "assets/rslib/storage/schema11.sql",
         "assets/rslib/storage/upgrades/schema14_upgrade.sql",
         "assets/rslib/storage/upgrades/schema15_upgrade.sql",
+        "assets/rslib/storage/upgrades/schema17_upgrade.sql",
         "assets/rslib/storage/upgrades/schema18_upgrade.sql",
     ] {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(relative);
@@ -472,6 +473,242 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
     assert_eq!(media_entries.entries.len(), 1);
     assert_eq!(media_entries.entries[0].name, "occlusion.png");
     assert_eq!(media_entries.entries[0].size, 5);
+}
+
+#[test]
+fn exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename() {
+    let root = unique_artifact_root("media-map-wire-shape");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-map-wire-shape");
+
+    build(
+        &sample_basic_normalized_ir_with_media(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let media_map =
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "media").as_slice()).unwrap();
+    let decoded = RemovedTag4MediaEntries::decode(media_map.as_slice()).unwrap();
+
+    assert_eq!(decoded.entries.len(), 1);
+    assert_eq!(decoded.entries[0].legacy_zip_filename, None);
+}
+
+#[test]
+fn latest_collection_derives_sfld_and_csum_from_first_notetype_field() {
+    let root = unique_artifact_root("note-storage-first-field");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-first-field");
+
+    build(
+        &sample_basic_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, String, u32) = conn
+        .query_row(
+            "select flds, cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front\u{1f}back");
+    assert_eq!(row.1, "front");
+    assert_eq!(row.2, 460_909_371);
+}
+
+#[test]
+fn latest_collection_strips_html_when_deriving_sort_field_and_checksum() {
+    let root = unique_artifact_root("note-storage-html");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-html");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Front".into(), "<b>front</b>".into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front");
+    assert_eq!(row.1, 460_909_371);
+}
+
+#[test]
+fn latest_collection_ignores_script_style_and_comment_bodies_for_sfld_and_csum() {
+    let root = unique_artifact_root("note-storage-html-blocks");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-html-blocks");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].fields.insert(
+        "Front".into(),
+        "<script>ignored()</script><style>.ignored{}</style><!-- hidden <b>noise</b> --><b>front</b>"
+            .into(),
+    );
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "front");
+    assert_eq!(row.1, 460_909_371);
+}
+
+#[test]
+fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr() {
+    let root = unique_artifact_root("note-storage-media-attr");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-media-attr");
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.notes[0]
+        .fields
+        .insert("Front".into(), r#"<IMG SRC = "sample.jpg">"#.into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, " sample.jpg ");
+    assert_eq!(row.1, 1_786_670_956);
+}
+
+#[test]
+fn latest_collection_preserves_media_filename_when_quoted_attr_contains_gt() {
+    let root = unique_artifact_root("note-storage-media-quoted-gt");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/note-storage-media-quoted-gt",
+    );
+    let mut normalized = sample_basic_normalized_ir_with_media();
+    normalized.notes[0].fields.insert(
+        "Front".into(),
+        r#"<img data-note="1 > 0" src="sample.jpg">"#.into(),
+    );
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, " sample.jpg ");
+    assert_eq!(row.1, 1_786_670_956);
+}
+
+#[test]
+fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
+    let root = unique_artifact_root("note-storage-mtime");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-mtime");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].mtime_secs = Some(1_777_777_777);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let mtime_secs: i64 = conn
+        .query_row("select mod from notes where guid = 'note-1'", [], |row| {
+            row.get(0)
+        })
+        .unwrap();
+
+    assert_eq!(mtime_secs, 1_777_777_777);
+}
+
+#[test]
+fn build_rejects_non_positive_explicit_normalized_note_mtime() {
+    let root = unique_artifact_root("note-storage-invalid-mtime");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-invalid-mtime");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].mtime_secs = Some(0);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.INVALID_NOTE_MTIME")
+        .expect("invalid note mtime diagnostic");
+    assert_eq!(diag.level, "error");
+    assert_eq!(diag.domain.as_deref(), Some("notes"));
+    assert_eq!(diag.path.as_deref(), Some("notes[0].mtime_secs"));
+    assert_eq!(diag.target_selector.as_deref(), Some("note[id='note-1']"));
+    assert!(
+        diag.summary.contains("mtime_secs") && diag.summary.contains("positive"),
+        "unexpected summary: {}",
+        diag.summary
+    );
 }
 
 #[test]
@@ -809,6 +1046,7 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
                 ("Back".into(), "back".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![],
     }
@@ -833,6 +1071,7 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
                 ("Back Extra".into(), "".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![],
     }
@@ -887,6 +1126,7 @@ fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
                 ("Comments".into(), "Comments".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
         }],
         media: vec![NormalizedMedia {
             filename: "occlusion.png".into(),
@@ -927,7 +1167,7 @@ fn unique_artifact_root(case: &str) -> PathBuf {
     root
 }
 
-fn open_zip(path: &PathBuf) -> zip::ZipArchive<File> {
+fn open_zip(path: &Path) -> zip::ZipArchive<File> {
     let file = File::open(path).unwrap();
     zip::ZipArchive::new(file).unwrap()
 }
@@ -943,6 +1183,19 @@ fn read_zip_entry_bytes(archive: &mut zip::ZipArchive<File>, name: &str) -> Vec<
     let mut buf = vec![];
     file.read_to_end(&mut buf).unwrap();
     buf
+}
+
+fn latest_collection_from_built_apkg(root: &Path) -> Connection {
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let latest_collection = zstd::stream::decode_all(
+        read_zip_entry_bytes(&mut archive, "collection.anki21b").as_slice(),
+    )
+    .unwrap();
+
+    let db_root = unique_artifact_root("latest-note-storage-db");
+    let db_path = db_root.join("collection.anki21b");
+    fs::write(&db_path, latest_collection).unwrap();
+    Connection::open(db_path).unwrap()
 }
 
 fn decode_package_metadata(bytes: Vec<u8>) -> TestPackageMetadata {
@@ -1002,6 +1255,37 @@ fn assert_latest_collection_has_required_system_tables(bytes: &[u8]) {
             "latest collection should include `{expected}` table: {table_names:?}"
         );
     }
+
+    let schema_version: i64 = conn
+        .query_row("select ver from col where id = 1", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(
+        schema_version, 18,
+        "latest collection should advertise schema V18"
+    );
+
+    let tag_columns: std::collections::BTreeSet<String> = conn
+        .prepare("pragma table_info(tags)")
+        .unwrap()
+        .query_map([], |row| row.get::<_, String>(1))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    for expected in ["tag", "usn", "collapsed", "config"] {
+        assert!(
+            tag_columns.contains(expected),
+            "schema17 tags table should contain `{expected}`: {tag_columns:?}"
+        );
+    }
+
+    let tag_row: (i64, i64, Option<Vec<u8>>) = conn
+        .query_row(
+            "select usn, collapsed, config from tags where tag = 'demo'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .unwrap();
+    assert_eq!(tag_row, (0, 0, None));
 
     let deck_blob_types: (String, String) = conn
         .query_row(
@@ -1071,6 +1355,24 @@ struct TestMediaEntries {
 }
 
 #[derive(Clone, PartialEq, Message)]
+struct RemovedTag4MediaEntries {
+    #[prost(message, repeated, tag = "1")]
+    entries: Vec<RemovedTag4MediaEntry>,
+}
+
+#[derive(Clone, PartialEq, Message)]
+struct RemovedTag4MediaEntry {
+    #[prost(string, tag = "1")]
+    name: String,
+    #[prost(uint32, tag = "2")]
+    size: u32,
+    #[prost(bytes, tag = "3")]
+    sha1: Vec<u8>,
+    #[prost(string, optional, tag = "4")]
+    legacy_zip_filename: Option<String>,
+}
+
+#[derive(Clone, PartialEq, Message)]
 struct TestMediaEntry {
     #[prost(string, tag = "1")]
     name: String,
@@ -1078,4 +1380,6 @@ struct TestMediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }

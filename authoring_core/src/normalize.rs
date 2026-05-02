@@ -202,6 +202,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
             deck_name: note.deck_name.clone(),
             fields: note.fields.clone(),
             tags: note.tags.clone(),
+            mtime_secs: None,
         });
     }
 

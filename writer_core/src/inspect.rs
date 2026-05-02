@@ -53,8 +53,8 @@ struct ArchiveMediaEntry {
     size: u32,
     #[prost(bytes, tag = "3")]
     sha1: Vec<u8>,
-    #[prost(string, optional, tag = "4")]
-    legacy_zip_filename: Option<String>,
+    #[prost(uint32, optional, tag = "255")]
+    legacy_zip_filename: Option<u32>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -843,14 +843,15 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
         }
 
         let mut note_rows =
-            conn.prepare("select id, guid, mid, tags, flds from notes order by id")?;
+            conn.prepare("select id, guid, mid, mod, tags, flds from notes order by id")?;
         let notes = note_rows
             .query_map([], |row| {
                 let _id: i64 = row.get(0)?;
                 let guid: String = row.get(1)?;
                 let mid: i64 = row.get(2)?;
-                let tags: String = row.get(3)?;
-                let flds: String = row.get(4)?;
+                let mtime_secs: i64 = row.get(3)?;
+                let tags: String = row.get(4)?;
+                let flds: String = row.get(5)?;
                 let notetype = notetypes_by_row_id
                     .get(&mid)
                     .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
@@ -873,6 +874,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                     } else {
                         tags.split(' ').map(|tag| tag.to_string()).collect()
                     },
+                    mtime_secs: Some(mtime_secs),
                 })
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
