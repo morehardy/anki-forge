@@ -39,13 +39,6 @@ run() {
   "$@"
 }
 
-run_with_env() {
-  local label="$1"
-  shift
-  printf '\n==> %s\n' "$label"
-  "$@"
-}
-
 check_branch_whitespace() {
   printf '\n==> git diff --check origin/main...HEAD\n'
   if ! git rev-parse --verify --quiet origin/main >/dev/null; then
@@ -80,10 +73,8 @@ run cargo run -p anki_forge --example minimal_flow
 run node --test bindings/node/test/raw.test.js
 run node --test bindings/node/test/structured.test.js
 run npm --prefix bindings/node run example:minimal
-run_with_env "PYTHONPATH=$python_path python -m unittest discover -s bindings/python/tests -v" \
-  env "PYTHONPATH=$python_path" python -m unittest discover -s bindings/python/tests -v
-run_with_env "PYTHONPATH=$python_path python bindings/python/examples/minimal_flow.py" \
-  env "PYTHONPATH=$python_path" python bindings/python/examples/minimal_flow.py
+run env "PYTHONPATH=$python_path" python3 -m unittest discover -s bindings/python/tests -v
+run env "PYTHONPATH=$python_path" python3 bindings/python/examples/minimal_flow.py
 run cargo run -p contract_tools -- verify --manifest "$manifest_path"
 run cargo run -p contract_tools -- summary --manifest "$manifest_path"
 run cargo run -p contract_tools -- package --manifest "$manifest_path" --out-dir "$dist_dir"

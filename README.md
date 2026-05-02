@@ -14,7 +14,7 @@
 - Rust `1.92.0`（见 `rust-toolchain.toml`）
 - `cargo`
 - `jq`（用于从 normalize 结果中提取 `normalized_ir`）
-- 可选：Node.js（运行 Node 绑定示例/测试）
+- 可选：Node.js `18+`（运行 Node 绑定示例/测试；`make verify-ci` 使用内置 `node --test`）
 - 可选：Python `3.11+`（运行 Python 绑定示例/测试）
 - 可选：`protoc` + 本地 `docs/source/anki`（仅 roundtrip oracle 需要）
 
