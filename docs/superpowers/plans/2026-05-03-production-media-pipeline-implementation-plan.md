@@ -12,7 +12,7 @@
 
 ## Scope Check
 
-This is one subsystem plan: production media ingestion and materialization. It touches contracts, normalization, writer, inspect, and high-level Rust facade code because those pieces currently share the inline `data_base64` contract. Node/Python stream APIs, remote media fetching, media transforms, automatic filename rewriting, and payload-level APKG dedupe remain out of scope.
+This is one subsystem plan: production media ingestion and materialization. It touches contracts, normalization, writer, inspect, and high-level Rust facade code because those pieces currently share the inline `data_base64` contract. Node/Python stream APIs, arbitrary Rust reader registration, remote media fetching, media transforms, automatic filename rewriting, and payload-level APKG dedupe remain out of scope for v1. A future Rust reader API must be an in-memory/build-time API that ingests directly to CAS; it must not become a JSON schema source variant.
 
 ## File Structure Map
 
@@ -24,18 +24,21 @@ This is one subsystem plan: production media ingestion and materialization. It t
 - Modify: `authoring_core/Cargo.toml` - add media ingest dependencies.
 - Modify: `authoring_core/src/lib.rs` - export media model, options, and normalize entry points.
 - Modify: `authoring_core/src/model.rs` - replace media structs and normalized IR fields.
-- Create: `authoring_core/src/media.rs` - media options, policy, CAS write, sniffing, filename/path validation, object/binding construction.
+- Create: `authoring_core/src/media.rs` - media options, policy, diagnostics, filename validation, object/binding construction.
+- Create: `authoring_core/src/media_io.rs` - streaming source validation, MIME sniffing, hash calculation, and atomic CAS writes.
 - Create: `authoring_core/src/media_refs.rs` - static media reference extraction and classification.
 - Modify: `authoring_core/src/normalize.rs` - call media ingest/reference validation and output new normalized fields.
+- Create: `authoring_core/tests/media_io_tests.rs` - streaming CAS, unique temp, lowercase hash, size, and inline decode tests.
 - Create: `authoring_core/tests/media_ingest_tests.rs` - CAS, source path, inline bytes, MIME, duplicate id/filename, and policy tests.
 - Create: `authoring_core/tests/media_refs_tests.rs` - sound/HTML/CSS reference parsing and unsafe/skipped/missing behavior.
+- Create: `writer_core/src/media.rs` - typed writer media errors and streaming CAS verification/copy helpers.
 - Modify: `writer_core/src/staging.rs` - validate normalized media invariants and materialize staging media from CAS by copy.
 - Modify: `writer_core/src/build.rs` - pass CAS-aware target through staging/APKG.
 - Modify: `writer_core/src/apkg.rs` - read media bytes from CAS, not `staging/media`.
 - Modify: `writer_core/src/inspect.rs` - staging media observations include manifest-declared Forge metadata; APKG observations stay APKG-only.
 - Modify: `writer_core/tests/build_tests.rs` - CAS-backed staging/APKG and writer invariant tests.
 - Modify: `writer_core/tests/inspect_tests.rs` - staging/APKG inspect media observation tests.
-- Modify: `anki_forge/src/deck/media.rs` - keep ergonomic file/bytes/reader registration while lowering to new authoring media sources.
+- Modify: `anki_forge/src/deck/media.rs` - keep ergonomic file/bytes registration while preserving file inputs as path-backed sources; arbitrary reader registration is v2.
 - Modify: `anki_forge/src/deck/lowering.rs` - emit new authoring media declarations.
 - Modify: `anki_forge/src/deck/export.rs` - call `normalize_with_options` with package-local media store.
 - Modify: `anki_forge/src/product/assets.rs` and `anki_forge/src/product/lowering.rs` - lower bundled font/static assets as ordinary authoring media sources.
@@ -216,6 +219,70 @@ fn writer_ready_normalized_ir_value_with_media_v2() -> Value {
     );
     value
 }
+
+#[test]
+fn normalized_media_contract_invariants_reject_inconsistent_object_identity() {
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value["media_objects"][0]["object_ref"] = json!("media://blake3/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+    let err = validate_media_contract_invariants(&value).unwrap_err();
+
+    assert!(err.contains("object_ref"));
+}
+
+#[test]
+fn normalized_media_contract_invariants_reject_missing_binding_object_and_duplicate_filename() {
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value["media_bindings"].as_array_mut().unwrap().push(json!({
+        "id": "media:other",
+        "export_filename": "hello.txt",
+        "object_id": "obj:blake3:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }));
+
+    let err = validate_media_contract_invariants(&value).unwrap_err();
+
+    assert!(err.contains("export_filename"));
+    assert!(err.contains("object_id"));
+}
+
+fn validate_media_contract_invariants(value: &Value) -> Result<(), String> {
+    let objects = value["media_objects"]
+        .as_array()
+        .ok_or_else(|| "media_objects must be an array".to_string())?;
+    let bindings = value["media_bindings"]
+        .as_array()
+        .ok_or_else(|| "media_bindings must be an array".to_string())?;
+    let mut object_ids = std::collections::BTreeSet::new();
+    let mut errors = Vec::new();
+    for object in objects {
+        let id = object["id"].as_str().unwrap_or_default();
+        let blake3 = object["blake3"].as_str().unwrap_or_default();
+        let object_ref = object["object_ref"].as_str().unwrap_or_default();
+        if id != format!("obj:blake3:{blake3}") {
+            errors.push(format!("id invariant failed for {id}"));
+        }
+        if object_ref != format!("media://blake3/{blake3}") {
+            errors.push(format!("object_ref invariant failed for {id}"));
+        }
+        object_ids.insert(id.to_string());
+    }
+    let mut filenames = std::collections::BTreeSet::new();
+    for binding in bindings {
+        let filename = binding["export_filename"].as_str().unwrap_or_default();
+        if !filenames.insert(filename.to_string()) {
+            errors.push(format!("duplicate export_filename {filename}"));
+        }
+        let object_id = binding["object_id"].as_str().unwrap_or_default();
+        if !object_ids.contains(object_id) {
+            errors.push(format!("missing object_id {object_id}"));
+        }
+    }
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors.join("; "))
+    }
+}
 ```
 
 - [ ] **Step 3: Run schema tests to verify failure**
@@ -225,9 +292,10 @@ Run:
 ```bash
 cargo test -p contract_tools --test schema_gate_tests authoring_ir_schema_accepts_path_and_inline_media_sources -- --nocapture
 cargo test -p contract_tools --test schema_gate_tests normalized_ir_schema_accepts_media_objects_bindings_and_reference_states -- --nocapture
+cargo test -p contract_tools --test schema_gate_tests normalized_media_contract_invariants_reject_inconsistent_object_identity -- --nocapture
 ```
 
-Expected: FAIL because both schemas still require legacy `filename/mime/data_base64` media.
+Expected: The first two commands FAIL because both schemas still require legacy `filename/mime/data_base64` media. The third command passes immediately; it pins cross-field rules JSON Schema cannot express.
 
 - [ ] **Step 4: Update authoring schema media definition**
 
@@ -395,6 +463,11 @@ Normalized media is represented by `media_objects`, `media_bindings`, and
 `media_objects` describe CAS-backed content, `media_bindings` describe APKG
 export filenames, and `media_references` describe resolved, missing, or skipped
 static references discovered in notes/templates.
+
+CAS ingest writes original bytes to a unique temporary file, computes BLAKE3,
+SHA-1, size, and MIME sample while streaming, then atomically persists with
+no-clobber semantics. If the final object already exists, normalize verifies the
+existing bytes and discards the temporary file.
 ```
 
 In `contracts/semantics/build.md`, add this paragraph after the APKG v3 media paragraph:
@@ -519,6 +592,7 @@ fn normalize_options_default_policy_is_explicit() {
             inline_bytes_max: 64 * 1024,
             max_media_object_bytes: None,
             max_total_media_bytes: None,
+            declared_mime_mismatch_behavior: DiagnosticBehavior::Error,
             unknown_mime_behavior: DiagnosticBehavior::Warning,
             unused_binding_behavior: DiagnosticBehavior::Warning,
         },
@@ -548,6 +622,7 @@ blake3 = "1"
 hex = "0.4"
 html-escape = "0.2"
 sha1 = "0.10"
+tempfile = "3"
 ```
 
 - [ ] **Step 4: Create media model module**
@@ -586,6 +661,7 @@ pub struct MediaPolicy {
     pub inline_bytes_max: usize,
     pub max_media_object_bytes: Option<u64>,
     pub max_total_media_bytes: Option<u64>,
+    pub declared_mime_mismatch_behavior: DiagnosticBehavior,
     pub unknown_mime_behavior: DiagnosticBehavior,
     pub unused_binding_behavior: DiagnosticBehavior,
 }
@@ -596,6 +672,7 @@ impl MediaPolicy {
             inline_bytes_max: 64 * 1024,
             max_media_object_bytes: None,
             max_total_media_bytes: None,
+            declared_mime_mismatch_behavior: DiagnosticBehavior::Error,
             unknown_mime_behavior: DiagnosticBehavior::Warning,
             unused_binding_behavior: DiagnosticBehavior::Warning,
         }
@@ -753,7 +830,462 @@ git add authoring_core/Cargo.toml authoring_core/src/lib.rs authoring_core/src/m
 git commit -m "feat: add cas media model types"
 ```
 
-## Task 3: CAS Ingest, Path Safety, and MIME Sniffing
+## Task 3: Media IO Abstraction
+
+**Files:**
+- Create: `authoring_core/src/media_io.rs`
+- Modify: `authoring_core/src/lib.rs`
+- Create: `authoring_core/tests/media_io_tests.rs`
+
+- [ ] **Step 1: Add failing streaming CAS IO tests**
+
+Create `authoring_core/tests/media_io_tests.rs` with:
+
+```rust
+use authoring_core::{
+    decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path, MediaIoError,
+    MediaReadSource, MediaSniffConfidence,
+};
+use std::fs;
+
+#[test]
+fn streams_file_source_to_cas_without_loading_payload_into_authoring_json() {
+    let root = unique_test_root("stream-file");
+    let source_path = root.join("input.bin");
+    let media_store = root.join("store");
+    fs::write(&source_path, vec![b'a'; 256 * 1024]).unwrap();
+
+    let ingested = ingest_media_read_source_to_cas(
+        MediaReadSource::File { path: &source_path },
+        &media_store,
+    )
+    .unwrap();
+
+    let object_path = object_store_path(&media_store, &ingested.blake3).unwrap();
+    assert_eq!(fs::metadata(object_path).unwrap().len(), 256 * 1024);
+    assert_eq!(ingested.size_bytes, 256 * 1024);
+    assert!(matches!(
+        ingested.sniffed_mime.as_ref().map(|item| item.confidence),
+        None | Some(MediaSniffConfidence::Low)
+    ));
+}
+
+#[test]
+fn concurrent_same_object_ingest_uses_unique_temp_files() {
+    let root = unique_test_root("concurrent-cas");
+    let source_path = root.join("same.txt");
+    let media_store = root.join("store");
+    fs::write(&source_path, b"same payload").unwrap();
+
+    let left_store = media_store.clone();
+    let left_path = source_path.clone();
+    let left = std::thread::spawn(move || {
+        ingest_media_read_source_to_cas(MediaReadSource::File { path: &left_path }, &left_store)
+            .unwrap()
+    });
+    let right_store = media_store.clone();
+    let right_path = source_path.clone();
+    let right = std::thread::spawn(move || {
+        ingest_media_read_source_to_cas(MediaReadSource::File { path: &right_path }, &right_store)
+            .unwrap()
+    });
+
+    let left = left.join().unwrap();
+    let right = right.join().unwrap();
+
+    assert_eq!(left.blake3, right.blake3);
+    assert_eq!(
+        fs::read_dir(media_store.join("tmp")).unwrap().count(),
+        0,
+        "temporary CAS files must be removed after finalize"
+    );
+}
+
+#[test]
+fn object_store_path_rejects_uppercase_hex() {
+    let root = unique_test_root("lowercase-hex");
+    let err = object_store_path(
+        &root,
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    )
+    .unwrap_err();
+
+    assert!(err.contains("lowercase"));
+}
+
+#[test]
+fn inline_decode_reports_base64_and_size_errors_before_cas_ingest() {
+    let decode = decode_inline_bytes("%%%", 64).unwrap_err();
+    assert!(matches!(decode, MediaIoError::InlineBase64Decode { .. }));
+
+    let too_large = base64::engine::general_purpose::STANDARD.encode([7_u8; 65]);
+    let size = decode_inline_bytes(&too_large, 64).unwrap_err();
+    assert!(matches!(size, MediaIoError::InlineBytesTooLarge { .. }));
+}
+
+#[test]
+fn cas_write_failure_is_typed() {
+    let root = unique_test_root("cas-write-failure");
+    let source_path = root.join("input.txt");
+    let media_store = root.join("store-is-file");
+    fs::write(&source_path, b"hello").unwrap();
+    fs::write(&media_store, b"not a directory").unwrap();
+
+    let err = ingest_media_read_source_to_cas(
+        MediaReadSource::File { path: &source_path },
+        &media_store,
+    )
+    .unwrap_err();
+
+    assert!(matches!(err, MediaIoError::CasWrite { .. }));
+}
+
+fn unique_test_root(label: &str) -> std::path::PathBuf {
+    let mut root = std::env::temp_dir();
+    root.push(format!(
+        "anki-forge-media-io-{label}-{}",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ));
+    fs::create_dir_all(&root).unwrap();
+    root
+}
+```
+
+At the top of the test file, also add:
+
+```rust
+use base64::Engine as _;
+```
+
+- [ ] **Step 2: Run IO tests to verify failure**
+
+Run:
+
+```bash
+cargo test -p authoring_core --test media_io_tests streams_file_source_to_cas_without_loading_payload_into_authoring_json -v
+```
+
+Expected: FAIL because `authoring_core/src/media_io.rs` does not exist.
+
+- [ ] **Step 3: Implement streaming media IO types**
+
+Create `authoring_core/src/media_io.rs` with:
+
+```rust
+use sha1::{Digest, Sha1};
+use std::fs::{self, File};
+use std::io::{self, Read, Write};
+use std::path::{Path, PathBuf};
+
+const SNIFF_SAMPLE_BYTES: usize = 8192;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum MediaSniffConfidence {
+    High,
+    Low,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SniffedMime {
+    pub mime: String,
+    pub confidence: MediaSniffConfidence,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IngestedMediaBytes {
+    pub blake3: String,
+    pub sha1: String,
+    pub size_bytes: u64,
+    pub sniffed_mime: Option<SniffedMime>,
+    pub object_path: PathBuf,
+}
+
+pub enum MediaReadSource<'a> {
+    File { path: &'a Path },
+    InlineBytes { bytes: &'a [u8] },
+}
+
+#[derive(Debug)]
+pub enum MediaIoError {
+    SourceOpen { path: PathBuf, message: String },
+    SourceRead { message: String },
+    InlineBase64Decode { message: String },
+    InlineBytesTooLarge { size: usize, limit: usize },
+    CasWrite { path: PathBuf, message: String },
+    CasFinalize { path: PathBuf, message: String },
+    CasExistingIntegrity { path: PathBuf },
+}
+
+impl MediaIoError {
+    pub fn diagnostic_code(&self) -> &'static str {
+        match self {
+            Self::SourceOpen { .. } => "MEDIA.SOURCE_MISSING",
+            Self::SourceRead { .. } => "MEDIA.SOURCE_READ_FAILED",
+            Self::InlineBase64Decode { .. } => "MEDIA.INLINE_BASE64_DECODE_FAILED",
+            Self::InlineBytesTooLarge { .. } => "MEDIA.INLINE_TOO_LARGE",
+            Self::CasWrite { .. } | Self::CasFinalize { .. } => "MEDIA.CAS_WRITE_FAILED",
+            Self::CasExistingIntegrity { .. } => "MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT",
+        }
+    }
+}
+```
+
+- [ ] **Step 4: Implement decode and object path helpers**
+
+Append to `authoring_core/src/media_io.rs`:
+
+```rust
+pub fn decode_inline_bytes(data_base64: &str, limit: usize) -> Result<Vec<u8>, MediaIoError> {
+    use base64::Engine as _;
+    let bytes = base64::engine::general_purpose::STANDARD
+        .decode(data_base64.as_bytes())
+        .map_err(|err| MediaIoError::InlineBase64Decode {
+            message: err.to_string(),
+        })?;
+    if bytes.len() > limit {
+        return Err(MediaIoError::InlineBytesTooLarge {
+            size: bytes.len(),
+            limit,
+        });
+    }
+    Ok(bytes)
+}
+
+pub fn object_store_path(store_dir: &Path, blake3_hex: &str) -> Result<PathBuf, String> {
+    let lowercase_hex = blake3_hex
+        .bytes()
+        .all(|byte| matches!(byte, b'0'..=b'9' | b'a'..=b'f'));
+    if blake3_hex.len() != 64 || !lowercase_hex {
+        return Err(format!("invalid lowercase blake3 hex: {blake3_hex}"));
+    }
+    Ok(store_dir
+        .join("objects")
+        .join("blake3")
+        .join(&blake3_hex[0..2])
+        .join(&blake3_hex[2..4])
+        .join(blake3_hex))
+}
+```
+
+- [ ] **Step 5: Implement streaming CAS ingest and atomic finalize**
+
+Append to `authoring_core/src/media_io.rs`:
+
+```rust
+pub fn ingest_media_read_source_to_cas(
+    source: MediaReadSource<'_>,
+    store_dir: &Path,
+) -> Result<IngestedMediaBytes, MediaIoError> {
+    let tmp_dir = store_dir.join("tmp");
+    fs::create_dir_all(&tmp_dir).map_err(|err| MediaIoError::CasWrite {
+        path: tmp_dir.clone(),
+        message: err.to_string(),
+    })?;
+
+    let mut reader: Box<dyn Read> = match source {
+        MediaReadSource::File { path } => Box::new(File::open(path).map_err(|err| {
+            MediaIoError::SourceOpen {
+                path: path.to_path_buf(),
+                message: err.to_string(),
+            }
+        })?),
+        MediaReadSource::InlineBytes { bytes } => Box::new(io::Cursor::new(bytes)),
+    };
+
+    let mut temp = tempfile::NamedTempFile::new_in(&tmp_dir).map_err(|err| {
+        MediaIoError::CasWrite {
+            path: tmp_dir.clone(),
+            message: err.to_string(),
+        }
+    })?;
+    let mut blake3_hasher = blake3::Hasher::new();
+    let mut sha1_hasher = Sha1::new();
+    let mut sample = Vec::with_capacity(SNIFF_SAMPLE_BYTES);
+    let mut size_bytes = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+
+    loop {
+        let read = reader.read(&mut buffer).map_err(|err| MediaIoError::SourceRead {
+            message: err.to_string(),
+        })?;
+        if read == 0 {
+            break;
+        }
+        let chunk = &buffer[..read];
+        if sample.len() < SNIFF_SAMPLE_BYTES {
+            let remaining = SNIFF_SAMPLE_BYTES - sample.len();
+            sample.extend_from_slice(&chunk[..chunk.len().min(remaining)]);
+        }
+        blake3_hasher.update(chunk);
+        sha1_hasher.update(chunk);
+        size_bytes += read as u64;
+        temp.write_all(chunk).map_err(|err| MediaIoError::CasWrite {
+            path: temp.path().to_path_buf(),
+            message: err.to_string(),
+        })?;
+    }
+    temp.flush().map_err(|err| MediaIoError::CasWrite {
+        path: temp.path().to_path_buf(),
+        message: err.to_string(),
+    })?;
+    temp.as_file().sync_all().map_err(|err| MediaIoError::CasWrite {
+        path: temp.path().to_path_buf(),
+        message: err.to_string(),
+    })?;
+
+    let blake3 = blake3_hasher.finalize().to_hex().to_string();
+    let sha1 = hex::encode(sha1_hasher.finalize());
+    let final_path = object_store_path(store_dir, &blake3).map_err(|message| {
+        MediaIoError::CasFinalize {
+            path: store_dir.to_path_buf(),
+            message,
+        }
+    })?;
+    let object_path = finalize_temp_object(temp, &final_path, &blake3, size_bytes)?;
+
+    Ok(IngestedMediaBytes {
+        blake3,
+        sha1,
+        size_bytes,
+        sniffed_mime: sniff_mime(&sample),
+        object_path,
+    })
+}
+
+fn finalize_temp_object(
+    temp: tempfile::NamedTempFile,
+    final_path: &Path,
+    blake3_hex: &str,
+    size_bytes: u64,
+) -> Result<PathBuf, MediaIoError> {
+    let parent = final_path.parent().ok_or_else(|| MediaIoError::CasFinalize {
+        path: final_path.to_path_buf(),
+        message: "CAS object path has no parent".into(),
+    })?;
+    fs::create_dir_all(parent).map_err(|err| MediaIoError::CasWrite {
+        path: parent.to_path_buf(),
+        message: err.to_string(),
+    })?;
+
+    if final_path.exists() {
+        verify_existing_object(final_path, blake3_hex, size_bytes)?;
+        return Ok(final_path.to_path_buf());
+    }
+
+    match temp.persist_noclobber(final_path) {
+        Ok(_) => Ok(final_path.to_path_buf()),
+        Err(err) if final_path.exists() => {
+            let _ = err.file.close();
+            verify_existing_object(final_path, blake3_hex, size_bytes)?;
+            Ok(final_path.to_path_buf())
+        }
+        Err(err) => Err(MediaIoError::CasFinalize {
+            path: final_path.to_path_buf(),
+            message: err.error.to_string(),
+        }),
+    }
+}
+
+fn verify_existing_object(path: &Path, blake3_hex: &str, size_bytes: u64) -> Result<(), MediaIoError> {
+    let mut file = File::open(path).map_err(|err| MediaIoError::CasExistingIntegrity {
+        path: path.to_path_buf(),
+    })?;
+    let mut hasher = blake3::Hasher::new();
+    let mut read_size = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+    loop {
+        let read = file.read(&mut buffer).map_err(|_| MediaIoError::CasExistingIntegrity {
+            path: path.to_path_buf(),
+        })?;
+        if read == 0 {
+            break;
+        }
+        read_size += read as u64;
+        hasher.update(&buffer[..read]);
+    }
+    if read_size == size_bytes && hasher.finalize().to_hex().as_str() == blake3_hex {
+        Ok(())
+    } else {
+        Err(MediaIoError::CasExistingIntegrity {
+            path: path.to_path_buf(),
+        })
+    }
+}
+```
+
+- [ ] **Step 6: Implement prefix MIME sniffing**
+
+Append to `authoring_core/src/media_io.rs`:
+
+```rust
+pub fn sniff_mime(bytes: &[u8]) -> Option<SniffedMime> {
+    if bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
+        Some(high("image/png"))
+    } else if bytes.starts_with(&[0xff, 0xd8, 0xff]) {
+        Some(high("image/jpeg"))
+    } else if bytes.starts_with(b"GIF87a") || bytes.starts_with(b"GIF89a") {
+        Some(high("image/gif"))
+    } else if bytes.starts_with(b"ID3") {
+        Some(high("audio/mpeg"))
+    } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WAVE") {
+        Some(high("audio/wav"))
+    } else if !bytes.is_empty()
+        && bytes
+            .iter()
+            .all(|byte| byte.is_ascii() && (!byte.is_ascii_control() || matches!(*byte, b'\n' | b'\r' | b'\t')))
+    {
+        Some(SniffedMime {
+            mime: "text/plain".into(),
+            confidence: MediaSniffConfidence::Low,
+        })
+    } else {
+        None
+    }
+}
+
+fn high(mime: &str) -> SniffedMime {
+    SniffedMime {
+        mime: mime.into(),
+        confidence: MediaSniffConfidence::High,
+    }
+}
+```
+
+- [ ] **Step 7: Export IO helpers**
+
+In `authoring_core/src/lib.rs`, add:
+
+```rust
+pub mod media_io;
+pub use media_io::{
+    decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path, IngestedMediaBytes,
+    MediaIoError, MediaReadSource, MediaSniffConfidence, SniffedMime,
+};
+```
+
+- [ ] **Step 8: Run IO tests**
+
+Run:
+
+```bash
+cargo test -p authoring_core --test media_io_tests -v
+```
+
+Expected: PASS.
+
+- [ ] **Step 9: Commit media IO abstraction**
+
+Run:
+
+```bash
+git add authoring_core/src/media_io.rs authoring_core/src/lib.rs authoring_core/tests/media_io_tests.rs
+git commit -m "feat: add streaming media io abstraction"
+```
+
+## Task 4: CAS Ingest, Path Safety, and MIME Policy
 
 **Files:**
 - Modify: `authoring_core/src/media.rs`
@@ -764,8 +1296,11 @@ git commit -m "feat: add cas media model types"
 Append these tests to `authoring_core/tests/media_ingest_tests.rs`:
 
 ```rust
-use authoring_core::{ingest_authoring_media, MediaIngestDiagnostic};
-use std::{fs, os::unix::fs as unix_fs};
+use authoring_core::{
+    ingest_authoring_media, AuthoringMedia, AuthoringMediaSource, DiagnosticBehavior, MediaPolicy,
+    NormalizeOptions,
+};
+use std::fs;
 
 #[test]
 fn ingest_path_source_writes_original_bytes_to_cas() {
@@ -792,8 +1327,11 @@ fn ingest_path_source_writes_original_bytes_to_cas() {
     assert_eq!(fs::read(result.object_path(&result.objects[0]).unwrap()).unwrap(), b"hello");
 }
 
+#[cfg(unix)]
 #[test]
 fn ingest_rejects_symlink_escape() {
+    use std::os::unix::fs as unix_fs;
+
     let root = unique_test_root("symlink-escape");
     let base_dir = root.join("input");
     let outside_dir = root.join("outside");
@@ -834,6 +1372,224 @@ fn ingest_rejects_inline_base64_decode_failure() {
     assert!(err.diagnostics.iter().any(|item| item.code == "MEDIA.INLINE_BASE64_DECODE_FAILED"));
 }
 
+#[test]
+fn ingest_rejects_path_source_that_is_not_regular_file() {
+    let root = unique_test_root("not-regular");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets/dir")).unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:dir".into(),
+        desired_filename: "dir.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/dir".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.SOURCE_NOT_REGULAR_FILE"));
+}
+
+#[test]
+fn same_export_filename_and_same_object_merges_binding_with_info() {
+    let root = unique_test_root("same-filename-same-object");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:first".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:second".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert_eq!(result.bindings.len(), 1);
+    assert!(result
+        .diagnostics
+        .iter()
+        .any(|item| item.level == "info" && item.code == "MEDIA.DEDUPED_BINDING"));
+}
+
+#[test]
+fn same_export_filename_and_different_object_is_conflict() {
+    let root = unique_test_root("same-filename-conflict");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/left.txt"), b"left").unwrap();
+    fs::write(base_dir.join("assets/right.txt"), b"right").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:left".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/left.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:right".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/right.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DUPLICATE_FILENAME_CONFLICT"));
+}
+
+#[test]
+fn different_filenames_for_same_object_are_allowed_with_deduped_object_info() {
+    let root = unique_test_root("deduped-object");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:a".into(),
+            desired_filename: "a.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:b".into(),
+            desired_filename: "b.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert_eq!(result.objects.len(), 1);
+    assert_eq!(result.bindings.len(), 2);
+    assert!(result
+        .diagnostics
+        .iter()
+        .any(|item| item.level == "info" && item.code == "MEDIA.DEDUPED_OBJECT"));
+}
+
+#[test]
+fn declared_mime_high_confidence_conflict_is_error() {
+    let root = unique_test_root("mime-conflict");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/image.bin"), b"\x89PNG\r\n\x1a\npayload").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:image".into(),
+        desired_filename: "image.png".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/image.bin".into(),
+        },
+        declared_mime: Some("image/jpeg".into()),
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DECLARED_MIME_MISMATCH"));
+}
+
+#[test]
+fn unknown_mime_and_size_limits_follow_policy() {
+    let root = unique_test_root("policy");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/blob.bin"), [0_u8, 159, 146, 150, 7]).unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.unknown_mime_behavior = DiagnosticBehavior::Error;
+    options.media_policy.max_media_object_bytes = Some(4);
+    let media = vec![AuthoringMedia {
+        id: "media:blob".into(),
+        desired_filename: "blob.bin".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/blob.bin".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+    let codes = err
+        .diagnostics
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+
+    assert!(codes.contains(&"MEDIA.UNKNOWN_MIME"));
+    assert!(codes.contains(&"MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
+#[test]
+fn total_unique_media_size_limit_is_enforced() {
+    let root = unique_test_root("total-size-limit");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/a.txt"), b"aaa").unwrap();
+    fs::write(base_dir.join("assets/b.txt"), b"bbb").unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.max_total_media_bytes = Some(5);
+    let media = vec![
+        AuthoringMedia {
+            id: "media:a".into(),
+            desired_filename: "a.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/a.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:b".into(),
+            desired_filename: "b.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/b.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
 fn test_options(base_dir: &std::path::Path, media_store_dir: &std::path::Path) -> NormalizeOptions {
     NormalizeOptions {
         base_dir: base_dir.to_path_buf(),
@@ -856,12 +1612,6 @@ fn unique_test_root(label: &str) -> std::path::PathBuf {
 }
 ```
 
-On non-Unix platforms, guard the symlink test with:
-
-```rust
-#[cfg(unix)]
-```
-
 - [ ] **Step 2: Run ingest tests to verify failure**
 
 Run:
@@ -877,12 +1627,13 @@ Expected: FAIL because `ingest_authoring_media` does not exist.
 Add these types and functions to `authoring_core/src/media.rs`:
 
 ```rust
-use base64::Engine as _;
-use sha1::{Digest, Sha1};
 use std::collections::{BTreeMap, BTreeSet};
-use std::fs;
-use std::io::{Read, Write};
 use std::path::{Component, Path, PathBuf};
+
+use crate::media_io::{
+    decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path, MediaIoError, MediaReadSource,
+    MediaSniffConfidence, SniffedMime,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MediaIngestDiagnostic {
@@ -920,6 +1671,7 @@ pub fn ingest_authoring_media(
     let mut bindings = Vec::<MediaBinding>::new();
     let mut seen_media_ids = BTreeSet::<String>::new();
     let mut filename_to_object = BTreeMap::<String, String>::new();
+    let mut total_unique_size = 0_u64;
 
     for item in media {
         if !seen_media_ids.insert(item.id.clone()) {
@@ -931,60 +1683,102 @@ pub fn ingest_authoring_media(
             continue;
         }
 
-        let bytes = match read_authoring_media_bytes(item, options) {
-            Ok(bytes) => bytes,
+        let prepared_source = match prepare_media_source(item, options) {
+            Ok(source) => source,
             Err(mut err) => {
                 diagnostics.append(&mut err.diagnostics);
                 continue;
             }
         };
-        if bytes.len() > options.media_policy.inline_bytes_max
-            && matches!(item.source, AuthoringMediaSource::InlineBytes { .. })
-        {
-            diagnostics.push(error(
-                "MEDIA.INLINE_TOO_LARGE",
-                format!("inline media {} exceeds inline_bytes_max", item.id),
-                Some(item.id.clone()),
-            ));
+
+        let ingested = match ingest_media_read_source_to_cas(
+            prepared_source.as_read_source(),
+            &options.media_store_dir,
+        ) {
+            Ok(ingested) => ingested,
+            Err(err) => {
+                diagnostics.push(media_io_error_to_diagnostic(err, &item.id));
+                continue;
+            }
+        };
+
+        let mut object_has_error = false;
+        if let Some(limit) = options.media_policy.max_media_object_bytes {
+            if ingested.size_bytes > limit {
+                diagnostics.push(error(
+                    "MEDIA.SIZE_LIMIT_EXCEEDED",
+                    format!("media object {} has {} bytes, above max_media_object_bytes {limit}", item.id, ingested.size_bytes),
+                    Some(item.id.clone()),
+                ));
+                object_has_error = true;
+            }
+        }
+
+        let object_id = media_object_id(&ingested.blake3);
+        let is_new_object = !objects_by_id.contains_key(&object_id);
+        if is_new_object && !object_has_error {
+            if let Some(limit) = options.media_policy.max_total_media_bytes {
+                if total_unique_size + ingested.size_bytes > limit {
+                    diagnostics.push(error(
+                        "MEDIA.SIZE_LIMIT_EXCEEDED",
+                        format!("unique media bytes would exceed max_total_media_bytes {limit}"),
+                        Some(item.id.clone()),
+                    ));
+                    continue;
+                }
+            }
+            total_unique_size += ingested.size_bytes;
+        }
+
+        let mut mime_diagnostics = Vec::new();
+        let mime = effective_mime(
+            item.declared_mime.as_deref(),
+            ingested.sniffed_mime.as_ref(),
+            &options.media_policy,
+            &mut mime_diagnostics,
+            &item.id,
+        );
+        let mime_has_error = mime_diagnostics.iter().any(|item| item.level == "error");
+        diagnostics.append(&mut mime_diagnostics);
+        if object_has_error || mime_has_error {
             continue;
         }
 
-        let blake3_hex = blake3::hash(&bytes).to_hex().to_string();
-        let sha1_hex = hex::encode(Sha1::digest(&bytes));
-        let mime = effective_mime(item.declared_mime.as_deref(), &bytes);
         let object = MediaObject {
-            id: media_object_id(&blake3_hex),
-            object_ref: media_object_ref(&blake3_hex),
-            blake3: blake3_hex.clone(),
-            sha1: sha1_hex,
-            size_bytes: bytes.len() as u64,
+            id: object_id.clone(),
+            object_ref: media_object_ref(&ingested.blake3),
+            blake3: ingested.blake3,
+            sha1: ingested.sha1,
+            size_bytes: ingested.size_bytes,
             mime,
         };
-        if let Err(message) = write_cas_object(&options.media_store_dir, &blake3_hex, &bytes) {
-            diagnostics.push(error("MEDIA.CAS_WRITE_FAILED", message, Some(item.id.clone())));
-            continue;
-        }
 
-        if let Some(previous_object_id) =
-            filename_to_object.insert(item.desired_filename.clone(), object.id.clone())
-        {
-            if previous_object_id != object.id {
+        if let Some(previous_object_id) = filename_to_object.get(&item.desired_filename) {
+            if previous_object_id != &object.id {
                 diagnostics.push(error(
                     "MEDIA.DUPLICATE_FILENAME_CONFLICT",
                     format!("export filename {} maps to multiple objects", item.desired_filename),
                     Some(item.desired_filename.clone()),
                 ));
             } else {
-                diagnostics.push(error(
-                    "MEDIA.DUPLICATE_EXPORT_FILENAME",
-                    format!("export filename {} is declared more than once", item.desired_filename),
+                diagnostics.push(info(
+                    "MEDIA.DEDUPED_BINDING",
+                    format!("duplicate export filename {} maps to the same object and was merged", item.desired_filename),
                     Some(item.desired_filename.clone()),
                 ));
             }
             continue;
         }
 
+        if !is_new_object {
+            diagnostics.push(info(
+                "MEDIA.DEDUPED_OBJECT",
+                format!("media {} reuses object {}", item.id, object.id),
+                Some(item.id.clone()),
+            ));
+        }
         objects_by_id.entry(object.id.clone()).or_insert(object.clone());
+        filename_to_object.insert(item.desired_filename.clone(), object.id.clone());
         bindings.push(MediaBinding {
             id: item.id.clone(),
             export_filename: item.desired_filename.clone(),
@@ -1008,41 +1802,51 @@ pub fn ingest_authoring_media(
 }
 ```
 
-- [ ] **Step 4: Implement path, inline, CAS, filename, and MIME helpers**
+- [ ] **Step 4: Implement source preparation, filename, and MIME policy helpers**
 
 Add these helpers to `authoring_core/src/media.rs` after `ingest_authoring_media`:
 
 ```rust
-fn read_authoring_media_bytes(
-    item: &crate::model::AuthoringMedia,
-    options: &NormalizeOptions,
-) -> Result<Vec<u8>, MediaIngestError> {
-    match &item.source {
-        AuthoringMediaSource::Path { path } => read_path_source(path, options),
-        AuthoringMediaSource::InlineBytes { data_base64 } => {
-            base64::engine::general_purpose::STANDARD
-                .decode(data_base64.as_bytes())
-                .map_err(|err| MediaIngestError {
-                    diagnostics: vec![error(
-                        "MEDIA.INLINE_BASE64_DECODE_FAILED",
-                        format!("decode inline bytes for {}: {err}", item.id),
-                        Some(item.id.clone()),
-                    )],
-                })
+enum PreparedMediaSource {
+    Path(PathBuf),
+    InlineBytes(Vec<u8>),
+}
+
+impl PreparedMediaSource {
+    fn as_read_source(&self) -> MediaReadSource<'_> {
+        match self {
+            Self::Path(path) => MediaReadSource::File { path },
+            Self::InlineBytes(bytes) => MediaReadSource::InlineBytes { bytes },
         }
     }
 }
 
-fn read_path_source(path: &str, options: &NormalizeOptions) -> Result<Vec<u8>, MediaIngestError> {
+fn prepare_media_source(
+    item: &crate::model::AuthoringMedia,
+    options: &NormalizeOptions,
+) -> Result<PreparedMediaSource, MediaIngestError> {
+    match &item.source {
+        AuthoringMediaSource::Path { path } => resolve_path_source(path, options)
+            .map(PreparedMediaSource::Path),
+        AuthoringMediaSource::InlineBytes { data_base64 } => decode_inline_bytes(
+            data_base64,
+            options.media_policy.inline_bytes_max,
+        )
+        .map(PreparedMediaSource::InlineBytes)
+        .map_err(|err| MediaIngestError {
+            diagnostics: vec![media_io_error_to_diagnostic(err, &item.id)],
+        }),
+    }
+}
+
+fn resolve_path_source(path: &str, options: &NormalizeOptions) -> Result<PathBuf, MediaIngestError> {
     let raw_path = Path::new(path);
     if raw_path.is_absolute() || has_parent_component(raw_path) {
-        return Err(MediaIngestError {
-            diagnostics: vec![error(
-                "MEDIA.UNSAFE_SOURCE_PATH",
-                format!("source.path must be relative and stay below base_dir: {path}"),
-                Some(path.into()),
-            )],
-        });
+        return Err(one_error(
+            "MEDIA.UNSAFE_SOURCE_PATH",
+            format!("source.path must be relative and stay below base_dir: {path}"),
+            Some(path.into()),
+        ));
     }
     let base = options.base_dir.canonicalize().map_err(|err| MediaIngestError {
         diagnostics: vec![error(
@@ -1060,15 +1864,13 @@ fn read_path_source(path: &str, options: &NormalizeOptions) -> Result<Vec<u8>, M
         )],
     })?;
     if !canonical.starts_with(&base) {
-        return Err(MediaIngestError {
-            diagnostics: vec![error(
-                "MEDIA.UNSAFE_SOURCE_PATH",
-                format!("source.path escapes base_dir: {path}"),
-                Some(path.into()),
-            )],
-        });
+        return Err(one_error(
+            "MEDIA.UNSAFE_SOURCE_PATH",
+            format!("source.path escapes base_dir: {path}"),
+            Some(path.into()),
+        ));
     }
-    let metadata = fs::metadata(&canonical).map_err(|err| MediaIngestError {
+    let metadata = std::fs::metadata(&canonical).map_err(|err| MediaIngestError {
         diagnostics: vec![error(
             "MEDIA.SOURCE_MISSING",
             format!("stat source.path {path}: {err}"),
@@ -1076,64 +1878,13 @@ fn read_path_source(path: &str, options: &NormalizeOptions) -> Result<Vec<u8>, M
         )],
     })?;
     if !metadata.is_file() {
-        return Err(MediaIngestError {
-            diagnostics: vec![error(
-                "MEDIA.SOURCE_NOT_REGULAR_FILE",
-                format!("source.path is not a regular file: {path}"),
-                Some(path.into()),
-            )],
-        });
-    }
-    fs::read(&canonical).map_err(|err| MediaIngestError {
-        diagnostics: vec![error(
-            "MEDIA.SOURCE_MISSING",
-            format!("read source.path {path}: {err}"),
+        return Err(one_error(
+            "MEDIA.SOURCE_NOT_REGULAR_FILE",
+            format!("source.path is not a regular file: {path}"),
             Some(path.into()),
-        )],
-    })
-}
-
-fn write_cas_object(store_dir: &Path, blake3_hex: &str, bytes: &[u8]) -> Result<(), String> {
-    let final_path = object_store_path(store_dir, blake3_hex)?;
-    if final_path.exists() {
-        let existing = fs::read(&final_path)
-            .map_err(|err| format!("read existing object {}: {err}", final_path.display()))?;
-        if blake3::hash(&existing).to_hex().to_string() != blake3_hex || existing.len() != bytes.len()
-        {
-            return Err(format!("existing object integrity mismatch: {}", final_path.display()));
-        }
-        return Ok(());
+        ));
     }
-    let parent = final_path
-        .parent()
-        .ok_or_else(|| format!("object path has no parent: {}", final_path.display()))?;
-    fs::create_dir_all(parent).map_err(|err| format!("create object dir {}: {err}", parent.display()))?;
-    let temp_path = parent.join(format!(".{blake3_hex}.tmp"));
-    {
-        let mut file = fs::File::create(&temp_path)
-            .map_err(|err| format!("create temp object {}: {err}", temp_path.display()))?;
-        file.write_all(bytes)
-            .map_err(|err| format!("write temp object {}: {err}", temp_path.display()))?;
-        file.sync_all()
-            .map_err(|err| format!("sync temp object {}: {err}", temp_path.display()))?;
-    }
-    fs::rename(&temp_path, &final_path).map_err(|err| {
-        let _ = fs::remove_file(&temp_path);
-        format!("rename temp object into {}: {err}", final_path.display())
-    })?;
-    Ok(())
-}
-
-pub fn object_store_path(store_dir: &Path, blake3_hex: &str) -> Result<PathBuf, String> {
-    if blake3_hex.len() != 64 || !blake3_hex.bytes().all(|byte| byte.is_ascii_hexdigit()) {
-        return Err(format!("invalid blake3 hex: {blake3_hex}"));
-    }
-    Ok(store_dir
-        .join("objects")
-        .join("blake3")
-        .join(&blake3_hex[0..2])
-        .join(&blake3_hex[2..4])
-        .join(blake3_hex))
+    Ok(canonical)
 }
 
 fn validate_bare_filename(name: &str) -> Result<(), String> {
@@ -1157,28 +1908,80 @@ fn has_parent_component(path: &Path) -> bool {
         .any(|component| matches!(component, Component::ParentDir | Component::CurDir))
 }
 
-fn effective_mime(declared_mime: Option<&str>, bytes: &[u8]) -> String {
-    sniff_mime(bytes)
-        .or_else(|| declared_mime.map(str::to_string))
-        .unwrap_or_else(|| "application/octet-stream".into())
+fn effective_mime(
+    declared_mime: Option<&str>,
+    sniffed: Option<&SniffedMime>,
+    policy: &MediaPolicy,
+    diagnostics: &mut Vec<MediaIngestDiagnostic>,
+    media_id: &str,
+) -> String {
+    if let (Some(declared), Some(sniffed)) = (declared_mime, sniffed) {
+        if sniffed.confidence == MediaSniffConfidence::High && declared != sniffed.mime {
+            push_policy_diagnostic(
+                diagnostics,
+                policy.declared_mime_mismatch_behavior,
+                "MEDIA.DECLARED_MIME_MISMATCH",
+                format!("declared MIME {declared} conflicts with sniffed MIME {}", sniffed.mime),
+                Some(media_id.into()),
+            );
+        }
+    }
+
+    if let Some(sniffed) = sniffed {
+        sniffed.mime.clone()
+    } else if let Some(declared) = declared_mime {
+        declared.into()
+    } else {
+        push_policy_diagnostic(
+            diagnostics,
+            policy.unknown_mime_behavior,
+            "MEDIA.UNKNOWN_MIME",
+            format!("could not determine MIME for {media_id}"),
+            Some(media_id.into()),
+        );
+        "application/octet-stream".into()
+    }
 }
 
-fn sniff_mime(bytes: &[u8]) -> Option<String> {
-    if bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
-        Some("image/png".into())
-    } else if bytes.starts_with(&[0xff, 0xd8, 0xff]) {
-        Some("image/jpeg".into())
-    } else if bytes.starts_with(b"GIF87a") || bytes.starts_with(b"GIF89a") {
-        Some("image/gif".into())
-    } else if bytes.starts_with(b"ID3") {
-        Some("audio/mpeg".into())
-    } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WAVE") {
-        Some("audio/wav".into())
-    } else if bytes.iter().all(|byte| byte.is_ascii() && !byte.is_ascii_control() || *byte == b'\n' || *byte == b'\r' || *byte == b'\t') {
-        Some("text/plain".into())
-    } else {
-        None
+fn media_io_error_to_diagnostic(err: MediaIoError, media_id: &str) -> MediaIngestDiagnostic {
+    error(
+        err.diagnostic_code(),
+        format!("media IO failed for {media_id}: {err:?}"),
+        Some(media_id.into()),
+    )
+}
+
+fn push_policy_diagnostic(
+    diagnostics: &mut Vec<MediaIngestDiagnostic>,
+    behavior: DiagnosticBehavior,
+    code: &str,
+    summary: String,
+    path: Option<String>,
+) {
+    match behavior {
+        DiagnosticBehavior::Ignore => {}
+        DiagnosticBehavior::Info => diagnostics.push(diagnostic("info", code, summary, path)),
+        DiagnosticBehavior::Warning => diagnostics.push(diagnostic("warning", code, summary, path)),
+        DiagnosticBehavior::Error => diagnostics.push(diagnostic("error", code, summary, path)),
     }
+}
+
+fn one_error(
+    code: impl Into<String>,
+    summary: impl Into<String>,
+    path: Option<String>,
+) -> MediaIngestError {
+    MediaIngestError {
+        diagnostics: vec![error(code, summary, path)],
+    }
+}
+
+fn info(
+    code: impl Into<String>,
+    summary: impl Into<String>,
+    path: Option<String>,
+) -> MediaIngestDiagnostic {
+    diagnostic("info", code, summary, path)
 }
 
 fn error(
@@ -1186,8 +1989,17 @@ fn error(
     summary: impl Into<String>,
     path: Option<String>,
 ) -> MediaIngestDiagnostic {
+    diagnostic("error", code, summary, path)
+}
+
+fn diagnostic(
+    level: impl Into<String>,
+    code: impl Into<String>,
+    summary: impl Into<String>,
+    path: Option<String>,
+) -> MediaIngestDiagnostic {
     MediaIngestDiagnostic {
-        level: "error".into(),
+        level: level.into(),
         code: code.into(),
         summary: summary.into(),
         path,
@@ -1200,8 +2012,7 @@ fn error(
 In `authoring_core/src/lib.rs`, extend the `pub use media::{...}` list with:
 
 ```rust
-ingest_authoring_media, object_store_path, MediaIngestDiagnostic, MediaIngestError,
-MediaIngestResult,
+ingest_authoring_media, MediaIngestDiagnostic, MediaIngestError, MediaIngestResult,
 ```
 
 - [ ] **Step 6: Run ingest tests**
@@ -1223,7 +2034,7 @@ git add authoring_core/src/media.rs authoring_core/src/lib.rs authoring_core/tes
 git commit -m "feat: ingest authoring media into cas"
 ```
 
-## Task 4: Media Reference Scanner
+## Task 5: Media Reference Scanner
 
 **Files:**
 - Create: `authoring_core/src/media_refs.rs`
@@ -1262,10 +2073,10 @@ fn classifies_external_and_data_uri_as_skipped() {
         "note-1",
         "field",
         "Back",
-        r#"<img src="https://example.com/a.png"><img src="data:image/png;base64,abc">"#,
+        r#"<img src="https://example.com/a.png"><img src="data:image/png;base64,abc"><img src="{{dynamic_name}}.png">"#,
     );
 
-    assert_eq!(refs.len(), 2);
+    assert_eq!(refs.len(), 3);
     assert!(refs.iter().all(|item| item.skip_reason.is_some()));
 }
 
@@ -1294,6 +2105,45 @@ fn sound_refs_do_not_use_url_percent_decoding() {
     );
 
     assert_eq!(refs[0].normalized_local_ref.as_deref(), Some("hello%20world.mp3"));
+}
+
+#[test]
+fn html_refs_handle_entities_case_unquoted_attributes_and_comments() {
+    let refs = extract_media_reference_candidates(
+        "note",
+        "note-1",
+        "field",
+        "Front",
+        r#"<IMG SRC=heart&amp;one.png><!-- <img src="ignored.png"> --><object DATA='clip.webm'></object><img data-src="not-media.png">"#,
+    );
+
+    let local_refs = refs
+        .iter()
+        .filter_map(|item| item.normalized_local_ref.as_deref())
+        .collect::<Vec<_>>();
+
+    assert!(local_refs.contains(&"heart&one.png"));
+    assert!(local_refs.contains(&"clip.webm"));
+    assert!(!local_refs.contains(&"ignored.png"));
+    assert!(!local_refs.contains(&"not-media.png"));
+}
+
+#[test]
+fn css_url_refs_require_url_function_boundary() {
+    let refs = extract_media_reference_candidates(
+        "note",
+        "note-1",
+        "field",
+        "Front",
+        r#"<style>.a{background:url("font.woff2?v=1#frag")}.b{background:myurl(fake.png)}.c{background:url(bad%2Fname.png)}</style>"#,
+    );
+
+    let raw_refs = refs.iter().map(|item| item.raw_ref.as_str()).collect::<Vec<_>>();
+    assert!(raw_refs.contains(&"font.woff2?v=1#frag"));
+    assert!(!raw_refs.contains(&"fake.png"));
+    assert!(refs
+        .iter()
+        .any(|item| item.raw_ref == "bad%2Fname.png" && item.unsafe_reason.as_deref() == Some("decoded-path-separator")));
 }
 ```
 
@@ -1343,11 +2193,16 @@ pub fn extract_media_reference_candidates(
     location_name: &str,
     text: &str,
 ) -> Vec<MediaReferenceCandidate> {
+    // v1 intentionally uses a small static scanner rather than a full HTML/CSS parser.
+    // The tests below pin the supported boundaries: comments are skipped, attribute
+    // names are ASCII-case-insensitive, entities are decoded for HTML attrs, `data-*`
+    // attrs are ignored, and CSS `url(...)` must appear as a real function token.
+    let scan_text = strip_html_comments(text);
     let mut refs = Vec::new();
-    refs.extend(extract_sound_refs(owner_kind, owner_id, location_kind, location_name, text));
-    refs.extend(extract_html_src_refs(owner_kind, owner_id, location_kind, location_name, text));
-    refs.extend(extract_html_object_data_refs(owner_kind, owner_id, location_kind, location_name, text));
-    refs.extend(extract_css_url_refs(owner_kind, owner_id, location_kind, location_name, text));
+    refs.extend(extract_sound_refs(owner_kind, owner_id, location_kind, location_name, &scan_text));
+    refs.extend(extract_html_src_refs(owner_kind, owner_id, location_kind, location_name, &scan_text));
+    refs.extend(extract_html_object_data_refs(owner_kind, owner_id, location_kind, location_name, &scan_text));
+    refs.extend(extract_css_url_refs(owner_kind, owner_id, location_kind, location_name, &scan_text));
     refs
 }
 ```
@@ -1355,6 +2210,19 @@ pub fn extract_media_reference_candidates(
 Add the parsing helpers below it:
 
 ```rust
+fn strip_html_comments(text: &str) -> String {
+    let mut output = String::with_capacity(text.len());
+    let mut remaining = text;
+    while let Some(start) = remaining.find("<!--") {
+        output.push_str(&remaining[..start]);
+        let after_start = &remaining[start + "<!--".len()..];
+        let Some(end) = after_start.find("-->") else { break };
+        remaining = &after_start[end + "-->".len()..];
+    }
+    output.push_str(remaining);
+    output
+}
+
 fn extract_sound_refs(owner_kind: &str, owner_id: &str, location_kind: &str, location_name: &str, text: &str) -> Vec<MediaReferenceCandidate> {
     let mut refs = Vec::new();
     let mut remaining = text;
@@ -1389,6 +2257,10 @@ fn extract_css_url_refs(owner_kind: &str, owner_id: &str, location_kind: &str, l
     let mut refs = Vec::new();
     let mut remaining = text;
     while let Some(start) = remaining.to_ascii_lowercase().find("url(") {
+        if !is_css_url_boundary(remaining, start) {
+            remaining = &remaining[start + "url(".len()..];
+            continue;
+        }
         let after = &remaining[start + "url(".len()..];
         let Some(end) = after.find(')') else { break };
         let raw = after[..end].trim().trim_matches('"').trim_matches('\'').to_string();
@@ -1403,6 +2275,10 @@ fn extract_html_attribute_refs(owner_kind: &str, owner_id: &str, location_kind: 
     let marker = format!("{attr}=");
     let mut remaining = text;
     while let Some(start) = remaining.to_ascii_lowercase().find(&marker) {
+        if !is_html_attribute_boundary(remaining, start) {
+            remaining = &remaining[start + marker.len()..];
+            continue;
+        }
         let after = &remaining[start + marker.len()..];
         let Some(first) = after.chars().next() else { break };
         let (raw, rest) = if first == '"' || first == '\'' {
@@ -1418,6 +2294,22 @@ fn extract_html_attribute_refs(owner_kind: &str, owner_id: &str, location_kind: 
         remaining = rest;
     }
     refs
+}
+
+fn is_html_attribute_boundary(text: &str, attr_start: usize) -> bool {
+    text[..attr_start]
+        .chars()
+        .next_back()
+        .map(|ch| ch.is_ascii_whitespace() || ch == '<')
+        .unwrap_or(true)
+}
+
+fn is_css_url_boundary(text: &str, url_start: usize) -> bool {
+    text[..url_start]
+        .chars()
+        .next_back()
+        .map(|ch| !(ch.is_ascii_alphanumeric() || ch == '_' || ch == '-'))
+        .unwrap_or(true)
 }
 ```
 
@@ -1528,7 +2420,7 @@ git add authoring_core/src/media_refs.rs authoring_core/src/lib.rs authoring_cor
 git commit -m "feat: extract normalized media references"
 ```
 
-## Task 5: Normalize Integration and Media Diagnostics
+## Task 6: Normalize Integration and Media Diagnostics
 
 **Files:**
 - Modify: `authoring_core/src/normalize.rs`
@@ -1914,10 +2806,12 @@ git add authoring_core/src/normalize.rs authoring_core/src/lib.rs authoring_core
 git commit -m "feat: normalize media into cas metadata"
 ```
 
-## Task 6: Writer CAS Target, Invariants, and Staging
+## Task 7: Writer CAS Target, Invariants, and Staging
 
 **Files:**
 - Modify: `writer_core/Cargo.toml`
+- Create: `writer_core/src/media.rs`
+- Modify: `writer_core/src/lib.rs`
 - Modify: `writer_core/src/staging.rs`
 - Modify: `writer_core/src/build.rs`
 - Modify: `writer_core/tests/build_tests.rs`
@@ -1979,10 +2873,43 @@ fn writer_reports_missing_cas_object_without_semantic_media_diagnostics() {
         .iter()
         .map(|item| item.code.as_str())
         .collect::<Vec<_>>();
-    assert_eq!(result.result_status, "invalid");
+    assert_eq!(result.result_status, "error");
     assert!(codes.contains(&"MEDIA.CAS_OBJECT_MISSING"));
     assert!(!codes.contains(&"MEDIA.MISSING_REFERENCE"));
     assert!(!codes.contains(&"MEDIA.UNUSED_BINDING"));
+}
+
+#[test]
+fn writer_rejects_cross_field_media_invariant_violations() {
+    let root = unique_artifact_root("media-invariant");
+    let media_store = root.join("media-store");
+    let mut normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    normalized.media_objects[0].object_ref = "media://blake3/not-the-object-hash".into();
+    normalized.media_bindings.push(authoring_core::MediaBinding {
+        id: "media:other".into(),
+        export_filename: "other.txt".into(),
+        object_id: "obj:blake3:missing".into(),
+    });
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-invariant")
+        .with_media_store_dir(media_store);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let codes = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+    assert_eq!(result.result_status, "invalid");
+    assert!(codes.contains(&"MEDIA.INVALID_MEDIA_OBJECT_INVARIANT"));
+    assert!(codes.contains(&"MEDIA.MEDIA_OBJECT_MISSING"));
 }
 ```
 
@@ -2153,7 +3080,152 @@ At the start of `validate_normalized_ir`, after `let mut diagnostics = vec![];`,
 diagnostics.extend(validate_media_invariants(normalized_ir));
 ```
 
-- [ ] **Step 6: Materialize staging media from CAS by copy**
+- [ ] **Step 6: Create typed writer media error and streaming helpers**
+
+Create `writer_core/src/media.rs` with:
+
+```rust
+use sha1::{Digest, Sha1};
+use std::fmt;
+use std::fs::File;
+use std::io::{Read, Write};
+use std::path::{Path, PathBuf};
+
+#[derive(Debug)]
+pub enum MediaWriterError {
+    CasObjectMissing { path: PathBuf },
+    CasObjectSizeMismatch { object_id: String },
+    CasObjectBlake3Mismatch { object_id: String },
+    CasObjectSha1Mismatch { object_id: String },
+    CasObjectReadFailed { path: PathBuf, message: String },
+    CasObjectCopyFailed { from: PathBuf, to: PathBuf, message: String },
+    ManifestInvariantViolation { code: &'static str, summary: String },
+}
+
+impl MediaWriterError {
+    pub fn diagnostic_code(&self) -> &'static str {
+        match self {
+            Self::CasObjectMissing { .. } => "MEDIA.CAS_OBJECT_MISSING",
+            Self::CasObjectSizeMismatch { .. } => "MEDIA.CAS_OBJECT_SIZE_MISMATCH",
+            Self::CasObjectBlake3Mismatch { .. } => "MEDIA.CAS_OBJECT_BLAKE3_MISMATCH",
+            Self::CasObjectSha1Mismatch { .. } => "MEDIA.CAS_OBJECT_SHA1_MISMATCH",
+            Self::CasObjectReadFailed { .. } => "MEDIA.CAS_OBJECT_READ_FAILED",
+            Self::CasObjectCopyFailed { .. } => "MEDIA.CAS_OBJECT_COPY_FAILED",
+            Self::ManifestInvariantViolation { code, .. } => code,
+        }
+    }
+}
+
+impl fmt::Display for MediaWriterError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::CasObjectMissing { path } => write!(formatter, "CAS object missing: {}", path.display()),
+            Self::CasObjectSizeMismatch { object_id } => write!(formatter, "CAS object size mismatch: {object_id}"),
+            Self::CasObjectBlake3Mismatch { object_id } => write!(formatter, "CAS object BLAKE3 mismatch: {object_id}"),
+            Self::CasObjectSha1Mismatch { object_id } => write!(formatter, "CAS object SHA-1 mismatch: {object_id}"),
+            Self::CasObjectReadFailed { path, message } => write!(formatter, "CAS object read failed {}: {message}", path.display()),
+            Self::CasObjectCopyFailed { from, to, message } => write!(formatter, "CAS object copy failed {} -> {}: {message}", from.display(), to.display()),
+            Self::ManifestInvariantViolation { summary, .. } => write!(formatter, "{summary}"),
+        }
+    }
+}
+
+impl std::error::Error for MediaWriterError {}
+
+pub fn copy_verified_cas_object_to_path(
+    media_store_dir: &Path,
+    object: &authoring_core::MediaObject,
+    output_path: &Path,
+) -> Result<(), MediaWriterError> {
+    let source = verify_cas_object_streaming(media_store_dir, object)?;
+    let mut input = File::open(&source).map_err(|err| classify_open_error(&source, err))?;
+    let mut output = File::create(output_path).map_err(|err| MediaWriterError::CasObjectCopyFailed {
+        from: source.clone(),
+        to: output_path.to_path_buf(),
+        message: err.to_string(),
+    })?;
+    std::io::copy(&mut input, &mut output).map_err(|err| MediaWriterError::CasObjectCopyFailed {
+        from: source.clone(),
+        to: output_path.to_path_buf(),
+        message: err.to_string(),
+    })?;
+    output.sync_all().map_err(|err| MediaWriterError::CasObjectCopyFailed {
+        from: source.clone(),
+        to: output_path.to_path_buf(),
+        message: err.to_string(),
+    })?;
+    Ok(())
+}
+
+pub fn verify_cas_object_streaming(
+    media_store_dir: &Path,
+    object: &authoring_core::MediaObject,
+) -> Result<PathBuf, MediaWriterError> {
+    let path = authoring_core::object_store_path(media_store_dir, &object.blake3).map_err(|message| {
+        MediaWriterError::ManifestInvariantViolation {
+            code: "MEDIA.INVALID_MEDIA_OBJECT_INVARIANT",
+            summary: message,
+        }
+    })?;
+    let mut file = File::open(&path).map_err(|err| classify_open_error(&path, err))?;
+    let mut blake3_hasher = blake3::Hasher::new();
+    let mut sha1_hasher = Sha1::new();
+    let mut size_bytes = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+
+    loop {
+        let read = file.read(&mut buffer).map_err(|err| MediaWriterError::CasObjectReadFailed {
+            path: path.clone(),
+            message: err.to_string(),
+        })?;
+        if read == 0 {
+            break;
+        }
+        let chunk = &buffer[..read];
+        blake3_hasher.update(chunk);
+        sha1_hasher.update(chunk);
+        size_bytes += read as u64;
+    }
+
+    if size_bytes != object.size_bytes {
+        return Err(MediaWriterError::CasObjectSizeMismatch {
+            object_id: object.id.clone(),
+        });
+    }
+    if blake3_hasher.finalize().to_hex().as_str() != object.blake3 {
+        return Err(MediaWriterError::CasObjectBlake3Mismatch {
+            object_id: object.id.clone(),
+        });
+    }
+    if hex::encode(sha1_hasher.finalize()) != object.sha1 {
+        return Err(MediaWriterError::CasObjectSha1Mismatch {
+            object_id: object.id.clone(),
+        });
+    }
+    Ok(path)
+}
+
+fn classify_open_error(path: &Path, err: std::io::Error) -> MediaWriterError {
+    if err.kind() == std::io::ErrorKind::NotFound {
+        MediaWriterError::CasObjectMissing {
+            path: path.to_path_buf(),
+        }
+    } else {
+        MediaWriterError::CasObjectReadFailed {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        }
+    }
+}
+```
+
+In `writer_core/src/lib.rs`, add:
+
+```rust
+pub mod media;
+```
+
+- [ ] **Step 7: Materialize staging media from CAS by copy**
 
 In `StagingPackage::materialize`, replace the base64 media block with:
 
@@ -2173,47 +3245,19 @@ if !self.manifest.normalized_ir.media_bindings.is_empty() {
         let object = objects_by_id
             .get(binding.object_id.as_str())
             .with_context(|| format!("binding {} references missing object {}", binding.id, binding.object_id))?;
-        let source = authoring_core::object_store_path(&target.media_store_dir, &object.blake3)
-            .map_err(anyhow::Error::msg)?;
-        verify_cas_object(&source, object)?;
         let media_path = validated_media_output_path(&media_dir, &binding.export_filename)?;
-        fs::copy(&source, &media_path).with_context(|| {
-            format!(
-                "copy media object {} into staging media {}",
-                source.display(),
-                media_path.display()
-            )
-        })?;
+        crate::media::copy_verified_cas_object_to_path(
+            &target.media_store_dir,
+            object,
+            &media_path,
+        )?;
     }
 }
 ```
 
-Add:
+This helper must use byte copy, or platform reflink if the codebase already has a reflink helper; it must not create a hardlink from `staging/media` to the mutable CAS path.
 
-```rust
-fn verify_cas_object(path: &Path, object: &authoring_core::MediaObject) -> Result<()> {
-    let bytes = fs::read(path)
-        .with_context(|| format!("read CAS media object {}", path.display()))?;
-    anyhow::ensure!(
-        bytes.len() as u64 == object.size_bytes,
-        "MEDIA.CAS_OBJECT_SIZE_MISMATCH: {}",
-        path.display()
-    );
-    anyhow::ensure!(
-        blake3::hash(&bytes).to_hex().to_string() == object.blake3,
-        "MEDIA.CAS_OBJECT_BLAKE3_MISMATCH: {}",
-        path.display()
-    );
-    anyhow::ensure!(
-        hex::encode(sha1::Sha1::digest(&bytes)) == object.sha1,
-        "MEDIA.CAS_OBJECT_SHA1_MISMATCH: {}",
-        path.display()
-    );
-    Ok(())
-}
-```
-
-- [ ] **Step 7: Convert materialize errors to media-specific build result codes**
+- [ ] **Step 8: Convert materialize errors to media-specific build result codes**
 
 In `writer_core/src/build.rs`, change the error mapping around `package.materialize`:
 
@@ -2221,15 +3265,8 @@ In `writer_core/src/build.rs`, change the error mapping around `package.material
 let materialized = match package.materialize(artifact_target) {
     Ok(materialized) => materialized,
     Err(err) => {
-        let text = err.to_string();
-        let code = if text.contains("No such file") && text.contains("media object") {
-            "MEDIA.CAS_OBJECT_MISSING"
-        } else if text.contains("MEDIA.CAS_OBJECT_SIZE_MISMATCH") {
-            "MEDIA.CAS_OBJECT_SIZE_MISMATCH"
-        } else if text.contains("MEDIA.CAS_OBJECT_BLAKE3_MISMATCH") {
-            "MEDIA.CAS_OBJECT_BLAKE3_MISMATCH"
-        } else if text.contains("MEDIA.CAS_OBJECT_SHA1_MISMATCH") {
-            "MEDIA.CAS_OBJECT_SHA1_MISMATCH"
+        let code = if let Some(media_err) = err.downcast_ref::<crate::media::MediaWriterError>() {
+            media_err.diagnostic_code()
         } else {
             "PHASE3.STAGING_MATERIALIZATION_FAILED"
         };
@@ -2237,7 +3274,7 @@ let materialized = match package.materialize(artifact_target) {
             writer_policy,
             build_context,
             code,
-            text,
+            err.to_string(),
             "materialize_staging",
             "write_manifest",
             Some(artifact_target.staging_manifest_path().display().to_string()),
@@ -2246,27 +3283,28 @@ let materialized = match package.materialize(artifact_target) {
 };
 ```
 
-- [ ] **Step 8: Run writer staging tests**
+- [ ] **Step 9: Run writer staging tests**
 
 Run:
 
 ```bash
 cargo test -p writer_core --test build_tests staging_materializes_media_from_cas_not_inline_payload -v
 cargo test -p writer_core --test build_tests writer_reports_missing_cas_object_without_semantic_media_diagnostics -v
+cargo test -p writer_core --test build_tests writer_rejects_cross_field_media_invariant_violations -v
 ```
 
 Expected: PASS.
 
-- [ ] **Step 9: Commit writer staging changes**
+- [ ] **Step 10: Commit writer staging changes**
 
 Run:
 
 ```bash
-git add writer_core/Cargo.toml writer_core/src/staging.rs writer_core/src/build.rs writer_core/tests/build_tests.rs
+git add writer_core/Cargo.toml writer_core/src/lib.rs writer_core/src/media.rs writer_core/src/staging.rs writer_core/src/build.rs writer_core/tests/build_tests.rs
 git commit -m "feat: materialize staging media from cas"
 ```
 
-## Task 7: APKG Media From CAS and Stable Ordering
+## Task 8: APKG Media From CAS and Stable Ordering
 
 **Files:**
 - Modify: `writer_core/src/apkg.rs`
@@ -2368,7 +3406,9 @@ to:
 write_media_payloads_and_map(&mut zip, &normalized_ir, &artifact_target.media_store_dir)?;
 ```
 
-- [ ] **Step 4: Implement CAS-backed APKG media loop**
+Remove the now-unused `staging_dir` variable from `emit_apkg`; APKG media is read from CAS and no longer depends on `staging/media`.
+
+- [ ] **Step 4: Implement streaming CAS-backed APKG media loop**
 
 Replace the loop in `write_media_payloads_and_map` with:
 
@@ -2383,10 +3423,8 @@ for (index, binding) in normalized_ir.media_bindings.iter().enumerate() {
     let object = objects_by_id
         .get(binding.object_id.as_str())
         .with_context(|| format!("binding {} references missing object {}", binding.id, binding.object_id))?;
-    let payload = read_media_payload(media_store_dir, object)?;
-    let encoded = zstd::stream::encode_all(payload.as_slice(), 0)
-        .context("compress media payload for apkg")?;
-    write_stored_entry(zip, &index.to_string(), &encoded)?;
+    let source = crate::media::verify_cas_object_streaming(media_store_dir, object)?;
+    write_zstd_file_entry(zip, &index.to_string(), &source)?;
     entries.push(MediaEntry {
         name: binding.export_filename.clone(),
         size: object.size_bytes as u32,
@@ -2397,19 +3435,25 @@ for (index, binding) in normalized_ir.media_bindings.iter().enumerate() {
 }
 ```
 
-Change `read_media_payload` to:
+Delete `read_media_payload` and add this streaming writer helper near `write_zstd_stored_entry`:
 
 ```rust
-fn read_media_payload(media_store_dir: &Path, object: &authoring_core::MediaObject) -> Result<Vec<u8>> {
-    let path = authoring_core::object_store_path(media_store_dir, &object.blake3)
-        .map_err(anyhow::Error::msg)?;
-    let bytes = fs::read(&path).with_context(|| format!("read media object {}", path.display()))?;
-    anyhow::ensure!(bytes.len() as u64 == object.size_bytes, "media object size mismatch {}", object.id);
-    anyhow::ensure!(blake3::hash(&bytes).to_hex().to_string() == object.blake3, "media object blake3 mismatch {}", object.id);
-    anyhow::ensure!(hex::encode(Sha1::digest(&bytes)) == object.sha1, "media object sha1 mismatch {}", object.id);
-    Ok(bytes)
+fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> Result<()> {
+    zip.start_file(
+        name,
+        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+    )?;
+    let mut input = File::open(path).with_context(|| format!("open media object {}", path.display()))?;
+    let mut encoder = zstd::stream::Encoder::new(zip, 0)
+        .context("create zstd encoder for media payload")?;
+    std::io::copy(&mut input, &mut encoder)
+        .with_context(|| format!("stream-compress media object {}", path.display()))?;
+    encoder.finish().context("finish zstd media payload")?;
+    Ok(())
 }
 ```
+
+Keep `zstd::stream::encode_all` only for the APKG media map because that payload is the small protobuf index, not the media bytes.
 
 - [ ] **Step 5: Run APKG tests**
 
@@ -2431,7 +3475,7 @@ git add writer_core/src/apkg.rs writer_core/tests/build_tests.rs
 git commit -m "feat: write apkg media from cas objects"
 ```
 
-## Task 8: Inspect Surface Updates
+## Task 9: Inspect Surface Updates
 
 **Files:**
 - Modify: `writer_core/src/inspect.rs`
@@ -2593,7 +3637,7 @@ git add writer_core/src/inspect.rs writer_core/tests/inspect_tests.rs
 git commit -m "feat: inspect cas-backed media surfaces"
 ```
 
-## Task 9: Rust Facade, Deck, Product, and Runtime Flow
+## Task 10: Rust Facade, Deck, Product, and Runtime Flow
 
 **Files:**
 - Modify: `anki_forge/src/deck/media.rs`
@@ -2632,6 +3676,31 @@ fn deck_build_uses_cas_media_without_normalized_base64_payload() {
     assert!(manifest.contains("media_bindings"));
     assert!(!manifest.contains("data_base64"));
 }
+
+#[test]
+fn deck_build_keeps_file_media_path_backed_until_normalize() {
+    let root = unique_artifacts_dir("deck-file-cas-build");
+    let source_dir = root.join("source");
+    std::fs::create_dir_all(&source_dir).unwrap();
+    std::fs::write(source_dir.join("hello.txt"), b"hello").unwrap();
+    let mut deck = anki_forge::Deck::builder("Media Deck").stable_id("media-deck").build();
+    let media = deck
+        .media()
+        .add(anki_forge::MediaSource::from_file(source_dir.join("hello.txt")))
+        .unwrap();
+    deck.basic()
+        .note("front", format!("<img src=\"{}\">", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+
+    let build = deck.build(&root).unwrap();
+    let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
+
+    assert!(root.join(".anki-forge-media-input/hello.txt").is_file());
+    assert!(manifest.contains("media_objects"));
+    assert!(!manifest.contains("data_base64"));
+}
 ```
 
 Use the existing `unique_artifacts_dir` helper already defined in
@@ -2660,50 +3729,193 @@ pub(crate) sha1_hex: String,
 with:
 
 ```rust
-pub(crate) source: crate::AuthoringMediaSource,
+pub(crate) source: RegisteredMediaSource,
 pub(crate) declared_mime: Option<String>,
 pub(crate) sha1_hex: String,
 ```
 
 Keep `sha1_hex` and raster metadata for identity and image occlusion behavior.
+Add this internal source enum in the same file:
+
+```rust
+use std::path::PathBuf;
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub(crate) enum RegisteredMediaSource {
+    File { path: PathBuf },
+    InlineBytes { data_base64: String },
+}
+```
 
 - [ ] **Step 4: Update deck media registration**
 
-In `anki_forge/src/deck/media.rs`, keep reading bytes for `sha1_hex` and raster metadata, but build an authoring source:
+In `anki_forge/src/deck/media.rs`, stop converting file inputs into inline bytes. File inputs stay path-backed; byte inputs remain inline because callers already supplied them in memory.
 
 ```rust
-let source = match source {
+let (name, registered_source, sha1_hex, raster_image) = match source {
     MediaSource::File { path } => {
-        let bytes = std::fs::read(&path)?;
         let name = path
             .file_name()
             .and_then(|item| item.to_str())
             .ok_or_else(|| anyhow::anyhow!("media path must end in a valid filename"))?
             .to_string();
-        (name, bytes, crate::AuthoringMediaSource::InlineBytes {
-            data_base64: base64::engine::general_purpose::STANDARD.encode(&bytes),
-        })
+        validate_source_file(&path)?;
+        let sha1_hex = sha1_file_hex(&path)?;
+        let raster_image = raster_image_metadata_from_path(&name, &path);
+        (
+            name,
+            crate::deck::model::RegisteredMediaSource::File { path },
+            sha1_hex,
+            raster_image,
+        )
     }
     MediaSource::Bytes { name, bytes } => {
+        let sha1_hex = hex::encode(Sha1::digest(&bytes));
+        let raster_image = raster_image_metadata_from_bytes(&name, &bytes);
         let encoded = base64::engine::general_purpose::STANDARD.encode(&bytes);
-        (name, bytes, crate::AuthoringMediaSource::InlineBytes { data_base64: encoded })
+        (
+            name,
+            crate::deck::model::RegisteredMediaSource::InlineBytes { data_base64: encoded },
+            sha1_hex,
+            raster_image,
+        )
     }
 };
 ```
 
-Store `declared_mime: Some(mime_from_name(&name))`. This keeps the existing high-level API stable while ensuring normalized output is CAS-backed after normalization.
+Add these helpers in `anki_forge/src/deck/media.rs`:
+
+```rust
+fn validate_source_file(path: &Path) -> anyhow::Result<()> {
+    let metadata = std::fs::metadata(path)
+        .with_context(|| format!("stat media file {}", path.display()))?;
+    anyhow::ensure!(metadata.is_file(), "media source must be a regular file: {}", path.display());
+    Ok(())
+}
+
+fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
+    let mut file = std::fs::File::open(path)
+        .with_context(|| format!("open media file {}", path.display()))?;
+    let mut hasher = Sha1::new();
+    let mut buffer = [0_u8; 64 * 1024];
+    loop {
+        let read = std::io::Read::read(&mut file, &mut buffer)
+            .with_context(|| format!("read media file {}", path.display()))?;
+        if read == 0 {
+            break;
+        }
+        hasher.update(&buffer[..read]);
+    }
+    Ok(hex::encode(hasher.finalize()))
+}
+
+fn raster_image_metadata_from_path(name: &str, path: &Path) -> Option<RasterImageMetadata> {
+    match mime_from_name(name).as_str() {
+        "image/png" | "image/jpeg" => imagesize::size(path)
+            .ok()
+            .map(|size| RasterImageMetadata {
+                width_px: size.width as u32,
+                height_px: size.height as u32,
+            }),
+        _ => None,
+    }
+}
+
+fn raster_image_metadata_from_bytes(name: &str, bytes: &[u8]) -> Option<RasterImageMetadata> {
+    match mime_from_name(name).as_str() {
+        "image/png" | "image/jpeg" => imagesize::blob_size(bytes)
+            .ok()
+            .map(|size| RasterImageMetadata {
+                width_px: size.width as u32,
+                height_px: size.height as u32,
+            }),
+        _ => None,
+    }
+}
+```
+
+Store `declared_mime: Some(mime_from_name(&name))`. Replace `repair_missing_raster_image_metadata` with:
+
+```rust
+fn repair_missing_raster_image_metadata(registered: &mut RegisteredMedia) {
+    if registered.raster_image.is_some() {
+        return;
+    }
+
+    registered.raster_image = match &registered.source {
+        crate::deck::model::RegisteredMediaSource::File { path } => {
+            raster_image_metadata_from_path(&registered.name, path)
+        }
+        crate::deck::model::RegisteredMediaSource::InlineBytes { data_base64 } => {
+            let Ok(bytes) = base64::engine::general_purpose::STANDARD.decode(data_base64) else {
+                return;
+            };
+            raster_image_metadata_from_bytes(&registered.name, &bytes)
+        }
+    };
+}
+```
 
 - [ ] **Step 5: Update deck lowering**
 
-In `anki_forge/src/deck/lowering.rs`, replace the media extension block with:
+In `anki_forge/src/deck/lowering.rs`, add a fallible lowering entry point that receives the build-local media source root:
 
 ```rust
-lowered.media.extend(self.media.values().map(|media| crate::AuthoringMedia {
-    id: format!("media:{}", media.name),
-    desired_filename: media.name.clone(),
-    source: media.source.clone(),
-    declared_mime: media.declared_mime.clone(),
-}));
+pub fn lower_authoring_with_media_source_dir(
+    &self,
+    media_source_dir: &Path,
+) -> anyhow::Result<crate::AuthoringDocument> {
+    let product = self.clone().into_product_document()?;
+    let mut lowered = product
+        .lower()
+        .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?
+        .authoring_document;
+    lowered.media.extend(
+        self.media
+            .values()
+            .map(|media| media.to_authoring_media(media_source_dir))
+            .collect::<anyhow::Result<Vec<_>>>()?,
+    );
+    Ok(lowered)
+}
+```
+
+Add this method to `RegisteredMedia` in `anki_forge/src/deck/media.rs`:
+
+```rust
+pub(crate) fn to_authoring_media(
+    &self,
+    media_source_dir: &Path,
+) -> anyhow::Result<crate::AuthoringMedia> {
+    let source = match &self.source {
+        crate::deck::model::RegisteredMediaSource::File { path } => {
+            std::fs::create_dir_all(media_source_dir)
+                .with_context(|| format!("create media source dir {}", media_source_dir.display()))?;
+            let staged_source = media_source_dir.join(&self.name);
+            std::fs::copy(path, &staged_source).with_context(|| {
+                format!(
+                    "copy media source {} into {}",
+                    path.display(),
+                    staged_source.display()
+                )
+            })?;
+            crate::AuthoringMediaSource::Path {
+                path: self.name.clone(),
+            }
+        }
+        crate::deck::model::RegisteredMediaSource::InlineBytes { data_base64 } => {
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: data_base64.clone(),
+            }
+        }
+    };
+    Ok(crate::AuthoringMedia {
+        id: format!("media:{}", self.name),
+        desired_filename: self.name.clone(),
+        source,
+        declared_mime: self.declared_mime.clone(),
+    })
+}
 ```
 
 - [ ] **Step 6: Update package build to call normalize_with_options**
@@ -2714,13 +3926,15 @@ In `anki_forge/src/deck/export.rs`, change imports to:
 use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
 ```
 
-Before normalizing in `build_package`, add:
+Before lowering and normalizing in `build_package`, add:
 
 ```rust
 let artifacts_dir = artifacts_dir.as_ref();
+let media_source_dir = artifacts_dir.join(".anki-forge-media-input");
 let media_store_dir = artifacts_dir.join(".anki-forge-media");
+let lowered = root_deck.lower_authoring_with_media_source_dir(&media_source_dir)?;
 let normalize_options = NormalizeOptions {
-    base_dir: std::env::current_dir().context("resolve current directory")?,
+    base_dir: media_source_dir.clone(),
     media_store_dir: media_store_dir.clone(),
     media_policy: MediaPolicy::default_strict(),
 };
@@ -2808,6 +4022,7 @@ Run:
 
 ```bash
 cargo test -p anki_forge --test deck_export_tests deck_build_uses_cas_media_without_normalized_base64_payload -v
+cargo test -p anki_forge --test deck_export_tests deck_build_keeps_file_media_path_backed_until_normalize -v
 cargo test -p anki_forge -v
 ```
 
@@ -2822,7 +4037,7 @@ git add anki_forge/src/deck/media.rs anki_forge/src/deck/model.rs anki_forge/src
 git commit -m "feat: route high-level media through cas normalize"
 ```
 
-## Task 10: Fixture Migration and Full Verification
+## Task 11: Fixture Migration and Full Verification
 
 **Files:**
 - Modify: `contracts/fixtures/**/*.json`
@@ -2838,7 +4053,7 @@ Run:
 rg -n '"data_base64"|"NormalizedMedia"|'\''data_base64'\''' .
 ```
 
-Expected: Output only from authoring inline-byte source schema/tests/helpers and historical spec text. No `NormalizedMedia` type and no writer-side `data_base64` read path should remain.
+Expected: Output only from authoring inline-byte source schema/tests/helpers, high-level in-memory byte registration, product inline asset lowering, and historical spec text. No `NormalizedMedia` type and no normalized/writer-side `data_base64` read path should remain.
 
 - [ ] **Step 2: Rewrite JSON fixtures**
 
@@ -2936,7 +4151,7 @@ Run:
 rg -n '"media"\s*:\s*\[|"data_base64"|NormalizedMedia|decode\(media\.data_base64|normalized_ir\.media' authoring_core writer_core anki_forge contracts
 ```
 
-Expected: No writer/normalized legacy payload usage. Matches for authoring inline bytes are allowed only when nested under `"source": { "kind": "inline_bytes" }`.
+Expected: No writer/normalized legacy payload usage. Matches for authoring inline bytes are allowed only under authoring source construction, high-level in-memory byte registration, product inline asset lowering, schema/tests, or historical docs.
 
 - [ ] **Step 7: Commit fixture and verification updates**
 
