@@ -28,4 +28,7 @@ For staging sources, note deck names come directly from normalized IR and card
 deck names are computed as `template.target_deck_name ?? note.deck_name`. For
 APKG sources, the original note-level import deck is not stored separately in
 Anki's collection schema, so inspection reconstructs `notes[].deck_name` from
-the first existing card deck, matching Anki's text export behavior.
+the first existing card deck, matching Anki's text export behavior. This APKG
+note deck is an observational reconstruction, not authoritative source recovery:
+it may differ from the original note deck when the first card was routed by a
+template target deck override or when a note's cards live in multiple decks.
