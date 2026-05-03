@@ -101,6 +101,7 @@ struct CollectionData {
     notetypes: Vec<NormalizedNotetype>,
     notes: Vec<NormalizedNote>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+    actual_card_decks: BTreeMap<(String, usize), String>,
 }
 
 pub fn inspect_build_result(
@@ -158,6 +159,7 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &manifest.normalized_ir,
         &media,
         &manifest.template_target_decks,
+        &BTreeMap::new(),
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
@@ -199,12 +201,14 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     };
     let mut has_core_data = false;
     let mut template_target_decks = vec![];
+    let mut actual_card_decks = BTreeMap::new();
 
     if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
         let collection = read_collection_data(&collection_bytes)?;
         normalized_ir.notetypes = collection.notetypes;
         normalized_ir.notes = collection.notes;
         template_target_decks = collection.template_target_decks;
+        actual_card_decks = collection.actual_card_decks;
         has_core_data = true;
     } else {
         limitations.missing_domains.insert(DOMAIN_NOTETYPES.into());
@@ -216,7 +220,12 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
             .push("collection database is unavailable".into());
     }
 
-    let observations = build_observations(&normalized_ir, &media, &template_target_decks);
+    let observations = build_observations(
+        &normalized_ir,
+        &media,
+        &template_target_decks,
+        &actual_card_decks,
+    );
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
 
@@ -319,6 +328,7 @@ fn build_observations(
     normalized_ir: &NormalizedIr,
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
+    actual_card_decks: &BTreeMap<(String, usize), String>,
 ) -> InspectObservations {
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
         .notetypes
@@ -437,6 +447,7 @@ fn build_observations(
             "selector": format!("note[id='{}']", note_id),
             "id": note_id,
             "notetype_id": notetype_id,
+            "deck_name": note.deck_name.as_str(),
             "tags": &note.tags,
             "fields": &note.fields,
             "evidence_refs": [format!("note:{}", note_id)],
@@ -444,11 +455,17 @@ fn build_observations(
 
         for (ord, template) in notetype.templates.iter().enumerate() {
             let template_name = template.name.as_str();
+            let card_deck_name = actual_card_decks
+                .get(&(note_id.to_string(), ord))
+                .map(String::as_str)
+                .or(template.target_deck_name.as_deref())
+                .unwrap_or(note.deck_name.as_str());
             card_entries.push(json!({
                 "selector": format!("card[note_id='{}'][ord={}]", note_id, ord),
                 "note_id": note_id,
                 "ord": ord,
                 "template_name": template_name,
+                "deck_name": card_deck_name,
                 "evidence_refs": [format!("card:{}:{}", note_id, ord)],
             }));
         }
@@ -842,11 +859,52 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
             notetype_values.push(notetype);
         }
 
+        let mut note_decks_by_row_id = BTreeMap::<i64, String>::new();
+        let mut note_deck_rows = conn.prepare(
+            "select cards.nid, decks.name
+             from cards
+             left join decks on decks.id = cards.did
+             where cards.ord = (
+                 select min(inner_cards.ord)
+                 from cards inner_cards
+                 where inner_cards.nid = cards.nid
+             )
+             order by cards.nid",
+        )?;
+        for row in note_deck_rows.query_map([], |row| {
+            Ok((row.get::<_, i64>(0)?, row.get::<_, Option<String>>(1)?))
+        })? {
+            let (note_id, deck_name) = row?;
+            note_decks_by_row_id.insert(note_id, deck_name.unwrap_or_else(|| "Default".into()));
+        }
+
+        let mut actual_card_decks = BTreeMap::<(String, usize), String>::new();
+        let mut card_deck_rows = conn.prepare(
+            "select notes.guid, cards.ord, decks.name
+             from cards
+             join notes on notes.id = cards.nid
+             left join decks on decks.id = cards.did
+             order by notes.guid, cards.ord",
+        )?;
+        for row in card_deck_rows.query_map([], |row| {
+            Ok((
+                row.get::<_, String>(0)?,
+                row.get::<_, i64>(1)?,
+                row.get::<_, Option<String>>(2)?,
+            ))
+        })? {
+            let (note_guid, ord, deck_name) = row?;
+            actual_card_decks.insert(
+                (note_guid, ord as usize),
+                deck_name.unwrap_or_else(|| "Default".into()),
+            );
+        }
+
         let mut note_rows =
             conn.prepare("select id, guid, mid, mod, tags, flds from notes order by id")?;
         let notes = note_rows
             .query_map([], |row| {
-                let _id: i64 = row.get(0)?;
+                let id: i64 = row.get(0)?;
                 let guid: String = row.get(1)?;
                 let mid: i64 = row.get(2)?;
                 let mtime_secs: i64 = row.get(3)?;
@@ -867,7 +925,10 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                 Ok(NormalizedNote {
                     id: guid,
                     notetype_id: notetype.id.clone(),
-                    deck_name: "Default".into(),
+                    deck_name: note_decks_by_row_id
+                        .get(&id)
+                        .cloned()
+                        .unwrap_or_else(|| "Default".into()),
                     fields,
                     tags: if tags.is_empty() {
                         vec![]
@@ -883,6 +944,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
             notetypes: notetype_values,
             notes,
             template_target_decks,
+            actual_card_decks,
         })
     })
 }

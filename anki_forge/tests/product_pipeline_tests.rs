@@ -54,7 +54,7 @@ fn browser_appearance_and_template_target_deck_survive_lower_normalize_and_build
                 deck_name: "Custom::Deck".into(),
             },
         )
-        .add_basic_note("basic-main", "note-1", "IGNORED", "front", "back")
+        .add_basic_note("basic-main", "note-1", "Default", "front", "back")
         .lower()
         .expect("lower product document");
 

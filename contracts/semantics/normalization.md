@@ -47,6 +47,13 @@ lane. The normalized output carries through:
   `browser_font_name`, and `browser_font_size`
 - `field_metadata` entries including `field_name`, `label`, and `role_hint`
 
+Normalization preserves `notes[].deck_name` independently from
+`notetypes[].templates[].target_deck_name`. The note deck represents the deck
+selected by authoring/import input for new cards from that note, while the
+template target deck represents Anki's per-template Deck Override. Normalization
+must not copy a note deck into template target deck fields or copy a template
+target deck into note deck fields.
+
 This explicit-lowered bridge allows upstream product authoring to preserve
 stock-compatible payloads and custom `normal` notetype declarations without
 inventing a separate downstream kind taxonomy.

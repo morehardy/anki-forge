@@ -193,15 +193,12 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     }
 
     for note in document.notes() {
-        let deck_name = document
-            .default_deck_name()
-            .map(str::to_owned)
-            .unwrap_or_else(|| match note {
-                ProductNote::Basic(basic) => basic.deck_name.clone(),
-                ProductNote::Cloze(cloze) => cloze.deck_name.clone(),
-                ProductNote::ImageOcclusion(io) => io.deck_name.clone(),
-                ProductNote::Custom(custom) => custom.deck_name.clone(),
-            });
+        let deck_name = match note {
+            ProductNote::Basic(basic) => basic.deck_name.clone(),
+            ProductNote::Cloze(cloze) => cloze.deck_name.clone(),
+            ProductNote::ImageOcclusion(io) => io.deck_name.clone(),
+            ProductNote::Custom(custom) => custom.deck_name.clone(),
+        };
         match note {
             ProductNote::Basic(basic) => {
                 let mut fields: BTreeMap<String, String> = BTreeMap::new();
