@@ -171,6 +171,41 @@ fn inspect_apkg_reports_complete_observations_and_counts() {
 }
 
 #[test]
+fn inspect_apkg_reports_note_and_card_deck_names() {
+    let root = unique_artifact_root("inspect-apkg-deck-routing");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg-deck-routing");
+    let mut normalized_ir = sample_basic_normalized_ir();
+    normalized_ir.notes[0].deck_name = "Biology::Cells".into();
+
+    build(
+        &normalized_ir,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    let note = report
+        .observations
+        .references
+        .iter()
+        .find(|value| value["selector"] == "note[id='note-1']")
+        .expect("note observation");
+    assert_eq!(note["deck_name"], "Biology::Cells");
+
+    let card = report
+        .observations
+        .references
+        .iter()
+        .find(|value| value["selector"] == "card[note_id='note-1'][ord=0]")
+        .expect("card observation");
+    assert_eq!(card["deck_name"], "Biology::Cells");
+}
+
+#[test]
 fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
     let left_root = unique_artifact_root("inspect-fingerprint-left");
     let right_root = unique_artifact_root("inspect-fingerprint-right");
