@@ -711,8 +711,7 @@ fn latest_collection_places_cards_in_note_deck_when_template_has_no_target_deck(
 #[test]
 fn latest_collection_template_target_deck_overrides_note_deck_for_cards() {
     let root = unique_artifact_root("template-deck-routing");
-    let target =
-        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/template-deck-routing");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/template-deck-routing");
     let mut normalized = sample_basic_normalized_ir();
     normalized.notes[0].deck_name = "Biology::Cells".into();
     normalized.notetypes[0].templates[0].target_deck_name = Some("Biology::Overrides".into());
