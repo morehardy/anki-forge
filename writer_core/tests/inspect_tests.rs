@@ -206,6 +206,53 @@ fn inspect_apkg_reports_note_and_card_deck_names() {
 }
 
 #[test]
+fn inspect_apkg_reports_actual_card_decks_for_mixed_template_routing() {
+    let root = unique_artifact_root("inspect-apkg-mixed-template-routing");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-apkg-mixed-template-routing",
+    );
+    let mut normalized_ir = sample_basic_normalized_ir();
+    normalized_ir.notes[0].deck_name = "Biology::Cells".into();
+    normalized_ir.notetypes[0].kind = "normal".into();
+    normalized_ir.notetypes[0].original_stock_kind = None;
+    normalized_ir.notetypes[0].templates[0].target_deck_name = Some("Biology::Overrides".into());
+
+    let mut second_template = normalized_ir.notetypes[0].templates[0].clone();
+    second_template.name = "Card 2".into();
+    second_template.ord = Some(1);
+    second_template.target_deck_name = None;
+    normalized_ir.notetypes[0].templates.push(second_template);
+
+    let result = build(
+        &normalized_ir,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+    assert!(result.apkg_ref.is_some(), "{result:#?}");
+
+    let report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    let first_card = report
+        .observations
+        .references
+        .iter()
+        .find(|value| value["selector"] == "card[note_id='note-1'][ord=0]")
+        .expect("first card observation");
+    assert_eq!(first_card["deck_name"], "Biology::Overrides");
+
+    let second_card = report
+        .observations
+        .references
+        .iter()
+        .find(|value| value["selector"] == "card[note_id='note-1'][ord=1]")
+        .expect("second card observation");
+    assert_eq!(second_card["deck_name"], "Biology::Cells");
+}
+
+#[test]
 fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
     let left_root = unique_artifact_root("inspect-fingerprint-left");
     let right_root = unique_artifact_root("inspect-fingerprint-right");
