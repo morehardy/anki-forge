@@ -820,6 +820,116 @@ fn exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename() {
 }
 
 #[test]
+fn apkg_media_entries_follow_export_filename_then_media_id_order() {
+    let root = unique_artifact_root("apkg-order");
+    let media_store = root.join("media-store");
+    let mut normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "b.txt", b"b");
+    let second = sample_basic_normalized_ir_with_cas_media(&media_store, "a.txt", b"a");
+    normalized.media_objects.extend(second.media_objects);
+    normalized.media_bindings.extend(second.media_bindings);
+    normalized.media_bindings[0].id = "media:b".into();
+    normalized.media_bindings[1].id = "media:a".into();
+    normalized.media_bindings.sort_by(|left, right| {
+        left.export_filename
+            .as_bytes()
+            .cmp(right.export_filename.as_bytes())
+            .then_with(|| left.id.as_bytes().cmp(right.id.as_bytes()))
+    });
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/apkg-order")
+        .with_media_store_dir(media_store);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let media_entries = decode_media_entries(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "media").as_slice()).unwrap(),
+    );
+    assert_eq!(media_entries.entries[0].name, "a.txt");
+    assert_eq!(media_entries.entries[1].name, "b.txt");
+}
+
+#[test]
+fn apkg_writes_duplicate_object_once_per_export_filename() {
+    let root = unique_artifact_root("apkg-deduped-object");
+    let media_store = root.join("media-store");
+    let mut normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "a.txt", b"same");
+    normalized
+        .media_bindings
+        .push(authoring_core::MediaBinding {
+            id: "media:b".into(),
+            export_filename: "b.txt".into(),
+            object_id: normalized.media_objects[0].id.clone(),
+        });
+    normalized.media_bindings.sort_by(|left, right| {
+        left.export_filename
+            .as_bytes()
+            .cmp(right.export_filename.as_bytes())
+            .then_with(|| left.id.as_bytes().cmp(right.id.as_bytes()))
+    });
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/apkg-deduped-object")
+        .with_media_store_dir(media_store);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let mut archive = open_zip(&root.join("package.apkg"));
+    let names = archive_names(&mut archive);
+    assert!(names.contains("0"));
+    assert!(names.contains("1"));
+    assert_eq!(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "0").as_slice()).unwrap(),
+        b"same"
+    );
+    assert_eq!(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "1").as_slice()).unwrap(),
+        b"same"
+    );
+    let media_entries = decode_media_entries(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "media").as_slice()).unwrap(),
+    );
+    assert_eq!(media_entries.entries[0].name, "a.txt");
+    assert_eq!(media_entries.entries[1].name, "b.txt");
+}
+
+#[test]
+fn emit_apkg_reads_media_from_cas_without_staging_media_dir() {
+    let root = unique_artifact_root("apkg-cas-source");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/apkg-cas-source")
+        .with_media_store_dir(media_store.clone());
+    let normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
+    let package = StagingPackage::from_normalized(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+    )
+    .unwrap();
+    let materialized = package.materialize(&target).unwrap();
+    let staging_media_dir = materialized.manifest_path.parent().unwrap().join("media");
+    fs::remove_dir_all(&staging_media_dir).unwrap();
+
+    let apkg = writer_core::apkg::emit_apkg(&materialized, &target).unwrap();
+
+    let mut archive = open_zip(&apkg.apkg_path);
+    assert_eq!(
+        zstd::stream::decode_all(read_zip_entry_bytes(&mut archive, "0").as_slice()).unwrap(),
+        b"hello"
+    );
+}
+
+#[test]
 fn latest_collection_derives_sfld_and_csum_from_first_notetype_field() {
     let root = unique_artifact_root("note-storage-first-field");
     let target =

@@ -80,10 +80,6 @@ pub fn emit_apkg(
     artifact_target: &BuildArtifactTarget,
 ) -> Result<ApkgMaterialization> {
     let normalized_ir = load_normalized_ir_from_staging_manifest(&materialized.manifest_path)?;
-    let staging_dir = materialized
-        .manifest_path
-        .parent()
-        .context("materialized staging manifest should live under a staging directory")?;
 
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
@@ -107,7 +103,7 @@ pub fn emit_apkg(
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
 
-    write_media_payloads_and_map(&mut zip, &normalized_ir, staging_dir)?;
+    write_media_payloads_and_map(&mut zip, &normalized_ir, &artifact_target.media_store_dir)?;
 
     zip.finish()?;
     fs::rename(&temp_path, &apkg_path).with_context(|| {
@@ -158,21 +154,32 @@ fn package_fingerprint(bytes: &[u8]) -> String {
 fn write_media_payloads_and_map(
     zip: &mut ZipWriter<File>,
     normalized_ir: &NormalizedIr,
-    staging_dir: &Path,
+    media_store_dir: &Path,
 ) -> Result<()> {
     let mut entries = Vec::new();
-    let media_dir = staging_dir.join("media");
+    let objects_by_id = normalized_ir
+        .media_objects
+        .iter()
+        .map(|object| (object.id.as_str(), object))
+        .collect::<std::collections::BTreeMap<_, _>>();
 
     for (index, binding) in normalized_ir.media_bindings.iter().enumerate() {
-        let payload = read_media_payload(&media_dir, &binding.export_filename)?;
-        let sha1 = Sha1::digest(&payload).to_vec();
-        let encoded = zstd::stream::encode_all(payload.as_slice(), 0)
-            .context("compress media payload for apkg")?;
-        write_stored_entry(zip, &index.to_string(), &encoded)?;
+        let object = objects_by_id
+            .get(binding.object_id.as_str())
+            .with_context(|| {
+                format!(
+                    "binding {} references missing object {}",
+                    binding.id, binding.object_id
+                )
+            })?;
+        let source = crate::media::verify_cas_object_streaming(media_store_dir, object)?;
+        write_zstd_file_entry(zip, &index.to_string(), &source)?;
+        let size = apkg_media_size(object.size_bytes, &object.id)?;
         entries.push(MediaEntry {
             name: binding.export_filename.clone(),
-            size: payload.len() as u32,
-            sha1,
+            size,
+            sha1: hex::decode(&object.sha1)
+                .with_context(|| format!("decode sha1 for media object {}", object.id))?,
             legacy_zip_filename: None,
         });
     }
@@ -185,9 +192,10 @@ fn write_media_payloads_and_map(
     Ok(())
 }
 
-fn read_media_payload(media_dir: &Path, filename: &str) -> Result<Vec<u8>> {
-    let path = media_dir.join(filename);
-    fs::read(&path).with_context(|| format!("read materialized media {}", path.display()))
+fn apkg_media_size(size_bytes: u64, object_id: &str) -> Result<u32> {
+    u32::try_from(size_bytes).with_context(|| {
+        format!("media object {object_id} size {size_bytes} exceeds APKG uint32 media map limit")
+    })
 }
 
 fn write_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Result<()> {
@@ -202,6 +210,21 @@ fn write_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Re
 fn write_zstd_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Result<()> {
     let compressed = zstd::stream::encode_all(bytes, 0)?;
     write_stored_entry(zip, name, &compressed)
+}
+
+fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> Result<()> {
+    zip.start_file(
+        name,
+        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+    )?;
+    let mut input =
+        File::open(path).with_context(|| format!("open media object {}", path.display()))?;
+    let mut encoder =
+        zstd::stream::Encoder::new(zip, 0).context("create zstd encoder for media payload")?;
+    std::io::copy(&mut input, &mut encoder)
+        .with_context(|| format!("stream-compress media object {}", path.display()))?;
+    encoder.finish().context("finish zstd media payload")?;
+    Ok(())
 }
 
 fn create_latest_collection_bytes(
@@ -776,5 +799,23 @@ mod tests {
         let decoded = UpstreamShapeMediaEntry::decode(entry.encode_to_vec().as_slice()).unwrap();
 
         assert_eq!(decoded.legacy_zip_filename, Some(7));
+    }
+
+    #[test]
+    fn apkg_media_size_rejects_values_above_uint32_range() {
+        let err = apkg_media_size(u64::from(u32::MAX) + 1, "object:too-large").unwrap_err();
+
+        assert!(
+            err.to_string().contains("object:too-large"),
+            "error should identify the media object: {err:?}"
+        );
+    }
+
+    #[test]
+    fn apkg_media_size_accepts_uint32_max() {
+        assert_eq!(
+            apkg_media_size(u64::from(u32::MAX), "object:max").unwrap(),
+            u32::MAX
+        );
     }
 }
