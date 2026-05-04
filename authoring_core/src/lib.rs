@@ -11,8 +11,9 @@ pub mod stock;
 pub use canonical_json::to_canonical_json;
 pub use identity::{resolve_identity, DefaultNonceSource, NonceSource};
 pub use media::{
-    media_object_id, media_object_ref, sort_media_bindings, sort_media_objects,
-    sort_media_references, AuthoringMediaSource, DiagnosticBehavior, MediaBinding, MediaObject,
+    ingest_authoring_media, media_object_id, media_object_ref, sort_media_bindings,
+    sort_media_objects, sort_media_references, AuthoringMediaSource, DiagnosticBehavior,
+    MediaBinding, MediaIngestDiagnostic, MediaIngestError, MediaIngestResult, MediaObject,
     MediaPolicy, MediaReference, MediaReferenceResolution, NormalizeOptions,
 };
 pub use media_io::{

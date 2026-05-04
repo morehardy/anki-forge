@@ -1,8 +1,10 @@
 use authoring_core::{
-    sort_media_bindings, sort_media_objects, sort_media_references, AuthoringMedia,
-    AuthoringMediaSource, DiagnosticBehavior, MediaBinding, MediaObject, MediaPolicy,
-    MediaReference, MediaReferenceResolution, NormalizeOptions, NormalizedIr,
+    ingest_authoring_media, object_store_path, sort_media_bindings, sort_media_objects,
+    sort_media_references, AuthoringMedia, AuthoringMediaSource, DiagnosticBehavior, MediaBinding,
+    MediaObject, MediaPolicy, MediaReference, MediaReferenceResolution, NormalizeOptions,
+    NormalizedIr,
 };
+use std::fs;
 use std::path::PathBuf;
 
 #[test]
@@ -205,6 +207,491 @@ fn sort_media_references_orders_by_owner_location_raw_kind_and_resolution() {
     );
 }
 
+#[test]
+fn ingest_path_source_writes_original_bytes_to_cas() {
+    let root = unique_test_root("path-source");
+    let base_dir = root.join("input");
+    let store_dir = root.join("store");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &store_dir);
+    let media = vec![AuthoringMedia {
+        id: "media:hello".into(),
+        desired_filename: "hello.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/hello.txt".into(),
+        },
+        declared_mime: Some("text/plain".into()),
+    }];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert!(result.diagnostics.is_empty());
+    assert_eq!(result.objects.len(), 1);
+    assert_eq!(result.bindings[0].export_filename, "hello.txt");
+    assert_eq!(
+        fs::read(result.object_path(&result.objects[0]).unwrap()).unwrap(),
+        b"hello"
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn ingest_rejects_symlink_escape() {
+    use std::os::unix::fs as unix_fs;
+
+    let root = unique_test_root("symlink-escape");
+    let base_dir = root.join("input");
+    let outside_dir = root.join("outside");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::create_dir_all(&outside_dir).unwrap();
+    fs::write(outside_dir.join("secret.txt"), b"secret").unwrap();
+    unix_fs::symlink(
+        outside_dir.join("secret.txt"),
+        base_dir.join("assets/link.txt"),
+    )
+    .unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:bad".into(),
+        desired_filename: "bad.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/link.txt".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.UNSAFE_SOURCE_PATH"));
+}
+
+#[test]
+fn ingest_rejects_empty_path_source_as_unsafe() {
+    let root = unique_test_root("empty-source-path");
+    let base_dir = root.join("input");
+    fs::create_dir_all(&base_dir).unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:empty".into(),
+        desired_filename: "empty.txt".into(),
+        source: AuthoringMediaSource::Path { path: "".into() },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.UNSAFE_SOURCE_PATH"));
+}
+
+#[test]
+fn ingest_rejects_dot_component_path_source_as_unsafe() {
+    let root = unique_test_root("dot-source-path");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:dot".into(),
+        desired_filename: "dot.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "./assets/hello.txt".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.UNSAFE_SOURCE_PATH"));
+}
+
+#[test]
+fn ingest_rejects_inline_base64_decode_failure() {
+    let root = unique_test_root("inline-decode");
+    let options = test_options(&root, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:inline".into(),
+        desired_filename: "inline.txt".into(),
+        source: AuthoringMediaSource::InlineBytes {
+            data_base64: "%%%".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.INLINE_BASE64_DECODE_FAILED"));
+}
+
+#[test]
+fn inline_base64_decode_diagnostic_has_readable_summary() {
+    let root = unique_test_root("inline-decode-summary");
+    let options = test_options(&root, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:inline".into(),
+        desired_filename: "inline.txt".into(),
+        source: AuthoringMediaSource::InlineBytes {
+            data_base64: "%%%".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+    let diagnostic = err
+        .diagnostics
+        .iter()
+        .find(|item| item.code == "MEDIA.INLINE_BASE64_DECODE_FAILED")
+        .unwrap();
+
+    assert!(diagnostic.summary.contains("decode inline bytes"));
+    assert!(diagnostic.summary.contains("media:inline"));
+    assert!(!diagnostic.summary.contains("InlineBase64Decode"));
+}
+
+#[test]
+fn ingest_rejects_path_source_that_is_not_regular_file() {
+    let root = unique_test_root("not-regular");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets/dir")).unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:dir".into(),
+        desired_filename: "dir.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/dir".into(),
+        },
+        declared_mime: None,
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.SOURCE_NOT_REGULAR_FILE"));
+}
+
+#[test]
+fn oversized_path_source_is_rejected_before_final_cas_object_is_written() {
+    let root = unique_test_root("oversized-path-no-cas");
+    let base_dir = root.join("input");
+    let store_dir = root.join("store");
+    let bytes = b"oversized";
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/blob.txt"), bytes).unwrap();
+    let mut options = test_options(&base_dir, &store_dir);
+    options.media_policy.max_media_object_bytes = Some((bytes.len() - 1) as u64);
+    let media = vec![AuthoringMedia {
+        id: "media:oversized".into(),
+        desired_filename: "blob.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/blob.txt".into(),
+        },
+        declared_mime: Some("text/plain".into()),
+    }];
+    let blake3 = blake3::hash(bytes).to_hex().to_string();
+    let object_path = object_store_path(&store_dir, &blake3).unwrap();
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.SIZE_LIMIT_EXCEEDED"));
+    assert!(!object_path.exists());
+}
+
+#[test]
+fn same_export_filename_and_same_object_merges_binding_with_info() {
+    let root = unique_test_root("same-filename-same-object");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:first".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:second".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert_eq!(result.bindings.len(), 1);
+    assert!(result
+        .diagnostics
+        .iter()
+        .any(|item| item.level == "info" && item.code == "MEDIA.DEDUPED_BINDING"));
+}
+
+#[test]
+fn same_export_filename_and_different_object_is_conflict() {
+    let root = unique_test_root("same-filename-conflict");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/left.txt"), b"left").unwrap();
+    fs::write(base_dir.join("assets/right.txt"), b"right").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:left".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/left.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:right".into(),
+            desired_filename: "hello.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/right.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DUPLICATE_FILENAME_CONFLICT"));
+}
+
+#[test]
+fn different_filenames_for_same_object_are_allowed_with_deduped_object_info() {
+    let root = unique_test_root("deduped-object");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:a".into(),
+            desired_filename: "a.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:b".into(),
+            desired_filename: "b.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/hello.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert_eq!(result.objects.len(), 1);
+    assert_eq!(result.bindings.len(), 2);
+    assert!(result
+        .diagnostics
+        .iter()
+        .any(|item| item.level == "info" && item.code == "MEDIA.DEDUPED_OBJECT"));
+}
+
+#[test]
+fn declared_mime_high_confidence_conflict_is_error() {
+    let root = unique_test_root("mime-conflict");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(
+        base_dir.join("assets/image.bin"),
+        b"\x89PNG\r\n\x1a\npayload",
+    )
+    .unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:image".into(),
+        desired_filename: "image.png".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/image.bin".into(),
+        },
+        declared_mime: Some("image/jpeg".into()),
+    }];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DECLARED_MIME_MISMATCH"));
+}
+
+#[test]
+fn declared_mime_comparison_is_case_insensitive_for_type_and_subtype() {
+    let root = unique_test_root("mime-case");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(
+        base_dir.join("assets/image.bin"),
+        b"\x89PNG\r\n\x1a\npayload",
+    )
+    .unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:image".into(),
+        desired_filename: "image.png".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/image.bin".into(),
+        },
+        declared_mime: Some("IMAGE/PNG".into()),
+    }];
+
+    let result = ingest_authoring_media(&media, &options).unwrap();
+
+    assert_eq!(result.objects[0].mime, "image/png");
+    assert!(result
+        .diagnostics
+        .iter()
+        .all(|item| item.code != "MEDIA.DECLARED_MIME_MISMATCH"));
+}
+
+#[test]
+fn rejected_object_does_not_count_toward_total_unique_size_limit() {
+    let root = unique_test_root("rejected-total-size-accounting");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/rejected.bin"), b"\x89PNG\r\n\x1a\nx").unwrap();
+    fs::write(base_dir.join("assets/accepted.txt"), b"ok\n").unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.max_total_media_bytes = Some(10);
+    let media = vec![
+        AuthoringMedia {
+            id: "media:rejected".into(),
+            desired_filename: "rejected.png".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/rejected.bin".into(),
+            },
+            declared_mime: Some("image/jpeg".into()),
+        },
+        AuthoringMedia {
+            id: "media:accepted".into(),
+            desired_filename: "accepted.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/accepted.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DECLARED_MIME_MISMATCH"));
+    assert!(err
+        .diagnostics
+        .iter()
+        .all(|item| item.code != "MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
+#[test]
+fn unknown_mime_and_size_limits_follow_policy() {
+    let root = unique_test_root("policy");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/blob.bin"), [0_u8, 159, 146, 150]).unwrap();
+    fs::write(base_dir.join("assets/large.txt"), b"large").unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.unknown_mime_behavior = DiagnosticBehavior::Error;
+    options.media_policy.max_media_object_bytes = Some(4);
+    let media = vec![
+        AuthoringMedia {
+            id: "media:blob".into(),
+            desired_filename: "blob.bin".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/blob.bin".into(),
+            },
+            declared_mime: None,
+        },
+        AuthoringMedia {
+            id: "media:large".into(),
+            desired_filename: "large.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/large.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+    let codes = err
+        .diagnostics
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+
+    assert!(codes.contains(&"MEDIA.UNKNOWN_MIME"));
+    assert!(codes.contains(&"MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
+#[test]
+fn total_unique_media_size_limit_is_enforced() {
+    let root = unique_test_root("total-size-limit");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/a.txt"), b"aaa").unwrap();
+    fs::write(base_dir.join("assets/b.txt"), b"bbb").unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.max_total_media_bytes = Some(5);
+    let media = vec![
+        AuthoringMedia {
+            id: "media:a".into(),
+            desired_filename: "a.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/a.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:b".into(),
+            desired_filename: "b.txt".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/b.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
 fn media_object(id: &str) -> MediaObject {
     MediaObject {
         id: id.into(),
@@ -273,4 +760,25 @@ fn reference_resolution_key(resolution: &MediaReferenceResolution) -> String {
         MediaReferenceResolution::Missing => "missing".into(),
         MediaReferenceResolution::Skipped { skip_reason } => format!("skipped:{skip_reason}"),
     }
+}
+
+fn test_options(base_dir: &std::path::Path, media_store_dir: &std::path::Path) -> NormalizeOptions {
+    NormalizeOptions {
+        base_dir: base_dir.to_path_buf(),
+        media_store_dir: media_store_dir.to_path_buf(),
+        media_policy: MediaPolicy::default_strict(),
+    }
+}
+
+fn unique_test_root(label: &str) -> std::path::PathBuf {
+    let mut root = std::env::temp_dir();
+    root.push(format!(
+        "anki-forge-media-{label}-{}",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ));
+    fs::create_dir_all(&root).unwrap();
+    root
 }
