@@ -5,7 +5,6 @@ use std::path::{Component, Path, PathBuf};
 use anyhow::{Context, Result};
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNotetype};
-use base64::Engine;
 use serde::{Deserialize, Serialize};
 use sha1::Digest;
 
@@ -20,14 +19,22 @@ use crate::policy::{build_context_ref, policy_ref};
 pub struct BuildArtifactTarget {
     pub root_dir: PathBuf,
     pub stable_ref_prefix: String,
+    pub media_store_dir: PathBuf,
 }
 
 impl BuildArtifactTarget {
     pub fn new(root_dir: impl Into<PathBuf>, stable_ref_prefix: impl Into<String>) -> Self {
+        let root_dir = root_dir.into();
         Self {
-            root_dir: root_dir.into(),
+            media_store_dir: root_dir.join(".anki-forge-media"),
+            root_dir,
             stable_ref_prefix: stable_ref_prefix.into(),
         }
+    }
+
+    pub fn with_media_store_dir(mut self, media_store_dir: impl Into<PathBuf>) -> Self {
+        self.media_store_dir = media_store_dir.into();
+        self
     }
 
     pub fn staging_dir(&self) -> PathBuf {
@@ -121,18 +128,33 @@ impl StagingPackage {
         fs::create_dir_all(&staging_dir)
             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
 
-        if !self.manifest.normalized_ir.media.is_empty() {
+        if !self.manifest.normalized_ir.media_bindings.is_empty() {
             let media_dir = staging_dir.join("media");
             fs::create_dir_all(&media_dir).with_context(|| {
                 format!("create staging media directory {}", media_dir.display())
             })?;
-            for media in &self.manifest.normalized_ir.media {
-                let payload = base64::engine::general_purpose::STANDARD
-                    .decode(media.data_base64.as_bytes())
-                    .with_context(|| format!("decode media payload {}", media.filename))?;
-                let media_path = validated_media_output_path(&media_dir, &media.filename)?;
-                fs::write(&media_path, payload)
-                    .with_context(|| format!("write staging media {}", media_path.display()))?;
+            let objects_by_id = self
+                .manifest
+                .normalized_ir
+                .media_objects
+                .iter()
+                .map(|object| (object.id.as_str(), object))
+                .collect::<BTreeMap<_, _>>();
+            for binding in &self.manifest.normalized_ir.media_bindings {
+                let object = objects_by_id
+                    .get(binding.object_id.as_str())
+                    .with_context(|| {
+                        format!(
+                            "binding {} references missing object {}",
+                            binding.id, binding.object_id
+                        )
+                    })?;
+                let media_path = validated_media_output_path(&media_dir, &binding.export_filename)?;
+                crate::media::copy_verified_cas_object_to_path(
+                    &target.media_store_dir,
+                    object,
+                    &media_path,
+                )?;
             }
         }
 
@@ -203,6 +225,34 @@ pub(crate) fn error_result(
     operation: &str,
     path: Option<String>,
 ) -> PackageBuildResult {
+    error_result_with_domain(
+        writer_policy,
+        build_context,
+        ErrorResultDetails {
+            code: code.into(),
+            summary: summary.into(),
+            domain: "staging".into(),
+            stage: stage.into(),
+            operation: operation.into(),
+            path,
+        },
+    )
+}
+
+pub(crate) struct ErrorResultDetails {
+    pub(crate) code: String,
+    pub(crate) summary: String,
+    pub(crate) domain: String,
+    pub(crate) stage: String,
+    pub(crate) operation: String,
+    pub(crate) path: Option<String>,
+}
+
+pub(crate) fn error_result_with_domain(
+    writer_policy: &WriterPolicy,
+    build_context: &BuildContext,
+    details: ErrorResultDetails,
+) -> PackageBuildResult {
     PackageBuildResult {
         kind: "package-build-result".into(),
         result_status: "error".into(),
@@ -217,15 +267,124 @@ pub(crate) fn error_result(
             kind: "build-diagnostics".into(),
             items: vec![BuildDiagnosticItem {
                 level: "error".into(),
-                code: code.into(),
-                summary: summary.into(),
-                domain: Some("staging".into()),
-                path,
+                code: details.code,
+                summary: details.summary,
+                domain: Some(details.domain),
+                path: details.path,
                 target_selector: None,
-                stage: Some(stage.into()),
-                operation: Some(operation.into()),
+                stage: Some(details.stage),
+                operation: Some(details.operation),
             }],
         },
+    }
+}
+
+fn validate_media_invariants(normalized_ir: &NormalizedIr) -> Vec<BuildDiagnosticItem> {
+    let mut diagnostics = Vec::new();
+    let mut object_ids = BTreeSet::new();
+    for (index, object) in normalized_ir.media_objects.iter().enumerate() {
+        if !object_ids.insert(object.id.as_str()) {
+            diagnostics.push(media_error(
+                "MEDIA.DUPLICATE_MEDIA_ID",
+                format!("duplicate media object id {}", object.id),
+                format!("media_objects[{index}].id"),
+            ));
+        }
+        if object.id != format!("obj:blake3:{}", object.blake3)
+            || object.object_ref != format!("media://blake3/{}", object.blake3)
+            || !is_lower_hex(&object.blake3, 64)
+            || !is_lower_hex(&object.sha1, 40)
+            || object.mime.trim().is_empty()
+        {
+            diagnostics.push(media_error(
+                "MEDIA.INVALID_MEDIA_OBJECT_INVARIANT",
+                format!(
+                    "invalid object invariant {}: blake3 must be 64 lowercase hex, sha1 must be 40 lowercase hex, object id/ref must match blake3, mime must be nonempty",
+                    object.id
+                ),
+                format!("media_objects[{index}]"),
+            ));
+        }
+    }
+    let object_id_set = normalized_ir
+        .media_objects
+        .iter()
+        .map(|object| object.id.as_str())
+        .collect::<BTreeSet<_>>();
+    let mut binding_ids = BTreeSet::new();
+    let mut filenames = BTreeSet::new();
+    for (index, binding) in normalized_ir.media_bindings.iter().enumerate() {
+        if !binding_ids.insert(binding.id.as_str()) {
+            diagnostics.push(media_error(
+                "MEDIA.DUPLICATE_MEDIA_ID",
+                format!("duplicate media binding id {}", binding.id),
+                format!("media_bindings[{index}].id"),
+            ));
+        }
+        if !filenames.insert(binding.export_filename.as_str()) {
+            diagnostics.push(media_error(
+                "MEDIA.DUPLICATE_EXPORT_FILENAME",
+                format!("duplicate export filename {}", binding.export_filename),
+                format!("media_bindings[{index}].export_filename"),
+            ));
+        }
+        if !object_id_set.contains(binding.object_id.as_str()) {
+            diagnostics.push(media_error(
+                "MEDIA.MEDIA_OBJECT_MISSING",
+                format!(
+                    "binding {} references missing object {}",
+                    binding.id, binding.object_id
+                ),
+                format!("media_bindings[{index}].object_id"),
+            ));
+        }
+        if !is_valid_media_object_id(&binding.object_id) {
+            diagnostics.push(media_error(
+                "MEDIA.INVALID_MEDIA_BINDING_INVARIANT",
+                format!(
+                    "binding {} object_id must be obj:blake3:<64 lowercase hex>",
+                    binding.id
+                ),
+                format!("media_bindings[{index}].object_id"),
+            ));
+        }
+        if let Err(err) = validated_media_output_path(Path::new("media"), &binding.export_filename)
+        {
+            diagnostics.push(media_error(
+                "MEDIA.UNSAFE_FILENAME",
+                err.to_string(),
+                format!("media_bindings[{index}].export_filename"),
+            ));
+        }
+    }
+    diagnostics
+}
+
+fn is_valid_media_object_id(object_id: &str) -> bool {
+    let Some(hash) = object_id.strip_prefix("obj:blake3:") else {
+        return false;
+    };
+    is_lower_hex(hash, 64)
+}
+
+fn is_lower_hex(value: &str, expected_len: usize) -> bool {
+    value.len() == expected_len
+        && value
+            .as_bytes()
+            .iter()
+            .all(|byte| matches!(byte, b'0'..=b'9' | b'a'..=b'f'))
+}
+
+fn media_error(code: &str, summary: String, path: String) -> BuildDiagnosticItem {
+    BuildDiagnosticItem {
+        level: "error".into(),
+        code: code.into(),
+        summary,
+        domain: Some("media".into()),
+        path: Some(path),
+        target_selector: None,
+        stage: Some("validate".into()),
+        operation: Some("writer-invariant".into()),
     }
 }
 
@@ -241,6 +400,7 @@ fn validate_normalized_ir(
         .collect();
 
     let mut diagnostics = vec![];
+    diagnostics.extend(validate_media_invariants(normalized_ir));
     let mut seen_notetype_ids = BTreeMap::new();
 
     for (index, notetype) in normalized_ir.notetypes.iter().enumerate() {
@@ -285,9 +445,9 @@ fn validate_normalized_ir(
     }
 
     let media_filenames: BTreeSet<_> = normalized_ir
-        .media
+        .media_bindings
         .iter()
-        .map(|media| media.filename.as_str())
+        .map(|binding| binding.export_filename.as_str())
         .collect();
 
     for (index, note) in normalized_ir.notes.iter().enumerate() {

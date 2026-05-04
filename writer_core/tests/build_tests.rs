@@ -1,13 +1,12 @@
 use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{
-    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
-};
+use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
 use prost::Message;
 use rusqlite::Connection;
+use sha1::Digest;
 use std::collections::BTreeMap;
 use std::fs;
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use writer_core::{
@@ -185,9 +184,13 @@ fn diff_report_keeps_required_empty_arrays_when_no_changes_exist() {
 #[test]
 fn emit_apkg_materializes_basic_package_from_staging_artifact() {
     let root = unique_artifact_root("basic-apkg");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-apkg");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-apkg")
+        .with_media_store_dir(media_store.clone());
+    let normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
     let package = StagingPackage::from_normalized(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
     )
@@ -222,10 +225,7 @@ fn emit_apkg_materializes_basic_package_from_staging_artifact() {
 #[test]
 fn build_materializes_basic_staging_into_caller_owned_root() {
     let root = unique_artifact_root("basic");
-    let target = BuildArtifactTarget {
-        root_dir: root.clone(),
-        stable_ref_prefix: "artifacts/phase3/basic".into(),
-    };
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic");
 
     let result = build(
         &sample_basic_normalized_ir(),
@@ -269,11 +269,11 @@ fn tracked_rslib_storage_sql_snapshots_exist() {
 #[test]
 fn build_accepts_numeric_html_entity_media_references() {
     let root = unique_artifact_root("html-entity-media");
-    let target = BuildArtifactTarget {
-        root_dir: root,
-        stable_ref_prefix: "artifacts/phase3/html-entity-media".into(),
-    };
-    let mut normalized = sample_basic_normalized_ir_with_media();
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/html-entity-media")
+        .with_media_store_dir(media_store.clone());
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
     normalized.notes[0]
         .fields
         .insert("Back".into(), "<img src=\"sample&#46;jpg\">".into());
@@ -292,10 +292,7 @@ fn build_accepts_numeric_html_entity_media_references() {
 #[test]
 fn build_materializes_cloze_staging_into_caller_owned_root() {
     let root = unique_artifact_root("cloze");
-    let target = BuildArtifactTarget {
-        root_dir: root.clone(),
-        stable_ref_prefix: "artifacts/phase3/cloze".into(),
-    };
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/cloze");
 
     let result = build(
         &sample_cloze_normalized_ir(),
@@ -321,10 +318,12 @@ fn build_materializes_cloze_staging_into_caller_owned_root() {
 #[test]
 fn build_materializes_media_payloads_into_staging_tree() {
     let root = unique_artifact_root("basic-media");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-media");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/basic-media")
+        .with_media_store_dir(media_store.clone());
 
     let result = build(
-        &sample_basic_normalized_ir_with_media(),
+        &sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello"),
         &sample_writer_policy(),
         &sample_build_context(false),
         &target,
@@ -339,11 +338,332 @@ fn build_materializes_media_payloads_into_staging_tree() {
 }
 
 #[test]
+fn staging_materializes_media_from_cas_not_inline_payload() {
+    let root = unique_artifact_root("cas-staging");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/cas-staging")
+        .with_media_store_dir(media_store.clone());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert_eq!(
+        fs::read(root.join("staging/media/hello.txt")).unwrap(),
+        b"hello"
+    );
+}
+
+#[test]
+fn writer_reports_missing_cas_object_without_semantic_media_diagnostics() {
+    let root = unique_artifact_root("missing-cas");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/missing-cas")
+        .with_media_store_dir(media_store.clone());
+    fs::remove_dir_all(&media_store).unwrap();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let codes = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+    assert_eq!(result.result_status, "error");
+    assert!(codes.contains(&"MEDIA.CAS_OBJECT_MISSING"));
+    assert!(!codes.contains(&"MEDIA.MISSING_REFERENCE"));
+    assert!(!codes.contains(&"MEDIA.UNUSED_BINDING"));
+
+    let media_diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "MEDIA.CAS_OBJECT_MISSING")
+        .expect("missing CAS object diagnostic");
+    assert_eq!(media_diag.domain.as_deref(), Some("media"));
+    assert!(media_diag.path.as_deref().unwrap().contains("media-store"));
+}
+
+#[test]
+fn writer_reports_corrupt_cas_size_mismatch_with_media_path() {
+    let root = unique_artifact_root("cas-size-mismatch");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let object_path =
+        authoring_core::object_store_path(&media_store, &normalized.media_objects[0].blake3)
+            .unwrap();
+    fs::write(&object_path, b"hello-too-long").unwrap();
+    let staged_media_path = seed_staged_media(&root, "hello.txt", b"previous");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/cas-size-mismatch")
+        .with_media_store_dir(media_store.clone());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_media_error_path(&result, "MEDIA.CAS_OBJECT_SIZE_MISMATCH", &object_path);
+    assert_staged_media_preserved(&staged_media_path, b"previous");
+}
+
+#[test]
+fn writer_reports_corrupt_cas_blake3_mismatch_with_media_path() {
+    let root = unique_artifact_root("cas-blake3-mismatch");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let object_path =
+        authoring_core::object_store_path(&media_store, &normalized.media_objects[0].blake3)
+            .unwrap();
+    fs::write(&object_path, b"hullo").unwrap();
+    let staged_media_path = seed_staged_media(&root, "hello.txt", b"previous");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/cas-blake3-mismatch")
+        .with_media_store_dir(media_store.clone());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_media_error_path(&result, "MEDIA.CAS_OBJECT_BLAKE3_MISMATCH", &object_path);
+    assert_staged_media_preserved(&staged_media_path, b"previous");
+}
+
+#[test]
+fn writer_reports_corrupt_cas_sha1_mismatch_with_media_path() {
+    let root = unique_artifact_root("cas-sha1-mismatch");
+    let media_store = root.join("media-store");
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let object_path =
+        authoring_core::object_store_path(&media_store, &normalized.media_objects[0].blake3)
+            .unwrap();
+    normalized.media_objects[0].sha1 = "0".repeat(40);
+    let staged_media_path = seed_staged_media(&root, "hello.txt", b"previous");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/cas-sha1-mismatch")
+        .with_media_store_dir(media_store.clone());
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_media_error_path(&result, "MEDIA.CAS_OBJECT_SHA1_MISMATCH", &object_path);
+    assert_staged_media_preserved(&staged_media_path, b"previous");
+}
+
+#[cfg(unix)]
+#[test]
+fn cas_copy_verifies_exact_bytes_written_to_staging_in_single_pass() {
+    let root = unique_artifact_root("cas-copy-single-pass");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let object = normalized.media_objects[0].clone();
+    let object_path = authoring_core::object_store_path(&media_store, &object.blake3).unwrap();
+    fs::remove_file(&object_path).unwrap();
+    let status = std::process::Command::new("mkfifo")
+        .arg(&object_path)
+        .status()
+        .unwrap();
+    assert!(status.success());
+
+    let output_dir = root.join("staging/media");
+    fs::create_dir_all(&output_dir).unwrap();
+    let output_path = output_dir.join("hello.txt");
+
+    let (good_done_tx, good_done_rx) = std::sync::mpsc::channel();
+    let good_object_path = object_path.clone();
+    let good_writer = std::thread::spawn(move || {
+        let mut fifo = fs::OpenOptions::new()
+            .write(true)
+            .open(&good_object_path)
+            .unwrap();
+        fifo.write_all(b"hello").unwrap();
+        drop(fifo);
+        good_done_tx.send(()).unwrap();
+    });
+
+    let copy_media_store = media_store.clone();
+    let copy_object = object.clone();
+    let copy_output_path = output_path.clone();
+    let (copy_done_tx, copy_done_rx) = std::sync::mpsc::channel();
+    let copy_thread = std::thread::spawn(move || {
+        let result = writer_core::media::copy_verified_cas_object_to_path(
+            &copy_media_store,
+            &copy_object,
+            &copy_output_path,
+        );
+        copy_done_tx.send(result).unwrap();
+    });
+
+    good_done_rx
+        .recv_timeout(std::time::Duration::from_secs(5))
+        .unwrap();
+
+    let mut bad_writer = None;
+    let result = match copy_done_rx.recv_timeout(std::time::Duration::from_secs(1)) {
+        Ok(result) => result,
+        Err(std::sync::mpsc::RecvTimeoutError::Timeout) => {
+            let bad_object_path = object_path.clone();
+            bad_writer = Some(std::thread::spawn(move || {
+                let mut fifo = fs::OpenOptions::new()
+                    .write(true)
+                    .open(&bad_object_path)
+                    .unwrap();
+                fifo.write_all(b"hullo").unwrap();
+                drop(fifo);
+            }));
+            copy_done_rx
+                .recv_timeout(std::time::Duration::from_secs(5))
+                .unwrap()
+        }
+        Err(std::sync::mpsc::RecvTimeoutError::Disconnected) => {
+            panic!("copy thread disconnected before returning result")
+        }
+    };
+    assert!(result.is_ok(), "{result:?}");
+
+    copy_thread.join().unwrap();
+    good_writer.join().unwrap();
+    if let Some(bad_writer) = bad_writer {
+        bad_writer.join().unwrap();
+    }
+    assert_eq!(fs::read(&output_path).unwrap(), b"hello");
+}
+
+#[test]
+fn writer_rejects_cross_field_media_invariant_violations() {
+    let root = unique_artifact_root("media-invariant");
+    let media_store = root.join("media-store");
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    normalized.media_objects[0].object_ref = "media://blake3/not-the-object-hash".into();
+    normalized
+        .media_bindings
+        .push(authoring_core::MediaBinding {
+            id: "media:other".into(),
+            export_filename: "other.txt".into(),
+            object_id: "obj:blake3:missing".into(),
+        });
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-invariant")
+        .with_media_store_dir(media_store);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let codes = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+    assert_eq!(result.result_status, "invalid");
+    assert!(codes.contains(&"MEDIA.INVALID_MEDIA_OBJECT_INVARIANT"));
+    assert!(codes.contains(&"MEDIA.MEDIA_OBJECT_MISSING"));
+}
+
+#[test]
+fn writer_rejects_malformed_media_invariant_shapes() {
+    let root = unique_artifact_root("media-invariant-shape");
+    let media_store = root.join("media-store");
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    normalized.media_objects[0].blake3 = normalized.media_objects[0].blake3.to_uppercase();
+    normalized.media_objects[0].id = format!("obj:blake3:{}", normalized.media_objects[0].blake3);
+    normalized.media_objects[0].object_ref =
+        format!("media://blake3/{}", normalized.media_objects[0].blake3);
+    normalized.media_objects[0].sha1 = normalized.media_objects[0].sha1.to_uppercase();
+    normalized.media_objects[0].mime.clear();
+    normalized.media_bindings[0].object_id = "obj:blake3:not-lowercase-hex".into();
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-invariant-shape")
+        .with_media_store_dir(media_store);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let codes = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+    assert_eq!(result.result_status, "invalid");
+    assert!(codes.contains(&"MEDIA.INVALID_MEDIA_OBJECT_INVARIANT"));
+    assert!(codes.contains(&"MEDIA.INVALID_MEDIA_BINDING_INVARIANT"));
+}
+
+#[cfg(unix)]
+#[test]
+fn staging_media_copy_replaces_existing_symlink_without_following_it() {
+    let root = unique_artifact_root("media-symlink-replace");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-symlink-replace")
+        .with_media_store_dir(media_store);
+    let media_dir = root.join("staging/media");
+    fs::create_dir_all(&media_dir).unwrap();
+    let outside = root.join("outside.txt");
+    fs::write(&outside, b"outside").unwrap();
+    std::os::unix::fs::symlink(&outside, media_dir.join("hello.txt")).unwrap();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert_eq!(fs::read(&outside).unwrap(), b"outside");
+    assert_eq!(fs::read(media_dir.join("hello.txt")).unwrap(), b"hello");
+    assert!(!fs::symlink_metadata(media_dir.join("hello.txt"))
+        .unwrap()
+        .file_type()
+        .is_symlink());
+}
+
+#[test]
 fn build_rejects_media_filenames_that_escape_staging_media_root() {
     let root = unique_artifact_root("media-traversal");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-traversal");
-    let mut normalized = sample_basic_normalized_ir_with_media();
-    normalized.media[0].filename = "../escape.jpg".into();
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-traversal")
+        .with_media_store_dir(media_store.clone());
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
+    normalized.media_bindings[0].export_filename = "../escape.jpg".into();
     normalized.notes[0]
         .fields
         .insert("Back".into(), r#"<img src="../escape.jpg">"#.into());
@@ -356,11 +676,8 @@ fn build_rejects_media_filenames_that_escape_staging_media_root() {
     )
     .expect("build should surface staging failure as error result");
 
-    assert_eq!(result.result_status, "error");
-    assert_eq!(
-        result.diagnostics.items[0].code,
-        "PHASE3.STAGING_MATERIALIZATION_FAILED"
-    );
+    assert_eq!(result.result_status, "invalid");
+    assert_eq!(result.diagnostics.items[0].code, "MEDIA.UNSAFE_FILENAME");
     assert!(result.diagnostics.items[0]
         .summary
         .contains("media filename"));
@@ -371,10 +688,12 @@ fn build_rejects_media_filenames_that_escape_staging_media_root() {
 #[test]
 fn build_preserves_bundled_media_entries() {
     let root = unique_artifact_root("bundled-media");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/bundled-media");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/bundled-media")
+        .with_media_store_dir(media_store.clone());
 
     let result = build(
-        &sample_basic_normalized_ir_with_media(),
+        &sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello"),
         &sample_writer_policy(),
         &sample_build_context(false),
         &target,
@@ -386,30 +705,31 @@ fn build_preserves_bundled_media_entries() {
     let manifest_json = fs::read_to_string(root.join("staging/manifest.json")).unwrap();
     let manifest: serde_json::Value = serde_json::from_str(&manifest_json).unwrap();
     assert_eq!(
-        manifest["normalized_ir"]["media"].as_array().unwrap().len(),
+        manifest["normalized_ir"]["media_objects"]
+            .as_array()
+            .unwrap()
+            .len(),
         1
     );
     assert_eq!(
-        manifest["normalized_ir"]["media"][0]["filename"],
+        manifest["normalized_ir"]["media_bindings"][0]["export_filename"],
         serde_json::json!("sample.jpg")
     );
     assert_eq!(
-        manifest["normalized_ir"]["media"][0]["mime"],
-        serde_json::json!("image/jpeg")
-    );
-    assert_eq!(
-        manifest["normalized_ir"]["media"][0]["data_base64"],
-        serde_json::json!("aGVsbG8=")
+        manifest["normalized_ir"]["media_objects"][0]["mime"],
+        serde_json::json!("text/plain")
     );
 }
 
 #[test]
 fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
     let root = unique_artifact_root("image-occlusion");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/image-occlusion");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/image-occlusion")
+        .with_media_store_dir(media_store.clone());
 
     let result = build(
-        &sample_image_occlusion_normalized_ir(),
+        &sample_image_occlusion_normalized_ir(&media_store),
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -478,10 +798,12 @@ fn build_materializes_image_occlusion_apkg_into_caller_owned_root() {
 #[test]
 fn exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename() {
     let root = unique_artifact_root("media-map-wire-shape");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-map-wire-shape");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/media-map-wire-shape")
+        .with_media_store_dir(media_store.clone());
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello"),
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -591,8 +913,11 @@ fn latest_collection_ignores_script_style_and_comment_bodies_for_sfld_and_csum()
 #[test]
 fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr() {
     let root = unique_artifact_root("note-storage-media-attr");
-    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-media-attr");
-    let mut normalized = sample_basic_normalized_ir_with_media();
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-media-attr")
+        .with_media_store_dir(media_store.clone());
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
     normalized.notes[0]
         .fields
         .insert("Front".into(), r#"<IMG SRC = "sample.jpg">"#.into());
@@ -621,11 +946,14 @@ fn latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr(
 #[test]
 fn latest_collection_preserves_media_filename_when_quoted_attr_contains_gt() {
     let root = unique_artifact_root("note-storage-media-quoted-gt");
+    let media_store = root.join("media-store");
     let target = BuildArtifactTarget::new(
         root.clone(),
         "artifacts/phase3/note-storage-media-quoted-gt",
-    );
-    let mut normalized = sample_basic_normalized_ir_with_media();
+    )
+    .with_media_store_dir(media_store.clone());
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "sample.jpg", b"hello");
     normalized.notes[0].fields.insert(
         "Front".into(),
         r#"<img data-note="1 > 0" src="sample.jpg">"#.into(),
@@ -714,9 +1042,10 @@ fn build_rejects_non_positive_explicit_normalized_note_mtime() {
 #[test]
 fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape() {
     let root = unique_artifact_root("image-occlusion-shape-drift");
+    let media_store = root.join("media-store");
     let target = BuildArtifactTarget::new(root, "artifacts/phase3/image-occlusion-shape-drift");
 
-    let mut normalized = sample_image_occlusion_normalized_ir();
+    let mut normalized = sample_image_occlusion_normalized_ir(&media_store);
     normalized.notetypes[0].templates[0].answer_format = "{{Image}}".into();
 
     let result = build(
@@ -749,20 +1078,23 @@ fn build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape
 fn build_apkg_package_fingerprint_is_stable_across_roots() {
     let left_root = unique_artifact_root("image-occlusion-left");
     let right_root = unique_artifact_root("image-occlusion-right");
+    let left_media_store = left_root.join("media-store");
+    let right_media_store = right_root.join("media-store");
     let target_prefix = "artifacts/phase3/image-occlusion";
 
     let left = build(
-        &sample_image_occlusion_normalized_ir(),
+        &sample_image_occlusion_normalized_ir(&left_media_store),
         &sample_writer_policy(),
         &sample_build_context(true),
-        &BuildArtifactTarget::new(left_root, target_prefix),
+        &BuildArtifactTarget::new(left_root, target_prefix).with_media_store_dir(left_media_store),
     )
     .unwrap();
     let right = build(
-        &sample_image_occlusion_normalized_ir(),
+        &sample_image_occlusion_normalized_ir(&right_media_store),
         &sample_writer_policy(),
         &sample_build_context(true),
-        &BuildArtifactTarget::new(right_root, target_prefix),
+        &BuildArtifactTarget::new(right_root, target_prefix)
+            .with_media_store_dir(right_media_store),
     )
     .unwrap();
 
@@ -779,20 +1111,14 @@ fn build_artifact_fingerprint_is_stable_across_roots() {
         &sample_basic_normalized_ir(),
         &sample_writer_policy(),
         &sample_build_context(false),
-        &BuildArtifactTarget {
-            root_dir: left_root,
-            stable_ref_prefix: "artifacts/phase3/basic".into(),
-        },
+        &BuildArtifactTarget::new(left_root, "artifacts/phase3/basic"),
     )
     .unwrap();
     let right = build(
         &sample_basic_normalized_ir(),
         &sample_writer_policy(),
         &sample_build_context(false),
-        &BuildArtifactTarget {
-            root_dir: right_root,
-            stable_ref_prefix: "artifacts/phase3/basic".into(),
-        },
+        &BuildArtifactTarget::new(right_root, "artifacts/phase3/basic"),
     )
     .unwrap();
 
@@ -802,10 +1128,7 @@ fn build_artifact_fingerprint_is_stable_across_roots() {
 #[test]
 fn build_rejects_unknown_notetype_with_selector_and_path_diagnostics() {
     let root = unique_artifact_root("invalid");
-    let target = BuildArtifactTarget {
-        root_dir: root,
-        stable_ref_prefix: "artifacts/phase3/invalid".into(),
-    };
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/invalid");
 
     let mut normalized = sample_basic_normalized_ir();
     normalized.notes[0].notetype_id = "missing-main".into();
@@ -989,10 +1312,12 @@ fn build_warns_on_unresolved_media_refs_when_behavior_is_warn() {
 #[test]
 fn build_accepts_html_entity_encoded_media_refs_when_payload_exists() {
     let root = unique_artifact_root("media-encoded");
-    let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-encoded");
+    let media_store = root.join("media-store");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-encoded")
+        .with_media_store_dir(media_store.clone());
 
     let result = build(
-        &sample_basic_normalized_ir_with_encoded_media_ref(),
+        &sample_basic_normalized_ir_with_encoded_media_ref(&media_store),
         &sample_writer_policy(),
         &sample_build_context(false),
         &target,
@@ -1048,7 +1373,9 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     }
 }
 
@@ -1073,38 +1400,91 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     }
 }
 
-fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
+fn sample_basic_normalized_ir_with_cas_media(
+    media_store: &Path,
+    filename: &str,
+    bytes: &[u8],
+) -> NormalizedIr {
     let mut normalized = sample_basic_normalized_ir();
-    normalized.notes[0]
-        .fields
-        .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
-    normalized.media.push(NormalizedMedia {
-        filename: "sample.jpg".into(),
-        mime: "image/jpeg".into(),
-        data_base64: "aGVsbG8=".into(),
-    });
+    let blake3_hex = blake3::hash(bytes).to_hex().to_string();
+    let sha1_hex = hex::encode(sha1::Sha1::digest(bytes));
+    let object_id = format!("obj:blake3:{blake3_hex}");
+    let object_path = authoring_core::object_store_path(media_store, &blake3_hex).unwrap();
+    fs::create_dir_all(object_path.parent().unwrap()).unwrap();
+    fs::write(&object_path, bytes).unwrap();
+    normalized.media_objects = vec![authoring_core::MediaObject {
+        id: object_id.clone(),
+        object_ref: format!("media://blake3/{blake3_hex}"),
+        blake3: blake3_hex,
+        sha1: sha1_hex,
+        size_bytes: bytes.len() as u64,
+        mime: "text/plain".into(),
+    }];
+    normalized.media_bindings = vec![authoring_core::MediaBinding {
+        id: "media:hello".into(),
+        export_filename: filename.into(),
+        object_id,
+    }];
+    normalized.media_references = vec![];
     normalized
 }
 
-fn sample_basic_normalized_ir_with_encoded_media_ref() -> NormalizedIr {
-    let mut normalized = sample_basic_normalized_ir();
+fn assert_media_error_path(result: &PackageBuildResult, code: &str, expected_path: &Path) {
+    assert_eq!(result.result_status, "error");
+    let diagnostic = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == code)
+        .unwrap_or_else(|| {
+            panic!(
+                "expected diagnostic {code:?}: {:?}",
+                result.diagnostics.items
+            )
+        });
+    assert_eq!(diagnostic.domain.as_deref(), Some("media"));
+    assert_eq!(
+        diagnostic.path.as_deref(),
+        Some(expected_path.to_string_lossy().as_ref())
+    );
+}
+
+fn seed_staged_media(root: &Path, filename: &str, bytes: &[u8]) -> PathBuf {
+    let media_path = root.join("staging/media").join(filename);
+    fs::create_dir_all(media_path.parent().unwrap()).unwrap();
+    fs::write(&media_path, bytes).unwrap();
+    media_path
+}
+
+fn assert_staged_media_preserved(media_path: &Path, expected: &[u8]) {
+    assert_eq!(fs::read(media_path).unwrap(), expected);
+    let filenames = fs::read_dir(media_path.parent().unwrap())
+        .unwrap()
+        .map(|entry| entry.unwrap().file_name())
+        .collect::<Vec<_>>();
+    assert_eq!(
+        filenames,
+        vec![media_path.file_name().unwrap().to_os_string()]
+    );
+}
+
+fn sample_basic_normalized_ir_with_encoded_media_ref(media_store: &Path) -> NormalizedIr {
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(media_store, "a&b.jpg", b"hello");
     normalized.notes[0]
         .fields
         .insert("Back".into(), r#"<img src="a&amp;b.jpg">"#.into());
-    normalized.media.push(NormalizedMedia {
-        filename: "a&b.jpg".into(),
-        mime: "image/jpeg".into(),
-        data_base64: "aGVsbG8=".into(),
-    });
     normalized
 }
 
-fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
-    NormalizedIr {
+fn sample_image_occlusion_normalized_ir(media_store: &Path) -> NormalizedIr {
+    let mut normalized = NormalizedIr {
         kind: "normalized-ir".into(),
         schema_version: "0.1.0".into(),
         document_id: "demo-doc".into(),
@@ -1128,12 +1508,14 @@ fn sample_image_occlusion_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![NormalizedMedia {
-            filename: "occlusion.png".into(),
-            mime: "image/png".into(),
-            data_base64: "aGVsbG8=".into(),
-        }],
-    }
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
+    };
+    let media = sample_basic_normalized_ir_with_cas_media(media_store, "occlusion.png", b"hello");
+    normalized.media_objects = media.media_objects;
+    normalized.media_bindings = media.media_bindings;
+    normalized
 }
 
 fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotetype {

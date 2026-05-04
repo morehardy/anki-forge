@@ -3,7 +3,10 @@ use authoring_core::NormalizedIr;
 
 use crate::apkg::emit_apkg;
 use crate::model::{BuildContext, PackageBuildResult, WriterPolicy};
-use crate::staging::{error_result, invalid_result, success_result, StagingPackage};
+use crate::staging::{
+    error_result, error_result_with_domain, invalid_result, success_result, ErrorResultDetails,
+    StagingPackage,
+};
 
 pub use crate::staging::BuildArtifactTarget;
 
@@ -35,6 +38,20 @@ pub fn build(
     let materialized = match package.materialize(artifact_target) {
         Ok(materialized) => materialized,
         Err(err) => {
+            if let Some(media_err) = err.downcast_ref::<crate::media::MediaWriterError>() {
+                return Ok(error_result_with_domain(
+                    writer_policy,
+                    build_context,
+                    ErrorResultDetails {
+                        code: media_err.diagnostic_code().into(),
+                        summary: err.to_string(),
+                        domain: "media".into(),
+                        stage: "materialize_staging".into(),
+                        operation: "write_media".into(),
+                        path: media_err.diagnostic_path(),
+                    },
+                ));
+            }
             return Ok(error_result(
                 writer_policy,
                 build_context,
@@ -48,7 +65,7 @@ pub fn build(
                         .display()
                         .to_string(),
                 ),
-            ))
+            ));
         }
     };
 

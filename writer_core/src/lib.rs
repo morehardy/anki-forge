@@ -5,6 +5,7 @@ pub mod build;
 pub mod canonical_json;
 pub mod diff;
 pub mod inspect;
+pub mod media;
 pub mod media_refs;
 pub mod model;
 pub mod policy;

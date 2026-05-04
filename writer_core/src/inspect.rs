@@ -8,7 +8,6 @@ use anyhow::{ensure, Context, Result};
 use authoring_core::{
     NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
 };
-use base64::Engine;
 use prost::Message;
 use rusqlite::Connection;
 use serde::Deserialize;
@@ -195,7 +194,9 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         resolved_identity: String::new(),
         notetypes: vec![],
         notes: vec![],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     };
     let mut has_core_data = false;
     let mut template_target_decks = vec![];
@@ -518,33 +519,22 @@ fn resolve_staging_media(
     let mut limitations = ReadLimitations::default();
     let mut resolved = vec![];
 
-    for media in &normalized_ir.media {
-        let media_path = media_root.join(&media.filename);
+    for binding in &normalized_ir.media_bindings {
+        let media_path = media_root.join(&binding.export_filename);
         let payload = match fs::read(&media_path) {
             Ok(bytes) => bytes,
             Err(err) => {
                 limitations.missing_domains.insert(DOMAIN_MEDIA.into());
-                limitations
-                    .degradation_reasons
-                    .push(format!("missing staged media {}: {err}", media.filename));
+                limitations.degradation_reasons.push(format!(
+                    "missing staged media {}: {err}",
+                    binding.export_filename
+                ));
                 continue;
             }
         };
 
-        let expected = base64::engine::general_purpose::STANDARD
-            .decode(media.data_base64.as_bytes())
-            .with_context(|| format!("decode staged media payload {}", media.filename))?;
-        if payload != expected {
-            limitations.missing_domains.insert(DOMAIN_MEDIA.into());
-            limitations.degradation_reasons.push(format!(
-                "staged media payload mismatch for {}",
-                media.filename
-            ));
-            continue;
-        }
-
         resolved.push(ResolvedMedia {
-            filename: media.filename.clone(),
+            filename: binding.export_filename.clone(),
             size: payload.len(),
             sha1_hex: hex::encode(sha1::Sha1::digest(&payload)),
         });

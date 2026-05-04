@@ -163,14 +163,14 @@ fn write_media_payloads_and_map(
     let mut entries = Vec::new();
     let media_dir = staging_dir.join("media");
 
-    for (index, media) in normalized_ir.media.iter().enumerate() {
-        let payload = read_media_payload(&media_dir, &media.filename)?;
+    for (index, binding) in normalized_ir.media_bindings.iter().enumerate() {
+        let payload = read_media_payload(&media_dir, &binding.export_filename)?;
         let sha1 = Sha1::digest(&payload).to_vec();
         let encoded = zstd::stream::encode_all(payload.as_slice(), 0)
             .context("compress media payload for apkg")?;
         write_stored_entry(zip, &index.to_string(), &encoded)?;
         entries.push(MediaEntry {
-            name: media.filename.clone(),
+            name: binding.export_filename.clone(),
             size: payload.len() as u32,
             sha1,
             legacy_zip_filename: None,

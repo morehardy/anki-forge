@@ -7,9 +7,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote,
-    NormalizedNotetype,
+    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedNote, NormalizedNotetype,
 };
+use sha1::Digest;
 use writer_core::{
     build, extract_media_references, inspect_apkg, inspect_build_result, inspect_staging,
     BuildArtifactTarget, BuildContext, WriterPolicy,
@@ -22,9 +22,10 @@ fn inspect_build_result_prefers_staging_when_available() {
         root.clone(),
         "artifacts/phase3/inspect-build-result-staging",
     );
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     let result = build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -46,9 +47,10 @@ fn inspect_build_result_prefers_staging_when_available() {
 fn inspect_staging_reports_complete_observations() {
     let root = unique_artifact_root("inspect-staging");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-staging");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &target,
@@ -132,9 +134,10 @@ fn inspect_emits_browser_template_and_field_label_observations() {
 fn inspect_apkg_reports_complete_observations_and_counts() {
     let root = unique_artifact_root("inspect-apkg");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -179,16 +182,18 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
         BuildArtifactTarget::new(left_root.clone(), "artifacts/phase3/inspect-fingerprint");
     let right_target =
         BuildArtifactTarget::new(right_root.clone(), "artifacts/phase3/inspect-fingerprint");
+    let left_normalized = sample_basic_normalized_ir_with_media(&left_target.media_store_dir);
+    let right_normalized = sample_basic_normalized_ir_with_media(&right_target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &left_normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &left_target,
     )
     .unwrap();
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &right_normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &right_target,
@@ -208,9 +213,10 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
 fn inspect_apkg_marks_missing_media_map_as_degraded() {
     let root = unique_artifact_root("inspect-apkg-degraded");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg-degraded");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -279,20 +285,38 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     }
 }
 
-fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
+fn sample_basic_normalized_ir_with_media(media_store: &Path) -> NormalizedIr {
     let mut normalized = sample_basic_normalized_ir();
+    let bytes = b"hello";
+    let blake3_hex = blake3::hash(bytes).to_hex().to_string();
+    let sha1_hex = hex::encode(sha1::Sha1::digest(bytes));
+    let object_id = format!("obj:blake3:{blake3_hex}");
+    let object_path = authoring_core::object_store_path(media_store, &blake3_hex).unwrap();
+    fs::create_dir_all(object_path.parent().unwrap()).unwrap();
+    fs::write(&object_path, bytes).unwrap();
     normalized.notes[0]
         .fields
         .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
-    normalized.media.push(NormalizedMedia {
-        filename: "sample.jpg".into(),
+    normalized.media_objects = vec![authoring_core::MediaObject {
+        id: object_id.clone(),
+        object_ref: format!("media://blake3/{blake3_hex}"),
+        blake3: blake3_hex,
+        sha1: sha1_hex,
+        size_bytes: bytes.len() as u64,
         mime: "image/jpeg".into(),
-        data_base64: "aGVsbG8=".into(),
-    });
+    }];
+    normalized.media_bindings = vec![authoring_core::MediaBinding {
+        id: "media:sample".into(),
+        export_filename: "sample.jpg".into(),
+        object_id,
+    }];
+    normalized.media_references = vec![];
     normalized
 }
 
