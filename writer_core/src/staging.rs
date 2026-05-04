@@ -729,7 +729,7 @@ fn fingerprint(canonical_json: &str) -> String {
     format!("artifact:{}", hex::encode(digest))
 }
 
-fn validated_media_output_path(media_dir: &Path, filename: &str) -> Result<PathBuf> {
+pub(crate) fn validated_media_output_path(media_dir: &Path, filename: &str) -> Result<PathBuf> {
     anyhow::ensure!(!filename.is_empty(), "media filename must not be empty");
     anyhow::ensure!(
         !filename.contains(['/', '\\']),
