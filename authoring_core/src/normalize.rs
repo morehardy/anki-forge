@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::identity::{resolve_identity, DefaultNonceSource};
 use crate::model::{
     DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
-    NormalizedIr, NormalizedMedia, NormalizedNote, PolicyRefs,
+    NormalizedIr, NormalizedNote, PolicyRefs,
 };
 use crate::risk::{assess_risk, unavailable_report};
 use crate::selector::{
@@ -206,17 +206,6 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         });
     }
 
-    let normalized_media = request
-        .input
-        .media
-        .iter()
-        .map(|media| NormalizedMedia {
-            filename: media.filename.clone(),
-            mime: media.mime.clone(),
-            data_base64: media.data_base64.clone(),
-        })
-        .collect::<Vec<_>>();
-
     let normalized_ir = NormalizedIr {
         kind: "normalized-ir".into(),
         schema_version: request.input.schema_version,
@@ -224,7 +213,9 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         resolved_identity: resolved_identity.clone(),
         notetypes: normalized_notetypes,
         notes: normalized_notes,
-        media: normalized_media,
+        media_objects: Vec::new(),
+        media_bindings: Vec::new(),
+        media_references: Vec::new(),
     };
 
     let merge_risk_report = assess_risk(&normalized_ir, request.comparison_context.as_ref());
