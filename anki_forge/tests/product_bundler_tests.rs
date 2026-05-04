@@ -1,5 +1,6 @@
 use anki_forge::product::model::{CustomField, CustomNoteType, CustomTemplate};
 use anki_forge::product::ProductDocument;
+use anki_forge::AuthoringMediaSource;
 use std::collections::BTreeMap;
 
 #[test]
@@ -40,9 +41,12 @@ fn inline_font_asset_lowers_to_media_and_font_face_css() {
 
     assert_eq!(plan.authoring_document.media.len(), 1);
     let media = &plan.authoring_document.media[0];
-    assert!(media.filename.starts_with("_custom-main_"));
-    assert_eq!(media.mime, "font/woff2");
-    assert_eq!(media.data_base64, "aGVsbG8=");
+    assert!(media.desired_filename.starts_with("_custom-main_"));
+    assert_eq!(media.declared_mime.as_deref(), Some("font/woff2"));
+    assert!(matches!(
+        &media.source,
+        AuthoringMediaSource::InlineBytes { data_base64 } if data_base64 == "aGVsbG8="
+    ));
 
     let notetype = plan
         .authoring_document
@@ -54,7 +58,7 @@ fn inline_font_asset_lowers_to_media_and_font_face_css() {
     assert!(css.contains("@font-face"));
     assert!(css.contains("Demo Font"));
     assert!(
-        css.contains(&media.filename),
+        css.contains(&media.desired_filename),
         "font-face css should reference lowered asset filename"
     );
 
@@ -171,17 +175,27 @@ fn font_binding_resolves_namespaced_asset_and_reports_missing_bindings() {
         .authoring_document
         .media
         .iter()
-        .find(|media| media.data_base64 == "aGVsbG8=")
+        .find(|media| {
+            matches!(
+                &media.source,
+                AuthoringMediaSource::InlineBytes { data_base64 } if data_base64 == "aGVsbG8="
+            )
+        })
         .expect("custom-main asset should lower");
     let other_media = plan
         .authoring_document
         .media
         .iter()
-        .find(|media| media.data_base64 == "d29ybGQ=")
+        .find(|media| {
+            matches!(
+                &media.source,
+                AuthoringMediaSource::InlineBytes { data_base64 } if data_base64 == "d29ybGQ="
+            )
+        })
         .expect("other-main asset should lower");
 
-    assert!(css.contains(&chosen_media.filename));
-    assert!(!css.contains(&other_media.filename));
+    assert!(css.contains(&chosen_media.desired_filename));
+    assert!(!css.contains(&other_media.desired_filename));
     assert!(
         plan.lowering_diagnostics
             .iter()

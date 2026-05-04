@@ -32,8 +32,13 @@ pub fn build_from_path(
         .context("input must map into normalized IR execution model")?;
     let writer_policy = load_writer_policy(&bundle, writer_policy_selector)?;
     let build_context = load_build_context(&bundle, build_context_selector)?;
+    let media_store_dir = input_path
+        .parent()
+        .map(|parent| parent.join(".anki-forge-media"))
+        .unwrap_or_else(|| Path::new(".anki-forge-media").to_path_buf());
     let artifact_target =
-        BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), "artifacts");
+        BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), "artifacts")
+            .with_media_store_dir(media_store_dir);
 
     build(
         &normalized_ir,

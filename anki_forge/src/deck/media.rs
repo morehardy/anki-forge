@@ -1,9 +1,13 @@
+use anyhow::Context;
 use base64::Engine as _;
 use sha1::{Digest, Sha1};
 use std::collections::BTreeMap;
+use std::io::Read;
 use std::path::{Component, Path};
 
-use crate::deck::model::{Deck, MediaRef, RasterImageMetadata, RegisteredMedia};
+use crate::deck::model::{
+    Deck, MediaRef, RasterImageMetadata, RegisteredMedia, RegisteredMediaSource,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum MediaSource {
@@ -85,38 +89,215 @@ fn repair_missing_raster_image_metadata(registered: &mut RegisteredMedia) {
         return;
     }
 
-    let Ok(bytes) = base64::engine::general_purpose::STANDARD.decode(&registered.data_base64)
-    else {
-        return;
+    registered.raster_image = match &registered.source {
+        RegisteredMediaSource::File { path } => {
+            raster_image_metadata_from_path(&registered.name, path)
+        }
+        RegisteredMediaSource::InlineBytes { data_base64 } => {
+            let Ok(bytes) = base64::engine::general_purpose::STANDARD.decode(data_base64) else {
+                return;
+            };
+            raster_image_metadata_from_bytes(&registered.name, &bytes)
+        }
     };
-    registered.raster_image = raster_image_metadata(&registered.name, &bytes);
 }
 
 impl RegisteredMedia {
     pub fn from_source(source: MediaSource) -> anyhow::Result<Self> {
-        let (name, bytes) = match source {
+        let (name, registered_source, sha1_hex, raster_image) = match source {
             MediaSource::File { path } => {
                 let name = path
                     .file_name()
                     .and_then(|item| item.to_str())
                     .ok_or_else(|| anyhow::anyhow!("media path must end in a valid filename"))?
                     .to_string();
-                (name, std::fs::read(path)?)
+                validate_source_file(&path)?;
+                let sha1_hex = sha1_file_hex(&path)?;
+                let raster_image = raster_image_metadata_from_path(&name, &path);
+                (
+                    name,
+                    RegisteredMediaSource::File { path },
+                    sha1_hex,
+                    raster_image,
+                )
             }
-            MediaSource::Bytes { name, bytes } => (name, bytes),
+            MediaSource::Bytes { name, bytes } => {
+                let sha1_hex = hex::encode(Sha1::digest(&bytes));
+                let raster_image = raster_image_metadata_from_bytes(&name, &bytes);
+                let encoded = base64::engine::general_purpose::STANDARD.encode(&bytes);
+                (
+                    name,
+                    RegisteredMediaSource::InlineBytes {
+                        data_base64: encoded,
+                    },
+                    sha1_hex,
+                    raster_image,
+                )
+            }
         };
         validate_media_filename(&name)?;
 
-        let sha1_hex = hex::encode(Sha1::digest(&bytes));
-        let raster_image = raster_image_metadata(&name, &bytes);
         Ok(Self {
             name: name.clone(),
-            mime: mime_from_name(&name),
-            data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+            source: registered_source,
+            declared_mime: Some(mime_from_name(&name)),
             sha1_hex,
             raster_image,
         })
     }
+
+    pub(crate) fn to_authoring_media(
+        &self,
+        media_source_dir: &Path,
+    ) -> anyhow::Result<crate::AuthoringMedia> {
+        let source = match &self.source {
+            RegisteredMediaSource::File { path } => {
+                ensure_safe_media_source_dir(media_source_dir)?;
+                let target = media_source_dir.join(&self.name);
+                ensure_not_symlink(&target)?;
+                std::fs::copy(path, &target).with_context(|| {
+                    format!(
+                        "copy media source {} to {}",
+                        path.display(),
+                        target.display()
+                    )
+                })?;
+                crate::AuthoringMediaSource::Path {
+                    path: self.name.clone(),
+                }
+            }
+            RegisteredMediaSource::InlineBytes { data_base64 } => {
+                crate::AuthoringMediaSource::InlineBytes {
+                    data_base64: data_base64.clone(),
+                }
+            }
+        };
+
+        Ok(crate::AuthoringMedia {
+            id: format!("media:{}", self.name),
+            desired_filename: self.name.clone(),
+            source,
+            declared_mime: self.declared_mime.clone(),
+        })
+    }
+
+    pub(crate) fn to_self_contained_authoring_media(
+        &self,
+    ) -> anyhow::Result<crate::AuthoringMedia> {
+        let source = match &self.source {
+            RegisteredMediaSource::File { path } => {
+                let bytes = std::fs::read(path)
+                    .with_context(|| format!("read media source file: {}", path.display()))?;
+                crate::AuthoringMediaSource::InlineBytes {
+                    data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+                }
+            }
+            RegisteredMediaSource::InlineBytes { data_base64 } => {
+                crate::AuthoringMediaSource::InlineBytes {
+                    data_base64: data_base64.clone(),
+                }
+            }
+        };
+
+        Ok(crate::AuthoringMedia {
+            id: format!("media:{}", self.name),
+            desired_filename: self.name.clone(),
+            source,
+            declared_mime: self.declared_mime.clone(),
+        })
+    }
+}
+
+fn validate_source_file(path: &Path) -> anyhow::Result<()> {
+    let metadata = std::fs::metadata(path)
+        .with_context(|| format!("stat media source file: {}", path.display()))?;
+    anyhow::ensure!(
+        metadata.is_file(),
+        "media source path must be a regular file: {}",
+        path.display()
+    );
+    Ok(())
+}
+
+fn ensure_safe_media_source_dir(media_source_dir: &Path) -> anyhow::Result<()> {
+    match std::fs::symlink_metadata(media_source_dir) {
+        Ok(metadata) => {
+            anyhow::ensure!(
+                !metadata.file_type().is_symlink(),
+                "media source directory must not be a symlink: {}",
+                media_source_dir.display()
+            );
+            anyhow::ensure!(
+                metadata.is_dir(),
+                "media source path must be a directory: {}",
+                media_source_dir.display()
+            );
+        }
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+            std::fs::create_dir_all(media_source_dir).with_context(|| {
+                format!(
+                    "create media source directory: {}",
+                    media_source_dir.display()
+                )
+            })?;
+            let metadata = std::fs::symlink_metadata(media_source_dir).with_context(|| {
+                format!(
+                    "stat media source directory: {}",
+                    media_source_dir.display()
+                )
+            })?;
+            anyhow::ensure!(
+                !metadata.file_type().is_symlink(),
+                "media source directory must not be a symlink: {}",
+                media_source_dir.display()
+            );
+        }
+        Err(err) => {
+            return Err(err).with_context(|| {
+                format!(
+                    "stat media source directory: {}",
+                    media_source_dir.display()
+                )
+            });
+        }
+    }
+
+    Ok(())
+}
+
+fn ensure_not_symlink(path: &Path) -> anyhow::Result<()> {
+    match std::fs::symlink_metadata(path) {
+        Ok(metadata) => {
+            anyhow::ensure!(
+                !metadata.file_type().is_symlink(),
+                "media input target must not be a symlink: {}",
+                path.display()
+            );
+        }
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => {}
+        Err(err) => {
+            return Err(err)
+                .with_context(|| format!("stat media input target: {}", path.display()));
+        }
+    }
+    Ok(())
+}
+
+fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
+    let mut file = std::fs::File::open(path)
+        .with_context(|| format!("open media source file: {}", path.display()))?;
+    let mut hasher = Sha1::new();
+    let mut buffer = [0_u8; 8192];
+    loop {
+        let read = file
+            .read(&mut buffer)
+            .with_context(|| format!("read media source file: {}", path.display()))?;
+        if read == 0 {
+            break;
+        }
+        hasher.update(&buffer[..read]);
+    }
+    Ok(hex::encode(hasher.finalize()))
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
@@ -152,7 +333,17 @@ fn mime_from_name(name: &str) -> String {
     }
 }
 
-fn raster_image_metadata(name: &str, bytes: &[u8]) -> Option<RasterImageMetadata> {
+fn raster_image_metadata_from_path(name: &str, path: &Path) -> Option<RasterImageMetadata> {
+    match mime_from_name(name).as_str() {
+        "image/png" | "image/jpeg" => imagesize::size(path).ok().map(|size| RasterImageMetadata {
+            width_px: size.width as u32,
+            height_px: size.height as u32,
+        }),
+        _ => None,
+    }
+}
+
+fn raster_image_metadata_from_bytes(name: &str, bytes: &[u8]) -> Option<RasterImageMetadata> {
     match mime_from_name(name).as_str() {
         "image/png" | "image/jpeg" => {
             imagesize::blob_size(bytes)

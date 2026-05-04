@@ -296,9 +296,12 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 let lowered_filename = asset.lowered_filename();
                 media_by_identity.insert(asset.identity(), lowered_filename.clone());
                 media.push(crate::AuthoringMedia {
-                    filename: lowered_filename.clone(),
-                    mime: asset.mime().into(),
-                    data_base64: asset.data_base64().into(),
+                    id: format!("media:{lowered_filename}"),
+                    desired_filename: lowered_filename.clone(),
+                    source: crate::AuthoringMediaSource::InlineBytes {
+                        data_base64: asset.data_base64().into(),
+                    },
+                    declared_mime: Some(asset.mime().into()),
                 });
                 mappings.push(LoweringMapping {
                     kind: "media",

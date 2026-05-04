@@ -22,6 +22,102 @@ fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
 }
 
 #[test]
+fn deck_build_uses_cas_media_without_normalized_base64_payload() {
+    let root = unique_artifacts_dir("deck-cas-build");
+    let mut deck = anki_forge::Deck::builder("Media Deck")
+        .stable_id("media-deck")
+        .build();
+    let media = deck
+        .media()
+        .add(anki_forge::MediaSource::from_bytes(
+            "hello.txt",
+            b"hello".to_vec(),
+        ))
+        .unwrap();
+    deck.basic()
+        .note("front", format!("<img src=\"{}\">", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+
+    let build = deck.build(&root).unwrap();
+    let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
+
+    assert!(manifest.contains("media_objects"));
+    assert!(manifest.contains("media_bindings"));
+    assert!(!manifest.contains("data_base64"));
+}
+
+#[test]
+fn deck_build_keeps_file_media_path_backed_until_normalize() {
+    let root = unique_artifacts_dir("deck-file-cas-build");
+    let source_dir = root.join("source");
+    std::fs::create_dir_all(&source_dir).unwrap();
+    std::fs::write(source_dir.join("hello.txt"), b"hello").unwrap();
+    let mut deck = anki_forge::Deck::builder("Media Deck")
+        .stable_id("media-deck")
+        .build();
+    let media = deck
+        .media()
+        .add(anki_forge::MediaSource::from_file(
+            source_dir.join("hello.txt"),
+        ))
+        .unwrap();
+    deck.basic()
+        .note("front", format!("<img src=\"{}\">", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+
+    let build = deck.build(&root).unwrap();
+    let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
+
+    assert!(root.join(".anki-forge-media-input/hello.txt").is_file());
+    assert!(manifest.contains("media_objects"));
+    assert!(!manifest.contains("data_base64"));
+}
+
+#[cfg(unix)]
+#[test]
+fn deck_build_rejects_preexisting_media_input_target_symlink() {
+    let root = unique_artifacts_dir("deck-file-cas-symlink-target");
+    let source_dir = root.join("source");
+    std::fs::create_dir_all(&source_dir).unwrap();
+    std::fs::write(source_dir.join("hello.txt"), b"hello").unwrap();
+    let victim_path = root.join("victim.txt");
+    std::fs::write(&victim_path, b"do not overwrite").unwrap();
+    let media_input_dir = root.join(".anki-forge-media-input");
+    std::fs::create_dir_all(&media_input_dir).unwrap();
+    std::os::unix::fs::symlink(&victim_path, media_input_dir.join("hello.txt")).unwrap();
+
+    let mut deck = anki_forge::Deck::builder("Media Deck")
+        .stable_id("media-deck")
+        .build();
+    let media = deck
+        .media()
+        .add(anki_forge::MediaSource::from_file(
+            source_dir.join("hello.txt"),
+        ))
+        .unwrap();
+    deck.basic()
+        .note("front", format!("<img src=\"{}\">", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+
+    let err = match deck.build(&root) {
+        Ok(_) => panic!("build must reject media input target symlink"),
+        Err(err) => err,
+    };
+
+    assert!(
+        err.to_string().contains("symlink"),
+        "unexpected error: {err}"
+    );
+    assert_eq!(std::fs::read(&victim_path).unwrap(), b"do not overwrite");
+}
+
+#[test]
 fn deck_basic_flow_example_shape_matches_the_public_happy_path() {
     let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
 

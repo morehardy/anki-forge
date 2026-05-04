@@ -5,8 +5,8 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use crate::{
-    normalize, AuthoringDocument, AuthoringMedia, AuthoringNote, AuthoringNotetype,
-    NormalizationRequest, NormalizationResult,
+    normalize_with_options, AuthoringDocument, AuthoringMedia, AuthoringNote, AuthoringNotetype,
+    MediaPolicy, NormalizationRequest, NormalizationResult, NormalizeOptions,
 };
 
 use super::{
@@ -57,5 +57,18 @@ pub fn normalize_from_path(
         media: input_document.media,
     };
 
-    Ok(normalize(NormalizationRequest::new(document)))
+    let base_dir = input_path
+        .parent()
+        .map(Path::to_path_buf)
+        .unwrap_or_else(|| Path::new(".").to_path_buf());
+    let media_store_dir = base_dir.join(".anki-forge-media");
+
+    Ok(normalize_with_options(
+        NormalizationRequest::new(document),
+        NormalizeOptions {
+            base_dir,
+            media_store_dir,
+            media_policy: MediaPolicy::default_strict(),
+        },
+    ))
 }

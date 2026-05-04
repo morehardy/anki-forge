@@ -39,7 +39,7 @@ fn io_font_bundle_case_can_be_loaded_from_data_fixtures_and_lowered() {
     );
     assert_eq!(lowering.authoring_document.media.len(), 1);
     assert!(lowering.authoring_document.media[0]
-        .filename
+        .desired_filename
         .starts_with("_io-main_"));
     assert_eq!(
         lowering.authoring_document.notetypes[0].field_metadata[0]

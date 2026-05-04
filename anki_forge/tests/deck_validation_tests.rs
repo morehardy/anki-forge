@@ -97,6 +97,36 @@ fn legacy_generated_note_still_deserializes_and_reports_warning() {
 }
 
 #[test]
+fn legacy_inline_media_shape_deserializes_as_self_contained_media() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Media Deck",
+        "stable_id": "media-deck",
+        "notes": [],
+        "next_generated_note_id": 1,
+        "media": {
+            "hello.txt": {
+                "name": "hello.txt",
+                "mime": "text/plain",
+                "data_base64": "aGVsbG8=",
+                "sha1_hex": "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d"
+            }
+        }
+    }))
+    .expect("legacy media deck should deserialize");
+
+    let lowered = deck.lower_authoring().expect("lower legacy media deck");
+    assert_eq!(lowered.media.len(), 1);
+    assert_eq!(
+        lowered.media[0].declared_mime.as_deref(),
+        Some("text/plain")
+    );
+    assert!(matches!(
+        &lowered.media[0].source,
+        anki_forge::AuthoringMediaSource::InlineBytes { data_base64 } if data_base64 == "aGVsbG8="
+    ));
+}
+
+#[test]
 fn blank_explicit_stable_id_fails_at_add_time() {
     let mut deck = Deck::new("Spanish");
 
