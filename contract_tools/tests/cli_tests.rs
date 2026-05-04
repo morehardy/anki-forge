@@ -20,6 +20,7 @@ fn run_cli(args: &[&str]) -> std::process::Output {
 }
 
 fn basic_normalized_ir() -> Value {
+    let blake3 = "ea8f163db38682925e4491c5e58d4bb3506ef8c14eb78a86e908c5624a67200f";
     serde_json::json!({
         "kind": "normalized-ir",
         "schema_version": "0.1.0",
@@ -58,17 +59,47 @@ fn basic_normalized_ir() -> Value {
                 "tags": ["demo"]
             }
         ],
-        "media": [
+        "media_objects": [
             {
-                "filename": "sample.jpg",
-                "mime": "image/jpeg",
-                "data_base64": "MQ=="
+                "id": format!("obj:blake3:{blake3}"),
+                "object_ref": format!("media://blake3/{blake3}"),
+                "blake3": blake3,
+                "sha1": "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+                "size_bytes": 5,
+                "mime": "image/jpeg"
+            }
+        ],
+        "media_bindings": [
+            {
+                "id": "media:sample.jpg",
+                "object_id": format!("obj:blake3:{blake3}"),
+                "export_filename": "sample.jpg"
+            }
+        ],
+        "media_references": [
+            {
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Back",
+                "raw_ref": "sample.jpg",
+                "ref_kind": "html_src",
+                "media_id": "media:sample.jpg",
+                "resolution_status": "resolved"
             }
         ]
     })
 }
 
 fn write_basic_normalized_ir(temp_dir: &std::path::Path) -> std::path::PathBuf {
+    let blake3 = "ea8f163db38682925e4491c5e58d4bb3506ef8c14eb78a86e908c5624a67200f";
+    let object_dir = temp_dir
+        .join(".anki-forge-media/objects/blake3")
+        .join(&blake3[0..2])
+        .join(&blake3[2..4]);
+    fs::create_dir_all(&object_dir).expect("create temp media object store");
+    fs::write(object_dir.join(blake3), b"hello").expect("write temp media object");
+
     let input = temp_dir.join("basic-normalized-ir.json");
     fs::write(
         &input,

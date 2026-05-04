@@ -52,6 +52,19 @@ fn diff_reports_emit_stable_selector_and_evidence_refs_for_domain_changes() {
     assert!(!change.evidence_refs.is_empty());
 }
 
+#[test]
+fn diff_reports_only_strip_media_provenance_from_media_domain() {
+    let left = sample_inspect_report("Basic");
+    let mut right = left.clone();
+    right.observations.references[0]["object_id"] = json!("semantic-object-id");
+
+    let diff = diff_reports(&left, &right).unwrap();
+
+    assert_eq!(diff.changes.len(), 1);
+    assert_eq!(diff.changes[0].domain, "references");
+    assert_eq!(diff.changes[0].selector, "note[id='note-1']");
+}
+
 fn sample_writer_policy() -> WriterPolicy {
     WriterPolicy {
         id: "writer-policy.default".into(),

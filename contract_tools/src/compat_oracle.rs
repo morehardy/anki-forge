@@ -146,8 +146,14 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
         }
 
         let stable_ref_prefix = format!("artifacts/compat-oracle/{}", case.id);
-        let artifact_target =
+        let media_store_dir = normalized_ir_path
+            .parent()
+            .map(|parent| parent.join(".anki-forge-media"));
+        let mut artifact_target =
             writer_core::BuildArtifactTarget::new(artifact_root, stable_ref_prefix);
+        if let Some(media_store_dir) = media_store_dir {
+            artifact_target = artifact_target.with_media_store_dir(media_store_dir);
+        }
         let build_result = writer_core::build(
             &normalized_ir,
             &writer_policy,

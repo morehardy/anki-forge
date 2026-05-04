@@ -211,10 +211,15 @@ fn build_phase3_fixture_apkg(
     let writer_policy = load_writer_policy_asset(&manifest, "default").expect("load writer policy");
     let build_context = load_build_context_asset(&manifest, "default").expect("load build context");
     let artifact_root = tempfile::tempdir().expect("temp artifact root");
+    let media_store_dir = normalized_path
+        .parent()
+        .expect("normalized fixture has parent")
+        .join(".anki-forge-media");
     let target = writer_core::BuildArtifactTarget::new(
         artifact_root.path().to_path_buf(),
         format!("artifacts/compat-oracle-tests/{label}"),
-    );
+    )
+    .with_media_store_dir(media_store_dir);
 
     let build_result = writer_core::build(&normalized_ir, &writer_policy, &build_context, &target)
         .expect("build fixture package");

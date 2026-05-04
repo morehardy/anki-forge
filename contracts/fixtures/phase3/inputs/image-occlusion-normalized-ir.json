@@ -1,11 +1,55 @@
 {
-  "document_id": "demo-doc",
   "kind": "normalized-ir",
-  "media": [
+  "schema_version": "0.1.0",
+  "document_id": "demo-doc",
+  "resolved_identity": "det:demo-doc",
+  "notetypes": [
     {
-      "data_base64": "aGVsbG8=",
-      "filename": "occlusion.png",
-      "mime": "image/png"
+      "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+      "fields": [
+        {
+          "name": "Occlusion",
+          "ord": 0,
+          "tag": 0,
+          "prevent_deletion": true
+        },
+        {
+          "name": "Image",
+          "ord": 1,
+          "tag": 1,
+          "prevent_deletion": true
+        },
+        {
+          "name": "Header",
+          "ord": 2,
+          "tag": 2,
+          "prevent_deletion": true
+        },
+        {
+          "name": "Back Extra",
+          "ord": 3,
+          "tag": 3,
+          "prevent_deletion": true
+        },
+        {
+          "name": "Comments",
+          "ord": 4,
+          "tag": 4,
+          "prevent_deletion": false
+        }
+      ],
+      "id": "io-main",
+      "kind": "cloze",
+      "name": "Image Occlusion",
+      "original_stock_kind": "image_occlusion",
+      "templates": [
+        {
+          "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",
+          "name": "Image Occlusion",
+          "ord": 0,
+          "question_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n"
+        }
+      ]
     }
   ],
   "notes": [
@@ -25,30 +69,33 @@
       ]
     }
   ],
-  "notetypes": [
+  "media_objects": [
     {
-      "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
-      "fields": [
-        { "name": "Occlusion", "ord": 0, "tag": 0, "prevent_deletion": true },
-        { "name": "Image", "ord": 1, "tag": 1, "prevent_deletion": true },
-        { "name": "Header", "ord": 2, "tag": 2, "prevent_deletion": true },
-        { "name": "Back Extra", "ord": 3, "tag": 3, "prevent_deletion": true },
-        { "name": "Comments", "ord": 4, "tag": 4, "prevent_deletion": false }
-      ],
-      "id": "io-main",
-      "kind": "cloze",
-      "name": "Image Occlusion",
-      "original_stock_kind": "image_occlusion",
-      "templates": [
-        {
-          "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",
-          "name": "Image Occlusion",
-          "ord": 0,
-          "question_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n"
-        }
-      ]
+      "id": "obj:blake3:7cd3a55aa8135ee1c12372cc4f830ff070b7779a2d5f357b9e851e72cd7c42bb",
+      "object_ref": "media://blake3/7cd3a55aa8135ee1c12372cc4f830ff070b7779a2d5f357b9e851e72cd7c42bb",
+      "blake3": "7cd3a55aa8135ee1c12372cc4f830ff070b7779a2d5f357b9e851e72cd7c42bb",
+      "sha1": "19b6af3663413eb7104f5c5537d910c6d94d6f6f",
+      "size_bytes": 6261,
+      "mime": "image/png"
     }
   ],
-  "resolved_identity": "det:demo-doc",
-  "schema_version": "0.1.0"
+  "media_bindings": [
+    {
+      "id": "media:occlusion.png",
+      "object_id": "obj:blake3:7cd3a55aa8135ee1c12372cc4f830ff070b7779a2d5f357b9e851e72cd7c42bb",
+      "export_filename": "occlusion.png"
+    }
+  ],
+  "media_references": [
+    {
+      "owner_kind": "note",
+      "owner_id": "note-io-1",
+      "location_kind": "field",
+      "location_name": "Image",
+      "raw_ref": "occlusion.png",
+      "ref_kind": "html_src",
+      "media_id": "media:occlusion.png",
+      "resolution_status": "resolved"
+    }
+  ]
 }

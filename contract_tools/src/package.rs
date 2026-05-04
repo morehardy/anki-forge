@@ -2,7 +2,7 @@ use crate::{
     fixtures::load_fixture_catalog,
     manifest::{load_manifest, resolve_contract_relative_path},
 };
-use anyhow::{Context, Result};
+use anyhow::{ensure, Context, Result};
 use flate2::{write::GzEncoder, Compression};
 use serde::Deserialize;
 use std::{
@@ -135,6 +135,105 @@ fn add_relative_entry(
     Ok(())
 }
 
+fn add_sibling_tree_if_exists(
+    entries: &mut BTreeMap<PathBuf, PathBuf>,
+    contracts_root: &Path,
+    relative_file: &str,
+    sibling_name: &str,
+) -> Result<()> {
+    let parent = Path::new(relative_file)
+        .parent()
+        .with_context(|| format!("fixture path must have parent: {relative_file}"))?;
+    add_relative_dir_tree_if_exists(entries, contracts_root, &parent.join(sibling_name))
+}
+
+fn add_sibling_media_store_objects_if_exists(
+    entries: &mut BTreeMap<PathBuf, PathBuf>,
+    contracts_root: &Path,
+    relative_file: &str,
+) -> Result<()> {
+    let parent = Path::new(relative_file)
+        .parent()
+        .with_context(|| format!("fixture path must have parent: {relative_file}"))?;
+    add_relative_dir_tree_if_exists(
+        entries,
+        contracts_root,
+        &parent.join(".anki-forge-media/objects/blake3"),
+    )
+}
+
+fn add_relative_dir_tree_if_exists(
+    entries: &mut BTreeMap<PathBuf, PathBuf>,
+    contracts_root: &Path,
+    relative_dir: &Path,
+) -> Result<()> {
+    let contracts_root = contracts_root.canonicalize().with_context(|| {
+        format!(
+            "failed to resolve contracts root for packaging: {}",
+            contracts_root.display()
+        )
+    })?;
+    let source_dir = contracts_root.join(relative_dir);
+    if !source_dir.exists() {
+        return Ok(());
+    }
+    let source_dir = source_dir.canonicalize().with_context(|| {
+        format!(
+            "failed to resolve transitive package directory: {}",
+            relative_dir.display()
+        )
+    })?;
+    ensure!(
+        source_dir.starts_with(&contracts_root),
+        "transitive package directory must stay within contracts/: {}",
+        source_dir.display()
+    );
+    ensure!(
+        source_dir.is_dir(),
+        "transitive package path must resolve to a directory: {}",
+        source_dir.display()
+    );
+
+    add_dir_entries(entries, &contracts_root, &source_dir)
+}
+
+fn add_dir_entries(
+    entries: &mut BTreeMap<PathBuf, PathBuf>,
+    contracts_root: &Path,
+    source_dir: &Path,
+) -> Result<()> {
+    for entry in fs::read_dir(source_dir)
+        .with_context(|| format!("failed to read package directory: {}", source_dir.display()))?
+    {
+        let entry = entry.with_context(|| {
+            format!(
+                "failed to read package directory entry: {}",
+                source_dir.display()
+            )
+        })?;
+        let file_type = entry.file_type().with_context(|| {
+            format!(
+                "failed to inspect package entry: {}",
+                entry.path().display()
+            )
+        })?;
+        let path = entry.path();
+        if file_type.is_dir() {
+            add_dir_entries(entries, contracts_root, &path)?;
+        } else if file_type.is_file() {
+            let relative = path.strip_prefix(contracts_root).with_context(|| {
+                format!(
+                    "package directory entry must stay within contracts/: {}",
+                    path.display()
+                )
+            })?;
+            entries.insert(PathBuf::from("contracts").join(relative), path);
+        }
+    }
+
+    Ok(())
+}
+
 fn add_case_transitive_entries(
     entries: &mut BTreeMap<PathBuf, PathBuf>,
     contracts_root: &Path,
@@ -191,6 +290,11 @@ fn add_case_transitive_entries(
                 })?;
 
             add_relative_entry(entries, contracts_root, &transitive.normalized_input)?;
+            add_sibling_media_store_objects_if_exists(
+                entries,
+                contracts_root,
+                &transitive.normalized_input,
+            )?;
             add_relative_entry(entries, contracts_root, &transitive.expected_build)?;
             add_relative_entry(entries, contracts_root, &transitive.expected_inspect)?;
             if let Some(expected_diff) = transitive.expected_diff {
@@ -220,6 +324,12 @@ fn add_case_transitive_entries(
                 })?;
 
             add_relative_entry(entries, contracts_root, &transitive.authoring_input)?;
+            add_sibling_tree_if_exists(
+                entries,
+                contracts_root,
+                &transitive.authoring_input,
+                "assets",
+            )?;
             add_relative_entry(entries, contracts_root, &transitive.expected_build)?;
             add_relative_entry(entries, contracts_root, &transitive.expected_inspect)?;
             if let Some(expected_diff) = transitive.expected_diff {

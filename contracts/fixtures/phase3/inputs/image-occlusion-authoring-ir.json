@@ -31,9 +31,13 @@
   ],
   "media": [
     {
-      "filename": "occlusion.png",
-      "mime": "image/png",
-      "data_base64": "aGVsbG8="
+      "id": "media:occlusion.png",
+      "desired_filename": "occlusion.png",
+      "source": {
+        "kind": "path",
+        "path": "assets/occlusion.png"
+      },
+      "declared_mime": "image/png"
     }
   ]
 }
