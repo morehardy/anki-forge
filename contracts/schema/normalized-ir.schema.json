@@ -8,7 +8,9 @@
     "resolved_identity",
     "notetypes",
     "notes",
-    "media"
+    "media_objects",
+    "media_bindings",
+    "media_references"
   ],
   "additionalProperties": false,
   "properties": {
@@ -39,11 +41,17 @@
         "$ref": "#/$defs/normalized_note"
       }
     },
-    "media": {
+    "media_objects": {
       "type": "array",
-      "items": {
-        "$ref": "#/$defs/normalized_media"
-      }
+      "items": { "$ref": "#/$defs/media_object" }
+    },
+    "media_bindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/media_binding" }
+    },
+    "media_references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/media_reference" }
     }
   },
   "$defs": {
@@ -224,20 +232,78 @@
         }
       }
     },
-    "normalized_media": {
+    "media_object": {
       "type": "object",
-      "required": ["filename", "mime", "data_base64"],
+      "required": ["id", "object_ref", "blake3", "sha1", "size_bytes", "mime"],
       "additionalProperties": false,
       "properties": {
-        "filename": {
-          "type": "string",
-          "minLength": 1
-        },
-        "mime": {
-          "type": "string",
-          "minLength": 1
-        },
-        "data_base64": {
+        "id": { "type": "string", "pattern": "^obj:blake3:[0-9a-f]{64}$" },
+        "object_ref": { "type": "string", "pattern": "^media://blake3/[0-9a-f]{64}$" },
+        "blake3": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "mime": { "type": "string", "minLength": 1 }
+      }
+    },
+    "media_binding": {
+      "type": "object",
+      "required": ["id", "export_filename", "object_id"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "export_filename": { "type": "string", "minLength": 1 },
+        "object_id": { "type": "string", "pattern": "^obj:blake3:[0-9a-f]{64}$" }
+      }
+    },
+    "media_reference": {
+      "oneOf": [
+        { "$ref": "#/$defs/resolved_media_reference" },
+        { "$ref": "#/$defs/missing_media_reference" },
+        { "$ref": "#/$defs/skipped_media_reference" }
+      ]
+    },
+    "resolved_media_reference": {
+      "type": "object",
+      "required": ["owner_kind", "owner_id", "location_kind", "location_name", "raw_ref", "ref_kind", "resolution_status", "media_id"],
+      "additionalProperties": false,
+      "properties": {
+        "owner_kind": { "type": "string", "minLength": 1 },
+        "owner_id": { "type": "string", "minLength": 1 },
+        "location_kind": { "type": "string", "minLength": 1 },
+        "location_name": { "type": "string", "minLength": 1 },
+        "raw_ref": { "type": "string", "minLength": 1 },
+        "ref_kind": { "type": "string", "minLength": 1 },
+        "resolution_status": { "const": "resolved" },
+        "media_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "missing_media_reference": {
+      "type": "object",
+      "required": ["owner_kind", "owner_id", "location_kind", "location_name", "raw_ref", "ref_kind", "resolution_status"],
+      "additionalProperties": false,
+      "properties": {
+        "owner_kind": { "type": "string", "minLength": 1 },
+        "owner_id": { "type": "string", "minLength": 1 },
+        "location_kind": { "type": "string", "minLength": 1 },
+        "location_name": { "type": "string", "minLength": 1 },
+        "raw_ref": { "type": "string", "minLength": 1 },
+        "ref_kind": { "type": "string", "minLength": 1 },
+        "resolution_status": { "const": "missing" }
+      }
+    },
+    "skipped_media_reference": {
+      "type": "object",
+      "required": ["owner_kind", "owner_id", "location_kind", "location_name", "raw_ref", "ref_kind", "resolution_status", "skip_reason"],
+      "additionalProperties": false,
+      "properties": {
+        "owner_kind": { "type": "string", "minLength": 1 },
+        "owner_id": { "type": "string", "minLength": 1 },
+        "location_kind": { "type": "string", "minLength": 1 },
+        "location_name": { "type": "string", "minLength": 1 },
+        "raw_ref": { "type": "string", "minLength": 1 },
+        "ref_kind": { "type": "string", "minLength": 1 },
+        "resolution_status": { "const": "skipped" },
+        "skip_reason": {
           "type": "string",
           "minLength": 1
         }

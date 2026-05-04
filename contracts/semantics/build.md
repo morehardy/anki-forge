@@ -42,6 +42,12 @@ it is not a byte-for-byte replay of Anki's full Rust upgrade path. Note rows der
 `notes[].mtime_secs` when supplied and deterministic fallback `1` otherwise; callers
 that need chronological APKG reimport updates must supply `mtime_secs`.
 
+Writer media payloads are read from the content-addressed media store. Staging
+media files are copy/reflink-derived inspect artifacts and are not the writer's
+source of truth. The writer validates normalized media invariants and CAS object
+integrity, but media semantics such as unused bindings, missing references,
+unsafe references, and MIME mismatch are normalization responsibilities.
+
 In `media.rs`, imported media filenames are safety-checked and normalized, and
 archives that omit the `media` entry are treated as a legacy-compatible empty
 media map during import rather than as an immediate error.

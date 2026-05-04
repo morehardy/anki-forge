@@ -54,19 +54,73 @@ fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
         ],
         "media": [
             {
-                "filename": "sample.jpg",
-                "mime": "image/jpeg",
-                "data_base64": "MQ=="
+                "id": "media:sample-jpg",
+                "desired_filename": "sample.jpg",
+                "source": { "kind": "inline_bytes", "data_base64": "MQ==" },
+                "declared_mime": "image/jpeg"
             },
             {
-                "filename": "sample.mp3",
-                "mime": "audio/mpeg",
-                "data_base64": "Mg=="
+                "id": "media:sample-mp3",
+                "desired_filename": "sample.mp3",
+                "source": { "kind": "inline_bytes", "data_base64": "Mg==" },
+                "declared_mime": "audio/mpeg"
             }
         ]
     });
 
     assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
+fn authoring_ir_schema_accepts_path_and_inline_media_sources() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "authoring_ir_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "authoring-ir",
+        "schema_version": "0.1.0",
+        "metadata": { "document_id": "demo-doc" },
+        "notetypes": [],
+        "notes": [],
+        "media": [
+            {
+                "id": "media:heart",
+                "desired_filename": "heart.png",
+                "source": { "kind": "path", "path": "assets/heart.png" },
+                "declared_mime": "image/png"
+            },
+            {
+                "id": "media:tiny",
+                "desired_filename": "tiny.txt",
+                "source": { "kind": "inline_bytes", "data_base64": "aGk=" }
+            }
+        ]
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
+fn authoring_ir_schema_rejects_legacy_inline_media_payloads() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "authoring_ir_schema").unwrap()).unwrap();
+    let value = json!({
+        "kind": "authoring-ir",
+        "schema_version": "0.1.0",
+        "metadata": { "document_id": "demo-doc" },
+        "notetypes": [],
+        "notes": [],
+        "media": [
+            {
+                "filename": "sample.jpg",
+                "mime": "image/jpeg",
+                "data_base64": "MQ=="
+            }
+        ]
+    });
+
+    assert!(validate_value(&schema, &value).is_err());
 }
 
 #[test]
@@ -216,6 +270,44 @@ fn manifest_registers_note_identity_schema_and_semantics_assets() {
             "manifest is missing asset key {asset_key}"
         );
     }
+}
+
+#[test]
+fn normalized_ir_schema_accepts_media_objects_bindings_and_reference_states() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalized_ir_schema").unwrap()).unwrap();
+    let value = writer_ready_normalized_ir_value_with_media_v2();
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
+fn normalized_ir_schema_rejects_media_payload_fields() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalized_ir_schema").unwrap()).unwrap();
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value.as_object_mut().unwrap().insert(
+        "media".into(),
+        json!([{ "filename": "sample.jpg", "mime": "image/jpeg", "data_base64": "MQ==" }]),
+    );
+
+    assert!(validate_value(&schema, &value).is_err());
+}
+
+#[test]
+fn normalized_ir_schema_requires_reference_state_fields() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalized_ir_schema").unwrap()).unwrap();
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value["media_references"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("media_id");
+
+    assert!(validate_value(&schema, &value).is_err());
 }
 
 #[test]
@@ -374,58 +466,7 @@ fn normalized_ir_schema_accepts_resolved_writer_ready_shape() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
         load_schema(resolve_asset_path(&manifest, "normalized_ir_schema").unwrap()).unwrap();
-    let value = json!({
-        "kind": "normalized-ir",
-        "schema_version": "0.1.0",
-        "document_id": "demo-doc",
-        "resolved_identity": "det:demo-doc",
-        "notetypes": [
-            {
-                "id": "basic-main",
-                "kind": "normal",
-                "original_stock_kind": "basic",
-                "name": "Basic",
-                "fields": [
-                    { "name": "Front", "ord": 0, "prevent_deletion": false },
-                    { "name": "Back", "ord": 1, "prevent_deletion": false }
-                ],
-                "templates": [
-                    {
-                        "name": "Card 1",
-                        "ord": 0,
-                        "question_format": "{{Front}}",
-                        "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
-                    }
-                ],
-                "css": "",
-                "field_metadata": []
-            }
-        ],
-        "notes": [
-            {
-                "id": "note-1",
-                "notetype_id": "basic-main",
-                "deck_name": "Default",
-                "fields": {
-                    "Front": "front",
-                    "Back": "back <img src=\"sample.jpg\"> [sound:sample.mp3]"
-                },
-                "tags": ["demo"]
-            }
-        ],
-        "media": [
-            {
-                "filename": "sample.jpg",
-                "mime": "image/jpeg",
-                "data_base64": "MQ=="
-            },
-            {
-                "filename": "sample.mp3",
-                "mime": "audio/mpeg",
-                "data_base64": "Mg=="
-            }
-        ]
-    });
+    let value = writer_ready_normalized_ir_value();
 
     assert!(validate_value(&schema, &value).is_ok());
 }
@@ -458,6 +499,135 @@ fn normalized_schema_value(path: &std::path::Path) -> Value {
         map.remove("$schema");
     }
     value
+}
+
+fn writer_ready_normalized_ir_value_with_media_v2() -> Value {
+    let mut value = writer_ready_normalized_ir_value();
+    let object_id = "obj:blake3:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+    value.as_object_mut().unwrap().remove("media");
+    value.as_object_mut().unwrap().insert(
+        "media_objects".into(),
+        json!([
+            {
+                "id": object_id,
+                "object_ref": "media://blake3/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "blake3": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "sha1": "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+                "size_bytes": 5,
+                "mime": "text/plain"
+            }
+        ]),
+    );
+    value.as_object_mut().unwrap().insert(
+        "media_bindings".into(),
+        json!([
+            {
+                "id": "media:hello",
+                "export_filename": "hello.txt",
+                "object_id": object_id
+            }
+        ]),
+    );
+    value.as_object_mut().unwrap().insert(
+        "media_references".into(),
+        json!([
+            {
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Front",
+                "raw_ref": "hello.txt",
+                "ref_kind": "html_src",
+                "resolution_status": "resolved",
+                "media_id": "media:hello"
+            },
+            {
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Back",
+                "raw_ref": "missing.png",
+                "ref_kind": "html_src",
+                "resolution_status": "missing"
+            },
+            {
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Back",
+                "raw_ref": "https://example.com/x.png",
+                "ref_kind": "html_src",
+                "resolution_status": "skipped",
+                "skip_reason": "external-url"
+            }
+        ]),
+    );
+    value
+}
+
+#[test]
+fn normalized_media_contract_invariants_reject_inconsistent_object_identity() {
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value["media_objects"][0]["object_ref"] =
+        json!("media://blake3/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+    let err = validate_media_contract_invariants(&value).unwrap_err();
+
+    assert!(err.contains("object_ref"));
+}
+
+#[test]
+fn normalized_media_contract_invariants_reject_missing_binding_object_and_duplicate_filename() {
+    let mut value = writer_ready_normalized_ir_value_with_media_v2();
+    value["media_bindings"].as_array_mut().unwrap().push(json!({
+        "id": "media:other",
+        "export_filename": "hello.txt",
+        "object_id": "obj:blake3:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }));
+
+    let err = validate_media_contract_invariants(&value).unwrap_err();
+
+    assert!(err.contains("export_filename"));
+    assert!(err.contains("object_id"));
+}
+
+fn validate_media_contract_invariants(value: &Value) -> Result<(), String> {
+    let objects = value["media_objects"]
+        .as_array()
+        .ok_or_else(|| "media_objects must be an array".to_string())?;
+    let bindings = value["media_bindings"]
+        .as_array()
+        .ok_or_else(|| "media_bindings must be an array".to_string())?;
+    let mut object_ids = std::collections::BTreeSet::new();
+    let mut errors = Vec::new();
+    for object in objects {
+        let id = object["id"].as_str().unwrap_or_default();
+        let blake3 = object["blake3"].as_str().unwrap_or_default();
+        let object_ref = object["object_ref"].as_str().unwrap_or_default();
+        if id != format!("obj:blake3:{blake3}") {
+            errors.push(format!("id invariant failed for {id}"));
+        }
+        if object_ref != format!("media://blake3/{blake3}") {
+            errors.push(format!("object_ref invariant failed for {id}"));
+        }
+        object_ids.insert(id.to_string());
+    }
+    let mut filenames = std::collections::BTreeSet::new();
+    for binding in bindings {
+        let filename = binding["export_filename"].as_str().unwrap_or_default();
+        if !filenames.insert(filename.to_string()) {
+            errors.push(format!("duplicate export_filename {filename}"));
+        }
+        let object_id = binding["object_id"].as_str().unwrap_or_default();
+        if !object_ids.contains(object_id) {
+            errors.push(format!("missing object_id {object_id}"));
+        }
+    }
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors.join("; "))
+    }
 }
 
 fn writer_ready_normalized_ir_value() -> Value {
@@ -500,16 +670,42 @@ fn writer_ready_normalized_ir_value() -> Value {
                 "tags": ["demo"]
             }
         ],
-        "media": [
+        "media_objects": [
             {
-                "filename": "sample.jpg",
-                "mime": "image/jpeg",
-                "data_base64": "MQ=="
+                "id": "obj:blake3:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "object_ref": "media://blake3/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "blake3": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "sha1": "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+                "size_bytes": 5,
+                "mime": "text/plain"
+            }
+        ],
+        "media_bindings": [
+            {
+                "id": "media:sample",
+                "export_filename": "sample.jpg",
+                "object_id": "obj:blake3:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+            }
+        ],
+        "media_references": [
+            {
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Back",
+                "raw_ref": "sample.jpg",
+                "ref_kind": "html_src",
+                "resolution_status": "resolved",
+                "media_id": "media:sample"
             },
             {
-                "filename": "sample.mp3",
-                "mime": "audio/mpeg",
-                "data_base64": "Mg=="
+                "owner_kind": "note",
+                "owner_id": "note-1",
+                "location_kind": "field",
+                "location_name": "Back",
+                "raw_ref": "sample.mp3",
+                "ref_kind": "sound",
+                "resolution_status": "missing"
             }
         ]
     })
