@@ -2,6 +2,7 @@ pub mod canonical_json;
 pub mod identity;
 pub mod media;
 pub mod media_io;
+pub mod media_refs;
 pub mod model;
 pub mod normalize;
 pub mod risk;
@@ -20,6 +21,9 @@ pub use media_io::{
     decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path,
     CasExistingIntegrityReason, IngestedMediaBytes, MediaIoError, MediaReadSource,
     MediaSniffConfidence, SniffedMime,
+};
+pub use media_refs::{
+    extract_media_reference_candidates, MediaReferenceCandidate, MediaReferenceCandidateKind,
 };
 pub use model::{
     AuthoringDocument, AuthoringField, AuthoringFieldMetadata, AuthoringMedia, AuthoringNote,
