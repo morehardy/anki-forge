@@ -1,6 +1,7 @@
 use authoring_core::{
-    normalize, AuthoringDocument, AuthoringField, AuthoringFieldMetadata, AuthoringNote,
-    AuthoringNotetype, AuthoringTemplate, ComparisonContext, NormalizationRequest,
+    normalize, normalize_with_options, AuthoringDocument, AuthoringField, AuthoringFieldMetadata,
+    AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
+    ComparisonContext, MediaPolicy, NormalizationRequest, NormalizeOptions,
 };
 use serde_json::{json, Value};
 use std::collections::BTreeMap;
@@ -22,6 +23,23 @@ fn string_map(value: Value) -> std::collections::BTreeMap<String, String> {
 
 fn normalized_field_names(fields: &[authoring_core::NormalizedField]) -> Vec<&str> {
     fields.iter().map(|field| field.name.as_str()).collect()
+}
+
+fn normalize_test_options(label: &str) -> NormalizeOptions {
+    let mut root = std::env::temp_dir();
+    root.push(format!(
+        "anki-forge-normalize-{label}-{}",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ));
+    std::fs::create_dir_all(&root).unwrap();
+    NormalizeOptions {
+        base_dir: root.join("input"),
+        media_store_dir: root.join("store"),
+        media_policy: MediaPolicy::default_strict(),
+    }
 }
 
 #[test]
@@ -314,7 +332,9 @@ fn basic_authoring_input_expands_to_resolved_basic_notetype() {
 
     assert_eq!(normalized.notetypes.len(), 1);
     assert_eq!(normalized.notes.len(), 1);
-    assert!(normalized.media.is_empty());
+    assert!(normalized.media_objects.is_empty());
+    assert!(normalized.media_bindings.is_empty());
+    assert!(normalized.media_references.is_empty());
 
     let notetype = &normalized.notetypes[0];
     assert_eq!(notetype.id, "basic-main");
@@ -435,20 +455,26 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
             ],
             "media": [
                 {
-                    "filename": "mask.png",
-                    "mime": "image/png",
-                    "data_base64": "MQ=="
+                    "id": "media:mask",
+                    "desired_filename": "mask.png",
+                    "source": {
+                        "kind": "inline_bytes",
+                        "data_base64": "iVBORw0KGgpwYXlsb2Fk"
+                    },
+                    "declared_mime": "image/png"
                 }
             ]
         },
     }));
 
-    let result = normalize(request);
+    let result = normalize_with_options(request, normalize_test_options("image-occlusion"));
     let normalized = result.normalized_ir.expect("normalized_ir");
 
     assert_eq!(normalized.notetypes.len(), 1);
     assert_eq!(normalized.notes.len(), 1);
-    assert_eq!(normalized.media.len(), 1);
+    assert_eq!(normalized.media_objects.len(), 1);
+    assert_eq!(normalized.media_bindings.len(), 1);
+    assert_eq!(normalized.media_references.len(), 1);
 
     let notetype = &normalized.notetypes[0];
     assert_eq!(notetype.id, "io-main");
@@ -496,10 +522,20 @@ fn image_occlusion_lane_uses_source_grounded_fields_and_css() {
         }))
     );
 
-    let media = &normalized.media[0];
-    assert_eq!(media.filename, "mask.png");
-    assert_eq!(media.mime, "image/png");
-    assert_eq!(media.data_base64, "MQ==");
+    let media_binding = &normalized.media_bindings[0];
+    assert_eq!(media_binding.id, "media:mask");
+    assert_eq!(media_binding.export_filename, "mask.png");
+    let media_object = normalized
+        .media_objects
+        .iter()
+        .find(|object| object.id == media_binding.object_id)
+        .expect("bound media object");
+    assert_eq!(media_object.mime, "image/png");
+    assert_eq!(media_object.size_bytes, 15);
+    assert_eq!(
+        normalized.media_references[0].resolution_status(),
+        "resolved"
+    );
 }
 
 #[test]
@@ -674,10 +710,20 @@ fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
             ]),
             tags: vec!["demo".into()],
         }],
-        media: vec![],
+        media: vec![AuthoringMedia {
+            id: "media:mask".into(),
+            desired_filename: "mask.png".into(),
+            source: AuthoringMediaSource::InlineBytes {
+                data_base64: "iVBORw0KGgpwYXlsb2Fk".into(),
+            },
+            declared_mime: Some("image/png".into()),
+        }],
     };
 
-    let result = normalize(NormalizationRequest::new(input));
+    let result = normalize_with_options(
+        NormalizationRequest::new(input),
+        normalize_test_options("explicit-io"),
+    );
     let normalized = result.normalized_ir.expect("normalized_ir");
     let notetype = normalized.notetypes.first().expect("normalized notetype");
 

@@ -83,6 +83,16 @@ pub struct MediaReference {
     pub resolution: MediaReferenceResolution,
 }
 
+impl MediaReference {
+    pub fn resolution_status(&self) -> &'static str {
+        match self.resolution {
+            MediaReferenceResolution::Resolved { .. } => "resolved",
+            MediaReferenceResolution::Missing => "missing",
+            MediaReferenceResolution::Skipped { .. } => "skipped",
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "resolution_status", rename_all = "snake_case")]
 pub enum MediaReferenceResolution {

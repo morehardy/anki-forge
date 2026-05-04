@@ -1,9 +1,11 @@
 use authoring_core::{
-    ingest_authoring_media, object_store_path, sort_media_bindings, sort_media_objects,
-    sort_media_references, AuthoringMedia, AuthoringMediaSource, DiagnosticBehavior, MediaBinding,
-    MediaObject, MediaPolicy, MediaReference, MediaReferenceResolution, NormalizeOptions,
-    NormalizedIr,
+    ingest_authoring_media, normalize, normalize_with_options, object_store_path,
+    sort_media_bindings, sort_media_objects, sort_media_references, AuthoringDocument,
+    AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, ComparisonContext,
+    DiagnosticBehavior, MediaBinding, MediaObject, MediaPolicy, MediaReference,
+    MediaReferenceResolution, NormalizationRequest, NormalizeOptions, NormalizedIr,
 };
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -690,6 +692,225 @@ fn total_unique_media_size_limit_is_enforced() {
         .diagnostics
         .iter()
         .any(|item| item.code == "MEDIA.SIZE_LIMIT_EXCEEDED"));
+}
+
+#[test]
+fn normalize_outputs_media_objects_bindings_and_resolved_references() {
+    let root = unique_test_root("normalize-media");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let request = NormalizationRequest::new(authoring_doc_with_media("<img src=\"hello.txt\">"));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    let normalized = result.normalized_ir.unwrap();
+    assert_eq!(normalized.media_objects.len(), 1);
+    assert_eq!(normalized.media_bindings[0].export_filename, "hello.txt");
+    assert_eq!(
+        normalized.media_references[0].resolution_status(),
+        "resolved"
+    );
+}
+
+#[test]
+fn normalize_reports_missing_and_unsafe_references() {
+    let root = unique_test_root("normalize-missing");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let request = NormalizationRequest::new(authoring_doc_with_media(
+        "<img src=\"missing.png\"><img src=\"bad%2Fname.png\">",
+    ));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "invalid");
+    let codes = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.code.as_str())
+        .collect::<Vec<_>>();
+    assert!(codes.contains(&"MEDIA.MISSING_REFERENCE"));
+    assert!(codes.contains(&"MEDIA.UNSAFE_REFERENCE"));
+    let summaries = result
+        .diagnostics
+        .items
+        .iter()
+        .map(|item| item.summary.as_str())
+        .collect::<Vec<_>>();
+    assert!(summaries
+        .iter()
+        .any(|summary| summary.contains("note note-1 field Back")));
+}
+
+#[test]
+fn normalize_preserves_successful_media_ingest_diagnostics() {
+    let root = unique_test_root("normalize-ingest-diagnostics");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/blob.bin"), [0_u8, 159, 146, 150]).unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![AuthoringMedia {
+        id: "media:blob".into(),
+        desired_filename: "blob.bin".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/blob.bin".into(),
+        },
+        declared_mime: None,
+    }];
+    let request = NormalizationRequest::new(authoring_doc("<img src=\"blob.bin\">", media));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.level == "warning" && item.code == "MEDIA.UNKNOWN_MIME"));
+}
+
+#[test]
+fn normalize_warns_about_unused_media_bindings_by_default() {
+    let root = unique_test_root("normalize-unused-warning");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let request = NormalizationRequest::new(authoring_doc_with_media("no media refs"));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    assert!(result.normalized_ir.is_some());
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.level == "warning" && item.code == "MEDIA.UNUSED_BINDING"));
+}
+
+#[test]
+fn normalize_rejects_unused_media_bindings_when_policy_errors() {
+    let root = unique_test_root("normalize-unused-error");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets/hello.txt"), b"hello").unwrap();
+    let mut options = test_options(&base_dir, &root.join("store"));
+    options.media_policy.unused_binding_behavior = DiagnosticBehavior::Error;
+    let request = NormalizationRequest::new(authoring_doc_with_media("no media refs"));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result.normalized_ir.is_none());
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.level == "error" && item.code == "MEDIA.UNUSED_BINDING"));
+}
+
+#[test]
+fn normalize_keeps_skipped_references_in_valid_output() {
+    let root = unique_test_root("normalize-skipped");
+    let options = test_options(&root, &root.join("store"));
+    let request = NormalizationRequest::new(authoring_doc(
+        r#"
+        <img src="https://example.test/hero.png">
+        <img src="data:image/png;base64,AAAA">
+        <object data="{{ dynamic_media }}"></object>
+        "#,
+        vec![],
+    ));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .all(|item| item.level != "error"));
+    let normalized = result.normalized_ir.expect("normalized_ir");
+    assert_eq!(normalized.media_references.len(), 3);
+    assert!(normalized
+        .media_references
+        .iter()
+        .all(|reference| reference.resolution_status() == "skipped"));
+}
+
+#[test]
+fn normalize_rejects_media_without_explicit_options() {
+    let mut request =
+        NormalizationRequest::new(authoring_doc_with_media("<img src=\"hello.txt\">"));
+    request.comparison_context = Some(ComparisonContext::normalized(
+        "baseline-fingerprint",
+        "risk-policy.review@1.0.0",
+    ));
+
+    let result = normalize(request);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "MEDIA.NORMALIZE_OPTIONS_REQUIRED"));
+    assert!(result.comparison_context.is_some());
+    let merge_risk_report = result.merge_risk_report.expect("merge risk report");
+    assert_eq!(merge_risk_report.comparison_status, "unavailable");
+    assert_eq!(
+        merge_risk_report.baseline_artifact_fingerprint,
+        "baseline-fingerprint"
+    );
+}
+
+fn authoring_doc_with_media(back: &str) -> AuthoringDocument {
+    let media = vec![AuthoringMedia {
+        id: "media:hello".into(),
+        desired_filename: "hello.txt".into(),
+        source: AuthoringMediaSource::Path {
+            path: "assets/hello.txt".into(),
+        },
+        declared_mime: Some("text/plain".into()),
+    }];
+    authoring_doc(back, media)
+}
+
+fn authoring_doc(back: &str, media: Vec<AuthoringMedia>) -> AuthoringDocument {
+    let mut fields = BTreeMap::new();
+    fields.insert("Front".into(), "front".into());
+    fields.insert("Back".into(), back.into());
+    AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc".into(),
+        notetypes: vec![AuthoringNotetype {
+            id: "basic-main".into(),
+            kind: "normal".into(),
+            name: Some("Basic".into()),
+            original_stock_kind: Some("basic".into()),
+            original_id: None,
+            fields: None,
+            templates: None,
+            css: None,
+            field_metadata: vec![],
+        }],
+        notes: vec![AuthoringNote {
+            id: "note-1".into(),
+            notetype_id: "basic-main".into(),
+            deck_name: "Default".into(),
+            fields,
+            tags: vec![],
+        }],
+        media,
+    }
 }
 
 fn media_object(id: &str) -> MediaObject {

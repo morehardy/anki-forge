@@ -31,7 +31,7 @@ pub use model::{
     NormalizedField, NormalizedFieldMetadata, NormalizedIr, NormalizedNote, NormalizedNotetype,
     NormalizedTemplate,
 };
-pub use normalize::normalize;
+pub use normalize::{normalize, normalize_with_options, selector_resolve_error_code};
 pub use risk::assess_risk;
 pub use selector::{
     parse_selector, resolve_selector, Selector, SelectorError, SelectorResolveError, SelectorTarget,
