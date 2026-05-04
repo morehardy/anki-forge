@@ -846,6 +846,27 @@ fn normalize_keeps_skipped_references_in_valid_output() {
 }
 
 #[test]
+fn normalize_drops_empty_skipped_references_from_valid_output() {
+    let root = unique_test_root("normalize-empty-refs");
+    let options = test_options(&root, &root.join("store"));
+    let request = NormalizationRequest::new(authoring_doc(
+        r#"<img src=""> [sound:] <object data=""></object>"#,
+        vec![],
+    ));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .all(|item| item.level != "error"));
+    let normalized = result.normalized_ir.expect("normalized_ir");
+    assert!(normalized.media_references.is_empty());
+}
+
+#[test]
 fn normalize_rejects_media_without_explicit_options() {
     let mut request =
         NormalizationRequest::new(authoring_doc_with_media("<img src=\"hello.txt\">"));

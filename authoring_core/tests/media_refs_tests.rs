@@ -1,5 +1,13 @@
 use authoring_core::{extract_media_reference_candidates, MediaReferenceCandidateKind};
 
+type ReferenceSummary<'a> = (
+    &'a str,
+    &'a str,
+    Option<&'a str>,
+    Option<&'a str>,
+    Option<&'a str>,
+);
+
 #[test]
 fn extracts_sound_html_object_and_css_refs() {
     let refs = scan(
@@ -396,9 +404,7 @@ fn scan(input: &str) -> Vec<authoring_core::MediaReferenceCandidate> {
     extract_media_reference_candidates("note", "note-1", "field", "Front", input)
 }
 
-fn ref_summaries(
-    refs: &[authoring_core::MediaReferenceCandidate],
-) -> Vec<(&str, &str, Option<&str>, Option<&str>, Option<&str>)> {
+fn ref_summaries(refs: &[authoring_core::MediaReferenceCandidate]) -> Vec<ReferenceSummary<'_>> {
     refs.iter()
         .map(|item| {
             (

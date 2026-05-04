@@ -361,6 +361,11 @@ fn resolve_media_references(
                 field_name,
                 field_value,
             ) {
+                if candidate.raw_ref.is_empty()
+                    && candidate.skip_reason.as_deref() == Some("empty-ref")
+                {
+                    continue;
+                }
                 let resolution = if let Some(reason) = candidate.unsafe_reason {
                     diagnostics.push(DiagnosticItem {
                         level: "error".into(),
