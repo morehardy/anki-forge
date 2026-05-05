@@ -219,19 +219,27 @@ fn validate_source_file(path: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
+fn validate_media_source_dir_metadata(
+    media_source_dir: &Path,
+    metadata: &std::fs::Metadata,
+) -> anyhow::Result<()> {
+    anyhow::ensure!(
+        !metadata.file_type().is_symlink(),
+        "media source directory must not be a symlink: {}",
+        media_source_dir.display()
+    );
+    anyhow::ensure!(
+        metadata.is_dir(),
+        "media source path must be a directory: {}",
+        media_source_dir.display()
+    );
+    Ok(())
+}
+
 fn ensure_safe_media_source_dir(media_source_dir: &Path) -> anyhow::Result<()> {
     match std::fs::symlink_metadata(media_source_dir) {
         Ok(metadata) => {
-            anyhow::ensure!(
-                !metadata.file_type().is_symlink(),
-                "media source directory must not be a symlink: {}",
-                media_source_dir.display()
-            );
-            anyhow::ensure!(
-                metadata.is_dir(),
-                "media source path must be a directory: {}",
-                media_source_dir.display()
-            );
+            validate_media_source_dir_metadata(media_source_dir, &metadata)?;
         }
         Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
             std::fs::create_dir_all(media_source_dir).with_context(|| {
@@ -246,11 +254,7 @@ fn ensure_safe_media_source_dir(media_source_dir: &Path) -> anyhow::Result<()> {
                     media_source_dir.display()
                 )
             })?;
-            anyhow::ensure!(
-                !metadata.file_type().is_symlink(),
-                "media source directory must not be a symlink: {}",
-                media_source_dir.display()
-            );
+            validate_media_source_dir_metadata(media_source_dir, &metadata)?;
         }
         Err(err) => {
             return Err(err).with_context(|| {
@@ -400,5 +404,21 @@ mod tests {
             .rect(10, 20, 30, 40)
             .add()
             .expect("io identity uses repaired dimensions");
+    }
+
+    #[test]
+    fn media_source_dir_metadata_rejects_non_directory() {
+        let root = tempfile::tempdir().expect("tempdir");
+        let media_source_dir = root.path().join("media-input");
+        std::fs::write(&media_source_dir, b"not a directory").expect("write file");
+        let metadata = std::fs::symlink_metadata(&media_source_dir).expect("metadata");
+
+        let err = validate_media_source_dir_metadata(&media_source_dir, &metadata)
+            .expect_err("file metadata must be rejected");
+
+        assert!(
+            err.to_string().contains("must be a directory"),
+            "unexpected error: {err}"
+        );
     }
 }

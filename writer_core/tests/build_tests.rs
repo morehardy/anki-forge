@@ -1116,6 +1116,80 @@ fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
 }
 
 #[test]
+fn latest_collection_places_cards_in_note_deck_when_template_has_no_target_deck() {
+    let root = unique_artifact_root("note-deck-routing");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-deck-routing");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].deck_name = "Biology::Cells".into();
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let card_deck_name: String = conn
+        .query_row(
+            "select decks.name
+             from cards
+             join decks on decks.id = cards.did
+             join notes on notes.id = cards.nid
+             where notes.guid = 'note-1' and cards.ord = 0",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap();
+
+    assert_eq!(card_deck_name, "Biology::Cells");
+}
+
+#[test]
+fn latest_collection_template_target_deck_overrides_note_deck_for_cards() {
+    let root = unique_artifact_root("template-deck-routing");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/template-deck-routing");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].deck_name = "Biology::Cells".into();
+    normalized.notetypes[0].templates[0].target_deck_name = Some("Biology::Overrides".into());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let card_deck_name: String = conn
+        .query_row(
+            "select decks.name
+             from cards
+             join decks on decks.id = cards.did
+             join notes on notes.id = cards.nid
+             where notes.guid = 'note-1' and cards.ord = 0",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap();
+
+    assert_eq!(card_deck_name, "Biology::Overrides");
+
+    let deck_names: std::collections::BTreeSet<String> = conn
+        .prepare("select name from decks order by name")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+
+    assert!(deck_names.contains("Biology::Cells"));
+    assert!(deck_names.contains("Biology::Overrides"));
+}
+
+#[test]
 fn build_rejects_non_positive_explicit_normalized_note_mtime() {
     let root = unique_artifact_root("note-storage-invalid-mtime");
     let target =

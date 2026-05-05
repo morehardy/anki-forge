@@ -200,3 +200,21 @@ fn custom_escape_hatch_lowers_to_explicit_authoring_normal_notetype_shape() {
         "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}"
     );
 }
+
+#[test]
+fn product_default_deck_does_not_overwrite_explicit_note_deck() {
+    let plan = ProductDocument::new("multi-deck-doc")
+        .with_default_deck("Package::Default")
+        .with_basic("basic-main")
+        .add_basic_note("basic-main", "note-1", "Per Note::Deck", "front", "back")
+        .lower()
+        .expect("lower should succeed");
+
+    let note = plan
+        .authoring_document
+        .notes
+        .first()
+        .expect("lower should produce one note");
+
+    assert_eq!(note.deck_name, "Per Note::Deck");
+}

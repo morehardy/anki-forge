@@ -58,5 +58,11 @@ For `Phase 5A`, the writer also preserves product-layer template metadata:
   staged and packaged output
 - browser appearance declarations are carried onto matching templates during
   lowering and preserved through build materialization
-- template target deck names are resolved to stable deck ids during staging and
-  reused when writing template configs and card rows
+- note deck names and template target deck names are resolved into one stable
+  package deck registry during staging and APKG materialization
+- template configs only receive a nonzero/resolved `target_deck_id` from
+  `template.target_deck_name`; templates without deck override keep Anki's
+  native `0`/none target-deck representation
+- card rows use Anki's routing order:
+  `template.target_deck_name ?? note.deck_name`; this keeps per-note deck
+  import semantics separate from template deck override semantics

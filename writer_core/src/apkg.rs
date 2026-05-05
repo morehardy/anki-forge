@@ -17,8 +17,8 @@ use crate::anki_proto::{
     encode_field_config, encode_notetype_config, encode_template_config,
 };
 use crate::staging::{
-    load_normalized_ir_from_staging_manifest, resolve_template_target_deck_ids,
-    BuildArtifactTarget, MaterializedStaging,
+    load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
+    MaterializedStaging,
 };
 
 // The local docs/source/rslib tree is an ignored reference mirror that CI does
@@ -276,7 +276,7 @@ fn execute_schema16_marker(conn: &Connection) -> Result<()> {
 
 fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -> Result<()> {
     let default_deck_config_id = 1_i64;
-    let template_target_deck_ids = resolve_template_target_deck_ids(normalized_ir);
+    let deck_ids = resolve_deck_ids(normalized_ir);
 
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
@@ -299,7 +299,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             default_deck_kind_bytes(default_deck_config_id)
         ],
     )?;
-    for (deck_name, deck_id) in &template_target_deck_ids {
+    for (deck_name, deck_id) in &deck_ids {
         if deck_name == "Default" {
             continue;
         }
@@ -334,8 +334,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
-            let target_deck_id =
-                resolve_template_target_deck_id(template, &template_target_deck_ids, 0_i64);
+            let target_deck_id = resolve_template_target_deck_id(template, &deck_ids, 0_i64);
             conn.execute(
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
                 rusqlite::params![
@@ -380,8 +379,7 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             normalized_tags.insert(tag.clone());
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
-            let target_deck_id =
-                resolve_template_target_deck_id(template, &template_target_deck_ids, 1_i64);
+            let target_deck_id = resolve_card_deck_id(note, template, &deck_ids);
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
@@ -407,17 +405,36 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
     Ok(())
 }
 
+fn resolve_card_deck_id(
+    note: &NormalizedNote,
+    template: &authoring_core::NormalizedTemplate,
+    deck_ids: &std::collections::BTreeMap<String, i64>,
+) -> i64 {
+    let deck_name = template
+        .target_deck_name
+        .as_deref()
+        .unwrap_or(note.deck_name.as_str());
+    resolve_deck_id(deck_name, deck_ids, 1_i64)
+}
+
 fn resolve_template_target_deck_id(
     template: &authoring_core::NormalizedTemplate,
-    template_target_deck_ids: &std::collections::BTreeMap<String, i64>,
+    deck_ids: &std::collections::BTreeMap<String, i64>,
     default_id: i64,
 ) -> i64 {
     template
         .target_deck_name
-        .as_ref()
-        .and_then(|deck_name| template_target_deck_ids.get(deck_name))
-        .copied()
+        .as_deref()
+        .map(|deck_name| resolve_deck_id(deck_name, deck_ids, default_id))
         .unwrap_or(default_id)
+}
+
+fn resolve_deck_id(
+    deck_name: &str,
+    deck_ids: &std::collections::BTreeMap<String, i64>,
+    default_id: i64,
+) -> i64 {
+    deck_ids.get(deck_name).copied().unwrap_or(default_id)
 }
 
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {
