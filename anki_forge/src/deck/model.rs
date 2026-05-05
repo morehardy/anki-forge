@@ -1,5 +1,6 @@
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::{BTreeMap, BTreeSet};
+use std::path::PathBuf;
 
 fn canonicalize_fields<F, I>(fields: I) -> anyhow::Result<Vec<F>>
 where
@@ -320,14 +321,93 @@ pub struct RasterImageMetadata {
     pub height_px: u32,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct RegisteredMedia {
     pub(crate) name: String,
-    pub(crate) mime: String,
-    pub(crate) data_base64: String,
+    pub(crate) source: RegisteredMediaSource,
+    pub(crate) declared_mime: Option<String>,
     pub(crate) sha1_hex: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub(crate) raster_image: Option<RasterImageMetadata>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub(crate) enum RegisteredMediaSource {
+    File { path: PathBuf },
+    InlineBytes { data_base64: String },
+}
+
+impl<'de> Deserialize<'de> for RegisteredMedia {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum Wire {
+            Current {
+                name: String,
+                source: RegisteredMediaSource,
+                #[serde(default)]
+                declared_mime: Option<String>,
+                sha1_hex: String,
+                #[serde(default)]
+                raster_image: Option<RasterImageMetadata>,
+            },
+            LegacyInline {
+                name: String,
+                #[serde(default)]
+                mime: Option<String>,
+                data_base64: String,
+                sha1_hex: String,
+                #[serde(default)]
+                raster_image: Option<RasterImageMetadata>,
+            },
+        }
+
+        match Wire::deserialize(deserializer)? {
+            Wire::Current {
+                name,
+                source,
+                declared_mime,
+                sha1_hex,
+                raster_image,
+            } => Ok(Self {
+                name,
+                source,
+                declared_mime,
+                sha1_hex,
+                raster_image,
+            }),
+            Wire::LegacyInline {
+                name,
+                mime,
+                data_base64,
+                sha1_hex,
+                raster_image,
+            } => {
+                let declared_mime = Some(mime.unwrap_or_else(|| legacy_mime_from_name(&name)));
+                Ok(Self {
+                    name,
+                    source: RegisteredMediaSource::InlineBytes { data_base64 },
+                    declared_mime,
+                    sha1_hex,
+                    raster_image,
+                })
+            }
+        }
+    }
+}
+
+fn legacy_mime_from_name(name: &str) -> String {
+    match name.rsplit('.').next().map(|ext| ext.to_ascii_lowercase()) {
+        Some(ext) if ext == "png" => "image/png".into(),
+        Some(ext) if ext == "jpg" || ext == "jpeg" => "image/jpeg".into(),
+        Some(ext) if ext == "svg" => "image/svg+xml".into(),
+        Some(ext) if ext == "mp3" => "audio/mpeg".into(),
+        Some(ext) if ext == "wav" => "audio/wav".into(),
+        _ => "application/octet-stream".into(),
+    }
 }
 
 impl Deck {

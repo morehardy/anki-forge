@@ -9,7 +9,9 @@ use std::{
     path::{Component, Path, PathBuf},
 };
 
-use authoring_core::{AuthoringMedia, AuthoringNote, AuthoringNotetype};
+use authoring_core::{
+    AuthoringMedia, AuthoringNote, AuthoringNotetype, MediaPolicy, NormalizeOptions,
+};
 
 use crate::{
     manifest::{load_manifest, resolve_asset_path, resolve_contract_relative_path},
@@ -806,6 +808,15 @@ fn run_phase3_writer_case(
         case_id
     );
 
+    let normalized_input_path =
+        resolve_contract_relative_path(&manifest.contracts_root, &case.normalized_input)
+            .with_context(|| {
+                format!("phase3 normalized input must resolve safely for case {case_id}")
+            })?;
+    let media_store_dir = normalized_input_path
+        .parent()
+        .map(|parent| parent.join(".anki-forge-media"));
+
     let normalized_ir = load_validated_json_model(
         manifest,
         &resources.normalized_ir_schema,
@@ -824,6 +835,7 @@ fn run_phase3_writer_case(
         &case.expected_build,
         &case.expected_inspect,
         case.expected_diff.as_deref(),
+        media_store_dir,
         case_id,
     )
 }
@@ -843,7 +855,24 @@ fn run_phase3_e2e_case(
     );
 
     let input = load_authoring_input(manifest, authoring_ir_schema, &case.authoring_input)?;
-    let normalization = authoring_core::normalize(authoring_core::NormalizationRequest::new(input));
+    let input_path =
+        resolve_contract_relative_path(&manifest.contracts_root, &case.authoring_input)
+            .with_context(|| {
+                format!("phase3 authoring input must resolve safely for case {case_id}")
+            })?;
+    let base_dir = input_path
+        .parent()
+        .map(Path::to_path_buf)
+        .unwrap_or_else(|| PathBuf::from("."));
+    let media_store_dir = base_dir.join(".anki-forge-media");
+    let normalization = authoring_core::normalize_with_options(
+        authoring_core::NormalizationRequest::new(input),
+        NormalizeOptions {
+            media_store_dir: media_store_dir.clone(),
+            base_dir,
+            media_policy: MediaPolicy::default_strict(),
+        },
+    );
     ensure!(
         normalization.result_status == "success",
         "phase3 e2e normalization must succeed: {}",
@@ -866,6 +895,7 @@ fn run_phase3_e2e_case(
         &case.expected_build,
         &case.expected_inspect,
         case.expected_diff.as_deref(),
+        Some(media_store_dir),
         case_id,
     )
 }
@@ -881,6 +911,7 @@ fn execute_phase3_case(
     expected_build: &str,
     expected_inspect: &str,
     expected_diff: Option<&str>,
+    media_store_dir: Option<PathBuf>,
     case_id: &str,
 ) -> anyhow::Result<()> {
     let writer_policy =
@@ -889,7 +920,10 @@ fn execute_phase3_case(
         crate::policies::load_build_context_asset(manifest, build_context_selector)?;
     let artifact_root = resolve_contract_relative_dir(&manifest.contracts_root, artifacts_dir)
         .with_context(|| format!("phase3 artifacts_dir must resolve safely for case {case_id}"))?;
-    let artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, "artifacts");
+    let mut artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, "artifacts");
+    if let Some(media_store_dir) = media_store_dir {
+        artifact_target = artifact_target.with_media_store_dir(media_store_dir);
+    }
 
     let build_result = writer_core::build(
         normalized_ir,

@@ -1,13 +1,12 @@
 use std::collections::BTreeMap;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{
-    AuthoringNotetype, NormalizedIr, NormalizedMedia, NormalizedNote, NormalizedNotetype,
-};
+use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
 use serde_json::json;
+use sha1::Digest;
 use writer_core::{
     build, diff_reports, inspect_apkg, inspect_staging, BuildArtifactTarget, BuildContext,
     InspectObservations, InspectReport, WriterPolicy,
@@ -18,9 +17,10 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
     let root = unique_artifact_root("diff-semantic-consistency");
     let target =
         BuildArtifactTarget::new(root.clone(), "artifacts/phase3/diff-semantic-consistency");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -50,6 +50,19 @@ fn diff_reports_emit_stable_selector_and_evidence_refs_for_domain_changes() {
     assert_eq!(change.domain, "notetypes");
     assert_eq!(change.selector, "notetype[id='basic-main']");
     assert!(!change.evidence_refs.is_empty());
+}
+
+#[test]
+fn diff_reports_only_strip_media_provenance_from_media_domain() {
+    let left = sample_inspect_report("Basic");
+    let mut right = left.clone();
+    right.observations.references[0]["object_id"] = json!("semantic-object-id");
+
+    let diff = diff_reports(&left, &right).unwrap();
+
+    assert_eq!(diff.changes.len(), 1);
+    assert_eq!(diff.changes[0].domain, "references");
+    assert_eq!(diff.changes[0].selector, "note[id='note-1']");
 }
 
 fn sample_writer_policy() -> WriterPolicy {
@@ -93,20 +106,38 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     }
 }
 
-fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
+fn sample_basic_normalized_ir_with_media(media_store: &Path) -> NormalizedIr {
     let mut normalized = sample_basic_normalized_ir();
+    let bytes = b"hello";
+    let blake3_hex = blake3::hash(bytes).to_hex().to_string();
+    let sha1_hex = hex::encode(sha1::Sha1::digest(bytes));
+    let object_id = format!("obj:blake3:{blake3_hex}");
+    let object_path = authoring_core::object_store_path(media_store, &blake3_hex).unwrap();
+    fs::create_dir_all(object_path.parent().unwrap()).unwrap();
+    fs::write(&object_path, bytes).unwrap();
     normalized.notes[0]
         .fields
         .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
-    normalized.media.push(NormalizedMedia {
-        filename: "sample.jpg".into(),
+    normalized.media_objects = vec![authoring_core::MediaObject {
+        id: object_id.clone(),
+        object_ref: format!("media://blake3/{blake3_hex}"),
+        blake3: blake3_hex,
+        sha1: sha1_hex,
+        size_bytes: bytes.len() as u64,
         mime: "image/jpeg".into(),
-        data_base64: "aGVsbG8=".into(),
-    });
+    }];
+    normalized.media_bindings = vec![authoring_core::MediaBinding {
+        id: "media:sample".into(),
+        export_filename: "sample.jpg".into(),
+        object_id,
+    }];
+    normalized.media_references = vec![];
     normalized
 }
 

@@ -1,3 +1,4 @@
+use crate::media::{AuthoringMediaSource, MediaBinding, MediaObject, MediaReference};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
@@ -89,9 +90,11 @@ pub struct AuthoringNote {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuthoringMedia {
-    pub filename: String,
-    pub mime: String,
-    pub data_base64: String,
+    pub id: String,
+    pub desired_filename: String,
+    pub source: AuthoringMediaSource,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub declared_mime: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -148,7 +151,9 @@ pub struct NormalizedIr {
     pub resolved_identity: String,
     pub notetypes: Vec<NormalizedNotetype>,
     pub notes: Vec<NormalizedNote>,
-    pub media: Vec<NormalizedMedia>,
+    pub media_objects: Vec<MediaObject>,
+    pub media_bindings: Vec<MediaBinding>,
+    pub media_references: Vec<MediaReference>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -219,13 +224,6 @@ pub struct NormalizedNote {
     pub tags: Vec<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mtime_secs: Option<i64>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NormalizedMedia {
-    pub filename: String,
-    pub mime: String,
-    pub data_base64: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

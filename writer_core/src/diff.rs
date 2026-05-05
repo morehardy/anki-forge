@@ -47,7 +47,7 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         for selector in selectors {
             match (left_entries.get(&selector), right_entries.get(&selector)) {
                 (Some(left_entry), Some(right_entry)) => {
-                    if entry_payload(left_entry)? != entry_payload(right_entry)? {
+                    if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
                         changes.push(change_for_modified(
                             domain,
                             &selector,
@@ -130,24 +130,34 @@ fn domain_entries(report: &InspectReport, domain: &str) -> BTreeMap<String, Valu
     entries
 }
 
-fn entry_payload(value: &Value) -> Result<String> {
-    let payload = strip_non_semantic_fields(value);
+fn entry_payload(domain: &str, value: &Value) -> Result<String> {
+    let payload = strip_non_semantic_fields(domain, value);
     to_canonical_json(&payload)
 }
 
-fn strip_non_semantic_fields(value: &Value) -> Value {
+fn strip_non_semantic_fields(domain: &str, value: &Value) -> Value {
     match value {
         Value::Object(map) => {
             let mut map = map.clone();
             map.remove("selector");
             map.remove("evidence_refs");
+            if domain == "media" {
+                map.remove("binding_id");
+                map.remove("object_id");
+                map.remove("object_ref");
+            }
             Value::Object(
                 map.into_iter()
-                    .map(|(key, value)| (key, strip_non_semantic_fields(&value)))
+                    .map(|(key, value)| (key, strip_non_semantic_fields(domain, &value)))
                     .collect(),
             )
         }
-        Value::Array(items) => Value::Array(items.iter().map(strip_non_semantic_fields).collect()),
+        Value::Array(items) => Value::Array(
+            items
+                .iter()
+                .map(|value| strip_non_semantic_fields(domain, value))
+                .collect(),
+        ),
         other => other.clone(),
     }
 }

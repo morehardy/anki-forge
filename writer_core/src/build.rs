@@ -3,7 +3,10 @@ use authoring_core::NormalizedIr;
 
 use crate::apkg::emit_apkg;
 use crate::model::{BuildContext, PackageBuildResult, WriterPolicy};
-use crate::staging::{error_result, invalid_result, success_result, StagingPackage};
+use crate::staging::{
+    error_result, error_result_with_domain, invalid_result, success_result, ErrorResultDetails,
+    StagingPackage,
+};
 
 pub use crate::staging::BuildArtifactTarget;
 
@@ -35,6 +38,20 @@ pub fn build(
     let materialized = match package.materialize(artifact_target) {
         Ok(materialized) => materialized,
         Err(err) => {
+            if let Some(media_err) = err.downcast_ref::<crate::media::MediaWriterError>() {
+                return Ok(error_result_with_domain(
+                    writer_policy,
+                    build_context,
+                    ErrorResultDetails {
+                        code: media_err.diagnostic_code().into(),
+                        summary: err.to_string(),
+                        domain: "media".into(),
+                        stage: "materialize_staging".into(),
+                        operation: "write_media".into(),
+                        path: media_err.diagnostic_path(),
+                    },
+                ));
+            }
             return Ok(error_result(
                 writer_policy,
                 build_context,
@@ -48,12 +65,22 @@ pub fn build(
                         .display()
                         .to_string(),
                 ),
-            ))
+            ));
         }
     };
 
     let apkg = if build_context.emit_apkg {
-        Some(emit_apkg(&materialized, artifact_target)?)
+        match emit_apkg(&materialized, artifact_target) {
+            Ok(apkg) => Some(apkg),
+            Err(err) => {
+                return Ok(apkg_error_result(
+                    writer_policy,
+                    build_context,
+                    artifact_target,
+                    err,
+                ));
+            }
+        }
     } else {
         None
     };
@@ -64,4 +91,117 @@ pub fn build(
     }
 
     Ok(result)
+}
+
+fn apkg_error_result(
+    writer_policy: &WriterPolicy,
+    build_context: &BuildContext,
+    artifact_target: &BuildArtifactTarget,
+    err: anyhow::Error,
+) -> PackageBuildResult {
+    if let Some(media_err) = err.downcast_ref::<crate::media::MediaWriterError>() {
+        return error_result_with_domain(
+            writer_policy,
+            build_context,
+            ErrorResultDetails {
+                code: media_err.diagnostic_code().into(),
+                summary: err.to_string(),
+                domain: "media".into(),
+                stage: "emit_apkg".into(),
+                operation: "write_media".into(),
+                path: media_err.diagnostic_path(),
+            },
+        );
+    }
+
+    error_result_with_domain(
+        writer_policy,
+        build_context,
+        ErrorResultDetails {
+            code: "PHASE3.APKG_EMISSION_FAILED".into(),
+            summary: err.to_string(),
+            domain: "apkg".into(),
+            stage: "emit_apkg".into(),
+            operation: "write_package".into(),
+            path: Some(
+                artifact_target
+                    .root_dir
+                    .join("package.apkg")
+                    .display()
+                    .to_string(),
+            ),
+        },
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use std::path::PathBuf;
+
+    use super::*;
+
+    #[test]
+    fn apkg_media_errors_are_returned_as_build_diagnostics() {
+        let missing_path = PathBuf::from("/tmp/missing-cas-object");
+        let result = apkg_error_result(
+            &sample_writer_policy(),
+            &sample_build_context(),
+            &BuildArtifactTarget::new("/tmp/anki-forge-apkg-error", "artifacts/error"),
+            anyhow::Error::new(crate::media::MediaWriterError::CasObjectMissing {
+                path: missing_path,
+            }),
+        );
+
+        assert_eq!(result.result_status, "error");
+        let diagnostic = result.diagnostics.items.first().expect("diagnostic");
+        assert_eq!(diagnostic.code, "MEDIA.CAS_OBJECT_MISSING");
+        assert_eq!(diagnostic.domain.as_deref(), Some("media"));
+        assert_eq!(diagnostic.stage.as_deref(), Some("emit_apkg"));
+        assert_eq!(diagnostic.operation.as_deref(), Some("write_media"));
+        assert_eq!(diagnostic.path.as_deref(), Some("/tmp/missing-cas-object"));
+    }
+
+    #[test]
+    fn apkg_non_media_errors_are_returned_as_build_diagnostics() {
+        let result = apkg_error_result(
+            &sample_writer_policy(),
+            &sample_build_context(),
+            &BuildArtifactTarget::new("/tmp/anki-forge-apkg-error", "artifacts/error"),
+            anyhow::anyhow!("zip write failed"),
+        );
+
+        assert_eq!(result.result_status, "error");
+        let diagnostic = result.diagnostics.items.first().expect("diagnostic");
+        assert_eq!(diagnostic.code, "PHASE3.APKG_EMISSION_FAILED");
+        assert_eq!(diagnostic.domain.as_deref(), Some("apkg"));
+        assert_eq!(diagnostic.stage.as_deref(), Some("emit_apkg"));
+        assert_eq!(diagnostic.operation.as_deref(), Some("write_package"));
+        assert_eq!(
+            diagnostic.path.as_deref(),
+            Some("/tmp/anki-forge-apkg-error/package.apkg")
+        );
+    }
+
+    fn sample_writer_policy() -> WriterPolicy {
+        WriterPolicy {
+            id: "writer-policy.test".into(),
+            version: "1.0.0".into(),
+            compatibility_target: "anki-2.1".into(),
+            stock_notetype_mode: "source-grounded".into(),
+            media_entry_mode: "manifest".into(),
+            apkg_version: "latest".into(),
+        }
+    }
+
+    fn sample_build_context() -> BuildContext {
+        BuildContext {
+            id: "build-context.test".into(),
+            version: "1.0.0".into(),
+            emit_apkg: true,
+            materialize_staging: true,
+            media_resolution_mode: "fail".into(),
+            unresolved_asset_behavior: "fail".into(),
+            fingerprint_mode: "stable".into(),
+        }
+    }
 }

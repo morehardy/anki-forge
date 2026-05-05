@@ -1,7 +1,6 @@
 {
   "document_id": "demo-doc",
   "kind": "normalized-ir",
-  "media": [],
   "notes": [
     {
       "deck_name": "Default",
@@ -20,8 +19,18 @@
     {
       "css": ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n",
       "fields": [
-        { "name": "Text", "ord": 0, "tag": 0, "prevent_deletion": true },
-        { "name": "Back Extra", "ord": 1, "tag": 1, "prevent_deletion": false }
+        {
+          "name": "Text",
+          "ord": 0,
+          "tag": 0,
+          "prevent_deletion": true
+        },
+        {
+          "name": "Back Extra",
+          "ord": 1,
+          "tag": 1,
+          "prevent_deletion": false
+        }
       ],
       "id": "cloze-main",
       "kind": "cloze",
@@ -38,5 +47,8 @@
     }
   ],
   "resolved_identity": "det:demo-doc",
-  "schema_version": "0.1.0"
+  "schema_version": "0.1.0",
+  "media_objects": [],
+  "media_bindings": [],
+  "media_references": []
 }

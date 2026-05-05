@@ -17,7 +17,7 @@ This directory contains manual validation scenarios for Anki Desktop importabili
 Each scenario includes:
 
 - `input/authoring-ir.json`: source input for `normalize -> build -> inspect`
-- `assets/`: source media files used to populate inline media payloads in `input/authoring-ir.json`
+- `assets/`: source copies of media files mirrored under `input/assets/` for path-based media sources
 
 ## Generate APKG
 
@@ -40,8 +40,8 @@ Outputs are written to:
 
 ## Notes
 
-- Scenarios `S03` to `S08` now use real media payloads (PNG, WAV with non-zero frames, MP4).
-- If you need to swap assets for local validation, replace files under each scenario `assets/` directory and regenerate with:
+- Scenarios `S03` to `S09` use real media sources (PNG, WAV with non-zero frames, MP4/WebM).
+- If you need to swap assets for local validation, replace files under each scenario `input/assets/` directory and regenerate with:
 
 ```bash
 ./scripts/run_manual_desktop_scenarios.sh <scenario>

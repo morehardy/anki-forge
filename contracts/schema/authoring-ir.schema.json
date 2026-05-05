@@ -219,21 +219,45 @@
     },
     "authoring_media": {
       "type": "object",
-      "required": ["filename", "mime", "data_base64"],
+      "required": ["id", "desired_filename", "source"],
       "additionalProperties": false,
       "properties": {
-        "filename": {
+        "id": {
           "type": "string",
           "minLength": 1
         },
-        "mime": {
+        "desired_filename": {
           "type": "string",
           "minLength": 1
         },
-        "data_base64": {
+        "source": {
+          "oneOf": [
+            { "$ref": "#/$defs/authoring_media_path_source" },
+            { "$ref": "#/$defs/authoring_media_inline_bytes_source" }
+          ]
+        },
+        "declared_mime": {
           "type": "string",
           "minLength": 1
         }
+      }
+    },
+    "authoring_media_path_source": {
+      "type": "object",
+      "required": ["kind", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "path" },
+        "path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "authoring_media_inline_bytes_source": {
+      "type": "object",
+      "required": ["kind", "data_base64"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "inline_bytes" },
+        "data_base64": { "type": "string", "minLength": 1 }
       }
     }
   }

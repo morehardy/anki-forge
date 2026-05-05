@@ -1027,7 +1027,9 @@ fn phase2_minimal_success_result_json() -> String {
             "resolved_identity": "det:demo-doc",
             "notetypes": [],
             "notes": [],
-            "media": []
+            "media_objects": [],
+            "media_bindings": [],
+            "media_references": []
         },
         "merge_risk_report": null
     });
@@ -1057,7 +1059,9 @@ fn phase2_minimal_success_result_mismatch_json() -> String {
             "resolved_identity": "det:not-the-same",
             "notetypes": [],
             "notes": [],
-            "media": []
+            "media_objects": [],
+            "media_bindings": [],
+            "media_references": []
         },
         "merge_risk_report": null
     });

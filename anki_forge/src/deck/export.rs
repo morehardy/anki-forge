@@ -3,7 +3,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use anyhow::{ensure, Context};
-use authoring_core::{normalize, NormalizationRequest};
+use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
 
 use crate::{inspect_apkg, inspect_staging};
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
@@ -85,10 +85,18 @@ fn build_package(
     package: &Package,
     artifacts_dir: impl AsRef<Path>,
 ) -> anyhow::Result<BuildResult> {
+    let artifacts_dir = artifacts_dir.as_ref();
     let root_deck = package.root_deck.clone();
     root_deck.validate()?;
-    let lowered = root_deck.lower_authoring()?;
-    let normalized = normalize(NormalizationRequest::new(lowered));
+    let media_source_dir = artifacts_dir.join(".anki-forge-media-input");
+    let media_store_dir = artifacts_dir.join(".anki-forge-media");
+    let lowered = root_deck.lower_authoring_with_media_source_dir(&media_source_dir)?;
+    let normalize_options = NormalizeOptions {
+        base_dir: media_source_dir.clone(),
+        media_store_dir: media_store_dir.clone(),
+        media_policy: MediaPolicy::default_strict(),
+    };
+    let normalized = normalize_with_options(NormalizationRequest::new(lowered), normalize_options);
     ensure!(
         normalized.result_status == "success",
         "normalization failed with status {}",
@@ -106,8 +114,8 @@ fn build_package(
         .as_deref()
         .map(|stable_id| format!("artifacts/{stable_id}"))
         .unwrap_or_else(|| "artifacts".into());
-    let artifact_target =
-        BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), stable_ref_prefix);
+    let artifact_target = BuildArtifactTarget::new(artifacts_dir.to_path_buf(), stable_ref_prefix)
+        .with_media_store_dir(media_store_dir);
     let package_build_result = crate::build(
         &normalized_ir,
         &writer_policy,

@@ -8,7 +8,6 @@ use anyhow::{ensure, Context, Result};
 use authoring_core::{
     NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
 };
-use base64::Engine;
 use prost::Message;
 use rusqlite::Connection;
 use serde::Deserialize;
@@ -24,7 +23,9 @@ use crate::anki_proto::{
 use crate::canonical_json::to_canonical_json;
 use crate::media_refs::extract_media_references;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
-use crate::staging::{BuildArtifactTarget, ResolvedTemplateTargetDeck};
+use crate::staging::{
+    validated_media_output_path, BuildArtifactTarget, ResolvedTemplateTargetDeck,
+};
 
 const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v1";
 const DOMAIN_NOTETYPES: &str = "notetypes";
@@ -94,6 +95,9 @@ struct ResolvedMedia {
     filename: String,
     size: usize,
     sha1_hex: String,
+    binding_id: Option<String>,
+    object_id: Option<String>,
+    object_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -197,7 +201,9 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         resolved_identity: String::new(),
         notetypes: vec![],
         notes: vec![],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     };
     let mut has_core_data = false;
     let mut template_target_decks = vec![];
@@ -507,13 +513,23 @@ fn build_observations(
         media: media
             .iter()
             .map(|entry| {
-                json!({
+                let mut value = json!({
                     "selector": format!("media[filename='{}']", entry.filename),
                     "filename": entry.filename,
                     "size": entry.size,
                     "sha1": entry.sha1_hex,
                     "evidence_refs": [format!("media:{}", entry.filename)],
-                })
+                });
+                if let Some(binding_id) = &entry.binding_id {
+                    value["binding_id"] = json!(binding_id);
+                }
+                if let Some(object_id) = &entry.object_id {
+                    value["object_id"] = json!(object_id);
+                }
+                if let Some(object_ref) = &entry.object_ref {
+                    value["object_ref"] = json!(object_ref);
+                }
+                value
             })
             .collect(),
         field_metadata: field_metadata_entries,
@@ -534,36 +550,72 @@ fn resolve_staging_media(
 ) -> Result<(Vec<ResolvedMedia>, ReadLimitations)> {
     let mut limitations = ReadLimitations::default();
     let mut resolved = vec![];
+    let objects_by_id = normalized_ir
+        .media_objects
+        .iter()
+        .map(|object| (object.id.as_str(), object))
+        .collect::<BTreeMap<_, _>>();
 
-    for media in &normalized_ir.media {
-        let media_path = media_root.join(&media.filename);
+    for binding in &normalized_ir.media_bindings {
+        let Some(object) = objects_by_id.get(binding.object_id.as_str()) else {
+            limitations.missing_domains.insert(DOMAIN_MEDIA.into());
+            limitations.degradation_reasons.push(format!(
+                "staging media binding {} references missing object {}",
+                binding.id, binding.object_id
+            ));
+            continue;
+        };
+
+        let media_path = match validated_media_output_path(media_root, &binding.export_filename) {
+            Ok(path) => path,
+            Err(err) => {
+                limitations.missing_domains.insert(DOMAIN_MEDIA.into());
+                limitations.degradation_reasons.push(format!(
+                    "invalid staged media filename {}: {err}",
+                    binding.export_filename
+                ));
+                continue;
+            }
+        };
         let payload = match fs::read(&media_path) {
             Ok(bytes) => bytes,
             Err(err) => {
                 limitations.missing_domains.insert(DOMAIN_MEDIA.into());
-                limitations
-                    .degradation_reasons
-                    .push(format!("missing staged media {}: {err}", media.filename));
+                limitations.degradation_reasons.push(format!(
+                    "missing staged media {}: {err}",
+                    binding.export_filename
+                ));
                 continue;
             }
         };
+        let sha1_hex = hex::encode(sha1::Sha1::digest(&payload));
 
-        let expected = base64::engine::general_purpose::STANDARD
-            .decode(media.data_base64.as_bytes())
-            .with_context(|| format!("decode staged media payload {}", media.filename))?;
-        if payload != expected {
+        if payload.len() as u64 != object.size_bytes {
             limitations.missing_domains.insert(DOMAIN_MEDIA.into());
             limitations.degradation_reasons.push(format!(
-                "staged media payload mismatch for {}",
-                media.filename
+                "staged media {} size mismatch for object {}: manifest {}, observed {}",
+                binding.export_filename,
+                object.id,
+                object.size_bytes,
+                payload.len()
             ));
-            continue;
+        }
+
+        if !sha1_hex.eq_ignore_ascii_case(&object.sha1) {
+            limitations.missing_domains.insert(DOMAIN_MEDIA.into());
+            limitations.degradation_reasons.push(format!(
+                "staged media {} sha1 mismatch for object {}: manifest {}, observed {}",
+                binding.export_filename, object.id, object.sha1, sha1_hex
+            ));
         }
 
         resolved.push(ResolvedMedia {
-            filename: media.filename.clone(),
+            filename: binding.export_filename.clone(),
             size: payload.len(),
-            sha1_hex: hex::encode(sha1::Sha1::digest(&payload)),
+            sha1_hex,
+            binding_id: Some(binding.id.clone()),
+            object_id: Some(object.id.clone()),
+            object_ref: Some(object.object_ref.clone()),
         });
     }
 
@@ -655,6 +707,9 @@ fn read_media_entries(
                 filename: name,
                 size: payload.len(),
                 sha1_hex: hex::encode(sha1::Sha1::digest(&payload)),
+                binding_id: None,
+                object_id: None,
+                object_ref: None,
             });
         }
         Ok(resolved)
@@ -674,6 +729,9 @@ fn read_media_entries(
                 filename: entry.name,
                 size: payload.len(),
                 sha1_hex,
+                binding_id: None,
+                object_id: None,
+                object_ref: None,
             });
         }
         Ok(resolved)

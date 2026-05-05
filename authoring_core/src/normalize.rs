@@ -1,9 +1,14 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::identity::{resolve_identity, DefaultNonceSource};
+use crate::media::{
+    ingest_authoring_media, sort_media_references, DiagnosticBehavior, MediaReference,
+    MediaReferenceResolution, NormalizeOptions,
+};
+use crate::media_refs::extract_media_reference_candidates;
 use crate::model::{
     DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
-    NormalizedIr, NormalizedMedia, NormalizedNote, PolicyRefs,
+    NormalizedIr, NormalizedNote, PolicyRefs,
 };
 use crate::risk::{assess_risk, unavailable_report};
 use crate::selector::{
@@ -18,6 +23,42 @@ pub fn selector_resolve_error_code(error: &SelectorResolveError) -> &'static str
 }
 
 pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
+    if request.input.media.is_empty() {
+        return normalize_with_options(
+            request,
+            NormalizeOptions {
+                base_dir: std::env::current_dir().unwrap_or_else(|_| ".".into()),
+                media_store_dir: std::env::temp_dir().join("anki-forge-unused-media-store"),
+                media_policy: crate::media::MediaPolicy::default_strict(),
+            },
+        );
+    }
+
+    let policy_refs = PolicyRefs {
+        identity_policy_ref: "identity-policy.default@1.0.0".into(),
+        risk_policy_ref: request
+            .comparison_context
+            .as_ref()
+            .map(|context| context.risk_policy_ref.clone()),
+    };
+
+    invalid_result(
+        policy_refs,
+        request.comparison_context,
+        vec![DiagnosticItem {
+            level: "error".into(),
+            code: "MEDIA.NORMALIZE_OPTIONS_REQUIRED".into(),
+            summary: "media normalization requires NormalizeOptions".into(),
+        }],
+        "det:unavailable".into(),
+        "media normalization requires explicit options".into(),
+    )
+}
+
+pub fn normalize_with_options(
+    request: NormalizationRequest,
+    options: NormalizeOptions,
+) -> NormalizationResult {
     let risk_policy_ref = request
         .comparison_context
         .as_ref()
@@ -206,16 +247,51 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         });
     }
 
-    let normalized_media = request
-        .input
-        .media
-        .iter()
-        .map(|media| NormalizedMedia {
-            filename: media.filename.clone(),
-            mime: media.mime.clone(),
-            data_base64: media.data_base64.clone(),
-        })
-        .collect::<Vec<_>>();
+    let ingest = match ingest_authoring_media(&request.input.media, &options) {
+        Ok(ingest) => ingest,
+        Err(error) => {
+            let items = error
+                .diagnostics
+                .into_iter()
+                .map(media_ingest_diagnostic_to_item)
+                .collect::<Vec<_>>();
+            return invalid_result(
+                policy_refs,
+                request.comparison_context,
+                items,
+                format!("det:{metadata_document_id}"),
+                "media ingestion failed".into(),
+            );
+        }
+    };
+
+    diagnostics.extend(
+        ingest
+            .diagnostics
+            .iter()
+            .cloned()
+            .map(media_ingest_diagnostic_to_item),
+    );
+
+    let (media_references, media_reference_diagnostics) =
+        resolve_media_references(&normalized_notes, &ingest.bindings);
+    let mut media_diagnostics = media_reference_diagnostics;
+    media_diagnostics.extend(unused_binding_diagnostics(
+        &ingest.bindings,
+        &media_references,
+        options.media_policy.unused_binding_behavior,
+    ));
+    if media_diagnostics.iter().any(|item| item.level == "error") {
+        diagnostics.extend(media_diagnostics);
+        return invalid_result(
+            policy_refs,
+            request.comparison_context,
+            diagnostics,
+            format!("det:{metadata_document_id}"),
+            "media reference resolution failed".into(),
+        );
+    }
+    diagnostics.extend(media_diagnostics);
 
     let normalized_ir = NormalizedIr {
         kind: "normalized-ir".into(),
@@ -224,7 +300,9 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
         resolved_identity: resolved_identity.clone(),
         notetypes: normalized_notetypes,
         notes: normalized_notes,
-        media: normalized_media,
+        media_objects: ingest.objects,
+        media_bindings: ingest.bindings,
+        media_references,
     };
 
     let merge_risk_report = assess_risk(&normalized_ir, request.comparison_context.as_ref());
@@ -251,6 +329,129 @@ fn selector_invalid_summary(error: &SelectorError) -> &'static str {
         SelectorError::ArrayIndexNotAllowed => "target_selector cannot use array index segments",
         SelectorError::InvalidPredicate => "target_selector does not match selector grammar",
     }
+}
+
+fn media_ingest_diagnostic_to_item(
+    diagnostic: crate::media::MediaIngestDiagnostic,
+) -> DiagnosticItem {
+    DiagnosticItem {
+        level: diagnostic.level,
+        code: diagnostic.code,
+        summary: diagnostic.summary,
+    }
+}
+
+fn resolve_media_references(
+    notes: &[NormalizedNote],
+    bindings: &[crate::media::MediaBinding],
+) -> (Vec<MediaReference>, Vec<DiagnosticItem>) {
+    let binding_by_filename = bindings
+        .iter()
+        .map(|binding| (binding.export_filename.as_str(), binding.id.as_str()))
+        .collect::<BTreeMap<_, _>>();
+    let mut references = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for note in notes {
+        for (field_name, field_value) in &note.fields {
+            for candidate in extract_media_reference_candidates(
+                "note",
+                &note.id,
+                "field",
+                field_name,
+                field_value,
+            ) {
+                if candidate.raw_ref.is_empty()
+                    && candidate.skip_reason.as_deref() == Some("empty-ref")
+                {
+                    continue;
+                }
+                let resolution = if let Some(reason) = candidate.unsafe_reason {
+                    diagnostics.push(DiagnosticItem {
+                        level: "error".into(),
+                        code: "MEDIA.UNSAFE_REFERENCE".into(),
+                        summary: format!(
+                            "unsafe media reference {} in note {} field {}: {}",
+                            candidate.raw_ref, candidate.owner_id, candidate.location_name, reason
+                        ),
+                    });
+                    MediaReferenceResolution::Skipped {
+                        skip_reason: reason,
+                    }
+                } else if let Some(reason) = candidate.skip_reason {
+                    MediaReferenceResolution::Skipped {
+                        skip_reason: reason,
+                    }
+                } else if let Some(local_ref) = candidate.normalized_local_ref {
+                    if let Some(media_id) = binding_by_filename.get(local_ref.as_str()) {
+                        MediaReferenceResolution::Resolved {
+                            media_id: (*media_id).to_string(),
+                        }
+                    } else {
+                        diagnostics.push(DiagnosticItem {
+                            level: "error".into(),
+                            code: "MEDIA.MISSING_REFERENCE".into(),
+                            summary: format!(
+                                "missing media reference {} in note {} field {}",
+                                candidate.raw_ref, candidate.owner_id, candidate.location_name
+                            ),
+                        });
+                        MediaReferenceResolution::Missing
+                    }
+                } else {
+                    MediaReferenceResolution::Skipped {
+                        skip_reason: "unresolved-candidate".into(),
+                    }
+                };
+
+                references.push(MediaReference {
+                    owner_kind: candidate.owner_kind,
+                    owner_id: candidate.owner_id,
+                    location_kind: candidate.location_kind,
+                    location_name: candidate.location_name,
+                    raw_ref: candidate.raw_ref,
+                    ref_kind: candidate.ref_kind,
+                    resolution,
+                });
+            }
+        }
+    }
+
+    sort_media_references(&mut references);
+    (references, diagnostics)
+}
+
+fn unused_binding_diagnostics(
+    bindings: &[crate::media::MediaBinding],
+    references: &[MediaReference],
+    behavior: DiagnosticBehavior,
+) -> Vec<DiagnosticItem> {
+    let level = match behavior {
+        DiagnosticBehavior::Ignore => return Vec::new(),
+        DiagnosticBehavior::Info => "info",
+        DiagnosticBehavior::Warning => "warning",
+        DiagnosticBehavior::Error => "error",
+    };
+    let referenced_media_ids = references
+        .iter()
+        .filter_map(|reference| match &reference.resolution {
+            MediaReferenceResolution::Resolved { media_id } => Some(media_id.as_str()),
+            MediaReferenceResolution::Missing | MediaReferenceResolution::Skipped { .. } => None,
+        })
+        .collect::<BTreeSet<_>>();
+
+    bindings
+        .iter()
+        .filter(|binding| !referenced_media_ids.contains(binding.id.as_str()))
+        .map(|binding| DiagnosticItem {
+            level: level.into(),
+            code: "MEDIA.UNUSED_BINDING".into(),
+            summary: format!(
+                "unused media binding {} for export filename {}",
+                binding.id, binding.export_filename
+            ),
+        })
+        .collect()
 }
 
 fn identity_error_diagnostic(error: &anyhow::Error) -> (&'static str, String) {

@@ -58,11 +58,38 @@ This explicit-lowered bridge allows upstream product authoring to preserve
 stock-compatible payloads and custom `normal` notetype declarations without
 inventing a separate downstream kind taxonomy.
 
-Authoring notes may reference media entries inline, and normalized output keeps
-those media records inline as well for this contract scope. The media source
-module shows that Anki normalizes filenames during filesystem insertion, but
-this contract does not model the filesystem rewrite or uniquification process.
-It only preserves the declared media records as part of the normalized payload.
+Authoring media declarations may reference relative local paths or small inline
+byte payloads. Path sources are resolved against explicit normalization options,
+not the process working directory. Inline byte payloads are authoring-only and
+must be ingested into the media store before normalized IR is produced.
+
+Normalized media is represented by `media_objects`, `media_bindings`, and
+`media_references`. It must not contain `data_base64` or inline byte payloads.
+`media_objects` describe CAS-backed content, `media_bindings` describe APKG
+export filenames, and `media_references` describe resolved, missing, or skipped
+static references discovered in notes/templates.
+
+CAS ingest writes original bytes to a unique temporary file, computes BLAKE3,
+SHA-1, size, and MIME sample while streaming, then atomically persists with
+no-clobber semantics. If the final object already exists, normalize verifies the
+existing bytes and discards the temporary file.
+
+Normalization owns semantic media diagnostics. It emits default media errors for
+unsafe desired/export filenames, unsafe source paths, missing or unreadable path
+sources, non-regular source files, invalid inline base64, inline payloads above
+policy size, CAS write or verification failures, duplicate media ids, duplicate
+or conflicting export filenames, unsafe static references, missing static local
+references, high-confidence declared MIME mismatches, and object or total media
+size limits. Policy-controlled media diagnostics cover unused bindings and
+unknown MIME results. Informational media diagnostics may report deduped objects
+when multiple bindings resolve to the same CAS object.
+
+Media diagnostic reports should identify the relevant object, binding, or
+reference location where possible, including owner/location selectors for
+references and stage/operation context for ingest, MIME, CAS, and policy
+failures. External URLs, `data:` URIs, protocol-relative URLs, and dynamically
+computed references are skipped or recorded as skipped references rather than
+reported as missing media.
 
 Normalization must not invent unsupported stock templates, unsupported field
 names, or final media storage names that are not backed by the local source.

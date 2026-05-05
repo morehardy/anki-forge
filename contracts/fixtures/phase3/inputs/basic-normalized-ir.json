@@ -1,7 +1,6 @@
 {
   "document_id": "demo-doc",
   "kind": "normalized-ir",
-  "media": [],
   "notes": [
     {
       "deck_name": "Default",
@@ -20,8 +19,16 @@
     {
       "css": "",
       "fields": [
-        { "name": "Front", "ord": 0, "prevent_deletion": false },
-        { "name": "Back", "ord": 1, "prevent_deletion": false }
+        {
+          "name": "Front",
+          "ord": 0,
+          "prevent_deletion": false
+        },
+        {
+          "name": "Back",
+          "ord": 1,
+          "prevent_deletion": false
+        }
       ],
       "id": "basic-main",
       "kind": "normal",
@@ -38,5 +45,8 @@
     }
   ],
   "resolved_identity": "det:demo-doc",
-  "schema_version": "0.1.0"
+  "schema_version": "0.1.0",
+  "media_objects": [],
+  "media_bindings": [],
+  "media_references": []
 }

@@ -149,9 +149,16 @@ fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
     let normalized = normalize_from_path(&runtime, &authoring_input).expect("normalize from path");
     assert_eq!(normalized.kind, "normalization-result");
     assert_eq!(normalized.result_status, "success");
+    let normalized_ir = normalized
+        .normalized_ir
+        .as_ref()
+        .expect("minimal authoring input should normalize");
 
-    let build_input = repo_root().join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
-    let artifacts_dir = temp_bundle_root("runtime_operations").join("artifacts");
+    let runtime_root = temp_bundle_root("runtime_operations");
+    fs::create_dir_all(&runtime_root).expect("create runtime operations root");
+    let build_input = runtime_root.join("normalized-ir.json");
+    write_json_fixture(&build_input, normalized_ir);
+    let artifacts_dir = runtime_root.join("artifacts");
     let build_result =
         build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
             .expect("build from path");

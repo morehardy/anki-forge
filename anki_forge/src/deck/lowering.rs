@@ -3,6 +3,7 @@ use crate::product::{
     render_image_occlusion_cloze, ProductDocument, STOCK_BASIC_ID, STOCK_CLOZE_ID,
     STOCK_IMAGE_OCCLUSION_ID,
 };
+use std::path::Path;
 
 impl Deck {
     pub fn into_product_document(self) -> anyhow::Result<ProductDocument> {
@@ -55,13 +56,30 @@ impl Deck {
             .lower()
             .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?
             .authoring_document;
-        lowered
+        let media = self
             .media
-            .extend(self.media.values().map(|media| crate::AuthoringMedia {
-                filename: media.name.clone(),
-                mime: media.mime.clone(),
-                data_base64: media.data_base64.clone(),
-            }));
+            .values()
+            .map(|media| media.to_self_contained_authoring_media())
+            .collect::<anyhow::Result<Vec<_>>>()?;
+        lowered.media.extend(media);
+        Ok(lowered)
+    }
+
+    pub fn lower_authoring_with_media_source_dir(
+        &self,
+        media_source_dir: &Path,
+    ) -> anyhow::Result<crate::AuthoringDocument> {
+        let product = self.clone().into_product_document()?;
+        let mut lowered = product
+            .lower()
+            .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?
+            .authoring_document;
+        let media = self
+            .media
+            .values()
+            .map(|media| media.to_authoring_media(media_source_dir))
+            .collect::<anyhow::Result<Vec<_>>>()?;
+        lowered.media.extend(media);
         Ok(lowered)
     }
 }

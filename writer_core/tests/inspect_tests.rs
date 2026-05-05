@@ -7,9 +7,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedMedia, NormalizedNote,
-    NormalizedNotetype,
+    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedNote, NormalizedNotetype,
 };
+use sha1::Digest;
 use writer_core::{
     build, extract_media_references, inspect_apkg, inspect_build_result, inspect_staging,
     BuildArtifactTarget, BuildContext, WriterPolicy,
@@ -22,9 +22,10 @@ fn inspect_build_result_prefers_staging_when_available() {
         root.clone(),
         "artifacts/phase3/inspect-build-result-staging",
     );
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     let result = build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -46,9 +47,10 @@ fn inspect_build_result_prefers_staging_when_available() {
 fn inspect_staging_reports_complete_observations() {
     let root = unique_artifact_root("inspect-staging");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-staging");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &target,
@@ -67,6 +69,110 @@ fn inspect_staging_reports_complete_observations() {
     assert!(!report.observations.media.is_empty());
     assert!(!report.observations.metadata.is_empty());
     assert!(!report.observations.references.is_empty());
+}
+
+#[test]
+fn inspect_staging_reports_manifest_media_object_and_binding_metadata() {
+    let root = unique_artifact_root("inspect-staging-cas");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-staging-cas")
+        .with_media_store_dir(media_store);
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_staging(root.join("staging/manifest.json")).unwrap();
+
+    let media = &report.observations.media[0];
+    assert_eq!(media["filename"], "hello.txt");
+    assert_eq!(media["binding_id"], "media:hello");
+    assert!(media["object_id"]
+        .as_str()
+        .unwrap()
+        .starts_with("obj:blake3:"));
+    assert!(media["object_ref"]
+        .as_str()
+        .unwrap()
+        .starts_with("media://blake3/"));
+}
+
+#[test]
+fn inspect_staging_marks_manifest_media_mismatch_as_degraded() {
+    let root = unique_artifact_root("inspect-staging-cas-mismatch");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-staging-cas-mismatch",
+    )
+    .with_media_store_dir(media_store);
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+    fs::write(root.join("staging/media/hello.txt"), b"hello!").unwrap();
+
+    let report = inspect_staging(root.join("staging/manifest.json")).unwrap();
+
+    assert_eq!(report.observation_status, "degraded");
+    assert!(report
+        .missing_domains
+        .iter()
+        .any(|domain| domain == "media"));
+    assert!(report
+        .degradation_reasons
+        .iter()
+        .any(|reason| reason.contains("size mismatch")));
+    assert!(report
+        .degradation_reasons
+        .iter()
+        .any(|reason| reason.contains("sha1 mismatch")));
+}
+
+#[test]
+fn inspect_staging_rejects_escaped_manifest_media_filename() {
+    let root = unique_artifact_root("inspect-staging-cas-escaped");
+    let media_store = root.join("media-store");
+    let outside_path = root.join("staging/escape.txt");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target =
+        BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-staging-cas-escaped")
+            .with_media_store_dir(media_store);
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+    fs::write(&outside_path, b"hello").unwrap();
+    let manifest_path = root.join("staging/manifest.json");
+    let mut manifest: serde_json::Value =
+        serde_json::from_slice(&fs::read(&manifest_path).unwrap()).unwrap();
+    manifest["normalized_ir"]["media_bindings"][0]["export_filename"] =
+        serde_json::json!("../escape.txt");
+    fs::write(&manifest_path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+
+    let report = inspect_staging(manifest_path).unwrap();
+
+    assert_eq!(report.observation_status, "degraded");
+    assert!(report
+        .missing_domains
+        .iter()
+        .any(|domain| domain == "media"));
+    assert!(report.observations.media.is_empty());
+    assert!(report
+        .degradation_reasons
+        .iter()
+        .any(|reason| reason.contains("invalid staged media filename ../escape.txt")));
 }
 
 #[test]
@@ -132,9 +238,10 @@ fn inspect_emits_browser_template_and_field_label_observations() {
 fn inspect_apkg_reports_complete_observations_and_counts() {
     let root = unique_artifact_root("inspect-apkg");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -168,6 +275,30 @@ fn inspect_apkg_reports_complete_observations_and_counts() {
         .references
         .iter()
         .any(|value| value["selector"] == "note[id='note-1']"));
+}
+
+#[test]
+fn inspect_apkg_does_not_report_forge_only_media_ids() {
+    let root = unique_artifact_root("inspect-apkg-cas");
+    let media_store = root.join("media-store");
+    let normalized = sample_basic_normalized_ir_with_cas_media(&media_store, "hello.txt", b"hello");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg-cas")
+        .with_media_store_dir(media_store);
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    let media = &report.observations.media[0];
+    assert_eq!(media["filename"], "hello.txt");
+    assert!(media.get("binding_id").is_none());
+    assert!(media.get("object_id").is_none());
+    assert!(media.get("object_ref").is_none());
 }
 
 #[test]
@@ -261,16 +392,18 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
         BuildArtifactTarget::new(left_root.clone(), "artifacts/phase3/inspect-fingerprint");
     let right_target =
         BuildArtifactTarget::new(right_root.clone(), "artifacts/phase3/inspect-fingerprint");
+    let left_normalized = sample_basic_normalized_ir_with_media(&left_target.media_store_dir);
+    let right_normalized = sample_basic_normalized_ir_with_media(&right_target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &left_normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &left_target,
     )
     .unwrap();
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &right_normalized,
         &sample_writer_policy(),
         &sample_build_context(false),
         &right_target,
@@ -290,9 +423,10 @@ fn inspect_staging_fingerprint_is_independent_of_artifact_root() {
 fn inspect_apkg_marks_missing_media_map_as_degraded() {
     let root = unique_artifact_root("inspect-apkg-degraded");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-apkg-degraded");
+    let normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
 
     build(
-        &sample_basic_normalized_ir_with_media(),
+        &normalized,
         &sample_writer_policy(),
         &sample_build_context(true),
         &target,
@@ -361,20 +495,67 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
             tags: vec!["demo".into()],
             mtime_secs: None,
         }],
-        media: vec![],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
     }
 }
 
-fn sample_basic_normalized_ir_with_media() -> NormalizedIr {
+fn sample_basic_normalized_ir_with_media(media_store: &Path) -> NormalizedIr {
     let mut normalized = sample_basic_normalized_ir();
+    let bytes = b"hello";
+    let blake3_hex = blake3::hash(bytes).to_hex().to_string();
+    let sha1_hex = hex::encode(sha1::Sha1::digest(bytes));
+    let object_id = format!("obj:blake3:{blake3_hex}");
+    let object_path = authoring_core::object_store_path(media_store, &blake3_hex).unwrap();
+    fs::create_dir_all(object_path.parent().unwrap()).unwrap();
+    fs::write(&object_path, bytes).unwrap();
     normalized.notes[0]
         .fields
         .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
-    normalized.media.push(NormalizedMedia {
-        filename: "sample.jpg".into(),
+    normalized.media_objects = vec![authoring_core::MediaObject {
+        id: object_id.clone(),
+        object_ref: format!("media://blake3/{blake3_hex}"),
+        blake3: blake3_hex,
+        sha1: sha1_hex,
+        size_bytes: bytes.len() as u64,
         mime: "image/jpeg".into(),
-        data_base64: "aGVsbG8=".into(),
-    });
+    }];
+    normalized.media_bindings = vec![authoring_core::MediaBinding {
+        id: "media:sample".into(),
+        export_filename: "sample.jpg".into(),
+        object_id,
+    }];
+    normalized.media_references = vec![];
+    normalized
+}
+
+fn sample_basic_normalized_ir_with_cas_media(
+    media_store: &Path,
+    filename: &str,
+    bytes: &[u8],
+) -> NormalizedIr {
+    let mut normalized = sample_basic_normalized_ir();
+    let blake3_hex = blake3::hash(bytes).to_hex().to_string();
+    let sha1_hex = hex::encode(sha1::Sha1::digest(bytes));
+    let object_id = format!("obj:blake3:{blake3_hex}");
+    let object_path = authoring_core::object_store_path(media_store, &blake3_hex).unwrap();
+    fs::create_dir_all(object_path.parent().unwrap()).unwrap();
+    fs::write(&object_path, bytes).unwrap();
+    normalized.media_objects = vec![authoring_core::MediaObject {
+        id: object_id.clone(),
+        object_ref: format!("media://blake3/{blake3_hex}"),
+        blake3: blake3_hex,
+        sha1: sha1_hex,
+        size_bytes: bytes.len() as u64,
+        mime: "text/plain".into(),
+    }];
+    normalized.media_bindings = vec![authoring_core::MediaBinding {
+        id: "media:hello".into(),
+        export_filename: filename.into(),
+        object_id,
+    }];
+    normalized.media_references = vec![];
     normalized
 }
 
