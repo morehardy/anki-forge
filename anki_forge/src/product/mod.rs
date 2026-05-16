@@ -10,6 +10,7 @@ pub mod metadata;
 pub mod model;
 pub mod note;
 pub mod notetype;
+pub mod project;
 pub mod stock;
 pub mod template;
 
@@ -29,6 +30,7 @@ pub use model::{
 };
 pub use note::Note;
 pub use notetype::{Field, FieldKey, NoteType};
+pub use project::Project;
 pub use stock::{
     render_image_occlusion_cloze, STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
