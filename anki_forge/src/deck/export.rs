@@ -116,7 +116,7 @@ fn build_package(
         .unwrap_or_else(|| "artifacts".into());
     let artifact_target = BuildArtifactTarget::new(artifacts_dir.to_path_buf(), stable_ref_prefix)
         .with_media_store_dir(media_store_dir);
-    let package_build_result = crate::build(
+    let package_build_result = crate::writer_build(
         &normalized_ir,
         &writer_policy,
         &build_context,

@@ -1,5 +1,8 @@
 mod deck;
 
+pub mod build;
+pub mod diagnostics;
+pub mod prelude;
 pub mod product;
 pub mod runtime;
 
@@ -17,11 +20,19 @@ pub use authoring_core::{
     SelectorResolveError, SelectorTarget,
 };
 pub use writer_core::{
-    build, build_context_ref, diff_reports, extract_media_references, inspect_apkg,
+    build as writer_build, build_context_ref, diff_reports, extract_media_references, inspect_apkg,
     inspect_build_result, inspect_staging, policy_ref,
     to_canonical_json as to_writer_canonical_json, BuildArtifactTarget, BuildContext, DiffReport,
     InspectReport, PackageBuildResult, VerificationGateRule, VerificationPolicy, WriterPolicy,
 };
+
+#[allow(non_upper_case_globals)]
+pub const build: fn(
+    &NormalizedIr,
+    &WriterPolicy,
+    &BuildContext,
+    &BuildArtifactTarget,
+) -> anyhow::Result<PackageBuildResult> = writer_core::build;
 
 pub fn authoring_tool_contract_version() -> &'static str {
     authoring_core::tool_contract_version()
