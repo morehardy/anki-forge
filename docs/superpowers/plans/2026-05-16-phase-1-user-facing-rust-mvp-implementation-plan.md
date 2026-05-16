@@ -98,15 +98,69 @@ Run every task in that worktree. Keep the original `docs/api-design.md` draft un
 
 1. `Project::build()` writes into a temporary artifacts directory when the caller only supplies `output`, then copies the built APKG to `output`.
 2. `Project::normalize()` uses deterministic project-owned normalization paths under a temp directory when the caller does not provide `ProjectNormalizeOptions`. The returned `NormalizedIr` must not contain absolute temp paths.
-3. `BuildReport.counts.notes` is `normalized_ir.notes.len()`.
-4. `BuildReport.counts.media` is `normalized_ir.media_bindings.len()`.
-5. `BuildReport.counts.cards` is Phase 1 approximate-but-inspected: prefer APKG inspect observations when available; otherwise count normal templates per note and cloze ords from field text for stock cloze notes.
-6. `BuildReport.diagnostics` combines product validation, lowering diagnostics, normalization diagnostics, and writer diagnostics.
-7. `BuildReport.ensure_success()` returns `Ok(())` only when an artifact path exists, no diagnostic has error severity, and the build status is `success`.
-8. `stable_config_id(namespace, note_type_id, key)` uses BLAKE3 over `namespace + "\0" + note_type_id + "\0" + key`, takes the first eight bytes as big-endian `i64`, and clears the sign bit with `raw & i64::MAX`.
-9. Phase 1 custom note types lower as `kind = "normal"`.
-10. `GenerationRule::Cloze` is rejected for custom normal note types with diagnostic `TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE`.
-11. Existing `Deck::image_occlusion()` remains supported only through `Project::from(deck)`; no new Product `Note::image_occlusion()` is added.
+3. `BuildOptions.normalize_options` must be consumed in `Project::build()`. If the caller provides `base_dir`, `media_store_dir`, or media policy, those values are used instead of the default build-derived paths.
+4. `BuildReport.counts.notes` is `normalized_ir.notes.len()`.
+5. `BuildReport.counts.media` is `normalized_ir.media_bindings.len()`.
+6. `BuildReport.counts.cards` prefers APKG inspect observations when `inspect` is enabled. Only when inspect is disabled or unavailable does it fall back to Phase 1 approximation: normal note card count comes from non-empty generated templates, and stock cloze count comes from distinct `{{cN::...}}` ordinals in cloze text.
+7. `BuildReport.diagnostics` combines project validation diagnostics, lowering diagnostics, normalization diagnostics, and writer diagnostics.
+8. `Project::validate()` must exist in Phase 1 and must at least report duplicate stable ids, auto-derived custom field keys, and custom note types missing identity recipes.
+9. `BuildReport.ensure_success()` returns `Ok(())` only when an artifact path exists, no diagnostic has error severity, and the build status is `success`.
+10. `stable_config_id(namespace, note_type_id, key)` uses BLAKE3 over `namespace + "\0" + note_type_id + "\0" + key`, takes the first eight bytes as big-endian `i64`, and clears the sign bit with `raw & i64::MAX`.
+11. Phase 1 custom note types lower as `kind = "normal"`.
+12. `GenerationRule::Cloze` is rejected for custom normal note types with diagnostic `TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE`.
+13. Existing `Deck::image_occlusion()` remains supported only through `Project::from(deck)`; no new Product `Note::image_occlusion()` is added.
+
+## Task 0: Codebase API Audit
+
+**Files:**
+- Read: `anki_forge/src/lib.rs`
+- Read: `anki_forge/src/product/builders.rs`
+- Read: `anki_forge/src/deck/model.rs`
+- Read: `anki_forge/src/deck/lowering.rs`
+- Read: `anki_forge/src/deck/media.rs`
+- Read: `writer_core/src/build.rs`
+- Read: `writer_core/src/inspect.rs`
+
+- [ ] **Step 1: Verify crate-root and runtime assumptions**
+
+Run:
+
+```bash
+rg -n "pub use writer_core::|pub fn build\\(|pub fn inspect_apkg\\(|pub fn load_default_writer_stack" anki_forge/src writer_core/src
+```
+
+Expected: output includes:
+
+```text
+anki_forge/src/lib.rs: pub use writer_core::{ ... build, ... inspect_apkg, ... }
+anki_forge/src/runtime/defaults.rs: pub fn load_default_writer_stack(...)
+writer_core/src/build.rs: pub fn build(...)
+writer_core/src/inspect.rs: pub fn inspect_apkg(...)
+```
+
+- [ ] **Step 2: Verify ProductDocument builder assumptions**
+
+Run:
+
+```bash
+rg -n "with_custom_notetype|add_custom_note|add_basic_note_with_tags|add_cloze_note_with_tags" anki_forge/src/product
+```
+
+Expected: output confirms these public methods exist in `anki_forge/src/product/builders.rs`.
+
+- [ ] **Step 3: Verify Deck facade assumptions**
+
+Run:
+
+```bash
+rg -n "pub fn new\\(name|pub fn name\\(&self\\)|pub fn stable_id\\(&self\\)|into_product_document|to_authoring_media" anki_forge/src/deck
+```
+
+Expected: output confirms `Deck::new`, `Deck::name`, `Deck::stable_id`, `Deck::into_product_document`, and `RegisteredMedia::to_authoring_media` exist.
+
+- [ ] **Step 4: Record audit result in the implementation branch**
+
+If any expected method is missing or has an incompatible signature, update this plan before starting Task 1. If all methods are present, commit no code for Task 0 and proceed to Task 1.
 
 ## Task 1: Public Module Skeleton And BuildReport Types
 
@@ -247,6 +301,19 @@ pub struct Diagnostic {
     pub source: Option<SourcePath>,
     pub help: Option<String>,
 }
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ValidationReport {
+    pub diagnostics: Vec<Diagnostic>,
+}
+
+impl ValidationReport {
+    pub fn has_errors(&self) -> bool {
+        self.diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+    }
+}
 ```
 
 - [ ] **Step 4: Add BuildOptions and BuildReport**
@@ -256,7 +323,7 @@ pub struct Diagnostic {
 pub mod options;
 pub mod report;
 
-pub use options::{BuildOptions, ProjectNormalizeOptions};
+pub use options::{BuildOptions, ProjectMediaPolicy, ProjectNormalizeOptions};
 pub use report::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildReport,
     InspectSummary,
@@ -267,11 +334,17 @@ pub use report::{
 // anki_forge/src/build/options.rs
 use std::path::PathBuf;
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum ProjectMediaPolicy {
+    #[default]
+    Strict,
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ProjectNormalizeOptions {
     pub base_dir: Option<PathBuf>,
     pub media_store_dir: Option<PathBuf>,
-    pub strict_media: bool,
+    pub media_policy: ProjectMediaPolicy,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -318,6 +391,32 @@ impl BuildOptions {
         self
     }
 }
+
+impl ProjectNormalizeOptions {
+    pub fn strict() -> Self {
+        Self {
+            base_dir: None,
+            media_store_dir: None,
+            media_policy: ProjectMediaPolicy::Strict,
+        }
+    }
+
+    pub fn base_dir(mut self, path: impl Into<PathBuf>) -> Self {
+        self.base_dir = Some(path.into());
+        self
+    }
+
+    pub fn media_store_dir(mut self, path: impl Into<PathBuf>) -> Self {
+        self.media_store_dir = Some(path.into());
+        self
+    }
+
+    pub(crate) fn to_authoring_media_policy(&self) -> authoring_core::MediaPolicy {
+        match self.media_policy {
+            ProjectMediaPolicy::Strict => authoring_core::MediaPolicy::default_strict(),
+        }
+    }
+}
 ```
 
 ```rust
@@ -356,6 +455,8 @@ impl Default for BuildMetrics {
 pub struct InspectSummary {
     pub source_kind: String,
     pub observation_status: String,
+    pub notes: usize,
+    pub cards: usize,
     pub notetypes: usize,
     pub templates: usize,
     pub fields: usize,
@@ -461,7 +562,7 @@ Keep the existing `authoring_core` and `writer_core` re-exports for this step so
 // anki_forge/src/prelude.rs
 pub use crate::build::{BuildOptions, BuildReport};
 pub use crate::deck::Deck;
-pub use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
+pub use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 ```
 
 - [ ] **Step 6: Run tests for Task 1**
@@ -544,11 +645,15 @@ fn custom_notetype_builder_records_keys_and_identity_recipe() {
         .name("Japanese Vocabulary")
         .field(Field::new("Expression").key("expr").identity().sort())
         .field(Field::new("Meaning").key("meaning").required())
+        .field(Field::new("Audio").key("audio").optional())
         .template(
             Template::new("Recognition")
                 .key("recognition")
                 .front("{{Expression}}")
                 .back("{{FrontSide}}<hr id=\"answer\">{{Meaning}}")
+                .browser_front("{{Expression}}")
+                .browser_back("{{Meaning}}")
+                .target_deck("Japanese::Recognition")
                 .generate_when(GenerationRule::all(["expr"])),
         )
         .identity(IdentityRecipe::fields(["expr"]));
@@ -559,7 +664,16 @@ fn custom_notetype_builder_records_keys_and_identity_recipe() {
     assert!(vocab.fields()[0].is_identity());
     assert!(vocab.fields()[0].is_sort());
     assert!(vocab.fields()[1].is_required());
+    assert!(vocab.fields()[2].is_optional());
     assert_eq!(vocab.templates()[0].key_ref().as_str(), "recognition");
+    assert_eq!(
+        vocab.templates()[0].browser_front().map(|source| source.as_str()),
+        Some("{{Expression}}")
+    );
+    assert_eq!(
+        vocab.templates()[0].target_deck(),
+        Some("Japanese::Recognition")
+    );
     assert_eq!(
         vocab.identity().expect("identity").field_keys(),
         vec![FieldKey::new("expr")]
@@ -709,6 +823,8 @@ pub struct Field {
     identity: bool,
     sort: bool,
     required: bool,
+    optional: bool,
+    key_auto_derived: bool,
 }
 
 impl Field {
@@ -720,11 +836,14 @@ impl Field {
             identity: false,
             sort: false,
             required: false,
+            optional: false,
+            key_auto_derived: true,
         }
     }
 
     pub fn key(mut self, key: impl Into<String>) -> Self {
         self.key = FieldKey::new(key);
+        self.key_auto_derived = false;
         self
     }
 
@@ -740,6 +859,13 @@ impl Field {
 
     pub fn required(mut self) -> Self {
         self.required = true;
+        self.optional = false;
+        self
+    }
+
+    pub fn optional(mut self) -> Self {
+        self.optional = true;
+        self.required = false;
         self
     }
 
@@ -761,6 +887,14 @@ impl Field {
 
     pub fn is_required(&self) -> bool {
         self.required
+    }
+
+    pub fn is_optional(&self) -> bool {
+        self.optional
+    }
+
+    pub fn key_auto_derived(&self) -> bool {
+        self.key_auto_derived
     }
 }
 
@@ -899,6 +1033,9 @@ pub struct Template {
     name: String,
     front: TemplateSource,
     back: TemplateSource,
+    browser_front: Option<TemplateSource>,
+    browser_back: Option<TemplateSource>,
+    target_deck: Option<String>,
     generation_rule: GenerationRule,
 }
 
@@ -910,6 +1047,9 @@ impl Template {
             name,
             front: TemplateSource::new(""),
             back: TemplateSource::new(""),
+            browser_front: None,
+            browser_back: None,
+            target_deck: None,
             generation_rule: GenerationRule::AnkiDefault,
         }
     }
@@ -926,6 +1066,21 @@ impl Template {
 
     pub fn back(mut self, back: impl Into<String>) -> Self {
         self.back = TemplateSource::new(back);
+        self
+    }
+
+    pub fn browser_front(mut self, source: impl Into<String>) -> Self {
+        self.browser_front = Some(TemplateSource::new(source));
+        self
+    }
+
+    pub fn browser_back(mut self, source: impl Into<String>) -> Self {
+        self.browser_back = Some(TemplateSource::new(source));
+        self
+    }
+
+    pub fn target_deck(mut self, deck_name: impl Into<String>) -> Self {
+        self.target_deck = Some(deck_name.into());
         self
     }
 
@@ -948,6 +1103,18 @@ impl Template {
 
     pub fn back_source(&self) -> &TemplateSource {
         &self.back
+    }
+
+    pub fn browser_front(&self) -> Option<&TemplateSource> {
+        self.browser_front.as_ref()
+    }
+
+    pub fn browser_back(&self) -> Option<&TemplateSource> {
+        self.browser_back.as_ref()
+    }
+
+    pub fn target_deck(&self) -> Option<&str> {
+        self.target_deck.as_deref()
     }
 
     pub fn generation_rule(&self) -> &GenerationRule {
@@ -1057,6 +1224,8 @@ impl Note {
 }
 ```
 
+`Note::cloze(...)` intentionally stores the cloze Text field as explicit HTML, because Anki must see raw `{{cN::...}}` markers. This is the one Phase 1 stock constructor that does not apply `Content::Text` escaping to its primary field; document that behavior in README and examples so users do not assume cloze text is escaped like `Note::basic(...)`.
+
 - [ ] **Step 8: Wire product exports and prelude**
 
 ```rust
@@ -1104,7 +1273,7 @@ pub use stock::{
 // anki_forge/src/prelude.rs
 pub use crate::build::{BuildOptions, BuildReport};
 pub use crate::deck::Deck;
-pub use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
+pub use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 pub use crate::product::{
     Content, Field, FieldKey, GenerationRule, IdentityRecipe, MediaRef, Note, NoteType, Template,
     TemplateKey,
@@ -1189,6 +1358,70 @@ fn project_normalize_basic_note_returns_normalized_ir() {
     assert_eq!(normalized.notes[0].fields.get("Front").map(String::as_str), Some("hola"));
 }
 
+#[test]
+fn project_validate_reports_duplicate_stable_ids() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("dup"))
+        .expect("add first note");
+    project
+        .add_note(Note::basic("adios", "goodbye").stable_id("dup"))
+        .expect("add second note");
+
+    let report = project.validate();
+
+    assert!(report.has_errors());
+    assert!(report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "AFID.STABLE_ID_DUPLICATE"));
+}
+
+#[test]
+fn project_validate_warns_for_auto_derived_custom_field_key() {
+    let note_type = NoteType::custom("auto-key")
+        .field(Field::new("Expression"))
+        .template(Template::new("Card 1").front("{{Expression}}").back("{{Expression}}"));
+    let mut project = Project::new("Auto Key")
+        .stable_id("auto-key")
+        .default_deck("Auto Key");
+    project.add_notetype(note_type).expect("add note type");
+
+    let report = project.validate();
+
+    assert!(report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.FIELD_KEY_AUTO_DERIVED"));
+}
+
+#[test]
+fn project_cloze_card_count_fallback_counts_distinct_ords_when_inspect_disabled() {
+    let root = unique_artifacts_dir("project-cloze-no-inspect");
+    let mut project = Project::new("Cloze")
+        .stable_id("cloze")
+        .default_deck("Cloze");
+    project
+        .add_note(
+            Note::cloze("{{c1::Madrid}} is in {{c2::Spain}} and {{c1::Europe}}")
+                .stable_id("cloze:1"),
+        )
+        .expect("add cloze");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("cloze.apkg"))
+                .inspect(false),
+        )
+        .expect("build cloze");
+
+    assert_eq!(report.counts.cards, 2);
+}
+
 fn unique_artifacts_dir(label: &str) -> PathBuf {
     let mut dir = std::env::temp_dir();
     dir.push(format!(
@@ -1222,14 +1455,14 @@ use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 use anyhow::Context;
-use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
+use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildReport, InspectSummary,
+    BuildReport, InspectSummary, ProjectNormalizeOptions,
 };
-use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
+use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::{
     LoweringPlan, Note, NoteType, ProductDocument, STOCK_BASIC_ID, STOCK_CLOZE_ID,
 };
@@ -1280,6 +1513,59 @@ impl Project {
         &mut self.media
     }
 
+    pub fn validate(&self) -> ValidationReport {
+        let mut diagnostics = Vec::new();
+        let mut seen_stable_ids = std::collections::BTreeSet::new();
+
+        for note in &self.notes {
+            if let Some(stable_id) = note.stable_id() {
+                if !seen_stable_ids.insert(stable_id.to_string()) {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
+                        severity: Severity::Error,
+                        message: format!("duplicate stable_id '{stable_id}'"),
+                        source: Some(SourcePath::new(format!("project.notes[\"{stable_id}\"]"))),
+                        help: Some("choose a unique stable_id for each note".into()),
+                    });
+                }
+            }
+        }
+
+        for note_type in &self.note_types {
+            if note_type.identity().is_none() {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
+                    severity: Severity::Warning,
+                    message: format!("custom note type '{}' has no identity recipe", note_type.id()),
+                    source: Some(SourcePath::new(format!("project.note_types[\"{}\"]", note_type.id()))),
+                    help: Some("add IdentityRecipe::fields([...]) before relying on update-safe builds".into()),
+                });
+            }
+
+            for field in note_type.fields() {
+                if field.key_auto_derived() {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("NOTETYPE.FIELD_KEY_AUTO_DERIVED"),
+                        severity: Severity::Warning,
+                        message: format!(
+                            "field '{}' in note type '{}' uses an auto-derived key",
+                            field.name(),
+                            note_type.id()
+                        ),
+                        source: Some(SourcePath::new(format!(
+                            "project.note_types[\"{}\"].fields[\"{}\"]",
+                            note_type.id(),
+                            field.name()
+                        ))),
+                        help: Some("call .key(\"stable-field-key\") explicitly".into()),
+                    });
+                }
+            }
+        }
+
+        ValidationReport { diagnostics }
+    }
+
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
         self.to_product_document()
             .lower()
@@ -1291,7 +1577,12 @@ impl Project {
             .prefix("anki-forge-project-normalize-")
             .tempdir()
             .context("create project normalize temp dir")?;
-        self.normalize_with_dirs(temp_dir.path(), temp_dir.path().join(".anki-forge-media"))
+        self.normalize_with_dirs(
+            temp_dir.path(),
+            temp_dir.path().join(".anki-forge-media"),
+            ProjectNormalizeOptions::default(),
+        )
+        .map(|output| output.normalized_ir)
     }
 
     pub fn build(&self, options: BuildOptions) -> Result<BuildReport, BuildError> {
@@ -1303,23 +1594,40 @@ impl Project {
                 .expect("create temp artifacts dir")
                 .keep()
         });
-        let media_input_dir = artifacts_dir.join(".anki-forge-media-input");
-        let media_store_dir = artifacts_dir.join(".anki-forge-media");
+        let normalize_options = options.normalize_options.clone().unwrap_or_default();
+        let media_input_dir = normalize_options
+            .base_dir
+            .clone()
+            .unwrap_or_else(|| artifacts_dir.join(".anki-forge-media-input"));
+        let media_store_dir = normalize_options
+            .media_store_dir
+            .clone()
+            .unwrap_or_else(|| artifacts_dir.join(".anki-forge-media"));
 
-        let normalized = match self.normalize_with_dirs(&media_input_dir, &media_store_dir) {
-            Ok(normalized) => normalized,
+        let validation = self.validate();
+        let mut diagnostics = validation.diagnostics;
+
+        let normalized_output = match self.normalize_with_dirs(
+            &media_input_dir,
+            &media_store_dir,
+            normalize_options,
+        ) {
+            Ok(output) => output,
             Err(error) => {
                 return Err(BuildError {
                     report: BuildReport {
                         artifact: None,
                         counts: BuildCounts::default(),
-                        diagnostics: vec![Diagnostic {
-                            code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
-                            severity: Severity::Error,
-                            message: error.to_string(),
-                            source: Some(SourcePath::new("project")),
-                            help: Some("inspect product notes and media registrations".into()),
-                        }],
+                        diagnostics: {
+                            diagnostics.push(Diagnostic {
+                                code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
+                                severity: Severity::Error,
+                                message: error.to_string(),
+                                source: Some(SourcePath::new("project")),
+                                help: Some("inspect product notes and media registrations".into()),
+                            });
+                            diagnostics
+                        },
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
                         },
@@ -1330,6 +1638,31 @@ impl Project {
                 });
             }
         };
+        let normalized = normalized_output.normalized_ir;
+        diagnostics.extend(normalized_output.diagnostics);
+
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            return Err(BuildError {
+                report: BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    diagnostics,
+                    metrics: BuildMetrics {
+                        duration: started.elapsed(),
+                    },
+                    inspect: None,
+                    status: "invalid".into(),
+                },
+                cause: BuildFailureCause::Diagnostics,
+            });
+        }
 
         let current_dir = std::env::current_dir().map_err(|err| BuildError {
             report: failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string()),
@@ -1399,6 +1732,8 @@ impl Project {
                 .as_ref()
                 .and_then(|artifact| crate::inspect_apkg(&artifact.path).ok())
                 .map(|report| InspectSummary {
+                    notes: inspect_metadata_count(&report, "note_count"),
+                    cards: inspect_metadata_count(&report, "card_count"),
                     source_kind: report.source_kind,
                     observation_status: report.observation_status,
                     notetypes: report.observations.notetypes.len(),
@@ -1412,7 +1747,11 @@ impl Project {
 
         let counts = BuildCounts {
             notes: normalized.notes.len(),
-            cards: count_phase1_cards(&normalized),
+            cards: inspect
+                .as_ref()
+                .map(|summary| summary.cards)
+                .filter(|cards| *cards > 0)
+                .unwrap_or_else(|| count_phase1_cards_without_inspect(&normalized)),
             media: normalized.media_bindings.len(),
         };
 
@@ -1493,16 +1832,19 @@ impl Project {
         &self,
         base_dir: impl Into<PathBuf>,
         media_store_dir: impl Into<PathBuf>,
-    ) -> anyhow::Result<authoring_core::NormalizedIr> {
+        mut options: ProjectNormalizeOptions,
+    ) -> anyhow::Result<ProjectNormalizeOutput> {
         let base_dir = base_dir.into();
         let media_store_dir = media_store_dir.into();
+        options.base_dir = options.base_dir.or(Some(base_dir.clone()));
+        options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
         let lowering = self.lower()?;
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
                 base_dir,
                 media_store_dir,
-                media_policy: MediaPolicy::default_strict(),
+                media_policy: options.to_authoring_media_policy(),
             },
         );
         anyhow::ensure!(
@@ -1510,9 +1852,36 @@ impl Project {
             "normalization failed with status {}",
             result.result_status
         );
-        result
+        let diagnostics = result
+            .diagnostics
+            .items
+            .into_iter()
+            .map(normalization_diagnostic_to_product_diagnostic)
+            .collect();
+        let normalized_ir = result
             .normalized_ir
-            .context("normalization did not produce normalized_ir")
+            .context("normalization did not produce normalized_ir")?;
+        Ok(ProjectNormalizeOutput {
+            normalized_ir,
+            diagnostics,
+        })
+    }
+}
+
+struct ProjectNormalizeOutput {
+    normalized_ir: authoring_core::NormalizedIr,
+    diagnostics: Vec<Diagnostic>,
+}
+
+fn normalization_diagnostic_to_product_diagnostic(
+    item: authoring_core::model::DiagnosticItem,
+) -> Diagnostic {
+    Diagnostic {
+        code: DiagnosticCode::new(item.code),
+        severity: severity_from_writer_level(&item.level),
+        message: item.summary,
+        source: None,
+        help: None,
     }
 }
 
@@ -1543,17 +1912,58 @@ fn severity_from_writer_level(level: &str) -> Severity {
     }
 }
 
-fn count_phase1_cards(normalized: &authoring_core::NormalizedIr) -> usize {
+fn inspect_metadata_count(report: &crate::InspectReport, key: &str) -> usize {
+    report
+        .observations
+        .metadata
+        .iter()
+        .find_map(|value| value.get(key).and_then(serde_json::Value::as_u64))
+        .unwrap_or(0) as usize
+}
+
+fn count_phase1_cards_without_inspect(normalized: &authoring_core::NormalizedIr) -> usize {
     let templates_by_notetype = normalized
         .notetypes
         .iter()
-        .map(|notetype| (notetype.id.as_str(), notetype.templates.len()))
+        .map(|notetype| {
+            let template_count = if notetype.kind == "cloze" {
+                0
+            } else {
+                notetype.templates.len()
+            };
+            (notetype.id.as_str(), (notetype.kind.as_str(), template_count))
+        })
         .collect::<std::collections::BTreeMap<_, _>>();
     normalized
         .notes
         .iter()
-        .map(|note| templates_by_notetype.get(note.notetype_id.as_str()).copied().unwrap_or(0))
+        .map(|note| {
+            let Some((kind, template_count)) = templates_by_notetype.get(note.notetype_id.as_str()) else {
+                return 0;
+            };
+            if *kind == "cloze" {
+                distinct_cloze_ords(note.fields.values().map(String::as_str))
+            } else {
+                *template_count
+            }
+        })
         .sum()
+}
+
+fn distinct_cloze_ords<'a>(fields: impl Iterator<Item = &'a str>) -> usize {
+    let mut ords = std::collections::BTreeSet::new();
+    for value in fields {
+        for part in value.split("{{c").skip(1) {
+            let digits = part
+                .chars()
+                .take_while(|ch| ch.is_ascii_digit())
+                .collect::<String>();
+            if !digits.is_empty() {
+                ords.insert(digits);
+            }
+        }
+    }
+    ords.len()
 }
 ```
 
@@ -2033,6 +2443,33 @@ for note_type in &self.note_types {
         css: None,
     };
     product = product.with_custom_notetype(custom);
+    for template in note_type.templates() {
+        if template.browser_front().is_some() || template.browser_back().is_some() {
+            product = product.with_browser_appearance(
+                note_type.id().to_string(),
+                crate::product::metadata::TemplateBrowserAppearanceDeclaration {
+                    template_name: template.name().to_string(),
+                    question_format: template
+                        .browser_front()
+                        .map(|source| source.as_str().to_string()),
+                    answer_format: template
+                        .browser_back()
+                        .map(|source| source.as_str().to_string()),
+                    font_name: None,
+                    font_size: None,
+                },
+            );
+        }
+        if let Some(deck_name) = template.target_deck() {
+            product = product.with_template_target_deck(
+                note_type.id().to_string(),
+                crate::product::metadata::TemplateTargetDeckDeclaration {
+                    template_name: template.name().to_string(),
+                    deck_name: deck_name.to_string(),
+                },
+            );
+        }
+    }
 }
 ```
 
@@ -2907,9 +3344,12 @@ pub mod authoring;
 pub mod writer;
 ```
 
-Keep old root re-exports for one release if existing tests still use them. Add a doc comment above them:
+Keep old root re-exports for one release if existing tests still use them. Mark them deprecated and add a doc comment above them:
 
 ```rust
+#[deprecated(
+    note = "use anki_forge::prelude for Product API or anki_forge::authoring / anki_forge::writer for advanced APIs"
+)]
 // Backward-compatible root re-exports. New user docs should use `prelude`,
 // `authoring`, or `writer`.
 ```
@@ -2970,24 +3410,28 @@ Expected: all commands pass. The three examples write `spanish.apkg`, `jp-core.a
 
 Spec coverage:
 
-1. `Project`: Task 3.
-2. `Deck` as `Project` facade: Task 4.
-3. `NoteType::custom`: Task 2 and Task 5.
-4. `FieldKey` / `TemplateKey` / stable config id: Task 5.
-5. `Field` / `Template` / minimal `GenerationRule`: Task 2 and Task 5.
-6. `Note::new` with named fields: Task 2.
-7. `Note::basic` / `Note::cloze`: Task 2 and Task 3.
-8. safe `Content::Text` / explicit `Content::Html`: Task 2.
-9. minimal media registry and helpers: Task 6.
-10. `write_apkg -> BuildReport`: Task 1 and Task 3.
-11. README/examples/Python shape: Task 7.
-12. snapshot/oracle gates: Task 5 and Task 7.
-13. public API boundary: Task 8.
+1. Codebase API audit and signature drift prevention: Task 0.
+2. `Project`: Task 3.
+3. `Project::validate()` duplicate stable id, auto key, and missing identity diagnostics: Task 3.
+4. `Deck` as `Project` facade: Task 4.
+5. `NoteType::custom`: Task 2 and Task 5.
+6. `FieldKey` / `TemplateKey` / stable config id: Task 5.
+7. `Field` / `Template` / minimal `GenerationRule`: Task 2 and Task 5.
+8. `Note::new` with named fields: Task 2.
+9. `Note::basic` / `Note::cloze`: Task 2 and Task 3.
+10. safe `Content::Text` / explicit `Content::Html`: Task 2.
+11. minimal media registry and helpers: Task 6.
+12. `write_apkg -> BuildReport`: Task 1 and Task 3.
+13. README/examples/Python shape: Task 7.
+14. snapshot/oracle gates: Task 5 and Task 7.
+15. public API boundary: Task 8.
 
 Type consistency:
 
 1. `BuildReport.artifact` is `Option<ApkgArtifact>` throughout the plan so partial error reports can omit artifacts.
-2. `Project::build` and `Deck::build` both take `BuildOptions`.
-3. `Project::write_apkg` and `Deck::write_apkg` both return `Result<BuildReport, BuildError>`.
-4. Product `MediaRef` is separate from existing deck `MediaRef`; imports must use `anki_forge::prelude::MediaRef` for Product API.
-5. Phase 1 custom note types lower as normal note types only.
+2. `BuildOptions.normalize_options` is consumed by `Project::build`, not left as a write-only field.
+3. `Project::build` and `Deck::build` both take `BuildOptions`.
+4. `Project::write_apkg` and `Deck::write_apkg` both return `Result<BuildReport, BuildError>`.
+5. Product `MediaRef` is separate from existing deck `MediaRef`; imports must use `anki_forge::prelude::MediaRef` for Product API.
+6. Phase 1 custom note types lower as normal note types only.
+7. Card counts use inspect metadata first and only fall back to approximation when inspect is disabled or unavailable.
