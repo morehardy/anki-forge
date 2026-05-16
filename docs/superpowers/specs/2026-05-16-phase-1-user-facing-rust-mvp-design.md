@@ -183,6 +183,21 @@ report.ensure_success()?;
 6. media registry
 7. build defaults
 
+`Project` also owns or derives the normalization defaults used by `normalize()` and `build()`. Phase 1 should use the existing strict default media policy unless `BuildOptions` explicitly overrides it. Media-related paths such as `base_dir` and `media_store_dir` are derived from `BuildOptions` and the artifact/output location during `build()`, and from project defaults during `normalize()`.
+
+`BuildOptions` should at minimum cover:
+
+```rust
+pub struct BuildOptions {
+    pub output: Option<PathBuf>,
+    pub artifacts_dir: Option<PathBuf>,
+    pub normalize_options: Option<ProjectNormalizeOptions>,
+    pub inspect: bool,
+}
+```
+
+`ProjectNormalizeOptions` is a product-facing wrapper over the lower-level `NormalizeOptions` concepts. It should not expose every internal field prematurely, but it must make the source of `base_dir`, `media_store_dir`, and media policy explicit enough that `Project::normalize()` has deterministic behavior outside `build()`.
+
 `Project` exposes:
 
 ```rust
@@ -229,6 +244,8 @@ Parity tests must compare:
 Artifact paths can differ when different output paths are requested. Semantic report fields must match.
 
 The current `deck::export::BuildResult` should be retired from the public happy path or bridged into `BuildReport`. Existing `to_apkg_bytes()` can stay as convenience if it delegates through the same `Project` build path.
+
+Existing `Deck::image_occlusion()` support remains in Phase 1. `Project::from(deck)` must convert `DeckNote::ImageOcclusion(IoNote)` through the existing ProductDocument Image Occlusion lowering path, so deck-authored IO notes continue to build. A new `Note::image_occlusion()` Product API constructor is not part of Phase 1.
 
 ## Custom Note Type MVP
 
@@ -292,6 +309,8 @@ config_id = positive signed i64 from the first 8 digest bytes, with the sign bit
 
 This rule must be treated as public behavior once APKGs are generated from it.
 
+Phase 1 custom note types are normal note types. Their lowered `notetype.kind` is fixed to `"normal"`; cloze custom note types are out of scope for this phase. The stock cloze path remains available through `Note::cloze(...)` and existing `Deck::cloze()` support.
+
 Phase 1 `GenerationRule`:
 
 ```rust
@@ -307,7 +326,7 @@ Rules:
 
 1. `AnkiDefault` leaves normal Anki front-template generation semantics intact.
 2. `All` and `Any` must lower to Anki-compatible front template behavior and be visible in snapshots.
-3. `Cloze` is limited to the stock cloze path in Phase 1.
+3. `Cloze` is limited to the stock cloze path in Phase 1 and is not exposed on custom normal note types.
 4. Unsupported or contradictory rules produce structured diagnostics with source paths.
 
 ## Notes And Content
@@ -500,6 +519,7 @@ Phase 1 does not include:
 8. full Python package release
 9. YAML/JSON declarative project format
 10. APKG import back into Project
+11. a new `Note::image_occlusion()` Product API constructor; existing `Deck::image_occlusion()` remains supported through `Project::from(deck)`
 
 These belong to later phases in `docs/api-design.md`.
 
