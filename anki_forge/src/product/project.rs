@@ -31,6 +31,7 @@ pub struct Project {
     note_types: Vec<NoteType>,
     notes: Vec<Note>,
     media: crate::product::MediaRegistry,
+    deck_source: Option<crate::deck::Deck>,
 }
 
 impl Project {
@@ -42,6 +43,7 @@ impl Project {
             note_types: Vec::new(),
             notes: Vec::new(),
             media: crate::product::MediaRegistry,
+            deck_source: None,
         }
     }
 
@@ -72,6 +74,38 @@ impl Project {
     pub fn validate(&self) -> ValidationReport {
         let mut diagnostics = Vec::new();
         let mut seen_stable_ids = BTreeSet::new();
+
+        if let Some(deck) = &self.deck_source {
+            match deck.validate_report() {
+                Ok(report) => diagnostics.extend(
+                    report
+                        .diagnostics()
+                        .iter()
+                        .map(deck_validation_diagnostic_to_project_diagnostic),
+                ),
+                Err(error) => diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("PROJECT.DECK_VALIDATE_FAILED"),
+                    severity: Severity::Error,
+                    message: error.to_string(),
+                    source: Some(SourcePath::new("project.deck")),
+                    help: Some("inspect deck notes before building".into()),
+                }),
+            }
+
+            if !self.notes.is_empty() || !self.note_types.is_empty() {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("PROJECT.DECK_SOURCE_AUTHORING_STATE_UNSUPPORTED"),
+                    severity: Severity::Error,
+                    message:
+                        "deck-backed projects cannot mix direct Project notes or note types yet"
+                            .into(),
+                    source: Some(SourcePath::new("project")),
+                    help: Some(
+                        "add notes to the Deck before converting it with Project::from".into(),
+                    ),
+                });
+            }
+        }
 
         for (index, note) in self.notes.iter().enumerate() {
             if let Some(stable_id) = note.stable_id_ref() {
@@ -163,6 +197,13 @@ impl Project {
     }
 
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
+        if let Some(deck) = &self.deck_source {
+            let product = deck.clone().into_product_document()?;
+            return product
+                .lower()
+                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err));
+        }
+
         self.to_product_document()
             .lower()
             .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))
@@ -459,16 +500,28 @@ impl Project {
         let media_store_dir = media_store_dir.into();
         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
-        let mut lowering = self.lower_with_diagnostics().map_err(|error| {
-            let diagnostics = map_product_lowering_error(&error);
-            ProjectNormalizeError {
-                message: "lower product document".into(),
-                diagnostics,
-                normalized_ir: None,
-            }
-        })?;
+        let mut lowering = self.lower_with_project_error()?;
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
+        if let Some(deck) = &self.deck_source {
+            let media = deck
+                .registered_media()
+                .values()
+                .map(|media| media.to_authoring_media(&base_dir))
+                .collect::<anyhow::Result<Vec<_>>>()
+                .map_err(|error| ProjectNormalizeError {
+                    message: "prepare deck media".into(),
+                    diagnostics: vec![Diagnostic {
+                        code: DiagnosticCode::new("PROJECT.DECK_MEDIA_FAILED"),
+                        severity: Severity::Error,
+                        message: error.to_string(),
+                        source: Some(SourcePath::new("project.deck.media")),
+                        help: Some("inspect deck media registrations and media paths".into()),
+                    }],
+                    normalized_ir: None,
+                })?;
+            lowering.authoring_document.media.extend(media);
+        }
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
@@ -505,8 +558,49 @@ impl Project {
         })
     }
 
-    fn lower_with_diagnostics(&self) -> Result<LoweringPlan, ProductLoweringError> {
-        self.to_product_document().lower()
+    fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
+        let product = if let Some(deck) = &self.deck_source {
+            deck.clone()
+                .into_product_document()
+                .map_err(|error| ProjectNormalizeError {
+                    message: "lower deck product document".into(),
+                    diagnostics: vec![Diagnostic {
+                        code: DiagnosticCode::new("PROJECT.DECK_LOWER_FAILED"),
+                        severity: Severity::Error,
+                        message: error.to_string(),
+                        source: Some(SourcePath::new("project.deck")),
+                        help: Some("inspect deck notes before lowering".into()),
+                    }],
+                    normalized_ir: None,
+                })?
+        } else {
+            self.to_product_document()
+        };
+
+        product.lower().map_err(|error| {
+            let diagnostics = map_product_lowering_error(&error);
+            ProjectNormalizeError {
+                message: if self.deck_source.is_some() {
+                    "lower deck product document".into()
+                } else {
+                    "lower product document".into()
+                },
+                diagnostics,
+                normalized_ir: None,
+            }
+        })
+    }
+}
+
+impl From<crate::deck::Deck> for Project {
+    fn from(deck: crate::deck::Deck) -> Self {
+        let mut project = Project::new(deck.name().to_string());
+        if let Some(stable_id) = deck.stable_id() {
+            project = project.stable_id(stable_id.to_string());
+        }
+        project = project.default_deck(deck.name().to_string());
+        project.deck_source = Some(deck);
+        project
     }
 }
 
@@ -637,6 +731,42 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
 
 fn severity_from_level(level: &str) -> Severity {
     match level {
+        "error" => Severity::Error,
+        "warning" => Severity::Warning,
+        _ => Severity::Info,
+    }
+}
+
+fn deck_validation_diagnostic_to_project_diagnostic(
+    diagnostic: &crate::deck::ValidationDiagnostic,
+) -> Diagnostic {
+    Diagnostic {
+        code: DiagnosticCode::new(deck_validation_code(&diagnostic.code)),
+        severity: severity_from_deck_validation(&diagnostic.severity),
+        message: diagnostic.message.clone(),
+        source: Some(SourcePath::new("project.deck")),
+        help: None,
+    }
+}
+
+fn deck_validation_code(code: &crate::deck::ValidationCode) -> &'static str {
+    match code {
+        crate::deck::ValidationCode::MissingStableId => "DECK.MISSING_STABLE_ID",
+        crate::deck::ValidationCode::DuplicateStableId => "DECK.DUPLICATE_STABLE_ID",
+        crate::deck::ValidationCode::BlankStableId => "DECK.BLANK_STABLE_ID",
+        crate::deck::ValidationCode::EmptyIoMasks => "DECK.EMPTY_IO_MASKS",
+        crate::deck::ValidationCode::UnknownMediaRef => "DECK.UNKNOWN_MEDIA_REF",
+        crate::deck::ValidationCode::NoteLevelIdentityOverrideUsed => {
+            "DECK.NOTE_LEVEL_IDENTITY_OVERRIDE_USED"
+        }
+        crate::deck::ValidationCode::IdentityDuplicatePayload => "DECK.IDENTITY_DUPLICATE_PAYLOAD",
+        crate::deck::ValidationCode::IdentityCollision => "DECK.IDENTITY_COLLISION",
+        crate::deck::ValidationCode::StableIdDuplicate => "DECK.STABLE_ID_DUPLICATE",
+    }
+}
+
+fn severity_from_deck_validation(severity: &str) -> Severity {
+    match severity {
         "error" => Severity::Error,
         "warning" => Severity::Warning,
         _ => Severity::Info,

@@ -64,8 +64,11 @@ impl Package {
 }
 
 impl Deck {
-    pub fn build(&self, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
-        Package::single(self.clone()).build(artifacts_dir)
+    pub fn build(
+        &self,
+        options: crate::build::BuildOptions,
+    ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
+        crate::product::Project::from(self.clone()).build(options)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
@@ -76,8 +79,11 @@ impl Deck {
         Package::single(self.clone()).write_to(writer)
     }
 
-    pub fn write_apkg(&self, path: impl AsRef<Path>) -> anyhow::Result<()> {
-        Package::single(self.clone()).write_apkg(path)
+    pub fn write_apkg(
+        &self,
+        path: impl AsRef<Path>,
+    ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
+        crate::product::Project::from(self.clone()).write_apkg(path)
     }
 }
 

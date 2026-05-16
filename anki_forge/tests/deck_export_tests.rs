@@ -1,3 +1,4 @@
+use anki_forge::build::BuildOptions;
 use anki_forge::{Deck, IoMode, MediaSource, Package};
 use serde_json::json;
 
@@ -11,11 +12,13 @@ fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
         .expect("add basic note");
 
     let artifacts_dir = unique_artifacts_dir("deck-export");
-    let build = deck.build(&artifacts_dir).expect("build facade");
+    let build = deck
+        .build(BuildOptions::new().output(artifacts_dir.join("deck.apkg")))
+        .expect("build facade");
 
-    assert!(build.apkg_path().exists());
-    assert!(build.staging_manifest_path().exists());
-    assert_eq!(build.package_build_result().result_status, "success");
+    assert!(build.artifact.as_ref().expect("artifact").path.exists());
+    assert_eq!(build.status, "success");
+    assert_eq!(build.counts.notes, 1);
 
     let bytes = deck.to_apkg_bytes().expect("apkg bytes");
     assert!(!bytes.is_empty());
@@ -40,7 +43,7 @@ fn deck_build_uses_cas_media_without_normalized_base64_payload() {
         .add()
         .unwrap();
 
-    let build = deck.build(&root).unwrap();
+    let build = Package::single(deck.clone()).build(&root).unwrap();
     let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
 
     assert!(manifest.contains("media_objects"));
@@ -69,7 +72,7 @@ fn deck_build_keeps_file_media_path_backed_until_normalize() {
         .add()
         .unwrap();
 
-    let build = deck.build(&root).unwrap();
+    let build = Package::single(deck.clone()).build(&root).unwrap();
     let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
 
     assert!(root.join(".anki-forge-media-input/hello.txt").is_file());
@@ -105,14 +108,22 @@ fn deck_build_rejects_preexisting_media_input_target_symlink() {
         .add()
         .unwrap();
 
-    let err = match deck.build(&root) {
+    let err = match deck.build(
+        BuildOptions::new()
+            .artifacts_dir(root.clone())
+            .output(root.join("deck.apkg")),
+    ) {
         Ok(_) => panic!("build must reject media input target symlink"),
         Err(err) => err,
     };
 
     assert!(
-        err.to_string().contains("symlink"),
-        "unexpected error: {err}"
+        err.report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.message.contains("symlink")),
+        "unexpected diagnostics: {:?}",
+        err.report.diagnostics
     );
     assert_eq!(std::fs::read(&victim_path).unwrap(), b"do not overwrite");
 }
@@ -250,6 +261,42 @@ fn deck_export_rejects_invalid_deserialized_deck_during_bytes_export() {
         .to_apkg_bytes()
         .expect_err("invalid deck should fail export");
     assert!(err.to_string().contains("deck validation failed"));
+}
+
+#[test]
+fn deck_build_reports_invalid_deserialized_deck_validation() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Spanish",
+        "stable_id": null,
+        "notes": [
+            {
+                "Basic": {
+                    "id": "",
+                    "stable_id": "   ",
+                    "front": "hola",
+                    "back": "hello",
+                    "tags": [],
+                    "generated": false
+                }
+            }
+        ],
+        "next_generated_note_id": 1,
+        "media": {}
+    }))
+    .expect("deserialize invalid deck");
+
+    let err = deck
+        .build(
+            BuildOptions::new()
+                .output(unique_artifacts_dir("deck-invalid-build").join("deck.apkg")),
+        )
+        .expect_err("invalid deck should fail build facade");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "DECK.BLANK_STABLE_ID"));
 }
 
 #[test]
