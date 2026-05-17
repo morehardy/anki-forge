@@ -12,15 +12,19 @@ fn inline_font_asset_lowers_to_media_and_font_face_css() {
             fields: vec![
                 CustomField {
                     name: "Front".into(),
+                    key: None,
                 },
                 CustomField {
                     name: "Back".into(),
+                    key: None,
                 },
             ],
             templates: vec![CustomTemplate {
                 name: "Card 1".into(),
+                key: None,
                 question_format: "{{Front}}".into(),
                 answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
+                generation_rule: None,
             }],
             css: Some(".card { color: red; }".into()),
         })
@@ -79,15 +83,19 @@ fn inline_font_asset_lowering_escapes_css_literals() {
             fields: vec![
                 CustomField {
                     name: "Front".into(),
+                    key: None,
                 },
                 CustomField {
                     name: "Back".into(),
+                    key: None,
                 },
             ],
             templates: vec![CustomTemplate {
                 name: "Card 1".into(),
+                key: None,
                 question_format: "{{Front}}".into(),
                 answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
+                generation_rule: None,
             }],
             css: Some(".card { color: red; }".into()),
         })
@@ -133,15 +141,19 @@ fn font_binding_resolves_namespaced_asset_and_reports_missing_bindings() {
             fields: vec![
                 CustomField {
                     name: "Front".into(),
+                    key: None,
                 },
                 CustomField {
                     name: "Back".into(),
+                    key: None,
                 },
             ],
             templates: vec![CustomTemplate {
                 name: "Card 1".into(),
+                key: None,
                 question_format: "{{Front}}".into(),
                 answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
+                generation_rule: None,
             }],
             css: None,
         })

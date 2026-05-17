@@ -109,13 +109,28 @@ pub struct ImageOcclusionNote {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CustomField {
     pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CustomTemplate {
     pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
     pub question_format: String,
     pub answer_format: String,
+    #[serde(default)]
+    pub generation_rule: Option<CustomGenerationRule>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CustomGenerationRule {
+    AnkiDefault,
+    All { fields: Vec<String> },
+    Any { fields: Vec<String> },
+    Cloze { field: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

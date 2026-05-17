@@ -3,7 +3,7 @@ use std::{fs, path::Path};
 use anyhow::Context;
 use serde_json::Value;
 
-use crate::{build, BuildArtifactTarget, NormalizedIr, PackageBuildResult};
+use crate::{writer_build, BuildArtifactTarget, NormalizedIr, PackageBuildResult};
 
 use super::{
     load_build_context, load_bundle_from_manifest, load_writer_policy, schema::load_schema_asset,
@@ -40,7 +40,7 @@ pub fn build_from_path(
         BuildArtifactTarget::new(artifacts_dir.as_ref().to_path_buf(), "artifacts")
             .with_media_store_dir(media_store_dir);
 
-    build(
+    writer_build(
         &normalized_ir,
         &writer_policy,
         &build_context,

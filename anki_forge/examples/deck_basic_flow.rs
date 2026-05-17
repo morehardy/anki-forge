@@ -35,6 +35,6 @@ fn main() -> anyhow::Result<()> {
         .stable_id("anatomy-heart-1")
         .add()?;
 
-    deck.write_apkg("spanish.apkg")?;
+    deck.write_apkg("spanish.apkg")?.ensure_success()?;
     Ok(())
 }
