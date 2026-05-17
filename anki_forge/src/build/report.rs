@@ -28,9 +28,16 @@ impl Default for BuildMetrics {
     }
 }
 
+/// Summary of writer inspection data attached to a build report.
+///
+/// These fields are derived from the writer inspection layer and are intended
+/// for reporting, not as a stable product-domain schema.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct InspectSummary {
     pub source_kind: String,
+    /// Writer-layer observation status passed through from the inspect report.
+    ///
+    /// Treat this as reporting metadata rather than a stable public enum.
     pub observation_status: String,
     pub notes: usize,
     pub cards: usize,

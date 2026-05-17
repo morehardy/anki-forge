@@ -312,6 +312,10 @@ pub enum IoMode {
     HideOneGuessOne,
 }
 
+/// Deck-scoped media handle used by the Deck image-occlusion API.
+///
+/// This is distinct from [`crate::product::MediaRef`], which is used by the
+/// Project facade and is exported through [`crate::prelude`].
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MediaRef(pub(crate) String);
 

@@ -65,7 +65,8 @@ fn main() -> anyhow::Result<()> {
 ```
 
 `BuildReport` includes the artifact path, note/card/media counts, diagnostics,
-warning count, inspect summary, and duration.
+warning count, inspect summary, and duration. `inspect.observation_status` is
+writer-layer reporting metadata passed through from the inspection step.
 
 Custom note types, stable field/template keys, and project media are shown in:
 

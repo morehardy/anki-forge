@@ -72,11 +72,24 @@ impl Deck {
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        Package::single(self.clone()).to_apkg_bytes()
+        with_temp_artifacts_dir("deck-bytes", |artifacts_dir| {
+            let output = artifacts_dir.join("deck.apkg");
+            let report = crate::product::Project::from(self.clone())
+                .write_apkg(&output)
+                .map_err(build_error_to_anyhow)?;
+            let artifact_path = report
+                .artifact
+                .as_ref()
+                .map(|artifact| artifact.path.as_path())
+                .unwrap_or(output.as_path());
+            fs::read(artifact_path)
+                .with_context(|| format!("read apkg bytes: {}", artifact_path.display()))
+        })
     }
 
-    pub fn write_to<W: Write>(&self, writer: W) -> anyhow::Result<()> {
-        Package::single(self.clone()).write_to(writer)
+    pub fn write_to<W: Write>(&self, mut writer: W) -> anyhow::Result<()> {
+        writer.write_all(&self.to_apkg_bytes()?)?;
+        Ok(())
     }
 
     pub fn write_apkg(
@@ -84,6 +97,21 @@ impl Deck {
         path: impl AsRef<Path>,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
         crate::product::Project::from(self.clone()).write_apkg(path)
+    }
+}
+
+fn build_error_to_anyhow(error: crate::build::BuildError) -> anyhow::Error {
+    let diagnostics = error
+        .report
+        .diagnostics
+        .iter()
+        .map(|diagnostic| format!("{}: {}", diagnostic.code.as_str(), diagnostic.message))
+        .collect::<Vec<_>>();
+
+    if diagnostics.is_empty() {
+        anyhow::anyhow!("{error}")
+    } else {
+        anyhow::anyhow!("{error}; diagnostics: {}", diagnostics.join("; "))
     }
 }
 

@@ -260,7 +260,20 @@ fn deck_export_rejects_invalid_deserialized_deck_during_bytes_export() {
     let err = deck
         .to_apkg_bytes()
         .expect_err("invalid deck should fail export");
-    assert!(err.to_string().contains("deck validation failed"));
+    assert!(
+        err.to_string().contains("DECK.BLANK_STABLE_ID"),
+        "unexpected error: {err:#}"
+    );
+
+    let mut written = Vec::new();
+    let err = deck
+        .write_to(&mut written)
+        .expect_err("invalid deck should fail writer export");
+    assert!(
+        err.to_string().contains("DECK.BLANK_STABLE_ID"),
+        "unexpected error: {err:#}"
+    );
+    assert!(written.is_empty());
 }
 
 #[test]
