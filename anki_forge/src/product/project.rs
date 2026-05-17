@@ -259,12 +259,12 @@ impl Project {
                     .as_ref()
                     .map(|normalized| BuildCounts {
                         notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(normalized),
+                        cards: count_phase1_cards_without_inspect(normalized.as_ref()),
                         media: normalized.media_bindings.len(),
                     })
                     .unwrap_or_default();
-                return Err(BuildError {
-                    report: BuildReport {
+                return Err(BuildError::new(
+                    BuildReport {
                         artifact: None,
                         counts,
                         diagnostics,
@@ -274,8 +274,8 @@ impl Project {
                         inspect: None,
                         status: "invalid".into(),
                     },
-                    cause: BuildFailureCause::Diagnostics,
-                });
+                    BuildFailureCause::Diagnostics,
+                ));
             }
         };
         let normalized = normalized_output.normalized_ir;
@@ -285,8 +285,8 @@ impl Project {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
-            return Err(BuildError {
-                report: BuildReport {
+            return Err(BuildError::new(
+                BuildReport {
                     artifact: None,
                     counts: BuildCounts {
                         notes: normalized.notes.len(),
@@ -300,18 +300,22 @@ impl Project {
                     inspect: None,
                     status: "invalid".into(),
                 },
-                cause: BuildFailureCause::Diagnostics,
-            });
+                BuildFailureCause::Diagnostics,
+            ));
         }
 
-        let current_dir = std::env::current_dir().map_err(|err| BuildError {
-            report: failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string()),
-            cause: BuildFailureCause::Io,
+        let current_dir = std::env::current_dir().map_err(|err| {
+            BuildError::new(
+                failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string()),
+                BuildFailureCause::Io,
+            )
         })?;
         let (_runtime, writer_policy, build_context) =
-            crate::runtime::load_default_writer_stack(current_dir).map_err(|err| BuildError {
-                report: failure_report(started, "PROJECT.RUNTIME_DEFAULTS_FAILED", err.to_string()),
-                cause: BuildFailureCause::Io,
+            crate::runtime::load_default_writer_stack(current_dir).map_err(|err| {
+                BuildError::new(
+                    failure_report(started, "PROJECT.RUNTIME_DEFAULTS_FAILED", err.to_string()),
+                    BuildFailureCause::Io,
+                )
             })?;
         let stable_ref_prefix = self
             .stable_id
@@ -326,9 +330,11 @@ impl Project {
             &build_context,
             &artifact_target,
         )
-        .map_err(|err| BuildError {
-            report: failure_report(started, "PROJECT.WRITER_FAILED", err.to_string()),
-            cause: BuildFailureCause::BuildStatus,
+        .map_err(|err| {
+            BuildError::new(
+                failure_report(started, "PROJECT.WRITER_FAILED", err.to_string()),
+                BuildFailureCause::BuildStatus,
+            )
         })?;
 
         diagnostics.extend(
@@ -347,25 +353,26 @@ impl Project {
 
         let mut artifact = None;
         if let Some(apkg_ref) = package_build_result.apkg_ref.as_deref() {
-            let built_path =
-                artifact_path_from_ref(&artifact_target, apkg_ref).map_err(|err| BuildError {
-                    report: failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", err.to_string()),
-                    cause: BuildFailureCause::Io,
-                })?;
+            let built_path = artifact_path_from_ref(&artifact_target, apkg_ref).map_err(|err| {
+                BuildError::new(
+                    failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", err.to_string()),
+                    BuildFailureCause::Io,
+                )
+            })?;
             let final_path = if let Some(output) = options.output.as_ref() {
                 if let Some(parent) = output.parent() {
-                    std::fs::create_dir_all(parent).map_err(|err| BuildError {
-                        report: failure_report(
-                            started,
-                            "PROJECT.OUTPUT_DIR_FAILED",
-                            err.to_string(),
-                        ),
-                        cause: BuildFailureCause::Io,
+                    std::fs::create_dir_all(parent).map_err(|err| {
+                        BuildError::new(
+                            failure_report(started, "PROJECT.OUTPUT_DIR_FAILED", err.to_string()),
+                            BuildFailureCause::Io,
+                        )
                     })?;
                 }
-                std::fs::copy(&built_path, output).map_err(|err| BuildError {
-                    report: failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string()),
-                    cause: BuildFailureCause::Io,
+                std::fs::copy(&built_path, output).map_err(|err| {
+                    BuildError::new(
+                        failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string()),
+                        BuildFailureCause::Io,
+                    )
                 })?;
                 output.clone()
             } else {
@@ -623,7 +630,7 @@ impl Project {
             return Err(ProjectNormalizeError {
                 message: format!("normalization failed with status {result_status}"),
                 diagnostics,
-                normalized_ir: result.normalized_ir,
+                normalized_ir: result.normalized_ir.map(Box::new),
             });
         }
         let normalized_ir = result.normalized_ir.ok_or_else(|| ProjectNormalizeError {
@@ -923,9 +930,11 @@ impl ArtifactWorkspace {
         let temp_dir = tempfile::Builder::new()
             .prefix("anki-forge-project-build-")
             .tempdir()
-            .map_err(|err| BuildError {
-                report: failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", err.to_string()),
-                cause: BuildFailureCause::Io,
+            .map_err(|err| {
+                BuildError::new(
+                    failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", err.to_string()),
+                    BuildFailureCause::Io,
+                )
             })?;
         let path = temp_dir.path().to_path_buf();
 
@@ -949,7 +958,7 @@ impl ArtifactWorkspace {
 struct ProjectNormalizeError {
     message: String,
     diagnostics: Vec<Diagnostic>,
-    normalized_ir: Option<authoring_core::NormalizedIr>,
+    normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
 }
 
 impl std::fmt::Display for ProjectNormalizeError {

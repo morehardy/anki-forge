@@ -67,8 +67,17 @@ pub enum BuildFailureCause {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BuildError {
-    pub report: BuildReport,
+    pub report: Box<BuildReport>,
     pub cause: BuildFailureCause,
+}
+
+impl BuildError {
+    pub fn new(report: BuildReport, cause: BuildFailureCause) -> Self {
+        Self {
+            report: Box::new(report),
+            cause,
+        }
+    }
 }
 
 impl BuildReport {
@@ -78,24 +87,24 @@ impl BuildReport {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
-            return Err(BuildError {
-                report: self.clone(),
-                cause: BuildFailureCause::Diagnostics,
-            });
+            return Err(BuildError::new(
+                self.clone(),
+                BuildFailureCause::Diagnostics,
+            ));
         }
 
         if self.artifact.is_none() {
-            return Err(BuildError {
-                report: self.clone(),
-                cause: BuildFailureCause::MissingArtifact,
-            });
+            return Err(BuildError::new(
+                self.clone(),
+                BuildFailureCause::MissingArtifact,
+            ));
         }
 
         if self.status != "success" {
-            return Err(BuildError {
-                report: self.clone(),
-                cause: BuildFailureCause::BuildStatus,
-            });
+            return Err(BuildError::new(
+                self.clone(),
+                BuildFailureCause::BuildStatus,
+            ));
         }
 
         Ok(())

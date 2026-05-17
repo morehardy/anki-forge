@@ -539,7 +539,7 @@ fn lower_generation_rule_front(
             ))
         }
         crate::product::model::CustomGenerationRule::Cloze { .. } => Err(ProductDiagnostic {
-            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE".into(),
+            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE",
             message: format!(
                 "custom normal note type '{}' template '{}' cannot use cloze generation",
                 note_type_id, template.name
@@ -558,7 +558,7 @@ fn generation_field_names(
     for field in fields {
         let Some(field_name) = field_name_by_key.get(field) else {
             return Err(ProductDiagnostic {
-                code: "TEMPLATE.REQUIRED_FIELD_MISSING".into(),
+                code: "TEMPLATE.REQUIRED_FIELD_MISSING",
                 message: format!(
                     "template '{}' in note type '{}' references unknown field key '{}'",
                     template.name, note_type_id, field
