@@ -116,7 +116,7 @@ impl Project {
 
         for (index, note) in self.notes.iter().enumerate() {
             if let Some(stable_id) = note.stable_id_ref() {
-                if !seen_stable_ids.insert(stable_id.to_string()) {
+                if !seen_stable_ids.insert(stable_id) {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
                         severity: Severity::Error,

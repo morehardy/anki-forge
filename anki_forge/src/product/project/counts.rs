@@ -66,12 +66,11 @@ fn distinct_cloze_ords<'a>(fields: impl Iterator<Item = &'a str>) -> usize {
     let mut ords = BTreeSet::new();
     for value in fields {
         for part in value.split("{{c").skip(1) {
-            let digits = part
-                .chars()
-                .take_while(|ch| ch.is_ascii_digit())
-                .collect::<String>();
-            if !digits.is_empty() {
-                ords.insert(digits);
+            let end = part
+                .find(|ch: char| !ch.is_ascii_digit())
+                .unwrap_or(part.len());
+            if end > 0 {
+                ords.insert(&part[..end]);
             }
         }
     }
