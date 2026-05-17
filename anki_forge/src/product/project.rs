@@ -6,6 +6,7 @@ use std::time::Instant;
 
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
+use base64::Engine as _;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
 
@@ -42,7 +43,7 @@ impl Project {
             default_deck: None,
             note_types: Vec::new(),
             notes: Vec::new(),
-            media: crate::product::MediaRegistry,
+            media: crate::product::MediaRegistry::default(),
             deck_source: None,
         }
     }
@@ -195,9 +196,14 @@ impl Project {
                 .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err));
         }
 
-        self.to_product_document()
+        let mut plan = self
+            .to_product_document()
             .lower()
-            .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))
+            .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
+        plan.authoring_document
+            .media
+            .extend(product_media_to_authoring_media(self.media.media())?);
+        Ok(plan)
     }
 
     pub fn normalize(&self) -> anyhow::Result<authoring_core::NormalizedIr> {
@@ -580,6 +586,20 @@ impl Project {
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
+        } else {
+            let media = product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
+                .map_err(|error| ProjectNormalizeError {
+                    message: "prepare product media".into(),
+                    diagnostics: vec![Diagnostic {
+                        code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
+                        severity: Severity::Error,
+                        message: error.to_string(),
+                        source: Some(SourcePath::new("project.media")),
+                        help: Some("inspect product media registrations and media paths".into()),
+                    }],
+                    normalized_ir: None,
+                })?;
+            lowering.authoring_document.media.extend(media);
         }
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
@@ -730,6 +750,141 @@ fn custom_note_fields_for_authoring(
         fields.insert(field_name, value);
     }
     fields
+}
+
+fn product_media_to_authoring_media<'a>(
+    media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
+) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
+    media.map(product_media_item_to_authoring_media).collect()
+}
+
+fn product_media_to_path_backed_authoring_media<'a>(
+    media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
+    media_input_dir: &Path,
+) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
+    media
+        .map(|media| product_media_item_to_path_backed_authoring_media(media, media_input_dir))
+        .collect()
+}
+
+fn product_media_item_to_authoring_media(
+    media: &crate::product::media_registry::ProductMedia,
+) -> anyhow::Result<crate::AuthoringMedia> {
+    let source = match &media.source {
+        crate::product::media_registry::ProductMediaSource::File { path } => {
+            let bytes = std::fs::read(path)
+                .with_context(|| format!("read media source file: {}", path.display()))?;
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+            }
+        }
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: data_base64.clone(),
+            }
+        }
+    };
+
+    Ok(crate::AuthoringMedia {
+        id: media.id.clone(),
+        desired_filename: media.export_filename.clone(),
+        source,
+        declared_mime: media.declared_mime.clone(),
+    })
+}
+
+fn product_media_item_to_path_backed_authoring_media(
+    media: &crate::product::media_registry::ProductMedia,
+    media_input_dir: &Path,
+) -> anyhow::Result<crate::AuthoringMedia> {
+    let source = match &media.source {
+        crate::product::media_registry::ProductMediaSource::File { path } => {
+            ensure_safe_product_media_input_dir(media_input_dir)?;
+            let target = media_input_dir.join(&media.export_filename);
+            ensure_not_symlink(&target)?;
+            std::fs::copy(path, &target).with_context(|| {
+                format!(
+                    "copy media source {} to {}",
+                    path.display(),
+                    target.display()
+                )
+            })?;
+            crate::AuthoringMediaSource::Path {
+                path: media.export_filename.clone(),
+            }
+        }
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: data_base64.clone(),
+            }
+        }
+    };
+
+    Ok(crate::AuthoringMedia {
+        id: media.id.clone(),
+        desired_filename: media.export_filename.clone(),
+        source,
+        declared_mime: media.declared_mime.clone(),
+    })
+}
+
+fn ensure_safe_product_media_input_dir(media_input_dir: &Path) -> anyhow::Result<()> {
+    match std::fs::symlink_metadata(media_input_dir) {
+        Ok(metadata) => validate_product_media_input_dir(media_input_dir, &metadata)?,
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+            std::fs::create_dir_all(media_input_dir).with_context(|| {
+                format!(
+                    "create media input directory: {}",
+                    media_input_dir.display()
+                )
+            })?;
+            let metadata = std::fs::symlink_metadata(media_input_dir).with_context(|| {
+                format!("stat media input directory: {}", media_input_dir.display())
+            })?;
+            validate_product_media_input_dir(media_input_dir, &metadata)?;
+        }
+        Err(err) => {
+            return Err(err).with_context(|| {
+                format!("stat media input directory: {}", media_input_dir.display())
+            });
+        }
+    }
+    Ok(())
+}
+
+fn validate_product_media_input_dir(
+    media_input_dir: &Path,
+    metadata: &std::fs::Metadata,
+) -> anyhow::Result<()> {
+    anyhow::ensure!(
+        !metadata.file_type().is_symlink(),
+        "media input directory must not be a symlink: {}",
+        media_input_dir.display()
+    );
+    anyhow::ensure!(
+        metadata.is_dir(),
+        "media input path must be a directory: {}",
+        media_input_dir.display()
+    );
+    Ok(())
+}
+
+fn ensure_not_symlink(path: &Path) -> anyhow::Result<()> {
+    match std::fs::symlink_metadata(path) {
+        Ok(metadata) => {
+            anyhow::ensure!(
+                !metadata.file_type().is_symlink(),
+                "media input target must not be a symlink: {}",
+                path.display()
+            );
+        }
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => {}
+        Err(err) => {
+            return Err(err)
+                .with_context(|| format!("stat media input target: {}", path.display()));
+        }
+    }
+    Ok(())
 }
 
 impl From<crate::deck::Deck> for Project {
