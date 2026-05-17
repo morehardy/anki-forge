@@ -11,7 +11,7 @@ use super::{
     diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
     helpers::{apply_helpers, HelperDeclaration},
     metadata::FieldMetadataDeclaration,
-    model::{ProductNote, ProductNoteType},
+    model::{CustomNoteType, ProductNote, ProductNoteType},
     ProductDocument,
 };
 
@@ -115,6 +115,12 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
             }
             ProductNoteType::Custom(custom) => {
+                let duplicate_key_diagnostics = duplicate_custom_key_diagnostics(custom);
+                if !duplicate_key_diagnostics.is_empty() {
+                    product_diagnostics.extend(duplicate_key_diagnostics);
+                    continue;
+                }
+
                 let helpers = document.helpers_for(&custom.id);
                 if !helpers.is_empty() {
                     match apply_helpers("custom", "", "", &helpers) {
@@ -126,55 +132,84 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     }
                 }
 
+                let field_name_by_key = custom
+                    .fields
+                    .iter()
+                    .map(|field| {
+                        let key = field.key.clone().unwrap_or_else(|| field.name.clone());
+                        (key, field.name.clone())
+                    })
+                    .collect::<BTreeMap<_, _>>();
+                let fields = custom
+                    .fields
+                    .iter()
+                    .enumerate()
+                    .map(|(ord, field)| {
+                        let key = field.key.clone().unwrap_or_else(|| field.name.clone());
+                        AuthoringField {
+                            name: field.name.clone(),
+                            ord: Some(ord as u32),
+                            config_id: Some(crate::product::stable_config_id(
+                                "field", &custom.id, &key,
+                            )),
+                            tag: None,
+                            prevent_deletion: false,
+                        }
+                    })
+                    .collect();
+                let templates = match custom
+                    .templates
+                    .iter()
+                    .enumerate()
+                    .map(|(ord, template)| {
+                        let key = template
+                            .key
+                            .clone()
+                            .unwrap_or_else(|| template.name.clone());
+                        let question_format =
+                            lower_generation_rule_front(&custom.id, template, &field_name_by_key)?;
+                        Ok(AuthoringTemplate {
+                            name: template.name.clone(),
+                            ord: Some(ord as u32),
+                            config_id: Some(crate::product::stable_config_id(
+                                "template", &custom.id, &key,
+                            )),
+                            question_format,
+                            answer_format: template.answer_format.clone(),
+                            browser_question_format: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.question_format),
+                            browser_answer_format: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.answer_format),
+                            target_deck_name: document
+                                .template_target_deck_for(&custom.id, &template.name)
+                                .map(|declaration| declaration.deck_name),
+                            browser_font_name: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.font_name),
+                            browser_font_size: document
+                                .browser_appearance_for(&custom.id, &template.name)
+                                .and_then(|declaration| declaration.font_size),
+                        })
+                    })
+                    .collect::<Result<Vec<_>, ProductDiagnostic>>()
+                {
+                    Ok(templates) => templates,
+                    Err(diagnostic) => {
+                        product_diagnostics.push(diagnostic);
+                        continue;
+                    }
+                };
+
                 notetypes.push(AuthoringNotetype {
                     id: custom.id.clone(),
                     kind: "normal".into(),
                     name: custom.name.clone(),
                     original_stock_kind: None,
                     original_id: None,
-                    fields: Some(
-                        custom
-                            .fields
-                            .iter()
-                            .enumerate()
-                            .map(|(ord, field)| AuthoringField {
-                                name: field.name.clone(),
-                                ord: Some(ord as u32),
-                                config_id: None,
-                                tag: None,
-                                prevent_deletion: false,
-                            })
-                            .collect(),
-                    ),
-                    templates: Some(
-                        custom
-                            .templates
-                            .iter()
-                            .enumerate()
-                            .map(|(ord, template)| AuthoringTemplate {
-                                name: template.name.clone(),
-                                ord: Some(ord as u32),
-                                config_id: None,
-                                question_format: template.question_format.clone(),
-                                answer_format: template.answer_format.clone(),
-                                browser_question_format: document
-                                    .browser_appearance_for(&custom.id, &template.name)
-                                    .and_then(|declaration| declaration.question_format),
-                                browser_answer_format: document
-                                    .browser_appearance_for(&custom.id, &template.name)
-                                    .and_then(|declaration| declaration.answer_format),
-                                target_deck_name: document
-                                    .template_target_deck_for(&custom.id, &template.name)
-                                    .map(|declaration| declaration.deck_name),
-                                browser_font_name: document
-                                    .browser_appearance_for(&custom.id, &template.name)
-                                    .and_then(|declaration| declaration.font_name),
-                                browser_font_size: document
-                                    .browser_appearance_for(&custom.id, &template.name)
-                                    .and_then(|declaration| declaration.font_size),
-                            })
-                            .collect(),
-                    ),
+                    fields: Some(fields),
+                    templates: Some(templates),
                     css: Some(custom.css.clone().unwrap_or_default()),
                     field_metadata: document
                         .field_metadata_for(&custom.id)
@@ -373,6 +408,38 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     })
 }
 
+fn duplicate_custom_key_diagnostics(custom: &CustomNoteType) -> Vec<ProductDiagnostic> {
+    let mut diagnostics = Vec::new();
+
+    let mut field_keys: BTreeMap<&str, &str> = BTreeMap::new();
+    for field in &custom.fields {
+        let key = field.key.as_deref().unwrap_or(field.name.as_str());
+        if let Some(first_field) = field_keys.insert(key, field.name.as_str()) {
+            diagnostics.push(ProductDiagnostic::duplicate_field_key(
+                &custom.id,
+                key,
+                first_field,
+                &field.name,
+            ));
+        }
+    }
+
+    let mut template_keys: BTreeMap<&str, &str> = BTreeMap::new();
+    for template in &custom.templates {
+        let key = template.key.as_deref().unwrap_or(template.name.as_str());
+        if let Some(first_template) = template_keys.insert(key, template.name.as_str()) {
+            diagnostics.push(ProductDiagnostic::duplicate_template_key(
+                &custom.id,
+                key,
+                first_template,
+                &template.name,
+            ));
+        }
+    }
+
+    diagnostics
+}
+
 fn lower_stock_notetype(
     document: &ProductDocument,
     id: &str,
@@ -440,6 +507,90 @@ fn lower_stock_notetype(
             .chain(defaults.field_metadata)
             .collect(),
     })
+}
+
+fn lower_generation_rule_front(
+    note_type_id: &str,
+    template: &crate::product::model::CustomTemplate,
+    field_name_by_key: &BTreeMap<String, String>,
+) -> Result<String, ProductDiagnostic> {
+    let Some(rule) = &template.generation_rule else {
+        return Ok(template.question_format.clone());
+    };
+
+    match rule {
+        crate::product::model::CustomGenerationRule::AnkiDefault => {
+            Ok(template.question_format.clone())
+        }
+        crate::product::model::CustomGenerationRule::All { fields } => {
+            let field_names =
+                generation_field_names(note_type_id, template, fields, field_name_by_key)?;
+            Ok(wrap_front_with_all_conditions(
+                &template.question_format,
+                &field_names,
+            ))
+        }
+        crate::product::model::CustomGenerationRule::Any { fields } => {
+            let field_names =
+                generation_field_names(note_type_id, template, fields, field_name_by_key)?;
+            Ok(wrap_front_with_any_conditions(
+                &template.question_format,
+                &field_names,
+            ))
+        }
+        crate::product::model::CustomGenerationRule::Cloze { .. } => Err(ProductDiagnostic {
+            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE".into(),
+            message: format!(
+                "custom normal note type '{}' template '{}' cannot use cloze generation",
+                note_type_id, template.name
+            ),
+        }),
+    }
+}
+
+fn generation_field_names(
+    note_type_id: &str,
+    template: &crate::product::model::CustomTemplate,
+    fields: &[String],
+    field_name_by_key: &BTreeMap<String, String>,
+) -> Result<Vec<String>, ProductDiagnostic> {
+    let mut field_names = Vec::with_capacity(fields.len());
+    for field in fields {
+        let Some(field_name) = field_name_by_key.get(field) else {
+            return Err(ProductDiagnostic {
+                code: "TEMPLATE.REQUIRED_FIELD_MISSING".into(),
+                message: format!(
+                    "template '{}' in note type '{}' references unknown field key '{}'",
+                    template.name, note_type_id, field
+                ),
+            });
+        };
+        field_names.push(field_name.clone());
+    }
+    Ok(field_names)
+}
+
+fn wrap_front_with_all_conditions(front: &str, field_keys: &[String]) -> String {
+    field_keys
+        .iter()
+        .rev()
+        .fold(front.to_string(), |inner, field| {
+            format!("{{{{#{field}}}}}{inner}{{{{/{field}}}}}")
+        })
+}
+
+fn wrap_front_with_any_conditions(front: &str, field_keys: &[String]) -> String {
+    let Some((field, rest)) = field_keys.split_first() else {
+        return String::new();
+    };
+    let guarded_front = format!("{{{{#{field}}}}}{front}{{{{/{field}}}}}");
+    if rest.is_empty() {
+        return guarded_front;
+    }
+    format!(
+        "{guarded_front}{{{{^{field}}}}}{}{{{{/{field}}}}}",
+        wrap_front_with_any_conditions(front, rest)
+    )
 }
 
 fn escape_css_string_literal(value: &str) -> String {

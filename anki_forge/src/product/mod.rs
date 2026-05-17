@@ -25,8 +25,8 @@ pub use metadata::{
     FieldMetadataDeclaration, TemplateBrowserAppearanceDeclaration, TemplateTargetDeckDeclaration,
 };
 pub use model::{
-    BasicNoteType, CustomField, CustomNote, CustomNoteType, CustomTemplate, ProductDocument,
-    ProductNote, ProductNoteType,
+    BasicNoteType, CustomField, CustomGenerationRule, CustomNote, CustomNoteType, CustomTemplate,
+    ProductDocument, ProductNote, ProductNoteType,
 };
 pub use note::Note;
 pub use notetype::{Field, FieldKey, NoteType};
@@ -34,4 +34,4 @@ pub use project::Project;
 pub use stock::{
     render_image_occlusion_cloze, STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
-pub use template::{GenerationRule, Template, TemplateKey, TemplateSource};
+pub use template::{stable_config_id, GenerationRule, Template, TemplateKey, TemplateSource};

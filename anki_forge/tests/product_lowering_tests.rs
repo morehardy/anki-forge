@@ -147,15 +147,19 @@ fn custom_escape_hatch_lowers_to_explicit_authoring_normal_notetype_shape() {
             fields: vec![
                 CustomField {
                     name: "Front".into(),
+                    key: None,
                 },
                 CustomField {
                     name: "Back".into(),
+                    key: None,
                 },
             ],
             templates: vec![CustomTemplate {
                 name: "Card 1".into(),
+                key: None,
                 question_format: "{{Front}}".into(),
                 answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
+                generation_rule: None,
             }],
             css: Some(".card { color: red; }".into()),
         })

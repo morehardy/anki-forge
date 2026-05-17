@@ -175,7 +175,7 @@ fn project_build_preserves_normalization_diagnostics_on_invalid_output() {
 }
 
 #[test]
-fn project_build_rejects_custom_inputs_until_lowering_supported() {
+fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))
         .template(
@@ -197,15 +197,18 @@ fn project_build_rejects_custom_inputs_until_lowering_supported() {
         )
         .expect("add custom note");
 
-    let err = project
+    let report = project
         .build(BuildOptions::new().inspect(false))
-        .expect_err("unsupported custom inputs must fail");
-    let codes = err.report.diagnostic_codes();
+        .expect("custom inputs build");
+    let codes = report.diagnostic_codes();
 
-    assert!(codes
+    assert_eq!(report.status, "success");
+    assert_eq!(report.counts.notes, 1);
+    assert_eq!(report.counts.cards, 1);
+    assert!(!codes
         .iter()
         .any(|code| code == "PROJECT.UNSUPPORTED_CUSTOM_NOTETYPE"));
-    assert!(codes
+    assert!(!codes
         .iter()
         .any(|code| code == "PROJECT.UNSUPPORTED_NOTE_TYPE"));
 }

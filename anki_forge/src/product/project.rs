@@ -1,6 +1,6 @@
 mod counts;
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
@@ -107,6 +107,12 @@ impl Project {
             }
         }
 
+        let custom_note_type_ids = self
+            .note_types
+            .iter()
+            .map(|note_type| note_type.id())
+            .collect::<BTreeSet<_>>();
+
         for (index, note) in self.notes.iter().enumerate() {
             if let Some(stable_id) = note.stable_id_ref() {
                 if !seen_stable_ids.insert(stable_id.to_string()) {
@@ -120,39 +126,24 @@ impl Project {
                 }
             }
 
-            if note.note_type_id() != STOCK_BASIC_ID && note.note_type_id() != STOCK_CLOZE_ID {
+            if note.note_type_id() != STOCK_BASIC_ID
+                && note.note_type_id() != STOCK_CLOZE_ID
+                && !custom_note_type_ids.contains(note.note_type_id())
+            {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.UNSUPPORTED_NOTE_TYPE"),
                     severity: Severity::Error,
                     message: format!(
-                        "note type '{}' is not supported by Project::build yet",
+                        "note type '{}' is not registered on the project",
                         note.note_type_id()
                     ),
                     source: Some(SourcePath::new(format!("project.notes[{index}]"))),
-                    help: Some(
-                        "use Note::basic or Note::cloze until custom note lowering lands".into(),
-                    ),
+                    help: Some("add a matching NoteType with Project::add_notetype".into()),
                 });
             }
         }
 
         for note_type in &self.note_types {
-            diagnostics.push(Diagnostic {
-                code: DiagnosticCode::new("PROJECT.UNSUPPORTED_CUSTOM_NOTETYPE"),
-                severity: Severity::Error,
-                message: format!(
-                    "custom note type '{}' is not supported by Project::build yet",
-                    note_type.id()
-                ),
-                source: Some(SourcePath::new(format!(
-                    "project.note_types[\"{}\"]",
-                    note_type.id()
-                ))),
-                help: Some(
-                    "custom note type lowering is planned for the next implementation step".into(),
-                ),
-            });
-
             if note_type.identity_ref().is_none() {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
@@ -457,6 +448,65 @@ impl Project {
             product = product.with_cloze(STOCK_CLOZE_ID);
         }
 
+        for note_type in &self.note_types {
+            let custom = crate::product::model::CustomNoteType {
+                id: note_type.id().to_string(),
+                name: note_type.name_ref().map(ToOwned::to_owned),
+                fields: note_type
+                    .fields()
+                    .iter()
+                    .map(|field| crate::product::model::CustomField {
+                        name: field.name().to_string(),
+                        key: Some(field.key_ref().as_str().to_string()),
+                    })
+                    .collect(),
+                templates: note_type
+                    .templates()
+                    .iter()
+                    .map(|template| crate::product::model::CustomTemplate {
+                        name: template.name().to_string(),
+                        key: Some(template.key_ref().as_str().to_string()),
+                        question_format: template.front_source().as_str().to_string(),
+                        answer_format: template.back_source().as_str().to_string(),
+                        generation_rule: Some(custom_generation_rule(template.generation_rule())),
+                    })
+                    .collect(),
+                css: None,
+            };
+            product = product.with_custom_notetype(custom);
+
+            for template in note_type.templates() {
+                if template.browser_front_source().is_some()
+                    || template.browser_back_source().is_some()
+                {
+                    product = product.with_browser_appearance(
+                        note_type.id().to_string(),
+                        crate::product::metadata::TemplateBrowserAppearanceDeclaration {
+                            template_name: template.name().to_string(),
+                            question_format: template
+                                .browser_front_source()
+                                .map(|source| source.as_str().to_string()),
+                            answer_format: template
+                                .browser_back_source()
+                                .map(|source| source.as_str().to_string()),
+                            font_name: None,
+                            font_size: None,
+                        },
+                    );
+                }
+
+                if let Some(deck_name) = template.target_deck_name() {
+                    product = product.with_template_target_deck(
+                        note_type.id().to_string(),
+                        crate::product::metadata::TemplateTargetDeckDeclaration {
+                            template_name: template.name().to_string(),
+                            deck_name: deck_name.to_string(),
+                        },
+                    );
+                }
+            }
+        }
+
         for note in &self.notes {
             let note_id = note
                 .stable_id_ref()
@@ -485,6 +535,15 @@ impl Project {
                     fields.get("Back Extra").cloned().unwrap_or_default(),
                     note.tags().iter().cloned(),
                 );
+            } else {
+                let fields = custom_note_fields_for_authoring(self, note);
+                product = product.add_custom_note(crate::product::model::CustomNote {
+                    id: note_id,
+                    note_type_id: note.note_type_id().to_string(),
+                    deck_name,
+                    fields,
+                    tags: note.tags().to_vec(),
+                });
             }
         }
         product
@@ -592,6 +651,87 @@ impl Project {
     }
 }
 
+fn custom_generation_rule(
+    rule: &crate::product::GenerationRule,
+) -> crate::product::model::CustomGenerationRule {
+    match rule {
+        crate::product::GenerationRule::AnkiDefault => {
+            crate::product::model::CustomGenerationRule::AnkiDefault
+        }
+        crate::product::GenerationRule::All(fields) => {
+            crate::product::model::CustomGenerationRule::All {
+                fields: fields
+                    .iter()
+                    .map(|field| field.as_str().to_string())
+                    .collect(),
+            }
+        }
+        crate::product::GenerationRule::Any(fields) => {
+            crate::product::model::CustomGenerationRule::Any {
+                fields: fields
+                    .iter()
+                    .map(|field| field.as_str().to_string())
+                    .collect(),
+            }
+        }
+        crate::product::GenerationRule::Cloze { field } => {
+            crate::product::model::CustomGenerationRule::Cloze {
+                field: field.as_str().to_string(),
+            }
+        }
+    }
+}
+
+fn custom_note_fields_for_authoring(
+    project: &Project,
+    note: &crate::product::Note,
+) -> BTreeMap<String, String> {
+    let rendered = note.rendered_fields();
+    let Some(note_type) = project
+        .note_types
+        .iter()
+        .find(|note_type| note_type.id() == note.note_type_id())
+    else {
+        return rendered;
+    };
+
+    let name_by_key = note_type
+        .fields()
+        .iter()
+        .map(|field| (field.key_ref().as_str(), field.name()))
+        .collect::<BTreeMap<_, _>>();
+    let field_names = note_type
+        .fields()
+        .iter()
+        .map(|field| field.name())
+        .collect::<BTreeSet<_>>();
+
+    let mut fields = BTreeMap::new();
+    let mut field_priorities = BTreeMap::new();
+    for (field_key_or_name, value) in rendered {
+        let is_visible_name = field_names.contains(field_key_or_name.as_str());
+        let field_name = if is_visible_name {
+            field_key_or_name
+        } else {
+            name_by_key
+                .get(field_key_or_name.as_str())
+                .copied()
+                .unwrap_or(field_key_or_name.as_str())
+                .to_string()
+        };
+        let priority = u8::from(is_visible_name);
+        if field_priorities
+            .get(&field_name)
+            .is_some_and(|existing| *existing > priority)
+        {
+            continue;
+        }
+        field_priorities.insert(field_name.clone(), priority);
+        fields.insert(field_name, value);
+    }
+    fields
+}
+
 impl From<crate::deck::Deck> for Project {
     fn from(deck: crate::deck::Deck) -> Self {
         let mut project = Project::new(deck.name().to_string());
@@ -659,7 +799,17 @@ struct ProjectNormalizeError {
 
 impl std::fmt::Display for ProjectNormalizeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.message)
+        if self.diagnostics.is_empty() {
+            return f.write_str(&self.message);
+        }
+
+        let codes = self
+            .diagnostics
+            .iter()
+            .map(|diagnostic| diagnostic.code.as_str())
+            .collect::<Vec<_>>()
+            .join(", ");
+        write!(f, "{}: {}", self.message, codes)
     }
 }
 
