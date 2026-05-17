@@ -16,7 +16,7 @@ fn main() -> anyhow::Result<()> {
         .export_as("hola.wav")?;
 
     project.add_note(
-        Note::basic("hola", "hello")
+        Note::basic("hola", "")
             .stable_id("es:hola")
             .sound("Back", audio),
     )?;

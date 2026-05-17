@@ -6,8 +6,8 @@ use anki_forge::product::{
     TemplateTargetDeckDeclaration,
 };
 use anki_forge::{
-    build, inspect_staging, normalize, BuildArtifactTarget, BuildContext, NormalizationRequest,
-    WriterPolicy,
+    authoring::{normalize, NormalizationRequest},
+    writer::{build, inspect_staging, BuildArtifactTarget, BuildContext, WriterPolicy},
 };
 
 fn unique_artifact_root(case: &str) -> std::path::PathBuf {
