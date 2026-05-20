@@ -562,7 +562,7 @@ impl Project {
                         generation_rule: Some(custom_generation_rule(template.generation_rule())),
                     })
                     .collect(),
-                css: None,
+                css: note_type.css_ref().map(ToOwned::to_owned),
             };
             product = product.with_custom_notetype(custom);
 

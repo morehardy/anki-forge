@@ -11,6 +11,7 @@ pub struct MediaReferenceCandidate {
     pub normalized_local_ref: Option<String>,
     pub skip_reason: Option<String>,
     pub unsafe_reason: Option<String>,
+    pub source_line: Option<usize>,
     pub kind: MediaReferenceCandidateKind,
 }
 
@@ -112,6 +113,7 @@ fn extract_sound_refs(
             &raw_ref,
             MediaReferenceCandidateKind::Sound,
             false,
+            None,
         ));
         cursor = value_end + 1;
     }
@@ -185,7 +187,9 @@ fn extract_css_url_refs(
 
         let value_start = url_start + "url(".len();
         let Some((raw_ref, next_cursor)) = parse_css_url_value(&input, value_start) else {
-            cursor = value_start;
+            cursor = input[value_start..]
+                .find(')')
+                .map_or(value_start, |relative_end| value_start + relative_end + 1);
             continue;
         };
         refs.push(local_candidate(
@@ -196,6 +200,7 @@ fn extract_css_url_refs(
             &raw_ref,
             MediaReferenceCandidateKind::CssUrl,
             true,
+            Some(line_number_at(&input, url_start)),
         ));
         cursor = next_cursor;
     }
@@ -286,6 +291,7 @@ fn extract_html_attribute_refs(
                 &raw_ref,
                 kind,
                 true,
+                None,
             ));
         }
         cursor = next_cursor;
@@ -312,6 +318,7 @@ fn local_candidate(
     raw_ref: &str,
     kind: MediaReferenceCandidateKind,
     url_semantics: bool,
+    source_line: Option<usize>,
 ) -> MediaReferenceCandidate {
     let raw_ref = raw_ref.trim().to_string();
     let ref_kind = kind.ref_kind().to_string();
@@ -332,6 +339,7 @@ fn local_candidate(
         normalized_local_ref,
         skip_reason,
         unsafe_reason,
+        source_line,
         kind,
     }
 }
@@ -341,8 +349,13 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
     if trimmed.is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
     }
-    if contains_dynamic_template(trimmed) {
-        return ReferenceClassification::Skipped("dynamic-template");
+    let dynamic_check_value = if url_semantics {
+        strip_url_query_and_fragment(trimmed)
+    } else {
+        trimmed
+    };
+    if contains_dynamic_template(dynamic_check_value) {
+        return ReferenceClassification::Skipped("dynamic-template-expression");
     }
     if trimmed.starts_with("//") {
         return ReferenceClassification::Skipped("protocol-relative-url");
@@ -375,6 +388,15 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
     }
     if local_ref.contains(['/', '\\']) {
         return ReferenceClassification::Unsafe("decoded-path-separator");
+    }
+    if local_ref.chars().any(char::is_control) {
+        return ReferenceClassification::Unsafe("helper-unsafe-character");
+    }
+    if !local_ref
+        .bytes()
+        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
+    {
+        return ReferenceClassification::Unsafe("helper-unsafe-character");
     }
 
     ReferenceClassification::Local(local_ref)
@@ -492,7 +514,20 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
         return None;
     }
 
-    Some((input[raw_start..cursor].trim().to_string(), cursor + 1))
+    let raw_ref = input[raw_start..cursor].trim();
+    if raw_ref.contains('(') {
+        return None;
+    }
+
+    Some((raw_ref.to_string(), cursor + 1))
+}
+
+fn line_number_at(input: &str, byte_index: usize) -> usize {
+    input[..byte_index.min(input.len())]
+        .bytes()
+        .filter(|byte| *byte == b'\n')
+        .count()
+        + 1
 }
 
 struct HtmlStartTag<'a> {
@@ -694,9 +729,15 @@ fn strip_css_block_comments(input: &str) -> String {
         let comment_body_start = absolute_start + "/*".len();
         match input[comment_body_start..].find("*/") {
             Some(comment_end) => {
+                output.extend(
+                    input[comment_body_start..comment_body_start + comment_end]
+                        .chars()
+                        .filter(|ch| *ch == '\n'),
+                );
                 cursor = comment_body_start + comment_end + "*/".len();
             }
             None => {
+                output.extend(input[comment_body_start..].chars().filter(|ch| *ch == '\n'));
                 cursor = input.len();
                 break;
             }
@@ -708,13 +749,7 @@ fn strip_css_block_comments(input: &str) -> String {
 }
 
 fn contains_dynamic_template(input: &str) -> bool {
-    input.contains("{{")
-        || input.contains("}}")
-        || input.contains("{%")
-        || input.contains("%}")
-        || input.contains("${")
-        || input.contains("<%")
-        || input.contains("%>")
+    input.contains("{{") || input.contains("}}")
 }
 
 fn has_url_scheme(input: &str) -> bool {

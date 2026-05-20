@@ -101,6 +101,7 @@ pub struct NoteType {
     name: Option<String>,
     fields: Vec<Field>,
     templates: Vec<Template>,
+    css: Option<String>,
     identity: Option<IdentityRecipe>,
 }
 
@@ -111,6 +112,7 @@ impl NoteType {
             name: None,
             fields: Vec::new(),
             templates: Vec::new(),
+            css: None,
             identity: None,
         }
     }
@@ -127,6 +129,11 @@ impl NoteType {
 
     pub fn template(mut self, template: Template) -> Self {
         self.templates.push(template);
+        self
+    }
+
+    pub fn css(mut self, css: impl Into<String>) -> Self {
+        self.css = Some(css.into());
         self
     }
 
@@ -149,6 +156,10 @@ impl NoteType {
 
     pub fn templates(&self) -> &[Template] {
         &self.templates
+    }
+
+    pub fn css_ref(&self) -> Option<&str> {
+        self.css.as_deref()
     }
 
     pub fn identity_ref(&self) -> Option<&IdentityRecipe> {

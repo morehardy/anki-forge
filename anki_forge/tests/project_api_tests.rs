@@ -322,6 +322,87 @@ fn project_build_maps_custom_note_field_diagnostic_to_product_field_key() {
 }
 
 #[test]
+fn project_build_maps_missing_template_media_reference_to_product_template_source() {
+    let mut project = Project::new("Template Media")
+        .stable_id("template-media")
+        .default_deck("Template Media");
+    project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expression"))
+                .template(
+                    Template::new("Recognition")
+                        .front(r#"<img src="missing-template.png"> {{Expression}}"#)
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect("add custom notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:template")
+                .text("expression", "taberu"),
+        )
+        .expect("add custom note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[\"jp-vocab\"].templates[\"Recognition\"].front")
+    );
+}
+
+#[test]
+fn project_build_maps_missing_css_media_reference_to_product_css_source() {
+    let mut project = Project::new("CSS Media")
+        .stable_id("css-media")
+        .default_deck("CSS Media");
+    project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expression"))
+                .template(
+                    Template::new("Recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .css(r#".card { background: url("missing-css.png"); }"#),
+        )
+        .expect("add custom notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:css")
+                .text("expression", "taberu"),
+        )
+        .expect("add custom note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[\"jp-vocab\"].css")
+    );
+}
+
+#[test]
 fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
     let mut project = Project::new("Media")
         .stable_id("media")

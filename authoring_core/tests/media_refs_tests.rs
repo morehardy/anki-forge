@@ -36,9 +36,9 @@ fn extracts_sound_html_object_and_css_refs() {
             (
                 "css_url",
                 "bg%20one.png?version=1#frag",
-                Some("bg one.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );
@@ -50,6 +50,78 @@ fn extracts_sound_html_object_and_css_refs() {
             MediaReferenceCandidateKind::HtmlSrc,
             MediaReferenceCandidateKind::HtmlObjectData,
             MediaReferenceCandidateKind::CssUrl,
+        ]
+    );
+}
+
+#[test]
+fn css_url_percent_decodes_helper_safe_local_paths() {
+    let refs = scan(r#"<style>.card { background-image: url("bg%5Fone.png"); }</style>"#);
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "bg%5Fone.png", Some("bg_one.png"), None, None,)]
+    );
+    assert_eq!(
+        refs.iter().map(|item| item.kind).collect::<Vec<_>>(),
+        vec![MediaReferenceCandidateKind::CssUrl]
+    );
+}
+
+#[test]
+fn css_url_reports_opening_url_line() {
+    let refs = scan(".a {}\n.card {\n  background-image: url(\"bg.png\");\n}");
+
+    assert_eq!(
+        refs.iter().map(|item| item.source_line).collect::<Vec<_>>(),
+        vec![Some(3)]
+    );
+}
+
+#[test]
+fn css_url_skips_malformed_nested_candidates_and_continues() {
+    let refs = scan(".bad { background: url(url(nested.png)); }\n.ok { background: url(ok.png); }");
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
+fn helper_unsafe_local_characters_are_unsafe() {
+    let refs = scan(
+        r#"
+        <img src="space%20name.png?cache=1#front">
+        <IMG SRC=hero&amp;icon.png>
+        [sound:space%20name.mp3]
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            (
+                "sound",
+                "space%20name.mp3",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "html_src",
+                "space%20name.png?cache=1#front",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "html_src",
+                "hero&icon.png",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
         ]
     );
 }
@@ -94,7 +166,7 @@ fn classifies_external_and_data_uri_as_skipped() {
                 "html_object_data",
                 "{{ dynamic_media }}",
                 None,
-                Some("dynamic-template"),
+                Some("dynamic-template-expression"),
                 None,
             ),
             (
@@ -109,7 +181,7 @@ fn classifies_external_and_data_uri_as_skipped() {
 }
 
 #[test]
-fn percent_decodes_local_url_path_and_rejects_decoded_separators() {
+fn percent_decodes_local_url_path_and_rejects_decoded_unsafe_paths() {
     let refs = scan(
         r#"
         <img src="space%20name.png?cache=1#front">
@@ -124,9 +196,9 @@ fn percent_decodes_local_url_path_and_rejects_decoded_separators() {
             (
                 "html_src",
                 "space%20name.png?cache=1#front",
-                Some("space name.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "html_src",
@@ -156,16 +228,16 @@ fn sound_refs_do_not_use_url_percent_decoding() {
             (
                 "sound",
                 "space%20name.mp3",
-                Some("space%20name.mp3"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "sound",
                 "folder%2Fescape.mp3",
-                Some("folder%2Fescape.mp3"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );
@@ -189,16 +261,16 @@ fn html_refs_handle_entities_case_unquoted_attributes_and_comments() {
             (
                 "html_src",
                 "hero&icon.png",
-                Some("hero&icon.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "html_object_data",
                 "diagram&v.svg",
-                Some("diagram&v.svg"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );

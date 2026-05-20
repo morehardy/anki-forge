@@ -8,7 +8,7 @@ use crate::media::{
 use crate::media_refs::extract_media_reference_candidates;
 use crate::model::{
     DiagnosticItem, NormalizationDiagnostics, NormalizationRequest, NormalizationResult,
-    NormalizedIr, NormalizedNote, PolicyRefs,
+    NormalizedIr, NormalizedNote, NormalizedNotetype, PolicyRefs,
 };
 use crate::risk::{assess_risk, unavailable_report};
 use crate::selector::{
@@ -283,7 +283,7 @@ pub fn normalize_with_options(
     );
 
     let (media_references, media_reference_diagnostics) =
-        resolve_media_references(&normalized_notes, &ingest.bindings);
+        resolve_media_references(&normalized_notes, &normalized_notetypes, &ingest.bindings);
     let mut media_diagnostics = media_reference_diagnostics;
     media_diagnostics.extend(unused_binding_diagnostics(
         &ingest.bindings,
@@ -353,6 +353,7 @@ fn media_ingest_diagnostic_to_item(
 
 fn resolve_media_references(
     notes: &[NormalizedNote],
+    notetypes: &[NormalizedNotetype],
     bindings: &[crate::media::MediaBinding],
 ) -> (Vec<MediaReference>, Vec<DiagnosticItem>) {
     let binding_by_filename = bindings
@@ -362,81 +363,207 @@ fn resolve_media_references(
     let mut references = Vec::new();
     let mut diagnostics = Vec::new();
 
-    for note in notes {
-        for (field_name, field_value) in &note.fields {
-            for candidate in extract_media_reference_candidates(
-                "note",
-                &note.id,
-                "field",
-                field_name,
-                field_value,
-            ) {
-                if candidate.raw_ref.is_empty()
-                    && candidate.skip_reason.as_deref() == Some("empty-ref")
-                {
-                    continue;
+    for surface in media_reference_surfaces(notes, notetypes) {
+        for candidate in extract_media_reference_candidates(
+            surface.owner_kind,
+            surface.owner_id,
+            surface.location_kind,
+            &surface.location_name,
+            surface.value,
+        ) {
+            if candidate.raw_ref.is_empty() && candidate.skip_reason.as_deref() == Some("empty-ref")
+            {
+                continue;
+            }
+            let diagnostic_path = surface.authoring_path.clone();
+            let resolution = if let Some(reason) = candidate.unsafe_reason.as_ref() {
+                diagnostics.push(DiagnosticItem {
+                    level: "error".into(),
+                    code: "MEDIA.UNSAFE_REFERENCE".into(),
+                    summary: unsafe_media_reference_summary(&candidate, reason),
+                    path: Some(diagnostic_path),
+                });
+                MediaReferenceResolution::Skipped {
+                    skip_reason: reason.clone(),
                 }
-                let resolution = if let Some(reason) = candidate.unsafe_reason {
-                    diagnostics.push(DiagnosticItem {
-                        level: "error".into(),
-                        code: "MEDIA.UNSAFE_REFERENCE".into(),
-                        summary: format!(
-                            "unsafe media reference {} in note {} field {}: {}",
-                            candidate.raw_ref, candidate.owner_id, candidate.location_name, reason
-                        ),
-                        path: Some(authoring_note_field_path(
-                            &candidate.owner_id,
-                            &candidate.location_name,
-                        )),
-                    });
-                    MediaReferenceResolution::Skipped {
-                        skip_reason: reason,
-                    }
-                } else if let Some(reason) = candidate.skip_reason {
-                    MediaReferenceResolution::Skipped {
-                        skip_reason: reason,
-                    }
-                } else if let Some(local_ref) = candidate.normalized_local_ref {
-                    if let Some(media_id) = binding_by_filename.get(local_ref.as_str()) {
-                        MediaReferenceResolution::Resolved {
-                            media_id: (*media_id).to_string(),
-                        }
-                    } else {
-                        diagnostics.push(DiagnosticItem {
-                            level: "error".into(),
-                            code: "MEDIA.MISSING_REFERENCE".into(),
-                            summary: format!(
-                                "missing media reference {} in note {} field {}",
-                                candidate.raw_ref, candidate.owner_id, candidate.location_name
-                            ),
-                            path: Some(authoring_note_field_path(
-                                &candidate.owner_id,
-                                &candidate.location_name,
-                            )),
-                        });
-                        MediaReferenceResolution::Missing
+            } else if let Some(reason) = candidate.skip_reason {
+                MediaReferenceResolution::Skipped {
+                    skip_reason: reason,
+                }
+            } else if let Some(local_ref) = candidate.normalized_local_ref.as_ref() {
+                if let Some(media_id) = binding_by_filename.get(local_ref.as_str()) {
+                    MediaReferenceResolution::Resolved {
+                        media_id: (*media_id).to_string(),
                     }
                 } else {
-                    MediaReferenceResolution::Skipped {
-                        skip_reason: "unresolved-candidate".into(),
-                    }
-                };
+                    diagnostics.push(DiagnosticItem {
+                        level: "error".into(),
+                        code: "MEDIA.MISSING_REFERENCE".into(),
+                        summary: missing_media_reference_summary(&candidate),
+                        path: Some(diagnostic_path),
+                    });
+                    MediaReferenceResolution::Missing
+                }
+            } else {
+                MediaReferenceResolution::Skipped {
+                    skip_reason: "unresolved-candidate".into(),
+                }
+            };
 
-                references.push(MediaReference {
-                    owner_kind: candidate.owner_kind,
-                    owner_id: candidate.owner_id,
-                    location_kind: candidate.location_kind,
-                    location_name: candidate.location_name,
-                    raw_ref: candidate.raw_ref,
-                    ref_kind: candidate.ref_kind,
-                    resolution,
-                });
-            }
+            references.push(MediaReference {
+                owner_kind: candidate.owner_kind,
+                owner_id: candidate.owner_id,
+                location_kind: candidate.location_kind,
+                location_name: candidate.location_name,
+                raw_ref: candidate.raw_ref,
+                ref_kind: candidate.ref_kind,
+                resolution,
+            });
         }
     }
 
     sort_media_references(&mut references);
     (references, diagnostics)
+}
+
+struct MediaReferenceSurface<'a> {
+    owner_kind: &'static str,
+    owner_id: &'a str,
+    location_kind: &'static str,
+    location_name: String,
+    value: &'a str,
+    authoring_path: String,
+}
+
+fn media_reference_surfaces<'a>(
+    notes: &'a [NormalizedNote],
+    notetypes: &'a [NormalizedNotetype],
+) -> Vec<MediaReferenceSurface<'a>> {
+    let mut surfaces = Vec::new();
+    for note in notes {
+        for (field_name, field_value) in &note.fields {
+            surfaces.push(MediaReferenceSurface {
+                owner_kind: "note",
+                owner_id: &note.id,
+                location_kind: "field",
+                location_name: field_name.clone(),
+                value: field_value,
+                authoring_path: authoring_note_field_path(&note.id, field_name),
+            });
+        }
+    }
+
+    for notetype in notetypes {
+        for template in &notetype.templates {
+            surfaces.push(MediaReferenceSurface {
+                owner_kind: "notetype",
+                owner_id: &notetype.id,
+                location_kind: "template_front",
+                location_name: format!("{}:front", template.name),
+                value: &template.question_format,
+                authoring_path: authoring_template_path(&notetype.id, &template.name, "front"),
+            });
+            surfaces.push(MediaReferenceSurface {
+                owner_kind: "notetype",
+                owner_id: &notetype.id,
+                location_kind: "template_back",
+                location_name: format!("{}:back", template.name),
+                value: &template.answer_format,
+                authoring_path: authoring_template_path(&notetype.id, &template.name, "back"),
+            });
+            if let Some(value) = template.browser_question_format.as_deref() {
+                surfaces.push(MediaReferenceSurface {
+                    owner_kind: "notetype",
+                    owner_id: &notetype.id,
+                    location_kind: "browser_template_front",
+                    location_name: format!("{}:browser_front", template.name),
+                    value,
+                    authoring_path: authoring_template_path(
+                        &notetype.id,
+                        &template.name,
+                        "browser_front",
+                    ),
+                });
+            }
+            if let Some(value) = template.browser_answer_format.as_deref() {
+                surfaces.push(MediaReferenceSurface {
+                    owner_kind: "notetype",
+                    owner_id: &notetype.id,
+                    location_kind: "browser_template_back",
+                    location_name: format!("{}:browser_back", template.name),
+                    value,
+                    authoring_path: authoring_template_path(
+                        &notetype.id,
+                        &template.name,
+                        "browser_back",
+                    ),
+                });
+            }
+        }
+        surfaces.push(MediaReferenceSurface {
+            owner_kind: "notetype",
+            owner_id: &notetype.id,
+            location_kind: "css",
+            location_name: "css".into(),
+            value: &notetype.css,
+            authoring_path: authoring_notetype_css_path(&notetype.id),
+        });
+    }
+
+    surfaces
+}
+
+fn missing_media_reference_summary(
+    candidate: &crate::media_refs::MediaReferenceCandidate,
+) -> String {
+    if candidate.ref_kind == "css_url" {
+        format!(
+            "missing media reference {} in {} {} {} {} line {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name,
+            candidate.source_line.unwrap_or(1)
+        )
+    } else {
+        format!(
+            "missing media reference {} in {} {} {} {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name
+        )
+    }
+}
+
+fn unsafe_media_reference_summary(
+    candidate: &crate::media_refs::MediaReferenceCandidate,
+    reason: &str,
+) -> String {
+    if candidate.ref_kind == "css_url" {
+        format!(
+            "unsafe media reference {} in {} {} {} {} line {}: {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name,
+            candidate.source_line.unwrap_or(1),
+            reason
+        )
+    } else {
+        format!(
+            "unsafe media reference {} in {} {} {} {}: {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name,
+            reason
+        )
+    }
 }
 
 fn unused_binding_diagnostics(
@@ -475,6 +602,14 @@ fn unused_binding_diagnostics(
 
 fn authoring_note_field_path(note_id: &str, field_name: &str) -> String {
     format!("authoring.notes[{note_id:?}].fields[{field_name:?}]")
+}
+
+fn authoring_template_path(notetype_id: &str, template_name: &str, surface: &str) -> String {
+    format!("authoring.note_types[{notetype_id:?}].templates[{template_name:?}].{surface}")
+}
+
+fn authoring_notetype_css_path(notetype_id: &str) -> String {
+    format!("authoring.note_types[{notetype_id:?}].css")
 }
 
 fn authoring_media_export_path(filename: &str) -> String {
