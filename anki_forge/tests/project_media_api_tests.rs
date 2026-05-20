@@ -184,6 +184,53 @@ fn project_build_does_not_self_copy_when_base_dir_contains_source_media() {
 }
 
 #[test]
+fn project_build_does_not_copy_over_hard_linked_staging_alias() {
+    let root = unique_artifacts_dir("project-media-hard-link-self-copy");
+    let source = root.join("source.bin");
+    let target = root.join("alias.bin");
+    let original = b"hard linked source bytes that must survive".to_vec();
+    std::fs::write(&source, &original).expect("write source");
+    std::fs::hard_link(&source, &target).expect("create hard link alias");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("alias.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("alias", "")
+                .stable_id("media:alias")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("alias.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect("build with hard linked staging alias");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(
+        std::fs::read(&source).expect("read source after build"),
+        original,
+        "build must not truncate a source file through a hard-linked staging target"
+    );
+}
+
+#[test]
 fn project_lower_inlines_file_media_instead_of_emitting_absolute_paths() {
     let root = unique_artifacts_dir("project-media-lower-file");
     let source = root.join("lower.bin");
@@ -206,6 +253,26 @@ fn project_lower_inlines_file_media_instead_of_emitting_absolute_paths() {
         ),
         "public lower() output should be self-contained and not contain an absolute file path"
     );
+}
+
+#[test]
+fn project_lower_rejects_large_file_media_with_inline_limit_diagnostic() {
+    let root = unique_artifacts_dir("project-media-lower-large-file");
+    let source = root.join("large.bin");
+    std::fs::write(&source, vec![b'x'; 64 * 1024 + 1]).expect("write large source");
+
+    let mut project = Project::new("Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("large.bin")
+        .expect("export file media");
+
+    let error = project.lower().expect_err(
+        "public lower rejects large file media rather than producing invalid inline media",
+    );
+    assert!(error.to_string().contains("MEDIA.INLINE_TOO_LARGE"));
 }
 
 #[test]
@@ -529,6 +596,115 @@ fn product_build_reports_each_binding_when_shared_source_is_missing() {
         missing_sources,
         vec!["project.media[\"one.bin\"]", "project.media[\"two.bin\"]"]
     );
+}
+
+#[test]
+fn product_build_reports_each_binding_when_shared_source_changes() {
+    let root = unique_artifacts_dir("project-media-shared-source-changed");
+    let source = root.join("shared.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let one = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("one.bin")
+        .expect("export first file media");
+    let two = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("two.bin")
+        .expect("export second file media");
+    std::fs::write(&source, b"changed bytes").expect("change source");
+
+    project
+        .add_note(
+            Note::basic("one", "")
+                .stable_id("media:one")
+                .sound("Back", one),
+        )
+        .expect("add first note");
+    project
+        .add_note(
+            Note::basic("two", "")
+                .stable_id("media:two")
+                .sound("Back", two),
+        )
+        .expect("add second note");
+
+    let error = project
+        .write_apkg(root.join("shared-changed.apkg"))
+        .expect_err("changed shared source fails build");
+
+    let changed_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED")
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        changed_sources,
+        vec!["project.media[\"one.bin\"]", "project.media[\"two.bin\"]"]
+    );
+}
+
+#[test]
+fn product_build_reports_only_failing_bindings_when_media_is_mixed() {
+    let root = unique_artifacts_dir("project-media-mixed-source-diagnostics");
+    let valid_source = root.join("valid.bin");
+    let changed_source = root.join("changed.bin");
+    std::fs::write(&valid_source, b"valid bytes").expect("write valid source");
+    std::fs::write(&changed_source, b"original bytes").expect("write changed source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let valid = project
+        .media_mut()
+        .add_file(&valid_source)
+        .expect("valid file media")
+        .export_as("valid.bin")
+        .expect("export valid media");
+    let changed = project
+        .media_mut()
+        .add_file(&changed_source)
+        .expect("changed file media")
+        .export_as("changed.bin")
+        .expect("export changed media");
+    std::fs::write(&changed_source, b"changed bytes").expect("change source");
+
+    project
+        .add_note(
+            Note::basic("valid", "")
+                .stable_id("media:valid")
+                .sound("Back", valid),
+        )
+        .expect("add valid note");
+    project
+        .add_note(
+            Note::basic("changed", "")
+                .stable_id("media:changed")
+                .sound("Back", changed),
+        )
+        .expect("add changed note");
+
+    let error = project
+        .write_apkg(root.join("mixed.apkg"))
+        .expect_err("changed source fails build");
+
+    let diagnostic_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert!(diagnostic_sources.contains(&"project.media[\"changed.bin\"]"));
+    assert!(!diagnostic_sources.contains(&"project.media[\"valid.bin\"]"));
 }
 
 fn unique_artifacts_dir(label: &str) -> PathBuf {

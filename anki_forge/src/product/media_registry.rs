@@ -6,7 +6,7 @@ use std::path::{Component, Path, PathBuf};
 use base64::Engine as _;
 use sha1::{Digest, Sha1};
 
-const INLINE_MEDIA_LIMIT_BYTES: usize = 64 * 1024;
+pub(crate) const INLINE_MEDIA_LIMIT_BYTES: usize = 64 * 1024;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MediaRef {
@@ -127,6 +127,10 @@ impl MediaRegistry {
 }
 
 impl ProductMedia {
+    pub(crate) fn observed_size_bytes(&self) -> u64 {
+        self.observed_fingerprint.size_bytes
+    }
+
     pub(crate) fn verify_registered_source(&self) -> Result<(), ProductMediaSourceDiagnostic> {
         match &self.source {
             ProductMediaSource::File { path } => {

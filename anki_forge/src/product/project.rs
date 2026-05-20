@@ -791,6 +791,14 @@ fn product_media_item_to_authoring_media(
             media
                 .verify_registered_source()
                 .map_err(|diagnostic| anyhow::anyhow!(diagnostic.message))?;
+            anyhow::ensure!(
+                media.observed_size_bytes()
+                    <= crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64,
+                "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {}",
+                media.observed_size_bytes(),
+                crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
+                filename = &media.export_filename,
+            );
             let bytes = std::fs::read(path)
                 .with_context(|| format!("read media source file: {}", path.display()))?;
             crate::AuthoringMediaSource::InlineBytes {
@@ -832,7 +840,7 @@ fn product_media_item_to_path_backed_authoring_media(
                     let code = if err.kind() == std::io::ErrorKind::NotFound {
                         "MEDIA.SOURCE_MISSING"
                     } else {
-                        "MEDIA.SOURCE_READ_FAILED"
+                        "PROJECT.PRODUCT_MEDIA_FAILED"
                     };
                     ProductMediaPrepareError::single(
                         code,
@@ -868,6 +876,17 @@ fn paths_are_same_file(left: &Path, right: &Path) -> anyhow::Result<bool> {
     if !right.exists() {
         return Ok(false);
     }
+    let left_metadata = std::fs::metadata(left)
+        .with_context(|| format!("stat media source: {}", left.display()))?;
+    let right_metadata = std::fs::metadata(right)
+        .with_context(|| format!("stat media staging target: {}", right.display()))?;
+    if let (Some(left_identity), Some(right_identity)) = (
+        metadata_file_identity(&left_metadata),
+        metadata_file_identity(&right_metadata),
+    ) {
+        return Ok(left_identity == right_identity);
+    }
+
     let left = left
         .canonicalize()
         .with_context(|| format!("canonicalize media source: {}", left.display()))?;
@@ -875,6 +894,28 @@ fn paths_are_same_file(left: &Path, right: &Path) -> anyhow::Result<bool> {
         .canonicalize()
         .with_context(|| format!("canonicalize media staging target: {}", right.display()))?;
     Ok(left == right)
+}
+
+#[cfg(unix)]
+fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    use std::os::unix::fs::MetadataExt;
+
+    Some((metadata.dev(), metadata.ino()))
+}
+
+#[cfg(windows)]
+fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    use std::os::windows::fs::MetadataExt;
+
+    metadata
+        .volume_serial_number()
+        .zip(metadata.file_index())
+        .map(|(volume, index)| (u64::from(volume), index))
+}
+
+#[cfg(not(any(unix, windows)))]
+fn metadata_file_identity(_metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    None
 }
 
 fn ensure_safe_product_media_input_dir(media_input_dir: &Path) -> anyhow::Result<()> {
