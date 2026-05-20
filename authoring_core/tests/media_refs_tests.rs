@@ -90,11 +90,14 @@ fn css_url_skips_malformed_nested_candidates_and_continues() {
 
 #[test]
 fn css_url_malformed_candidate_does_not_consume_later_valid_url_token() {
-    let refs = scan(r#".bad { background: url("broken" url(ok.png)); }"#);
+    let refs = scan(
+        r#".bad { background: url("broken" url(ok.png)); }
+.later { background: url(later.png); }"#,
+    );
 
     assert_eq!(
         ref_summaries(&refs),
-        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+        vec![("css_url", "later.png", Some("later.png"), None, None)]
     );
 }
 
@@ -159,6 +162,44 @@ fn helper_unsafe_local_characters_are_unsafe() {
                 None,
                 Some("helper-unsafe-character"),
             ),
+        ]
+    );
+}
+
+#[test]
+fn html_and_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
+    let refs = scan(
+        r#"
+        [sound: hero.png ]
+        <img src=" hero.png ">
+        <img src="   ">
+        <style>
+          .bad { background: url(" hero.png "); }
+          .empty { background: url("   "); }
+        </style>
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            ("sound", "hero.png", Some("hero.png"), None, None),
+            (
+                "html_src",
+                " hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            ("html_src", "   ", None, Some("empty-ref"), None),
+            (
+                "css_url",
+                " hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            ("css_url", "   ", None, Some("empty-ref"), None),
         ]
     );
 }

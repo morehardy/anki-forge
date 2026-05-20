@@ -291,7 +291,7 @@ fn extract_html_attribute_refs(
             break;
         };
         if name.eq_ignore_ascii_case(attr_name) {
-            let raw_ref = decode_html_entities(raw_value.trim()).to_string();
+            let raw_ref = decode_html_entities(raw_value).to_string();
             refs.push(local_candidate(
                 owner_kind,
                 owner_id,
@@ -331,7 +331,11 @@ fn local_candidate(
     diagnostic_ref: Option<String>,
     source_line: Option<usize>,
 ) -> MediaReferenceCandidate {
-    let raw_ref = raw_ref.trim().to_string();
+    let raw_ref = if url_semantics {
+        raw_ref.to_string()
+    } else {
+        raw_ref.trim().to_string()
+    };
     let ref_kind = kind.ref_kind().to_string();
     let (normalized_local_ref, skip_reason, unsafe_reason) =
         match classify_ref(&raw_ref, url_semantics) {
@@ -357,39 +361,43 @@ fn local_candidate(
 }
 
 fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
-    let trimmed = raw_ref.trim();
-    if trimmed.is_empty() {
+    let value = if url_semantics {
+        raw_ref
+    } else {
+        raw_ref.trim()
+    };
+    if value.trim().is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
     }
     let dynamic_check_value = if url_semantics {
-        strip_url_query_and_fragment(trimmed)
+        strip_url_query_and_fragment(value)
     } else {
-        trimmed
+        value
     };
     if contains_dynamic_template(dynamic_check_value) {
         return ReferenceClassification::Skipped("dynamic-template-expression");
     }
-    if trimmed.starts_with("//") {
+    if value.starts_with("//") {
         return ReferenceClassification::Skipped("protocol-relative-url");
     }
-    if starts_with_ascii_case_insensitive(trimmed, "data:") {
+    if starts_with_ascii_case_insensitive(value, "data:") {
         return ReferenceClassification::Skipped("data-uri");
     }
-    if has_url_scheme(trimmed) {
+    if has_url_scheme(value) {
         return ReferenceClassification::Skipped("external-url");
     }
 
     let local_ref = if url_semantics {
-        let url_path = strip_url_query_and_fragment(trimmed);
+        let url_path = strip_url_query_and_fragment(value);
         match percent_decode_utf8(url_path) {
             Ok(value) => value,
             Err(reason) => return ReferenceClassification::Unsafe(reason),
         }
     } else {
-        trimmed.to_string()
+        value.to_string()
     };
 
-    if local_ref.is_empty() {
+    if local_ref.trim().is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
     }
     if matches!(local_ref.as_str(), "." | "..") {
@@ -557,10 +565,51 @@ fn css_quoted_url_recovery_cursor(input: &str, quote_start: usize) -> usize {
             continue;
         }
         if bytes[cursor] == quote {
-            return cursor + 1;
+            let after_quote = skip_ascii_whitespace(input, cursor + 1);
+            if bytes.get(after_quote) == Some(&b')') {
+                return after_quote + 1;
+            }
+            return css_malformed_url_boundary(input, after_quote);
         }
         if bytes[cursor] == b';' || bytes[cursor] == b'}' {
             return cursor;
+        }
+        cursor += 1;
+    }
+
+    input.len()
+}
+
+fn css_malformed_url_boundary(input: &str, start: usize) -> usize {
+    let bytes = input.as_bytes();
+    let mut cursor = start;
+    let mut nested_parens = 0usize;
+    let mut quote = None;
+
+    while cursor < bytes.len() {
+        if let Some(active_quote) = quote {
+            if bytes[cursor] == b'\\' {
+                cursor = cursor.saturating_add(2);
+                continue;
+            }
+            if bytes[cursor] == active_quote {
+                quote = None;
+            }
+            cursor += 1;
+            continue;
+        }
+
+        match bytes[cursor] {
+            b'"' | b'\'' => quote = Some(bytes[cursor]),
+            b'(' => nested_parens += 1,
+            b')' => {
+                if nested_parens == 0 {
+                    return cursor + 1;
+                }
+                nested_parens -= 1;
+            }
+            b';' | b'}' => return cursor,
+            _ => {}
         }
         cursor += 1;
     }
