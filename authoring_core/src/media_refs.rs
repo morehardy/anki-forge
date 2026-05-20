@@ -184,9 +184,41 @@ fn extract_css_url_refs(
 ) -> Vec<MediaReferenceCandidate> {
     let mut refs = Vec::new();
     let input = strip_html_raw_text_elements(input, "script");
+    refs.extend(extract_inline_style_css_url_refs(
+        owner_kind,
+        owner_id,
+        location_kind,
+        location_name,
+        &input,
+    ));
+
     let input = strip_html_start_tags(&input);
     let input = strip_css_block_comments(&input);
+    refs.extend(extract_css_url_refs_from_css_text(
+        owner_kind,
+        owner_id,
+        location_kind,
+        location_name,
+        &input,
+        &input,
+        0,
+    ));
+
+    refs
+}
+
+fn extract_css_url_refs_from_css_text(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+    line_source: &str,
+    line_base_offset: usize,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
     let mut cursor = 0;
+    let line_base = line_number_at(line_source, line_base_offset).saturating_sub(1);
 
     while let Some(url_start) = find_css_url_function(&input, cursor) {
         if !is_css_url_boundary(input.as_bytes(), url_start) {
@@ -209,9 +241,99 @@ fn extract_css_url_refs(
             MediaReferenceCandidateKind::CssUrl,
             true,
             Some(raw_token),
-            Some(line_number_at(&input, url_start)),
+            Some(line_base + line_number_at(input, url_start)),
         ));
         cursor = next_cursor;
+    }
+
+    refs
+}
+
+fn extract_inline_style_css_url_refs(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
+    let mut cursor = 0;
+
+    while let Some(tag) = next_html_start_tag(input, cursor) {
+        refs.extend(extract_style_attribute_css_url_refs(
+            owner_kind,
+            owner_id,
+            location_kind,
+            location_name,
+            tag.source,
+            input,
+            tag.start,
+        ));
+        cursor = next_html_scan_cursor(input, &tag);
+    }
+
+    refs
+}
+
+fn extract_style_attribute_css_url_refs(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+    line_source: &str,
+    source_base_offset: usize,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
+    let mut cursor = html_start_tag_attribute_cursor(input);
+    let bytes = input.as_bytes();
+
+    while cursor < bytes.len() {
+        cursor = skip_ascii_whitespace(input, cursor);
+        let Some(first) = bytes.get(cursor) else {
+            break;
+        };
+        if *first == b'>' {
+            break;
+        }
+        if *first == b'/' {
+            cursor += 1;
+            continue;
+        }
+        if !is_html_attribute_name_byte(*first) {
+            cursor += 1;
+            continue;
+        }
+
+        let name_start = cursor;
+        while cursor < bytes.len() && is_html_attribute_name_byte(bytes[cursor]) {
+            cursor += 1;
+        }
+        let name = &input[name_start..cursor];
+        let mut value_start = skip_ascii_whitespace(input, cursor);
+        if bytes.get(value_start) != Some(&b'=') {
+            cursor = value_start;
+            continue;
+        }
+        value_start = skip_ascii_whitespace(input, value_start + 1);
+
+        let Some(value) = parse_html_attribute_value_span(input, value_start) else {
+            break;
+        };
+        if name.eq_ignore_ascii_case("style") {
+            let css = decode_html_entities(value.raw).to_string();
+            let css = strip_css_block_comments(&css);
+            refs.extend(extract_css_url_refs_from_css_text(
+                owner_kind,
+                owner_id,
+                location_kind,
+                location_name,
+                &css,
+                line_source,
+                source_base_offset + value.raw_start,
+            ));
+        }
+        cursor = value.next_cursor;
     }
 
     refs
@@ -461,6 +583,20 @@ impl MediaReferenceCandidateKind {
 }
 
 fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, usize)> {
+    let value = parse_html_attribute_value_span(input, value_start)?;
+    Some((value.raw, value.next_cursor))
+}
+
+struct HtmlAttributeValue<'a> {
+    raw: &'a str,
+    raw_start: usize,
+    next_cursor: usize,
+}
+
+fn parse_html_attribute_value_span(
+    input: &str,
+    value_start: usize,
+) -> Option<HtmlAttributeValue<'_>> {
     let bytes = input.as_bytes();
     let first = *bytes.get(value_start)?;
 
@@ -469,7 +605,11 @@ fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, 
         let mut cursor = value_start + 1;
         while cursor < bytes.len() {
             if bytes[cursor] == quote {
-                return Some((&input[value_start + 1..cursor], cursor + 1));
+                return Some(HtmlAttributeValue {
+                    raw: &input[value_start + 1..cursor],
+                    raw_start: value_start + 1,
+                    next_cursor: cursor + 1,
+                });
             }
             cursor += 1;
         }
@@ -484,7 +624,11 @@ fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, 
         }
         cursor += 1;
     }
-    Some((&input[value_start..cursor], cursor))
+    Some(HtmlAttributeValue {
+        raw: &input[value_start..cursor],
+        raw_start: value_start,
+        next_cursor: cursor,
+    })
 }
 
 fn html_start_tag_attribute_cursor(input: &str) -> usize {

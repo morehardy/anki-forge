@@ -129,6 +129,20 @@ fn css_url_line_hints_preserve_stripped_html_comment_and_script_newlines() {
 }
 
 #[test]
+fn css_url_refs_scan_inline_style_attributes_without_scanning_script_text() {
+    let refs = scan(
+        "<script>\nvar html = '<div style=\"background:url(fake.png)\"></div>';\n</script>\n<div style=\"background:url(ok.png)\"></div>",
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("ok.png", Some(4))]
+    );
+}
+
+#[test]
 fn helper_unsafe_local_characters_are_unsafe() {
     let refs = scan(
         r#"

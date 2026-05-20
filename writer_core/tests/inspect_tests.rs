@@ -7,7 +7,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, NormalizedFieldMetadata, NormalizedIr, NormalizedNote, NormalizedNotetype,
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedFieldMetadata,
+    NormalizedIr, NormalizedNote, NormalizedNotetype,
 };
 use sha1::Digest;
 use writer_core::{
@@ -232,6 +233,85 @@ fn inspect_emits_browser_template_and_field_label_observations() {
         .any(|value| value["template_name"] == "Card 1"
             && value["target_deck_name"] == "Custom::Deck"
             && value["resolved_target_deck_id"] == 2));
+}
+
+#[test]
+fn inspect_staging_media_ref_observations_come_from_normalized_references() {
+    let root = unique_artifact_root("inspect-normalized-media-refs");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-normalized-media-refs",
+    );
+    let mut normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
+    normalized.media_references = vec![MediaReference {
+        owner_kind: "notetype".into(),
+        owner_id: "basic-main".into(),
+        location_kind: "css".into(),
+        location_name: "css".into(),
+        raw_ref: "sample.jpg".into(),
+        ref_kind: "css_url".into(),
+        resolution: MediaReferenceResolution::Resolved {
+            media_id: "media:sample".into(),
+        },
+    }];
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_staging(target.staging_manifest_path()).unwrap();
+    let media_refs = report
+        .observations
+        .references
+        .iter()
+        .filter(|value| {
+            value["selector"]
+                .as_str()
+                .is_some_and(|selector| selector.starts_with("media-ref["))
+        })
+        .collect::<Vec<_>>();
+
+    assert_eq!(media_refs.len(), 1);
+    assert_eq!(media_refs[0]["owner_kind"], "notetype");
+    assert_eq!(media_refs[0]["location_kind"], "css");
+    assert_eq!(media_refs[0]["media_id"], "media:sample");
+}
+
+#[test]
+fn inspect_staging_does_not_scan_raw_fields_for_media_ref_observations() {
+    let root = unique_artifact_root("inspect-no-raw-field-media-scan");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-no-raw-field-media-scan",
+    );
+    let mut normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
+    normalized.notes[0]
+        .fields
+        .insert("Back".into(), r#"<img src="sample.jpg">"#.into());
+    normalized.media_references = vec![];
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_staging(target.staging_manifest_path()).unwrap();
+
+    assert!(!report.observations.references.iter().any(|value| {
+        value["selector"]
+            .as_str()
+            .is_some_and(|selector| selector.starts_with("media-ref["))
+    }));
 }
 
 #[test]

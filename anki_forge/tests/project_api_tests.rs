@@ -282,6 +282,39 @@ fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
 }
 
 #[test]
+fn project_build_maps_missing_inline_style_media_reference_to_note_field_source() {
+    let mut project = Project::new("Inline Style Media")
+        .stable_id("inline-style-media")
+        .default_deck("Inline Style Media");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:inline-style")
+                .text("Front", "front")
+                .html(
+                    "Back",
+                    r#"<div style="background:url(missing-style.png)"></div>"#,
+                ),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing inline style media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.notes[\"media:inline-style\"].fields[\"Back\"]")
+    );
+}
+
+#[test]
 fn project_build_uses_normalization_skips_for_non_packaged_media_refs() {
     let mut project = Project::new("Skipped Media")
         .stable_id("skipped-media")
