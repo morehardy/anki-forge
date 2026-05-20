@@ -282,6 +282,98 @@ fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
 }
 
 #[test]
+fn project_build_uses_normalization_skips_for_non_packaged_media_refs() {
+    let mut project = Project::new("Skipped Media")
+        .stable_id("skipped-media")
+        .default_deck("Skipped Media");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:skipped")
+                .html(
+                    "Front",
+                    r#"<img src="https://example.test/remote.png"><img src="//cdn.example.test/asset.png">"#,
+                )
+                .html(
+                    "Back",
+                    r##"<img src="{{DynamicImage}}"><img src="?v=1"><img src="#fragment">"##,
+                ),
+        )
+        .expect("add note");
+
+    let report = project
+        .build(BuildOptions::new().inspect(false))
+        .expect("skipped references should not fail writer build");
+
+    assert_eq!(report.status, "success");
+    assert!(!report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE"));
+    assert!(!report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code.starts_with("MEDIA.")));
+}
+
+#[test]
+fn project_build_missing_and_unsafe_refs_fail_in_normalization_not_writer() {
+    let mut missing_project = Project::new("Missing Media")
+        .stable_id("missing-media")
+        .default_deck("Missing Media");
+    missing_project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:missing")
+                .text("Front", "front")
+                .html("Back", r#"<img src="missing.png">"#),
+        )
+        .expect("add missing note");
+
+    let missing_error = missing_project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing reference fails normalization");
+
+    assert!(missing_error
+        .report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "MEDIA.MISSING_REFERENCE"));
+    assert!(!missing_error
+        .report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE"));
+
+    let mut unsafe_project = Project::new("Unsafe Media")
+        .stable_id("unsafe-media")
+        .default_deck("Unsafe Media");
+    unsafe_project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:unsafe")
+                .text("Front", "front")
+                .html("Back", r#"<img src="bad%2Fname.png">"#),
+        )
+        .expect("add unsafe note");
+
+    let unsafe_error = unsafe_project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("unsafe reference fails normalization");
+
+    assert!(unsafe_error
+        .report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "MEDIA.UNSAFE_REFERENCE"));
+    assert!(!unsafe_error
+        .report
+        .diagnostic_codes()
+        .iter()
+        .any(|code| code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE"));
+}
+
+#[test]
 fn project_build_maps_custom_note_field_diagnostic_to_product_field_key() {
     let mut project = Project::new("Custom Media")
         .stable_id("custom-media")

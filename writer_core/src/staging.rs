@@ -504,7 +504,7 @@ fn validate_normalized_ir(
             });
         }
 
-        if build_context.media_resolution_mode == "inline-only" {
+        if build_context.media_resolution_mode == "legacy-inline-scan" {
             for (field_name, field_value) in &note.fields {
                 for media_ref in extract_media_references(field_value) {
                     if media_ref.starts_with("data:")

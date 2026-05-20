@@ -115,7 +115,7 @@ fn browser_appearance_and_template_target_deck_survive_lower_normalize_and_build
             version: "1.0.0".into(),
             emit_apkg: false,
             materialize_staging: true,
-            media_resolution_mode: "inline-only".into(),
+            media_resolution_mode: "pre-resolved".into(),
             unresolved_asset_behavior: "fail".into(),
             fingerprint_mode: "canonical".into(),
         },

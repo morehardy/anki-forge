@@ -82,7 +82,7 @@ fn sample_build_context(emit_apkg: bool) -> BuildContext {
         version: "1.0.0".into(),
         emit_apkg,
         materialize_staging: true,
-        media_resolution_mode: "inline-only".into(),
+        media_resolution_mode: "pre-resolved".into(),
         unresolved_asset_behavior: "fail".into(),
         fingerprint_mode: "canonical".into(),
     }
