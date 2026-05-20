@@ -4,7 +4,10 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
+use authoring_core::{
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedIr, NormalizedNote,
+    NormalizedNotetype,
+};
 use serde_json::json;
 use sha1::Digest;
 use writer_core::{
@@ -137,7 +140,17 @@ fn sample_basic_normalized_ir_with_media(media_store: &Path) -> NormalizedIr {
         export_filename: "sample.jpg".into(),
         object_id,
     }];
-    normalized.media_references = vec![];
+    normalized.media_references = vec![MediaReference {
+        owner_kind: "note".into(),
+        owner_id: "note-1".into(),
+        location_kind: "field".into(),
+        location_name: "Back".into(),
+        raw_ref: "sample.jpg".into(),
+        ref_kind: "html_src".into(),
+        resolution: MediaReferenceResolution::Resolved {
+            media_id: "media:sample".into(),
+        },
+    }];
     normalized
 }
 

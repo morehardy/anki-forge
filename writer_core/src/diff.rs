@@ -45,6 +45,9 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         selectors.extend(right_entries.keys().cloned());
 
         for selector in selectors {
+            if should_skip_selector(domain, &selector, left, right) {
+                continue;
+            }
             match (left_entries.get(&selector), right_entries.get(&selector)) {
                 (Some(left_entry), Some(right_entry)) => {
                     if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
@@ -93,6 +96,17 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         comparison_limitations: comparison_limitations.into_iter().collect(),
         changes,
     })
+}
+
+fn should_skip_selector(
+    domain: &str,
+    selector: &str,
+    left: &InspectReport,
+    right: &InspectReport,
+) -> bool {
+    domain == "references"
+        && selector.starts_with("media-ref[")
+        && (left.source_kind == "apkg" || right.source_kind == "apkg")
 }
 
 fn has_unavailable(left: &InspectReport, right: &InspectReport) -> bool {
