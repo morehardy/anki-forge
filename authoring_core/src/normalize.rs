@@ -284,24 +284,16 @@ pub fn normalize_with_options(
 
     let (media_references, media_reference_diagnostics) =
         resolve_media_references(&normalized_notes, &normalized_notetypes, &ingest.bindings);
+    let has_media_reference_error = media_reference_diagnostics
+        .iter()
+        .any(|item| item.level == "error");
     let mut media_diagnostics = media_reference_diagnostics;
     media_diagnostics.extend(unused_binding_diagnostics(
         &ingest.bindings,
         &media_references,
         options.media_policy.unused_binding_behavior,
     ));
-    if media_diagnostics.iter().any(|item| item.level == "error") {
-        diagnostics.extend(media_diagnostics);
-        return invalid_result(
-            policy_refs,
-            request.comparison_context,
-            diagnostics,
-            format!("det:{metadata_document_id}"),
-            "media reference resolution failed".into(),
-        );
-    }
-    diagnostics.extend(media_diagnostics);
-
+    let current_artifact_fingerprint = format!("det:{metadata_document_id}");
     let normalized_ir = NormalizedIr {
         kind: "normalized-ir".into(),
         schema_version: request.input.schema_version,
@@ -313,6 +305,18 @@ pub fn normalize_with_options(
         media_bindings: ingest.bindings,
         media_references,
     };
+    if media_diagnostics.iter().any(|item| item.level == "error") {
+        diagnostics.extend(media_diagnostics);
+        return invalid_result_with_normalized_ir(
+            policy_refs,
+            request.comparison_context,
+            diagnostics,
+            current_artifact_fingerprint,
+            "media reference resolution failed".into(),
+            has_media_reference_error.then_some(normalized_ir),
+        );
+    }
+    diagnostics.extend(media_diagnostics);
 
     let merge_risk_report = assess_risk(&normalized_ir, request.comparison_context.as_ref());
 
@@ -652,6 +656,24 @@ fn invalid_result(
     current_artifact_fingerprint: String,
     comparison_reason: String,
 ) -> NormalizationResult {
+    invalid_result_with_normalized_ir(
+        policy_refs,
+        comparison_context,
+        diagnostics,
+        current_artifact_fingerprint,
+        comparison_reason,
+        None,
+    )
+}
+
+fn invalid_result_with_normalized_ir(
+    policy_refs: PolicyRefs,
+    comparison_context: Option<crate::model::ComparisonContext>,
+    diagnostics: Vec<DiagnosticItem>,
+    current_artifact_fingerprint: String,
+    comparison_reason: String,
+    normalized_ir: Option<NormalizedIr>,
+) -> NormalizationResult {
     let merge_risk_report = unavailable_report(
         comparison_context.as_ref(),
         current_artifact_fingerprint,
@@ -669,7 +691,7 @@ fn invalid_result(
             status: "invalid".into(),
             items: diagnostics,
         },
-        normalized_ir: None,
+        normalized_ir,
         merge_risk_report,
     }
 }

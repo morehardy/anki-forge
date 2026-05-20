@@ -4,5 +4,5 @@ pub mod report;
 pub use options::{BuildOptions, ProjectMediaPolicy, ProjectNormalizeOptions};
 pub use report::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildReport,
-    InspectSummary,
+    InspectSummary, MediaSummary,
 };

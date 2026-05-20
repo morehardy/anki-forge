@@ -268,6 +268,9 @@ fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
     let error = project
         .build(BuildOptions::new().inspect(false))
         .expect_err("missing media reference fails build");
+    assert_eq!(error.report.media.references, 1);
+    assert_eq!(error.report.media.missing_references, 1);
+    assert_eq!(error.report.media.unsafe_references, 0);
     let diagnostic = error
         .report
         .diagnostics
@@ -446,6 +449,9 @@ fn project_build_maps_unsafe_media_reference_to_product_note_field_source_and_he
     let error = project
         .build(BuildOptions::new().inspect(false))
         .expect_err("unsafe reference fails normalization");
+    assert_eq!(error.report.media.references, 1);
+    assert_eq!(error.report.media.missing_references, 0);
+    assert_eq!(error.report.media.unsafe_references, 1);
     let diagnostic = error
         .report
         .diagnostics

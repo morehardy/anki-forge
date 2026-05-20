@@ -16,7 +16,7 @@ use counts::{
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildReport, InspectSummary, ProjectNormalizeOptions,
+    BuildReport, InspectSummary, MediaSummary, ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::lowering::ProductSourceMap;
@@ -341,10 +341,17 @@ impl Project {
                         media: normalized.media_bindings.len(),
                     })
                     .unwrap_or_default();
+                let media = normalized_ir
+                    .as_ref()
+                    .map(|normalized| {
+                        MediaSummary::from_normalized_ir(normalized.as_ref(), &diagnostics)
+                    })
+                    .unwrap_or_default();
                 return Err(BuildError::new(
                     BuildReport {
                         artifact: None,
                         counts,
+                        media,
                         diagnostics,
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -363,6 +370,7 @@ impl Project {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
+            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
             return Err(BuildError::new(
                 BuildReport {
                     artifact: None,
@@ -371,6 +379,7 @@ impl Project {
                         cards: count_phase1_cards_without_inspect(&normalized),
                         media: normalized.media_bindings.len(),
                     },
+                    media,
                     diagnostics,
                     metrics: BuildMetrics {
                         duration: started.elapsed(),
@@ -497,9 +506,11 @@ impl Project {
             });
         }
 
+        let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
         let report = BuildReport {
             artifact,
             counts,
+            media,
             diagnostics,
             metrics: BuildMetrics {
                 duration: started.elapsed(),
@@ -1564,6 +1575,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
     BuildReport {
         artifact: None,
         counts: BuildCounts::default(),
+        media: MediaSummary::default(),
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new(code),
             severity: Severity::Error,

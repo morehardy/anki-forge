@@ -79,6 +79,48 @@ fn project_build_packages_product_media_and_reports_count() {
 }
 
 #[test]
+fn project_build_report_includes_media_summary_with_unique_object_bytes() {
+    let root = unique_artifacts_dir("project-media-summary");
+    let mut project = Project::new("Media Summary")
+        .stable_id("media-summary")
+        .default_deck("Media Summary");
+    let chart = project
+        .media_mut()
+        .add_bytes("chart-a.png", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.png")
+        .expect("chart media");
+    project
+        .media_mut()
+        .add_bytes("chart-b.png", PNG.to_vec())
+        .expect("same bytes media")
+        .export_as("chart-copy.png")
+        .expect("same content under another export filename");
+
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:summary")
+                .image("Back", chart),
+        )
+        .expect("add note");
+
+    let report = project
+        .write_apkg(root.join("summary.apkg"))
+        .expect("unused media remains a warning");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(report.counts.media, 2);
+    assert_eq!(report.media.objects, 1);
+    assert_eq!(report.media.bindings, 2);
+    assert_eq!(report.media.references, 1);
+    assert_eq!(report.media.missing_references, 0);
+    assert_eq!(report.media.unsafe_references, 0);
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(report.media.unique_bytes, PNG.len() as u64);
+}
+
+#[test]
 fn project_build_maps_unused_media_binding_to_product_media_source() {
     let mut project = Project::new("Media")
         .stable_id("media")
@@ -96,6 +138,9 @@ fn project_build_maps_unused_media_binding_to_product_media_source() {
     let report = project
         .build(BuildOptions::new().inspect(false))
         .expect("unused media is a warning under strict policy");
+    assert_eq!(report.media.bindings, 1);
+    assert_eq!(report.media.references, 0);
+    assert_eq!(report.media.unused_bindings, 1);
     let diagnostic = report
         .diagnostics
         .iter()
