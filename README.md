@@ -102,8 +102,8 @@ Common media diagnostics:
   template, or CSS. Remove the registration or add the intended local reference;
   this is a warning under the strict default.
 - Unsafe media reference: packaged media references must be bare local
-  filenames. Remove path components, absolute paths, escapes, query-only values,
-  or unsafe characters.
+  filenames. Remove path components, absolute paths, escapes, or unsafe
+  characters.
 - MIME mismatch: the export filename or declared MIME does not match the
   observed source bytes. Change the export filename/declared MIME, or replace
   the source file.
@@ -112,7 +112,7 @@ Common media diagnostics:
 those edits can change deck behavior and hide the authoring intent. Keep the
 registered `export_as(...)` filename and local references in sync yourself.
 `BuildReport::pretty_report()` is a human-facing summary; structured
-machine-readable report export is planned as a future enhancement.
+machine-readable report export is not currently exported.
 
 ## 4. Advanced: Contract Tools And Runtime
 
