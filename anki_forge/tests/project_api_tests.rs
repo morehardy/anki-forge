@@ -351,6 +351,78 @@ fn deck_backed_project_lower_maps_note_fields_to_deck_note_index_source() {
 }
 
 #[test]
+fn project_lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit()
+{
+    let mut project = Project::new("Shifted Note Types")
+        .stable_id("shifted-notetypes")
+        .default_deck("Shifted Note Types");
+    project
+        .add_note(Note::basic("front", "back").stable_id("basic:1"))
+        .expect("add stock note");
+    project
+        .add_notetype(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}")
+                        .browser_back("{{Prompt}}"),
+                ),
+        )
+        .expect("add first custom notetype");
+    project
+        .add_notetype(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recall")
+                        .key("recall")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}")
+                        .browser_front("{{Prompt}}"),
+                ),
+        )
+        .expect("add second custom notetype");
+
+    let plan = project.lower().expect("lower project");
+
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].templates[\"Recognition\"].front"),
+        Some("project.note_types[0].templates[\"Recognition\"].front")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[1].templates[\"Recognition\"].browser_back"
+        ),
+        Some("project.note_types[0].templates[\"Recognition\"].browser_back")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].css"),
+        Some("project.note_types[0].css")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[2].templates[\"Recall\"].back"),
+        Some("project.note_types[1].templates[\"Recall\"].back")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[2].templates[\"Recall\"].browser_front"
+        ),
+        Some("project.note_types[1].templates[\"Recall\"].browser_front")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[2].css"),
+        Some("project.note_types[1].css")
+    );
+}
+
+#[test]
 fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))

@@ -236,6 +236,7 @@ impl Project {
                 .lower()
                 .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err))?;
             self.apply_note_source_paths(&mut plan);
+            self.apply_notetype_source_paths(&mut plan);
             return Ok(plan);
         }
 
@@ -244,6 +245,7 @@ impl Project {
             .lower()
             .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
         self.apply_note_source_paths(&mut plan);
+        self.apply_notetype_source_paths(&mut plan);
         plan.authoring_document
             .media
             .extend(product_media_to_authoring_media(self.media.media())?);
@@ -672,6 +674,83 @@ impl Project {
         }
     }
 
+    fn apply_notetype_source_paths(&self, plan: &mut LoweringPlan) {
+        if self.deck_source.is_some() {
+            return;
+        }
+
+        let mut id_counts = BTreeMap::new();
+        for note_type in &self.note_types {
+            *id_counts.entry(note_type.id()).or_insert(0usize) += 1;
+        }
+
+        let mut consumed_by_id = BTreeMap::new();
+        let mut entries = Vec::new();
+        for (project_index, note_type) in self.note_types.iter().enumerate() {
+            if id_counts.get(note_type.id()).copied().unwrap_or_default() <= 1 {
+                continue;
+            }
+
+            let consumed = consumed_by_id
+                .entry(note_type.id().to_string())
+                .or_insert(0usize);
+            let authoring_match = plan
+                .authoring_document
+                .notetypes
+                .iter()
+                .enumerate()
+                .filter(|(_, authoring_notetype)| authoring_notetype.id == note_type.id())
+                .nth(*consumed);
+            *consumed += 1;
+
+            let Some((authoring_index, authoring_notetype)) = authoring_match else {
+                continue;
+            };
+            let authoring_notetype_source = format!("authoring.note_types[{authoring_index}]");
+            let project_notetype_source = format!("project.note_types[{project_index}]");
+
+            if let Some(templates) = authoring_notetype.templates.as_ref() {
+                for template in templates {
+                    let authoring_template =
+                        format!("{authoring_notetype_source}.templates[{:?}]", template.name);
+                    let project_template =
+                        format!("{project_notetype_source}.templates[{:?}]", template.name);
+                    entries.push((
+                        format!("{authoring_template}.front"),
+                        format!("{project_template}.front"),
+                    ));
+                    entries.push((
+                        format!("{authoring_template}.back"),
+                        format!("{project_template}.back"),
+                    ));
+                    if template.browser_question_format.is_some() {
+                        entries.push((
+                            format!("{authoring_template}.browser_front"),
+                            format!("{project_template}.browser_front"),
+                        ));
+                    }
+                    if template.browser_answer_format.is_some() {
+                        entries.push((
+                            format!("{authoring_template}.browser_back"),
+                            format!("{project_template}.browser_back"),
+                        ));
+                    }
+                }
+            }
+
+            if authoring_notetype.css.is_some() {
+                entries.push((
+                    format!("{authoring_notetype_source}.css"),
+                    format!("{project_notetype_source}.css"),
+                ));
+            }
+        }
+
+        for (authoring_path, project_source) in entries {
+            plan.source_map.insert(authoring_path, project_source);
+        }
+    }
+
     fn normalize_with_dirs(
         &self,
         base_dir: impl Into<PathBuf>,
@@ -686,6 +765,7 @@ impl Project {
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
         self.apply_note_source_paths(&mut lowering);
+        self.apply_notetype_source_paths(&mut lowering);
         if let Some(deck) = &self.deck_source {
             let media = deck
                 .registered_media()
