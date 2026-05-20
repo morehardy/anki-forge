@@ -488,13 +488,12 @@ fn build_observations(
         };
         let resolved_media = media_by_binding_id.get(media_id.as_str());
         let mut entry = json!({
-            "selector": format!(
-                "media-ref[owner_kind='{}'][owner_id='{}'][location_kind='{}'][location_name='{}'][ref='{}']",
-                media_ref.owner_kind,
-                media_ref.owner_id,
-                media_ref.location_kind,
-                media_ref.location_name,
-                media_ref.raw_ref
+            "selector": media_ref_selector(
+                &media_ref.owner_kind,
+                &media_ref.owner_id,
+                &media_ref.location_kind,
+                &media_ref.location_name,
+                &media_ref.raw_ref,
             ),
             "owner_kind": media_ref.owner_kind.as_str(),
             "owner_id": media_ref.owner_id.as_str(),
@@ -565,6 +564,40 @@ fn build_observations(
             .chain(media_reference_entries)
             .collect(),
     }
+}
+
+fn media_ref_selector(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    raw_ref: &str,
+) -> String {
+    format!(
+        "media-ref[owner_kind={}][owner_id={}][location_kind={}][location_name={}][ref={}]",
+        selector_value(owner_kind),
+        selector_value(owner_id),
+        selector_value(location_kind),
+        selector_value(location_name),
+        selector_value(raw_ref),
+    )
+}
+
+fn selector_value(value: &str) -> String {
+    let mut escaped = String::with_capacity(value.len() + 2);
+    escaped.push('\'');
+    for ch in value.chars() {
+        match ch {
+            '\\' => escaped.push_str("\\\\"),
+            '\'' => escaped.push_str("\\'"),
+            '"' => escaped.push_str("\\\""),
+            '[' => escaped.push_str("\\["),
+            ']' => escaped.push_str("\\]"),
+            _ => escaped.push(ch),
+        }
+    }
+    escaped.push('\'');
+    escaped
 }
 
 fn resolve_staging_media(

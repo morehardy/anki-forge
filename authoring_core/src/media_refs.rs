@@ -890,17 +890,23 @@ fn strip_html_start_tags(input: &str) -> String {
         }
 
         output.push_str(&input[cursor..tag_start]);
-        match input[tag_name_start..].find('>') {
-            Some(relative_tag_end) => {
-                let tag_end = tag_name_start + relative_tag_end + 1;
-                output.extend(input[tag_start..tag_end].chars().filter(|ch| *ch == '\n'));
-                cursor = tag_end;
+        match find_html_tag_end(input, tag_name_start) {
+            Some(tag_end) => {
+                output.extend(input[tag_start..=tag_end].chars().filter(|ch| *ch == '\n'));
+                cursor = tag_end + 1;
             }
-            None => {
-                output.extend(input[tag_start..].chars().filter(|ch| *ch == '\n'));
-                cursor = input.len();
-                break;
-            }
+            None => match input[tag_name_start..].find('>') {
+                Some(relative_tag_end) => {
+                    let tag_end = tag_name_start + relative_tag_end;
+                    output.extend(input[tag_start..=tag_end].chars().filter(|ch| *ch == '\n'));
+                    cursor = tag_end + 1;
+                }
+                None => {
+                    output.extend(input[tag_start..].chars().filter(|ch| *ch == '\n'));
+                    cursor = input.len();
+                    break;
+                }
+            },
         }
     }
 

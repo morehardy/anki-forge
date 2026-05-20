@@ -4,7 +4,9 @@ use std::path::{Component, Path, PathBuf};
 
 use anyhow::{Context, Result};
 use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNotetype};
+use authoring_core::{
+    AuthoringNotetype, MediaReferenceResolution, NormalizedIr, NormalizedNotetype,
+};
 use serde::{Deserialize, Serialize};
 use sha1::Digest;
 
@@ -357,6 +359,31 @@ fn validate_media_invariants(normalized_ir: &NormalizedIr) -> Vec<BuildDiagnosti
             ));
         }
     }
+    for (index, media_ref) in normalized_ir.media_references.iter().enumerate() {
+        match &media_ref.resolution {
+            MediaReferenceResolution::Resolved { media_id } => {
+                if !binding_ids.contains(media_id.as_str()) {
+                    diagnostics.push(media_error(
+                        "MEDIA.MEDIA_BINDING_MISSING",
+                        format!(
+                            "media reference {} resolves to missing binding {}",
+                            media_ref.raw_ref, media_id
+                        ),
+                        format!("media_references[{index}].media_id"),
+                    ));
+                }
+            }
+            MediaReferenceResolution::Missing => diagnostics.push(media_error(
+                "MEDIA.MISSING_REFERENCE",
+                format!(
+                    "writer-ready input contains unresolved missing media reference {}",
+                    media_ref.raw_ref
+                ),
+                format!("media_references[{index}]"),
+            )),
+            MediaReferenceResolution::Skipped { .. } => {}
+        }
+    }
     diagnostics
 }
 
@@ -400,6 +427,7 @@ fn validate_normalized_ir(
         .collect();
 
     let mut diagnostics = vec![];
+    diagnostics.extend(validate_media_resolution_mode(build_context));
     diagnostics.extend(validate_media_invariants(normalized_ir));
     let mut seen_notetype_ids = BTreeMap::new();
 
@@ -504,38 +532,58 @@ fn validate_normalized_ir(
             });
         }
 
-        if build_context.media_resolution_mode == "legacy-inline-scan" {
-            for (field_name, field_value) in &note.fields {
-                for media_ref in extract_media_references(field_value) {
-                    if media_ref.starts_with("data:")
-                        || media_filenames.contains(media_ref.as_str())
-                    {
-                        continue;
-                    }
+        match build_context.media_resolution_mode.as_str() {
+            "legacy-inline-scan" => {
+                for (field_name, field_value) in &note.fields {
+                    for media_ref in extract_media_references(field_value) {
+                        if media_ref.starts_with("data:")
+                            || media_filenames.contains(media_ref.as_str())
+                        {
+                            continue;
+                        }
 
-                    diagnostics.push(BuildDiagnosticItem {
-                        level: if build_context.unresolved_asset_behavior == "warn" {
-                            "warning".into()
-                        } else {
-                            "error".into()
-                        },
-                        code: "PHASE3.UNRESOLVED_MEDIA_REFERENCE".into(),
-                        summary: format!(
-                            "field {} references missing media {}",
-                            field_name, media_ref
-                        ),
-                        domain: Some("notes".into()),
-                        path: Some(format!(r#"notes[{index}].fields["{}"]"#, field_name)),
-                        target_selector: Some(format!("note[id='{}']", note.id)),
-                        stage: Some("validate".into()),
-                        operation: Some("resolve-media".into()),
-                    });
+                        diagnostics.push(BuildDiagnosticItem {
+                            level: if build_context.unresolved_asset_behavior == "warn" {
+                                "warning".into()
+                            } else {
+                                "error".into()
+                            },
+                            code: "PHASE3.UNRESOLVED_MEDIA_REFERENCE".into(),
+                            summary: format!(
+                                "field {} references missing media {}",
+                                field_name, media_ref
+                            ),
+                            domain: Some("notes".into()),
+                            path: Some(format!(r#"notes[{index}].fields["{}"]"#, field_name)),
+                            target_selector: Some(format!("note[id='{}']", note.id)),
+                            stage: Some("validate".into()),
+                            operation: Some("resolve-media".into()),
+                        });
+                    }
                 }
             }
+            "pre-resolved" => {}
+            _ => {}
         }
     }
 
     diagnostics
+}
+
+fn validate_media_resolution_mode(build_context: &BuildContext) -> Vec<BuildDiagnosticItem> {
+    match build_context.media_resolution_mode.as_str() {
+        "pre-resolved" | "legacy-inline-scan" => vec![],
+        unsupported => vec![BuildDiagnosticItem {
+            level: "error".into(),
+            code: "PHASE3.UNSUPPORTED_MEDIA_RESOLUTION_MODE".into(),
+            summary: format!("unsupported media_resolution_mode {unsupported}"),
+            domain: Some("media".into()),
+            path: Some("build_context.media_resolution_mode".into()),
+            target_selector: None,
+            stage: Some("validate".into()),
+            operation: Some("resolve-media".into()),
+        }],
+    }
 }
 
 fn validate_stock_notetype_shape(

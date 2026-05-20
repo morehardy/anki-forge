@@ -285,6 +285,54 @@ fn inspect_staging_media_ref_observations_come_from_normalized_references() {
 }
 
 #[test]
+fn inspect_staging_escapes_media_ref_selector_values() {
+    let root = unique_artifact_root("inspect-escaped-media-ref-selector");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-escaped-media-ref-selector",
+    );
+    let mut normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
+    let raw_ref = r#"sample.jpg?caption='front'&alt="back"[v1]#frag\end"#;
+    normalized.media_references = vec![MediaReference {
+        owner_kind: "note".into(),
+        owner_id: "note-1".into(),
+        location_kind: "field".into(),
+        location_name: "Back".into(),
+        raw_ref: raw_ref.into(),
+        ref_kind: "html_src".into(),
+        resolution: MediaReferenceResolution::Resolved {
+            media_id: "media:sample".into(),
+        },
+    }];
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    let report = inspect_staging(target.staging_manifest_path()).unwrap();
+    let media_ref = report
+        .observations
+        .references
+        .iter()
+        .find(|value| {
+            value["selector"]
+                .as_str()
+                .is_some_and(|selector| selector.starts_with("media-ref["))
+        })
+        .expect("media-ref observation");
+
+    assert_eq!(media_ref["reference"], raw_ref);
+    assert_eq!(
+        media_ref["selector"],
+        r#"media-ref[owner_kind='note'][owner_id='note-1'][location_kind='field'][location_name='Back'][ref='sample.jpg?caption=\'front\'&alt=\"back\"\[v1\]#frag\\end']"#
+    );
+}
+
+#[test]
 fn inspect_staging_does_not_scan_raw_fields_for_media_ref_observations() {
     let root = unique_artifact_root("inspect-no-raw-field-media-scan");
     let target = BuildArtifactTarget::new(

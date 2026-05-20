@@ -143,6 +143,21 @@ fn css_url_refs_scan_inline_style_attributes_without_scanning_script_text() {
 }
 
 #[test]
+fn css_url_scanning_ignores_url_text_inside_quoted_html_tag_attributes() {
+    let refs = scan(
+        r#"<div title="> url(fake.png)" style="background:url(ok.png)"></div>
+<style>.later { background: url(later.png); }</style>"#,
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("ok.png", Some(1)), ("later.png", Some(2))]
+    );
+}
+
+#[test]
 fn helper_unsafe_local_characters_are_unsafe() {
     let refs = scan(
         r#"

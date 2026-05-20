@@ -1,5 +1,8 @@
 use authoring_core::stock::resolve_stock_notetype;
-use authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
+use authoring_core::{
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedIr, NormalizedNote,
+    NormalizedNotetype,
+};
 use prost::Message;
 use rusqlite::Connection;
 use sha1::Digest;
@@ -1396,6 +1399,112 @@ fn build_rejects_cloze_notetype_that_drifts_from_source_grounded_css() {
         diag.target_selector.as_deref(),
         Some("notetype[id='cloze-main']")
     );
+}
+
+#[test]
+fn build_rejects_unsupported_media_resolution_mode() {
+    let root = unique_artifact_root("unsupported-media-resolution-mode");
+    let target =
+        BuildArtifactTarget::new(root, "artifacts/phase3/unsupported-media-resolution-mode");
+
+    let normalized = sample_basic_normalized_ir();
+    let mut build_context = sample_build_context(false);
+    build_context.media_resolution_mode = "inline-only".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &build_context,
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "PHASE3.UNSUPPORTED_MEDIA_RESOLUTION_MODE")
+        .expect("unsupported media resolution mode diagnostic");
+    assert_eq!(diag.level, "error");
+    assert_eq!(diag.domain.as_deref(), Some("media"));
+    assert_eq!(
+        diag.path.as_deref(),
+        Some("build_context.media_resolution_mode")
+    );
+}
+
+#[test]
+fn build_rejects_resolved_media_reference_without_binding() {
+    let root = unique_artifact_root("resolved-media-ref-missing-binding");
+    let target =
+        BuildArtifactTarget::new(root, "artifacts/phase3/resolved-media-ref-missing-binding");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.media_references = vec![MediaReference {
+        owner_kind: "note".into(),
+        owner_id: "note-1".into(),
+        location_kind: "field".into(),
+        location_name: "Back".into(),
+        raw_ref: "missing.png".into(),
+        ref_kind: "html_src".into(),
+        resolution: MediaReferenceResolution::Resolved {
+            media_id: "media:missing".into(),
+        },
+    }];
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "MEDIA.MEDIA_BINDING_MISSING")
+        .expect("missing media binding diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("media"));
+    assert_eq!(diag.path.as_deref(), Some("media_references[0].media_id"));
+}
+
+#[test]
+fn build_rejects_missing_media_reference_in_writer_ready_input() {
+    let root = unique_artifact_root("missing-media-ref-writer-ready");
+    let target = BuildArtifactTarget::new(root, "artifacts/phase3/missing-media-ref-writer-ready");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.media_references = vec![MediaReference {
+        owner_kind: "note".into(),
+        owner_id: "note-1".into(),
+        location_kind: "field".into(),
+        location_name: "Back".into(),
+        raw_ref: "missing.png".into(),
+        ref_kind: "html_src".into(),
+        resolution: MediaReferenceResolution::Missing,
+    }];
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "MEDIA.MISSING_REFERENCE")
+        .expect("missing media reference diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("media"));
+    assert_eq!(diag.path.as_deref(), Some("media_references[0]"));
 }
 
 #[test]
