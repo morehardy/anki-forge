@@ -450,9 +450,9 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
         let asset_identity = format!("{}/{}", binding.note_type_id, binding.filename);
         let Some(media_filename) = media_by_identity.get(&asset_identity) else {
             lowering_diagnostics.push(LoweringDiagnostic {
-                code: "PHASE5A.FONT_BINDING_UNKNOWN_ASSET",
+                code: "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
                 message: format!(
-                    "font binding for note type '{}' could not resolve bundled asset '{}'",
+                    "font binding for note type '{}' would reference unregistered bundled asset '{}'",
                     binding.note_type_id, binding.filename
                 ),
             });

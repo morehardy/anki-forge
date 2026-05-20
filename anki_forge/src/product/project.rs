@@ -1811,7 +1811,7 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
 
 fn lowering_diagnostic_severity(code: &str) -> Severity {
     match code {
-        "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE" | "PHASE5A.FONT_BINDING_UNKNOWN_ASSET" => {
+        "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE" | "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED" => {
             Severity::Error
         }
         _ => Severity::Warning,
@@ -1928,7 +1928,7 @@ mod tests {
                 message: "missing notetype".into(),
             },
             LoweringDiagnostic {
-                code: "PHASE5A.FONT_BINDING_UNKNOWN_ASSET",
+                code: "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
                 message: "missing asset".into(),
             },
             LoweringDiagnostic {
@@ -1944,7 +1944,10 @@ mod tests {
                 .collect::<Vec<_>>(),
             vec![
                 ("PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE", Severity::Error),
-                ("PHASE5A.FONT_BINDING_UNKNOWN_ASSET", Severity::Error),
+                (
+                    "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
+                    Severity::Error
+                ),
                 ("PHASE5A.ADVISORY", Severity::Warning),
             ]
         );

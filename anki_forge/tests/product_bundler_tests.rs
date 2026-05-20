@@ -205,6 +205,7 @@ fn font_binding_resolves_namespaced_asset_and_reports_missing_bindings() {
         .bundle_inline_template_asset("custom-main", "shared.woff2", "font/woff2", "aGVsbG8=")
         .bundle_inline_template_asset("other-main", "shared.woff2", "font/woff2", "d29ybGQ=")
         .bind_font("custom-main", "Demo Font", "shared.woff2")
+        .bind_font("custom-main", "Missing Asset Font", "missing.woff2")
         .bind_font("missing-main", "Missing Font", "missing.woff2")
         .add_custom_note(anki_forge::product::model::CustomNote {
             id: "note-1".into(),
@@ -258,5 +259,11 @@ fn font_binding_resolves_namespaced_asset_and_reports_missing_bindings() {
             .iter()
             .any(|diag| diag.code == "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE"),
         "missing note type binding should emit a lowering diagnostic"
+    );
+    assert!(
+        plan.lowering_diagnostics
+            .iter()
+            .any(|diag| diag.code == "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED"),
+        "missing bundled helper media should emit a Product-domain diagnostic"
     );
 }
