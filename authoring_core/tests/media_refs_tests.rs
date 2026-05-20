@@ -219,6 +219,56 @@ fn html_and_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
 }
 
 #[test]
+fn unquoted_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
+    let refs = scan(
+        r#"
+        .leading { background: url( hero.png); }
+        .trailing { background: url(hero.png ); }
+        .both { background: url( hero.png ); }
+        .empty { background: url(   ); }
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            (
+                "css_url",
+                " hero.png",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "css_url",
+                "hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "css_url",
+                " hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            ("css_url", "   ", None, Some("empty-ref"), None),
+        ]
+    );
+}
+
+#[test]
+fn incomplete_unquoted_css_url_does_not_consume_later_valid_url() {
+    let refs = scan(".bad { background: url(bad.png; }\n.ok { background: url(ok.png); }");
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
 fn classifies_external_and_data_uri_as_skipped() {
     let refs = scan(
         r#"

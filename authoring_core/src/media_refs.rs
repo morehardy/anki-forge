@@ -667,15 +667,19 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
         return None;
     }
 
-    let raw_start = cursor;
+    let raw_start = value_start;
+    cursor = value_start;
     while cursor < bytes.len() && bytes[cursor] != b')' {
+        if bytes[cursor] == b';' || bytes[cursor] == b'}' {
+            return None;
+        }
         cursor += 1;
     }
     if cursor >= bytes.len() {
         return None;
     }
 
-    let raw_ref = input[raw_start..cursor].trim();
+    let raw_ref = &input[raw_start..cursor];
     if raw_ref.contains('(') {
         return None;
     }
@@ -693,9 +697,7 @@ fn css_url_recovery_cursor(input: &str, value_start: usize) -> usize {
         return css_quoted_url_recovery_cursor(input, value_start);
     }
 
-    input[value_start..]
-        .find(')')
-        .map_or(value_start, |relative_end| value_start + relative_end + 1)
+    css_malformed_url_boundary(input, value_start)
 }
 
 fn css_quoted_url_recovery_cursor(input: &str, quote_start: usize) -> usize {
