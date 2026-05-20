@@ -83,7 +83,8 @@ impl MediaRef {
 impl MediaRegistry {
     pub fn add_file(&mut self, path: impl AsRef<Path>) -> anyhow::Result<PendingMedia<'_>> {
         let path = path.as_ref().to_path_buf();
-        let observed = observe_file_source(&path, EmptySourceBehavior::Reject)?;
+        let observed = observe_file_source(&path, EmptySourceBehavior::Reject)
+            .map_err(MediaSourceObservationError::into_anyhow)?;
 
         Ok(PendingMedia {
             registry: self,
@@ -130,7 +131,7 @@ impl ProductMedia {
         match &self.source {
             ProductMediaSource::File { path } => {
                 let observed = observe_file_source(path, EmptySourceBehavior::Allow)
-                    .map_err(|err| registration_error_to_diagnostic(err, &self.export_filename))?;
+                    .map_err(|err| err.to_diagnostic(&self.export_filename))?;
                 if observed.fingerprint != self.observed_fingerprint {
                     return Err(ProductMediaSourceDiagnostic {
                         code: "MEDIA.SOURCE_CHANGED",
@@ -185,30 +186,90 @@ enum EmptySourceBehavior {
     Reject,
 }
 
+#[derive(Debug)]
+enum MediaSourceObservationError {
+    Missing { path: PathBuf, message: String },
+    NotRegularFile { path: PathBuf },
+    ReadFailed { path: PathBuf, message: String },
+    Empty { path: PathBuf },
+}
+
+impl MediaSourceObservationError {
+    fn code(&self) -> &'static str {
+        match self {
+            Self::Missing { .. } => "MEDIA.SOURCE_MISSING",
+            Self::NotRegularFile { .. } => "MEDIA.SOURCE_NOT_REGULAR_FILE",
+            Self::ReadFailed { .. } => "MEDIA.SOURCE_READ_FAILED",
+            Self::Empty { .. } => "MEDIA.EMPTY_SOURCE",
+        }
+    }
+
+    fn message(&self) -> String {
+        match self {
+            Self::Missing { path, message } => {
+                format!("{}: {}: {message}", self.code(), path.display())
+            }
+            Self::NotRegularFile { path } => {
+                format!("{}: {}", self.code(), path.display())
+            }
+            Self::ReadFailed { path, message } => {
+                format!("{}: {}: {message}", self.code(), path.display())
+            }
+            Self::Empty { path } => {
+                format!("{}: {}", self.code(), path.display())
+            }
+        }
+    }
+
+    fn into_anyhow(self) -> anyhow::Error {
+        anyhow::anyhow!(self.message())
+    }
+
+    fn to_diagnostic(&self, export_filename: &str) -> ProductMediaSourceDiagnostic {
+        ProductMediaSourceDiagnostic {
+            code: self.code(),
+            message: self.message(),
+            source_path: media_source_path(export_filename),
+        }
+    }
+}
+
 fn observe_file_source(
     path: &Path,
     empty_source_behavior: EmptySourceBehavior,
-) -> anyhow::Result<ObservedMedia> {
+) -> Result<ObservedMedia, MediaSourceObservationError> {
     let metadata = std::fs::metadata(path).map_err(|err| match err.kind() {
-        std::io::ErrorKind::NotFound => {
-            anyhow::anyhow!("MEDIA.SOURCE_MISSING: {}: {err}", path.display())
-        }
-        _ => anyhow::anyhow!("MEDIA.SOURCE_READ_FAILED: {}: {err}", path.display()),
+        std::io::ErrorKind::NotFound => MediaSourceObservationError::Missing {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+        _ => MediaSourceObservationError::ReadFailed {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
     })?;
-    anyhow::ensure!(
-        metadata.is_file(),
-        "MEDIA.SOURCE_NOT_REGULAR_FILE: {}",
-        path.display()
-    );
+    if !metadata.is_file() {
+        return Err(MediaSourceObservationError::NotRegularFile {
+            path: path.to_path_buf(),
+        });
+    }
     if empty_source_behavior == EmptySourceBehavior::Reject {
-        anyhow::ensure!(metadata.len() > 0, "MEDIA.EMPTY_SOURCE: {}", path.display());
+        if metadata.len() == 0 {
+            return Err(MediaSourceObservationError::Empty {
+                path: path.to_path_buf(),
+            });
+        }
     }
 
     let mut file = File::open(path).map_err(|err| match err.kind() {
-        std::io::ErrorKind::NotFound => {
-            anyhow::anyhow!("MEDIA.SOURCE_MISSING: {}: {err}", path.display())
-        }
-        _ => anyhow::anyhow!("MEDIA.SOURCE_READ_FAILED: {}: {err}", path.display()),
+        std::io::ErrorKind::NotFound => MediaSourceObservationError::Missing {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+        _ => MediaSourceObservationError::ReadFailed {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
     })?;
     let mut blake3_hasher = blake3::Hasher::new();
     let mut sha1_hasher = Sha1::new();
@@ -216,9 +277,12 @@ fn observe_file_source(
     let mut buffer = [0_u8; 64 * 1024];
 
     loop {
-        let read = file.read(&mut buffer).map_err(|err| {
-            anyhow::anyhow!("MEDIA.SOURCE_READ_FAILED: {}: {err}", path.display())
-        })?;
+        let read =
+            file.read(&mut buffer)
+                .map_err(|err| MediaSourceObservationError::ReadFailed {
+                    path: path.to_path_buf(),
+                    message: err.to_string(),
+                })?;
         if read == 0 {
             break;
         }
@@ -229,7 +293,11 @@ fn observe_file_source(
     }
 
     if empty_source_behavior == EmptySourceBehavior::Reject {
-        anyhow::ensure!(size_bytes > 0, "MEDIA.EMPTY_SOURCE: {}", path.display());
+        if size_bytes == 0 {
+            return Err(MediaSourceObservationError::Empty {
+                path: path.to_path_buf(),
+            });
+        }
     }
     Ok(ObservedMedia {
         fingerprint: MediaFingerprint {
@@ -257,27 +325,6 @@ fn validate_source_label(source_label: &str) -> anyhow::Result<()> {
         "MEDIA.INVALID_SOURCE_LABEL: source label contains a control character"
     );
     Ok(())
-}
-
-fn registration_error_to_diagnostic(
-    error: anyhow::Error,
-    export_filename: &str,
-) -> ProductMediaSourceDiagnostic {
-    let message = error.to_string();
-    let code = if message.contains("MEDIA.SOURCE_MISSING") {
-        "MEDIA.SOURCE_MISSING"
-    } else if message.contains("MEDIA.SOURCE_NOT_REGULAR_FILE") {
-        "MEDIA.SOURCE_NOT_REGULAR_FILE"
-    } else if message.contains("MEDIA.EMPTY_SOURCE") {
-        "MEDIA.EMPTY_SOURCE"
-    } else {
-        "MEDIA.SOURCE_READ_FAILED"
-    };
-    ProductMediaSourceDiagnostic {
-        code,
-        message,
-        source_path: media_source_path(export_filename),
-    }
 }
 
 fn media_source_path(value: &str) -> String {

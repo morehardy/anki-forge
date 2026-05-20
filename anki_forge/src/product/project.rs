@@ -6,6 +6,7 @@ use std::time::Instant;
 
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
+use base64::Engine as _;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
 
@@ -762,9 +763,24 @@ fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
 ) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
-    media
-        .map(|media| product_media_item_to_path_backed_authoring_media(media, media_input_dir))
-        .collect()
+    let mut prepared = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for item in media {
+        match product_media_item_to_path_backed_authoring_media(item, media_input_dir) {
+            Ok(media) => prepared.push(media),
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if diagnostics.is_empty() {
+        Ok(prepared)
+    } else {
+        Err(ProductMediaPrepareError {
+            message: "prepare product media".into(),
+            diagnostics,
+        })
+    }
 }
 
 fn product_media_item_to_authoring_media(
@@ -772,8 +788,13 @@ fn product_media_item_to_authoring_media(
 ) -> anyhow::Result<crate::AuthoringMedia> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
-            crate::AuthoringMediaSource::Path {
-                path: path.display().to_string(),
+            media
+                .verify_registered_source()
+                .map_err(|diagnostic| anyhow::anyhow!(diagnostic.message))?;
+            let bytes = std::fs::read(path)
+                .with_context(|| format!("read media source file: {}", path.display()))?;
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
         }
         crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
@@ -804,22 +825,26 @@ fn product_media_item_to_path_backed_authoring_media(
                 .map_err(ProductMediaPrepareError::from_prepare_error)?;
             let target = media_input_dir.join(&media.export_filename);
             ensure_not_symlink(&target).map_err(ProductMediaPrepareError::from_prepare_error)?;
-            std::fs::copy(path, &target).map_err(|err| {
-                let code = if err.kind() == std::io::ErrorKind::NotFound {
-                    "MEDIA.SOURCE_MISSING"
-                } else {
-                    "MEDIA.SOURCE_READ_FAILED"
-                };
-                ProductMediaPrepareError::single(
-                    code,
-                    format!(
-                        "copy media source {} to {}: {err}",
-                        path.display(),
-                        target.display()
-                    ),
-                    media.export_filename.clone(),
-                )
-            })?;
+            if !paths_are_same_file(path, &target)
+                .map_err(ProductMediaPrepareError::from_prepare_error)?
+            {
+                std::fs::copy(path, &target).map_err(|err| {
+                    let code = if err.kind() == std::io::ErrorKind::NotFound {
+                        "MEDIA.SOURCE_MISSING"
+                    } else {
+                        "MEDIA.SOURCE_READ_FAILED"
+                    };
+                    ProductMediaPrepareError::single(
+                        code,
+                        format!(
+                            "copy media source {} to {}: {err}",
+                            path.display(),
+                            target.display()
+                        ),
+                        media.export_filename.clone(),
+                    )
+                })?;
+            }
             crate::AuthoringMediaSource::Path {
                 path: media.export_filename.clone(),
             }
@@ -837,6 +862,19 @@ fn product_media_item_to_path_backed_authoring_media(
         source,
         declared_mime: media.declared_mime.clone(),
     })
+}
+
+fn paths_are_same_file(left: &Path, right: &Path) -> anyhow::Result<bool> {
+    if !right.exists() {
+        return Ok(false);
+    }
+    let left = left
+        .canonicalize()
+        .with_context(|| format!("canonicalize media source: {}", left.display()))?;
+    let right = right
+        .canonicalize()
+        .with_context(|| format!("canonicalize media staging target: {}", right.display()))?;
+    Ok(left == right)
 }
 
 fn ensure_safe_product_media_input_dir(media_input_dir: &Path) -> anyhow::Result<()> {

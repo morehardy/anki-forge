@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
+use anki_forge::build::ProjectNormalizeOptions;
 use anki_forge::prelude::*;
+use anki_forge::AuthoringMediaSource;
 
 const MP3: &[u8] = b"fake-mp3-bytes-for-package-test";
 const PNG: &[u8] = &[
@@ -134,6 +136,76 @@ fn project_build_keeps_file_media_path_backed_for_large_sources() {
 
     report.ensure_success().expect("successful media build");
     assert_eq!(report.counts.media, 1);
+}
+
+#[test]
+fn project_build_does_not_self_copy_when_base_dir_contains_source_media() {
+    let root = unique_artifacts_dir("project-media-self-copy");
+    let source = root.join("same.bin");
+    let original = b"source bytes that must survive".to_vec();
+    std::fs::write(&source, &original).expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("same.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("same", "")
+                .stable_id("media:same")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("same.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect("build with source dir as base_dir");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(
+        std::fs::read(&source).expect("read source after build"),
+        original,
+        "build must not truncate or mutate a source file when staging target is the same path"
+    );
+}
+
+#[test]
+fn project_lower_inlines_file_media_instead_of_emitting_absolute_paths() {
+    let root = unique_artifacts_dir("project-media-lower-file");
+    let source = root.join("lower.bin");
+    std::fs::write(&source, b"file bytes").expect("write source");
+
+    let mut project = Project::new("Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("lower.bin")
+        .expect("export file media");
+
+    let lowered = project.lower().expect("lower product");
+    assert_eq!(lowered.authoring_document.media.len(), 1);
+    assert!(
+        matches!(
+            &lowered.authoring_document.media[0].source,
+            AuthoringMediaSource::InlineBytes { .. }
+        ),
+        "public lower() output should be self-contained and not contain an absolute file path"
+    );
 }
 
 #[test]
@@ -402,6 +474,61 @@ fn product_build_reports_file_source_missing_after_registration() {
         .diagnostics
         .iter()
         .any(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING"));
+}
+
+#[test]
+fn product_build_reports_each_binding_when_shared_source_is_missing() {
+    let root = unique_artifacts_dir("project-media-shared-source-missing");
+    let source = root.join("shared.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let one = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("one.bin")
+        .expect("export first file media");
+    let two = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("two.bin")
+        .expect("export second file media");
+    std::fs::remove_file(&source).expect("delete source");
+
+    project
+        .add_note(
+            Note::basic("one", "")
+                .stable_id("media:one")
+                .sound("Back", one),
+        )
+        .expect("add first note");
+    project
+        .add_note(
+            Note::basic("two", "")
+                .stable_id("media:two")
+                .sound("Back", two),
+        )
+        .expect("add second note");
+
+    let error = project
+        .write_apkg(root.join("shared-missing.apkg"))
+        .expect_err("missing shared source fails build");
+
+    let missing_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING")
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        missing_sources,
+        vec!["project.media[\"one.bin\"]", "project.media[\"two.bin\"]"]
+    );
 }
 
 fn unique_artifacts_dir(label: &str) -> PathBuf {
