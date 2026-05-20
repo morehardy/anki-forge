@@ -1,6 +1,27 @@
 use anki_forge::prelude::*;
 
 #[test]
+fn product_source_map_is_not_a_public_mutation_surface() {
+    let product_mod =
+        std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/product/mod.rs"))
+            .expect("read product mod");
+    let lowering = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/product/lowering.rs"
+    ))
+    .expect("read product lowering");
+
+    assert!(
+        !product_mod.contains("ProductSourceMap"),
+        "ProductSourceMap should not be re-exported from anki_forge::product"
+    );
+    assert!(
+        !lowering.contains("pub fn insert(&mut self"),
+        "ProductSourceMap::insert should not be public API"
+    );
+}
+
+#[test]
 fn prelude_exports_product_happy_path_types() {
     let mut project = Project::new("Spanish")
         .stable_id("spanish")

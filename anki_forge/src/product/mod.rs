@@ -19,7 +19,7 @@ pub use content::Content;
 pub use diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError};
 pub use helpers::HelperDeclaration;
 pub use identity::IdentityRecipe;
-pub use lowering::{LoweringMapping, LoweringPlan, ProductSourceMap};
+pub use lowering::{LoweringMapping, LoweringPlan};
 pub use media_registry::{MediaRef, MediaRegistry};
 pub use metadata::{
     FieldMetadataDeclaration, TemplateBrowserAppearanceDeclaration, TemplateTargetDeckDeclaration,

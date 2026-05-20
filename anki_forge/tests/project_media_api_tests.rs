@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use anki_forge::build::ProjectNormalizeOptions;
 use anki_forge::prelude::*;
 use anki_forge::AuthoringMediaSource;
+use anki_forge::MediaSource;
 
 const MP3: &[u8] = b"fake-mp3-bytes-for-package-test";
 const PNG: &[u8] = &[
@@ -104,6 +105,33 @@ fn project_build_maps_unused_media_binding_to_product_media_source() {
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some("project.media[\"taberu.mp3\"]")
+    );
+}
+
+#[test]
+fn deck_backed_project_build_maps_unused_media_binding_to_product_media_source() {
+    let mut deck = Deck::builder("Deck Media").stable_id("deck-media").build();
+    deck.media()
+        .add(MediaSource::from_bytes("unused.png", PNG.to_vec()))
+        .expect("register deck media");
+    deck.basic()
+        .note("front", "back")
+        .stable_id("deck:note")
+        .add()
+        .expect("add deck note");
+
+    let report = Project::from(deck)
+        .build(BuildOptions::new().inspect(false))
+        .expect("unused media is a warning under strict policy");
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNUSED_BINDING")
+        .expect("unused binding diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"unused.png\"]")
     );
 }
 

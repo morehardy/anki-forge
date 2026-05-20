@@ -29,7 +29,11 @@ pub struct ProductSourceMap {
 }
 
 impl ProductSourceMap {
-    pub fn insert(&mut self, authoring_path: impl Into<String>, product_source: impl Into<String>) {
+    pub(crate) fn insert(
+        &mut self,
+        authoring_path: impl Into<String>,
+        product_source: impl Into<String>,
+    ) {
         self.by_authoring_path
             .insert(authoring_path.into(), product_source.into());
     }

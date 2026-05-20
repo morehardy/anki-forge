@@ -19,9 +19,10 @@ use crate::build::{
     BuildReport, InspectSummary, ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
+use crate::product::lowering::ProductSourceMap;
 use crate::product::{
     LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
-    ProductLoweringError, ProductSourceMap, STOCK_BASIC_ID, STOCK_CLOZE_ID,
+    ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
 };
 
 #[derive(Debug, Clone)]
@@ -703,6 +704,13 @@ impl Project {
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
+            for filename in deck.registered_media().keys() {
+                crate::product::lowering::record_media_source_path(
+                    &mut lowering.source_map,
+                    &format!("media:{filename}"),
+                    filename,
+                );
+            }
         } else {
             let media = product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
                 .map_err(|error| ProjectNormalizeError {
