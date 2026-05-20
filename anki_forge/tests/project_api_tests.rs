@@ -326,6 +326,31 @@ fn deck_backed_project_maps_missing_media_reference_to_deck_note_index_source() 
 }
 
 #[test]
+fn deck_backed_project_lower_maps_note_fields_to_deck_note_index_source() {
+    let mut deck = Deck::builder("Deck Lower").stable_id("deck-lower").build();
+    deck.basic()
+        .note("front", "back")
+        .stable_id("deck:stable")
+        .add()
+        .expect("add deck note");
+
+    let plan = Project::from(deck)
+        .lower()
+        .expect("lower deck-backed project");
+
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"deck:stable\"].fields[\"Back\"]"),
+        Some("project.notes[0].fields[\"Back\"]")
+    );
+    assert_ne!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"deck:stable\"].fields[\"Back\"]"),
+        Some("project.notes[\"deck:stable\"].fields[\"Back\"]")
+    );
+}
+
+#[test]
 fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))

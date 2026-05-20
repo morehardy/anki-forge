@@ -231,9 +231,11 @@ impl Project {
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;
-            return product
+            let mut plan = product
                 .lower()
-                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err));
+                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err))?;
+            self.apply_note_source_paths(&mut plan);
+            return Ok(plan);
         }
 
         let mut plan = self
