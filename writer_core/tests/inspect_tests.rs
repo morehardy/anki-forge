@@ -292,7 +292,7 @@ fn inspect_staging_escapes_media_ref_selector_values() {
         "artifacts/phase3/inspect-escaped-media-ref-selector",
     );
     let mut normalized = sample_basic_normalized_ir_with_media(&target.media_store_dir);
-    let raw_ref = r#"sample.jpg?caption='front'&alt="back"[v1]#frag\end"#;
+    let raw_ref = "sample.jpg?caption='front'&alt=\"back\"[v1]#frag\\end\nunit\u{001f}";
     normalized.media_references = vec![MediaReference {
         owner_kind: "note".into(),
         owner_id: "note-1".into(),
@@ -328,7 +328,11 @@ fn inspect_staging_escapes_media_ref_selector_values() {
     assert_eq!(media_ref["reference"], raw_ref);
     assert_eq!(
         media_ref["selector"],
-        r#"media-ref[owner_kind='note'][owner_id='note-1'][location_kind='field'][location_name='Back'][ref='sample.jpg?caption=\'front\'&alt=\"back\"\[v1\]#frag\\end']"#
+        r#"media-ref[owner_kind='note'][owner_id='note-1'][location_kind='field'][location_name='Back'][ref='sample.jpg?caption=\'front\'&alt=\"back\"\[v1\]#frag\\end\nunit\u{1f}']"#
+    );
+    assert_eq!(
+        media_ref["evidence_refs"][0],
+        r#"media-ref:note:note-1:field:Back:sample.jpg?caption='front'&alt="back"[v1]#frag\\end\nunit\u{1f}"#
     );
 }
 

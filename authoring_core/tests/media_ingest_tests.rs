@@ -959,7 +959,7 @@ fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_l
             browser_font_name: None,
             browser_font_size: None,
         },
-        ".bad {\n  background: url(\"missing-style.png?v=1\");\n}\n.more { background: url(bad%2Fstyle.png); }\n",
+        ".bad {\n  background: url( missing-style.png?v=1 );\n}\n.more { background: url(bad%2Fstyle.png); }\n",
         vec![],
     ));
 
@@ -986,7 +986,7 @@ fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_l
     assert!(result.diagnostics.items.iter().any(|item| {
         item.code == "MEDIA.MISSING_REFERENCE"
             && item.path.as_deref() == Some("authoring.note_types[\"custom-main\"].css")
-            && item.summary.contains("url(\"missing-style.png?v=1\")")
+            && item.summary.contains("url( missing-style.png?v=1 )")
             && item.summary.contains("line 2")
     }));
     assert!(result.diagnostics.items.iter().any(|item| {

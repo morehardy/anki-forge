@@ -680,11 +680,16 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
     }
 
     let raw_ref = &input[raw_start..cursor];
+    let trimmed_ref = raw_ref.trim();
     if raw_ref.contains('(') {
         return None;
     }
 
-    Some((raw_ref.to_string(), cursor + 1))
+    if trimmed_ref.is_empty() {
+        Some((raw_ref.to_string(), cursor + 1))
+    } else {
+        Some((trimmed_ref.to_string(), cursor + 1))
+    }
 }
 
 fn css_url_recovery_cursor(input: &str, value_start: usize) -> usize {

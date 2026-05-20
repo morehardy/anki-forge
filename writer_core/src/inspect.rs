@@ -504,11 +504,11 @@ fn build_observations(
             "media_id": media_id.as_str(),
             "evidence_refs": [format!(
                 "media-ref:{}:{}:{}:{}:{}",
-                media_ref.owner_kind,
-                media_ref.owner_id,
-                media_ref.location_kind,
-                media_ref.location_name,
-                media_ref.raw_ref
+                evidence_component(&media_ref.owner_kind),
+                evidence_component(&media_ref.owner_id),
+                evidence_component(&media_ref.location_kind),
+                evidence_component(&media_ref.location_name),
+                evidence_component(&media_ref.raw_ref)
             )],
         });
         if let Some(resolved_media) = resolved_media {
@@ -593,10 +593,37 @@ fn selector_value(value: &str) -> String {
             '"' => escaped.push_str("\\\""),
             '[' => escaped.push_str("\\["),
             ']' => escaped.push_str("\\]"),
+            '\n' => escaped.push_str("\\n"),
+            '\r' => escaped.push_str("\\r"),
+            '\t' => escaped.push_str("\\t"),
+            ch if ch.is_control() => {
+                escaped.push_str("\\u{");
+                escaped.push_str(&format!("{:x}", ch as u32));
+                escaped.push('}');
+            }
             _ => escaped.push(ch),
         }
     }
     escaped.push('\'');
+    escaped
+}
+
+fn evidence_component(value: &str) -> String {
+    let mut escaped = String::with_capacity(value.len());
+    for ch in value.chars() {
+        match ch {
+            '\\' => escaped.push_str("\\\\"),
+            '\n' => escaped.push_str("\\n"),
+            '\r' => escaped.push_str("\\r"),
+            '\t' => escaped.push_str("\\t"),
+            ch if ch.is_control() => {
+                escaped.push_str("\\u{");
+                escaped.push_str(&format!("{:x}", ch as u32));
+                escaped.push('}');
+            }
+            _ => escaped.push(ch),
+        }
+    }
     escaped
 }
 

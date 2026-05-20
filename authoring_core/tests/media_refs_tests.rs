@@ -234,7 +234,7 @@ fn html_and_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
 }
 
 #[test]
-fn unquoted_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
+fn unquoted_css_url_wrapper_whitespace_is_trimmed_but_empty_refs_skip() {
     let refs = scan(
         r#"
         .leading { background: url( hero.png); }
@@ -247,27 +247,9 @@ fn unquoted_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
     assert_eq!(
         ref_summaries(&refs),
         vec![
-            (
-                "css_url",
-                " hero.png",
-                None,
-                None,
-                Some("helper-unsafe-character"),
-            ),
-            (
-                "css_url",
-                "hero.png ",
-                None,
-                None,
-                Some("helper-unsafe-character"),
-            ),
-            (
-                "css_url",
-                " hero.png ",
-                None,
-                None,
-                Some("helper-unsafe-character"),
-            ),
+            ("css_url", "hero.png", Some("hero.png"), None, None),
+            ("css_url", "hero.png", Some("hero.png"), None, None),
+            ("css_url", "hero.png", Some("hero.png"), None, None),
             ("css_url", "   ", None, Some("empty-ref"), None),
         ]
     );
