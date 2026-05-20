@@ -301,6 +301,31 @@ fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_dupl
 }
 
 #[test]
+fn deck_backed_project_maps_missing_media_reference_to_deck_note_index_source() {
+    let mut deck = Deck::builder("Deck Media").stable_id("deck-media").build();
+    deck.basic()
+        .note("front", "<img src=\"missing.png\">")
+        .stable_id("deck:stable")
+        .add()
+        .expect("add deck note");
+
+    let error = Project::from(deck)
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.notes[0].fields[\"Back\"]")
+    );
+}
+
+#[test]
 fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))

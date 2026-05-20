@@ -278,6 +278,98 @@ fn product_lowering_records_note_template_css_and_media_source_paths() {
 }
 
 #[test]
+fn duplicate_notetype_ids_use_index_source_paths_for_template_browser_and_css_surfaces() {
+    let plan = ProductDocument::new("duplicate-notetype-source-map")
+        .with_custom_notetype(CustomNoteType {
+            id: "jp-vocab".into(),
+            name: Some("Japanese Vocabulary".into()),
+            fields: vec![CustomField {
+                name: "Expression".into(),
+                key: Some("expression".into()),
+            }],
+            templates: vec![CustomTemplate {
+                name: "Recognition".into(),
+                key: Some("recognition".into()),
+                question_format: "{{Expression}}".into(),
+                answer_format: "{{FrontSide}}".into(),
+                generation_rule: None,
+            }],
+            css: Some(".card { color: red; }".into()),
+        })
+        .with_custom_notetype(CustomNoteType {
+            id: "jp-vocab".into(),
+            name: Some("Japanese Vocabulary Copy".into()),
+            fields: vec![CustomField {
+                name: "Expression".into(),
+                key: Some("expression".into()),
+            }],
+            templates: vec![CustomTemplate {
+                name: "Recall".into(),
+                key: Some("recall".into()),
+                question_format: "{{Expression}}".into(),
+                answer_format: "{{FrontSide}}".into(),
+                generation_rule: None,
+            }],
+            css: Some(".card { color: blue; }".into()),
+        })
+        .with_browser_appearance(
+            "jp-vocab",
+            anki_forge::product::metadata::TemplateBrowserAppearanceDeclaration {
+                template_name: "Recognition".into(),
+                question_format: Some("{{Expression}}".into()),
+                answer_format: Some("{{Expression}}".into()),
+                font_name: None,
+                font_size: None,
+            },
+        )
+        .with_browser_appearance(
+            "jp-vocab",
+            anki_forge::product::metadata::TemplateBrowserAppearanceDeclaration {
+                template_name: "Recall".into(),
+                question_format: Some("{{Expression}}".into()),
+                answer_format: Some("{{Expression}}".into()),
+                font_name: None,
+                font_size: None,
+            },
+        )
+        .lower()
+        .expect("lower duplicate notetype ids enough to inspect source map");
+
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[0].templates[\"Recognition\"].front"),
+        Some("project.note_types[0].templates[\"Recognition\"].front")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[0].templates[\"Recognition\"].browser_back"
+        ),
+        Some("project.note_types[0].templates[\"Recognition\"].browser_back")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[0].css"),
+        Some("project.note_types[0].css")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].templates[\"Recall\"].back"),
+        Some("project.note_types[1].templates[\"Recall\"].back")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].css"),
+        Some("project.note_types[1].css")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"jp-vocab\"].templates[\"Recognition\"].front"
+        ),
+        None
+    );
+}
+
+#[test]
 fn product_default_deck_does_not_overwrite_explicit_note_deck() {
     let plan = ProductDocument::new("multi-deck-doc")
         .with_default_deck("Package::Default")

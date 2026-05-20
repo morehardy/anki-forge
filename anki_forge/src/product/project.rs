@@ -626,6 +626,21 @@ impl Project {
 
     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
         if self.deck_source.is_some() {
+            for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
+                let note_source = format!("project.notes[{index}]");
+                for field_name in authoring_note.fields.keys() {
+                    plan.source_map.insert(
+                        crate::product::lowering::authoring_note_field_path(
+                            &authoring_note.id,
+                            field_name,
+                        ),
+                        crate::product::lowering::product_note_field_source(
+                            &note_source,
+                            field_name,
+                        ),
+                    );
+                }
+            }
             return;
         }
         let stable_id_counts = self.note_stable_id_counts();

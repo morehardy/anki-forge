@@ -65,8 +65,14 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     let mut source_map = ProductSourceMap::default();
     let mut product_diagnostics: Vec<ProductDiagnostic> = Vec::new();
     let mut lowering_diagnostics: Vec<LoweringDiagnostic> = Vec::new();
-
+    let mut notetype_id_counts = BTreeMap::<String, usize>::new();
     for notetype in document.note_types() {
+        *notetype_id_counts
+            .entry(product_notetype_id(notetype).to_string())
+            .or_default() += 1;
+    }
+
+    for (notetype_index, notetype) in document.note_types().iter().enumerate() {
         match notetype {
             ProductNoteType::Basic(basic) => {
                 let helpers = document.helpers_for(&basic.id);
@@ -80,7 +86,16 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     &helpers,
                 ) {
                     Ok(notetype) => {
-                        record_notetype_source_paths(&mut source_map, &notetype, &basic.id);
+                        record_notetype_source_paths(
+                            &mut source_map,
+                            &notetype,
+                            notetype_index,
+                            notetype_id_counts
+                                .get(&basic.id)
+                                .copied()
+                                .unwrap_or_default()
+                                > 1,
+                        );
                         notetypes.push(notetype);
                     }
                     Err(diagnostic) => {
@@ -107,7 +122,16 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     &helpers,
                 ) {
                     Ok(notetype) => {
-                        record_notetype_source_paths(&mut source_map, &notetype, &cloze.id);
+                        record_notetype_source_paths(
+                            &mut source_map,
+                            &notetype,
+                            notetype_index,
+                            notetype_id_counts
+                                .get(&cloze.id)
+                                .copied()
+                                .unwrap_or_default()
+                                > 1,
+                        );
                         notetypes.push(notetype);
                     }
                     Err(diagnostic) => {
@@ -134,7 +158,12 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     &helpers,
                 ) {
                     Ok(notetype) => {
-                        record_notetype_source_paths(&mut source_map, &notetype, &io.id);
+                        record_notetype_source_paths(
+                            &mut source_map,
+                            &notetype,
+                            notetype_index,
+                            notetype_id_counts.get(&io.id).copied().unwrap_or_default() > 1,
+                        );
                         notetypes.push(notetype);
                     }
                     Err(diagnostic) => {
@@ -252,7 +281,16 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                         .map(authoring_field_metadata)
                         .collect(),
                 };
-                record_notetype_source_paths(&mut source_map, &notetype, &custom.id);
+                record_notetype_source_paths(
+                    &mut source_map,
+                    &notetype,
+                    notetype_index,
+                    notetype_id_counts
+                        .get(&custom.id)
+                        .copied()
+                        .unwrap_or_default()
+                        > 1,
+                );
                 notetypes.push(notetype);
                 mappings.push(LoweringMapping {
                     kind: "notetype",
@@ -487,6 +525,15 @@ fn duplicate_custom_key_diagnostics(custom: &CustomNoteType) -> Vec<ProductDiagn
     diagnostics
 }
 
+fn product_notetype_id(notetype: &ProductNoteType) -> &str {
+    match notetype {
+        ProductNoteType::Basic(basic) => &basic.id,
+        ProductNoteType::Cloze(cloze) => &cloze.id,
+        ProductNoteType::ImageOcclusion(io) => &io.id,
+        ProductNoteType::Custom(custom) => &custom.id,
+    }
+}
+
 pub(crate) fn authoring_note_field_path(note_id: &str, field_name: &str) -> String {
     format!("authoring.notes[{note_id:?}].fields[{field_name:?}]")
 }
@@ -536,15 +583,23 @@ fn record_note_field_source_paths<'a>(
 fn record_notetype_source_paths(
     source_map: &mut ProductSourceMap,
     notetype: &AuthoringNotetype,
-    product_notetype_id: &str,
+    product_notetype_index: usize,
+    duplicate_product_notetype_id: bool,
 ) {
-    let product_notetype_source = format!("project.note_types[{product_notetype_id:?}]");
+    let authoring_notetype_source = if duplicate_product_notetype_id {
+        format!("authoring.note_types[{product_notetype_index}]")
+    } else {
+        format!("authoring.note_types[{:?}]", notetype.id)
+    };
+    let product_notetype_source = if duplicate_product_notetype_id {
+        format!("project.note_types[{product_notetype_index}]")
+    } else {
+        format!("project.note_types[{:?}]", notetype.id)
+    };
     if let Some(templates) = notetype.templates.as_ref() {
         for template in templates {
-            let authoring_template = format!(
-                "authoring.note_types[{:?}].templates[{:?}]",
-                notetype.id, template.name
-            );
+            let authoring_template =
+                format!("{authoring_notetype_source}.templates[{:?}]", template.name);
             let product_template =
                 format!("{product_notetype_source}.templates[{:?}]", template.name);
             source_map.insert(
@@ -572,7 +627,7 @@ fn record_notetype_source_paths(
 
     if notetype.css.is_some() {
         source_map.insert(
-            format!("authoring.note_types[{:?}].css", notetype.id),
+            format!("{authoring_notetype_source}.css"),
             format!("{product_notetype_source}.css"),
         );
     }
