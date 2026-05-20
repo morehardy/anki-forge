@@ -1508,6 +1508,85 @@ fn build_rejects_missing_media_reference_in_writer_ready_input() {
 }
 
 #[test]
+fn build_rejects_unsafe_skipped_media_reference_in_writer_ready_input() {
+    let root = unique_artifact_root("unsafe-skipped-media-ref-writer-ready");
+    let target = BuildArtifactTarget::new(
+        root,
+        "artifacts/phase3/unsafe-skipped-media-ref-writer-ready",
+    );
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.media_references = vec![
+        skipped_media_reference(".", "decoded-dot-path"),
+        skipped_media_reference("../secret.png", "decoded-path-separator"),
+        skipped_media_reference("bad name.png", "helper-unsafe-character"),
+        skipped_media_reference("%ZZ.png", "invalid-percent-encoding"),
+    ];
+    let mut build_context = sample_build_context(false);
+    build_context.media_resolution_mode = "pre-resolved".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &build_context,
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "invalid");
+    let diag = result
+        .diagnostics
+        .items
+        .iter()
+        .find(|item| item.code == "MEDIA.UNSAFE_REFERENCE")
+        .expect("unsafe media reference diagnostic");
+    assert_eq!(diag.domain.as_deref(), Some("media"));
+    assert_eq!(diag.path.as_deref(), Some("media_references[0]"));
+    assert_eq!(
+        result
+            .diagnostics
+            .items
+            .iter()
+            .filter(|item| item.code == "MEDIA.UNSAFE_REFERENCE")
+            .count(),
+        4
+    );
+}
+
+#[test]
+fn build_accepts_safe_skipped_media_references_in_writer_ready_input() {
+    let root = unique_artifact_root("safe-skipped-media-ref-writer-ready");
+    let target =
+        BuildArtifactTarget::new(root, "artifacts/phase3/safe-skipped-media-ref-writer-ready");
+
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.media_references = vec![
+        skipped_media_reference("https://example.test/a.png", "external-url"),
+        skipped_media_reference("data:image/png;base64,AAAA", "data-uri"),
+        skipped_media_reference("//cdn.example.test/a.png", "protocol-relative-url"),
+        skipped_media_reference("{{Asset}}", "dynamic-template-expression"),
+        skipped_media_reference("?cache=1", "empty-ref"),
+    ];
+    let mut build_context = sample_build_context(false);
+    build_context.media_resolution_mode = "pre-resolved".into();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &build_context,
+        &target,
+    )
+    .unwrap();
+
+    assert_eq!(result.result_status, "success");
+    assert!(
+        result.diagnostics.items.is_empty(),
+        "safe skipped references should not emit diagnostics: {:?}",
+        result.diagnostics.items
+    );
+}
+
+#[test]
 fn build_rejects_unresolved_media_refs_when_behavior_is_fail() {
     let root = unique_artifact_root("media-fail");
     let target = BuildArtifactTarget::new(root, "artifacts/phase3/media-fail");
@@ -1726,6 +1805,20 @@ fn sample_basic_normalized_ir_with_cas_media(
     }];
     normalized.media_references = vec![];
     normalized
+}
+
+fn skipped_media_reference(raw_ref: &str, skip_reason: &str) -> MediaReference {
+    MediaReference {
+        owner_kind: "note".into(),
+        owner_id: "note-1".into(),
+        location_kind: "field".into(),
+        location_name: "Back".into(),
+        raw_ref: raw_ref.into(),
+        ref_kind: "html_src".into(),
+        resolution: MediaReferenceResolution::Skipped {
+            skip_reason: skip_reason.into(),
+        },
+    }
 }
 
 fn assert_media_error_path(result: &PackageBuildResult, code: &str, expected_path: &Path) {

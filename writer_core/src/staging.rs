@@ -381,10 +381,31 @@ fn validate_media_invariants(normalized_ir: &NormalizedIr) -> Vec<BuildDiagnosti
                 ),
                 format!("media_references[{index}]"),
             )),
-            MediaReferenceResolution::Skipped { .. } => {}
+            MediaReferenceResolution::Skipped { skip_reason } => {
+                if is_unsafe_media_reference_skip_reason(skip_reason) {
+                    diagnostics.push(media_error(
+                        "MEDIA.UNSAFE_REFERENCE",
+                        format!(
+                            "writer-ready input contains unsafe skipped media reference {}: {}",
+                            media_ref.raw_ref, skip_reason
+                        ),
+                        format!("media_references[{index}]"),
+                    ));
+                }
+            }
         }
     }
     diagnostics
+}
+
+fn is_unsafe_media_reference_skip_reason(skip_reason: &str) -> bool {
+    matches!(
+        skip_reason,
+        "decoded-dot-path"
+            | "decoded-path-separator"
+            | "helper-unsafe-character"
+            | "invalid-percent-encoding"
+    )
 }
 
 fn is_valid_media_object_id(object_id: &str) -> bool {
