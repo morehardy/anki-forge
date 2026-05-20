@@ -1481,13 +1481,50 @@ fn normalization_diagnostic_to_product_diagnostic(
             .source_for_diagnostic_path(path)
             .map(SourcePath::new)
     });
+    let code = item.code;
+    let message = product_diagnostic_message(&code, item.summary);
+    let help = product_diagnostic_help(&code, source.as_ref().map(SourcePath::as_str));
     Diagnostic {
-        code: DiagnosticCode::new(item.code),
+        code: DiagnosticCode::new(code),
         severity: severity_from_level(&item.level),
-        message: item.summary,
+        message,
         source,
-        help: None,
+        help,
     }
+}
+
+fn product_diagnostic_message(code: &str, message: String) -> String {
+    if code == "MEDIA.DECLARED_MIME_MISMATCH" {
+        message.replace("sniffed MIME", "observed MIME")
+    } else {
+        message
+    }
+}
+
+fn product_diagnostic_help(code: &str, source: Option<&str>) -> Option<String> {
+    let help = match code {
+        "MEDIA.MISSING_REFERENCE" => {
+            if source.is_some_and(|source| source.ends_with(".css")) {
+                "This Product CSS references packaged media that is not registered. Register it with project.media_mut().add_file(...).export_as(...) or update the CSS url(...) local filename."
+            } else {
+                "This Product field or template references packaged media that is not registered. Register it with project.media_mut().add_file(...).export_as(...) or update the local filename in the Product content."
+            }
+        }
+        "MEDIA.UNSAFE_REFERENCE" => {
+            "This Product content uses a media reference that cannot be packaged safely. Use a bare local filename for packaged media, without paths, URL escapes, or unsafe characters."
+        }
+        "MEDIA.UNUSED_BINDING" => {
+            "This Product media registration is not referenced by packaged content. You can remove the registration or reference it from a note, template, or CSS."
+        }
+        "MEDIA.DECLARED_MIME_MISMATCH" => {
+            "This Product media registration declares a MIME type that does not match the observed source bytes. Change the export filename/declared MIME or replace the source file with matching content."
+        }
+        "MEDIA.DUPLICATE_FILENAME_CONFLICT" => {
+            "This Product media export filename is already bound to different content. Choose a unique export_as(...) name for one of the registrations."
+        }
+        _ => return None,
+    };
+    Some(help.into())
 }
 
 fn map_product_lowering_error(error: &ProductLoweringError) -> Vec<Diagnostic> {

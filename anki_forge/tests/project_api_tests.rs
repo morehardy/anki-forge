@@ -275,9 +275,32 @@ fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
         .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
         .expect("missing reference diagnostic");
 
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.MISSING_REFERENCE");
+    assert_eq!(diagnostic.severity, Severity::Error);
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some("project.notes[\"media:missing\"].fields[\"Back\"]")
+    );
+    assert!(diagnostic.message.contains("missing.png"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| help
+        .contains("project.media_mut().add_file")
+        && help.contains("local filename")));
+
+    let media_index = error
+        .report
+        .diagnostics
+        .iter()
+        .position(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("media diagnostic index");
+    let normalize_index = error
+        .report
+        .diagnostics
+        .iter()
+        .position(|diagnostic| diagnostic.code.as_str() == "PROJECT.NORMALIZE_FAILED")
+        .expect("normalize failed diagnostic index");
+    assert!(
+        media_index < normalize_index,
+        "specific media diagnostics should precede generic normalization failure"
     );
 }
 
@@ -407,6 +430,42 @@ fn project_build_missing_and_unsafe_refs_fail_in_normalization_not_writer() {
 }
 
 #[test]
+fn project_build_maps_unsafe_media_reference_to_product_note_field_source_and_help() {
+    let mut project = Project::new("Unsafe Media")
+        .stable_id("unsafe-media-source")
+        .default_deck("Unsafe Media");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:unsafe-source")
+                .text("Front", "front")
+                .html("Back", r#"<img src="bad%2Fname.png">"#),
+        )
+        .expect("add unsafe note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("unsafe reference fails normalization");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNSAFE_REFERENCE")
+        .expect("unsafe reference diagnostic");
+
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.UNSAFE_REFERENCE");
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.notes[\"media:unsafe-source\"].fields[\"Back\"]")
+    );
+    assert!(diagnostic.message.contains("bad%2Fname.png"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("bare local filename") && help.contains("packaged media")
+    }));
+}
+
+#[test]
 fn project_build_maps_custom_note_field_diagnostic_to_product_field_key() {
     let mut project = Project::new("Custom Media")
         .stable_id("custom-media")
@@ -532,6 +591,11 @@ fn project_build_maps_missing_css_media_reference_to_product_css_source() {
     );
     assert!(diagnostic.message.contains(r#"url("missing-css.png")"#));
     assert!(diagnostic.message.contains("line 1"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("project.media_mut().add_file")
+            && help.contains("CSS")
+            && help.contains("local filename")
+    }));
 }
 
 #[test]

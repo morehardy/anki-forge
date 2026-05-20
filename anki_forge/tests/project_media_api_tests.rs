@@ -102,10 +102,19 @@ fn project_build_maps_unused_media_binding_to_product_media_source() {
         .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNUSED_BINDING")
         .expect("unused binding diagnostic");
 
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.UNUSED_BINDING");
+    assert_eq!(diagnostic.severity, Severity::Warning);
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some("project.media[\"taberu.mp3\"]")
     );
+    assert!(diagnostic.message.contains("taberu.mp3"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("remove the registration")
+            && help.contains("note")
+            && help.contains("template")
+            && help.contains("CSS")
+    }));
 }
 
 #[test]
@@ -162,6 +171,51 @@ fn project_build_uses_export_name_for_declared_mime() {
 
     report.ensure_success().expect("successful media build");
     assert_eq!(report.counts.media, 1);
+}
+
+#[test]
+fn project_build_maps_declared_mime_mismatch_to_product_media_source_and_help() {
+    let mut project = Project::new("Media")
+        .stable_id("media-mime-mismatch")
+        .default_deck("Media");
+    let image_exported_as_audio = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:mime-mismatch")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("declared MIME mismatch fails strict build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.DECLARED_MIME_MISMATCH")
+        .expect("MIME mismatch diagnostic");
+
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.DECLARED_MIME_MISMATCH");
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"chart.mp3\"]")
+    );
+    assert!(diagnostic.message.contains("declared MIME audio/mpeg"));
+    assert!(diagnostic.message.contains("observed MIME image/png"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("export filename")
+            && help.contains("declared MIME")
+            && help.contains("source file")
+    }));
 }
 
 #[test]
