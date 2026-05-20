@@ -665,6 +665,53 @@ fn project_build_maps_missing_css_media_reference_to_product_css_source() {
         help.contains("project.media_mut().add_file")
             && help.contains("CSS")
             && help.contains("local filename")
+            && help.contains("conservative")
+            && help.contains("rule/import")
+    }));
+}
+
+#[test]
+fn project_build_explains_missing_css_import_media_reference() {
+    let mut project = Project::new("CSS Import Media")
+        .stable_id("css-import-media")
+        .default_deck("CSS Import Media");
+    project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expression"))
+                .template(
+                    Template::new("Recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .css(r#"@import url("theme.css");"#),
+        )
+        .expect("add custom notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:css-import")
+                .text("expression", "taberu"),
+        )
+        .expect("add custom note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing CSS import media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[\"jp-vocab\"].css")
+    );
+    assert!(diagnostic.message.contains(r#"url("theme.css")"#));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("Register") && help.contains("external") && help.contains("rule/import")
     }));
 }
 

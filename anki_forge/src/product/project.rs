@@ -1516,7 +1516,7 @@ fn product_diagnostic_help(code: &str, source: Option<&str>) -> Option<String> {
     let help = match code {
         "MEDIA.MISSING_REFERENCE" => {
             if source.is_some_and(|source| source.ends_with(".css")) {
-                "This Product CSS references packaged media that is not registered. Register it with project.media_mut().add_file(...).export_as(...) or update the CSS url(...) local filename."
+                "Product CSS scanning is conservative: a local filename in url(...) is treated as packaged media. Register it with project.media_mut().add_file(...).export_as(...), change the URL to an external URL, or remove the CSS rule/import if unused."
             } else {
                 "This Product field or template references packaged media that is not registered. Register it with project.media_mut().add_file(...).export_as(...) or update the local filename in the Product content."
             }
