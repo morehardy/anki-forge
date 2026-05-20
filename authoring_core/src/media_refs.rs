@@ -76,9 +76,15 @@ fn strip_html_comments(input: &str) -> String {
         let comment_body_start = absolute_start + "<!--".len();
         match input[comment_body_start..].find("-->") {
             Some(comment_end) => {
+                output.extend(
+                    input[comment_body_start..comment_body_start + comment_end]
+                        .chars()
+                        .filter(|ch| *ch == '\n'),
+                );
                 cursor = comment_body_start + comment_end + "-->".len();
             }
             None => {
+                output.extend(input[comment_body_start..].chars().filter(|ch| *ch == '\n'));
                 cursor = input.len();
                 break;
             }
@@ -189,7 +195,7 @@ fn extract_css_url_refs(
 
         let value_start = url_start + "url(".len();
         let Some((raw_ref, next_cursor)) = parse_css_url_value(&input, value_start) else {
-            cursor = css_url_recovery_cursor(&input, url_start, value_start);
+            cursor = css_url_recovery_cursor(&input, value_start);
             continue;
         };
         let raw_token = input[url_start..next_cursor].to_string();
@@ -527,21 +533,41 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
     Some((raw_ref.to_string(), cursor + 1))
 }
 
-fn css_url_recovery_cursor(input: &str, url_start: usize, value_start: usize) -> usize {
+fn css_url_recovery_cursor(input: &str, value_start: usize) -> usize {
     let value_start = skip_ascii_whitespace(input, value_start);
-    if input.as_bytes().get(value_start).is_some_and(|byte| {
-        *byte == b'"'
-            || *byte == b'\''
-            || !starts_with_ascii_case_insensitive(&input[value_start..], "url(")
-    }) {
-        if let Some(next_url_start) = find_css_url_function_plain(input, url_start + 1) {
-            return next_url_start;
-        }
+    if input
+        .as_bytes()
+        .get(value_start)
+        .is_some_and(|byte| *byte == b'"' || *byte == b'\'')
+    {
+        return css_quoted_url_recovery_cursor(input, value_start);
     }
 
     input[value_start..]
         .find(')')
         .map_or(value_start, |relative_end| value_start + relative_end + 1)
+}
+
+fn css_quoted_url_recovery_cursor(input: &str, quote_start: usize) -> usize {
+    let bytes = input.as_bytes();
+    let quote = bytes[quote_start];
+    let mut cursor = quote_start + 1;
+
+    while cursor < bytes.len() {
+        if bytes[cursor] == b'\\' {
+            cursor = cursor.saturating_add(2);
+            continue;
+        }
+        if bytes[cursor] == quote {
+            return cursor + 1;
+        }
+        if bytes[cursor] == b';' || bytes[cursor] == b'}' {
+            return cursor;
+        }
+        cursor += 1;
+    }
+
+    input.len()
 }
 
 fn line_number_at(input: &str, byte_index: usize) -> usize {
@@ -550,24 +576,6 @@ fn line_number_at(input: &str, byte_index: usize) -> usize {
         .filter(|byte| *byte == b'\n')
         .count()
         + 1
-}
-
-fn find_css_url_function_plain(input: &str, start: usize) -> Option<usize> {
-    let needle = b"url(";
-    let bytes = input.as_bytes();
-    let mut cursor = start;
-
-    while cursor < bytes.len() {
-        if bytes
-            .get(cursor..cursor + needle.len())
-            .is_some_and(|candidate| candidate.eq_ignore_ascii_case(needle))
-        {
-            return Some(cursor);
-        }
-        cursor += 1;
-    }
-
-    None
 }
 
 struct HtmlStartTag<'a> {
@@ -656,6 +664,11 @@ fn strip_html_raw_text_elements(input: &str, tag_name: &str) -> String {
         if tag.name.eq_ignore_ascii_case(tag_name) && !is_self_closing_start_tag(tag.source) {
             output.push_str(&input[copy_cursor..tag.start]);
             copy_cursor = find_html_raw_text_end(input, tag.end + 1, tag.name);
+            output.extend(
+                input[tag.start..copy_cursor]
+                    .chars()
+                    .filter(|ch| *ch == '\n'),
+            );
             scan_cursor = copy_cursor;
         } else {
             scan_cursor = tag.end + 1;

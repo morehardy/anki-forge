@@ -99,6 +99,33 @@ fn css_url_malformed_candidate_does_not_consume_later_valid_url_token() {
 }
 
 #[test]
+fn css_url_malformed_quoted_candidate_does_not_rescan_inner_url_token() {
+    let refs = scan(
+        r#".bad { background: url("broken url(fake.png)" ; }
+.ok { background: url(ok.png); }"#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
+fn css_url_line_hints_preserve_stripped_html_comment_and_script_newlines() {
+    let refs = scan(
+        "<!--\ncomment\n-->\n<script>\nurl(fake.png)\n</script>\n<style>\n.card { background: url(bg.png); }\n</style>",
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("bg.png", Some(8))]
+    );
+}
+
+#[test]
 fn helper_unsafe_local_characters_are_unsafe() {
     let refs = scan(
         r#"

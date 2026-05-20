@@ -998,6 +998,49 @@ fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_l
 }
 
 #[test]
+fn ingest_rejects_helper_unsafe_desired_filenames() {
+    let root = unique_test_root("ingest-helper-unsafe-filenames");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets").join("source.txt"), b"media").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:space".into(),
+            desired_filename: "space name.png".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/source.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:ampersand".into(),
+            desired_filename: "bad&name.png".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/source.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).expect_err("unsafe filenames");
+
+    assert_eq!(err.diagnostics.len(), 2);
+    assert!(err
+        .diagnostics
+        .iter()
+        .all(|item| item.code == "MEDIA.UNSAFE_FILENAME"));
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.path.as_deref() == Some("space name.png")));
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.path.as_deref() == Some("bad&name.png")));
+}
+
+#[test]
 fn normalize_rejects_media_without_explicit_options() {
     let mut request =
         NormalizationRequest::new(authoring_doc_with_media("<img src=\"hello.txt\">"));
