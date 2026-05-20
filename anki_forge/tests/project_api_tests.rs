@@ -255,6 +255,46 @@ fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
 }
 
 #[test]
+fn project_build_maps_custom_note_field_diagnostic_to_product_field_key() {
+    let mut project = Project::new("Custom Media")
+        .stable_id("custom-media")
+        .default_deck("Custom Media");
+    project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expression_key"))
+                .template(
+                    Template::new("Recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect("add custom notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .html("expression_key", "<img src=\"missing.png\">"),
+        )
+        .expect("add custom note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.notes[\"jp:taberu\"].fields[\"expression_key\"]")
+    );
+}
+
+#[test]
 fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
     let mut project = Project::new("Media")
         .stable_id("media")

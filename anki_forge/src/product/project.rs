@@ -653,6 +653,7 @@ impl Project {
             let Some(product_note) = self.notes.get(index) else {
                 continue;
             };
+            let field_source_names = note_field_source_names_for_authoring(self, product_note);
             let note_source = match product_note.stable_id_ref() {
                 Some(stable_id)
                     if !stable_id.trim().is_empty()
@@ -663,12 +664,19 @@ impl Project {
                 _ => format!("project.notes[{index}]"),
             };
             for field_name in authoring_note.fields.keys() {
+                let product_field_name = field_source_names
+                    .get(field_name)
+                    .map(String::as_str)
+                    .unwrap_or(field_name);
                 plan.source_map.insert(
                     crate::product::lowering::authoring_note_field_path(
                         &authoring_note.id,
                         field_name,
                     ),
-                    crate::product::lowering::product_note_field_source(&note_source, field_name),
+                    crate::product::lowering::product_note_field_source(
+                        &note_source,
+                        product_field_name,
+                    ),
                 );
             }
         }
@@ -969,6 +977,59 @@ fn custom_note_fields_for_authoring(
         fields.insert(field_name, value);
     }
     fields
+}
+
+fn note_field_source_names_for_authoring(
+    project: &Project,
+    note: &crate::product::Note,
+) -> BTreeMap<String, String> {
+    let rendered = note.rendered_fields();
+    let Some(note_type) = project
+        .note_types
+        .iter()
+        .find(|note_type| note_type.id() == note.note_type_id())
+    else {
+        return rendered
+            .keys()
+            .map(|field| (field.clone(), field.clone()))
+            .collect();
+    };
+
+    let name_by_key = note_type
+        .fields()
+        .iter()
+        .map(|field| (field.key_ref().as_str(), field.name()))
+        .collect::<BTreeMap<_, _>>();
+    let field_names = note_type
+        .fields()
+        .iter()
+        .map(|field| field.name())
+        .collect::<BTreeSet<_>>();
+
+    let mut sources = BTreeMap::new();
+    let mut field_priorities = BTreeMap::new();
+    for field_key_or_name in rendered.keys() {
+        let is_visible_name = field_names.contains(field_key_or_name.as_str());
+        let field_name = if is_visible_name {
+            field_key_or_name.clone()
+        } else {
+            name_by_key
+                .get(field_key_or_name.as_str())
+                .copied()
+                .unwrap_or(field_key_or_name.as_str())
+                .to_string()
+        };
+        let priority = u8::from(is_visible_name);
+        if field_priorities
+            .get(&field_name)
+            .is_some_and(|existing| *existing > priority)
+        {
+            continue;
+        }
+        field_priorities.insert(field_name.clone(), priority);
+        sources.insert(field_name, field_key_or_name.clone());
+    }
+    sources
 }
 
 fn product_media_to_authoring_media<'a>(

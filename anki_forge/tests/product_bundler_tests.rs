@@ -75,6 +75,51 @@ fn inline_font_asset_lowers_to_media_and_font_face_css() {
 }
 
 #[test]
+fn inline_font_asset_source_map_resolves_actual_authoring_media_id() {
+    let plan = ProductDocument::new("demo-doc")
+        .with_custom_notetype(CustomNoteType {
+            id: "custom-main".into(),
+            name: Some("Custom Normal".into()),
+            fields: vec![
+                CustomField {
+                    name: "Front".into(),
+                    key: None,
+                },
+                CustomField {
+                    name: "Back".into(),
+                    key: None,
+                },
+            ],
+            templates: vec![CustomTemplate {
+                name: "Card 1".into(),
+                key: None,
+                question_format: "{{Front}}".into(),
+                answer_format: "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}".into(),
+                generation_rule: None,
+            }],
+            css: Some(".card { color: red; }".into()),
+        })
+        .bundle_inline_template_asset("custom-main", "demo.woff2", "font/woff2", "aGVsbG8=")
+        .lower()
+        .expect("lower should succeed");
+
+    let media = plan
+        .authoring_document
+        .media
+        .first()
+        .expect("inline asset should lower to media");
+
+    let expected_source = format!(
+        "project.media[{filename:?}]",
+        filename = media.desired_filename
+    );
+    assert_eq!(
+        plan.source_map.source_for_diagnostic_path(&media.id),
+        Some(expected_source.as_str())
+    );
+}
+
+#[test]
 fn inline_font_asset_lowering_escapes_css_literals() {
     let plan = ProductDocument::new("demo-doc")
         .with_custom_notetype(CustomNoteType {

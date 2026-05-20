@@ -409,9 +409,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
         match asset {
             AssetSource::InlineTemplateStatic { .. } => {
                 let lowered_filename = asset.lowered_filename();
+                let authoring_media_id = format!("media:{lowered_filename}");
                 media_by_identity.insert(asset.identity(), lowered_filename.clone());
                 media.push(crate::AuthoringMedia {
-                    id: format!("media:{lowered_filename}"),
+                    id: authoring_media_id.clone(),
                     desired_filename: lowered_filename.clone(),
                     source: crate::AuthoringMediaSource::InlineBytes {
                         data_base64: asset.data_base64().into(),
@@ -422,13 +423,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     kind: "media",
                     source_kind: "asset",
                     product_id: asset.product_id(),
-                    authoring_id: lowered_filename,
+                    authoring_id: lowered_filename.clone(),
                 });
-                record_media_source_path(
-                    &mut source_map,
-                    &asset.product_id(),
-                    &asset.lowered_filename(),
-                );
+                record_media_source_path(&mut source_map, &asset.product_id(), &lowered_filename);
+                record_media_source_path(&mut source_map, &authoring_media_id, &lowered_filename);
             }
         }
     }
