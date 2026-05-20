@@ -924,6 +924,61 @@ fn project_lower_maps_custom_notetype_stock_collision_sources_to_project_index()
 }
 
 #[test]
+fn project_build_maps_stock_collision_template_media_to_custom_notetype_index() {
+    let mut project = Project::new("Implicit Duplicate Media")
+        .stable_id("implicit-duplicate-media")
+        .default_deck("Implicit Duplicate Media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("basic:1"))
+        .expect("add stock note");
+    project
+        .add_notetype(
+            NoteType::custom("basic")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Custom Basic")
+                        .front(r#"<img src="missing-custom-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-custom-css.png"); }"#),
+        )
+        .expect("add custom basic notetype");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("implicit stock collision and missing custom media fail build");
+
+    let duplicate = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
+        .expect("duplicate notetype diagnostic");
+    assert_eq!(
+        duplicate.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+    assert!(duplicate.message.contains("implicit stock"));
+
+    let sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .map(|diagnostic| {
+            diagnostic
+                .source
+                .as_ref()
+                .map(|source| source.as_str())
+                .expect("missing media diagnostic source")
+        })
+        .collect::<Vec<_>>();
+
+    assert!(sources.contains(&"project.note_types[0].templates[\"Custom Basic\"].front"));
+    assert!(sources.contains(&"project.note_types[0].css"));
+}
+
+#[test]
 fn project_build_reports_duplicate_notetype_template_and_css_media_sources_by_index() {
     let mut project = Project::new("Duplicate Note Type Media")
         .stable_id("duplicate-notetype-media")

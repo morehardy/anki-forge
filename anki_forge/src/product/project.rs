@@ -759,6 +759,8 @@ impl Project {
 
         let mut consumed_by_id = BTreeMap::new();
         for stock_id in &implicit_stock_notetype_ids {
+            // Product custom note types start after any implicit stock notetype
+            // with the same id in the lowered authoring document.
             consumed_by_id.insert((*stock_id).to_string(), 1usize);
         }
         let mut entries = Vec::new();
@@ -1620,14 +1622,18 @@ impl ProductMediaPrepareError {
     fn from_source_diagnostic(
         diagnostic: crate::product::media_registry::ProductMediaSourceDiagnostic,
     ) -> Self {
+        let code = diagnostic.code;
+        let source_path = diagnostic.source_path;
+        let help = product_diagnostic_help(code, Some(&source_path))
+            .unwrap_or_else(|| "inspect product media registrations and source files".into());
         Self {
             message: "prepare product media".into(),
             diagnostics: vec![Diagnostic {
-                code: DiagnosticCode::new(diagnostic.code),
+                code: DiagnosticCode::new(code),
                 severity: Severity::Error,
                 message: diagnostic.message,
-                source: Some(SourcePath::new(diagnostic.source_path)),
-                help: Some("inspect product media registrations and source files".into()),
+                source: Some(SourcePath::new(source_path)),
+                help: Some(help),
             }],
         }
     }
@@ -1740,6 +1746,30 @@ fn product_diagnostic_help(code: &str, source: Option<&str>) -> Option<String> {
         }
         "MEDIA.DUPLICATE_FILENAME_CONFLICT" => {
             "This Product media export filename is already bound to different content. Choose a unique export_as(...) name for one of the registrations."
+        }
+        "MEDIA.SOURCE_CHANGED" => {
+            "This Product media source changed after registration. Restore the original bytes, re-register the current file with project.media_mut().add_file(...).export_as(...), or remove the stale registration."
+        }
+        "MEDIA.SOURCE_MISSING" => {
+            "This Product media registration points at a source file that no longer exists. Restore the file, update the registration to the new path, or remove the unused media binding."
+        }
+        "MEDIA.SOURCE_NOT_REGULAR_FILE" => {
+            "This Product media registration must point at a regular file. Replace the source path with a file and register directories or special files through an explicit file asset."
+        }
+        "MEDIA.SOURCE_READ_FAILED" => {
+            "This Product media source could not be read. Check the file path, permissions, and workspace access, then retry the build."
+        }
+        "MEDIA.UNKNOWN_MIME" => {
+            "This media source has no reliable MIME type. Use an export filename with a known extension, provide bytes that can be sniffed, or adjust the advanced media policy if the opaque file is intentional."
+        }
+        "MEDIA.CAS_WRITE_FAILED" => {
+            "The media object could not be written into the build media store. Check workspace permissions and disk space, then retry the build."
+        }
+        "MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT" => {
+            "An existing media-store object did not match the expected content hash. Rebuild in a clean artifacts directory or remove the corrupt media-store object before retrying."
+        }
+        "MEDIA.INLINE_TOO_LARGE" => {
+            "This inline media payload exceeds the configured limit. Register large assets with project.media_mut().add_file(...).export_as(...) so they stay path-backed until normalization."
         }
         _ => return None,
     };
@@ -1918,6 +1948,25 @@ mod tests {
                 ("PHASE5A.ADVISORY", Severity::Warning),
             ]
         );
+    }
+
+    #[test]
+    fn product_diagnostic_help_covers_actionable_media_storage_codes() {
+        for code in [
+            "MEDIA.SOURCE_CHANGED",
+            "MEDIA.SOURCE_MISSING",
+            "MEDIA.SOURCE_NOT_REGULAR_FILE",
+            "MEDIA.SOURCE_READ_FAILED",
+            "MEDIA.UNKNOWN_MIME",
+            "MEDIA.CAS_WRITE_FAILED",
+            "MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT",
+            "MEDIA.INLINE_TOO_LARGE",
+        ] {
+            assert!(
+                product_diagnostic_help(code, Some("project.media[\"asset.bin\"]")).is_some(),
+                "{code} should have Product-facing help"
+            );
+        }
     }
 
     #[test]

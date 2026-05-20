@@ -437,6 +437,15 @@ fn project_media_policy_can_promote_unknown_mime_to_error() {
         media_diagnostic_severity(&error.report, "MEDIA.UNKNOWN_MIME"),
         Some(Severity::Error)
     );
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNKNOWN_MIME")
+        .expect("unknown MIME diagnostic");
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("known extension") && help.contains("advanced media policy")
+    }));
 }
 
 #[test]
@@ -921,11 +930,19 @@ fn product_build_reports_file_source_changed_after_registration() {
     let error = project
         .write_apkg(root.join("source-changed.apkg"))
         .expect_err("changed source fails build");
-    assert!(error
+    let diagnostic = error
         .report
         .diagnostics
         .iter()
-        .any(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED"));
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED")
+        .expect("changed source diagnostic");
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"source.bin\"]")
+    );
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("changed after registration") && help.contains("re-register")
+    }));
 }
 
 #[test]
@@ -991,11 +1008,19 @@ fn product_build_reports_file_source_missing_after_registration() {
     let error = project
         .write_apkg(root.join("source-missing.apkg"))
         .expect_err("missing source fails build");
-    assert!(error
+    let diagnostic = error
         .report
         .diagnostics
         .iter()
-        .any(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING"));
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING")
+        .expect("missing source diagnostic");
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"source.bin\"]")
+    );
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("no longer exists") && help.contains("update the registration")
+    }));
 }
 
 #[test]
