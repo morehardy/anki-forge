@@ -78,6 +78,36 @@ fn project_build_packages_product_media_and_reports_count() {
 }
 
 #[test]
+fn project_build_maps_unused_media_binding_to_product_media_source() {
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("taberu.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("taberu", "eat").stable_id("jp:taberu"))
+        .expect("add note");
+
+    let report = project
+        .build(BuildOptions::new().inspect(false))
+        .expect("unused media is a warning under strict policy");
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNUSED_BINDING")
+        .expect("unused binding diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"taberu.mp3\"]")
+    );
+}
+
+#[test]
 fn project_build_uses_export_name_for_declared_mime() {
     let root = unique_artifacts_dir("project-media-mime");
     let mut project = Project::new("Media")

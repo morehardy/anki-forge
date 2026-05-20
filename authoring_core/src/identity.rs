@@ -67,6 +67,7 @@ pub fn resolve_identity(
                 level: "warning".into(),
                 code: "PHASE2.IDENTITY_RANDOM_OVERRIDE".into(),
                 summary: "random override disables deterministic identity resolution".into(),
+                path: None,
             });
 
             Ok(format!("rnd:{:016x}", nonce_source.next_u64()))

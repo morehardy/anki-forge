@@ -107,6 +107,56 @@ fn project_validate_reports_duplicate_stable_ids() {
 }
 
 #[test]
+fn project_validate_reports_blank_stable_id() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("   "))
+        .expect("add note");
+
+    let report = project.validate();
+
+    assert!(report.has_errors());
+    assert!(report.diagnostics.iter().any(|diagnostic| {
+        diagnostic.code.as_str() == "AFID.STABLE_ID_BLANK"
+            && diagnostic
+                .source
+                .as_ref()
+                .is_some_and(|source| source.as_str() == "project.notes[0]")
+    }));
+}
+
+#[test]
+fn project_validate_reports_duplicate_notetype_ids_with_index_sources_and_names() {
+    let mut project = Project::new("Duplicate Note Types")
+        .stable_id("duplicate-notetypes")
+        .default_deck("Duplicate Note Types");
+
+    project
+        .add_notetype(NoteType::custom("jp-vocab").name("Japanese Vocabulary"))
+        .expect("add first note type");
+    project
+        .add_notetype(NoteType::custom("jp-vocab").name("Japanese Vocab Copy"))
+        .expect("add second note type");
+
+    let report = project.validate();
+    let duplicate = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
+        .expect("duplicate notetype diagnostic");
+
+    assert_eq!(
+        duplicate.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[1]")
+    );
+    assert!(duplicate.message.contains("Japanese Vocabulary"));
+    assert!(duplicate.message.contains("Japanese Vocab Copy"));
+}
+
+#[test]
 fn project_validate_warns_for_auto_derived_custom_field_key() {
     let note_type = NoteType::custom("auto-key")
         .field(Field::new("Expression"))
@@ -172,6 +222,82 @@ fn project_build_preserves_normalization_diagnostics_on_invalid_output() {
         "diagnostics: {:?}",
         err.report.diagnostic_codes()
     );
+}
+
+#[test]
+fn project_build_maps_missing_media_reference_to_stable_note_field_source() {
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:missing")
+                .text("Front", "front")
+                .html("Back", "<img src=\"missing.png\">"),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media reference fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.notes[\"media:missing\"].fields[\"Back\"]")
+    );
+}
+
+#[test]
+fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("")
+                .text("Front", "blank")
+                .html("Back", "<img src=\"blank.png\">"),
+        )
+        .expect("add blank note");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("dup")
+                .text("Front", "dup 1")
+                .html("Back", "<img src=\"one.png\">"),
+        )
+        .expect("add first duplicate note");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("dup")
+                .text("Front", "dup 2")
+                .html("Back", "<img src=\"two.png\">"),
+        )
+        .expect("add second duplicate note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("missing media references fail build");
+    let sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+
+    assert!(sources.contains(&"project.notes[0].fields[\"Back\"]"));
+    assert!(sources.contains(&"project.notes[1].fields[\"Back\"]"));
+    assert!(sources.contains(&"project.notes[2].fields[\"Back\"]"));
 }
 
 #[test]

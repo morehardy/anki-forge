@@ -21,7 +21,7 @@ use crate::build::{
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::{
     LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
-    ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
+    ProductLoweringError, ProductSourceMap, STOCK_BASIC_ID, STOCK_CLOZE_ID,
 };
 
 #[derive(Debug, Clone)]
@@ -116,12 +116,20 @@ impl Project {
 
         for (index, note) in self.notes.iter().enumerate() {
             if let Some(stable_id) = note.stable_id_ref() {
-                if !seen_stable_ids.insert(stable_id) {
+                if stable_id.trim().is_empty() {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("AFID.STABLE_ID_BLANK"),
+                        severity: Severity::Error,
+                        message: "stable_id cannot be blank".into(),
+                        source: Some(SourcePath::new(format!("project.notes[{index}]"))),
+                        help: Some("choose a non-empty stable_id or omit it".into()),
+                    });
+                } else if !seen_stable_ids.insert(stable_id) {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
                         severity: Severity::Error,
                         message: format!("duplicate stable_id '{stable_id}'"),
-                        source: Some(SourcePath::new(format!("project.notes[\"{stable_id}\"]"))),
+                        source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a unique stable_id for each note".into()),
                     });
                 }
@@ -144,7 +152,42 @@ impl Project {
             }
         }
 
+        let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
         for note_type in &self.note_types {
+            *notetype_id_counts.entry(note_type.id()).or_default() += 1;
+        }
+        let mut first_notetype_by_id = BTreeMap::<&str, (usize, Option<&str>)>::new();
+        for (index, note_type) in self.note_types.iter().enumerate() {
+            if let Some((first_index, first_name)) = first_notetype_by_id.get(note_type.id()) {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
+                    severity: Severity::Error,
+                    message: duplicate_notetype_message(
+                        note_type.id(),
+                        *first_index,
+                        *first_name,
+                        index,
+                        note_type.name_ref(),
+                    ),
+                    source: Some(SourcePath::new(format!("project.note_types[{index}]"))),
+                    help: Some("choose a unique id for each custom note type".into()),
+                });
+            } else {
+                first_notetype_by_id.insert(note_type.id(), (index, note_type.name_ref()));
+            }
+        }
+
+        for (index, note_type) in self.note_types.iter().enumerate() {
+            let note_type_source = if notetype_id_counts
+                .get(note_type.id())
+                .copied()
+                .unwrap_or_default()
+                > 1
+            {
+                format!("project.note_types[{index}]")
+            } else {
+                format!("project.note_types[{:?}]", note_type.id())
+            };
             if note_type.identity_ref().is_none() {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
@@ -153,10 +196,7 @@ impl Project {
                         "custom note type '{}' has no identity recipe",
                         note_type.id()
                     ),
-                    source: Some(SourcePath::new(format!(
-                        "project.note_types[\"{}\"]",
-                        note_type.id()
-                    ))),
+                    source: Some(SourcePath::new(note_type_source.clone())),
                     help: Some(
                         "add IdentityRecipe::fields([...]) before relying on update-safe builds"
                             .into(),
@@ -175,8 +215,8 @@ impl Project {
                             note_type.id()
                         ),
                         source: Some(SourcePath::new(format!(
-                            "project.note_types[\"{}\"].fields[\"{}\"]",
-                            note_type.id(),
+                            "{}.fields[\"{}\"]",
+                            note_type_source,
                             field.name()
                         ))),
                         help: Some("call .key(\"stable-field-key\") explicitly".into()),
@@ -200,9 +240,11 @@ impl Project {
             .to_product_document()
             .lower()
             .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
+        self.apply_note_source_paths(&mut plan);
         plan.authoring_document
             .media
             .extend(product_media_to_authoring_media(self.media.media())?);
+        record_project_media_source_paths(&mut plan, self.media.media());
         Ok(plan)
     }
 
@@ -520,11 +562,17 @@ impl Project {
             }
         }
 
-        for note in &self.notes {
-            let note_id = note
-                .stable_id_ref()
-                .map(ToOwned::to_owned)
-                .unwrap_or_else(|| format!("generated:{}", product.notes().len() + 1));
+        let stable_id_counts = self.note_stable_id_counts();
+        for (index, note) in self.notes.iter().enumerate() {
+            let note_id = match note.stable_id_ref() {
+                Some(stable_id)
+                    if !stable_id.trim().is_empty()
+                        && stable_id_counts.get(stable_id).copied() == Some(1) =>
+                {
+                    stable_id.to_string()
+                }
+                _ => format!("generated:{}", index + 1),
+            };
             let deck_name = note
                 .deck_name()
                 .unwrap_or(default_deck.as_str())
@@ -562,6 +610,50 @@ impl Project {
         product
     }
 
+    fn note_stable_id_counts(&self) -> BTreeMap<&str, usize> {
+        let mut counts = BTreeMap::new();
+        for note in &self.notes {
+            let Some(stable_id) = note.stable_id_ref() else {
+                continue;
+            };
+            if stable_id.trim().is_empty() {
+                continue;
+            }
+            *counts.entry(stable_id).or_default() += 1;
+        }
+        counts
+    }
+
+    fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
+        if self.deck_source.is_some() {
+            return;
+        }
+        let stable_id_counts = self.note_stable_id_counts();
+        for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
+            let Some(product_note) = self.notes.get(index) else {
+                continue;
+            };
+            let note_source = match product_note.stable_id_ref() {
+                Some(stable_id)
+                    if !stable_id.trim().is_empty()
+                        && stable_id_counts.get(stable_id).copied() == Some(1) =>
+                {
+                    format!("project.notes[{stable_id:?}]")
+                }
+                _ => format!("project.notes[{index}]"),
+            };
+            for field_name in authoring_note.fields.keys() {
+                plan.source_map.insert(
+                    crate::product::lowering::authoring_note_field_path(
+                        &authoring_note.id,
+                        field_name,
+                    ),
+                    crate::product::lowering::product_note_field_source(&note_source, field_name),
+                );
+            }
+        }
+    }
+
     fn normalize_with_dirs(
         &self,
         base_dir: impl Into<PathBuf>,
@@ -575,6 +667,7 @@ impl Project {
         let mut lowering = self.lower_with_project_error()?;
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
+        self.apply_note_source_paths(&mut lowering);
         if let Some(deck) = &self.deck_source {
             let media = deck
                 .registered_media()
@@ -601,7 +694,9 @@ impl Project {
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
+            record_project_media_source_paths(&mut lowering, self.media.media());
         }
+        let source_map = lowering.source_map.clone();
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
@@ -617,7 +712,7 @@ impl Project {
                 .diagnostics
                 .items
                 .into_iter()
-                .map(normalization_diagnostic_to_product_diagnostic)
+                .map(|item| normalization_diagnostic_to_product_diagnostic(item, &source_map))
                 .collect(),
         );
         if result_status != "success" {
@@ -703,6 +798,24 @@ fn custom_generation_rule(
     }
 }
 
+fn duplicate_notetype_message(
+    id: &str,
+    first_index: usize,
+    first_name: Option<&str>,
+    duplicate_index: usize,
+    duplicate_name: Option<&str>,
+) -> String {
+    format!(
+        "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is project.note_types[{first_index}]{}",
+        display_name_suffix(duplicate_name),
+        display_name_suffix(first_name),
+    )
+}
+
+fn display_name_suffix(name: Option<&str>) -> String {
+    name.map(|name| format!(" ({name})")).unwrap_or_default()
+}
+
 fn custom_note_fields_for_authoring(
     project: &Project,
     note: &crate::product::Note,
@@ -757,6 +870,19 @@ fn product_media_to_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
 ) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
     media.map(product_media_item_to_authoring_media).collect()
+}
+
+fn record_project_media_source_paths<'a>(
+    plan: &mut LoweringPlan,
+    media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
+) {
+    for item in media {
+        crate::product::lowering::record_media_source_path(
+            &mut plan.source_map,
+            &item.id,
+            &item.export_filename,
+        );
+    }
 }
 
 fn product_media_to_path_backed_authoring_media<'a>(
@@ -1114,12 +1240,18 @@ impl std::error::Error for ProjectNormalizeError {}
 
 fn normalization_diagnostic_to_product_diagnostic(
     item: authoring_core::model::DiagnosticItem,
+    source_map: &ProductSourceMap,
 ) -> Diagnostic {
+    let source = item.path.as_deref().and_then(|path| {
+        source_map
+            .source_for_diagnostic_path(path)
+            .map(SourcePath::new)
+    });
     Diagnostic {
         code: DiagnosticCode::new(item.code),
         severity: severity_from_level(&item.level),
         message: item.summary,
-        source: None,
+        source,
         help: None,
     }
 }

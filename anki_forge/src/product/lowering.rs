@@ -23,10 +23,35 @@ pub struct LoweringMapping {
     pub authoring_id: String,
 }
 
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ProductSourceMap {
+    by_authoring_path: BTreeMap<String, String>,
+}
+
+impl ProductSourceMap {
+    pub fn insert(&mut self, authoring_path: impl Into<String>, product_source: impl Into<String>) {
+        self.by_authoring_path
+            .insert(authoring_path.into(), product_source.into());
+    }
+
+    pub fn source_for_authoring_path(&self, authoring_path: &str) -> Option<&str> {
+        self.by_authoring_path
+            .get(authoring_path)
+            .map(String::as_str)
+    }
+
+    pub fn source_for_diagnostic_path(&self, path: &str) -> Option<&str> {
+        self.source_for_authoring_path(path)
+            .or_else(|| self.source_for_authoring_path(&authoring_media_path(path)))
+            .or_else(|| self.source_for_authoring_path(&authoring_media_export_path(path)))
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct LoweringPlan {
     pub authoring_document: AuthoringDocument,
     pub mappings: Vec<LoweringMapping>,
+    pub source_map: ProductSourceMap,
     pub product_diagnostics: Vec<ProductDiagnostic>,
     pub lowering_diagnostics: Vec<LoweringDiagnostic>,
 }
@@ -37,6 +62,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     let mut media: Vec<crate::AuthoringMedia> = Vec::new();
     let mut media_by_identity: BTreeMap<String, String> = BTreeMap::new();
     let mut mappings: Vec<LoweringMapping> = Vec::new();
+    let mut source_map = ProductSourceMap::default();
     let mut product_diagnostics: Vec<ProductDiagnostic> = Vec::new();
     let mut lowering_diagnostics: Vec<LoweringDiagnostic> = Vec::new();
 
@@ -53,7 +79,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                         .expect("source-grounded basic lowering defaults"),
                     &helpers,
                 ) {
-                    Ok(notetype) => notetypes.push(notetype),
+                    Ok(notetype) => {
+                        record_notetype_source_paths(&mut source_map, &notetype, &basic.id);
+                        notetypes.push(notetype);
+                    }
                     Err(diagnostic) => {
                         product_diagnostics.push(diagnostic);
                         continue;
@@ -77,7 +106,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                         .expect("source-grounded cloze lowering defaults"),
                     &helpers,
                 ) {
-                    Ok(notetype) => notetypes.push(notetype),
+                    Ok(notetype) => {
+                        record_notetype_source_paths(&mut source_map, &notetype, &cloze.id);
+                        notetypes.push(notetype);
+                    }
                     Err(diagnostic) => {
                         product_diagnostics.push(diagnostic);
                         continue;
@@ -101,7 +133,10 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                         .expect("source-grounded image occlusion lowering defaults"),
                     &helpers,
                 ) {
-                    Ok(notetype) => notetypes.push(notetype),
+                    Ok(notetype) => {
+                        record_notetype_source_paths(&mut source_map, &notetype, &io.id);
+                        notetypes.push(notetype);
+                    }
                     Err(diagnostic) => {
                         product_diagnostics.push(diagnostic);
                         continue;
@@ -202,7 +237,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     }
                 };
 
-                notetypes.push(AuthoringNotetype {
+                let notetype = AuthoringNotetype {
                     id: custom.id.clone(),
                     kind: "normal".into(),
                     name: custom.name.clone(),
@@ -216,7 +251,9 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                         .into_iter()
                         .map(authoring_field_metadata)
                         .collect(),
-                });
+                };
+                record_notetype_source_paths(&mut source_map, &notetype, &custom.id);
+                notetypes.push(notetype);
                 mappings.push(LoweringMapping {
                     kind: "notetype",
                     source_kind: "notetype",
@@ -240,6 +277,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 fields.insert("Front".into(), basic.front.clone());
                 fields.insert("Back".into(), basic.back.clone());
 
+                record_note_field_source_paths(&mut source_map, &basic.id, fields.keys());
                 notes.push(AuthoringNote {
                     id: basic.id.clone(),
                     notetype_id: basic.note_type_id.clone(),
@@ -260,6 +298,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 fields.insert("Text".into(), cloze.text.clone());
                 fields.insert("Back Extra".into(), cloze.back_extra.clone());
 
+                record_note_field_source_paths(&mut source_map, &cloze.id, fields.keys());
                 notes.push(AuthoringNote {
                     id: cloze.id.clone(),
                     notetype_id: cloze.note_type_id.clone(),
@@ -288,6 +327,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 fields.insert("Back Extra".into(), io.back_extra.clone());
                 fields.insert("Comments".into(), io.comments.clone());
 
+                record_note_field_source_paths(&mut source_map, &io.id, fields.keys());
                 notes.push(AuthoringNote {
                     id: io.id.clone(),
                     notetype_id: io.note_type_id.clone(),
@@ -304,6 +344,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                 });
             }
             ProductNote::Custom(note) => {
+                record_note_field_source_paths(&mut source_map, &note.id, note.fields.keys());
                 notes.push(AuthoringNote {
                     id: note.id.clone(),
                     notetype_id: note.note_type_id.clone(),
@@ -341,6 +382,11 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
                     product_id: asset.product_id(),
                     authoring_id: lowered_filename,
                 });
+                record_media_source_path(
+                    &mut source_map,
+                    &asset.product_id(),
+                    &asset.lowered_filename(),
+                );
             }
         }
     }
@@ -403,6 +449,7 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
             media,
         },
         mappings,
+        source_map,
         product_diagnostics: Vec::new(),
         lowering_diagnostics,
     })
@@ -438,6 +485,97 @@ fn duplicate_custom_key_diagnostics(custom: &CustomNoteType) -> Vec<ProductDiagn
     }
 
     diagnostics
+}
+
+pub(crate) fn authoring_note_field_path(note_id: &str, field_name: &str) -> String {
+    format!("authoring.notes[{note_id:?}].fields[{field_name:?}]")
+}
+
+pub(crate) fn product_note_field_source(note_source: &str, field_name: &str) -> String {
+    format!("{note_source}.fields[{field_name:?}]")
+}
+
+pub(crate) fn authoring_media_path(media_id: &str) -> String {
+    format!("authoring.media[{media_id:?}]")
+}
+
+pub(crate) fn authoring_media_export_path(filename: &str) -> String {
+    format!("authoring.media_exports[{filename:?}]")
+}
+
+pub(crate) fn product_media_source(filename: &str) -> String {
+    format!("project.media[{filename:?}]")
+}
+
+pub(crate) fn record_media_source_path(
+    source_map: &mut ProductSourceMap,
+    media_id: &str,
+    export_filename: &str,
+) {
+    let source = product_media_source(export_filename);
+    source_map.insert(authoring_media_path(media_id), source.clone());
+    source_map.insert(authoring_media_export_path(export_filename), source.clone());
+    source_map.insert(media_id, source.clone());
+    source_map.insert(export_filename, source);
+}
+
+fn record_note_field_source_paths<'a>(
+    source_map: &mut ProductSourceMap,
+    note_id: &str,
+    fields: impl IntoIterator<Item = &'a String>,
+) {
+    let note_source = format!("project.notes[{note_id:?}]");
+    for field in fields {
+        source_map.insert(
+            authoring_note_field_path(note_id, field),
+            product_note_field_source(&note_source, field),
+        );
+    }
+}
+
+fn record_notetype_source_paths(
+    source_map: &mut ProductSourceMap,
+    notetype: &AuthoringNotetype,
+    product_notetype_id: &str,
+) {
+    let product_notetype_source = format!("project.note_types[{product_notetype_id:?}]");
+    if let Some(templates) = notetype.templates.as_ref() {
+        for template in templates {
+            let authoring_template = format!(
+                "authoring.note_types[{:?}].templates[{:?}]",
+                notetype.id, template.name
+            );
+            let product_template =
+                format!("{product_notetype_source}.templates[{:?}]", template.name);
+            source_map.insert(
+                format!("{authoring_template}.front"),
+                format!("{product_template}.front"),
+            );
+            source_map.insert(
+                format!("{authoring_template}.back"),
+                format!("{product_template}.back"),
+            );
+            if template.browser_question_format.is_some() {
+                source_map.insert(
+                    format!("{authoring_template}.browser_front"),
+                    format!("{product_template}.browser_front"),
+                );
+            }
+            if template.browser_answer_format.is_some() {
+                source_map.insert(
+                    format!("{authoring_template}.browser_back"),
+                    format!("{product_template}.browser_back"),
+                );
+            }
+        }
+    }
+
+    if notetype.css.is_some() {
+        source_map.insert(
+            format!("authoring.note_types[{:?}].css", notetype.id),
+            format!("{product_notetype_source}.css"),
+        );
+    }
 }
 
 fn lower_stock_notetype(

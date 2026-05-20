@@ -206,6 +206,78 @@ fn custom_escape_hatch_lowers_to_explicit_authoring_normal_notetype_shape() {
 }
 
 #[test]
+fn product_lowering_records_note_template_css_and_media_source_paths() {
+    let plan = ProductDocument::new("source-map-doc")
+        .with_custom_notetype(CustomNoteType {
+            id: "jp-vocab".into(),
+            name: Some("Japanese Vocabulary".into()),
+            fields: vec![
+                CustomField {
+                    name: "Expression".into(),
+                    key: Some("expression".into()),
+                },
+                CustomField {
+                    name: "Audio".into(),
+                    key: Some("audio".into()),
+                },
+            ],
+            templates: vec![CustomTemplate {
+                name: "Recognition".into(),
+                key: Some("recognition".into()),
+                question_format: "{{Expression}}".into(),
+                answer_format: "{{FrontSide}}{{Audio}}".into(),
+                generation_rule: None,
+            }],
+            css: Some(".card { font-family: sans-serif; }".into()),
+        })
+        .with_browser_appearance(
+            "jp-vocab",
+            anki_forge::product::metadata::TemplateBrowserAppearanceDeclaration {
+                template_name: "Recognition".into(),
+                question_format: Some("{{Expression}}".into()),
+                answer_format: Some("{{Audio}}".into()),
+                font_name: None,
+                font_size: None,
+            },
+        )
+        .add_custom_note(CustomNote {
+            id: "jp:taberu".into(),
+            note_type_id: "jp-vocab".into(),
+            deck_name: "Default".into(),
+            fields: BTreeMap::from([
+                ("Expression".into(), "taberu".into()),
+                ("Audio".into(), "[sound:taberu.mp3]".into()),
+            ]),
+            tags: vec![],
+        })
+        .lower()
+        .expect("lower should succeed");
+
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"jp:taberu\"].fields[\"Audio\"]"),
+        Some("project.notes[\"jp:taberu\"].fields[\"Audio\"]")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"jp-vocab\"].templates[\"Recognition\"].front"
+        ),
+        Some("project.note_types[\"jp-vocab\"].templates[\"Recognition\"].front")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"jp-vocab\"].templates[\"Recognition\"].browser_back"
+        ),
+        Some("project.note_types[\"jp-vocab\"].templates[\"Recognition\"].browser_back")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[\"jp-vocab\"].css"),
+        Some("project.note_types[\"jp-vocab\"].css")
+    );
+}
+
+#[test]
 fn product_default_deck_does_not_overwrite_explicit_note_deck() {
     let plan = ProductDocument::new("multi-deck-doc")
         .with_default_deck("Package::Default")

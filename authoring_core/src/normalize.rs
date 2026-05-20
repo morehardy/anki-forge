@@ -49,6 +49,7 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
             level: "error".into(),
             code: "MEDIA.NORMALIZE_OPTIONS_REQUIRED".into(),
             summary: "media normalization requires NormalizeOptions".into(),
+            path: None,
         }],
         "det:unavailable".into(),
         "media normalization requires explicit options".into(),
@@ -79,6 +80,7 @@ pub fn normalize_with_options(
                 level: "error".into(),
                 code: "PHASE2.MISSING_DOCUMENT_ID".into(),
                 summary: "metadata_document_id cannot be blank".into(),
+                path: None,
             }],
             "det:unavailable".into(),
             "missing document id".into(),
@@ -96,6 +98,7 @@ pub fn normalize_with_options(
                         level: "error".into(),
                         code: "PHASE2.SELECTOR_INVALID".into(),
                         summary: selector_invalid_summary(&error).into(),
+                        path: None,
                     }],
                     format!("det:{metadata_document_id}"),
                     "target selector did not match any resolvable object".into(),
@@ -116,6 +119,7 @@ pub fn normalize_with_options(
                     level: "error".into(),
                     code: selector_resolve_error_code(&error).into(),
                     summary: "target_selector resolution failed".into(),
+                    path: None,
                 }],
                 format!("det:{metadata_document_id}"),
                 "target selector did not match any resolvable object".into(),
@@ -133,6 +137,7 @@ pub fn normalize_with_options(
                 level: "error".into(),
                 code: code.into(),
                 summary,
+                path: None,
             });
 
             return invalid_result(
@@ -155,6 +160,7 @@ pub fn normalize_with_options(
                     level: "error".into(),
                     code: "PHASE3.DUPLICATE_NOTETYPE_ID".into(),
                     summary: format!("duplicate notetype id: {}", notetype.id),
+                    path: None,
                 }],
                 format!("det:{metadata_document_id}"),
                 "writer-ready normalization requires unique notetype ids".into(),
@@ -175,6 +181,7 @@ pub fn normalize_with_options(
                 level: "error".into(),
                 code: "PHASE3.UNSUPPORTED_STOCK_KIND".into(),
                 summary: error.to_string(),
+                path: None,
             });
             return invalid_result(
                 policy_refs,
@@ -205,6 +212,7 @@ pub fn normalize_with_options(
                         "note {} references unknown notetype_id {}",
                         note.id, note.notetype_id
                     ),
+                    path: None,
                 }],
                 format!("det:{metadata_document_id}"),
                 "writer-ready note references an unknown notetype".into(),
@@ -231,6 +239,7 @@ pub fn normalize_with_options(
                         expected_fields,
                         actual_fields,
                     ),
+                    path: None,
                 }],
                 format!("det:{metadata_document_id}"),
                 "writer-ready note fields do not match the resolved stock lane".into(),
@@ -338,6 +347,7 @@ fn media_ingest_diagnostic_to_item(
         level: diagnostic.level,
         code: diagnostic.code,
         summary: diagnostic.summary,
+        path: diagnostic.path,
     }
 }
 
@@ -374,6 +384,10 @@ fn resolve_media_references(
                             "unsafe media reference {} in note {} field {}: {}",
                             candidate.raw_ref, candidate.owner_id, candidate.location_name, reason
                         ),
+                        path: Some(authoring_note_field_path(
+                            &candidate.owner_id,
+                            &candidate.location_name,
+                        )),
                     });
                     MediaReferenceResolution::Skipped {
                         skip_reason: reason,
@@ -395,6 +409,10 @@ fn resolve_media_references(
                                 "missing media reference {} in note {} field {}",
                                 candidate.raw_ref, candidate.owner_id, candidate.location_name
                             ),
+                            path: Some(authoring_note_field_path(
+                                &candidate.owner_id,
+                                &candidate.location_name,
+                            )),
                         });
                         MediaReferenceResolution::Missing
                     }
@@ -450,8 +468,17 @@ fn unused_binding_diagnostics(
                 "unused media binding {} for export filename {}",
                 binding.id, binding.export_filename
             ),
+            path: Some(authoring_media_export_path(&binding.export_filename)),
         })
         .collect()
+}
+
+fn authoring_note_field_path(note_id: &str, field_name: &str) -> String {
+    format!("authoring.notes[{note_id:?}].fields[{field_name:?}]")
+}
+
+fn authoring_media_export_path(filename: &str) -> String {
+    format!("authoring.media_exports[{filename:?}]")
 }
 
 fn identity_error_diagnostic(error: &anyhow::Error) -> (&'static str, String) {
