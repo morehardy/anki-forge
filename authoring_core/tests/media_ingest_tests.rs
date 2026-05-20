@@ -808,7 +808,12 @@ fn normalize_rejects_unused_media_bindings_when_policy_errors() {
     let result = normalize_with_options(request, options);
 
     assert_eq!(result.result_status, "invalid");
-    assert!(result.normalized_ir.is_none());
+    let normalized_ir = result
+        .normalized_ir
+        .as_ref()
+        .expect("unused binding policy errors keep normalized media for reporting");
+    assert_eq!(normalized_ir.media_bindings.len(), 1);
+    assert_eq!(normalized_ir.media_references.len(), 0);
     assert!(result
         .diagnostics
         .items

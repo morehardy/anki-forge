@@ -284,9 +284,6 @@ pub fn normalize_with_options(
 
     let (media_references, media_reference_diagnostics) =
         resolve_media_references(&normalized_notes, &normalized_notetypes, &ingest.bindings);
-    let has_media_reference_error = media_reference_diagnostics
-        .iter()
-        .any(|item| item.level == "error");
     let mut media_diagnostics = media_reference_diagnostics;
     media_diagnostics.extend(unused_binding_diagnostics(
         &ingest.bindings,
@@ -313,7 +310,7 @@ pub fn normalize_with_options(
             diagnostics,
             current_artifact_fingerprint,
             "media reference resolution failed".into(),
-            has_media_reference_error.then_some(normalized_ir),
+            Some(normalized_ir),
         );
     }
     diagnostics.extend(media_diagnostics);

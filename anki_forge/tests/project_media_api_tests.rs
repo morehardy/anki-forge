@@ -1,6 +1,9 @@
 use std::path::PathBuf;
 
-use anki_forge::build::ProjectNormalizeOptions;
+use anki_forge::build::{
+    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
+    ProjectNormalizeOptions,
+};
 use anki_forge::prelude::*;
 use anki_forge::AuthoringMediaSource;
 use anki_forge::MediaSource;
@@ -261,6 +264,238 @@ fn project_build_maps_declared_mime_mismatch_to_product_media_source_and_help() 
             && help.contains("declared MIME")
             && help.contains("source file")
     }));
+}
+
+#[test]
+fn project_media_policy_strict_keeps_default_warning_and_error_severities() {
+    let report = Project::from(deck_with_untyped_blob_media())
+        .build(BuildOptions::new().inspect(false).normalize_options(
+            ProjectNormalizeOptions::strict().media_policy(ProjectMediaPolicy::strict()),
+        ))
+        .expect("strict unknown MIME remains a warning");
+
+    report
+        .ensure_success()
+        .expect("strict media warnings should not fail the report");
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNKNOWN_MIME"),
+        Some(Severity::Warning)
+    );
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Warning)
+    );
+
+    let mut mismatch_project = Project::new("Media")
+        .stable_id("media-strict-mismatch")
+        .default_deck("Media");
+    let image_exported_as_audio = mismatch_project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+    mismatch_project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:strict-mismatch")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let error = mismatch_project
+        .build(BuildOptions::new().inspect(false).normalize_options(
+            ProjectNormalizeOptions::strict().media_policy(ProjectMediaPolicy::strict()),
+        ))
+        .expect_err("strict declared MIME mismatch remains an error");
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.DECLARED_MIME_MISMATCH"),
+        Some(Severity::Error)
+    );
+}
+
+#[test]
+fn project_media_policy_can_ignore_unused_binding_while_summary_still_counts_it() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-ignore")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-ignore"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Ignore),
+                ),
+            ),
+        )
+        .expect("ignored unused binding should not fail build");
+
+    report
+        .ensure_success()
+        .expect("ignored diagnostic report succeeds");
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        None
+    );
+}
+
+#[test]
+fn project_media_policy_can_emit_unused_binding_as_info() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-info")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-info"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Info),
+                ),
+            ),
+        )
+        .expect("info unused binding should not fail build");
+
+    report
+        .ensure_success()
+        .expect("info diagnostic report succeeds");
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Info)
+    );
+}
+
+#[test]
+fn project_media_policy_can_promote_unused_binding_to_error_and_keep_summary_count() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-error")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-error"))
+        .expect("add note");
+
+    let error = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Error),
+                ),
+            ),
+        )
+        .expect_err("error unused binding should fail build");
+
+    assert_eq!(error.report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Error)
+    );
+}
+
+#[test]
+fn project_media_policy_can_promote_unknown_mime_to_error() {
+    let error = Project::from(deck_with_untyped_blob_media())
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unknown_mime_behavior(ProjectMediaDiagnosticBehavior::Error)
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Ignore),
+                ),
+            ),
+        )
+        .expect_err("unknown MIME can be promoted to an error");
+
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.UNKNOWN_MIME"),
+        Some(Severity::Error)
+    );
+}
+
+#[test]
+fn project_media_policy_can_demote_declared_mime_mismatch_to_warning() {
+    let mut project = Project::new("Media")
+        .stable_id("media-mismatch-warning")
+        .default_deck("Media");
+    let image_exported_as_audio = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:mismatch-warning")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let report =
+        project
+            .build(BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict().declared_mime_mismatch_behavior(
+                        ProjectDeclaredMimeMismatchBehavior::Warning,
+                    ),
+                ),
+            ))
+            .expect("declared MIME mismatch warning should not fail build");
+
+    report
+        .ensure_success()
+        .expect("warning-only media report succeeds");
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.DECLARED_MIME_MISMATCH"),
+        Some(Severity::Warning)
+    );
+}
+
+#[test]
+fn declared_mime_mismatch_policy_rejects_ignore_and_info_behaviors() {
+    assert_eq!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Warning),
+        Ok(ProjectDeclaredMimeMismatchBehavior::Warning)
+    );
+    assert_eq!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Error),
+        Ok(ProjectDeclaredMimeMismatchBehavior::Error)
+    );
+    assert!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Ignore)
+            .is_err()
+    );
+    assert!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Info)
+            .is_err()
+    );
 }
 
 #[test]
@@ -876,4 +1111,36 @@ fn unique_artifacts_dir(label: &str) -> PathBuf {
     ));
     std::fs::create_dir_all(&dir).expect("create temp artifacts dir");
     dir
+}
+
+fn deck_with_untyped_blob_media() -> Deck {
+    let mut deck = Deck::builder("Untyped Media")
+        .stable_id("untyped-media")
+        .build();
+    deck.media()
+        .add(MediaSource::from_bytes(
+            "blob.bin",
+            vec![0_u8, 159_u8, 146_u8, 150_u8],
+        ))
+        .expect("register opaque media");
+    deck.basic()
+        .note("front", "back")
+        .stable_id("deck:untyped")
+        .add()
+        .expect("add note");
+
+    let mut value = serde_json::to_value(deck).expect("serialize deck");
+    value["media"]["blob.bin"]["declared_mime"] = serde_json::Value::Null;
+    serde_json::from_value(value).expect("deserialize deck with omitted declared MIME")
+}
+
+fn media_diagnostic_severity(
+    report: &anki_forge::build::BuildReport,
+    code: &str,
+) -> Option<Severity> {
+    report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == code)
+        .map(|diagnostic| diagnostic.severity)
 }

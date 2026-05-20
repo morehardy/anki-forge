@@ -1,3 +1,7 @@
+use anki_forge::build::{
+    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
+    ProjectNormalizeOptions,
+};
 use anki_forge::prelude::*;
 use std::path::PathBuf;
 
@@ -430,6 +434,66 @@ fn project_build_missing_and_unsafe_refs_fail_in_normalization_not_writer() {
         .diagnostic_codes()
         .iter()
         .any(|code| code == "PHASE3.UNRESOLVED_MEDIA_REFERENCE"));
+}
+
+#[test]
+fn media_policy_does_not_demote_missing_or_unsafe_references() {
+    let permissive_policy = ProjectMediaPolicy::strict()
+        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Ignore)
+        .unknown_mime_behavior(ProjectMediaDiagnosticBehavior::Ignore)
+        .declared_mime_mismatch_behavior(ProjectDeclaredMimeMismatchBehavior::Warning);
+
+    let mut missing_project = Project::new("Missing Media")
+        .stable_id("policy-missing-media")
+        .default_deck("Missing Media");
+    missing_project
+        .add_note(
+            Note::new("basic")
+                .stable_id("policy:missing")
+                .text("Front", "front")
+                .html("Back", r#"<img src="missing.png">"#),
+        )
+        .expect("add missing note");
+
+    let missing_error =
+        missing_project
+            .build(BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(permissive_policy),
+            ))
+            .expect_err("missing reference remains an error");
+    let missing = missing_error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .expect("missing reference diagnostic");
+    assert_eq!(missing.severity, Severity::Error);
+
+    let mut unsafe_project = Project::new("Unsafe Media")
+        .stable_id("policy-unsafe-media")
+        .default_deck("Unsafe Media");
+    unsafe_project
+        .add_note(
+            Note::new("basic")
+                .stable_id("policy:unsafe")
+                .text("Front", "front")
+                .html("Back", r#"<img src="bad%2Fname.png">"#),
+        )
+        .expect("add unsafe note");
+
+    let unsafe_error =
+        unsafe_project
+            .build(BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(permissive_policy),
+            ))
+            .expect_err("unsafe reference remains an error");
+    let unsafe_reference = unsafe_error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNSAFE_REFERENCE")
+        .expect("unsafe reference diagnostic");
+    assert_eq!(unsafe_reference.severity, Severity::Error);
 }
 
 #[test]
