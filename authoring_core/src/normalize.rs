@@ -517,9 +517,13 @@ fn missing_media_reference_summary(
     candidate: &crate::media_refs::MediaReferenceCandidate,
 ) -> String {
     if candidate.ref_kind == "css_url" {
+        let raw_ref = candidate
+            .diagnostic_ref
+            .as_deref()
+            .unwrap_or(candidate.raw_ref.as_str());
         format!(
             "missing media reference {} in {} {} {} {} line {}",
-            candidate.raw_ref,
+            raw_ref,
             candidate.owner_kind,
             candidate.owner_id,
             candidate.location_kind,
@@ -543,9 +547,13 @@ fn unsafe_media_reference_summary(
     reason: &str,
 ) -> String {
     if candidate.ref_kind == "css_url" {
+        let raw_ref = candidate
+            .diagnostic_ref
+            .as_deref()
+            .unwrap_or(candidate.raw_ref.as_str());
         format!(
             "unsafe media reference {} in {} {} {} {} line {}: {}",
-            candidate.raw_ref,
+            raw_ref,
             candidate.owner_kind,
             candidate.owner_id,
             candidate.location_kind,

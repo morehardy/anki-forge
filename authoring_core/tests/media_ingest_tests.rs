@@ -986,13 +986,13 @@ fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_l
     assert!(result.diagnostics.items.iter().any(|item| {
         item.code == "MEDIA.MISSING_REFERENCE"
             && item.path.as_deref() == Some("authoring.note_types[\"custom-main\"].css")
-            && item.summary.contains("missing-style.png?v=1")
+            && item.summary.contains("url(\"missing-style.png?v=1\")")
             && item.summary.contains("line 2")
     }));
     assert!(result.diagnostics.items.iter().any(|item| {
         item.code == "MEDIA.UNSAFE_REFERENCE"
             && item.path.as_deref() == Some("authoring.note_types[\"custom-main\"].css")
-            && item.summary.contains("bad%2Fstyle.png")
+            && item.summary.contains("url(bad%2Fstyle.png)")
             && item.summary.contains("line 4")
     }));
 }

@@ -89,6 +89,16 @@ fn css_url_skips_malformed_nested_candidates_and_continues() {
 }
 
 #[test]
+fn css_url_malformed_candidate_does_not_consume_later_valid_url_token() {
+    let refs = scan(r#".bad { background: url("broken" url(ok.png)); }"#);
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
 fn helper_unsafe_local_characters_are_unsafe() {
     let refs = scan(
         r#"

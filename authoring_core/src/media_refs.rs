@@ -11,6 +11,7 @@ pub struct MediaReferenceCandidate {
     pub normalized_local_ref: Option<String>,
     pub skip_reason: Option<String>,
     pub unsafe_reason: Option<String>,
+    pub diagnostic_ref: Option<String>,
     pub source_line: Option<usize>,
     pub kind: MediaReferenceCandidateKind,
 }
@@ -114,6 +115,7 @@ fn extract_sound_refs(
             MediaReferenceCandidateKind::Sound,
             false,
             None,
+            None,
         ));
         cursor = value_end + 1;
     }
@@ -187,11 +189,10 @@ fn extract_css_url_refs(
 
         let value_start = url_start + "url(".len();
         let Some((raw_ref, next_cursor)) = parse_css_url_value(&input, value_start) else {
-            cursor = input[value_start..]
-                .find(')')
-                .map_or(value_start, |relative_end| value_start + relative_end + 1);
+            cursor = css_url_recovery_cursor(&input, url_start, value_start);
             continue;
         };
+        let raw_token = input[url_start..next_cursor].to_string();
         refs.push(local_candidate(
             owner_kind,
             owner_id,
@@ -200,6 +201,7 @@ fn extract_css_url_refs(
             &raw_ref,
             MediaReferenceCandidateKind::CssUrl,
             true,
+            Some(raw_token),
             Some(line_number_at(&input, url_start)),
         ));
         cursor = next_cursor;
@@ -292,6 +294,7 @@ fn extract_html_attribute_refs(
                 kind,
                 true,
                 None,
+                None,
             ));
         }
         cursor = next_cursor;
@@ -318,6 +321,7 @@ fn local_candidate(
     raw_ref: &str,
     kind: MediaReferenceCandidateKind,
     url_semantics: bool,
+    diagnostic_ref: Option<String>,
     source_line: Option<usize>,
 ) -> MediaReferenceCandidate {
     let raw_ref = raw_ref.trim().to_string();
@@ -339,6 +343,7 @@ fn local_candidate(
         normalized_local_ref,
         skip_reason,
         unsafe_reason,
+        diagnostic_ref,
         source_line,
         kind,
     }
@@ -522,12 +527,47 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
     Some((raw_ref.to_string(), cursor + 1))
 }
 
+fn css_url_recovery_cursor(input: &str, url_start: usize, value_start: usize) -> usize {
+    let value_start = skip_ascii_whitespace(input, value_start);
+    if input.as_bytes().get(value_start).is_some_and(|byte| {
+        *byte == b'"'
+            || *byte == b'\''
+            || !starts_with_ascii_case_insensitive(&input[value_start..], "url(")
+    }) {
+        if let Some(next_url_start) = find_css_url_function_plain(input, url_start + 1) {
+            return next_url_start;
+        }
+    }
+
+    input[value_start..]
+        .find(')')
+        .map_or(value_start, |relative_end| value_start + relative_end + 1)
+}
+
 fn line_number_at(input: &str, byte_index: usize) -> usize {
     input[..byte_index.min(input.len())]
         .bytes()
         .filter(|byte| *byte == b'\n')
         .count()
         + 1
+}
+
+fn find_css_url_function_plain(input: &str, start: usize) -> Option<usize> {
+    let needle = b"url(";
+    let bytes = input.as_bytes();
+    let mut cursor = start;
+
+    while cursor < bytes.len() {
+        if bytes
+            .get(cursor..cursor + needle.len())
+            .is_some_and(|candidate| candidate.eq_ignore_ascii_case(needle))
+        {
+            return Some(cursor);
+        }
+        cursor += 1;
+    }
+
+    None
 }
 
 struct HtmlStartTag<'a> {
