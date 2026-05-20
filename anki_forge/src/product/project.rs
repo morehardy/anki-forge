@@ -6,7 +6,6 @@ use std::time::Instant;
 
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
-use base64::Engine as _;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
 
@@ -596,14 +595,8 @@ impl Project {
         } else {
             let media = product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
                 .map_err(|error| ProjectNormalizeError {
-                    message: "prepare product media".into(),
-                    diagnostics: vec![Diagnostic {
-                        code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
-                        severity: Severity::Error,
-                        message: error.to_string(),
-                        source: Some(SourcePath::new("project.media")),
-                        help: Some("inspect product media registrations and media paths".into()),
-                    }],
+                    message: error.message,
+                    diagnostics: error.diagnostics,
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
@@ -768,7 +761,7 @@ fn product_media_to_authoring_media<'a>(
 fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
-) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
+) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
     media
         .map(|media| product_media_item_to_path_backed_authoring_media(media, media_input_dir))
         .collect()
@@ -779,13 +772,11 @@ fn product_media_item_to_authoring_media(
 ) -> anyhow::Result<crate::AuthoringMedia> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
-            let bytes = std::fs::read(path)
-                .with_context(|| format!("read media source file: {}", path.display()))?;
-            crate::AuthoringMediaSource::InlineBytes {
-                data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+            crate::AuthoringMediaSource::Path {
+                path: path.display().to_string(),
             }
         }
-        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
@@ -803,24 +794,37 @@ fn product_media_item_to_authoring_media(
 fn product_media_item_to_path_backed_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
     media_input_dir: &Path,
-) -> anyhow::Result<crate::AuthoringMedia> {
+) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
-            ensure_safe_product_media_input_dir(media_input_dir)?;
+            media
+                .verify_registered_source()
+                .map_err(ProductMediaPrepareError::from_source_diagnostic)?;
+            ensure_safe_product_media_input_dir(media_input_dir)
+                .map_err(ProductMediaPrepareError::from_prepare_error)?;
             let target = media_input_dir.join(&media.export_filename);
-            ensure_not_symlink(&target)?;
-            std::fs::copy(path, &target).with_context(|| {
-                format!(
-                    "copy media source {} to {}",
-                    path.display(),
-                    target.display()
+            ensure_not_symlink(&target).map_err(ProductMediaPrepareError::from_prepare_error)?;
+            std::fs::copy(path, &target).map_err(|err| {
+                let code = if err.kind() == std::io::ErrorKind::NotFound {
+                    "MEDIA.SOURCE_MISSING"
+                } else {
+                    "MEDIA.SOURCE_READ_FAILED"
+                };
+                ProductMediaPrepareError::single(
+                    code,
+                    format!(
+                        "copy media source {} to {}: {err}",
+                        path.display(),
+                        target.display()
+                    ),
+                    media.export_filename.clone(),
                 )
             })?;
             crate::AuthoringMediaSource::Path {
                 path: media.export_filename.clone(),
             }
         }
-        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
@@ -959,6 +963,56 @@ struct ProjectNormalizeError {
     message: String,
     diagnostics: Vec<Diagnostic>,
     normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
+}
+
+struct ProductMediaPrepareError {
+    message: String,
+    diagnostics: Vec<Diagnostic>,
+}
+
+impl ProductMediaPrepareError {
+    fn from_source_diagnostic(
+        diagnostic: crate::product::media_registry::ProductMediaSourceDiagnostic,
+    ) -> Self {
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new(diagnostic.code),
+                severity: Severity::Error,
+                message: diagnostic.message,
+                source: Some(SourcePath::new(diagnostic.source_path)),
+                help: Some("inspect product media registrations and source files".into()),
+            }],
+        }
+    }
+
+    fn from_prepare_error(error: anyhow::Error) -> Self {
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
+                severity: Severity::Error,
+                message: error.to_string(),
+                source: Some(SourcePath::new("project.media")),
+                help: Some("inspect product media registrations and media paths".into()),
+            }],
+        }
+    }
+
+    fn single(code: &'static str, message: String, export_filename: String) -> Self {
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new(code),
+                severity: Severity::Error,
+                message,
+                source: Some(SourcePath::new(format!(
+                    "project.media[{export_filename:?}]"
+                ))),
+                help: Some("inspect product media registrations and source files".into()),
+            }],
+        }
+    }
 }
 
 impl std::fmt::Display for ProjectNormalizeError {

@@ -12,7 +12,7 @@ fn main() -> anyhow::Result<()> {
         .default_deck("Spanish::Media");
     let audio = project
         .media_mut()
-        .add_bytes("hola-source.wav", TINY_WAV.to_vec())
+        .add_bytes("hola-source.wav", TINY_WAV.to_vec())?
         .export_as("hola.wav")?;
 
     project.add_note(
