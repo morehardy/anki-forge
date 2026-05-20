@@ -184,6 +184,7 @@ fn extract_css_url_refs(
 ) -> Vec<MediaReferenceCandidate> {
     let mut refs = Vec::new();
     let input = strip_html_raw_text_elements(input, "script");
+    let input = strip_html_start_tags(&input);
     let input = strip_css_block_comments(&input);
     let mut cursor = 0;
 
@@ -388,14 +389,11 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
         trimmed.to_string()
     };
 
-    if url_semantics && local_ref.is_empty() {
-        return ReferenceClassification::Unsafe("decoded-empty-path");
-    }
-    if url_semantics && matches!(local_ref.as_str(), "." | "..") {
-        return ReferenceClassification::Unsafe("decoded-dot-path");
-    }
     if local_ref.is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
+    }
+    if matches!(local_ref.as_str(), "." | "..") {
+        return ReferenceClassification::Unsafe("decoded-dot-path");
     }
     if local_ref.contains(['/', '\\']) {
         return ReferenceClassification::Unsafe("decoded-path-separator");
@@ -467,7 +465,7 @@ fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, 
             }
             cursor += 1;
         }
-        return Some((&input[value_start + 1..], input.len()));
+        return None;
     }
 
     let mut cursor = value_start;
@@ -676,6 +674,42 @@ fn strip_html_raw_text_elements(input: &str, tag_name: &str) -> String {
     }
 
     output.push_str(&input[copy_cursor..]);
+    output
+}
+
+fn strip_html_start_tags(input: &str) -> String {
+    let mut output = String::with_capacity(input.len());
+    let bytes = input.as_bytes();
+    let mut cursor = 0;
+
+    while let Some(relative_tag_start) = input[cursor..].find('<') {
+        let tag_start = cursor + relative_tag_start;
+        let tag_name_start = tag_start + 1;
+        let Some(first_tag_name_byte) = bytes.get(tag_name_start) else {
+            break;
+        };
+        if !first_tag_name_byte.is_ascii_alphabetic() && *first_tag_name_byte != b'/' {
+            output.push_str(&input[cursor..tag_name_start]);
+            cursor = tag_name_start;
+            continue;
+        }
+
+        output.push_str(&input[cursor..tag_start]);
+        match input[tag_name_start..].find('>') {
+            Some(relative_tag_end) => {
+                let tag_end = tag_name_start + relative_tag_end + 1;
+                output.extend(input[tag_start..tag_end].chars().filter(|ch| *ch == '\n'));
+                cursor = tag_end;
+            }
+            None => {
+                output.extend(input[tag_start..].chars().filter(|ch| *ch == '\n'));
+                cursor = input.len();
+                break;
+            }
+        }
+    }
+
+    output.push_str(&input[cursor..]);
     output
 }
 

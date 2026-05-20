@@ -473,11 +473,14 @@ fn invalid_percent_escapes_are_unsafe() {
 }
 
 #[test]
-fn decoded_empty_dot_and_dot_dot_paths_are_unsafe() {
+fn query_fragment_only_refs_are_skipped_and_dot_paths_are_unsafe() {
     let refs = scan(
         r##"
         <img src="?cache=1">
         <img src="#fragment">
+        <style>.empty { background: url(?cache=1); list-style-image: url(#fragment); }</style>
+        [sound:.]
+        [sound:..]
         <img src=".">
         <img src="%2E">
         <style>.x { background: url(..); background-image: url(%2E%2E); }</style>
@@ -487,24 +490,35 @@ fn decoded_empty_dot_and_dot_dot_paths_are_unsafe() {
     assert_eq!(
         ref_summaries(&refs),
         vec![
-            (
-                "html_src",
-                "?cache=1",
-                None,
-                None,
-                Some("decoded-empty-path"),
-            ),
-            (
-                "html_src",
-                "#fragment",
-                None,
-                None,
-                Some("decoded-empty-path"),
-            ),
+            ("sound", ".", None, None, Some("decoded-dot-path")),
+            ("sound", "..", None, None, Some("decoded-dot-path")),
+            ("html_src", "?cache=1", None, Some("empty-ref"), None,),
+            ("html_src", "#fragment", None, Some("empty-ref"), None,),
             ("html_src", ".", None, None, Some("decoded-dot-path")),
             ("html_src", "%2E", None, None, Some("decoded-dot-path")),
+            ("css_url", "?cache=1", None, Some("empty-ref"), None,),
+            ("css_url", "#fragment", None, Some("empty-ref"), None,),
             ("css_url", "..", None, None, Some("decoded-dot-path")),
             ("css_url", "%2E%2E", None, None, Some("decoded-dot-path")),
+        ]
+    );
+}
+
+#[test]
+fn unclosed_html_attribute_quotes_are_skipped_without_aborting_other_ref_forms() {
+    let refs = scan(
+        r#"
+        <img src="missing.png>
+        [sound:ok.mp3]
+        <style>.ok { background: url(ok.png); }</style>
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            ("sound", "ok.mp3", Some("ok.mp3"), None, None),
+            ("css_url", "ok.png", Some("ok.png"), None, None),
         ]
     );
 }

@@ -355,10 +355,13 @@ fn project_build_maps_missing_template_media_reference_to_product_template_sourc
         .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
         .expect("missing reference diagnostic");
 
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.MISSING_REFERENCE");
+    assert_eq!(diagnostic.severity, Severity::Error);
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some("project.note_types[\"jp-vocab\"].templates[\"Recognition\"].front")
     );
+    assert!(diagnostic.message.contains("missing-template.png"));
 }
 
 #[test]
@@ -396,10 +399,14 @@ fn project_build_maps_missing_css_media_reference_to_product_css_source() {
         .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
         .expect("missing reference diagnostic");
 
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.MISSING_REFERENCE");
+    assert_eq!(diagnostic.severity, Severity::Error);
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some("project.note_types[\"jp-vocab\"].css")
     );
+    assert!(diagnostic.message.contains(r#"url("missing-css.png")"#));
+    assert!(diagnostic.message.contains("line 1"));
 }
 
 #[test]
