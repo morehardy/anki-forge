@@ -878,6 +878,10 @@ impl Project {
             record_project_media_source_paths(&mut lowering, self.media.media());
         }
         let source_map = lowering.source_map.clone();
+        let duplicate_notetype_media_diagnostics = duplicate_notetype_media_reference_diagnostics(
+            &lowering.authoring_document,
+            &source_map,
+        );
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
@@ -887,14 +891,21 @@ impl Project {
             },
         );
         let result_status = result.result_status.clone();
+        let mut normalization_diagnostics = result
+            .diagnostics
+            .items
+            .into_iter()
+            .map(|item| normalization_diagnostic_to_product_diagnostic(item, &source_map))
+            .collect::<Vec<_>>();
+        if normalization_diagnostics
+            .iter()
+            .any(|item| item.code.as_str() == "PHASE3.DUPLICATE_NOTETYPE_ID")
+        {
+            normalization_diagnostics.extend(duplicate_notetype_media_diagnostics);
+        }
         let diagnostics = combine_lowering_and_normalization_diagnostics(
             lowering_diagnostics,
-            result
-                .diagnostics
-                .items
-                .into_iter()
-                .map(|item| normalization_diagnostic_to_product_diagnostic(item, &source_map))
-                .collect(),
+            normalization_diagnostics,
         );
         if result_status != "success" {
             return Err(ProjectNormalizeError {
@@ -1207,6 +1218,17 @@ fn product_media_item_to_path_backed_authoring_media(
             if !paths_are_same_file(path, &target)
                 .map_err(ProductMediaPrepareError::from_prepare_error)?
             {
+                if target
+                    .try_exists()
+                    .with_context(|| format!("stat media input target: {}", target.display()))
+                    .map_err(ProductMediaPrepareError::from_prepare_error)?
+                {
+                    return Err(ProductMediaPrepareError::staging_collision(
+                        path.clone(),
+                        target,
+                        media.export_filename.clone(),
+                    ));
+                }
                 std::fs::copy(path, &target).map_err(|err| {
                     let code = if err.kind() == std::io::ErrorKind::NotFound {
                         "MEDIA.SOURCE_MISSING"
@@ -1360,6 +1382,180 @@ impl From<crate::deck::Deck> for Project {
     }
 }
 
+fn duplicate_notetype_media_reference_diagnostics(
+    document: &authoring_core::AuthoringDocument,
+    source_map: &ProductSourceMap,
+) -> Vec<Diagnostic> {
+    let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
+    for notetype in &document.notetypes {
+        *notetype_id_counts.entry(notetype.id.as_str()).or_default() += 1;
+    }
+    if !notetype_id_counts.values().any(|count| *count > 1) {
+        return Vec::new();
+    }
+
+    let media_exports = document
+        .media
+        .iter()
+        .map(|media| media.desired_filename.as_str())
+        .collect::<BTreeSet<_>>();
+    let mut diagnostics = Vec::new();
+
+    for (notetype_index, notetype) in document.notetypes.iter().enumerate() {
+        if notetype_id_counts
+            .get(notetype.id.as_str())
+            .copied()
+            .unwrap_or_default()
+            < 2
+        {
+            continue;
+        }
+
+        let authoring_notetype_source = format!("authoring.note_types[{notetype_index}]");
+        if let Some(templates) = notetype.templates.as_ref() {
+            for template in templates {
+                let authoring_template =
+                    format!("{authoring_notetype_source}.templates[{:?}]", template.name);
+                append_missing_media_reference_diagnostics(
+                    &mut diagnostics,
+                    &media_exports,
+                    source_map,
+                    &format!("{authoring_template}.front"),
+                    "notetype",
+                    &notetype.id,
+                    "template_front",
+                    &format!("{}:front", template.name),
+                    &template.question_format,
+                );
+                append_missing_media_reference_diagnostics(
+                    &mut diagnostics,
+                    &media_exports,
+                    source_map,
+                    &format!("{authoring_template}.back"),
+                    "notetype",
+                    &notetype.id,
+                    "template_back",
+                    &format!("{}:back", template.name),
+                    &template.answer_format,
+                );
+                if let Some(value) = template.browser_question_format.as_deref() {
+                    append_missing_media_reference_diagnostics(
+                        &mut diagnostics,
+                        &media_exports,
+                        source_map,
+                        &format!("{authoring_template}.browser_front"),
+                        "notetype",
+                        &notetype.id,
+                        "browser_template_front",
+                        &format!("{}:browser_front", template.name),
+                        value,
+                    );
+                }
+                if let Some(value) = template.browser_answer_format.as_deref() {
+                    append_missing_media_reference_diagnostics(
+                        &mut diagnostics,
+                        &media_exports,
+                        source_map,
+                        &format!("{authoring_template}.browser_back"),
+                        "notetype",
+                        &notetype.id,
+                        "browser_template_back",
+                        &format!("{}:browser_back", template.name),
+                        value,
+                    );
+                }
+            }
+        }
+
+        if let Some(css) = notetype.css.as_deref() {
+            append_missing_media_reference_diagnostics(
+                &mut diagnostics,
+                &media_exports,
+                source_map,
+                &format!("{authoring_notetype_source}.css"),
+                "notetype",
+                &notetype.id,
+                "css",
+                "css",
+                css,
+            );
+        }
+    }
+
+    diagnostics
+}
+
+fn append_missing_media_reference_diagnostics(
+    diagnostics: &mut Vec<Diagnostic>,
+    media_exports: &BTreeSet<&str>,
+    source_map: &ProductSourceMap,
+    authoring_path: &str,
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    value: &str,
+) {
+    for candidate in authoring_core::extract_media_reference_candidates(
+        owner_kind,
+        owner_id,
+        location_kind,
+        location_name,
+        value,
+    ) {
+        if candidate.skip_reason.is_some() || candidate.unsafe_reason.is_some() {
+            continue;
+        }
+        let Some(local_ref) = candidate.normalized_local_ref.as_deref() else {
+            continue;
+        };
+        if media_exports.contains(local_ref) {
+            continue;
+        }
+
+        let source = source_map
+            .source_for_diagnostic_path(authoring_path)
+            .map(SourcePath::new);
+        diagnostics.push(Diagnostic {
+            code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),
+            severity: Severity::Error,
+            message: missing_media_reference_summary(&candidate),
+            help: product_diagnostic_help(
+                "MEDIA.MISSING_REFERENCE",
+                source.as_ref().map(SourcePath::as_str),
+            ),
+            source,
+        });
+    }
+}
+
+fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCandidate) -> String {
+    if candidate.ref_kind == "css_url" {
+        let raw_ref = candidate
+            .diagnostic_ref
+            .as_deref()
+            .unwrap_or(candidate.raw_ref.as_str());
+        format!(
+            "missing media reference {} in {} {} {} {} line {}",
+            raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name,
+            candidate.source_line.unwrap_or(1)
+        )
+    } else {
+        format!(
+            "missing media reference {} in {} {} {} {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name
+        )
+    }
+}
+
 struct ProjectNormalizeOutput {
     normalized_ir: authoring_core::NormalizedIr,
     diagnostics: Vec<Diagnostic>,
@@ -1463,6 +1659,18 @@ impl ProductMediaPrepareError {
             }],
         }
     }
+
+    fn staging_collision(source: PathBuf, target: PathBuf, export_filename: String) -> Self {
+        Self::single(
+            "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION",
+            format!(
+                "Product media staging target already exists for export filename {export_filename:?}; source {} would overwrite target {}",
+                source.display(),
+                target.display()
+            ),
+            export_filename,
+        )
+    }
 }
 
 impl std::fmt::Display for ProjectNormalizeError {
@@ -1563,12 +1771,21 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
         .into_iter()
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
-            severity: Severity::Warning,
+            severity: lowering_diagnostic_severity(diagnostic.code),
             message: diagnostic.message,
             source: Some(SourcePath::new("project.lower")),
             help: None,
         })
         .collect()
+}
+
+fn lowering_diagnostic_severity(code: &str) -> Severity {
+    match code {
+        "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE" | "PHASE5A.FONT_BINDING_UNKNOWN_ASSET" => {
+            Severity::Error
+        }
+        _ => Severity::Warning,
+    }
 }
 
 fn failure_report(started: Instant, code: &str, message: String) -> BuildReport {
@@ -1670,6 +1887,36 @@ mod tests {
                 .map(|diagnostic| diagnostic.code.as_str())
                 .collect::<Vec<_>>(),
             vec!["LOWERING.WARNING", "NORMALIZE.ERROR"]
+        );
+    }
+
+    #[test]
+    fn product_helper_wiring_lowering_diagnostics_map_to_errors() {
+        let diagnostics = map_lowering_diagnostics(vec![
+            LoweringDiagnostic {
+                code: "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE",
+                message: "missing notetype".into(),
+            },
+            LoweringDiagnostic {
+                code: "PHASE5A.FONT_BINDING_UNKNOWN_ASSET",
+                message: "missing asset".into(),
+            },
+            LoweringDiagnostic {
+                code: "PHASE5A.ADVISORY",
+                message: "advisory".into(),
+            },
+        ]);
+
+        assert_eq!(
+            diagnostics
+                .iter()
+                .map(|diagnostic| (diagnostic.code.as_str(), diagnostic.severity))
+                .collect::<Vec<_>>(),
+            vec![
+                ("PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE", Severity::Error),
+                ("PHASE5A.FONT_BINDING_UNKNOWN_ASSET", Severity::Error),
+                ("PHASE5A.ADVISORY", Severity::Warning),
+            ]
         );
     }
 

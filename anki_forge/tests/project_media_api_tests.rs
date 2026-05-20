@@ -576,6 +576,69 @@ fn project_build_does_not_self_copy_when_base_dir_contains_source_media() {
 }
 
 #[test]
+fn project_build_rejects_product_media_staging_collision_without_overwriting_target() {
+    let root = unique_artifacts_dir("project-media-staging-collision");
+    let source_dir = root.join("sources");
+    std::fs::create_dir_all(&source_dir).expect("create source dir");
+    let source = source_dir.join("source.bin");
+    std::fs::write(&source, b"registered source bytes").expect("write source");
+    let preexisting_target = root.join("same.bin");
+    let preexisting = b"unrelated caller file bytes".to_vec();
+    std::fs::write(&preexisting_target, &preexisting).expect("write preexisting target");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("same.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("collision", "")
+                .stable_id("media:collision")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("collision.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect_err("staging collision must fail");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION")
+        .expect("staging collision diagnostic");
+
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"same.bin\"]")
+    );
+    assert!(diagnostic.message.contains(&source.display().to_string()));
+    assert!(diagnostic
+        .message
+        .contains(&preexisting_target.display().to_string()));
+    assert_eq!(
+        std::fs::read(&preexisting_target).expect("read preexisting target after build"),
+        preexisting,
+        "build must not overwrite a caller-owned file when staging Product media"
+    );
+}
+
+#[test]
 fn project_build_does_not_copy_over_hard_linked_staging_alias() {
     let root = unique_artifacts_dir("project-media-hard-link-self-copy");
     let source = root.join("source.bin");

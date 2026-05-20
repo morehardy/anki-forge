@@ -924,6 +924,67 @@ fn project_lower_maps_custom_notetype_stock_collision_sources_to_project_index()
 }
 
 #[test]
+fn project_build_reports_duplicate_notetype_template_and_css_media_sources_by_index() {
+    let mut project = Project::new("Duplicate Note Type Media")
+        .stable_id("duplicate-notetype-media")
+        .default_deck("Duplicate Note Type Media");
+    project
+        .add_notetype(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recognition")
+                        .front(r#"<img src="missing-first-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-first-css.png"); }"#),
+        )
+        .expect("add first custom notetype");
+    project
+        .add_notetype(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recall")
+                        .front(r#"<img src="missing-second-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-second-css.png"); }"#),
+        )
+        .expect("add second custom notetype");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("duplicate notetype id and missing media references fail build");
+
+    assert!(error
+        .report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE"));
+
+    let sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+        .map(|diagnostic| {
+            assert_eq!(diagnostic.severity, Severity::Error);
+            diagnostic
+                .source
+                .as_ref()
+                .map(|source| source.as_str())
+                .expect("missing media diagnostic source")
+        })
+        .collect::<Vec<_>>();
+
+    assert!(sources.contains(&"project.note_types[0].templates[\"Recognition\"].front"));
+    assert!(sources.contains(&"project.note_types[0].css"));
+    assert!(sources.contains(&"project.note_types[1].templates[\"Recall\"].front"));
+    assert!(sources.contains(&"project.note_types[1].css"));
+}
+
+#[test]
 fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))
