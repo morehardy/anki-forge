@@ -157,6 +157,33 @@ fn project_validate_reports_duplicate_notetype_ids_with_index_sources_and_names(
 }
 
 #[test]
+fn project_validate_reports_custom_notetype_id_collision_with_implicit_stock() {
+    let mut project = Project::new("Implicit Duplicate")
+        .stable_id("implicit-duplicate")
+        .default_deck("Implicit Duplicate");
+    project
+        .add_note(Note::basic("front", "back").stable_id("basic:1"))
+        .expect("add stock note");
+    project
+        .add_notetype(NoteType::custom("basic").name("Custom Basic"))
+        .expect("add custom basic notetype");
+
+    let report = project.validate();
+    let duplicate = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
+        .expect("duplicate notetype diagnostic");
+
+    assert_eq!(
+        duplicate.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+    assert!(duplicate.message.contains("implicit stock"));
+    assert!(duplicate.message.contains("Custom Basic"));
+}
+
+#[test]
 fn project_validate_warns_for_auto_derived_custom_field_key() {
     let note_type = NoteType::custom("auto-key")
         .field(Field::new("Expression"))
@@ -459,6 +486,46 @@ fn project_lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_
         plan.source_map
             .source_for_authoring_path("authoring.note_types[2].css"),
         Some("project.note_types[1].css")
+    );
+}
+
+#[test]
+fn project_lower_maps_custom_notetype_stock_collision_sources_to_project_index() {
+    let mut project = Project::new("Implicit Duplicate")
+        .stable_id("implicit-duplicate")
+        .default_deck("Implicit Duplicate");
+    project
+        .add_note(Note::basic("front", "back").stable_id("basic:1"))
+        .expect("add stock note");
+    project
+        .add_notetype(
+            NoteType::custom("basic")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Custom Basic")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}"),
+                ),
+        )
+        .expect("add custom basic notetype");
+
+    let plan = project.lower().expect("lower project");
+
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].templates[\"Custom Basic\"].front"),
+        Some("project.note_types[0].templates[\"Custom Basic\"].front")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[1].css"),
+        Some("project.note_types[0].css")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"basic\"].templates[\"Custom Basic\"].front"
+        ),
+        None
     );
 }
 

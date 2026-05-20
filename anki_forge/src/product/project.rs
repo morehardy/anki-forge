@@ -36,6 +36,11 @@ pub struct Project {
     deck_source: Option<crate::deck::Deck>,
 }
 
+enum NotetypeDuplicateFirst<'a> {
+    ImplicitStock,
+    Project { index: usize, name: Option<&'a str> },
+}
+
 impl Project {
     pub fn new(name: impl Into<String>) -> Self {
         Self {
@@ -153,28 +158,54 @@ impl Project {
             }
         }
 
+        let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
         let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            *notetype_id_counts.entry(*stock_id).or_default() += 1;
+        }
         for note_type in &self.note_types {
             *notetype_id_counts.entry(note_type.id()).or_default() += 1;
         }
-        let mut first_notetype_by_id = BTreeMap::<&str, (usize, Option<&str>)>::new();
+        let mut first_notetype_by_id = BTreeMap::<&str, NotetypeDuplicateFirst<'_>>::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            first_notetype_by_id.insert(*stock_id, NotetypeDuplicateFirst::ImplicitStock);
+        }
         for (index, note_type) in self.note_types.iter().enumerate() {
-            if let Some((first_index, first_name)) = first_notetype_by_id.get(note_type.id()) {
-                diagnostics.push(Diagnostic {
-                    code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
-                    severity: Severity::Error,
-                    message: duplicate_notetype_message(
+            if let Some(first) = first_notetype_by_id.get(note_type.id()) {
+                let message = match first {
+                    NotetypeDuplicateFirst::ImplicitStock => {
+                        duplicate_implicit_stock_notetype_message(
+                            note_type.id(),
+                            index,
+                            note_type.name_ref(),
+                        )
+                    }
+                    NotetypeDuplicateFirst::Project {
+                        index: first_index,
+                        name: first_name,
+                    } => duplicate_notetype_message(
                         note_type.id(),
                         *first_index,
                         *first_name,
                         index,
                         note_type.name_ref(),
                     ),
+                };
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
+                    severity: Severity::Error,
+                    message,
                     source: Some(SourcePath::new(format!("project.note_types[{index}]"))),
                     help: Some("choose a unique id for each custom note type".into()),
                 });
             } else {
-                first_notetype_by_id.insert(note_type.id(), (index, note_type.name_ref()));
+                first_notetype_by_id.insert(
+                    note_type.id(),
+                    NotetypeDuplicateFirst::Project {
+                        index,
+                        name: note_type.name_ref(),
+                    },
+                );
             }
         }
 
@@ -629,6 +660,25 @@ impl Project {
         counts
     }
 
+    fn implicit_stock_notetype_ids(&self) -> Vec<&'static str> {
+        let mut ids = Vec::new();
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_BASIC_ID)
+        {
+            ids.push(STOCK_BASIC_ID);
+        }
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
+        {
+            ids.push(STOCK_CLOZE_ID);
+        }
+        ids
+    }
+
     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
         if self.deck_source.is_some() {
             for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
@@ -687,12 +737,19 @@ impl Project {
             return;
         }
 
+        let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
         let mut id_counts = BTreeMap::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            *id_counts.entry(*stock_id).or_insert(0usize) += 1;
+        }
         for note_type in &self.note_types {
             *id_counts.entry(note_type.id()).or_insert(0usize) += 1;
         }
 
         let mut consumed_by_id = BTreeMap::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            consumed_by_id.insert((*stock_id).to_string(), 1usize);
+        }
         let mut entries = Vec::new();
         for (project_index, note_type) in self.note_types.iter().enumerate() {
             if id_counts.get(note_type.id()).copied().unwrap_or_default() <= 1 {
@@ -922,6 +979,17 @@ fn duplicate_notetype_message(
         "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is project.note_types[{first_index}]{}",
         display_name_suffix(duplicate_name),
         display_name_suffix(first_name),
+    )
+}
+
+fn duplicate_implicit_stock_notetype_message(
+    id: &str,
+    duplicate_index: usize,
+    duplicate_name: Option<&str>,
+) -> String {
+    format!(
+        "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is an implicit stock note type inserted for stock {id} notes",
+        display_name_suffix(duplicate_name),
     )
 }
 
