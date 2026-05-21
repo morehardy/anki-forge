@@ -264,12 +264,10 @@ fn observe_file_source(
             path: path.to_path_buf(),
         });
     }
-    if empty_source_behavior == EmptySourceBehavior::Reject {
-        if metadata.len() == 0 {
-            return Err(MediaSourceObservationError::Empty {
-                path: path.to_path_buf(),
-            });
-        }
+    if empty_source_behavior == EmptySourceBehavior::Reject && metadata.len() == 0 {
+        return Err(MediaSourceObservationError::Empty {
+            path: path.to_path_buf(),
+        });
     }
 
     let mut file = File::open(path).map_err(|err| match err.kind() {
@@ -303,12 +301,10 @@ fn observe_file_source(
         size_bytes += read as u64;
     }
 
-    if empty_source_behavior == EmptySourceBehavior::Reject {
-        if size_bytes == 0 {
-            return Err(MediaSourceObservationError::Empty {
-                path: path.to_path_buf(),
-            });
-        }
+    if empty_source_behavior == EmptySourceBehavior::Reject && size_bytes == 0 {
+        return Err(MediaSourceObservationError::Empty {
+            path: path.to_path_buf(),
+        });
     }
     Ok(ObservedMedia {
         fingerprint: MediaFingerprint {

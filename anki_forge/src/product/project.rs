@@ -1434,35 +1434,41 @@ fn duplicate_notetype_media_reference_diagnostics(
                     &mut diagnostics,
                     &media_exports,
                     source_map,
-                    &format!("{authoring_template}.front"),
-                    "notetype",
-                    &notetype.id,
-                    "template_front",
-                    &format!("{}:front", template.name),
-                    &template.question_format,
+                    MissingMediaReferenceScan {
+                        authoring_path: &format!("{authoring_template}.front"),
+                        owner_kind: "notetype",
+                        owner_id: &notetype.id,
+                        location_kind: "template_front",
+                        location_name: &format!("{}:front", template.name),
+                        value: &template.question_format,
+                    },
                 );
                 append_missing_media_reference_diagnostics(
                     &mut diagnostics,
                     &media_exports,
                     source_map,
-                    &format!("{authoring_template}.back"),
-                    "notetype",
-                    &notetype.id,
-                    "template_back",
-                    &format!("{}:back", template.name),
-                    &template.answer_format,
+                    MissingMediaReferenceScan {
+                        authoring_path: &format!("{authoring_template}.back"),
+                        owner_kind: "notetype",
+                        owner_id: &notetype.id,
+                        location_kind: "template_back",
+                        location_name: &format!("{}:back", template.name),
+                        value: &template.answer_format,
+                    },
                 );
                 if let Some(value) = template.browser_question_format.as_deref() {
                     append_missing_media_reference_diagnostics(
                         &mut diagnostics,
                         &media_exports,
                         source_map,
-                        &format!("{authoring_template}.browser_front"),
-                        "notetype",
-                        &notetype.id,
-                        "browser_template_front",
-                        &format!("{}:browser_front", template.name),
-                        value,
+                        MissingMediaReferenceScan {
+                            authoring_path: &format!("{authoring_template}.browser_front"),
+                            owner_kind: "notetype",
+                            owner_id: &notetype.id,
+                            location_kind: "browser_template_front",
+                            location_name: &format!("{}:browser_front", template.name),
+                            value,
+                        },
                     );
                 }
                 if let Some(value) = template.browser_answer_format.as_deref() {
@@ -1470,12 +1476,14 @@ fn duplicate_notetype_media_reference_diagnostics(
                         &mut diagnostics,
                         &media_exports,
                         source_map,
-                        &format!("{authoring_template}.browser_back"),
-                        "notetype",
-                        &notetype.id,
-                        "browser_template_back",
-                        &format!("{}:browser_back", template.name),
-                        value,
+                        MissingMediaReferenceScan {
+                            authoring_path: &format!("{authoring_template}.browser_back"),
+                            owner_kind: "notetype",
+                            owner_id: &notetype.id,
+                            location_kind: "browser_template_back",
+                            location_name: &format!("{}:browser_back", template.name),
+                            value,
+                        },
                     );
                 }
             }
@@ -1486,12 +1494,14 @@ fn duplicate_notetype_media_reference_diagnostics(
                 &mut diagnostics,
                 &media_exports,
                 source_map,
-                &format!("{authoring_notetype_source}.css"),
-                "notetype",
-                &notetype.id,
-                "css",
-                "css",
-                css,
+                MissingMediaReferenceScan {
+                    authoring_path: &format!("{authoring_notetype_source}.css"),
+                    owner_kind: "notetype",
+                    owner_id: &notetype.id,
+                    location_kind: "css",
+                    location_name: "css",
+                    value: css,
+                },
             );
         }
     }
@@ -1499,23 +1509,27 @@ fn duplicate_notetype_media_reference_diagnostics(
     diagnostics
 }
 
+struct MissingMediaReferenceScan<'a> {
+    authoring_path: &'a str,
+    owner_kind: &'a str,
+    owner_id: &'a str,
+    location_kind: &'a str,
+    location_name: &'a str,
+    value: &'a str,
+}
+
 fn append_missing_media_reference_diagnostics(
     diagnostics: &mut Vec<Diagnostic>,
     media_exports: &BTreeSet<&str>,
     source_map: &ProductSourceMap,
-    authoring_path: &str,
-    owner_kind: &str,
-    owner_id: &str,
-    location_kind: &str,
-    location_name: &str,
-    value: &str,
+    scan: MissingMediaReferenceScan<'_>,
 ) {
     for candidate in authoring_core::extract_media_reference_candidates(
-        owner_kind,
-        owner_id,
-        location_kind,
-        location_name,
-        value,
+        scan.owner_kind,
+        scan.owner_id,
+        scan.location_kind,
+        scan.location_name,
+        scan.value,
     ) {
         if candidate.skip_reason.is_some() || candidate.unsafe_reason.is_some() {
             continue;
@@ -1528,7 +1542,7 @@ fn append_missing_media_reference_diagnostics(
         }
 
         let source = source_map
-            .source_for_diagnostic_path(authoring_path)
+            .source_for_diagnostic_path(scan.authoring_path)
             .map(SourcePath::new);
         diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),

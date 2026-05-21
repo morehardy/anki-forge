@@ -112,17 +112,17 @@ fn extract_sound_refs(
         };
         let value_end = value_start + relative_end;
         let raw_ref = decode_html_entities(input[value_start..value_end].trim()).to_string();
-        refs.push(local_candidate(
+        refs.push(local_candidate(CandidateInput {
             owner_kind,
             owner_id,
             location_kind,
             location_name,
-            &raw_ref,
-            MediaReferenceCandidateKind::Sound,
-            false,
-            None,
-            None,
-        ));
+            raw_ref: &raw_ref,
+            kind: MediaReferenceCandidateKind::Sound,
+            url_semantics: false,
+            diagnostic_ref: None,
+            source_line: None,
+        }));
         cursor = value_end + 1;
     }
 
@@ -220,29 +220,29 @@ fn extract_css_url_refs_from_css_text(
     let mut cursor = 0;
     let line_base = line_number_at(line_source, line_base_offset).saturating_sub(1);
 
-    while let Some(url_start) = find_css_url_function(&input, cursor) {
+    while let Some(url_start) = find_css_url_function(input, cursor) {
         if !is_css_url_boundary(input.as_bytes(), url_start) {
             cursor = url_start + "url(".len();
             continue;
         }
 
         let value_start = url_start + "url(".len();
-        let Some((raw_ref, next_cursor)) = parse_css_url_value(&input, value_start) else {
-            cursor = css_url_recovery_cursor(&input, value_start);
+        let Some((raw_ref, next_cursor)) = parse_css_url_value(input, value_start) else {
+            cursor = css_url_recovery_cursor(input, value_start);
             continue;
         };
         let raw_token = input[url_start..next_cursor].to_string();
-        refs.push(local_candidate(
+        refs.push(local_candidate(CandidateInput {
             owner_kind,
             owner_id,
             location_kind,
             location_name,
-            &raw_ref,
-            MediaReferenceCandidateKind::CssUrl,
-            true,
-            Some(raw_token),
-            Some(line_base + line_number_at(input, url_start)),
-        ));
+            raw_ref: &raw_ref,
+            kind: MediaReferenceCandidateKind::CssUrl,
+            url_semantics: true,
+            diagnostic_ref: Some(raw_token),
+            source_line: Some(line_base + line_number_at(input, url_start)),
+        }));
         cursor = next_cursor;
     }
 
@@ -414,17 +414,17 @@ fn extract_html_attribute_refs(
         };
         if name.eq_ignore_ascii_case(attr_name) {
             let raw_ref = decode_html_entities(raw_value).to_string();
-            refs.push(local_candidate(
+            refs.push(local_candidate(CandidateInput {
                 owner_kind,
                 owner_id,
                 location_kind,
                 location_name,
-                &raw_ref,
+                raw_ref: &raw_ref,
                 kind,
-                true,
-                None,
-                None,
-            ));
+                url_semantics: true,
+                diagnostic_ref: None,
+                source_line: None,
+            }));
         }
         cursor = next_cursor;
     }
@@ -442,43 +442,45 @@ fn is_css_url_boundary(bytes: &[u8], start: usize) -> bool {
     start == 0 || !is_css_identifier_byte(bytes[start - 1])
 }
 
-fn local_candidate(
-    owner_kind: &str,
-    owner_id: &str,
-    location_kind: &str,
-    location_name: &str,
-    raw_ref: &str,
+struct CandidateInput<'a> {
+    owner_kind: &'a str,
+    owner_id: &'a str,
+    location_kind: &'a str,
+    location_name: &'a str,
+    raw_ref: &'a str,
     kind: MediaReferenceCandidateKind,
     url_semantics: bool,
     diagnostic_ref: Option<String>,
     source_line: Option<usize>,
-) -> MediaReferenceCandidate {
-    let raw_ref = if url_semantics {
-        raw_ref.to_string()
+}
+
+fn local_candidate(input: CandidateInput<'_>) -> MediaReferenceCandidate {
+    let raw_ref = if input.url_semantics {
+        input.raw_ref.to_string()
     } else {
-        raw_ref.trim().to_string()
+        input.raw_ref.trim().to_string()
     };
-    let ref_kind = kind.ref_kind().to_string();
+    let ref_kind = input.kind.ref_kind().to_string();
     let (normalized_local_ref, skip_reason, unsafe_reason) =
-        match classify_ref(&raw_ref, url_semantics) {
+        match classify_ref(&raw_ref, input.url_semantics) {
             ReferenceClassification::Local(value) => (Some(value), None, None),
             ReferenceClassification::Skipped(reason) => (None, Some(reason.to_string()), None),
             ReferenceClassification::Unsafe(reason) => (None, None, Some(reason.to_string())),
         };
 
     MediaReferenceCandidate {
-        owner_kind: owner_kind.to_string(),
-        owner_id: owner_id.to_string(),
-        location_kind: location_kind.to_string(),
-        location_name: location_name.to_string(),
+        owner_kind: input.owner_kind.to_string(),
+        owner_id: input.owner_id.to_string(),
+        location_kind: input.location_kind.to_string(),
+        location_name: input.location_name.to_string(),
         raw_ref,
         ref_kind,
         normalized_local_ref,
         skip_reason,
         unsafe_reason,
-        diagnostic_ref,
-        source_line,
-        kind,
+        diagnostic_ref: input.diagnostic_ref,
+        source_line: input.source_line,
+        kind: input.kind,
     }
 }
 

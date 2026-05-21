@@ -11,17 +11,19 @@ pub enum ProjectMediaPolicy {
     },
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum ProjectMediaDiagnosticBehavior {
     Ignore,
     Info,
+    #[default]
     Warning,
     Error,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum ProjectDeclaredMimeMismatchBehavior {
     Warning,
+    #[default]
     Error,
 }
 
@@ -248,15 +250,3 @@ impl std::fmt::Display for ProjectMediaPolicyError {
 }
 
 impl std::error::Error for ProjectMediaPolicyError {}
-
-impl Default for ProjectMediaDiagnosticBehavior {
-    fn default() -> Self {
-        Self::Warning
-    }
-}
-
-impl Default for ProjectDeclaredMimeMismatchBehavior {
-    fn default() -> Self {
-        Self::Error
-    }
-}
