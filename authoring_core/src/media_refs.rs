@@ -512,7 +512,7 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
     }
 
     let local_ref = if url_semantics {
-        let url_path = strip_url_query_and_fragment(value);
+        let url_path = dynamic_check_value;
         match percent_decode_utf8(url_path) {
             Ok(value) => value,
             Err(reason) => return ReferenceClassification::Unsafe(reason),
@@ -529,9 +529,6 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
     }
     if local_ref.contains(['/', '\\']) {
         return ReferenceClassification::Unsafe("decoded-path-separator");
-    }
-    if local_ref.chars().any(char::is_control) {
-        return ReferenceClassification::Unsafe("helper-unsafe-character");
     }
     if !local_ref
         .bytes()
