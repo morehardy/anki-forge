@@ -260,6 +260,18 @@ impl Project {
         ValidationReport { diagnostics }
     }
 
+    /// Lowers this project into an authoring plan for inspection or serialization.
+    ///
+    /// `lower()` returns a self-contained `LoweringPlan`. Product media registered
+    /// with `media_mut().add_file(...)` is verified, read from disk, and embedded
+    /// as inline base64 bytes in that plan, so callers do not receive hidden
+    /// absolute source paths or need a media input directory.
+    ///
+    /// Because the self-contained form uses inline media, file-backed media must
+    /// fit within the inline media limit. Larger file media can make `lower()`
+    /// fail with `MEDIA.INLINE_TOO_LARGE`. The build and normalize paths use
+    /// path-backed media staging instead, and keep `add_file(...)` assets
+    /// path-backed until normalization.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;

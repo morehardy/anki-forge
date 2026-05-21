@@ -8,6 +8,13 @@ use sha1::{Digest, Sha1};
 
 pub(crate) const INLINE_MEDIA_LIMIT_BYTES: usize = 64 * 1024;
 
+/// Opaque handle to a Product media export filename.
+///
+/// A `MediaRef` is keyed by the export filename, not by source path, content
+/// hash, registry address, or object identity. `PartialEq`, `Eq`, and ordering
+/// therefore compare only that filename. Separate successful registrations that
+/// resolve to the same export filename produce equal `MediaRef` values; the
+/// registry rejects attempts to bind that same filename to different content.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MediaRef {
     filename: String,
