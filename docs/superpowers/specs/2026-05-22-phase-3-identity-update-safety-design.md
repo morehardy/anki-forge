@@ -190,11 +190,17 @@ Strict
 The build follows existing behavior.
 
 `Strict` is activated when the caller supplies `compare_to(...)`,
-`identity_lockfile(...)`, or `update_safety(true)`.
+`identity_lockfile(...)`, or `update_safety(UpdateSafetyMode::Strict)`.
 
 `ReportOnly` is an explicit preview mode for users who want diagnostics from a
 baseline without blocking output. Baseline-bearing options do not silently fall
 back to report-only; callers must request it.
+
+`write_identity_lockfile(true)` alone does not activate strict mode. This lets
+first-time users build a package and create the first lockfile without already
+having a previous baseline. When combined with `compare_to(...)` or
+`identity_lockfile(...)`, the written lockfile contains the reconciled selected
+GUIDs.
 
 Recommended API shape:
 
@@ -302,6 +308,11 @@ Recommended default name:
 anki-forge.lock.json
 ```
 
+When `write_identity_lockfile(true)` is used without an explicit
+`identity_lockfile(...)` path, the build writes the default lockfile name in the
+current working directory. When `identity_lockfile(...)` is present, the same
+path is used for read and write.
+
 Required fields:
 
 ```text
@@ -366,14 +377,20 @@ anki_forge_identity:
 Inspection recovery order:
 
 1. Use embedded anki-forge note identity metadata when present.
-2. For older anki-forge APKGs without embedded note metadata, allow a
+2. If a lockfile is supplied, join previous APKG `notes.guid` to lockfile
+   `anki_guid` entries and inherit the corresponding stable id.
+3. For older anki-forge APKGs without embedded note metadata, allow a
    compatibility recovery path when `notes.guid` exactly matches a current or
    lockfile stable id.
-3. If neither path applies, mark the baseline entry unrecoverable.
+4. If none of these paths apply, mark the baseline entry unrecoverable.
 
 This rule prevents a false claim that arbitrary APKGs can always be mapped back
-to Product stable ids. In strict update-safe mode, unrecoverable identity for an
-expected existing note is blocking.
+to Product stable ids.
+
+An "expected existing note" means a current stable id that is present in a
+recoverable previous APKG entry or in the supplied lockfile. Unrecoverable APKG
+notes that cannot be associated with any current or lockfile stable id degrade
+baseline coverage, but they do not block strict mode by themselves.
 
 ## 10. Build Flow
 
@@ -531,7 +548,7 @@ The existing `BuildError` shape remains valid. If strict update-safety fails,
 
 ## 15. Contract Assets
 
-Phase 3 should add these contract assets:
+Phase 3 adds these contract assets:
 
 ```text
 contracts/schema/identity-index.schema.json
