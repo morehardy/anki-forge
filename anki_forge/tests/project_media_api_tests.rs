@@ -1,6 +1,12 @@
 use std::path::PathBuf;
 
+use anki_forge::build::{
+    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
+    ProjectNormalizeOptions,
+};
 use anki_forge::prelude::*;
+use anki_forge::AuthoringMediaSource;
+use anki_forge::MediaSource;
 
 const MP3: &[u8] = b"fake-mp3-bytes-for-package-test";
 const PNG: &[u8] = &[
@@ -17,11 +23,13 @@ fn product_media_helpers_render_anki_compatible_content() {
     let audio = project
         .media_mut()
         .add_bytes("raw-audio.bin", MP3.to_vec())
+        .expect("bytes media")
         .export_as("hola.mp3")
         .expect("audio media");
     let image = project
         .media_mut()
         .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
         .export_as("chart.png")
         .expect("image media");
 
@@ -52,6 +60,7 @@ fn project_build_packages_product_media_and_reports_count() {
     let audio = project
         .media_mut()
         .add_bytes("hola-source.mp3", MP3.to_vec())
+        .expect("bytes media")
         .export_as("hola.mp3")
         .expect("audio media");
 
@@ -73,6 +82,117 @@ fn project_build_packages_product_media_and_reports_count() {
 }
 
 #[test]
+fn project_build_report_includes_media_summary_with_unique_object_bytes() {
+    let root = unique_artifacts_dir("project-media-summary");
+    let mut project = Project::new("Media Summary")
+        .stable_id("media-summary")
+        .default_deck("Media Summary");
+    let chart = project
+        .media_mut()
+        .add_bytes("chart-a.png", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.png")
+        .expect("chart media");
+    project
+        .media_mut()
+        .add_bytes("chart-b.png", PNG.to_vec())
+        .expect("same bytes media")
+        .export_as("chart-copy.png")
+        .expect("same content under another export filename");
+
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:summary")
+                .image("Back", chart),
+        )
+        .expect("add note");
+
+    let report = project
+        .write_apkg(root.join("summary.apkg"))
+        .expect("unused media remains a warning");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(report.counts.media, 2);
+    assert_eq!(report.media.objects, 1);
+    assert_eq!(report.media.bindings, 2);
+    assert_eq!(report.media.references, 1);
+    assert_eq!(report.media.missing_references, 0);
+    assert_eq!(report.media.unsafe_references, 0);
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(report.media.unique_bytes, PNG.len() as u64);
+}
+
+#[test]
+fn project_build_maps_unused_media_binding_to_product_media_source() {
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("taberu.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("taberu", "eat").stable_id("jp:taberu"))
+        .expect("add note");
+
+    let report = project
+        .build(BuildOptions::new().inspect(false))
+        .expect("unused media is a warning under strict policy");
+    assert_eq!(report.media.bindings, 1);
+    assert_eq!(report.media.references, 0);
+    assert_eq!(report.media.unused_bindings, 1);
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNUSED_BINDING")
+        .expect("unused binding diagnostic");
+
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.UNUSED_BINDING");
+    assert_eq!(diagnostic.severity, Severity::Warning);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"taberu.mp3\"]")
+    );
+    assert!(diagnostic.message.contains("taberu.mp3"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("remove the registration")
+            && help.contains("note")
+            && help.contains("template")
+            && help.contains("CSS")
+    }));
+}
+
+#[test]
+fn deck_backed_project_build_maps_unused_media_binding_to_product_media_source() {
+    let mut deck = Deck::builder("Deck Media").stable_id("deck-media").build();
+    deck.media()
+        .add(MediaSource::from_bytes("unused.png", PNG.to_vec()))
+        .expect("register deck media");
+    deck.basic()
+        .note("front", "back")
+        .stable_id("deck:note")
+        .add()
+        .expect("add deck note");
+
+    let report = Project::from(deck)
+        .build(BuildOptions::new().inspect(false))
+        .expect("unused media is a warning under strict policy");
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNUSED_BINDING")
+        .expect("unused binding diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"unused.png\"]")
+    );
+}
+
+#[test]
 fn project_build_uses_export_name_for_declared_mime() {
     let root = unique_artifacts_dir("project-media-mime");
     let mut project = Project::new("Media")
@@ -81,6 +201,7 @@ fn project_build_uses_export_name_for_declared_mime() {
     let image = project
         .media_mut()
         .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
         .export_as("chart.png")
         .expect("image media");
 
@@ -98,6 +219,292 @@ fn project_build_uses_export_name_for_declared_mime() {
 
     report.ensure_success().expect("successful media build");
     assert_eq!(report.counts.media, 1);
+}
+
+#[test]
+fn project_build_maps_declared_mime_mismatch_to_product_media_source_and_help() {
+    let mut project = Project::new("Media")
+        .stable_id("media-mime-mismatch")
+        .default_deck("Media");
+    let image_exported_as_audio = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:mime-mismatch")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(BuildOptions::new().inspect(false))
+        .expect_err("declared MIME mismatch fails strict build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.DECLARED_MIME_MISMATCH")
+        .expect("MIME mismatch diagnostic");
+
+    assert_eq!(diagnostic.code.as_str(), "MEDIA.DECLARED_MIME_MISMATCH");
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"chart.mp3\"]")
+    );
+    assert!(diagnostic.message.contains("declared MIME audio/mpeg"));
+    assert!(diagnostic.message.contains("observed MIME image/png"));
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("export filename")
+            && help.contains("declared MIME")
+            && help.contains("source file")
+    }));
+}
+
+#[test]
+fn project_media_policy_strict_keeps_default_warning_and_error_severities() {
+    let report = Project::from(deck_with_untyped_blob_media())
+        .build(BuildOptions::new().inspect(false).normalize_options(
+            ProjectNormalizeOptions::strict().media_policy(ProjectMediaPolicy::strict()),
+        ))
+        .expect("strict unknown MIME remains a warning");
+
+    report
+        .ensure_success()
+        .expect("strict media warnings should not fail the report");
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNKNOWN_MIME"),
+        Some(Severity::Warning)
+    );
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Warning)
+    );
+
+    let mut mismatch_project = Project::new("Media")
+        .stable_id("media-strict-mismatch")
+        .default_deck("Media");
+    let image_exported_as_audio = mismatch_project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+    mismatch_project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:strict-mismatch")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let error = mismatch_project
+        .build(BuildOptions::new().inspect(false).normalize_options(
+            ProjectNormalizeOptions::strict().media_policy(ProjectMediaPolicy::strict()),
+        ))
+        .expect_err("strict declared MIME mismatch remains an error");
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.DECLARED_MIME_MISMATCH"),
+        Some(Severity::Error)
+    );
+}
+
+#[test]
+fn project_media_policy_can_ignore_unused_binding_while_summary_still_counts_it() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-ignore")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-ignore"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Ignore),
+                ),
+            ),
+        )
+        .expect("ignored unused binding should not fail build");
+
+    report
+        .ensure_success()
+        .expect("ignored diagnostic report succeeds");
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        None
+    );
+}
+
+#[test]
+fn project_media_policy_can_emit_unused_binding_as_info() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-info")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-info"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Info),
+                ),
+            ),
+        )
+        .expect("info unused binding should not fail build");
+
+    report
+        .ensure_success()
+        .expect("info diagnostic report succeeds");
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Info)
+    );
+}
+
+#[test]
+fn project_media_policy_can_promote_unused_binding_to_error_and_keep_summary_count() {
+    let mut project = Project::new("Media")
+        .stable_id("media-unused-error")
+        .default_deck("Media");
+    project
+        .media_mut()
+        .add_bytes("unused-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("unused.mp3")
+        .expect("audio media");
+    project
+        .add_note(Note::basic("front", "back").stable_id("media:unused-error"))
+        .expect("add note");
+
+    let error = project
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Error),
+                ),
+            ),
+        )
+        .expect_err("error unused binding should fail build");
+
+    assert_eq!(error.report.media.unused_bindings, 1);
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.UNUSED_BINDING"),
+        Some(Severity::Error)
+    );
+}
+
+#[test]
+fn project_media_policy_can_promote_unknown_mime_to_error() {
+    let error = Project::from(deck_with_untyped_blob_media())
+        .build(
+            BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict()
+                        .unknown_mime_behavior(ProjectMediaDiagnosticBehavior::Error)
+                        .unused_binding_behavior(ProjectMediaDiagnosticBehavior::Ignore),
+                ),
+            ),
+        )
+        .expect_err("unknown MIME can be promoted to an error");
+
+    assert_eq!(
+        media_diagnostic_severity(&error.report, "MEDIA.UNKNOWN_MIME"),
+        Some(Severity::Error)
+    );
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNKNOWN_MIME")
+        .expect("unknown MIME diagnostic");
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("known extension") && help.contains("advanced media policy")
+    }));
+}
+
+#[test]
+fn project_media_policy_can_demote_declared_mime_mismatch_to_warning() {
+    let mut project = Project::new("Media")
+        .stable_id("media-mismatch-warning")
+        .default_deck("Media");
+    let image_exported_as_audio = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("chart.mp3")
+        .expect("mismatched media");
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("media:mismatch-warning")
+                .sound("Back", image_exported_as_audio),
+        )
+        .expect("add note");
+
+    let report =
+        project
+            .build(BuildOptions::new().inspect(false).normalize_options(
+                ProjectNormalizeOptions::strict().media_policy(
+                    ProjectMediaPolicy::strict().declared_mime_mismatch_behavior(
+                        ProjectDeclaredMimeMismatchBehavior::Warning,
+                    ),
+                ),
+            ))
+            .expect("declared MIME mismatch warning should not fail build");
+
+    report
+        .ensure_success()
+        .expect("warning-only media report succeeds");
+    assert_eq!(
+        media_diagnostic_severity(&report, "MEDIA.DECLARED_MIME_MISMATCH"),
+        Some(Severity::Warning)
+    );
+}
+
+#[test]
+fn declared_mime_mismatch_policy_rejects_ignore_and_info_behaviors() {
+    assert_eq!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Warning),
+        Ok(ProjectDeclaredMimeMismatchBehavior::Warning)
+    );
+    assert_eq!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Error),
+        Ok(ProjectDeclaredMimeMismatchBehavior::Error)
+    );
+    assert!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Ignore)
+            .is_err()
+    );
+    assert!(
+        ProjectDeclaredMimeMismatchBehavior::try_from(ProjectMediaDiagnosticBehavior::Info)
+            .is_err()
+    );
 }
 
 #[test]
@@ -133,12 +540,213 @@ fn project_build_keeps_file_media_path_backed_for_large_sources() {
 }
 
 #[test]
+fn project_build_does_not_self_copy_when_base_dir_contains_source_media() {
+    let root = unique_artifacts_dir("project-media-self-copy");
+    let source = root.join("same.bin");
+    let original = b"source bytes that must survive".to_vec();
+    std::fs::write(&source, &original).expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("same.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("same", "")
+                .stable_id("media:same")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("same.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect("build with source dir as base_dir");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(
+        std::fs::read(&source).expect("read source after build"),
+        original,
+        "build must not truncate or mutate a source file when staging target is the same path"
+    );
+}
+
+#[test]
+fn project_build_rejects_product_media_staging_collision_without_overwriting_target() {
+    let root = unique_artifacts_dir("project-media-staging-collision");
+    let source_dir = root.join("sources");
+    std::fs::create_dir_all(&source_dir).expect("create source dir");
+    let source = source_dir.join("source.bin");
+    std::fs::write(&source, b"registered source bytes").expect("write source");
+    let preexisting_target = root.join("same.bin");
+    let preexisting = b"unrelated caller file bytes".to_vec();
+    std::fs::write(&preexisting_target, &preexisting).expect("write preexisting target");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("same.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("collision", "")
+                .stable_id("media:collision")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let error = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("collision.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect_err("staging collision must fail");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION")
+        .expect("staging collision diagnostic");
+
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"same.bin\"]")
+    );
+    assert!(diagnostic.message.contains(&source.display().to_string()));
+    assert!(diagnostic
+        .message
+        .contains(&preexisting_target.display().to_string()));
+    assert_eq!(
+        std::fs::read(&preexisting_target).expect("read preexisting target after build"),
+        preexisting,
+        "build must not overwrite a caller-owned file when staging Product media"
+    );
+}
+
+#[test]
+fn project_build_does_not_copy_over_hard_linked_staging_alias() {
+    let root = unique_artifacts_dir("project-media-hard-link-self-copy");
+    let source = root.join("source.bin");
+    let target = root.join("alias.bin");
+    let original = b"hard linked source bytes that must survive".to_vec();
+    std::fs::write(&source, &original).expect("write source");
+    std::fs::hard_link(&source, &target).expect("create hard link alias");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("alias.bin")
+        .expect("export file media");
+
+    project
+        .add_note(
+            Note::basic("alias", "")
+                .stable_id("media:alias")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("alias.apkg"))
+                .normalize_options(
+                    ProjectNormalizeOptions::strict()
+                        .base_dir(&root)
+                        .media_store_dir(root.join(".media-store")),
+                ),
+        )
+        .expect("build with hard linked staging alias");
+
+    report.ensure_success().expect("successful media build");
+    assert_eq!(
+        std::fs::read(&source).expect("read source after build"),
+        original,
+        "build must not truncate a source file through a hard-linked staging target"
+    );
+}
+
+#[test]
+fn project_lower_inlines_file_media_instead_of_emitting_absolute_paths() {
+    let root = unique_artifacts_dir("project-media-lower-file");
+    let source = root.join("lower.bin");
+    std::fs::write(&source, b"file bytes").expect("write source");
+
+    let mut project = Project::new("Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("lower.bin")
+        .expect("export file media");
+
+    let lowered = project.lower().expect("lower product");
+    assert_eq!(lowered.authoring_document.media.len(), 1);
+    assert!(
+        matches!(
+            &lowered.authoring_document.media[0].source,
+            AuthoringMediaSource::InlineBytes { .. }
+        ),
+        "public lower() output should be self-contained and not contain an absolute file path"
+    );
+}
+
+#[test]
+fn project_lower_rejects_large_file_media_with_inline_limit_diagnostic() {
+    let root = unique_artifacts_dir("project-media-lower-large-file");
+    let source = root.join("large.bin");
+    std::fs::write(&source, vec![b'x'; 64 * 1024 + 1]).expect("write large source");
+
+    let mut project = Project::new("Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("large.bin")
+        .expect("export file media");
+
+    let error = project.lower().expect_err(
+        "public lower rejects large file media rather than producing invalid inline media",
+    );
+    assert!(error.to_string().contains("MEDIA.INLINE_TOO_LARGE"));
+}
+
+#[test]
 fn media_export_names_reject_helper_unsafe_characters() {
     let mut project = Project::new("Media");
 
     let image_error = project
         .media_mut()
         .add_bytes("raw-image.png", PNG.to_vec())
+        .expect("bytes media")
         .export_as("bad\"name.png")
         .expect_err("quotes break img src helpers");
     assert!(image_error.to_string().contains("MEDIA.EXPORT_NAME"));
@@ -146,9 +754,437 @@ fn media_export_names_reject_helper_unsafe_characters() {
     let sound_error = project
         .media_mut()
         .add_bytes("raw-audio.mp3", MP3.to_vec())
+        .expect("bytes media")
         .export_as("bad].mp3")
         .expect_err("closing bracket breaks sound helpers");
     assert!(sound_error.to_string().contains("MEDIA.EXPORT_NAME"));
+}
+
+#[test]
+fn add_bytes_rejects_oversized_inline_payload_immediately() {
+    let mut project = Project::new("Media");
+
+    let error = project
+        .media_mut()
+        .add_bytes("too-big.bin", vec![b'x'; 64 * 1024 + 1])
+        .expect_err("inline bytes above strict limit are rejected");
+
+    assert!(error.to_string().contains("MEDIA.INLINE_TOO_LARGE"));
+    assert_eq!(
+        project
+            .lower()
+            .expect("lower product")
+            .authoring_document
+            .media
+            .len(),
+        0,
+        "oversized add_bytes must not create a pending registry entry"
+    );
+}
+
+#[test]
+fn add_bytes_and_add_file_reject_zero_byte_sources() {
+    let root = unique_artifacts_dir("project-media-empty");
+    let empty_file = root.join("empty.bin");
+    std::fs::write(&empty_file, []).expect("write empty media");
+
+    let mut project = Project::new("Media");
+    let bytes_error = project
+        .media_mut()
+        .add_bytes("empty-bytes.bin", Vec::new())
+        .expect_err("empty bytes are rejected");
+    assert!(bytes_error.to_string().contains("MEDIA.EMPTY_SOURCE"));
+
+    let file_error = project
+        .media_mut()
+        .add_file(&empty_file)
+        .expect_err("empty files are rejected");
+    assert!(file_error.to_string().contains("MEDIA.EMPTY_SOURCE"));
+}
+
+#[test]
+fn export_as_reuses_same_filename_for_same_content_and_conflicts_for_different_content() {
+    let mut project = Project::new("Media");
+
+    let first = project
+        .media_mut()
+        .add_bytes("first-audio", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("sound.mp3")
+        .expect("first export");
+    let second = project
+        .media_mut()
+        .add_bytes("same-audio", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("sound.mp3")
+        .expect("same content same filename is reused");
+
+    assert_eq!(first.filename(), "sound.mp3");
+    assert_eq!(second.filename(), "sound.mp3");
+    assert_eq!(
+        project
+            .lower()
+            .expect("lower product")
+            .authoring_document
+            .media
+            .len(),
+        1
+    );
+
+    let conflict = project
+        .media_mut()
+        .add_bytes("different-audio", b"different bytes".to_vec())
+        .expect("bytes media")
+        .export_as("sound.mp3")
+        .expect_err("same filename with different content conflicts");
+    assert!(conflict
+        .to_string()
+        .contains("MEDIA.DUPLICATE_FILENAME_CONFLICT"));
+}
+
+#[test]
+fn same_content_can_export_under_different_filenames() {
+    let mut project = Project::new("Media");
+
+    project
+        .media_mut()
+        .add_bytes("first", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("one.mp3")
+        .expect("first export");
+    project
+        .media_mut()
+        .add_bytes("second", MP3.to_vec())
+        .expect("bytes media")
+        .export_as("two.mp3")
+        .expect("second export");
+
+    let lowered = project.lower().expect("lower product");
+    assert_eq!(lowered.authoring_document.media.len(), 2);
+}
+
+#[test]
+fn add_bytes_validates_source_label_without_filename_rules() {
+    let mut project = Project::new("Media");
+
+    let empty = project
+        .media_mut()
+        .add_bytes("   ", MP3.to_vec())
+        .expect_err("blank source label rejected");
+    assert!(empty.to_string().contains("MEDIA.INVALID_SOURCE_LABEL"));
+
+    let control = project
+        .media_mut()
+        .add_bytes("bad\nlabel", MP3.to_vec())
+        .expect_err("control characters rejected");
+    assert!(control.to_string().contains("MEDIA.INVALID_SOURCE_LABEL"));
+
+    project
+        .media_mut()
+        .add_bytes("logical source label with spaces", MP3.to_vec())
+        .expect("source label is not a helper-safe filename")
+        .export_as("safe.mp3")
+        .expect("safe export filename");
+}
+
+#[test]
+fn failed_export_does_not_mutate_registry() {
+    let mut project = Project::new("Media");
+
+    project
+        .media_mut()
+        .add_bytes("raw-image", PNG.to_vec())
+        .expect("bytes media")
+        .export_as("../chart.png")
+        .expect_err("unsafe export name fails");
+
+    let lowered = project.lower().expect("lower product");
+    assert_eq!(lowered.authoring_document.media.len(), 0);
+}
+
+#[test]
+fn product_build_reports_file_source_changed_after_registration() {
+    let root = unique_artifacts_dir("project-media-source-changed");
+    let source = root.join("source.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("source.bin")
+        .expect("export file media");
+    std::fs::write(&source, b"changed bytes").expect("change source");
+
+    project
+        .add_note(
+            Note::basic("source", "")
+                .stable_id("media:source")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let error = project
+        .write_apkg(root.join("source-changed.apkg"))
+        .expect_err("changed source fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED")
+        .expect("changed source diagnostic");
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"source.bin\"]")
+    );
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("changed after registration") && help.contains("re-register")
+    }));
+}
+
+#[test]
+fn product_build_reports_file_source_changed_when_source_becomes_empty() {
+    let root = unique_artifacts_dir("project-media-source-empty-change");
+    let source = root.join("source.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("source.bin")
+        .expect("export file media");
+    std::fs::write(&source, []).expect("empty source");
+
+    project
+        .add_note(
+            Note::basic("source", "")
+                .stable_id("media:source")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let error = project
+        .write_apkg(root.join("source-empty-change.apkg"))
+        .expect_err("emptied source fails build");
+    assert!(error
+        .report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED"));
+}
+
+#[test]
+fn product_build_reports_file_source_missing_after_registration() {
+    let root = unique_artifacts_dir("project-media-source-missing");
+    let source = root.join("source.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("source.bin")
+        .expect("export file media");
+    std::fs::remove_file(&source).expect("delete source");
+
+    project
+        .add_note(
+            Note::basic("source", "")
+                .stable_id("media:source")
+                .sound("Back", media),
+        )
+        .expect("add note");
+
+    let error = project
+        .write_apkg(root.join("source-missing.apkg"))
+        .expect_err("missing source fails build");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING")
+        .expect("missing source diagnostic");
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.media[\"source.bin\"]")
+    );
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("no longer exists") && help.contains("update the registration")
+    }));
+}
+
+#[test]
+fn product_build_reports_each_binding_when_shared_source_is_missing() {
+    let root = unique_artifacts_dir("project-media-shared-source-missing");
+    let source = root.join("shared.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let one = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("one.bin")
+        .expect("export first file media");
+    let two = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("two.bin")
+        .expect("export second file media");
+    std::fs::remove_file(&source).expect("delete source");
+
+    project
+        .add_note(
+            Note::basic("one", "")
+                .stable_id("media:one")
+                .sound("Back", one),
+        )
+        .expect("add first note");
+    project
+        .add_note(
+            Note::basic("two", "")
+                .stable_id("media:two")
+                .sound("Back", two),
+        )
+        .expect("add second note");
+
+    let error = project
+        .write_apkg(root.join("shared-missing.apkg"))
+        .expect_err("missing shared source fails build");
+
+    let missing_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING")
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        missing_sources,
+        vec!["project.media[\"one.bin\"]", "project.media[\"two.bin\"]"]
+    );
+}
+
+#[test]
+fn product_build_reports_each_binding_when_shared_source_changes() {
+    let root = unique_artifacts_dir("project-media-shared-source-changed");
+    let source = root.join("shared.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let one = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("one.bin")
+        .expect("export first file media");
+    let two = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("two.bin")
+        .expect("export second file media");
+    std::fs::write(&source, b"changed bytes").expect("change source");
+
+    project
+        .add_note(
+            Note::basic("one", "")
+                .stable_id("media:one")
+                .sound("Back", one),
+        )
+        .expect("add first note");
+    project
+        .add_note(
+            Note::basic("two", "")
+                .stable_id("media:two")
+                .sound("Back", two),
+        )
+        .expect("add second note");
+
+    let error = project
+        .write_apkg(root.join("shared-changed.apkg"))
+        .expect_err("changed shared source fails build");
+
+    let changed_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_CHANGED")
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        changed_sources,
+        vec!["project.media[\"one.bin\"]", "project.media[\"two.bin\"]"]
+    );
+}
+
+#[test]
+fn product_build_reports_only_failing_bindings_when_media_is_mixed() {
+    let root = unique_artifacts_dir("project-media-mixed-source-diagnostics");
+    let valid_source = root.join("valid.bin");
+    let changed_source = root.join("changed.bin");
+    std::fs::write(&valid_source, b"valid bytes").expect("write valid source");
+    std::fs::write(&changed_source, b"original bytes").expect("write changed source");
+
+    let mut project = Project::new("Media")
+        .stable_id("media")
+        .default_deck("Media");
+    let valid = project
+        .media_mut()
+        .add_file(&valid_source)
+        .expect("valid file media")
+        .export_as("valid.bin")
+        .expect("export valid media");
+    let changed = project
+        .media_mut()
+        .add_file(&changed_source)
+        .expect("changed file media")
+        .export_as("changed.bin")
+        .expect("export changed media");
+    std::fs::write(&changed_source, b"changed bytes").expect("change source");
+
+    project
+        .add_note(
+            Note::basic("valid", "")
+                .stable_id("media:valid")
+                .sound("Back", valid),
+        )
+        .expect("add valid note");
+    project
+        .add_note(
+            Note::basic("changed", "")
+                .stable_id("media:changed")
+                .sound("Back", changed),
+        )
+        .expect("add changed note");
+
+    let error = project
+        .write_apkg(root.join("mixed.apkg"))
+        .expect_err("changed source fails build");
+
+    let diagnostic_sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter_map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert!(diagnostic_sources.contains(&"project.media[\"changed.bin\"]"));
+    assert!(!diagnostic_sources.contains(&"project.media[\"valid.bin\"]"));
 }
 
 fn unique_artifacts_dir(label: &str) -> PathBuf {
@@ -163,4 +1199,36 @@ fn unique_artifacts_dir(label: &str) -> PathBuf {
     ));
     std::fs::create_dir_all(&dir).expect("create temp artifacts dir");
     dir
+}
+
+fn deck_with_untyped_blob_media() -> Deck {
+    let mut deck = Deck::builder("Untyped Media")
+        .stable_id("untyped-media")
+        .build();
+    deck.media()
+        .add(MediaSource::from_bytes(
+            "blob.bin",
+            vec![0_u8, 159_u8, 146_u8, 150_u8],
+        ))
+        .expect("register opaque media");
+    deck.basic()
+        .note("front", "back")
+        .stable_id("deck:untyped")
+        .add()
+        .expect("add note");
+
+    let mut value = serde_json::to_value(deck).expect("serialize deck");
+    value["media"]["blob.bin"]["declared_mime"] = serde_json::Value::Null;
+    serde_json::from_value(value).expect("deserialize deck with omitted declared MIME")
+}
+
+fn media_diagnostic_severity(
+    report: &anki_forge::build::BuildReport,
+    code: &str,
+) -> Option<Severity> {
+    report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == code)
+        .map(|diagnostic| diagnostic.severity)
 }

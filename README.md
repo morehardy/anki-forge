@@ -79,6 +79,41 @@ cargo run -q -p anki_forge --example target_api_media
 so Anki receives raw `{{cN::...}}` markers. Do not assume cloze text is escaped
 like `Note::basic(...)` text.
 
+### 3.1 Media Troubleshooting
+
+Media export names must be helper-safe bare filenames such as `taberu.mp3`.
+Avoid path components, absolute paths, URL escapes, and unsafe characters.
+Register files with `project.media_mut().add_file(...).export_as("taberu.mp3")`;
+inline examples can use `project.media_mut().add_bytes(...).export_as(...)`.
+
+Common media diagnostics:
+
+- Filename collision: the same export filename is bound to different bytes.
+  Choose a unique `export_as(...)` name and update local note, template, or CSS
+  references to match.
+- Missing media reference: Product content refers to a local filename that is
+  not registered. Register it or change the local filename in the HTML/CSS.
+- CSS missing reference: CSS scanning is conservative. A local
+  `url("icon.svg")` should be registered, changed to an external URL, or removed
+  if the CSS rule is unused.
+- CSS import reference: a local import such as `url("theme.css")` must be
+  registered as packaged media, changed to an external URL, or removed if unused.
+- Unused media binding: a registered file is not referenced by any note,
+  template, or CSS. Remove the registration or add the intended local reference;
+  this is a warning under the strict default.
+- Unsafe media reference: packaged media references must be bare local
+  filenames. Remove path components, absolute paths, escapes, or unsafe
+  characters.
+- MIME mismatch: the export filename or declared MIME does not match the
+  observed source bytes. Change the export filename/declared MIME, or replace
+  the source file.
+
+`anki-forge` does not automatically rewrite filenames, HTML, or CSS because
+those edits can change deck behavior and hide the authoring intent. Keep the
+registered `export_as(...)` filename and local references in sync yourself.
+`BuildReport::pretty_report()` is a human-facing summary; structured
+machine-readable report export is not currently exported.
+
 ## 4. Advanced: Contract Tools And Runtime
 
 The lower-level contract flow is:
@@ -170,7 +205,8 @@ cargo run -q -p anki_forge --example minimal_flow
 
 - `target_api_basic`: shortest `Deck` API path; writes `spanish.apkg`
 - `target_api_custom_notetype`: `Project` with custom note type; writes `jp-core.apkg`
-- `target_api_media`: `Project` media helpers; writes `spanish-media.apkg`
+- `target_api_media`: `Project` media helpers, template/CSS references, and
+  pretty media report; writes `spanish-media.apkg`
 - `deck_basic_flow`: broader Rust Deck API scenario
 - `product_basic_flow`: lower-level product authoring example
 - `minimal_flow`: file-driven runtime example
@@ -235,8 +271,9 @@ PYTHONPATH=bindings/python/src python3.11 bindings/python/examples/minimal_flow.
 PYTHONPATH=bindings/python/src python3.11 -m unittest discover -s bindings/python/tests -p "test_*.py"
 ```
 
-The target Product API shape is documented in
-`bindings/python/examples/target_api_custom.py`.
+The target Product API shape sketches are documented in
+`bindings/python/examples/target_api_custom.py` and
+`bindings/python/examples/target_api_media.py`.
 
 ## 5. Manual Anki Desktop Scenarios
 

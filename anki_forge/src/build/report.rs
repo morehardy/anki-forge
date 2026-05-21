@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -13,6 +14,17 @@ pub struct BuildCounts {
     pub notes: usize,
     pub cards: usize,
     pub media: usize,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct MediaSummary {
+    pub objects: usize,
+    pub bindings: usize,
+    pub references: usize,
+    pub missing_references: usize,
+    pub unsafe_references: usize,
+    pub unused_bindings: usize,
+    pub unique_bytes: u64,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -51,6 +63,7 @@ pub struct InspectSummary {
 pub struct BuildReport {
     pub artifact: Option<ApkgArtifact>,
     pub counts: BuildCounts,
+    pub media: MediaSummary,
     pub diagnostics: Vec<Diagnostic>,
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
@@ -81,6 +94,27 @@ impl BuildError {
 }
 
 impl BuildReport {
+    pub fn pretty_report(&self) -> String {
+        let mut lines = vec![
+            "Media:".to_string(),
+            format!("  objects: {}", self.media.objects),
+            format!("  bindings: {}", self.media.bindings),
+            format!("  references: {}", self.media.references),
+            format!("  missing_references: {}", self.media.missing_references),
+            format!("  unsafe_references: {}", self.media.unsafe_references),
+            format!("  unused_bindings: {}", self.media.unused_bindings),
+            format!("  unique_bytes: {}", self.media.unique_bytes),
+        ];
+
+        lines.extend(
+            sorted_diagnostics(&self.diagnostics)
+                .into_iter()
+                .map(pretty_diagnostic),
+        );
+
+        lines.join("\n")
+    }
+
     pub fn ensure_success(&self) -> Result<(), BuildError> {
         if self
             .diagnostics
@@ -123,6 +157,114 @@ impl BuildReport {
             .map(|diagnostic| diagnostic.code.as_str().to_string())
             .collect()
     }
+}
+
+impl MediaSummary {
+    pub(crate) fn from_normalized_ir(
+        normalized_ir: &authoring_core::NormalizedIr,
+        diagnostics: &[Diagnostic],
+    ) -> Self {
+        let mut referenced_media_ids = BTreeSet::new();
+        let mut missing_references = 0;
+        for reference in &normalized_ir.media_references {
+            match &reference.resolution {
+                authoring_core::MediaReferenceResolution::Resolved { media_id } => {
+                    referenced_media_ids.insert(media_id.as_str());
+                }
+                authoring_core::MediaReferenceResolution::Missing => {
+                    missing_references += 1;
+                }
+                authoring_core::MediaReferenceResolution::Skipped { .. } => {}
+            }
+        }
+
+        let unused_bindings = normalized_ir
+            .media_bindings
+            .iter()
+            .filter(|binding| !referenced_media_ids.contains(binding.id.as_str()))
+            .count();
+
+        let unsafe_references = diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.UNSAFE_REFERENCE")
+            .count();
+
+        let mut unique_object_refs = BTreeSet::new();
+        let unique_bytes = normalized_ir
+            .media_objects
+            .iter()
+            .filter(|object| unique_object_refs.insert(object.object_ref.as_str()))
+            .map(|object| object.size_bytes)
+            .sum();
+
+        Self {
+            objects: normalized_ir.media_objects.len(),
+            bindings: normalized_ir.media_bindings.len(),
+            references: normalized_ir.media_references.len(),
+            missing_references,
+            unsafe_references,
+            unused_bindings,
+            unique_bytes,
+        }
+    }
+}
+
+fn sorted_diagnostics(diagnostics: &[Diagnostic]) -> Vec<&Diagnostic> {
+    let mut sorted = diagnostics.iter().collect::<Vec<_>>();
+    sorted.sort_by(|left, right| {
+        severity_rank(left.severity)
+            .cmp(&severity_rank(right.severity))
+            .then_with(|| diagnostic_source(left).cmp(diagnostic_source(right)))
+            .then_with(|| left.code.as_str().cmp(right.code.as_str()))
+            .then_with(|| left.message.as_bytes().cmp(right.message.as_bytes()))
+    });
+    sorted
+}
+
+fn pretty_diagnostic(diagnostic: &Diagnostic) -> String {
+    let mut line = format!(
+        "[{} {}] ",
+        severity_label(diagnostic.severity),
+        diagnostic.code.as_str()
+    );
+    if let Some(source) = &diagnostic.source {
+        line.push_str(source.as_str());
+        line.push_str(": ");
+    }
+    line.push_str(&diagnostic.message);
+    if let Some(help) = &diagnostic.help {
+        if !help.is_empty() {
+            if !line.ends_with(' ') {
+                line.push(' ');
+            }
+            line.push_str(help);
+        }
+    }
+    line
+}
+
+fn severity_rank(severity: Severity) -> u8 {
+    match severity {
+        Severity::Error => 0,
+        Severity::Warning => 1,
+        Severity::Info => 2,
+    }
+}
+
+fn severity_label(severity: Severity) -> &'static str {
+    match severity {
+        Severity::Error => "error",
+        Severity::Warning => "warning",
+        Severity::Info => "info",
+    }
+}
+
+fn diagnostic_source(diagnostic: &Diagnostic) -> &str {
+    diagnostic
+        .source
+        .as_ref()
+        .map(|source| source.as_str())
+        .unwrap_or_default()
 }
 
 impl std::fmt::Display for BuildError {

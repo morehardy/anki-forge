@@ -16,9 +16,10 @@ use counts::{
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildReport, InspectSummary, ProjectNormalizeOptions,
+    BuildReport, InspectSummary, MediaSummary, ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
+use crate::product::lowering::ProductSourceMap;
 use crate::product::{
     LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
     ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
@@ -33,6 +34,11 @@ pub struct Project {
     notes: Vec<Note>,
     media: crate::product::MediaRegistry,
     deck_source: Option<crate::deck::Deck>,
+}
+
+enum NotetypeDuplicateFirst<'a> {
+    ImplicitStock,
+    Project { index: usize, name: Option<&'a str> },
 }
 
 impl Project {
@@ -116,12 +122,20 @@ impl Project {
 
         for (index, note) in self.notes.iter().enumerate() {
             if let Some(stable_id) = note.stable_id_ref() {
-                if !seen_stable_ids.insert(stable_id) {
+                if stable_id.trim().is_empty() {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("AFID.STABLE_ID_BLANK"),
+                        severity: Severity::Error,
+                        message: "stable_id cannot be blank".into(),
+                        source: Some(SourcePath::new(format!("project.notes[{index}]"))),
+                        help: Some("choose a non-empty stable_id or omit it".into()),
+                    });
+                } else if !seen_stable_ids.insert(stable_id) {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
                         severity: Severity::Error,
                         message: format!("duplicate stable_id '{stable_id}'"),
-                        source: Some(SourcePath::new(format!("project.notes[\"{stable_id}\"]"))),
+                        source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a unique stable_id for each note".into()),
                     });
                 }
@@ -144,7 +158,68 @@ impl Project {
             }
         }
 
+        let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
+        let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            *notetype_id_counts.entry(*stock_id).or_default() += 1;
+        }
         for note_type in &self.note_types {
+            *notetype_id_counts.entry(note_type.id()).or_default() += 1;
+        }
+        let mut first_notetype_by_id = BTreeMap::<&str, NotetypeDuplicateFirst<'_>>::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            first_notetype_by_id.insert(*stock_id, NotetypeDuplicateFirst::ImplicitStock);
+        }
+        for (index, note_type) in self.note_types.iter().enumerate() {
+            if let Some(first) = first_notetype_by_id.get(note_type.id()) {
+                let message = match first {
+                    NotetypeDuplicateFirst::ImplicitStock => {
+                        duplicate_implicit_stock_notetype_message(
+                            note_type.id(),
+                            index,
+                            note_type.name_ref(),
+                        )
+                    }
+                    NotetypeDuplicateFirst::Project {
+                        index: first_index,
+                        name: first_name,
+                    } => duplicate_notetype_message(
+                        note_type.id(),
+                        *first_index,
+                        *first_name,
+                        index,
+                        note_type.name_ref(),
+                    ),
+                };
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
+                    severity: Severity::Error,
+                    message,
+                    source: Some(SourcePath::new(format!("project.note_types[{index}]"))),
+                    help: Some("choose a unique id for each custom note type".into()),
+                });
+            } else {
+                first_notetype_by_id.insert(
+                    note_type.id(),
+                    NotetypeDuplicateFirst::Project {
+                        index,
+                        name: note_type.name_ref(),
+                    },
+                );
+            }
+        }
+
+        for (index, note_type) in self.note_types.iter().enumerate() {
+            let note_type_source = if notetype_id_counts
+                .get(note_type.id())
+                .copied()
+                .unwrap_or_default()
+                > 1
+            {
+                format!("project.note_types[{index}]")
+            } else {
+                format!("project.note_types[{:?}]", note_type.id())
+            };
             if note_type.identity_ref().is_none() {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
@@ -153,10 +228,7 @@ impl Project {
                         "custom note type '{}' has no identity recipe",
                         note_type.id()
                     ),
-                    source: Some(SourcePath::new(format!(
-                        "project.note_types[\"{}\"]",
-                        note_type.id()
-                    ))),
+                    source: Some(SourcePath::new(note_type_source.clone())),
                     help: Some(
                         "add IdentityRecipe::fields([...]) before relying on update-safe builds"
                             .into(),
@@ -175,8 +247,8 @@ impl Project {
                             note_type.id()
                         ),
                         source: Some(SourcePath::new(format!(
-                            "project.note_types[\"{}\"].fields[\"{}\"]",
-                            note_type.id(),
+                            "{}.fields[\"{}\"]",
+                            note_type_source,
                             field.name()
                         ))),
                         help: Some("call .key(\"stable-field-key\") explicitly".into()),
@@ -188,21 +260,39 @@ impl Project {
         ValidationReport { diagnostics }
     }
 
+    /// Lowers this project into an authoring plan for inspection or serialization.
+    ///
+    /// `lower()` returns a self-contained `LoweringPlan`. Product media registered
+    /// with `media_mut().add_file(...)` is verified, read from disk, and embedded
+    /// as inline base64 bytes in that plan, so callers do not receive hidden
+    /// absolute source paths or need a media input directory.
+    ///
+    /// Because the self-contained form uses inline media, file-backed media must
+    /// fit within the inline media limit. Larger file media can make `lower()`
+    /// fail with `MEDIA.INLINE_TOO_LARGE`. The build and normalize paths use
+    /// path-backed media staging instead, and keep `add_file(...)` assets
+    /// path-backed until normalization.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;
-            return product
+            let mut plan = product
                 .lower()
-                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err));
+                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err))?;
+            self.apply_note_source_paths(&mut plan);
+            self.apply_notetype_source_paths(&mut plan);
+            return Ok(plan);
         }
 
         let mut plan = self
             .to_product_document()
             .lower()
             .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
+        self.apply_note_source_paths(&mut plan);
+        self.apply_notetype_source_paths(&mut plan);
         plan.authoring_document
             .media
             .extend(product_media_to_authoring_media(self.media.media())?);
+        record_project_media_source_paths(&mut plan, self.media.media());
         Ok(plan)
     }
 
@@ -263,10 +353,17 @@ impl Project {
                         media: normalized.media_bindings.len(),
                     })
                     .unwrap_or_default();
+                let media = normalized_ir
+                    .as_ref()
+                    .map(|normalized| {
+                        MediaSummary::from_normalized_ir(normalized.as_ref(), &diagnostics)
+                    })
+                    .unwrap_or_default();
                 return Err(BuildError::new(
                     BuildReport {
                         artifact: None,
                         counts,
+                        media,
                         diagnostics,
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -285,6 +382,7 @@ impl Project {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
+            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
             return Err(BuildError::new(
                 BuildReport {
                     artifact: None,
@@ -293,6 +391,7 @@ impl Project {
                         cards: count_phase1_cards_without_inspect(&normalized),
                         media: normalized.media_bindings.len(),
                     },
+                    media,
                     diagnostics,
                     metrics: BuildMetrics {
                         duration: started.elapsed(),
@@ -419,9 +518,11 @@ impl Project {
             });
         }
 
+        let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
         let report = BuildReport {
             artifact,
             counts,
+            media,
             diagnostics,
             metrics: BuildMetrics {
                 duration: started.elapsed(),
@@ -484,7 +585,7 @@ impl Project {
                         generation_rule: Some(custom_generation_rule(template.generation_rule())),
                     })
                     .collect(),
-                css: None,
+                css: note_type.css_ref().map(ToOwned::to_owned),
             };
             product = product.with_custom_notetype(custom);
 
@@ -520,11 +621,17 @@ impl Project {
             }
         }
 
-        for note in &self.notes {
-            let note_id = note
-                .stable_id_ref()
-                .map(ToOwned::to_owned)
-                .unwrap_or_else(|| format!("generated:{}", product.notes().len() + 1));
+        let stable_id_counts = self.note_stable_id_counts();
+        for (index, note) in self.notes.iter().enumerate() {
+            let note_id = match note.stable_id_ref() {
+                Some(stable_id)
+                    if !stable_id.trim().is_empty()
+                        && stable_id_counts.get(stable_id).copied() == Some(1) =>
+                {
+                    stable_id.to_string()
+                }
+                _ => format!("generated:{}", index + 1),
+            };
             let deck_name = note
                 .deck_name()
                 .unwrap_or(default_deck.as_str())
@@ -562,6 +669,178 @@ impl Project {
         product
     }
 
+    fn note_stable_id_counts(&self) -> BTreeMap<&str, usize> {
+        let mut counts = BTreeMap::new();
+        for note in &self.notes {
+            let Some(stable_id) = note.stable_id_ref() else {
+                continue;
+            };
+            if stable_id.trim().is_empty() {
+                continue;
+            }
+            *counts.entry(stable_id).or_default() += 1;
+        }
+        counts
+    }
+
+    fn implicit_stock_notetype_ids(&self) -> Vec<&'static str> {
+        let mut ids = Vec::new();
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_BASIC_ID)
+        {
+            ids.push(STOCK_BASIC_ID);
+        }
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
+        {
+            ids.push(STOCK_CLOZE_ID);
+        }
+        ids
+    }
+
+    fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
+        if self.deck_source.is_some() {
+            for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
+                let note_source = format!("project.notes[{index}]");
+                for field_name in authoring_note.fields.keys() {
+                    plan.source_map.insert(
+                        crate::product::lowering::authoring_note_field_path(
+                            &authoring_note.id,
+                            field_name,
+                        ),
+                        crate::product::lowering::product_note_field_source(
+                            &note_source,
+                            field_name,
+                        ),
+                    );
+                }
+            }
+            return;
+        }
+        let stable_id_counts = self.note_stable_id_counts();
+        for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
+            let Some(product_note) = self.notes.get(index) else {
+                continue;
+            };
+            let field_source_names = note_field_source_names_for_authoring(self, product_note);
+            let note_source = match product_note.stable_id_ref() {
+                Some(stable_id)
+                    if !stable_id.trim().is_empty()
+                        && stable_id_counts.get(stable_id).copied() == Some(1) =>
+                {
+                    format!("project.notes[{stable_id:?}]")
+                }
+                _ => format!("project.notes[{index}]"),
+            };
+            for field_name in authoring_note.fields.keys() {
+                let product_field_name = field_source_names
+                    .get(field_name)
+                    .map(String::as_str)
+                    .unwrap_or(field_name);
+                plan.source_map.insert(
+                    crate::product::lowering::authoring_note_field_path(
+                        &authoring_note.id,
+                        field_name,
+                    ),
+                    crate::product::lowering::product_note_field_source(
+                        &note_source,
+                        product_field_name,
+                    ),
+                );
+            }
+        }
+    }
+
+    fn apply_notetype_source_paths(&self, plan: &mut LoweringPlan) {
+        if self.deck_source.is_some() {
+            return;
+        }
+
+        let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
+        let mut id_counts = BTreeMap::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            *id_counts.entry(*stock_id).or_insert(0usize) += 1;
+        }
+        for note_type in &self.note_types {
+            *id_counts.entry(note_type.id()).or_insert(0usize) += 1;
+        }
+
+        let mut consumed_by_id = BTreeMap::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            // Product custom note types start after any implicit stock notetype
+            // with the same id in the lowered authoring document.
+            consumed_by_id.insert((*stock_id).to_string(), 1usize);
+        }
+        let mut entries = Vec::new();
+        for (project_index, note_type) in self.note_types.iter().enumerate() {
+            if id_counts.get(note_type.id()).copied().unwrap_or_default() <= 1 {
+                continue;
+            }
+
+            let consumed = consumed_by_id
+                .entry(note_type.id().to_string())
+                .or_insert(0usize);
+            let authoring_match = plan
+                .authoring_document
+                .notetypes
+                .iter()
+                .enumerate()
+                .filter(|(_, authoring_notetype)| authoring_notetype.id == note_type.id())
+                .nth(*consumed);
+            *consumed += 1;
+
+            let Some((authoring_index, authoring_notetype)) = authoring_match else {
+                continue;
+            };
+            let authoring_notetype_source = format!("authoring.note_types[{authoring_index}]");
+            let project_notetype_source = format!("project.note_types[{project_index}]");
+
+            if let Some(templates) = authoring_notetype.templates.as_ref() {
+                for template in templates {
+                    let authoring_template =
+                        format!("{authoring_notetype_source}.templates[{:?}]", template.name);
+                    let project_template =
+                        format!("{project_notetype_source}.templates[{:?}]", template.name);
+                    entries.push((
+                        format!("{authoring_template}.front"),
+                        format!("{project_template}.front"),
+                    ));
+                    entries.push((
+                        format!("{authoring_template}.back"),
+                        format!("{project_template}.back"),
+                    ));
+                    if template.browser_question_format.is_some() {
+                        entries.push((
+                            format!("{authoring_template}.browser_front"),
+                            format!("{project_template}.browser_front"),
+                        ));
+                    }
+                    if template.browser_answer_format.is_some() {
+                        entries.push((
+                            format!("{authoring_template}.browser_back"),
+                            format!("{project_template}.browser_back"),
+                        ));
+                    }
+                }
+            }
+
+            if authoring_notetype.css.is_some() {
+                entries.push((
+                    format!("{authoring_notetype_source}.css"),
+                    format!("{project_notetype_source}.css"),
+                ));
+            }
+        }
+
+        for (authoring_path, project_source) in entries {
+            plan.source_map.insert(authoring_path, project_source);
+        }
+    }
+
     fn normalize_with_dirs(
         &self,
         base_dir: impl Into<PathBuf>,
@@ -575,6 +854,8 @@ impl Project {
         let mut lowering = self.lower_with_project_error()?;
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
+        self.apply_note_source_paths(&mut lowering);
+        self.apply_notetype_source_paths(&mut lowering);
         if let Some(deck) = &self.deck_source {
             let media = deck
                 .registered_media()
@@ -593,21 +874,28 @@ impl Project {
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
+            for filename in deck.registered_media().keys() {
+                crate::product::lowering::record_media_source_path(
+                    &mut lowering.source_map,
+                    &format!("media:{filename}"),
+                    filename,
+                );
+            }
         } else {
             let media = product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
                 .map_err(|error| ProjectNormalizeError {
-                    message: "prepare product media".into(),
-                    diagnostics: vec![Diagnostic {
-                        code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
-                        severity: Severity::Error,
-                        message: error.to_string(),
-                        source: Some(SourcePath::new("project.media")),
-                        help: Some("inspect product media registrations and media paths".into()),
-                    }],
+                    message: error.message,
+                    diagnostics: error.diagnostics,
                     normalized_ir: None,
                 })?;
             lowering.authoring_document.media.extend(media);
+            record_project_media_source_paths(&mut lowering, self.media.media());
         }
+        let source_map = lowering.source_map.clone();
+        let duplicate_notetype_media_diagnostics = duplicate_notetype_media_reference_diagnostics(
+            &lowering.authoring_document,
+            &source_map,
+        );
         let result = normalize_with_options(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
@@ -617,14 +905,21 @@ impl Project {
             },
         );
         let result_status = result.result_status.clone();
+        let mut normalization_diagnostics = result
+            .diagnostics
+            .items
+            .into_iter()
+            .map(|item| normalization_diagnostic_to_product_diagnostic(item, &source_map))
+            .collect::<Vec<_>>();
+        if normalization_diagnostics
+            .iter()
+            .any(|item| item.code.as_str() == "PHASE3.DUPLICATE_NOTETYPE_ID")
+        {
+            normalization_diagnostics.extend(duplicate_notetype_media_diagnostics);
+        }
         let diagnostics = combine_lowering_and_normalization_diagnostics(
             lowering_diagnostics,
-            result
-                .diagnostics
-                .items
-                .into_iter()
-                .map(normalization_diagnostic_to_product_diagnostic)
-                .collect(),
+            normalization_diagnostics,
         );
         if result_status != "success" {
             return Err(ProjectNormalizeError {
@@ -709,6 +1004,35 @@ fn custom_generation_rule(
     }
 }
 
+fn duplicate_notetype_message(
+    id: &str,
+    first_index: usize,
+    first_name: Option<&str>,
+    duplicate_index: usize,
+    duplicate_name: Option<&str>,
+) -> String {
+    format!(
+        "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is project.note_types[{first_index}]{}",
+        display_name_suffix(duplicate_name),
+        display_name_suffix(first_name),
+    )
+}
+
+fn duplicate_implicit_stock_notetype_message(
+    id: &str,
+    duplicate_index: usize,
+    duplicate_name: Option<&str>,
+) -> String {
+    format!(
+        "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is an implicit stock note type inserted for stock {id} notes",
+        display_name_suffix(duplicate_name),
+    )
+}
+
+fn display_name_suffix(name: Option<&str>) -> String {
+    name.map(|name| format!(" ({name})")).unwrap_or_default()
+}
+
 fn custom_note_fields_for_authoring(
     project: &Project,
     note: &crate::product::Note,
@@ -759,19 +1083,100 @@ fn custom_note_fields_for_authoring(
     fields
 }
 
+fn note_field_source_names_for_authoring(
+    project: &Project,
+    note: &crate::product::Note,
+) -> BTreeMap<String, String> {
+    let rendered = note.rendered_fields();
+    let Some(note_type) = project
+        .note_types
+        .iter()
+        .find(|note_type| note_type.id() == note.note_type_id())
+    else {
+        return rendered
+            .keys()
+            .map(|field| (field.clone(), field.clone()))
+            .collect();
+    };
+
+    let name_by_key = note_type
+        .fields()
+        .iter()
+        .map(|field| (field.key_ref().as_str(), field.name()))
+        .collect::<BTreeMap<_, _>>();
+    let field_names = note_type
+        .fields()
+        .iter()
+        .map(|field| field.name())
+        .collect::<BTreeSet<_>>();
+
+    let mut sources = BTreeMap::new();
+    let mut field_priorities = BTreeMap::new();
+    for field_key_or_name in rendered.keys() {
+        let is_visible_name = field_names.contains(field_key_or_name.as_str());
+        let field_name = if is_visible_name {
+            field_key_or_name.clone()
+        } else {
+            name_by_key
+                .get(field_key_or_name.as_str())
+                .copied()
+                .unwrap_or(field_key_or_name.as_str())
+                .to_string()
+        };
+        let priority = u8::from(is_visible_name);
+        if field_priorities
+            .get(&field_name)
+            .is_some_and(|existing| *existing > priority)
+        {
+            continue;
+        }
+        field_priorities.insert(field_name.clone(), priority);
+        sources.insert(field_name, field_key_or_name.clone());
+    }
+    sources
+}
+
 fn product_media_to_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
 ) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
     media.map(product_media_item_to_authoring_media).collect()
 }
 
+fn record_project_media_source_paths<'a>(
+    plan: &mut LoweringPlan,
+    media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
+) {
+    for item in media {
+        crate::product::lowering::record_media_source_path(
+            &mut plan.source_map,
+            &item.id,
+            &item.export_filename,
+        );
+    }
+}
+
 fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
-) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
-    media
-        .map(|media| product_media_item_to_path_backed_authoring_media(media, media_input_dir))
-        .collect()
+) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
+    let mut prepared = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for item in media {
+        match product_media_item_to_path_backed_authoring_media(item, media_input_dir) {
+            Ok(media) => prepared.push(media),
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if diagnostics.is_empty() {
+        Ok(prepared)
+    } else {
+        Err(ProductMediaPrepareError {
+            message: "prepare product media".into(),
+            diagnostics,
+        })
+    }
 }
 
 fn product_media_item_to_authoring_media(
@@ -779,13 +1184,24 @@ fn product_media_item_to_authoring_media(
 ) -> anyhow::Result<crate::AuthoringMedia> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
+            media
+                .verify_registered_source()
+                .map_err(|diagnostic| anyhow::anyhow!(diagnostic.message))?;
+            anyhow::ensure!(
+                media.observed_size_bytes()
+                    <= crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64,
+                "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {}",
+                media.observed_size_bytes(),
+                crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
+                filename = &media.export_filename,
+            );
             let bytes = std::fs::read(path)
                 .with_context(|| format!("read media source file: {}", path.display()))?;
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
         }
-        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
@@ -803,24 +1219,52 @@ fn product_media_item_to_authoring_media(
 fn product_media_item_to_path_backed_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
     media_input_dir: &Path,
-) -> anyhow::Result<crate::AuthoringMedia> {
+) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
-            ensure_safe_product_media_input_dir(media_input_dir)?;
+            media
+                .verify_registered_source()
+                .map_err(ProductMediaPrepareError::from_source_diagnostic)?;
+            ensure_safe_product_media_input_dir(media_input_dir)
+                .map_err(ProductMediaPrepareError::from_prepare_error)?;
             let target = media_input_dir.join(&media.export_filename);
-            ensure_not_symlink(&target)?;
-            std::fs::copy(path, &target).with_context(|| {
-                format!(
-                    "copy media source {} to {}",
-                    path.display(),
-                    target.display()
-                )
-            })?;
+            ensure_not_symlink(&target).map_err(ProductMediaPrepareError::from_prepare_error)?;
+            if !paths_are_same_file(path, &target)
+                .map_err(ProductMediaPrepareError::from_prepare_error)?
+            {
+                if target
+                    .try_exists()
+                    .with_context(|| format!("stat media input target: {}", target.display()))
+                    .map_err(ProductMediaPrepareError::from_prepare_error)?
+                {
+                    return Err(ProductMediaPrepareError::staging_collision(
+                        path.clone(),
+                        target,
+                        media.export_filename.clone(),
+                    ));
+                }
+                std::fs::copy(path, &target).map_err(|err| {
+                    let code = if err.kind() == std::io::ErrorKind::NotFound {
+                        "MEDIA.SOURCE_MISSING"
+                    } else {
+                        "PROJECT.PRODUCT_MEDIA_FAILED"
+                    };
+                    ProductMediaPrepareError::single(
+                        code,
+                        format!(
+                            "copy media source {} to {}: {err}",
+                            path.display(),
+                            target.display()
+                        ),
+                        media.export_filename.clone(),
+                    )
+                })?;
+            }
             crate::AuthoringMediaSource::Path {
                 path: media.export_filename.clone(),
             }
         }
-        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64 } => {
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
@@ -833,6 +1277,52 @@ fn product_media_item_to_path_backed_authoring_media(
         source,
         declared_mime: media.declared_mime.clone(),
     })
+}
+
+fn paths_are_same_file(left: &Path, right: &Path) -> anyhow::Result<bool> {
+    if !right.exists() {
+        return Ok(false);
+    }
+    let left_metadata = std::fs::metadata(left)
+        .with_context(|| format!("stat media source: {}", left.display()))?;
+    let right_metadata = std::fs::metadata(right)
+        .with_context(|| format!("stat media staging target: {}", right.display()))?;
+    if let (Some(left_identity), Some(right_identity)) = (
+        metadata_file_identity(&left_metadata),
+        metadata_file_identity(&right_metadata),
+    ) {
+        return Ok(left_identity == right_identity);
+    }
+
+    let left = left
+        .canonicalize()
+        .with_context(|| format!("canonicalize media source: {}", left.display()))?;
+    let right = right
+        .canonicalize()
+        .with_context(|| format!("canonicalize media staging target: {}", right.display()))?;
+    Ok(left == right)
+}
+
+#[cfg(unix)]
+fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    use std::os::unix::fs::MetadataExt;
+
+    Some((metadata.dev(), metadata.ino()))
+}
+
+#[cfg(windows)]
+fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    use std::os::windows::fs::MetadataExt;
+
+    metadata
+        .volume_serial_number()
+        .zip(metadata.file_index())
+        .map(|(volume, index)| (u64::from(volume), index))
+}
+
+#[cfg(not(any(unix, windows)))]
+fn metadata_file_identity(_metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    None
 }
 
 fn ensure_safe_product_media_input_dir(media_input_dir: &Path) -> anyhow::Result<()> {
@@ -906,6 +1396,194 @@ impl From<crate::deck::Deck> for Project {
     }
 }
 
+fn duplicate_notetype_media_reference_diagnostics(
+    document: &authoring_core::AuthoringDocument,
+    source_map: &ProductSourceMap,
+) -> Vec<Diagnostic> {
+    let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
+    for notetype in &document.notetypes {
+        *notetype_id_counts.entry(notetype.id.as_str()).or_default() += 1;
+    }
+    if !notetype_id_counts.values().any(|count| *count > 1) {
+        return Vec::new();
+    }
+
+    let media_exports = document
+        .media
+        .iter()
+        .map(|media| media.desired_filename.as_str())
+        .collect::<BTreeSet<_>>();
+    let mut diagnostics = Vec::new();
+
+    for (notetype_index, notetype) in document.notetypes.iter().enumerate() {
+        if notetype_id_counts
+            .get(notetype.id.as_str())
+            .copied()
+            .unwrap_or_default()
+            < 2
+        {
+            continue;
+        }
+
+        let authoring_notetype_source = format!("authoring.note_types[{notetype_index}]");
+        if let Some(templates) = notetype.templates.as_ref() {
+            for template in templates {
+                let authoring_template =
+                    format!("{authoring_notetype_source}.templates[{:?}]", template.name);
+                append_missing_media_reference_diagnostics(
+                    &mut diagnostics,
+                    &media_exports,
+                    source_map,
+                    MissingMediaReferenceScan {
+                        authoring_path: &format!("{authoring_template}.front"),
+                        owner_kind: "notetype",
+                        owner_id: &notetype.id,
+                        location_kind: "template_front",
+                        location_name: &format!("{}:front", template.name),
+                        value: &template.question_format,
+                    },
+                );
+                append_missing_media_reference_diagnostics(
+                    &mut diagnostics,
+                    &media_exports,
+                    source_map,
+                    MissingMediaReferenceScan {
+                        authoring_path: &format!("{authoring_template}.back"),
+                        owner_kind: "notetype",
+                        owner_id: &notetype.id,
+                        location_kind: "template_back",
+                        location_name: &format!("{}:back", template.name),
+                        value: &template.answer_format,
+                    },
+                );
+                if let Some(value) = template.browser_question_format.as_deref() {
+                    append_missing_media_reference_diagnostics(
+                        &mut diagnostics,
+                        &media_exports,
+                        source_map,
+                        MissingMediaReferenceScan {
+                            authoring_path: &format!("{authoring_template}.browser_front"),
+                            owner_kind: "notetype",
+                            owner_id: &notetype.id,
+                            location_kind: "browser_template_front",
+                            location_name: &format!("{}:browser_front", template.name),
+                            value,
+                        },
+                    );
+                }
+                if let Some(value) = template.browser_answer_format.as_deref() {
+                    append_missing_media_reference_diagnostics(
+                        &mut diagnostics,
+                        &media_exports,
+                        source_map,
+                        MissingMediaReferenceScan {
+                            authoring_path: &format!("{authoring_template}.browser_back"),
+                            owner_kind: "notetype",
+                            owner_id: &notetype.id,
+                            location_kind: "browser_template_back",
+                            location_name: &format!("{}:browser_back", template.name),
+                            value,
+                        },
+                    );
+                }
+            }
+        }
+
+        if let Some(css) = notetype.css.as_deref() {
+            append_missing_media_reference_diagnostics(
+                &mut diagnostics,
+                &media_exports,
+                source_map,
+                MissingMediaReferenceScan {
+                    authoring_path: &format!("{authoring_notetype_source}.css"),
+                    owner_kind: "notetype",
+                    owner_id: &notetype.id,
+                    location_kind: "css",
+                    location_name: "css",
+                    value: css,
+                },
+            );
+        }
+    }
+
+    diagnostics
+}
+
+struct MissingMediaReferenceScan<'a> {
+    authoring_path: &'a str,
+    owner_kind: &'a str,
+    owner_id: &'a str,
+    location_kind: &'a str,
+    location_name: &'a str,
+    value: &'a str,
+}
+
+fn append_missing_media_reference_diagnostics(
+    diagnostics: &mut Vec<Diagnostic>,
+    media_exports: &BTreeSet<&str>,
+    source_map: &ProductSourceMap,
+    scan: MissingMediaReferenceScan<'_>,
+) {
+    for candidate in authoring_core::extract_media_reference_candidates(
+        scan.owner_kind,
+        scan.owner_id,
+        scan.location_kind,
+        scan.location_name,
+        scan.value,
+    ) {
+        if candidate.skip_reason.is_some() || candidate.unsafe_reason.is_some() {
+            continue;
+        }
+        let Some(local_ref) = candidate.normalized_local_ref.as_deref() else {
+            continue;
+        };
+        if media_exports.contains(local_ref) {
+            continue;
+        }
+
+        let source = source_map
+            .source_for_diagnostic_path(scan.authoring_path)
+            .map(SourcePath::new);
+        diagnostics.push(Diagnostic {
+            code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),
+            severity: Severity::Error,
+            message: missing_media_reference_summary(&candidate),
+            help: product_diagnostic_help(
+                "MEDIA.MISSING_REFERENCE",
+                source.as_ref().map(SourcePath::as_str),
+            ),
+            source,
+        });
+    }
+}
+
+fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCandidate) -> String {
+    if candidate.ref_kind == "css_url" {
+        let raw_ref = candidate
+            .diagnostic_ref
+            .as_deref()
+            .unwrap_or(candidate.raw_ref.as_str());
+        format!(
+            "missing media reference {} in {} {} {} {} line {}",
+            raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name,
+            candidate.source_line.unwrap_or(1)
+        )
+    } else {
+        format!(
+            "missing media reference {} in {} {} {} {}",
+            candidate.raw_ref,
+            candidate.owner_kind,
+            candidate.owner_id,
+            candidate.location_kind,
+            candidate.location_name
+        )
+    }
+}
+
 struct ProjectNormalizeOutput {
     normalized_ir: authoring_core::NormalizedIr,
     diagnostics: Vec<Diagnostic>,
@@ -961,6 +1639,72 @@ struct ProjectNormalizeError {
     normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
 }
 
+struct ProductMediaPrepareError {
+    message: String,
+    diagnostics: Vec<Diagnostic>,
+}
+
+impl ProductMediaPrepareError {
+    fn from_source_diagnostic(
+        diagnostic: crate::product::media_registry::ProductMediaSourceDiagnostic,
+    ) -> Self {
+        let code = diagnostic.code;
+        let source_path = diagnostic.source_path;
+        let help = product_diagnostic_help(code, Some(&source_path))
+            .unwrap_or_else(|| "inspect product media registrations and source files".into());
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new(code),
+                severity: Severity::Error,
+                message: diagnostic.message,
+                source: Some(SourcePath::new(source_path)),
+                help: Some(help),
+            }],
+        }
+    }
+
+    fn from_prepare_error(error: anyhow::Error) -> Self {
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
+                severity: Severity::Error,
+                message: error.to_string(),
+                source: Some(SourcePath::new("project.media")),
+                help: Some("inspect product media registrations and media paths".into()),
+            }],
+        }
+    }
+
+    fn single(code: &'static str, message: String, export_filename: String) -> Self {
+        Self {
+            message: "prepare product media".into(),
+            diagnostics: vec![Diagnostic {
+                code: DiagnosticCode::new(code),
+                severity: Severity::Error,
+                message,
+                source: Some(SourcePath::new(format!(
+                    "project.media[{export_filename:?}]"
+                ))),
+                help: Some("inspect product media registrations and source files".into()),
+            }],
+        }
+    }
+
+    fn staging_collision(source: PathBuf, target: PathBuf, export_filename: String) -> Self {
+        Self::single(
+            "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION",
+            format!(
+                "Product media staging target already exists for export filename {export_filename:?}; source {} would overwrite target {}",
+                source.display(),
+                target.display()
+            ),
+            export_filename,
+        )
+    }
+}
+
 impl std::fmt::Display for ProjectNormalizeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.diagnostics.is_empty() {
@@ -981,14 +1725,81 @@ impl std::error::Error for ProjectNormalizeError {}
 
 fn normalization_diagnostic_to_product_diagnostic(
     item: authoring_core::model::DiagnosticItem,
+    source_map: &ProductSourceMap,
 ) -> Diagnostic {
+    let source = item.path.as_deref().and_then(|path| {
+        source_map
+            .source_for_diagnostic_path(path)
+            .map(SourcePath::new)
+    });
+    let code = item.code;
+    let message = product_diagnostic_message(&code, item.summary);
+    let help = product_diagnostic_help(&code, source.as_ref().map(SourcePath::as_str));
     Diagnostic {
-        code: DiagnosticCode::new(item.code),
+        code: DiagnosticCode::new(code),
         severity: severity_from_level(&item.level),
-        message: item.summary,
-        source: None,
-        help: None,
+        message,
+        source,
+        help,
     }
+}
+
+fn product_diagnostic_message(code: &str, message: String) -> String {
+    if code == "MEDIA.DECLARED_MIME_MISMATCH" {
+        message.replace("sniffed MIME", "observed MIME")
+    } else {
+        message
+    }
+}
+
+fn product_diagnostic_help(code: &str, source: Option<&str>) -> Option<String> {
+    let help = match code {
+        "MEDIA.MISSING_REFERENCE" => {
+            if source.is_some_and(|source| source.ends_with(".css")) {
+                "Product CSS scanning is conservative: a local filename in url(...) is treated as packaged media. Register it with project.media_mut().add_file(...).export_as(...), change the URL to an external URL, or remove the CSS rule/import if unused."
+            } else {
+                "This Product field or template references packaged media that is not registered. Register it with project.media_mut().add_file(...).export_as(...) or update the local filename in the Product content."
+            }
+        }
+        "MEDIA.UNSAFE_REFERENCE" => {
+            "This Product content uses a media reference that cannot be packaged safely. Use a bare local filename for packaged media, without paths, URL escapes, or unsafe characters."
+        }
+        "MEDIA.UNUSED_BINDING" => {
+            "This Product media registration is not referenced by packaged content. You can remove the registration or reference it from a note, template, or CSS."
+        }
+        "MEDIA.DECLARED_MIME_MISMATCH" => {
+            "This Product media registration declares a MIME type that does not match the observed source bytes. Change the export filename/declared MIME or replace the source file with matching content."
+        }
+        "MEDIA.DUPLICATE_FILENAME_CONFLICT" => {
+            "This Product media export filename is already bound to different content. Choose a unique export_as(...) name for one of the registrations."
+        }
+        "MEDIA.SOURCE_CHANGED" => {
+            "This Product media source changed after registration. Restore the original bytes, re-register the current file with project.media_mut().add_file(...).export_as(...), or remove the stale registration."
+        }
+        "MEDIA.SOURCE_MISSING" => {
+            "This Product media registration points at a source file that no longer exists. Restore the file, update the registration to the new path, or remove the unused media binding."
+        }
+        "MEDIA.SOURCE_NOT_REGULAR_FILE" => {
+            "This Product media registration must point at a regular file. Replace the source path with a file and register directories or special files through an explicit file asset."
+        }
+        "MEDIA.SOURCE_READ_FAILED" => {
+            "This Product media source could not be read. Check the file path, permissions, and workspace access, then retry the build."
+        }
+        "MEDIA.UNKNOWN_MIME" => {
+            "This media source has no reliable MIME type. Use an export filename with a known extension, provide bytes that can be sniffed, or adjust the advanced media policy if the opaque file is intentional."
+        }
+        "MEDIA.CAS_WRITE_FAILED" => {
+            "The media object could not be written into the build media store. Check workspace permissions and disk space, then retry the build."
+        }
+        "MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT" => {
+            "An existing media-store object did not match the expected content hash. Rebuild in a clean artifacts directory or remove the corrupt media-store object before retrying."
+        }
+        "MEDIA.INLINE_TOO_LARGE" => {
+            "This inline media payload exceeds the configured limit. Register large assets with project.media_mut().add_file(...).export_as(...) so they stay path-backed until normalization."
+        }
+        _ => return None,
+    };
+    Some(help.into())
 }
 
 fn map_product_lowering_error(error: &ProductLoweringError) -> Vec<Diagnostic> {
@@ -1016,7 +1827,7 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
         .into_iter()
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
-            severity: Severity::Warning,
+            severity: lowering_diagnostic_severity(diagnostic.code),
             message: diagnostic.message,
             source: Some(SourcePath::new("project.lower")),
             help: None,
@@ -1024,10 +1835,20 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
         .collect()
 }
 
+fn lowering_diagnostic_severity(code: &str) -> Severity {
+    match code {
+        "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE" | "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED" => {
+            Severity::Error
+        }
+        _ => Severity::Warning,
+    }
+}
+
 fn failure_report(started: Instant, code: &str, message: String) -> BuildReport {
     BuildReport {
         artifact: None,
         counts: BuildCounts::default(),
+        media: MediaSummary::default(),
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new(code),
             severity: Severity::Error,
@@ -1123,6 +1944,58 @@ mod tests {
                 .collect::<Vec<_>>(),
             vec!["LOWERING.WARNING", "NORMALIZE.ERROR"]
         );
+    }
+
+    #[test]
+    fn product_helper_wiring_lowering_diagnostics_map_to_errors() {
+        let diagnostics = map_lowering_diagnostics(vec![
+            LoweringDiagnostic {
+                code: "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE",
+                message: "missing notetype".into(),
+            },
+            LoweringDiagnostic {
+                code: "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
+                message: "missing asset".into(),
+            },
+            LoweringDiagnostic {
+                code: "PHASE5A.ADVISORY",
+                message: "advisory".into(),
+            },
+        ]);
+
+        assert_eq!(
+            diagnostics
+                .iter()
+                .map(|diagnostic| (diagnostic.code.as_str(), diagnostic.severity))
+                .collect::<Vec<_>>(),
+            vec![
+                ("PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE", Severity::Error),
+                (
+                    "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
+                    Severity::Error
+                ),
+                ("PHASE5A.ADVISORY", Severity::Warning),
+            ]
+        );
+    }
+
+    #[test]
+    fn product_diagnostic_help_covers_actionable_media_storage_codes() {
+        for code in [
+            "MEDIA.SOURCE_CHANGED",
+            "MEDIA.SOURCE_MISSING",
+            "MEDIA.SOURCE_NOT_REGULAR_FILE",
+            "MEDIA.SOURCE_READ_FAILED",
+            "MEDIA.UNKNOWN_MIME",
+            "MEDIA.CAS_WRITE_FAILED",
+            "MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT",
+            "MEDIA.INLINE_TOO_LARGE",
+        ] {
+            assert!(
+                product_diagnostic_help(code, Some("project.media[\"asset.bin\"]")).is_some(),
+                "{code} should have Product-facing help"
+            );
+        }
     }
 
     #[test]

@@ -11,6 +11,8 @@ pub struct MediaReferenceCandidate {
     pub normalized_local_ref: Option<String>,
     pub skip_reason: Option<String>,
     pub unsafe_reason: Option<String>,
+    pub diagnostic_ref: Option<String>,
+    pub source_line: Option<usize>,
     pub kind: MediaReferenceCandidateKind,
 }
 
@@ -74,9 +76,15 @@ fn strip_html_comments(input: &str) -> String {
         let comment_body_start = absolute_start + "<!--".len();
         match input[comment_body_start..].find("-->") {
             Some(comment_end) => {
+                output.extend(
+                    input[comment_body_start..comment_body_start + comment_end]
+                        .chars()
+                        .filter(|ch| *ch == '\n'),
+                );
                 cursor = comment_body_start + comment_end + "-->".len();
             }
             None => {
+                output.extend(input[comment_body_start..].chars().filter(|ch| *ch == '\n'));
                 cursor = input.len();
                 break;
             }
@@ -104,15 +112,17 @@ fn extract_sound_refs(
         };
         let value_end = value_start + relative_end;
         let raw_ref = decode_html_entities(input[value_start..value_end].trim()).to_string();
-        refs.push(local_candidate(
+        refs.push(local_candidate(CandidateInput {
             owner_kind,
             owner_id,
             location_kind,
             location_name,
-            &raw_ref,
-            MediaReferenceCandidateKind::Sound,
-            false,
-        ));
+            raw_ref: &raw_ref,
+            kind: MediaReferenceCandidateKind::Sound,
+            url_semantics: false,
+            diagnostic_ref: None,
+            source_line: None,
+        }));
         cursor = value_end + 1;
     }
 
@@ -174,30 +184,156 @@ fn extract_css_url_refs(
 ) -> Vec<MediaReferenceCandidate> {
     let mut refs = Vec::new();
     let input = strip_html_raw_text_elements(input, "script");
-    let input = strip_css_block_comments(&input);
-    let mut cursor = 0;
+    refs.extend(extract_inline_style_css_url_refs(
+        owner_kind,
+        owner_id,
+        location_kind,
+        location_name,
+        &input,
+    ));
 
-    while let Some(url_start) = find_css_url_function(&input, cursor) {
+    let input = strip_html_start_tags(&input);
+    let input = strip_css_block_comments(&input);
+    refs.extend(extract_css_url_refs_from_css_text(
+        owner_kind,
+        owner_id,
+        location_kind,
+        location_name,
+        &input,
+        &input,
+        0,
+    ));
+
+    refs
+}
+
+fn extract_css_url_refs_from_css_text(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+    line_source: &str,
+    line_base_offset: usize,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
+    let mut cursor = 0;
+    let line_base = line_number_at(line_source, line_base_offset).saturating_sub(1);
+
+    while let Some(url_start) = find_css_url_function(input, cursor) {
         if !is_css_url_boundary(input.as_bytes(), url_start) {
             cursor = url_start + "url(".len();
             continue;
         }
 
         let value_start = url_start + "url(".len();
-        let Some((raw_ref, next_cursor)) = parse_css_url_value(&input, value_start) else {
-            cursor = value_start;
+        let Some((raw_ref, next_cursor)) = parse_css_url_value(input, value_start) else {
+            cursor = css_url_recovery_cursor(input, value_start);
             continue;
         };
-        refs.push(local_candidate(
+        let raw_token = input[url_start..next_cursor].to_string();
+        refs.push(local_candidate(CandidateInput {
             owner_kind,
             owner_id,
             location_kind,
             location_name,
-            &raw_ref,
-            MediaReferenceCandidateKind::CssUrl,
-            true,
-        ));
+            raw_ref: &raw_ref,
+            kind: MediaReferenceCandidateKind::CssUrl,
+            url_semantics: true,
+            diagnostic_ref: Some(raw_token),
+            source_line: Some(line_base + line_number_at(input, url_start)),
+        }));
         cursor = next_cursor;
+    }
+
+    refs
+}
+
+fn extract_inline_style_css_url_refs(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
+    let mut cursor = 0;
+
+    while let Some(tag) = next_html_start_tag(input, cursor) {
+        refs.extend(extract_style_attribute_css_url_refs(
+            owner_kind,
+            owner_id,
+            location_kind,
+            location_name,
+            tag.source,
+            input,
+            tag.start,
+        ));
+        cursor = next_html_scan_cursor(input, &tag);
+    }
+
+    refs
+}
+
+fn extract_style_attribute_css_url_refs(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    input: &str,
+    line_source: &str,
+    source_base_offset: usize,
+) -> Vec<MediaReferenceCandidate> {
+    let mut refs = Vec::new();
+    let mut cursor = html_start_tag_attribute_cursor(input);
+    let bytes = input.as_bytes();
+
+    while cursor < bytes.len() {
+        cursor = skip_ascii_whitespace(input, cursor);
+        let Some(first) = bytes.get(cursor) else {
+            break;
+        };
+        if *first == b'>' {
+            break;
+        }
+        if *first == b'/' {
+            cursor += 1;
+            continue;
+        }
+        if !is_html_attribute_name_byte(*first) {
+            cursor += 1;
+            continue;
+        }
+
+        let name_start = cursor;
+        while cursor < bytes.len() && is_html_attribute_name_byte(bytes[cursor]) {
+            cursor += 1;
+        }
+        let name = &input[name_start..cursor];
+        let mut value_start = skip_ascii_whitespace(input, cursor);
+        if bytes.get(value_start) != Some(&b'=') {
+            cursor = value_start;
+            continue;
+        }
+        value_start = skip_ascii_whitespace(input, value_start + 1);
+
+        let Some(value) = parse_html_attribute_value_span(input, value_start) else {
+            break;
+        };
+        if name.eq_ignore_ascii_case("style") {
+            let css = decode_html_entities(value.raw).to_string();
+            let css = strip_css_block_comments(&css);
+            refs.extend(extract_css_url_refs_from_css_text(
+                owner_kind,
+                owner_id,
+                location_kind,
+                location_name,
+                &css,
+                line_source,
+                source_base_offset + value.raw_start,
+            ));
+        }
+        cursor = value.next_cursor;
     }
 
     refs
@@ -277,16 +413,18 @@ fn extract_html_attribute_refs(
             break;
         };
         if name.eq_ignore_ascii_case(attr_name) {
-            let raw_ref = decode_html_entities(raw_value.trim()).to_string();
-            refs.push(local_candidate(
+            let raw_ref = decode_html_entities(raw_value).to_string();
+            refs.push(local_candidate(CandidateInput {
                 owner_kind,
                 owner_id,
                 location_kind,
                 location_name,
-                &raw_ref,
+                raw_ref: &raw_ref,
                 kind,
-                true,
-            ));
+                url_semantics: true,
+                diagnostic_ref: None,
+                source_line: None,
+            }));
         }
         cursor = next_cursor;
     }
@@ -304,77 +442,99 @@ fn is_css_url_boundary(bytes: &[u8], start: usize) -> bool {
     start == 0 || !is_css_identifier_byte(bytes[start - 1])
 }
 
-fn local_candidate(
-    owner_kind: &str,
-    owner_id: &str,
-    location_kind: &str,
-    location_name: &str,
-    raw_ref: &str,
+struct CandidateInput<'a> {
+    owner_kind: &'a str,
+    owner_id: &'a str,
+    location_kind: &'a str,
+    location_name: &'a str,
+    raw_ref: &'a str,
     kind: MediaReferenceCandidateKind,
     url_semantics: bool,
-) -> MediaReferenceCandidate {
-    let raw_ref = raw_ref.trim().to_string();
-    let ref_kind = kind.ref_kind().to_string();
+    diagnostic_ref: Option<String>,
+    source_line: Option<usize>,
+}
+
+fn local_candidate(input: CandidateInput<'_>) -> MediaReferenceCandidate {
+    let raw_ref = if input.url_semantics {
+        input.raw_ref.to_string()
+    } else {
+        input.raw_ref.trim().to_string()
+    };
+    let ref_kind = input.kind.ref_kind().to_string();
     let (normalized_local_ref, skip_reason, unsafe_reason) =
-        match classify_ref(&raw_ref, url_semantics) {
+        match classify_ref(&raw_ref, input.url_semantics) {
             ReferenceClassification::Local(value) => (Some(value), None, None),
             ReferenceClassification::Skipped(reason) => (None, Some(reason.to_string()), None),
             ReferenceClassification::Unsafe(reason) => (None, None, Some(reason.to_string())),
         };
 
     MediaReferenceCandidate {
-        owner_kind: owner_kind.to_string(),
-        owner_id: owner_id.to_string(),
-        location_kind: location_kind.to_string(),
-        location_name: location_name.to_string(),
+        owner_kind: input.owner_kind.to_string(),
+        owner_id: input.owner_id.to_string(),
+        location_kind: input.location_kind.to_string(),
+        location_name: input.location_name.to_string(),
         raw_ref,
         ref_kind,
         normalized_local_ref,
         skip_reason,
         unsafe_reason,
-        kind,
+        diagnostic_ref: input.diagnostic_ref,
+        source_line: input.source_line,
+        kind: input.kind,
     }
 }
 
 fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
-    let trimmed = raw_ref.trim();
-    if trimmed.is_empty() {
+    let value = if url_semantics {
+        raw_ref
+    } else {
+        raw_ref.trim()
+    };
+    if value.trim().is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
     }
-    if contains_dynamic_template(trimmed) {
-        return ReferenceClassification::Skipped("dynamic-template");
+    let dynamic_check_value = if url_semantics {
+        strip_url_query_and_fragment(value)
+    } else {
+        value
+    };
+    if contains_dynamic_template(dynamic_check_value) {
+        return ReferenceClassification::Skipped("dynamic-template-expression");
     }
-    if trimmed.starts_with("//") {
+    if value.starts_with("//") {
         return ReferenceClassification::Skipped("protocol-relative-url");
     }
-    if starts_with_ascii_case_insensitive(trimmed, "data:") {
+    if starts_with_ascii_case_insensitive(value, "data:") {
         return ReferenceClassification::Skipped("data-uri");
     }
-    if has_url_scheme(trimmed) {
+    if has_url_scheme(value) {
         return ReferenceClassification::Skipped("external-url");
     }
 
     let local_ref = if url_semantics {
-        let url_path = strip_url_query_and_fragment(trimmed);
+        let url_path = dynamic_check_value;
         match percent_decode_utf8(url_path) {
             Ok(value) => value,
             Err(reason) => return ReferenceClassification::Unsafe(reason),
         }
     } else {
-        trimmed.to_string()
+        value.to_string()
     };
 
-    if url_semantics && local_ref.is_empty() {
-        return ReferenceClassification::Unsafe("decoded-empty-path");
-    }
-    if url_semantics && matches!(local_ref.as_str(), "." | "..") {
-        return ReferenceClassification::Unsafe("decoded-dot-path");
-    }
-    if local_ref.is_empty() {
+    if local_ref.trim().is_empty() {
         return ReferenceClassification::Skipped("empty-ref");
+    }
+    if matches!(local_ref.as_str(), "." | "..") {
+        return ReferenceClassification::Unsafe("decoded-dot-path");
     }
     if local_ref.contains(['/', '\\']) {
         return ReferenceClassification::Unsafe("decoded-path-separator");
+    }
+    if !local_ref
+        .bytes()
+        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
+    {
+        return ReferenceClassification::Unsafe("helper-unsafe-character");
     }
 
     ReferenceClassification::Local(local_ref)
@@ -422,6 +582,20 @@ impl MediaReferenceCandidateKind {
 }
 
 fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, usize)> {
+    let value = parse_html_attribute_value_span(input, value_start)?;
+    Some((value.raw, value.next_cursor))
+}
+
+struct HtmlAttributeValue<'a> {
+    raw: &'a str,
+    raw_start: usize,
+    next_cursor: usize,
+}
+
+fn parse_html_attribute_value_span(
+    input: &str,
+    value_start: usize,
+) -> Option<HtmlAttributeValue<'_>> {
     let bytes = input.as_bytes();
     let first = *bytes.get(value_start)?;
 
@@ -430,11 +604,15 @@ fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, 
         let mut cursor = value_start + 1;
         while cursor < bytes.len() {
             if bytes[cursor] == quote {
-                return Some((&input[value_start + 1..cursor], cursor + 1));
+                return Some(HtmlAttributeValue {
+                    raw: &input[value_start + 1..cursor],
+                    raw_start: value_start + 1,
+                    next_cursor: cursor + 1,
+                });
             }
             cursor += 1;
         }
-        return Some((&input[value_start + 1..], input.len()));
+        return None;
     }
 
     let mut cursor = value_start;
@@ -445,7 +623,11 @@ fn parse_html_attribute_value(input: &str, value_start: usize) -> Option<(&str, 
         }
         cursor += 1;
     }
-    Some((&input[value_start..cursor], cursor))
+    Some(HtmlAttributeValue {
+        raw: &input[value_start..cursor],
+        raw_start: value_start,
+        next_cursor: cursor,
+    })
 }
 
 fn html_start_tag_attribute_cursor(input: &str) -> usize {
@@ -484,15 +666,113 @@ fn parse_css_url_value(input: &str, value_start: usize) -> Option<(String, usize
         return None;
     }
 
-    let raw_start = cursor;
+    let raw_start = value_start;
+    cursor = value_start;
     while cursor < bytes.len() && bytes[cursor] != b')' {
+        if bytes[cursor] == b';' || bytes[cursor] == b'}' {
+            return None;
+        }
         cursor += 1;
     }
     if cursor >= bytes.len() {
         return None;
     }
 
-    Some((input[raw_start..cursor].trim().to_string(), cursor + 1))
+    let raw_ref = &input[raw_start..cursor];
+    let trimmed_ref = raw_ref.trim();
+    if raw_ref.contains('(') {
+        return None;
+    }
+
+    if trimmed_ref.is_empty() {
+        Some((raw_ref.to_string(), cursor + 1))
+    } else {
+        Some((trimmed_ref.to_string(), cursor + 1))
+    }
+}
+
+fn css_url_recovery_cursor(input: &str, value_start: usize) -> usize {
+    let value_start = skip_ascii_whitespace(input, value_start);
+    if input
+        .as_bytes()
+        .get(value_start)
+        .is_some_and(|byte| *byte == b'"' || *byte == b'\'')
+    {
+        return css_quoted_url_recovery_cursor(input, value_start);
+    }
+
+    css_malformed_url_boundary(input, value_start)
+}
+
+fn css_quoted_url_recovery_cursor(input: &str, quote_start: usize) -> usize {
+    let bytes = input.as_bytes();
+    let quote = bytes[quote_start];
+    let mut cursor = quote_start + 1;
+
+    while cursor < bytes.len() {
+        if bytes[cursor] == b'\\' {
+            cursor = cursor.saturating_add(2);
+            continue;
+        }
+        if bytes[cursor] == quote {
+            let after_quote = skip_ascii_whitespace(input, cursor + 1);
+            if bytes.get(after_quote) == Some(&b')') {
+                return after_quote + 1;
+            }
+            return css_malformed_url_boundary(input, after_quote);
+        }
+        if bytes[cursor] == b';' || bytes[cursor] == b'}' {
+            return cursor;
+        }
+        cursor += 1;
+    }
+
+    input.len()
+}
+
+fn css_malformed_url_boundary(input: &str, start: usize) -> usize {
+    let bytes = input.as_bytes();
+    let mut cursor = start;
+    let mut nested_parens = 0usize;
+    let mut quote = None;
+
+    while cursor < bytes.len() {
+        if let Some(active_quote) = quote {
+            if bytes[cursor] == b'\\' {
+                cursor = cursor.saturating_add(2);
+                continue;
+            }
+            if bytes[cursor] == active_quote {
+                quote = None;
+            }
+            cursor += 1;
+            continue;
+        }
+
+        match bytes[cursor] {
+            b'"' | b'\'' => quote = Some(bytes[cursor]),
+            b'(' => nested_parens += 1,
+            b')' => {
+                if nested_parens == 0 {
+                    return cursor + 1;
+                }
+                nested_parens -= 1;
+            }
+            b';' | b'}' => return cursor,
+            _ => {}
+        }
+        cursor += 1;
+    }
+
+    input.len()
+}
+
+fn line_number_at(input: &str, byte_index: usize) -> usize {
+    input[..byte_index.min(input.len())]
+        .bytes()
+        .filter(|byte| *byte == b'\n')
+        .count()
+        + 1
 }
 
 struct HtmlStartTag<'a> {
@@ -581,6 +861,11 @@ fn strip_html_raw_text_elements(input: &str, tag_name: &str) -> String {
         if tag.name.eq_ignore_ascii_case(tag_name) && !is_self_closing_start_tag(tag.source) {
             output.push_str(&input[copy_cursor..tag.start]);
             copy_cursor = find_html_raw_text_end(input, tag.end + 1, tag.name);
+            output.extend(
+                input[tag.start..copy_cursor]
+                    .chars()
+                    .filter(|ch| *ch == '\n'),
+            );
             scan_cursor = copy_cursor;
         } else {
             scan_cursor = tag.end + 1;
@@ -588,6 +873,48 @@ fn strip_html_raw_text_elements(input: &str, tag_name: &str) -> String {
     }
 
     output.push_str(&input[copy_cursor..]);
+    output
+}
+
+fn strip_html_start_tags(input: &str) -> String {
+    let mut output = String::with_capacity(input.len());
+    let bytes = input.as_bytes();
+    let mut cursor = 0;
+
+    while let Some(relative_tag_start) = input[cursor..].find('<') {
+        let tag_start = cursor + relative_tag_start;
+        let tag_name_start = tag_start + 1;
+        let Some(first_tag_name_byte) = bytes.get(tag_name_start) else {
+            break;
+        };
+        if !first_tag_name_byte.is_ascii_alphabetic() && *first_tag_name_byte != b'/' {
+            output.push_str(&input[cursor..tag_name_start]);
+            cursor = tag_name_start;
+            continue;
+        }
+
+        output.push_str(&input[cursor..tag_start]);
+        match find_html_tag_end(input, tag_name_start) {
+            Some(tag_end) => {
+                output.extend(input[tag_start..=tag_end].chars().filter(|ch| *ch == '\n'));
+                cursor = tag_end + 1;
+            }
+            None => match input[tag_name_start..].find('>') {
+                Some(relative_tag_end) => {
+                    let tag_end = tag_name_start + relative_tag_end;
+                    output.extend(input[tag_start..=tag_end].chars().filter(|ch| *ch == '\n'));
+                    cursor = tag_end + 1;
+                }
+                None => {
+                    output.extend(input[tag_start..].chars().filter(|ch| *ch == '\n'));
+                    cursor = input.len();
+                    break;
+                }
+            },
+        }
+    }
+
+    output.push_str(&input[cursor..]);
     output
 }
 
@@ -694,9 +1021,15 @@ fn strip_css_block_comments(input: &str) -> String {
         let comment_body_start = absolute_start + "/*".len();
         match input[comment_body_start..].find("*/") {
             Some(comment_end) => {
+                output.extend(
+                    input[comment_body_start..comment_body_start + comment_end]
+                        .chars()
+                        .filter(|ch| *ch == '\n'),
+                );
                 cursor = comment_body_start + comment_end + "*/".len();
             }
             None => {
+                output.extend(input[comment_body_start..].chars().filter(|ch| *ch == '\n'));
                 cursor = input.len();
                 break;
             }
@@ -708,13 +1041,7 @@ fn strip_css_block_comments(input: &str) -> String {
 }
 
 fn contains_dynamic_template(input: &str) -> bool {
-    input.contains("{{")
-        || input.contains("}}")
-        || input.contains("{%")
-        || input.contains("%}")
-        || input.contains("${")
-        || input.contains("<%")
-        || input.contains("%>")
+    input.contains("{{") || input.contains("}}")
 }
 
 fn has_url_scheme(input: &str) -> bool {

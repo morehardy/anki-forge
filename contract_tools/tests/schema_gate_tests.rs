@@ -231,6 +231,28 @@ fn normalization_diagnostics_schema_accepts_info_level_items() {
 }
 
 #[test]
+fn normalization_diagnostics_schema_accepts_items_with_source_path() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "normalization_diagnostics_schema").unwrap())
+            .unwrap();
+    let value = json!({
+        "kind": "normalization-diagnostics",
+        "status": "invalid",
+        "items": [
+            {
+                "level": "error",
+                "code": "MEDIA.MISSING_REFERENCE",
+                "summary": "missing media reference missing.png in note note-1 field Back",
+                "path": "authoring.notes[\"note-1\"].fields[\"Back\"]"
+            }
+        ]
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}
+
+#[test]
 fn schema_gates_run_against_the_bundled_contract_manifest() {
     run_schema_gates(contract_manifest_path().to_str().unwrap()).unwrap();
 }

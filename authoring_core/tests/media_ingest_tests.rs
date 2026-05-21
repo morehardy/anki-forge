@@ -1,8 +1,8 @@
 use authoring_core::{
     ingest_authoring_media, normalize, normalize_with_options, object_store_path,
     sort_media_bindings, sort_media_objects, sort_media_references, AuthoringDocument,
-    AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, ComparisonContext,
-    DiagnosticBehavior, MediaBinding, MediaObject, MediaPolicy, MediaReference,
+    AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
+    ComparisonContext, DiagnosticBehavior, MediaBinding, MediaObject, MediaPolicy, MediaReference,
     MediaReferenceResolution, NormalizationRequest, NormalizeOptions, NormalizedIr,
 };
 use std::collections::BTreeMap;
@@ -808,7 +808,12 @@ fn normalize_rejects_unused_media_bindings_when_policy_errors() {
     let result = normalize_with_options(request, options);
 
     assert_eq!(result.result_status, "invalid");
-    assert!(result.normalized_ir.is_none());
+    let normalized_ir = result
+        .normalized_ir
+        .as_ref()
+        .expect("unused binding policy errors keep normalized media for reporting");
+    assert_eq!(normalized_ir.media_bindings.len(), 1);
+    assert_eq!(normalized_ir.media_references.len(), 0);
     assert!(result
         .diagnostics
         .items
@@ -864,6 +869,180 @@ fn normalize_drops_empty_skipped_references_from_valid_output() {
         .all(|item| item.level != "error"));
     let normalized = result.normalized_ir.expect("normalized_ir");
     assert!(normalized.media_references.is_empty());
+}
+
+#[test]
+fn normalize_scans_templates_browser_templates_and_css_references() {
+    let root = unique_test_root("normalize-template-css-refs");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    for filename in [
+        "front.txt",
+        "back.txt",
+        "browser-front.txt",
+        "browser-back.txt",
+        "style.txt",
+        "conditional.txt",
+    ] {
+        fs::write(base_dir.join("assets").join(filename), b"media").unwrap();
+    }
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = [
+        "front.txt",
+        "back.txt",
+        "browser-front.txt",
+        "browser-back.txt",
+        "style.txt",
+        "conditional.txt",
+    ]
+    .into_iter()
+    .map(|filename| AuthoringMedia {
+        id: format!("media:{filename}"),
+        desired_filename: filename.into(),
+        source: AuthoringMediaSource::Path {
+            path: format!("assets/{filename}"),
+        },
+        declared_mime: Some("text/plain".into()),
+    })
+    .collect::<Vec<_>>();
+    let request = NormalizationRequest::new(custom_authoring_doc(
+        AuthoringTemplate {
+            name: "Recognition".into(),
+            ord: None,
+            config_id: None,
+            question_format:
+                r#"{{#HasImage}}<img src="conditional.txt">{{/HasImage}} <img src="front.txt">"#
+                    .into(),
+            answer_format: r#"[sound:back.txt]"#.into(),
+            browser_question_format: Some(r#"<img src="browser-front.txt">"#.into()),
+            browser_answer_format: Some(r#"<object data="browser-back.txt"></object>"#.into()),
+            target_deck_name: None,
+            browser_font_name: None,
+            browser_font_size: None,
+        },
+        ".card {\n  background: url(\"style.txt?v=1#hash\");\n}\n",
+        media,
+    ));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "success");
+    let normalized = result.normalized_ir.expect("normalized_ir");
+    let keys = reference_keys(&normalized.media_references);
+    assert!(keys.contains(
+        &"custom-main|Recognition:front|conditional.txt|resolved:media:conditional.txt".into()
+    ));
+    assert!(
+        keys.contains(&"custom-main|Recognition:front|front.txt|resolved:media:front.txt".into())
+    );
+    assert!(keys.contains(&"custom-main|Recognition:back|back.txt|resolved:media:back.txt".into()));
+    assert!(keys.contains(
+        &"custom-main|Recognition:browser_front|browser-front.txt|resolved:media:browser-front.txt"
+            .into()
+    ));
+    assert!(keys.contains(
+        &"custom-main|Recognition:browser_back|browser-back.txt|resolved:media:browser-back.txt"
+            .into()
+    ));
+    assert!(keys.contains(&"custom-main|css|style.txt?v=1#hash|resolved:media:style.txt".into()));
+}
+
+#[test]
+fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_line() {
+    let root = unique_test_root("normalize-template-css-diags");
+    let options = test_options(&root, &root.join("store"));
+    let request = NormalizationRequest::new(custom_authoring_doc(
+        AuthoringTemplate {
+            name: "Recognition".into(),
+            ord: None,
+            config_id: None,
+            question_format: r#"<img src="{{Image}}"><img src="missing-front.png">"#.into(),
+            answer_format: r#"<img src="bad%2Fback.png">"#.into(),
+            browser_question_format: Some(r#"<img src="https://example.test/skip.png">"#.into()),
+            browser_answer_format: Some(r#"<img src="missing-browser.png">"#.into()),
+            target_deck_name: None,
+            browser_font_name: None,
+            browser_font_size: None,
+        },
+        ".bad {\n  background: url( missing-style.png?v=1 );\n}\n.more { background: url(bad%2Fstyle.png); }\n",
+        vec![],
+    ));
+
+    let result = normalize_with_options(request, options);
+
+    assert_eq!(result.result_status, "invalid");
+    assert!(result.diagnostics.items.iter().any(|item| {
+        item.code == "MEDIA.MISSING_REFERENCE"
+            && item.path.as_deref()
+                == Some("authoring.note_types[\"custom-main\"].templates[\"Recognition\"].front")
+    }));
+    assert!(result.diagnostics.items.iter().any(|item| {
+        item.code == "MEDIA.UNSAFE_REFERENCE"
+            && item.path.as_deref()
+                == Some("authoring.note_types[\"custom-main\"].templates[\"Recognition\"].back")
+    }));
+    assert!(result.diagnostics.items.iter().any(|item| {
+        item.code == "MEDIA.MISSING_REFERENCE"
+            && item.path.as_deref()
+                == Some(
+                    "authoring.note_types[\"custom-main\"].templates[\"Recognition\"].browser_back",
+                )
+    }));
+    assert!(result.diagnostics.items.iter().any(|item| {
+        item.code == "MEDIA.MISSING_REFERENCE"
+            && item.path.as_deref() == Some("authoring.note_types[\"custom-main\"].css")
+            && item.summary.contains("url( missing-style.png?v=1 )")
+            && item.summary.contains("line 2")
+    }));
+    assert!(result.diagnostics.items.iter().any(|item| {
+        item.code == "MEDIA.UNSAFE_REFERENCE"
+            && item.path.as_deref() == Some("authoring.note_types[\"custom-main\"].css")
+            && item.summary.contains("url(bad%2Fstyle.png)")
+            && item.summary.contains("line 4")
+    }));
+}
+
+#[test]
+fn ingest_rejects_helper_unsafe_desired_filenames() {
+    let root = unique_test_root("ingest-helper-unsafe-filenames");
+    let base_dir = root.join("input");
+    fs::create_dir_all(base_dir.join("assets")).unwrap();
+    fs::write(base_dir.join("assets").join("source.txt"), b"media").unwrap();
+    let options = test_options(&base_dir, &root.join("store"));
+    let media = vec![
+        AuthoringMedia {
+            id: "media:space".into(),
+            desired_filename: "space name.png".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/source.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+        AuthoringMedia {
+            id: "media:ampersand".into(),
+            desired_filename: "bad&name.png".into(),
+            source: AuthoringMediaSource::Path {
+                path: "assets/source.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        },
+    ];
+
+    let err = ingest_authoring_media(&media, &options).expect_err("unsafe filenames");
+
+    assert_eq!(err.diagnostics.len(), 2);
+    assert!(err
+        .diagnostics
+        .iter()
+        .all(|item| item.code == "MEDIA.UNSAFE_FILENAME"));
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.path.as_deref() == Some("space name.png")));
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.path.as_deref() == Some("bad&name.png")));
 }
 
 #[test]
@@ -926,6 +1105,45 @@ fn authoring_doc(back: &str, media: Vec<AuthoringMedia>) -> AuthoringDocument {
         notes: vec![AuthoringNote {
             id: "note-1".into(),
             notetype_id: "basic-main".into(),
+            deck_name: "Default".into(),
+            fields,
+            tags: vec![],
+        }],
+        media,
+    }
+}
+
+fn custom_authoring_doc(
+    template: AuthoringTemplate,
+    css: &str,
+    media: Vec<AuthoringMedia>,
+) -> AuthoringDocument {
+    let mut fields = BTreeMap::new();
+    fields.insert("Prompt".into(), "prompt".into());
+    AuthoringDocument {
+        kind: "authoring-ir".into(),
+        schema_version: "0.1.0".into(),
+        metadata_document_id: "doc".into(),
+        notetypes: vec![AuthoringNotetype {
+            id: "custom-main".into(),
+            kind: "normal".into(),
+            name: Some("Custom".into()),
+            original_stock_kind: None,
+            original_id: None,
+            fields: Some(vec![authoring_core::AuthoringField {
+                name: "Prompt".into(),
+                ord: None,
+                config_id: None,
+                tag: None,
+                prevent_deletion: false,
+            }]),
+            templates: Some(vec![template]),
+            css: Some(css.into()),
+            field_metadata: vec![],
+        }],
+        notes: vec![AuthoringNote {
+            id: "note-1".into(),
+            notetype_id: "custom-main".into(),
             deck_name: "Default".into(),
             fields,
             tags: vec![],

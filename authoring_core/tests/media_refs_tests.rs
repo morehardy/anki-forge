@@ -36,9 +36,9 @@ fn extracts_sound_html_object_and_css_refs() {
             (
                 "css_url",
                 "bg%20one.png?version=1#frag",
-                Some("bg one.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );
@@ -51,6 +51,217 @@ fn extracts_sound_html_object_and_css_refs() {
             MediaReferenceCandidateKind::HtmlObjectData,
             MediaReferenceCandidateKind::CssUrl,
         ]
+    );
+}
+
+#[test]
+fn css_url_percent_decodes_helper_safe_local_paths() {
+    let refs = scan(r#"<style>.card { background-image: url("bg%5Fone.png"); }</style>"#);
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "bg%5Fone.png", Some("bg_one.png"), None, None,)]
+    );
+    assert_eq!(
+        refs.iter().map(|item| item.kind).collect::<Vec<_>>(),
+        vec![MediaReferenceCandidateKind::CssUrl]
+    );
+}
+
+#[test]
+fn css_url_reports_opening_url_line() {
+    let refs = scan(".a {}\n.card {\n  background-image: url(\"bg.png\");\n}");
+
+    assert_eq!(
+        refs.iter().map(|item| item.source_line).collect::<Vec<_>>(),
+        vec![Some(3)]
+    );
+}
+
+#[test]
+fn css_url_skips_malformed_nested_candidates_and_continues() {
+    let refs = scan(".bad { background: url(url(nested.png)); }\n.ok { background: url(ok.png); }");
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
+fn css_url_malformed_candidate_does_not_consume_later_valid_url_token() {
+    let refs = scan(
+        r#".bad { background: url("broken" url(ok.png)); }
+.later { background: url(later.png); }"#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "later.png", Some("later.png"), None, None)]
+    );
+}
+
+#[test]
+fn css_url_malformed_quoted_candidate_does_not_rescan_inner_url_token() {
+    let refs = scan(
+        r#".bad { background: url("broken url(fake.png)" ; }
+.ok { background: url(ok.png); }"#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
+    );
+}
+
+#[test]
+fn css_url_line_hints_preserve_stripped_html_comment_and_script_newlines() {
+    let refs = scan(
+        "<!--\ncomment\n-->\n<script>\nurl(fake.png)\n</script>\n<style>\n.card { background: url(bg.png); }\n</style>",
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("bg.png", Some(8))]
+    );
+}
+
+#[test]
+fn css_url_refs_scan_inline_style_attributes_without_scanning_script_text() {
+    let refs = scan(
+        "<script>\nvar html = '<div style=\"background:url(fake.png)\"></div>';\n</script>\n<div style=\"background:url(ok.png)\"></div>",
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("ok.png", Some(4))]
+    );
+}
+
+#[test]
+fn css_url_scanning_ignores_url_text_inside_quoted_html_tag_attributes() {
+    let refs = scan(
+        r#"<div title="> url(fake.png)" style="background:url(ok.png)"></div>
+<style>.later { background: url(later.png); }</style>"#,
+    );
+
+    assert_eq!(
+        refs.iter()
+            .map(|item| (item.raw_ref.as_str(), item.source_line))
+            .collect::<Vec<_>>(),
+        vec![("ok.png", Some(1)), ("later.png", Some(2))]
+    );
+}
+
+#[test]
+fn helper_unsafe_local_characters_are_unsafe() {
+    let refs = scan(
+        r#"
+        <img src="space%20name.png?cache=1#front">
+        <IMG SRC=hero&amp;icon.png>
+        [sound:space%20name.mp3]
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            (
+                "sound",
+                "space%20name.mp3",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "html_src",
+                "space%20name.png?cache=1#front",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            (
+                "html_src",
+                "hero&icon.png",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+        ]
+    );
+}
+
+#[test]
+fn html_and_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip() {
+    let refs = scan(
+        r#"
+        [sound: hero.png ]
+        <img src=" hero.png ">
+        <img src="   ">
+        <style>
+          .bad { background: url(" hero.png "); }
+          .empty { background: url("   "); }
+        </style>
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            ("sound", "hero.png", Some("hero.png"), None, None),
+            (
+                "html_src",
+                " hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            ("html_src", "   ", None, Some("empty-ref"), None),
+            (
+                "css_url",
+                " hero.png ",
+                None,
+                None,
+                Some("helper-unsafe-character"),
+            ),
+            ("css_url", "   ", None, Some("empty-ref"), None),
+        ]
+    );
+}
+
+#[test]
+fn unquoted_css_url_wrapper_whitespace_is_trimmed_but_empty_refs_skip() {
+    let refs = scan(
+        r#"
+        .leading { background: url( hero.png); }
+        .trailing { background: url(hero.png ); }
+        .both { background: url( hero.png ); }
+        .empty { background: url(   ); }
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            ("css_url", "hero.png", Some("hero.png"), None, None),
+            ("css_url", "hero.png", Some("hero.png"), None, None),
+            ("css_url", "hero.png", Some("hero.png"), None, None),
+            ("css_url", "   ", None, Some("empty-ref"), None),
+        ]
+    );
+}
+
+#[test]
+fn incomplete_unquoted_css_url_does_not_consume_later_valid_url() {
+    let refs = scan(".bad { background: url(bad.png; }\n.ok { background: url(ok.png); }");
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![("css_url", "ok.png", Some("ok.png"), None, None)]
     );
 }
 
@@ -94,7 +305,7 @@ fn classifies_external_and_data_uri_as_skipped() {
                 "html_object_data",
                 "{{ dynamic_media }}",
                 None,
-                Some("dynamic-template"),
+                Some("dynamic-template-expression"),
                 None,
             ),
             (
@@ -109,7 +320,7 @@ fn classifies_external_and_data_uri_as_skipped() {
 }
 
 #[test]
-fn percent_decodes_local_url_path_and_rejects_decoded_separators() {
+fn percent_decodes_local_url_path_and_rejects_decoded_unsafe_paths() {
     let refs = scan(
         r#"
         <img src="space%20name.png?cache=1#front">
@@ -124,9 +335,9 @@ fn percent_decodes_local_url_path_and_rejects_decoded_separators() {
             (
                 "html_src",
                 "space%20name.png?cache=1#front",
-                Some("space name.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "html_src",
@@ -156,16 +367,16 @@ fn sound_refs_do_not_use_url_percent_decoding() {
             (
                 "sound",
                 "space%20name.mp3",
-                Some("space%20name.mp3"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "sound",
                 "folder%2Fescape.mp3",
-                Some("folder%2Fescape.mp3"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );
@@ -189,16 +400,16 @@ fn html_refs_handle_entities_case_unquoted_attributes_and_comments() {
             (
                 "html_src",
                 "hero&icon.png",
-                Some("hero&icon.png"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
             (
                 "html_object_data",
                 "diagram&v.svg",
-                Some("diagram&v.svg"),
                 None,
                 None,
+                Some("helper-unsafe-character"),
             ),
         ]
     );
@@ -364,11 +575,14 @@ fn invalid_percent_escapes_are_unsafe() {
 }
 
 #[test]
-fn decoded_empty_dot_and_dot_dot_paths_are_unsafe() {
+fn query_fragment_only_refs_are_skipped_and_dot_paths_are_unsafe() {
     let refs = scan(
         r##"
         <img src="?cache=1">
         <img src="#fragment">
+        <style>.empty { background: url(?cache=1); list-style-image: url(#fragment); }</style>
+        [sound:.]
+        [sound:..]
         <img src=".">
         <img src="%2E">
         <style>.x { background: url(..); background-image: url(%2E%2E); }</style>
@@ -378,24 +592,35 @@ fn decoded_empty_dot_and_dot_dot_paths_are_unsafe() {
     assert_eq!(
         ref_summaries(&refs),
         vec![
-            (
-                "html_src",
-                "?cache=1",
-                None,
-                None,
-                Some("decoded-empty-path"),
-            ),
-            (
-                "html_src",
-                "#fragment",
-                None,
-                None,
-                Some("decoded-empty-path"),
-            ),
+            ("sound", ".", None, None, Some("decoded-dot-path")),
+            ("sound", "..", None, None, Some("decoded-dot-path")),
+            ("html_src", "?cache=1", None, Some("empty-ref"), None,),
+            ("html_src", "#fragment", None, Some("empty-ref"), None,),
             ("html_src", ".", None, None, Some("decoded-dot-path")),
             ("html_src", "%2E", None, None, Some("decoded-dot-path")),
+            ("css_url", "?cache=1", None, Some("empty-ref"), None,),
+            ("css_url", "#fragment", None, Some("empty-ref"), None,),
             ("css_url", "..", None, None, Some("decoded-dot-path")),
             ("css_url", "%2E%2E", None, None, Some("decoded-dot-path")),
+        ]
+    );
+}
+
+#[test]
+fn unclosed_html_attribute_quotes_are_skipped_without_aborting_other_ref_forms() {
+    let refs = scan(
+        r#"
+        <img src="missing.png>
+        [sound:ok.mp3]
+        <style>.ok { background: url(ok.png); }</style>
+        "#,
+    );
+
+    assert_eq!(
+        ref_summaries(&refs),
+        vec![
+            ("sound", "ok.mp3", Some("ok.mp3"), None, None),
+            ("css_url", "ok.png", Some("ok.png"), None, None),
         ]
     );
 }

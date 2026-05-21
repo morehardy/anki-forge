@@ -408,11 +408,21 @@ fn validate_bare_filename(name: &str) -> Result<(), String> {
     let mut components = Path::new(name).components();
     let is_bare =
         matches!(components.next(), Some(Component::Normal(_))) && components.next().is_none();
-    if is_bare {
-        Ok(())
-    } else {
-        Err(format!("media filename must be a bare filename: {name}"))
+    if !is_bare {
+        return Err(format!("media filename must be a bare filename: {name}"));
     }
+    if !is_helper_safe_filename(name) {
+        return Err(format!(
+            "media filename contains helper-unsafe characters: {name}"
+        ));
+    }
+
+    Ok(())
+}
+
+fn is_helper_safe_filename(name: &str) -> bool {
+    name.bytes()
+        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
 }
 
 fn has_parent_component(path: &Path) -> bool {

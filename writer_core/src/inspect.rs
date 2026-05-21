@@ -6,7 +6,8 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{ensure, Context, Result};
 use authoring_core::{
-    NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+    MediaReferenceResolution, NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype,
+    NormalizedTemplate,
 };
 use prost::Message;
 use rusqlite::Connection;
@@ -21,7 +22,6 @@ use crate::anki_proto::{
     NotetypeKind, OriginalStockKind,
 };
 use crate::canonical_json::to_canonical_json;
-use crate::media_refs::extract_media_references;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::staging::{
     validated_media_output_path, BuildArtifactTarget, ResolvedTemplateTargetDeck,
@@ -341,9 +341,14 @@ fn build_observations(
         .iter()
         .map(|notetype| (notetype.id.as_str(), notetype))
         .collect();
-    let media_by_filename: BTreeMap<_, _> = media
+    let media_by_binding_id: BTreeMap<_, _> = media
         .iter()
-        .map(|media| (media.filename.as_str(), media))
+        .filter_map(|media| {
+            media
+                .binding_id
+                .as_deref()
+                .map(|binding_id| (binding_id, media))
+        })
         .collect();
 
     let mut notetype_entries = vec![];
@@ -475,24 +480,41 @@ fn build_observations(
                 "evidence_refs": [format!("card:{}:{}", note_id, ord)],
             }));
         }
+    }
 
-        for (field_name, field_value) in &note.fields {
-            for media_ref in extract_media_references(field_value) {
-                if media_by_filename.contains_key(media_ref.as_str()) {
-                    let field_name = field_name.as_str();
-                    media_reference_entries.push(json!({
-                        "selector": format!(
-                            "media-ref[note_id='{}'][field='{}'][ref='{}']",
-                            note_id, field_name, media_ref
-                        ),
-                        "note_id": note_id,
-                        "field": field_name,
-                        "reference": media_ref.as_str(),
-                        "evidence_refs": [format!("media-ref:{}:{}:{}", note_id, field_name, media_ref)],
-                    }));
-                }
-            }
+    for media_ref in &normalized_ir.media_references {
+        let MediaReferenceResolution::Resolved { media_id } = &media_ref.resolution else {
+            continue;
+        };
+        let resolved_media = media_by_binding_id.get(media_id.as_str());
+        let mut entry = json!({
+            "selector": media_ref_selector(
+                &media_ref.owner_kind,
+                &media_ref.owner_id,
+                &media_ref.location_kind,
+                &media_ref.location_name,
+                &media_ref.raw_ref,
+            ),
+            "owner_kind": media_ref.owner_kind.as_str(),
+            "owner_id": media_ref.owner_id.as_str(),
+            "location_kind": media_ref.location_kind.as_str(),
+            "location_name": media_ref.location_name.as_str(),
+            "reference": media_ref.raw_ref.as_str(),
+            "ref_kind": media_ref.ref_kind.as_str(),
+            "media_id": media_id.as_str(),
+            "evidence_refs": [format!(
+                "media-ref:{}:{}:{}:{}:{}",
+                evidence_component(&media_ref.owner_kind),
+                evidence_component(&media_ref.owner_id),
+                evidence_component(&media_ref.location_kind),
+                evidence_component(&media_ref.location_name),
+                evidence_component(&media_ref.raw_ref)
+            )],
+        });
+        if let Some(resolved_media) = resolved_media {
+            entry["filename"] = json!(resolved_media.filename.as_str());
         }
+        media_reference_entries.push(entry);
     }
 
     let metadata_entries = vec![json!({
@@ -542,6 +564,67 @@ fn build_observations(
             .chain(media_reference_entries)
             .collect(),
     }
+}
+
+fn media_ref_selector(
+    owner_kind: &str,
+    owner_id: &str,
+    location_kind: &str,
+    location_name: &str,
+    raw_ref: &str,
+) -> String {
+    format!(
+        "media-ref[owner_kind={}][owner_id={}][location_kind={}][location_name={}][ref={}]",
+        selector_value(owner_kind),
+        selector_value(owner_id),
+        selector_value(location_kind),
+        selector_value(location_name),
+        selector_value(raw_ref),
+    )
+}
+
+fn selector_value(value: &str) -> String {
+    let mut escaped = String::with_capacity(value.len() + 2);
+    escaped.push('\'');
+    for ch in value.chars() {
+        match ch {
+            '\\' => escaped.push_str("\\\\"),
+            '\'' => escaped.push_str("\\'"),
+            '"' => escaped.push_str("\\\""),
+            '[' => escaped.push_str("\\["),
+            ']' => escaped.push_str("\\]"),
+            '\n' => escaped.push_str("\\n"),
+            '\r' => escaped.push_str("\\r"),
+            '\t' => escaped.push_str("\\t"),
+            ch if ch.is_control() => {
+                escaped.push_str("\\u{");
+                escaped.push_str(&format!("{:x}", ch as u32));
+                escaped.push('}');
+            }
+            _ => escaped.push(ch),
+        }
+    }
+    escaped.push('\'');
+    escaped
+}
+
+fn evidence_component(value: &str) -> String {
+    let mut escaped = String::with_capacity(value.len());
+    for ch in value.chars() {
+        match ch {
+            '\\' => escaped.push_str("\\\\"),
+            '\n' => escaped.push_str("\\n"),
+            '\r' => escaped.push_str("\\r"),
+            '\t' => escaped.push_str("\\t"),
+            ch if ch.is_control() => {
+                escaped.push_str("\\u{");
+                escaped.push_str(&format!("{:x}", ch as u32));
+                escaped.push('}');
+            }
+            _ => escaped.push(ch),
+        }
+    }
+    escaped
 }
 
 fn resolve_staging_media(

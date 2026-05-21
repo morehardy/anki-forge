@@ -16,12 +16,17 @@ PYTHONPATH=bindings/python/src python3.11 bindings/python/examples/minimal_flow.
 
 ## Target Product API Shape
 
-The Phase 1 Rust MVP also documents the intended high-level Python Product API
-shape for future bindings. Read this file as an API sketch, not as a currently
-executable example:
+The high-level Python Product API is a target shape sketch for future bindings,
+not a complete binding and not currently executable. The implemented Python
+runtime module remains `anki_forge_python`.
 
 - `bindings/python/examples/target_api_custom.py`
+- `bindings/python/examples/target_api_media.py`
 
-That example mirrors the Rust `Project`, `NoteType`, `Field`, `Template`,
-`GenerationRule`, `IdentityRecipe`, and `Note` APIs. It is a product-facing API
-sketch; the implemented Python runtime module remains `anki_forge_python`.
+These examples mirror the product-facing `Project`, `NoteType`, `Field`,
+`Template`, `GenerationRule`, `IdentityRecipe`, `Note`, media, and report APIs.
+Slice 7's shape check is that media registration, media refs, template/CSS
+references, unused binding warnings, and `pretty_report()` can be expressed with
+plain Python variables and registry methods. The sketch deliberately avoids
+Rust-only ownership patterns such as `media_mut()` borrowing or a required
+`PendingMedia.export_as(...)` chain.

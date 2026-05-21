@@ -1,5 +1,5 @@
 {
-  "artifact_fingerprint": "artifact:f7b4422a9b16e43e030cd55f54c686edd45a57d4",
+  "artifact_fingerprint": "artifact:a92d4f753e8fa9fe4caab62785a8ad18dc20bb02",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
@@ -125,12 +125,17 @@
       },
       {
         "evidence_refs": [
-          "media-ref:note-io-1:Image:occlusion.png"
+          "media-ref:note:note-io-1:field:Image:occlusion.png"
         ],
-        "field": "Image",
-        "note_id": "note-io-1",
+        "filename": "occlusion.png",
+        "location_kind": "field",
+        "location_name": "Image",
+        "media_id": "media:occlusion.png",
+        "owner_id": "note-io-1",
+        "owner_kind": "note",
+        "ref_kind": "html_src",
         "reference": "occlusion.png",
-        "selector": "media-ref[note_id='note-io-1'][field='Image'][ref='occlusion.png']"
+        "selector": "media-ref[owner_kind='note'][owner_id='note-io-1'][location_kind='field'][location_name='Image'][ref='occlusion.png']"
       }
     ],
     "template_target_decks": [],
