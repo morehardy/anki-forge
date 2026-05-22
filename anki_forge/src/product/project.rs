@@ -514,152 +514,223 @@ impl Project {
             ));
         }
 
-        let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
-            if path.exists() {
-                match crate::update_safety::lockfile::read_lockfile(path) {
-                    Ok(lockfile) => Some(lockfile),
+        let disabled_update_safety = matches!(update_mode, crate::update_safety::EffectiveMode::Disabled);
+
+        let mut reconcile_output: Option<crate::update_safety::reconcile::ReconcileOutput> = None;
+        let mut writer_guid_plan_opt: Option<writer_core::WriterGuidPlan> = None;
+        let mut update_safety_summary_opt: Option<crate::build::UpdateSafetySummary> = None;
+        let mut lockfile_written = false;
+        let mut lockfile_index: Option<crate::update_safety::model::IdentityIndex> = None;
+
+        if disabled_update_safety {
+            let mut baseline_sources = Vec::new();
+            if let Some(path) = options.compare_to.as_ref() {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("UPDATE.BASELINE_IGNORED_DISABLED"),
+                    severity: Severity::Info,
+                    message: "compare_to baseline ignored because update safety is disabled".into(),
+                    source: Some(SourcePath::new(path.display().to_string())),
+                    help: Some("remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline".into()),
+                });
+                baseline_sources.push(crate::update_safety::report::ignored_previous_apkg_source(path));
+            }
+            if let Some(path) = options.identity_lockfile.as_ref() {
+                baseline_sources.push(crate::update_safety::report::ignored_lockfile_source(path));
+            }
+            let reconcile = crate::update_safety::reconcile::current_only_reconcile(&current_identity.index)
+                .map_err(|_err| {
+                    BuildError::new(
+                        BuildReport {
+                            artifact: None,
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics { duration: started.elapsed() },
+                            inspect: None,
+                            update_safety: None,
+                            status: "invalid".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    )
+                })?;
+            writer_guid_plan_opt = Some(writer_core::WriterGuidPlan {
+                assignments: reconcile.assignments.clone(),
+            });
+            update_safety_summary_opt = Some(crate::update_safety::report::summary_from_disabled_mode(
+                &current_identity.index,
+                baseline_sources,
+                diagnostics
+                    .iter()
+                    .filter(|item| item.severity == Severity::Error)
+                    .map(|item| item.code.to_string())
+                    .collect(),
+            ));
+            reconcile_output = Some(reconcile);
+        } else {
+            let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
+                if path.exists() {
+                    match crate::update_safety::lockfile::read_lockfile(path) {
+                        Ok(lockfile) => Some(lockfile),
+                        Err(err) => {
+                            diagnostics.push(Diagnostic {
+                                code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                                severity: Severity::Error,
+                                message: err.to_string(),
+                                source: Some(SourcePath::new(path.display().to_string())),
+                                help: Some("fix or regenerate the identity lockfile".into()),
+                            });
+                            None
+                        }
+                    }
+                } else if options.write_identity_lockfile {
+                    None
+                } else {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                        severity: Severity::Error,
+                        message: format!("identity lockfile {} does not exist", path.display()),
+                        source: Some(SourcePath::new(path.display().to_string())),
+                        help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
+                    });
+                    None
+                }
+            } else {
+                None
+            };
+            let lf_index = lockfile.as_ref().map(|lockfile| lockfile.identity_index.clone());
+            lockfile_index.clone_from(&lf_index);
+
+            let previous_index = if let Some(path) = options.compare_to.as_ref() {
+                match crate::update_safety::baseline::load_previous_apkg_identity_index(
+                    path,
+                    Some(&current_identity.index),
+                    lf_index.as_ref(),
+                ) {
+                    Ok(index) => Some(index),
                     Err(err) => {
                         diagnostics.push(Diagnostic {
-                            code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                            code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
                             severity: Severity::Error,
                             message: err.to_string(),
                             source: Some(SourcePath::new(path.display().to_string())),
-                            help: Some("fix or regenerate the identity lockfile".into()),
+                            help: Some("verify the previous APKG path and package contents".into()),
                         });
                         None
                     }
                 }
-            } else if options.write_identity_lockfile {
-                None
             } else {
-                diagnostics.push(Diagnostic {
-                    code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
-                    severity: Severity::Error,
-                    message: format!("identity lockfile {} does not exist", path.display()),
-                    source: Some(SourcePath::new(path.display().to_string())),
-                    help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
-                });
                 None
-            }
-        } else {
-            None
-        };
-        let lockfile_index = lockfile.as_ref().map(|lockfile| lockfile.identity_index.clone());
+            };
 
-        let previous_index = if let Some(path) = options.compare_to.as_ref() {
-            match crate::update_safety::baseline::load_previous_apkg_identity_index(
-                path,
-                Some(&current_identity.index),
-                lockfile_index.as_ref(),
-            ) {
-                Ok(index) => Some(index),
-                Err(err) => {
-                    diagnostics.push(Diagnostic {
-                        code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
-                        severity: Severity::Error,
-                        message: err.to_string(),
-                        source: Some(SourcePath::new(path.display().to_string())),
-                        help: Some("verify the previous APKG path and package contents".into()),
-                    });
-                    None
-                }
-            }
-        } else {
-            None
-        };
-
-        if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
-            && options.compare_to.is_some()
-            && previous_index.is_none()
-        {
-            return Err(BuildError::new(
-                BuildReport {
-                    artifact: None,
-                    counts: BuildCounts {
-                        notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(&normalized),
-                        media: normalized.media_bindings.len(),
+            if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                && options.compare_to.is_some()
+                && previous_index.is_none()
+            {
+                return Err(BuildError::new(
+                    BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
+                        },
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics { duration: started.elapsed() },
+                        inspect: None,
+                        update_safety: None,
+                        status: "invalid".into(),
                     },
-                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                    diagnostics: diagnostics.clone(),
-                    metrics: BuildMetrics { duration: started.elapsed() },
-                    inspect: None,
-                    update_safety: None,
-                    status: "invalid".into(),
-                },
-                BuildFailureCause::Diagnostics,
-            ));
-        }
+                    BuildFailureCause::Diagnostics,
+                ));
+            }
 
-        let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
-            &current_identity.index,
-            previous_index.as_ref(),
-            lockfile_index.as_ref(),
-        )
-        .map_err(|err| {
-            diagnostics.push(Diagnostic {
-                code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
-                severity: Severity::Error,
-                message: err.to_string(),
-                source: Some(SourcePath::new("update_safety.reconcile")),
-                help: Some("choose unique stable ids or remove conflicting lockfile entries".into()),
-            });
-            BuildError::new(
-                BuildReport {
-                    artifact: None,
-                    counts: BuildCounts {
-                        notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(&normalized),
-                        media: normalized.media_bindings.len(),
-                    },
-                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                    diagnostics: diagnostics.clone(),
-                    metrics: BuildMetrics { duration: started.elapsed() },
-                    inspect: None,
-                    update_safety: None,
-                    status: "invalid".into(),
-                },
-                BuildFailureCause::Diagnostics,
-            )
-        })?;
-        diagnostics.extend(reconcile.diagnostics.clone());
-        let mut lockfile_written = false;
-        let baseline_for_merge = previous_index.as_ref().or(lockfile_index.as_ref());
-        if let Some(baseline_for_merge) = baseline_for_merge {
-            diagnostics.extend(crate::update_safety::merge_safety::compare_notetype_merge_safety(
+            let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
                 &current_identity.index,
-                baseline_for_merge,
-            ));
-        }
-        if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
-            && diagnostics.iter().any(|diagnostic| diagnostic.severity == Severity::Error)
-        {
-            return Err(BuildError::new(
-                BuildReport {
-                    artifact: None,
-                    counts: BuildCounts {
-                        notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(&normalized),
-                        media: normalized.media_bindings.len(),
+                previous_index.as_ref(),
+                lf_index.as_ref(),
+            )
+            .map_err(|err| {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
+                    severity: Severity::Error,
+                    message: err.to_string(),
+                    source: Some(SourcePath::new("update_safety.reconcile")),
+                    help: Some("choose unique stable ids or remove conflicting lockfile entries".into()),
+                });
+                BuildError::new(
+                    BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
+                        },
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics { duration: started.elapsed() },
+                        inspect: None,
+                        update_safety: None,
+                        status: "invalid".into(),
                     },
-                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                    diagnostics: diagnostics.clone(),
-                    metrics: BuildMetrics { duration: started.elapsed() },
-                    inspect: None,
-                    update_safety: Some(crate::update_safety::report::summary_from_reconcile(
-                        update_mode,
-                        &reconcile,
-                        &diagnostics,
-                        lockfile_written,
-                    )),
-                    status: "invalid".into(),
-                },
-                BuildFailureCause::Diagnostics,
-            ));
+                    BuildFailureCause::Diagnostics,
+                )
+            })?;
+            diagnostics.extend(reconcile.diagnostics.clone());
+            let baseline_for_merge = previous_index.as_ref().or(lf_index.as_ref());
+            if let Some(baseline_for_merge) = baseline_for_merge {
+                diagnostics.extend(crate::update_safety::merge_safety::compare_notetype_merge_safety(
+                    &current_identity.index,
+                    baseline_for_merge,
+                ));
+            }
+            if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                && diagnostics.iter().any(|diagnostic| diagnostic.severity == Severity::Error)
+            {
+                return Err(BuildError::new(
+                    BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
+                        },
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics { duration: started.elapsed() },
+                        inspect: None,
+                        update_safety: Some(crate::update_safety::report::summary_from_reconcile(
+                            update_mode,
+                            &reconcile,
+                            &diagnostics,
+                            lockfile_written,
+                        )),
+                        status: "invalid".into(),
+                    },
+                    BuildFailureCause::Diagnostics,
+                ));
+            }
+            writer_guid_plan_opt = Some(writer_core::WriterGuidPlan {
+                assignments: reconcile.assignments.clone(),
+            });
+            let summary = crate::update_safety::report::summary_from_reconcile(
+                update_mode,
+                &reconcile,
+                &diagnostics,
+                lockfile_written,
+            );
+            reconcile_output = Some(reconcile);
+            update_safety_summary_opt = Some(summary);
         }
-        let writer_guid_plan = writer_core::WriterGuidPlan {
-            assignments: reconcile.assignments.clone(),
-        };
+
+        let reconcile = reconcile_output.expect("update safety branch sets reconcile output");
+        let writer_guid_plan = writer_guid_plan_opt.expect("update safety branch sets writer GUID plan");
+        let mut update_safety_summary_val =
+            update_safety_summary_opt.expect("update safety branch sets update safety summary");
 
         let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
@@ -796,6 +867,13 @@ impl Project {
                     },
                 )?;
                 lockfile_written = true;
+                update_safety_summary_val =
+                    crate::update_safety::report::summary_from_reconcile(
+                        update_mode,
+                        &reconcile,
+                        &diagnostics,
+                        true,
+                    );
             }
         }
 
@@ -838,12 +916,7 @@ impl Project {
         }
 
         let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
-        let update_safety = Some(crate::update_safety::report::summary_from_reconcile(
-            update_mode,
-            &reconcile,
-            &diagnostics,
-            lockfile_written,
-        ));
+        let update_safety = Some(update_safety_summary_val);
         let report = BuildReport {
             artifact,
             counts,
