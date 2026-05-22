@@ -1,3 +1,4 @@
+pub mod baseline;
 pub mod current;
 pub mod diagnostics;
 pub mod lockfile;
