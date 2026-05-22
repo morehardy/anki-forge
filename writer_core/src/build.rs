@@ -97,6 +97,20 @@ pub fn build_with_guid_plan(
                         },
                     ));
                 }
+                if err.to_string().starts_with("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE") {
+                    return Ok(error_result_with_domain(
+                        writer_policy,
+                        build_context,
+                        ErrorResultDetails {
+                            code: "UPDATE.NOTE_DATA_METADATA_UNMERGEABLE".into(),
+                            summary: err.to_string(),
+                            domain: "identity".into(),
+                            stage: "emit_apkg".into(),
+                            operation: "merge_note_data".into(),
+                            path: None,
+                        },
+                    ));
+                }
                 return Ok(apkg_error_result(
                     writer_policy,
                     build_context,

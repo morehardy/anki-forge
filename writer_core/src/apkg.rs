@@ -16,7 +16,7 @@ use crate::anki_proto::{
     default_deck_common_bytes, default_deck_config_bytes, default_deck_kind_bytes,
     encode_field_config, encode_notetype_config, encode_template_config,
 };
-use crate::model::{WriterGuidAssignment, WriterGuidPlan};
+use crate::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
 use crate::staging::{
     load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
     MaterializedStaging,
@@ -109,6 +109,55 @@ fn validate_guid_plan(
     }
 
     Ok(by_note)
+}
+
+fn note_identity_metadata_for_assignment(
+    assignment: Option<&WriterGuidAssignment>,
+    note: &NormalizedNote,
+) -> NoteIdentityMetadata {
+    let selected = assignment
+        .map(|a| a.selected_anki_guid.clone())
+        .unwrap_or_else(|| note.id.clone());
+    let source = assignment
+        .map(|a| a.source.clone())
+        .unwrap_or_else(|| "current_derivation".into());
+
+    NoteIdentityMetadata {
+        schema_version: "identity-note-v1".into(),
+        stable_id: assignment
+            .map(|a| a.stable_id.clone())
+            .unwrap_or_else(|| note.id.clone()),
+        recipe_id: "product.explicit-or-normalized.v1".into(),
+        canonical_payload_hash: None,
+        current_guid_candidate: note.id.clone(),
+        selected_anki_guid: selected,
+        guid_derivation_version: "guid.raw-stable-id.v1".into(),
+        guid_source: source,
+        recovery_method: "current_resolution".into(),
+    }
+}
+
+fn merge_identity_note_data(
+    existing: &str,
+    metadata: &NoteIdentityMetadata,
+) -> anyhow::Result<String> {
+    let mut value = if existing.trim().is_empty() {
+        serde_json::json!({})
+    } else {
+        serde_json::from_str(existing).map_err(|err| {
+            anyhow::anyhow!("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE: invalid notes.data JSON: {err}")
+        })?
+    };
+
+    let Some(object) = value.as_object_mut() else {
+        anyhow::bail!("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE: notes.data must be a JSON object");
+    };
+
+    object.insert(
+        "anki_forge_identity".into(),
+        serde_json::to_value(metadata).expect("identity metadata serializes"),
+    );
+    Ok(serde_json::to_string(&value).expect("identity note data serializes"))
 }
 
 pub fn emit_apkg(
@@ -420,7 +469,13 @@ fn populate_latest_collection(
                 storage.flds,
                 storage.sfld,
                 storage.csum,
-                "{}"
+                merge_identity_note_data(
+                    "{}",
+                    &note_identity_metadata_for_assignment(
+                        guid_assignments.get(&note.id),
+                        note,
+                    ),
+                )?,
             ],
         )?;
         for tag in &note.tags {
