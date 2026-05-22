@@ -1,5 +1,6 @@
 use crate::build::{BuildOptions, UpdateSafetyMode};
 use crate::diagnostics::{DiagnosticCode, Severity};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EffectiveMode {
@@ -54,4 +55,123 @@ pub fn validate_writer_policy_ref(id: &str, version: &str) -> Result<String, Mod
         });
     }
     Ok(writer_core::policy_ref(id, version))
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct IdentityIndex {
+    pub schema_version: String,
+    pub source_kind: String,
+    pub source_ref: String,
+    pub writer_policy_ref: String,
+    pub project_stable_id: Option<String>,
+    pub notes: Vec<NoteIdentityEntry>,
+    pub notetypes: Vec<NotetypeIdentityEntry>,
+    pub limitations: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct NoteIdentityEntry {
+    pub stable_id: String,
+    pub normalized_note_id: Option<String>,
+    pub anki_guid: String,
+    pub current_guid_candidate: String,
+    pub guid_derivation_version: String,
+    pub note_type_id: String,
+    pub recipe_id: String,
+    pub canonical_payload_hash: Option<String>,
+    pub provenance: String,
+    pub used_override: bool,
+    pub entry_lifecycle: String,
+    pub source_path: String,
+    pub recovery_method: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct NotetypeIdentityEntry {
+    pub note_type_id: String,
+    pub anki_model_id: Option<i64>,
+    pub name: String,
+    pub fields: Vec<FieldMergeEntry>,
+    pub templates: Vec<TemplateMergeEntry>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct FieldMergeEntry {
+    pub field_key: String,
+    pub field_name: String,
+    pub ord: u32,
+    pub config_id: i64,
+    pub tag: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct TemplateMergeEntry {
+    pub template_key: String,
+    pub template_name: String,
+    pub ord: u32,
+    pub config_id: i64,
+}
+
+impl IdentityIndex {
+    pub fn current(project_stable_id: Option<&str>, writer_policy: &writer_core::WriterPolicy) -> Self {
+        Self {
+            schema_version: "identity-index-v1".into(),
+            source_kind: "current".into(),
+            source_ref: "current".into(),
+            writer_policy_ref: writer_core::policy_ref(&writer_policy.id, &writer_policy.version),
+            project_stable_id: project_stable_id.map(str::to_string),
+            notes: vec![],
+            notetypes: vec![],
+            limitations: vec![],
+        }
+    }
+
+    pub fn push_current_note(&mut self, note: &authoring_core::NormalizedNote) {
+        self.notes.push(NoteIdentityEntry {
+            stable_id: note.id.clone(),
+            normalized_note_id: Some(note.id.clone()),
+            anki_guid: note.id.clone(),
+            current_guid_candidate: note.id.clone(),
+            guid_derivation_version: "guid.raw-stable-id.v1".into(),
+            note_type_id: note.notetype_id.clone(),
+            recipe_id: "product.explicit-or-normalized.v1".into(),
+            canonical_payload_hash: None,
+            provenance: "ExplicitStableId".into(),
+            used_override: false,
+            entry_lifecycle: "active".into(),
+            source_path: format!("note[id='{}']", note.id),
+            recovery_method: "current_resolution".into(),
+        });
+    }
+
+    pub fn push_current_notetype(&mut self, notetype: &authoring_core::NormalizedNotetype) {
+        self.notetypes.push(NotetypeIdentityEntry {
+            note_type_id: notetype.id.clone(),
+            anki_model_id: None,
+            name: notetype.name.clone(),
+            fields: notetype
+                .fields
+                .iter()
+                .enumerate()
+                .map(|(ord, field)| FieldMergeEntry {
+                    field_key: field.name.clone(),
+                    field_name: field.name.clone(),
+                    ord: ord as u32,
+                    config_id: field.config_id.unwrap_or(0),
+                    tag: field.tag.map(|t| t as i32).unwrap_or(0),
+                })
+                .collect(),
+            templates: notetype
+                .templates
+                .iter()
+                .enumerate()
+                .map(|(ord, template)| TemplateMergeEntry {
+                    template_key: template.name.clone(),
+                    template_name: template.name.clone(),
+                    ord: template.ord.unwrap_or(ord as u32),
+                    config_id: template.config_id.unwrap_or(0),
+                })
+                .collect(),
+        });
+    }
 }

@@ -423,6 +423,97 @@ impl Project {
             .as_deref()
             .map(|stable_id| format!("artifacts/{stable_id}"))
             .unwrap_or_else(|| "artifacts".into());
+
+        let update_mode = match crate::update_safety::effective_mode(&options) {
+            Ok(mode) => mode,
+            Err(err) => {
+                diagnostics.push(Diagnostic {
+                    code: err.code,
+                    severity: err.severity,
+                    message: err.message,
+                    source: Some(SourcePath::new("build.options")),
+                    help: Some("provide identity_lockfile(path) when write_identity_lockfile(true) is set".into()),
+                });
+                let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+                return Err(BuildError::new(
+                    BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
+                        },
+                        media,
+                        diagnostics,
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: None,
+                        status: "invalid".into(),
+                    },
+                    BuildFailureCause::Diagnostics,
+                ));
+            }
+        };
+
+        if self.stable_id.is_none()
+            && (options.compare_to.is_some()
+                || options.identity_lockfile.is_some()
+                || options.write_identity_lockfile)
+        {
+            let condition = if options.identity_lockfile.is_some() || options.write_identity_lockfile {
+                crate::update_safety::EvidenceCondition::LockfileRequired
+            } else {
+                crate::update_safety::EvidenceCondition::StrictCompareOnly
+            };
+            let classified = crate::update_safety::classify_project_stable_id_missing(condition);
+            if let Some(code) = classified.diagnostic_code {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new(code),
+                    severity: classified.severity,
+                    message: "project stable id is missing for update-safety proof".into(),
+                    source: Some(SourcePath::new("project.stable_id")),
+                    help: Some("set Project::stable_id(value) for update-safe builds".into()),
+                });
+            }
+        }
+
+        let current_identity = crate::update_safety::current::build_current_identity_index(
+            crate::update_safety::current::CurrentIdentityInput {
+                project_stable_id: self.stable_id.as_deref(),
+                normalized: &normalized,
+                writer_policy: &writer_policy,
+                mode: update_mode,
+            },
+        );
+        diagnostics.extend(current_identity.diagnostics);
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+            return Err(BuildError::new(
+                BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    media,
+                    diagnostics,
+                    metrics: BuildMetrics {
+                        duration: started.elapsed(),
+                    },
+                    inspect: None,
+                    update_safety: None,
+                    status: "invalid".into(),
+                },
+                BuildFailureCause::Diagnostics,
+            ));
+        }
+
         let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
         let package_build_result = crate::writer_build(
