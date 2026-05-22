@@ -108,3 +108,58 @@ fn note_entry(stable_id: &str, guid: &str) -> NoteIdentityEntry {
         recovery_method: "current_resolution".into(),
     }
 }
+
+#[test]
+#[ignore = "manual performance boundary check"]
+fn lockfile_parse_scale_100k_entries() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let path = root.path().join("large.lock.json");
+    let mut lockfile = sample_lockfile_with_entries(100_000);
+    let start = std::time::Instant::now();
+    write_lockfile_atomic(&path, &lockfile).expect("write large lockfile");
+    let write_elapsed = start.elapsed();
+    let start = std::time::Instant::now();
+    lockfile = read_lockfile(&path).expect("read large lockfile");
+    let read_elapsed = start.elapsed();
+    assert_eq!(lockfile.identity_index.notes.len(), 100_000);
+    eprintln!("write={write_elapsed:?} read={read_elapsed:?}");
+}
+
+fn sample_lockfile_with_entries(count: usize) -> IdentityLockfile {
+    let mut lockfile = IdentityLockfile {
+        schema_version: "identity-lockfile-v1".into(),
+        project_stable_id: "scale-project".into(),
+        writer_policy_ref: "writer-policy.default@1.0.0".into(),
+        identity_index: IdentityIndex::empty_lockfile(
+            "scale-project",
+            "writer-policy.default@1.0.0",
+        ),
+        generated_by: GeneratedBy {
+            tool: "anki-forge".into(),
+            tool_version: env!("CARGO_PKG_VERSION").into(),
+            writer_policy_ref: "writer-policy.default@1.0.0".into(),
+        },
+    };
+    lockfile.identity_index.notes = (0..count)
+        .map(|index| bench_note_entry(&format!("note-{index:06}"), &format!("guid-{index:06}")))
+        .collect();
+    lockfile
+}
+
+fn bench_note_entry(stable_id: &str, guid: &str) -> NoteIdentityEntry {
+    NoteIdentityEntry {
+        stable_id: stable_id.into(),
+        normalized_note_id: Some(stable_id.into()),
+        anki_guid: guid.into(),
+        current_guid_candidate: stable_id.into(),
+        guid_derivation_version: "guid.raw-stable-id.v1".into(),
+        note_type_id: "basic".into(),
+        recipe_id: "product.explicit-or-normalized.v1".into(),
+        canonical_payload_hash: None,
+        provenance: "ExplicitStableId".into(),
+        used_override: false,
+        entry_lifecycle: "active".into(),
+        source_path: "benchmark".into(),
+        recovery_method: "current_resolution".into(),
+    }
+}

@@ -270,6 +270,56 @@ fn fixture_gates_reject_note_identity_error_codes_missing_from_registry() {
         .contains("note-identity error_code must exist in registry"));
 }
 
+#[test]
+fn update_safety_contract_fixtures_validate() {
+    let root = contracts_root();
+    let fixtures = [
+        ("schema/identity-index.schema.json", "fixtures/update-safety/current-index.json"),
+        ("schema/identity-lockfile.schema.json", "fixtures/update-safety/identity-lockfile.json"),
+        ("schema/update-safety-summary.schema.json", "fixtures/update-safety/update-safety-summary.json"),
+    ];
+    for (schema_rel, fixture_rel) in fixtures {
+        let schema_raw = std::fs::read_to_string(root.join(schema_rel)).expect("schema");
+        let fixture_raw = std::fs::read_to_string(root.join(fixture_rel)).expect("fixture");
+        let schema_json: serde_json::Value = serde_json::from_str(&schema_raw).expect("schema json");
+        let fixture_json: serde_json::Value = serde_json::from_str(&fixture_raw).expect("fixture json");
+        let compiled = jsonschema::JSONSchema::compile(&schema_json).expect("compile schema");
+        compiled
+            .validate(&fixture_json)
+            .unwrap_or_else(|errors| panic!("{fixture_rel} failed schema: {}", errors.map(|e| e.to_string()).collect::<Vec<_>>().join("; ")));
+    }
+}
+
+#[test]
+fn update_safety_fixture_catalog_lists_required_scenarios() {
+    let root = contracts_root();
+    let raw = std::fs::read_to_string(root.join("fixtures/index.yaml"))
+        .expect("fixture catalog");
+    for id in [
+        "update-safety-current-index-generation",
+        "update-safety-lockfile-roundtrip",
+        "update-safety-previous-apkg-priority",
+        "update-safety-guid-preservation",
+        "update-safety-new-note-guid-derivation",
+        "update-safety-baseline-identity-unrecoverable",
+        "update-safety-field-config-id-preservation",
+        "update-safety-template-config-id-preservation",
+        "update-safety-template-ord-warning",
+        "update-safety-absent-entry-reintroduced",
+        "update-safety-normalized-note-id-mismatch",
+        "update-safety-field-ord-warning",
+    ] {
+        assert!(raw.contains(id), "fixture catalog missing {id}");
+    }
+}
+
+fn contracts_root() -> PathBuf {
+    contract_manifest_path()
+        .parent()
+        .expect("manifest path should have a parent")
+        .to_path_buf()
+}
+
 fn temp_contract_root(label: &str) -> PathBuf {
     static NEXT_TEMP_ROOT_ID: AtomicU64 = AtomicU64::new(0);
     let unique = NEXT_TEMP_ROOT_ID.fetch_add(1, Ordering::Relaxed);

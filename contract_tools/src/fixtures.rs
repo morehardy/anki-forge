@@ -417,6 +417,22 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                     fixture.expected,
                 );
             }
+            "phase3-update-safety" => {
+                let case_value: serde_yaml::Value = load_yaml_model(&input_path)?;
+                ensure!(
+                    case_value
+                        .get("kind")
+                        .and_then(|value| value.as_str())
+                        == Some("phase3-update-safety-case"),
+                    "phase3 update-safety fixture must declare kind=phase3-update-safety-case: {}",
+                    case.id
+                );
+                ensure!(
+                    case_value.get("scenario").and_then(|value| value.as_str()).is_some(),
+                    "phase3 update-safety fixture must declare scenario: {}",
+                    case.id
+                );
+            }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;
                 ensure!(
