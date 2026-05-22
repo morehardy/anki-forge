@@ -514,13 +514,127 @@ impl Project {
             ));
         }
 
+        let previous_index = if let Some(path) = options.compare_to.as_ref() {
+            match crate::update_safety::baseline::load_previous_apkg_identity_index(
+                path,
+                Some(&current_identity.index),
+                None,
+            ) {
+                Ok(index) => Some(index),
+                Err(err) => {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
+                        severity: Severity::Error,
+                        message: err.to_string(),
+                        source: Some(SourcePath::new(path.display().to_string())),
+                        help: Some("verify the previous APKG path and package contents".into()),
+                    });
+                    None
+                }
+            }
+        } else {
+            None
+        };
+
+        if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+            && options.compare_to.is_some()
+            && previous_index.is_none()
+        {
+            return Err(BuildError::new(
+                BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                    diagnostics: diagnostics.clone(),
+                    metrics: BuildMetrics { duration: started.elapsed() },
+                    inspect: None,
+                    update_safety: None,
+                    status: "invalid".into(),
+                },
+                BuildFailureCause::Diagnostics,
+            ));
+        }
+
+        let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
+            &current_identity.index,
+            previous_index.as_ref(),
+            None,
+        )
+        .map_err(|err| {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
+                severity: Severity::Error,
+                message: err.to_string(),
+                source: Some(SourcePath::new("update_safety.reconcile")),
+                help: Some("choose unique stable ids or remove conflicting lockfile entries".into()),
+            });
+            BuildError::new(
+                BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                    diagnostics: diagnostics.clone(),
+                    metrics: BuildMetrics { duration: started.elapsed() },
+                    inspect: None,
+                    update_safety: None,
+                    status: "invalid".into(),
+                },
+                BuildFailureCause::Diagnostics,
+            )
+        })?;
+        diagnostics.extend(reconcile.diagnostics.clone());
+        if let Some(baseline_for_merge) = previous_index.as_ref() {
+            diagnostics.extend(crate::update_safety::merge_safety::compare_notetype_merge_safety(
+                &current_identity.index,
+                baseline_for_merge,
+            ));
+        }
+        if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+            && diagnostics.iter().any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            return Err(BuildError::new(
+                BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                    diagnostics: diagnostics.clone(),
+                    metrics: BuildMetrics { duration: started.elapsed() },
+                    inspect: None,
+                    update_safety: Some(crate::update_safety::report::summary_from_reconcile(
+                        update_mode,
+                        &reconcile,
+                        &diagnostics,
+                        false,
+                    )),
+                    status: "invalid".into(),
+                },
+                BuildFailureCause::Diagnostics,
+            ));
+        }
+        let writer_guid_plan = writer_core::WriterGuidPlan {
+            assignments: reconcile.assignments.clone(),
+        };
+
         let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
-        let package_build_result = crate::writer_build(
+        let package_build_result = writer_core::build_with_guid_plan(
             &normalized,
             &writer_policy,
             &build_context,
             &artifact_target,
+            Some(&writer_guid_plan),
         )
         .map_err(|err| {
             BuildError::new(
@@ -612,6 +726,12 @@ impl Project {
         }
 
         let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+        let update_safety = Some(crate::update_safety::report::summary_from_reconcile(
+            update_mode,
+            &reconcile,
+            &diagnostics,
+            false,
+        ));
         let report = BuildReport {
             artifact,
             counts,
@@ -621,7 +741,7 @@ impl Project {
                 duration: started.elapsed(),
             },
             inspect,
-            update_safety: None,
+            update_safety,
             status: package_build_result.result_status,
         };
 
