@@ -2,6 +2,7 @@ pub mod baseline;
 pub mod current;
 pub mod diagnostics;
 pub mod lockfile;
+pub mod merge_safety;
 pub mod model;
 pub mod reconcile;
 pub mod report;
