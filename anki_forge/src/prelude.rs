@@ -1,4 +1,4 @@
-pub use crate::build::{BuildOptions, BuildReport, MediaSummary};
+pub use crate::build::{BuildOptions, BuildReport, MediaSummary, UpdateSafetyMode};
 pub use crate::deck::Deck;
 pub use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 pub use crate::product::{

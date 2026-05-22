@@ -39,12 +39,23 @@ pub struct ProjectNormalizeOptions {
     pub media_policy: ProjectMediaPolicy,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum UpdateSafetyMode {
+    Disabled,
+    ReportOnly,
+    Strict,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BuildOptions {
     pub output: Option<PathBuf>,
     pub artifacts_dir: Option<PathBuf>,
     pub normalize_options: Option<ProjectNormalizeOptions>,
     pub inspect: bool,
+    pub compare_to: Option<PathBuf>,
+    pub identity_lockfile: Option<PathBuf>,
+    pub write_identity_lockfile: bool,
+    pub update_safety: Option<UpdateSafetyMode>,
 }
 
 impl Default for BuildOptions {
@@ -54,6 +65,10 @@ impl Default for BuildOptions {
             artifacts_dir: None,
             normalize_options: None,
             inspect: true,
+            compare_to: None,
+            identity_lockfile: None,
+            write_identity_lockfile: false,
+            update_safety: None,
         }
     }
 }
@@ -80,6 +95,26 @@ impl BuildOptions {
 
     pub fn inspect(mut self, inspect: bool) -> Self {
         self.inspect = inspect;
+        self
+    }
+
+    pub fn compare_to(mut self, path: impl Into<PathBuf>) -> Self {
+        self.compare_to = Some(path.into());
+        self
+    }
+
+    pub fn identity_lockfile(mut self, path: impl Into<PathBuf>) -> Self {
+        self.identity_lockfile = Some(path.into());
+        self
+    }
+
+    pub fn write_identity_lockfile(mut self, write: bool) -> Self {
+        self.write_identity_lockfile = write;
+        self
+    }
+
+    pub fn update_safety(mut self, mode: UpdateSafetyMode) -> Self {
+        self.update_safety = Some(mode);
         self
     }
 }

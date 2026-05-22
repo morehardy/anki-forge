@@ -3,9 +3,9 @@ pub mod report;
 
 pub use options::{
     BuildOptions, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
-    ProjectMediaPolicy, ProjectMediaPolicyError, ProjectNormalizeOptions,
+    ProjectMediaPolicy, ProjectMediaPolicyError, ProjectNormalizeOptions, UpdateSafetyMode,
 };
 pub use report::{
-    ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildReport,
-    InspectSummary, MediaSummary,
+    ApkgArtifact, BaselineSourceSummary, BuildCounts, BuildError, BuildFailureCause, BuildMetrics,
+    BuildReport, InspectSummary, MediaSummary, UpdateSafetySummary,
 };

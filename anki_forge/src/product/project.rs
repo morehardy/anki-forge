@@ -369,6 +369,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        update_safety: None,
                         status: "invalid".into(),
                     },
                     BuildFailureCause::Diagnostics,
@@ -397,6 +398,7 @@ impl Project {
                         duration: started.elapsed(),
                     },
                     inspect: None,
+                    update_safety: None,
                     status: "invalid".into(),
                 },
                 BuildFailureCause::Diagnostics,
@@ -528,6 +530,7 @@ impl Project {
                 duration: started.elapsed(),
             },
             inspect,
+            update_safety: None,
             status: package_build_result.result_status,
         };
 
@@ -1860,6 +1863,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
             duration: started.elapsed(),
         },
         inspect: None,
+        update_safety: None,
         status: "error".into(),
     }
 }

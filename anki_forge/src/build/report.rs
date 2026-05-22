@@ -59,6 +59,29 @@ pub struct InspectSummary {
     pub media: usize,
 }
 
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct BaselineSourceSummary {
+    pub source_kind: String,
+    pub source_ref: String,
+    pub display_path: Option<String>,
+    pub status: String,
+    pub used_for_reconcile: bool,
+    pub limitations: Vec<String>,
+    pub diagnostic_codes: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct UpdateSafetySummary {
+    pub mode: String,
+    pub baseline_sources: Vec<BaselineSourceSummary>,
+    pub notes_preserved: usize,
+    pub notes_derived: usize,
+    pub notes_failed: usize,
+    pub baseline_conflicts: usize,
+    pub blocking_diagnostics: Vec<String>,
+    pub lockfile_written: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BuildReport {
     pub artifact: Option<ApkgArtifact>,
@@ -67,6 +90,7 @@ pub struct BuildReport {
     pub diagnostics: Vec<Diagnostic>,
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
+    pub update_safety: Option<UpdateSafetySummary>,
     pub status: String,
 }
 
