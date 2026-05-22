@@ -3,6 +3,7 @@ pub mod current;
 pub mod diagnostics;
 pub mod lockfile;
 pub mod model;
+pub mod reconcile;
 pub mod report;
 
 pub use diagnostics::{
