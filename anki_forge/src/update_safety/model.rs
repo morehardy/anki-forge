@@ -112,7 +112,36 @@ pub struct TemplateMergeEntry {
     pub config_id: i64,
 }
 
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq, Eq)]
+pub struct IdentityLockfile {
+    pub schema_version: String,
+    pub project_stable_id: String,
+    pub writer_policy_ref: String,
+    pub identity_index: IdentityIndex,
+    pub generated_by: GeneratedBy,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq, Eq)]
+pub struct GeneratedBy {
+    pub tool: String,
+    pub tool_version: String,
+    pub writer_policy_ref: String,
+}
+
 impl IdentityIndex {
+    pub fn empty_lockfile(project_stable_id: &str, writer_policy_ref: &str) -> Self {
+        Self {
+            schema_version: "identity-index-v1".into(),
+            source_kind: "lockfile".into(),
+            source_ref: "baseline.identity_lockfile.primary".into(),
+            writer_policy_ref: writer_policy_ref.into(),
+            project_stable_id: Some(project_stable_id.into()),
+            notes: vec![],
+            notetypes: vec![],
+            limitations: vec![],
+        }
+    }
+
     pub fn current(project_stable_id: Option<&str>, writer_policy: &writer_core::WriterPolicy) -> Self {
         Self {
             schema_version: "identity-index-v1".into(),
