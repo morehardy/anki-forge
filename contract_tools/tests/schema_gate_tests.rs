@@ -316,6 +316,23 @@ fn manifest_registers_note_identity_schema_and_semantics_assets() {
 }
 
 #[test]
+fn manifest_registers_update_safety_schema_and_semantics_assets() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+
+    for asset_key in [
+        "identity_index_schema",
+        "identity_lockfile_schema",
+        "update_safety_summary_schema",
+        "identity_update_safety_semantics",
+    ] {
+        assert!(
+            resolve_asset_path(&manifest, asset_key).is_ok(),
+            "manifest is missing asset key {asset_key}"
+        );
+    }
+}
+
+#[test]
 fn normalized_ir_schema_accepts_media_objects_bindings_and_reference_states() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
