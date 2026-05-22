@@ -6,6 +6,7 @@ pub mod diagnostics;
 pub mod prelude;
 pub mod product;
 pub mod runtime;
+pub mod update_safety;
 pub mod writer;
 
 pub use deck::*;
