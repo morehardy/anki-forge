@@ -514,11 +514,43 @@ impl Project {
             ));
         }
 
+        let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
+            if path.exists() {
+                match crate::update_safety::lockfile::read_lockfile(path) {
+                    Ok(lockfile) => Some(lockfile),
+                    Err(err) => {
+                        diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                            severity: Severity::Error,
+                            message: err.to_string(),
+                            source: Some(SourcePath::new(path.display().to_string())),
+                            help: Some("fix or regenerate the identity lockfile".into()),
+                        });
+                        None
+                    }
+                }
+            } else if options.write_identity_lockfile {
+                None
+            } else {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                    severity: Severity::Error,
+                    message: format!("identity lockfile {} does not exist", path.display()),
+                    source: Some(SourcePath::new(path.display().to_string())),
+                    help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
+                });
+                None
+            }
+        } else {
+            None
+        };
+        let lockfile_index = lockfile.as_ref().map(|lockfile| lockfile.identity_index.clone());
+
         let previous_index = if let Some(path) = options.compare_to.as_ref() {
             match crate::update_safety::baseline::load_previous_apkg_identity_index(
                 path,
                 Some(&current_identity.index),
-                None,
+                lockfile_index.as_ref(),
             ) {
                 Ok(index) => Some(index),
                 Err(err) => {
@@ -562,7 +594,7 @@ impl Project {
         let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
             &current_identity.index,
             previous_index.as_ref(),
-            None,
+            lockfile_index.as_ref(),
         )
         .map_err(|err| {
             diagnostics.push(Diagnostic {
@@ -591,7 +623,9 @@ impl Project {
             )
         })?;
         diagnostics.extend(reconcile.diagnostics.clone());
-        if let Some(baseline_for_merge) = previous_index.as_ref() {
+        let mut lockfile_written = false;
+        let baseline_for_merge = previous_index.as_ref().or(lockfile_index.as_ref());
+        if let Some(baseline_for_merge) = baseline_for_merge {
             diagnostics.extend(crate::update_safety::merge_safety::compare_notetype_merge_safety(
                 &current_identity.index,
                 baseline_for_merge,
@@ -616,7 +650,7 @@ impl Project {
                         update_mode,
                         &reconcile,
                         &diagnostics,
-                        false,
+                        lockfile_written,
                     )),
                     status: "invalid".into(),
                 },
@@ -687,6 +721,84 @@ impl Project {
             artifact = Some(ApkgArtifact { path: final_path });
         }
 
+        if options.write_identity_lockfile {
+            if let Some(path) = options.identity_lockfile.as_ref() {
+                let Some(project_stable_id) = self.stable_id.clone() else {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISSING"),
+                        severity: Severity::Error,
+                        message: "project stable id is required before writing an identity lockfile".into(),
+                        source: Some(SourcePath::new("project.stable_id")),
+                        help: Some("set Project::stable_id(value) before write_identity_lockfile(true)".into()),
+                    });
+                    return Err(BuildError::new(
+                        BuildReport {
+                            artifact: artifact.clone(),
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics { duration: started.elapsed() },
+                            inspect: None,
+                            update_safety: None,
+                            status: "error".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    ));
+                };
+                let selected_index = crate::update_safety::reconcile::selected_identity_index(
+                    &current_identity.index,
+                    &reconcile,
+                    lockfile_index.as_ref(),
+                );
+                let writer_policy_ref =
+                    writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
+                let lockfile = crate::update_safety::model::IdentityLockfile {
+                    schema_version: "identity-lockfile-v1".into(),
+                    project_stable_id,
+                    writer_policy_ref: writer_policy_ref.clone(),
+                    identity_index: selected_index,
+                    generated_by: crate::update_safety::model::GeneratedBy {
+                        tool: "anki-forge".into(),
+                        tool_version: env!("CARGO_PKG_VERSION").into(),
+                        writer_policy_ref,
+                    },
+                };
+                crate::update_safety::lockfile::write_lockfile_atomic(path, &lockfile).map_err(
+                    |err| {
+                        diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
+                            severity: Severity::Error,
+                            message: err.to_string(),
+                            source: Some(SourcePath::new(path.display().to_string())),
+                            help: Some("verify the lockfile path is writable".into()),
+                        });
+                        BuildError::new(
+                            BuildReport {
+                                artifact: artifact.clone(),
+                                counts: BuildCounts {
+                                    notes: normalized.notes.len(),
+                                    cards: count_phase1_cards_without_inspect(&normalized),
+                                    media: normalized.media_bindings.len(),
+                                },
+                                media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                                diagnostics: diagnostics.clone(),
+                                metrics: BuildMetrics { duration: started.elapsed() },
+                                inspect: None,
+                                update_safety: None,
+                                status: "error".into(),
+                            },
+                            BuildFailureCause::Io,
+                        )
+                    },
+                )?;
+                lockfile_written = true;
+            }
+        }
+
         let inspect = if options.inspect {
             artifact
                 .as_ref()
@@ -730,7 +842,7 @@ impl Project {
             update_mode,
             &reconcile,
             &diagnostics,
-            false,
+            lockfile_written,
         ));
         let report = BuildReport {
             artifact,

@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 use writer_core::WriterGuidAssignment;
@@ -179,4 +179,43 @@ fn push_writer_policy_mismatch_diagnostics(
             help: Some("verify the baseline was produced with a compatible writer policy".into()),
         });
     }
+}
+
+pub fn selected_identity_index(
+    current: &IdentityIndex,
+    output: &ReconcileOutput,
+    previous_lockfile_index: Option<&IdentityIndex>,
+) -> IdentityIndex {
+    let by_stable: BTreeMap<_, _> = output
+        .assignments
+        .iter()
+        .map(|assignment| (assignment.stable_id.as_str(), assignment))
+        .collect();
+    let mut selected = current.clone();
+    selected.source_kind = "lockfile".into();
+    selected.source_ref = "baseline.identity_lockfile.primary".into();
+    for note in &mut selected.notes {
+        if let Some(assignment) = by_stable.get(note.stable_id.as_str()) {
+            note.anki_guid = assignment.selected_anki_guid.clone();
+        }
+    }
+    let current_stable_ids: BTreeSet<String> = selected
+        .notes
+        .iter()
+        .map(|note| note.stable_id.clone())
+        .collect();
+    if let Some(previous_lockfile_index) = previous_lockfile_index {
+        for old_note in &previous_lockfile_index.notes {
+            if current_stable_ids.contains(old_note.stable_id.as_str()) {
+                continue;
+            }
+            let mut absent = old_note.clone();
+            absent.normalized_note_id = None;
+            absent.entry_lifecycle = "absent_from_current".into();
+            absent.source_path = "baseline.identity_lockfile.primary".into();
+            selected.notes.push(absent);
+        }
+    }
+    selected.notes.sort_by(|left, right| left.stable_id.cmp(&right.stable_id));
+    selected
 }
