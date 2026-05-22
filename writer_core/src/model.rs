@@ -130,3 +130,17 @@ pub struct DiffReport {
     pub comparison_limitations: Vec<String>,
     pub changes: Vec<DiffChange>,
 }
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WriterGuidPlan {
+    pub assignments: Vec<WriterGuidAssignment>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WriterGuidAssignment {
+    pub normalized_note_id: String,
+    pub stable_id: String,
+    pub selected_anki_guid: String,
+    pub guid_derivation_version: String,
+    pub source: String,
+}

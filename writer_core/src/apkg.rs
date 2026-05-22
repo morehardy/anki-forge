@@ -16,6 +16,7 @@ use crate::anki_proto::{
     default_deck_common_bytes, default_deck_config_bytes, default_deck_kind_bytes,
     encode_field_config, encode_notetype_config, encode_template_config,
 };
+use crate::model::{WriterGuidAssignment, WriterGuidPlan};
 use crate::staging::{
     load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
     MaterializedStaging,
@@ -75,11 +76,49 @@ struct MediaEntry {
     legacy_zip_filename: Option<u32>,
 }
 
+fn validate_guid_plan(
+    normalized_ir: &NormalizedIr,
+    guid_plan: Option<&WriterGuidPlan>,
+) -> anyhow::Result<std::collections::BTreeMap<String, WriterGuidAssignment>> {
+    let Some(plan) = guid_plan else {
+        return Ok(Default::default());
+    };
+
+    let expected: std::collections::BTreeSet<_> =
+        normalized_ir.notes.iter().map(|note| note.id.as_str()).collect();
+    let mut seen = std::collections::BTreeSet::new();
+    let mut by_note = std::collections::BTreeMap::new();
+
+    for assignment in &plan.assignments {
+        if !seen.insert(assignment.normalized_note_id.as_str()) {
+            anyhow::bail!(
+                "UPDATE.WRITER_GUID_PLAN_MISMATCH: duplicate assignment for {}",
+                assignment.normalized_note_id
+            );
+        }
+        by_note.insert(assignment.normalized_note_id.clone(), assignment.clone());
+    }
+
+    let actual: std::collections::BTreeSet<_> = by_note.keys().map(String::as_str).collect();
+    if expected != actual {
+        anyhow::bail!(
+            "UPDATE.WRITER_GUID_PLAN_MISMATCH: plan ids {:?} did not match normalized note ids {:?}",
+            actual,
+            expected
+        );
+    }
+
+    Ok(by_note)
+}
+
 pub fn emit_apkg(
     materialized: &MaterializedStaging,
     artifact_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
 ) -> Result<ApkgMaterialization> {
     let normalized_ir = load_normalized_ir_from_staging_manifest(&materialized.manifest_path)?;
+
+    let guid_assignments = validate_guid_plan(&normalized_ir, guid_plan)?;
 
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
@@ -98,7 +137,7 @@ pub fn emit_apkg(
 
     write_meta(&mut zip)?;
     let latest_collection =
-        create_latest_collection_bytes(&artifact_target.root_dir, &normalized_ir)?;
+        create_latest_collection_bytes(&artifact_target.root_dir, &normalized_ir, &guid_assignments)?;
     write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
@@ -230,6 +269,7 @@ fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> 
 fn create_latest_collection_bytes(
     root_dir: &Path,
     normalized_ir: &NormalizedIr,
+    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
 ) -> Result<Vec<u8>> {
     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
     let _ = fs::remove_file(&path);
@@ -241,7 +281,7 @@ fn create_latest_collection_bytes(
     execute_schema16_marker(&conn)?;
     execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
-    populate_latest_collection(&conn, normalized_ir)?;
+    populate_latest_collection(&conn, normalized_ir, guid_assignments)?;
     conn.execute_batch("VACUUM;")?;
     drop(conn);
     let bytes = fs::read(&path).with_context(|| format!("read collection {}", path.display()))?;
@@ -274,7 +314,11 @@ fn execute_schema16_marker(conn: &Connection) -> Result<()> {
     Ok(())
 }
 
-fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -> Result<()> {
+fn populate_latest_collection(
+    conn: &Connection,
+    normalized_ir: &NormalizedIr,
+    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+) -> Result<()> {
     let default_deck_config_id = 1_i64;
     let deck_ids = resolve_deck_ids(normalized_ir);
 
@@ -361,11 +405,15 @@ fn populate_latest_collection(conn: &Connection, normalized_ir: &NormalizedIr) -
             .expect("normalized note should reference a known notetype");
         let storage = note_storage_values(note, notetype)?;
         let note_row = note_row_id;
+        let guid = guid_assignments
+            .get(&note.id)
+            .map(|assignment| assignment.selected_anki_guid.as_str())
+            .unwrap_or(note.id.as_str());
         conn.execute(
             "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
             rusqlite::params![
                 note_row,
-                note.id,
+                guid,
                 ntid,
                 storage.mtime_secs,
                 note.tags.join(" "),

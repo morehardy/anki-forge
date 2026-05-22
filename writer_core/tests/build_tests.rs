@@ -13,9 +13,10 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use writer_core::{
-    build, build_context_ref, policy_ref, to_canonical_json, BuildArtifactTarget, BuildContext,
-    BuildDiagnosticItem, BuildDiagnostics, DiffReport, InspectObservations, InspectReport,
-    PackageBuildResult, StagingPackage, VerificationGateRule, VerificationPolicy, WriterPolicy,
+    build, build_context_ref, build_with_guid_plan, inspect_apkg, policy_ref, to_canonical_json,
+    BuildArtifactTarget, BuildContext, BuildDiagnosticItem, BuildDiagnostics, DiffReport,
+    InspectObservations, InspectReport, PackageBuildResult, StagingPackage,
+    VerificationGateRule, VerificationPolicy, WriterGuidAssignment, WriterGuidPlan, WriterPolicy,
 };
 
 #[test]
@@ -200,7 +201,7 @@ fn emit_apkg_materializes_basic_package_from_staging_artifact() {
     .unwrap();
     let materialized = package.materialize(&target).unwrap();
 
-    let apkg = writer_core::apkg::emit_apkg(&materialized, &target).unwrap();
+    let apkg = writer_core::apkg::emit_apkg(&materialized, &target, None).unwrap();
 
     assert_eq!(apkg.apkg_ref, "artifacts/phase3/basic-apkg/package.apkg");
     assert!(apkg.apkg_path.exists());
@@ -923,7 +924,7 @@ fn emit_apkg_reads_media_from_cas_without_staging_media_dir() {
     let staging_media_dir = materialized.manifest_path.parent().unwrap().join("media");
     fs::remove_dir_all(&staging_media_dir).unwrap();
 
-    let apkg = writer_core::apkg::emit_apkg(&materialized, &target).unwrap();
+    let apkg = writer_core::apkg::emit_apkg(&materialized, &target, None).unwrap();
 
     let mut archive = open_zip(&apkg.apkg_path);
     assert_eq!(
@@ -2108,6 +2109,65 @@ fn assert_latest_collection_has_required_system_tables(bytes: &[u8]) {
         .map(|row| row.unwrap())
         .collect();
     assert_eq!(tags, std::collections::BTreeSet::from(["demo".to_string()]));
+}
+
+#[test]
+fn writer_guid_plan_overrides_notes_guid() {
+    let root = unique_artifact_root("writer-guid-plan-overrides");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/writer-guid-plan-overrides");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].id = "stable-note".into();
+
+    let plan = WriterGuidPlan {
+        assignments: vec![WriterGuidAssignment {
+            normalized_note_id: "stable-note".into(),
+            stable_id: "stable-note".into(),
+            selected_anki_guid: "old-guid-from-baseline".into(),
+            guid_derivation_version: "guid.raw-stable-id.v1".into(),
+            source: "previous_apkg".into(),
+        }],
+    };
+
+    let result = build_with_guid_plan(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+        Some(&plan),
+    )
+    .expect("build with guid plan");
+
+    assert_eq!(result.result_status, "success");
+    let report = inspect_apkg(root.join("package.apkg")).expect("inspect apkg");
+    assert!(report
+        .observations
+        .references
+        .iter()
+        .any(|value| value["selector"] == "note[id='old-guid-from-baseline']"));
+}
+
+#[test]
+fn writer_guid_plan_mismatch_returns_update_diagnostic_error() {
+    let root = unique_artifact_root("writer-guid-plan-mismatch");
+    let target = BuildArtifactTarget::new(root, "artifacts/writer-guid-plan-mismatch");
+    let normalized = sample_basic_normalized_ir();
+    let plan = WriterGuidPlan { assignments: vec![] };
+
+    let result = build_with_guid_plan(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+        Some(&plan),
+    )
+    .expect("build returns package result");
+
+    assert_eq!(result.result_status, "error");
+    assert!(result
+        .diagnostics
+        .items
+        .iter()
+        .any(|item| item.code == "UPDATE.WRITER_GUID_PLAN_MISMATCH"));
 }
 
 #[derive(Clone, PartialEq, Message)]
