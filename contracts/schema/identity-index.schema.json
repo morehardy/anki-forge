@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["schema_version", "source_kind", "source_ref", "writer_policy_ref", "project_stable_id", "notes", "notetypes", "limitations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "identity-index-v1" },
+    "source_kind": { "enum": ["current", "previous_apkg", "lockfile"] },
+    "source_ref": { "enum": ["current", "baseline.previous_apkg.primary", "baseline.identity_lockfile.primary"] },
+    "writer_policy_ref": { "type": "string", "pattern": "^[^@\\u0000-\\u001f]+@[^@\\u0000-\\u001f]+$" },
+    "project_stable_id": { "type": ["string", "null"] },
+    "notes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/note_identity_entry" }
+    },
+    "notetypes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/notetype_identity_entry" }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  },
+  "definitions": {
+    "note_identity_entry": {
+      "type": "object",
+      "required": ["stable_id", "anki_guid", "current_guid_candidate", "guid_derivation_version", "note_type_id", "recipe_id", "provenance", "used_override", "entry_lifecycle", "source_path", "recovery_method"],
+      "additionalProperties": false,
+      "properties": {
+        "stable_id": { "type": "string", "minLength": 1 },
+        "normalized_note_id": { "type": "string", "minLength": 1 },
+        "anki_guid": { "type": "string", "minLength": 1 },
+        "current_guid_candidate": { "type": "string", "minLength": 1 },
+        "guid_derivation_version": { "const": "guid.raw-stable-id.v1" },
+        "note_type_id": { "type": "string", "minLength": 1 },
+        "recipe_id": { "type": "string", "minLength": 1 },
+        "canonical_payload_hash": { "type": "string", "pattern": "^blake3:[0-9a-f]{64}$" },
+        "provenance": { "enum": ["ExplicitStableId", "InferredFromNoteFields", "InferredFromNotetypeFields", "InferredFromStockRecipe", "unknown_baseline"] },
+        "used_override": { "type": "boolean" },
+        "entry_lifecycle": { "enum": ["active", "absent_from_current"] },
+        "source_path": { "type": "string" },
+        "recovery_method": { "enum": ["current_resolution", "embedded_metadata", "lockfile_join", "guid_equals_stable_id", "unrecoverable"] }
+      }
+    },
+    "notetype_identity_entry": {
+      "type": "object",
+      "required": ["note_type_id", "anki_model_id", "name", "fields", "templates"],
+      "additionalProperties": false,
+      "properties": {
+        "note_type_id": { "type": "string", "minLength": 1 },
+        "anki_model_id": { "type": ["integer", "null"] },
+        "name": { "type": "string", "minLength": 1 },
+        "fields": { "type": "array", "items": { "$ref": "#/definitions/field_merge_entry" } },
+        "templates": { "type": "array", "items": { "$ref": "#/definitions/template_merge_entry" } }
+      }
+    },
+    "field_merge_entry": {
+      "type": "object",
+      "required": ["field_key", "field_name", "ord", "config_id", "tag"],
+      "additionalProperties": false,
+      "properties": {
+        "field_key": { "type": "string", "minLength": 1 },
+        "field_name": { "type": "string", "minLength": 1 },
+        "ord": { "type": "integer", "minimum": 0 },
+        "config_id": { "type": "integer" },
+        "tag": { "type": "integer" }
+      }
+    },
+    "template_merge_entry": {
+      "type": "object",
+      "required": ["template_key", "template_name", "ord", "config_id"],
+      "additionalProperties": false,
+      "properties": {
+        "template_key": { "type": "string", "minLength": 1 },
+        "template_name": { "type": "string", "minLength": 1 },
+        "ord": { "type": "integer", "minimum": 0 },
+        "config_id": { "type": "integer" }
+      }
+    }
+  }
+}

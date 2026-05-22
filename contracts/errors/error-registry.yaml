@@ -68,3 +68,120 @@ codes:
   - id: AFID.IO_RECT_DUPLICATE
     status: active
     summary: image occlusion identity rejects duplicate rect masks
+  - id: UPDATE.BASELINE_APKG_UNREADABLE
+    status: active
+    summary: previous APKG baseline could not be read
+  - id: UPDATE.BASELINE_LOCKFILE_UNREADABLE
+    status: active
+    summary: identity lockfile could not be read or validated
+  - id: UPDATE.BASELINE_SCHEMA_UNSUPPORTED
+    status: active
+    summary: baseline schema version is unsupported
+  - id: UPDATE.BASELINE_CONFLICT_GUID
+    status: active
+    summary: previous APKG and lockfile selected different GUIDs
+  - id: UPDATE.BASELINE_IGNORED_DISABLED
+    status: active
+    summary: baseline inputs were ignored because update safety is disabled
+  - id: UPDATE.PROJECT_STABLE_ID_MISSING
+    status: active
+    summary: project stable id is missing for update-safety proof
+  - id: UPDATE.PROJECT_STABLE_ID_MISMATCH
+    status: active
+    summary: project stable ids differ across current project and baselines
+  - id: UPDATE.WRITER_POLICY_MISMATCH
+    status: active
+    summary: writer policy differs from baseline
+  - id: UPDATE.WRITER_POLICY_REF_INVALID
+    status: active
+    summary: writer policy ref cannot be serialized safely
+  - id: UPDATE.WRITER_GUID_PLAN_MISMATCH
+    status: active
+    summary: writer GUID plan does not match normalized notes
+  - id: UPDATE.LOCKFILE_PATH_REQUIRED
+    status: active
+    summary: lockfile write was requested without a lockfile path
+  - id: UPDATE.LOCKFILE_ABSENT_ENTRIES_HIGH
+    status: active
+    summary: lockfile contains many absent entries
+  - id: UPDATE.NORMALIZED_NOTE_ID_MISMATCH
+    status: active
+    summary: normalized note id differs from stable id for raw stable-id GUID derivation
+  - id: UPDATE.ANKI_GUID_INVALID
+    status: active
+    summary: selected Anki GUID violates writer validation
+  - id: UPDATE.STABLE_ID_MISSING_IN_STRICT_MODE
+    status: active
+    summary: current output note has no resolved stable id in strict mode
+  - id: UPDATE.STABLE_ID_DUPLICATE_IN_BASELINE
+    status: active
+    summary: baseline contains duplicate stable ids
+  - id: UPDATE.GUID_DUPLICATE_IN_BASELINE
+    status: active
+    summary: baseline contains duplicate Anki GUIDs
+  - id: UPDATE.GUID_DUPLICATE_AT_RECONCILE
+    status: active
+    summary: two stable ids selected the same Anki GUID
+  - id: UPDATE.STABLE_ID_REMOVED_FROM_CURRENT
+    status: active
+    summary: lockfile stable id is absent from the current project
+  - id: UPDATE.GUID_PRESERVED_FROM_PREVIOUS
+    status: active
+    summary: GUID was preserved from previous APKG
+  - id: UPDATE.GUID_PRESERVED_FROM_LOCKFILE
+    status: active
+    summary: GUID was preserved from identity lockfile
+  - id: UPDATE.GUID_DERIVATION_DRIFT
+    status: active
+    summary: selected baseline GUID differs from current derivation
+  - id: UPDATE.GUID_DERIVED_FOR_NEW_NOTE
+    status: active
+    summary: GUID was derived for a new note
+  - id: UPDATE.IDENTITY_PAYLOAD_CHANGED
+    status: active
+    summary: comparable identity payload hash changed
+  - id: UPDATE.IDENTITY_PAYLOAD_HASH_DROPPED
+    status: active
+    summary: baseline identity payload hash was dropped
+  - id: UPDATE.IDENTITY_PAYLOAD_HASH_ADDED
+    status: active
+    summary: current identity payload hash was added
+  - id: UPDATE.NOTETYPE_SET_CHANGED
+    status: active
+    summary: notetype set changed
+  - id: UPDATE.NOTETYPE_RENAMED
+    status: active
+    summary: notetype was renamed while stable id remained unchanged
+  - id: UPDATE.FIELD_MERGE_ID_CHANGED
+    status: active
+    summary: field config id drifted for the same field key
+  - id: UPDATE.FIELD_RENAMED
+    status: active
+    summary: field was renamed while config id remained unchanged
+  - id: UPDATE.FIELD_ORD_CHANGED
+    status: active
+    summary: field ord changed
+  - id: UPDATE.TEMPLATE_SET_CHANGED
+    status: active
+    summary: template set changed
+  - id: UPDATE.TEMPLATE_MERGE_ID_CHANGED
+    status: active
+    summary: template config id drifted for the same template key
+  - id: UPDATE.TEMPLATE_RENAMED
+    status: active
+    summary: template was renamed while config id remained unchanged
+  - id: UPDATE.TEMPLATE_ORD_CHANGED
+    status: active
+    summary: template ord changed
+  - id: UPDATE.BASELINE_IDENTITY_UNRECOVERABLE
+    status: active
+    summary: expected baseline identity could not be recovered
+  - id: UPDATE.LOCKFILE_WRITTEN
+    status: active
+    summary: identity lockfile was written
+  - id: UPDATE.LOCKFILE_WRITE_FAILED
+    status: active
+    summary: identity lockfile write failed
+  - id: UPDATE.NOTE_DATA_METADATA_UNMERGEABLE
+    status: active
+    summary: note data could not be merged with identity metadata
