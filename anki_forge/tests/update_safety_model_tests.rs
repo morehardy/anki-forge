@@ -36,12 +36,9 @@ fn effective_mode_upgrades_identity_lockfile_to_strict() {
 fn classifier_returns_limitation_and_diagnostic() {
     let classified = classify_project_stable_id_missing(EvidenceCondition::StrictCompareOnly);
 
+    assert_eq!(classified.limitation, Some("project_stable_id_missing"));
     assert_eq!(
-        classified.limitation.as_deref(),
-        Some("project_stable_id_missing")
-    );
-    assert_eq!(
-        classified.diagnostic_code.as_deref(),
+        classified.diagnostic_code,
         Some("UPDATE.PROJECT_STABLE_ID_MISSING")
     );
     assert_eq!(
@@ -51,7 +48,7 @@ fn classifier_returns_limitation_and_diagnostic() {
 
     let classified = classify_project_stable_id_missing(EvidenceCondition::LockfileRequired);
     assert_eq!(
-        classified.diagnostic_code.as_deref(),
+        classified.diagnostic_code,
         Some("UPDATE.PROJECT_STABLE_ID_MISSING")
     );
     assert_eq!(

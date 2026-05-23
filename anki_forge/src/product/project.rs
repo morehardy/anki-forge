@@ -434,10 +434,7 @@ impl Project {
                     severity: err.severity,
                     message: err.message,
                     source: Some(SourcePath::new("build.options")),
-                    help: Some(
-                        "provide identity_lockfile(path) when write_identity_lockfile(true) is set"
-                            .into(),
-                    ),
+                    help: None,
                 });
                 let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
                 return Err(BuildError::new(
@@ -1097,8 +1094,10 @@ impl Project {
             }
         }
 
+        let stable_id_counts = self.note_stable_id_counts();
         for (index, note) in self.notes.iter().enumerate() {
-            let note_id = resolve_product_note_identity(self, note, index).stable_id;
+            let note_id =
+                resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
             let deck_name = note
                 .deck_name()
                 .unwrap_or(default_deck.as_str())
@@ -1153,11 +1152,12 @@ impl Project {
     fn resolved_note_identities(
         &self,
     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+        let stable_id_counts = self.note_stable_id_counts();
         self.notes
             .iter()
             .enumerate()
             .map(|(index, note)| {
-                let identity = resolve_product_note_identity(self, note, index);
+                let identity = resolve_product_note_identity(self, note, index, &stable_id_counts);
                 (identity.stable_id.clone(), identity)
             })
             .collect()
@@ -1529,8 +1529,8 @@ fn resolve_product_note_identity(
     project: &Project,
     note: &crate::product::Note,
     index: usize,
+    stable_id_counts: &BTreeMap<&str, usize>,
 ) -> crate::update_safety::model::ResolvedNoteIdentity {
-    let stable_id_counts = project.note_stable_id_counts();
     if let Some(stable_id) = note.stable_id_ref() {
         if !stable_id.trim().is_empty() && stable_id_counts.get(stable_id).copied() == Some(1) {
             return crate::update_safety::model::ResolvedNoteIdentity {

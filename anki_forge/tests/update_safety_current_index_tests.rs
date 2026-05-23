@@ -73,6 +73,37 @@ fn strict_update_safety_blocks_invalid_anki_guid_candidate() {
 }
 
 #[test]
+fn missing_identity_lockfile_path_uses_message_without_redundant_help() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("missing-lockfile-path.apkg");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .write_identity_lockfile(true),
+        )
+        .expect_err("write_identity_lockfile requires identity_lockfile path");
+
+    let diagnostic = err
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "UPDATE.LOCKFILE_PATH_REQUIRED")
+        .expect("lockfile path diagnostic");
+    assert_eq!(
+        diagnostic.message,
+        "write_identity_lockfile(true) requires identity_lockfile(path)"
+    );
+    assert_eq!(diagnostic.help, None);
+    assert!(!output.exists());
+}
+
+#[test]
 fn custom_update_safety_identity_recipe_derives_stable_note_id_in_strict_mode() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("custom-derived.apkg");
