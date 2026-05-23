@@ -5,12 +5,20 @@ use anki_forge::update_safety::model::{
 
 #[test]
 fn field_config_id_drift_is_error() {
-    let current = index_with_notetype(field("front", "Front", 0, 111), template("card", "Card", 0, 222));
-    let baseline = index_with_notetype(field("front", "Front", 0, 999), template("card", "Card", 0, 222));
+    let current = index_with_notetype(
+        field("front", "Front", 0, 111),
+        template("card", "Card", 0, 222),
+    );
+    let baseline = index_with_notetype(
+        field("front", "Front", 0, 999),
+        template("card", "Card", 0, 222),
+    );
 
     let diagnostics = compare_notetype_merge_safety(&current, &baseline);
 
-    assert!(diagnostics.iter().any(|d| d.code.as_str() == "UPDATE.FIELD_MERGE_ID_CHANGED"));
+    assert!(diagnostics
+        .iter()
+        .any(|d| d.code.as_str() == "UPDATE.FIELD_MERGE_ID_CHANGED"));
 }
 
 #[test]
@@ -53,7 +61,10 @@ fn notetype_and_template_set_changes_include_change_kind() {
     added_removed_current.notetypes[0].note_type_id = "basic-new".into();
 
     let mut diagnostics = compare_notetype_merge_safety(&current, &baseline);
-    diagnostics.extend(compare_notetype_merge_safety(&added_removed_current, &baseline));
+    diagnostics.extend(compare_notetype_merge_safety(
+        &added_removed_current,
+        &baseline,
+    ));
 
     assert!(diagnostics.iter().any(|diagnostic| {
         diagnostic.code.as_str() == "UPDATE.NOTETYPE_SET_CHANGED"
@@ -77,7 +88,11 @@ fn index_with_notetype(field: FieldMergeEntry, template: TemplateMergeEntry) -> 
     index_with_named_notetype("Basic", field, template)
 }
 
-fn index_with_named_notetype(name: &str, field: FieldMergeEntry, template: TemplateMergeEntry) -> IdentityIndex {
+fn index_with_named_notetype(
+    name: &str,
+    field: FieldMergeEntry,
+    template: TemplateMergeEntry,
+) -> IdentityIndex {
     let mut index = IdentityIndex::empty_lockfile("project-a", "writer-policy.default@1.0.0");
     index.notetypes.push(NotetypeIdentityEntry {
         note_type_id: "basic".into(),

@@ -84,8 +84,11 @@ fn validate_guid_plan(
         return Ok(Default::default());
     };
 
-    let expected: std::collections::BTreeSet<_> =
-        normalized_ir.notes.iter().map(|note| note.id.as_str()).collect();
+    let expected: std::collections::BTreeSet<_> = normalized_ir
+        .notes
+        .iter()
+        .map(|note| note.id.as_str())
+        .collect();
     let mut seen = std::collections::BTreeSet::new();
     let mut by_note = std::collections::BTreeMap::new();
 
@@ -127,13 +130,23 @@ fn note_identity_metadata_for_assignment(
         stable_id: assignment
             .map(|a| a.stable_id.clone())
             .unwrap_or_else(|| note.id.clone()),
-        recipe_id: "product.explicit-or-normalized.v1".into(),
-        canonical_payload_hash: None,
-        current_guid_candidate: note.id.clone(),
+        recipe_id: assignment
+            .map(|a| a.recipe_id.clone())
+            .unwrap_or_else(|| "product.explicit-or-normalized.v1".into()),
+        canonical_payload_hash: assignment.and_then(|a| a.canonical_payload_hash.clone()),
+        current_guid_candidate: assignment
+            .map(|a| a.current_guid_candidate.clone())
+            .unwrap_or_else(|| note.id.clone()),
         selected_anki_guid: selected,
-        guid_derivation_version: "guid.raw-stable-id.v1".into(),
+        guid_derivation_version: assignment
+            .map(|a| a.guid_derivation_version.clone())
+            .unwrap_or_else(|| "guid.raw-stable-id.v1".into()),
         guid_source: source,
         recovery_method: "current_resolution".into(),
+        provenance: assignment
+            .map(|a| a.provenance.clone())
+            .unwrap_or_else(|| "ExplicitStableId".into()),
+        used_override: assignment.map(|a| a.used_override).unwrap_or(false),
     }
 }
 
@@ -185,8 +198,11 @@ pub fn emit_apkg(
     let mut zip = ZipWriter::new(file);
 
     write_meta(&mut zip)?;
-    let latest_collection =
-        create_latest_collection_bytes(&artifact_target.root_dir, &normalized_ir, &guid_assignments)?;
+    let latest_collection = create_latest_collection_bytes(
+        &artifact_target.root_dir,
+        &normalized_ir,
+        &guid_assignments,
+    )?;
     write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;

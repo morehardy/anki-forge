@@ -15,8 +15,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use writer_core::{
     build, build_context_ref, build_with_guid_plan, inspect_apkg, policy_ref, to_canonical_json,
     BuildArtifactTarget, BuildContext, BuildDiagnosticItem, BuildDiagnostics, DiffReport,
-    InspectObservations, InspectReport, PackageBuildResult, StagingPackage,
-    VerificationGateRule, VerificationPolicy, WriterGuidAssignment, WriterGuidPlan, WriterPolicy,
+    InspectObservations, InspectReport, PackageBuildResult, StagingPackage, VerificationGateRule,
+    VerificationPolicy, WriterGuidAssignment, WriterGuidPlan, WriterPolicy,
 };
 
 #[test]
@@ -2123,7 +2123,12 @@ fn writer_guid_plan_overrides_notes_guid() {
             normalized_note_id: "stable-note".into(),
             stable_id: "stable-note".into(),
             selected_anki_guid: "old-guid-from-baseline".into(),
+            current_guid_candidate: "stable-note".into(),
             guid_derivation_version: "guid.raw-stable-id.v1".into(),
+            recipe_id: "product.explicit-stable-id.v1".into(),
+            canonical_payload_hash: None,
+            provenance: "ExplicitStableId".into(),
+            used_override: false,
             source: "previous_apkg".into(),
         }],
     };
@@ -2151,7 +2156,9 @@ fn writer_guid_plan_mismatch_returns_update_diagnostic_error() {
     let root = unique_artifact_root("writer-guid-plan-mismatch");
     let target = BuildArtifactTarget::new(root, "artifacts/writer-guid-plan-mismatch");
     let normalized = sample_basic_normalized_ir();
-    let plan = WriterGuidPlan { assignments: vec![] };
+    let plan = WriterGuidPlan {
+        assignments: vec![],
+    };
 
     let result = build_with_guid_plan(
         &normalized,

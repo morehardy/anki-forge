@@ -27,7 +27,11 @@ fn build_writes_lockfile_and_second_build_preserves_guid_from_it() {
         .add_note(Note::basic("hola", "hello again").stable_id("es:hola"))
         .expect("add second note");
     let report = second
-        .build(BuildOptions::new().output(&second_apkg).identity_lockfile(&lockfile))
+        .build(
+            BuildOptions::new()
+                .output(&second_apkg)
+                .identity_lockfile(&lockfile),
+        )
         .expect("use lockfile");
 
     assert_eq!(report.update_safety.unwrap().notes_preserved, 1);
@@ -74,4 +78,33 @@ fn lockfile_carries_forward_absent_entries() {
     assert!(loaded.identity_index.notes.iter().any(|note| {
         note.stable_id == "es:adios" && note.entry_lifecycle == "absent_from_current"
     }));
+}
+
+#[test]
+fn update_safety_build_does_not_write_lockfile_when_writer_fails() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("out.apkg");
+    let lockfile = root.path().join("anki-forge.lock.json");
+    let artifact_file = root.path().join("artifact-root-is-file");
+    std::fs::write(&artifact_file, b"not a directory").expect("seed artifact file");
+
+    let mut project = Project::new("Spanish").stable_id("spanish");
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .artifacts_dir(&artifact_file)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true),
+        )
+        .expect_err("writer failure should fail build");
+
+    assert!(err.report.diagnostics.iter().any(|diagnostic| {
+        diagnostic.severity == Severity::Error && diagnostic.code.as_str().starts_with("PHASE3.")
+    }));
+    assert!(!lockfile.exists());
 }

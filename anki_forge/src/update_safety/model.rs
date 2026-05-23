@@ -86,6 +86,16 @@ pub struct NoteIdentityEntry {
     pub recovery_method: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ResolvedNoteIdentity {
+    pub stable_id: String,
+    pub current_guid_candidate: String,
+    pub recipe_id: String,
+    pub canonical_payload_hash: Option<String>,
+    pub provenance: String,
+    pub used_override: bool,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct NotetypeIdentityEntry {
     pub note_type_id: String,
@@ -142,7 +152,10 @@ impl IdentityIndex {
         }
     }
 
-    pub fn current(project_stable_id: Option<&str>, writer_policy: &writer_core::WriterPolicy) -> Self {
+    pub fn current(
+        project_stable_id: Option<&str>,
+        writer_policy: &writer_core::WriterPolicy,
+    ) -> Self {
         Self {
             schema_version: "identity-index-v1".into(),
             source_kind: "current".into(),
@@ -155,18 +168,40 @@ impl IdentityIndex {
         }
     }
 
-    pub fn push_current_note(&mut self, note: &authoring_core::NormalizedNote) {
+    pub fn push_current_note(
+        &mut self,
+        note: &authoring_core::NormalizedNote,
+        resolved: Option<&ResolvedNoteIdentity>,
+    ) {
+        let stable_id = resolved
+            .map(|identity| identity.stable_id.clone())
+            .unwrap_or_else(|| note.id.clone());
+        let current_guid_candidate = resolved
+            .map(|identity| identity.current_guid_candidate.clone())
+            .unwrap_or_else(|| note.id.clone());
+        let recipe_id = resolved
+            .map(|identity| identity.recipe_id.clone())
+            .unwrap_or_else(|| "product.explicit-or-normalized.v1".into());
+        let canonical_payload_hash =
+            resolved.and_then(|identity| identity.canonical_payload_hash.clone());
+        let provenance = resolved
+            .map(|identity| identity.provenance.clone())
+            .unwrap_or_else(|| "ExplicitStableId".into());
+        let used_override = resolved
+            .map(|identity| identity.used_override)
+            .unwrap_or(false);
+
         self.notes.push(NoteIdentityEntry {
-            stable_id: note.id.clone(),
+            stable_id,
             normalized_note_id: Some(note.id.clone()),
-            anki_guid: note.id.clone(),
-            current_guid_candidate: note.id.clone(),
+            anki_guid: current_guid_candidate.clone(),
+            current_guid_candidate,
             guid_derivation_version: "guid.raw-stable-id.v1".into(),
             note_type_id: note.notetype_id.clone(),
-            recipe_id: "product.explicit-or-normalized.v1".into(),
-            canonical_payload_hash: None,
-            provenance: "ExplicitStableId".into(),
-            used_override: false,
+            recipe_id,
+            canonical_payload_hash,
+            provenance,
+            used_override,
             entry_lifecycle: "active".into(),
             source_path: format!("note[id='{}']", note.id),
             recovery_method: "current_resolution".into(),
@@ -183,7 +218,7 @@ impl IdentityIndex {
                 .iter()
                 .enumerate()
                 .map(|(ord, field)| FieldMergeEntry {
-                    field_key: field.name.clone(),
+                    field_key: field_merge_key(&field.name, field.config_id),
                     field_name: field.name.clone(),
                     ord: ord as u32,
                     config_id: field.config_id.unwrap_or(0),
@@ -195,12 +230,27 @@ impl IdentityIndex {
                 .iter()
                 .enumerate()
                 .map(|(ord, template)| TemplateMergeEntry {
-                    template_key: template.name.clone(),
+                    template_key: template_merge_key(&template.name, template.config_id),
                     template_name: template.name.clone(),
                     ord: template.ord.unwrap_or(ord as u32),
                     config_id: template.config_id.unwrap_or(0),
                 })
                 .collect(),
         });
+    }
+}
+
+pub fn field_merge_key(name: &str, config_id: Option<i64>) -> String {
+    stable_merge_key("field", name, config_id)
+}
+
+pub fn template_merge_key(name: &str, config_id: Option<i64>) -> String {
+    stable_merge_key("template", name, config_id)
+}
+
+fn stable_merge_key(kind: &str, name: &str, config_id: Option<i64>) -> String {
+    match config_id {
+        Some(id) if id != 0 => format!("{kind}:config:{id}"),
+        _ => name.to_string(),
     }
 }

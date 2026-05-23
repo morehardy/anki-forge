@@ -1,7 +1,7 @@
 use anki_forge::build::{BuildOptions, UpdateSafetyMode};
 use anki_forge::update_safety::{
-    classify_project_stable_id_missing, effective_mode, validate_writer_policy_ref,
-    EvidenceCondition, EffectiveMode,
+    classify_project_stable_id_missing, effective_mode, validate_writer_policy_ref, EffectiveMode,
+    EvidenceCondition,
 };
 
 #[test]
@@ -36,13 +36,28 @@ fn effective_mode_upgrades_identity_lockfile_to_strict() {
 fn classifier_returns_limitation_and_diagnostic() {
     let classified = classify_project_stable_id_missing(EvidenceCondition::StrictCompareOnly);
 
-    assert_eq!(classified.limitation.as_deref(), Some("project_stable_id_missing"));
-    assert_eq!(classified.diagnostic_code.as_deref(), Some("UPDATE.PROJECT_STABLE_ID_MISSING"));
-    assert_eq!(classified.severity, anki_forge::diagnostics::Severity::Warning);
+    assert_eq!(
+        classified.limitation.as_deref(),
+        Some("project_stable_id_missing")
+    );
+    assert_eq!(
+        classified.diagnostic_code.as_deref(),
+        Some("UPDATE.PROJECT_STABLE_ID_MISSING")
+    );
+    assert_eq!(
+        classified.severity,
+        anki_forge::diagnostics::Severity::Warning
+    );
 
     let classified = classify_project_stable_id_missing(EvidenceCondition::LockfileRequired);
-    assert_eq!(classified.diagnostic_code.as_deref(), Some("UPDATE.PROJECT_STABLE_ID_MISSING"));
-    assert_eq!(classified.severity, anki_forge::diagnostics::Severity::Error);
+    assert_eq!(
+        classified.diagnostic_code.as_deref(),
+        Some("UPDATE.PROJECT_STABLE_ID_MISSING")
+    );
+    assert_eq!(
+        classified.severity,
+        anki_forge::diagnostics::Severity::Error
+    );
 }
 
 #[test]

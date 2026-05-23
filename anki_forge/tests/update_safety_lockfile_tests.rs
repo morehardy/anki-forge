@@ -1,5 +1,7 @@
 use anki_forge::update_safety::lockfile::{read_lockfile, write_lockfile_atomic};
-use anki_forge::update_safety::model::{GeneratedBy, IdentityIndex, IdentityLockfile, NoteIdentityEntry};
+use anki_forge::update_safety::model::{
+    GeneratedBy, IdentityIndex, IdentityLockfile, NoteIdentityEntry,
+};
 
 #[test]
 fn lockfile_roundtrip_uses_canonical_json_and_generated_by() {
@@ -37,7 +39,9 @@ fn lockfile_rejects_unknown_schema_version() {
     .expect("write invalid lockfile");
 
     let err = read_lockfile(&path).expect_err("schema should fail");
-    assert!(err.to_string().contains("UPDATE.BASELINE_SCHEMA_UNSUPPORTED"));
+    assert!(err
+        .to_string()
+        .contains("UPDATE.BASELINE_SCHEMA_UNSUPPORTED"));
 }
 
 #[test]
@@ -53,19 +57,35 @@ fn lockfile_rejects_duplicate_stable_id_and_guid() {
             writer_policy_ref: "writer-policy.default@1.0.0".into(),
         },
     };
-    lockfile.identity_index.notes.push(note_entry("stable-a", "guid-a"));
-    lockfile.identity_index.notes.push(note_entry("stable-a", "guid-b"));
+    lockfile
+        .identity_index
+        .notes
+        .push(note_entry("stable-a", "guid-a"));
+    lockfile
+        .identity_index
+        .notes
+        .push(note_entry("stable-a", "guid-b"));
 
     let root = tempfile::tempdir().expect("tempdir");
     let path = root.path().join("duplicate-stable.lock.json");
     let err = write_lockfile_atomic(&path, &lockfile).expect_err("duplicate stable id");
-    assert!(err.to_string().contains("UPDATE.STABLE_ID_DUPLICATE_IN_BASELINE"));
+    assert!(err
+        .to_string()
+        .contains("UPDATE.STABLE_ID_DUPLICATE_IN_BASELINE"));
 
     lockfile.identity_index.notes.clear();
-    lockfile.identity_index.notes.push(note_entry("stable-a", "guid-a"));
-    lockfile.identity_index.notes.push(note_entry("stable-b", "guid-a"));
+    lockfile
+        .identity_index
+        .notes
+        .push(note_entry("stable-a", "guid-a"));
+    lockfile
+        .identity_index
+        .notes
+        .push(note_entry("stable-b", "guid-a"));
     let err = write_lockfile_atomic(&path, &lockfile).expect_err("duplicate guid");
-    assert!(err.to_string().contains("UPDATE.GUID_DUPLICATE_IN_BASELINE"));
+    assert!(err
+        .to_string()
+        .contains("UPDATE.GUID_DUPLICATE_IN_BASELINE"));
 }
 
 #[test]
@@ -88,7 +108,9 @@ fn lockfile_rejects_active_normalized_note_id_mismatch() {
     let root = tempfile::tempdir().expect("tempdir");
     let path = root.path().join("mismatch.lock.json");
     let err = write_lockfile_atomic(&path, &lockfile).expect_err("mismatch");
-    assert!(err.to_string().contains("UPDATE.NORMALIZED_NOTE_ID_MISMATCH"));
+    assert!(err
+        .to_string()
+        .contains("UPDATE.NORMALIZED_NOTE_ID_MISMATCH"));
 }
 
 fn note_entry(stable_id: &str, guid: &str) -> NoteIdentityEntry {

@@ -160,7 +160,8 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         .unwrap_or_else(|| PathBuf::from("media"));
 
     let (media, mut limitations) = resolve_staging_media(&manifest.normalized_ir, &media_root)?;
-    let note_identity_metadata = build_note_identity_metadata_from_normalized_ir(&manifest.normalized_ir);
+    let note_identity_metadata =
+        build_note_identity_metadata_from_normalized_ir(&manifest.normalized_ir);
     let observations = build_observations(
         &manifest.normalized_ir,
         &media,
@@ -384,12 +385,15 @@ fn build_observations(
             "evidence_refs": [format!("notetype:{}", notetype_id)],
         }));
 
-        for field in &notetype.fields {
+        for (field_index, field) in notetype.fields.iter().enumerate() {
             let field_name = field.name.as_str();
             field_entries.push(json!({
                 "selector": format!("notetype[id='{}']::field[{}]", notetype_id, field_name),
                 "notetype_id": notetype_id,
                 "name": field_name,
+                "ord": field.ord.unwrap_or(field_index as u32),
+                "config_id": field.config_id,
+                "tag": field.tag,
                 "evidence_refs": [format!("field:{}:{}", notetype_id, field_name)],
             }));
         }
@@ -406,12 +410,14 @@ fn build_observations(
             }));
         }
 
-        for template in &notetype.templates {
+        for (template_index, template) in notetype.templates.iter().enumerate() {
             let template_name = template.name.as_str();
             template_entries.push(json!({
                 "selector": format!("notetype[id='{}']::template[{}]", notetype_id, template_name),
                 "notetype_id": notetype_id,
                 "name": template_name,
+                "ord": template.ord.unwrap_or(template_index as u32),
+                "config_id": template.config_id,
                 "question_format": template.question_format.as_str(),
                 "answer_format": template.answer_format.as_str(),
                 "evidence_refs": [format!("template:{}:{}", notetype_id, template_name)],
@@ -591,6 +597,8 @@ fn build_note_identity_metadata_from_normalized_ir(normalized_ir: &NormalizedIr)
                 "guid_derivation_version": "guid.raw-stable-id.v1",
                 "guid_source": "current_derivation",
                 "recovery_method": "current_resolution",
+                "provenance": "ExplicitStableId",
+                "used_override": false,
                 "evidence_refs": [format!("note-data:{}", guid)],
             })
         })

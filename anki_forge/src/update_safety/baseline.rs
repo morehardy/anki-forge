@@ -2,7 +2,10 @@ use std::path::Path;
 
 use anyhow::{Context, Result};
 
-use super::model::{IdentityIndex, NoteIdentityEntry};
+use super::model::{
+    field_merge_key, template_merge_key, FieldMergeEntry, IdentityIndex, NoteIdentityEntry,
+    NotetypeIdentityEntry, TemplateMergeEntry,
+};
 
 pub fn load_previous_apkg_identity_index(
     path: impl AsRef<Path>,
@@ -24,7 +27,11 @@ pub fn load_previous_apkg_identity_index(
     };
 
     for metadata in &inspect.observations.metadata {
-        if metadata.get("schema_version").and_then(|value| value.as_str()) != Some("identity-note-v1") {
+        if metadata
+            .get("schema_version")
+            .and_then(|value| value.as_str())
+            != Some("identity-note-v1")
+        {
             continue;
         }
         let Some(stable_id) = metadata.get("stable_id").and_then(|value| value.as_str()) else {
@@ -35,7 +42,13 @@ pub fn load_previous_apkg_identity_index(
             .get("selected_anki_guid")
             .and_then(|value| value.as_str())
             .unwrap_or(stable_id);
-        index.limitations.push("unknown_baseline_provenance".into());
+        let provenance = metadata
+            .get("provenance")
+            .and_then(|value| value.as_str())
+            .unwrap_or("unknown_baseline");
+        if provenance == "unknown_baseline" {
+            index.limitations.push("unknown_baseline_provenance".into());
+        }
         index.notes.push(NoteIdentityEntry {
             stable_id: stable_id.into(),
             normalized_note_id: None,
@@ -60,8 +73,11 @@ pub fn load_previous_apkg_identity_index(
                 .get("canonical_payload_hash")
                 .and_then(|value| value.as_str())
                 .map(str::to_string),
-            provenance: "unknown_baseline".into(),
-            used_override: false,
+            provenance: provenance.into(),
+            used_override: metadata
+                .get("used_override")
+                .and_then(|value| value.as_bool())
+                .unwrap_or(false),
             entry_lifecycle: "active".into(),
             source_path: path.display().to_string(),
             recovery_method: "embedded_metadata".into(),
@@ -71,10 +87,91 @@ pub fn load_previous_apkg_identity_index(
     if index.notes.is_empty() {
         recover_guid_equals_stable_id(&mut index, &inspect, current, lockfile);
     }
+    recover_notetype_merge_metadata(&mut index, &inspect);
 
     index.limitations.sort();
     index.limitations.dedup();
     Ok(index)
+}
+
+fn recover_notetype_merge_metadata(
+    index: &mut IdentityIndex,
+    inspect: &writer_core::InspectReport,
+) {
+    let mut fields_by_notetype = std::collections::BTreeMap::<String, Vec<FieldMergeEntry>>::new();
+    for field in &inspect.observations.fields {
+        let Some(notetype_id) = field.get("notetype_id").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        let Some(name) = field.get("name").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        let config_id = field
+            .get("config_id")
+            .and_then(|value| value.as_i64())
+            .unwrap_or(0);
+        fields_by_notetype
+            .entry(notetype_id.to_string())
+            .or_default()
+            .push(FieldMergeEntry {
+                field_key: field_merge_key(name, Some(config_id)),
+                field_name: name.to_string(),
+                ord: field
+                    .get("ord")
+                    .and_then(|value| value.as_u64())
+                    .unwrap_or_default() as u32,
+                config_id,
+                tag: field
+                    .get("tag")
+                    .and_then(|value| value.as_i64())
+                    .unwrap_or_default() as i32,
+            });
+    }
+
+    let mut templates_by_notetype =
+        std::collections::BTreeMap::<String, Vec<TemplateMergeEntry>>::new();
+    for template in &inspect.observations.templates {
+        let Some(notetype_id) = template.get("notetype_id").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        let Some(name) = template.get("name").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        let config_id = template
+            .get("config_id")
+            .and_then(|value| value.as_i64())
+            .unwrap_or(0);
+        templates_by_notetype
+            .entry(notetype_id.to_string())
+            .or_default()
+            .push(TemplateMergeEntry {
+                template_key: template_merge_key(name, Some(config_id)),
+                template_name: name.to_string(),
+                ord: template
+                    .get("ord")
+                    .and_then(|value| value.as_u64())
+                    .unwrap_or_default() as u32,
+                config_id,
+            });
+    }
+
+    for notetype in &inspect.observations.notetypes {
+        let Some(note_type_id) = notetype.get("id").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        let Some(name) = notetype.get("name").and_then(|value| value.as_str()) else {
+            continue;
+        };
+        index.notetypes.push(NotetypeIdentityEntry {
+            note_type_id: note_type_id.to_string(),
+            anki_model_id: None,
+            name: name.to_string(),
+            fields: fields_by_notetype.remove(note_type_id).unwrap_or_default(),
+            templates: templates_by_notetype
+                .remove(note_type_id)
+                .unwrap_or_default(),
+        });
+    }
 }
 
 fn recover_guid_equals_stable_id(

@@ -734,7 +734,12 @@ fn inspect_apkg_reports_note_identity_metadata_from_notes_data() {
             normalized_note_id: "stable-note".into(),
             stable_id: "stable-note".into(),
             selected_anki_guid: "stable-note".into(),
+            current_guid_candidate: "stable-note".into(),
             guid_derivation_version: "guid.raw-stable-id.v1".into(),
+            recipe_id: "product.explicit-stable-id.v1".into(),
+            canonical_payload_hash: None,
+            provenance: "ExplicitStableId".into(),
+            used_override: false,
             source: "current_derivation".into(),
         }],
     };

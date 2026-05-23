@@ -1,15 +1,19 @@
 use authoring_core::NormalizedIr;
+use std::collections::BTreeMap;
 
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 use writer_core::WriterPolicy;
 
-use super::model::{validate_writer_policy_ref, EffectiveMode, IdentityIndex};
+use super::model::{
+    validate_writer_policy_ref, EffectiveMode, IdentityIndex, ResolvedNoteIdentity,
+};
 
 pub struct CurrentIdentityInput<'a> {
     pub project_stable_id: Option<&'a str>,
     pub normalized: &'a NormalizedIr,
     pub writer_policy: &'a WriterPolicy,
     pub mode: EffectiveMode,
+    pub resolved_note_identities: &'a BTreeMap<String, ResolvedNoteIdentity>,
 }
 
 pub struct CurrentIdentityOutput {
@@ -20,7 +24,9 @@ pub struct CurrentIdentityOutput {
 pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentIdentityOutput {
     let mut diagnostics = Vec::new();
     let mut index = IdentityIndex::current(input.project_stable_id, input.writer_policy);
-    if let Err(err) = validate_writer_policy_ref(&input.writer_policy.id, &input.writer_policy.version) {
+    if let Err(err) =
+        validate_writer_policy_ref(&input.writer_policy.id, &input.writer_policy.version)
+    {
         diagnostics.push(Diagnostic {
             code: err.code,
             severity: err.severity,
@@ -32,7 +38,9 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
 
     for note in &input.normalized.notes {
         let stable_id = note.id.as_str();
-        if matches!(input.mode, EffectiveMode::Strict) && (stable_id.trim().is_empty() || stable_id.starts_with("generated:")) {
+        if matches!(input.mode, EffectiveMode::Strict)
+            && (stable_id.trim().is_empty() || stable_id.starts_with("generated:"))
+        {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("UPDATE.STABLE_ID_MISSING_IN_STRICT_MODE"),
                 severity: Severity::Error,
@@ -52,7 +60,7 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
             });
             continue;
         }
-        index.push_current_note(note);
+        index.push_current_note(note, input.resolved_note_identities.get(&note.id));
     }
 
     for notetype in &input.normalized.notetypes {

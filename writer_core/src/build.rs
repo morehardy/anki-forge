@@ -16,7 +16,13 @@ pub fn build(
     build_context: &BuildContext,
     artifact_target: &BuildArtifactTarget,
 ) -> Result<PackageBuildResult> {
-    build_with_guid_plan(normalized_ir, writer_policy, build_context, artifact_target, None)
+    build_with_guid_plan(
+        normalized_ir,
+        writer_policy,
+        build_context,
+        artifact_target,
+        None,
+    )
 }
 
 pub fn build_with_guid_plan(
@@ -83,7 +89,10 @@ pub fn build_with_guid_plan(
         match emit_apkg(&materialized, artifact_target, guid_plan) {
             Ok(apkg) => Some(apkg),
             Err(err) => {
-                if err.to_string().starts_with("UPDATE.WRITER_GUID_PLAN_MISMATCH") {
+                if err
+                    .to_string()
+                    .starts_with("UPDATE.WRITER_GUID_PLAN_MISMATCH")
+                {
                     return Ok(error_result_with_domain(
                         writer_policy,
                         build_context,
@@ -97,7 +106,10 @@ pub fn build_with_guid_plan(
                         },
                     ));
                 }
-                if err.to_string().starts_with("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE") {
+                if err
+                    .to_string()
+                    .starts_with("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE")
+                {
                     return Ok(error_result_with_domain(
                         writer_policy,
                         build_context,

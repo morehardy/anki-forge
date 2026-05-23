@@ -266,5 +266,8 @@ fn build_report_can_carry_update_safety_summary() {
 
     let summary = report.update_safety.as_ref().expect("summary");
     assert_eq!(summary.mode, "strict");
-    assert_eq!(summary.baseline_sources[0].source_ref, "baseline.previous_apkg.primary");
+    assert_eq!(
+        summary.baseline_sources[0].source_ref,
+        "baseline.previous_apkg.primary"
+    );
 }

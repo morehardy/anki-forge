@@ -1,12 +1,13 @@
 use std::collections::BTreeMap;
 
-use super::{Content, MediaRef};
+use super::{Content, IdentityRecipe, MediaRef};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Note {
     note_type_id: String,
     stable_id: Option<String>,
     deck_name: Option<String>,
+    identity: Option<IdentityRecipe>,
     fields: BTreeMap<String, Content>,
     tags: Vec<String>,
 }
@@ -17,6 +18,7 @@ impl Note {
             note_type_id: note_type_id.into(),
             stable_id: None,
             deck_name: None,
+            identity: None,
             fields: BTreeMap::new(),
             tags: Vec::new(),
         }
@@ -37,6 +39,15 @@ impl Note {
 
     pub fn deck(mut self, deck_name: impl Into<String>) -> Self {
         self.deck_name = Some(deck_name.into());
+        self
+    }
+
+    pub fn identity<I, S>(mut self, fields: I) -> Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+    {
+        self.identity = Some(IdentityRecipe::fields(fields));
         self
     }
 
@@ -77,6 +88,10 @@ impl Note {
 
     pub fn stable_id_ref(&self) -> Option<&str> {
         self.stable_id.as_deref()
+    }
+
+    pub fn identity_ref(&self) -> Option<&IdentityRecipe> {
+        self.identity.as_ref()
     }
 
     pub fn deck_name(&self) -> Option<&str> {

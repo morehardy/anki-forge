@@ -19,7 +19,10 @@ fn strict_update_safety_blocks_note_without_resolved_stable_id() {
         )
         .expect_err("strict update safety should require stable ids");
 
-    assert!(err.report.diagnostic_codes().contains(&"UPDATE.STABLE_ID_MISSING_IN_STRICT_MODE".into()));
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"UPDATE.STABLE_ID_MISSING_IN_STRICT_MODE".into()));
     assert!(!output.exists());
 }
 
@@ -62,6 +65,104 @@ fn strict_update_safety_blocks_invalid_anki_guid_candidate() {
         )
         .expect_err("invalid GUID candidate should block writer execution");
 
-    assert!(err.report.diagnostic_codes().contains(&"UPDATE.ANKI_GUID_INVALID".into()));
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"UPDATE.ANKI_GUID_INVALID".into()));
     assert!(!output.exists());
+}
+
+#[test]
+fn custom_update_safety_identity_recipe_derives_stable_note_id_in_strict_mode() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("custom-derived.apkg");
+    let lockfile = root.path().join("anki-forge.lock.json");
+    let mut project = Project::new("Japanese").stable_id("jp-core");
+    project
+        .add_notetype(custom_vocab_notetype().identity(IdentityRecipe::fields(["expr"])))
+        .expect("add notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .text("expr", "食べる")
+                .text("meaning", "to eat"),
+        )
+        .expect("add note");
+
+    project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::Strict),
+        )
+        .expect("strict build should accept recipe-derived identity");
+
+    let loaded =
+        anki_forge::update_safety::lockfile::read_lockfile(&lockfile).expect("read lockfile");
+    let note = loaded.identity_index.notes.first().expect("note identity");
+    assert!(note.stable_id.starts_with("afid:v1:"));
+    assert_eq!(
+        note.normalized_note_id.as_deref(),
+        Some(note.stable_id.as_str())
+    );
+    assert_eq!(note.current_guid_candidate, note.stable_id);
+    assert_eq!(note.recipe_id, "custom.notetype.fields.v1");
+    assert!(note
+        .canonical_payload_hash
+        .as_deref()
+        .is_some_and(|hash| hash.starts_with("blake3:")));
+    assert_eq!(note.provenance, "InferredFromNotetypeFields");
+    assert!(!note.used_override);
+}
+
+#[test]
+fn note_level_update_safety_identity_override_marks_snapshot_and_derives_id() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("custom-override.apkg");
+    let lockfile = root.path().join("anki-forge.lock.json");
+    let mut project = Project::new("Japanese").stable_id("jp-core");
+    project
+        .add_notetype(custom_vocab_notetype())
+        .expect("add notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .text("expr", "食べる")
+                .text("meaning", "to eat")
+                .identity(["expr"]),
+        )
+        .expect("add note");
+
+    project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::Strict),
+        )
+        .expect("strict build should accept note-level identity override");
+
+    let loaded =
+        anki_forge::update_safety::lockfile::read_lockfile(&lockfile).expect("read lockfile");
+    let note = loaded.identity_index.notes.first().expect("note identity");
+    assert!(note.stable_id.starts_with("afid:v1:"));
+    assert_eq!(note.recipe_id, "custom.note-override.fields.v1");
+    assert_eq!(note.provenance, "InferredFromNoteFields");
+    assert!(note.used_override);
+}
+
+fn custom_vocab_notetype() -> NoteType {
+    NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .field(Field::new("Meaning").key("meaning"))
+        .template(
+            Template::new("Recognition")
+                .key("recognition")
+                .front("{{Expression}}")
+                .back("{{Meaning}}")
+                .generate_when(GenerationRule::all(["expr"])),
+        )
 }

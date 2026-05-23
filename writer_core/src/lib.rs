@@ -11,8 +11,8 @@ pub mod model;
 pub mod policy;
 pub mod staging;
 
-pub use build::{build, build_with_guid_plan};
 pub use build::BuildArtifactTarget;
+pub use build::{build, build_with_guid_plan};
 pub use canonical_json::to_canonical_json;
 pub use diff::diff_reports;
 pub use inspect::{artifact_path_from_ref, inspect_apkg, inspect_build_result, inspect_staging};

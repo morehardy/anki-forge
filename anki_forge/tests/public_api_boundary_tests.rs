@@ -64,7 +64,10 @@ fn build_options_expose_update_safety_builder_methods() {
         .write_identity_lockfile(true)
         .update_safety(UpdateSafetyMode::ReportOnly);
 
-    assert_eq!(options.compare_to.as_deref(), Some(std::path::Path::new("previous.apkg")));
+    assert_eq!(
+        options.compare_to.as_deref(),
+        Some(std::path::Path::new("previous.apkg"))
+    );
     assert_eq!(
         options.identity_lockfile.as_deref(),
         Some(std::path::Path::new("anki-forge.lock.json"))

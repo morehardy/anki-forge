@@ -4,7 +4,10 @@ use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 
 use super::model::{FieldMergeEntry, IdentityIndex, NotetypeIdentityEntry, TemplateMergeEntry};
 
-pub fn compare_notetype_merge_safety(current: &IdentityIndex, baseline: &IdentityIndex) -> Vec<Diagnostic> {
+pub fn compare_notetype_merge_safety(
+    current: &IdentityIndex,
+    baseline: &IdentityIndex,
+) -> Vec<Diagnostic> {
     let mut diagnostics = Vec::new();
     let current_by_id: BTreeMap<_, _> = current
         .notetypes
@@ -18,8 +21,13 @@ pub fn compare_notetype_merge_safety(current: &IdentityIndex, baseline: &Identit
         .collect();
 
     for current_notetype in &current.notetypes {
-        let Some(baseline_notetype) = baseline_by_id.get(current_notetype.note_type_id.as_str()) else {
-            diagnostics.push(warning("UPDATE.NOTETYPE_SET_CHANGED", &current_notetype.note_type_id, "change_kind=added; notetype was added"));
+        let Some(baseline_notetype) = baseline_by_id.get(current_notetype.note_type_id.as_str())
+        else {
+            diagnostics.push(warning(
+                "UPDATE.NOTETYPE_SET_CHANGED",
+                &current_notetype.note_type_id,
+                "change_kind=added; notetype was added",
+            ));
             continue;
         };
         compare_notetype(current_notetype, baseline_notetype, &mut diagnostics);
@@ -37,16 +45,32 @@ pub fn compare_notetype_merge_safety(current: &IdentityIndex, baseline: &Identit
     diagnostics
 }
 
-fn compare_notetype(current: &NotetypeIdentityEntry, baseline: &NotetypeIdentityEntry, diagnostics: &mut Vec<Diagnostic>) {
+fn compare_notetype(
+    current: &NotetypeIdentityEntry,
+    baseline: &NotetypeIdentityEntry,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
     if current.name != baseline.name {
-        diagnostics.push(warning("UPDATE.NOTETYPE_RENAMED", &current.note_type_id, "notetype name changed"));
+        diagnostics.push(warning(
+            "UPDATE.NOTETYPE_RENAMED",
+            &current.note_type_id,
+            "notetype name changed",
+        ));
     }
     compare_fields(current, baseline, diagnostics);
     compare_templates(current, baseline, diagnostics);
 }
 
-fn compare_fields(current: &NotetypeIdentityEntry, baseline: &NotetypeIdentityEntry, diagnostics: &mut Vec<Diagnostic>) {
-    let baseline_by_key: BTreeMap<_, _> = baseline.fields.iter().map(|field| (field.field_key.as_str(), field)).collect();
+fn compare_fields(
+    current: &NotetypeIdentityEntry,
+    baseline: &NotetypeIdentityEntry,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
+    let baseline_by_key: BTreeMap<_, _> = baseline
+        .fields
+        .iter()
+        .map(|field| (field.field_key.as_str(), field))
+        .collect();
     for field in &current.fields {
         if let Some(old) = baseline_by_key.get(field.field_key.as_str()) {
             compare_field(field, old, &current.note_type_id, diagnostics);
@@ -54,22 +78,51 @@ fn compare_fields(current: &NotetypeIdentityEntry, baseline: &NotetypeIdentityEn
     }
 }
 
-fn compare_field(current: &FieldMergeEntry, baseline: &FieldMergeEntry, notetype_id: &str, diagnostics: &mut Vec<Diagnostic>) {
+fn compare_field(
+    current: &FieldMergeEntry,
+    baseline: &FieldMergeEntry,
+    notetype_id: &str,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
     if current.config_id != baseline.config_id {
-        diagnostics.push(error("UPDATE.FIELD_MERGE_ID_CHANGED", notetype_id, "field config id changed"));
+        diagnostics.push(error(
+            "UPDATE.FIELD_MERGE_ID_CHANGED",
+            notetype_id,
+            "field config id changed",
+        ));
         return;
     }
     if current.field_name != baseline.field_name {
-        diagnostics.push(warning("UPDATE.FIELD_RENAMED", notetype_id, "field name changed"));
+        diagnostics.push(warning(
+            "UPDATE.FIELD_RENAMED",
+            notetype_id,
+            "field name changed",
+        ));
     }
     if current.ord != baseline.ord {
-        diagnostics.push(warning("UPDATE.FIELD_ORD_CHANGED", notetype_id, "field ord changed"));
+        diagnostics.push(warning(
+            "UPDATE.FIELD_ORD_CHANGED",
+            notetype_id,
+            "field ord changed",
+        ));
     }
 }
 
-fn compare_templates(current: &NotetypeIdentityEntry, baseline: &NotetypeIdentityEntry, diagnostics: &mut Vec<Diagnostic>) {
-    let current_by_key: BTreeMap<_, _> = current.templates.iter().map(|template| (template.template_key.as_str(), template)).collect();
-    let baseline_by_key: BTreeMap<_, _> = baseline.templates.iter().map(|template| (template.template_key.as_str(), template)).collect();
+fn compare_templates(
+    current: &NotetypeIdentityEntry,
+    baseline: &NotetypeIdentityEntry,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
+    let current_by_key: BTreeMap<_, _> = current
+        .templates
+        .iter()
+        .map(|template| (template.template_key.as_str(), template))
+        .collect();
+    let baseline_by_key: BTreeMap<_, _> = baseline
+        .templates
+        .iter()
+        .map(|template| (template.template_key.as_str(), template))
+        .collect();
     for template in &current.templates {
         if let Some(old) = baseline_by_key.get(template.template_key.as_str()) {
             compare_template(template, old, &current.note_type_id, diagnostics);
@@ -92,16 +145,33 @@ fn compare_templates(current: &NotetypeIdentityEntry, baseline: &NotetypeIdentit
     }
 }
 
-fn compare_template(current: &TemplateMergeEntry, baseline: &TemplateMergeEntry, notetype_id: &str, diagnostics: &mut Vec<Diagnostic>) {
+fn compare_template(
+    current: &TemplateMergeEntry,
+    baseline: &TemplateMergeEntry,
+    notetype_id: &str,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
     if current.config_id != baseline.config_id {
-        diagnostics.push(error("UPDATE.TEMPLATE_MERGE_ID_CHANGED", notetype_id, "template config id changed"));
+        diagnostics.push(error(
+            "UPDATE.TEMPLATE_MERGE_ID_CHANGED",
+            notetype_id,
+            "template config id changed",
+        ));
         return;
     }
     if current.template_name != baseline.template_name {
-        diagnostics.push(warning("UPDATE.TEMPLATE_RENAMED", notetype_id, "template name changed"));
+        diagnostics.push(warning(
+            "UPDATE.TEMPLATE_RENAMED",
+            notetype_id,
+            "template name changed",
+        ));
     }
     if current.ord != baseline.ord {
-        diagnostics.push(warning("UPDATE.TEMPLATE_ORD_CHANGED", notetype_id, "template ord changed"));
+        diagnostics.push(warning(
+            "UPDATE.TEMPLATE_ORD_CHANGED",
+            notetype_id,
+            "template ord changed",
+        ));
     }
 }
 

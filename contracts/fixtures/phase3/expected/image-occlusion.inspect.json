@@ -1,5 +1,5 @@
 {
-  "artifact_fingerprint": "artifact:a92d4f753e8fa9fe4caab62785a8ad18dc20bb02",
+  "artifact_fingerprint": "artifact:ae62c05a5fd5e519eb863f21182f8fd6b1b4155d",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
@@ -10,44 +10,59 @@
     "field_metadata": [],
     "fields": [
       {
+        "config_id": null,
         "evidence_refs": [
           "field:io-main:Occlusion"
         ],
         "name": "Occlusion",
         "notetype_id": "io-main",
-        "selector": "notetype[id='io-main']::field[Occlusion]"
+        "ord": 0,
+        "selector": "notetype[id='io-main']::field[Occlusion]",
+        "tag": 0
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:io-main:Image"
         ],
         "name": "Image",
         "notetype_id": "io-main",
-        "selector": "notetype[id='io-main']::field[Image]"
+        "ord": 1,
+        "selector": "notetype[id='io-main']::field[Image]",
+        "tag": 1
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:io-main:Header"
         ],
         "name": "Header",
         "notetype_id": "io-main",
-        "selector": "notetype[id='io-main']::field[Header]"
+        "ord": 2,
+        "selector": "notetype[id='io-main']::field[Header]",
+        "tag": 2
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:io-main:Back Extra"
         ],
         "name": "Back Extra",
         "notetype_id": "io-main",
-        "selector": "notetype[id='io-main']::field[Back Extra]"
+        "ord": 3,
+        "selector": "notetype[id='io-main']::field[Back Extra]",
+        "tag": 3
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:io-main:Comments"
         ],
         "name": "Comments",
         "notetype_id": "io-main",
-        "selector": "notetype[id='io-main']::field[Comments]"
+        "ord": 4,
+        "selector": "notetype[id='io-main']::field[Comments]",
+        "tag": 4
       }
     ],
     "media": [
@@ -76,6 +91,23 @@
         "notetype_count": 1,
         "selector": "counts",
         "template_count": 1
+      },
+      {
+        "canonical_payload_hash": null,
+        "current_guid_candidate": "note-io-1",
+        "evidence_refs": [
+          "note-data:note-io-1"
+        ],
+        "guid_derivation_version": "guid.raw-stable-id.v1",
+        "guid_source": "current_derivation",
+        "provenance": "ExplicitStableId",
+        "recipe_id": "product.explicit-or-normalized.v1",
+        "recovery_method": "current_resolution",
+        "schema_version": "identity-note-v1",
+        "selected_anki_guid": "note-io-1",
+        "selector": "note[guid='note-io-1']::anki_forge_identity",
+        "stable_id": "note-io-1",
+        "used_override": false
       }
     ],
     "notetypes": [
@@ -142,11 +174,13 @@
     "templates": [
       {
         "answer_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n\n<div><button id=\"toggle\">Toggle Masks</button></div>\n{{#Back Extra}}<div>{{Back Extra}}</div>{{/Back Extra}}\n",
+        "config_id": null,
         "evidence_refs": [
           "template:io-main:Image Occlusion"
         ],
         "name": "Image Occlusion",
         "notetype_id": "io-main",
+        "ord": 0,
         "question_format": "{{#Header}}<div>{{Header}}</div>{{/Header}}\n<div style=\"display: none\">{{cloze:Occlusion}}</div>\n<div id=\"err\"></div>\n<div id=\"image-occlusion-container\">\n    {{Image}}\n    <canvas id=\"image-occlusion-canvas\"></canvas>\n</div>\n<script>\ntry {\n    anki.imageOcclusion.setup();\n} catch (exc) {\n    document.getElementById(\"err\").innerHTML = `Error loading image occlusion<br><br>${exc}`;\n}\n</script>\n",
         "selector": "notetype[id='io-main']::template[Image Occlusion]"
       }

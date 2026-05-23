@@ -147,6 +147,8 @@ pub struct NoteIdentityMetadata {
     pub guid_derivation_version: String,
     pub guid_source: String,
     pub recovery_method: String,
+    pub provenance: String,
+    pub used_override: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -154,6 +156,11 @@ pub struct WriterGuidAssignment {
     pub normalized_note_id: String,
     pub stable_id: String,
     pub selected_anki_guid: String,
+    pub current_guid_candidate: String,
     pub guid_derivation_version: String,
+    pub recipe_id: String,
+    pub canonical_payload_hash: Option<String>,
+    pub provenance: String,
+    pub used_override: bool,
     pub source: String,
 }

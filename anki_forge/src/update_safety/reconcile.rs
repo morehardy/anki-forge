@@ -78,7 +78,10 @@ pub fn reconcile_guid_plan(
             (locked.anki_guid.clone(), GuidSource::Lockfile)
         } else {
             notes_derived += 1;
-            (note.current_guid_candidate.clone(), GuidSource::CurrentDerivation)
+            (
+                note.current_guid_candidate.clone(),
+                GuidSource::CurrentDerivation,
+            )
         };
 
         let info_code = match source {
@@ -120,7 +123,12 @@ pub fn reconcile_guid_plan(
             normalized_note_id,
             stable_id: note.stable_id.clone(),
             selected_anki_guid: guid,
+            current_guid_candidate: note.current_guid_candidate.clone(),
             guid_derivation_version: note.guid_derivation_version.clone(),
+            recipe_id: note.recipe_id.clone(),
+            canonical_payload_hash: note.canonical_payload_hash.clone(),
+            provenance: note.provenance.clone(),
+            used_override: note.used_override,
             source: source.as_str().into(),
         });
     }
@@ -216,6 +224,8 @@ pub fn selected_identity_index(
             selected.notes.push(absent);
         }
     }
-    selected.notes.sort_by(|left, right| left.stable_id.cmp(&right.stable_id));
+    selected
+        .notes
+        .sort_by(|left, right| left.stable_id.cmp(&right.stable_id));
     selected
 }

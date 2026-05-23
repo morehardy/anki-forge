@@ -706,10 +706,10 @@ fn phase3_update_safety_schemas_are_valid_json_schema() {
         "schema/update-safety-summary.schema.json",
     ] {
         let path = root.join(relative);
-        let raw = std::fs::read_to_string(&path)
-            .unwrap_or_else(|err| panic!("read {relative}: {err}"));
-        let json: serde_json::Value = serde_json::from_str(&raw)
-            .unwrap_or_else(|err| panic!("parse {relative}: {err}"));
+        let raw =
+            std::fs::read_to_string(&path).unwrap_or_else(|err| panic!("read {relative}: {err}"));
+        let json: serde_json::Value =
+            serde_json::from_str(&raw).unwrap_or_else(|err| panic!("parse {relative}: {err}"));
         jsonschema::JSONSchema::compile(&json)
             .unwrap_or_else(|err| panic!("compile {relative}: {err}"));
     }

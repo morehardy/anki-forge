@@ -23,7 +23,9 @@ pub fn write_lockfile_atomic(path: impl AsRef<Path>, lockfile: &IdentityLockfile
         .with_context(|| format!("create lockfile directory {}", parent.display()))?;
     let tmp = parent.join(format!(
         ".{}.tmp-{}",
-        path.file_name().and_then(|name| name.to_str()).unwrap_or("anki-forge.lock.json"),
+        path.file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("anki-forge.lock.json"),
         std::process::id()
     ));
     let bytes = writer_core::to_canonical_json(lockfile)

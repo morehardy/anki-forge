@@ -274,27 +274,40 @@ fn fixture_gates_reject_note_identity_error_codes_missing_from_registry() {
 fn update_safety_contract_fixtures_validate() {
     let root = contracts_root();
     let fixtures = [
-        ("schema/identity-index.schema.json", "fixtures/update-safety/current-index.json"),
-        ("schema/identity-lockfile.schema.json", "fixtures/update-safety/identity-lockfile.json"),
-        ("schema/update-safety-summary.schema.json", "fixtures/update-safety/update-safety-summary.json"),
+        (
+            "schema/identity-index.schema.json",
+            "fixtures/update-safety/current-index.json",
+        ),
+        (
+            "schema/identity-lockfile.schema.json",
+            "fixtures/update-safety/identity-lockfile.json",
+        ),
+        (
+            "schema/update-safety-summary.schema.json",
+            "fixtures/update-safety/update-safety-summary.json",
+        ),
     ];
     for (schema_rel, fixture_rel) in fixtures {
         let schema_raw = std::fs::read_to_string(root.join(schema_rel)).expect("schema");
         let fixture_raw = std::fs::read_to_string(root.join(fixture_rel)).expect("fixture");
-        let schema_json: serde_json::Value = serde_json::from_str(&schema_raw).expect("schema json");
-        let fixture_json: serde_json::Value = serde_json::from_str(&fixture_raw).expect("fixture json");
+        let schema_json: serde_json::Value =
+            serde_json::from_str(&schema_raw).expect("schema json");
+        let fixture_json: serde_json::Value =
+            serde_json::from_str(&fixture_raw).expect("fixture json");
         let compiled = jsonschema::JSONSchema::compile(&schema_json).expect("compile schema");
-        compiled
-            .validate(&fixture_json)
-            .unwrap_or_else(|errors| panic!("{fixture_rel} failed schema: {}", errors.map(|e| e.to_string()).collect::<Vec<_>>().join("; ")));
+        compiled.validate(&fixture_json).unwrap_or_else(|errors| {
+            panic!(
+                "{fixture_rel} failed schema: {}",
+                errors.map(|e| e.to_string()).collect::<Vec<_>>().join("; ")
+            )
+        });
     }
 }
 
 #[test]
 fn update_safety_fixture_catalog_lists_required_scenarios() {
     let root = contracts_root();
-    let raw = std::fs::read_to_string(root.join("fixtures/index.yaml"))
-        .expect("fixture catalog");
+    let raw = std::fs::read_to_string(root.join("fixtures/index.yaml")).expect("fixture catalog");
     for id in [
         "update-safety-current-index-generation",
         "update-safety-lockfile-roundtrip",

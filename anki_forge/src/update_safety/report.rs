@@ -8,6 +8,7 @@ pub fn summary_from_reconcile(
     mode: EffectiveMode,
     reconcile: &ReconcileOutput,
     diagnostics: &[Diagnostic],
+    baseline_sources: Vec<BaselineSourceSummary>,
     lockfile_written: bool,
 ) -> UpdateSafetySummary {
     UpdateSafetySummary {
@@ -17,7 +18,7 @@ pub fn summary_from_reconcile(
             EffectiveMode::Strict => "strict",
         }
         .into(),
-        baseline_sources: vec![],
+        baseline_sources,
         notes_preserved: reconcile.notes_preserved,
         notes_derived: reconcile.notes_derived,
         notes_failed: reconcile.notes_failed,
@@ -52,6 +53,84 @@ pub fn ignored_lockfile_source(path: &std::path::Path) -> BaselineSourceSummary 
         used_for_reconcile: false,
         limitations: vec![],
         diagnostic_codes: vec!["UPDATE.BASELINE_IGNORED_DISABLED".into()],
+    }
+}
+
+pub fn loaded_previous_apkg_source(
+    path: &std::path::Path,
+    limitations: Vec<String>,
+) -> BaselineSourceSummary {
+    loaded_source(
+        "previous_apkg",
+        "baseline.previous_apkg.primary",
+        path,
+        limitations,
+    )
+}
+
+pub fn loaded_lockfile_source(
+    path: &std::path::Path,
+    limitations: Vec<String>,
+) -> BaselineSourceSummary {
+    loaded_source(
+        "lockfile",
+        "baseline.identity_lockfile.primary",
+        path,
+        limitations,
+    )
+}
+
+pub fn unreadable_previous_apkg_source(
+    path: &std::path::Path,
+    code: &str,
+) -> BaselineSourceSummary {
+    unreadable_source(
+        "previous_apkg",
+        "baseline.previous_apkg.primary",
+        path,
+        code,
+    )
+}
+
+pub fn unreadable_lockfile_source(path: &std::path::Path, code: &str) -> BaselineSourceSummary {
+    unreadable_source("lockfile", "baseline.identity_lockfile.primary", path, code)
+}
+
+fn loaded_source(
+    source_kind: &str,
+    source_ref: &str,
+    path: &std::path::Path,
+    limitations: Vec<String>,
+) -> BaselineSourceSummary {
+    BaselineSourceSummary {
+        source_kind: source_kind.into(),
+        source_ref: source_ref.into(),
+        display_path: Some(path.display().to_string()),
+        status: if limitations.is_empty() {
+            "loaded".into()
+        } else {
+            "partial".into()
+        },
+        used_for_reconcile: true,
+        limitations,
+        diagnostic_codes: vec![],
+    }
+}
+
+fn unreadable_source(
+    source_kind: &str,
+    source_ref: &str,
+    path: &std::path::Path,
+    code: &str,
+) -> BaselineSourceSummary {
+    BaselineSourceSummary {
+        source_kind: source_kind.into(),
+        source_ref: source_ref.into(),
+        display_path: Some(path.display().to_string()),
+        status: "unreadable".into(),
+        used_for_reconcile: false,
+        limitations: vec![],
+        diagnostic_codes: vec![code.into()],
     }
 }
 

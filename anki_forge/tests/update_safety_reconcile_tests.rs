@@ -28,11 +28,14 @@ fn previous_apkg_wins_over_lockfile_for_same_stable_id() {
     let previous = index_with_note("previous_apkg", "note-a", "guid-from-apkg");
     let lockfile = index_with_note("lockfile", "note-a", "guid-from-lockfile");
 
-    let output = reconcile_guid_plan(&current, Some(&previous), Some(&lockfile))
-        .expect("reconcile");
+    let output =
+        reconcile_guid_plan(&current, Some(&previous), Some(&lockfile)).expect("reconcile");
 
     assert_eq!(output.assignments[0].selected_anki_guid, "guid-from-apkg");
-    assert_eq!(output.assignments[0].source, GuidSource::PreviousApkg.as_str());
+    assert_eq!(
+        output.assignments[0].source,
+        GuidSource::PreviousApkg.as_str()
+    );
     assert!(output
         .diagnostics
         .iter()
@@ -61,7 +64,9 @@ fn reconcile_rejects_duplicate_selected_guid() {
 
     let err = reconcile_guid_plan(&current, None, None).expect_err("duplicate guid");
 
-    assert!(err.to_string().contains("UPDATE.GUID_DUPLICATE_AT_RECONCILE"));
+    assert!(err
+        .to_string()
+        .contains("UPDATE.GUID_DUPLICATE_AT_RECONCILE"));
 }
 
 #[test]
