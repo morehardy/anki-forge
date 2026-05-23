@@ -43,12 +43,13 @@ Reasons:
 Phase 4 includes:
 
 1. `Project::build(BuildOptions::compare_to(...).fail_on(...))`.
-2. `BuildReport` fields for diff, import risk, and policy result.
-3. Product-facing risk classification over existing inspect, diff, and update-safety evidence.
-4. JSON report serialization for Rust-generated reports.
-5. CLI support for Product-document build with `compare_to`, `fail_on`, and report JSON output.
-6. CI-oriented exit behavior and examples.
-7. Tests proving Rust and CLI produce the same canonical report projection.
+2. `Project::diff_against_apkg(path)` as a read-only standalone comparison entrypoint.
+3. `BuildReport` fields for diff, import risk, and policy result.
+4. Product-facing risk classification over existing inspect, diff, and update-safety evidence.
+5. JSON report serialization for Rust-generated reports.
+6. CLI support for Product-document build with `compare_to`, `fail_on`, and report JSON output.
+7. CI-oriented exit behavior and examples.
+8. Tests proving Rust and CLI produce the same canonical report projection.
 
 Phase 4 excludes:
 
@@ -86,6 +87,24 @@ Ownership boundaries:
 
 This keeps lower layers factual and Product layers interpretive.
 
+Standalone diff uses the same comparison assembler:
+
+```text
+Project
+  -> lower Product API
+  -> normalize Authoring IR
+  -> materialize temporary current artifact for inspection
+  -> inspect current artifact
+  -> inspect previous APKG
+  -> artifact diff
+  -> semantic/import risk
+  -> ProjectDiffReport
+```
+
+`diff_against_apkg(...)` must not invent a second comparison path. It may use temporary staging or APKG materialization internally so current project facts are observed through the same writer/inspect layer as `build(compare_to(...))`, but it does not copy or publish a final APKG unless a future option explicitly asks for retained artifacts.
+
+The materialization step is a full temporary writer path: Product lowering, normalization, writer APKG/staging materialization, and inspect all run exactly as they would for `build(compare_to(...))`. It is not an in-memory shortcut. `build(compare_to(...))` and `diff_against_apkg(...)` both call a shared internal comparison assembler; the build path then adds final artifact copy, policy evaluation, report JSON writing, and CI exit behavior.
+
 ## 5. Rust API
 
 Phase 4 extends the existing build API rather than introducing a second build entrypoint.
@@ -103,6 +122,67 @@ let report = project.build(
 
 report.ensure_success()?;
 ```
+
+Standalone comparison API:
+
+```rust
+let diff = project.diff_against_apkg("previous/jp-core.apkg")?;
+
+assert_eq!(diff.comparison, ComparisonStatus::Complete);
+println!("{}", diff.summary());
+```
+
+Target report shape:
+
+```text
+ProjectDiffReport
+  status: BuildStatus
+  comparison: ComparisonStatus
+  diagnostics: Vec<Diagnostic>
+  current_inspect: Option<InspectSummary>
+  previous_inspect: Option<InspectSummary>
+  update_safety: Option<UpdateSafetySummary>
+  diff: Option<BuildDiffSummary>
+  risk: Option<ImportRiskReport>
+  metrics: ComparisonMetrics
+```
+
+The public type may be exported as `anki_forge::diff::DiffReport`; this spec uses `ProjectDiffReport` to distinguish it from `writer_core::DiffReport`. It reuses the same `BuildDiffSummary`, `ImportRiskReport`, `ComparisonStatus`, evidence refs, and diagnostics as `BuildReport`.
+
+```text
+ComparisonMetrics
+  duration: Duration
+```
+
+`Project::diff_against_apkg(...)` does not apply `fail_on` policy and does not write report JSON in the first slice. CI gating belongs to `Project::build(...fail_on...)` and `contract_tools product-build`. Standalone diff is for local inspection, tests, and API users who want comparison data without publishing a new APKG.
+
+`ProjectDiffReport.status` uses the same `BuildStatus` values except `blocked`, which is not produced because no policy is evaluated:
+
+```text
+success | invalid | error
+```
+
+`success` means the comparison ran to completion. High-risk findings alone do not make standalone diff fail. `invalid` means user-controlled project or baseline input made the comparison incomplete, such as an unreadable previous APKG. `error` means infrastructure or execution failure.
+
+Every standalone diff failure returns:
+
+```text
+ProjectDiffError { report: ProjectDiffReport, cause: BuildFailureCause }
+```
+
+Standalone diff may return only these `BuildFailureCause` variants:
+
+```text
+Diagnostics | Invalid | Io | Internal
+```
+
+`PolicyBlocked` and `MissingArtifact` are unreachable for standalone diff because it does not evaluate policy and does not require a published artifact.
+
+Once `Project::diff_against_apkg(...)` is entered on an in-memory `Project`, failures should return `ProjectDiffError` with a partial report whenever possible. If the previous APKG cannot be read or inspected, `diff_against_apkg(...)` returns `Err(ProjectDiffError)` with `report.status = invalid`, `report.comparison = unavailable`, and `RISK.BASELINE_UNAVAILABLE` when enough report state exists. CLI/file parsing failures before a `Project` exists remain invocation failures outside this Rust API contract.
+
+The separate standalone diff API is intentional even though callers could simulate it with a temporary build. It is listed in `docs/api-design.md`, gives users a read-only comparison mental model, avoids accidental publication of disposable APKGs, and makes tests express comparison intent without configuring artifact output or policy.
+
+`Project::diff_against_apkg(...)` always cleans up its temporary staging and APKG materialization in the first slice. It does not accept `BuildOptions` and does not honor `artifacts_dir`; retained comparison artifacts can be added later as an explicit diff option if users need debugging output.
 
 `BuildOptions` gains:
 
@@ -172,7 +252,7 @@ error > invalid > blocked > success
 
 If multiple conditions occur, the report status uses the highest-precedence status while preserving all diagnostics, risk findings, and policy evidence that were available.
 
-`diff` is omitted when no baseline is requested. `risk` is still allowed without a baseline when risks can be derived from current diagnostics, but full import/update risk requires `compare_to`.
+`diff` is omitted when no baseline is requested. `risk` is still allowed without a baseline when risks can be derived from current diagnostics, but full import/update risk requires `compare_to`. In the first slice, the only baseline-free risk from the listed rules is `RISK.MEDIA_REFERENCE_BROKEN`; all identity, field/template, card-count, and media-removal risks require a baseline.
 
 `report_json` writes the stable report projection whenever a report exists, including policy-blocked and invalid results. Failure to write the report file is an IO failure:
 
@@ -222,6 +302,13 @@ success -> no BuildError
 blocked -> PolicyBlocked
 invalid -> Diagnostics | MissingArtifact | Invalid
 error -> Io | Internal
+```
+
+When multiple causes map to the same status, choose the most specific cause by this precedence:
+
+```text
+Diagnostics > MissingArtifact > Invalid
+Io > Internal
 ```
 
 The artifact may exist in a policy-blocked result. This is intentional so CI can upload both artifact and report for review.
@@ -308,9 +395,13 @@ ArtifactDiffChange
 - `not_requested`: no `compare_to` baseline was supplied.
 - `complete`: current and previous artifacts were inspected, neither inspect report has `observation_status = unavailable`, and no compared domain is missing from either side.
 - `partial`: both artifacts were at least partly inspected, but one or more non-fatal domains are missing or degraded. The report remains actionable and must list the missing or degraded domains in `limitations`.
-- `unavailable`: one side cannot be inspected at all, or a required core domain is unavailable such that artifact comparison cannot be trusted. First-slice required core domains are `notetypes`, `templates`, `fields`, and `metadata`.
+- `unavailable`: one side cannot be inspected at all, or a required core evidence domain is unavailable such that artifact comparison cannot be trusted. First-slice required core evidence domains are `notetypes`, `templates`, `fields`, `metadata`, and `card_evidence`.
 
 Limitations must identify the affected domain and, when available, the affected selector. Domain-level limitations are acceptable when inspect cannot identify a narrower selector. Selector-level failures inside an otherwise comparable domain produce `partial` unless they make a required core domain unavailable as a whole.
+
+`card_evidence` is a Product-level evidence domain, not necessarily a raw `writer_core::InspectObservations` field. In the first slice it may be derived from inspect metadata card counts and card/note/template references. If card evidence is missing, template/card-structure risk rules that depend on it must be deferred or emit limitations rather than claiming a complete comparison.
+
+Minimum first-slice `card_evidence` is present when both current and previous inspect reports expose total card count and enough card/template ordinal evidence to connect card-count changes to template changes. If only total card count is available, card evidence is degraded and comparison is `partial` for card-dependent rules. If neither total count nor ordinal evidence is available, card evidence is missing.
 
 ## 8. Risk Model
 
@@ -359,7 +450,16 @@ EvidenceRef
 
 `ref_id` is stable within a single report projection. It does not need to be globally stable across builds.
 
-`oracle` evidence means a reference to behavior evidence outside the current report, such as a manual-validation scenario id, roundtrip oracle fixture id, upstream Anki source citation id, or documented Anki manual citation id. The implementation plan should choose the concrete id format, but every oracle ref must resolve to a repo file, fixture id, or cited source recorded by the tests.
+`oracle` evidence means a reference to behavior evidence outside the current report. First-slice oracle refs use these prefixes:
+
+```text
+manual:<scenario-id>
+roundtrip:<fixture-id>
+source:<source-id>
+manual-doc:<citation-id>
+```
+
+Every oracle ref must resolve to a repo file, fixture id, or cited source recorded by the tests.
 
 First-version risk rules:
 
@@ -391,6 +491,8 @@ First-slice safe-rename rule:
 - Stable field key and field `config_id` derivation are expected from the existing Phase 1/3 custom-notetype identity work. The implementation plan must verify that inspect exposes this evidence before enabling the safe-rename branch. If inspect cannot expose it yet, the first slice treats field renames as unsafe until that evidence exists.
 
 High-risk and critical rules that depend on Anki import/update behavior require evidence before they ship. Existing Phase 3 update-safety evidence may satisfy GUID and config-id preservation rules. Template ordinal and card-removal risks may cite upstream Anki source, existing manual scenarios, or new Phase 4 oracle evidence. If no evidence exists for a rule, that rule is not enabled as a blocking high/critical finding in the first slice.
+
+`RISK.CARD_COUNT_CHANGED` promotion is deterministic: when the same report also contains `RISK.TEMPLATE_REMOVED`, the card-count finding is upgraded from `Medium` to `High` and links to the template-removal finding through `evidence_refs`. It remains a separate finding so CI can count card-count changes independently.
 
 ## 9. Policy
 
@@ -456,6 +558,13 @@ Output overwrite behavior:
 - `--apkg-out` overwrites an existing file when the build reaches final artifact copy.
 - `--report-json` overwrites an existing file using an atomic temp-file-and-rename write when possible.
 - Failure to overwrite either path is an IO failure represented in the BuildReport when report creation has started.
+
+Manifest contract:
+
+- Phase 4 uses the existing `contracts/manifest.yaml` shape and `assets` map. It does not introduce a new manifest format.
+- Required first-slice asset keys are `writer_policy`, `build_context_default`, `writer_policy_schema`, `build_context_schema`, and the Phase 4 report schema key, `build_report_schema`.
+- `writer_policy`, `build_context_default`, `writer_policy_schema`, and `build_context_schema` already exist in the current manifest. `build_report_schema` is new Phase 4 work.
+- Manifest values are contract-relative paths and must resolve inside the bundle root using the existing runtime asset resolver.
 
 CLI behavior:
 
@@ -530,6 +639,7 @@ Rust unit tests:
 Product build integration tests:
 
 - `Project::build(compare_to(...))` includes diff, risk, and policy.
+- `Project::diff_against_apkg(...)` returns the same comparison, diff, and risk evidence as `Project::build(compare_to(...))` for the same project and baseline, excluding policy and artifact-output fields.
 - policy-blocked result carries artifact and report when artifact generation completed.
 - stable id/GUID drift becomes high risk.
 - template reorder and template removal become high or critical risk.
@@ -559,14 +669,16 @@ Oracle/manual tests:
 
 Recommended implementation order:
 
-1. Add report projection, schema versioning, stable `BuildStatus`, `RiskLevel`, `ImportRiskReport`, and policy types.
-2. Extend `BuildOptions` with `fail_on` and `report_json`.
-3. Attach current artifact inspect, previous artifact inspect, artifact diff, and first-slice semantic diff to Product build flow.
-4. Implement first-version risk rules from existing update-safety, diagnostics, diff, and oracle evidence.
-5. Apply `fail_on` policy and add `PolicyBlocked` failure cause.
-6. Add `contract_tools product-build` with ProductDocument input, JSON report output, and shared Rust report path.
-7. Add CI documentation and examples.
-8. Add oracle-backed tests for Anki-sensitive high-risk rules.
+1. Prepare the risk-rule evidence matrix and mark each first-version rule `enabled` or `deferred`.
+2. Add report projection, schema versioning, stable `BuildStatus`, `RiskLevel`, `ImportRiskReport`, and policy types.
+3. Extend `BuildOptions` with `fail_on` and `report_json`.
+4. Attach current artifact inspect, previous artifact inspect, artifact diff, and first-slice semantic diff to Product build flow.
+5. Implement enabled first-version risk rules from existing update-safety, diagnostics, diff, and oracle evidence.
+6. Add `Project::diff_against_apkg(...)` as a read-only facade over the shared comparison assembler.
+7. Apply `fail_on` policy and add `PolicyBlocked` failure cause.
+8. Add `contract_tools product-build` with ProductDocument input, JSON report output, and shared Rust report path.
+9. Add CI documentation and examples.
+10. Add oracle-backed tests for Anki-sensitive high-risk rules.
 
 This order gets a stable report carrier in place before risk rules accrete.
 
@@ -575,14 +687,15 @@ This order gets a stable report carrier in place before risk rules accrete.
 Phase 4 is complete when all are true:
 
 1. `Project::build(compare_to(...).fail_on(...))` returns a complete report.
-2. `BuildReport` contains diff, risk, and policy sections.
-3. Policy-blocked builds preserve the report and, when available, the artifact path.
-4. Rust and CLI report projections match for shared fixtures.
-5. CLI can emit report JSON to stdout and write it with `--report-json`.
-6. CI examples demonstrate blocked, warning-only, and successful flows.
-7. High-risk rules have regression tests and Anki-behavior evidence.
-8. Product risk semantics stay out of `writer_core`.
-9. Existing Phase 3 update-safety behavior remains valid and becomes evidence for the broader Phase 4 risk model.
+2. `Project::diff_against_apkg(...)` returns Product-level diff and risk evidence without publishing a new APKG.
+3. `BuildReport` contains diff, risk, and policy sections.
+4. Policy-blocked builds preserve the report and, when available, the artifact path.
+5. Rust and CLI report projections match for shared fixtures.
+6. CLI can emit report JSON to stdout and write it with `--report-json`.
+7. CI examples demonstrate blocked, warning-only, and successful flows.
+8. High-risk rules have regression tests and Anki-behavior evidence.
+9. Product risk semantics stay out of `writer_core`.
+10. Existing Phase 3 update-safety behavior remains valid and becomes evidence for the broader Phase 4 risk model.
 
 ## 15. Open Decisions Locked For Planning
 
