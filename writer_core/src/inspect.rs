@@ -104,6 +104,7 @@ struct ResolvedMedia {
 struct CollectionData {
     notetypes: Vec<NormalizedNotetype>,
     notes: Vec<NormalizedNote>,
+    note_identity_metadata: Vec<Value>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
     actual_card_decks: BTreeMap<(String, usize), String>,
 }
@@ -159,11 +160,14 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         .unwrap_or_else(|| PathBuf::from("media"));
 
     let (media, mut limitations) = resolve_staging_media(&manifest.normalized_ir, &media_root)?;
+    let note_identity_metadata =
+        build_note_identity_metadata_from_normalized_ir(&manifest.normalized_ir);
     let observations = build_observations(
         &manifest.normalized_ir,
         &media,
         &manifest.template_target_decks,
         &BTreeMap::new(),
+        &note_identity_metadata,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
@@ -208,11 +212,13 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     let mut has_core_data = false;
     let mut template_target_decks = vec![];
     let mut actual_card_decks = BTreeMap::new();
+    let mut note_identity_metadata = vec![];
 
     if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
         let collection = read_collection_data(&collection_bytes)?;
         normalized_ir.notetypes = collection.notetypes;
         normalized_ir.notes = collection.notes;
+        note_identity_metadata = collection.note_identity_metadata;
         template_target_decks = collection.template_target_decks;
         actual_card_decks = collection.actual_card_decks;
         has_core_data = true;
@@ -231,6 +237,7 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         &media,
         &template_target_decks,
         &actual_card_decks,
+        &note_identity_metadata,
     );
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
@@ -335,6 +342,7 @@ fn build_observations(
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
     actual_card_decks: &BTreeMap<(String, usize), String>,
+    note_identity_metadata: &[Value],
 ) -> InspectObservations {
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
         .notetypes
@@ -377,12 +385,15 @@ fn build_observations(
             "evidence_refs": [format!("notetype:{}", notetype_id)],
         }));
 
-        for field in &notetype.fields {
+        for (field_index, field) in notetype.fields.iter().enumerate() {
             let field_name = field.name.as_str();
             field_entries.push(json!({
                 "selector": format!("notetype[id='{}']::field[{}]", notetype_id, field_name),
                 "notetype_id": notetype_id,
                 "name": field_name,
+                "ord": field.ord.unwrap_or(field_index as u32),
+                "config_id": field.config_id,
+                "tag": field.tag,
                 "evidence_refs": [format!("field:{}:{}", notetype_id, field_name)],
             }));
         }
@@ -399,12 +410,14 @@ fn build_observations(
             }));
         }
 
-        for template in &notetype.templates {
+        for (template_index, template) in notetype.templates.iter().enumerate() {
             let template_name = template.name.as_str();
             template_entries.push(json!({
                 "selector": format!("notetype[id='{}']::template[{}]", notetype_id, template_name),
                 "notetype_id": notetype_id,
                 "name": template_name,
+                "ord": template.ord.unwrap_or(template_index as u32),
+                "config_id": template.config_id,
                 "question_format": template.question_format.as_str(),
                 "answer_format": template.answer_format.as_str(),
                 "evidence_refs": [format!("template:{}:{}", notetype_id, template_name)],
@@ -517,7 +530,7 @@ fn build_observations(
         media_reference_entries.push(entry);
     }
 
-    let metadata_entries = vec![json!({
+    let mut metadata_entries = vec![json!({
         "selector": "counts",
         "notetype_count": normalized_ir.notetypes.len(),
         "template_count": template_entries.len(),
@@ -527,6 +540,7 @@ fn build_observations(
         "media_count": media.len(),
         "evidence_refs": ["counts"],
     })];
+    metadata_entries.extend(note_identity_metadata.iter().cloned());
 
     InspectObservations {
         notetypes: notetype_entries,
@@ -564,6 +578,31 @@ fn build_observations(
             .chain(media_reference_entries)
             .collect(),
     }
+}
+
+fn build_note_identity_metadata_from_normalized_ir(normalized_ir: &NormalizedIr) -> Vec<Value> {
+    normalized_ir
+        .notes
+        .iter()
+        .map(|note| {
+            let guid = &note.id;
+            json!({
+                "selector": format!("note[guid='{}']::anki_forge_identity", guid),
+                "schema_version": "identity-note-v1",
+                "stable_id": note.id,
+                "recipe_id": "product.explicit-or-normalized.v1",
+                "canonical_payload_hash": None::<String>,
+                "current_guid_candidate": note.id,
+                "selected_anki_guid": note.id,
+                "guid_derivation_version": "guid.raw-stable-id.v1",
+                "guid_source": "current_derivation",
+                "recovery_method": "current_resolution",
+                "provenance": "ExplicitStableId",
+                "used_override": false,
+                "evidence_refs": [format!("note-data:{}", guid)],
+            })
+        })
+        .collect()
 }
 
 fn media_ref_selector(
@@ -1042,8 +1081,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
         }
 
         let mut note_rows =
-            conn.prepare("select id, guid, mid, mod, tags, flds from notes order by id")?;
-        let notes = note_rows
+            conn.prepare("select id, guid, mid, mod, tags, flds, data from notes order by id")?;
+        let rows = note_rows
             .query_map([], |row| {
                 let id: i64 = row.get(0)?;
                 let guid: String = row.get(1)?;
@@ -1051,6 +1090,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                 let mtime_secs: i64 = row.get(3)?;
                 let tags: String = row.get(4)?;
                 let flds: String = row.get(5)?;
+                let data: String = row.get(6)?;
                 let notetype = notetypes_by_row_id
                     .get(&mid)
                     .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
@@ -1063,8 +1103,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                 for (field, value) in notetype.fields.iter().zip(field_values) {
                     fields.insert(field.name.clone(), value);
                 }
-                Ok(NormalizedNote {
-                    id: guid,
+                let note = NormalizedNote {
+                    id: guid.clone(),
                     notetype_id: notetype.id.clone(),
                     deck_name: note_decks_by_row_id
                         .get(&id)
@@ -1077,13 +1117,43 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                         tags.split(' ').map(|tag| tag.to_string()).collect()
                     },
                     mtime_secs: Some(mtime_secs),
-                })
+                };
+                let identity_metadata = serde_json::from_str::<Value>(&data)
+                    .ok()
+                    .and_then(|value| value.get("anki_forge_identity").cloned())
+                    .map(|mut observed| {
+                        if let Some(object) = observed.as_object_mut() {
+                            object.insert(
+                                "selector".into(),
+                                Value::String(format!(
+                                    "note[guid='{}']::anki_forge_identity",
+                                    guid
+                                )),
+                            );
+                            object.insert(
+                                "evidence_refs".into(),
+                                json!([format!("note-data:{}", guid)]),
+                            );
+                        }
+                        observed
+                    });
+                Ok((note, identity_metadata))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
+
+        let mut notes = Vec::with_capacity(rows.len());
+        let mut note_identity_metadata = Vec::new();
+        for (note, identity) in rows {
+            notes.push(note);
+            if let Some(identity) = identity {
+                note_identity_metadata.push(identity);
+            }
+        }
 
         Ok(CollectionData {
             notetypes: notetype_values,
             notes,
+            note_identity_metadata,
             template_target_decks,
             actual_card_decks,
         })

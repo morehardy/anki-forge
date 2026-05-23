@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["schema_version", "project_stable_id", "writer_policy_ref", "identity_index", "generated_by"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "identity-lockfile-v1" },
+    "project_stable_id": { "type": "string", "minLength": 1 },
+    "writer_policy_ref": { "type": "string", "pattern": "^[^@\\u0000-\\u001f]+@[^@\\u0000-\\u001f]+$" },
+    "identity_index": {
+      "type": "object",
+      "required": ["schema_version", "source_kind", "source_ref", "writer_policy_ref", "project_stable_id", "notes", "notetypes", "limitations"],
+      "additionalProperties": true,
+      "properties": {
+        "schema_version": { "const": "identity-index-v1" },
+        "source_kind": { "type": "string", "minLength": 1 },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "project_stable_id": { "type": "string", "minLength": 1 },
+        "writer_policy_ref": { "type": "string", "minLength": 1 },
+        "notes": { "type": "array" },
+        "notetypes": { "type": "array" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "generated_by": {
+      "type": "object",
+      "required": ["tool", "tool_version", "writer_policy_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "tool": { "const": "anki-forge" },
+        "tool_version": { "type": "string", "minLength": 1 },
+        "writer_policy_ref": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

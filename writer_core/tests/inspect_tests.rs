@@ -12,8 +12,9 @@ use authoring_core::{
 };
 use sha1::Digest;
 use writer_core::{
-    build, extract_media_references, inspect_apkg, inspect_build_result, inspect_staging,
-    BuildArtifactTarget, BuildContext, WriterPolicy,
+    build, build_with_guid_plan, extract_media_references, inspect_apkg, inspect_build_result,
+    inspect_staging, BuildArtifactTarget, BuildContext, WriterGuidAssignment, WriterGuidPlan,
+    WriterPolicy,
 };
 
 #[test]
@@ -720,6 +721,50 @@ fn unique_artifact_root(case: &str) -> PathBuf {
     let _ = fs::remove_dir_all(&root);
     fs::create_dir_all(&root).unwrap();
     root
+}
+
+#[test]
+fn inspect_apkg_reports_note_identity_metadata_from_notes_data() {
+    let root = unique_artifact_root("inspect-note-identity-metadata");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/inspect-note-identity-metadata");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notes[0].id = "stable-note".into();
+    let plan = WriterGuidPlan {
+        assignments: vec![WriterGuidAssignment {
+            normalized_note_id: "stable-note".into(),
+            stable_id: "stable-note".into(),
+            selected_anki_guid: "stable-note".into(),
+            current_guid_candidate: "stable-note".into(),
+            guid_derivation_version: "guid.raw-stable-id.v1".into(),
+            recipe_id: "product.explicit-stable-id.v1".into(),
+            canonical_payload_hash: None,
+            provenance: "ExplicitStableId".into(),
+            used_override: false,
+            source: "current_derivation".into(),
+        }],
+    };
+
+    let result = build_with_guid_plan(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+        Some(&plan),
+    )
+    .expect("build");
+    assert_eq!(result.result_status, "success");
+
+    let report = inspect_apkg(root.join("package.apkg")).expect("inspect apkg");
+    let identity = report
+        .observations
+        .metadata
+        .iter()
+        .find(|value| value["selector"] == "note[guid='stable-note']::anki_forge_identity")
+        .expect("identity metadata observation");
+
+    assert_eq!(identity["stable_id"], "stable-note");
+    assert_eq!(identity["selected_anki_guid"], "stable-note");
+    assert_eq!(identity["schema_version"], "identity-note-v1");
 }
 
 fn strip_zip_entry(source: &Path, target: &Path, missing_entry: &str) {

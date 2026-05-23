@@ -1,5 +1,5 @@
 {
-  "artifact_fingerprint": "artifact:e4a701ef18c35e39c3425429a404c8718faa3879",
+  "artifact_fingerprint": "artifact:fe0f31e107ca25060da8bb28d1b4fbf6863848e7",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
@@ -10,20 +10,26 @@
     "field_metadata": [],
     "fields": [
       {
+        "config_id": null,
         "evidence_refs": [
           "field:cloze-main:Text"
         ],
         "name": "Text",
         "notetype_id": "cloze-main",
-        "selector": "notetype[id='cloze-main']::field[Text]"
+        "ord": 0,
+        "selector": "notetype[id='cloze-main']::field[Text]",
+        "tag": 0
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:cloze-main:Back Extra"
         ],
         "name": "Back Extra",
         "notetype_id": "cloze-main",
-        "selector": "notetype[id='cloze-main']::field[Back Extra]"
+        "ord": 1,
+        "selector": "notetype[id='cloze-main']::field[Back Extra]",
+        "tag": 1
       }
     ],
     "media": [],
@@ -39,6 +45,23 @@
         "notetype_count": 1,
         "selector": "counts",
         "template_count": 1
+      },
+      {
+        "canonical_payload_hash": null,
+        "current_guid_candidate": "note-1",
+        "evidence_refs": [
+          "note-data:note-1"
+        ],
+        "guid_derivation_version": "guid.raw-stable-id.v1",
+        "guid_source": "current_derivation",
+        "provenance": "ExplicitStableId",
+        "recipe_id": "product.explicit-or-normalized.v1",
+        "recovery_method": "current_resolution",
+        "schema_version": "identity-note-v1",
+        "selected_anki_guid": "note-1",
+        "selector": "note[guid='note-1']::anki_forge_identity",
+        "stable_id": "note-1",
+        "used_override": false
       }
     ],
     "notetypes": [
@@ -88,11 +111,13 @@
     "templates": [
       {
         "answer_format": "{{cloze:Text}}<br>\n{{Back Extra}}",
+        "config_id": null,
         "evidence_refs": [
           "template:cloze-main:Cloze"
         ],
         "name": "Cloze",
         "notetype_id": "cloze-main",
+        "ord": 0,
         "question_format": "{{cloze:Text}}",
         "selector": "notetype[id='cloze-main']::template[Cloze]"
       }

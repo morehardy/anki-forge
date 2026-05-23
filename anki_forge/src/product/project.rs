@@ -7,6 +7,7 @@ use std::time::Instant;
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
 use base64::Engine as _;
+use serde::Serialize;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
 
@@ -369,6 +370,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        update_safety: None,
                         status: "invalid".into(),
                     },
                     BuildFailureCause::Diagnostics,
@@ -397,6 +399,7 @@ impl Project {
                         duration: started.elapsed(),
                     },
                     inspect: None,
+                    update_safety: None,
                     status: "invalid".into(),
                 },
                 BuildFailureCause::Diagnostics,
@@ -421,13 +424,385 @@ impl Project {
             .as_deref()
             .map(|stable_id| format!("artifacts/{stable_id}"))
             .unwrap_or_else(|| "artifacts".into());
+        let resolved_note_identities = self.resolved_note_identities();
+
+        let update_mode = match crate::update_safety::effective_mode(&options) {
+            Ok(mode) => mode,
+            Err(err) => {
+                diagnostics.push(Diagnostic {
+                    code: err.code,
+                    severity: err.severity,
+                    message: err.message,
+                    source: Some(SourcePath::new("build.options")),
+                    help: None,
+                });
+                let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+                return Err(BuildError::new(
+                    BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
+                        },
+                        media,
+                        diagnostics,
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: None,
+                        status: "invalid".into(),
+                    },
+                    BuildFailureCause::Diagnostics,
+                ));
+            }
+        };
+
+        if self.stable_id.is_none()
+            && (options.compare_to.is_some()
+                || options.identity_lockfile.is_some()
+                || options.write_identity_lockfile)
+        {
+            let condition =
+                if options.identity_lockfile.is_some() || options.write_identity_lockfile {
+                    crate::update_safety::EvidenceCondition::LockfileRequired
+                } else {
+                    crate::update_safety::EvidenceCondition::StrictCompareOnly
+                };
+            let classified = crate::update_safety::classify_project_stable_id_missing(condition);
+            if let Some(code) = classified.diagnostic_code {
+                diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new(code),
+                    severity: classified.severity,
+                    message: "project stable id is missing for update-safety proof".into(),
+                    source: Some(SourcePath::new("project.stable_id")),
+                    help: Some("set Project::stable_id(value) for update-safe builds".into()),
+                });
+            }
+        }
+
+        let current_identity = crate::update_safety::current::build_current_identity_index(
+            crate::update_safety::current::CurrentIdentityInput {
+                project_stable_id: self.stable_id.as_deref(),
+                normalized: &normalized,
+                writer_policy: &writer_policy,
+                mode: update_mode,
+                resolved_note_identities: &resolved_note_identities,
+            },
+        );
+        diagnostics.extend(current_identity.diagnostics);
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+            return Err(BuildError::new(
+                BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
+                    },
+                    media,
+                    diagnostics,
+                    metrics: BuildMetrics {
+                        duration: started.elapsed(),
+                    },
+                    inspect: None,
+                    update_safety: None,
+                    status: "invalid".into(),
+                },
+                BuildFailureCause::Diagnostics,
+            ));
+        }
+
+        let disabled_update_safety =
+            matches!(update_mode, crate::update_safety::EffectiveMode::Disabled);
+
+        let (reconcile, writer_guid_plan, mut update_safety_summary_val, lockfile_index) =
+            if disabled_update_safety {
+                let mut baseline_sources = Vec::new();
+                if let Some(path) = options.compare_to.as_ref() {
+                    diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("UPDATE.BASELINE_IGNORED_DISABLED"),
+                    severity: Severity::Info,
+                    message: "compare_to baseline ignored because update safety is disabled".into(),
+                    source: Some(SourcePath::new(path.display().to_string())),
+                    help: Some("remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline".into()),
+                });
+                    baseline_sources.push(
+                        crate::update_safety::report::ignored_previous_apkg_source(path),
+                    );
+                }
+                if let Some(path) = options.identity_lockfile.as_ref() {
+                    baseline_sources
+                        .push(crate::update_safety::report::ignored_lockfile_source(path));
+                }
+                let reconcile = crate::update_safety::reconcile::current_only_reconcile(
+                    &current_identity.index,
+                )
+                .map_err(|_err| {
+                    BuildError::new(
+                        BuildReport {
+                            artifact: None,
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: None,
+                            status: "invalid".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    )
+                })?;
+                let writer_guid_plan = writer_core::WriterGuidPlan {
+                    assignments: reconcile.assignments.clone(),
+                };
+                let summary = crate::update_safety::report::summary_from_disabled_mode(
+                    &current_identity.index,
+                    baseline_sources,
+                    diagnostics
+                        .iter()
+                        .filter(|item| item.severity == Severity::Error)
+                        .map(|item| item.code.to_string())
+                        .collect(),
+                );
+                (reconcile, writer_guid_plan, summary, None)
+            } else {
+                let mut baseline_sources = Vec::new();
+                let update_error_severity = update_safety_blocking_severity(update_mode);
+                let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
+                    if path.exists() {
+                        match crate::update_safety::lockfile::read_lockfile(path) {
+                            Ok(lockfile) => {
+                                baseline_sources.push(
+                                    crate::update_safety::report::loaded_lockfile_source(
+                                        path,
+                                        lockfile.identity_index.limitations.clone(),
+                                    ),
+                                );
+                                Some(lockfile)
+                            }
+                            Err(err) => {
+                                diagnostics.push(Diagnostic {
+                                    code: DiagnosticCode::new(
+                                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                                    ),
+                                    severity: update_error_severity,
+                                    message: err.to_string(),
+                                    source: Some(SourcePath::new(path.display().to_string())),
+                                    help: Some("fix or regenerate the identity lockfile".into()),
+                                });
+                                baseline_sources.push(
+                                    crate::update_safety::report::unreadable_lockfile_source(
+                                        path,
+                                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                                    ),
+                                );
+                                None
+                            }
+                        }
+                    } else if options.write_identity_lockfile {
+                        None
+                    } else {
+                        diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                        severity: update_error_severity,
+                        message: format!("identity lockfile {} does not exist", path.display()),
+                        source: Some(SourcePath::new(path.display().to_string())),
+                        help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
+                    });
+                        baseline_sources.push(
+                            crate::update_safety::report::unreadable_lockfile_source(
+                                path,
+                                "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                            ),
+                        );
+                        None
+                    }
+                } else {
+                    None
+                };
+                let lf_index = lockfile
+                    .as_ref()
+                    .map(|lockfile| lockfile.identity_index.clone());
+                let lockfile_index = lf_index.clone();
+
+                let previous_index = if let Some(path) = options.compare_to.as_ref() {
+                    match crate::update_safety::baseline::load_previous_apkg_identity_index(
+                        path,
+                        Some(&current_identity.index),
+                        lf_index.as_ref(),
+                    ) {
+                        Ok(index) => {
+                            baseline_sources.push(
+                                crate::update_safety::report::loaded_previous_apkg_source(
+                                    path,
+                                    index.limitations.clone(),
+                                ),
+                            );
+                            Some(index)
+                        }
+                        Err(err) => {
+                            diagnostics.push(Diagnostic {
+                                code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
+                                severity: update_error_severity,
+                                message: err.to_string(),
+                                source: Some(SourcePath::new(path.display().to_string())),
+                                help: Some(
+                                    "verify the previous APKG path and package contents".into(),
+                                ),
+                            });
+                            baseline_sources.push(
+                                crate::update_safety::report::unreadable_previous_apkg_source(
+                                    path,
+                                    "UPDATE.BASELINE_APKG_UNREADABLE",
+                                ),
+                            );
+                            None
+                        }
+                    }
+                } else {
+                    None
+                };
+
+                if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                    && options.compare_to.is_some()
+                    && previous_index.is_none()
+                {
+                    return Err(BuildError::new(
+                        BuildReport {
+                            artifact: None,
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: None,
+                            status: "invalid".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    ));
+                }
+
+                let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
+                    &current_identity.index,
+                    previous_index.as_ref(),
+                    lf_index.as_ref(),
+                )
+                .map_err(|err| {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
+                        severity: Severity::Error,
+                        message: err.to_string(),
+                        source: Some(SourcePath::new("update_safety.reconcile")),
+                        help: Some(
+                            "choose unique stable ids or remove conflicting lockfile entries"
+                                .into(),
+                        ),
+                    });
+                    BuildError::new(
+                        BuildReport {
+                            artifact: None,
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: None,
+                            status: "invalid".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    )
+                })?;
+                diagnostics.extend(reconcile.diagnostics.clone());
+                let baseline_for_merge = previous_index.as_ref().or(lf_index.as_ref());
+                if let Some(baseline_for_merge) = baseline_for_merge {
+                    let mut merge_diagnostics =
+                        crate::update_safety::merge_safety::compare_notetype_merge_safety(
+                            &current_identity.index,
+                            baseline_for_merge,
+                        );
+                    if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
+                        downgrade_update_errors_to_warnings(&mut merge_diagnostics);
+                    }
+                    diagnostics.extend(merge_diagnostics);
+                }
+                if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                    && diagnostics
+                        .iter()
+                        .any(|diagnostic| diagnostic.severity == Severity::Error)
+                {
+                    return Err(BuildError::new(
+                        BuildReport {
+                            artifact: None,
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: Some(
+                                crate::update_safety::report::summary_from_reconcile(
+                                    update_mode,
+                                    &reconcile,
+                                    &diagnostics,
+                                    baseline_sources.clone(),
+                                    false,
+                                ),
+                            ),
+                            status: "invalid".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    ));
+                }
+                let writer_guid_plan = writer_core::WriterGuidPlan {
+                    assignments: reconcile.assignments.clone(),
+                };
+                let summary = crate::update_safety::report::summary_from_reconcile(
+                    update_mode,
+                    &reconcile,
+                    &diagnostics,
+                    baseline_sources,
+                    false,
+                );
+                (reconcile, writer_guid_plan, summary, lockfile_index)
+            };
+
         let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
-        let package_build_result = crate::writer_build(
+        let package_build_result = writer_core::build_with_guid_plan(
             &normalized,
             &writer_policy,
             &build_context,
             &artifact_target,
+            Some(&writer_guid_plan),
         )
         .map_err(|err| {
             BuildError::new(
@@ -449,6 +824,23 @@ impl Project {
                     help: None,
                 }),
         );
+        if package_build_result.result_status != "success"
+            && !diagnostics
+                .iter()
+                .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("PROJECT.BUILD_STATUS_FAILED"),
+                severity: Severity::Error,
+                message: format!("build status was {}", package_build_result.result_status),
+                source: Some(SourcePath::new("project.build")),
+                help: Some("inspect writer diagnostics for the failed stage".into()),
+            });
+        }
+        let writer_failed = package_build_result.result_status != "success"
+            || diagnostics
+                .iter()
+                .any(|diagnostic| diagnostic.severity == Severity::Error);
 
         let mut artifact = None;
         if let Some(apkg_ref) = package_build_result.apkg_ref.as_deref() {
@@ -480,6 +872,99 @@ impl Project {
             artifact = Some(ApkgArtifact { path: final_path });
         }
 
+        if options.write_identity_lockfile && !writer_failed {
+            if let Some(path) = options.identity_lockfile.as_ref() {
+                let Some(project_stable_id) = self.stable_id.clone() else {
+                    diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISSING"),
+                        severity: Severity::Error,
+                        message:
+                            "project stable id is required before writing an identity lockfile"
+                                .into(),
+                        source: Some(SourcePath::new("project.stable_id")),
+                        help: Some(
+                            "set Project::stable_id(value) before write_identity_lockfile(true)"
+                                .into(),
+                        ),
+                    });
+                    return Err(BuildError::new(
+                        BuildReport {
+                            artifact: artifact.clone(),
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
+                            },
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: None,
+                            status: "error".into(),
+                        },
+                        BuildFailureCause::Diagnostics,
+                    ));
+                };
+                let selected_index = crate::update_safety::reconcile::selected_identity_index(
+                    &current_identity.index,
+                    &reconcile,
+                    lockfile_index.as_ref(),
+                );
+                let writer_policy_ref =
+                    writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
+                let lockfile = crate::update_safety::model::IdentityLockfile {
+                    schema_version: "identity-lockfile-v1".into(),
+                    project_stable_id,
+                    writer_policy_ref: writer_policy_ref.clone(),
+                    identity_index: selected_index,
+                    generated_by: crate::update_safety::model::GeneratedBy {
+                        tool: "anki-forge".into(),
+                        tool_version: env!("CARGO_PKG_VERSION").into(),
+                        writer_policy_ref,
+                    },
+                };
+                crate::update_safety::lockfile::write_lockfile_atomic(path, &lockfile).map_err(
+                    |err| {
+                        diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
+                            severity: Severity::Error,
+                            message: err.to_string(),
+                            source: Some(SourcePath::new(path.display().to_string())),
+                            help: Some("verify the lockfile path is writable".into()),
+                        });
+                        BuildError::new(
+                            BuildReport {
+                                artifact: artifact.clone(),
+                                counts: BuildCounts {
+                                    notes: normalized.notes.len(),
+                                    cards: count_phase1_cards_without_inspect(&normalized),
+                                    media: normalized.media_bindings.len(),
+                                },
+                                media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                                diagnostics: diagnostics.clone(),
+                                metrics: BuildMetrics {
+                                    duration: started.elapsed(),
+                                },
+                                inspect: None,
+                                update_safety: None,
+                                status: "error".into(),
+                            },
+                            BuildFailureCause::Io,
+                        )
+                    },
+                )?;
+                update_safety_summary_val = crate::update_safety::report::summary_from_reconcile(
+                    update_mode,
+                    &reconcile,
+                    &diagnostics,
+                    update_safety_summary_val.baseline_sources.clone(),
+                    true,
+                );
+            }
+        }
+
         let inspect = if options.inspect {
             artifact
                 .as_ref()
@@ -504,21 +989,8 @@ impl Project {
             media: normalized.media_bindings.len(),
         };
 
-        if package_build_result.result_status != "success"
-            && !diagnostics
-                .iter()
-                .any(|diagnostic| diagnostic.severity == Severity::Error)
-        {
-            diagnostics.push(Diagnostic {
-                code: DiagnosticCode::new("PROJECT.BUILD_STATUS_FAILED"),
-                severity: Severity::Error,
-                message: format!("build status was {}", package_build_result.result_status),
-                source: Some(SourcePath::new("project.build")),
-                help: Some("inspect writer diagnostics for the failed stage".into()),
-            });
-        }
-
         let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+        let update_safety = Some(update_safety_summary_val);
         let report = BuildReport {
             artifact,
             counts,
@@ -528,6 +1000,7 @@ impl Project {
                 duration: started.elapsed(),
             },
             inspect,
+            update_safety,
             status: package_build_result.result_status,
         };
 
@@ -623,15 +1096,8 @@ impl Project {
 
         let stable_id_counts = self.note_stable_id_counts();
         for (index, note) in self.notes.iter().enumerate() {
-            let note_id = match note.stable_id_ref() {
-                Some(stable_id)
-                    if !stable_id.trim().is_empty()
-                        && stable_id_counts.get(stable_id).copied() == Some(1) =>
-                {
-                    stable_id.to_string()
-                }
-                _ => format!("generated:{}", index + 1),
-            };
+            let note_id =
+                resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
             let deck_name = note
                 .deck_name()
                 .unwrap_or(default_deck.as_str())
@@ -681,6 +1147,20 @@ impl Project {
             *counts.entry(stable_id).or_default() += 1;
         }
         counts
+    }
+
+    fn resolved_note_identities(
+        &self,
+    ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+        let stable_id_counts = self.note_stable_id_counts();
+        self.notes
+            .iter()
+            .enumerate()
+            .map(|(index, note)| {
+                let identity = resolve_product_note_identity(self, note, index, &stable_id_counts);
+                (identity.stable_id.clone(), identity)
+            })
+            .collect()
     }
 
     fn implicit_stock_notetype_ids(&self) -> Vec<&'static str> {
@@ -1031,6 +1511,128 @@ fn duplicate_implicit_stock_notetype_message(
 
 fn display_name_suffix(name: Option<&str>) -> String {
     name.map(|name| format!(" ({name})")).unwrap_or_default()
+}
+
+#[derive(Debug, Serialize)]
+struct ProductIdentityComponents {
+    selected_fields: Vec<ProductIdentityFieldComponent>,
+}
+
+#[derive(Debug, Serialize)]
+struct ProductIdentityFieldComponent {
+    key: String,
+    name: String,
+    value: String,
+}
+
+fn resolve_product_note_identity(
+    project: &Project,
+    note: &crate::product::Note,
+    index: usize,
+    stable_id_counts: &BTreeMap<&str, usize>,
+) -> crate::update_safety::model::ResolvedNoteIdentity {
+    if let Some(stable_id) = note.stable_id_ref() {
+        if !stable_id.trim().is_empty() && stable_id_counts.get(stable_id).copied() == Some(1) {
+            return crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.to_string(),
+                current_guid_candidate: stable_id.to_string(),
+                recipe_id: "product.explicit-stable-id.v1".into(),
+                canonical_payload_hash: None,
+                provenance: "ExplicitStableId".into(),
+                used_override: false,
+            };
+        }
+    }
+
+    let note_type = project
+        .note_types
+        .iter()
+        .find(|note_type| note_type.id() == note.note_type_id());
+
+    if let (Some(note_type), Some(recipe)) = (note_type, note.identity_ref()) {
+        return derive_product_note_identity(
+            note_type,
+            note,
+            recipe,
+            "custom.note-override.fields.v1",
+            "InferredFromNoteFields",
+            true,
+        );
+    }
+
+    if let Some((note_type, recipe)) =
+        note_type.and_then(|note_type| note_type.identity_ref().map(|recipe| (note_type, recipe)))
+    {
+        return derive_product_note_identity(
+            note_type,
+            note,
+            recipe,
+            "custom.notetype.fields.v1",
+            "InferredFromNotetypeFields",
+            false,
+        );
+    }
+
+    let generated = format!("generated:{}", index + 1);
+    crate::update_safety::model::ResolvedNoteIdentity {
+        stable_id: generated.clone(),
+        current_guid_candidate: generated,
+        recipe_id: "product.generated-note-id.v1".into(),
+        canonical_payload_hash: None,
+        provenance: "unknown_baseline".into(),
+        used_override: false,
+    }
+}
+
+fn derive_product_note_identity(
+    note_type: &NoteType,
+    note: &crate::product::Note,
+    recipe: &crate::product::IdentityRecipe,
+    recipe_id: &str,
+    provenance: &str,
+    used_override: bool,
+) -> crate::update_safety::model::ResolvedNoteIdentity {
+    let rendered = note.rendered_fields();
+    let field_by_key = note_type
+        .fields()
+        .iter()
+        .map(|field| (field.key_ref().as_str(), field))
+        .collect::<BTreeMap<_, _>>();
+    let components = ProductIdentityComponents {
+        selected_fields: recipe
+            .field_keys()
+            .into_iter()
+            .map(|key| {
+                let key = key.as_str().to_string();
+                let field_name = field_by_key
+                    .get(key.as_str())
+                    .map(|field| field.name().to_string())
+                    .unwrap_or_else(|| key.clone());
+                let value = rendered
+                    .get(key.as_str())
+                    .or_else(|| rendered.get(field_name.as_str()))
+                    .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
+                    .unwrap_or_default();
+                ProductIdentityFieldComponent {
+                    key,
+                    name: field_name,
+                    value,
+                }
+            })
+            .collect(),
+    };
+    let (stable_id, canonical_payload) =
+        crate::deck::identity::hash_payload(recipe_id, "custom", note_type.id(), components)
+            .expect("product identity payload should serialize");
+    let canonical_payload_hash = format!("blake3:{}", blake3::hash(canonical_payload.as_bytes()));
+    crate::update_safety::model::ResolvedNoteIdentity {
+        stable_id: stable_id.clone(),
+        current_guid_candidate: stable_id,
+        recipe_id: recipe_id.into(),
+        canonical_payload_hash: Some(canonical_payload_hash),
+        provenance: provenance.into(),
+        used_override,
+    }
 }
 
 fn custom_note_fields_for_authoring(
@@ -1860,6 +2462,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
             duration: started.elapsed(),
         },
         inspect: None,
+        update_safety: None,
         status: "error".into(),
     }
 }
@@ -1869,6 +2472,23 @@ fn severity_from_level(level: &str) -> Severity {
         "error" => Severity::Error,
         "warning" => Severity::Warning,
         _ => Severity::Info,
+    }
+}
+
+fn update_safety_blocking_severity(mode: crate::update_safety::EffectiveMode) -> Severity {
+    match mode {
+        crate::update_safety::EffectiveMode::Strict => Severity::Error,
+        crate::update_safety::EffectiveMode::ReportOnly
+        | crate::update_safety::EffectiveMode::Disabled => Severity::Warning,
+    }
+}
+
+fn downgrade_update_errors_to_warnings(diagnostics: &mut [Diagnostic]) {
+    for diagnostic in diagnostics {
+        if diagnostic.code.as_str().starts_with("UPDATE.") && diagnostic.severity == Severity::Error
+        {
+            diagnostic.severity = Severity::Warning;
+        }
     }
 }
 

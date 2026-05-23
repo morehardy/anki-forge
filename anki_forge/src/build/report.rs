@@ -59,6 +59,29 @@ pub struct InspectSummary {
     pub media: usize,
 }
 
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct BaselineSourceSummary {
+    pub source_kind: String,
+    pub source_ref: String,
+    pub display_path: Option<String>,
+    pub status: String,
+    pub used_for_reconcile: bool,
+    pub limitations: Vec<String>,
+    pub diagnostic_codes: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct UpdateSafetySummary {
+    pub mode: String,
+    pub baseline_sources: Vec<BaselineSourceSummary>,
+    pub notes_preserved: usize,
+    pub notes_derived: usize,
+    pub notes_failed: usize,
+    pub baseline_conflicts: usize,
+    pub blocking_diagnostics: Vec<String>,
+    pub lockfile_written: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BuildReport {
     pub artifact: Option<ApkgArtifact>,
@@ -67,6 +90,7 @@ pub struct BuildReport {
     pub diagnostics: Vec<Diagnostic>,
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
+    pub update_safety: Option<UpdateSafetySummary>,
     pub status: String,
 }
 
@@ -111,6 +135,45 @@ impl BuildReport {
                 .into_iter()
                 .map(pretty_diagnostic),
         );
+
+        if let Some(update) = &self.update_safety {
+            lines.push("Update safety:".into());
+            lines.push(format!("  mode: {}", update.mode));
+            lines.push(format!("  notes_preserved: {}", update.notes_preserved));
+            lines.push(format!("  notes_derived: {}", update.notes_derived));
+            lines.push(format!("  notes_failed: {}", update.notes_failed));
+        }
+
+        let mut update_diagnostics =
+            std::collections::BTreeMap::<String, (usize, Vec<String>)>::new();
+        for diagnostic in &self.diagnostics {
+            let code = diagnostic.code.as_str();
+            if !code.starts_with("UPDATE.") {
+                continue;
+            }
+            let entry = update_diagnostics
+                .entry(code.to_string())
+                .or_insert_with(|| (0, Vec::new()));
+            entry.0 += 1;
+            if entry.1.len() < 3 {
+                if let Some(source) = diagnostic.source.as_ref() {
+                    entry.1.push(source.as_str().to_string());
+                }
+            }
+        }
+        if !update_diagnostics.is_empty() {
+            lines.push("Update diagnostics:".into());
+            for (code, (count, samples)) in update_diagnostics {
+                if samples.is_empty() {
+                    lines.push(format!("  {code}: count={count}"));
+                } else {
+                    lines.push(format!(
+                        "  {code}: count={count} samples={}",
+                        samples.join(", ")
+                    ));
+                }
+            }
+        }
 
         lines.join("\n")
     }

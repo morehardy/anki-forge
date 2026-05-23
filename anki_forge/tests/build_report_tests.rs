@@ -23,6 +23,7 @@ fn build_report_ensure_success_accepts_successful_artifact() {
             duration: Duration::from_millis(25),
         },
         inspect: None,
+        update_safety: None,
         status: "success".into(),
     };
 
@@ -54,6 +55,7 @@ fn build_report_ensure_success_rejects_error_diagnostic() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        update_safety: None,
         status: "invalid".into(),
     };
 
@@ -86,6 +88,7 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        update_safety: None,
         status: "invalid".into(),
     };
 
@@ -124,6 +127,7 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        update_safety: None,
         status: "success".into(),
     };
 
@@ -200,6 +204,7 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             duration: Duration::from_millis(5),
         },
         inspect: None,
+        update_safety: None,
         status: "invalid".into(),
     };
 
@@ -221,5 +226,48 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             "[warning MEDIA.Z_LAST] project.media[\"b.png\"]: zulu warning.\n",
             "[info PROJECT.INFO] informational note."
         )
+    );
+}
+
+#[test]
+fn build_report_can_carry_update_safety_summary() {
+    use anki_forge::build::{
+        BaselineSourceSummary, BuildCounts, BuildMetrics, BuildReport, MediaSummary,
+        UpdateSafetySummary,
+    };
+
+    let report = BuildReport {
+        artifact: None,
+        counts: BuildCounts::default(),
+        media: MediaSummary::default(),
+        diagnostics: vec![],
+        metrics: BuildMetrics::default(),
+        inspect: None,
+        update_safety: Some(UpdateSafetySummary {
+            mode: "strict".into(),
+            baseline_sources: vec![BaselineSourceSummary {
+                source_kind: "previous_apkg".into(),
+                source_ref: "baseline.previous_apkg.primary".into(),
+                display_path: Some("previous.apkg".into()),
+                status: "loaded".into(),
+                used_for_reconcile: true,
+                limitations: vec![],
+                diagnostic_codes: vec![],
+            }],
+            notes_preserved: 1,
+            notes_derived: 0,
+            notes_failed: 0,
+            baseline_conflicts: 0,
+            blocking_diagnostics: vec![],
+            lockfile_written: false,
+        }),
+        status: "success".into(),
+    };
+
+    let summary = report.update_safety.as_ref().expect("summary");
+    assert_eq!(summary.mode, "strict");
+    assert_eq!(
+        summary.baseline_sources[0].source_ref,
+        "baseline.previous_apkg.primary"
     );
 }

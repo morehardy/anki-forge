@@ -316,6 +316,23 @@ fn manifest_registers_note_identity_schema_and_semantics_assets() {
 }
 
 #[test]
+fn manifest_registers_update_safety_schema_and_semantics_assets() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+
+    for asset_key in [
+        "identity_index_schema",
+        "identity_lockfile_schema",
+        "update_safety_summary_schema",
+        "identity_update_safety_semantics",
+    ] {
+        assert!(
+            resolve_asset_path(&manifest, asset_key).is_ok(),
+            "manifest is missing asset key {asset_key}"
+        );
+    }
+}
+
+#[test]
 fn normalized_ir_schema_accepts_media_objects_bindings_and_reference_states() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
@@ -670,6 +687,31 @@ fn validate_media_contract_invariants(value: &Value) -> Result<(), String> {
         Ok(())
     } else {
         Err(errors.join("; "))
+    }
+}
+
+fn contracts_root() -> std::path::PathBuf {
+    contract_manifest_path()
+        .parent()
+        .expect("manifest path should have a parent")
+        .to_path_buf()
+}
+
+#[test]
+fn phase3_update_safety_schemas_are_valid_json_schema() {
+    let root = contracts_root();
+    for relative in [
+        "schema/identity-index.schema.json",
+        "schema/identity-lockfile.schema.json",
+        "schema/update-safety-summary.schema.json",
+    ] {
+        let path = root.join(relative);
+        let raw =
+            std::fs::read_to_string(&path).unwrap_or_else(|err| panic!("read {relative}: {err}"));
+        let json: serde_json::Value =
+            serde_json::from_str(&raw).unwrap_or_else(|err| panic!("parse {relative}: {err}"));
+        jsonschema::JSONSchema::compile(&json)
+            .unwrap_or_else(|err| panic!("compile {relative}: {err}"));
     }
 }
 

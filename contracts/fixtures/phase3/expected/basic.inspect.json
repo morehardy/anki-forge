@@ -1,5 +1,5 @@
 {
-  "artifact_fingerprint": "artifact:9278caad14d2ab18720e564f283ad84f6dde6391",
+  "artifact_fingerprint": "artifact:a6c11b181b370fc44468e539c437a424a2e2f67f",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
@@ -10,20 +10,26 @@
     "field_metadata": [],
     "fields": [
       {
+        "config_id": null,
         "evidence_refs": [
           "field:basic-main:Front"
         ],
         "name": "Front",
         "notetype_id": "basic-main",
-        "selector": "notetype[id='basic-main']::field[Front]"
+        "ord": 0,
+        "selector": "notetype[id='basic-main']::field[Front]",
+        "tag": null
       },
       {
+        "config_id": null,
         "evidence_refs": [
           "field:basic-main:Back"
         ],
         "name": "Back",
         "notetype_id": "basic-main",
-        "selector": "notetype[id='basic-main']::field[Back]"
+        "ord": 1,
+        "selector": "notetype[id='basic-main']::field[Back]",
+        "tag": null
       }
     ],
     "media": [],
@@ -39,6 +45,23 @@
         "notetype_count": 1,
         "selector": "counts",
         "template_count": 1
+      },
+      {
+        "canonical_payload_hash": null,
+        "current_guid_candidate": "note-1",
+        "evidence_refs": [
+          "note-data:note-1"
+        ],
+        "guid_derivation_version": "guid.raw-stable-id.v1",
+        "guid_source": "current_derivation",
+        "provenance": "ExplicitStableId",
+        "recipe_id": "product.explicit-or-normalized.v1",
+        "recovery_method": "current_resolution",
+        "schema_version": "identity-note-v1",
+        "selected_anki_guid": "note-1",
+        "selector": "note[guid='note-1']::anki_forge_identity",
+        "stable_id": "note-1",
+        "used_override": false
       }
     ],
     "notetypes": [
@@ -88,11 +111,13 @@
     "templates": [
       {
         "answer_format": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
+        "config_id": null,
         "evidence_refs": [
           "template:basic-main:Card 1"
         ],
         "name": "Card 1",
         "notetype_id": "basic-main",
+        "ord": 0,
         "question_format": "{{Front}}",
         "selector": "notetype[id='basic-main']::template[Card 1]"
       }

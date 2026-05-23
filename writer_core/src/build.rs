@@ -2,7 +2,7 @@ use anyhow::Result;
 use authoring_core::NormalizedIr;
 
 use crate::apkg::emit_apkg;
-use crate::model::{BuildContext, PackageBuildResult, WriterPolicy};
+use crate::model::{BuildContext, PackageBuildResult, WriterGuidPlan, WriterPolicy};
 use crate::staging::{
     error_result, error_result_with_domain, invalid_result, success_result, ErrorResultDetails,
     StagingPackage,
@@ -15,6 +15,22 @@ pub fn build(
     writer_policy: &WriterPolicy,
     build_context: &BuildContext,
     artifact_target: &BuildArtifactTarget,
+) -> Result<PackageBuildResult> {
+    build_with_guid_plan(
+        normalized_ir,
+        writer_policy,
+        build_context,
+        artifact_target,
+        None,
+    )
+}
+
+pub fn build_with_guid_plan(
+    normalized_ir: &NormalizedIr,
+    writer_policy: &WriterPolicy,
+    build_context: &BuildContext,
+    artifact_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
 ) -> Result<PackageBuildResult> {
     if !build_context.materialize_staging {
         return Ok(error_result(
@@ -70,9 +86,43 @@ pub fn build(
     };
 
     let apkg = if build_context.emit_apkg {
-        match emit_apkg(&materialized, artifact_target) {
+        match emit_apkg(&materialized, artifact_target, guid_plan) {
             Ok(apkg) => Some(apkg),
             Err(err) => {
+                if err
+                    .to_string()
+                    .starts_with("UPDATE.WRITER_GUID_PLAN_MISMATCH")
+                {
+                    return Ok(error_result_with_domain(
+                        writer_policy,
+                        build_context,
+                        ErrorResultDetails {
+                            code: "UPDATE.WRITER_GUID_PLAN_MISMATCH".into(),
+                            summary: err.to_string(),
+                            domain: "identity".into(),
+                            stage: "emit_apkg".into(),
+                            operation: "validate_guid_plan".into(),
+                            path: None,
+                        },
+                    ));
+                }
+                if err
+                    .to_string()
+                    .starts_with("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE")
+                {
+                    return Ok(error_result_with_domain(
+                        writer_policy,
+                        build_context,
+                        ErrorResultDetails {
+                            code: "UPDATE.NOTE_DATA_METADATA_UNMERGEABLE".into(),
+                            summary: err.to_string(),
+                            domain: "identity".into(),
+                            stage: "emit_apkg".into(),
+                            operation: "merge_note_data".into(),
+                            path: None,
+                        },
+                    ));
+                }
                 return Ok(apkg_error_result(
                     writer_policy,
                     build_context,

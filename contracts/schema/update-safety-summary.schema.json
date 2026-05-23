@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["mode", "baseline_sources", "notes_preserved", "notes_derived", "notes_failed", "baseline_conflicts", "blocking_diagnostics", "lockfile_written"],
+  "additionalProperties": false,
+  "properties": {
+    "mode": { "enum": ["disabled", "report_only", "strict"] },
+    "baseline_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_kind", "source_ref", "status", "used_for_reconcile", "limitations", "diagnostic_codes"],
+        "additionalProperties": false,
+        "properties": {
+          "source_kind": { "enum": ["previous_apkg", "lockfile"] },
+          "source_ref": { "type": "string", "minLength": 1 },
+          "display_path": { "type": "string" },
+          "status": { "enum": ["loaded", "partial", "unreadable", "ignored_disabled", "schema_unsupported"] },
+          "used_for_reconcile": { "type": "boolean" },
+          "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "diagnostic_codes": { "type": "array", "items": { "type": "string", "pattern": "^UPDATE\\.[A-Z0-9_]+$" } }
+        }
+      }
+    },
+    "notes_preserved": { "type": "integer", "minimum": 0 },
+    "notes_derived": { "type": "integer", "minimum": 0 },
+    "notes_failed": { "type": "integer", "minimum": 0 },
+    "baseline_conflicts": { "type": "integer", "minimum": 0 },
+    "blocking_diagnostics": { "type": "array", "items": { "type": "string", "pattern": "^UPDATE\\.[A-Z0-9_]+$" } },
+    "lockfile_written": { "type": "boolean" }
+  }
+}

@@ -109,3 +109,75 @@ cases:
   - id: note-identity-io-translation-different
     category: note-identity
     input: fixtures/note-identity/io-translation-different.case.json
+  - id: update-safety-current-index-generation
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/current-index-generation.case.yaml
+  - id: update-safety-lockfile-roundtrip
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/lockfile-roundtrip.case.yaml
+  - id: update-safety-previous-apkg-priority
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/previous-apkg-priority.case.yaml
+  - id: update-safety-guid-preservation
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/guid-preservation.case.yaml
+  - id: update-safety-new-note-guid-derivation
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/new-note-guid-derivation.case.yaml
+  - id: update-safety-baseline-identity-unrecoverable
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/baseline-identity-unrecoverable.case.yaml
+  - id: update-safety-field-config-id-preservation
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/field-config-id-preservation.case.yaml
+  - id: update-safety-template-config-id-preservation
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/template-config-id-preservation.case.yaml
+  - id: update-safety-template-ord-warning
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/template-ord-warning.case.yaml
+  - id: update-safety-absent-entry-reintroduced
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/absent-entry-reintroduced.case.yaml
+  - id: update-safety-normalized-note-id-mismatch
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/normalized-note-id-mismatch.case.yaml
+  - id: update-safety-field-ord-warning
+    category: phase3-update-safety
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/update-safety/field-ord-warning.case.yaml

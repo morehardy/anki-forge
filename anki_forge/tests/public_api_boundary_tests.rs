@@ -53,3 +53,25 @@ fn advanced_writer_reexports_are_namespaced() {
     let _policy: Option<anki_forge::writer::WriterPolicy> = None;
     let _target: Option<anki_forge::writer::BuildArtifactTarget> = None;
 }
+
+#[test]
+fn build_options_expose_update_safety_builder_methods() {
+    use anki_forge::build::{BuildOptions, UpdateSafetyMode};
+
+    let options = BuildOptions::new()
+        .compare_to("previous.apkg")
+        .identity_lockfile("anki-forge.lock.json")
+        .write_identity_lockfile(true)
+        .update_safety(UpdateSafetyMode::ReportOnly);
+
+    assert_eq!(
+        options.compare_to.as_deref(),
+        Some(std::path::Path::new("previous.apkg"))
+    );
+    assert_eq!(
+        options.identity_lockfile.as_deref(),
+        Some(std::path::Path::new("anki-forge.lock.json"))
+    );
+    assert!(options.write_identity_lockfile);
+    assert_eq!(options.update_safety, Some(UpdateSafetyMode::ReportOnly));
+}

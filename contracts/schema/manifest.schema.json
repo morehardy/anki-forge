@@ -75,7 +75,24 @@
         "identity_semantics",
         "note_stable_id_semantics",
         "merge_risk_semantics",
-        "canonical_serialization_semantics"
+        "canonical_serialization_semantics",
+        "package_build_result_schema",
+        "inspect_report_schema",
+        "diff_report_schema",
+        "writer_policy_schema",
+        "verification_policy_schema",
+        "build_context_schema",
+        "writer_policy",
+        "verification_policy",
+        "build_context_default",
+        "build_semantics",
+        "inspect_semantics",
+        "diff_semantics",
+        "golden_regression_semantics",
+        "identity_index_schema",
+        "identity_lockfile_schema",
+        "update_safety_summary_schema",
+        "identity_update_safety_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -248,6 +265,22 @@
           "minLength": 1
         },
         "golden_regression_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_index_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_lockfile_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "update_safety_summary_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_update_safety_semantics": {
           "type": "string",
           "minLength": 1
         }

@@ -1,0 +1,55 @@
+{
+  "schema_version": "identity-index-v1",
+  "source_kind": "current",
+  "source_ref": "current",
+  "writer_policy_ref": "writer-policy.default@1.0.0",
+  "project_stable_id": "spanish",
+  "notes": [
+    {
+      "stable_id": "es:hola",
+      "normalized_note_id": "es:hola",
+      "anki_guid": "es:hola",
+      "current_guid_candidate": "es:hola",
+      "guid_derivation_version": "guid.raw-stable-id.v1",
+      "note_type_id": "basic",
+      "recipe_id": "product.explicit-or-normalized.v1",
+      "provenance": "ExplicitStableId",
+      "used_override": false,
+      "entry_lifecycle": "active",
+      "source_path": "note[id='es:hola']",
+      "recovery_method": "current_resolution"
+    }
+  ],
+  "notetypes": [
+    {
+      "note_type_id": "basic",
+      "anki_model_id": null,
+      "name": "Basic",
+      "fields": [
+        {
+          "field_key": "Front",
+          "field_name": "Front",
+          "ord": 0,
+          "config_id": 1,
+          "tag": 0
+        },
+        {
+          "field_key": "Back",
+          "field_name": "Back",
+          "ord": 1,
+          "config_id": 2,
+          "tag": 1
+        }
+      ],
+      "templates": [
+        {
+          "template_key": "Card 1",
+          "template_name": "Card 1",
+          "ord": 0,
+          "config_id": 1
+        }
+      ]
+    }
+  ],
+  "limitations": []
+}
