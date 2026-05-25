@@ -795,3 +795,31 @@ fn writer_ready_normalized_ir_value() -> Value {
         ]
     })
 }
+
+#[test]
+fn phase4_build_report_schema_is_registered_in_manifest() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let schema_path =
+        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
+            .expect("build_report_schema should resolve");
+    assert!(
+        schema_path.ends_with("contracts/schema/build-report.schema.json"),
+        "unexpected schema path: {}",
+        schema_path.display()
+    );
+}
+
+#[test]
+fn phase4_build_report_schema_is_valid_json_schema() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let schema_path =
+        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
+            .expect("build_report_schema should resolve");
+    let raw = std::fs::read_to_string(schema_path).expect("read build report schema");
+    let schema: serde_json::Value = serde_json::from_str(&raw).expect("schema JSON");
+    jsonschema::JSONSchema::compile(&schema).expect("schema compiles");
+}
