@@ -3,6 +3,7 @@ use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use anyhow::{ensure, Context, Result};
 use authoring_core::{
@@ -33,6 +34,7 @@ const DOMAIN_TEMPLATES: &str = "templates";
 const DOMAIN_FIELDS: &str = "fields";
 const DOMAIN_MEDIA: &str = "media";
 const DOMAIN_REFERENCES: &str = "references";
+static TEMP_PATH_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, PartialEq, Message)]
 struct PackageMetadata {
@@ -1298,11 +1300,15 @@ fn derive_status(all_domains_present: bool, has_core_data: bool) -> String {
 }
 
 fn unique_temp_path(name: &str) -> PathBuf {
+    let counter = TEMP_PATH_COUNTER.fetch_add(1, Ordering::Relaxed);
     let nanos = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    std::env::temp_dir().join(format!("anki-forge-{name}-{}-{nanos}", std::process::id()))
+    std::env::temp_dir().join(format!(
+        "anki-forge-{name}-{}-{nanos}-{counter}",
+        std::process::id()
+    ))
 }
 
 #[derive(Debug, Deserialize)]
