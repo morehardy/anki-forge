@@ -752,6 +752,48 @@ fn product_build_command_uses_manifest_when_invoked_outside_repo() {
 }
 
 #[test]
+fn product_build_report_validates_against_build_report_schema() {
+    let temp = tempdir().expect("tempdir");
+    let manifest = contract_tools::contract_manifest_path();
+    let input = write_basic_product_document(temp.path());
+    let apkg = temp.path().join("deck.apkg");
+
+    let output = run_cli(&[
+        "product-build",
+        "--manifest",
+        manifest.to_str().unwrap(),
+        "--product-input",
+        input.to_str().unwrap(),
+        "--apkg-out",
+        apkg.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report JSON");
+    let manifest = contract_tools::manifest::load_manifest(&manifest).expect("manifest");
+    let schema_path =
+        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
+            .expect("schema path");
+    let schema_value: Value =
+        serde_json::from_str(&fs::read_to_string(schema_path).expect("schema")).unwrap();
+    let schema = jsonschema::JSONSchema::compile(&schema_value).expect("schema compiles");
+    let errors = schema
+        .validate(&report)
+        .err()
+        .map(|errors| errors.map(|error| error.to_string()).collect::<Vec<_>>())
+        .unwrap_or_default();
+    assert!(errors.is_empty(), "schema errors: {errors:#?}");
+}
+
+#[test]
 fn product_build_command_returns_invalid_exit_for_missing_baseline() {
     let temp = tempdir().expect("tempdir");
     let manifest = contract_tools::contract_manifest_path();
