@@ -1,6 +1,6 @@
 use anki_forge::build::{
-    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
-    ProjectNormalizeOptions,
+    BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
+    ProjectMediaPolicy, ProjectNormalizeOptions,
 };
 use anki_forge::prelude::*;
 use std::path::PathBuf;
@@ -368,7 +368,7 @@ fn project_build_uses_normalization_skips_for_non_packaged_media_refs() {
         .build(BuildOptions::new().inspect(false))
         .expect("skipped references should not fail writer build");
 
-    assert_eq!(report.status, "success");
+    assert_eq!(report.status, BuildStatus::Success);
     assert!(!report
         .diagnostic_codes()
         .iter()
@@ -1067,7 +1067,7 @@ fn project_build_accepts_custom_inputs_after_lowering_lands() {
         .expect("custom inputs build");
     let codes = report.diagnostic_codes();
 
-    assert_eq!(report.status, "success");
+    assert_eq!(report.status, BuildStatus::Success);
     assert_eq!(report.counts.notes, 1);
     assert_eq!(report.counts.cards, 1);
     assert!(!codes

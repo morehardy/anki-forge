@@ -2,7 +2,8 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use anki_forge::build::{
-    ApkgArtifact, BuildCounts, BuildFailureCause, BuildMetrics, BuildReport, MediaSummary,
+    ApkgArtifact, BuildCounts, BuildFailureCause, BuildMetrics, BuildPolicyResult,
+    BuildPolicyStatus, BuildReport, BuildStatus, ComparisonStatus, MediaSummary, RiskLevel,
 };
 use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 
@@ -24,7 +25,11 @@ fn build_report_ensure_success_accepts_successful_artifact() {
         },
         inspect: None,
         update_safety: None,
-        status: "success".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
     };
 
     report.ensure_success().expect("successful report");
@@ -56,7 +61,11 @@ fn build_report_ensure_success_rejects_error_diagnostic() {
         },
         inspect: None,
         update_safety: None,
-        status: "invalid".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Invalid,
     };
 
     let err = report.ensure_success().expect_err("report should fail");
@@ -89,7 +98,11 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
         },
         inspect: None,
         update_safety: None,
-        status: "invalid".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Invalid,
     };
 
     let err = report.ensure_success().expect_err("report should fail");
@@ -128,7 +141,11 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
         },
         inspect: None,
         update_safety: None,
-        status: "success".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
     };
 
     report
@@ -205,7 +222,11 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
         },
         inspect: None,
         update_safety: None,
-        status: "invalid".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Invalid,
     };
 
     assert_eq!(
@@ -232,8 +253,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
 #[test]
 fn build_report_can_carry_update_safety_summary() {
     use anki_forge::build::{
-        BaselineSourceSummary, BuildCounts, BuildMetrics, BuildReport, MediaSummary,
-        UpdateSafetySummary,
+        BaselineSourceSummary, BuildCounts, BuildMetrics, BuildPolicyResult, BuildReport,
+        BuildStatus, ComparisonStatus, MediaSummary, UpdateSafetySummary,
     };
 
     let report = BuildReport {
@@ -261,7 +282,11 @@ fn build_report_can_carry_update_safety_summary() {
             blocking_diagnostics: vec![],
             lockfile_written: false,
         }),
-        status: "success".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
     };
 
     let summary = report.update_safety.as_ref().expect("summary");
@@ -269,5 +294,66 @@ fn build_report_can_carry_update_safety_summary() {
     assert_eq!(
         summary.baseline_sources[0].source_ref,
         "baseline.previous_apkg.primary"
+    );
+}
+
+#[test]
+fn risk_level_order_matches_fail_on_thresholds() {
+    assert!(RiskLevel::Critical >= RiskLevel::High);
+    assert!(RiskLevel::High >= RiskLevel::Medium);
+    assert!(RiskLevel::Medium >= RiskLevel::Low);
+    assert!(RiskLevel::Low >= RiskLevel::Info);
+}
+
+#[test]
+fn policy_blocks_at_or_above_threshold() {
+    let result = BuildPolicyResult::evaluate(
+        Some(RiskLevel::High),
+        Some(RiskLevel::High),
+        vec!["RISK.BASELINE_UNAVAILABLE".to_string()],
+    );
+
+    assert_eq!(result.status, BuildPolicyStatus::Blocked);
+    assert_eq!(result.threshold, Some(RiskLevel::High));
+    assert_eq!(result.highest_risk, Some(RiskLevel::High));
+    assert_eq!(
+        result.blocking_findings,
+        vec!["RISK.BASELINE_UNAVAILABLE".to_string()]
+    );
+}
+
+#[test]
+fn policy_passes_below_threshold() {
+    let result = BuildPolicyResult::evaluate(
+        Some(RiskLevel::High),
+        Some(RiskLevel::Medium),
+        vec!["RISK.FIELD_REMOVED_OR_RENAMED".to_string()],
+    );
+
+    assert_eq!(result.status, BuildPolicyStatus::Passed);
+    assert_eq!(result.blocking_findings, Vec::<String>::new());
+}
+
+#[test]
+fn build_status_precedence_prefers_error_over_invalid_blocked_success() {
+    let status = BuildStatus::highest([
+        BuildStatus::Success,
+        BuildStatus::Blocked,
+        BuildStatus::Invalid,
+        BuildStatus::Error,
+    ]);
+
+    assert_eq!(status, BuildStatus::Error);
+}
+
+#[test]
+fn comparison_status_serializes_as_snake_case() {
+    assert_eq!(
+        serde_json::to_string(&ComparisonStatus::NotRequested).unwrap(),
+        "\"not_requested\""
+    );
+    assert_eq!(
+        serde_json::to_string(&ComparisonStatus::Unavailable).unwrap(),
+        "\"unavailable\""
     );
 }

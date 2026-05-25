@@ -75,3 +75,20 @@ fn build_options_expose_update_safety_builder_methods() {
     assert!(options.write_identity_lockfile);
     assert_eq!(options.update_safety, Some(UpdateSafetyMode::ReportOnly));
 }
+
+#[test]
+fn build_api_exports_phase4_report_types() {
+    use anki_forge::build::{
+        BuildPolicyResult, BuildPolicyStatus, BuildStatus, ComparisonStatus, RiskLevel,
+    };
+
+    let _status = BuildStatus::Success;
+    let _comparison = ComparisonStatus::NotRequested;
+    let _level = RiskLevel::High;
+    let _policy = BuildPolicyResult {
+        status: BuildPolicyStatus::NotEvaluated,
+        threshold: None,
+        highest_risk: None,
+        blocking_findings: Vec::new(),
+    };
+}

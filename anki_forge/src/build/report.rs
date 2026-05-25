@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 use std::path::PathBuf;
 use std::time::Duration;
 
+use crate::build::{BuildPolicyResult, BuildPolicyStatus, BuildStatus, ComparisonStatus};
 use crate::diagnostics::{Diagnostic, Severity};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -91,15 +92,21 @@ pub struct BuildReport {
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
     pub update_safety: Option<UpdateSafetySummary>,
-    pub status: String,
+    pub comparison: ComparisonStatus,
+    pub diff: Option<crate::diff::BuildDiffSummary>,
+    pub risk: Option<crate::risk::ImportRiskReport>,
+    pub policy: BuildPolicyResult,
+    pub status: BuildStatus,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BuildFailureCause {
     MissingArtifact,
     Diagnostics,
-    BuildStatus,
+    PolicyBlocked,
+    Invalid,
     Io,
+    Internal,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -197,11 +204,21 @@ impl BuildReport {
             ));
         }
 
-        if self.status != "success" {
+        if matches!(self.policy.status, BuildPolicyStatus::Blocked) {
             return Err(BuildError::new(
                 self.clone(),
-                BuildFailureCause::BuildStatus,
+                BuildFailureCause::PolicyBlocked,
             ));
+        }
+
+        if !self.status.is_success() {
+            let cause = match self.status {
+                BuildStatus::Invalid => BuildFailureCause::Invalid,
+                BuildStatus::Error => BuildFailureCause::Internal,
+                BuildStatus::Blocked => BuildFailureCause::PolicyBlocked,
+                BuildStatus::Success => BuildFailureCause::Internal,
+            };
+            return Err(BuildError::new(self.clone(), cause));
         }
 
         Ok(())

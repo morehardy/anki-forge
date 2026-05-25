@@ -17,7 +17,8 @@ use counts::{
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildReport, InspectSummary, MediaSummary, ProjectNormalizeOptions,
+    BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, InspectSummary, MediaSummary,
+    ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::lowering::ProductSourceMap;
@@ -371,7 +372,11 @@ impl Project {
                         },
                         inspect: None,
                         update_safety: None,
-                        status: "invalid".into(),
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: None,
+                        policy: BuildPolicyResult::default(),
+                        status: BuildStatus::Invalid,
                     },
                     BuildFailureCause::Diagnostics,
                 ));
@@ -400,7 +405,11 @@ impl Project {
                     },
                     inspect: None,
                     update_safety: None,
-                    status: "invalid".into(),
+                    comparison: ComparisonStatus::NotRequested,
+                    diff: None,
+                    risk: None,
+                    policy: BuildPolicyResult::default(),
+                    status: BuildStatus::Invalid,
                 },
                 BuildFailureCause::Diagnostics,
             ));
@@ -452,7 +461,11 @@ impl Project {
                         },
                         inspect: None,
                         update_safety: None,
-                        status: "invalid".into(),
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: None,
+                        policy: BuildPolicyResult::default(),
+                        status: BuildStatus::Invalid,
                     },
                     BuildFailureCause::Diagnostics,
                 ));
@@ -512,7 +525,11 @@ impl Project {
                     },
                     inspect: None,
                     update_safety: None,
-                    status: "invalid".into(),
+                    comparison: ComparisonStatus::NotRequested,
+                    diff: None,
+                    risk: None,
+                    policy: BuildPolicyResult::default(),
+                    status: BuildStatus::Invalid,
                 },
                 BuildFailureCause::Diagnostics,
             ));
@@ -559,7 +576,11 @@ impl Project {
                             },
                             inspect: None,
                             update_safety: None,
-                            status: "invalid".into(),
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Invalid,
                         },
                         BuildFailureCause::Diagnostics,
                     )
@@ -694,7 +715,11 @@ impl Project {
                             },
                             inspect: None,
                             update_safety: None,
-                            status: "invalid".into(),
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Invalid,
                         },
                         BuildFailureCause::Diagnostics,
                     ));
@@ -731,7 +756,11 @@ impl Project {
                             },
                             inspect: None,
                             update_safety: None,
-                            status: "invalid".into(),
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Invalid,
                         },
                         BuildFailureCause::Diagnostics,
                     )
@@ -777,7 +806,11 @@ impl Project {
                                     false,
                                 ),
                             ),
-                            status: "invalid".into(),
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Invalid,
                         },
                         BuildFailureCause::Diagnostics,
                     ));
@@ -807,7 +840,7 @@ impl Project {
         .map_err(|err| {
             BuildError::new(
                 failure_report(started, "PROJECT.WRITER_FAILED", err.to_string()),
-                BuildFailureCause::BuildStatus,
+                BuildFailureCause::Internal,
             )
         })?;
 
@@ -902,7 +935,11 @@ impl Project {
                             },
                             inspect: None,
                             update_safety: None,
-                            status: "error".into(),
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Error,
                         },
                         BuildFailureCause::Diagnostics,
                     ));
@@ -949,7 +986,11 @@ impl Project {
                                 },
                                 inspect: None,
                                 update_safety: None,
-                                status: "error".into(),
+                                comparison: ComparisonStatus::NotRequested,
+                                diff: None,
+                                risk: None,
+                                policy: BuildPolicyResult::default(),
+                                status: BuildStatus::Error,
                             },
                             BuildFailureCause::Io,
                         )
@@ -1001,7 +1042,11 @@ impl Project {
             },
             inspect,
             update_safety,
-            status: package_build_result.result_status,
+            comparison: ComparisonStatus::NotRequested,
+            diff: None,
+            risk: None,
+            policy: BuildPolicyResult::default(),
+            status: build_status_from_writer_result(&package_build_result.result_status),
         };
 
         report.ensure_success()?;
@@ -2463,7 +2508,20 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
         },
         inspect: None,
         update_safety: None,
-        status: "error".into(),
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Error,
+    }
+}
+
+fn build_status_from_writer_result(status: &str) -> BuildStatus {
+    match status {
+        "success" => BuildStatus::Success,
+        "invalid" => BuildStatus::Invalid,
+        "error" => BuildStatus::Error,
+        _ => BuildStatus::Error,
     }
 }
 
@@ -2596,6 +2654,23 @@ mod tests {
                 ),
                 ("PHASE5A.ADVISORY", Severity::Warning),
             ]
+        );
+    }
+
+    #[test]
+    fn writer_result_status_maps_to_typed_build_status() {
+        assert_eq!(
+            build_status_from_writer_result("success"),
+            BuildStatus::Success
+        );
+        assert_eq!(
+            build_status_from_writer_result("invalid"),
+            BuildStatus::Invalid
+        );
+        assert_eq!(build_status_from_writer_result("error"), BuildStatus::Error);
+        assert_eq!(
+            build_status_from_writer_result("unexpected"),
+            BuildStatus::Error
         );
     }
 
