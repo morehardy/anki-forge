@@ -92,3 +92,18 @@ fn build_api_exports_phase4_report_types() {
         blocking_findings: Vec::new(),
     };
 }
+
+#[test]
+fn build_options_expose_phase4_builder_methods() {
+    use anki_forge::build::{BuildOptions, RiskLevel};
+
+    let options = BuildOptions::new()
+        .fail_on(RiskLevel::High)
+        .report_json("build-report.json");
+
+    assert_eq!(options.fail_on, Some(RiskLevel::High));
+    assert_eq!(
+        options.report_json.as_deref(),
+        Some(std::path::Path::new("build-report.json"))
+    );
+}

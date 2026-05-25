@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
+
 use crate::build::RiskLevel;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ImportRiskFinding {
     pub code: String,
     pub level: RiskLevel,
@@ -11,7 +13,7 @@ pub struct ImportRiskFinding {
     pub suggested_action: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ImportRiskReport {
     pub highest_level: Option<RiskLevel>,
     pub findings: Vec<ImportRiskFinding>,

@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+use crate::build::RiskLevel;
+
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum ProjectMediaPolicy {
     #[default]
@@ -52,6 +54,8 @@ pub struct BuildOptions {
     pub artifacts_dir: Option<PathBuf>,
     pub normalize_options: Option<ProjectNormalizeOptions>,
     pub inspect: bool,
+    pub fail_on: Option<RiskLevel>,
+    pub report_json: Option<PathBuf>,
     pub compare_to: Option<PathBuf>,
     pub identity_lockfile: Option<PathBuf>,
     pub write_identity_lockfile: bool,
@@ -65,6 +69,8 @@ impl Default for BuildOptions {
             artifacts_dir: None,
             normalize_options: None,
             inspect: true,
+            fail_on: None,
+            report_json: None,
             compare_to: None,
             identity_lockfile: None,
             write_identity_lockfile: false,
@@ -95,6 +101,16 @@ impl BuildOptions {
 
     pub fn inspect(mut self, inspect: bool) -> Self {
         self.inspect = inspect;
+        self
+    }
+
+    pub fn fail_on(mut self, level: RiskLevel) -> Self {
+        self.fail_on = Some(level);
+        self
+    }
+
+    pub fn report_json(mut self, path: impl Into<PathBuf>) -> Self {
+        self.report_json = Some(path.into());
         self
     }
 

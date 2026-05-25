@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, PartialEq, Eq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BuildDiffSummary {
     pub artifact_diff: Option<ArtifactDiffSummary>,
     pub semantic_changes: Vec<SemanticDiffChange>,
@@ -6,7 +8,7 @@ pub struct BuildDiffSummary {
     pub limitations: Vec<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DiffSummaryCounts {
     pub added: usize,
     pub removed: usize,
@@ -15,13 +17,13 @@ pub struct DiffSummaryCounts {
     pub uncompared_domains: usize,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ArtifactDiffSummary {
     pub changes: Vec<ArtifactDiffChange>,
     pub limitations: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ArtifactDiffChange {
     pub category: String,
     pub domain: String,
@@ -31,7 +33,8 @@ pub struct ArtifactDiffChange {
     pub evidence_refs: Vec<EvidenceRef>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SemanticDiffCategory {
     Notetype,
     Field,
@@ -42,7 +45,8 @@ pub enum SemanticDiffCategory {
     Baseline,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SemanticDiffChangeKind {
     Added,
     Removed,
@@ -51,7 +55,7 @@ pub enum SemanticDiffChangeKind {
     Unavailable,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SemanticDiffChange {
     pub category: SemanticDiffCategory,
     pub selector: String,
@@ -61,7 +65,8 @@ pub struct SemanticDiffChange {
     pub source: Option<crate::diagnostics::SourcePath>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum EvidenceRefKind {
     Diagnostic,
     DiffChange,
@@ -70,7 +75,7 @@ pub enum EvidenceRefKind {
     Oracle,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct EvidenceRef {
     pub kind: EvidenceRefKind,
     pub ref_id: String,

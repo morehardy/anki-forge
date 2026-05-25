@@ -1,8 +1,10 @@
+pub mod json_report;
 pub mod options;
 pub mod policy;
 pub mod report;
 pub mod status;
 
+pub use json_report::{write_report_json_atomic, BuildReportJson, SerializableBuildReport};
 pub use options::{
     BuildOptions, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectMediaPolicyError, ProjectNormalizeOptions, UpdateSafetyMode,

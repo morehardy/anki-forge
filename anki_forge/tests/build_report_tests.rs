@@ -2,8 +2,9 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use anki_forge::build::{
-    ApkgArtifact, BuildCounts, BuildFailureCause, BuildMetrics, BuildPolicyResult,
-    BuildPolicyStatus, BuildReport, BuildStatus, ComparisonStatus, MediaSummary, RiskLevel,
+    write_report_json_atomic, ApkgArtifact, BuildCounts, BuildFailureCause, BuildMetrics,
+    BuildPolicyResult, BuildPolicyStatus, BuildReport, BuildReportJson, BuildStatus,
+    ComparisonStatus, MediaSummary, RiskLevel, SerializableBuildReport,
 };
 use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 
@@ -356,4 +357,86 @@ fn comparison_status_serializes_as_snake_case() {
         serde_json::to_string(&ComparisonStatus::Unavailable).unwrap(),
         "\"unavailable\""
     );
+}
+
+fn successful_report_fixture() -> BuildReport {
+    BuildReport {
+        artifact: Some(ApkgArtifact {
+            path: PathBuf::from("out/success.apkg"),
+        }),
+        counts: BuildCounts {
+            notes: 1,
+            cards: 1,
+            media: 0,
+        },
+        media: MediaSummary::default(),
+        diagnostics: Vec::new(),
+        metrics: BuildMetrics {
+            duration: std::time::Duration::from_millis(1),
+        },
+        inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
+    }
+}
+
+#[test]
+fn build_report_projection_has_phase4_contract_header() {
+    let report = successful_report_fixture();
+    let projected = BuildReportJson::from_report(&report);
+    let projected_from_trait = report.to_report_json();
+
+    assert_eq!(projected.kind, "anki-forge-build-report");
+    assert_eq!(projected_from_trait.kind, "anki-forge-build-report");
+    assert_eq!(projected.schema_version, "phase4-build-report-v1");
+    assert!(!projected.tool_version.is_empty());
+    assert_eq!(projected.status, BuildStatus::Success);
+    assert_eq!(projected.comparison, ComparisonStatus::NotRequested);
+}
+
+#[test]
+fn build_report_projection_serializes_duration_as_milliseconds() {
+    let mut report = successful_report_fixture();
+    report.metrics = BuildMetrics {
+        duration: std::time::Duration::from_millis(42),
+    };
+
+    let json = serde_json::to_value(BuildReportJson::from_report(&report)).unwrap();
+    assert_eq!(json["metrics"]["duration_ms"], 42);
+}
+
+#[test]
+fn build_report_projection_serializes_diagnostics_as_strings() {
+    let mut report = successful_report_fixture();
+    report.diagnostics.push(Diagnostic {
+        code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
+        severity: Severity::Error,
+        message: "normalization failed".to_string(),
+        source: Some(SourcePath::new("project")),
+        help: Some("inspect the Product input".to_string()),
+    });
+
+    let json = serde_json::to_value(BuildReportJson::from_report(&report)).unwrap();
+    assert_eq!(json["diagnostics"][0]["code"], "PROJECT.NORMALIZE_FAILED");
+    assert_eq!(json["diagnostics"][0]["severity"], "error");
+    assert_eq!(json["diagnostics"][0]["source"], "project");
+}
+
+#[test]
+fn write_report_json_atomic_preserves_unrelated_tmp_sibling() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let report_path = temp.path().join("build-report.json");
+    let unrelated_tmp = temp.path().join("build-report.tmp");
+    std::fs::write(&unrelated_tmp, "keep me").expect("write tmp sibling");
+
+    write_report_json_atomic(&report_path, &successful_report_fixture()).expect("write report");
+
+    assert_eq!(std::fs::read_to_string(&unrelated_tmp).unwrap(), "keep me");
+    let written: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(report_path).unwrap()).unwrap();
+    assert_eq!(written["kind"], "anki-forge-build-report");
 }
