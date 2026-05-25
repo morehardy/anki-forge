@@ -361,43 +361,9 @@ impl Project {
                         MediaSummary::from_normalized_ir(normalized.as_ref(), &diagnostics)
                     })
                     .unwrap_or_default();
-                return Err(BuildError::new(
-                    BuildReport {
-                        artifact: None,
-                        counts,
-                        media,
-                        diagnostics,
-                        metrics: BuildMetrics {
-                            duration: started.elapsed(),
-                        },
-                        inspect: None,
-                        update_safety: None,
-                        comparison: ComparisonStatus::NotRequested,
-                        diff: None,
-                        risk: None,
-                        policy: BuildPolicyResult::default(),
-                        status: BuildStatus::Invalid,
-                    },
-                    BuildFailureCause::Diagnostics,
-                ));
-            }
-        };
-        let normalized = normalized_output.normalized_ir;
-        diagnostics.extend(normalized_output.diagnostics);
-
-        if diagnostics
-            .iter()
-            .any(|diagnostic| diagnostic.severity == Severity::Error)
-        {
-            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
-            return Err(BuildError::new(
-                BuildReport {
+                let report = BuildReport {
                     artifact: None,
-                    counts: BuildCounts {
-                        notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(&normalized),
-                        media: normalized.media_bindings.len(),
-                    },
+                    counts,
                     media,
                     diagnostics,
                     metrics: BuildMetrics {
@@ -410,23 +376,56 @@ impl Project {
                     risk: None,
                     policy: BuildPolicyResult::default(),
                     status: BuildStatus::Invalid,
+                };
+                return return_report_error(&options, report, BuildFailureCause::Diagnostics);
+            }
+        };
+        let normalized = normalized_output.normalized_ir;
+        diagnostics.extend(normalized_output.diagnostics);
+
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+            let report = BuildReport {
+                artifact: None,
+                counts: BuildCounts {
+                    notes: normalized.notes.len(),
+                    cards: count_phase1_cards_without_inspect(&normalized),
+                    media: normalized.media_bindings.len(),
                 },
-                BuildFailureCause::Diagnostics,
-            ));
+                media,
+                diagnostics,
+                metrics: BuildMetrics {
+                    duration: started.elapsed(),
+                },
+                inspect: None,
+                update_safety: None,
+                comparison: ComparisonStatus::NotRequested,
+                diff: None,
+                risk: None,
+                policy: BuildPolicyResult::default(),
+                status: BuildStatus::Invalid,
+            };
+            return return_report_error(&options, report, BuildFailureCause::Diagnostics);
         }
 
         let current_dir = std::env::current_dir().map_err(|err| {
-            BuildError::new(
-                failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string()),
-                BuildFailureCause::Io,
-            )
+            let report = failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string());
+            match maybe_write_report_json(&options, report) {
+                Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                Err(err) => err,
+            }
         })?;
         let (_runtime, writer_policy, build_context) =
             crate::runtime::load_default_writer_stack(current_dir).map_err(|err| {
-                BuildError::new(
-                    failure_report(started, "PROJECT.RUNTIME_DEFAULTS_FAILED", err.to_string()),
-                    BuildFailureCause::Io,
-                )
+                let report =
+                    failure_report(started, "PROJECT.RUNTIME_DEFAULTS_FAILED", err.to_string());
+                match maybe_write_report_json(&options, report) {
+                    Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                    Err(err) => err,
+                }
             })?;
         let stable_ref_prefix = self
             .stable_id
@@ -446,29 +445,27 @@ impl Project {
                     help: None,
                 });
                 let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
-                return Err(BuildError::new(
-                    BuildReport {
-                        artifact: None,
-                        counts: BuildCounts {
-                            notes: normalized.notes.len(),
-                            cards: count_phase1_cards_without_inspect(&normalized),
-                            media: normalized.media_bindings.len(),
-                        },
-                        media,
-                        diagnostics,
-                        metrics: BuildMetrics {
-                            duration: started.elapsed(),
-                        },
-                        inspect: None,
-                        update_safety: None,
-                        comparison: ComparisonStatus::NotRequested,
-                        diff: None,
-                        risk: None,
-                        policy: BuildPolicyResult::default(),
-                        status: BuildStatus::Invalid,
+                let report = BuildReport {
+                    artifact: None,
+                    counts: BuildCounts {
+                        notes: normalized.notes.len(),
+                        cards: count_phase1_cards_without_inspect(&normalized),
+                        media: normalized.media_bindings.len(),
                     },
-                    BuildFailureCause::Diagnostics,
-                ));
+                    media,
+                    diagnostics,
+                    metrics: BuildMetrics {
+                        duration: started.elapsed(),
+                    },
+                    inspect: None,
+                    update_safety: None,
+                    comparison: ComparisonStatus::NotRequested,
+                    diff: None,
+                    risk: None,
+                    policy: BuildPolicyResult::default(),
+                    status: BuildStatus::Invalid,
+                };
+                return return_report_error(&options, report, BuildFailureCause::Diagnostics);
             }
         };
 
@@ -510,29 +507,27 @@ impl Project {
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
             let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
-            return Err(BuildError::new(
-                BuildReport {
-                    artifact: None,
-                    counts: BuildCounts {
-                        notes: normalized.notes.len(),
-                        cards: count_phase1_cards_without_inspect(&normalized),
-                        media: normalized.media_bindings.len(),
-                    },
-                    media,
-                    diagnostics,
-                    metrics: BuildMetrics {
-                        duration: started.elapsed(),
-                    },
-                    inspect: None,
-                    update_safety: None,
-                    comparison: ComparisonStatus::NotRequested,
-                    diff: None,
-                    risk: None,
-                    policy: BuildPolicyResult::default(),
-                    status: BuildStatus::Invalid,
+            let report = BuildReport {
+                artifact: None,
+                counts: BuildCounts {
+                    notes: normalized.notes.len(),
+                    cards: count_phase1_cards_without_inspect(&normalized),
+                    media: normalized.media_bindings.len(),
                 },
-                BuildFailureCause::Diagnostics,
-            ));
+                media,
+                diagnostics,
+                metrics: BuildMetrics {
+                    duration: started.elapsed(),
+                },
+                inspect: None,
+                update_safety: None,
+                comparison: ComparisonStatus::NotRequested,
+                diff: None,
+                risk: None,
+                policy: BuildPolicyResult::default(),
+                status: BuildStatus::Invalid,
+            };
+            return return_report_error(&options, report, BuildFailureCause::Diagnostics);
         }
 
         let disabled_update_safety =
@@ -561,29 +556,30 @@ impl Project {
                     &current_identity.index,
                 )
                 .map_err(|_err| {
-                    BuildError::new(
-                        BuildReport {
-                            artifact: None,
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            update_safety: None,
-                            comparison: ComparisonStatus::NotRequested,
-                            diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Invalid,
+                    let report = BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
                         },
-                        BuildFailureCause::Diagnostics,
-                    )
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: None,
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: None,
+                        policy: BuildPolicyResult::default(),
+                        status: BuildStatus::Invalid,
+                    };
+                    match maybe_write_report_json(&options, report) {
+                        Ok(report) => BuildError::new(report, BuildFailureCause::Diagnostics),
+                        Err(err) => err,
+                    }
                 })?;
                 let writer_guid_plan = writer_core::WriterGuidPlan {
                     assignments: reconcile.assignments.clone(),
@@ -719,32 +715,35 @@ impl Project {
                                 &current_identity.index,
                             )
                             .map_err(|_err| {
-                                BuildError::new(
-                                    BuildReport {
-                                        artifact: None,
-                                        counts: BuildCounts {
-                                            notes: normalized.notes.len(),
-                                            cards: count_phase1_cards_without_inspect(&normalized),
-                                            media: normalized.media_bindings.len(),
-                                        },
-                                        media: MediaSummary::from_normalized_ir(
-                                            &normalized,
-                                            &diagnostics,
-                                        ),
-                                        diagnostics: diagnostics.clone(),
-                                        metrics: BuildMetrics {
-                                            duration: started.elapsed(),
-                                        },
-                                        inspect: None,
-                                        update_safety: None,
-                                        comparison: ComparisonStatus::NotRequested,
-                                        diff: None,
-                                        risk: None,
-                                        policy: BuildPolicyResult::default(),
-                                        status: BuildStatus::Invalid,
+                                let report = BuildReport {
+                                    artifact: None,
+                                    counts: BuildCounts {
+                                        notes: normalized.notes.len(),
+                                        cards: count_phase1_cards_without_inspect(&normalized),
+                                        media: normalized.media_bindings.len(),
                                     },
-                                    BuildFailureCause::Diagnostics,
-                                )
+                                    media: MediaSummary::from_normalized_ir(
+                                        &normalized,
+                                        &diagnostics,
+                                    ),
+                                    diagnostics: diagnostics.clone(),
+                                    metrics: BuildMetrics {
+                                        duration: started.elapsed(),
+                                    },
+                                    inspect: None,
+                                    update_safety: None,
+                                    comparison: ComparisonStatus::NotRequested,
+                                    diff: None,
+                                    risk: None,
+                                    policy: BuildPolicyResult::default(),
+                                    status: BuildStatus::Invalid,
+                                };
+                                match maybe_write_report_json(&options, report) {
+                                    Ok(report) => {
+                                        BuildError::new(report, BuildFailureCause::Diagnostics)
+                                    }
+                                    Err(err) => err,
+                                }
                             })?,
                             &diagnostics,
                             baseline_sources.clone(),
@@ -758,29 +757,27 @@ impl Project {
                         policy_status(&policy),
                         diagnostics_status(&diagnostics),
                     ]);
-                    return Err(BuildError::new(
-                        BuildReport {
-                            artifact: None,
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            update_safety: Some(update_safety_summary),
-                            comparison: ComparisonStatus::Unavailable,
-                            diff: None,
-                            risk: Some(risk),
-                            policy,
-                            status,
+                    let report = BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
                         },
-                        BuildFailureCause::Diagnostics,
-                    ));
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: Some(update_safety_summary),
+                        comparison: ComparisonStatus::Unavailable,
+                        diff: None,
+                        risk: Some(risk),
+                        policy,
+                        status,
+                    };
+                    return return_report_error(&options, report, BuildFailureCause::Diagnostics);
                 }
 
                 let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
@@ -799,29 +796,30 @@ impl Project {
                                 .into(),
                         ),
                     });
-                    BuildError::new(
-                        BuildReport {
-                            artifact: None,
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            update_safety: None,
-                            comparison: ComparisonStatus::NotRequested,
-                            diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Invalid,
+                    let report = BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
                         },
-                        BuildFailureCause::Diagnostics,
-                    )
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: None,
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: None,
+                        policy: BuildPolicyResult::default(),
+                        status: BuildStatus::Invalid,
+                    };
+                    match maybe_write_report_json(&options, report) {
+                        Ok(report) => BuildError::new(report, BuildFailureCause::Diagnostics),
+                        Err(err) => err,
+                    }
                 })?;
                 diagnostics.extend(reconcile.diagnostics.clone());
                 let baseline_for_merge = previous_index.as_ref().or(lf_index.as_ref());
@@ -863,29 +861,27 @@ impl Project {
                         policy_status(&policy),
                         diagnostics_status(&diagnostics),
                     ]);
-                    return Err(BuildError::new(
-                        BuildReport {
-                            artifact: None,
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            update_safety: Some(update_safety_summary),
-                            comparison: ComparisonStatus::NotRequested,
-                            diff: None,
-                            risk: Some(risk),
-                            policy,
-                            status,
+                    let report = BuildReport {
+                        artifact: None,
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
                         },
-                        BuildFailureCause::Diagnostics,
-                    ));
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: Some(update_safety_summary),
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: Some(risk),
+                        policy,
+                        status,
+                    };
+                    return return_report_error(&options, report, BuildFailureCause::Diagnostics);
                 }
                 let writer_guid_plan = writer_core::WriterGuidPlan {
                     assignments: reconcile.assignments.clone(),
@@ -910,10 +906,11 @@ impl Project {
             Some(&writer_guid_plan),
         )
         .map_err(|err| {
-            BuildError::new(
-                failure_report(started, "PROJECT.WRITER_FAILED", err.to_string()),
-                BuildFailureCause::Internal,
-            )
+            let report = failure_report(started, "PROJECT.WRITER_FAILED", err.to_string());
+            match maybe_write_report_json(&options, report) {
+                Ok(report) => BuildError::new(report, BuildFailureCause::Internal),
+                Err(err) => err,
+            }
         })?;
 
         diagnostics.extend(
@@ -950,25 +947,31 @@ impl Project {
         let mut artifact = None;
         if let Some(apkg_ref) = package_build_result.apkg_ref.as_deref() {
             let built_path = artifact_path_from_ref(&artifact_target, apkg_ref).map_err(|err| {
-                BuildError::new(
-                    failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", err.to_string()),
-                    BuildFailureCause::Io,
-                )
+                let report =
+                    failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", err.to_string());
+                match maybe_write_report_json(&options, report) {
+                    Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                    Err(err) => err,
+                }
             })?;
             let final_path = if let Some(output) = options.output.as_ref() {
                 if let Some(parent) = output.parent() {
                     std::fs::create_dir_all(parent).map_err(|err| {
-                        BuildError::new(
-                            failure_report(started, "PROJECT.OUTPUT_DIR_FAILED", err.to_string()),
-                            BuildFailureCause::Io,
-                        )
+                        let report =
+                            failure_report(started, "PROJECT.OUTPUT_DIR_FAILED", err.to_string());
+                        match maybe_write_report_json(&options, report) {
+                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                            Err(err) => err,
+                        }
                     })?;
                 }
                 std::fs::copy(&built_path, output).map_err(|err| {
-                    BuildError::new(
-                        failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string()),
-                        BuildFailureCause::Io,
-                    )
+                    let report =
+                        failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string());
+                    match maybe_write_report_json(&options, report) {
+                        Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                        Err(err) => err,
+                    }
                 })?;
                 output.clone()
             } else {
@@ -992,29 +995,27 @@ impl Project {
                                 .into(),
                         ),
                     });
-                    return Err(BuildError::new(
-                        BuildReport {
-                            artifact: artifact.clone(),
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            update_safety: None,
-                            comparison: ComparisonStatus::NotRequested,
-                            diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Error,
+                    let report = BuildReport {
+                        artifact: artifact.clone(),
+                        counts: BuildCounts {
+                            notes: normalized.notes.len(),
+                            cards: count_phase1_cards_without_inspect(&normalized),
+                            media: normalized.media_bindings.len(),
                         },
-                        BuildFailureCause::Diagnostics,
-                    ));
+                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        diagnostics: diagnostics.clone(),
+                        metrics: BuildMetrics {
+                            duration: started.elapsed(),
+                        },
+                        inspect: None,
+                        update_safety: None,
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        risk: None,
+                        policy: BuildPolicyResult::default(),
+                        status: BuildStatus::Error,
+                    };
+                    return return_report_error(&options, report, BuildFailureCause::Diagnostics);
                 };
                 let selected_index = crate::update_safety::reconcile::selected_identity_index(
                     &current_identity.index,
@@ -1043,29 +1044,30 @@ impl Project {
                             source: Some(SourcePath::new(path.display().to_string())),
                             help: Some("verify the lockfile path is writable".into()),
                         });
-                        BuildError::new(
-                            BuildReport {
-                                artifact: artifact.clone(),
-                                counts: BuildCounts {
-                                    notes: normalized.notes.len(),
-                                    cards: count_phase1_cards_without_inspect(&normalized),
-                                    media: normalized.media_bindings.len(),
-                                },
-                                media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
-                                diagnostics: diagnostics.clone(),
-                                metrics: BuildMetrics {
-                                    duration: started.elapsed(),
-                                },
-                                inspect: None,
-                                update_safety: None,
-                                comparison: ComparisonStatus::NotRequested,
-                                diff: None,
-                                risk: None,
-                                policy: BuildPolicyResult::default(),
-                                status: BuildStatus::Error,
+                        let report = BuildReport {
+                            artifact: artifact.clone(),
+                            counts: BuildCounts {
+                                notes: normalized.notes.len(),
+                                cards: count_phase1_cards_without_inspect(&normalized),
+                                media: normalized.media_bindings.len(),
                             },
-                            BuildFailureCause::Io,
-                        )
+                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            diagnostics: diagnostics.clone(),
+                            metrics: BuildMetrics {
+                                duration: started.elapsed(),
+                            },
+                            inspect: None,
+                            update_safety: None,
+                            comparison: ComparisonStatus::NotRequested,
+                            diff: None,
+                            risk: None,
+                            policy: BuildPolicyResult::default(),
+                            status: BuildStatus::Error,
+                        };
+                        match maybe_write_report_json(&options, report) {
+                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                            Err(err) => err,
+                        }
                     },
                 )?;
                 update_safety_summary_val = crate::update_safety::report::summary_from_reconcile(
@@ -1161,6 +1163,7 @@ impl Project {
             status,
         };
 
+        let report = maybe_write_report_json(&options, report)?;
         report.ensure_success()?;
         artifact_workspace.persist_if_requested();
         Ok(report)
@@ -2368,10 +2371,12 @@ impl ArtifactWorkspace {
             .prefix("anki-forge-project-build-")
             .tempdir()
             .map_err(|err| {
-                BuildError::new(
-                    failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", err.to_string()),
-                    BuildFailureCause::Io,
-                )
+                let report =
+                    failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", err.to_string());
+                match maybe_write_report_json(options, report) {
+                    Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                    Err(err) => err,
+                }
             })?;
         let path = temp_dir.path().to_path_buf();
 
@@ -2625,6 +2630,40 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
         risk: None,
         policy: BuildPolicyResult::default(),
         status: BuildStatus::Error,
+    }
+}
+
+fn maybe_write_report_json(
+    options: &BuildOptions,
+    mut report: BuildReport,
+) -> Result<BuildReport, BuildError> {
+    let Some(path) = options.report_json.as_ref() else {
+        return Ok(report);
+    };
+
+    if let Err(err) = crate::build::write_report_json_atomic(path, &report) {
+        report.diagnostics.push(Diagnostic {
+            code: DiagnosticCode::new("REPORT.JSON_WRITE_FAILED"),
+            severity: Severity::Error,
+            message: err.to_string(),
+            source: Some(SourcePath::new(path.display().to_string())),
+            help: Some("verify that the report_json path is writable".to_string()),
+        });
+        report.status = BuildStatus::Error;
+        return Err(BuildError::new(report, BuildFailureCause::Io));
+    }
+
+    Ok(report)
+}
+
+fn return_report_error(
+    options: &BuildOptions,
+    report: BuildReport,
+    cause: BuildFailureCause,
+) -> Result<BuildReport, BuildError> {
+    match maybe_write_report_json(options, report) {
+        Ok(report) => Err(BuildError::new(report, cause)),
+        Err(err) => Err(err),
     }
 }
 

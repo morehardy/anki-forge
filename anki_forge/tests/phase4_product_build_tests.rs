@@ -130,6 +130,80 @@ fn product_build_strict_update_diagnostics_attach_risk_and_policy() {
         .contains(&"RISK.NOTETYPE_CONFIG_ID_DRIFT".into()));
 }
 
+#[test]
+fn product_build_report_json_writes_success_report() {
+    let temp = tempdir().expect("tempdir");
+    let apkg = temp.path().join("deck.apkg");
+    let report_json = temp.path().join("build-report.json");
+
+    let report = basic_project("front")
+        .build(BuildOptions::new().output(&apkg).report_json(&report_json))
+        .expect("build succeeds");
+
+    assert_eq!(report.status, BuildStatus::Success);
+    let written: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&report_json).expect("read report"))
+            .expect("report JSON");
+    assert_eq!(written["kind"], "anki-forge-build-report");
+    assert_eq!(written["status"], "success");
+}
+
+#[test]
+fn product_build_report_json_writes_invalid_baseline_report() {
+    let temp = tempdir().expect("tempdir");
+    let apkg = temp.path().join("deck.apkg");
+    let report_json = temp.path().join("build-report.json");
+    let missing = temp.path().join("missing.apkg");
+
+    let err = basic_project("front")
+        .build(
+            BuildOptions::new()
+                .output(&apkg)
+                .compare_to(&missing)
+                .fail_on(RiskLevel::High)
+                .report_json(&report_json),
+        )
+        .expect_err("invalid baseline should fail");
+
+    assert_eq!(err.report.status, BuildStatus::Invalid);
+    let written: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&report_json).expect("read report"))
+            .expect("report JSON");
+    assert_eq!(written["status"], "invalid");
+    assert_eq!(written["comparison"], "unavailable");
+    assert_eq!(written["policy"]["status"], "blocked");
+}
+
+#[test]
+fn product_build_report_json_write_failure_returns_io_error_report() {
+    let temp = tempdir().expect("tempdir");
+    let apkg = temp.path().join("deck.apkg");
+    let report_json = temp.path().join("report-target");
+    std::fs::create_dir(&report_json).expect("create directory at report target");
+
+    let err = basic_project("front")
+        .build(BuildOptions::new().output(&apkg).report_json(&report_json))
+        .expect_err("directory report_json target should fail");
+
+    assert_eq!(err.cause, BuildFailureCause::Io);
+    assert_eq!(err.report.status, BuildStatus::Error);
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"REPORT.JSON_WRITE_FAILED".to_string()));
+    let diagnostic = err
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "REPORT.JSON_WRITE_FAILED")
+        .expect("json write diagnostic");
+    let expected_source = report_json.display().to_string();
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some(expected_source.as_str())
+    );
+}
+
 fn vocab_notetype_with_expression_key(expression_key: &str) -> NoteType {
     NoteType::custom("jp-vocab")
         .field(Field::new("Expression").key(expression_key))
