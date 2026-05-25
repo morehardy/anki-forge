@@ -1,21 +1,7 @@
-use serde::{Deserialize, Serialize};
+pub mod model;
+pub mod policy;
+pub mod rules;
 
-use crate::build::RiskLevel;
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct ImportRiskFinding {
-    pub code: String,
-    pub level: RiskLevel,
-    pub category: String,
-    pub message: String,
-    pub source: Option<crate::diagnostics::SourcePath>,
-    pub evidence_refs: Vec<crate::diff::EvidenceRef>,
-    pub suggested_action: Option<String>,
-}
-
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
-pub struct ImportRiskReport {
-    pub highest_level: Option<RiskLevel>,
-    pub findings: Vec<ImportRiskFinding>,
-    pub limitations: Vec<String>,
-}
+pub use model::{ImportRiskFinding, ImportRiskReport};
+pub use policy::policy_from_risk_report;
+pub use rules::classify_import_risk;

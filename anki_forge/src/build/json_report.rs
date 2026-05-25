@@ -1,12 +1,11 @@
 use anyhow::Context;
-use serde::ser::SerializeStruct;
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 use std::io::Write;
 use std::path::Path;
 
 use crate::build::{
-    ApkgArtifact, BaselineSourceSummary, BuildCounts, BuildMetrics, BuildPolicyResult, BuildReport,
-    BuildStatus, ComparisonStatus, InspectSummary, MediaSummary, UpdateSafetySummary,
+    ApkgArtifact, BuildCounts, BuildMetrics, BuildPolicyResult, BuildReport, BuildStatus,
+    ComparisonStatus, InspectSummary, MediaSummary, UpdateSafetySummary,
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -152,41 +151,6 @@ impl From<&InspectSummary> for InspectSummaryJson {
             fields: value.fields,
             media: value.media,
         }
-    }
-}
-
-impl Serialize for BaselineSourceSummary {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let mut state = serializer.serialize_struct("BaselineSourceSummary", 7)?;
-        state.serialize_field("source_kind", &self.source_kind)?;
-        state.serialize_field("source_ref", &self.source_ref)?;
-        state.serialize_field("display_path", &self.display_path)?;
-        state.serialize_field("status", &self.status)?;
-        state.serialize_field("used_for_reconcile", &self.used_for_reconcile)?;
-        state.serialize_field("limitations", &self.limitations)?;
-        state.serialize_field("diagnostic_codes", &self.diagnostic_codes)?;
-        state.end()
-    }
-}
-
-impl Serialize for UpdateSafetySummary {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let mut state = serializer.serialize_struct("UpdateSafetySummary", 8)?;
-        state.serialize_field("mode", &self.mode)?;
-        state.serialize_field("baseline_sources", &self.baseline_sources)?;
-        state.serialize_field("notes_preserved", &self.notes_preserved)?;
-        state.serialize_field("notes_derived", &self.notes_derived)?;
-        state.serialize_field("notes_failed", &self.notes_failed)?;
-        state.serialize_field("baseline_conflicts", &self.baseline_conflicts)?;
-        state.serialize_field("blocking_diagnostics", &self.blocking_diagnostics)?;
-        state.serialize_field("lockfile_written", &self.lockfile_written)?;
-        state.end()
     }
 }
 

@@ -1,4 +1,8 @@
+pub mod summary;
+
 use serde::{Deserialize, Serialize};
+
+pub use summary::summarize_writer_diff;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BuildDiffSummary {
@@ -79,4 +83,37 @@ pub enum EvidenceRefKind {
 pub struct EvidenceRef {
     pub kind: EvidenceRefKind,
     pub ref_id: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProjectDiffReport {
+    pub status: crate::build::BuildStatus,
+    pub comparison: crate::build::ComparisonStatus,
+    pub diagnostics: Vec<crate::diagnostics::Diagnostic>,
+    pub current_inspect: Option<crate::build::InspectSummary>,
+    pub previous_inspect: Option<crate::build::InspectSummary>,
+    pub update_safety: Option<crate::build::UpdateSafetySummary>,
+    pub diff: Option<BuildDiffSummary>,
+    pub risk: Option<crate::risk::ImportRiskReport>,
+    pub metrics: ComparisonMetrics,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ComparisonMetrics {
+    pub duration_ms: u128,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProjectDiffError {
+    pub report: Box<ProjectDiffReport>,
+    pub cause: crate::build::BuildFailureCause,
+}
+
+impl ProjectDiffError {
+    pub fn new(report: ProjectDiffReport, cause: crate::build::BuildFailureCause) -> Self {
+        Self {
+            report: Box::new(report),
+            cause,
+        }
+    }
 }

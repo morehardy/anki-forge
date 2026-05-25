@@ -2,6 +2,8 @@ use std::collections::BTreeSet;
 use std::path::PathBuf;
 use std::time::Duration;
 
+use serde::{Deserialize, Serialize};
+
 use crate::build::{BuildPolicyResult, BuildPolicyStatus, BuildStatus, ComparisonStatus};
 use crate::diagnostics::{Diagnostic, Severity};
 
@@ -45,7 +47,7 @@ impl Default for BuildMetrics {
 ///
 /// These fields are derived from the writer inspection layer and are intended
 /// for reporting, not as a stable product-domain schema.
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InspectSummary {
     pub source_kind: String,
     /// Writer-layer observation status passed through from the inspect report.
@@ -60,7 +62,7 @@ pub struct InspectSummary {
     pub media: usize,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BaselineSourceSummary {
     pub source_kind: String,
     pub source_ref: String,
@@ -71,7 +73,7 @@ pub struct BaselineSourceSummary {
     pub diagnostic_codes: Vec<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UpdateSafetySummary {
     pub mode: String,
     pub baseline_sources: Vec<BaselineSourceSummary>,
