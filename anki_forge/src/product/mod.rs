@@ -1,5 +1,6 @@
 pub mod assets;
 pub mod builders;
+pub mod comparison;
 pub mod content;
 pub mod diagnostics;
 pub mod helpers;
