@@ -169,10 +169,14 @@ fn compare_template(
     if current.ord != baseline.ord {
         diagnostics.push(warning(
             "UPDATE.TEMPLATE_ORD_CHANGED",
-            notetype_id,
+            &template_source(notetype_id, &current.template_name),
             "template ord changed",
         ));
     }
+}
+
+fn template_source(notetype_id: &str, template_name: &str) -> String {
+    format!("notetype[id='{notetype_id}']::template[{template_name}]")
 }
 
 fn error(code: &str, source: &str, message: &str) -> Diagnostic {

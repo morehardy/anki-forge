@@ -1,5 +1,5 @@
 use anki_forge::build::{
-    BuildFailureCause, BuildOptions, BuildStatus, ComparisonStatus, RiskLevel,
+    BuildFailureCause, BuildOptions, BuildPolicyStatus, BuildStatus, ComparisonStatus, RiskLevel,
 };
 use anki_forge::prelude::*;
 use tempfile::tempdir;
@@ -247,6 +247,120 @@ fn project_diff_against_apkg_unreadable_baseline_returns_invalid_report() {
         .findings
         .iter()
         .any(|finding| finding.code == "RISK.BASELINE_UNAVAILABLE"));
+}
+
+fn custom_template_project(template_names: &[&str]) -> Project {
+    let mut note_type = NoteType::custom("jp-vocab")
+        .name("Japanese Vocabulary")
+        .field(Field::new("Expression").key("expr").identity())
+        .field(Field::new("Meaning").key("meaning"))
+        .identity(IdentityRecipe::fields(["expr"]));
+
+    for template_name in template_names {
+        note_type = note_type.template(
+            Template::new(*template_name)
+                .key(template_name.to_ascii_lowercase().replace(' ', "-"))
+                .front("{{Expression}}")
+                .back("{{Meaning}}")
+                .generate_when(GenerationRule::all(["expr"])),
+        );
+    }
+
+    let mut project = Project::new("Phase4 Template Oracle")
+        .stable_id("phase4-template-oracle")
+        .default_deck("Phase4");
+    project.add_notetype(note_type).expect("add notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp-vocab:taberu")
+                .text("Expression", "食べる")
+                .text("Meaning", "to eat"),
+        )
+        .expect("add note");
+    project
+}
+
+#[test]
+fn oracle_template_removed_emits_critical_risk_with_evidence() {
+    let temp = tempdir().expect("tempdir");
+    let previous = temp.path().join("previous.apkg");
+    let current = temp.path().join("current.apkg");
+
+    custom_template_project(&["Recognition", "Production"])
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+
+    let err = custom_template_project(&["Recognition"])
+        .build(
+            BuildOptions::new()
+                .output(&current)
+                .compare_to(&previous)
+                .fail_on(RiskLevel::Critical),
+        )
+        .expect_err("template removal should block at critical");
+
+    assert_eq!(err.report.policy.status, BuildPolicyStatus::Blocked);
+    let finding = err
+        .report
+        .risk
+        .as_ref()
+        .expect("risk")
+        .findings
+        .iter()
+        .find(|finding| finding.code == "RISK.TEMPLATE_REMOVED")
+        .expect("template removed finding");
+    assert_eq!(finding.level, RiskLevel::Critical);
+    assert!(
+        finding
+            .evidence_refs
+            .iter()
+            .any(|evidence| evidence.ref_id.contains("semantic")),
+        "finding should link to semantic diff evidence"
+    );
+}
+
+#[test]
+fn oracle_template_reorder_emits_high_risk_with_evidence() {
+    let temp = tempdir().expect("tempdir");
+    let previous = temp.path().join("previous.apkg");
+    let current = temp.path().join("current.apkg");
+
+    custom_template_project(&["Recognition", "Production"])
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+
+    let report = custom_template_project(&["Production", "Recognition"])
+        .build(
+            BuildOptions::new()
+                .output(&current)
+                .compare_to(&previous)
+                .fail_on(RiskLevel::Critical),
+        )
+        .expect("template reorder is high risk but below critical threshold");
+
+    assert_eq!(report.policy.status, BuildPolicyStatus::Passed);
+    let finding = report
+        .risk
+        .as_ref()
+        .expect("risk")
+        .findings
+        .iter()
+        .find(|finding| {
+            finding.code == "RISK.TEMPLATE_REORDER"
+                && finding.evidence_refs.iter().any(|evidence| {
+                    evidence.ref_id.contains("semantic")
+                        || evidence.ref_id.contains("diff:templates")
+                })
+        })
+        .expect("template reorder diff-backed finding");
+    assert_eq!(finding.level, RiskLevel::High);
+    assert!(
+        finding.evidence_refs.iter().any(|evidence| {
+            evidence.ref_id.contains("semantic") || evidence.ref_id.contains("diff:templates")
+        }),
+        "finding should link to semantic or template diff evidence"
+    );
 }
 
 fn vocab_notetype_with_expression_key(expression_key: &str) -> NoteType {

@@ -193,8 +193,15 @@ fn notetype_config_id_drift_preserves_diagnostic_source() {
 }
 
 #[test]
-fn template_ord_changed_stays_config_id_drift_for_task_5() {
-    let diagnostics = vec![diagnostic("UPDATE.TEMPLATE_ORD_CHANGED", Severity::Warning)];
+fn template_ord_changed_preserves_source_and_only_skips_own_config_id_drift() {
+    let diagnostics = vec![
+        diagnostic_with_source(
+            "UPDATE.TEMPLATE_ORD_CHANGED",
+            Severity::Warning,
+            "project.notetypes[0].templates[production].ord",
+        ),
+        diagnostic("UPDATE.FIELD_MERGE_ID_CHANGED", Severity::Warning),
+    ];
     let report = classify_import_risk(RiskInput {
         diagnostics: &diagnostics,
         comparison: ComparisonStatus::Complete,
@@ -204,12 +211,193 @@ fn template_ord_changed_stays_config_id_drift_for_task_5() {
         update_safety: None,
     });
 
+    let finding = report
+        .findings
+        .iter()
+        .find(|finding| finding.code == "RISK.TEMPLATE_REORDER")
+        .expect("template reorder finding");
+    assert_eq!(finding.level, RiskLevel::High);
+    assert_eq!(
+        finding.source.as_ref().map(SourcePath::as_str),
+        Some("project.notetypes[0].templates[production].ord")
+    );
+    assert_eq!(
+        report
+            .findings
+            .iter()
+            .filter(|finding| finding.code == "RISK.NOTETYPE_CONFIG_ID_DRIFT")
+            .count(),
+        1
+    );
     assert!(report
         .findings
         .iter()
         .any(|finding| finding.code == "RISK.NOTETYPE_CONFIG_ID_DRIFT"));
-    assert!(!report
+}
+
+#[test]
+fn template_ord_changed_merges_semantic_evidence_without_duplicate_reorder_findings() {
+    let diagnostics = vec![diagnostic_with_source(
+        "UPDATE.TEMPLATE_ORD_CHANGED",
+        Severity::Warning,
+        "selector:1",
+    )];
+    let diff = diff_with_semantic_change("RISK.TEMPLATE_REORDER", SemanticDiffCategory::Template);
+
+    let report = classify_import_risk(RiskInput {
+        diagnostics: &diagnostics,
+        comparison: ComparisonStatus::Complete,
+        diff: Some(&diff),
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+    });
+
+    let reorder_findings = report
         .findings
         .iter()
-        .any(|finding| finding.code == "RISK.TEMPLATE_REORDER"));
+        .filter(|finding| finding.code == "RISK.TEMPLATE_REORDER")
+        .collect::<Vec<_>>();
+    assert_eq!(reorder_findings.len(), 1);
+    let finding = reorder_findings[0];
+    assert!(finding
+        .evidence_refs
+        .iter()
+        .any(|evidence| evidence.kind == EvidenceRefKind::Diagnostic));
+    assert!(finding
+        .evidence_refs
+        .iter()
+        .any(|evidence| evidence.ref_id.starts_with("semantic:")));
+    assert_eq!(
+        finding.source.as_ref().map(SourcePath::as_str),
+        Some("selector:1")
+    );
+}
+
+#[test]
+fn template_ord_changed_keeps_unmatched_semantic_reorder_separate() {
+    let diagnostics = vec![diagnostic_with_source(
+        "UPDATE.TEMPLATE_ORD_CHANGED",
+        Severity::Warning,
+        "notetype[id='jp-vocab']::template[Production]",
+    )];
+    let diff = diff_with_semantic_change("RISK.TEMPLATE_REORDER", SemanticDiffCategory::Template);
+
+    let report = classify_import_risk(RiskInput {
+        diagnostics: &diagnostics,
+        comparison: ComparisonStatus::Complete,
+        diff: Some(&diff),
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+    });
+
+    assert_eq!(
+        report
+            .findings
+            .iter()
+            .filter(|finding| finding.code == "RISK.TEMPLATE_REORDER")
+            .count(),
+        2
+    );
+}
+
+#[test]
+fn template_ord_changed_does_not_attach_unrelated_template_artifact_diff() {
+    let diagnostics = vec![diagnostic_with_source(
+        "UPDATE.TEMPLATE_ORD_CHANGED",
+        Severity::Warning,
+        "notetype[id='jp-vocab']::template[Production]",
+    )];
+    let diff = BuildDiffSummary {
+        artifact_diff: Some(ArtifactDiffSummary {
+            changes: vec![ArtifactDiffChange {
+                category: "modified".to_string(),
+                domain: "templates".to_string(),
+                severity: "medium".to_string(),
+                selector: "notetype[id='jp-vocab']::template[Recognition]".to_string(),
+                message: "template front changed".to_string(),
+                evidence_refs: Vec::new(),
+            }],
+            limitations: Vec::new(),
+        }),
+        semantic_changes: Vec::new(),
+        summary_counts: DiffSummaryCounts {
+            added: 0,
+            removed: 0,
+            modified: 1,
+            reordered: 0,
+            uncompared_domains: 0,
+        },
+        limitations: Vec::new(),
+    };
+
+    let report = classify_import_risk(RiskInput {
+        diagnostics: &diagnostics,
+        comparison: ComparisonStatus::Complete,
+        diff: Some(&diff),
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+    });
+
+    let finding = report
+        .findings
+        .iter()
+        .find(|finding| finding.code == "RISK.TEMPLATE_REORDER")
+        .expect("template reorder finding");
+    assert!(!finding
+        .evidence_refs
+        .iter()
+        .any(|evidence| evidence.ref_id.starts_with("diff:templates")));
+}
+
+#[test]
+fn template_ord_changed_attaches_matching_template_artifact_diff() {
+    let diagnostics = vec![diagnostic_with_source(
+        "UPDATE.TEMPLATE_ORD_CHANGED",
+        Severity::Warning,
+        "notetype[id='jp-vocab']::template[Production]",
+    )];
+    let diff = BuildDiffSummary {
+        artifact_diff: Some(ArtifactDiffSummary {
+            changes: vec![ArtifactDiffChange {
+                category: "modified".to_string(),
+                domain: "templates".to_string(),
+                severity: "medium".to_string(),
+                selector: "notetype[id='jp-vocab']::template[Production]".to_string(),
+                message: "template changed".to_string(),
+                evidence_refs: Vec::new(),
+            }],
+            limitations: Vec::new(),
+        }),
+        semantic_changes: Vec::new(),
+        summary_counts: DiffSummaryCounts {
+            added: 0,
+            removed: 0,
+            modified: 1,
+            reordered: 0,
+            uncompared_domains: 0,
+        },
+        limitations: Vec::new(),
+    };
+
+    let report = classify_import_risk(RiskInput {
+        diagnostics: &diagnostics,
+        comparison: ComparisonStatus::Complete,
+        diff: Some(&diff),
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+    });
+
+    let finding = report
+        .findings
+        .iter()
+        .find(|finding| finding.code == "RISK.TEMPLATE_REORDER")
+        .expect("template reorder finding");
+    assert!(finding
+        .evidence_refs
+        .iter()
+        .any(|evidence| evidence.ref_id.starts_with("diff:templates")));
 }

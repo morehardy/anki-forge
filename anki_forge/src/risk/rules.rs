@@ -73,12 +73,33 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
             findings.push(item);
         }
 
+        if code == "UPDATE.TEMPLATE_ORD_CHANGED" {
+            let mut evidence_refs = vec![EvidenceRef {
+                kind: EvidenceRefKind::Diagnostic,
+                ref_id: format!("diagnostic:{index}:{code}"),
+            }];
+            evidence_refs.extend(template_reorder_diff_evidence_for_source(
+                input.diff,
+                diagnostic.source.as_ref(),
+            ));
+            let mut item = finding(
+                "RISK.TEMPLATE_REORDER",
+                RiskLevel::High,
+                "template",
+                "template ordinal changed and may affect existing card scheduling",
+                evidence_refs,
+                "preserve template order for existing cards or review the migration before import",
+            );
+            item.source = diagnostic.source.clone();
+            findings.push(item);
+            continue;
+        }
+
         if matches!(
             code,
             "UPDATE.FIELD_MERGE_ID_CHANGED"
                 | "UPDATE.TEMPLATE_MERGE_ID_CHANGED"
                 | "UPDATE.FIELD_ORD_CHANGED"
-                | "UPDATE.TEMPLATE_ORD_CHANGED"
                 | "UPDATE.NOTETYPE_SET_CHANGED"
                 | "UPDATE.TEMPLATE_SET_CHANGED"
         ) {
@@ -102,17 +123,30 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
         for (index, change) in diff.semantic_changes.iter().enumerate() {
             for code in &change.risk_codes {
                 let level = level_for_semantic_code(code);
-                let evidence = vec![EvidenceRef {
+                let evidence = EvidenceRef {
                     kind: EvidenceRefKind::DiffChange,
                     ref_id: format!("semantic:{index}:{}", change.selector),
-                }];
+                };
+                if code == "RISK.TEMPLATE_REORDER" {
+                    if let Some(finding) = findings.iter_mut().find(|finding| {
+                        finding.code == "RISK.TEMPLATE_REORDER"
+                            && finding
+                                .source
+                                .as_ref()
+                                .map(|source| source.as_str() == change.selector)
+                                .unwrap_or(false)
+                    }) {
+                        push_evidence_ref_once(finding, evidence);
+                        continue;
+                    }
+                }
                 findings.push(ImportRiskFinding {
                     code: code.clone(),
                     level,
                     category: semantic_category_name(change.category).to_string(),
                     message: change.message.clone(),
                     source: change.source.clone(),
-                    evidence_refs: evidence,
+                    evidence_refs: vec![evidence],
                     suggested_action: suggested_action_for_code(code).map(str::to_string),
                 });
             }
@@ -169,6 +203,65 @@ fn suggested_action_for_code(code: &str) -> Option<&'static str> {
         }
         "RISK.MEDIA_REMOVED" => Some("restore removed media or verify no notes reference it"),
         _ => None,
+    }
+}
+
+fn template_reorder_diff_evidence_for_source(
+    diff: Option<&crate::diff::BuildDiffSummary>,
+    source: Option<&crate::diagnostics::SourcePath>,
+) -> Vec<EvidenceRef> {
+    let Some(diff) = diff else {
+        return Vec::new();
+    };
+    let Some(source) = source.map(crate::diagnostics::SourcePath::as_str) else {
+        return Vec::new();
+    };
+
+    let mut evidence = Vec::new();
+    for (index, change) in diff.semantic_changes.iter().enumerate() {
+        if change
+            .risk_codes
+            .iter()
+            .any(|code| code == "RISK.TEMPLATE_REORDER")
+            && change.selector == source
+        {
+            evidence.push(EvidenceRef {
+                kind: EvidenceRefKind::DiffChange,
+                ref_id: format!("semantic:{index}:{}", change.selector),
+            });
+        }
+    }
+    if !evidence.is_empty() {
+        return evidence;
+    }
+
+    if let Some(artifact_diff) = diff.artifact_diff.as_ref() {
+        for (index, change) in artifact_diff.changes.iter().enumerate() {
+            if template_modified_change_matches_reorder_evidence(change, source) {
+                evidence.push(EvidenceRef {
+                    kind: EvidenceRefKind::DiffChange,
+                    ref_id: format!("diff:{}:{index}", change.domain),
+                });
+            }
+        }
+    }
+    evidence
+}
+
+fn template_modified_change_matches_reorder_evidence(
+    change: &crate::diff::ArtifactDiffChange,
+    source: &str,
+) -> bool {
+    if change.domain != "templates" || change.category != "modified" {
+        return false;
+    }
+
+    !source.is_empty() && change.selector == source
+}
+
+fn push_evidence_ref_once(finding: &mut ImportRiskFinding, evidence: EvidenceRef) {
+    if !finding.evidence_refs.contains(&evidence) {
+        finding.evidence_refs.push(evidence);
     }
 }
 
