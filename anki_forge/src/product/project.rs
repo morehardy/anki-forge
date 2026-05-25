@@ -9,7 +9,7 @@ use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOpti
 use base64::Engine as _;
 use serde::Serialize;
 use tempfile::TempDir;
-use writer_core::{artifact_path_from_ref, BuildArtifactTarget};
+use writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 
 use counts::{
     card_count_from_inspect_or_fallback, count_phase1_cards_without_inspect, inspect_metadata_count,
@@ -36,6 +36,7 @@ pub struct Project {
     notes: Vec<Note>,
     media: crate::product::MediaRegistry,
     deck_source: Option<crate::deck::Deck>,
+    product_document_source: Option<ProductDocument>,
 }
 
 enum NotetypeDuplicateFirst<'a> {
@@ -53,6 +54,22 @@ impl Project {
             notes: Vec::new(),
             media: crate::product::MediaRegistry::default(),
             deck_source: None,
+            product_document_source: None,
+        }
+    }
+
+    pub fn from_product_document(document: ProductDocument) -> Self {
+        let name = document.document_id().to_string();
+        let default_deck = document.default_deck_name().map(str::to_string);
+        Self {
+            name: name.clone(),
+            stable_id: Some(name),
+            default_deck,
+            note_types: Vec::new(),
+            notes: Vec::new(),
+            media: crate::product::MediaRegistry::default(),
+            deck_source: None,
+            product_document_source: Some(document),
         }
     }
 
@@ -83,6 +100,11 @@ impl Project {
     pub fn validate(&self) -> ValidationReport {
         let mut diagnostics = Vec::new();
         let mut seen_stable_ids = BTreeSet::new();
+
+        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
+            diagnostics.push(diagnostic);
+            return ValidationReport { diagnostics };
+        }
 
         if let Some(deck) = &self.deck_source {
             match deck.validate_report() {
@@ -275,6 +297,16 @@ impl Project {
     /// path-backed media staging instead, and keep `add_file(...)` assets
     /// path-backed until normalization.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
+        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
+            anyhow::bail!("{}: {}", diagnostic.code.as_str(), diagnostic.message);
+        }
+
+        if let Some(product) = &self.product_document_source {
+            return product
+                .lower()
+                .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err));
+        }
+
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;
             let mut plan = product
@@ -313,6 +345,23 @@ impl Project {
     }
 
     pub fn build(&self, options: BuildOptions) -> Result<BuildReport, BuildError> {
+        self.build_with_writer_stack_source(options, None)
+    }
+
+    pub(crate) fn build_with_writer_stack(
+        &self,
+        options: BuildOptions,
+        writer_policy: WriterPolicy,
+        build_context: BuildContext,
+    ) -> Result<BuildReport, BuildError> {
+        self.build_with_writer_stack_source(options, Some((writer_policy, build_context)))
+    }
+
+    fn build_with_writer_stack_source(
+        &self,
+        options: BuildOptions,
+        writer_stack: Option<(WriterPolicy, BuildContext)>,
+    ) -> Result<BuildReport, BuildError> {
         let started = Instant::now();
         let artifact_workspace = ArtifactWorkspace::new(&options, started)?;
         let artifacts_dir = artifact_workspace.path.clone();
@@ -411,22 +460,32 @@ impl Project {
             return return_report_error(&options, report, BuildFailureCause::Diagnostics);
         }
 
-        let current_dir = std::env::current_dir().map_err(|err| {
-            let report = failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string());
-            match maybe_write_report_json(&options, report) {
-                Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                Err(err) => err,
+        let (writer_policy, build_context) = match writer_stack {
+            Some((writer_policy, build_context)) => (writer_policy, build_context),
+            None => {
+                let current_dir = std::env::current_dir().map_err(|err| {
+                    let report =
+                        failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string());
+                    match maybe_write_report_json(&options, report) {
+                        Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                        Err(err) => err,
+                    }
+                })?;
+                let (_runtime, writer_policy, build_context) =
+                    crate::runtime::load_default_writer_stack(current_dir).map_err(|err| {
+                        let report = failure_report(
+                            started,
+                            "PROJECT.RUNTIME_DEFAULTS_FAILED",
+                            err.to_string(),
+                        );
+                        match maybe_write_report_json(&options, report) {
+                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                            Err(err) => err,
+                        }
+                    })?;
+                (writer_policy, build_context)
             }
-        })?;
-        let (_runtime, writer_policy, build_context) =
-            crate::runtime::load_default_writer_stack(current_dir).map_err(|err| {
-                let report =
-                    failure_report(started, "PROJECT.RUNTIME_DEFAULTS_FAILED", err.to_string());
-                match maybe_write_report_json(&options, report) {
-                    Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                    Err(err) => err,
-                }
-            })?;
+        };
         let stable_ref_prefix = self
             .stable_id
             .as_deref()
@@ -1605,6 +1664,14 @@ impl Project {
         media_store_dir: impl Into<PathBuf>,
         mut options: ProjectNormalizeOptions,
     ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
+        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
+            return Err(ProjectNormalizeError {
+                message: format!("{}: {}", diagnostic.code.as_str(), diagnostic.message),
+                diagnostics: vec![diagnostic],
+                normalized_ir: None,
+            });
+        }
+
         let base_dir = base_dir.into();
         let media_store_dir = media_store_dir.into();
         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
@@ -1698,7 +1765,17 @@ impl Project {
     }
 
     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
-        let product = if let Some(deck) = &self.deck_source {
+        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
+            return Err(ProjectNormalizeError {
+                message: format!("{}: {}", diagnostic.code.as_str(), diagnostic.message),
+                diagnostics: vec![diagnostic],
+                normalized_ir: None,
+            });
+        }
+
+        let product = if let Some(product) = &self.product_document_source {
+            product.clone()
+        } else if let Some(deck) = &self.deck_source {
             deck.clone()
                 .into_product_document()
                 .map_err(|error| ProjectNormalizeError {
@@ -1728,6 +1805,28 @@ impl Project {
                 normalized_ir: None,
             }
         })
+    }
+
+    fn product_document_source_mixed_diagnostic(&self) -> Option<Diagnostic> {
+        if self.product_document_source.is_some()
+            && (!self.notes.is_empty()
+                || !self.note_types.is_empty()
+                || self.deck_source.is_some()
+                || self.media.media().next().is_some())
+        {
+            Some(Diagnostic {
+                code: DiagnosticCode::new("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
+                severity: Severity::Error,
+                message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
+                source: Some(SourcePath::new("project")),
+                help: Some(
+                    "build either a ProductDocument-backed Project or a builder-backed Project"
+                        .to_string(),
+                ),
+            })
+        } else {
+            None
+        }
     }
 }
 

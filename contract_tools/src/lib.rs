@@ -10,6 +10,7 @@ pub mod manifest;
 pub mod normalize_cmd;
 pub mod package;
 pub mod policies;
+pub mod product_build_cmd;
 pub mod registry;
 pub mod schema;
 pub mod semantics;

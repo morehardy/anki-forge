@@ -19,6 +19,14 @@ fn run_cli(args: &[&str]) -> std::process::Output {
         .expect("contract_tools binary should run")
 }
 
+fn run_cli_in_dir(args: &[&str], current_dir: &Path) -> std::process::Output {
+    Command::new(cargo_bin())
+        .current_dir(current_dir)
+        .args(args)
+        .output()
+        .expect("contract_tools binary should run")
+}
+
 fn basic_normalized_ir() -> Value {
     let blake3 = "ea8f163db38682925e4491c5e58d4bb3506ef8c14eb78a86e908c5624a67200f";
     serde_json::json!({
@@ -642,6 +650,136 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     assert!(cli_diff.status.success());
     let cli_diff_json: serde_json::Value = serde_json::from_slice(&cli_diff.stdout).unwrap();
     assert_eq!(cli_diff_json, serde_json::to_value(runtime_diff).unwrap());
+}
+
+fn write_basic_product_document(temp_dir: &Path) -> PathBuf {
+    let input = temp_dir.join("basic.product.json");
+    let value = serde_json::json!({
+        "document_id": "phase4-cli",
+        "note_types": [
+            { "Basic": { "id": "basic-main", "name": "Basic" } }
+        ],
+        "notes": [
+            {
+                "Basic": {
+                    "id": "note-1",
+                    "note_type_id": "basic-main",
+                    "deck_name": "Default",
+                    "front": "front",
+                    "back": "back",
+                    "tags": []
+                }
+            }
+        ]
+    });
+    fs::write(&input, serde_json::to_string_pretty(&value).unwrap()).expect("write product");
+    input
+}
+
+#[test]
+fn product_build_command_writes_apkg_and_report_json() {
+    let temp = tempdir().expect("tempdir");
+    let manifest = contract_tools::contract_manifest_path();
+    let input = write_basic_product_document(temp.path());
+    let apkg = temp.path().join("deck.apkg");
+    let report_json = temp.path().join("build-report.json");
+
+    let output = run_cli(&[
+        "product-build",
+        "--manifest",
+        manifest.to_str().unwrap(),
+        "--product-input",
+        input.to_str().unwrap(),
+        "--apkg-out",
+        apkg.to_str().unwrap(),
+        "--report-json",
+        report_json.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(apkg.exists(), "APKG output should exist");
+    assert!(report_json.exists(), "report JSON should exist");
+    let stdout_report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
+    let file_report: Value =
+        serde_json::from_str(&fs::read_to_string(report_json).expect("read report")).unwrap();
+    assert_eq!(stdout_report["kind"], "anki-forge-build-report");
+    assert_eq!(stdout_report["status"], "success");
+    assert_eq!(stdout_report, file_report);
+}
+
+#[test]
+fn product_build_command_uses_manifest_when_invoked_outside_repo() {
+    let temp = tempdir().expect("tempdir");
+    let cwd = temp.path().join("outside-repo");
+    fs::create_dir(&cwd).expect("create cwd");
+    let manifest = contract_tools::contract_manifest_path()
+        .canonicalize()
+        .expect("canonical manifest");
+    let input = write_basic_product_document(temp.path());
+    let apkg = temp.path().join("deck.apkg");
+
+    let output = run_cli_in_dir(
+        &[
+            "product-build",
+            "--manifest",
+            manifest.to_str().unwrap(),
+            "--product-input",
+            input.to_str().unwrap(),
+            "--apkg-out",
+            apkg.to_str().unwrap(),
+            "--output",
+            "contract-json",
+        ],
+        &cwd,
+    );
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(apkg.exists(), "APKG output should exist");
+    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
+    assert_eq!(report["status"], "success");
+}
+
+#[test]
+fn product_build_command_returns_invalid_exit_for_missing_baseline() {
+    let temp = tempdir().expect("tempdir");
+    let manifest = contract_tools::contract_manifest_path();
+    let input = write_basic_product_document(temp.path());
+    let apkg = temp.path().join("deck.apkg");
+    let missing = temp.path().join("missing.apkg");
+
+    let output = run_cli(&[
+        "product-build",
+        "--manifest",
+        manifest.to_str().unwrap(),
+        "--product-input",
+        input.to_str().unwrap(),
+        "--apkg-out",
+        apkg.to_str().unwrap(),
+        "--compare-to",
+        missing.to_str().unwrap(),
+        "--fail-on",
+        "high",
+        "--output",
+        "contract-json",
+    ]);
+
+    assert_eq!(output.status.code(), Some(3));
+    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
+    assert_eq!(report["status"], "invalid");
+    assert_eq!(report["comparison"], "unavailable");
+    assert_eq!(report["policy"]["status"], "blocked");
 }
 
 fn temp_contract_root(label: &str) -> PathBuf {

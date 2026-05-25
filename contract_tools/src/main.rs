@@ -46,6 +46,22 @@ enum Command {
         #[arg(long, default_value = "contract-json")]
         output: String,
     },
+    ProductBuild {
+        #[arg(long)]
+        manifest: String,
+        #[arg(long)]
+        product_input: String,
+        #[arg(long)]
+        apkg_out: String,
+        #[arg(long)]
+        compare_to: Option<String>,
+        #[arg(long)]
+        fail_on: Option<String>,
+        #[arg(long)]
+        report_json: Option<String>,
+        #[arg(long, default_value = "contract-json")]
+        output: String,
+    },
     Inspect {
         #[arg(long)]
         staging: Option<String>,
@@ -108,6 +124,36 @@ fn main() -> anyhow::Result<()> {
                     &output,
                 )?
             );
+        }
+        Command::ProductBuild {
+            manifest,
+            product_input,
+            apkg_out,
+            compare_to,
+            fail_on,
+            report_json,
+            output,
+        } => {
+            match contract_tools::product_build_cmd::run(
+                &manifest,
+                &product_input,
+                &apkg_out,
+                compare_to.as_deref(),
+                fail_on.as_deref(),
+                report_json.as_deref(),
+                &output,
+            )? {
+                contract_tools::product_build_cmd::ProductBuildOutcome::Success(body) => {
+                    print!("{body}");
+                }
+                contract_tools::product_build_cmd::ProductBuildOutcome::ReportFailure {
+                    json,
+                    exit_code,
+                } => {
+                    print!("{json}");
+                    std::process::exit(exit_code);
+                }
+            }
         }
         Command::Inspect {
             staging,
