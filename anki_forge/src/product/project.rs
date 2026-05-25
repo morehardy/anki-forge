@@ -700,6 +700,64 @@ impl Project {
                     && options.compare_to.is_some()
                     && previous_index.is_none()
                 {
+                    if let Some(path) = options.compare_to.as_ref() {
+                        diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
+                            severity: Severity::Error,
+                            message: format!(
+                                "APKG could not be inspected for comparison: {}",
+                                path.display()
+                            ),
+                            source: Some(SourcePath::new(path.display().to_string())),
+                            help: Some("verify the previous APKG path and package contents".into()),
+                        });
+                    }
+                    let update_safety_summary =
+                        crate::update_safety::report::summary_from_reconcile(
+                            update_mode,
+                            &crate::update_safety::reconcile::current_only_reconcile(
+                                &current_identity.index,
+                            )
+                            .map_err(|_err| {
+                                BuildError::new(
+                                    BuildReport {
+                                        artifact: None,
+                                        counts: BuildCounts {
+                                            notes: normalized.notes.len(),
+                                            cards: count_phase1_cards_without_inspect(&normalized),
+                                            media: normalized.media_bindings.len(),
+                                        },
+                                        media: MediaSummary::from_normalized_ir(
+                                            &normalized,
+                                            &diagnostics,
+                                        ),
+                                        diagnostics: diagnostics.clone(),
+                                        metrics: BuildMetrics {
+                                            duration: started.elapsed(),
+                                        },
+                                        inspect: None,
+                                        update_safety: None,
+                                        comparison: ComparisonStatus::NotRequested,
+                                        diff: None,
+                                        risk: None,
+                                        policy: BuildPolicyResult::default(),
+                                        status: BuildStatus::Invalid,
+                                    },
+                                    BuildFailureCause::Diagnostics,
+                                )
+                            })?,
+                            &diagnostics,
+                            baseline_sources.clone(),
+                            false,
+                        );
+                    let risk =
+                        baseline_unavailable_risk(&diagnostics, Some(&update_safety_summary));
+                    let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
+                    let status = BuildStatus::highest([
+                        BuildStatus::Invalid,
+                        policy_status(&policy),
+                        diagnostics_status(&diagnostics),
+                    ]);
                     return Err(BuildError::new(
                         BuildReport {
                             artifact: None,
@@ -714,12 +772,12 @@ impl Project {
                                 duration: started.elapsed(),
                             },
                             inspect: None,
-                            update_safety: None,
-                            comparison: ComparisonStatus::NotRequested,
+                            update_safety: Some(update_safety_summary),
+                            comparison: ComparisonStatus::Unavailable,
                             diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Invalid,
+                            risk: Some(risk),
+                            policy,
+                            status,
                         },
                         BuildFailureCause::Diagnostics,
                     ));
@@ -783,6 +841,28 @@ impl Project {
                         .iter()
                         .any(|diagnostic| diagnostic.severity == Severity::Error)
                 {
+                    let update_safety_summary =
+                        crate::update_safety::report::summary_from_reconcile(
+                            update_mode,
+                            &reconcile,
+                            &diagnostics,
+                            baseline_sources.clone(),
+                            false,
+                        );
+                    let risk = crate::risk::classify_import_risk(crate::risk::rules::RiskInput {
+                        diagnostics: &diagnostics,
+                        comparison: ComparisonStatus::NotRequested,
+                        diff: None,
+                        current_inspect: None,
+                        previous_inspect: None,
+                        update_safety: Some(&update_safety_summary),
+                    });
+                    let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
+                    let status = BuildStatus::highest([
+                        BuildStatus::Invalid,
+                        policy_status(&policy),
+                        diagnostics_status(&diagnostics),
+                    ]);
                     return Err(BuildError::new(
                         BuildReport {
                             artifact: None,
@@ -797,20 +877,12 @@ impl Project {
                                 duration: started.elapsed(),
                             },
                             inspect: None,
-                            update_safety: Some(
-                                crate::update_safety::report::summary_from_reconcile(
-                                    update_mode,
-                                    &reconcile,
-                                    &diagnostics,
-                                    baseline_sources.clone(),
-                                    false,
-                                ),
-                            ),
+                            update_safety: Some(update_safety_summary),
                             comparison: ComparisonStatus::NotRequested,
                             diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Invalid,
+                            risk: Some(risk),
+                            policy,
+                            status,
                         },
                         BuildFailureCause::Diagnostics,
                     ));
@@ -1031,7 +1103,47 @@ impl Project {
         };
 
         let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
-        let update_safety = Some(update_safety_summary_val);
+        let writer_status = build_status_from_writer_result(&package_build_result.result_status);
+        let mut comparison = ComparisonStatus::NotRequested;
+        let mut diff = None;
+        let mut risk = None;
+        let mut policy = BuildPolicyResult::default();
+        let mut status = BuildStatus::highest([writer_status, diagnostics_status(&diagnostics)]);
+        if let Some(artifact) = artifact.as_ref() {
+            let comparison_output = crate::product::comparison::assemble_comparison(
+                crate::product::comparison::ComparisonInput {
+                    current_artifact: &artifact.path,
+                    previous_artifact: options.compare_to.as_deref(),
+                    diagnostics: &diagnostics,
+                    update_safety: Some(&update_safety_summary_val),
+                    started,
+                },
+            );
+            diagnostics = comparison_output.diagnostics;
+            let comparison_is_report_only = matches!(
+                update_mode,
+                crate::update_safety::EffectiveMode::Disabled
+                    | crate::update_safety::EffectiveMode::ReportOnly
+            );
+            if comparison_is_report_only {
+                downgrade_compare_errors_to_warnings(&mut diagnostics);
+            }
+            comparison = comparison_output.comparison;
+            diff = comparison_output.diff;
+            risk = comparison_output.risk;
+            policy = crate::risk::policy_from_risk_report(options.fail_on, risk.as_ref());
+            let comparison_status = if comparison_is_report_only && options.fail_on.is_none() {
+                BuildStatus::Success
+            } else {
+                comparison_output.status
+            };
+            status = BuildStatus::highest([
+                writer_status,
+                comparison_status,
+                policy_status(&policy),
+                diagnostics_status(&diagnostics),
+            ]);
+        }
         let report = BuildReport {
             artifact,
             counts,
@@ -1041,12 +1153,12 @@ impl Project {
                 duration: started.elapsed(),
             },
             inspect,
-            update_safety,
-            comparison: ComparisonStatus::NotRequested,
-            diff: None,
-            risk: None,
-            policy: BuildPolicyResult::default(),
-            status: build_status_from_writer_result(&package_build_result.result_status),
+            update_safety: Some(update_safety_summary_val),
+            comparison,
+            diff,
+            risk,
+            policy,
+            status,
         };
 
         report.ensure_success()?;
@@ -2525,6 +2637,39 @@ fn build_status_from_writer_result(status: &str) -> BuildStatus {
     }
 }
 
+fn diagnostics_status(diagnostics: &[Diagnostic]) -> BuildStatus {
+    if diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.severity == Severity::Error)
+    {
+        BuildStatus::Invalid
+    } else {
+        BuildStatus::Success
+    }
+}
+
+fn policy_status(policy: &BuildPolicyResult) -> BuildStatus {
+    if matches!(policy.status, crate::build::BuildPolicyStatus::Blocked) {
+        BuildStatus::Blocked
+    } else {
+        BuildStatus::Success
+    }
+}
+
+fn baseline_unavailable_risk(
+    diagnostics: &[Diagnostic],
+    update_safety: Option<&crate::build::UpdateSafetySummary>,
+) -> crate::risk::ImportRiskReport {
+    crate::risk::classify_import_risk(crate::risk::rules::RiskInput {
+        diagnostics,
+        comparison: ComparisonStatus::Unavailable,
+        diff: None,
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety,
+    })
+}
+
 fn severity_from_level(level: &str) -> Severity {
     match level {
         "error" => Severity::Error,
@@ -2544,6 +2689,16 @@ fn update_safety_blocking_severity(mode: crate::update_safety::EffectiveMode) ->
 fn downgrade_update_errors_to_warnings(diagnostics: &mut [Diagnostic]) {
     for diagnostic in diagnostics {
         if diagnostic.code.as_str().starts_with("UPDATE.") && diagnostic.severity == Severity::Error
+        {
+            diagnostic.severity = Severity::Warning;
+        }
+    }
+}
+
+fn downgrade_compare_errors_to_warnings(diagnostics: &mut [Diagnostic]) {
+    for diagnostic in diagnostics {
+        if diagnostic.code.as_str().starts_with("COMPARE.")
+            && diagnostic.severity == Severity::Error
         {
             diagnostic.severity = Severity::Warning;
         }
