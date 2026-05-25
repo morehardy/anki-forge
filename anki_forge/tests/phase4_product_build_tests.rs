@@ -204,6 +204,51 @@ fn product_build_report_json_write_failure_returns_io_error_report() {
     );
 }
 
+#[test]
+fn project_diff_against_apkg_matches_build_comparison_sections() {
+    let temp = tempdir().expect("tempdir");
+    let previous = temp.path().join("previous.apkg");
+    let current = temp.path().join("current.apkg");
+
+    basic_project("front")
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+
+    let project = basic_project("changed front");
+    let build_report = project
+        .build(BuildOptions::new().output(&current).compare_to(&previous))
+        .expect("build comparison");
+    let diff_report = project
+        .diff_against_apkg(&previous)
+        .expect("standalone diff");
+
+    assert_eq!(diff_report.comparison, build_report.comparison);
+    assert_eq!(diff_report.diff, build_report.diff);
+    assert_eq!(diff_report.risk, build_report.risk);
+    assert!(diff_report.current_inspect.is_some());
+    assert!(diff_report.previous_inspect.is_some());
+}
+
+#[test]
+fn project_diff_against_apkg_unreadable_baseline_returns_invalid_report() {
+    let temp = tempdir().expect("tempdir");
+    let missing = temp.path().join("missing.apkg");
+    let err = basic_project("front")
+        .diff_against_apkg(&missing)
+        .expect_err("missing baseline should fail");
+
+    assert_eq!(err.report.status, BuildStatus::Invalid);
+    assert_eq!(err.report.comparison, ComparisonStatus::Unavailable);
+    assert!(err
+        .report
+        .risk
+        .as_ref()
+        .expect("risk")
+        .findings
+        .iter()
+        .any(|finding| finding.code == "RISK.BASELINE_UNAVAILABLE"));
+}
+
 fn vocab_notetype_with_expression_key(expression_key: &str) -> NoteType {
     NoteType::custom("jp-vocab")
         .field(Field::new("Expression").key(expression_key))

@@ -1173,6 +1173,124 @@ impl Project {
         self.build(BuildOptions::new().output(path.as_ref().to_path_buf()))
     }
 
+    pub fn diff_against_apkg(
+        &self,
+        path: impl AsRef<Path>,
+    ) -> Result<crate::diff::ProjectDiffReport, crate::diff::ProjectDiffError> {
+        let started = Instant::now();
+        let temp = tempfile::Builder::new()
+            .prefix("anki-forge-project-diff-")
+            .tempdir()
+            .map_err(|err| {
+                let report = crate::diff::ProjectDiffReport {
+                    status: BuildStatus::Error,
+                    comparison: ComparisonStatus::Unavailable,
+                    diagnostics: vec![Diagnostic {
+                        code: DiagnosticCode::new("DIFF.TEMP_DIR_FAILED"),
+                        severity: Severity::Error,
+                        message: err.to_string(),
+                        source: Some(SourcePath::new("project.diff_against_apkg")),
+                        help: Some(
+                            "verify that the system temporary directory is writable".to_string(),
+                        ),
+                    }],
+                    current_inspect: None,
+                    previous_inspect: None,
+                    update_safety: None,
+                    diff: None,
+                    risk: None,
+                    metrics: crate::diff::ComparisonMetrics { duration_ms: 0 },
+                };
+                crate::diff::ProjectDiffError::new(report, BuildFailureCause::Io)
+            })?;
+        let current_path = temp.path().join("current.apkg");
+
+        let build = self.build(
+            BuildOptions::new()
+                .output(&current_path)
+                .inspect(true)
+                .compare_to(path.as_ref())
+                .update_safety(crate::build::UpdateSafetyMode::ReportOnly),
+        );
+        let build_report = match build {
+            Ok(report) => report,
+            Err(err) => {
+                let report = crate::diff::ProjectDiffReport {
+                    status: err.report.status,
+                    comparison: ComparisonStatus::Unavailable,
+                    diagnostics: err.report.diagnostics.clone(),
+                    current_inspect: err.report.inspect.clone(),
+                    previous_inspect: None,
+                    update_safety: err.report.update_safety.clone(),
+                    diff: None,
+                    risk: err.report.risk.clone(),
+                    metrics: crate::diff::ComparisonMetrics {
+                        duration_ms: started.elapsed().as_millis(),
+                    },
+                };
+                return Err(crate::diff::ProjectDiffError::new(report, err.cause));
+            }
+        };
+
+        let Some(artifact) = build_report.artifact.as_ref() else {
+            let report = crate::diff::ProjectDiffReport {
+                status: BuildStatus::Invalid,
+                comparison: ComparisonStatus::Unavailable,
+                diagnostics: build_report.diagnostics.clone(),
+                current_inspect: build_report.inspect.clone(),
+                previous_inspect: None,
+                update_safety: build_report.update_safety.clone(),
+                diff: None,
+                risk: build_report.risk.clone(),
+                metrics: crate::diff::ComparisonMetrics {
+                    duration_ms: started.elapsed().as_millis(),
+                },
+            };
+            return Err(crate::diff::ProjectDiffError::new(
+                report,
+                BuildFailureCause::Invalid,
+            ));
+        };
+
+        let comparison = crate::product::comparison::assemble_comparison(
+            crate::product::comparison::ComparisonInput {
+                current_artifact: &artifact.path,
+                previous_artifact: Some(path.as_ref()),
+                diagnostics: &build_report.diagnostics,
+                update_safety: build_report.update_safety.as_ref(),
+                started,
+            },
+        );
+        let report = crate::diff::ProjectDiffReport {
+            status: comparison.status,
+            comparison: comparison.comparison,
+            diagnostics: comparison.diagnostics,
+            current_inspect: comparison.current_inspect,
+            previous_inspect: comparison.previous_inspect,
+            update_safety: build_report.update_safety,
+            diff: comparison.diff,
+            risk: comparison.risk,
+            metrics: crate::diff::ComparisonMetrics {
+                duration_ms: comparison.duration.as_millis(),
+            },
+        };
+
+        if report.status == BuildStatus::Success {
+            Ok(report)
+        } else {
+            let cause = if report
+                .diagnostics
+                .iter()
+                .any(|diagnostic| diagnostic.severity == Severity::Error)
+            {
+                BuildFailureCause::Diagnostics
+            } else {
+                BuildFailureCause::Invalid
+            };
+            Err(crate::diff::ProjectDiffError::new(report, cause))
+        }
+    }
+
     fn to_product_document(&self) -> ProductDocument {
         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
         let default_deck = self
