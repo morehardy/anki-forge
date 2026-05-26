@@ -225,6 +225,7 @@ fn project_diff_against_apkg_matches_build_comparison_sections() {
     assert_eq!(diff_report.comparison, build_report.comparison);
     assert_eq!(diff_report.diff, build_report.diff);
     assert_eq!(diff_report.risk, build_report.risk);
+    assert_eq!(diff_report.previous_inspect, build_report.previous_inspect);
     assert!(diff_report.current_inspect.is_some());
     assert!(diff_report.previous_inspect.is_some());
 }

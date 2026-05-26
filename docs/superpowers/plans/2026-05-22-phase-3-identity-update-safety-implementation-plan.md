@@ -3814,7 +3814,7 @@ if disabled_update_safety {
             .collect(),
     ));
     reconcile_output = Some(reconcile);
-} 
+}
 ```
 
 Keep the current-derivation writer plan so metadata is embedded.

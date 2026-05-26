@@ -21,6 +21,7 @@ pub struct BuildReportJson {
     pub diagnostics: Vec<crate::diagnostics::Diagnostic>,
     pub metrics: BuildMetricsJson,
     pub inspect: Option<InspectSummaryJson>,
+    pub previous_inspect: Option<InspectSummaryJson>,
     pub update_safety: Option<UpdateSafetySummary>,
     pub diff: Option<crate::diff::BuildDiffSummary>,
     pub risk: Option<crate::risk::ImportRiskReport>,
@@ -91,6 +92,10 @@ impl BuildReportJson {
             diagnostics: report.diagnostics.clone(),
             metrics: BuildMetricsJson::from(report.metrics),
             inspect: report.inspect.as_ref().map(InspectSummaryJson::from),
+            previous_inspect: report
+                .previous_inspect
+                .as_ref()
+                .map(InspectSummaryJson::from),
             update_safety: report.update_safety.clone(),
             diff: report.diff.clone(),
             risk: report.risk.clone(),

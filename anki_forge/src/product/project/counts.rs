@@ -2,15 +2,6 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::build::InspectSummary;
 
-pub(super) fn inspect_metadata_count(report: &crate::InspectReport, key: &str) -> usize {
-    report
-        .observations
-        .metadata
-        .iter()
-        .find_map(|value| value.get(key).and_then(serde_json::Value::as_u64))
-        .unwrap_or(0) as usize
-}
-
 pub(super) fn card_count_from_inspect_or_fallback(
     inspect: Option<&InspectSummary>,
     normalized: &authoring_core::NormalizedIr,

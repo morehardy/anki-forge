@@ -47,28 +47,28 @@ API 需要同时服务两类用户：
 
 目标 API 遵守八条原则。
 
-1. **Public API 表达用户意图**  
+1. **Public API 表达用户意图**
    用户写的是“我要构建什么卡组”，不是“APKG 内部应该怎么写”。
 
-2. **IR 是内部稳定契约**  
+2. **IR 是内部稳定契约**
    Product API 不绕过底层管线，而是 lower 到 `Authoring IR`，再 normalize 成 writer 输入。
 
-3. **Normalized IR 是 writer 唯一语义输入**  
+3. **Normalized IR 是 writer 唯一语义输入**
    writer 不理解 Product API 的高级语义，只消费规范化后的结构。
 
-4. **BuildReport 是最终真相**  
+4. **BuildReport 是最终真相**
    构建不只是“写出一个文件”。从第一版 `Project::write_apkg()` 开始，用户就应该拿到 artifact path、notes/cards/media counts、diagnostics、warnings、inspect summary 和 duration/metrics。完整 diff/risk 可以后续增强，但 basic report 不能后置。
 
-5. **易用性不能绕过验证**  
+5. **易用性不能绕过验证**
    `Deck::new(...).basic(...)` 这种快捷 API 也必须走同一条 lowering/normalize/build/inspect/report 路径。`Deck` 只能是 `Project` facade，不能拥有独立 writer path、identity/media/card-generation semantics。
 
-6. **Product API 不承诺 Anki 无法稳定表达的语义**  
+6. **Product API 不承诺 Anki 无法稳定表达的语义**
    所有高级语义必须能 lower 成 Anki-compatible artifact；如果只能存在于 anki-forge 中，必须明确标记为 Forge-only metadata。
 
-7. **用户可见 ID 与 Anki 内部 ID 分离**  
+7. **用户可见 ID 与 Anki 内部 ID 分离**
    用户面对 `stable_id`、`FieldKey`、`TemplateKey`、`DeckPath`；writer 负责稳定派生或保留 deck id、notetype id、field id、template id、note guid。
 
-8. **更新安全必须以真实 Anki import 行为为 oracle**  
+8. **更新安全必须以真实 Anki import 行为为 oracle**
    diff/risk 不能只比较 JSON。关键行为需要用 Anki 手册、上游源码、roundtrip oracle 或导入场景回归测试校验。oracle 不应该是一次性前置大阶段，而应该绑定到每个新 Product API 语义的验收门槛。
 
 ## 3. API 分层

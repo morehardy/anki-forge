@@ -11,13 +11,11 @@ use serde::Serialize;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 
-use counts::{
-    card_count_from_inspect_or_fallback, count_phase1_cards_without_inspect, inspect_metadata_count,
-};
+use counts::{card_count_from_inspect_or_fallback, count_phase1_cards_without_inspect};
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, InspectSummary, MediaSummary,
+    BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, MediaSummary,
     ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
@@ -419,6 +417,7 @@ impl Project {
                         duration: started.elapsed(),
                     },
                     inspect: None,
+                    previous_inspect: None,
                     update_safety: None,
                     comparison: ComparisonStatus::NotRequested,
                     diff: None,
@@ -450,6 +449,7 @@ impl Project {
                     duration: started.elapsed(),
                 },
                 inspect: None,
+                previous_inspect: None,
                 update_safety: None,
                 comparison: ComparisonStatus::NotRequested,
                 diff: None,
@@ -517,6 +517,7 @@ impl Project {
                         duration: started.elapsed(),
                     },
                     inspect: None,
+                    previous_inspect: None,
                     update_safety: None,
                     comparison: ComparisonStatus::NotRequested,
                     diff: None,
@@ -579,6 +580,7 @@ impl Project {
                     duration: started.elapsed(),
                 },
                 inspect: None,
+                previous_inspect: None,
                 update_safety: None,
                 comparison: ComparisonStatus::NotRequested,
                 diff: None,
@@ -628,6 +630,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        previous_inspect: None,
                         update_safety: None,
                         comparison: ComparisonStatus::NotRequested,
                         diff: None,
@@ -790,6 +793,7 @@ impl Project {
                                         duration: started.elapsed(),
                                     },
                                     inspect: None,
+                                    previous_inspect: None,
                                     update_safety: None,
                                     comparison: ComparisonStatus::NotRequested,
                                     diff: None,
@@ -829,6 +833,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        previous_inspect: None,
                         update_safety: Some(update_safety_summary),
                         comparison: ComparisonStatus::Unavailable,
                         diff: None,
@@ -868,6 +873,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        previous_inspect: None,
                         update_safety: None,
                         comparison: ComparisonStatus::NotRequested,
                         diff: None,
@@ -933,6 +939,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        previous_inspect: None,
                         update_safety: Some(update_safety_summary),
                         comparison: ComparisonStatus::NotRequested,
                         diff: None,
@@ -1067,6 +1074,7 @@ impl Project {
                             duration: started.elapsed(),
                         },
                         inspect: None,
+                        previous_inspect: None,
                         update_safety: None,
                         comparison: ComparisonStatus::NotRequested,
                         diff: None,
@@ -1116,6 +1124,7 @@ impl Project {
                                 duration: started.elapsed(),
                             },
                             inspect: None,
+                            previous_inspect: None,
                             update_safety: None,
                             comparison: ComparisonStatus::NotRequested,
                             diff: None,
@@ -1139,32 +1148,10 @@ impl Project {
             }
         }
 
-        let inspect = if options.inspect {
-            artifact
-                .as_ref()
-                .and_then(|artifact| crate::inspect_apkg(&artifact.path).ok())
-                .map(|report| InspectSummary {
-                    notes: inspect_metadata_count(&report, "note_count"),
-                    cards: inspect_metadata_count(&report, "card_count"),
-                    source_kind: report.source_kind,
-                    observation_status: report.observation_status,
-                    notetypes: report.observations.notetypes.len(),
-                    templates: report.observations.templates.len(),
-                    fields: report.observations.fields.len(),
-                    media: report.observations.media.len(),
-                })
-        } else {
-            None
-        };
-
-        let counts = BuildCounts {
-            notes: normalized.notes.len(),
-            cards: card_count_from_inspect_or_fallback(inspect.as_ref(), &normalized),
-            media: normalized.media_bindings.len(),
-        };
-
         let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
         let writer_status = build_status_from_writer_result(&package_build_result.result_status);
+        let mut inspect = None;
+        let mut previous_inspect = None;
         let mut comparison = ComparisonStatus::NotRequested;
         let mut diff = None;
         let mut risk = None;
@@ -1181,6 +1168,10 @@ impl Project {
                 },
             );
             diagnostics = comparison_output.diagnostics;
+            if options.inspect {
+                inspect = comparison_output.current_inspect.clone();
+            }
+            previous_inspect = comparison_output.previous_inspect;
             let comparison_is_report_only = matches!(
                 update_mode,
                 crate::update_safety::EffectiveMode::Disabled
@@ -1205,6 +1196,11 @@ impl Project {
                 diagnostics_status(&diagnostics),
             ]);
         }
+        let counts = BuildCounts {
+            notes: normalized.notes.len(),
+            cards: card_count_from_inspect_or_fallback(inspect.as_ref(), &normalized),
+            media: normalized.media_bindings.len(),
+        };
         let report = BuildReport {
             artifact,
             counts,
@@ -1214,6 +1210,7 @@ impl Project {
                 duration: started.elapsed(),
             },
             inspect,
+            previous_inspect,
             update_safety: Some(update_safety_summary_val),
             comparison,
             diff,
@@ -1279,7 +1276,7 @@ impl Project {
                     comparison: ComparisonStatus::Unavailable,
                     diagnostics: err.report.diagnostics.clone(),
                     current_inspect: err.report.inspect.clone(),
-                    previous_inspect: None,
+                    previous_inspect: err.report.previous_inspect.clone(),
                     update_safety: err.report.update_safety.clone(),
                     diff: None,
                     risk: err.report.risk.clone(),
@@ -1291,13 +1288,13 @@ impl Project {
             }
         };
 
-        let Some(artifact) = build_report.artifact.as_ref() else {
+        if build_report.artifact.is_none() {
             let report = crate::diff::ProjectDiffReport {
                 status: BuildStatus::Invalid,
                 comparison: ComparisonStatus::Unavailable,
                 diagnostics: build_report.diagnostics.clone(),
                 current_inspect: build_report.inspect.clone(),
-                previous_inspect: None,
+                previous_inspect: build_report.previous_inspect.clone(),
                 update_safety: build_report.update_safety.clone(),
                 diff: None,
                 risk: build_report.risk.clone(),
@@ -1309,28 +1306,24 @@ impl Project {
                 report,
                 BuildFailureCause::Invalid,
             ));
-        };
+        }
 
-        let comparison = crate::product::comparison::assemble_comparison(
-            crate::product::comparison::ComparisonInput {
-                current_artifact: &artifact.path,
-                previous_artifact: Some(path.as_ref()),
-                diagnostics: &build_report.diagnostics,
-                update_safety: build_report.update_safety.as_ref(),
-                started,
-            },
-        );
+        let status = if build_report.comparison == ComparisonStatus::Unavailable {
+            BuildStatus::Invalid
+        } else {
+            build_report.status
+        };
         let report = crate::diff::ProjectDiffReport {
-            status: comparison.status,
-            comparison: comparison.comparison,
-            diagnostics: comparison.diagnostics,
-            current_inspect: comparison.current_inspect,
-            previous_inspect: comparison.previous_inspect,
+            status,
+            comparison: build_report.comparison,
+            diagnostics: build_report.diagnostics,
+            current_inspect: build_report.inspect,
+            previous_inspect: build_report.previous_inspect,
             update_safety: build_report.update_safety,
-            diff: comparison.diff,
-            risk: comparison.risk,
+            diff: build_report.diff,
+            risk: build_report.risk,
             metrics: crate::diff::ComparisonMetrics {
-                duration_ms: comparison.duration.as_millis(),
+                duration_ms: started.elapsed().as_millis(),
             },
         };
 
@@ -2841,6 +2834,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
             duration: started.elapsed(),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,

@@ -25,6 +25,7 @@ fn build_report_ensure_success_accepts_successful_artifact() {
             duration: Duration::from_millis(25),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,
@@ -61,6 +62,7 @@ fn build_report_ensure_success_rejects_error_diagnostic() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,
@@ -98,6 +100,7 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,
@@ -108,6 +111,41 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
 
     let err = report.ensure_success().expect_err("report should fail");
     assert_eq!(err.cause, BuildFailureCause::Diagnostics);
+}
+
+#[test]
+fn build_report_ensure_success_uses_status_precedence_over_policy_status() {
+    let report = BuildReport {
+        artifact: Some(ApkgArtifact {
+            path: PathBuf::from("out/internal-error.apkg"),
+        }),
+        counts: BuildCounts {
+            notes: 1,
+            cards: 1,
+            media: 0,
+        },
+        media: MediaSummary::default(),
+        diagnostics: vec![],
+        metrics: BuildMetrics {
+            duration: Duration::from_millis(1),
+        },
+        inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::Complete,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult {
+            status: BuildPolicyStatus::Blocked,
+            threshold: Some(RiskLevel::High),
+            highest_risk: Some(RiskLevel::Critical),
+            blocking_findings: vec!["RISK.TEMPLATE_REMOVED".to_string()],
+        },
+        status: BuildStatus::Error,
+    };
+
+    let err = report.ensure_success().expect_err("report should fail");
+    assert_eq!(err.cause, BuildFailureCause::Internal);
 }
 
 #[test]
@@ -141,6 +179,7 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
             duration: Duration::from_millis(1),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,
@@ -222,6 +261,7 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             duration: Duration::from_millis(5),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,
@@ -265,6 +305,7 @@ fn build_report_can_carry_update_safety_summary() {
         diagnostics: vec![],
         metrics: BuildMetrics::default(),
         inspect: None,
+        previous_inspect: None,
         update_safety: Some(UpdateSafetySummary {
             mode: "strict".into(),
             baseline_sources: vec![BaselineSourceSummary {
@@ -375,6 +416,7 @@ fn successful_report_fixture() -> BuildReport {
             duration: std::time::Duration::from_millis(1),
         },
         inspect: None,
+        previous_inspect: None,
         update_safety: None,
         comparison: ComparisonStatus::NotRequested,
         diff: None,

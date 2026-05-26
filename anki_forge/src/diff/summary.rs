@@ -39,6 +39,10 @@ pub fn summarize_writer_diff(report: &writer_core::DiffReport) -> BuildDiffSumma
         .iter()
         .filter_map(semantic_change_from_writer_change)
         .collect::<Vec<_>>();
+    counts.reordered = semantic_changes
+        .iter()
+        .filter(|change| change.change_kind == SemanticDiffChangeKind::Reordered)
+        .count();
     let mut limitations = report.comparison_limitations.clone();
     if semantic_changes.iter().any(|change| {
         change

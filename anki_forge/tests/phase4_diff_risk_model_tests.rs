@@ -186,6 +186,7 @@ fn writer_diff_summary_maps_template_modified_ord_evidence_to_reorder_risk() {
 
     let summary = anki_forge::diff::summarize_writer_diff(&writer);
 
+    assert_eq!(summary.summary_counts.reordered, 1);
     assert_eq!(summary.semantic_changes.len(), 1);
     assert_eq!(
         summary.semantic_changes[0].change_kind,

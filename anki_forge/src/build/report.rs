@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
 
-use crate::build::{BuildPolicyResult, BuildPolicyStatus, BuildStatus, ComparisonStatus};
+use crate::build::{BuildPolicyResult, BuildStatus, ComparisonStatus};
 use crate::diagnostics::{Diagnostic, Severity};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -93,6 +93,7 @@ pub struct BuildReport {
     pub diagnostics: Vec<Diagnostic>,
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
+    pub previous_inspect: Option<InspectSummary>,
     pub update_safety: Option<UpdateSafetySummary>,
     pub comparison: ComparisonStatus,
     pub diff: Option<crate::diff::BuildDiffSummary>,
@@ -203,13 +204,6 @@ impl BuildReport {
             return Err(BuildError::new(
                 self.clone(),
                 BuildFailureCause::MissingArtifact,
-            ));
-        }
-
-        if matches!(self.policy.status, BuildPolicyStatus::Blocked) {
-            return Err(BuildError::new(
-                self.clone(),
-                BuildFailureCause::PolicyBlocked,
             ));
         }
 
