@@ -5,6 +5,7 @@ pub mod diff;
 pub mod discovery;
 pub mod inspect;
 pub mod normalize;
+pub mod product_build;
 pub mod schema;
 
 pub use assets::{
@@ -17,3 +18,4 @@ pub use diff::diff_from_paths;
 pub use discovery::{discover_workspace_runtime, ResolvedRuntime, RuntimeMode};
 pub use inspect::{inspect_apkg_path, inspect_staging_path};
 pub use normalize::normalize_from_path;
+pub use product_build::{build_product_document, build_product_document_with_writer_stack};

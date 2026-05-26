@@ -92,6 +92,7 @@
         "identity_index_schema",
         "identity_lockfile_schema",
         "update_safety_summary_schema",
+        "build_report_schema",
         "identity_update_safety_semantics"
       ],
       "additionalProperties": false,
@@ -277,6 +278,10 @@
           "minLength": 1
         },
         "update_safety_summary_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_report_schema": {
           "type": "string",
           "minLength": 1
         },

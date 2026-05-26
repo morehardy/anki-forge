@@ -46,6 +46,29 @@ fn notetype_field_and_template_renames_are_warnings_when_ids_stay_stable() {
 }
 
 #[test]
+fn template_ord_changed_source_names_the_template_selector() {
+    let current = index_with_notetype(
+        field("front", "Front", 0, 111),
+        template("card", "Card", 1, 222),
+    );
+    let baseline = index_with_notetype(
+        field("front", "Front", 0, 111),
+        template("card", "Card", 0, 222),
+    );
+
+    let diagnostics = compare_notetype_merge_safety(&current, &baseline);
+    let diagnostic = diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "UPDATE.TEMPLATE_ORD_CHANGED")
+        .expect("template ord diagnostic");
+
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("notetype[id='basic']::template[Card]")
+    );
+}
+
+#[test]
 fn notetype_and_template_set_changes_include_change_kind() {
     let current = index_with_named_notetype(
         "Basic",

@@ -1,4 +1,4 @@
-use anki_forge::build::BuildOptions;
+use anki_forge::build::{BuildOptions, BuildStatus};
 use anki_forge::{Deck, IoMode, MediaSource, Package};
 use serde_json::json;
 
@@ -17,7 +17,7 @@ fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
         .expect("build facade");
 
     assert!(build.artifact.as_ref().expect("artifact").path.exists());
-    assert_eq!(build.status, "success");
+    assert_eq!(build.status, BuildStatus::Success);
     assert_eq!(build.counts.notes, 1);
 
     let bytes = deck.to_apkg_bytes().expect("apkg bytes");

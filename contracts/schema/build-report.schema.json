@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anki-forge.local/schema/build-report.schema.json",
+  "title": "Anki Forge Build Report",
+  "type": "object",
+  "required": [
+    "kind",
+    "schema_version",
+    "tool_version",
+    "status",
+    "comparison",
+    "counts",
+    "media",
+    "diagnostics",
+    "metrics",
+    "policy"
+  ],
+  "properties": {
+    "kind": { "const": "anki-forge-build-report" },
+    "schema_version": { "const": "phase4-build-report-v1" },
+    "tool_version": { "type": "string", "minLength": 1 },
+    "artifact": {
+      "type": ["object", "null"],
+      "required": ["path"],
+      "properties": { "path": { "type": "string", "minLength": 1 } },
+      "additionalProperties": false
+    },
+    "status": { "enum": ["success", "blocked", "invalid", "error"] },
+    "comparison": { "enum": ["not_requested", "complete", "partial", "unavailable"] },
+    "counts": {
+      "type": "object",
+      "required": ["notes", "cards", "media"],
+      "properties": {
+        "notes": { "type": "integer", "minimum": 0 },
+        "cards": { "type": "integer", "minimum": 0 },
+        "media": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "media": {
+      "type": "object",
+      "required": [
+        "objects",
+        "bindings",
+        "references",
+        "missing_references",
+        "unsafe_references",
+        "unused_bindings",
+        "unique_bytes"
+      ],
+      "properties": {
+        "objects": { "type": "integer", "minimum": 0 },
+        "bindings": { "type": "integer", "minimum": 0 },
+        "references": { "type": "integer", "minimum": 0 },
+        "missing_references": { "type": "integer", "minimum": 0 },
+        "unsafe_references": { "type": "integer", "minimum": 0 },
+        "unused_bindings": { "type": "integer", "minimum": 0 },
+        "unique_bytes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "diagnostics": { "type": "array", "items": { "type": "object" } },
+    "metrics": {
+      "type": "object",
+      "required": ["duration_ms"],
+      "properties": { "duration_ms": { "type": "integer", "minimum": 0 } },
+      "additionalProperties": false
+    },
+    "inspect": { "type": ["object", "null"] },
+    "previous_inspect": { "type": ["object", "null"] },
+    "update_safety": { "type": ["object", "null"] },
+    "diff": { "type": ["object", "null"] },
+    "risk": { "type": ["object", "null"] },
+    "policy": {
+      "type": "object",
+      "required": ["status", "threshold", "highest_risk", "blocking_findings"],
+      "properties": {
+        "status": { "enum": ["passed", "blocked", "not_evaluated"] },
+        "threshold": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
+        "highest_risk": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
+        "blocking_findings": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

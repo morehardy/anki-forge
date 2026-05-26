@@ -1,8 +1,9 @@
 use anki_forge::build::{
-    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
-    ProjectNormalizeOptions,
+    BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
+    ProjectMediaPolicy, ProjectNormalizeOptions,
 };
 use anki_forge::prelude::*;
+use anki_forge::product::ProductDocument;
 use std::path::PathBuf;
 
 #[test]
@@ -86,6 +87,49 @@ fn project_normalize_basic_note_returns_normalized_ir() {
         normalized.notes[0].fields.get("Front").map(String::as_str),
         Some("hola")
     );
+}
+
+#[test]
+fn product_document_backed_project_rejects_project_media_state() {
+    let document = ProductDocument::new("direct-doc")
+        .with_basic("basic-main")
+        .add_basic_note("basic-main", "note-1", "Default", "front", "back");
+    let mut project = Project::from_product_document(document);
+    project
+        .media_mut()
+        .add_bytes("unused.bin", b"media".to_vec())
+        .expect("add media bytes")
+        .export_as("unused.bin")
+        .expect("export media");
+
+    let validation = project.validate();
+    assert!(validation.has_errors());
+    assert!(validation
+        .diagnostics
+        .iter()
+        .any(|diagnostic| { diagnostic.code.as_str() == "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" }));
+
+    let normalize_error = project
+        .normalize()
+        .expect_err("normalize should reject mixed state");
+    assert!(
+        normalize_error
+            .to_string()
+            .contains("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
+        "{normalize_error}"
+    );
+
+    let build_error = project
+        .build(
+            BuildOptions::new()
+                .output(unique_artifacts_dir("product-document-mixed-media").join("deck.apkg")),
+        )
+        .expect_err("build should reject mixed state");
+    assert!(build_error
+        .report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| { diagnostic.code.as_str() == "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" }));
 }
 
 #[test]
@@ -368,7 +412,7 @@ fn project_build_uses_normalization_skips_for_non_packaged_media_refs() {
         .build(BuildOptions::new().inspect(false))
         .expect("skipped references should not fail writer build");
 
-    assert_eq!(report.status, "success");
+    assert_eq!(report.status, BuildStatus::Success);
     assert!(!report
         .diagnostic_codes()
         .iter()
@@ -1067,7 +1111,7 @@ fn project_build_accepts_custom_inputs_after_lowering_lands() {
         .expect("custom inputs build");
     let codes = report.diagnostic_codes();
 
-    assert_eq!(report.status, "success");
+    assert_eq!(report.status, BuildStatus::Success);
     assert_eq!(report.counts.notes, 1);
     assert_eq!(report.counts.cards, 1);
     assert!(!codes

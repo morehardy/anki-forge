@@ -2,6 +2,9 @@ use std::collections::BTreeSet;
 use std::path::PathBuf;
 use std::time::Duration;
 
+use serde::{Deserialize, Serialize};
+
+use crate::build::{BuildPolicyResult, BuildStatus, ComparisonStatus};
 use crate::diagnostics::{Diagnostic, Severity};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -44,7 +47,7 @@ impl Default for BuildMetrics {
 ///
 /// These fields are derived from the writer inspection layer and are intended
 /// for reporting, not as a stable product-domain schema.
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InspectSummary {
     pub source_kind: String,
     /// Writer-layer observation status passed through from the inspect report.
@@ -59,7 +62,7 @@ pub struct InspectSummary {
     pub media: usize,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BaselineSourceSummary {
     pub source_kind: String,
     pub source_ref: String,
@@ -70,7 +73,7 @@ pub struct BaselineSourceSummary {
     pub diagnostic_codes: Vec<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UpdateSafetySummary {
     pub mode: String,
     pub baseline_sources: Vec<BaselineSourceSummary>,
@@ -90,16 +93,23 @@ pub struct BuildReport {
     pub diagnostics: Vec<Diagnostic>,
     pub metrics: BuildMetrics,
     pub inspect: Option<InspectSummary>,
+    pub previous_inspect: Option<InspectSummary>,
     pub update_safety: Option<UpdateSafetySummary>,
-    pub status: String,
+    pub comparison: ComparisonStatus,
+    pub diff: Option<crate::diff::BuildDiffSummary>,
+    pub risk: Option<crate::risk::ImportRiskReport>,
+    pub policy: BuildPolicyResult,
+    pub status: BuildStatus,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BuildFailureCause {
     MissingArtifact,
     Diagnostics,
-    BuildStatus,
+    PolicyBlocked,
+    Invalid,
     Io,
+    Internal,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -197,11 +207,14 @@ impl BuildReport {
             ));
         }
 
-        if self.status != "success" {
-            return Err(BuildError::new(
-                self.clone(),
-                BuildFailureCause::BuildStatus,
-            ));
+        if !self.status.is_success() {
+            let cause = match self.status {
+                BuildStatus::Invalid => BuildFailureCause::Invalid,
+                BuildStatus::Error => BuildFailureCause::Internal,
+                BuildStatus::Blocked => BuildFailureCause::PolicyBlocked,
+                BuildStatus::Success => BuildFailureCause::Internal,
+            };
+            return Err(BuildError::new(self.clone(), cause));
         }
 
         Ok(())
