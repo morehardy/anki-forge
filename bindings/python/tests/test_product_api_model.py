@@ -112,13 +112,18 @@ def test_media_registry_validates_export_names_and_duplicates(tmp_path):
         registry.add_bytes(source_label="bad", data=b"different", export_as="hello.wav")
     with pytest.raises(ValidationError):
         registry.add_bytes(source_label="bad", data=b"x", export_as="../bad.wav")
+    with pytest.raises(ValidationError):
+        registry.add_bytes(source_label="bad", data=b"x", export_as="bad:name.wav")
+    safe_ref = registry.add_bytes(source_label="safe", data=b"safe", export_as="hello-world_1.wav")
+    assert safe_ref.export_as == "hello-world_1.wav"
     media_file = tmp_path / "sound.wav"
     media_file.write_bytes(b"RIFF")
     file_ref = registry.add_file(media_file, export_as="sound.wav")
     assert file_ref.export_as == "sound.wav"
     assert registry.add_file(media_file, export_as="sound.wav") == file_ref
-    assert registry.items[1].source_kind == "file"
-    assert registry.items[1].data is None
+    file_item = next(item for item in registry.items if item.ref == file_ref)
+    assert file_item.source_kind == "file"
+    assert file_item.data is None
     assert isinstance(registry.items, tuple)
 
 

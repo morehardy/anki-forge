@@ -118,6 +118,8 @@ class Project:
                 product_input = Path(temp_dir) / "project.product-v2.json"
                 report = self._cloze_marker_report()
                 if report is not None:
+                    if report_path is not None:
+                        _write_report_json(report, report_path)
                     return report
                 product_document = self._runtime_product_document(product_input.parent)
                 product_input.write_text(
@@ -254,3 +256,41 @@ def _validate_write_paths(
         raise ValidationError("apkg output path must differ from report_json")
     if compare_to is not None and report_json is not None and compare_to == report_json:
         raise ValidationError("compare_to path must differ from report_json")
+
+
+def _write_report_json(report: BuildReport, path: Path) -> None:
+    path.write_text(json.dumps(_report_to_json(report), ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _report_to_json(report: BuildReport) -> dict[str, object]:
+    return {
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "status": report.status,
+        "comparison": report.comparison,
+        "artifact": report.artifact,
+        "counts": dict(report.counts),
+        "media": dict(report.media),
+        "diagnostics": [
+            {
+                "code": diagnostic.code,
+                "severity": diagnostic.severity,
+                "message": diagnostic.message,
+                "source": diagnostic.source,
+                "help": diagnostic.help,
+            }
+            for diagnostic in report.diagnostics
+        ],
+        "metrics": {"duration_ms": 0},
+        "policy": {
+            "status": "not_evaluated",
+            "threshold": None,
+            "highest_risk": None,
+            "blocking_findings": [],
+        },
+        "inspect": report.inspect,
+        "previous_inspect": report.previous_inspect,
+        "update_safety": report.update_safety,
+        "diff": report.diff,
+        "risk": report.risk,
+    }

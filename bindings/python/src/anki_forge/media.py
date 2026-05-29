@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from dataclasses import dataclass
 from pathlib import Path, PurePath
 from typing import Sequence
 
 from .diagnostics import ValidationError
 from .notetype import _ASCII_CONTROL, _validate_non_empty
+
+_SAFE_EXPORT_NAME_PATTERN = re.compile(r"^[A-Za-z0-9._-]+$")
 
 
 @dataclass(frozen=True)
@@ -109,4 +112,6 @@ def _validate_export_as(value: str) -> str:
     path = PurePath(export_as)
     if path.is_absolute() or any(part == ".." for part in path.parts) or len(path.parts) != 1:
         raise ValidationError("export name must be a bare filename")
+    if _SAFE_EXPORT_NAME_PATTERN.fullmatch(export_as) is None:
+        raise ValidationError("export name may only contain ASCII letters, digits, '.', '_', and '-'")
     return export_as

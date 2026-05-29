@@ -1,4 +1,5 @@
 import base64
+import json
 import os
 from pathlib import Path
 
@@ -74,7 +75,7 @@ def test_missing_media_file_returns_structured_diagnostics(tmp_path):
     report = project.write_apkg(tmp_path / "missing-media.apkg")
     with pytest.raises(DiagnosticsError):
         report.ensure_success()
-    assert any("MEDIA" in diagnostic.code for diagnostic in report.diagnostics)
+    assert any(diagnostic.code == "MEDIA.SOURCE_MISSING" for diagnostic in report.diagnostics)
 
 
 def test_cloze_note_without_cloze_marker_returns_structured_diagnostics(tmp_path):
@@ -83,4 +84,17 @@ def test_cloze_note_without_cloze_marker_returns_structured_diagnostics(tmp_path
     report = project.write_apkg(tmp_path / "no-cloze.apkg")
     with pytest.raises(DiagnosticsError):
         report.ensure_success()
-    assert any("CLOZE" in diagnostic.code for diagnostic in report.diagnostics)
+    assert any(diagnostic.code == "PRODUCT.CLOZE_MARKER_MISSING" for diagnostic in report.diagnostics)
+
+
+def test_cloze_note_without_cloze_marker_writes_report_json(tmp_path):
+    report_json = tmp_path / "report.json"
+    project = Project("Deck")
+    project.add_note(Note.cloze("plain text without cloze", stable_id="cloze:plain"))
+    report = project.write_apkg(tmp_path / "no-cloze.apkg", report_json=report_json)
+
+    assert report.status == "invalid"
+    assert report_json.is_file()
+    payload = json.loads(report_json.read_text(encoding="utf-8"))
+    assert payload["status"] == "invalid"
+    assert any(diagnostic["code"] == "PRODUCT.CLOZE_MARKER_MISSING" for diagnostic in payload["diagnostics"])
