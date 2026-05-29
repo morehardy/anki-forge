@@ -7,7 +7,6 @@ use std::time::Instant;
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
 use base64::Engine as _;
-use serde::Serialize;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 
@@ -1883,18 +1882,6 @@ fn display_name_suffix(name: Option<&str>) -> String {
     name.map(|name| format!(" ({name})")).unwrap_or_default()
 }
 
-#[derive(Debug, Serialize)]
-struct ProductIdentityComponents {
-    selected_fields: Vec<ProductIdentityFieldComponent>,
-}
-
-#[derive(Debug, Serialize)]
-struct ProductIdentityFieldComponent {
-    key: String,
-    name: String,
-    value: String,
-}
-
 fn resolve_product_note_identity(
     project: &Project,
     note: &crate::product::Note,
@@ -1909,6 +1896,38 @@ fn resolve_product_note_identity(
                 recipe_id: "product.explicit-stable-id.v1".into(),
                 canonical_payload_hash: None,
                 provenance: "ExplicitStableId".into(),
+                used_override: false,
+            };
+        }
+    }
+
+    if note.note_type_id() == STOCK_BASIC_ID {
+        let rendered = note.rendered_fields();
+        if let Ok(stable_id) = crate::deck::identity::derive_basic_stock_stable_id_from_front(
+            rendered.get("Front").map(String::as_str).unwrap_or_default(),
+        ) {
+            return crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: crate::deck::identity::BASIC_RECIPE_ID.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
+                used_override: false,
+            };
+        }
+    }
+
+    if note.note_type_id() == STOCK_CLOZE_ID {
+        let rendered = note.rendered_fields();
+        if let Ok(stable_id) = crate::deck::identity::derive_cloze_stock_stable_id_from_text(
+            rendered.get("Text").map(String::as_str).unwrap_or_default(),
+        ) {
+            return crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: crate::deck::identity::CLOZE_RECIPE_ID.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
                 used_override: false,
             };
         }
@@ -1968,41 +1987,45 @@ fn derive_product_note_identity(
         .iter()
         .map(|field| (field.key_ref().as_str(), field))
         .collect::<BTreeMap<_, _>>();
-    let components = ProductIdentityComponents {
-        selected_fields: recipe
-            .field_keys()
-            .into_iter()
-            .map(|key| {
-                let key = key.as_str().to_string();
-                let field_name = field_by_key
-                    .get(key.as_str())
-                    .map(|field| field.name().to_string())
-                    .unwrap_or_else(|| key.clone());
-                let value = rendered
-                    .get(key.as_str())
-                    .or_else(|| rendered.get(field_name.as_str()))
-                    .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
-                    .unwrap_or_default();
-                ProductIdentityFieldComponent {
-                    key,
-                    name: field_name,
-                    value,
-                }
-            })
-            .collect(),
-    };
-    let (stable_id, canonical_payload) =
-        crate::deck::identity::hash_payload(recipe_id, "custom", note_type.id(), components)
-            .expect("product identity payload should serialize");
-    let canonical_payload_hash = format!("blake3:{}", blake3::hash(canonical_payload.as_bytes()));
-    crate::update_safety::model::ResolvedNoteIdentity {
-        stable_id: stable_id.clone(),
-        current_guid_candidate: stable_id,
-        recipe_id: recipe_id.into(),
-        canonical_payload_hash: Some(canonical_payload_hash),
-        provenance: provenance.into(),
-        used_override,
+    let selected_fields = recipe
+        .field_keys()
+        .into_iter()
+        .map(|key| {
+            let key = key.as_str().to_string();
+            let field_name = field_by_key
+                .get(key.as_str())
+                .map(|field| field.name().to_string())
+                .unwrap_or_else(|| key.clone());
+            let value = rendered
+                .get(key.as_str())
+                .or_else(|| rendered.get(field_name.as_str()))
+                .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
+                .unwrap_or_default();
+            crate::product::identity::CustomIdentityFieldComponent {
+                key,
+                name: field_name,
+                value,
+            }
+        })
+        .collect();
+
+    if recipe_id == "custom.notetype.fields.v1"
+        && provenance == "InferredFromNotetypeFields"
+        && !used_override
+    {
+        return crate::product::identity::derive_custom_notetype_identity(
+            note_type.id(),
+            selected_fields,
+        );
     }
+
+    crate::product::identity::derive_custom_identity(
+        note_type.id(),
+        recipe_id,
+        provenance,
+        used_override,
+        selected_fields,
+    )
 }
 
 fn custom_note_fields_for_authoring(
