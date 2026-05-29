@@ -233,13 +233,12 @@ impl<'de> Deserialize<'de> for ProductDocument {
         D: Deserializer<'de>,
     {
         let value = serde_json::Value::deserialize(deserializer)?;
-        match value
-            .get("product_document_version")
-            .and_then(serde_json::Value::as_str)
-        {
-            Some("product-v2") => serde_json::from_value::<ProductDocumentV2>(value)
-                .map(ProductDocument::from)
-                .map_err(serde::de::Error::custom),
+        match value.get("product_document_version") {
+            Some(serde_json::Value::String(version)) if version == "product-v2" => {
+                serde_json::from_value::<ProductDocumentV2>(value)
+                    .map(ProductDocument::from)
+                    .map_err(serde::de::Error::custom)
+            }
             Some(version) => Ok(ProductDocument::from_unknown_version(&value, version)),
             None => serde_json::from_value::<ProductDocumentLegacy>(value)
                 .map(ProductDocument::from)
@@ -623,7 +622,7 @@ impl ProductDocument {
         }
     }
 
-    fn from_unknown_version(raw: &serde_json::Value, version: &str) -> Self {
+    fn from_unknown_version(raw: &serde_json::Value, version: &serde_json::Value) -> Self {
         let document_id = raw
             .get("document_id")
             .and_then(serde_json::Value::as_str)
@@ -677,5 +676,50 @@ impl ProductDocument {
 
     pub fn font_bindings(&self) -> &[super::assets::FontBinding] {
         &self.font_bindings
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn unsupported_string_product_version_records_transport_diagnostic() {
+        let raw = r#"{
+            "product_document_version": "product-v3",
+            "document_id": "future",
+            "note_types": [],
+            "notes": []
+        }"#;
+
+        let doc: ProductDocument = serde_json::from_str(raw).expect("unsupported version");
+        let payload = doc.product_v2().expect("transport payload");
+
+        assert_eq!(doc.document_id(), "future");
+        assert_eq!(payload.transport_diagnostics.len(), 1);
+        assert_eq!(
+            payload.transport_diagnostics[0].code,
+            "PRODUCT.VERSION_UNSUPPORTED"
+        );
+    }
+
+    #[test]
+    fn non_string_product_version_records_transport_diagnostic() {
+        let raw = r#"{
+            "product_document_version": 2,
+            "document_id": "numeric-version",
+            "note_types": [],
+            "notes": []
+        }"#;
+
+        let doc: ProductDocument = serde_json::from_str(raw).expect("unsupported version");
+        let payload = doc.product_v2().expect("transport payload");
+
+        assert_eq!(doc.document_id(), "numeric-version");
+        assert_eq!(payload.transport_diagnostics.len(), 1);
+        assert_eq!(
+            payload.transport_diagnostics[0].code,
+            "PRODUCT.VERSION_UNSUPPORTED"
+        );
     }
 }
