@@ -97,6 +97,9 @@ class Project:
 
         seen_stable_ids: set[str] = set()
         for note in self._notes:
+            if note.note_type_id not in STOCK_NOTE_TYPE_IDS and note.note_type_id not in self._note_types:
+                raise ValidationError(f"unknown note type id: {note.note_type_id}")
+
             if note.stable_id is not None:
                 if note.stable_id in seen_stable_ids:
                     raise ValidationError(f"duplicate note stable_id: {note.stable_id}")

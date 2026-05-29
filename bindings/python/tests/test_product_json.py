@@ -56,6 +56,13 @@ def test_custom_identity_missing_stable_id_fast_fails():
         project.to_product_document()
 
 
+def test_unknown_internal_note_type_fast_fails_before_serialization():
+    project = Project("Deck")
+    project._notes.append(Note("missing").text("front", "x"))
+    with pytest.raises(ValidationError):
+        project.to_product_document()
+
+
 def test_custom_media_project_serializes_typed_content():
     project = Project("Media", stable_id="custom-media-demo", default_deck="Media")
     ref = project.media.add_bytes(source_label="hello.wav", data=INLINE_WAV_BYTES, export_as="hello.wav")
