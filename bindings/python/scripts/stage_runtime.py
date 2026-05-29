@@ -21,7 +21,11 @@ RUNTIME_ROOT = PYTHON_ROOT / "src" / "anki_forge" / "_runtime"
 
 def runtime_executable() -> Path:
     executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
-    executable = REPO_ROOT / "target" / "release" / executable_name
+    cargo_target = os.environ.get("CARGO_BUILD_TARGET")
+    target_dir = REPO_ROOT / "target"
+    if cargo_target:
+        target_dir = target_dir / cargo_target
+    executable = target_dir / "release" / executable_name
     if not executable.is_file():
         raise SystemExit(f"release contract_tools binary missing: {executable}")
     return executable

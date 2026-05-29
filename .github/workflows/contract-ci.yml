@@ -23,6 +23,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - run: python -m pip install --upgrade pytest
       - run: ./scripts/verify-ci.sh
 
   python-wheel-smoke:
@@ -113,6 +114,8 @@ jobs:
             bash -lc '
           set -euo pipefail
           export PATH="$PYTHON_BIN:$PATH"
+          curl --proto '"'"'=https'"'"' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.92.0 --no-modify-path
+          export PATH="$HOME/.cargo/bin:$PATH"
           python -m pip install --upgrade pip build pytest wheel
           cargo build -p contract_tools --release
           cd bindings/python

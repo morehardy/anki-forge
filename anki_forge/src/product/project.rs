@@ -2812,10 +2812,7 @@ fn replace_output_atomically(
     )?;
     temp_target.as_file_mut().sync_all()?;
     if force_failure_for_test {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "forced output replace failure",
-        ));
+        return Err(std::io::Error::other("forced output replace failure"));
     }
     temp_target.persist(target).map_err(|err| err.error)?;
     Ok(())
