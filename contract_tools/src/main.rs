@@ -24,6 +24,10 @@ enum Command {
         #[arg(long)]
         out_dir: String,
     },
+    PackageRuntimeAssets {
+        #[arg(long)]
+        manifest: String,
+    },
     Normalize {
         #[arg(long)]
         manifest: String,
@@ -94,6 +98,11 @@ fn main() -> anyhow::Result<()> {
         Command::Package { manifest, out_dir } => {
             let artifact_path = contract_tools::package::build_artifact(&manifest, &out_dir)?;
             println!("{}", artifact_path.display());
+        }
+        Command::PackageRuntimeAssets { manifest } => {
+            let manifest = contract_tools::manifest::load_manifest(&manifest)?;
+            let paths = contract_tools::package::runtime_asset_relative_paths(&manifest)?;
+            println!("{}", serde_json::to_string(&paths)?);
         }
         Command::Normalize {
             manifest,

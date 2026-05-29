@@ -17,6 +17,13 @@ where = ["src"]
 include = ["anki_forge", "anki_forge.*"]
 exclude = ["anki_forge_python", "anki_forge_python.*"]
 
+[tool.setuptools.package-data]
+anki_forge = [
+  "_runtime/bin/*",
+  "_runtime/contracts/*",
+  "_runtime/contracts/**/*",
+]
+
 [tool.mypy]
 python_version = "3.11"
 disallow_untyped_defs = true
