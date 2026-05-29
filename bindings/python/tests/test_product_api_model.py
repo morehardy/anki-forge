@@ -147,6 +147,15 @@ def test_project_accepts_hyphenated_custom_ids_and_validates_mutated_notetypes()
         Project("Other").add_notetype(nt)
 
 
+def test_notetype_defaults_name_to_id_and_keeps_id_stable():
+    nt = NoteType.custom("custom")
+    assert nt.name == "custom"
+    with pytest.raises(AttributeError):
+        nt.id = "other"
+    nt.field(Field("Front", key="front"))
+    assert nt.fields[0].key == "front"
+
+
 def test_project_notetypes_is_read_only_but_add_notetype_still_mutates():
     project = Project("Deck")
     with pytest.raises(TypeError):

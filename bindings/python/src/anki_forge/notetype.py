@@ -167,9 +167,15 @@ class NoteType:
     css_value: str | None = None
     custom_value: bool = True
 
+    def __setattr__(self, name: str, value: object) -> None:
+        if name == "id" and "id" in self.__dict__:
+            raise AttributeError("note type id is immutable")
+        super().__setattr__(name, value)
+
     def __post_init__(self) -> None:
-        object.__setattr__(self, "id", _validate_id(self.id, "note type id"))
-        object.__setattr__(self, "name", _validate_optional_non_empty(self.name, "note type name"))
+        note_type_id = _validate_id(self.id, "note type id")
+        object.__setattr__(self, "id", note_type_id)
+        object.__setattr__(self, "name", _validate_optional_non_empty(self.name, "note type name") or note_type_id)
         if self.css_value is not None:
             _reject_ascii_control(self.css_value, "css")
 
