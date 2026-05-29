@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use anki_forge::build::{BuildOptions, BuildReportJson, BuildStatus, RiskLevel};
+use anki_forge::build::{
+    BuildOptions, BuildReportJson, BuildStatus, ProjectNormalizeOptions, RiskLevel,
+};
 use anki_forge::product::ProductDocument;
 
 pub enum ProductBuildOutcome {
@@ -22,10 +24,17 @@ pub fn run(
     let runtime_bundle = anki_forge::runtime::load_bundle_from_manifest(&manifest.path)?;
     let writer_policy = anki_forge::runtime::load_writer_policy(&runtime_bundle, "default")?;
     let build_context = anki_forge::runtime::load_build_context(&runtime_bundle, "default")?;
-    let raw = std::fs::read_to_string(product_input)?;
+    let product_input_path = PathBuf::from(product_input);
+    let product_input_base_dir = product_input_path
+        .parent()
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("."));
+    let raw = std::fs::read_to_string(&product_input_path)?;
     let document: ProductDocument = serde_json::from_str(&raw)?;
 
-    let mut options = BuildOptions::new().output(PathBuf::from(apkg_out));
+    let mut options = BuildOptions::new()
+        .output(PathBuf::from(apkg_out))
+        .normalize_options(ProjectNormalizeOptions::strict().base_dir(product_input_base_dir));
     if let Some(compare_to) = compare_to {
         options = options.compare_to(compare_to);
     }

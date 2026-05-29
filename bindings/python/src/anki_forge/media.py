@@ -26,8 +26,8 @@ class MediaItem:
     source_label: str
     data: bytes | None
     path: Path | None
-    length: int
-    sha256: str
+    length: int | None
+    sha256: str | None
 
 
 class MediaRegistry:
@@ -75,7 +75,6 @@ class MediaRegistry:
         existing = self._items_by_export.get(export_name)
         if existing is not None:
             raise ValidationError(f"media export name already exists: {export_name}")
-        data = media_path.read_bytes()
         ref = self._new_ref(export_name)
         item = MediaItem(
             ref=ref,
@@ -83,8 +82,8 @@ class MediaRegistry:
             source_label=str(media_path),
             data=None,
             path=media_path,
-            length=len(data),
-            sha256=hashlib.sha256(data).hexdigest(),
+            length=None,
+            sha256=None,
         )
         self._items.append(item)
         self._items_by_export[export_name] = item

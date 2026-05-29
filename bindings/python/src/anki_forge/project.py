@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import shutil
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping, Sequence
 
-from .diagnostics import RuntimeInvocationError, ValidationError
+from .diagnostics import Diagnostic, RuntimeInvocationError, ValidationError
 from .media import MediaRegistry
 from .note import Note
 from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empty
@@ -21,6 +23,7 @@ STOCK_FIELD_KEYS = {
     "cloze": {"text", "back_extra"},
 }
 ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
+CLOZE_MARKER_PATTERN = re.compile(r"\{\{c[1-9][0-9]*::")
 
 
 @dataclass
@@ -113,8 +116,12 @@ class Project:
         try:
             with tempfile.TemporaryDirectory(prefix="anki-forge-product-") as temp_dir:
                 product_input = Path(temp_dir) / "project.product-v2.json"
+                report = self._cloze_marker_report()
+                if report is not None:
+                    return report
+                product_document = self._runtime_product_document(product_input.parent)
                 product_input.write_text(
-                    json.dumps(self.to_product_document(), ensure_ascii=False),
+                    json.dumps(product_document, ensure_ascii=False),
                     encoding="utf-8",
                 )
                 report = run_product_build(
@@ -129,6 +136,56 @@ class Project:
             raise RuntimeInvocationError(str(error), kind="setup_failed") from error
 
         return report
+
+    def _runtime_product_document(self, runtime_dir: Path) -> dict[str, object]:
+        product_document = self.to_product_document()
+        media_entries = product_document.get("media")
+        if not isinstance(media_entries, list):
+            return product_document
+
+        for item, entry in zip(self.media.items, media_entries, strict=True):
+            if item.source_kind != "file" or item.path is None or not isinstance(entry, dict):
+                continue
+            source = entry.get("source")
+            if not isinstance(source, dict):
+                continue
+            source["path"] = item.ref.export_as
+            if item.path.is_file():
+                shutil.copy2(item.path, runtime_dir / item.ref.export_as)
+        return product_document
+
+    def _cloze_marker_report(self) -> BuildReport | None:
+        for index, note in enumerate(self._notes):
+            if note.note_type_id != "cloze":
+                continue
+            text = note.fields.get("text")
+            if text is None or text.value is None or CLOZE_MARKER_PATTERN.search(text.value):
+                continue
+            return BuildReport(
+                status="invalid",
+                comparison="not_requested",
+                artifact=None,
+                counts={"notes": 0, "cards": 0, "media": 0},
+                media={
+                    "objects": 0,
+                    "bindings": 0,
+                    "references": 0,
+                    "missing_references": 0,
+                    "unsafe_references": 0,
+                    "unused_bindings": 0,
+                    "unique_bytes": 0,
+                },
+                diagnostics=(
+                    Diagnostic(
+                        code="PRODUCT.CLOZE_MARKER_MISSING",
+                        severity="error",
+                        message="cloze note text must contain at least one cloze marker",
+                        source=f"project.notes[{index}].fields[\"text\"]",
+                        help="add a marker like {{c1::text}} to the cloze note text",
+                    ),
+                ),
+            )
+        return None
 
     def _stock_note_types(self) -> list[str]:
         used = {note.note_type_id for note in self._notes}

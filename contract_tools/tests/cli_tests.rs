@@ -931,6 +931,35 @@ fn product_build_empty_project_is_invalid_and_writes_no_artifact() {
 }
 
 #[test]
+fn product_v2_handwritten_missing_identity_is_diagnostic() {
+    let temp = tempdir().expect("tempdir");
+    let output = run_product_build_fixture(
+        "missing-custom-identity",
+        temp.path(),
+        &os_args(&["--output", "contract-json"]),
+    );
+    assert_eq!(output.status.code(), Some(3));
+    let report: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert!(diagnostics_include(&report, "PRODUCT.IDENTITY_MISSING"));
+}
+
+#[test]
+fn product_v2_handwritten_reserved_stock_id_is_diagnostic() {
+    let temp = tempdir().expect("tempdir");
+    let output = run_product_build_fixture(
+        "reserved-stock-id",
+        temp.path(),
+        &os_args(&["--output", "contract-json"]),
+    );
+    assert_eq!(output.status.code(), Some(3));
+    let report: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert!(diagnostics_include(
+        &report,
+        "PRODUCT.RESERVED_ID_KIND_MISMATCH"
+    ));
+}
+
+#[test]
 fn product_build_report_json_write_failure_is_reported() {
     let temp = tempdir().expect("tempdir");
     let report_json = unwritable_report_json_path(temp.path());

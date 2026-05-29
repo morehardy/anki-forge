@@ -1,0 +1,23 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "reserved-stock-id",
+  "default_deck_name": "Invalid",
+  "note_types": [
+    {
+      "kind": "custom",
+      "id": "basic",
+      "name": "Reserved",
+      "fields": [
+        {"name": "Front", "key": "front", "identity": true, "sort": true, "required": true, "source_path": "project.note_types[\"basic\"].fields[\"front\"]"}
+      ],
+      "templates": [
+        {"name": "Card", "key": "card", "front": "{{Front}}", "back": "{{Front}}", "generation_rule": {"kind": "all", "fields": ["front"]}, "source_path": "project.note_types[\"basic\"].templates[\"card\"]"}
+      ],
+      "identity": {"kind": "fields", "fields": ["front"]},
+      "css": null,
+      "source_path": "project.note_types[\"basic\"]"
+    }
+  ],
+  "notes": [],
+  "media": []
+}
