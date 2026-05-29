@@ -10,6 +10,10 @@ from .note import Note
 from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empty
 
 STOCK_NOTE_TYPE_IDS = {"basic", "cloze"}
+STOCK_FIELD_KEYS = {
+    "basic": {"front", "back"},
+    "cloze": {"text", "back_extra"},
+}
 
 
 @dataclass
@@ -95,6 +99,7 @@ class Project:
         for note_type_id in self._note_type_order:
             self._note_types[note_type_id].validate()
 
+        media_ids = {item.ref.media_id for item in self.media.items}
         seen_stable_ids: set[str] = set()
         for note in self._notes:
             if note.note_type_id not in STOCK_NOTE_TYPE_IDS and note.note_type_id not in self._note_types:
@@ -111,6 +116,21 @@ class Project:
                 has_identity_fields = any(field.identity for field in note_type.fields)
                 if note.stable_id is None and not has_identity_fields:
                     raise ValidationError(f"custom note type {note_type.id} needs identity fields or stable_id")
+            else:
+                self._validate_stock_note_field_keys(note)
+
+            self._validate_note_media_references(note, media_ids)
+
+    def _validate_stock_note_field_keys(self, note: Note) -> None:
+        allowed = STOCK_FIELD_KEYS[note.note_type_id]
+        for field_key in note.fields:
+            if field_key not in allowed:
+                raise ValidationError(f"unknown field key for {note.note_type_id}: {field_key}")
+
+    def _validate_note_media_references(self, note: Note, media_ids: set[str]) -> None:
+        for content in note.fields.values():
+            if content.kind in {"sound", "image"} and content.media_id not in media_ids:
+                raise ValidationError(f"unknown media id: {content.media_id}")
 
     def _validate_custom_note_field_keys(self, note: Note, note_type: NoteType) -> None:
         allowed = {field.key for field in note_type.fields}

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from anki_forge import Field, GenerationRule, Note, NoteType, Project, Template, ValidationError
+from anki_forge import Field, GenerationRule, MediaRef, Note, NoteType, Project, Template, ValidationError
 from anki_forge.product_json import basic_stock_notetype_json, cloze_stock_notetype_json
 
 
@@ -59,6 +59,34 @@ def test_custom_identity_missing_stable_id_fast_fails():
 def test_unknown_internal_note_type_fast_fails_before_serialization():
     project = Project("Deck")
     project._notes.append(Note("missing").text("front", "x"))
+    with pytest.raises(ValidationError):
+        project.to_product_document()
+
+
+def test_mutated_stock_note_fields_fast_fail_before_serialization():
+    note = Note.basic("Front", "Back")
+    note.fields["extra"] = note.fields["front"]
+    project = Project("Deck").add_note(note)
+    with pytest.raises(ValidationError):
+        project.to_product_document()
+
+
+def test_unknown_media_reference_fast_fails_before_serialization():
+    nt = (
+        NoteType.custom("audio-card")
+        .field(Field("Prompt", key="prompt", identity=True))
+        .field(Field("Audio", key="audio"))
+    )
+    note = Note("audio-card").text("prompt", "hello").sound("audio", MediaRef("media:999999", "missing.wav"))
+    project = Project("Deck").add_notetype(nt).add_note(note)
+    with pytest.raises(ValidationError):
+        project.to_product_document()
+
+
+def test_duplicate_stable_ids_fast_fail_before_serialization():
+    project = Project("Deck")
+    project.add_note(Note.basic("A", "Back", stable_id="duplicate"))
+    project.add_note(Note.basic("B", "Back", stable_id="duplicate"))
     with pytest.raises(ValidationError):
         project.to_product_document()
 
