@@ -26,6 +26,8 @@ nt = (
     NoteType.custom("jp-vocab")
     .field(Field("Expression", key="expr", identity=True, sort=True, required=True))
     .field(Field("Meaning", key="meaning"))
+    .field(Field("Audio", key="audio"))
+    .field(Field("Picture", key="picture"))
     .template(Template("Recognition", front="{{Expression}}", back="{{Meaning}}", generate_when=GenerationRule.all(["expr"])))
 )
 project = Project("Japanese").add_notetype(nt)
