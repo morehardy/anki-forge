@@ -43,19 +43,24 @@ def resolve_runtime(explicit: RuntimeOverride | ResolvedRuntime | None = None, c
 
 
 def _workspace_runtime(cwd: Path | str | None) -> ResolvedRuntime:
-    current = Path(cwd or Path.cwd()).resolve()
+    workspace_root = _find_workspace_root(cwd)
+    manifest = workspace_root / "contracts" / "manifest.yaml"
     executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
+    for profile in ("release", "debug"):
+        executable = workspace_root / "target" / profile / executable_name
+        if executable.is_file():
+            return ResolvedRuntime(manifest=manifest, executable=executable, mode="workspace")
+    raise RuntimeNotFoundError(
+        "found contracts/manifest.yaml but no contract_tools executable; "
+        "build it with cargo or pass RuntimeOverride(manifest=..., executable=...)"
+    )
+
+
+def _find_workspace_root(cwd: Path | str | None) -> Path:
+    current = Path(cwd or Path.cwd()).resolve()
     while True:
-        manifest = current / "contracts" / "manifest.yaml"
-        if manifest.is_file():
-            for profile in ("release", "debug"):
-                executable = current / "target" / profile / executable_name
-                if executable.is_file():
-                    return ResolvedRuntime(manifest=manifest, executable=executable, mode="workspace")
-            raise RuntimeNotFoundError(
-                "found contracts/manifest.yaml but no contract_tools executable; "
-                "build it with cargo or pass RuntimeOverride(manifest=..., executable=...)"
-            )
+        if (current / "contracts" / "manifest.yaml").is_file():
+            return current
         if current.parent == current:
             raise RuntimeNotFoundError(
                 "failed to discover anki-forge runtime; build contract_tools in the workspace "

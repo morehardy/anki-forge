@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from anki_forge import DiagnosticsError, Project, ProtocolError, RuntimeInvocationError, ValidationError
+import anki_forge.runtime as runtime_module
 from anki_forge.report import BuildReport
 from anki_forge.runtime import RuntimeOverride, build_product_build_argv, parse_completed_process
 
@@ -110,6 +111,47 @@ def test_fail_on_requires_compare_to_before_subprocess(monkeypatch):
     monkeypatch.setattr(subprocess, "run", fail_run)
     with pytest.raises(ValidationError):
         Project("Deck").write_apkg("out.apkg", fail_on="medium", runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")))
+
+
+def test_write_apkg_returns_invalid_report_without_raising(monkeypatch):
+    def fake_run(*args, **kwargs):
+        return subprocess.CompletedProcess(["contract_tools"], 1, stdout=json.dumps({
+            "kind": "anki-forge-build-report",
+            "schema_version": "phase4-build-report-v1",
+            "tool_version": "test",
+            "status": "invalid",
+            "comparison": "not_requested",
+            "artifact": None,
+            "counts": {"notes": 0, "cards": 0, "media": 0},
+            "media": {"objects": 0, "bindings": 0, "bytes": 0},
+            "diagnostics": [{"code": "E", "severity": "error", "message": "bad"}],
+            "metrics": {"duration_ms": 1},
+            "policy": {"status": "not_applicable"}
+        }), stderr="")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    report = Project("Deck").write_apkg(
+        "out.apkg",
+        runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")),
+    )
+
+    assert report.status == "invalid"
+    with pytest.raises(DiagnosticsError):
+        report.ensure_success()
+
+
+def test_find_workspace_root_discovers_parent_manifest(tmp_path):
+    workspace = tmp_path / "workspace"
+    nested = workspace / "bindings" / "python"
+    manifest = workspace / "contracts" / "manifest.yaml"
+    manifest.parent.mkdir(parents=True)
+    nested.mkdir(parents=True)
+    manifest.write_text("bundle_version: test\n", encoding="utf-8")
+
+    find_workspace_root = getattr(runtime_module, "_find_workspace_root", None)
+
+    assert callable(find_workspace_root)
+    assert find_workspace_root(nested) == workspace
 
 
 def test_negative_returncode_is_interrupted():

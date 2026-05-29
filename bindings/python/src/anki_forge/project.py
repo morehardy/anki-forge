@@ -128,7 +128,6 @@ class Project:
         except OSError as error:
             raise RuntimeInvocationError(str(error), kind="setup_failed") from error
 
-        report.ensure_success()
         return report
 
     def _stock_note_types(self) -> list[str]:
