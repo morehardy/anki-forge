@@ -93,8 +93,8 @@ def _required_int_map(payload: dict[str, Any], key: str, fields: tuple[str, ...]
     value = payload.get(key)
     if not isinstance(value, dict):
         raise ProtocolError(f"build report {key} must be an object")
-    if set(value) != set(fields):
-        raise ProtocolError(f"build report {key} must contain exactly: {', '.join(fields)}")
+    if not set(fields).issubset(value):
+        raise ProtocolError(f"build report {key} is missing required fields")
     parsed: dict[str, int] = {}
     for field in fields:
         parsed[field] = _non_negative_int(value.get(field), f"{key}.{field}")
@@ -106,8 +106,8 @@ def _artifact(value: object) -> Mapping[str, Any] | None:
         return None
     if not isinstance(value, dict):
         raise ProtocolError("build report artifact must be an object or null")
-    if set(value) != {"path"}:
-        raise ProtocolError("build report artifact must contain exactly path")
+    if "path" not in value:
+        raise ProtocolError("build report artifact must contain path")
     if not isinstance(value["path"], str) or not value["path"]:
         raise ProtocolError("build report artifact.path must be a non-empty string")
     return value
@@ -116,16 +116,16 @@ def _artifact(value: object) -> Mapping[str, Any] | None:
 def _metrics(value: object) -> None:
     if not isinstance(value, dict):
         raise ProtocolError("build report metrics must be an object")
-    if set(value) != {"duration_ms"}:
-        raise ProtocolError("build report metrics must contain exactly duration_ms")
+    if "duration_ms" not in value:
+        raise ProtocolError("build report metrics must contain duration_ms")
     _non_negative_int(value.get("duration_ms"), "metrics.duration_ms")
 
 
 def _policy(value: object) -> None:
     if not isinstance(value, dict):
         raise ProtocolError("build report policy must be an object")
-    if set(value) != POLICY_FIELDS:
-        raise ProtocolError("build report policy must contain exactly status, threshold, highest_risk, blocking_findings")
+    if not POLICY_FIELDS.issubset(value):
+        raise ProtocolError("build report policy is missing required fields")
     status = value["status"]
     if not isinstance(status, str) or status not in POLICY_STATUSES:
         raise ProtocolError("build report policy.status is unsupported")

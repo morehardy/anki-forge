@@ -1,11 +1,12 @@
 from copy import deepcopy
 import json
+import os
 import subprocess
 from pathlib import Path
 
 import pytest
 
-from anki_forge import DiagnosticsError, Project, ProtocolError, RuntimeInvocationError, ValidationError
+from anki_forge import DiagnosticsError, Note, Project, ProtocolError, RuntimeInvocationError, ValidationError
 import anki_forge.runtime as runtime_module
 from anki_forge.report import BuildReport
 from anki_forge.runtime import RuntimeOverride, build_product_build_argv, parse_completed_process
@@ -113,8 +114,9 @@ def test_report_rejects_missing_or_invalid_artifact_path():
         BuildReport.from_json(build_report_payload(artifact={}))
     with pytest.raises(ProtocolError):
         BuildReport.from_json(build_report_payload(artifact={"path": ""}))
-    with pytest.raises(ProtocolError):
-        BuildReport.from_json(build_report_payload(artifact={"path": "deck.apkg", "extra": True}))
+
+    report = BuildReport.from_json(build_report_payload(artifact={"path": "deck.apkg", "extra": True}))
+    assert report.artifact == {"path": "deck.apkg", "extra": True}
 
 
 def test_report_rejects_bool_integer_field():
@@ -134,14 +136,42 @@ def test_report_rejects_invalid_policy_shape_and_status():
             "highest_risk": None,
             "blocking_findings": [],
         }))
-    with pytest.raises(ProtocolError):
-        BuildReport.from_json(build_report_payload(policy={
-            "status": "not_evaluated",
-            "threshold": None,
-            "highest_risk": None,
-            "blocking_findings": [],
-            "extra": "nope",
-        }))
+
+    BuildReport.from_json(build_report_payload(policy={
+        "status": "not_evaluated",
+        "threshold": None,
+        "highest_risk": None,
+        "blocking_findings": [],
+        "extra": "ok",
+    }))
+
+
+def test_report_accepts_forward_compatible_summary_fields():
+    report = BuildReport.from_json(build_report_payload(
+        counts={"notes": 1, "cards": 1, "media": 0, "future": 99},
+        media={
+            "objects": 0,
+            "bindings": 0,
+            "references": 0,
+            "missing_references": 0,
+            "unsafe_references": 0,
+            "unused_bindings": 0,
+            "unique_bytes": 0,
+            "future": 99,
+        },
+        metrics={"duration_ms": 1, "future": True},
+    ))
+
+    assert report.counts == {"notes": 1, "cards": 1, "media": 0}
+    assert report.media == {
+        "objects": 0,
+        "bindings": 0,
+        "references": 0,
+        "missing_references": 0,
+        "unsafe_references": 0,
+        "unused_bindings": 0,
+        "unique_bytes": 0,
+    }
 
 
 def test_exit_zero_non_json_is_protocol_error(monkeypatch):
@@ -200,6 +230,53 @@ def test_find_workspace_root_discovers_parent_manifest(tmp_path):
 
     assert callable(find_workspace_root)
     assert find_workspace_root(nested) == workspace
+
+
+def test_workspace_runtime_uses_cargo_build_target(monkeypatch, tmp_path):
+    workspace = tmp_path / "workspace"
+    manifest = workspace / "contracts" / "manifest.yaml"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text("bundle_version: test\n", encoding="utf-8")
+    executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
+    executable = workspace / "target" / "x86_64-unknown-linux-gnu" / "release" / executable_name
+    executable.parent.mkdir(parents=True)
+    executable.touch()
+    monkeypatch.setenv("CARGO_BUILD_TARGET", "x86_64-unknown-linux-gnu")
+
+    workspace_runtime = getattr(runtime_module, "_workspace_runtime")
+
+    resolved = workspace_runtime(workspace)
+
+    assert resolved.executable == executable
+
+
+def test_cloze_marker_detection_accepts_uppercase_c(monkeypatch):
+    def fake_run(*args, **kwargs):
+        return subprocess.CompletedProcess(["contract_tools"], 0, stdout=json.dumps(build_report_payload()), stderr="")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    report = Project("Deck").add_note(Note.cloze("A {{C1::valid}} marker")).write_apkg(
+        "out.apkg",
+        runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")),
+    )
+
+    assert report.status == "success"
+
+
+def test_cloze_report_json_creates_parent_directories(tmp_path):
+    report_json = tmp_path / "nested" / "reports" / "report.json"
+    project = Project("Deck")
+    project.add_note(Note.cloze("plain text", stable_id="cloze:plain"))
+
+    report = project.write_apkg(
+        tmp_path / "no-cloze.apkg",
+        report_json=report_json,
+        runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")),
+    )
+
+    assert report.status == "invalid"
+    assert report_json.is_file()
 
 
 def test_negative_returncode_is_interrupted():

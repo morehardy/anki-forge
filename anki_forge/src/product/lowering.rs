@@ -1125,22 +1125,22 @@ fn lower_product_v2_custom_note(
 
     let mut fields = BTreeMap::new();
     for declaration in &notetype.fields {
-        if let Some(content) = note.fields.get(&declaration.key) {
+        let value = if let Some(content) = note.fields.get(&declaration.key) {
             let field_source = v2_note_field_source(
                 note.source_path.as_deref(),
                 serialized_index,
                 &declaration.key,
             );
-            fields.insert(
-                declaration.name.clone(),
-                render_v2_content(plan, content, media_export_by_id, Some(&field_source)),
-            );
-        }
+            render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+        } else {
+            String::new()
+        };
+        fields.insert(declaration.name.clone(), value);
     }
     let field_source_keys = notetype
         .fields
         .iter()
-        .filter(|declaration| fields.contains_key(&declaration.name))
+        .filter(|declaration| note.fields.contains_key(&declaration.key))
         .map(|declaration| (declaration.name.clone(), declaration.key.clone()))
         .collect::<BTreeMap<_, _>>();
 

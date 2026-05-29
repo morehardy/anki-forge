@@ -942,6 +942,62 @@ fn product_v2_stock_cloze_missing_optional_back_extra_still_lowers() {
 }
 
 #[test]
+fn product_v2_custom_missing_optional_field_still_lowers_empty() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "custom-optional",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [
+              {"name": "Prompt", "key": "prompt", "identity": true, "required": true},
+              {"name": "Back", "key": "back", "required": false}
+            ],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Back}}", "generation_rule": {"kind": "all", "fields": ["prompt"]}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Optional",
+            "fields": {"prompt": {"kind": "text", "value": "Front only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower custom note with missing optional field");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Prompt").map(String::as_str),
+        Some("Front only")
+    );
+    assert_eq!(note.fields.get("Back").map(String::as_str), Some(""));
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{:?}].fields[\"Prompt\"]",
+            note.id
+        )),
+        Some("project.notes[0].fields[\"prompt\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path(&format!("authoring.notes[{:?}].fields[\"Back\"]", note.id)),
+        None
+    );
+}
+
+#[test]
 fn product_v2_image_content_renders_like_builder_media_ref() {
     let plan = product_v2_inline(
         r#"{

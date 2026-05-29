@@ -23,7 +23,7 @@ STOCK_FIELD_KEYS = {
     "cloze": {"text", "back_extra"},
 }
 ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
-CLOZE_MARKER_PATTERN = re.compile(r"\{\{c[1-9][0-9]*::")
+CLOZE_MARKER_PATTERN = re.compile(r"\{\{[cC][1-9][0-9]*::")
 
 
 @dataclass
@@ -259,6 +259,7 @@ def _validate_write_paths(
 
 
 def _write_report_json(report: BuildReport, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(_report_to_json(report), ensure_ascii=False, indent=2), encoding="utf-8")
 
 

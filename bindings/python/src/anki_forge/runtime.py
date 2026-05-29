@@ -46,7 +46,12 @@ def _workspace_runtime(cwd: Path | str | None) -> ResolvedRuntime:
     workspace_root = _find_workspace_root(cwd)
     manifest = workspace_root / "contracts" / "manifest.yaml"
     executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
+    cargo_target = os.environ.get("CARGO_BUILD_TARGET")
     for profile in ("release", "debug"):
+        if cargo_target:
+            executable = workspace_root / "target" / cargo_target / profile / executable_name
+            if executable.is_file():
+                return ResolvedRuntime(manifest=manifest, executable=executable, mode="workspace")
         executable = workspace_root / "target" / profile / executable_name
         if executable.is_file():
             return ResolvedRuntime(manifest=manifest, executable=executable, mode="workspace")
