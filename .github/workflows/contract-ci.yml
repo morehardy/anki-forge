@@ -47,7 +47,7 @@ jobs:
             platform-tag: manylinux_2_17_x86_64.manylinux2014_x86_64
             linux: true
             macosx-deployment-target: ""
-          - os: macos-13
+          - os: macos-15-intel
             arch: x86_64
             python-arch: x64
             python-version: "3.11"
@@ -55,7 +55,7 @@ jobs:
             platform-tag: macosx_10_13_x86_64
             linux: false
             macosx-deployment-target: "10.13"
-          - os: macos-13
+          - os: macos-15-intel
             arch: x86_64
             python-arch: x64
             python-version: "3.12"
