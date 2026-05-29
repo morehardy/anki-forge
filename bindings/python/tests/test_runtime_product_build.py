@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import subprocess
 from pathlib import Path
@@ -16,8 +17,8 @@ except ImportError as exc:
 from anki_forge_python.runtime import ResolvedRuntime as LowLevelRuntime
 
 
-def test_report_success_warning_does_not_raise():
-    report = BuildReport.from_json({
+def build_report_payload(**overrides):
+    payload = {
         "kind": "anki-forge-build-report",
         "schema_version": "phase4-build-report-v1",
         "tool_version": "test",
@@ -25,68 +26,122 @@ def test_report_success_warning_does_not_raise():
         "comparison": "not_requested",
         "artifact": {"path": "deck.apkg"},
         "counts": {"notes": 1, "cards": 1, "media": 0},
-        "media": {"objects": 0, "bindings": 0, "bytes": 0},
-        "diagnostics": [{"code": "W", "severity": "warning", "message": "warn"}],
+        "media": {
+            "objects": 0,
+            "bindings": 0,
+            "references": 0,
+            "missing_references": 0,
+            "unsafe_references": 0,
+            "unused_bindings": 0,
+            "unique_bytes": 0,
+        },
+        "diagnostics": [],
         "metrics": {"duration_ms": 1},
-        "policy": {"status": "not_applicable"}
-    })
+        "policy": {
+            "status": "not_evaluated",
+            "threshold": None,
+            "highest_risk": None,
+            "blocking_findings": [],
+        },
+    }
+    payload.update(deepcopy(overrides))
+    return payload
+
+
+def test_report_success_warning_does_not_raise():
+    report = BuildReport.from_json(build_report_payload(
+        diagnostics=[{"code": "W", "severity": "warning", "message": "warn"}],
+    ))
     report.ensure_success()
 
 
 def test_report_ensure_success_raises_for_invalid_report():
-    payload = {
-        "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
-        "tool_version": "test",
-        "status": "invalid",
-        "comparison": "not_requested",
-        "artifact": None,
-        "counts": {"notes": 0, "cards": 0, "media": 0},
-        "media": {"objects": 0, "bindings": 0, "bytes": 0},
-        "diagnostics": [{"code": "E", "severity": "error", "message": "bad"}],
-        "metrics": {"duration_ms": 1},
-        "policy": {"status": "not_applicable"}
-    }
+    payload = build_report_payload(
+        status="invalid",
+        artifact=None,
+        counts={"notes": 0, "cards": 0, "media": 0},
+        diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+    )
     with pytest.raises(DiagnosticsError):
         BuildReport.from_json(payload).ensure_success()
 
 
 def test_report_rejects_unknown_comparison():
-    payload = {
-        "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
-        "tool_version": "test",
-        "status": "success",
-        "comparison": "garbage",
-        "artifact": {"path": "deck.apkg"},
-        "counts": {"notes": 1, "cards": 1, "media": 0},
-        "media": {"objects": 0, "bindings": 0, "bytes": 0},
-        "diagnostics": [],
-        "metrics": {"duration_ms": 1},
-        "policy": {"status": "not_applicable"}
-    }
+    payload = build_report_payload(comparison="garbage")
     with pytest.raises(ProtocolError):
         BuildReport.from_json(payload)
 
 
 def test_report_rejects_wrong_kind_and_schema_version():
-    base = {
-        "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
-        "tool_version": "test",
-        "status": "success",
-        "comparison": "not_requested",
-        "artifact": {"path": "deck.apkg"},
-        "counts": {"notes": 1, "cards": 1, "media": 0},
-        "media": {"objects": 0, "bindings": 0, "bytes": 0},
-        "diagnostics": [],
-        "metrics": {"duration_ms": 1},
-        "policy": {"status": "not_applicable"}
-    }
+    base = build_report_payload()
     with pytest.raises(ProtocolError):
         BuildReport.from_json({**base, "kind": "wrong"})
     with pytest.raises(ProtocolError):
         BuildReport.from_json({**base, "schema_version": "future"})
+
+
+def test_report_parses_schema_media_summary_unique_bytes():
+    report = BuildReport.from_json(build_report_payload(
+        media={
+            "objects": 2,
+            "bindings": 3,
+            "references": 4,
+            "missing_references": 0,
+            "unsafe_references": 1,
+            "unused_bindings": 5,
+            "unique_bytes": 987,
+        },
+    ))
+
+    assert report.media["unique_bytes"] == 987
+
+
+def test_report_rejects_legacy_media_bytes_payload():
+    payload = build_report_payload(media={"objects": 0, "bindings": 0, "bytes": 0})
+
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(payload)
+
+
+def test_report_rejects_unknown_status():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(status="warning"))
+
+
+def test_report_rejects_missing_or_invalid_artifact_path():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(artifact={}))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(artifact={"path": ""}))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(artifact={"path": "deck.apkg", "extra": True}))
+
+
+def test_report_rejects_bool_integer_field():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(counts={"notes": True, "cards": 1, "media": 0}))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(metrics={"duration_ms": True}))
+
+
+def test_report_rejects_invalid_policy_shape_and_status():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(policy={"status": "not_evaluated"}))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(policy={
+            "status": "not_applicable",
+            "threshold": None,
+            "highest_risk": None,
+            "blocking_findings": [],
+        }))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(policy={
+            "status": "not_evaluated",
+            "threshold": None,
+            "highest_risk": None,
+            "blocking_findings": [],
+            "extra": "nope",
+        }))
 
 
 def test_exit_zero_non_json_is_protocol_error(monkeypatch):
@@ -115,19 +170,12 @@ def test_fail_on_requires_compare_to_before_subprocess(monkeypatch):
 
 def test_write_apkg_returns_invalid_report_without_raising(monkeypatch):
     def fake_run(*args, **kwargs):
-        return subprocess.CompletedProcess(["contract_tools"], 1, stdout=json.dumps({
-            "kind": "anki-forge-build-report",
-            "schema_version": "phase4-build-report-v1",
-            "tool_version": "test",
-            "status": "invalid",
-            "comparison": "not_requested",
-            "artifact": None,
-            "counts": {"notes": 0, "cards": 0, "media": 0},
-            "media": {"objects": 0, "bindings": 0, "bytes": 0},
-            "diagnostics": [{"code": "E", "severity": "error", "message": "bad"}],
-            "metrics": {"duration_ms": 1},
-            "policy": {"status": "not_applicable"}
-        }), stderr="")
+        return subprocess.CompletedProcess(["contract_tools"], 1, stdout=json.dumps(build_report_payload(
+            status="invalid",
+            artifact=None,
+            counts={"notes": 0, "cards": 0, "media": 0},
+            diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+        )), stderr="")
     monkeypatch.setattr(subprocess, "run", fake_run)
 
     report = Project("Deck").write_apkg(
@@ -163,19 +211,12 @@ def test_negative_returncode_is_interrupted():
 
 
 def test_negative_returncode_with_report_json_returns_report():
-    completed = subprocess.CompletedProcess(["contract_tools"], -2, stdout=json.dumps({
-        "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
-        "tool_version": "test",
-        "status": "error",
-        "comparison": "not_requested",
-        "artifact": None,
-        "counts": {"notes": 0, "cards": 0, "media": 0},
-        "media": {"objects": 0, "bindings": 0, "bytes": 0},
-        "diagnostics": [{"code": "E", "severity": "error", "message": "interrupted after report"}],
-        "metrics": {"duration_ms": 1},
-        "policy": {"status": "not_applicable"}
-    }), stderr="signal")
+    completed = subprocess.CompletedProcess(["contract_tools"], -2, stdout=json.dumps(build_report_payload(
+        status="error",
+        artifact=None,
+        counts={"notes": 0, "cards": 0, "media": 0},
+        diagnostics=[{"code": "E", "severity": "error", "message": "interrupted after report"}],
+    )), stderr="signal")
     report = parse_completed_process(completed)
     assert report.status == "error"
 

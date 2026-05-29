@@ -7,7 +7,21 @@ from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
 BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v1"
+ALLOWED_STATUSES = {"success", "blocked", "invalid", "error"}
 ALLOWED_COMPARISONS = {"not_requested", "complete", "partial", "unavailable"}
+COUNT_FIELDS = ("notes", "cards", "media")
+MEDIA_FIELDS = (
+    "objects",
+    "bindings",
+    "references",
+    "missing_references",
+    "unsafe_references",
+    "unused_bindings",
+    "unique_bytes",
+)
+POLICY_FIELDS = {"status", "threshold", "highest_risk", "blocking_findings"}
+POLICY_STATUSES = {"passed", "blocked", "not_evaluated"}
+RISK_LEVELS = {"info", "low", "medium", "high", "critical"}
 
 
 @dataclass(frozen=True)
@@ -34,25 +48,19 @@ class BuildReport:
             raise ProtocolError("build report has unexpected schema_version")
 
         status = _required_non_empty_string(payload, "status")
+        if status not in ALLOWED_STATUSES:
+            raise ProtocolError(f"build report has unsupported status: {status}")
         comparison = _required_non_empty_string(payload, "comparison")
         if comparison not in ALLOWED_COMPARISONS:
             raise ProtocolError(f"build report has unsupported comparison: {comparison}")
 
-        artifact = payload.get("artifact")
-        if artifact is not None and not isinstance(artifact, dict):
-            raise ProtocolError("build report artifact must be an object or null")
-
-        counts = _required_int_map(payload, "counts", ("notes", "cards", "media"))
-        media = _required_int_map(payload, "media", ("objects", "bindings", "bytes"))
+        artifact = _artifact(payload.get("artifact"))
+        counts = _required_int_map(payload, "counts", COUNT_FIELDS)
+        media = _required_int_map(payload, "media", MEDIA_FIELDS)
         diagnostics = _diagnostics(payload.get("diagnostics"))
 
-        metrics = payload.get("metrics")
-        if not isinstance(metrics, dict) or not isinstance(metrics.get("duration_ms"), int):
-            raise ProtocolError("build report metrics.duration_ms must be an integer")
-
-        policy = payload.get("policy")
-        if not isinstance(policy, dict) or not isinstance(policy.get("status"), str) or not policy["status"]:
-            raise ProtocolError("build report policy.status must be a non-empty string")
+        _metrics(payload.get("metrics"))
+        _policy(payload.get("policy"))
 
         return cls(
             status=status,
@@ -85,13 +93,55 @@ def _required_int_map(payload: dict[str, Any], key: str, fields: tuple[str, ...]
     value = payload.get(key)
     if not isinstance(value, dict):
         raise ProtocolError(f"build report {key} must be an object")
+    if set(value) != set(fields):
+        raise ProtocolError(f"build report {key} must contain exactly: {', '.join(fields)}")
     parsed: dict[str, int] = {}
     for field in fields:
-        field_value = value.get(field)
-        if not isinstance(field_value, int):
-            raise ProtocolError(f"build report {key}.{field} must be an integer")
-        parsed[field] = field_value
+        parsed[field] = _non_negative_int(value.get(field), f"{key}.{field}")
     return parsed
+
+
+def _artifact(value: object) -> Mapping[str, Any] | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ProtocolError("build report artifact must be an object or null")
+    if set(value) != {"path"}:
+        raise ProtocolError("build report artifact must contain exactly path")
+    if not isinstance(value["path"], str) or not value["path"]:
+        raise ProtocolError("build report artifact.path must be a non-empty string")
+    return value
+
+
+def _metrics(value: object) -> None:
+    if not isinstance(value, dict):
+        raise ProtocolError("build report metrics must be an object")
+    if set(value) != {"duration_ms"}:
+        raise ProtocolError("build report metrics must contain exactly duration_ms")
+    _non_negative_int(value.get("duration_ms"), "metrics.duration_ms")
+
+
+def _policy(value: object) -> None:
+    if not isinstance(value, dict):
+        raise ProtocolError("build report policy must be an object")
+    if set(value) != POLICY_FIELDS:
+        raise ProtocolError("build report policy must contain exactly status, threshold, highest_risk, blocking_findings")
+    status = value["status"]
+    if not isinstance(status, str) or status not in POLICY_STATUSES:
+        raise ProtocolError("build report policy.status is unsupported")
+    for key in ("threshold", "highest_risk"):
+        risk_value = value[key]
+        if risk_value is not None and (not isinstance(risk_value, str) or risk_value not in RISK_LEVELS):
+            raise ProtocolError(f"build report policy.{key} is unsupported")
+    blocking_findings = value["blocking_findings"]
+    if not isinstance(blocking_findings, list) or not all(isinstance(item, str) for item in blocking_findings):
+        raise ProtocolError("build report policy.blocking_findings must be an array of strings")
+
+
+def _non_negative_int(value: object, label: str) -> int:
+    if type(value) is not int or value < 0:
+        raise ProtocolError(f"build report {label} must be a non-negative integer")
+    return value
 
 
 def _diagnostics(value: object) -> tuple[Diagnostic, ...]:
