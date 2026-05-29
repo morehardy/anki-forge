@@ -535,13 +535,14 @@ fn lower_product_v2_document(
         match notetype {
             ProductNoteTypeV2::Stock(stock) => {
                 if stock.id != "basic" && stock.id != "cloze" {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.STOCK_NOTE_TYPE_INVALID",
                         format!(
                             "stock note type '{}' is not supported in product-v2",
                             stock.id
                         ),
+                        stock.source_path.as_deref(),
                     );
                     continue;
                 }
@@ -571,21 +572,23 @@ fn lower_product_v2_document(
             }
             ProductNoteTypeV2::Custom(custom) => {
                 if custom.id == "basic" || custom.id == "cloze" {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.RESERVED_ID_KIND_MISMATCH",
                         format!("custom note type '{}' uses a reserved stock id", custom.id),
+                        custom.source_path.as_deref(),
                     );
                     continue;
                 }
                 if matches!(custom.identity, Some(ProductIdentityV2::Unknown(_))) {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.IDENTITY_KIND_UNSUPPORTED",
                         format!(
                             "custom note type '{}' uses an unsupported identity kind",
                             custom.id
                         ),
+                        custom.source_path.as_deref(),
                     );
                 }
                 let lowered = lower_product_v2_custom_notetype(&mut plan, custom);
@@ -607,10 +610,11 @@ fn lower_product_v2_document(
                 plan.authoring_document.notetypes.push(lowered);
             }
             ProductNoteTypeV2::Unknown(unknown) => {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     &mut plan,
                     "PRODUCT.UNSUPPORTED_KIND",
                     format!("unsupported product-v2 note type kind '{}'", unknown.kind),
+                    unknown_source_path(unknown).as_deref(),
                 );
             }
         }
@@ -675,13 +679,14 @@ fn lower_product_v2_document(
         match note {
             ProductNoteV2::Stock(stock) => {
                 let Some(declaration) = stock_declarations.get(&stock.note_type_id) else {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.STOCK_NOTE_TYPE_MISSING",
                         format!(
                             "stock note references undeclared note type '{}'",
                             stock.note_type_id
                         ),
+                        stock.source_path.as_deref(),
                     );
                     continue;
                 };
@@ -695,13 +700,14 @@ fn lower_product_v2_document(
             }
             ProductNoteV2::Custom(custom) => {
                 let Some(notetype) = custom_declarations.get(&custom.note_type_id).cloned() else {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.CUSTOM_NOTE_TYPE_MISSING",
                         format!(
                             "custom note references undeclared note type '{}'",
                             custom.note_type_id
                         ),
+                        custom.source_path.as_deref(),
                     );
                     continue;
                 };
@@ -714,10 +720,11 @@ fn lower_product_v2_document(
                 );
             }
             ProductNoteV2::Unknown(unknown) => {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     &mut plan,
                     "PRODUCT.UNSUPPORTED_KIND",
                     format!("unsupported product-v2 note kind '{}'", unknown.kind),
+                    unknown_source_path(unknown).as_deref(),
                 );
             }
         }
@@ -784,6 +791,7 @@ fn lower_product_v2_custom_notetype(
                 &template.name,
                 &template.front,
                 template.generation_rule.as_ref(),
+                template.source_path.as_deref(),
                 &field_name_by_key,
             ),
             answer_format: template.back.clone(),
@@ -829,6 +837,7 @@ fn validate_v2_stock_generation_rules(
                 &stock.id,
                 &template.name,
                 rule,
+                template.source_path.as_deref(),
                 &field_keys,
                 &field_names,
             );
@@ -842,6 +851,7 @@ fn lower_product_v2_generation_rule_front(
     template_name: &str,
     front: &str,
     rule: Option<&ProductGenerationRuleV2>,
+    source_path: Option<&str>,
     field_name_by_key: &BTreeMap<String, String>,
 ) -> String {
     let field_keys = field_name_by_key
@@ -857,6 +867,7 @@ fn lower_product_v2_generation_rule_front(
         note_type_id,
         template_name,
         rule,
+        source_path,
         &field_keys,
         field_name_by_key,
     ) {
@@ -890,6 +901,7 @@ fn validate_product_v2_generation_rule(
     note_type_id: &str,
     template_name: &str,
     rule: &ProductGenerationRuleV2,
+    source_path: Option<&str>,
     field_keys: &BTreeSet<&str>,
     field_name_by_key: &BTreeMap<String, String>,
 ) -> bool {
@@ -897,24 +909,26 @@ fn validate_product_v2_generation_rule(
         ProductGenerationRuleV2::AnkiDefault => true,
         ProductGenerationRuleV2::All { fields } | ProductGenerationRuleV2::Any { fields } => {
             if fields.is_empty() {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.GENERATION_RULE_INVALID",
                     format!(
                         "template '{template_name}' in note type '{note_type_id}' has an empty generation field list"
                     ),
+                    source_path,
                 );
                 return false;
             }
             let mut valid = true;
             for field in fields {
                 if !field_keys.contains(field.as_str()) {
-                    push_product_diagnostic(
+                    push_product_diagnostic_at(
                         plan,
                         "PRODUCT.GENERATION_RULE_INVALID",
                         format!(
                             "template '{template_name}' in note type '{note_type_id}' references unknown generation field key '{field}'"
                         ),
+                        source_path,
                     );
                     valid = false;
                 }
@@ -923,25 +937,27 @@ fn validate_product_v2_generation_rule(
         }
         ProductGenerationRuleV2::Cloze { field } => {
             if field.trim().is_empty() || !field_name_by_key.contains_key(field) {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.GENERATION_RULE_INVALID",
                     format!(
                         "template '{template_name}' in note type '{note_type_id}' has invalid cloze generation field '{field}'"
                     ),
+                    source_path,
                 );
                 return false;
             }
             true
         }
         ProductGenerationRuleV2::Unknown(unknown) => {
-            push_product_diagnostic(
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.GENERATION_RULE_INVALID",
                 format!(
                     "template '{template_name}' in note type '{note_type_id}' uses unsupported generation rule kind '{}'",
                     unknown.kind
                 ),
+                source_path,
             );
             false
         }
@@ -987,10 +1003,14 @@ fn lower_product_v2_stock_note(
     let mut fields = BTreeMap::new();
     let mut field_source_keys = BTreeMap::new();
     for (source_key, authoring_name) in field_map {
+        let field_source =
+            v2_note_field_source(stock.source_path.as_deref(), serialized_index, source_key);
         let value = stock
             .fields
             .get(source_key)
-            .map(|content| render_v2_content(plan, content, media_export_by_id))
+            .map(|content| {
+                render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+            })
             .unwrap_or_default();
         fields.insert(authoring_name.to_string(), value);
         field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
@@ -1004,10 +1024,11 @@ fn lower_product_v2_stock_note(
         ) {
             Ok(stable_id) => stable_id,
             Err(error) => {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.IDENTITY_MISSING",
                     format!("could not derive basic stock identity: {error}"),
+                    stock.source_path.as_deref(),
                 );
                 return;
             }
@@ -1018,10 +1039,11 @@ fn lower_product_v2_stock_note(
         ) {
             Ok(stable_id) => stable_id,
             Err(error) => {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.IDENTITY_MISSING",
                     format!("could not derive cloze stock identity: {error}"),
+                    stock.source_path.as_deref(),
                 );
                 return;
             }
@@ -1070,13 +1092,14 @@ fn lower_product_v2_custom_note(
     let mut invalid = false;
     for key in note.fields.keys() {
         if !field_by_key.contains_key(key) {
-            push_product_diagnostic(
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.FIELD_UNKNOWN",
                 format!(
                     "custom note for note type '{}' contains unknown field key '{}'",
                     note.note_type_id, key
                 ),
+                note.source_path.as_deref(),
             );
             invalid = true;
         }
@@ -1085,9 +1108,14 @@ fn lower_product_v2_custom_note(
     let mut fields = BTreeMap::new();
     for declaration in &notetype.fields {
         if let Some(content) = note.fields.get(&declaration.key) {
+            let field_source = v2_note_field_source(
+                note.source_path.as_deref(),
+                serialized_index,
+                &declaration.key,
+            );
             fields.insert(
                 declaration.name.clone(),
-                render_v2_content(plan, content, media_export_by_id),
+                render_v2_content(plan, content, media_export_by_id, Some(&field_source)),
             );
         }
     }
@@ -1127,25 +1155,27 @@ fn lower_product_v2_custom_note(
     } else {
         let identity_fields = custom_identity_field_keys(notetype);
         if identity_fields.is_empty() {
-            push_product_diagnostic(
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.IDENTITY_MISSING",
                 format!(
                     "custom note type '{}' has no identity fields for derived note identity",
                     notetype.id
                 ),
+                note.source_path.as_deref(),
             );
             return;
         }
         for key in &identity_fields {
             if !field_by_key.contains_key(key) {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.IDENTITY_FIELD_UNKNOWN",
                     format!(
                         "custom note type '{}' identity references unknown field key '{}'",
                         notetype.id, key
                     ),
+                    notetype.source_path.as_deref(),
                 );
                 return;
             }
@@ -1215,16 +1245,18 @@ fn render_v2_content(
     plan: &mut LoweringPlan,
     content: &ProductFieldContentV2,
     media_export_by_id: &BTreeMap<String, String>,
+    source_path: Option<&str>,
 ) -> String {
     match content {
         ProductFieldContentV2::Text { value } => crate::product::content::escape_html(value),
         ProductFieldContentV2::Html { value } => value.clone(),
         ProductFieldContentV2::Sound { media_id } => {
             let Some(export_as) = media_export_by_id.get(media_id) else {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.MEDIA_MISSING",
                     format!("field content references missing media id '{media_id}'"),
+                    source_path,
                 );
                 return String::new();
             };
@@ -1232,10 +1264,11 @@ fn render_v2_content(
         }
         ProductFieldContentV2::Image { media_id } => {
             let Some(export_as) = media_export_by_id.get(media_id) else {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     plan,
                     "PRODUCT.MEDIA_MISSING",
                     format!("field content references missing media id '{media_id}'"),
+                    source_path,
                 );
                 return String::new();
             };
@@ -1245,13 +1278,14 @@ fn render_v2_content(
             )
         }
         ProductFieldContentV2::Unknown(unknown) => {
-            push_product_diagnostic(
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.FIELD_CONTENT_KIND_UNSUPPORTED",
                 format!(
                     "unsupported product-v2 field content kind '{}'",
                     unknown.kind
                 ),
+                source_path,
             );
             String::new()
         }
@@ -1394,14 +1428,6 @@ fn record_v2_media_source_path(
     source_map.insert(export_filename, source);
 }
 
-fn push_product_diagnostic(
-    plan: &mut LoweringPlan,
-    code: &'static str,
-    message: impl Into<String>,
-) {
-    push_product_diagnostic_at(plan, code, message, None);
-}
-
 fn push_product_diagnostic_at(
     plan: &mut LoweringPlan,
     code: &'static str,
@@ -1462,6 +1488,25 @@ pub(crate) fn authoring_note_field_path(note_id: &str, field_name: &str) -> Stri
 
 pub(crate) fn product_note_field_source(note_source: &str, field_name: &str) -> String {
     format!("{note_source}.fields[{field_name:?}]")
+}
+
+fn v2_note_field_source(
+    note_source: Option<&str>,
+    serialized_index: usize,
+    field_key: &str,
+) -> String {
+    let note_source = note_source
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]"));
+    product_note_field_source(&note_source, field_key)
+}
+
+fn unknown_source_path(unknown: &crate::product::model::UnknownProductObjectV2) -> Option<String> {
+    unknown
+        .raw
+        .get("source_path")
+        .and_then(serde_json::Value::as_str)
+        .map(str::to_owned)
 }
 
 pub(crate) fn authoring_media_path(media_id: &str) -> String {

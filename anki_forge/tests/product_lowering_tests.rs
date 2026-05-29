@@ -490,6 +490,17 @@ fn diagnostic_source<'a>(
         .map(|source| source.as_str())
 }
 
+fn build_error_diagnostic_source(document: ProductDocument, code: &str) -> Option<String> {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    diagnostic_source(&err.report.diagnostics, code).map(str::to_owned)
+}
+
 const PRODUCT_V2_BASIC_MISSING_FRONT: &str = r#"{
   "product_document_version": "product-v2",
   "document_id": "invalid-basic-required",
@@ -1180,6 +1191,104 @@ fn product_v2_build_surfaces_required_field_source_path() {
         Some("project.notes[0]")
     );
     assert!(!err.report.status.is_success());
+}
+
+#[test]
+fn product_v2_build_surfaces_custom_unknown_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-field-source",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "custom",
+                "id": "custom",
+                "name": "Custom",
+                "fields": [{"name": "Prompt", "key": "prompt"}],
+                "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+                "identity": {"kind": "fields", "fields": ["prompt"]},
+                "css": null
+              }],
+              "notes": [{
+                "kind": "custom",
+                "note_type_id": "custom",
+                "deck_name": "Invalid",
+                "fields": {
+                  "prompt": {"kind": "text", "value": "ok"},
+                  "extra": {"kind": "text", "value": "no"}
+                },
+                "source_path": "project.notes[\"bad-field\"]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(source.as_deref(), Some("project.notes[\"bad-field\"]"));
+}
+
+#[test]
+fn product_v2_build_surfaces_stock_missing_notetype_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-stock-source",
+              "default_deck_name": "Invalid",
+              "note_types": [],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "deck_name": "Invalid",
+                "fields": {"front": {"kind": "text", "value": "front"}},
+                "source_path": "project.notes[\"missing-stock\"]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.STOCK_NOTE_TYPE_MISSING",
+    );
+
+    assert_eq!(source.as_deref(), Some("project.notes[\"missing-stock\"]"));
+}
+
+#[test]
+fn product_v2_build_surfaces_missing_media_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-missing-media-source",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "custom",
+                "id": "image-card",
+                "name": "Image Card",
+                "fields": [{"name": "Picture", "key": "picture", "required": true}],
+                "templates": [{"name": "Card", "key": "card", "front": "{{Picture}}", "back": "{{Picture}}", "generation_rule": {"kind": "anki_default"}}],
+                "identity": {"kind": "fields", "fields": ["picture"]},
+                "css": null
+              }],
+              "notes": [{
+                "kind": "custom",
+                "note_type_id": "image-card",
+                "stable_id": "image:missing",
+                "deck_name": "Invalid",
+                "fields": {"picture": {"kind": "image", "media_id": "media:missing"}},
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.MEDIA_MISSING",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"picture\"]")
+    );
 }
 
 #[test]
