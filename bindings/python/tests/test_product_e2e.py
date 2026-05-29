@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from anki_forge import DiagnosticsError, Field, Note, NoteType, Project, Template, ValidationError
+from anki_forge.report import BuildReport
 
 
 def find_repo_root() -> Path:
@@ -97,4 +98,8 @@ def test_cloze_note_without_cloze_marker_writes_report_json(tmp_path):
     assert report_json.is_file()
     payload = json.loads(report_json.read_text(encoding="utf-8"))
     assert payload["status"] == "invalid"
+    assert isinstance(payload["tool_version"], str)
+    assert payload["tool_version"]
     assert any(diagnostic["code"] == "PRODUCT.CLOZE_MARKER_MISSING" for diagnostic in payload["diagnostics"])
+    parsed = BuildReport.from_json(payload)
+    assert parsed.status == "invalid"

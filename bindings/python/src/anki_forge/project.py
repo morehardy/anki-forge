@@ -266,6 +266,7 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
     return {
         "kind": "anki-forge-build-report",
         "schema_version": "phase4-build-report-v1",
+        "tool_version": "anki-forge-python",
         "status": report.status,
         "comparison": report.comparison,
         "artifact": report.artifact,
