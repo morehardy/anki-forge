@@ -24,6 +24,34 @@ fn stock_constants_match_default_notetype_ids() {
 }
 
 #[test]
+fn product_v2_basic_fixture_deserializes() {
+    let raw = include_str!("../../contracts/fixtures/product-v2/basic-stock.json");
+    let doc: anki_forge::product::ProductDocument =
+        serde_json::from_str(raw).expect("product-v2 fixture");
+    assert_eq!(doc.document_id(), "basic-demo");
+    assert_eq!(doc.note_types().len(), 1);
+    assert_eq!(doc.notes().len(), 1);
+}
+
+#[test]
+fn product_v2_custom_typed_media_fixture_deserializes() {
+    let raw = include_str!("../../contracts/fixtures/product-v2/custom-typed-media.json");
+    let doc: anki_forge::product::ProductDocument =
+        serde_json::from_str(raw).expect("custom typed media product-v2 fixture");
+    assert_eq!(doc.document_id(), "custom-media-demo");
+    assert_eq!(doc.note_types().len(), 1);
+    assert_eq!(doc.notes().len(), 1);
+}
+
+#[test]
+fn legacy_unversioned_product_document_still_deserializes() {
+    let raw = r#"{"document_id":"legacy","note_types":[],"notes":[]}"#;
+    let doc: anki_forge::product::ProductDocument =
+        serde_json::from_str(raw).expect("legacy product-v1");
+    assert_eq!(doc.document_id(), "legacy");
+}
+
+#[test]
 fn stock_builders_capture_tags_on_notes() {
     let document = ProductDocument::new("demo-doc")
         .with_basic(STOCK_BASIC_ID)

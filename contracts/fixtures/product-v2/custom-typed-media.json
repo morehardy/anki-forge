@@ -1,0 +1,45 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "custom-media-demo",
+  "default_deck_name": "Media",
+  "note_types": [
+    {
+      "kind": "custom",
+      "id": "media-card",
+      "name": "Media Card",
+      "fields": [
+        {"name": "Prompt", "key": "prompt", "identity": true, "sort": true, "required": true, "source_path": "project.note_types[\"media-card\"].fields[\"prompt\"]"},
+        {"name": "Answer", "key": "answer", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"media-card\"].fields[\"answer\"]"},
+        {"name": "Audio", "key": "audio", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"media-card\"].fields[\"audio\"]"}
+      ],
+      "templates": [
+        {"name": "Card", "key": "card", "front": "{{Prompt}} {{Audio}}", "back": "{{FrontSide}}<hr id=\"answer\">{{Answer}}", "generation_rule": {"kind": "all", "fields": ["prompt"]}, "source_path": "project.note_types[\"media-card\"].templates[\"card\"]"}
+      ],
+      "identity": {"kind": "fields", "fields": ["prompt"]},
+      "css": null,
+      "source_path": "project.note_types[\"media-card\"]"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "custom",
+      "note_type_id": "media-card",
+      "deck_name": "Media",
+      "fields": {
+        "prompt": {"kind": "text", "value": "hello"},
+        "answer": {"kind": "html", "value": "<b>world</b>"},
+        "audio": {"kind": "sound", "media_id": "media:000001"}
+      },
+      "tags": [],
+      "source_path": "project.notes[0]"
+    }
+  ],
+  "media": [
+    {
+      "id": "media:000001",
+      "source": {"kind": "inline_base64", "source_label": "hello.wav", "data_base64": "UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="},
+      "export_as": "hello.wav",
+      "source_path": "project.media[\"hello.wav\"]"
+    }
+  ]
+}
