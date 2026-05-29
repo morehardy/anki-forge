@@ -1481,6 +1481,12 @@ impl Project {
     fn resolved_note_identities(
         &self,
     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+        if let Some(product) = &self.product_document_source {
+            if let Some(v2) = product.product_v2() {
+                return product_v2_resolved_note_identities(v2);
+            }
+        }
+
         let stable_id_counts = self.note_stable_id_counts();
         self.notes
             .iter()
@@ -1882,6 +1888,176 @@ fn display_name_suffix(name: Option<&str>) -> String {
     name.map(|name| format!(" ({name})")).unwrap_or_default()
 }
 
+fn product_v2_resolved_note_identities(
+    v2: &crate::product::model::ProductDocumentV2Payload,
+) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+    let custom_notetypes = v2
+        .note_types
+        .iter()
+        .filter_map(|notetype| match notetype {
+            crate::product::model::ProductNoteTypeV2::Custom(custom) => {
+                Some((custom.id.clone(), custom))
+            }
+            _ => None,
+        })
+        .collect::<BTreeMap<_, _>>();
+    let media_export_by_id = v2
+        .media
+        .iter()
+        .map(|media| (media.id.clone(), media.export_as.clone()))
+        .collect::<BTreeMap<_, _>>();
+    let mut identities = BTreeMap::new();
+
+    for note in &v2.notes {
+        let Some(identity) = product_v2_note_identity(note, &custom_notetypes, &media_export_by_id)
+        else {
+            continue;
+        };
+        identities.insert(identity.stable_id.clone(), identity);
+    }
+
+    identities
+}
+
+fn product_v2_note_identity(
+    note: &crate::product::model::ProductNoteV2,
+    custom_notetypes: &BTreeMap<String, &crate::product::model::ProductCustomNoteTypeV2>,
+    media_export_by_id: &BTreeMap<String, String>,
+) -> Option<crate::update_safety::model::ResolvedNoteIdentity> {
+    match note {
+        crate::product::model::ProductNoteV2::Stock(stock) => {
+            if let Some(stable_id) = stock.stable_id.as_deref() {
+                return Some(crate::update_safety::model::ResolvedNoteIdentity {
+                    stable_id: stable_id.to_string(),
+                    current_guid_candidate: stable_id.to_string(),
+                    recipe_id: "product.explicit-stable-id.v1".into(),
+                    canonical_payload_hash: None,
+                    provenance: "ExplicitStableId".into(),
+                    used_override: false,
+                });
+            }
+
+            let stable_id = match stock.note_type_id.as_str() {
+                STOCK_BASIC_ID => {
+                    let front = stock
+                        .fields
+                        .get("front")
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .unwrap_or_default();
+                    crate::deck::identity::derive_basic_stock_stable_id_from_front(&front).ok()?
+                }
+                STOCK_CLOZE_ID => {
+                    let text = stock
+                        .fields
+                        .get("text")
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .unwrap_or_default();
+                    crate::deck::identity::derive_cloze_stock_stable_id_from_text(&text).ok()?
+                }
+                _ => return None,
+            };
+
+            let recipe_id = match stock.note_type_id.as_str() {
+                STOCK_BASIC_ID => crate::deck::identity::BASIC_RECIPE_ID,
+                STOCK_CLOZE_ID => crate::deck::identity::CLOZE_RECIPE_ID,
+                _ => return None,
+            };
+            Some(crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: recipe_id.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
+                used_override: false,
+            })
+        }
+        crate::product::model::ProductNoteV2::Custom(note) => {
+            if let Some(stable_id) = note.stable_id.as_deref() {
+                return Some(crate::update_safety::model::ResolvedNoteIdentity {
+                    stable_id: stable_id.to_string(),
+                    current_guid_candidate: stable_id.to_string(),
+                    recipe_id: "product.explicit-stable-id.v1".into(),
+                    canonical_payload_hash: None,
+                    provenance: "ExplicitStableId".into(),
+                    used_override: false,
+                });
+            }
+
+            let notetype = custom_notetypes.get(&note.note_type_id)?;
+            let field_by_key = notetype
+                .fields
+                .iter()
+                .map(|field| (field.key.clone(), field))
+                .collect::<BTreeMap<_, _>>();
+            let identity_fields = match notetype.identity.as_ref() {
+                Some(crate::product::model::ProductIdentityV2::Fields { fields }) => fields.clone(),
+                Some(crate::product::model::ProductIdentityV2::Unknown(_)) => return None,
+                None => notetype
+                    .fields
+                    .iter()
+                    .filter(|field| field.identity)
+                    .map(|field| field.key.clone())
+                    .collect(),
+            };
+            if identity_fields.is_empty() {
+                return None;
+            }
+
+            let selected_fields = identity_fields
+                .into_iter()
+                .map(|key| {
+                    let field = field_by_key.get(&key)?;
+                    let value = note
+                        .fields
+                        .get(&key)
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .map(|value| {
+                            crate::deck::identity::normalize_field_text_for_identity(&value)
+                        })
+                        .unwrap_or_default();
+                    Some(crate::product::identity::CustomIdentityFieldComponent {
+                        key,
+                        name: field.name.clone(),
+                        value,
+                    })
+                })
+                .collect::<Option<Vec<_>>>()?;
+
+            Some(crate::product::identity::derive_custom_notetype_identity(
+                &notetype.id,
+                selected_fields,
+            ))
+        }
+        crate::product::model::ProductNoteV2::Unknown(_) => None,
+    }
+}
+
+fn product_v2_identity_content(
+    content: &crate::product::model::ProductFieldContentV2,
+    media_export_by_id: &BTreeMap<String, String>,
+) -> String {
+    match content {
+        crate::product::model::ProductFieldContentV2::Text { value } => {
+            crate::product::content::escape_html(value)
+        }
+        crate::product::model::ProductFieldContentV2::Html { value } => value.clone(),
+        crate::product::model::ProductFieldContentV2::Sound { media_id } => media_export_by_id
+            .get(media_id)
+            .map(|export_as| format!("[sound:{export_as}]"))
+            .unwrap_or_default(),
+        crate::product::model::ProductFieldContentV2::Image { media_id } => media_export_by_id
+            .get(media_id)
+            .map(|export_as| {
+                format!(
+                    "<img src=\"{}\" alt=\"\">",
+                    crate::product::content::escape_html(export_as)
+                )
+            })
+            .unwrap_or_default(),
+        crate::product::model::ProductFieldContentV2::Unknown(_) => String::new(),
+    }
+}
+
 fn resolve_product_note_identity(
     project: &Project,
     note: &crate::product::Note,
@@ -1904,7 +2080,10 @@ fn resolve_product_note_identity(
     if note.note_type_id() == STOCK_BASIC_ID {
         let rendered = note.rendered_fields();
         if let Ok(stable_id) = crate::deck::identity::derive_basic_stock_stable_id_from_front(
-            rendered.get("Front").map(String::as_str).unwrap_or_default(),
+            rendered
+                .get("Front")
+                .map(String::as_str)
+                .unwrap_or_default(),
         ) {
             return crate::update_safety::model::ResolvedNoteIdentity {
                 stable_id: stable_id.clone(),
