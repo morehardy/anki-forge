@@ -141,22 +141,22 @@ pub(crate) struct ProductTemplateV2 {
     pub(crate) source_path: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(tag = "kind", rename_all = "snake_case")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum ProductGenerationRuleV2 {
     AnkiDefault,
     All { fields: Vec<String> },
     Any { fields: Vec<String> },
     Cloze { field: String },
+    Unknown(UnknownProductObjectV2),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(tag = "kind", rename_all = "snake_case")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum ProductFieldContentV2 {
     Text { value: String },
     Html { value: String },
     Sound { media_id: String },
     Image { media_id: String },
+    Unknown(UnknownProductObjectV2),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -168,8 +168,7 @@ pub(crate) struct ProductMediaV2 {
     pub(crate) source_path: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(tag = "kind", rename_all = "snake_case")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum ProductMediaSourceV2 {
     File {
         path: String,
@@ -178,6 +177,7 @@ pub(crate) enum ProductMediaSourceV2 {
         source_label: String,
         data_base64: String,
     },
+    Unknown(UnknownProductObjectV2),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -335,6 +335,161 @@ impl<'de> Deserialize<'de> for ProductIdentityV2 {
     }
 }
 
+impl<'de> Deserialize<'de> for ProductGenerationRuleV2 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        let kind = object_kind(&value).map_err(serde::de::Error::custom)?;
+        match kind.as_str() {
+            "anki_default" => Ok(ProductGenerationRuleV2::AnkiDefault),
+            "all" => {
+                #[derive(Deserialize)]
+                struct FieldsRule {
+                    fields: Vec<String>,
+                }
+
+                serde_json::from_value::<FieldsRule>(value)
+                    .map(|rule| ProductGenerationRuleV2::All {
+                        fields: rule.fields,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            "any" => {
+                #[derive(Deserialize)]
+                struct FieldsRule {
+                    fields: Vec<String>,
+                }
+
+                serde_json::from_value::<FieldsRule>(value)
+                    .map(|rule| ProductGenerationRuleV2::Any {
+                        fields: rule.fields,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            "cloze" => {
+                #[derive(Deserialize)]
+                struct ClozeRule {
+                    field: String,
+                }
+
+                serde_json::from_value::<ClozeRule>(value)
+                    .map(|rule| ProductGenerationRuleV2::Cloze { field: rule.field })
+                    .map_err(serde::de::Error::custom)
+            }
+            _ => Ok(ProductGenerationRuleV2::Unknown(UnknownProductObjectV2 {
+                kind,
+                raw: value,
+            })),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for ProductFieldContentV2 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        let kind = object_kind(&value).map_err(serde::de::Error::custom)?;
+        match kind.as_str() {
+            "text" => {
+                #[derive(Deserialize)]
+                struct TextContent {
+                    value: String,
+                }
+
+                serde_json::from_value::<TextContent>(value)
+                    .map(|content| ProductFieldContentV2::Text {
+                        value: content.value,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            "html" => {
+                #[derive(Deserialize)]
+                struct HtmlContent {
+                    value: String,
+                }
+
+                serde_json::from_value::<HtmlContent>(value)
+                    .map(|content| ProductFieldContentV2::Html {
+                        value: content.value,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            "sound" => {
+                #[derive(Deserialize)]
+                struct SoundContent {
+                    media_id: String,
+                }
+
+                serde_json::from_value::<SoundContent>(value)
+                    .map(|content| ProductFieldContentV2::Sound {
+                        media_id: content.media_id,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            "image" => {
+                #[derive(Deserialize)]
+                struct ImageContent {
+                    media_id: String,
+                }
+
+                serde_json::from_value::<ImageContent>(value)
+                    .map(|content| ProductFieldContentV2::Image {
+                        media_id: content.media_id,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            _ => Ok(ProductFieldContentV2::Unknown(UnknownProductObjectV2 {
+                kind,
+                raw: value,
+            })),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for ProductMediaSourceV2 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        let kind = object_kind(&value).map_err(serde::de::Error::custom)?;
+        match kind.as_str() {
+            "file" => {
+                #[derive(Deserialize)]
+                struct FileSource {
+                    path: String,
+                }
+
+                serde_json::from_value::<FileSource>(value)
+                    .map(|source| ProductMediaSourceV2::File { path: source.path })
+                    .map_err(serde::de::Error::custom)
+            }
+            "inline_base64" => {
+                #[derive(Deserialize)]
+                struct InlineBase64Source {
+                    source_label: String,
+                    data_base64: String,
+                }
+
+                serde_json::from_value::<InlineBase64Source>(value)
+                    .map(|source| ProductMediaSourceV2::InlineBase64 {
+                        source_label: source.source_label,
+                        data_base64: source.data_base64,
+                    })
+                    .map_err(serde::de::Error::custom)
+            }
+            _ => Ok(ProductMediaSourceV2::Unknown(UnknownProductObjectV2 {
+                kind,
+                raw: value,
+            })),
+        }
+    }
+}
+
 impl<'de> Deserialize<'de> for ProductNoteV2 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -403,7 +558,7 @@ fn convert_note_type_v2(notetype: &ProductNoteTypeV2) -> Option<ProductNoteType>
                     generation_rule: template
                         .generation_rule
                         .as_ref()
-                        .map(convert_generation_rule_v2),
+                        .and_then(convert_generation_rule_v2),
                 })
                 .collect(),
             css: custom.css.clone(),
@@ -458,18 +613,19 @@ fn convert_note_v2(note: &ProductNoteV2) -> Option<ProductNote> {
     }
 }
 
-fn convert_generation_rule_v2(rule: &ProductGenerationRuleV2) -> CustomGenerationRule {
+fn convert_generation_rule_v2(rule: &ProductGenerationRuleV2) -> Option<CustomGenerationRule> {
     match rule {
-        ProductGenerationRuleV2::AnkiDefault => CustomGenerationRule::AnkiDefault,
-        ProductGenerationRuleV2::All { fields } => CustomGenerationRule::All {
+        ProductGenerationRuleV2::AnkiDefault => Some(CustomGenerationRule::AnkiDefault),
+        ProductGenerationRuleV2::All { fields } => Some(CustomGenerationRule::All {
             fields: fields.clone(),
-        },
-        ProductGenerationRuleV2::Any { fields } => CustomGenerationRule::Any {
+        }),
+        ProductGenerationRuleV2::Any { fields } => Some(CustomGenerationRule::Any {
             fields: fields.clone(),
-        },
-        ProductGenerationRuleV2::Cloze { field } => CustomGenerationRule::Cloze {
+        }),
+        ProductGenerationRuleV2::Cloze { field } => Some(CustomGenerationRule::Cloze {
             field: field.clone(),
-        },
+        }),
+        ProductGenerationRuleV2::Unknown(_) => None,
     }
 }
 
@@ -479,6 +635,7 @@ fn field_content_text(content: Option<&ProductFieldContentV2>) -> String {
         | Some(ProductFieldContentV2::Html { value }) => value.clone(),
         Some(ProductFieldContentV2::Sound { media_id })
         | Some(ProductFieldContentV2::Image { media_id }) => format!("[{media_id}]"),
+        Some(ProductFieldContentV2::Unknown(_)) => String::new(),
         None => String::new(),
     }
 }
@@ -721,5 +878,93 @@ mod tests {
             payload.transport_diagnostics[0].code,
             "PRODUCT.VERSION_UNSUPPORTED"
         );
+    }
+
+    #[test]
+    fn unknown_generation_rule_kind_deserializes_into_v2_payload() {
+        let raw = r#"{
+            "product_document_version": "product-v2",
+            "document_id": "unknown-generation",
+            "note_types": [{
+                "kind": "custom",
+                "id": "custom",
+                "name": "Custom",
+                "fields": [{"name": "Prompt", "key": "prompt"}],
+                "templates": [{
+                    "name": "Card",
+                    "key": "card",
+                    "front": "{{Prompt}}",
+                    "back": "{{Prompt}}",
+                    "generation_rule": {"kind": "future_rule", "required_fields": ["prompt"]}
+                }]
+            }],
+            "notes": [],
+            "media": []
+        }"#;
+
+        let doc: ProductDocument = serde_json::from_str(raw).expect("unknown generation rule");
+        let payload = doc.product_v2().expect("transport payload");
+        let ProductNoteTypeV2::Custom(notetype) = &payload.note_types[0] else {
+            panic!("expected custom note type");
+        };
+        let Some(ProductGenerationRuleV2::Unknown(unknown)) =
+            &notetype.templates[0].generation_rule
+        else {
+            panic!("expected unknown generation rule");
+        };
+
+        assert_eq!(unknown.kind, "future_rule");
+    }
+
+    #[test]
+    fn unknown_field_content_kind_deserializes_into_v2_payload() {
+        let raw = r#"{
+            "product_document_version": "product-v2",
+            "document_id": "unknown-field-content",
+            "note_types": [],
+            "notes": [{
+                "kind": "custom",
+                "note_type_id": "custom",
+                "deck_name": "Default",
+                "fields": {
+                    "prompt": {"kind": "future_content", "value": "hello"}
+                }
+            }],
+            "media": []
+        }"#;
+
+        let doc: ProductDocument = serde_json::from_str(raw).expect("unknown field content");
+        let payload = doc.product_v2().expect("transport payload");
+        let ProductNoteV2::Custom(note) = &payload.notes[0] else {
+            panic!("expected custom note");
+        };
+        let Some(ProductFieldContentV2::Unknown(unknown)) = note.fields.get("prompt") else {
+            panic!("expected unknown field content");
+        };
+
+        assert_eq!(unknown.kind, "future_content");
+    }
+
+    #[test]
+    fn unknown_media_source_kind_deserializes_into_v2_payload() {
+        let raw = r#"{
+            "product_document_version": "product-v2",
+            "document_id": "unknown-media-source",
+            "note_types": [],
+            "notes": [],
+            "media": [{
+                "id": "media:future",
+                "source": {"kind": "future_source", "uri": "asset://future"},
+                "export_as": "future.bin"
+            }]
+        }"#;
+
+        let doc: ProductDocument = serde_json::from_str(raw).expect("unknown media source");
+        let payload = doc.product_v2().expect("transport payload");
+        let ProductMediaSourceV2::Unknown(unknown) = &payload.media[0].source else {
+            panic!("expected unknown media source");
+        };
+
+        assert_eq!(unknown.kind, "future_source");
     }
 }
