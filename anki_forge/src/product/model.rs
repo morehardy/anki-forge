@@ -797,6 +797,7 @@ impl ProductDocument {
             transport_diagnostics: vec![ProductDiagnostic {
                 code: "PRODUCT.VERSION_UNSUPPORTED",
                 message: format!("Unsupported product document version '{version}'."),
+                source_path: None,
             }],
         });
         document

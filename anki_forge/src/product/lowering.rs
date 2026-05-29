@@ -14,7 +14,8 @@ use super::{
     model::{
         CustomNoteType, ProductCustomNoteTypeV2, ProductFieldContentV2, ProductFieldV2,
         ProductGenerationRuleV2, ProductIdentityV2, ProductMediaSourceV2, ProductNote,
-        ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteV2, ProductTemplateV2,
+        ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteTypeV2,
+        ProductStockNoteV2, ProductTemplateV2,
     },
     ProductDocument,
 };
@@ -528,7 +529,7 @@ fn lower_product_v2_document(
         lowering_diagnostics: Vec::new(),
     };
 
-    let mut declared_stock = BTreeSet::<String>::new();
+    let mut stock_declarations = BTreeMap::<String, ProductStockNoteTypeV2>::new();
     let mut custom_declarations = BTreeMap::<String, ProductCustomNoteTypeV2>::new();
     for (index, notetype) in v2.note_types.iter().enumerate() {
         match notetype {
@@ -544,7 +545,7 @@ fn lower_product_v2_document(
                     );
                     continue;
                 }
-                declared_stock.insert(stock.id.clone());
+                stock_declarations.insert(stock.id.clone(), stock.clone());
                 validate_v2_stock_generation_rules(&mut plan, stock);
                 let defaults = stock_lowering_defaults(&stock.id)
                     .expect("phase 5 stock note type id should have defaults");
@@ -657,13 +658,14 @@ fn lower_product_v2_document(
                 );
             }
             ProductMediaSourceV2::Unknown(unknown) => {
-                push_product_diagnostic(
+                push_product_diagnostic_at(
                     &mut plan,
                     "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED",
                     format!(
                         "media '{}' uses unsupported source kind '{}'",
                         media.id, unknown.kind
                     ),
+                    media.source_path.as_deref(),
                 );
             }
         }
@@ -672,7 +674,7 @@ fn lower_product_v2_document(
     for (serialized_index, note) in v2.notes.iter().enumerate() {
         match note {
             ProductNoteV2::Stock(stock) => {
-                if !declared_stock.contains(&stock.note_type_id) {
+                let Some(declaration) = stock_declarations.get(&stock.note_type_id) else {
                     push_product_diagnostic(
                         &mut plan,
                         "PRODUCT.STOCK_NOTE_TYPE_MISSING",
@@ -682,10 +684,11 @@ fn lower_product_v2_document(
                         ),
                     );
                     continue;
-                }
+                };
                 lower_product_v2_stock_note(
                     &mut plan,
                     stock,
+                    declaration,
                     serialized_index,
                     &media_export_by_id,
                 );
@@ -948,6 +951,7 @@ fn validate_product_v2_generation_rule(
 fn lower_product_v2_stock_note(
     plan: &mut LoweringPlan,
     stock: &ProductStockNoteV2,
+    declaration: &ProductStockNoteTypeV2,
     serialized_index: usize,
     media_export_by_id: &BTreeMap<String, String>,
 ) {
@@ -957,15 +961,21 @@ fn lower_product_v2_stock_note(
         _ => BTreeMap::new(),
     };
     let mut invalid = false;
-    for source_key in field_map.keys() {
-        if !stock.fields.contains_key(*source_key) {
-            push_product_diagnostic(
+    for source_key in declaration
+        .fields
+        .iter()
+        .filter(|field| field.required)
+        .map(|field| field.key.as_str())
+    {
+        if field_map.contains_key(source_key) && !stock.fields.contains_key(source_key) {
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.REQUIRED_FIELD_MISSING",
                 format!(
                     "stock note for note type '{}' is missing required field '{}'",
                     stock.note_type_id, source_key
                 ),
+                stock.source_path.as_deref(),
             );
             invalid = true;
         }
@@ -977,13 +987,13 @@ fn lower_product_v2_stock_note(
     let mut fields = BTreeMap::new();
     let mut field_source_keys = BTreeMap::new();
     for (source_key, authoring_name) in field_map {
-        if let Some(content) = stock.fields.get(source_key) {
-            fields.insert(
-                authoring_name.to_string(),
-                render_v2_content(plan, content, media_export_by_id),
-            );
-            field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
-        }
+        let value = stock
+            .fields
+            .get(source_key)
+            .map(|content| render_v2_content(plan, content, media_export_by_id))
+            .unwrap_or_default();
+        fields.insert(authoring_name.to_string(), value);
+        field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
     }
 
     let note_id = if let Some(stable_id) = stock.stable_id.as_deref() {
@@ -1095,13 +1105,14 @@ fn lower_product_v2_custom_note(
                 .map(|value| value.is_empty())
                 .unwrap_or(true)
         {
-            push_product_diagnostic(
+            push_product_diagnostic_at(
                 plan,
                 "PRODUCT.REQUIRED_FIELD_MISSING",
                 format!(
                     "custom note for note type '{}' is missing required field '{}'",
                     note.note_type_id, declaration.key
                 ),
+                note.source_path.as_deref(),
             );
             invalid = true;
         }
@@ -1388,9 +1399,19 @@ fn push_product_diagnostic(
     code: &'static str,
     message: impl Into<String>,
 ) {
+    push_product_diagnostic_at(plan, code, message, None);
+}
+
+fn push_product_diagnostic_at(
+    plan: &mut LoweringPlan,
+    code: &'static str,
+    message: impl Into<String>,
+    source_path: Option<&str>,
+) {
     plan.product_diagnostics.push(ProductDiagnostic {
         code,
         message: message.into(),
+        source_path: source_path.map(str::to_owned),
     });
 }
 
@@ -1638,6 +1659,7 @@ fn lower_generation_rule_front(
                 "custom normal note type '{}' template '{}' cannot use cloze generation",
                 note_type_id, template.name
             ),
+            source_path: None,
         }),
     }
 }
@@ -1657,6 +1679,7 @@ fn generation_field_names(
                     "template '{}' in note type '{}' references unknown field key '{}'",
                     template.name, note_type_id, field
                 ),
+                source_path: None,
             });
         };
         field_names.push(field_name.clone());

@@ -3007,7 +3007,11 @@ fn map_product_diagnostics(diagnostics: Vec<ProductDiagnostic>) -> Vec<Diagnosti
             code: DiagnosticCode::new(diagnostic.code),
             severity: Severity::Error,
             message: diagnostic.message,
-            source: Some(SourcePath::new("project.lower")),
+            source: Some(SourcePath::new(
+                diagnostic
+                    .source_path
+                    .unwrap_or_else(|| "project.lower".to_string()),
+            )),
             help: None,
         })
         .collect()
@@ -3276,6 +3280,95 @@ mod tests {
                 ),
                 ("PHASE5A.ADVISORY", Severity::Warning),
             ]
+        );
+    }
+
+    #[test]
+    fn product_v2_normalize_preserves_unknown_media_source_path() {
+        let document = serde_json::from_str::<crate::product::ProductDocument>(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-media-source",
+              "default_deck_name": "Invalid",
+              "note_types": [],
+              "notes": [],
+              "media": [{
+                "id": "media:future",
+                "source": {"kind": "future_source", "uri": "asset://future"},
+                "export_as": "future.bin",
+                "source_path": "project.media[\"future.bin\"]"
+              }]
+            }"#,
+        )
+        .expect("parse product-v2 document");
+        let temp = tempfile::tempdir().expect("tempdir");
+        let err = match Project::from_product_document(document).normalize_with_dirs(
+            temp.path(),
+            temp.path().join(".anki-forge-media"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("product diagnostics should fail normalization"),
+            Err(error) => error,
+        };
+
+        assert_eq!(
+            err.diagnostics
+                .iter()
+                .find(|diagnostic| {
+                    diagnostic.code.as_str() == "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"
+                })
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.media[\"future.bin\"]")
+        );
+    }
+
+    #[test]
+    fn product_v2_normalize_preserves_required_field_source_path() {
+        let document = serde_json::from_str::<crate::product::ProductDocument>(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-basic-required",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "basic",
+                "name": "Basic",
+                "fields": [
+                  {"name": "Front", "key": "front", "required": true},
+                  {"name": "Back", "key": "back", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "deck_name": "Invalid",
+                "fields": {"back": {"kind": "text", "value": "Back only"}},
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        )
+        .expect("parse product-v2 document");
+        let temp = tempfile::tempdir().expect("tempdir");
+        let err = match Project::from_product_document(document).normalize_with_dirs(
+            temp.path(),
+            temp.path().join(".anki-forge-media"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("product diagnostics should fail normalization"),
+            Err(error) => error,
+        };
+
+        assert_eq!(
+            err.diagnostics
+                .iter()
+                .find(|diagnostic| diagnostic.code.as_str() == "PRODUCT.REQUIRED_FIELD_MISSING")
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.notes[0]")
         );
     }
 

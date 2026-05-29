@@ -479,6 +479,42 @@ fn diagnostic_codes(document: ProductDocument) -> Vec<&'static str> {
         .collect()
 }
 
+fn diagnostic_source<'a>(
+    diagnostics: &'a [anki_forge::diagnostics::Diagnostic],
+    code: &str,
+) -> Option<&'a str> {
+    diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == code)
+        .and_then(|diagnostic| diagnostic.source.as_ref())
+        .map(|source| source.as_str())
+}
+
+const PRODUCT_V2_BASIC_MISSING_FRONT: &str = r#"{
+  "product_document_version": "product-v2",
+  "document_id": "invalid-basic-required",
+  "default_deck_name": "Invalid",
+  "note_types": [{
+    "kind": "stock",
+    "id": "basic",
+    "name": "Basic",
+    "fields": [
+      {"name": "Front", "key": "front", "required": true},
+      {"name": "Back", "key": "back", "required": false}
+    ],
+    "templates": [],
+    "css": null
+  }],
+  "notes": [{
+    "kind": "stock",
+    "note_type_id": "basic",
+    "deck_name": "Invalid",
+    "fields": {"back": {"kind": "text", "value": "Back only"}},
+    "source_path": "project.notes[0]"
+  }],
+  "media": []
+}"#;
+
 #[test]
 fn product_v2_workspace_runtime_prerequisite_is_available() {
     let start = workspace_runtime_start_dir();
@@ -757,24 +793,9 @@ fn product_v2_custom_identity_matches_builder_product_recipe() {
 
 #[test]
 fn product_v2_stock_basic_missing_front_is_required_field_diagnostic() {
-    let plan = product_v2_inline(
-        r#"{
-          "product_document_version": "product-v2",
-          "document_id": "invalid-basic-required",
-          "default_deck_name": "Invalid",
-          "note_types": [{"kind": "stock", "id": "basic", "name": "Basic", "fields": [], "templates": [], "css": null}],
-          "notes": [{
-            "kind": "stock",
-            "note_type_id": "basic",
-            "deck_name": "Invalid",
-            "fields": {"back": {"kind": "text", "value": "Back only"}},
-            "source_path": "project.notes[0]"
-          }],
-          "media": []
-        }"#,
-    )
-    .lower()
-    .expect("invalid product-v2 basic should lower with diagnostics");
+    let plan = product_v2_inline(PRODUCT_V2_BASIC_MISSING_FRONT)
+        .lower()
+        .expect("invalid product-v2 basic should lower with diagnostics");
 
     assert!(plan
         .product_diagnostics
@@ -790,7 +811,17 @@ fn product_v2_stock_cloze_missing_text_is_required_field_diagnostic() {
           "product_document_version": "product-v2",
           "document_id": "invalid-cloze-required",
           "default_deck_name": "Invalid",
-          "note_types": [{"kind": "stock", "id": "cloze", "name": "Cloze", "fields": [], "templates": [], "css": null}],
+          "note_types": [{
+            "kind": "stock",
+            "id": "cloze",
+            "name": "Cloze",
+            "fields": [
+              {"name": "Text", "key": "text", "required": true},
+              {"name": "Back Extra", "key": "back_extra", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
           "notes": [{
             "kind": "stock",
             "note_type_id": "cloze",
@@ -809,6 +840,94 @@ fn product_v2_stock_cloze_missing_text_is_required_field_diagnostic() {
         .iter()
         .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
     assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_stock_basic_missing_optional_back_still_lowers() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "basic-optional-back",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "stock",
+            "id": "basic",
+            "name": "Basic",
+            "fields": [
+              {"name": "Front", "key": "front", "required": true},
+              {"name": "Back", "key": "back", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "basic",
+            "stable_id": "basic:optional-back",
+            "deck_name": "Optional",
+            "fields": {"front": {"kind": "text", "value": "Front only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower basic with missing optional back");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Front").map(String::as_str),
+        Some("Front only")
+    );
+    assert_eq!(note.fields.get("Back").map(String::as_str), Some(""));
+}
+
+#[test]
+fn product_v2_stock_cloze_missing_optional_back_extra_still_lowers() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "cloze-optional-back-extra",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "stock",
+            "id": "cloze",
+            "name": "Cloze",
+            "fields": [
+              {"name": "Text", "key": "text", "required": true},
+              {"name": "Back Extra", "key": "back_extra", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "cloze",
+            "stable_id": "cloze:optional-back-extra",
+            "deck_name": "Optional",
+            "fields": {"text": {"kind": "html", "value": "A {{c1::cloze}} note"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower cloze with missing optional back extra");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Text").map(String::as_str),
+        Some("A {{c1::cloze}} note")
+    );
+    assert_eq!(note.fields.get("Back Extra").map(String::as_str), Some(""));
 }
 
 #[test]
@@ -1025,6 +1144,41 @@ fn product_v2_build_surfaces_unknown_media_source_product_diagnostic() {
         .diagnostics
         .iter()
         .any(|diagnostic| { diagnostic.code.as_str() == "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED" }));
+    assert_eq!(
+        diagnostic_source(
+            &err.report.diagnostics,
+            "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"
+        ),
+        Some("project.media[\"future.bin\"]")
+    );
+    assert!(!err.report.status.is_success());
+}
+
+#[test]
+fn product_v2_build_surfaces_required_field_source_path() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let document = product_v2_inline(PRODUCT_V2_BASIC_MISSING_FRONT);
+
+    let normalize_err = Project::from_product_document(document.clone())
+        .normalize()
+        .expect_err("product diagnostics should make normalization unsuccessful");
+    assert!(
+        normalize_err
+            .to_string()
+            .contains("PRODUCT.REQUIRED_FIELD_MISSING"),
+        "unexpected normalize error: {normalize_err}"
+    );
+
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid-required.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    assert_eq!(
+        diagnostic_source(&err.report.diagnostics, "PRODUCT.REQUIRED_FIELD_MISSING"),
+        Some("project.notes[0]")
+    );
     assert!(!err.report.status.is_success());
 }
 
