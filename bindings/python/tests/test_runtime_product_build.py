@@ -1,0 +1,163 @@
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from anki_forge import DiagnosticsError, Project, ProtocolError, RuntimeInvocationError, ValidationError
+from anki_forge.report import BuildReport
+from anki_forge.runtime import RuntimeOverride, build_product_build_argv, parse_completed_process
+
+try:
+    from anki_forge_python.raw import _build_args
+except ImportError as exc:
+    raise AssertionError("low-level _build_args drifted; update this parity test with the wrapper change") from exc
+from anki_forge_python.runtime import ResolvedRuntime as LowLevelRuntime
+
+
+def test_report_success_warning_does_not_raise():
+    report = BuildReport.from_json({
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "success",
+        "comparison": "not_requested",
+        "artifact": {"path": "deck.apkg"},
+        "counts": {"notes": 1, "cards": 1, "media": 0},
+        "media": {"objects": 0, "bindings": 0, "bytes": 0},
+        "diagnostics": [{"code": "W", "severity": "warning", "message": "warn"}],
+        "metrics": {"duration_ms": 1},
+        "policy": {"status": "not_applicable"}
+    })
+    report.ensure_success()
+
+
+def test_report_ensure_success_raises_for_invalid_report():
+    payload = {
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "invalid",
+        "comparison": "not_requested",
+        "artifact": None,
+        "counts": {"notes": 0, "cards": 0, "media": 0},
+        "media": {"objects": 0, "bindings": 0, "bytes": 0},
+        "diagnostics": [{"code": "E", "severity": "error", "message": "bad"}],
+        "metrics": {"duration_ms": 1},
+        "policy": {"status": "not_applicable"}
+    }
+    with pytest.raises(DiagnosticsError):
+        BuildReport.from_json(payload).ensure_success()
+
+
+def test_report_rejects_unknown_comparison():
+    payload = {
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "success",
+        "comparison": "garbage",
+        "artifact": {"path": "deck.apkg"},
+        "counts": {"notes": 1, "cards": 1, "media": 0},
+        "media": {"objects": 0, "bindings": 0, "bytes": 0},
+        "diagnostics": [],
+        "metrics": {"duration_ms": 1},
+        "policy": {"status": "not_applicable"}
+    }
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(payload)
+
+
+def test_report_rejects_wrong_kind_and_schema_version():
+    base = {
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "success",
+        "comparison": "not_requested",
+        "artifact": {"path": "deck.apkg"},
+        "counts": {"notes": 1, "cards": 1, "media": 0},
+        "media": {"objects": 0, "bindings": 0, "bytes": 0},
+        "diagnostics": [],
+        "metrics": {"duration_ms": 1},
+        "policy": {"status": "not_applicable"}
+    }
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json({**base, "kind": "wrong"})
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json({**base, "schema_version": "future"})
+
+
+def test_exit_zero_non_json_is_protocol_error(monkeypatch):
+    def fake_run(*args, **kwargs):
+        return subprocess.CompletedProcess(["contract_tools"], 0, stdout="not json", stderr="")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with pytest.raises(ProtocolError):
+        Project("Deck").write_apkg("out.apkg", runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")))
+
+
+def test_fail_on_rejects_unknown_level_before_subprocess(monkeypatch):
+    def fail_run(*args, **kwargs):
+        raise AssertionError("subprocess must not run")
+    monkeypatch.setattr(subprocess, "run", fail_run)
+    with pytest.raises(ValidationError):
+        Project("Deck").write_apkg("out.apkg", compare_to="old.apkg", fail_on="severe", runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")))
+
+
+def test_fail_on_requires_compare_to_before_subprocess(monkeypatch):
+    def fail_run(*args, **kwargs):
+        raise AssertionError("subprocess must not run")
+    monkeypatch.setattr(subprocess, "run", fail_run)
+    with pytest.raises(ValidationError):
+        Project("Deck").write_apkg("out.apkg", fail_on="medium", runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")))
+
+
+def test_negative_returncode_is_interrupted():
+    completed = subprocess.CompletedProcess(["contract_tools"], -2, stdout="", stderr="signal")
+    with pytest.raises(RuntimeInvocationError) as err:
+        parse_completed_process(completed)
+    assert err.value.kind == "interrupted"
+    assert err.value.exit_code == -2
+
+
+def test_negative_returncode_with_report_json_returns_report():
+    completed = subprocess.CompletedProcess(["contract_tools"], -2, stdout=json.dumps({
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "error",
+        "comparison": "not_requested",
+        "artifact": None,
+        "counts": {"notes": 0, "cards": 0, "media": 0},
+        "media": {"objects": 0, "bindings": 0, "bytes": 0},
+        "diagnostics": [{"code": "E", "severity": "error", "message": "interrupted after report"}],
+        "metrics": {"duration_ms": 1},
+        "policy": {"status": "not_applicable"}
+    }), stderr="signal")
+    report = parse_completed_process(completed)
+    assert report.status == "error"
+
+
+def test_runtime_argv_helpers_use_list_args_without_shell(tmp_path):
+    """Guard against argv drift while public and low-level runtime wrappers coexist."""
+    manifest = tmp_path / "contracts" / "manifest.yaml"
+    manifest.parent.mkdir()
+    manifest.write_text("bundle_version: test\n", encoding="utf-8")
+    product_argv = build_product_build_argv(
+        executable=tmp_path / "contract_tools",
+        manifest=manifest,
+        product_input=tmp_path / "输入.json",
+        apkg_out=tmp_path / "out deck.apkg",
+        compare_to=None,
+        fail_on=None,
+        report_json=None,
+    )
+    low_level = _build_args(
+        "normalize",
+        {"input_path": str(tmp_path / "输入.json"), "output": "contract-json"},
+        LowLevelRuntime("workspace", manifest, manifest.parent, "test", "cargo", ("run", "-q", "-p", "contract_tools", "--")),
+    )
+    assert isinstance(product_argv, list)
+    assert isinstance(low_level, list)
+    assert "--product-input" in product_argv
+    assert "--input" in low_level

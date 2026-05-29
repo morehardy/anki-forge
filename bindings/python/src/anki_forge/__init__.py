@@ -12,6 +12,7 @@ from .media import MediaRef, MediaRegistry
 from .note import Note
 from .notetype import Field, GenerationRule, NoteType, Template
 from .project import Project
+from .report import BuildReport
 
 __all__ = [
     "Diagnostic",
@@ -28,4 +29,5 @@ __all__ = [
     "NoteType",
     "Template",
     "Project",
+    "BuildReport",
 ]

@@ -1,19 +1,26 @@
 from __future__ import annotations
 
-from types import MappingProxyType
+import json
+import os
+import tempfile
 from dataclasses import dataclass, field
+from pathlib import Path
+from types import MappingProxyType
 from typing import Mapping, Sequence
 
-from .diagnostics import ValidationError
+from .diagnostics import RuntimeInvocationError, ValidationError
 from .media import MediaRegistry
 from .note import Note
 from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empty
+from .report import BuildReport
+from .runtime import RuntimeOverride, resolve_runtime, run_product_build
 
 STOCK_NOTE_TYPE_IDS = {"basic", "cloze"}
 STOCK_FIELD_KEYS = {
     "basic": {"front", "back"},
     "cloze": {"text", "back_extra"},
 }
+ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
 
 
 @dataclass
@@ -88,6 +95,42 @@ class Project:
             "media": [media_to_json(item) for item in self.media.items],
         }
 
+    def write_apkg(
+        self,
+        path: str | os.PathLike[str],
+        *,
+        compare_to: str | os.PathLike[str] | None = None,
+        fail_on: str | None = None,
+        report_json: str | os.PathLike[str] | None = None,
+        runtime: RuntimeOverride | None = None,
+    ) -> BuildReport:
+        target_path = Path(path).resolve()
+        compare_path = Path(compare_to).resolve() if compare_to is not None else None
+        report_path = Path(report_json).resolve() if report_json is not None else None
+        _validate_write_paths(target_path, compare_path, report_path, fail_on)
+        resolved_runtime = resolve_runtime(runtime)
+
+        try:
+            with tempfile.TemporaryDirectory(prefix="anki-forge-product-") as temp_dir:
+                product_input = Path(temp_dir) / "project.product-v2.json"
+                product_input.write_text(
+                    json.dumps(self.to_product_document(), ensure_ascii=False),
+                    encoding="utf-8",
+                )
+                report = run_product_build(
+                    runtime=resolved_runtime,
+                    product_input=product_input,
+                    apkg_out=target_path,
+                    compare_to=compare_path,
+                    fail_on=fail_on,
+                    report_json=report_path,
+                )
+        except OSError as error:
+            raise RuntimeInvocationError(str(error), kind="setup_failed") from error
+
+        report.ensure_success()
+        return report
+
     def _stock_note_types(self) -> list[str]:
         used = {note.note_type_id for note in self._notes}
         return [note_type_id for note_type_id in ("basic", "cloze") if note_type_id in used]
@@ -137,3 +180,21 @@ class Project:
         for field_key in note.fields:
             if field_key not in allowed:
                 raise ValidationError(f"unknown field key for {note_type.id}: {field_key}")
+
+
+def _validate_write_paths(
+    target: Path,
+    compare_to: Path | None,
+    report_json: Path | None,
+    fail_on: str | None,
+) -> None:
+    if fail_on is not None and fail_on not in ALLOWED_FAIL_ON:
+        raise ValidationError(f"unknown fail_on level: {fail_on}")
+    if fail_on is not None and compare_to is None:
+        raise ValidationError("fail_on requires compare_to")
+    if compare_to is not None and target == compare_to:
+        raise ValidationError("apkg output path must differ from compare_to")
+    if report_json is not None and target == report_json:
+        raise ValidationError("apkg output path must differ from report_json")
+    if compare_to is not None and report_json is not None and compare_to == report_json:
+        raise ValidationError("compare_to path must differ from report_json")

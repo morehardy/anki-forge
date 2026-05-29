@@ -1,0 +1,165 @@
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+from dataclasses import dataclass
+from pathlib import Path
+
+from .diagnostics import ProtocolError, RuntimeInvocationError, RuntimeNotFoundError
+from .report import BuildReport
+
+
+@dataclass(frozen=True)
+class ResolvedRuntime:
+    manifest: Path
+    executable: Path
+    mode: str
+
+
+@dataclass(frozen=True)
+class RuntimeOverride:
+    manifest: Path
+    executable: Path
+
+    def resolve(self) -> ResolvedRuntime:
+        return ResolvedRuntime(
+            manifest=self.manifest.resolve(),
+            executable=self.executable.resolve(),
+            mode="explicit",
+        )
+
+
+def resolve_runtime(explicit: RuntimeOverride | ResolvedRuntime | None = None, cwd: Path | str | None = None) -> ResolvedRuntime:
+    if isinstance(explicit, ResolvedRuntime):
+        return explicit
+    if explicit is not None:
+        return explicit.resolve()
+
+    bundled = _bundled_runtime()
+    if bundled is not None:
+        return bundled
+    return _workspace_runtime(cwd)
+
+
+def _workspace_runtime(cwd: Path | str | None) -> ResolvedRuntime:
+    current = Path(cwd or Path.cwd()).resolve()
+    executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
+    while True:
+        manifest = current / "contracts" / "manifest.yaml"
+        if manifest.is_file():
+            for profile in ("release", "debug"):
+                executable = current / "target" / profile / executable_name
+                if executable.is_file():
+                    return ResolvedRuntime(manifest=manifest, executable=executable, mode="workspace")
+            raise RuntimeNotFoundError(
+                "found contracts/manifest.yaml but no contract_tools executable; "
+                "build it with cargo or pass RuntimeOverride(manifest=..., executable=...)"
+            )
+        if current.parent == current:
+            raise RuntimeNotFoundError(
+                "failed to discover anki-forge runtime; build contract_tools in the workspace "
+                "or pass RuntimeOverride(manifest=..., executable=...)"
+            )
+        current = current.parent
+
+
+def _bundled_runtime() -> ResolvedRuntime | None:
+    package_dir = Path(__file__).resolve().parent
+    executable_name = "contract_tools.exe" if os.name == "nt" else "contract_tools"
+    executable = package_dir / "_runtime" / "bin" / executable_name
+    manifest = package_dir / "_runtime" / "contracts" / "manifest.yaml"
+    if executable.is_file() and manifest.is_file():
+        return ResolvedRuntime(manifest=manifest, executable=executable, mode="bundled")
+    return None
+
+
+def build_product_build_argv(
+    *,
+    executable: Path,
+    manifest: Path,
+    product_input: Path,
+    apkg_out: Path,
+    compare_to: Path | None,
+    fail_on: str | None,
+    report_json: Path | None,
+) -> list[str]:
+    argv = [
+        str(executable),
+        "product-build",
+        "--manifest",
+        str(manifest),
+        "--product-input",
+        str(product_input),
+        "--apkg-out",
+        str(apkg_out),
+        "--output",
+        "contract-json",
+    ]
+    if compare_to is not None:
+        argv.extend(["--compare-to", str(compare_to)])
+    if fail_on is not None:
+        argv.extend(["--fail-on", fail_on])
+    if report_json is not None:
+        argv.extend(["--report-json", str(report_json)])
+    return argv
+
+
+def run_product_build(
+    *,
+    runtime: ResolvedRuntime,
+    product_input: Path,
+    apkg_out: Path,
+    compare_to: Path | None = None,
+    fail_on: str | None = None,
+    report_json: Path | None = None,
+) -> BuildReport:
+    argv = build_product_build_argv(
+        executable=runtime.executable,
+        manifest=runtime.manifest,
+        product_input=product_input,
+        apkg_out=apkg_out,
+        compare_to=compare_to,
+        fail_on=fail_on,
+        report_json=report_json,
+    )
+    try:
+        completed = subprocess.run(
+            argv,
+            shell=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+    except OSError as error:
+        raise RuntimeInvocationError(str(error), kind="spawn_failed", argv=argv) from error
+    except UnicodeDecodeError as error:
+        raise RuntimeInvocationError(str(error), kind="decode_failed", argv=argv) from error
+    return parse_completed_process(completed)
+
+
+def parse_completed_process(completed: subprocess.CompletedProcess[str]) -> BuildReport:
+    stdout = completed.stdout.strip()
+    try:
+        payload = json.loads(stdout)
+    except json.JSONDecodeError as error:
+        if completed.returncode < 0:
+            raise RuntimeInvocationError(
+                "runtime process was interrupted before producing a build report",
+                kind="interrupted",
+                argv=list(completed.args) if isinstance(completed.args, (list, tuple)) else [str(completed.args)],
+                exit_code=completed.returncode,
+                stdout=completed.stdout,
+                stderr=completed.stderr,
+            ) from error
+        if completed.returncode == 0:
+            raise ProtocolError("runtime exited successfully without valid build report JSON") from error
+        raise RuntimeInvocationError(
+            "runtime exited without a build report",
+            kind="exit_without_report",
+            argv=list(completed.args) if isinstance(completed.args, (list, tuple)) else [str(completed.args)],
+            exit_code=completed.returncode,
+            stdout=completed.stdout,
+            stderr=completed.stderr,
+        ) from error
+    return BuildReport.from_json(payload)
