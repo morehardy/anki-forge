@@ -637,6 +637,42 @@ fn product_v2_source_path_mixed_notes_use_absolute_indexes() {
         ),
         Some("project.note_types[\"basic\"].templates[\"card_1\"].front")
     );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"a\"].fields[\"Front\"]"),
+        Some("project.notes[\"a\"].fields[\"front\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"a\"].fields[\"Back\"]"),
+        Some("project.notes[\"a\"].fields[\"back\"]")
+    );
+}
+
+#[test]
+fn product_v2_custom_note_field_source_paths_use_product_keys() {
+    let plan = product_v2_fixture("custom-identity-derived.json")
+        .lower()
+        .expect("lower custom identity fixture");
+    let note_id = &plan
+        .authoring_document
+        .notes
+        .first()
+        .expect("lowered custom note")
+        .id;
+
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{note_id:?}].fields[\"Expression\"]"
+        )),
+        Some("project.notes[0].fields[\"expr\"]")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{note_id:?}].fields[\"Meaning\"]"
+        )),
+        Some("project.notes[0].fields[\"meaning\"]")
+    );
 }
 
 #[test]
@@ -717,6 +753,103 @@ fn product_v2_custom_identity_matches_builder_product_recipe() {
         builder_identity.canonical_payload_hash
     );
     assert_eq!(product_identity.provenance, builder_identity.provenance);
+}
+
+#[test]
+fn product_v2_stock_basic_missing_front_is_required_field_diagnostic() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-basic-required",
+          "default_deck_name": "Invalid",
+          "note_types": [{"kind": "stock", "id": "basic", "name": "Basic", "fields": [], "templates": [], "css": null}],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "basic",
+            "deck_name": "Invalid",
+            "fields": {"back": {"kind": "text", "value": "Back only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("invalid product-v2 basic should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_stock_cloze_missing_text_is_required_field_diagnostic() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-cloze-required",
+          "default_deck_name": "Invalid",
+          "note_types": [{"kind": "stock", "id": "cloze", "name": "Cloze", "fields": [], "templates": [], "css": null}],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "cloze",
+            "deck_name": "Invalid",
+            "fields": {"back_extra": {"kind": "text", "value": "Hint only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("invalid product-v2 cloze should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_image_content_renders_like_builder_media_ref() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "image-content",
+          "default_deck_name": "Images",
+          "note_types": [{
+            "kind": "custom",
+            "id": "image-card",
+            "name": "Image Card",
+            "fields": [{"name": "Picture", "key": "picture", "identity": true, "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Picture}}", "back": "{{Picture}}", "generation_rule": {"kind": "all", "fields": ["picture"]}}],
+            "identity": {"kind": "fields", "fields": ["picture"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "image-card",
+            "stable_id": "image:one",
+            "deck_name": "Images",
+            "fields": {"picture": {"kind": "image", "media_id": "image:one"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": [{
+            "id": "image:one",
+            "source": {"kind": "inline_base64", "source_label": "pixel", "data_base64": "AA=="},
+            "export_as": "picture.png"
+          }]
+        }"#,
+    )
+    .lower()
+    .expect("lower image content");
+
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Picture").map(String::as_str),
+        Some("<img src=\"picture.png\">")
+    );
 }
 
 #[test]

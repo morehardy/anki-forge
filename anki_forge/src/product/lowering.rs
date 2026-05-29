@@ -956,13 +956,33 @@ fn lower_product_v2_stock_note(
         "cloze" => BTreeMap::from([("text", "Text"), ("back_extra", "Back Extra")]),
         _ => BTreeMap::new(),
     };
+    let mut invalid = false;
+    for source_key in field_map.keys() {
+        if !stock.fields.contains_key(*source_key) {
+            push_product_diagnostic(
+                plan,
+                "PRODUCT.REQUIRED_FIELD_MISSING",
+                format!(
+                    "stock note for note type '{}' is missing required field '{}'",
+                    stock.note_type_id, source_key
+                ),
+            );
+            invalid = true;
+        }
+    }
+    if invalid {
+        return;
+    }
+
     let mut fields = BTreeMap::new();
+    let mut field_source_keys = BTreeMap::new();
     for (source_key, authoring_name) in field_map {
         if let Some(content) = stock.fields.get(source_key) {
             fields.insert(
                 authoring_name.to_string(),
                 render_v2_content(plan, content, media_export_by_id),
             );
+            field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
         }
     }
 
@@ -1005,7 +1025,7 @@ fn lower_product_v2_stock_note(
         authoring_index,
         serialized_index,
         stock.source_path.as_deref(),
-        fields.keys(),
+        &field_source_keys,
     );
     plan.authoring_document.notes.push(AuthoringNote {
         id: note_id.clone(),
@@ -1061,6 +1081,12 @@ fn lower_product_v2_custom_note(
             );
         }
     }
+    let field_source_keys = notetype
+        .fields
+        .iter()
+        .filter(|declaration| fields.contains_key(&declaration.name))
+        .map(|declaration| (declaration.name.clone(), declaration.key.clone()))
+        .collect::<BTreeMap<_, _>>();
 
     for declaration in &notetype.fields {
         if declaration.required
@@ -1141,7 +1167,7 @@ fn lower_product_v2_custom_note(
         authoring_index,
         serialized_index,
         note.source_path.as_deref(),
-        fields.keys(),
+        &field_source_keys,
     );
     plan.authoring_document.notes.push(AuthoringNote {
         id: note_id.clone(),
@@ -1203,7 +1229,7 @@ fn render_v2_content(
                 return String::new();
             };
             format!(
-                "<img src=\"{}\" alt=\"\">",
+                "<img src=\"{}\">",
                 crate::product::content::escape_html(export_as)
             )
         }
@@ -1314,13 +1340,13 @@ fn record_v2_notetype_source_paths(
     }
 }
 
-fn record_v2_note_source_paths<'a>(
+fn record_v2_note_source_paths(
     source_map: &mut ProductSourceMap,
     note_id: &str,
     authoring_index: usize,
     serialized_index: usize,
     source_path: Option<&str>,
-    fields: impl IntoIterator<Item = &'a String>,
+    field_source_keys: &BTreeMap<String, String>,
 ) {
     let source = source_path
         .map(str::to_owned)
@@ -1334,10 +1360,10 @@ fn record_v2_note_source_paths<'a>(
         format!("product_v2.notes[{serialized_index}]"),
         source.clone(),
     );
-    for field in fields {
+    for (field, product_key) in field_source_keys {
         source_map.insert(
             authoring_note_field_path(note_id, field),
-            product_note_field_source(&source, field),
+            product_note_field_source(&source, product_key),
         );
     }
 }

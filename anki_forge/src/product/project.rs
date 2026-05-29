@@ -2064,7 +2064,7 @@ fn product_v2_identity_content(
             .get(media_id)
             .map(|export_as| {
                 format!(
-                    "<img src=\"{}\" alt=\"\">",
+                    "<img src=\"{}\">",
                     crate::product::content::escape_html(export_as)
                 )
             })
