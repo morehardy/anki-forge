@@ -172,6 +172,11 @@ class NoteType:
             raise AttributeError("note type id is immutable")
         super().__setattr__(name, value)
 
+    def __delattr__(self, name: str) -> None:
+        if name == "id" and "id" in self.__dict__:
+            raise AttributeError("note type id is immutable")
+        super().__delattr__(name)
+
     def __post_init__(self) -> None:
         note_type_id = _validate_id(self.id, "note type id")
         object.__setattr__(self, "id", note_type_id)

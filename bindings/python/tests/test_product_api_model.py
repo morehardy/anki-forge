@@ -152,6 +152,9 @@ def test_notetype_defaults_name_to_id_and_keeps_id_stable():
     assert nt.name == "custom"
     with pytest.raises(AttributeError):
         nt.id = "other"
+    with pytest.raises(AttributeError):
+        del nt.id
+    assert nt.id == "custom"
     nt.field(Field("Front", key="front"))
     assert nt.fields[0].key == "front"
 
