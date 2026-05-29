@@ -1032,19 +1032,14 @@ impl Project {
                 }
             })?;
             let final_path = if let Some(output) = options.output.as_ref() {
-                if let Some(parent) = output.parent() {
-                    std::fs::create_dir_all(parent).map_err(|err| {
-                        let report =
-                            failure_report(started, "PROJECT.OUTPUT_DIR_FAILED", err.to_string());
-                        match maybe_write_report_json(&options, report) {
-                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                            Err(err) => err,
-                        }
-                    })?;
-                }
-                std::fs::copy(&built_path, output).map_err(|err| {
+                replace_output_atomically(
+                    &built_path,
+                    output,
+                    options.output_replace_failure_for_test(),
+                )
+                .map_err(|err| {
                     let report =
-                        failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string());
+                        failure_report(started, "PROJECT.OUTPUT_WRITE_FAILED", err.to_string());
                     match maybe_write_report_json(&options, report) {
                         Ok(report) => BuildError::new(report, BuildFailureCause::Io),
                         Err(err) => err,
@@ -2789,6 +2784,85 @@ fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCan
 struct ProjectNormalizeOutput {
     normalized_ir: authoring_core::NormalizedIr,
     diagnostics: Vec<Diagnostic>,
+}
+
+fn replace_output_atomically(
+    temp_artifact: &Path,
+    target: &Path,
+    force_failure_for_test: bool,
+) -> std::io::Result<()> {
+    let parent = target.parent().ok_or_else(|| {
+        std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "output path has no parent",
+        )
+    })?;
+    std::fs::create_dir_all(parent)?;
+    let file_name = target
+        .file_name()
+        .and_then(|name| name.to_str())
+        .unwrap_or("deck.apkg");
+    let mut temp_target = tempfile::Builder::new()
+        .prefix(&format!(".{file_name}."))
+        .suffix(".tmp")
+        .tempfile_in(parent)?;
+    std::io::copy(
+        &mut std::fs::File::open(temp_artifact)?,
+        temp_target.as_file_mut(),
+    )?;
+    temp_target.as_file_mut().sync_all()?;
+    if force_failure_for_test {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "forced output replace failure",
+        ));
+    }
+    temp_target.persist(target).map_err(|err| err.error)?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod atomic_output_tests {
+    use std::path::Path;
+
+    use tempfile::tempdir;
+
+    use crate::{
+        build::{BuildError, BuildOptions, BuildReport},
+        product::{Note, Project},
+    };
+
+    fn build_with_forced_replace_failure(target: &Path) -> Result<BuildReport, BuildError> {
+        let mut project = Project::new("Atomic Output")
+            .stable_id("atomic-output")
+            .default_deck("Atomic");
+        project
+            .add_note(Note::basic("front", "back").stable_id("atomic-note-1"))
+            .expect("add note");
+
+        project.build(
+            BuildOptions::new()
+                .output(target)
+                .force_output_replace_failure_for_test(true),
+        )
+    }
+
+    #[test]
+    fn product_build_preserves_existing_target_when_replace_fails() {
+        let temp = tempdir().expect("tempdir");
+        let target = temp.path().join("deck.apkg");
+        std::fs::write(&target, b"previous").expect("seed target");
+
+        let err =
+            build_with_forced_replace_failure(&target).expect_err("forced replace should fail");
+
+        assert_eq!(std::fs::read(&target).expect("read target"), b"previous");
+        assert!(err
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "PROJECT.OUTPUT_WRITE_FAILED"));
+    }
 }
 
 struct ArtifactWorkspace {
