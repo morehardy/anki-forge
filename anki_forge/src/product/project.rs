@@ -2508,13 +2508,10 @@ fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
 }
 
 #[cfg(windows)]
-fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
-    use std::os::windows::fs::MetadataExt;
-
-    metadata
-        .volume_serial_number()
-        .zip(metadata.file_index())
-        .map(|(volume, index)| (u64::from(volume), index))
+fn metadata_file_identity(_metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    // Stable Rust does not expose a Windows volume/file index pair. The caller
+    // falls back to canonical path comparison when metadata identity is absent.
+    None
 }
 
 #[cfg(not(any(unix, windows)))]
