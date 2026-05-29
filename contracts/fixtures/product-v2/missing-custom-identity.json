@@ -1,0 +1,33 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "missing-custom-identity",
+  "default_deck_name": "Invalid",
+  "note_types": [
+    {
+      "kind": "custom",
+      "id": "custom",
+      "name": "Custom",
+      "fields": [
+        {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true, "source_path": "project.note_types[\"custom\"].fields[\"front\"]"}
+      ],
+      "templates": [
+        {"name": "Card", "key": "card", "front": "{{Front}}", "back": "{{Front}}", "generation_rule": {"kind": "all", "fields": ["front"]}, "source_path": "project.note_types[\"custom\"].templates[\"card\"]"}
+      ],
+      "css": null,
+      "source_path": "project.note_types[\"custom\"]"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "custom",
+      "note_type_id": "custom",
+      "deck_name": "Invalid",
+      "fields": {
+        "front": {"kind": "text", "value": "value"}
+      },
+      "tags": [],
+      "source_path": "project.notes[0]"
+    }
+  ],
+  "media": []
+}

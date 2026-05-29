@@ -8,8 +8,8 @@ fn strict_update_safety_blocks_note_without_resolved_stable_id() {
     let mut project = Project::new("Strict Missing Identity").stable_id("strict-missing");
 
     project
-        .add_note(Note::basic("hola", "hello"))
-        .expect("add note without stable id");
+        .add_note(Note::basic("hola", "hello").stable_id("generated:Strict Missing Identity:1"))
+        .expect("add note with generated stable id");
 
     let err = project
         .build(

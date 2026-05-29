@@ -1,0 +1,36 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "custom-identity-demo",
+  "default_deck_name": "Identity",
+  "note_types": [
+    {
+      "kind": "custom",
+      "id": "jp-vocab",
+      "name": "Japanese Vocabulary",
+      "fields": [
+        {"name": "Expression", "key": "expr", "identity": true, "sort": true, "required": true, "source_path": "project.note_types[\"jp-vocab\"].fields[\"expr\"]"},
+        {"name": "Meaning", "key": "meaning", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"jp-vocab\"].fields[\"meaning\"]"}
+      ],
+      "templates": [
+        {"name": "Recognition", "key": "recognition", "front": "{{Expression}}", "back": "{{Meaning}}", "generation_rule": {"kind": "all", "fields": ["expr"]}, "source_path": "project.note_types[\"jp-vocab\"].templates[\"recognition\"]"}
+      ],
+      "identity": {"kind": "fields", "fields": ["expr"]},
+      "css": null,
+      "source_path": "project.note_types[\"jp-vocab\"]"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "custom",
+      "note_type_id": "jp-vocab",
+      "deck_name": "Identity",
+      "fields": {
+        "expr": {"kind": "text", "value": "食べる"},
+        "meaning": {"kind": "text", "value": "to eat"}
+      },
+      "tags": [],
+      "source_path": "project.notes[0]"
+    }
+  ],
+  "media": []
+}

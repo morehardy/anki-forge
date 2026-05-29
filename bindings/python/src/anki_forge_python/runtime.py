@@ -3,6 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+# Keep this low-level wrapper independent during Phase 5A. Future consolidation target:
+# anki_forge._runtime.
+
 
 @dataclass(frozen=True)
 class ResolvedRuntime:

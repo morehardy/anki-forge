@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
 
@@ -11,7 +11,12 @@ use super::{
     diagnostics::{LoweringDiagnostic, ProductDiagnostic, ProductLoweringError},
     helpers::{apply_helpers, HelperDeclaration},
     metadata::FieldMetadataDeclaration,
-    model::{CustomNoteType, ProductNote, ProductNoteType},
+    model::{
+        CustomNoteType, ProductCustomNoteTypeV2, ProductFieldContentV2, ProductFieldV2,
+        ProductGenerationRuleV2, ProductIdentityV2, ProductMediaSourceV2, ProductNote,
+        ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteTypeV2,
+        ProductStockNoteV2, ProductTemplateV2,
+    },
     ProductDocument,
 };
 
@@ -61,6 +66,16 @@ pub struct LoweringPlan {
 }
 
 pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, ProductLoweringError> {
+    if let Some(v2) = document.product_v2() {
+        return Ok(lower_product_v2_document(document, v2));
+    }
+
+    lower_legacy_product_document(document)
+}
+
+fn lower_legacy_product_document(
+    document: &ProductDocument,
+) -> Result<LoweringPlan, ProductLoweringError> {
     let mut notetypes: Vec<AuthoringNotetype> = Vec::new();
     let mut notes: Vec<AuthoringNote> = Vec::new();
     let mut media: Vec<crate::AuthoringMedia> = Vec::new();
@@ -495,6 +510,972 @@ pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, Produc
     })
 }
 
+fn lower_product_v2_document(
+    document: &ProductDocument,
+    v2: &crate::product::model::ProductDocumentV2Payload,
+) -> LoweringPlan {
+    let mut plan = LoweringPlan {
+        authoring_document: AuthoringDocument {
+            kind: "authoring-ir".into(),
+            schema_version: "0.1.0".into(),
+            metadata_document_id: document.document_id().to_string(),
+            notetypes: Vec::new(),
+            notes: Vec::new(),
+            media: Vec::new(),
+        },
+        mappings: Vec::new(),
+        source_map: ProductSourceMap::default(),
+        product_diagnostics: v2.transport_diagnostics.clone(),
+        lowering_diagnostics: Vec::new(),
+    };
+
+    let mut stock_declarations = BTreeMap::<String, ProductStockNoteTypeV2>::new();
+    let mut custom_declarations = BTreeMap::<String, ProductCustomNoteTypeV2>::new();
+    for (index, notetype) in v2.note_types.iter().enumerate() {
+        match notetype {
+            ProductNoteTypeV2::Stock(stock) => {
+                if stock.id != "basic" && stock.id != "cloze" {
+                    push_product_diagnostic_at(
+                        &mut plan,
+                        "PRODUCT.STOCK_NOTE_TYPE_INVALID",
+                        format!(
+                            "stock note type '{}' is not supported in product-v2",
+                            stock.id
+                        ),
+                        stock.source_path.as_deref(),
+                    );
+                    continue;
+                }
+                stock_declarations.insert(stock.id.clone(), stock.clone());
+                validate_v2_stock_generation_rules(&mut plan, stock);
+                let defaults = stock_lowering_defaults(&stock.id)
+                    .expect("phase 5 stock note type id should have defaults");
+                let mut lowered = lower_product_v2_stock_notetype(stock, defaults);
+                if let Some(css) = stock.css.clone() {
+                    lowered.css = Some(css);
+                }
+                record_v2_notetype_source_paths(
+                    &mut plan.source_map,
+                    &lowered,
+                    &stock.fields,
+                    &stock.templates,
+                    stock.source_path.as_deref(),
+                    index,
+                );
+                plan.mappings.push(LoweringMapping {
+                    kind: "notetype",
+                    source_kind: "product_v2.notetype",
+                    product_id: stock.id.clone(),
+                    authoring_id: lowered.id.clone(),
+                });
+                plan.authoring_document.notetypes.push(lowered);
+            }
+            ProductNoteTypeV2::Custom(custom) => {
+                if custom.id == "basic" || custom.id == "cloze" {
+                    push_product_diagnostic_at(
+                        &mut plan,
+                        "PRODUCT.RESERVED_ID_KIND_MISMATCH",
+                        format!("custom note type '{}' uses a reserved stock id", custom.id),
+                        custom.source_path.as_deref(),
+                    );
+                    continue;
+                }
+                if matches!(custom.identity, Some(ProductIdentityV2::Unknown(_))) {
+                    push_product_diagnostic_at(
+                        &mut plan,
+                        "PRODUCT.IDENTITY_KIND_UNSUPPORTED",
+                        format!(
+                            "custom note type '{}' uses an unsupported identity kind",
+                            custom.id
+                        ),
+                        custom.source_path.as_deref(),
+                    );
+                }
+                let lowered = lower_product_v2_custom_notetype(&mut plan, custom);
+                record_v2_notetype_source_paths(
+                    &mut plan.source_map,
+                    &lowered,
+                    &custom.fields,
+                    &custom.templates,
+                    custom.source_path.as_deref(),
+                    index,
+                );
+                custom_declarations.insert(custom.id.clone(), custom.clone());
+                plan.mappings.push(LoweringMapping {
+                    kind: "notetype",
+                    source_kind: "product_v2.notetype",
+                    product_id: custom.id.clone(),
+                    authoring_id: lowered.id.clone(),
+                });
+                plan.authoring_document.notetypes.push(lowered);
+            }
+            ProductNoteTypeV2::Unknown(unknown) => {
+                push_product_diagnostic_at(
+                    &mut plan,
+                    "PRODUCT.UNSUPPORTED_KIND",
+                    format!("unsupported product-v2 note type kind '{}'", unknown.kind),
+                    unknown_source_path(unknown).as_deref(),
+                );
+            }
+        }
+    }
+
+    let media_export_by_id = v2
+        .media
+        .iter()
+        .map(|media| (media.id.clone(), media.export_as.clone()))
+        .collect::<BTreeMap<_, _>>();
+
+    for media in &v2.media {
+        match &media.source {
+            ProductMediaSourceV2::File { path } => {
+                plan.authoring_document.media.push(crate::AuthoringMedia {
+                    id: media.id.clone(),
+                    desired_filename: media.export_as.clone(),
+                    source: crate::AuthoringMediaSource::Path { path: path.clone() },
+                    declared_mime: None,
+                });
+                record_v2_media_source_path(
+                    &mut plan.source_map,
+                    &media.id,
+                    &media.export_as,
+                    media.source_path.as_deref(),
+                );
+            }
+            ProductMediaSourceV2::InlineBase64 {
+                source_label: _,
+                data_base64,
+            } => {
+                plan.authoring_document.media.push(crate::AuthoringMedia {
+                    id: media.id.clone(),
+                    desired_filename: media.export_as.clone(),
+                    source: crate::AuthoringMediaSource::InlineBytes {
+                        data_base64: data_base64.clone(),
+                    },
+                    declared_mime: None,
+                });
+                record_v2_media_source_path(
+                    &mut plan.source_map,
+                    &media.id,
+                    &media.export_as,
+                    media.source_path.as_deref(),
+                );
+            }
+            ProductMediaSourceV2::Unknown(unknown) => {
+                push_product_diagnostic_at(
+                    &mut plan,
+                    "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED",
+                    format!(
+                        "media '{}' uses unsupported source kind '{}'",
+                        media.id, unknown.kind
+                    ),
+                    media.source_path.as_deref(),
+                );
+            }
+        }
+    }
+
+    for (serialized_index, note) in v2.notes.iter().enumerate() {
+        match note {
+            ProductNoteV2::Stock(stock) => {
+                let Some(declaration) = stock_declarations.get(&stock.note_type_id) else {
+                    push_product_diagnostic_at(
+                        &mut plan,
+                        "PRODUCT.STOCK_NOTE_TYPE_MISSING",
+                        format!(
+                            "stock note references undeclared note type '{}'",
+                            stock.note_type_id
+                        ),
+                        stock.source_path.as_deref(),
+                    );
+                    continue;
+                };
+                lower_product_v2_stock_note(
+                    &mut plan,
+                    stock,
+                    declaration,
+                    serialized_index,
+                    &media_export_by_id,
+                );
+            }
+            ProductNoteV2::Custom(custom) => {
+                let Some(notetype) = custom_declarations.get(&custom.note_type_id).cloned() else {
+                    push_product_diagnostic_at(
+                        &mut plan,
+                        "PRODUCT.CUSTOM_NOTE_TYPE_MISSING",
+                        format!(
+                            "custom note references undeclared note type '{}'",
+                            custom.note_type_id
+                        ),
+                        custom.source_path.as_deref(),
+                    );
+                    continue;
+                };
+                lower_product_v2_custom_note(
+                    &mut plan,
+                    custom,
+                    &notetype,
+                    serialized_index,
+                    &media_export_by_id,
+                );
+            }
+            ProductNoteV2::Unknown(unknown) => {
+                push_product_diagnostic_at(
+                    &mut plan,
+                    "PRODUCT.UNSUPPORTED_KIND",
+                    format!("unsupported product-v2 note kind '{}'", unknown.kind),
+                    unknown_source_path(unknown).as_deref(),
+                );
+            }
+        }
+    }
+
+    plan
+}
+
+fn lower_product_v2_stock_notetype(
+    stock: &crate::product::model::ProductStockNoteTypeV2,
+    defaults: StockLoweringDefaults,
+) -> AuthoringNotetype {
+    AuthoringNotetype {
+        id: stock.id.clone(),
+        kind: defaults.kind,
+        name: Some(stock.name.clone().unwrap_or(defaults.name)),
+        original_stock_kind: Some(defaults.original_stock_kind),
+        original_id: None,
+        fields: Some(defaults.fields),
+        templates: Some(defaults.templates),
+        css: Some(defaults.css),
+        field_metadata: defaults.field_metadata,
+    }
+}
+
+fn lower_product_v2_custom_notetype(
+    plan: &mut LoweringPlan,
+    custom: &ProductCustomNoteTypeV2,
+) -> AuthoringNotetype {
+    let field_name_by_key = custom
+        .fields
+        .iter()
+        .map(|field| (field.key.clone(), field.name.clone()))
+        .collect::<BTreeMap<_, _>>();
+    let fields = custom
+        .fields
+        .iter()
+        .enumerate()
+        .map(|(ord, field)| AuthoringField {
+            name: field.name.clone(),
+            ord: Some(ord as u32),
+            config_id: Some(crate::product::stable_config_id(
+                "field", &custom.id, &field.key,
+            )),
+            tag: None,
+            prevent_deletion: false,
+        })
+        .collect();
+    let templates = custom
+        .templates
+        .iter()
+        .enumerate()
+        .map(|(ord, template)| AuthoringTemplate {
+            name: template.name.clone(),
+            ord: Some(ord as u32),
+            config_id: Some(crate::product::stable_config_id(
+                "template",
+                &custom.id,
+                &template.key,
+            )),
+            question_format: lower_product_v2_generation_rule_front(
+                plan,
+                &custom.id,
+                &template.name,
+                &template.front,
+                template.generation_rule.as_ref(),
+                template.source_path.as_deref(),
+                &field_name_by_key,
+            ),
+            answer_format: template.back.clone(),
+            browser_question_format: None,
+            browser_answer_format: None,
+            target_deck_name: None,
+            browser_font_name: None,
+            browser_font_size: None,
+        })
+        .collect();
+
+    AuthoringNotetype {
+        id: custom.id.clone(),
+        kind: "normal".into(),
+        name: custom.name.clone(),
+        original_stock_kind: None,
+        original_id: None,
+        fields: Some(fields),
+        templates: Some(templates),
+        css: Some(custom.css.clone().unwrap_or_default()),
+        field_metadata: Vec::new(),
+    }
+}
+
+fn validate_v2_stock_generation_rules(
+    plan: &mut LoweringPlan,
+    stock: &crate::product::model::ProductStockNoteTypeV2,
+) {
+    let field_keys = stock
+        .fields
+        .iter()
+        .map(|field| field.key.as_str())
+        .collect::<BTreeSet<_>>();
+    let field_names = stock
+        .fields
+        .iter()
+        .map(|field| (field.key.clone(), field.name.clone()))
+        .collect::<BTreeMap<_, _>>();
+    for template in &stock.templates {
+        if let Some(rule) = template.generation_rule.as_ref() {
+            validate_product_v2_generation_rule(
+                plan,
+                &stock.id,
+                &template.name,
+                rule,
+                template.source_path.as_deref(),
+                &field_keys,
+                &field_names,
+            );
+        }
+    }
+}
+
+fn lower_product_v2_generation_rule_front(
+    plan: &mut LoweringPlan,
+    note_type_id: &str,
+    template_name: &str,
+    front: &str,
+    rule: Option<&ProductGenerationRuleV2>,
+    source_path: Option<&str>,
+    field_name_by_key: &BTreeMap<String, String>,
+) -> String {
+    let field_keys = field_name_by_key
+        .keys()
+        .map(String::as_str)
+        .collect::<BTreeSet<_>>();
+    let Some(rule) = rule else {
+        return front.to_string();
+    };
+
+    if !validate_product_v2_generation_rule(
+        plan,
+        note_type_id,
+        template_name,
+        rule,
+        source_path,
+        &field_keys,
+        field_name_by_key,
+    ) {
+        return front.to_string();
+    }
+
+    match rule {
+        ProductGenerationRuleV2::AnkiDefault => front.to_string(),
+        ProductGenerationRuleV2::All { fields } => {
+            let field_names = fields
+                .iter()
+                .filter_map(|field| field_name_by_key.get(field).cloned())
+                .collect::<Vec<_>>();
+            wrap_front_with_all_conditions(front, &field_names)
+        }
+        ProductGenerationRuleV2::Any { fields } => {
+            let field_names = fields
+                .iter()
+                .filter_map(|field| field_name_by_key.get(field).cloned())
+                .collect::<Vec<_>>();
+            wrap_front_with_any_conditions(front, &field_names)
+        }
+        ProductGenerationRuleV2::Cloze { .. } | ProductGenerationRuleV2::Unknown(_) => {
+            front.to_string()
+        }
+    }
+}
+
+fn validate_product_v2_generation_rule(
+    plan: &mut LoweringPlan,
+    note_type_id: &str,
+    template_name: &str,
+    rule: &ProductGenerationRuleV2,
+    source_path: Option<&str>,
+    field_keys: &BTreeSet<&str>,
+    field_name_by_key: &BTreeMap<String, String>,
+) -> bool {
+    match rule {
+        ProductGenerationRuleV2::AnkiDefault => true,
+        ProductGenerationRuleV2::All { fields } | ProductGenerationRuleV2::Any { fields } => {
+            if fields.is_empty() {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.GENERATION_RULE_INVALID",
+                    format!(
+                        "template '{template_name}' in note type '{note_type_id}' has an empty generation field list"
+                    ),
+                    source_path,
+                );
+                return false;
+            }
+            let mut valid = true;
+            for field in fields {
+                if !field_keys.contains(field.as_str()) {
+                    push_product_diagnostic_at(
+                        plan,
+                        "PRODUCT.GENERATION_RULE_INVALID",
+                        format!(
+                            "template '{template_name}' in note type '{note_type_id}' references unknown generation field key '{field}'"
+                        ),
+                        source_path,
+                    );
+                    valid = false;
+                }
+            }
+            valid
+        }
+        ProductGenerationRuleV2::Cloze { field } => {
+            if field.trim().is_empty() || !field_name_by_key.contains_key(field) {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.GENERATION_RULE_INVALID",
+                    format!(
+                        "template '{template_name}' in note type '{note_type_id}' has invalid cloze generation field '{field}'"
+                    ),
+                    source_path,
+                );
+                return false;
+            }
+            true
+        }
+        ProductGenerationRuleV2::Unknown(unknown) => {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.GENERATION_RULE_INVALID",
+                format!(
+                    "template '{template_name}' in note type '{note_type_id}' uses unsupported generation rule kind '{}'",
+                    unknown.kind
+                ),
+                source_path,
+            );
+            false
+        }
+    }
+}
+
+fn lower_product_v2_stock_note(
+    plan: &mut LoweringPlan,
+    stock: &ProductStockNoteV2,
+    declaration: &ProductStockNoteTypeV2,
+    serialized_index: usize,
+    media_export_by_id: &BTreeMap<String, String>,
+) {
+    let field_map = match stock.note_type_id.as_str() {
+        "basic" => BTreeMap::from([("front", "Front"), ("back", "Back")]),
+        "cloze" => BTreeMap::from([("text", "Text"), ("back_extra", "Back Extra")]),
+        _ => BTreeMap::new(),
+    };
+    let mut invalid = false;
+    for key in stock.fields.keys() {
+        if !field_map.contains_key(key.as_str()) {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.FIELD_UNKNOWN",
+                format!(
+                    "stock note for note type '{}' contains unknown field key '{}'",
+                    stock.note_type_id, key
+                ),
+                Some(&v2_note_field_source(
+                    stock.source_path.as_deref(),
+                    serialized_index,
+                    key,
+                )),
+            );
+            invalid = true;
+        }
+    }
+    for source_key in declaration
+        .fields
+        .iter()
+        .filter(|field| field.required)
+        .map(|field| field.key.as_str())
+    {
+        if field_map.contains_key(source_key) && !stock.fields.contains_key(source_key) {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.REQUIRED_FIELD_MISSING",
+                format!(
+                    "stock note for note type '{}' is missing required field '{}'",
+                    stock.note_type_id, source_key
+                ),
+                stock.source_path.as_deref(),
+            );
+            invalid = true;
+        }
+    }
+    if invalid {
+        return;
+    }
+
+    let mut fields = BTreeMap::new();
+    let mut field_source_keys = BTreeMap::new();
+    for (source_key, authoring_name) in field_map {
+        let field_source =
+            v2_note_field_source(stock.source_path.as_deref(), serialized_index, source_key);
+        let value = stock
+            .fields
+            .get(source_key)
+            .map(|content| {
+                render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+            })
+            .unwrap_or_default();
+        fields.insert(authoring_name.to_string(), value);
+        field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
+    }
+
+    let note_id = if let Some(stable_id) = stock.stable_id.as_deref() {
+        stable_id.to_string()
+    } else if stock.note_type_id == "basic" {
+        match crate::deck::identity::derive_basic_stock_stable_id_from_front(
+            fields.get("Front").map(String::as_str).unwrap_or_default(),
+        ) {
+            Ok(stable_id) => stable_id,
+            Err(error) => {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.IDENTITY_MISSING",
+                    format!("could not derive basic stock identity: {error}"),
+                    stock.source_path.as_deref(),
+                );
+                return;
+            }
+        }
+    } else {
+        match crate::deck::identity::derive_cloze_stock_stable_id_from_text(
+            fields.get("Text").map(String::as_str).unwrap_or_default(),
+        ) {
+            Ok(stable_id) => stable_id,
+            Err(error) => {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.IDENTITY_MISSING",
+                    format!("could not derive cloze stock identity: {error}"),
+                    stock.source_path.as_deref(),
+                );
+                return;
+            }
+        }
+    };
+
+    let authoring_index = plan.authoring_document.notes.len();
+    record_v2_note_source_paths(
+        &mut plan.source_map,
+        &note_id,
+        authoring_index,
+        serialized_index,
+        stock.source_path.as_deref(),
+        &field_source_keys,
+    );
+    plan.authoring_document.notes.push(AuthoringNote {
+        id: note_id.clone(),
+        notetype_id: stock.note_type_id.clone(),
+        deck_name: stock.deck_name.clone(),
+        fields,
+        tags: stock.tags.clone(),
+    });
+    plan.mappings.push(LoweringMapping {
+        kind: "note",
+        source_kind: "product_v2.note",
+        product_id: stock
+            .stable_id
+            .clone()
+            .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]")),
+        authoring_id: note_id,
+    });
+}
+
+fn lower_product_v2_custom_note(
+    plan: &mut LoweringPlan,
+    note: &crate::product::model::ProductCustomNoteV2,
+    notetype: &ProductCustomNoteTypeV2,
+    serialized_index: usize,
+    media_export_by_id: &BTreeMap<String, String>,
+) {
+    let field_by_key = notetype
+        .fields
+        .iter()
+        .map(|field| (field.key.clone(), field))
+        .collect::<BTreeMap<_, _>>();
+    let mut invalid = false;
+    for key in note.fields.keys() {
+        if !field_by_key.contains_key(key) {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.FIELD_UNKNOWN",
+                format!(
+                    "custom note for note type '{}' contains unknown field key '{}'",
+                    note.note_type_id, key
+                ),
+                note.source_path.as_deref(),
+            );
+            invalid = true;
+        }
+    }
+
+    let mut fields = BTreeMap::new();
+    for declaration in &notetype.fields {
+        let value = if let Some(content) = note.fields.get(&declaration.key) {
+            let field_source = v2_note_field_source(
+                note.source_path.as_deref(),
+                serialized_index,
+                &declaration.key,
+            );
+            render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+        } else {
+            String::new()
+        };
+        fields.insert(declaration.name.clone(), value);
+    }
+    let field_source_keys = notetype
+        .fields
+        .iter()
+        .filter(|declaration| note.fields.contains_key(&declaration.key))
+        .map(|declaration| (declaration.name.clone(), declaration.key.clone()))
+        .collect::<BTreeMap<_, _>>();
+
+    for declaration in &notetype.fields {
+        if declaration.required
+            && custom_required_field_is_missing_or_empty(
+                note.fields.get(&declaration.key),
+                fields.get(&declaration.name),
+            )
+        {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.REQUIRED_FIELD_MISSING",
+                format!(
+                    "custom note for note type '{}' is missing required field '{}'",
+                    note.note_type_id, declaration.key
+                ),
+                note.source_path.as_deref(),
+            );
+            invalid = true;
+        }
+    }
+
+    if invalid {
+        return;
+    }
+
+    let note_id = if let Some(stable_id) = note.stable_id.as_deref() {
+        stable_id.to_string()
+    } else {
+        let identity_fields = custom_identity_field_keys(notetype);
+        if identity_fields.is_empty() {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.IDENTITY_MISSING",
+                format!(
+                    "custom note type '{}' has no identity fields for derived note identity",
+                    notetype.id
+                ),
+                note.source_path.as_deref(),
+            );
+            return;
+        }
+        for key in &identity_fields {
+            if !field_by_key.contains_key(key) {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.IDENTITY_FIELD_UNKNOWN",
+                    format!(
+                        "custom note type '{}' identity references unknown field key '{}'",
+                        notetype.id, key
+                    ),
+                    notetype.source_path.as_deref(),
+                );
+                return;
+            }
+        }
+        let selected_fields = identity_fields
+            .into_iter()
+            .map(|key| {
+                let field = field_by_key
+                    .get(&key)
+                    .expect("identity field keys were validated before derivation");
+                let value = fields
+                    .get(&field.name)
+                    .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
+                    .unwrap_or_default();
+                crate::product::identity::CustomIdentityFieldComponent {
+                    key,
+                    name: field.name.clone(),
+                    value,
+                }
+            })
+            .collect();
+        crate::product::identity::derive_custom_notetype_identity(&notetype.id, selected_fields)
+            .stable_id
+    };
+
+    let authoring_index = plan.authoring_document.notes.len();
+    record_v2_note_source_paths(
+        &mut plan.source_map,
+        &note_id,
+        authoring_index,
+        serialized_index,
+        note.source_path.as_deref(),
+        &field_source_keys,
+    );
+    plan.authoring_document.notes.push(AuthoringNote {
+        id: note_id.clone(),
+        notetype_id: note.note_type_id.clone(),
+        deck_name: note.deck_name.clone(),
+        fields,
+        tags: note.tags.clone(),
+    });
+    plan.mappings.push(LoweringMapping {
+        kind: "note",
+        source_kind: "product_v2.note",
+        product_id: note
+            .stable_id
+            .clone()
+            .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]")),
+        authoring_id: note_id,
+    });
+}
+
+fn custom_identity_field_keys(notetype: &ProductCustomNoteTypeV2) -> Vec<String> {
+    match notetype.identity.as_ref() {
+        Some(ProductIdentityV2::Fields { fields }) => fields.clone(),
+        Some(ProductIdentityV2::Unknown(_)) => Vec::new(),
+        None => notetype
+            .fields
+            .iter()
+            .filter(|field| field.identity)
+            .map(|field| field.key.clone())
+            .collect(),
+    }
+}
+
+fn render_v2_content(
+    plan: &mut LoweringPlan,
+    content: &ProductFieldContentV2,
+    media_export_by_id: &BTreeMap<String, String>,
+    source_path: Option<&str>,
+) -> String {
+    match content {
+        ProductFieldContentV2::Text { value } => crate::product::content::escape_html(value),
+        ProductFieldContentV2::Html { value } => value.clone(),
+        ProductFieldContentV2::Sound { media_id } => {
+            let Some(export_as) = media_export_by_id.get(media_id) else {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.MEDIA_MISSING",
+                    format!("field content references missing media id '{media_id}'"),
+                    source_path,
+                );
+                return String::new();
+            };
+            format!("[sound:{export_as}]")
+        }
+        ProductFieldContentV2::Image { media_id } => {
+            let Some(export_as) = media_export_by_id.get(media_id) else {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.MEDIA_MISSING",
+                    format!("field content references missing media id '{media_id}'"),
+                    source_path,
+                );
+                return String::new();
+            };
+            format!(
+                "<img src=\"{}\">",
+                crate::product::content::escape_html(export_as)
+            )
+        }
+        ProductFieldContentV2::Unknown(unknown) => {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.FIELD_CONTENT_KIND_UNSUPPORTED",
+                format!(
+                    "unsupported product-v2 field content kind '{}'",
+                    unknown.kind
+                ),
+                source_path,
+            );
+            String::new()
+        }
+    }
+}
+
+fn custom_required_field_is_missing_or_empty(
+    content: Option<&ProductFieldContentV2>,
+    rendered: Option<&String>,
+) -> bool {
+    match content {
+        None => true,
+        Some(ProductFieldContentV2::Text { .. }) | Some(ProductFieldContentV2::Html { .. }) => {
+            rendered.map(|value| value.is_empty()).unwrap_or(true)
+        }
+        Some(
+            ProductFieldContentV2::Sound { .. }
+            | ProductFieldContentV2::Image { .. }
+            | ProductFieldContentV2::Unknown(_),
+        ) => false,
+    }
+}
+
+fn record_v2_notetype_source_paths(
+    source_map: &mut ProductSourceMap,
+    notetype: &AuthoringNotetype,
+    product_fields: &[ProductFieldV2],
+    product_templates: &[ProductTemplateV2],
+    source_path: Option<&str>,
+    index: usize,
+) {
+    let source = source_path
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("product_v2.note_types[{index}]"));
+    source_map.insert(
+        format!("authoring.note_types[{:?}]", notetype.id),
+        source.clone(),
+    );
+    source_map.insert(format!("product_v2.note_types[{index}]"), source.clone());
+    let field_source_by_name = product_fields
+        .iter()
+        .map(|field| {
+            (
+                field.name.as_str(),
+                field
+                    .source_path
+                    .clone()
+                    .unwrap_or_else(|| format!("{source}.fields[{:?}]", field.key)),
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+    if let Some(fields) = notetype.fields.as_ref() {
+        for field in fields {
+            let field_source = field_source_by_name
+                .get(field.name.as_str())
+                .cloned()
+                .unwrap_or_else(|| format!("{source}.fields[{:?}]", field.name));
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].fields[{:?}]",
+                    notetype.id, field.name
+                ),
+                field_source,
+            );
+        }
+    }
+
+    let template_source_by_name = product_templates
+        .iter()
+        .map(|template| {
+            (
+                template.name.as_str(),
+                template
+                    .source_path
+                    .clone()
+                    .unwrap_or_else(|| format!("{source}.templates[{:?}]", template.key)),
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+    if let Some(templates) = notetype.templates.as_ref() {
+        for template in templates {
+            let template_source = template_source_by_name
+                .get(template.name.as_str())
+                .cloned()
+                .unwrap_or_else(|| format!("{source}.templates[{:?}]", template.name));
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].templates[{:?}]",
+                    notetype.id, template.name
+                ),
+                template_source.clone(),
+            );
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].templates[{:?}].front",
+                    notetype.id, template.name
+                ),
+                format!("{template_source}.front"),
+            );
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].templates[{:?}].back",
+                    notetype.id, template.name
+                ),
+                format!("{template_source}.back"),
+            );
+        }
+    }
+    if notetype.css.is_some() {
+        source_map.insert(
+            format!("authoring.note_types[{:?}].css", notetype.id),
+            format!("{source}.css"),
+        );
+    }
+}
+
+fn record_v2_note_source_paths(
+    source_map: &mut ProductSourceMap,
+    note_id: &str,
+    authoring_index: usize,
+    serialized_index: usize,
+    source_path: Option<&str>,
+    field_source_keys: &BTreeMap<String, String>,
+) {
+    let source = source_path
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]"));
+    source_map.insert(
+        format!("authoring.notes[{authoring_index}]"),
+        source.clone(),
+    );
+    source_map.insert(format!("authoring.notes[{note_id:?}]"), source.clone());
+    source_map.insert(
+        format!("product_v2.notes[{serialized_index}]"),
+        source.clone(),
+    );
+    for (field, product_key) in field_source_keys {
+        source_map.insert(
+            authoring_note_field_path(note_id, field),
+            product_note_field_source(&source, product_key),
+        );
+    }
+}
+
+fn record_v2_media_source_path(
+    source_map: &mut ProductSourceMap,
+    media_id: &str,
+    export_filename: &str,
+    source_path: Option<&str>,
+) {
+    let source = source_path
+        .map(str::to_owned)
+        .unwrap_or_else(|| product_media_source(export_filename));
+    source_map.insert(authoring_media_path(media_id), source.clone());
+    source_map.insert(authoring_media_export_path(export_filename), source.clone());
+    source_map.insert(media_id, source.clone());
+    source_map.insert(export_filename, source);
+}
+
+fn push_product_diagnostic_at(
+    plan: &mut LoweringPlan,
+    code: &'static str,
+    message: impl Into<String>,
+    source_path: Option<&str>,
+) {
+    plan.product_diagnostics.push(ProductDiagnostic {
+        code,
+        message: message.into(),
+        source_path: source_path.map(str::to_owned),
+    });
+}
+
 fn duplicate_custom_key_diagnostics(custom: &CustomNoteType) -> Vec<ProductDiagnostic> {
     let mut diagnostics = Vec::new();
 
@@ -542,6 +1523,25 @@ pub(crate) fn authoring_note_field_path(note_id: &str, field_name: &str) -> Stri
 
 pub(crate) fn product_note_field_source(note_source: &str, field_name: &str) -> String {
     format!("{note_source}.fields[{field_name:?}]")
+}
+
+fn v2_note_field_source(
+    note_source: Option<&str>,
+    serialized_index: usize,
+    field_key: &str,
+) -> String {
+    let note_source = note_source
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]"));
+    product_note_field_source(&note_source, field_key)
+}
+
+fn unknown_source_path(unknown: &crate::product::model::UnknownProductObjectV2) -> Option<String> {
+    unknown
+        .raw
+        .get("source_path")
+        .and_then(serde_json::Value::as_str)
+        .map(str::to_owned)
 }
 
 pub(crate) fn authoring_media_path(media_id: &str) -> String {
@@ -739,6 +1739,7 @@ fn lower_generation_rule_front(
                 "custom normal note type '{}' template '{}' cannot use cloze generation",
                 note_type_id, template.name
             ),
+            source_path: None,
         }),
     }
 }
@@ -758,6 +1759,7 @@ fn generation_field_names(
                     "template '{}' in note type '{}' references unknown field key '{}'",
                     template.name, note_type_id, field
                 ),
+                source_path: None,
             });
         };
         field_names.push(field_name.clone());

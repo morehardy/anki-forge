@@ -190,17 +190,24 @@ fn product_build_report_json_write_failure_returns_io_error_report() {
     assert!(err
         .report
         .diagnostic_codes()
-        .contains(&"REPORT.JSON_WRITE_FAILED".to_string()));
+        .contains(&"PROJECT.REPORT_JSON_WRITE_FAILED".to_string()));
     let diagnostic = err
         .report
         .diagnostics
         .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "REPORT.JSON_WRITE_FAILED")
+        .find(|diagnostic| diagnostic.code.as_str() == "PROJECT.REPORT_JSON_WRITE_FAILED")
         .expect("json write diagnostic");
     let expected_source = report_json.display().to_string();
     assert_eq!(
         diagnostic.source.as_ref().map(|source| source.as_str()),
         Some(expected_source.as_str())
+    );
+    assert!(diagnostic
+        .message
+        .starts_with("failed to write report_json: "));
+    assert_eq!(
+        diagnostic.help.as_deref(),
+        Some("choose a writable report_json path")
     );
 }
 

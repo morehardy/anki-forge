@@ -1,0 +1,62 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "stock-order-demo",
+  "default_deck_name": "Order",
+  "note_types": [
+    {
+      "kind": "stock",
+      "id": "cloze",
+      "name": "Cloze",
+      "fields": [
+        {"name": "Text", "key": "text", "identity": false, "sort": true, "required": true, "source_path": "project.note_types[\"cloze\"].fields[\"text\"]"},
+        {"name": "Back Extra", "key": "back_extra", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"cloze\"].fields[\"back_extra\"]"}
+      ],
+      "templates": [
+        {"name": "Cloze", "key": "cloze", "front": "{{cloze:Text}}", "back": "{{cloze:Text}}<br>\n{{Back Extra}}", "generation_rule": {"kind": "cloze", "field": "text"}, "source_path": "project.note_types[\"cloze\"].templates[\"cloze\"]"}
+      ],
+      "css": null,
+      "source_path": "project.note_types[\"cloze\"]"
+    },
+    {
+      "kind": "stock",
+      "id": "basic",
+      "name": "Basic",
+      "fields": [
+        {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true, "source_path": "project.note_types[\"basic\"].fields[\"front\"]"},
+        {"name": "Back", "key": "back", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"basic\"].fields[\"back\"]"}
+      ],
+      "templates": [
+        {"name": "Card 1", "key": "card_1", "front": "{{Front}}", "back": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}", "generation_rule": {"kind": "anki_default"}, "source_path": "project.note_types[\"basic\"].templates[\"card_1\"]"}
+      ],
+      "css": null,
+      "source_path": "project.note_types[\"basic\"]"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "stock",
+      "note_type_id": "basic",
+      "stable_id": "basic:order",
+      "deck_name": "Order",
+      "fields": {
+        "front": {"kind": "text", "value": "Basic front"},
+        "back": {"kind": "text", "value": "Basic back"}
+      },
+      "tags": [],
+      "source_path": "project.notes[0]"
+    },
+    {
+      "kind": "stock",
+      "note_type_id": "cloze",
+      "stable_id": "cloze:order",
+      "deck_name": "Order",
+      "fields": {
+        "text": {"kind": "html", "value": "A {{c1::cloze}} note"},
+        "back_extra": {"kind": "text", "value": "hint"}
+      },
+      "tags": [],
+      "source_path": "project.notes[1]"
+    }
+  ],
+  "media": []
+}

@@ -314,7 +314,12 @@ fn deck_build_reports_invalid_deserialized_deck_validation() {
 
 #[test]
 fn package_single_with_stable_id_keeps_root_deck_and_changes_export_identity() {
-    let deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
+    let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
+    deck.basic()
+        .note("hola", "hello")
+        .stable_id("es-hola")
+        .add()
+        .expect("add basic note");
 
     let package = Package::single(deck.clone()).with_stable_id("package-v1");
 

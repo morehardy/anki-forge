@@ -1,0 +1,36 @@
+{
+  "product_document_version": "product-v2",
+  "document_id": "basic-demo",
+  "default_deck_name": "Demo",
+  "note_types": [
+    {
+      "kind": "stock",
+      "id": "basic",
+      "name": "Basic",
+      "fields": [
+        {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true, "source_path": "project.note_types[\"basic\"].fields[\"front\"]"},
+        {"name": "Back", "key": "back", "identity": false, "sort": false, "required": false, "source_path": "project.note_types[\"basic\"].fields[\"back\"]"}
+      ],
+      "templates": [
+        {"name": "Card 1", "key": "card_1", "front": "{{Front}}", "back": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}", "generation_rule": {"kind": "anki_default"}, "source_path": "project.note_types[\"basic\"].templates[\"card_1\"]"}
+      ],
+      "css": null,
+      "source_path": "project.note_types[\"basic\"]"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "stock",
+      "note_type_id": "basic",
+      "stable_id": "basic:hello",
+      "deck_name": "Demo",
+      "fields": {
+        "front": {"kind": "text", "value": "Hello"},
+        "back": {"kind": "text", "value": "Changed World"}
+      },
+      "tags": ["demo"],
+      "source_path": "project.notes[\"basic:hello\"]"
+    }
+  ],
+  "media": []
+}

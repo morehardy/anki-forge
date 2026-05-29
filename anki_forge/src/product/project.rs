@@ -7,7 +7,6 @@ use std::time::Instant;
 use anyhow::Context;
 use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
 use base64::Engine as _;
-use serde::Serialize;
 use tempfile::TempDir;
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 
@@ -430,6 +429,18 @@ impl Project {
         };
         let normalized = normalized_output.normalized_ir;
         diagnostics.extend(normalized_output.diagnostics);
+
+        if normalized.notes.is_empty() {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("PROJECT.EMPTY"),
+                severity: Severity::Error,
+                message: "project contains no notes".into(),
+                source: Some(SourcePath::new("project.notes")),
+                help: Some("add at least one note before building".into()),
+            });
+            let report = invalid_report_without_artifact(diagnostics, &normalized, started);
+            return return_report_error(&options, report, BuildFailureCause::Invalid);
+        }
 
         if diagnostics
             .iter()
@@ -1021,19 +1032,14 @@ impl Project {
                 }
             })?;
             let final_path = if let Some(output) = options.output.as_ref() {
-                if let Some(parent) = output.parent() {
-                    std::fs::create_dir_all(parent).map_err(|err| {
-                        let report =
-                            failure_report(started, "PROJECT.OUTPUT_DIR_FAILED", err.to_string());
-                        match maybe_write_report_json(&options, report) {
-                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                            Err(err) => err,
-                        }
-                    })?;
-                }
-                std::fs::copy(&built_path, output).map_err(|err| {
+                replace_output_atomically(
+                    &built_path,
+                    output,
+                    options.output_replace_failure_for_test(),
+                )
+                .map_err(|err| {
                     let report =
-                        failure_report(started, "PROJECT.OUTPUT_COPY_FAILED", err.to_string());
+                        failure_report(started, "PROJECT.OUTPUT_WRITE_FAILED", err.to_string());
                     match maybe_write_report_json(&options, report) {
                         Ok(report) => BuildError::new(report, BuildFailureCause::Io),
                         Err(err) => err,
@@ -1183,6 +1189,7 @@ impl Project {
             comparison = comparison_output.comparison;
             diff = comparison_output.diff;
             risk = comparison_output.risk;
+            attach_artifact_diff_risk_if_needed(&mut risk, diff.as_ref());
             policy = crate::risk::policy_from_risk_report(options.fail_on, risk.as_ref());
             let comparison_status = if comparison_is_report_only && options.fail_on.is_none() {
                 BuildStatus::Success
@@ -1482,6 +1489,12 @@ impl Project {
     fn resolved_note_identities(
         &self,
     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+        if let Some(product) = &self.product_document_source {
+            if let Some(v2) = product.product_v2() {
+                return product_v2_resolved_note_identities(v2);
+            }
+        }
+
         let stable_id_counts = self.note_stable_id_counts();
         self.notes
             .iter()
@@ -1670,6 +1683,8 @@ impl Project {
         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
         let mut lowering = self.lower_with_project_error()?;
+        let product_diagnostics =
+            map_product_diagnostics(std::mem::take(&mut lowering.product_diagnostics));
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
         self.apply_note_source_paths(&mut lowering);
@@ -1736,7 +1751,10 @@ impl Project {
             normalization_diagnostics.extend(duplicate_notetype_media_diagnostics);
         }
         let diagnostics = combine_lowering_and_normalization_diagnostics(
-            lowering_diagnostics,
+            product_diagnostics
+                .into_iter()
+                .chain(lowering_diagnostics)
+                .collect(),
             normalization_diagnostics,
         );
         if result_status != "success" {
@@ -1751,6 +1769,16 @@ impl Project {
             diagnostics: diagnostics.clone(),
             normalized_ir: None,
         })?;
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            return Err(ProjectNormalizeError {
+                message: "normalization produced product errors".into(),
+                diagnostics,
+                normalized_ir: Some(Box::new(normalized_ir)),
+            });
+        }
         Ok(ProjectNormalizeOutput {
             normalized_ir,
             diagnostics,
@@ -1883,16 +1911,174 @@ fn display_name_suffix(name: Option<&str>) -> String {
     name.map(|name| format!(" ({name})")).unwrap_or_default()
 }
 
-#[derive(Debug, Serialize)]
-struct ProductIdentityComponents {
-    selected_fields: Vec<ProductIdentityFieldComponent>,
+fn product_v2_resolved_note_identities(
+    v2: &crate::product::model::ProductDocumentV2Payload,
+) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+    let custom_notetypes = v2
+        .note_types
+        .iter()
+        .filter_map(|notetype| match notetype {
+            crate::product::model::ProductNoteTypeV2::Custom(custom) => {
+                Some((custom.id.clone(), custom))
+            }
+            _ => None,
+        })
+        .collect::<BTreeMap<_, _>>();
+    let media_export_by_id = v2
+        .media
+        .iter()
+        .map(|media| (media.id.clone(), media.export_as.clone()))
+        .collect::<BTreeMap<_, _>>();
+    let mut identities = BTreeMap::new();
+
+    for note in &v2.notes {
+        let Some(identity) = product_v2_note_identity(note, &custom_notetypes, &media_export_by_id)
+        else {
+            continue;
+        };
+        identities.insert(identity.stable_id.clone(), identity);
+    }
+
+    identities
 }
 
-#[derive(Debug, Serialize)]
-struct ProductIdentityFieldComponent {
-    key: String,
-    name: String,
-    value: String,
+fn product_v2_note_identity(
+    note: &crate::product::model::ProductNoteV2,
+    custom_notetypes: &BTreeMap<String, &crate::product::model::ProductCustomNoteTypeV2>,
+    media_export_by_id: &BTreeMap<String, String>,
+) -> Option<crate::update_safety::model::ResolvedNoteIdentity> {
+    match note {
+        crate::product::model::ProductNoteV2::Stock(stock) => {
+            if let Some(stable_id) = stock.stable_id.as_deref() {
+                return Some(crate::update_safety::model::ResolvedNoteIdentity {
+                    stable_id: stable_id.to_string(),
+                    current_guid_candidate: stable_id.to_string(),
+                    recipe_id: "product.explicit-stable-id.v1".into(),
+                    canonical_payload_hash: None,
+                    provenance: "ExplicitStableId".into(),
+                    used_override: false,
+                });
+            }
+
+            let stable_id = match stock.note_type_id.as_str() {
+                STOCK_BASIC_ID => {
+                    let front = stock
+                        .fields
+                        .get("front")
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .unwrap_or_default();
+                    crate::deck::identity::derive_basic_stock_stable_id_from_front(&front).ok()?
+                }
+                STOCK_CLOZE_ID => {
+                    let text = stock
+                        .fields
+                        .get("text")
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .unwrap_or_default();
+                    crate::deck::identity::derive_cloze_stock_stable_id_from_text(&text).ok()?
+                }
+                _ => return None,
+            };
+
+            let recipe_id = match stock.note_type_id.as_str() {
+                STOCK_BASIC_ID => crate::deck::identity::BASIC_RECIPE_ID,
+                STOCK_CLOZE_ID => crate::deck::identity::CLOZE_RECIPE_ID,
+                _ => return None,
+            };
+            Some(crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: recipe_id.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
+                used_override: false,
+            })
+        }
+        crate::product::model::ProductNoteV2::Custom(note) => {
+            if let Some(stable_id) = note.stable_id.as_deref() {
+                return Some(crate::update_safety::model::ResolvedNoteIdentity {
+                    stable_id: stable_id.to_string(),
+                    current_guid_candidate: stable_id.to_string(),
+                    recipe_id: "product.explicit-stable-id.v1".into(),
+                    canonical_payload_hash: None,
+                    provenance: "ExplicitStableId".into(),
+                    used_override: false,
+                });
+            }
+
+            let notetype = custom_notetypes.get(&note.note_type_id)?;
+            let field_by_key = notetype
+                .fields
+                .iter()
+                .map(|field| (field.key.clone(), field))
+                .collect::<BTreeMap<_, _>>();
+            let identity_fields = match notetype.identity.as_ref() {
+                Some(crate::product::model::ProductIdentityV2::Fields { fields }) => fields.clone(),
+                Some(crate::product::model::ProductIdentityV2::Unknown(_)) => return None,
+                None => notetype
+                    .fields
+                    .iter()
+                    .filter(|field| field.identity)
+                    .map(|field| field.key.clone())
+                    .collect(),
+            };
+            if identity_fields.is_empty() {
+                return None;
+            }
+
+            let selected_fields = identity_fields
+                .into_iter()
+                .map(|key| {
+                    let field = field_by_key.get(&key)?;
+                    let value = note
+                        .fields
+                        .get(&key)
+                        .map(|content| product_v2_identity_content(content, media_export_by_id))
+                        .map(|value| {
+                            crate::deck::identity::normalize_field_text_for_identity(&value)
+                        })
+                        .unwrap_or_default();
+                    Some(crate::product::identity::CustomIdentityFieldComponent {
+                        key,
+                        name: field.name.clone(),
+                        value,
+                    })
+                })
+                .collect::<Option<Vec<_>>>()?;
+
+            Some(crate::product::identity::derive_custom_notetype_identity(
+                &notetype.id,
+                selected_fields,
+            ))
+        }
+        crate::product::model::ProductNoteV2::Unknown(_) => None,
+    }
+}
+
+fn product_v2_identity_content(
+    content: &crate::product::model::ProductFieldContentV2,
+    media_export_by_id: &BTreeMap<String, String>,
+) -> String {
+    match content {
+        crate::product::model::ProductFieldContentV2::Text { value } => {
+            crate::product::content::escape_html(value)
+        }
+        crate::product::model::ProductFieldContentV2::Html { value } => value.clone(),
+        crate::product::model::ProductFieldContentV2::Sound { media_id } => media_export_by_id
+            .get(media_id)
+            .map(|export_as| format!("[sound:{export_as}]"))
+            .unwrap_or_default(),
+        crate::product::model::ProductFieldContentV2::Image { media_id } => media_export_by_id
+            .get(media_id)
+            .map(|export_as| {
+                format!(
+                    "<img src=\"{}\">",
+                    crate::product::content::escape_html(export_as)
+                )
+            })
+            .unwrap_or_default(),
+        crate::product::model::ProductFieldContentV2::Unknown(_) => String::new(),
+    }
 }
 
 fn resolve_product_note_identity(
@@ -1909,6 +2095,41 @@ fn resolve_product_note_identity(
                 recipe_id: "product.explicit-stable-id.v1".into(),
                 canonical_payload_hash: None,
                 provenance: "ExplicitStableId".into(),
+                used_override: false,
+            };
+        }
+    }
+
+    if note.note_type_id() == STOCK_BASIC_ID {
+        let rendered = note.rendered_fields();
+        if let Ok(stable_id) = crate::deck::identity::derive_basic_stock_stable_id_from_front(
+            rendered
+                .get("Front")
+                .map(String::as_str)
+                .unwrap_or_default(),
+        ) {
+            return crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: crate::deck::identity::BASIC_RECIPE_ID.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
+                used_override: false,
+            };
+        }
+    }
+
+    if note.note_type_id() == STOCK_CLOZE_ID {
+        let rendered = note.rendered_fields();
+        if let Ok(stable_id) = crate::deck::identity::derive_cloze_stock_stable_id_from_text(
+            rendered.get("Text").map(String::as_str).unwrap_or_default(),
+        ) {
+            return crate::update_safety::model::ResolvedNoteIdentity {
+                stable_id: stable_id.clone(),
+                current_guid_candidate: stable_id,
+                recipe_id: crate::deck::identity::CLOZE_RECIPE_ID.into(),
+                canonical_payload_hash: None,
+                provenance: "InferredFromStockRecipe".into(),
                 used_override: false,
             };
         }
@@ -1968,41 +2189,45 @@ fn derive_product_note_identity(
         .iter()
         .map(|field| (field.key_ref().as_str(), field))
         .collect::<BTreeMap<_, _>>();
-    let components = ProductIdentityComponents {
-        selected_fields: recipe
-            .field_keys()
-            .into_iter()
-            .map(|key| {
-                let key = key.as_str().to_string();
-                let field_name = field_by_key
-                    .get(key.as_str())
-                    .map(|field| field.name().to_string())
-                    .unwrap_or_else(|| key.clone());
-                let value = rendered
-                    .get(key.as_str())
-                    .or_else(|| rendered.get(field_name.as_str()))
-                    .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
-                    .unwrap_or_default();
-                ProductIdentityFieldComponent {
-                    key,
-                    name: field_name,
-                    value,
-                }
-            })
-            .collect(),
-    };
-    let (stable_id, canonical_payload) =
-        crate::deck::identity::hash_payload(recipe_id, "custom", note_type.id(), components)
-            .expect("product identity payload should serialize");
-    let canonical_payload_hash = format!("blake3:{}", blake3::hash(canonical_payload.as_bytes()));
-    crate::update_safety::model::ResolvedNoteIdentity {
-        stable_id: stable_id.clone(),
-        current_guid_candidate: stable_id,
-        recipe_id: recipe_id.into(),
-        canonical_payload_hash: Some(canonical_payload_hash),
-        provenance: provenance.into(),
-        used_override,
+    let selected_fields = recipe
+        .field_keys()
+        .into_iter()
+        .map(|key| {
+            let key = key.as_str().to_string();
+            let field_name = field_by_key
+                .get(key.as_str())
+                .map(|field| field.name().to_string())
+                .unwrap_or_else(|| key.clone());
+            let value = rendered
+                .get(key.as_str())
+                .or_else(|| rendered.get(field_name.as_str()))
+                .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
+                .unwrap_or_default();
+            crate::product::identity::CustomIdentityFieldComponent {
+                key,
+                name: field_name,
+                value,
+            }
+        })
+        .collect();
+
+    if recipe_id == "custom.notetype.fields.v1"
+        && provenance == "InferredFromNotetypeFields"
+        && !used_override
+    {
+        return crate::product::identity::derive_custom_notetype_identity(
+            note_type.id(),
+            selected_fields,
+        );
     }
+
+    crate::product::identity::derive_custom_identity(
+        note_type.id(),
+        recipe_id,
+        provenance,
+        used_override,
+        selected_fields,
+    )
 }
 
 fn custom_note_fields_for_authoring(
@@ -2283,13 +2508,10 @@ fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
 }
 
 #[cfg(windows)]
-fn metadata_file_identity(metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
-    use std::os::windows::fs::MetadataExt;
-
-    metadata
-        .volume_serial_number()
-        .zip(metadata.file_index())
-        .map(|(volume, index)| (u64::from(volume), index))
+fn metadata_file_identity(_metadata: &std::fs::Metadata) -> Option<(u64, u64)> {
+    // Stable Rust does not expose a Windows volume/file index pair. The caller
+    // falls back to canonical path comparison when metadata identity is absent.
+    None
 }
 
 #[cfg(not(any(unix, windows)))]
@@ -2561,6 +2783,82 @@ struct ProjectNormalizeOutput {
     diagnostics: Vec<Diagnostic>,
 }
 
+fn replace_output_atomically(
+    temp_artifact: &Path,
+    target: &Path,
+    force_failure_for_test: bool,
+) -> std::io::Result<()> {
+    let parent = target.parent().ok_or_else(|| {
+        std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "output path has no parent",
+        )
+    })?;
+    std::fs::create_dir_all(parent)?;
+    let file_name = target
+        .file_name()
+        .and_then(|name| name.to_str())
+        .unwrap_or("deck.apkg");
+    let mut temp_target = tempfile::Builder::new()
+        .prefix(&format!(".{file_name}."))
+        .suffix(".tmp")
+        .tempfile_in(parent)?;
+    std::io::copy(
+        &mut std::fs::File::open(temp_artifact)?,
+        temp_target.as_file_mut(),
+    )?;
+    temp_target.as_file_mut().sync_all()?;
+    if force_failure_for_test {
+        return Err(std::io::Error::other("forced output replace failure"));
+    }
+    temp_target.persist(target).map_err(|err| err.error)?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod atomic_output_tests {
+    use std::path::Path;
+
+    use tempfile::tempdir;
+
+    use crate::{
+        build::{BuildError, BuildOptions, BuildReport},
+        product::{Note, Project},
+    };
+
+    fn build_with_forced_replace_failure(target: &Path) -> Result<BuildReport, BuildError> {
+        let mut project = Project::new("Atomic Output")
+            .stable_id("atomic-output")
+            .default_deck("Atomic");
+        project
+            .add_note(Note::basic("front", "back").stable_id("atomic-note-1"))
+            .expect("add note");
+
+        project.build(
+            BuildOptions::new()
+                .output(target)
+                .force_output_replace_failure_for_test(true),
+        )
+    }
+
+    #[test]
+    fn product_build_preserves_existing_target_when_replace_fails() {
+        let temp = tempdir().expect("tempdir");
+        let target = temp.path().join("deck.apkg");
+        std::fs::write(&target, b"previous").expect("seed target");
+
+        let err =
+            build_with_forced_replace_failure(&target).expect_err("forced replace should fail");
+
+        assert_eq!(std::fs::read(&target).expect("read target"), b"previous");
+        assert!(err
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "PROJECT.OUTPUT_WRITE_FAILED"));
+    }
+}
+
 struct ArtifactWorkspace {
     path: PathBuf,
     temp_dir: Option<TempDir>,
@@ -2790,7 +3088,11 @@ fn map_product_diagnostics(diagnostics: Vec<ProductDiagnostic>) -> Vec<Diagnosti
             code: DiagnosticCode::new(diagnostic.code),
             severity: Severity::Error,
             message: diagnostic.message,
-            source: Some(SourcePath::new("project.lower")),
+            source: Some(SourcePath::new(
+                diagnostic
+                    .source_path
+                    .unwrap_or_else(|| "project.lower".to_string()),
+            )),
             help: None,
         })
         .collect()
@@ -2844,6 +3146,64 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
     }
 }
 
+fn invalid_report_without_artifact(
+    diagnostics: Vec<Diagnostic>,
+    normalized: &authoring_core::NormalizedIr,
+    started: Instant,
+) -> BuildReport {
+    BuildReport {
+        artifact: None,
+        counts: BuildCounts {
+            notes: normalized.notes.len(),
+            cards: count_phase1_cards_without_inspect(normalized),
+            media: normalized.media_bindings.len(),
+        },
+        media: MediaSummary::from_normalized_ir(normalized, &diagnostics),
+        diagnostics,
+        metrics: BuildMetrics {
+            duration: started.elapsed(),
+        },
+        inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Invalid,
+    }
+}
+
+fn attach_artifact_diff_risk_if_needed(
+    risk: &mut Option<crate::risk::ImportRiskReport>,
+    diff: Option<&crate::diff::BuildDiffSummary>,
+) {
+    let Some(risk) = risk.as_mut() else {
+        return;
+    };
+    if !risk.findings.is_empty() {
+        return;
+    }
+    let Some(first_change) = diff
+        .and_then(|diff| diff.artifact_diff.as_ref())
+        .and_then(|artifact_diff| artifact_diff.changes.first())
+    else {
+        return;
+    };
+
+    risk.findings.push(crate::risk::ImportRiskFinding {
+        code: "RISK.ARTIFACT_DIFF".into(),
+        level: crate::build::RiskLevel::Low,
+        category: "artifact".into(),
+        message: "comparison detected artifact changes not covered by a more specific risk rule"
+            .into(),
+        source: Some(SourcePath::new(first_change.selector.clone())),
+        evidence_refs: first_change.evidence_refs.clone(),
+        suggested_action: Some("review the diff before importing".into()),
+    });
+    risk.highest_level = risk.findings.iter().map(|finding| finding.level).max();
+}
+
 fn maybe_write_report_json(
     options: &BuildOptions,
     mut report: BuildReport,
@@ -2854,13 +3214,13 @@ fn maybe_write_report_json(
 
     if let Err(err) = crate::build::write_report_json_atomic(path, &report) {
         report.diagnostics.push(Diagnostic {
-            code: DiagnosticCode::new("REPORT.JSON_WRITE_FAILED"),
+            code: DiagnosticCode::new("PROJECT.REPORT_JSON_WRITE_FAILED"),
             severity: Severity::Error,
-            message: err.to_string(),
+            message: format!("failed to write report_json: {err}"),
             source: Some(SourcePath::new(path.display().to_string())),
-            help: Some("verify that the report_json path is writable".to_string()),
+            help: Some("choose a writable report_json path".to_string()),
         });
-        report.status = BuildStatus::Error;
+        report.status = BuildStatus::highest([report.status, BuildStatus::Error]);
         return Err(BuildError::new(report, BuildFailureCause::Io));
     }
 
@@ -3059,6 +3419,95 @@ mod tests {
                 ),
                 ("PHASE5A.ADVISORY", Severity::Warning),
             ]
+        );
+    }
+
+    #[test]
+    fn product_v2_normalize_preserves_unknown_media_source_path() {
+        let document = serde_json::from_str::<crate::product::ProductDocument>(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-media-source",
+              "default_deck_name": "Invalid",
+              "note_types": [],
+              "notes": [],
+              "media": [{
+                "id": "media:future",
+                "source": {"kind": "future_source", "uri": "asset://future"},
+                "export_as": "future.bin",
+                "source_path": "project.media[\"future.bin\"]"
+              }]
+            }"#,
+        )
+        .expect("parse product-v2 document");
+        let temp = tempfile::tempdir().expect("tempdir");
+        let err = match Project::from_product_document(document).normalize_with_dirs(
+            temp.path(),
+            temp.path().join(".anki-forge-media"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("product diagnostics should fail normalization"),
+            Err(error) => error,
+        };
+
+        assert_eq!(
+            err.diagnostics
+                .iter()
+                .find(|diagnostic| {
+                    diagnostic.code.as_str() == "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"
+                })
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.media[\"future.bin\"]")
+        );
+    }
+
+    #[test]
+    fn product_v2_normalize_preserves_required_field_source_path() {
+        let document = serde_json::from_str::<crate::product::ProductDocument>(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-basic-required",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "basic",
+                "name": "Basic",
+                "fields": [
+                  {"name": "Front", "key": "front", "required": true},
+                  {"name": "Back", "key": "back", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "deck_name": "Invalid",
+                "fields": {"back": {"kind": "text", "value": "Back only"}},
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        )
+        .expect("parse product-v2 document");
+        let temp = tempfile::tempdir().expect("tempdir");
+        let err = match Project::from_product_document(document).normalize_with_dirs(
+            temp.path(),
+            temp.path().join(".anki-forge-media"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("product diagnostics should fail normalization"),
+            Err(error) => error,
+        };
+
+        assert_eq!(
+            err.diagnostics
+                .iter()
+                .find(|diagnostic| diagnostic.code.as_str() == "PRODUCT.REQUIRED_FIELD_MISSING")
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.notes[0]")
         );
     }
 

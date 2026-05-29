@@ -23,4 +23,228 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - run: python -m pip install --upgrade pytest
       - run: ./scripts/verify-ci.sh
+
+  python-wheel-smoke:
+    name: python-wheel-smoke (${{ matrix.os }}, py${{ matrix.python-version }}, ${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+            python-version: "3.11"
+            python-bin: /opt/python/cp311-cp311/bin
+            platform-tag: manylinux_2_17_x86_64.manylinux2014_x86_64
+            linux: true
+            macosx-deployment-target: ""
+          - os: ubuntu-latest
+            arch: x86_64
+            python-version: "3.12"
+            python-bin: /opt/python/cp312-cp312/bin
+            platform-tag: manylinux_2_17_x86_64.manylinux2014_x86_64
+            linux: true
+            macosx-deployment-target: ""
+          - os: macos-15-intel
+            arch: x86_64
+            python-arch: x64
+            python-version: "3.11"
+            python-bin: ""
+            platform-tag: macosx_10_13_x86_64
+            linux: false
+            macosx-deployment-target: "10.13"
+          - os: macos-15-intel
+            arch: x86_64
+            python-arch: x64
+            python-version: "3.12"
+            python-bin: ""
+            platform-tag: macosx_10_13_x86_64
+            linux: false
+            macosx-deployment-target: "10.13"
+          - os: macos-14
+            arch: arm64
+            python-arch: arm64
+            python-version: "3.11"
+            python-bin: ""
+            platform-tag: macosx_11_0_arm64
+            linux: false
+            macosx-deployment-target: "11.0"
+          - os: macos-14
+            arch: arm64
+            python-arch: arm64
+            python-version: "3.12"
+            python-bin: ""
+            platform-tag: macosx_11_0_arm64
+            linux: false
+            macosx-deployment-target: "11.0"
+          - os: windows-latest
+            arch: x86_64
+            python-arch: x64
+            python-version: "3.11"
+            python-bin: ""
+            platform-tag: win_amd64
+            linux: false
+            macosx-deployment-target: ""
+          - os: windows-latest
+            arch: x86_64
+            python-arch: x64
+            python-version: "3.12"
+            python-bin: ""
+            platform-tag: win_amd64
+            linux: false
+            macosx-deployment-target: ""
+    env:
+      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.macosx-deployment-target }}
+      PLATFORM_TAG: ${{ matrix.platform-tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Linux wheel smoke in manylinux container
+        if: matrix.linux
+        shell: bash
+        run: |
+          docker run --rm \
+            -e PYTHON_BIN="${{ matrix.python-bin }}" \
+            -e PLATFORM_TAG="$PLATFORM_TAG" \
+            -v "$PWD:/work" \
+            -w /work \
+            messense/manylinux2014-cross:x86_64@sha256:a6be29564b43b6320955b378c7b0a68fe25cc0a1fa4f0b22fe91a4a4add9d018 \
+            bash -lc '
+          set -euo pipefail
+          export PATH="$PYTHON_BIN:$PATH"
+          curl --proto '"'"'=https'"'"' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.92.0 --no-modify-path
+          export PATH="$HOME/.cargo/bin:$PATH"
+          python -m pip install --upgrade pip build pytest wheel
+          cargo build -p contract_tools --release
+          cd bindings/python
+          python scripts/stage_runtime.py
+          rm -rf build dist src/*.egg-info
+          python -m build --wheel
+          python -m wheel tags --python-tag py3 --abi-tag none --platform-tag "$PLATFORM_TAG" --remove dist/*.whl
+          python - <<'"'"'PY'"'"'
+          from pathlib import Path
+
+          wheels = sorted(Path("dist").glob("anki_forge-*.whl"))
+          if len(wheels) != 1:
+              raise SystemExit(f"expected exactly one public wheel, got {wheels}")
+          print(wheels[0])
+          PY
+          python - <<'"'"'PY'"'"'
+          import os
+          import subprocess
+          import tempfile
+          import venv
+          from pathlib import Path
+
+          python_root = Path.cwd()
+          root = Path(tempfile.mkdtemp(prefix="anki-forge-smoke-"))
+          venv.EnvBuilder(with_pip=True).create(root / "venv")
+          python = root / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+          wheel = next(Path("dist").glob("anki_forge-*.whl"))
+          subprocess.run([str(python), "-m", "pip", "install", str(wheel)], check=True)
+          subprocess.run(
+              [str(python), str(python_root / "tests" / "wheel_smoke_project.py"), str(root / "space path" / "输出 deck.apkg")],
+              check=True,
+          )
+          PY
+          python -m pytest tests/test_import_isolation.py -q
+            '
+
+      - uses: dtolnay/rust-toolchain@master
+        if: matrix.linux == false
+        with:
+          toolchain: 1.92.0
+
+      - uses: actions/setup-python@v5
+        if: matrix.linux == false
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.python-arch }}
+
+      - name: Install Python build tooling
+        if: matrix.linux == false
+        shell: bash
+        run: python -m pip install --upgrade build pytest wheel
+
+      - name: Build contract tools release binary
+        if: matrix.linux == false
+        shell: bash
+        run: cargo build -p contract_tools --release
+
+      - name: Windows non-ASCII product input preflight
+        if: matrix.linux == false && runner.os == 'Windows'
+        shell: bash
+        run: |
+          export PYTHONPATH="$PWD/bindings/python/src"
+          python - <<'PY'
+          from pathlib import Path
+          import os
+
+          from anki_forge import Note, Project
+
+          root = Path(os.environ["RUNNER_TEMP"]) / "路径 smoke"
+          out = root / "输出 deck.apkg"
+          project = Project("窗口")
+          project.add_note(Note.basic("Front", "Back"))
+          report = project.write_apkg(out)
+          report.ensure_success()
+          assert out.is_file(), out
+          PY
+
+      - name: Stage runtime
+        if: matrix.linux == false
+        shell: bash
+        run: |
+          cd bindings/python
+          python scripts/stage_runtime.py
+
+      - name: Build public wheel
+        if: matrix.linux == false
+        shell: bash
+        run: |
+          cd bindings/python
+          rm -rf build dist src/*.egg-info
+          python -m build --wheel
+          python -m wheel tags --python-tag py3 --abi-tag none --platform-tag "$PLATFORM_TAG" --remove dist/*.whl
+          python - <<'PY'
+          from pathlib import Path
+
+          wheels = sorted(Path("dist").glob("anki_forge-*.whl"))
+          if len(wheels) != 1:
+              raise SystemExit(f"expected exactly one public wheel, got {wheels}")
+          print(wheels[0])
+          PY
+
+      - name: Smoke installed wheel
+        if: matrix.linux == false
+        shell: bash
+        run: |
+          cd bindings/python
+          python - <<'PY'
+          import os
+          import subprocess
+          import sys
+          import tempfile
+          import venv
+          from pathlib import Path
+
+          python_root = Path.cwd()
+          root = Path(tempfile.mkdtemp(prefix="anki-forge-smoke-"))
+          venv.EnvBuilder(with_pip=True).create(root / "venv")
+          python = root / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+          wheel = next(Path("dist").glob("anki_forge-*.whl"))
+          subprocess.run([str(python), "-m", "pip", "install", str(wheel)], check=True)
+          subprocess.run(
+              [str(python), str(python_root / "tests" / "wheel_smoke_project.py"), str(root / "space path" / "输出 deck.apkg")],
+              check=True,
+          )
+          PY
+
+      - name: Run import isolation tests
+        if: matrix.linux == false
+        shell: bash
+        run: |
+          cd bindings/python
+          python -m pytest tests/test_import_isolation.py -q

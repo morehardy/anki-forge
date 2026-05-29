@@ -1,6 +1,10 @@
+use anki_forge::build::{BuildOptions, UpdateSafetyMode};
+use anki_forge::prelude::{Field, IdentityRecipe, Note, NoteType, Project, Template};
 use anki_forge::product::model::{CustomField, CustomNote, CustomNoteType, CustomTemplate};
 use anki_forge::product::ProductDocument;
+use anki_forge::update_safety::model::NoteIdentityEntry;
 use std::collections::BTreeMap;
+use std::path::{Path, PathBuf};
 
 #[test]
 fn basic_product_document_lowers_to_authoring_ir_with_mapping_evidence() {
@@ -385,4 +389,1119 @@ fn product_default_deck_does_not_overwrite_explicit_note_deck() {
         .expect("lower should produce one note");
 
     assert_eq!(note.deck_name, "Per Note::Deck");
+}
+
+fn workspace_runtime_start_dir() -> PathBuf {
+    let mut cursor = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    loop {
+        if cursor.join("contracts/manifest.yaml").exists() {
+            return cursor;
+        }
+        if !cursor.pop() {
+            return std::env::current_dir().expect("current dir fallback");
+        }
+    }
+}
+
+fn product_v2_fixture(name: &str) -> ProductDocument {
+    let path = workspace_runtime_start_dir()
+        .join("contracts/fixtures/product-v2")
+        .join(name);
+    let raw = std::fs::read_to_string(&path).expect("read product-v2 fixture");
+    serde_json::from_str(&raw).expect("parse product-v2 fixture")
+}
+
+fn product_v2_inline(raw: &str) -> ProductDocument {
+    serde_json::from_str(raw).expect("parse inline product-v2 document")
+}
+
+fn build_product_document_with_workspace_writer_stack(
+    document: ProductDocument,
+    options: BuildOptions,
+) -> anki_forge::build::BuildReport {
+    try_build_product_document_with_workspace_writer_stack(document, options)
+        .expect("build product document with workspace writer stack")
+}
+
+fn try_build_product_document_with_workspace_writer_stack(
+    document: ProductDocument,
+    options: BuildOptions,
+) -> Result<anki_forge::build::BuildReport, anki_forge::build::BuildError> {
+    let start = workspace_runtime_start_dir();
+    let runtime = anki_forge::runtime::discover_workspace_runtime(&start)
+        .expect("discover workspace runtime");
+    let bundle = anki_forge::runtime::load_bundle_from_manifest(&runtime.manifest_path)
+        .expect("load workspace runtime bundle");
+    let writer_policy =
+        anki_forge::runtime::load_writer_policy(&bundle, "default").expect("load writer policy");
+    let build_context =
+        anki_forge::runtime::load_build_context(&bundle, "default").expect("load build context");
+
+    anki_forge::runtime::build_product_document_with_writer_stack(
+        document,
+        options,
+        writer_policy,
+        build_context,
+    )
+}
+
+fn identity_options(temp: &Path, label: &str) -> (BuildOptions, PathBuf) {
+    let lockfile = temp.join(format!("{label}.lock.json"));
+    let output = temp.join(format!("{label}.apkg"));
+    (
+        BuildOptions::new()
+            .output(output)
+            .identity_lockfile(&lockfile)
+            .write_identity_lockfile(true)
+            .update_safety(UpdateSafetyMode::Strict),
+        lockfile,
+    )
+}
+
+fn active_note_identity(lockfile: &Path) -> NoteIdentityEntry {
+    let lockfile = anki_forge::update_safety::lockfile::read_lockfile(lockfile)
+        .expect("read identity lockfile");
+    lockfile
+        .identity_index
+        .notes
+        .into_iter()
+        .find(|entry| entry.entry_lifecycle == "active")
+        .expect("active note identity entry")
+}
+
+fn diagnostic_codes(document: ProductDocument) -> Vec<&'static str> {
+    document
+        .lower()
+        .expect("product-v2 diagnostics should be carried in the lowering plan")
+        .product_diagnostics
+        .into_iter()
+        .map(|diagnostic| diagnostic.code)
+        .collect()
+}
+
+fn diagnostic_source<'a>(
+    diagnostics: &'a [anki_forge::diagnostics::Diagnostic],
+    code: &str,
+) -> Option<&'a str> {
+    diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == code)
+        .and_then(|diagnostic| diagnostic.source.as_ref())
+        .map(|source| source.as_str())
+}
+
+fn build_error_diagnostic_source(document: ProductDocument, code: &str) -> Option<String> {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    diagnostic_source(&err.report.diagnostics, code).map(str::to_owned)
+}
+
+const PRODUCT_V2_BASIC_MISSING_FRONT: &str = r#"{
+  "product_document_version": "product-v2",
+  "document_id": "invalid-basic-required",
+  "default_deck_name": "Invalid",
+  "note_types": [{
+    "kind": "stock",
+    "id": "basic",
+    "name": "Basic",
+    "fields": [
+      {"name": "Front", "key": "front", "required": true},
+      {"name": "Back", "key": "back", "required": false}
+    ],
+    "templates": [],
+    "css": null
+  }],
+  "notes": [{
+    "kind": "stock",
+    "note_type_id": "basic",
+    "deck_name": "Invalid",
+    "fields": {"back": {"kind": "text", "value": "Back only"}},
+    "source_path": "project.notes[0]"
+  }],
+  "media": []
+}"#;
+
+#[test]
+fn product_v2_workspace_runtime_prerequisite_is_available() {
+    let start = workspace_runtime_start_dir();
+    let runtime =
+        anki_forge::runtime::discover_workspace_runtime(&start).expect("workspace runtime");
+
+    assert!(runtime.manifest_path.ends_with("contracts/manifest.yaml"));
+    assert!(runtime.bundle_root.ends_with("contracts"));
+}
+
+#[test]
+fn product_v2_basic_lowers_to_authoring_fields_and_stock_identity() {
+    let plan = product_v2_fixture("basic-stock.json")
+        .lower()
+        .expect("lower product-v2 basic fixture");
+
+    assert!(plan.product_diagnostics.is_empty());
+    let notetype = plan
+        .authoring_document
+        .notetypes
+        .first()
+        .expect("basic notetype");
+    assert_eq!(notetype.id, "basic");
+    assert_eq!(notetype.kind, "normal");
+    assert_eq!(notetype.original_stock_kind.as_deref(), Some("basic"));
+
+    let note = plan.authoring_document.notes.first().expect("basic note");
+    assert_eq!(note.id, "basic:hello");
+    assert_eq!(note.fields.get("Front").map(String::as_str), Some("Hello"));
+    assert_eq!(note.fields.get("Back").map(String::as_str), Some("World"));
+}
+
+#[test]
+fn product_v2_basic_identity_matches_builder_stock_recipe() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let raw = r#"{
+      "product_document_version": "product-v2",
+      "document_id": "basic-identity-demo",
+      "default_deck_name": "Identity",
+      "note_types": [{
+        "kind": "stock",
+        "id": "basic",
+        "name": "Basic",
+        "fields": [
+          {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true},
+          {"name": "Back", "key": "back", "identity": false, "sort": false, "required": false}
+        ],
+        "templates": [{"name": "Card 1", "key": "card_1", "front": "{{Front}}", "back": "{{Back}}", "generation_rule": {"kind": "anki_default"}}],
+        "css": null
+      }],
+      "notes": [{
+        "kind": "stock",
+        "note_type_id": "basic",
+        "deck_name": "Identity",
+        "fields": {
+          "front": {"kind": "text", "value": "Derived front"},
+          "back": {"kind": "text", "value": "Derived back"}
+        },
+        "tags": [],
+        "source_path": "project.notes[0]"
+      }],
+      "media": []
+    }"#;
+
+    let (product_options, product_lockfile) = identity_options(temp.path(), "product-basic");
+    let product_report =
+        build_product_document_with_workspace_writer_stack(product_v2_inline(raw), product_options);
+
+    let mut builder = Project::new("Identity").stable_id("basic-identity-demo");
+    builder
+        .add_note(Note::basic("Derived front", "Derived back").deck("Identity"))
+        .expect("add builder basic note");
+    let (builder_options, builder_lockfile) = identity_options(temp.path(), "builder-basic");
+    let builder_report = builder.build(builder_options).expect("build builder basic");
+
+    let product_identity = active_note_identity(&product_lockfile);
+    let builder_identity = active_note_identity(&builder_lockfile);
+    assert_eq!(product_report.status, builder_report.status);
+    assert_eq!(product_identity.stable_id, builder_identity.stable_id);
+    assert_eq!(product_identity.recipe_id, "basic.core.v1");
+    assert_eq!(
+        product_identity.canonical_payload_hash,
+        builder_identity.canonical_payload_hash
+    );
+}
+
+#[test]
+fn product_v2_stock_basic_without_stable_id_derives_identity() {
+    let raw = r#"{
+      "product_document_version": "product-v2",
+      "document_id": "basic-derived-demo",
+      "default_deck_name": "Identity",
+      "note_types": [{"kind": "stock", "id": "basic", "name": "Basic", "fields": [], "templates": [], "css": null}],
+      "notes": [{
+        "kind": "stock",
+        "note_type_id": "basic",
+        "deck_name": "Identity",
+        "fields": {
+          "front": {"kind": "text", "value": "No explicit id"},
+          "back": {"kind": "text", "value": "Back"}
+        },
+        "tags": [],
+        "source_path": "project.notes[0]"
+      }],
+      "media": []
+    }"#;
+    let plan = product_v2_inline(raw)
+        .lower()
+        .expect("lower product-v2 basic without stable id");
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+
+    assert!(note.id.starts_with("afid:v1:"));
+}
+
+#[test]
+fn product_v2_source_path_mixed_notes_use_absolute_indexes() {
+    let plan = product_v2_fixture("source-path-mixed-notes.json")
+        .lower()
+        .expect("lower mixed source paths");
+
+    assert!(plan.product_diagnostics.is_empty());
+    assert_eq!(plan.authoring_document.notes.len(), 4);
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[1]"),
+        Some("project.notes[1]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[3]"),
+        Some("project.notes[3]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("product_v2.notes[1]"),
+        Some("project.notes[1]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("product_v2.notes[3]"),
+        Some("project.notes[3]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[\"basic\"].fields[\"Front\"]"),
+        Some("project.note_types[\"basic\"].fields[\"front\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[\"basic\"].templates[\"Card 1\"]"),
+        Some("project.note_types[\"basic\"].templates[\"card_1\"]")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"basic\"].templates[\"Card 1\"].front"
+        ),
+        Some("project.note_types[\"basic\"].templates[\"card_1\"].front")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"a\"].fields[\"Front\"]"),
+        Some("project.notes[\"a\"].fields[\"front\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.notes[\"a\"].fields[\"Back\"]"),
+        Some("project.notes[\"a\"].fields[\"back\"]")
+    );
+}
+
+#[test]
+fn product_v2_custom_note_field_source_paths_use_product_keys() {
+    let plan = product_v2_fixture("custom-identity-derived.json")
+        .lower()
+        .expect("lower custom identity fixture");
+    let note_id = &plan
+        .authoring_document
+        .notes
+        .first()
+        .expect("lowered custom note")
+        .id;
+
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{note_id:?}].fields[\"Expression\"]"
+        )),
+        Some("project.notes[0].fields[\"expr\"]")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{note_id:?}].fields[\"Meaning\"]"
+        )),
+        Some("project.notes[0].fields[\"meaning\"]")
+    );
+}
+
+#[test]
+fn product_v2_stock_notetype_order_is_semantic_not_positional() {
+    let plan = product_v2_fixture("stock-order-cloze-before-basic.json")
+        .lower()
+        .expect("lower stock order fixture");
+
+    assert!(plan.product_diagnostics.is_empty());
+    assert_eq!(
+        plan.authoring_document.notes[0]
+            .fields
+            .get("Front")
+            .map(String::as_str),
+        Some("Basic front")
+    );
+    assert_eq!(
+        plan.authoring_document.notes[1]
+            .fields
+            .get("Text")
+            .map(String::as_str),
+        Some("A {{c1::cloze}} note")
+    );
+}
+
+#[test]
+fn product_v2_custom_identity_matches_builder_product_recipe() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let (product_options, product_lockfile) = identity_options(temp.path(), "product-custom");
+    let product_report = build_product_document_with_workspace_writer_stack(
+        product_v2_fixture("custom-identity-derived.json"),
+        product_options,
+    );
+
+    let mut builder = Project::new("Identity").stable_id("custom-identity-demo");
+    builder
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .name("Japanese Vocabulary")
+                .field(
+                    Field::new("Expression")
+                        .key("expr")
+                        .identity()
+                        .sort()
+                        .required(),
+                )
+                .field(Field::new("Meaning").key("meaning"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Expression}}")
+                        .back("{{Meaning}}")
+                        .generate_when(anki_forge::prelude::GenerationRule::all(["expr"])),
+                )
+                .identity(IdentityRecipe::fields(["expr"])),
+        )
+        .expect("add custom notetype");
+    builder
+        .add_note(
+            Note::new("jp-vocab")
+                .deck("Identity")
+                .text("expr", "食べる")
+                .text("meaning", "to eat"),
+        )
+        .expect("add custom note");
+    let (builder_options, builder_lockfile) = identity_options(temp.path(), "builder-custom");
+    let builder_report = builder
+        .build(builder_options)
+        .expect("build builder custom");
+
+    let product_identity = active_note_identity(&product_lockfile);
+    let builder_identity = active_note_identity(&builder_lockfile);
+    assert_eq!(product_report.status, builder_report.status);
+    assert_eq!(product_identity.stable_id, builder_identity.stable_id);
+    assert_eq!(product_identity.recipe_id, "custom.notetype.fields.v1");
+    assert_eq!(
+        product_identity.canonical_payload_hash,
+        builder_identity.canonical_payload_hash
+    );
+    assert_eq!(product_identity.provenance, builder_identity.provenance);
+}
+
+#[test]
+fn product_v2_stock_basic_missing_front_is_required_field_diagnostic() {
+    let plan = product_v2_inline(PRODUCT_V2_BASIC_MISSING_FRONT)
+        .lower()
+        .expect("invalid product-v2 basic should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_stock_cloze_missing_text_is_required_field_diagnostic() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-cloze-required",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "stock",
+            "id": "cloze",
+            "name": "Cloze",
+            "fields": [
+              {"name": "Text", "key": "text", "required": true},
+              {"name": "Back Extra", "key": "back_extra", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "cloze",
+            "deck_name": "Invalid",
+            "fields": {"back_extra": {"kind": "text", "value": "Hint only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("invalid product-v2 cloze should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_stock_basic_missing_optional_back_still_lowers() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "basic-optional-back",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "stock",
+            "id": "basic",
+            "name": "Basic",
+            "fields": [
+              {"name": "Front", "key": "front", "required": true},
+              {"name": "Back", "key": "back", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "basic",
+            "stable_id": "basic:optional-back",
+            "deck_name": "Optional",
+            "fields": {"front": {"kind": "text", "value": "Front only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower basic with missing optional back");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Front").map(String::as_str),
+        Some("Front only")
+    );
+    assert_eq!(note.fields.get("Back").map(String::as_str), Some(""));
+}
+
+#[test]
+fn product_v2_stock_cloze_missing_optional_back_extra_still_lowers() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "cloze-optional-back-extra",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "stock",
+            "id": "cloze",
+            "name": "Cloze",
+            "fields": [
+              {"name": "Text", "key": "text", "required": true},
+              {"name": "Back Extra", "key": "back_extra", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "cloze",
+            "stable_id": "cloze:optional-back-extra",
+            "deck_name": "Optional",
+            "fields": {"text": {"kind": "html", "value": "A {{c1::cloze}} note"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower cloze with missing optional back extra");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Text").map(String::as_str),
+        Some("A {{c1::cloze}} note")
+    );
+    assert_eq!(note.fields.get("Back Extra").map(String::as_str), Some(""));
+}
+
+#[test]
+fn product_v2_custom_missing_optional_field_still_lowers_empty() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "custom-optional",
+          "default_deck_name": "Optional",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [
+              {"name": "Prompt", "key": "prompt", "identity": true, "required": true},
+              {"name": "Back", "key": "back", "required": false}
+            ],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Back}}", "generation_rule": {"kind": "all", "fields": ["prompt"]}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Optional",
+            "fields": {"prompt": {"kind": "text", "value": "Front only"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower custom note with missing optional field");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Prompt").map(String::as_str),
+        Some("Front only")
+    );
+    assert_eq!(note.fields.get("Back").map(String::as_str), Some(""));
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(&format!(
+            "authoring.notes[{:?}].fields[\"Prompt\"]",
+            note.id
+        )),
+        Some("project.notes[0].fields[\"prompt\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path(&format!("authoring.notes[{:?}].fields[\"Back\"]", note.id)),
+        None
+    );
+}
+
+#[test]
+fn product_v2_image_content_renders_like_builder_media_ref() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "image-content",
+          "default_deck_name": "Images",
+          "note_types": [{
+            "kind": "custom",
+            "id": "image-card",
+            "name": "Image Card",
+            "fields": [{"name": "Picture", "key": "picture", "identity": true, "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Picture}}", "back": "{{Picture}}", "generation_rule": {"kind": "all", "fields": ["picture"]}}],
+            "identity": {"kind": "fields", "fields": ["picture"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "image-card",
+            "stable_id": "image:one",
+            "deck_name": "Images",
+            "fields": {"picture": {"kind": "image", "media_id": "image:one"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": [{
+            "id": "image:one",
+            "source": {"kind": "inline_base64", "source_label": "pixel", "data_base64": "AA=="},
+            "export_as": "picture.png"
+          }]
+        }"#,
+    )
+    .lower()
+    .expect("lower image content");
+
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Picture").map(String::as_str),
+        Some("<img src=\"picture.png\">")
+    );
+}
+
+#[test]
+fn product_v2_empty_generation_rule_fields_are_diagnostic() {
+    let codes = diagnostic_codes(product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-generation-empty",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt"}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "all", "fields": []}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    ));
+
+    assert!(codes.contains(&"PRODUCT.GENERATION_RULE_INVALID"));
+}
+
+#[test]
+fn product_v2_generation_rule_unknown_field_is_diagnostic() {
+    let codes = diagnostic_codes(product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-generation-field",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt"}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "any", "fields": ["missing"]}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    ));
+
+    assert!(codes.contains(&"PRODUCT.GENERATION_RULE_INVALID"));
+}
+
+#[test]
+fn product_v2_custom_note_unknown_field_is_diagnostic() {
+    let codes = diagnostic_codes(product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-note-field",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Invalid",
+            "fields": {
+              "prompt": {"kind": "text", "value": "ok"},
+              "extra": {"kind": "text", "value": "no"}
+            },
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    ));
+
+    assert!(codes.contains(&"PRODUCT.FIELD_UNKNOWN"));
+}
+
+#[test]
+fn product_v2_custom_note_missing_required_field_is_diagnostic() {
+    let codes = diagnostic_codes(product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-note-required",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Invalid",
+            "fields": {},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    ));
+
+    assert!(codes.contains(&"PRODUCT.REQUIRED_FIELD_MISSING"));
+}
+
+#[test]
+fn product_v2_stock_note_without_declaration_is_diagnostic() {
+    let codes = diagnostic_codes(product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-stock-note",
+          "default_deck_name": "Invalid",
+          "note_types": [],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "basic",
+            "deck_name": "Invalid",
+            "fields": {"front": {"kind": "text", "value": "front"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    ));
+
+    assert!(codes.contains(&"PRODUCT.STOCK_NOTE_TYPE_MISSING"));
+}
+
+#[test]
+fn product_v2_build_surfaces_unknown_media_source_product_diagnostic() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let document = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-media-source",
+          "default_deck_name": "Invalid",
+          "note_types": [],
+          "notes": [],
+          "media": [{
+            "id": "media:future",
+            "source": {"kind": "future_source", "uri": "asset://future"},
+            "export_as": "future.bin",
+            "source_path": "project.media[\"future.bin\"]"
+          }]
+        }"#,
+    );
+
+    let normalize_err = Project::from_product_document(document.clone())
+        .normalize()
+        .expect_err("product diagnostics should make normalization unsuccessful");
+    assert!(
+        normalize_err
+            .to_string()
+            .contains("PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"),
+        "unexpected normalize error: {normalize_err}"
+    );
+
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    assert!(err
+        .report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| { diagnostic.code.as_str() == "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED" }));
+    assert_eq!(
+        diagnostic_source(
+            &err.report.diagnostics,
+            "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"
+        ),
+        Some("project.media[\"future.bin\"]")
+    );
+    assert!(!err.report.status.is_success());
+}
+
+#[test]
+fn product_v2_build_surfaces_required_field_source_path() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let document = product_v2_inline(PRODUCT_V2_BASIC_MISSING_FRONT);
+
+    let normalize_err = Project::from_product_document(document.clone())
+        .normalize()
+        .expect_err("product diagnostics should make normalization unsuccessful");
+    assert!(
+        normalize_err
+            .to_string()
+            .contains("PRODUCT.REQUIRED_FIELD_MISSING"),
+        "unexpected normalize error: {normalize_err}"
+    );
+
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid-required.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    assert_eq!(
+        diagnostic_source(&err.report.diagnostics, "PRODUCT.REQUIRED_FIELD_MISSING"),
+        Some("project.notes[0]")
+    );
+    assert!(!err.report.status.is_success());
+}
+
+#[test]
+fn product_v2_build_surfaces_custom_unknown_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-field-source",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "custom",
+                "id": "custom",
+                "name": "Custom",
+                "fields": [{"name": "Prompt", "key": "prompt"}],
+                "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+                "identity": {"kind": "fields", "fields": ["prompt"]},
+                "css": null
+              }],
+              "notes": [{
+                "kind": "custom",
+                "note_type_id": "custom",
+                "deck_name": "Invalid",
+                "fields": {
+                  "prompt": {"kind": "text", "value": "ok"},
+                  "extra": {"kind": "text", "value": "no"}
+                },
+                "source_path": "project.notes[\"bad-field\"]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(source.as_deref(), Some("project.notes[\"bad-field\"]"));
+}
+
+#[test]
+fn product_v2_build_surfaces_stock_missing_notetype_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-stock-source",
+              "default_deck_name": "Invalid",
+              "note_types": [],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "deck_name": "Invalid",
+                "fields": {"front": {"kind": "text", "value": "front"}},
+                "source_path": "project.notes[\"missing-stock\"]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.STOCK_NOTE_TYPE_MISSING",
+    );
+
+    assert_eq!(source.as_deref(), Some("project.notes[\"missing-stock\"]"));
+}
+
+#[test]
+fn product_v2_build_surfaces_missing_media_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-missing-media-source",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "custom",
+                "id": "image-card",
+                "name": "Image Card",
+                "fields": [{"name": "Picture", "key": "picture", "required": true}],
+                "templates": [{"name": "Card", "key": "card", "front": "{{Picture}}", "back": "{{Picture}}", "generation_rule": {"kind": "anki_default"}}],
+                "identity": {"kind": "fields", "fields": ["picture"]},
+                "css": null
+              }],
+              "notes": [{
+                "kind": "custom",
+                "note_type_id": "image-card",
+                "stable_id": "image:missing",
+                "deck_name": "Invalid",
+                "fields": {"picture": {"kind": "image", "media_id": "media:missing"}},
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.MEDIA_MISSING",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"picture\"]")
+    );
+}
+
+#[test]
+fn product_v2_custom_required_render_failure_does_not_report_required_missing() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "required-render-failure",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "audio-card",
+            "name": "Audio Card",
+            "fields": [{"name": "Audio", "key": "audio", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Audio}}", "back": "{{Audio}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["audio"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "audio-card",
+            "stable_id": "audio:missing",
+            "deck_name": "Invalid",
+            "fields": {"audio": {"kind": "sound", "media_id": "media:missing"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("product-v2 diagnostics should be carried in the lowering plan");
+    let codes = plan
+        .product_diagnostics
+        .iter()
+        .map(|diagnostic| diagnostic.code)
+        .collect::<Vec<_>>();
+
+    assert!(codes.contains(&"PRODUCT.MEDIA_MISSING"));
+    assert!(!codes.contains(&"PRODUCT.REQUIRED_FIELD_MISSING"));
+}
+
+#[test]
+fn product_v2_build_surfaces_unknown_basic_stock_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-basic-extra-field",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "basic",
+                "name": "Basic",
+                "fields": [
+                  {"name": "Front", "key": "front", "required": true},
+                  {"name": "Back", "key": "back", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "stable_id": "basic:extra",
+                "deck_name": "Invalid",
+                "fields": {
+                  "front": {"kind": "text", "value": "front"},
+                  "extra": {"kind": "text", "value": "ignored"}
+                },
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"extra\"]")
+    );
+}
+
+#[test]
+fn product_v2_build_surfaces_unknown_cloze_stock_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-cloze-extra-field",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "cloze",
+                "name": "Cloze",
+                "fields": [
+                  {"name": "Text", "key": "text", "required": true},
+                  {"name": "Back Extra", "key": "back_extra", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "cloze",
+                "stable_id": "cloze:extra",
+                "deck_name": "Invalid",
+                "fields": {
+                  "text": {"kind": "html", "value": "A {{c1::cloze}} note"},
+                  "extra": {"kind": "text", "value": "ignored"}
+                },
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"extra\"]")
+    );
+}
+
+#[test]
+fn product_v2_custom_identity_unknown_field_is_diagnostic() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-identity-field",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["missing"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Invalid",
+            "fields": {"prompt": {"kind": "text", "value": "ok"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("invalid product-v2 identity should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.IDENTITY_FIELD_UNKNOWN"));
+    assert!(plan.authoring_document.notes.is_empty());
 }

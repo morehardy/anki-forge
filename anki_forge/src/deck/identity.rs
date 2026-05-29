@@ -98,8 +98,8 @@ struct IoComponents {
     shapes: Vec<IoShapeComponent>,
 }
 
-const BASIC_RECIPE_ID: &str = "basic.core.v1";
-const CLOZE_RECIPE_ID: &str = "cloze.core.v2";
+pub(crate) const BASIC_RECIPE_ID: &str = "basic.core.v1";
+pub(crate) const CLOZE_RECIPE_ID: &str = "cloze.core.v2";
 const IO_RECIPE_ID: &str = "io.core.v2";
 const BASIC_DEFAULT_FIELDS: [BasicIdentityField; 1] = [BasicIdentityField::Front];
 
@@ -130,6 +130,25 @@ pub(crate) fn hash_payload<T: Serialize>(
         blake3::hash(canonical_payload.as_bytes()).to_hex()
     );
     Ok((stable_id, canonical_payload))
+}
+
+pub(crate) fn derive_basic_stock_stable_id_from_front(front: &str) -> anyhow::Result<String> {
+    let components = BasicComponents {
+        selected_fields: vec![BasicFieldComponent {
+            name: "front",
+            value: normalize_field_text_for_identity(front),
+        }],
+    };
+    let (stable_id, _) = hash_payload(BASIC_RECIPE_ID, "stock", "basic", components)?;
+    Ok(stable_id)
+}
+
+pub(crate) fn derive_cloze_stock_stable_id_from_text(text: &str) -> anyhow::Result<String> {
+    let normalized_text = normalize_field_text_for_identity(text);
+    let segments = parse_cloze_segments(&normalized_text)?;
+    let components = cloze_components_from_segments(&segments)?;
+    let (stable_id, _) = hash_payload(CLOZE_RECIPE_ID, "stock", "cloze", components)?;
+    Ok(stable_id)
 }
 
 pub(crate) fn resolve_inferred_identity(

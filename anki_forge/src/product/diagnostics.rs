@@ -2,6 +2,7 @@
 pub struct ProductDiagnostic {
     pub code: &'static str,
     pub message: String,
+    pub source_path: Option<String>,
 }
 
 impl ProductDiagnostic {
@@ -9,6 +10,7 @@ impl ProductDiagnostic {
         Self {
             code: "PHASE5A.IO_IMAGE_REQUIRED",
             message: format!("Image occlusion note '{note_id}' requires a non-empty image."),
+            source_path: None,
         }
     }
 
@@ -23,6 +25,7 @@ impl ProductDiagnostic {
             message: format!(
                 "custom note type '{note_type_id}' uses field key '{key}' for both '{first_field}' and '{duplicate_field}'"
             ),
+            source_path: None,
         }
     }
 
@@ -37,6 +40,7 @@ impl ProductDiagnostic {
             message: format!(
                 "custom note type '{note_type_id}' uses template key '{key}' for both '{first_template}' and '{duplicate_template}'"
             ),
+            source_path: None,
         }
     }
 }

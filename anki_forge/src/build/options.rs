@@ -60,6 +60,8 @@ pub struct BuildOptions {
     pub identity_lockfile: Option<PathBuf>,
     pub write_identity_lockfile: bool,
     pub update_safety: Option<UpdateSafetyMode>,
+    #[cfg(test)]
+    pub(crate) force_output_replace_failure_for_test: bool,
 }
 
 impl Default for BuildOptions {
@@ -75,6 +77,8 @@ impl Default for BuildOptions {
             identity_lockfile: None,
             write_identity_lockfile: false,
             update_safety: None,
+            #[cfg(test)]
+            force_output_replace_failure_for_test: false,
         }
     }
 }
@@ -132,6 +136,23 @@ impl BuildOptions {
     pub fn update_safety(mut self, mode: UpdateSafetyMode) -> Self {
         self.update_safety = Some(mode);
         self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn force_output_replace_failure_for_test(mut self, value: bool) -> Self {
+        self.force_output_replace_failure_for_test = value;
+        self
+    }
+
+    pub(crate) fn output_replace_failure_for_test(&self) -> bool {
+        #[cfg(test)]
+        {
+            self.force_output_replace_failure_for_test
+        }
+        #[cfg(not(test))]
+        {
+            false
+        }
     }
 }
 

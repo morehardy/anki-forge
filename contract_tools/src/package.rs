@@ -1,12 +1,12 @@
 use crate::{
     fixtures::load_fixture_catalog,
-    manifest::{load_manifest, resolve_contract_relative_path},
+    manifest::{load_manifest, resolve_contract_relative_path, LoadedManifest},
 };
 use anyhow::{ensure, Context, Result};
 use flate2::{write::GzEncoder, Compression};
 use serde::Deserialize;
 use std::{
-    collections::BTreeMap,
+    collections::{BTreeMap, BTreeSet},
     fs::{self, File},
     path::{Path, PathBuf},
 };
@@ -77,6 +77,35 @@ pub fn build_artifact(
         .context("failed to finalize gzip archive")?;
 
     Ok(artifact_path)
+}
+
+pub fn runtime_asset_paths(manifest: &LoadedManifest) -> anyhow::Result<Vec<PathBuf>> {
+    let mut paths = BTreeSet::new();
+    paths.insert(manifest.path.clone());
+    for relative in manifest.data.assets.values() {
+        paths.insert(resolve_contract_relative_path(
+            &manifest.contracts_root,
+            relative,
+        )?);
+    }
+    Ok(paths.into_iter().collect())
+}
+
+pub fn runtime_asset_relative_paths(manifest: &LoadedManifest) -> anyhow::Result<Vec<String>> {
+    let mut paths = BTreeSet::new();
+    anyhow::ensure!(
+        manifest.path.file_name().and_then(|name| name.to_str()) == Some("manifest.yaml"),
+        "runtime package manifest path must end with manifest.yaml"
+    );
+    paths.insert("manifest.yaml".to_string());
+    for path in runtime_asset_paths(manifest)? {
+        if path == manifest.path {
+            continue;
+        }
+        let relative = path.strip_prefix(&manifest.contracts_root)?;
+        paths.insert(relative.to_string_lossy().replace('\\', "/"));
+    }
+    Ok(paths.into_iter().collect())
 }
 
 fn package_entries(

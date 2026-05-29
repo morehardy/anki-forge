@@ -26,6 +26,7 @@ pub fn apply_helpers(
                         message: format!(
                             "AnswerDivider is only valid for basic note types, got {note_kind}"
                         ),
+                        source_path: None,
                     });
                 }
 
@@ -38,6 +39,7 @@ pub fn apply_helpers(
                         message: format!(
                             "BackExtraPanel is only valid for cloze and image_occlusion note types, got {note_kind}"
                         ),
+                        source_path: None,
                     });
                 }
 
