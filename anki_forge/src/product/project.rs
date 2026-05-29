@@ -1675,6 +1675,8 @@ impl Project {
         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
         let mut lowering = self.lower_with_project_error()?;
+        let product_diagnostics =
+            map_product_diagnostics(std::mem::take(&mut lowering.product_diagnostics));
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
         self.apply_note_source_paths(&mut lowering);
@@ -1741,7 +1743,10 @@ impl Project {
             normalization_diagnostics.extend(duplicate_notetype_media_diagnostics);
         }
         let diagnostics = combine_lowering_and_normalization_diagnostics(
-            lowering_diagnostics,
+            product_diagnostics
+                .into_iter()
+                .chain(lowering_diagnostics)
+                .collect(),
             normalization_diagnostics,
         );
         if result_status != "success" {
@@ -1756,6 +1761,16 @@ impl Project {
             diagnostics: diagnostics.clone(),
             normalized_ir: None,
         })?;
+        if diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            return Err(ProjectNormalizeError {
+                message: "normalization produced product errors".into(),
+                diagnostics,
+                normalized_ir: Some(Box::new(normalized_ir)),
+            });
+        }
         Ok(ProjectNormalizeOutput {
             normalized_ir,
             diagnostics,

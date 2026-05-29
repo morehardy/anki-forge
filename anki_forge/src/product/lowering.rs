@@ -12,9 +12,9 @@ use super::{
     helpers::{apply_helpers, HelperDeclaration},
     metadata::FieldMetadataDeclaration,
     model::{
-        CustomNoteType, ProductCustomNoteTypeV2, ProductFieldContentV2, ProductGenerationRuleV2,
-        ProductIdentityV2, ProductMediaSourceV2, ProductNote, ProductNoteType, ProductNoteTypeV2,
-        ProductNoteV2, ProductStockNoteV2,
+        CustomNoteType, ProductCustomNoteTypeV2, ProductFieldContentV2, ProductFieldV2,
+        ProductGenerationRuleV2, ProductIdentityV2, ProductMediaSourceV2, ProductNote,
+        ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteV2, ProductTemplateV2,
     },
     ProductDocument,
 };
@@ -555,6 +555,8 @@ fn lower_product_v2_document(
                 record_v2_notetype_source_paths(
                     &mut plan.source_map,
                     &lowered,
+                    &stock.fields,
+                    &stock.templates,
                     stock.source_path.as_deref(),
                     index,
                 );
@@ -589,6 +591,8 @@ fn lower_product_v2_document(
                 record_v2_notetype_source_paths(
                     &mut plan.source_map,
                     &lowered,
+                    &custom.fields,
+                    &custom.templates,
                     custom.source_path.as_deref(),
                     index,
                 );
@@ -1096,12 +1100,25 @@ fn lower_product_v2_custom_note(
             );
             return;
         }
+        for key in &identity_fields {
+            if !field_by_key.contains_key(key) {
+                push_product_diagnostic(
+                    plan,
+                    "PRODUCT.IDENTITY_FIELD_UNKNOWN",
+                    format!(
+                        "custom note type '{}' identity references unknown field key '{}'",
+                        notetype.id, key
+                    ),
+                );
+                return;
+            }
+        }
         let selected_fields = identity_fields
             .into_iter()
             .map(|key| {
                 let field = field_by_key
                     .get(&key)
-                    .expect("identity field should resolve");
+                    .expect("identity field keys were validated before derivation");
                 let value = fields
                     .get(&field.name)
                     .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
@@ -1207,6 +1224,8 @@ fn render_v2_content(
 fn record_v2_notetype_source_paths(
     source_map: &mut ProductSourceMap,
     notetype: &AuthoringNotetype,
+    product_fields: &[ProductFieldV2],
+    product_templates: &[ProductTemplateV2],
     source_path: Option<&str>,
     index: usize,
 ) {
@@ -1218,21 +1237,72 @@ fn record_v2_notetype_source_paths(
         source.clone(),
     );
     source_map.insert(format!("product_v2.note_types[{index}]"), source.clone());
+    let field_source_by_name = product_fields
+        .iter()
+        .map(|field| {
+            (
+                field.name.as_str(),
+                field
+                    .source_path
+                    .clone()
+                    .unwrap_or_else(|| format!("{source}.fields[{:?}]", field.key)),
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+    if let Some(fields) = notetype.fields.as_ref() {
+        for field in fields {
+            let field_source = field_source_by_name
+                .get(field.name.as_str())
+                .cloned()
+                .unwrap_or_else(|| format!("{source}.fields[{:?}]", field.name));
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].fields[{:?}]",
+                    notetype.id, field.name
+                ),
+                field_source,
+            );
+        }
+    }
+
+    let template_source_by_name = product_templates
+        .iter()
+        .map(|template| {
+            (
+                template.name.as_str(),
+                template
+                    .source_path
+                    .clone()
+                    .unwrap_or_else(|| format!("{source}.templates[{:?}]", template.key)),
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
     if let Some(templates) = notetype.templates.as_ref() {
         for template in templates {
+            let template_source = template_source_by_name
+                .get(template.name.as_str())
+                .cloned()
+                .unwrap_or_else(|| format!("{source}.templates[{:?}]", template.name));
+            source_map.insert(
+                format!(
+                    "authoring.note_types[{:?}].templates[{:?}]",
+                    notetype.id, template.name
+                ),
+                template_source.clone(),
+            );
             source_map.insert(
                 format!(
                     "authoring.note_types[{:?}].templates[{:?}].front",
                     notetype.id, template.name
                 ),
-                format!("{source}.templates[{:?}].front", template.name),
+                format!("{template_source}.front"),
             );
             source_map.insert(
                 format!(
                     "authoring.note_types[{:?}].templates[{:?}].back",
                     notetype.id, template.name
                 ),
-                format!("{source}.templates[{:?}].back", template.name),
+                format!("{template_source}.back"),
             );
         }
     }

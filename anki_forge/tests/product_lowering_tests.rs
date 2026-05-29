@@ -419,6 +419,14 @@ fn build_product_document_with_workspace_writer_stack(
     document: ProductDocument,
     options: BuildOptions,
 ) -> anki_forge::build::BuildReport {
+    try_build_product_document_with_workspace_writer_stack(document, options)
+        .expect("build product document with workspace writer stack")
+}
+
+fn try_build_product_document_with_workspace_writer_stack(
+    document: ProductDocument,
+    options: BuildOptions,
+) -> Result<anki_forge::build::BuildReport, anki_forge::build::BuildError> {
     let start = workspace_runtime_start_dir();
     let runtime = anki_forge::runtime::discover_workspace_runtime(&start)
         .expect("discover workspace runtime");
@@ -435,7 +443,6 @@ fn build_product_document_with_workspace_writer_stack(
         writer_policy,
         build_context,
     )
-    .expect("build product document with workspace writer stack")
 }
 
 fn identity_options(temp: &Path, label: &str) -> (BuildOptions, PathBuf) {
@@ -613,6 +620,22 @@ fn product_v2_source_path_mixed_notes_use_absolute_indexes() {
         plan.source_map
             .source_for_authoring_path("product_v2.notes[3]"),
         Some("project.notes[3]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[\"basic\"].fields[\"Front\"]"),
+        Some("project.note_types[\"basic\"].fields[\"front\"]")
+    );
+    assert_eq!(
+        plan.source_map
+            .source_for_authoring_path("authoring.note_types[\"basic\"].templates[\"Card 1\"]"),
+        Some("project.note_types[\"basic\"].templates[\"card_1\"]")
+    );
+    assert_eq!(
+        plan.source_map.source_for_authoring_path(
+            "authoring.note_types[\"basic\"].templates[\"Card 1\"].front"
+        ),
+        Some("project.note_types[\"basic\"].templates[\"card_1\"].front")
     );
 }
 
@@ -827,4 +850,83 @@ fn product_v2_stock_note_without_declaration_is_diagnostic() {
     ));
 
     assert!(codes.contains(&"PRODUCT.STOCK_NOTE_TYPE_MISSING"));
+}
+
+#[test]
+fn product_v2_build_surfaces_unknown_media_source_product_diagnostic() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let document = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-media-source",
+          "default_deck_name": "Invalid",
+          "note_types": [],
+          "notes": [],
+          "media": [{
+            "id": "media:future",
+            "source": {"kind": "future_source", "uri": "asset://future"},
+            "export_as": "future.bin",
+            "source_path": "project.media[\"future.bin\"]"
+          }]
+        }"#,
+    );
+
+    let normalize_err = Project::from_product_document(document.clone())
+        .normalize()
+        .expect_err("product diagnostics should make normalization unsuccessful");
+    assert!(
+        normalize_err
+            .to_string()
+            .contains("PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED"),
+        "unexpected normalize error: {normalize_err}"
+    );
+
+    let err = try_build_product_document_with_workspace_writer_stack(
+        document,
+        BuildOptions::new().output(temp.path().join("invalid.apkg")),
+    )
+    .expect_err("product diagnostics should make the build unsuccessful");
+
+    assert!(err
+        .report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| { diagnostic.code.as_str() == "PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED" }));
+    assert!(!err.report.status.is_success());
+}
+
+#[test]
+fn product_v2_custom_identity_unknown_field_is_diagnostic() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "invalid-identity-field",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [{"name": "Prompt", "key": "prompt", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Prompt}}", "back": "{{Prompt}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["missing"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "custom",
+            "deck_name": "Invalid",
+            "fields": {"prompt": {"kind": "text", "value": "ok"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("invalid product-v2 identity should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.IDENTITY_FIELD_UNKNOWN"));
+    assert!(plan.authoring_document.notes.is_empty());
 }
