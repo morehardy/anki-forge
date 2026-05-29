@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
 from pathlib import Path, PurePath
+from typing import Sequence
 
 from .diagnostics import ValidationError
 from .notetype import _ASCII_CONTROL, _validate_non_empty
@@ -10,28 +11,35 @@ from .notetype import _ASCII_CONTROL, _validate_non_empty
 
 @dataclass(frozen=True)
 class MediaRef:
-    id: str
+    media_id: str
     export_as: str
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "id", _validate_non_empty(self.id, "media id"))
+        object.__setattr__(self, "media_id", _validate_non_empty(self.media_id, "media id"))
         object.__setattr__(self, "export_as", _validate_export_as(self.export_as))
 
 
 @dataclass(frozen=True)
 class MediaItem:
     ref: MediaRef
+    source_kind: str
     source_label: str
+    data: bytes | None
+    path: Path | None
     length: int
     sha256: str
-    path: Path | None = None
 
 
 class MediaRegistry:
     def __init__(self) -> None:
+        self._items: list[MediaItem] = []
         self._items_by_export: dict[str, MediaItem] = {}
         self._items_by_path_export: dict[tuple[Path, str], MediaItem] = {}
         self._next_id = 1
+
+    @property
+    def items(self) -> Sequence[MediaItem]:
+        return tuple(self._items)
 
     def add_bytes(self, *, source_label: str, data: bytes | bytearray, export_as: str) -> MediaRef:
         label = _validate_non_empty(source_label, "source label")
@@ -44,7 +52,17 @@ class MediaRegistry:
                 return existing.ref
             raise ValidationError(f"media export name already exists with different content: {export_name}")
         ref = self._new_ref(export_name)
-        self._items_by_export[export_name] = MediaItem(ref=ref, source_label=label, length=len(payload), sha256=digest)
+        item = MediaItem(
+            ref=ref,
+            source_kind="bytes",
+            source_label=label,
+            data=payload,
+            path=None,
+            length=len(payload),
+            sha256=digest,
+        )
+        self._items.append(item)
+        self._items_by_export[export_name] = item
         return ref
 
     def add_file(self, path: str | Path, *, export_as: str | None = None) -> MediaRef:
@@ -61,11 +79,14 @@ class MediaRegistry:
         ref = self._new_ref(export_name)
         item = MediaItem(
             ref=ref,
+            source_kind="file",
             source_label=str(media_path),
+            data=None,
+            path=media_path,
             length=len(data),
             sha256=hashlib.sha256(data).hexdigest(),
-            path=media_path,
         )
+        self._items.append(item)
         self._items_by_export[export_name] = item
         self._items_by_path_export[key] = item
         return ref

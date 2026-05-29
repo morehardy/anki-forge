@@ -16,7 +16,8 @@ _STOCK_FIELD_KEYS = {
 @dataclass(frozen=True)
 class FieldContent:
     kind: str
-    value: str | MediaRef
+    value: str | None = None
+    media_id: str | None = None
 
 
 @dataclass
@@ -52,22 +53,23 @@ class Note:
         stable_id: str | None = None,
         deck_name: str | None = None,
     ) -> Note:
-        note = cls("cloze", stable_id=stable_id, deck_name=deck_name).text("text", text)
-        if back_extra is not None:
-            note.html("back_extra", back_extra)
-        return note
+        return cls("cloze", stable_id=stable_id, deck_name=deck_name).html("text", text).text("back_extra", back_extra or "")
 
     def text(self, key: str, value: str) -> Note:
+        if not isinstance(value, str):
+            raise ValidationError("text field value must be a string")
         return self._set_field(key, "text", value)
 
     def html(self, key: str, value: str) -> Note:
+        if not isinstance(value, str):
+            raise ValidationError("html field value must be a string")
         return self._set_field(key, "html", value)
 
     def sound(self, key: str, ref: MediaRef) -> Note:
-        return self._set_field(key, "sound", ref)
+        return self._set_field(key, "sound", None, media_id=ref.media_id)
 
     def image(self, key: str, ref: MediaRef) -> Note:
-        return self._set_field(key, "image", ref)
+        return self._set_field(key, "image", None, media_id=ref.media_id)
 
     def tag(self, tag: str) -> Note:
         normalized = _validate_tag(tag)
@@ -84,10 +86,10 @@ class Note:
         self.deck_name = _validate_optional_non_empty(deck_name, "deck name")
         return self
 
-    def _set_field(self, key: str, kind: str, value: str | MediaRef) -> Note:
+    def _set_field(self, key: str, kind: str, value: str | None, *, media_id: str | None = None) -> Note:
         field_key = _validate_id(key, "field key")
         allowed_keys = _STOCK_FIELD_KEYS.get(self.note_type_id)
         if allowed_keys is not None and field_key not in allowed_keys:
             raise ValidationError(f"unknown field key for {self.note_type_id}: {field_key}")
-        self.fields[field_key] = FieldContent(kind=kind, value=value)
+        self.fields[field_key] = FieldContent(kind=kind, value=value, media_id=media_id)
         return self
