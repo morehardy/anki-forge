@@ -430,6 +430,18 @@ impl Project {
         let normalized = normalized_output.normalized_ir;
         diagnostics.extend(normalized_output.diagnostics);
 
+        if normalized.notes.is_empty() {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("PROJECT.EMPTY"),
+                severity: Severity::Error,
+                message: "project contains no notes".into(),
+                source: Some(SourcePath::new("project.notes")),
+                help: Some("add at least one note before building".into()),
+            });
+            let report = invalid_report_without_artifact(diagnostics, &normalized, started);
+            return return_report_error(&options, report, BuildFailureCause::Invalid);
+        }
+
         if diagnostics
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
@@ -1182,6 +1194,7 @@ impl Project {
             comparison = comparison_output.comparison;
             diff = comparison_output.diff;
             risk = comparison_output.risk;
+            attach_artifact_diff_risk_if_needed(&mut risk, diff.as_ref());
             policy = crate::risk::policy_from_risk_report(options.fail_on, risk.as_ref());
             let comparison_status = if comparison_is_report_only && options.fail_on.is_none() {
                 BuildStatus::Success
@@ -3065,6 +3078,64 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
     }
 }
 
+fn invalid_report_without_artifact(
+    diagnostics: Vec<Diagnostic>,
+    normalized: &authoring_core::NormalizedIr,
+    started: Instant,
+) -> BuildReport {
+    BuildReport {
+        artifact: None,
+        counts: BuildCounts {
+            notes: normalized.notes.len(),
+            cards: count_phase1_cards_without_inspect(normalized),
+            media: normalized.media_bindings.len(),
+        },
+        media: MediaSummary::from_normalized_ir(normalized, &diagnostics),
+        diagnostics,
+        metrics: BuildMetrics {
+            duration: started.elapsed(),
+        },
+        inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Invalid,
+    }
+}
+
+fn attach_artifact_diff_risk_if_needed(
+    risk: &mut Option<crate::risk::ImportRiskReport>,
+    diff: Option<&crate::diff::BuildDiffSummary>,
+) {
+    let Some(risk) = risk.as_mut() else {
+        return;
+    };
+    if !risk.findings.is_empty() {
+        return;
+    }
+    let Some(first_change) = diff
+        .and_then(|diff| diff.artifact_diff.as_ref())
+        .and_then(|artifact_diff| artifact_diff.changes.first())
+    else {
+        return;
+    };
+
+    risk.findings.push(crate::risk::ImportRiskFinding {
+        code: "RISK.ARTIFACT_DIFF".into(),
+        level: crate::build::RiskLevel::Low,
+        category: "artifact".into(),
+        message: "comparison detected artifact changes not covered by a more specific risk rule"
+            .into(),
+        source: Some(SourcePath::new(first_change.selector.clone())),
+        evidence_refs: first_change.evidence_refs.clone(),
+        suggested_action: Some("review the diff before importing".into()),
+    });
+    risk.highest_level = risk.findings.iter().map(|finding| finding.level).max();
+}
+
 fn maybe_write_report_json(
     options: &BuildOptions,
     mut report: BuildReport,
@@ -3075,13 +3146,13 @@ fn maybe_write_report_json(
 
     if let Err(err) = crate::build::write_report_json_atomic(path, &report) {
         report.diagnostics.push(Diagnostic {
-            code: DiagnosticCode::new("REPORT.JSON_WRITE_FAILED"),
+            code: DiagnosticCode::new("PROJECT.REPORT_JSON_WRITE_FAILED"),
             severity: Severity::Error,
-            message: err.to_string(),
+            message: format!("failed to write report_json: {err}"),
             source: Some(SourcePath::new(path.display().to_string())),
-            help: Some("verify that the report_json path is writable".to_string()),
+            help: Some("choose a writable report_json path".to_string()),
         });
-        report.status = BuildStatus::Error;
+        report.status = BuildStatus::highest([report.status, BuildStatus::Error]);
         return Err(BuildError::new(report, BuildFailureCause::Io));
     }
 

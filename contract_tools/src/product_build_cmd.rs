@@ -46,7 +46,14 @@ pub fn run(
     match result {
         Ok(report) => {
             let body = render(&report, output)?;
-            Ok(ProductBuildOutcome::Success(body))
+            if report.status == BuildStatus::Success {
+                Ok(ProductBuildOutcome::Success(body))
+            } else {
+                Ok(ProductBuildOutcome::ReportFailure {
+                    json: body,
+                    exit_code: exit_code_for_status(report.status),
+                })
+            }
         }
         Err(err) => {
             let body = render(&err.report, output)?;
