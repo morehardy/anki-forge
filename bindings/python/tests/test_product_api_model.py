@@ -42,6 +42,14 @@ def test_note_mutators_validate_tags_and_deck_clearing():
         Note("basic", stable_id=" ")
 
 
+def test_note_tags_mutator_validates_and_deduplicates():
+    note = Note.basic("front", "back").tags(["demo", "demo", "review"]).tag("review")
+    assert hasattr(Note, "tags")
+    assert note.tag_values == ["demo", "review"]
+    with pytest.raises(ValidationError):
+        note.tags(["ok", "bad tag"])
+
+
 def test_stock_notes_reject_unknown_field_keys():
     ref = MediaRef("media:000001", "x.png")
     with pytest.raises(ValidationError):

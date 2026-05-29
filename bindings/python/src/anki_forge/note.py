@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Iterable
 
 from .diagnostics import ValidationError
 from .media import MediaRef
@@ -24,7 +25,7 @@ class Note:
     stable_id: str | None = None
     deck_name: str | None = None
     fields: dict[str, FieldContent] = field(default_factory=dict)
-    tags: list[str] = field(default_factory=list)
+    tag_values: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.note_type_id = _validate_id(self.note_type_id, "note type id")
@@ -70,8 +71,13 @@ class Note:
 
     def tag(self, tag: str) -> Note:
         normalized = _validate_tag(tag)
-        if normalized not in self.tags:
-            self.tags.append(normalized)
+        if normalized not in self.tag_values:
+            self.tag_values.append(normalized)
+        return self
+
+    def tags(self, tags: Iterable[str]) -> Note:
+        for tag in tags:
+            self.tag(tag)
         return self
 
     def deck(self, deck_name: str | None) -> Note:
