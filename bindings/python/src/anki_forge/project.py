@@ -57,6 +57,58 @@ class Project:
         self._notes.append(note)
         return self
 
+    def to_product_document(self) -> dict[str, object]:
+        from .product_json import (
+            basic_stock_notetype_json,
+            cloze_stock_notetype_json,
+            custom_notetype_json,
+            media_to_json,
+            note_to_json,
+        )
+
+        self._validate_notes_for_serialization()
+        note_types: list[dict[str, object]] = []
+        for note_type_id in self._stock_note_types():
+            if note_type_id == "basic":
+                note_types.append(basic_stock_notetype_json())
+            elif note_type_id == "cloze":
+                note_types.append(cloze_stock_notetype_json())
+        note_types.extend(custom_notetype_json(self._note_types[note_type_id]) for note_type_id in self._note_type_order)
+
+        return {
+            "product_document_version": "product-v2",
+            "document_id": self.stable_id or self.name,
+            "default_deck_name": self.default_deck,
+            "note_types": note_types,
+            "notes": [note_to_json(note, index, self._resolve_deck(note)) for index, note in enumerate(self._notes)],
+            "media": [media_to_json(item) for item in self.media.items],
+        }
+
+    def _stock_note_types(self) -> list[str]:
+        used = {note.note_type_id for note in self._notes}
+        return [note_type_id for note_type_id in ("basic", "cloze") if note_type_id in used]
+
+    def _resolve_deck(self, note: Note) -> str:
+        return note.deck_name or self.default_deck or self.name
+
+    def _validate_notes_for_serialization(self) -> None:
+        for note_type_id in self._note_type_order:
+            self._note_types[note_type_id].validate()
+
+        seen_stable_ids: set[str] = set()
+        for note in self._notes:
+            if note.stable_id is not None:
+                if note.stable_id in seen_stable_ids:
+                    raise ValidationError(f"duplicate note stable_id: {note.stable_id}")
+                seen_stable_ids.add(note.stable_id)
+
+            if note.note_type_id in self._note_types:
+                note_type = self._note_types[note.note_type_id]
+                self._validate_custom_note_field_keys(note, note_type)
+                has_identity_fields = any(field.identity for field in note_type.fields)
+                if note.stable_id is None and not has_identity_fields:
+                    raise ValidationError(f"custom note type {note_type.id} needs identity fields or stable_id")
+
     def _validate_custom_note_field_keys(self, note: Note, note_type: NoteType) -> None:
         allowed = {field.key for field in note_type.fields}
         for field_key in note.fields:
