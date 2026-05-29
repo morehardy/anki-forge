@@ -49,6 +49,8 @@ fn legacy_unversioned_product_document_still_deserializes() {
     let doc: anki_forge::product::ProductDocument =
         serde_json::from_str(raw).expect("legacy product-v1");
     assert_eq!(doc.document_id(), "legacy");
+    assert_eq!(doc.note_types().len(), 0);
+    assert_eq!(doc.notes().len(), 0);
 }
 
 #[test]
