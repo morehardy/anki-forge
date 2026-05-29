@@ -1292,6 +1292,45 @@ fn product_v2_build_surfaces_missing_media_field_source_path() {
 }
 
 #[test]
+fn product_v2_custom_required_render_failure_does_not_report_required_missing() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "required-render-failure",
+          "default_deck_name": "Invalid",
+          "note_types": [{
+            "kind": "custom",
+            "id": "audio-card",
+            "name": "Audio Card",
+            "fields": [{"name": "Audio", "key": "audio", "required": true}],
+            "templates": [{"name": "Card", "key": "card", "front": "{{Audio}}", "back": "{{Audio}}", "generation_rule": {"kind": "anki_default"}}],
+            "identity": {"kind": "fields", "fields": ["audio"]},
+            "css": null
+          }],
+          "notes": [{
+            "kind": "custom",
+            "note_type_id": "audio-card",
+            "stable_id": "audio:missing",
+            "deck_name": "Invalid",
+            "fields": {"audio": {"kind": "sound", "media_id": "media:missing"}},
+            "source_path": "project.notes[0]"
+          }],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("product-v2 diagnostics should be carried in the lowering plan");
+    let codes = plan
+        .product_diagnostics
+        .iter()
+        .map(|diagnostic| diagnostic.code)
+        .collect::<Vec<_>>();
+
+    assert!(codes.contains(&"PRODUCT.MEDIA_MISSING"));
+    assert!(!codes.contains(&"PRODUCT.REQUIRED_FIELD_MISSING"));
+}
+
+#[test]
 fn product_v2_build_surfaces_unknown_basic_stock_field_source_path() {
     let source = build_error_diagnostic_source(
         product_v2_inline(

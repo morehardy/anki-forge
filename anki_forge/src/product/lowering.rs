@@ -1146,10 +1146,10 @@ fn lower_product_v2_custom_note(
 
     for declaration in &notetype.fields {
         if declaration.required
-            && fields
-                .get(&declaration.name)
-                .map(|value| value.is_empty())
-                .unwrap_or(true)
+            && custom_required_field_is_missing_or_empty(
+                note.fields.get(&declaration.key),
+                fields.get(&declaration.name),
+            )
         {
             push_product_diagnostic_at(
                 plan,
@@ -1307,6 +1307,23 @@ fn render_v2_content(
             );
             String::new()
         }
+    }
+}
+
+fn custom_required_field_is_missing_or_empty(
+    content: Option<&ProductFieldContentV2>,
+    rendered: Option<&String>,
+) -> bool {
+    match content {
+        None => true,
+        Some(ProductFieldContentV2::Text { .. }) | Some(ProductFieldContentV2::Html { .. }) => {
+            rendered.map(|value| value.is_empty()).unwrap_or(true)
+        }
+        Some(
+            ProductFieldContentV2::Sound { .. }
+            | ProductFieldContentV2::Image { .. }
+            | ProductFieldContentV2::Unknown(_),
+        ) => false,
     }
 }
 
