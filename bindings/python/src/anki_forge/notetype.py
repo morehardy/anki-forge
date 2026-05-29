@@ -222,11 +222,14 @@ class NoteType:
         seen_field_names: set[str] = set()
         sort_count = 0
         for current_field in self.fields:
-            if current_field.key in seen_field_keys:
-                raise ValidationError(f"duplicate field key: {current_field.key}")
+            field_key = current_field.key
+            if field_key is None:
+                raise ValidationError("field key must not be None after validation")
+            if field_key in seen_field_keys:
+                raise ValidationError(f"duplicate field key: {field_key}")
             if current_field.name in seen_field_names:
                 raise ValidationError(f"duplicate field name: {current_field.name}")
-            seen_field_keys.add(current_field.key)
+            seen_field_keys.add(field_key)
             seen_field_names.add(current_field.name)
             if current_field.sort:
                 sort_count += 1
@@ -235,9 +238,12 @@ class NoteType:
 
         seen_template_keys: set[str] = set()
         for current_template in self.templates:
-            if current_template.key in seen_template_keys:
-                raise ValidationError(f"duplicate template key: {current_template.key}")
-            seen_template_keys.add(current_template.key)
+            template_key = current_template.key
+            if template_key is None:
+                raise ValidationError("template key must not be None after validation")
+            if template_key in seen_template_keys:
+                raise ValidationError(f"duplicate template key: {template_key}")
+            seen_template_keys.add(template_key)
             for field_key in _generation_rule_field_keys(current_template.generate_when):
                 if field_key not in seen_field_keys:
                     raise ValidationError(f"template generation rule references unknown field key: {field_key}")

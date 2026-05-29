@@ -26,7 +26,7 @@ def _note_type_source_path(note_type_id: str) -> str:
     return f"project.note_types[{_path_key(note_type_id)}]"
 
 
-_BASIC_STOCK_NOTETYPE = {
+_BASIC_STOCK_NOTETYPE: dict[str, object] = {
     "kind": "stock",
     "id": "basic",
     "name": "Basic",
@@ -62,7 +62,7 @@ _BASIC_STOCK_NOTETYPE = {
     "source_path": 'project.note_types["basic"]',
 }
 
-_CLOZE_STOCK_NOTETYPE = {
+_CLOZE_STOCK_NOTETYPE: dict[str, object] = {
     "kind": "stock",
     "id": "cloze",
     "name": "Cloze",
@@ -120,6 +120,8 @@ def generation_rule_to_json(rule: GenerationRule) -> dict[str, object]:
 
 
 def field_to_json(note_type_id: str, field: Field) -> dict[str, object]:
+    if field.key is None:
+        raise ValidationError("field key must not be None after validation")
     return {
         "name": field.name,
         "key": field.key,
@@ -131,6 +133,10 @@ def field_to_json(note_type_id: str, field: Field) -> dict[str, object]:
 
 
 def template_to_json(note_type_id: str, template: Template) -> dict[str, object]:
+    if template.key is None:
+        raise ValidationError("template key must not be None after validation")
+    if template.generate_when is None:
+        raise ValidationError("template generation rule must not be None after validation")
     return {
         "name": template.name,
         "key": template.key,
@@ -151,7 +157,13 @@ def custom_notetype_json(note_type: NoteType) -> dict[str, object]:
         "fields": fields,
         "templates": templates,
     }
-    identity_fields = [field.key for field in note_type.fields if field.identity]
+    identity_fields: list[str] = []
+    for field in note_type.fields:
+        if not field.identity:
+            continue
+        if field.key is None:
+            raise ValidationError("identity field key must not be None after validation")
+        identity_fields.append(field.key)
     if identity_fields:
         result["identity"] = {"kind": "fields", "fields": identity_fields}
     result["css"] = note_type.css_value
