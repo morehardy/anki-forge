@@ -1292,6 +1292,90 @@ fn product_v2_build_surfaces_missing_media_field_source_path() {
 }
 
 #[test]
+fn product_v2_build_surfaces_unknown_basic_stock_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-basic-extra-field",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "basic",
+                "name": "Basic",
+                "fields": [
+                  {"name": "Front", "key": "front", "required": true},
+                  {"name": "Back", "key": "back", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "basic",
+                "stable_id": "basic:extra",
+                "deck_name": "Invalid",
+                "fields": {
+                  "front": {"kind": "text", "value": "front"},
+                  "extra": {"kind": "text", "value": "ignored"}
+                },
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"extra\"]")
+    );
+}
+
+#[test]
+fn product_v2_build_surfaces_unknown_cloze_stock_field_source_path() {
+    let source = build_error_diagnostic_source(
+        product_v2_inline(
+            r#"{
+              "product_document_version": "product-v2",
+              "document_id": "invalid-cloze-extra-field",
+              "default_deck_name": "Invalid",
+              "note_types": [{
+                "kind": "stock",
+                "id": "cloze",
+                "name": "Cloze",
+                "fields": [
+                  {"name": "Text", "key": "text", "required": true},
+                  {"name": "Back Extra", "key": "back_extra", "required": false}
+                ],
+                "templates": [],
+                "css": null
+              }],
+              "notes": [{
+                "kind": "stock",
+                "note_type_id": "cloze",
+                "stable_id": "cloze:extra",
+                "deck_name": "Invalid",
+                "fields": {
+                  "text": {"kind": "html", "value": "A {{c1::cloze}} note"},
+                  "extra": {"kind": "text", "value": "ignored"}
+                },
+                "source_path": "project.notes[0]"
+              }],
+              "media": []
+            }"#,
+        ),
+        "PRODUCT.FIELD_UNKNOWN",
+    );
+
+    assert_eq!(
+        source.as_deref(),
+        Some("project.notes[0].fields[\"extra\"]")
+    );
+}
+
+#[test]
 fn product_v2_custom_identity_unknown_field_is_diagnostic() {
     let plan = product_v2_inline(
         r#"{

@@ -977,6 +977,24 @@ fn lower_product_v2_stock_note(
         _ => BTreeMap::new(),
     };
     let mut invalid = false;
+    for key in stock.fields.keys() {
+        if !field_map.contains_key(key.as_str()) {
+            push_product_diagnostic_at(
+                plan,
+                "PRODUCT.FIELD_UNKNOWN",
+                format!(
+                    "stock note for note type '{}' contains unknown field key '{}'",
+                    stock.note_type_id, key
+                ),
+                Some(&v2_note_field_source(
+                    stock.source_path.as_deref(),
+                    serialized_index,
+                    key,
+                )),
+            );
+            invalid = true;
+        }
+    }
     for source_key in declaration
         .fields
         .iter()
