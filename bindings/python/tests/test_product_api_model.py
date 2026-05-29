@@ -21,6 +21,11 @@ def test_notetype_custom_templates_and_duplicate_validation():
         nt.template(Template("Broken", front="x", back="y", generate_when=GenerationRule.all(["missing"])))
 
 
+def test_template_rejects_invalid_generate_when_type():
+    with pytest.raises(ValidationError):
+        Template("Broken", front="x", back="y", generate_when="bad")
+
+
 def test_generation_rules_validate_empty_inputs():
     assert GenerationRule.anki_default().kind == "anki_default"
     assert GenerationRule.cloze("text").field == "text"
@@ -140,3 +145,13 @@ def test_project_accepts_hyphenated_custom_ids_and_validates_mutated_notetypes()
         nt.validate()
     with pytest.raises(ValidationError):
         Project("Other").add_notetype(nt)
+
+
+def test_project_notetypes_is_read_only_but_add_notetype_still_mutates():
+    project = Project("Deck")
+    with pytest.raises(TypeError):
+        project.notetypes["custom"] = NoteType.custom("custom").field(Field("Front", key="front"))
+    assert project.notetypes == {}
+    project.add_notetype(NoteType.custom("custom").field(Field("Front", key="front")))
+    assert "custom" in project.notetypes
+    assert project._note_type_order == ["custom"]

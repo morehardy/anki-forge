@@ -149,6 +149,8 @@ class Template:
         front = _validate_non_empty(self.front, "template front")
         back = _validate_non_empty(self.back, "template back")
         generate_when = self.generate_when or GenerationRule.anki_default()
+        if not isinstance(generate_when, GenerationRule):
+            raise ValidationError("template generate_when must be a GenerationRule")
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "key", key)
         object.__setattr__(self, "front", front)

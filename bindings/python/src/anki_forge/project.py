@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from types import MappingProxyType
 from dataclasses import dataclass, field
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from .diagnostics import ValidationError
 from .media import MediaRegistry
@@ -27,8 +28,8 @@ class Project:
         self.default_deck = _validate_optional_non_empty(self.default_deck, "default deck")
 
     @property
-    def notetypes(self) -> dict[str, NoteType]:
-        return self._note_types
+    def notetypes(self) -> Mapping[str, NoteType]:
+        return MappingProxyType(self._note_types)
 
     @property
     def notetype_order(self) -> Sequence[str]:
