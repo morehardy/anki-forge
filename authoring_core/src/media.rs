@@ -149,7 +149,7 @@ pub fn ingest_authoring_media(
             continue;
         }
 
-        if let Err(message) = validate_bare_filename(&item.desired_filename) {
+        if let Err(message) = validate_authoring_media_filename(&item.desired_filename) {
             diagnostics.push(error(
                 "MEDIA.UNSAFE_FILENAME",
                 message,
@@ -395,7 +395,7 @@ fn resolve_path_source(
     Ok((canonical, metadata.len()))
 }
 
-fn validate_bare_filename(name: &str) -> Result<(), String> {
+pub fn validate_authoring_media_filename(name: &str) -> Result<(), String> {
     if name.is_empty() {
         return Err("media filename must not be empty".into());
     }

@@ -13,9 +13,10 @@ pub use canonical_json::to_canonical_json;
 pub use identity::{resolve_identity, DefaultNonceSource, NonceSource};
 pub use media::{
     ingest_authoring_media, media_object_id, media_object_ref, sort_media_bindings,
-    sort_media_objects, sort_media_references, AuthoringMediaSource, DiagnosticBehavior,
-    MediaBinding, MediaIngestDiagnostic, MediaIngestError, MediaIngestResult, MediaObject,
-    MediaPolicy, MediaReference, MediaReferenceResolution, NormalizeOptions,
+    sort_media_objects, sort_media_references, validate_authoring_media_filename,
+    AuthoringMediaSource, DiagnosticBehavior, MediaBinding, MediaIngestDiagnostic,
+    MediaIngestError, MediaIngestResult, MediaObject, MediaPolicy, MediaReference,
+    MediaReferenceResolution, NormalizeOptions,
 };
 pub use media_io::{
     decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path,
