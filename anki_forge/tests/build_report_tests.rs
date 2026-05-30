@@ -6,7 +6,7 @@ use anki_forge::build::{
     BuildPolicyResult, BuildPolicyStatus, BuildReport, BuildReportJson, BuildStatus,
     ComparisonStatus, MediaSummary, RiskLevel, SerializableBuildReport,
 };
-use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
+use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, ErrorCode, Severity, SourcePath};
 
 #[test]
 fn build_report_ensure_success_accepts_successful_artifact() {
@@ -150,6 +150,35 @@ fn build_report_ensure_success_uses_status_precedence_over_policy_status() {
 
     let err = report.ensure_success().expect_err("report should fail");
     assert_eq!(err.cause, BuildFailureCause::Internal);
+    assert_eq!(err.code(), ErrorCode::ProjectBuildInternal);
+}
+
+#[test]
+fn build_error_without_diagnostics_uses_stable_cause_code() {
+    let report = BuildReport {
+        artifact: None,
+        counts: BuildCounts::default(),
+        media: MediaSummary::default(),
+        diagnostics: vec![],
+        metrics: BuildMetrics {
+            duration: Duration::from_millis(1),
+        },
+        inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
+    };
+
+    let err = report
+        .ensure_success()
+        .expect_err("missing artifact should fail");
+    assert_eq!(err.cause, BuildFailureCause::MissingArtifact);
+    assert_eq!(err.code(), ErrorCode::ProjectBuildMissingArtifact);
+    assert_eq!(err.code().as_str(), "PROJECT.BUILD_MISSING_ARTIFACT");
 }
 
 #[test]

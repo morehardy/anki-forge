@@ -25,6 +25,18 @@ pub enum MediaError {
         path: std::path::PathBuf,
         message: String,
     },
+    SourceEmpty {
+        label: String,
+    },
+    InvalidSourceLabel {
+        label: String,
+        message: String,
+    },
+    InlineTooLarge {
+        label: String,
+        size_bytes: usize,
+        limit_bytes: usize,
+    },
     UnsafeFilename {
         name: String,
         message: String,
@@ -45,6 +57,11 @@ impl MediaError {
                 crate::diagnostics::ErrorCode::MediaSourceNotRegularFile
             }
             Self::SourceReadFailed { .. } => crate::diagnostics::ErrorCode::MediaSourceReadFailed,
+            Self::SourceEmpty { .. } => crate::diagnostics::ErrorCode::MediaEmptySource,
+            Self::InvalidSourceLabel { .. } => {
+                crate::diagnostics::ErrorCode::MediaInvalidSourceLabel
+            }
+            Self::InlineTooLarge { .. } => crate::diagnostics::ErrorCode::MediaInlineTooLarge,
             Self::ConflictingPayload { .. } => {
                 crate::diagnostics::ErrorCode::MediaDuplicateFilenameConflict
             }
@@ -65,6 +82,19 @@ impl std::fmt::Display for MediaError {
             Self::SourceReadFailed { path, message } => {
                 write!(f, "{}: {}: {message}", self.code(), path.display())
             }
+            Self::SourceEmpty { label } => write!(f, "{}: {label}", self.code()),
+            Self::InvalidSourceLabel { label, message } => {
+                write!(f, "{}: {label}: {message}", self.code())
+            }
+            Self::InlineTooLarge {
+                label,
+                size_bytes,
+                limit_bytes,
+            } => write!(
+                f,
+                "{}: {label} has {size_bytes} bytes, above inline limit {limit_bytes}",
+                self.code()
+            ),
             Self::UnsafeFilename { message, .. } => write!(f, "{}: {message}", self.code()),
             Self::ConflictingPayload { name } => {
                 write!(f, "{}: {name}", self.code())

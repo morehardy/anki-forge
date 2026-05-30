@@ -745,7 +745,7 @@ fn field_checksum(text: &str) -> u32 {
     u32::from_be_bytes(digest[..4].try_into().expect("sha1 digest has four bytes"))
 }
 
-fn strip_html_preserving_media_filenames(input: &str) -> String {
+pub(crate) fn strip_html_preserving_media_filenames(input: &str) -> String {
     let mut output = String::with_capacity(input.len());
     let mut index = 0;
 

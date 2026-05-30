@@ -6,6 +6,8 @@ use std::path::{Component, Path, PathBuf};
 use base64::Engine as _;
 use sha1::{Digest, Sha1};
 
+use crate::deck::MediaError;
+
 pub(crate) const INLINE_MEDIA_LIMIT_BYTES: usize = 64 * 1024;
 
 /// Opaque handle to a Product media export filename.
@@ -108,12 +110,20 @@ impl MediaRegistry {
     ) -> anyhow::Result<PendingMedia<'_>> {
         let source_label = source_label.into();
         validate_source_label(&source_label)?;
-        anyhow::ensure!(!bytes.is_empty(), "MEDIA.EMPTY_SOURCE: {source_label}");
-        anyhow::ensure!(
-            bytes.len() <= INLINE_MEDIA_LIMIT_BYTES,
-            "MEDIA.INLINE_TOO_LARGE: {source_label} has {} bytes, above inline limit {INLINE_MEDIA_LIMIT_BYTES}",
-            bytes.len()
-        );
+        if bytes.is_empty() {
+            return Err(MediaError::SourceEmpty {
+                label: source_label,
+            }
+            .into());
+        }
+        if bytes.len() > INLINE_MEDIA_LIMIT_BYTES {
+            return Err(MediaError::InlineTooLarge {
+                label: source_label,
+                size_bytes: bytes.len(),
+                limit_bytes: INLINE_MEDIA_LIMIT_BYTES,
+            }
+            .into());
+        }
 
         let fingerprint = fingerprint_bytes(&bytes);
         let sha1_hex = hex::encode(Sha1::digest(&bytes));
@@ -166,10 +176,9 @@ impl PendingMedia<'_> {
         validate_media_filename(&filename)?;
 
         if let Some(existing) = self.registry.media.get(&filename) {
-            anyhow::ensure!(
-                existing.observed_fingerprint == self.fingerprint,
-                "MEDIA.DUPLICATE_FILENAME_CONFLICT: {filename}"
-            );
+            if existing.observed_fingerprint != self.fingerprint {
+                return Err(MediaError::ConflictingPayload { name: filename }.into());
+            }
             return Ok(MediaRef::new(filename));
         }
 
@@ -233,7 +242,18 @@ impl MediaSourceObservationError {
     }
 
     fn into_anyhow(self) -> anyhow::Error {
-        anyhow::anyhow!(self.message())
+        self.into_media_error().into()
+    }
+
+    fn into_media_error(self) -> MediaError {
+        match self {
+            Self::Missing { path, message } => MediaError::SourceMissing { path, message },
+            Self::NotRegularFile { path } => MediaError::SourceNotRegularFile { path },
+            Self::ReadFailed { path, message } => MediaError::SourceReadFailed { path, message },
+            Self::Empty { path } => MediaError::SourceEmpty {
+                label: path.display().to_string(),
+            },
+        }
     }
 
     fn to_diagnostic(&self, export_filename: &str) -> ProductMediaSourceDiagnostic {
@@ -323,14 +343,20 @@ fn fingerprint_bytes(bytes: &[u8]) -> MediaFingerprint {
 }
 
 fn validate_source_label(source_label: &str) -> anyhow::Result<()> {
-    anyhow::ensure!(
-        !source_label.trim().is_empty(),
-        "MEDIA.INVALID_SOURCE_LABEL: source label must not be empty"
-    );
-    anyhow::ensure!(
-        !source_label.chars().any(char::is_control),
-        "MEDIA.INVALID_SOURCE_LABEL: source label contains a control character"
-    );
+    if source_label.trim().is_empty() {
+        return Err(MediaError::InvalidSourceLabel {
+            label: source_label.to_string(),
+            message: "source label must not be empty".into(),
+        }
+        .into());
+    }
+    if source_label.chars().any(char::is_control) {
+        return Err(MediaError::InvalidSourceLabel {
+            label: source_label.to_string(),
+            message: "source label contains a control character".into(),
+        }
+        .into());
+    }
     Ok(())
 }
 
@@ -339,23 +365,48 @@ fn media_source_path(value: &str) -> String {
 }
 
 fn validate_media_filename(filename: &str) -> anyhow::Result<()> {
-    anyhow::ensure!(!filename.trim().is_empty(), "MEDIA.EXPORT_NAME_EMPTY");
-    anyhow::ensure!(
-        !filename.contains(['/', '\\']),
-        "MEDIA.EXPORT_NAME_CONTAINS_SEPARATOR"
-    );
+    if filename.trim().is_empty() {
+        return Err(MediaError::UnsafeFilename {
+            name: filename.to_string(),
+            message: "MEDIA.EXPORT_NAME_EMPTY: media export filename must not be empty".into(),
+        }
+        .into());
+    }
+    if filename.contains(['/', '\\']) {
+        return Err(MediaError::UnsafeFilename {
+            name: filename.to_string(),
+            message:
+                "MEDIA.EXPORT_NAME_CONTAINS_SEPARATOR: media export filename must not contain path separators"
+                    .into(),
+        }
+        .into());
+    }
 
     let mut components = Path::new(filename).components();
     let only_component = matches!(components.next(), Some(Component::Normal(_)))
         && components.next().is_none()
         && !Path::new(filename).is_absolute();
-    anyhow::ensure!(only_component, "MEDIA.EXPORT_NAME_NOT_BARE_FILENAME");
-    anyhow::ensure!(
-        filename
-            .chars()
-            .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '.' | '-' | '_')),
-        "MEDIA.EXPORT_NAME_UNSAFE_CHARACTER"
-    );
+    if !only_component {
+        return Err(MediaError::UnsafeFilename {
+            name: filename.to_string(),
+            message:
+                "MEDIA.EXPORT_NAME_NOT_BARE_FILENAME: media export filename must be a bare filename"
+                    .into(),
+        }
+        .into());
+    }
+    if !filename
+        .chars()
+        .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '.' | '-' | '_'))
+    {
+        return Err(MediaError::UnsafeFilename {
+            name: filename.to_string(),
+            message:
+                "MEDIA.EXPORT_NAME_UNSAFE_CHARACTER: media export filename contains an unsafe character"
+                    .into(),
+        }
+        .into());
+    }
 
     Ok(())
 }

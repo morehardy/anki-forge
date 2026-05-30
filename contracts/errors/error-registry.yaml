@@ -140,6 +140,12 @@ codes:
   - id: MEDIA.SOURCE_READ_FAILED
     status: active
     summary: media source could not be read
+  - id: MEDIA.EMPTY_SOURCE
+    status: active
+    summary: media source is empty
+  - id: MEDIA.INVALID_SOURCE_LABEL
+    status: active
+    summary: inline media source label is invalid
   - id: MEDIA.UNSAFE_SOURCE_PATH
     status: active
     summary: media source path is unsafe or escapes the base directory
@@ -191,6 +197,30 @@ codes:
   - id: MEDIA.NORMALIZE_OPTIONS_REQUIRED
     status: active
     summary: media normalization requires explicit normalization options
+  - id: PROJECT.BUILD_MISSING_ARTIFACT
+    status: active
+    summary: build report did not include an APKG artifact
+  - id: PROJECT.BUILD_DIAGNOSTICS
+    status: active
+    summary: build report contained error diagnostics
+  - id: PROJECT.BUILD_POLICY_BLOCKED
+    status: active
+    summary: build policy blocked the output
+  - id: PROJECT.BUILD_INVALID
+    status: active
+    summary: build report status was invalid
+  - id: PROJECT.BUILD_IO
+    status: active
+    summary: project build failed while reading or writing files
+  - id: PROJECT.BUILD_INTERNAL
+    status: active
+    summary: project build failed with an internal error status
+  - id: PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED
+    status: active
+    summary: ProductDocument-backed project mixed direct Project sources
+  - id: PROJECT.LOWER_FAILED
+    status: active
+    summary: product lowering failed without a more specific diagnostic
   - id: UPDATE.BASELINE_APKG_UNREADABLE
     status: active
     summary: previous APKG baseline could not be read

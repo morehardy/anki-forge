@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use anki_forge::diagnostics::{ErrorCode, ErrorCodeExt};
+use anki_forge::product::{Note, ProductDocument, Project};
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
 };
@@ -150,4 +151,31 @@ fn deck_validate_error_preserves_diagnostic_code() {
 
     assert_eq!(err.code(), ErrorCode::StableIdBlank);
     assert_eq!(err.code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn product_media_builder_errors_have_stable_codes() {
+    let mut project = Project::new("Spanish");
+
+    let err = project
+        .media_mut()
+        .add_bytes("empty.png", vec![])
+        .expect_err("empty media bytes must fail");
+
+    assert_eq!(err.code(), ErrorCode::MediaEmptySource);
+    assert_eq!(err.code().as_str(), "MEDIA.EMPTY_SOURCE");
+}
+
+#[test]
+fn product_lowering_errors_are_downcastable_from_anyhow() {
+    let mut project = Project::from_product_document(ProductDocument::new("doc"));
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("note-1"))
+        .expect("add direct note");
+
+    let err = project
+        .lower()
+        .expect_err("mixed ProductDocument and direct Project state must fail");
+
+    assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
 }

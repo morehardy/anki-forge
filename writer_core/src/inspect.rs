@@ -22,6 +22,7 @@ use crate::anki_proto::{
     decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
     CardRequirement, CardRequirementKind, NotetypeKind, OriginalStockKind,
 };
+use crate::apkg::strip_html_preserving_media_filenames;
 use crate::canonical_json::to_canonical_json;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::staging::{
@@ -168,7 +169,7 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &manifest.normalized_ir,
         &media,
         &manifest.template_target_decks,
-        &BTreeMap::new(),
+        None,
         &note_identity_metadata,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
@@ -238,7 +239,7 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         &normalized_ir,
         &media,
         &template_target_decks,
-        &actual_card_decks,
+        Some(&actual_card_decks),
         &note_identity_metadata,
     );
     limitations.observation_status =
@@ -343,7 +344,7 @@ fn build_observations(
     normalized_ir: &NormalizedIr,
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
-    actual_card_decks: &BTreeMap<(String, usize), String>,
+    actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
     note_identity_metadata: &[Value],
 ) -> InspectObservations {
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
@@ -487,20 +488,31 @@ fn build_observations(
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
-        for (ord, template) in notetype.templates.iter().enumerate() {
+        for (template_index, template) in notetype.templates.iter().enumerate() {
+            if !template_generates_card(note, notetype, template) {
+                continue;
+            }
             let template_name = template.name.as_str();
-            let card_deck_name = actual_card_decks
-                .get(&(note_id.to_string(), ord))
-                .map(String::as_str)
-                .or(template.target_deck_name.as_deref())
-                .unwrap_or(note.deck_name.as_str());
+            let card_ord = template.ord.unwrap_or(template_index as u32);
+            let card_key = (note_id.to_string(), card_ord as usize);
+            let card_deck_name = if let Some(actual_card_decks) = actual_card_decks {
+                let Some(deck_name) = actual_card_decks.get(&card_key) else {
+                    continue;
+                };
+                deck_name.as_str()
+            } else {
+                template
+                    .target_deck_name
+                    .as_deref()
+                    .unwrap_or(note.deck_name.as_str())
+            };
             card_entries.push(json!({
-                "selector": format!("card[note_id='{}'][ord={}]", note_id, ord),
+                "selector": format!("card[note_id='{}'][ord={}]", note_id, card_ord),
                 "note_id": note_id,
-                "ord": ord,
+                "ord": card_ord,
                 "template_name": template_name,
                 "deck_name": card_deck_name,
-                "evidence_refs": [format!("card:{}:{}", note_id, ord)],
+                "evidence_refs": [format!("card:{}:{}", note_id, card_ord)],
             }));
         }
     }
@@ -674,6 +686,51 @@ fn evidence_component(value: &str) -> String {
         }
     }
     escaped
+}
+
+fn template_generates_card(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    template: &NormalizedTemplate,
+) -> bool {
+    let Some(requirement) = template.generation_requirement.as_ref() else {
+        return true;
+    };
+
+    match requirement.kind.as_str() {
+        "none" => true,
+        "all" => requirement
+            .field_names
+            .iter()
+            .all(|name| note_field_is_nonempty(note, notetype, name)),
+        _ => requirement
+            .field_names
+            .iter()
+            .any(|name| note_field_is_nonempty(note, notetype, name)),
+    }
+}
+
+fn note_field_is_nonempty(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    field_name: &str,
+) -> bool {
+    if !notetype
+        .fields
+        .iter()
+        .any(|field| field.name.as_str() == field_name)
+    {
+        return false;
+    }
+
+    note.fields
+        .get(field_name)
+        .map(|value| {
+            !strip_html_preserving_media_filenames(value)
+                .trim()
+                .is_empty()
+        })
+        .unwrap_or(false)
 }
 
 fn resolve_staging_media(

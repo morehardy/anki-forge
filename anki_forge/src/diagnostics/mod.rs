@@ -31,9 +31,17 @@ pub enum ErrorCode {
     MediaSourceMissing,
     MediaSourceNotRegularFile,
     MediaSourceReadFailed,
+    MediaEmptySource,
+    MediaInvalidSourceLabel,
     MediaInlineTooLarge,
     MediaCasWriteFailed,
     MediaCasObjectMissing,
+    ProjectBuildMissingArtifact,
+    ProjectBuildDiagnostics,
+    ProjectBuildPolicyBlocked,
+    ProjectBuildInvalid,
+    ProjectBuildIo,
+    ProjectBuildInternal,
     ProjectBuildStatusFailed,
     ProjectNormalizeFailed,
     ProjectWriterFailed,
@@ -74,9 +82,17 @@ impl ErrorCode {
             Self::MediaSourceMissing => "MEDIA.SOURCE_MISSING",
             Self::MediaSourceNotRegularFile => "MEDIA.SOURCE_NOT_REGULAR_FILE",
             Self::MediaSourceReadFailed => "MEDIA.SOURCE_READ_FAILED",
+            Self::MediaEmptySource => "MEDIA.EMPTY_SOURCE",
+            Self::MediaInvalidSourceLabel => "MEDIA.INVALID_SOURCE_LABEL",
             Self::MediaInlineTooLarge => "MEDIA.INLINE_TOO_LARGE",
             Self::MediaCasWriteFailed => "MEDIA.CAS_WRITE_FAILED",
             Self::MediaCasObjectMissing => "MEDIA.CAS_OBJECT_MISSING",
+            Self::ProjectBuildMissingArtifact => "PROJECT.BUILD_MISSING_ARTIFACT",
+            Self::ProjectBuildDiagnostics => "PROJECT.BUILD_DIAGNOSTICS",
+            Self::ProjectBuildPolicyBlocked => "PROJECT.BUILD_POLICY_BLOCKED",
+            Self::ProjectBuildInvalid => "PROJECT.BUILD_INVALID",
+            Self::ProjectBuildIo => "PROJECT.BUILD_IO",
+            Self::ProjectBuildInternal => "PROJECT.BUILD_INTERNAL",
             Self::ProjectBuildStatusFailed => "PROJECT.BUILD_STATUS_FAILED",
             Self::ProjectNormalizeFailed => "PROJECT.NORMALIZE_FAILED",
             Self::ProjectWriterFailed => "PROJECT.WRITER_FAILED",
@@ -124,9 +140,17 @@ impl ErrorCode {
             "MEDIA.SOURCE_MISSING" => Self::MediaSourceMissing,
             "MEDIA.SOURCE_NOT_REGULAR_FILE" => Self::MediaSourceNotRegularFile,
             "MEDIA.SOURCE_READ_FAILED" => Self::MediaSourceReadFailed,
+            "MEDIA.EMPTY_SOURCE" => Self::MediaEmptySource,
+            "MEDIA.INVALID_SOURCE_LABEL" => Self::MediaInvalidSourceLabel,
             "MEDIA.INLINE_TOO_LARGE" => Self::MediaInlineTooLarge,
             "MEDIA.CAS_WRITE_FAILED" => Self::MediaCasWriteFailed,
             "MEDIA.CAS_OBJECT_MISSING" => Self::MediaCasObjectMissing,
+            "PROJECT.BUILD_MISSING_ARTIFACT" => Self::ProjectBuildMissingArtifact,
+            "PROJECT.BUILD_DIAGNOSTICS" => Self::ProjectBuildDiagnostics,
+            "PROJECT.BUILD_POLICY_BLOCKED" => Self::ProjectBuildPolicyBlocked,
+            "PROJECT.BUILD_INVALID" => Self::ProjectBuildInvalid,
+            "PROJECT.BUILD_IO" => Self::ProjectBuildIo,
+            "PROJECT.BUILD_INTERNAL" => Self::ProjectBuildInternal,
             "PROJECT.BUILD_STATUS_FAILED" => Self::ProjectBuildStatusFailed,
             "PROJECT.NORMALIZE_FAILED" => Self::ProjectNormalizeFailed,
             "PROJECT.WRITER_FAILED" => Self::ProjectWriterFailed,
@@ -280,6 +304,9 @@ impl ErrorCodeExt for anyhow::Error {
             return error.code();
         }
         if let Some(error) = self.downcast_ref::<crate::build::BuildError>() {
+            return error.code();
+        }
+        if let Some(error) = self.downcast_ref::<crate::product::ProductLoweringError>() {
             return error.code();
         }
 

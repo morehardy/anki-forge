@@ -481,6 +481,81 @@ fn inspect_apkg_preserves_sort_field_and_generation_requirement() {
 }
 
 #[test]
+fn inspect_reports_skip_cards_when_generation_requirement_is_unmet() {
+    let root = unique_artifact_root("inspect-generation-skip");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-generation-skip");
+    let mut normalized = sample_custom_generation_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Audio".into(), String::new());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let staging_report = inspect_staging(target.staging_manifest_path()).unwrap();
+    let apkg_report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    for report in [&staging_report, &apkg_report] {
+        let counts = report
+            .observations
+            .metadata
+            .iter()
+            .find(|value| value["selector"] == "counts")
+            .expect("counts metadata observation");
+        assert_eq!(counts["card_count"], 0);
+        assert!(!report.observations.references.iter().any(|value| {
+            value["selector"]
+                .as_str()
+                .is_some_and(|selector| selector.starts_with("card["))
+        }));
+    }
+}
+
+#[test]
+fn inspect_reports_use_template_ord_for_card_observations() {
+    let root = unique_artifact_root("inspect-template-ord");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/inspect-template-ord");
+    let mut normalized = sample_custom_generation_normalized_ir();
+    normalized.notetypes[0].templates[0].ord = Some(3);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let staging_report = inspect_staging(target.staging_manifest_path()).unwrap();
+    let apkg_report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    for report in [&staging_report, &apkg_report] {
+        let counts = report
+            .observations
+            .metadata
+            .iter()
+            .find(|value| value["selector"] == "counts")
+            .expect("counts metadata observation");
+        assert_eq!(counts["card_count"], 1);
+        assert!(report
+            .observations
+            .references
+            .iter()
+            .any(|value| value["selector"] == "card[note_id='note-1'][ord=3]"));
+        assert!(!report
+            .observations
+            .references
+            .iter()
+            .any(|value| value["selector"] == "card[note_id='note-1'][ord=0]"));
+    }
+}
+
+#[test]
 fn inspect_apkg_does_not_report_forge_only_media_ids() {
     let root = unique_artifact_root("inspect-apkg-cas");
     let media_store = root.join("media-store");

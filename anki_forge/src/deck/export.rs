@@ -76,7 +76,7 @@ impl Deck {
             let output = artifacts_dir.join("deck.apkg");
             let report = crate::product::Project::from(self.clone())
                 .write_apkg(&output)
-                .map_err(build_error_to_anyhow)?;
+                .map_err(anyhow::Error::from)?;
             let artifact_path = report
                 .artifact
                 .as_ref()
@@ -97,21 +97,6 @@ impl Deck {
         path: impl AsRef<Path>,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
         crate::product::Project::from(self.clone()).write_apkg(path)
-    }
-}
-
-fn build_error_to_anyhow(error: crate::build::BuildError) -> anyhow::Error {
-    let diagnostics = error
-        .report
-        .diagnostics
-        .iter()
-        .map(|diagnostic| format!("{}: {}", diagnostic.code.as_str(), diagnostic.message))
-        .collect::<Vec<_>>();
-
-    if diagnostics.is_empty() {
-        anyhow::anyhow!("{error}")
-    } else {
-        anyhow::anyhow!("{error}; diagnostics: {}", diagnostics.join("; "))
     }
 }
 

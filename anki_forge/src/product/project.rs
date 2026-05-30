@@ -310,21 +310,25 @@ impl Project {
     /// path-backed media staging instead, and keep `add_file(...)` assets
     /// path-backed until normalization.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
-        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
-            anyhow::bail!("{}: {}", diagnostic.code.as_str(), diagnostic.message);
+        if self.product_document_source_mixed_diagnostic().is_some() {
+            return Err(ProductLoweringError {
+                product_diagnostics: vec![ProductDiagnostic {
+                    code: "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED",
+                    message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
+                    source_path: Some("project".to_string()),
+                }],
+                lowering_diagnostics: vec![],
+            }
+            .into());
         }
 
         if let Some(product) = &self.product_document_source {
-            return product
-                .lower()
-                .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err));
+            return product.lower().map_err(anyhow::Error::from);
         }
 
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;
-            let mut plan = product
-                .lower()
-                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err))?;
+            let mut plan = product.lower().map_err(anyhow::Error::from)?;
             self.apply_note_source_paths(&mut plan);
             self.apply_notetype_source_paths(&mut plan);
             return Ok(plan);
@@ -333,7 +337,7 @@ impl Project {
         let mut plan = self
             .to_product_document()
             .lower()
-            .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
+            .map_err(anyhow::Error::from)?;
         self.apply_note_source_paths(&mut plan);
         self.apply_notetype_source_paths(&mut plan);
         plan.authoring_document

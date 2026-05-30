@@ -49,9 +49,30 @@ def build_report_payload(**overrides):
     return payload
 
 
+def diagnostic_payload(
+    *,
+    code="E",
+    severity="error",
+    message="bad",
+    domain="project",
+    stage="build",
+    path=None,
+    suggested_fix=None,
+):
+    return {
+        "code": code,
+        "severity": severity,
+        "domain": domain,
+        "stage": stage,
+        "path": path,
+        "message": message,
+        "suggested_fix": suggested_fix,
+    }
+
+
 def test_report_success_warning_does_not_raise():
     report = BuildReport.from_json(build_report_payload(
-        diagnostics=[{"code": "W", "severity": "warning", "message": "warn"}],
+        diagnostics=[diagnostic_payload(code="W", severity="warning", message="warn")],
     ))
     report.ensure_success()
 
@@ -61,7 +82,7 @@ def test_report_ensure_success_raises_for_invalid_report():
         status="invalid",
         artifact=None,
         counts={"notes": 0, "cards": 0, "media": 0},
-        diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+        diagnostics=[diagnostic_payload()],
     )
     with pytest.raises(DiagnosticsError):
         BuildReport.from_json(payload).ensure_success()
@@ -79,6 +100,17 @@ def test_report_rejects_wrong_kind_and_schema_version():
         BuildReport.from_json({**base, "kind": "wrong"})
     with pytest.raises(ProtocolError):
         BuildReport.from_json({**base, "schema_version": "future"})
+
+
+def test_report_rejects_v2_diagnostic_missing_required_fields():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(
+            diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+        ))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(
+            diagnostics=[diagnostic_payload(domain="")],
+        ))
 
 
 def test_report_parses_schema_media_summary_unique_bytes():
@@ -204,7 +236,7 @@ def test_write_apkg_returns_invalid_report_without_raising(monkeypatch):
             status="invalid",
             artifact=None,
             counts={"notes": 0, "cards": 0, "media": 0},
-            diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+            diagnostics=[diagnostic_payload()],
         )), stderr="")
     monkeypatch.setattr(subprocess, "run", fake_run)
 
@@ -292,7 +324,7 @@ def test_negative_returncode_with_report_json_returns_report():
         status="error",
         artifact=None,
         counts={"notes": 0, "cards": 0, "media": 0},
-        diagnostics=[{"code": "E", "severity": "error", "message": "interrupted after report"}],
+        diagnostics=[diagnostic_payload(message="interrupted after report")],
     )), stderr="signal")
     report = parse_completed_process(completed)
     assert report.status == "error"
