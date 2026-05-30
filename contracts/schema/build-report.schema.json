@@ -55,7 +55,11 @@
         "missing_references": { "type": "integer", "minimum": 0 },
         "unsafe_references": { "type": "integer", "minimum": 0 },
         "unused_bindings": { "type": "integer", "minimum": 0 },
-        "unique_bytes": { "type": "integer", "minimum": 0 }
+        "unique_bytes": { "type": "integer", "minimum": 0 },
+        "entries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/media_entry" }
+        }
       },
       "additionalProperties": false
     },
@@ -79,6 +83,19 @@
         "threshold": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
         "highest_risk": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
         "blocking_findings": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "media_entry": {
+      "type": "object",
+      "required": ["id", "filename", "source_mode", "size_bytes"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "filename": { "type": "string", "minLength": 1 },
+        "source_mode": { "enum": ["inline", "path_backed"] },
+        "size_bytes": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": false
     }
