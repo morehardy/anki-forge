@@ -114,6 +114,8 @@ impl Project {
                 Err(error) => diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.DECK_VALIDATE_FAILED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message: error.to_string(),
                     source: Some(SourcePath::new("project.deck")),
                     help: Some("inspect deck notes before building".into()),
@@ -124,6 +126,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.DECK_SOURCE_AUTHORING_STATE_UNSUPPORTED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message:
                         "deck-backed projects cannot mix direct Project notes or note types yet"
                             .into(),
@@ -147,6 +151,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_BLANK"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: "stable_id cannot be blank".into(),
                         source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a non-empty stable_id or omit it".into()),
@@ -155,6 +161,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: format!("duplicate stable_id '{stable_id}'"),
                         source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a unique stable_id for each note".into()),
@@ -169,6 +177,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.UNSUPPORTED_NOTE_TYPE"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message: format!(
                         "note type '{}' is not registered on the project",
                         note.note_type_id()
@@ -215,6 +225,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message,
                     source: Some(SourcePath::new(format!("project.note_types[{index}]"))),
                     help: Some("choose a unique id for each custom note type".into()),
@@ -245,6 +257,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
                     severity: Severity::Warning,
+                    domain: None,
+                    stage: None,
                     message: format!(
                         "custom note type '{}' has no identity recipe",
                         note_type.id()
@@ -262,6 +276,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("NOTETYPE.FIELD_KEY_AUTO_DERIVED"),
                         severity: Severity::Warning,
+                        domain: None,
+                        stage: None,
                         message: format!(
                             "field '{}' in note type '{}' uses an auto-derived key",
                             field.name(),
@@ -389,6 +405,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message,
                     source: Some(SourcePath::new("project")),
                     help: Some("inspect product notes and media registrations".into()),
@@ -434,6 +452,8 @@ impl Project {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.EMPTY"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "project contains no notes".into(),
                 source: Some(SourcePath::new("project.notes")),
                 help: Some("add at least one note before building".into()),
@@ -510,6 +530,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: err.code,
                     severity: err.severity,
+                    domain: None,
+                    stage: None,
                     message: err.message,
                     source: Some(SourcePath::new("build.options")),
                     help: None,
@@ -556,6 +578,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new(code),
                     severity: classified.severity,
+                    domain: None,
+                    stage: None,
                     message: "project stable id is missing for update-safety proof".into(),
                     source: Some(SourcePath::new("project.stable_id")),
                     help: Some("set Project::stable_id(value) for update-safe builds".into()),
@@ -612,6 +636,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("UPDATE.BASELINE_IGNORED_DISABLED"),
                     severity: Severity::Info,
+                    domain: None,
+                    stage: None,
                     message: "compare_to baseline ignored because update safety is disabled".into(),
                     source: Some(SourcePath::new(path.display().to_string())),
                     help: Some("remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline".into()),
@@ -688,6 +714,8 @@ impl Project {
                                         "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
                                     ),
                                     severity: update_error_severity,
+                                    domain: None,
+                                    stage: None,
                                     message: err.to_string(),
                                     source: Some(SourcePath::new(path.display().to_string())),
                                     help: Some("fix or regenerate the identity lockfile".into()),
@@ -707,6 +735,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
                         severity: update_error_severity,
+                        domain: None,
+                        stage: None,
                         message: format!("identity lockfile {} does not exist", path.display()),
                         source: Some(SourcePath::new(path.display().to_string())),
                         help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
@@ -746,6 +776,8 @@ impl Project {
                             diagnostics.push(Diagnostic {
                                 code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
                                 severity: update_error_severity,
+                                domain: None,
+                                stage: None,
                                 message: err.to_string(),
                                 source: Some(SourcePath::new(path.display().to_string())),
                                 help: Some(
@@ -773,6 +805,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                             code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
                             severity: Severity::Error,
+                            domain: None,
+                            stage: None,
                             message: format!(
                                 "APKG could not be inspected for comparison: {}",
                                 path.display()
@@ -864,6 +898,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: err.to_string(),
                         source: Some(SourcePath::new("update_safety.reconcile")),
                         help: Some(
@@ -990,19 +1026,23 @@ impl Project {
             }
         })?;
 
-        diagnostics.extend(
-            package_build_result
-                .diagnostics
-                .items
-                .iter()
-                .map(|item| Diagnostic {
-                    code: DiagnosticCode::new(item.code.clone()),
-                    severity: severity_from_level(&item.level),
-                    message: item.summary.clone(),
-                    source: item.path.clone().map(SourcePath::new),
-                    help: None,
-                }),
-        );
+        diagnostics.extend(package_build_result.diagnostics.items.iter().map(|item| {
+            Diagnostic {
+                code: DiagnosticCode::new(item.code.clone()),
+                severity: severity_from_level(&item.level),
+                domain: item
+                    .domain
+                    .clone()
+                    .map(crate::diagnostics::DiagnosticDomain::new),
+                stage: item
+                    .stage
+                    .clone()
+                    .map(crate::diagnostics::DiagnosticStage::new),
+                message: item.summary.clone(),
+                source: item.path.clone().map(SourcePath::new),
+                help: None,
+            }
+        }));
         if package_build_result.result_status != "success"
             && !diagnostics
                 .iter()
@@ -1011,6 +1051,8 @@ impl Project {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.BUILD_STATUS_FAILED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: format!("build status was {}", package_build_result.result_status),
                 source: Some(SourcePath::new("project.build")),
                 help: Some("inspect writer diagnostics for the failed stage".into()),
@@ -1058,6 +1100,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISSING"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message:
                             "project stable id is required before writing an identity lockfile"
                                 .into(),
@@ -1113,6 +1157,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                             code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
                             severity: Severity::Error,
+                            domain: None,
+                            stage: None,
                             message: err.to_string(),
                             source: Some(SourcePath::new(path.display().to_string())),
                             help: Some("verify the lockfile path is writable".into()),
@@ -1251,6 +1297,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("DIFF.TEMP_DIR_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: err.to_string(),
                         source: Some(SourcePath::new("project.diff_against_apkg")),
                         help: Some(
@@ -1700,6 +1748,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("PROJECT.DECK_MEDIA_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: error.to_string(),
                         source: Some(SourcePath::new("project.deck.media")),
                         help: Some("inspect deck media registrations and media paths".into()),
@@ -1804,6 +1854,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("PROJECT.DECK_LOWER_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: error.to_string(),
                         source: Some(SourcePath::new("project.deck")),
                         help: Some("inspect deck notes before lowering".into()),
@@ -1838,6 +1890,8 @@ impl Project {
             Some(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
                 source: Some(SourcePath::new("project")),
                 help: Some(
@@ -2741,6 +2795,8 @@ fn append_missing_media_reference_diagnostics(
         diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: missing_media_reference_summary(&candidate),
             help: product_diagnostic_help(
                 "MEDIA.MISSING_REFERENCE",
@@ -2929,6 +2985,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new(code),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: diagnostic.message,
                 source: Some(SourcePath::new(source_path)),
                 help: Some(help),
@@ -2942,6 +3000,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: error.to_string(),
                 source: Some(SourcePath::new("project.media")),
                 help: Some("inspect product media registrations and media paths".into()),
@@ -2955,6 +3015,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new(code),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message,
                 source: Some(SourcePath::new(format!(
                     "project.media[{export_filename:?}]"
@@ -3010,6 +3072,8 @@ fn normalization_diagnostic_to_product_diagnostic(
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity: severity_from_level(&item.level),
+        domain: None,
+        stage: None,
         message,
         source,
         help,
@@ -3087,6 +3151,8 @@ fn map_product_diagnostics(diagnostics: Vec<ProductDiagnostic>) -> Vec<Diagnosti
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: diagnostic.message,
             source: Some(SourcePath::new(
                 diagnostic
@@ -3104,6 +3170,8 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
             severity: lowering_diagnostic_severity(diagnostic.code),
+            domain: None,
+            stage: None,
             message: diagnostic.message,
             source: Some(SourcePath::new("project.lower")),
             help: None,
@@ -3128,6 +3196,8 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new(code),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message,
             source: Some(SourcePath::new("project.build")),
             help: None,
@@ -3216,6 +3286,8 @@ fn maybe_write_report_json(
         report.diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("PROJECT.REPORT_JSON_WRITE_FAILED"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: format!("failed to write report_json: {err}"),
             source: Some(SourcePath::new(path.display().to_string())),
             help: Some("choose a writable report_json path".to_string()),
@@ -3320,7 +3392,9 @@ fn deck_validation_diagnostic_to_project_diagnostic(
 ) -> Diagnostic {
     Diagnostic {
         code: DiagnosticCode::new(deck_validation_code(&diagnostic.code)),
-        severity: severity_from_deck_validation(&diagnostic.severity),
+        severity: diagnostic.severity,
+        domain: None,
+        stage: None,
         message: diagnostic.message.clone(),
         source: Some(SourcePath::new("project.deck")),
         help: None,
@@ -3343,14 +3417,6 @@ fn deck_validation_code(code: &crate::deck::ValidationCode) -> &'static str {
     }
 }
 
-fn severity_from_deck_validation(severity: &str) -> Severity {
-    match severity {
-        "error" => Severity::Error,
-        "warning" => Severity::Warning,
-        _ => Severity::Info,
-    }
-}
-
 fn combine_lowering_and_normalization_diagnostics(
     mut lowering_diagnostics: Vec<Diagnostic>,
     normalization_diagnostics: Vec<Diagnostic>,
@@ -3367,6 +3433,8 @@ mod tests {
         Diagnostic {
             code: DiagnosticCode::new(code),
             severity,
+            domain: None,
+            stage: None,
             message: code.into(),
             source: None,
             help: None,

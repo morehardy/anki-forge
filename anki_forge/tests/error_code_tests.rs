@@ -1,0 +1,153 @@
+use std::path::PathBuf;
+
+use anki_forge::diagnostics::{ErrorCode, ErrorCodeExt};
+use anki_forge::{
+    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
+};
+use serde_json::json;
+
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..")
+}
+
+fn io_fixture_image_path() -> PathBuf {
+    repo_root().join(
+        "contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png",
+    )
+}
+
+#[test]
+fn blank_stable_id_error_has_stable_code() {
+    let mut deck = Deck::new("Spanish");
+
+    let err = deck
+        .basic()
+        .note("hola", "hello")
+        .stable_id("   ")
+        .add()
+        .expect_err("blank stable id must fail");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn reserved_afid_namespace_error_has_stable_code() {
+    let mut deck = Deck::new("Spanish");
+
+    let err = deck
+        .basic()
+        .note("hola", "hello")
+        .stable_id("afid:v1:deadbeef")
+        .add()
+        .expect_err("reserved namespace must fail");
+
+    assert_eq!(err.code(), ErrorCode::ReservedAfidNamespace);
+    assert_eq!(err.code().as_str(), "DECK.RESERVED_AFID_NAMESPACE");
+}
+
+#[test]
+fn empty_identity_selection_error_has_stable_code() {
+    let err =
+        BasicIdentitySelection::new(std::iter::empty::<BasicIdentityField>()).expect_err("error");
+
+    assert_eq!(err.code(), ErrorCode::IdentityFieldsEmpty);
+    assert_eq!(err.code().as_str(), "AFID.IDENTITY_FIELDS_EMPTY");
+}
+
+#[test]
+fn blank_identity_override_reason_error_has_stable_code() {
+    let err = BasicIdentityOverride::new([BasicIdentityField::Front], "   ").expect_err("error");
+
+    assert_eq!(
+        err.code(),
+        ErrorCode::NoteLevelIdentityOverrideReasonRequired
+    );
+    assert_eq!(
+        err.code().as_str(),
+        "AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED"
+    );
+}
+
+#[test]
+fn deck_media_unsafe_filename_error_has_stable_code() {
+    let mut deck = Deck::new("Anatomy");
+
+    let err = deck
+        .media()
+        .add(MediaSource::from_bytes("../escape.png", vec![1, 2, 3]))
+        .expect_err("path-like media names must fail");
+
+    assert_eq!(err.code(), ErrorCode::MediaUnsafeFilename);
+    assert_eq!(err.code().as_str(), "MEDIA.UNSAFE_FILENAME");
+}
+
+#[test]
+fn image_occlusion_empty_masks_error_has_stable_code() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register image");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .stable_id("io-empty")
+        .mode(IoMode::HideOneGuessOne)
+        .add()
+        .expect_err("empty masks must fail");
+
+    assert_eq!(err.code(), ErrorCode::ImageOcclusionEmptyMasks);
+    assert_eq!(err.code().as_str(), "DECK.EMPTY_IO_MASKS");
+}
+
+#[test]
+fn image_occlusion_rect_out_of_bounds_error_has_stable_code() {
+    let mut deck = Deck::new("Anatomy");
+    let image = deck
+        .media()
+        .add(MediaSource::from_file(io_fixture_image_path()))
+        .expect("register image");
+
+    let err = deck
+        .image_occlusion()
+        .note(image)
+        .mode(IoMode::HideOneGuessOne)
+        .rect(u32::MAX, 0, 1, 1)
+        .add()
+        .expect_err("out-of-bounds rect must fail");
+
+    assert_eq!(err.code(), ErrorCode::ImageOcclusionRectOutOfBounds);
+    assert_eq!(err.code().as_str(), "AFID.IO_RECT_OUT_OF_BOUNDS");
+}
+
+#[test]
+fn deck_validate_error_preserves_diagnostic_code() {
+    let deck: Deck = serde_json::from_value(json!({
+        "name": "Spanish",
+        "stable_id": null,
+        "notes": [
+            {
+                "Basic": {
+                    "id": "",
+                    "stable_id": "   ",
+                    "front": "hola",
+                    "back": "hello",
+                    "tags": [],
+                    "generated": false
+                }
+            }
+        ],
+        "next_generated_note_id": 1,
+        "media": {}
+    }))
+    .expect("deserialize deck");
+
+    let err = deck
+        .validate()
+        .expect_err("blank stable id must fail validation");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.code().as_str(), "DECK.BLANK_STABLE_ID");
+}

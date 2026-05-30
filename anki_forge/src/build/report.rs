@@ -125,6 +125,22 @@ impl BuildError {
             cause,
         }
     }
+
+    pub fn code(&self) -> crate::diagnostics::ErrorCode {
+        self.report
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.report.diagnostics.first())
+            .map(|diagnostic| diagnostic.code.error_code())
+            .unwrap_or_else(|| crate::diagnostics::ErrorCode::Unknown(format!("{:?}", self.cause)))
+    }
+}
+
+impl crate::diagnostics::ErrorCodeExt for BuildError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        BuildError::code(self)
+    }
 }
 
 impl BuildReport {

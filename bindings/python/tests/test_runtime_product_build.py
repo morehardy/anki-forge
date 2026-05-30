@@ -21,7 +21,7 @@ from anki_forge_python.runtime import ResolvedRuntime as LowLevelRuntime
 def build_report_payload(**overrides):
     payload = {
         "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
+        "schema_version": "phase4-build-report-v2",
         "tool_version": "test",
         "status": "success",
         "comparison": "not_requested",

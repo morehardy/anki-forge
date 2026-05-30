@@ -1,5 +1,5 @@
 use authoring_core::{
-    decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path,
+    decode_inline_bytes, ingest_media_read_source_to_cas, media_io::sniff_mime, object_store_path,
     CasExistingIntegrityReason, MediaIoError, MediaReadSource, MediaSniffConfidence,
 };
 use base64::Engine as _;
@@ -88,6 +88,53 @@ fn inline_decode_preflights_encoded_size_before_decode_allocation() {
         err,
         MediaIoError::InlineBytesTooLarge { size, limit: 64 } if size > 64
     ));
+}
+
+#[test]
+fn sniff_mime_recognizes_common_binary_media_formats() {
+    let cases = [
+        (&b"RIFF\x00\x00\x00\x00WEBPVP8 "[..], "image/webp"),
+        (&b"%PDF-1.7\n"[..], "application/pdf"),
+        (&b"OggS\x00\x02opus payload"[..], "audio/ogg"),
+        (&[0xff, 0xf1, 0x50, 0x80][..], "audio/aac"),
+        (&b"wOFF\x00\x01\x00\x00"[..], "font/woff"),
+        (&b"wOF2\x00\x01\x00\x00"[..], "font/woff2"),
+        (
+            &[
+                0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
+            ][..],
+            "font/ttf",
+        ),
+        (&b"OTTO\x00\x01\x00\x10\x00\x00\x00\x00"[..], "font/otf"),
+    ];
+
+    for (bytes, expected_mime) in cases {
+        let sniffed = sniff_mime(bytes).expect("sniff common media format");
+        assert_eq!(sniffed.mime, expected_mime);
+        assert_eq!(sniffed.confidence, MediaSniffConfidence::High);
+    }
+}
+
+#[test]
+fn sniff_mime_keeps_json_like_text_as_plain_text() {
+    let sniffed = sniff_mime(br#"{"answer": 42}"#).expect("sniff ASCII text");
+
+    assert_eq!(sniffed.mime, "text/plain");
+    assert_eq!(sniffed.confidence, MediaSniffConfidence::Low);
+}
+
+#[test]
+fn sniff_mime_does_not_treat_text_prefixes_as_fonts() {
+    for bytes in [
+        &b"true"[..],
+        &b"true\nhello world"[..],
+        &b"OTTO memo"[..],
+        &b"OTTO\nhello world"[..],
+    ] {
+        let sniffed = sniff_mime(bytes).expect("sniff ASCII text");
+        assert_eq!(sniffed.mime, "text/plain");
+        assert_eq!(sniffed.confidence, MediaSniffConfidence::Low);
+    }
 }
 
 #[test]

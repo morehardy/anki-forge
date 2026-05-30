@@ -209,6 +209,7 @@ pub fn ingest_authoring_media(
         let mime = effective_mime(
             item.declared_mime.as_deref(),
             ingested.sniffed_mime.as_ref(),
+            Some(item.desired_filename.as_str()),
             &options.media_policy,
             &mut mime_diagnostics,
             &item.id,
@@ -433,20 +434,29 @@ fn has_parent_component(path: &Path) -> bool {
 fn effective_mime(
     declared_mime: Option<&str>,
     sniffed: Option<&SniffedMime>,
+    export_filename: Option<&str>,
     policy: &MediaPolicy,
     diagnostics: &mut Vec<MediaIngestDiagnostic>,
     media_id: &str,
 ) -> String {
-    if let (Some(declared), Some(sniffed)) = (declared_mime, sniffed) {
+    let extension_mime = export_filename.and_then(crate::mime::mime_from_filename);
+    let expected_mime = declared_mime.or(extension_mime);
+    let expected_label = if declared_mime.is_some() {
+        "declared MIME"
+    } else {
+        "export filename MIME"
+    };
+
+    if let (Some(expected), Some(sniffed)) = (expected_mime, sniffed) {
         if sniffed.confidence == MediaSniffConfidence::High
-            && !mime_type_subtype_eq(declared, &sniffed.mime)
+            && !mime_type_subtype_compatible(expected, &sniffed.mime)
         {
             push_policy_diagnostic(
                 diagnostics,
                 policy.declared_mime_mismatch_behavior,
                 "MEDIA.DECLARED_MIME_MISMATCH",
                 format!(
-                    "declared MIME {declared} conflicts with sniffed MIME {}",
+                    "{expected_label} {expected} conflicts with sniffed MIME {}",
                     sniffed.mime
                 ),
                 Some(media_id.into()),
@@ -454,10 +464,24 @@ fn effective_mime(
         }
     }
 
-    if let Some(sniffed) = sniffed {
+    if let Some(sniffed) =
+        sniffed.filter(|sniffed| sniffed.confidence == MediaSniffConfidence::High)
+    {
+        if let Some(expected) = expected_mime {
+            if mime_type_subtype_eq(expected, &sniffed.mime) {
+                return sniffed.mime.clone();
+            }
+            if mime_container_compatible(expected, &sniffed.mime) {
+                return expected.into();
+            }
+        }
         sniffed.mime.clone()
     } else if let Some(declared) = declared_mime {
         declared.into()
+    } else if let Some(extension_mime) = extension_mime {
+        extension_mime.into()
+    } else if let Some(sniffed) = sniffed {
+        sniffed.mime.clone()
     } else {
         push_policy_diagnostic(
             diagnostics,
@@ -474,6 +498,30 @@ fn mime_type_subtype_eq(left: &str, right: &str) -> bool {
     let left = left.split(';').next().unwrap_or("").trim();
     let right = right.split(';').next().unwrap_or("").trim();
     left.eq_ignore_ascii_case(right)
+}
+
+fn mime_type_subtype_compatible(left: &str, right: &str) -> bool {
+    mime_type_subtype_eq(left, right) || mime_container_compatible(left, right)
+}
+
+fn mime_container_compatible(left: &str, right: &str) -> bool {
+    let left = left.split(';').next().unwrap_or("").trim();
+    let right = right.split(';').next().unwrap_or("").trim();
+    (is_mp4_media_mime(left) && is_mp4_media_mime(right))
+        || (is_webm_media_mime(left) && is_webm_media_mime(right))
+        || (is_ogg_or_opus_mime(left) && is_ogg_or_opus_mime(right))
+}
+
+fn is_mp4_media_mime(mime: &str) -> bool {
+    mime.eq_ignore_ascii_case("audio/mp4") || mime.eq_ignore_ascii_case("video/mp4")
+}
+
+fn is_webm_media_mime(mime: &str) -> bool {
+    mime.eq_ignore_ascii_case("audio/webm") || mime.eq_ignore_ascii_case("video/webm")
+}
+
+fn is_ogg_or_opus_mime(mime: &str) -> bool {
+    mime.eq_ignore_ascii_case("audio/ogg") || mime.eq_ignore_ascii_case("audio/opus")
 }
 
 fn media_io_error_to_diagnostic(err: MediaIoError, media_id: &str) -> MediaIngestDiagnostic {

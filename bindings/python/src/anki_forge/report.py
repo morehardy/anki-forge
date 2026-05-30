@@ -6,7 +6,7 @@ from typing import Any, Mapping
 from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
-BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v1"
+BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
 ALLOWED_STATUSES = {"success", "blocked", "invalid", "error"}
 ALLOWED_COMPARISONS = {"not_requested", "complete", "partial", "unavailable"}
 COUNT_FIELDS = ("notes", "cards", "media")
@@ -151,13 +151,19 @@ def _diagnostics(value: object) -> tuple[Diagnostic, ...]:
     for item in value:
         if not isinstance(item, dict):
             raise ProtocolError("build report diagnostic must be an object")
+        severity = _required_non_empty_string(item, "severity")
+        if severity not in {"error", "warning", "info"}:
+            raise ProtocolError("build report diagnostic severity is unsupported")
         diagnostics.append(
             Diagnostic(
                 code=_required_non_empty_string(item, "code"),
-                severity=_required_non_empty_string(item, "severity"),
+                severity=severity,
                 message=_required_non_empty_string(item, "message"),
-                source=_optional_string(item, "source"),
-                help=_optional_string(item, "help"),
+                domain=_optional_string(item, "domain"),
+                stage=_optional_string(item, "stage"),
+                path=_optional_string(item, "path") or _optional_string(item, "source"),
+                suggested_fix=_optional_string(item, "suggested_fix")
+                or _optional_string(item, "help"),
             )
         )
     return tuple(diagnostics)

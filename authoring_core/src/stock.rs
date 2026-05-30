@@ -219,6 +219,7 @@ fn authoring_field(
         config_id: None,
         tag,
         prevent_deletion,
+        sort: false,
     }
 }
 
@@ -239,6 +240,7 @@ fn authoring_template(
         target_deck_name: None,
         browser_font_name: None,
         browser_font_size: None,
+        generation_requirement: None,
     }
 }
 
@@ -249,6 +251,7 @@ fn normalized_field(field: AuthoringField) -> NormalizedField {
         config_id: field.config_id,
         tag: field.tag,
         prevent_deletion: field.prevent_deletion,
+        sort: field.sort,
     }
 }
 
@@ -264,6 +267,12 @@ fn normalized_template(template: AuthoringTemplate) -> NormalizedTemplate {
         target_deck_name: template.target_deck_name,
         browser_font_name: template.browser_font_name,
         browser_font_size: template.browser_font_size,
+        generation_requirement: template.generation_requirement.map(|requirement| {
+            crate::model::NormalizedGenerationRequirement {
+                kind: requirement.kind,
+                field_names: requirement.field_names,
+            }
+        }),
     }
 }
 

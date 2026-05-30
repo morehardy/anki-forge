@@ -3,6 +3,7 @@ pub mod identity;
 pub mod media;
 pub mod media_io;
 pub mod media_refs;
+pub mod mime;
 pub mod model;
 pub mod normalize;
 pub mod risk;
@@ -26,10 +27,12 @@ pub use media_io::{
 pub use media_refs::{
     extract_media_reference_candidates, MediaReferenceCandidate, MediaReferenceCandidateKind,
 };
+pub use mime::{mime_from_filename, mime_from_filename_or_octet, APPLICATION_OCTET_STREAM};
 pub use model::{
-    AuthoringDocument, AuthoringField, AuthoringFieldMetadata, AuthoringMedia, AuthoringNote,
-    AuthoringNotetype, AuthoringTemplate, ComparisonContext, MergeRiskReport, NormalizationRequest,
-    NormalizedField, NormalizedFieldMetadata, NormalizedIr, NormalizedNote, NormalizedNotetype,
+    AuthoringDocument, AuthoringField, AuthoringFieldMetadata, AuthoringGenerationRequirement,
+    AuthoringMedia, AuthoringNote, AuthoringNotetype, AuthoringTemplate, ComparisonContext,
+    MergeRiskReport, NormalizationRequest, NormalizedField, NormalizedFieldMetadata,
+    NormalizedGenerationRequirement, NormalizedIr, NormalizedNote, NormalizedNotetype,
     NormalizedTemplate,
 };
 pub use normalize::{normalize, normalize_with_options, selector_resolve_error_code};

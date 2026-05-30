@@ -361,11 +361,5 @@ fn validate_media_filename(filename: &str) -> anyhow::Result<()> {
 }
 
 fn mime_from_name(name: &str) -> String {
-    match name.rsplit('.').next().map(str::to_ascii_lowercase) {
-        Some(ext) if ext == "png" => "image/png".into(),
-        Some(ext) if ext == "jpg" || ext == "jpeg" => "image/jpeg".into(),
-        Some(ext) if ext == "mp3" => "audio/mpeg".into(),
-        Some(ext) if ext == "wav" => "audio/wav".into(),
-        _ => "application/octet-stream".into(),
-    }
+    authoring_core::mime_from_filename_or_octet(name)
 }

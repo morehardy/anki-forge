@@ -19,5 +19,8 @@ sha1 = "0.10"
 zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
 zstd = "0.13"
 
+[dev-dependencies]
+proptest = "1.6"
+
 [lints]
 workspace = true

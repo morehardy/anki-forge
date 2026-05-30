@@ -68,5 +68,15 @@ class Diagnostic:
     code: str
     severity: str
     message: str
-    source: str | None = None
-    help: str | None = None
+    domain: str | None = None
+    stage: str | None = None
+    path: str | None = None
+    suggested_fix: str | None = None
+
+    @property
+    def source(self) -> str | None:
+        return self.path
+
+    @property
+    def help(self) -> str | None:
+        return self.suggested_fix

@@ -9,6 +9,78 @@ use crate::deck::model::{
     Deck, MediaRef, RasterImageMetadata, RegisteredMedia, RegisteredMediaSource,
 };
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum MediaError {
+    InvalidSourceFilename {
+        message: String,
+    },
+    SourceMissing {
+        path: std::path::PathBuf,
+        message: String,
+    },
+    SourceNotRegularFile {
+        path: std::path::PathBuf,
+    },
+    SourceReadFailed {
+        path: std::path::PathBuf,
+        message: String,
+    },
+    UnsafeFilename {
+        name: String,
+        message: String,
+    },
+    ConflictingPayload {
+        name: String,
+    },
+}
+
+impl MediaError {
+    pub fn code(&self) -> crate::diagnostics::ErrorCode {
+        match self {
+            Self::InvalidSourceFilename { .. } | Self::UnsafeFilename { .. } => {
+                crate::diagnostics::ErrorCode::MediaUnsafeFilename
+            }
+            Self::SourceMissing { .. } => crate::diagnostics::ErrorCode::MediaSourceMissing,
+            Self::SourceNotRegularFile { .. } => {
+                crate::diagnostics::ErrorCode::MediaSourceNotRegularFile
+            }
+            Self::SourceReadFailed { .. } => crate::diagnostics::ErrorCode::MediaSourceReadFailed,
+            Self::ConflictingPayload { .. } => {
+                crate::diagnostics::ErrorCode::MediaDuplicateFilenameConflict
+            }
+        }
+    }
+}
+
+impl std::fmt::Display for MediaError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::InvalidSourceFilename { message } => write!(f, "{}: {message}", self.code()),
+            Self::SourceMissing { path, message } => {
+                write!(f, "{}: {}: {message}", self.code(), path.display())
+            }
+            Self::SourceNotRegularFile { path } => {
+                write!(f, "{}: {}", self.code(), path.display())
+            }
+            Self::SourceReadFailed { path, message } => {
+                write!(f, "{}: {}: {message}", self.code(), path.display())
+            }
+            Self::UnsafeFilename { message, .. } => write!(f, "{}: {message}", self.code()),
+            Self::ConflictingPayload { name } => {
+                write!(f, "{}: {name}", self.code())
+            }
+        }
+    }
+}
+
+impl std::error::Error for MediaError {}
+
+impl crate::diagnostics::ErrorCodeExt for MediaError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        MediaError::code(self)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum MediaSource {
     File { path: std::path::PathBuf },
@@ -64,7 +136,10 @@ impl<'a> MediaRegistry<'a> {
                 return Ok(MediaRef::new(existing.name.clone()));
             }
 
-            anyhow::bail!("conflicting media payload for {}", registered.name);
+            return Err(MediaError::ConflictingPayload {
+                name: registered.name,
+            }
+            .into());
         }
 
         let reference = MediaRef::new(registered.name.clone());
@@ -113,7 +188,9 @@ impl RegisteredMedia {
                 let name = path
                     .file_name()
                     .and_then(|item| item.to_str())
-                    .ok_or_else(|| anyhow::anyhow!("media path must end in a valid filename"))?
+                    .ok_or_else(|| MediaError::InvalidSourceFilename {
+                        message: "media path must end in a valid filename".into(),
+                    })?
                     .to_string();
                 validate_source_file(&path)?;
                 let sha1_hex = sha1_file_hex(&path)?;
@@ -213,13 +290,22 @@ impl RegisteredMedia {
 }
 
 fn validate_source_file(path: &Path) -> anyhow::Result<()> {
-    let metadata = std::fs::metadata(path)
-        .with_context(|| format!("stat media source file: {}", path.display()))?;
-    anyhow::ensure!(
-        metadata.is_file(),
-        "media source path must be a regular file: {}",
-        path.display()
-    );
+    let metadata = std::fs::metadata(path).map_err(|err| match err.kind() {
+        std::io::ErrorKind::NotFound => MediaError::SourceMissing {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+        _ => MediaError::SourceReadFailed {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+    })?;
+    if !metadata.is_file() {
+        return Err(MediaError::SourceNotRegularFile {
+            path: path.to_path_buf(),
+        }
+        .into());
+    }
     Ok(())
 }
 
@@ -292,14 +378,25 @@ fn ensure_not_symlink(path: &Path) -> anyhow::Result<()> {
 }
 
 fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
-    let mut file = std::fs::File::open(path)
-        .with_context(|| format!("open media source file: {}", path.display()))?;
+    let mut file = std::fs::File::open(path).map_err(|err| match err.kind() {
+        std::io::ErrorKind::NotFound => MediaError::SourceMissing {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+        _ => MediaError::SourceReadFailed {
+            path: path.to_path_buf(),
+            message: err.to_string(),
+        },
+    })?;
     let mut hasher = Sha1::new();
     let mut buffer = [0_u8; 8192];
     loop {
         let read = file
             .read(&mut buffer)
-            .with_context(|| format!("read media source file: {}", path.display()))?;
+            .map_err(|err| MediaError::SourceReadFailed {
+                path: path.to_path_buf(),
+                message: err.to_string(),
+            })?;
         if read == 0 {
             break;
         }
@@ -309,33 +406,34 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
-    authoring_core::validate_authoring_media_filename(name).map_err(anyhow::Error::msg)
+    authoring_core::validate_authoring_media_filename(name).map_err(|message| {
+        MediaError::UnsafeFilename {
+            name: name.to_string(),
+            message,
+        }
+        .into()
+    })
 }
 
 fn mime_from_name(name: &str) -> String {
-    match name.rsplit('.').next().map(|ext| ext.to_ascii_lowercase()) {
-        Some(ext) if ext == "png" => "image/png".into(),
-        Some(ext) if ext == "jpg" || ext == "jpeg" => "image/jpeg".into(),
-        Some(ext) if ext == "svg" => "image/svg+xml".into(),
-        Some(ext) if ext == "mp3" => "audio/mpeg".into(),
-        Some(ext) if ext == "wav" => "audio/wav".into(),
-        _ => "application/octet-stream".into(),
-    }
+    authoring_core::mime_from_filename_or_octet(name)
 }
 
 fn raster_image_metadata_from_path(name: &str, path: &Path) -> Option<RasterImageMetadata> {
-    match mime_from_name(name).as_str() {
-        "image/png" | "image/jpeg" => imagesize::size(path).ok().map(|size| RasterImageMetadata {
-            width_px: size.width as u32,
-            height_px: size.height as u32,
-        }),
+    match authoring_core::mime_from_filename(name) {
+        Some("image/png" | "image/jpeg" | "image/gif" | "image/webp") => {
+            imagesize::size(path).ok().map(|size| RasterImageMetadata {
+                width_px: size.width as u32,
+                height_px: size.height as u32,
+            })
+        }
         _ => None,
     }
 }
 
 fn raster_image_metadata_from_bytes(name: &str, bytes: &[u8]) -> Option<RasterImageMetadata> {
-    match mime_from_name(name).as_str() {
-        "image/png" | "image/jpeg" => {
+    match authoring_core::mime_from_filename(name) {
+        Some("image/png" | "image/jpeg" | "image/gif" | "image/webp") => {
             imagesize::blob_size(bytes)
                 .ok()
                 .map(|size| RasterImageMetadata {

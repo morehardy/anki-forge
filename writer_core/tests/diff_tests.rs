@@ -37,7 +37,7 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
     assert_eq!(diff.comparison_status, "complete");
     assert!(diff.uncompared_domains.is_empty());
     assert!(diff.comparison_limitations.is_empty());
-    assert!(diff.changes.is_empty());
+    assert!(diff.changes.is_empty(), "{:#?}", diff.changes);
 }
 
 #[test]

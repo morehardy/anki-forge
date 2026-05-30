@@ -7,7 +7,7 @@ pub mod model;
 pub mod validation;
 
 pub use export::BuildResult;
-pub use media::MediaSource;
+pub use media::{MediaError, MediaSource};
 pub use model::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
     DeckError, DeckIdentityPolicy, DeckNote, IdentityOverride, IdentityProvenance,

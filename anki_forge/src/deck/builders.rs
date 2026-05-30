@@ -6,6 +6,7 @@ use crate::deck::model::{
     ResolvedIdentitySnapshot,
 };
 use crate::deck::validation::{ValidationCode, ValidationDiagnostic, ValidationReport};
+use crate::diagnostics::Severity;
 
 pub struct DeckBuilder {
     name: String,
@@ -76,12 +77,12 @@ impl Deck {
                 Some("") => diagnostics.push(ValidationDiagnostic {
                     code: ValidationCode::BlankStableId,
                     message: format!("note '{}' has a blank explicit stable_id", note.id()),
-                    severity: "error".into(),
+                    severity: Severity::Error,
                 }),
                 None if note.generated() => diagnostics.push(ValidationDiagnostic {
                     code: ValidationCode::MissingStableId,
                     message: format!("note '{}' was assigned a generated id", note.id()),
-                    severity: "warning".into(),
+                    severity: Severity::Warning,
                 }),
                 None => {}
                 Some(_) => {}
@@ -91,7 +92,7 @@ impl Deck {
                 diagnostics.push(ValidationDiagnostic {
                     code: ValidationCode::StableIdDuplicate,
                     message: format!("id '{}' is duplicated", note.id()),
-                    severity: "error".into(),
+                    severity: Severity::Error,
                 });
             }
 
@@ -102,7 +103,7 @@ impl Deck {
                 diagnostics.push(ValidationDiagnostic {
                     code: ValidationCode::NoteLevelIdentityOverrideUsed,
                     message: format!("note '{}' uses a note-level identity override", note.id()),
-                    severity: "warning".into(),
+                    severity: Severity::Warning,
                 });
             }
 
@@ -115,7 +116,7 @@ impl Deck {
                             io.id,
                             io.image.name()
                         ),
-                        severity: "error".into(),
+                        severity: Severity::Error,
                     });
                 }
 
@@ -126,7 +127,7 @@ impl Deck {
                             "image occlusion note '{}' requires at least one rect",
                             io.id
                         ),
-                        severity: "error".into(),
+                        severity: Severity::Error,
                     });
                 }
             }
@@ -137,7 +138,17 @@ impl Deck {
 
     pub fn validate(&self) -> anyhow::Result<()> {
         let report = self.validate_report()?;
-        anyhow::ensure!(!report.has_errors(), "deck validation failed");
+        if let Some(diagnostic) = report
+            .diagnostics()
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            return Err(DeckError::ValidationFailed {
+                code: diagnostic.code.code(),
+                message: diagnostic.message.clone(),
+            }
+            .into());
+        }
         Ok(())
     }
 
@@ -170,7 +181,10 @@ impl Deck {
             }
 
             if note.id().starts_with("afid:v1:") {
-                anyhow::bail!("AFID.IDENTITY_SNAPSHOT_MISSING: {}", note.id());
+                return Err(DeckError::IdentitySnapshotMissing {
+                    stable_id: note.id().to_string(),
+                }
+                .into());
             }
 
             if note.id().starts_with("generated:") {
@@ -219,13 +233,14 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
         .map(|stable_id| stable_id.trim().to_string());
 
     match requested.as_deref() {
-        Some("") => anyhow::bail!("stable_id must not be blank"),
+        Some("") => return Err(DeckError::StableIdBlank.into()),
         Some(stable_id) => {
-            anyhow::ensure!(
-                !stable_id.starts_with("afid:v1:"),
-                "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit stable_id cannot use reserved AFID namespace: {}",
-                stable_id,
-            );
+            if stable_id.starts_with("afid:v1:") {
+                return Err(DeckError::ReservedAfidNamespace {
+                    stable_id: stable_id.to_string(),
+                }
+                .into());
+            }
             if deck.used_note_ids.contains(stable_id) {
                 return Err(DeckError::StableIdDuplicate {
                     stable_id: stable_id.to_string(),
@@ -267,11 +282,12 @@ fn assign_identity(deck: &mut Deck, note: &mut DeckNote) -> anyhow::Result<()> {
 
 fn validate_requested_stable_id_namespace(note: &DeckNote) -> anyhow::Result<()> {
     if let Some(stable_id) = note.requested_stable_id().map(str::trim) {
-        anyhow::ensure!(
-            !stable_id.starts_with("afid:v1:"),
-            "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit stable_id cannot use reserved AFID namespace: {}",
-            stable_id
-        );
+        if stable_id.starts_with("afid:v1:") {
+            return Err(DeckError::ReservedAfidNamespace {
+                stable_id: stable_id.to_string(),
+            }
+            .into());
+        }
     }
 
     Ok(())
@@ -281,12 +297,13 @@ fn validate_snapshot_for_note(
     note: &DeckNote,
     snapshot: &ResolvedIdentitySnapshot,
 ) -> anyhow::Result<()> {
-    anyhow::ensure!(
-        snapshot.stable_id == note.id(),
-        "AFID.IDENTITY_SNAPSHOT_NOTE_ID_MISMATCH: {} != {}",
-        snapshot.stable_id,
-        note.id()
-    );
+    if snapshot.stable_id != note.id() {
+        return Err(DeckError::IdentitySnapshotNoteIdMismatch {
+            snapshot_stable_id: snapshot.stable_id.clone(),
+            note_id: note.id().to_string(),
+        }
+        .into());
+    }
 
     match snapshot.provenance {
         IdentityProvenance::ExplicitStableId => validate_explicit_snapshot_shape(note, snapshot),
@@ -301,11 +318,12 @@ fn validate_snapshot_for_note(
 fn validate_snapshot_hash(snapshot: &ResolvedIdentitySnapshot) -> anyhow::Result<()> {
     if let Some(canonical_payload) = &snapshot.canonical_payload {
         let expected = format!("afid:v1:{}", blake3::hash(canonical_payload.as_bytes()));
-        anyhow::ensure!(
-            snapshot.stable_id == expected,
-            "AFID.IDENTITY_SNAPSHOT_HASH_MISMATCH: {}",
-            snapshot.stable_id
-        );
+        if snapshot.stable_id != expected {
+            return Err(DeckError::IdentitySnapshotHashMismatch {
+                stable_id: snapshot.stable_id.clone(),
+            }
+            .into());
+        }
     }
 
     Ok(())
@@ -316,21 +334,25 @@ fn validate_explicit_snapshot_shape(
     snapshot: &ResolvedIdentitySnapshot,
 ) -> anyhow::Result<()> {
     let requested = note.requested_stable_id().map(str::trim);
-    anyhow::ensure!(
-        matches!(requested, Some(stable_id) if !stable_id.is_empty() && stable_id == note.id() && stable_id == snapshot.stable_id),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
-    anyhow::ensure!(
-        !snapshot.stable_id.starts_with("afid:v1:"),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: explicit provenance cannot use reserved AFID namespace: {}",
-        snapshot.stable_id
-    );
-    anyhow::ensure!(
-        snapshot.recipe_id.is_none() && snapshot.canonical_payload.is_none(),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
+    if !matches!(requested, Some(stable_id) if !stable_id.is_empty() && stable_id == note.id() && stable_id == snapshot.stable_id)
+    {
+        return Err(DeckError::IdentitySnapshotIncomplete {
+            stable_id: snapshot.stable_id.clone(),
+        }
+        .into());
+    }
+    if snapshot.stable_id.starts_with("afid:v1:") {
+        return Err(DeckError::ReservedAfidNamespace {
+            stable_id: snapshot.stable_id.clone(),
+        }
+        .into());
+    }
+    if !(snapshot.recipe_id.is_none() && snapshot.canonical_payload.is_none()) {
+        return Err(DeckError::IdentitySnapshotIncomplete {
+            stable_id: snapshot.stable_id.clone(),
+        }
+        .into());
+    }
 
     Ok(())
 }
@@ -339,32 +361,20 @@ fn validate_inferred_snapshot_shape(
     note: &DeckNote,
     snapshot: &ResolvedIdentitySnapshot,
 ) -> anyhow::Result<()> {
-    anyhow::ensure!(
-        note.requested_stable_id().is_none(),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
-    anyhow::ensure!(
-        snapshot.recipe_id.is_some() && snapshot.canonical_payload.is_some(),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
-    anyhow::ensure!(
-        snapshot
-            .recipe_id
-            .as_deref()
-            .is_some_and(|recipe_id| !recipe_id.trim().is_empty()),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
-    anyhow::ensure!(
-        snapshot
-            .canonical_payload
-            .as_deref()
-            .is_some_and(|payload| !payload.is_empty()),
-        "AFID.IDENTITY_SNAPSHOT_INCOMPLETE: {}",
-        snapshot.stable_id
-    );
+    let has_valid_recipe_id = snapshot
+        .recipe_id
+        .as_deref()
+        .is_some_and(|recipe_id| !recipe_id.trim().is_empty());
+    let has_valid_payload = snapshot
+        .canonical_payload
+        .as_deref()
+        .is_some_and(|payload| !payload.is_empty());
+    if note.requested_stable_id().is_some() || !has_valid_recipe_id || !has_valid_payload {
+        return Err(DeckError::IdentitySnapshotIncomplete {
+            stable_id: snapshot.stable_id.clone(),
+        }
+        .into());
+    }
 
     Ok(())
 }
@@ -413,15 +423,15 @@ fn insert_used_note_id(
 
 fn validate_note_shape_before_insert(deck: &Deck, note: &DeckNote) -> anyhow::Result<()> {
     if let DeckNote::ImageOcclusion(io) = note {
-        anyhow::ensure!(
-            deck.media.contains_key(io.image.name()),
-            "image occlusion note references unknown media '{}'",
-            io.image.name()
-        );
-        anyhow::ensure!(
-            !io.rects.is_empty(),
-            "image occlusion note requires at least one rect"
-        );
+        if !deck.media.contains_key(io.image.name()) {
+            return Err(DeckError::ImageOcclusionUnknownMedia {
+                media_name: io.image.name().to_string(),
+            }
+            .into());
+        }
+        if io.rects.is_empty() {
+            return Err(DeckError::ImageOcclusionEmptyMasks.into());
+        }
     }
     Ok(())
 }

@@ -497,15 +497,19 @@ fn populate_latest_collection(
         for tag in &note.tags {
             normalized_tags.insert(tag.clone());
         }
-        for (template_ord, template) in notetype.templates.iter().enumerate() {
+        for (template_index, template) in notetype.templates.iter().enumerate() {
+            if !template_generates_card(note, notetype, template) {
+                continue;
+            }
             let target_deck_id = resolve_card_deck_id(note, template, &deck_ids);
+            let card_ord = template.ord.unwrap_or(template_index as u32);
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
-                    note_row * 10 + template_ord as i64,
+                    note_row * 10 + template_index as i64,
                     note_row,
                     target_deck_id,
-                    template_ord as i64,
+                    card_ord as i64,
                     note_row,
                     "{}"
                 ],
@@ -657,25 +661,30 @@ fn note_storage_values(
     note: &NormalizedNote,
     notetype: &NormalizedNotetype,
 ) -> Result<NoteStorageValues> {
-    let values = ordered_field_values(note, notetype);
+    let fields = ordered_notetype_fields(notetype);
+    let values = ordered_field_values(note, &fields);
     let first_field = values.first().map(String::as_str).unwrap_or("");
     let first_field_stripped = strip_html_preserving_media_filenames(first_field);
-    let sort_field = values
-        .first()
+    let sort_field_index = fields.iter().position(|field| field.sort).unwrap_or(0);
+    let sort_field_stripped = values
+        .get(sort_field_index)
         .map(|field| strip_html_preserving_media_filenames(field))
         .unwrap_or_default();
 
     Ok(NoteStorageValues {
         flds: values.join("\u{1f}"),
-        sfld: sort_field,
+        sfld: sort_field_stripped,
         csum: field_checksum(&first_field_stripped),
         mtime_secs: note.mtime_secs.unwrap_or(1),
     })
 }
 
-fn ordered_field_values(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Vec<String> {
-    ordered_notetype_fields(notetype)
-        .into_iter()
+fn ordered_field_values(
+    note: &NormalizedNote,
+    fields: &[&authoring_core::NormalizedField],
+) -> Vec<String> {
+    fields
+        .iter()
         .map(|field| note.fields.get(&field.name).cloned().unwrap_or_default())
         .collect()
 }
@@ -684,6 +693,51 @@ fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&authoring_core
     let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
     fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
     fields.into_iter().map(|(_, field)| field).collect()
+}
+
+fn template_generates_card(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    template: &authoring_core::NormalizedTemplate,
+) -> bool {
+    let Some(requirement) = template.generation_requirement.as_ref() else {
+        return true;
+    };
+
+    match requirement.kind.as_str() {
+        "none" => true,
+        "all" => requirement
+            .field_names
+            .iter()
+            .all(|name| note_field_is_nonempty(note, notetype, name)),
+        _ => requirement
+            .field_names
+            .iter()
+            .any(|name| note_field_is_nonempty(note, notetype, name)),
+    }
+}
+
+fn note_field_is_nonempty(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    field_name: &str,
+) -> bool {
+    if !notetype
+        .fields
+        .iter()
+        .any(|field| field.name.as_str() == field_name)
+    {
+        return false;
+    }
+
+    note.fields
+        .get(field_name)
+        .map(|value| {
+            !strip_html_preserving_media_filenames(value)
+                .trim()
+                .is_empty()
+        })
+        .unwrap_or(false)
 }
 
 fn field_checksum(text: &str) -> u32 {
@@ -697,11 +751,10 @@ fn strip_html_preserving_media_filenames(input: &str) -> String {
 
     while index < input.len() {
         if input[index..].starts_with("<!--") {
-            let Some(end) = input[index + 4..].find("-->") else {
-                break;
-            };
-            index += 4 + end + 3;
-            continue;
+            if let Some(end) = input[index + 4..].find("-->") {
+                index += 4 + end + 3;
+                continue;
+            }
         }
 
         let ch = input[index..]
@@ -710,14 +763,19 @@ fn strip_html_preserving_media_filenames(input: &str) -> String {
             .expect("index is within string bounds");
         if ch == '<' {
             let Some(tag_end) = find_html_tag_end(input, index) else {
-                break;
+                output.push(ch);
+                index += ch.len_utf8();
+                continue;
             };
             let tag = &input[index..=tag_end];
             if let Some((tag_name, closing)) = html_tag_name(tag) {
                 if !closing && is_raw_text_html_tag(tag_name) {
-                    index = find_raw_text_html_tag_end(input, tag_end + 1, tag_name)
-                        .unwrap_or(input.len());
-                    continue;
+                    if let Some(raw_text_end) =
+                        find_raw_text_html_tag_end(input, tag_end + 1, tag_name)
+                    {
+                        index = raw_text_end;
+                        continue;
+                    }
                 }
                 if !closing {
                     if let Some(filename) = media_filename_from_tag(tag) {
@@ -734,7 +792,7 @@ fn strip_html_preserving_media_filenames(input: &str) -> String {
         }
     }
 
-    html_escape::decode_html_entities(&output).into_owned()
+    decode_html_entities_for_anki_text(&output)
 }
 
 fn find_html_tag_end(input: &str, start: usize) -> Option<usize> {
@@ -886,11 +944,19 @@ fn extract_html_attr(tag: &str, attr: &str) -> Option<String> {
         };
 
         if name.eq_ignore_ascii_case(attr) {
-            return Some(html_escape::decode_html_entities(raw).into_owned());
+            return Some(decode_html_entities_for_anki_text(raw));
         }
     }
 
     None
+}
+
+fn decode_html_entities_for_anki_text(value: &str) -> String {
+    if !value.contains('&') {
+        return value.to_string();
+    }
+
+    html_escape::decode_html_entities(value).replace('\u{a0}', " ")
 }
 
 fn skip_html_whitespace(input: &str, mut index: usize) -> usize {
@@ -910,6 +976,7 @@ fn skip_html_whitespace(input: &str, mut index: usize) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     #[derive(Clone, PartialEq, Message)]
     struct UpstreamShapeMediaEntry {
@@ -953,5 +1020,102 @@ mod tests {
             apkg_media_size(u64::from(u32::MAX), "object:max").unwrap(),
             u32::MAX
         );
+    }
+
+    #[test]
+    fn strip_html_preserving_media_filenames_handles_anki_boundary_vectors() {
+        let cases = [
+            ("plain text", "plain text"),
+            ("AT&amp;T&nbsp;ok", "AT&T ok"),
+            ("<b>front</b>", "front"),
+            (
+                "<script>ignored()</script><style>.ignored{}</style><!-- hidden --><b>front</b>",
+                "front",
+            ),
+            ("a<!-- unclosed <b>front</b>", "afront"),
+            ("before <b unclosed", "before <b unclosed"),
+            (
+                r#"<img data-note="1 > 0" src="sample.jpg">"#,
+                " sample.jpg ",
+            ),
+            (
+                r#"<img src="sample.jpg" data-note="1 > 0">tail"#,
+                " sample.jpg tail",
+            ),
+            ("<IMG SRC = 'sample&#46;jpg'>", " sample.jpg "),
+            ("<img src=sample.jpg>", " sample.jpg "),
+            ("<video><source src=clip.webm></video>", " clip.webm "),
+            ("<audio><source src='voice.mp3'></audio>", " voice.mp3 "),
+            ("<object data=diagram.svg></object>", " diagram.svg "),
+            (
+                r#"<img src="data:image/png;base64,AAAA">"#,
+                " data:image/png;base64,AAAA ",
+            ),
+            (
+                r#"<svg><image href="ignored.png"></image><text>Label</text></svg>"#,
+                "Label",
+            ),
+            (
+                r#"<style>.card { background: url(bg.png); }</style>front"#,
+                "front",
+            ),
+            ("{{c1::<b>front</b>}}", "{{c1::front}}"),
+            (r#"<img alt="src=ghost.png" src="real.png">"#, " real.png "),
+        ];
+
+        for (input, expected) in cases {
+            assert_eq!(
+                strip_html_preserving_media_filenames(input),
+                expected,
+                "input: {input:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn field_checksum_uses_stripped_first_field_text_for_html_boundaries() {
+        let cases = [
+            ("AT&amp;T&nbsp;ok", 2_203_148_468),
+            (r#"<img data-note="1 > 0" src="sample.jpg">"#, 1_786_670_956),
+            ("{{c1::<b>front</b>}}", 2_031_771_444),
+        ];
+
+        for (input, expected_checksum) in cases {
+            let stripped = strip_html_preserving_media_filenames(input);
+            assert_eq!(
+                field_checksum(&stripped),
+                expected_checksum,
+                "input: {input:?}, stripped: {stripped:?}"
+            );
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn strip_html_preserving_media_filenames_never_panics(input in "\\PC*") {
+            let stripped = strip_html_preserving_media_filenames(&input);
+            prop_assert!(stripped.is_char_boundary(stripped.len()));
+        }
+
+        #[test]
+        fn strip_html_preserving_media_filenames_preserves_generated_media_attrs(
+            tag in prop::sample::select(vec!["img", "audio", "video", "source", "object"]),
+            attr in prop::sample::select(vec!["src", "data"]),
+            filename in "[A-Za-z0-9_.-]{1,32}",
+            quote in prop::sample::select(vec!["\"", "'", ""]),
+            before in "[A-Za-z0-9_-]{0,12}",
+            after in "[A-Za-z0-9_ >-]{0,12}",
+        ) {
+            let html = if quote.is_empty() {
+                format!(r#"<{tag} title="{before} >" {attr}={filename} data-note="{after}">"#)
+            } else {
+                format!(r#"<{tag} title="{before} >" {attr}={quote}{filename}{quote} data-note="{after}">"#)
+            };
+
+            prop_assert_eq!(
+                strip_html_preserving_media_filenames(&html),
+                format!(" {filename} ")
+            );
+        }
     }
 }

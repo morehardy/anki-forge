@@ -181,9 +181,11 @@ class Project:
                     Diagnostic(
                         code="PRODUCT.CLOZE_MARKER_MISSING",
                         severity="error",
+                        domain="product",
+                        stage="validate",
                         message="cloze note text must contain at least one cloze marker",
-                        source=f"project.notes[{index}].fields[\"text\"]",
-                        help="add a marker like {{c1::text}} to the cloze note text",
+                        path=f"project.notes[{index}].fields[\"text\"]",
+                        suggested_fix="add a marker like {{c1::text}} to the cloze note text",
                     ),
                 ),
             )
@@ -266,7 +268,7 @@ def _write_report_json(report: BuildReport, path: Path) -> None:
 def _report_to_json(report: BuildReport) -> dict[str, object]:
     return {
         "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
+        "schema_version": "phase4-build-report-v2",
         "tool_version": "anki-forge-python",
         "status": report.status,
         "comparison": report.comparison,
@@ -277,9 +279,11 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
             {
                 "code": diagnostic.code,
                 "severity": diagnostic.severity,
+                "domain": diagnostic.domain,
+                "stage": diagnostic.stage,
+                "path": diagnostic.path,
                 "message": diagnostic.message,
-                "source": diagnostic.source,
-                "help": diagnostic.help,
+                "suggested_fix": diagnostic.suggested_fix,
             }
             for diagnostic in report.diagnostics
         ],

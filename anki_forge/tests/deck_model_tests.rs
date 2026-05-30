@@ -77,9 +77,7 @@ fn deck_add_rejects_reserved_afid_explicit_stable_id() {
         )
         .expect_err("reserved AFID explicit stable id should be rejected");
 
-    assert!(error
-        .to_string()
-        .contains("AFID.IDENTITY_SNAPSHOT_INCOMPLETE"));
+    assert!(error.to_string().contains("DECK.RESERVED_AFID_NAMESPACE"));
     assert!(deck.notes().is_empty());
 }
 

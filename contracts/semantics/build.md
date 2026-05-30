@@ -37,10 +37,18 @@ For latest APKG output, the writer emits package metadata version 3, a zstd-comp
 `collection.anki21b`, a schema11 dummy `collection.anki2`, zstd-compressed media
 payloads, and a zstd-compressed protobuf `MediaEntries` map. The latest collection is
 constructed directly as a V18-compatible SQLite database using vendored schema anchors;
-it is not a byte-for-byte replay of Anki's full Rust upgrade path. Note rows derive
-`flds`, `sfld`, and `csum` from notetype field order. `notes.mod` uses explicit
-`notes[].mtime_secs` when supplied and deterministic fallback `1` otherwise; callers
-that need chronological APKG reimport updates must supply `mtime_secs`.
+it is not a byte-for-byte replay of Anki's full Rust upgrade path. Note row `flds`
+stores normalized field values as HTML-ready Anki field text separated by U+001F.
+The writer does not HTML-escape normalized fields again. `sfld` is derived from
+the field marked as the notetype sort field, or the first notetype field when no
+field is marked. `csum` follows Anki/rslib duplicate-check behavior: it is always
+the SHA-1 first four bytes of the first notetype field after HTML stripping, even
+when `sfld` comes from another sort field. The HTML stripping step removes tags,
+comment bodies, script/style bodies, and decodes HTML entities while preserving
+filenames from `img`, `audio`, `video`, `source`, and `object` `src`/`data`
+attributes. `notes.mod` uses explicit `notes[].mtime_secs` when supplied and
+deterministic fallback `1` otherwise; callers that need chronological APKG
+reimport updates must supply `mtime_secs`.
 
 Writer media payloads are read from the content-addressed media store. Staging
 media files are copy/reflink-derived inspect artifacts and are not the writer's
@@ -66,3 +74,6 @@ For `Phase 5A`, the writer also preserves product-layer template metadata:
 - card rows use Anki's routing order:
   `template.target_deck_name ?? note.deck_name`; this keeps per-note deck
   import semantics separate from template deck override semantics
+- card rows use normalized template ordinals for Anki card ordinals and are
+  emitted only when the template generation requirement is satisfied by the
+  note's stripped, non-empty field values

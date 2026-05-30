@@ -183,6 +183,8 @@ fn error(code: &str, source: &str, message: &str) -> Diagnostic {
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity: Severity::Error,
+        domain: None,
+        stage: None,
         message: message.into(),
         source: Some(SourcePath::new(source)),
         help: None,
@@ -193,6 +195,8 @@ fn warning(code: &str, source: &str, message: &str) -> Diagnostic {
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity: Severity::Warning,
+        domain: None,
+        stage: None,
         message: message.into(),
         source: Some(SourcePath::new(source)),
         help: None,

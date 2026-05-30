@@ -2,9 +2,11 @@ use authoring_core::{
     ingest_authoring_media, normalize, normalize_with_options, object_store_path,
     sort_media_bindings, sort_media_objects, sort_media_references, AuthoringDocument,
     AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
-    ComparisonContext, DiagnosticBehavior, MediaBinding, MediaObject, MediaPolicy, MediaReference,
-    MediaReferenceResolution, NormalizationRequest, NormalizeOptions, NormalizedIr,
+    ComparisonContext, DiagnosticBehavior, MediaBinding, MediaIngestResult, MediaObject,
+    MediaPolicy, MediaReference, MediaReferenceResolution, NormalizationRequest, NormalizeOptions,
+    NormalizedIr,
 };
+use base64::Engine as _;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
@@ -360,6 +362,52 @@ fn inline_base64_decode_diagnostic_has_readable_summary() {
     assert!(diagnostic.summary.contains("decode inline bytes"));
     assert!(diagnostic.summary.contains("media:inline"));
     assert!(!diagnostic.summary.contains("InlineBase64Decode"));
+}
+
+#[test]
+fn known_extension_mime_is_used_when_sniff_is_low_confidence_text() {
+    let root = unique_test_root("extension-mime-fallback");
+    let options = test_options(&root, &root.join("store"));
+    let media = vec![
+        inline_media("media:css", "theme.css", b".card { color: red; }\n"),
+        inline_media("media:js", "script.js", b"export const answer = 42;\n"),
+        inline_media("media:html", "fragment.html", b"<main>hello</main>\n"),
+        inline_media("media:mp4", "clip.mp4", b"opaque mp4 placeholder\n"),
+        inline_media("media:woff2", "font.woff2", b"opaque font placeholder\n"),
+    ];
+
+    let result = ingest_authoring_media(&media, &options).expect("ingest known extensions");
+
+    assert_eq!(mime_for_export(&result, "theme.css"), Some("text/css"));
+    assert_eq!(
+        mime_for_export(&result, "script.js"),
+        Some("text/javascript")
+    );
+    assert_eq!(mime_for_export(&result, "fragment.html"), Some("text/html"));
+    assert_eq!(mime_for_export(&result, "clip.mp4"), Some("video/mp4"));
+    assert_eq!(mime_for_export(&result, "font.woff2"), Some("font/woff2"));
+    assert!(result
+        .diagnostics
+        .iter()
+        .all(|item| item.code != "MEDIA.UNKNOWN_MIME"));
+}
+
+#[test]
+fn high_confidence_sniff_conflicts_with_known_extension_mime() {
+    let root = unique_test_root("extension-mime-conflict");
+    let options = test_options(&root, &root.join("store"));
+    let media = vec![inline_media(
+        "media:image-as-audio",
+        "image-as-audio.mp3",
+        b"\x89PNG\r\n\x1a\npayload",
+    )];
+
+    let err = ingest_authoring_media(&media, &options).unwrap_err();
+
+    assert!(err
+        .diagnostics
+        .iter()
+        .any(|item| item.code == "MEDIA.DECLARED_MIME_MISMATCH"));
 }
 
 #[test]
@@ -919,6 +967,7 @@ fn normalize_scans_templates_browser_templates_and_css_references() {
             target_deck_name: None,
             browser_font_name: None,
             browser_font_size: None,
+            generation_requirement: None,
         },
         ".card {\n  background: url(\"style.txt?v=1#hash\");\n}\n",
         media,
@@ -963,6 +1012,7 @@ fn normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_l
             target_deck_name: None,
             browser_font_name: None,
             browser_font_size: None,
+            generation_requirement: None,
         },
         ".bad {\n  background: url( missing-style.png?v=1 );\n}\n.more { background: url(bad%2Fstyle.png); }\n",
         vec![],
@@ -1136,6 +1186,7 @@ fn custom_authoring_doc(
                 config_id: None,
                 tag: None,
                 prevent_deletion: false,
+                sort: false,
             }]),
             templates: Some(vec![template]),
             css: Some(css.into()),
@@ -1220,6 +1271,29 @@ fn reference_resolution_key(resolution: &MediaReferenceResolution) -> String {
         MediaReferenceResolution::Missing => "missing".into(),
         MediaReferenceResolution::Skipped { skip_reason } => format!("skipped:{skip_reason}"),
     }
+}
+
+fn inline_media(id: &str, desired_filename: &str, bytes: &[u8]) -> AuthoringMedia {
+    AuthoringMedia {
+        id: id.into(),
+        desired_filename: desired_filename.into(),
+        source: AuthoringMediaSource::InlineBytes {
+            data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+        },
+        declared_mime: None,
+    }
+}
+
+fn mime_for_export<'a>(result: &'a MediaIngestResult, export_filename: &str) -> Option<&'a str> {
+    let binding = result
+        .bindings
+        .iter()
+        .find(|binding| binding.export_filename == export_filename)?;
+    result
+        .objects
+        .iter()
+        .find(|object| object.id == binding.object_id)
+        .map(|object| object.mime.as_str())
 }
 
 fn test_options(base_dir: &std::path::Path, media_store_dir: &std::path::Path) -> NormalizeOptions {

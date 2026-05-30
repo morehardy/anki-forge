@@ -10,7 +10,9 @@ where
     let mut values: Vec<F> = fields.into_iter().collect();
     values.sort();
     values.dedup();
-    anyhow::ensure!(!values.is_empty(), "AFID.IDENTITY_FIELDS_EMPTY");
+    if values.is_empty() {
+        return Err(DeckError::IdentityFieldsEmpty.into());
+    }
     Ok(values)
 }
 
@@ -77,10 +79,9 @@ where
         I: IntoIterator<Item = F>,
     {
         let reason_code = reason_code.into().trim().to_string();
-        anyhow::ensure!(
-            !reason_code.is_empty(),
-            "AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED"
-        );
+        if reason_code.is_empty() {
+            return Err(DeckError::NoteLevelIdentityOverrideReasonRequired.into());
+        }
         Ok(Self {
             fields: canonicalize_fields(fields)?,
             reason_code,
@@ -150,36 +151,187 @@ pub struct ResolvedIdentitySnapshot {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DeckError {
-    StableIdDuplicate { stable_id: String },
-    IdentityDuplicatePayload { stable_id: String },
-    IdentityCollision { stable_id: String },
+    StableIdBlank,
+    StableIdDuplicate {
+        stable_id: String,
+    },
+    ReservedAfidNamespace {
+        stable_id: String,
+    },
+    IdentitySnapshotMissing {
+        stable_id: String,
+    },
+    IdentitySnapshotNoteIdMismatch {
+        snapshot_stable_id: String,
+        note_id: String,
+    },
+    IdentitySnapshotHashMismatch {
+        stable_id: String,
+    },
+    IdentitySnapshotIncomplete {
+        stable_id: String,
+    },
+    IdentityDuplicatePayload {
+        stable_id: String,
+    },
+    IdentityCollision {
+        stable_id: String,
+    },
+    IdentityFieldsEmpty,
+    IdentityComponentEmpty {
+        component: String,
+    },
+    NoteLevelIdentityOverrideReasonRequired,
+    ClozeMalformed {
+        message: String,
+    },
+    ClozeOrdInvalid {
+        message: String,
+    },
+    ClozeNestedUnsupported,
+    ImageOcclusionImageDimensionsMissing,
+    ImageOcclusionRectEmpty,
+    ImageOcclusionRectOutOfBounds,
+    ImageOcclusionRectDuplicate,
+    ImageOcclusionUnknownMedia {
+        media_name: String,
+    },
+    ImageOcclusionEmptyMasks,
+    ValidationFailed {
+        code: crate::diagnostics::ErrorCode,
+        message: String,
+    },
 }
 
 impl DeckError {
-    pub fn code(&self) -> &'static str {
+    pub fn code(&self) -> crate::diagnostics::ErrorCode {
         match self {
-            Self::StableIdDuplicate { .. } => "AFID.STABLE_ID_DUPLICATE",
-            Self::IdentityDuplicatePayload { .. } => "AFID.IDENTITY_DUPLICATE_PAYLOAD",
-            Self::IdentityCollision { .. } => "AFID.IDENTITY_COLLISION",
+            Self::StableIdBlank => crate::diagnostics::ErrorCode::StableIdBlank,
+            Self::StableIdDuplicate { .. } => crate::diagnostics::ErrorCode::StableIdDuplicate,
+            Self::ReservedAfidNamespace { .. } => {
+                crate::diagnostics::ErrorCode::ReservedAfidNamespace
+            }
+            Self::IdentitySnapshotIncomplete { .. } => {
+                crate::diagnostics::ErrorCode::IdentitySnapshotIncomplete
+            }
+            Self::IdentitySnapshotMissing { .. } => {
+                crate::diagnostics::ErrorCode::IdentitySnapshotMissing
+            }
+            Self::IdentitySnapshotNoteIdMismatch { .. } => {
+                crate::diagnostics::ErrorCode::IdentitySnapshotNoteIdMismatch
+            }
+            Self::IdentitySnapshotHashMismatch { .. } => {
+                crate::diagnostics::ErrorCode::IdentitySnapshotHashMismatch
+            }
+            Self::IdentityDuplicatePayload { .. } => {
+                crate::diagnostics::ErrorCode::IdentityDuplicatePayload
+            }
+            Self::IdentityCollision { .. } => crate::diagnostics::ErrorCode::IdentityCollision,
+            Self::IdentityFieldsEmpty => crate::diagnostics::ErrorCode::IdentityFieldsEmpty,
+            Self::IdentityComponentEmpty { component } => match component.as_str() {
+                "io rects" => crate::diagnostics::ErrorCode::ImageOcclusionEmptyMasks,
+                "missing io media" => crate::diagnostics::ErrorCode::ImageOcclusionUnknownMedia,
+                _ => crate::diagnostics::ErrorCode::IdentityComponentEmpty,
+            },
+            Self::NoteLevelIdentityOverrideReasonRequired => {
+                crate::diagnostics::ErrorCode::NoteLevelIdentityOverrideReasonRequired
+            }
+            Self::ClozeMalformed { .. } => crate::diagnostics::ErrorCode::ClozeMalformed,
+            Self::ClozeOrdInvalid { .. } => crate::diagnostics::ErrorCode::ClozeOrdInvalid,
+            Self::ClozeNestedUnsupported => crate::diagnostics::ErrorCode::ClozeNestedUnsupported,
+            Self::ImageOcclusionImageDimensionsMissing => {
+                crate::diagnostics::ErrorCode::ImageOcclusionImageDimensionsMissing
+            }
+            Self::ImageOcclusionRectEmpty => crate::diagnostics::ErrorCode::ImageOcclusionRectEmpty,
+            Self::ImageOcclusionRectOutOfBounds => {
+                crate::diagnostics::ErrorCode::ImageOcclusionRectOutOfBounds
+            }
+            Self::ImageOcclusionRectDuplicate => {
+                crate::diagnostics::ErrorCode::ImageOcclusionRectDuplicate
+            }
+            Self::ImageOcclusionUnknownMedia { .. } => {
+                crate::diagnostics::ErrorCode::ImageOcclusionUnknownMedia
+            }
+            Self::ImageOcclusionEmptyMasks => {
+                crate::diagnostics::ErrorCode::ImageOcclusionEmptyMasks
+            }
+            Self::ValidationFailed { code, .. } => code.clone(),
         }
     }
 
     pub fn stable_id(&self) -> &str {
         match self {
+            Self::StableIdBlank => "",
             Self::StableIdDuplicate { stable_id }
+            | Self::ReservedAfidNamespace { stable_id }
+            | Self::IdentitySnapshotMissing { stable_id }
+            | Self::IdentitySnapshotHashMismatch { stable_id }
+            | Self::IdentitySnapshotIncomplete { stable_id }
             | Self::IdentityDuplicatePayload { stable_id }
             | Self::IdentityCollision { stable_id } => stable_id,
+            Self::IdentitySnapshotNoteIdMismatch {
+                snapshot_stable_id, ..
+            } => snapshot_stable_id,
+            Self::IdentityFieldsEmpty => "",
+            Self::IdentityComponentEmpty { component } => component,
+            Self::ClozeMalformed { message } | Self::ClozeOrdInvalid { message } => message,
+            Self::NoteLevelIdentityOverrideReasonRequired
+            | Self::ClozeNestedUnsupported
+            | Self::ImageOcclusionImageDimensionsMissing
+            | Self::ImageOcclusionRectEmpty
+            | Self::ImageOcclusionRectOutOfBounds
+            | Self::ImageOcclusionRectDuplicate
+            | Self::ImageOcclusionEmptyMasks
+            | Self::ValidationFailed { .. } => "",
+            Self::ImageOcclusionUnknownMedia { media_name } => media_name,
         }
     }
 }
 
 impl std::fmt::Display for DeckError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}: {}", self.code(), self.stable_id())
+        match self {
+            Self::StableIdBlank => write!(f, "{}: stable_id must not be blank", self.code()),
+            Self::ReservedAfidNamespace { stable_id } => write!(
+                f,
+                "{}: explicit stable_id cannot use reserved AFID namespace: {}",
+                self.code(),
+                stable_id
+            ),
+            Self::IdentitySnapshotNoteIdMismatch {
+                snapshot_stable_id,
+                note_id,
+            } => write!(f, "{}: {} != {}", self.code(), snapshot_stable_id, note_id),
+            Self::ImageOcclusionRectEmpty
+            | Self::ImageOcclusionRectOutOfBounds
+            | Self::ImageOcclusionRectDuplicate
+            | Self::ImageOcclusionImageDimensionsMissing
+            | Self::IdentityFieldsEmpty
+            | Self::NoteLevelIdentityOverrideReasonRequired
+            | Self::ClozeNestedUnsupported => write!(f, "{}", self.code()),
+            Self::ImageOcclusionUnknownMedia { media_name } => {
+                write!(f, "{}: unknown media {}", self.code(), media_name)
+            }
+            Self::ImageOcclusionEmptyMasks => {
+                write!(
+                    f,
+                    "{}: image occlusion note requires at least one rect",
+                    self.code()
+                )
+            }
+            Self::ValidationFailed { code, message } => write!(f, "{code}: {message}"),
+            _ => write!(f, "{}: {}", self.code(), self.stable_id()),
+        }
     }
 }
 
 impl std::error::Error for DeckError {}
+
+impl crate::diagnostics::ErrorCodeExt for DeckError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        DeckError::code(self)
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Deck {
@@ -404,14 +556,7 @@ impl<'de> Deserialize<'de> for RegisteredMedia {
 }
 
 fn legacy_mime_from_name(name: &str) -> String {
-    match name.rsplit('.').next().map(|ext| ext.to_ascii_lowercase()) {
-        Some(ext) if ext == "png" => "image/png".into(),
-        Some(ext) if ext == "jpg" || ext == "jpeg" => "image/jpeg".into(),
-        Some(ext) if ext == "svg" => "image/svg+xml".into(),
-        Some(ext) if ext == "mp3" => "audio/mpeg".into(),
-        Some(ext) if ext == "wav" => "audio/wav".into(),
-        _ => "application/octet-stream".into(),
-    }
+    authoring_core::mime_from_filename_or_octet(name)
 }
 
 impl Deck {

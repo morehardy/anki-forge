@@ -1,5 +1,6 @@
 use crate::deck::model::{
-    BasicIdentityField, BasicNote, ClozeNote, Deck, DeckNote, IdentityProvenance, IoMode, IoNote,
+    BasicIdentityField, BasicNote, ClozeNote, Deck, DeckError, DeckNote, IdentityProvenance,
+    IoMode, IoNote,
 };
 use serde::Serialize;
 use std::collections::BTreeSet;
@@ -229,40 +230,45 @@ fn resolve_cloze_identity(note: &ClozeNote) -> anyhow::Result<ResolvedIdentity> 
 
 fn resolve_io_identity(deck: &Deck, note: &IoNote) -> anyhow::Result<ResolvedIdentity> {
     if note.rects.is_empty() {
-        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: io rects");
+        return Err(DeckError::IdentityComponentEmpty {
+            component: "io rects".into(),
+        }
+        .into());
     }
 
-    let media = deck
-        .media
-        .get(note.image.name())
-        .ok_or_else(|| anyhow::anyhow!("AFID.IDENTITY_COMPONENT_EMPTY: missing io media"))?;
+    let media =
+        deck.media
+            .get(note.image.name())
+            .ok_or_else(|| DeckError::IdentityComponentEmpty {
+                component: "missing io media".into(),
+            })?;
     let raster_image = media
         .raster_image
         .as_ref()
-        .ok_or_else(|| anyhow::anyhow!("AFID.IO_IMAGE_DIMENSIONS_MISSING"))?;
+        .ok_or(DeckError::ImageOcclusionImageDimensionsMissing)?;
 
     let mut seen_rects = BTreeSet::new();
     let mut shapes = Vec::with_capacity(note.rects.len());
     for rect in &note.rects {
         if rect.width == 0 || rect.height == 0 {
-            anyhow::bail!("AFID.IO_RECT_EMPTY");
+            return Err(DeckError::ImageOcclusionRectEmpty.into());
         }
 
         let right = rect
             .x
             .checked_add(rect.width)
-            .ok_or_else(|| anyhow::anyhow!("AFID.IO_RECT_OUT_OF_BOUNDS"))?;
+            .ok_or(DeckError::ImageOcclusionRectOutOfBounds)?;
         let bottom = rect
             .y
             .checked_add(rect.height)
-            .ok_or_else(|| anyhow::anyhow!("AFID.IO_RECT_OUT_OF_BOUNDS"))?;
+            .ok_or(DeckError::ImageOcclusionRectOutOfBounds)?;
         if right > raster_image.width_px || bottom > raster_image.height_px {
-            anyhow::bail!("AFID.IO_RECT_OUT_OF_BOUNDS");
+            return Err(DeckError::ImageOcclusionRectOutOfBounds.into());
         }
 
         let rect_key = (rect.x, rect.y, rect.width, rect.height);
         if !seen_rects.insert(rect_key) {
-            anyhow::bail!("AFID.IO_RECT_DUPLICATE");
+            return Err(DeckError::ImageOcclusionRectDuplicate.into());
         }
 
         shapes.push(IoShapeComponent::Rect {
@@ -323,7 +329,10 @@ fn parse_cloze_segments(input: &str) -> anyhow::Result<Vec<ClozeSegment>> {
     }
 
     if slot == 0 {
-        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: cloze deletions");
+        return Err(DeckError::IdentityComponentEmpty {
+            component: "cloze deletions".into(),
+        }
+        .into());
     }
 
     Ok(segments)
@@ -364,14 +373,19 @@ fn parse_cloze_deletion(
     }
 
     if !input[digits_end..].starts_with("::") {
-        anyhow::bail!("AFID.CLOZE_MALFORMED: expected cloze body delimiter");
+        return Err(DeckError::ClozeMalformed {
+            message: "expected cloze body delimiter".into(),
+        }
+        .into());
     }
 
     let ord = input[digits_start..digits_end]
         .parse::<u32>()
         .ok()
         .and_then(NonZeroU32::new)
-        .ok_or_else(|| anyhow::anyhow!("AFID.CLOZE_ORD_INVALID: cloze ordinal"))?;
+        .ok_or_else(|| DeckError::ClozeOrdInvalid {
+            message: "cloze ordinal".into(),
+        })?;
 
     let body_start = digits_end + "::".len();
     let mut cursor = body_start;
@@ -380,7 +394,7 @@ fn parse_cloze_deletion(
 
     while cursor < input.len() {
         if is_cloze_start_at(input, cursor) {
-            anyhow::bail!("AFID.CLOZE_NESTED_UNSUPPORTED: nested cloze deletion");
+            return Err(DeckError::ClozeNestedUnsupported.into());
         }
         if input[cursor..].starts_with("::") {
             hint_start = Some(cursor + "::".len());
@@ -397,7 +411,7 @@ fn parse_cloze_deletion(
     if hint_start.is_some() {
         while cursor < input.len() {
             if is_cloze_start_at(input, cursor) {
-                anyhow::bail!("AFID.CLOZE_NESTED_UNSUPPORTED: nested cloze deletion");
+                return Err(DeckError::ClozeNestedUnsupported.into());
             }
             if input[cursor..].starts_with("}}") {
                 close_start = Some(cursor);
@@ -407,13 +421,17 @@ fn parse_cloze_deletion(
         }
     }
 
-    let close_start =
-        close_start.ok_or_else(|| anyhow::anyhow!("AFID.CLOZE_MALFORMED: missing close"))?;
+    let close_start = close_start.ok_or_else(|| DeckError::ClozeMalformed {
+        message: "missing close".into(),
+    })?;
     let body_end = hint_start
         .map(|start| start - "::".len())
         .unwrap_or(close_start);
     if body_start == body_end {
-        anyhow::bail!("AFID.CLOZE_MALFORMED: empty cloze body");
+        return Err(DeckError::ClozeMalformed {
+            message: "empty cloze body".into(),
+        }
+        .into());
     }
 
     let body = normalize_field_text_for_identity(&input[body_start..body_end]);
@@ -457,7 +475,10 @@ fn cloze_components_from_segments(segments: &[ClozeSegment]) -> anyhow::Result<C
     }
 
     if deletions.is_empty() {
-        anyhow::bail!("AFID.IDENTITY_COMPONENT_EMPTY: cloze deletions");
+        return Err(DeckError::IdentityComponentEmpty {
+            component: "cloze deletions".into(),
+        }
+        .into());
     }
 
     Ok(ClozeComponents {

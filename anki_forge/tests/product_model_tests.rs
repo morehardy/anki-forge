@@ -44,6 +44,35 @@ fn product_v2_custom_typed_media_fixture_deserializes() {
 }
 
 #[test]
+fn product_v2_unknown_stock_notetype_is_not_exposed_as_basic_in_compat_view() {
+    let raw = r#"{
+      "product_document_version": "product-v2",
+      "document_id": "future-stock",
+      "default_deck_name": "Future",
+      "note_types": [{
+        "kind": "stock",
+        "id": "future_stock",
+        "name": "Future Stock",
+        "fields": [],
+        "templates": []
+      }],
+      "notes": [{
+        "kind": "stock",
+        "note_type_id": "future_stock",
+        "deck_name": "Future",
+        "fields": {"front": {"kind": "text", "value": "front"}}
+      }],
+      "media": []
+    }"#;
+
+    let doc: anki_forge::product::ProductDocument =
+        serde_json::from_str(raw).expect("future stock product-v2");
+
+    assert_eq!(doc.note_types().len(), 0);
+    assert_eq!(doc.notes().len(), 0);
+}
+
+#[test]
 fn legacy_unversioned_product_document_still_deserializes() {
     let raw = r#"{"document_id":"legacy","note_types":[],"notes":[]}"#;
     let doc: anki_forge::product::ProductDocument =

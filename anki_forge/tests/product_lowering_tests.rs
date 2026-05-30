@@ -1039,6 +1039,297 @@ fn product_v2_image_content_renders_like_builder_media_ref() {
 }
 
 #[test]
+fn product_v2_sound_content_renders_real_anki_sound_markup() {
+    let plan = product_v2_fixture("custom-typed-media.json")
+        .lower()
+        .expect("lower typed media fixture");
+
+    let note = plan.authoring_document.notes.first().expect("lowered note");
+    assert_eq!(
+        note.fields.get("Audio").map(String::as_str),
+        Some("[sound:hello.wav]")
+    );
+}
+
+#[test]
+fn rust_product_media_registry_declares_expanded_mime_types_from_export_name() {
+    let mut project = Project::new("Expanded MIME")
+        .stable_id("expanded-mime")
+        .default_deck("Expanded MIME");
+
+    for export_as in [
+        "diagram.webp",
+        "clip.mp4",
+        "movie.webm",
+        "voice.ogg",
+        "voice.opus",
+        "song.m4a",
+        "raw.aac",
+        "handout.pdf",
+        "theme.css",
+        "script.js",
+        "fragment.html",
+        "font.ttf",
+        "font.otf",
+        "font.woff",
+        "font.woff2",
+    ] {
+        project
+            .media_mut()
+            .add_bytes(
+                format!("{export_as}.source"),
+                format!("bytes for {export_as}").into_bytes(),
+            )
+            .expect("register bytes")
+            .export_as(export_as)
+            .expect("export media");
+    }
+
+    let plan = project.lower().expect("lower product media");
+    let declared_by_name = plan
+        .authoring_document
+        .media
+        .iter()
+        .map(|media| {
+            (
+                media.desired_filename.as_str(),
+                media.declared_mime.as_deref(),
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+
+    assert_eq!(declared_by_name["diagram.webp"], Some("image/webp"));
+    assert_eq!(declared_by_name["clip.mp4"], Some("video/mp4"));
+    assert_eq!(declared_by_name["movie.webm"], Some("video/webm"));
+    assert_eq!(declared_by_name["voice.ogg"], Some("audio/ogg"));
+    assert_eq!(declared_by_name["voice.opus"], Some("audio/opus"));
+    assert_eq!(declared_by_name["song.m4a"], Some("audio/mp4"));
+    assert_eq!(declared_by_name["raw.aac"], Some("audio/aac"));
+    assert_eq!(declared_by_name["handout.pdf"], Some("application/pdf"));
+    assert_eq!(declared_by_name["theme.css"], Some("text/css"));
+    assert_eq!(declared_by_name["script.js"], Some("text/javascript"));
+    assert_eq!(declared_by_name["fragment.html"], Some("text/html"));
+    assert_eq!(declared_by_name["font.ttf"], Some("font/ttf"));
+    assert_eq!(declared_by_name["font.otf"], Some("font/otf"));
+    assert_eq!(declared_by_name["font.woff"], Some("font/woff"));
+    assert_eq!(declared_by_name["font.woff2"], Some("font/woff2"));
+}
+
+#[test]
+fn product_v2_normalization_uses_export_extension_mime_without_declared_mime() {
+    let document = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "product-v2-extension-mime",
+          "default_deck_name": "Media",
+          "note_types": [{
+            "kind": "stock",
+            "id": "basic",
+            "name": "Basic",
+            "fields": [
+              {"name": "Front", "key": "front", "required": true},
+              {"name": "Back", "key": "back", "required": false}
+            ],
+            "templates": [],
+            "css": null
+          }],
+          "notes": [{
+            "kind": "stock",
+            "note_type_id": "basic",
+            "stable_id": "extension:mime",
+            "deck_name": "Media",
+            "fields": {
+              "front": {"kind": "text", "value": "front"},
+              "back": {"kind": "text", "value": "back"}
+            }
+          }],
+          "media": [
+            {"id": "media:css", "source": {"kind": "inline_base64", "source_label": "theme", "data_base64": "LmNhcmQgeyBjb2xvcjogcmVkOyB9Cg=="}, "export_as": "theme.css"},
+            {"id": "media:webm", "source": {"kind": "inline_base64", "source_label": "clip", "data_base64": "d2VibSBwbGFjZWhvbGRlcg=="}, "export_as": "clip.webm"},
+            {"id": "media:woff2", "source": {"kind": "inline_base64", "source_label": "font", "data_base64": "Zm9udCBwbGFjZWhvbGRlcg=="}, "export_as": "font.woff2"}
+          ]
+        }"#,
+    );
+
+    let normalized = Project::from_product_document(document)
+        .normalize()
+        .expect("normalize product-v2 media");
+    let mime_by_binding = normalized
+        .media_bindings
+        .iter()
+        .filter_map(|binding| {
+            normalized
+                .media_objects
+                .iter()
+                .find(|object| object.id == binding.object_id)
+                .map(|object| (binding.export_filename.as_str(), object.mime.as_str()))
+        })
+        .collect::<BTreeMap<_, _>>();
+
+    assert_eq!(mime_by_binding["theme.css"], "text/css");
+    assert_eq!(mime_by_binding["clip.webm"], "video/webm");
+    assert_eq!(mime_by_binding["font.woff2"], "font/woff2");
+}
+
+#[test]
+fn product_v2_custom_sort_flag_is_preserved_on_lowered_authoring_field() {
+    let plan = product_v2_fixture("custom-typed-media.json")
+        .lower()
+        .expect("lower typed media fixture");
+    let notetype = plan.authoring_document.notetypes.first().expect("notetype");
+    let fields = notetype.fields.as_ref().expect("custom fields");
+
+    assert!(fields
+        .iter()
+        .any(|field| field.name == "Prompt" && field.sort));
+    assert!(fields
+        .iter()
+        .all(|field| field.name == "Prompt" || !field.sort));
+}
+
+#[test]
+fn product_v2_generation_rule_lowers_to_writer_requirement_metadata() {
+    let plan = product_v2_fixture("custom-typed-media.json")
+        .lower()
+        .expect("lower typed media fixture");
+    let notetype = plan.authoring_document.notetypes.first().expect("notetype");
+    let template = notetype
+        .templates
+        .as_ref()
+        .expect("custom templates")
+        .first()
+        .expect("template");
+    let requirement = template
+        .generation_requirement
+        .as_ref()
+        .expect("generation requirement");
+
+    assert_eq!(requirement.kind, "all");
+    assert_eq!(requirement.field_names, vec!["Prompt"]);
+}
+
+#[test]
+fn product_v2_unknown_stock_notetype_is_diagnostic_not_basic_lowering() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "future-stock",
+          "default_deck_name": "Future",
+          "note_types": [{
+            "kind": "stock",
+            "id": "future_stock",
+            "name": "Future Stock",
+            "fields": [],
+            "templates": [],
+            "source_path": "project.note_types[\"future_stock\"]"
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("unsupported stock should lower with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.STOCK_NOTE_TYPE_INVALID"));
+    assert!(plan.authoring_document.notetypes.is_empty());
+}
+
+#[test]
+fn product_v2_custom_reorder_preserves_config_ids_and_updates_ords() {
+    let left = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "reorder-left",
+          "default_deck_name": "Reorder",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [
+              {"name": "Prompt", "key": "prompt"},
+              {"name": "Answer", "key": "answer"}
+            ],
+            "templates": [
+              {"name": "Recognition", "key": "recognition", "front": "{{Prompt}}", "back": "{{Answer}}", "generation_rule": {"kind": "all", "fields": ["prompt"]}},
+              {"name": "Production", "key": "production", "front": "{{Answer}}", "back": "{{Prompt}}", "generation_rule": {"kind": "all", "fields": ["answer"]}}
+            ],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower left order");
+    let right = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "reorder-right",
+          "default_deck_name": "Reorder",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "name": "Custom",
+            "fields": [
+              {"name": "Answer", "key": "answer"},
+              {"name": "Prompt", "key": "prompt"}
+            ],
+            "templates": [
+              {"name": "Production", "key": "production", "front": "{{Answer}}", "back": "{{Prompt}}", "generation_rule": {"kind": "all", "fields": ["answer"]}},
+              {"name": "Recognition", "key": "recognition", "front": "{{Prompt}}", "back": "{{Answer}}", "generation_rule": {"kind": "all", "fields": ["prompt"]}}
+            ],
+            "identity": {"kind": "fields", "fields": ["prompt"]},
+            "css": null
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("lower right order");
+
+    let left_notetype = left.authoring_document.notetypes.first().expect("left");
+    let right_notetype = right.authoring_document.notetypes.first().expect("right");
+    let left_prompt = left_notetype
+        .fields
+        .as_ref()
+        .expect("left fields")
+        .iter()
+        .find(|field| field.name == "Prompt")
+        .expect("left prompt");
+    let right_prompt = right_notetype
+        .fields
+        .as_ref()
+        .expect("right fields")
+        .iter()
+        .find(|field| field.name == "Prompt")
+        .expect("right prompt");
+    let left_recognition = left_notetype
+        .templates
+        .as_ref()
+        .expect("left templates")
+        .iter()
+        .find(|template| template.name == "Recognition")
+        .expect("left recognition");
+    let right_recognition = right_notetype
+        .templates
+        .as_ref()
+        .expect("right templates")
+        .iter()
+        .find(|template| template.name == "Recognition")
+        .expect("right recognition");
+
+    assert_eq!(left_prompt.config_id, right_prompt.config_id);
+    assert_ne!(left_prompt.ord, right_prompt.ord);
+    assert_eq!(left_recognition.config_id, right_recognition.config_id);
+    assert_ne!(left_recognition.ord, right_recognition.ord);
+}
+
+#[test]
 fn product_v2_empty_generation_rule_fields_are_diagnostic() {
     let codes = diagnostic_codes(product_v2_inline(
         r#"{

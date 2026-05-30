@@ -7,8 +7,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedFieldMetadata,
-    NormalizedIr, NormalizedNote, NormalizedNotetype,
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedField,
+    NormalizedFieldMetadata, NormalizedGenerationRequirement, NormalizedIr, NormalizedNote,
+    NormalizedNotetype, NormalizedTemplate,
 };
 use sha1::Digest;
 use writer_core::{
@@ -411,6 +412,75 @@ fn inspect_apkg_reports_complete_observations_and_counts() {
 }
 
 #[test]
+fn inspect_apkg_preserves_sort_field_and_generation_requirement() {
+    let root = unique_artifact_root("inspect-apkg-sort-generation");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/inspect-apkg-sort-generation",
+    );
+    let normalized = sample_custom_generation_normalized_ir();
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let staging_report = inspect_staging(target.staging_manifest_path()).unwrap();
+    let apkg_report = inspect_apkg(root.join("package.apkg")).unwrap();
+
+    let staging_sort_field = staging_report
+        .observations
+        .fields
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::field[Audio]")
+        .expect("staging sort field observation");
+    let apkg_sort_field = apkg_report
+        .observations
+        .fields
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::field[Audio]")
+        .expect("apkg sort field observation");
+    assert_eq!(staging_sort_field["sort"], true);
+    assert_eq!(apkg_sort_field["sort"], true);
+
+    let apkg_prompt_field = apkg_report
+        .observations
+        .fields
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::field[Prompt]")
+        .expect("apkg prompt field observation");
+    assert!(apkg_prompt_field.get("sort").is_none());
+
+    let expected_requirement = serde_json::json!({
+        "kind": "all",
+        "field_names": ["Prompt", "Audio"]
+    });
+    let staging_template = staging_report
+        .observations
+        .templates
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::template[Card]")
+        .expect("staging template observation");
+    let apkg_template = apkg_report
+        .observations
+        .templates
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::template[Card]")
+        .expect("apkg template observation");
+    assert_eq!(
+        staging_template["generation_requirement"],
+        expected_requirement
+    );
+    assert_eq!(
+        apkg_template["generation_requirement"],
+        expected_requirement
+    );
+}
+
+#[test]
 fn inspect_apkg_does_not_report_forge_only_media_ids() {
     let root = unique_artifact_root("inspect-apkg-cas");
     let media_store = root.join("media-store");
@@ -626,6 +696,72 @@ fn sample_basic_normalized_ir() -> NormalizedIr {
                 ("Back".into(), "back".into()),
             ]),
             tags: vec!["demo".into()],
+            mtime_secs: None,
+        }],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
+    }
+}
+
+fn sample_custom_generation_normalized_ir() -> NormalizedIr {
+    NormalizedIr {
+        kind: "normalized-ir".into(),
+        schema_version: "0.1.0".into(),
+        document_id: "custom-generation".into(),
+        resolved_identity: "document:custom-generation".into(),
+        notetypes: vec![NormalizedNotetype {
+            id: "media-card".into(),
+            kind: "normal".into(),
+            name: "Media Card".into(),
+            original_stock_kind: None,
+            original_id: None,
+            fields: vec![
+                NormalizedField {
+                    name: "Prompt".into(),
+                    ord: Some(0),
+                    config_id: Some(101),
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: false,
+                },
+                NormalizedField {
+                    name: "Audio".into(),
+                    ord: Some(1),
+                    config_id: Some(102),
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: true,
+                },
+            ],
+            templates: vec![NormalizedTemplate {
+                name: "Card".into(),
+                ord: Some(0),
+                config_id: Some(201),
+                question_format: "{{Prompt}} {{Audio}}".into(),
+                answer_format: "{{Prompt}}".into(),
+                browser_question_format: None,
+                browser_answer_format: None,
+                target_deck_name: None,
+                browser_font_name: None,
+                browser_font_size: None,
+                generation_requirement: Some(NormalizedGenerationRequirement {
+                    kind: "all".into(),
+                    field_names: vec!["Prompt".into(), "Audio".into()],
+                }),
+            }],
+            css: String::new(),
+            field_metadata: vec![],
+        }],
+        notes: vec![NormalizedNote {
+            id: "note-1".into(),
+            notetype_id: "media-card".into(),
+            deck_name: "Default".into(),
+            fields: BTreeMap::from([
+                ("Prompt".into(), "front".into()),
+                ("Audio".into(), "audio".into()),
+            ]),
+            tags: vec![],
             mtime_secs: None,
         }],
         media_objects: vec![],
