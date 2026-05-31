@@ -167,6 +167,7 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
             unsafe_references: 0,
             unused_bindings: 1,
             unique_bytes: 31,
+            entries: Vec::new(),
         },
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new("MEDIA.UNUSED_BINDING"),
@@ -212,6 +213,7 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             unsafe_references: 0,
             unused_bindings: 1,
             unique_bytes: 48213,
+            entries: Vec::new(),
         },
         diagnostics: vec![
             Diagnostic {

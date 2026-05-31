@@ -35,6 +35,7 @@ def build_report_payload(**overrides):
             "unsafe_references": 0,
             "unused_bindings": 0,
             "unique_bytes": 0,
+            "entries": [],
         },
         "diagnostics": [],
         "metrics": {"duration_ms": 1},
@@ -91,10 +92,28 @@ def test_report_parses_schema_media_summary_unique_bytes():
             "unsafe_references": 1,
             "unused_bindings": 5,
             "unique_bytes": 987,
+            "entries": [
+                {
+                    "id": "media:audio.wav",
+                    "filename": "audio.wav",
+                    "source_mode": "path_backed",
+                    "size_bytes": 987,
+                }
+            ],
         },
     ))
 
     assert report.media["unique_bytes"] == 987
+    assert report.media["entries"][0]["source_mode"] == "path_backed"
+
+
+def test_report_accepts_v1_media_summary_without_entries():
+    payload = build_report_payload()
+    del payload["media"]["entries"]
+
+    report = BuildReport.from_json(payload)
+
+    assert report.media["entries"] == []
 
 
 def test_report_rejects_legacy_media_bytes_payload():
@@ -157,6 +176,7 @@ def test_report_accepts_forward_compatible_summary_fields():
             "unsafe_references": 0,
             "unused_bindings": 0,
             "unique_bytes": 0,
+            "entries": [],
             "future": 99,
         },
         metrics={"duration_ms": 1, "future": True},
@@ -171,6 +191,7 @@ def test_report_accepts_forward_compatible_summary_fields():
         "unsafe_references": 0,
         "unused_bindings": 0,
         "unique_bytes": 0,
+        "entries": [],
     }
 
 
@@ -277,6 +298,9 @@ def test_cloze_report_json_creates_parent_directories(tmp_path):
 
     assert report.status == "invalid"
     assert report_json.is_file()
+    written = json.loads(report_json.read_text(encoding="utf-8"))
+    parsed = BuildReport.from_json(written)
+    assert parsed.media["entries"] == []
 
 
 def test_negative_returncode_is_interrupted():

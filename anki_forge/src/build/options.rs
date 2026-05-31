@@ -14,6 +14,13 @@ pub enum ProjectMediaPolicy {
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum ProjectMediaMode {
+    #[default]
+    PathBacked,
+    SelfContained,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum ProjectMediaDiagnosticBehavior {
     Ignore,
     Info,
@@ -39,6 +46,7 @@ pub struct ProjectNormalizeOptions {
     pub base_dir: Option<PathBuf>,
     pub media_store_dir: Option<PathBuf>,
     pub media_policy: ProjectMediaPolicy,
+    pub media_mode: ProjectMediaMode,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -103,6 +111,16 @@ impl BuildOptions {
         self
     }
 
+    pub fn self_contained(mut self) -> Self {
+        let normalize_options = self
+            .normalize_options
+            .take()
+            .unwrap_or_default()
+            .self_contained();
+        self.normalize_options = Some(normalize_options);
+        self
+    }
+
     pub fn inspect(mut self, inspect: bool) -> Self {
         self.inspect = inspect;
         self
@@ -162,6 +180,7 @@ impl ProjectNormalizeOptions {
             base_dir: None,
             media_store_dir: None,
             media_policy: ProjectMediaPolicy::strict(),
+            media_mode: ProjectMediaMode::PathBacked,
         }
     }
 
@@ -177,6 +196,16 @@ impl ProjectNormalizeOptions {
 
     pub fn media_policy(mut self, policy: ProjectMediaPolicy) -> Self {
         self.media_policy = policy;
+        self
+    }
+
+    pub fn self_contained(mut self) -> Self {
+        self.media_mode = ProjectMediaMode::SelfContained;
+        self
+    }
+
+    pub fn path_backed_staging(mut self) -> Self {
+        self.media_mode = ProjectMediaMode::PathBacked;
         self
     }
 

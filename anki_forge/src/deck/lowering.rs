@@ -50,6 +50,11 @@ impl Deck {
         Ok(product)
     }
 
+    /// Lowers this deck into a self-contained authoring document.
+    ///
+    /// File-backed media is embedded as inline base64 in this form. For builds,
+    /// prefer `write_apkg()` or `lower_authoring_with_media_source_dir(...)` so
+    /// large media stays path-backed through normalization.
     pub fn lower_authoring(&self) -> anyhow::Result<crate::AuthoringDocument> {
         let product = self.clone().into_product_document()?;
         let mut lowered = product

@@ -14,8 +14,8 @@ use counts::{card_count_from_inspect_or_fallback, count_phase1_cards_without_ins
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
-    BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, MediaSummary,
-    ProjectNormalizeOptions,
+    BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, MediaSourceMode, MediaSummary,
+    ProjectMediaMode, ProjectNormalizeOptions,
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::lowering::ProductSourceMap;
@@ -290,9 +290,10 @@ impl Project {
     ///
     /// Because the self-contained form uses inline media, file-backed media must
     /// fit within the inline media limit. Larger file media can make `lower()`
-    /// fail with `MEDIA.INLINE_TOO_LARGE`. The build and normalize paths use
-    /// path-backed media staging instead, and keep `add_file(...)` assets
-    /// path-backed until normalization.
+    /// fail with `MEDIA.INLINE_TOO_LARGE`. The default build path uses
+    /// path-backed media staging instead, and keeps `add_file(...)` assets
+    /// path-backed until normalization unless `BuildOptions::self_contained()`
+    /// is selected explicitly.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
         if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
             anyhow::bail!("{}: {}", diagnostic.code.as_str(), diagnostic.message);
@@ -384,6 +385,7 @@ impl Project {
                     message,
                     diagnostics: mut normalize_diagnostics,
                     normalized_ir,
+                    media_source_modes,
                 } = error;
                 diagnostics.append(&mut normalize_diagnostics);
                 diagnostics.push(Diagnostic {
@@ -404,7 +406,11 @@ impl Project {
                 let media = normalized_ir
                     .as_ref()
                     .map(|normalized| {
-                        MediaSummary::from_normalized_ir(normalized.as_ref(), &diagnostics)
+                        MediaSummary::from_normalized_ir_with_source_modes(
+                            normalized.as_ref(),
+                            &diagnostics,
+                            &media_source_modes,
+                        )
                     })
                     .unwrap_or_default();
                 let report = BuildReport {
@@ -428,6 +434,7 @@ impl Project {
             }
         };
         let normalized = normalized_output.normalized_ir;
+        let media_source_modes = normalized_output.media_source_modes;
         diagnostics.extend(normalized_output.diagnostics);
 
         if normalized.notes.is_empty() {
@@ -438,7 +445,12 @@ impl Project {
                 source: Some(SourcePath::new("project.notes")),
                 help: Some("add at least one note before building".into()),
             });
-            let report = invalid_report_without_artifact(diagnostics, &normalized, started);
+            let report = invalid_report_without_artifact(
+                diagnostics,
+                &normalized,
+                &media_source_modes,
+                started,
+            );
             return return_report_error(&options, report, BuildFailureCause::Invalid);
         }
 
@@ -446,7 +458,11 @@ impl Project {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
-            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+            let media = MediaSummary::from_normalized_ir_with_source_modes(
+                &normalized,
+                &diagnostics,
+                &media_source_modes,
+            );
             let report = BuildReport {
                 artifact: None,
                 counts: BuildCounts {
@@ -514,7 +530,11 @@ impl Project {
                     source: Some(SourcePath::new("build.options")),
                     help: None,
                 });
-                let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+                let media = MediaSummary::from_normalized_ir_with_source_modes(
+                    &normalized,
+                    &diagnostics,
+                    &media_source_modes,
+                );
                 let report = BuildReport {
                     artifact: None,
                     counts: BuildCounts {
@@ -577,7 +597,11 @@ impl Project {
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
         {
-            let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+            let media = MediaSummary::from_normalized_ir_with_source_modes(
+                &normalized,
+                &diagnostics,
+                &media_source_modes,
+            );
             let report = BuildReport {
                 artifact: None,
                 counts: BuildCounts {
@@ -635,7 +659,11 @@ impl Project {
                             cards: count_phase1_cards_without_inspect(&normalized),
                             media: normalized.media_bindings.len(),
                         },
-                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        media: MediaSummary::from_normalized_ir_with_source_modes(
+                            &normalized,
+                            &diagnostics,
+                            &media_source_modes,
+                        ),
                         diagnostics: diagnostics.clone(),
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -795,9 +823,10 @@ impl Project {
                                         cards: count_phase1_cards_without_inspect(&normalized),
                                         media: normalized.media_bindings.len(),
                                     },
-                                    media: MediaSummary::from_normalized_ir(
+                                    media: MediaSummary::from_normalized_ir_with_source_modes(
                                         &normalized,
                                         &diagnostics,
+                                        &media_source_modes,
                                     ),
                                     diagnostics: diagnostics.clone(),
                                     metrics: BuildMetrics {
@@ -838,7 +867,11 @@ impl Project {
                             cards: count_phase1_cards_without_inspect(&normalized),
                             media: normalized.media_bindings.len(),
                         },
-                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        media: MediaSummary::from_normalized_ir_with_source_modes(
+                            &normalized,
+                            &diagnostics,
+                            &media_source_modes,
+                        ),
                         diagnostics: diagnostics.clone(),
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -878,7 +911,11 @@ impl Project {
                             cards: count_phase1_cards_without_inspect(&normalized),
                             media: normalized.media_bindings.len(),
                         },
-                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        media: MediaSummary::from_normalized_ir_with_source_modes(
+                            &normalized,
+                            &diagnostics,
+                            &media_source_modes,
+                        ),
                         diagnostics: diagnostics.clone(),
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -944,7 +981,11 @@ impl Project {
                             cards: count_phase1_cards_without_inspect(&normalized),
                             media: normalized.media_bindings.len(),
                         },
-                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        media: MediaSummary::from_normalized_ir_with_source_modes(
+                            &normalized,
+                            &diagnostics,
+                            &media_source_modes,
+                        ),
                         diagnostics: diagnostics.clone(),
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -1074,7 +1115,11 @@ impl Project {
                             cards: count_phase1_cards_without_inspect(&normalized),
                             media: normalized.media_bindings.len(),
                         },
-                        media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                        media: MediaSummary::from_normalized_ir_with_source_modes(
+                            &normalized,
+                            &diagnostics,
+                            &media_source_modes,
+                        ),
                         diagnostics: diagnostics.clone(),
                         metrics: BuildMetrics {
                             duration: started.elapsed(),
@@ -1124,7 +1169,11 @@ impl Project {
                                 cards: count_phase1_cards_without_inspect(&normalized),
                                 media: normalized.media_bindings.len(),
                             },
-                            media: MediaSummary::from_normalized_ir(&normalized, &diagnostics),
+                            media: MediaSummary::from_normalized_ir_with_source_modes(
+                                &normalized,
+                                &diagnostics,
+                                &media_source_modes,
+                            ),
                             diagnostics: diagnostics.clone(),
                             metrics: BuildMetrics {
                                 duration: started.elapsed(),
@@ -1154,7 +1203,11 @@ impl Project {
             }
         }
 
-        let media = MediaSummary::from_normalized_ir(&normalized, &diagnostics);
+        let media = MediaSummary::from_normalized_ir_with_source_modes(
+            &normalized,
+            &diagnostics,
+            &media_source_modes,
+        );
         let writer_status = build_status_from_writer_result(&package_build_result.result_status);
         let mut inspect = None;
         let mut previous_inspect = None;
@@ -1675,6 +1728,7 @@ impl Project {
                 message: format!("{}: {}", diagnostic.code.as_str(), diagnostic.message),
                 diagnostics: vec![diagnostic],
                 normalized_ir: None,
+                media_source_modes: BTreeMap::new(),
             });
         }
 
@@ -1689,11 +1743,15 @@ impl Project {
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
         self.apply_note_source_paths(&mut lowering);
         self.apply_notetype_source_paths(&mut lowering);
+        let media_mode = options.media_mode;
         if let Some(deck) = &self.deck_source {
             let media = deck
                 .registered_media()
                 .values()
-                .map(|media| media.to_authoring_media(&base_dir))
+                .map(|media| match media_mode {
+                    ProjectMediaMode::PathBacked => media.to_authoring_media(&base_dir),
+                    ProjectMediaMode::SelfContained => media.to_self_contained_authoring_media(),
+                })
                 .collect::<anyhow::Result<Vec<_>>>()
                 .map_err(|error| ProjectNormalizeError {
                     message: "prepare deck media".into(),
@@ -1705,6 +1763,7 @@ impl Project {
                         help: Some("inspect deck media registrations and media paths".into()),
                     }],
                     normalized_ir: None,
+                    media_source_modes: BTreeMap::new(),
                 })?;
             lowering.authoring_document.media.extend(media);
             for filename in deck.registered_media().keys() {
@@ -1715,16 +1774,40 @@ impl Project {
                 );
             }
         } else {
-            let media = product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
-                .map_err(|error| ProjectNormalizeError {
-                    message: error.message,
-                    diagnostics: error.diagnostics,
-                    normalized_ir: None,
-                })?;
+            let media = match media_mode {
+                ProjectMediaMode::PathBacked => {
+                    product_media_to_path_backed_authoring_media(self.media.media(), &base_dir)
+                }
+                ProjectMediaMode::SelfContained => {
+                    product_media_to_self_contained_authoring_media(self.media.media())
+                }
+            }
+            .map_err(|error| ProjectNormalizeError {
+                message: error.message,
+                diagnostics: error.diagnostics,
+                normalized_ir: None,
+                media_source_modes: BTreeMap::new(),
+            })?;
             lowering.authoring_document.media.extend(media);
             record_project_media_source_paths(&mut lowering, self.media.media());
         }
+        if media_mode == ProjectMediaMode::SelfContained {
+            let inline_limit = options.to_authoring_media_policy().inline_bytes_max;
+            self_contain_authoring_path_media(
+                &mut lowering.authoring_document.media,
+                &base_dir,
+                inline_limit,
+                &lowering.source_map,
+            )
+            .map_err(|error| ProjectNormalizeError {
+                message: error.message,
+                diagnostics: error.diagnostics,
+                normalized_ir: None,
+                media_source_modes: BTreeMap::new(),
+            })?;
+        }
         let source_map = lowering.source_map.clone();
+        let media_source_modes = authoring_media_source_modes(&lowering.authoring_document.media);
         let duplicate_notetype_media_diagnostics = duplicate_notetype_media_reference_diagnostics(
             &lowering.authoring_document,
             &source_map,
@@ -1762,12 +1845,14 @@ impl Project {
                 message: format!("normalization failed with status {result_status}"),
                 diagnostics,
                 normalized_ir: result.normalized_ir.map(Box::new),
+                media_source_modes,
             });
         }
         let normalized_ir = result.normalized_ir.ok_or_else(|| ProjectNormalizeError {
             message: "normalization did not produce normalized_ir".into(),
             diagnostics: diagnostics.clone(),
             normalized_ir: None,
+            media_source_modes: media_source_modes.clone(),
         })?;
         if diagnostics
             .iter()
@@ -1777,11 +1862,13 @@ impl Project {
                 message: "normalization produced product errors".into(),
                 diagnostics,
                 normalized_ir: Some(Box::new(normalized_ir)),
+                media_source_modes,
             });
         }
         Ok(ProjectNormalizeOutput {
             normalized_ir,
             diagnostics,
+            media_source_modes,
         })
     }
 
@@ -1791,6 +1878,7 @@ impl Project {
                 message: format!("{}: {}", diagnostic.code.as_str(), diagnostic.message),
                 diagnostics: vec![diagnostic],
                 normalized_ir: None,
+                media_source_modes: BTreeMap::new(),
             });
         }
 
@@ -1809,6 +1897,7 @@ impl Project {
                         help: Some("inspect deck notes before lowering".into()),
                     }],
                     normalized_ir: None,
+                    media_source_modes: BTreeMap::new(),
                 })?
         } else {
             self.to_product_document()
@@ -1824,6 +1913,7 @@ impl Project {
                 },
                 diagnostics,
                 normalized_ir: None,
+                media_source_modes: BTreeMap::new(),
             }
         })
     }
@@ -2352,6 +2442,44 @@ fn record_project_media_source_paths<'a>(
     }
 }
 
+fn authoring_media_source_modes(
+    media: &[crate::AuthoringMedia],
+) -> BTreeMap<String, MediaSourceMode> {
+    media
+        .iter()
+        .map(|item| {
+            let mode = match &item.source {
+                crate::AuthoringMediaSource::Path { .. } => MediaSourceMode::PathBacked,
+                crate::AuthoringMediaSource::InlineBytes { .. } => MediaSourceMode::Inline,
+            };
+            (item.id.clone(), mode)
+        })
+        .collect()
+}
+
+fn product_media_to_self_contained_authoring_media<'a>(
+    media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
+) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
+    let mut prepared = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for item in media {
+        match product_media_item_to_self_contained_authoring_media(item) {
+            Ok(media) => prepared.push(media),
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if diagnostics.is_empty() {
+        Ok(prepared)
+    } else {
+        Err(ProductMediaPrepareError {
+            message: "prepare self-contained product media".into(),
+            diagnostics,
+        })
+    }
+}
+
 fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
@@ -2374,6 +2502,57 @@ fn product_media_to_path_backed_authoring_media<'a>(
             diagnostics,
         })
     }
+}
+
+fn product_media_item_to_self_contained_authoring_media(
+    media: &crate::product::media_registry::ProductMedia,
+) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
+    let source = match &media.source {
+        crate::product::media_registry::ProductMediaSource::File { path } => {
+            media
+                .verify_registered_source()
+                .map_err(ProductMediaPrepareError::from_source_diagnostic)?;
+            let limit = crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64;
+            if media.observed_size_bytes() > limit {
+                return Err(ProductMediaPrepareError::single(
+                    "MEDIA.INLINE_TOO_LARGE",
+                    format!(
+                        "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {}",
+                        media.observed_size_bytes(),
+                        crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
+                        filename = &media.export_filename,
+                    ),
+                    media.export_filename.clone(),
+                ));
+            }
+            let bytes = std::fs::read(path).map_err(|err| {
+                ProductMediaPrepareError::single(
+                    if err.kind() == std::io::ErrorKind::NotFound {
+                        "MEDIA.SOURCE_MISSING"
+                    } else {
+                        "MEDIA.SOURCE_READ_FAILED"
+                    },
+                    format!("read media source file {}: {err}", path.display()),
+                    media.export_filename.clone(),
+                )
+            })?;
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+            }
+        }
+        crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
+            crate::AuthoringMediaSource::InlineBytes {
+                data_base64: data_base64.clone(),
+            }
+        }
+    };
+
+    Ok(crate::AuthoringMedia {
+        id: media.id.clone(),
+        desired_filename: media.export_filename.clone(),
+        source,
+        declared_mime: media.declared_mime.clone(),
+    })
 }
 
 fn product_media_item_to_authoring_media(
@@ -2474,6 +2653,181 @@ fn product_media_item_to_path_backed_authoring_media(
         source,
         declared_mime: media.declared_mime.clone(),
     })
+}
+
+fn self_contain_authoring_path_media(
+    media: &mut [crate::AuthoringMedia],
+    base_dir: &Path,
+    inline_limit: usize,
+    source_map: &ProductSourceMap,
+) -> Result<(), ProductMediaPrepareError> {
+    let mut diagnostics = Vec::new();
+    let mut canonical_base: Option<Result<PathBuf, String>> = None;
+
+    for item in media {
+        let crate::AuthoringMediaSource::Path { path } = &item.source else {
+            continue;
+        };
+        let source_path =
+            authoring_media_product_source(source_map, &item.id, &item.desired_filename);
+        let base = match canonical_base
+            .get_or_insert_with(|| {
+                base_dir
+                    .canonicalize()
+                    .map_err(|err| format!("canonicalize base_dir {}: {err}", base_dir.display()))
+            })
+            .as_ref()
+        {
+            Ok(base) => base,
+            Err(message) => {
+                let mut error = authoring_path_media_error(
+                    "MEDIA.UNSAFE_SOURCE_PATH",
+                    message.clone(),
+                    source_path,
+                );
+                diagnostics.append(&mut error.diagnostics);
+                continue;
+            }
+        };
+
+        match read_authoring_path_media_for_inline(ReadAuthoringPathMediaParams {
+            path,
+            base,
+            inline_limit,
+            filename: &item.desired_filename,
+            source_path,
+        }) {
+            Ok(bytes) => {
+                item.source = crate::AuthoringMediaSource::InlineBytes {
+                    data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
+                };
+            }
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if !diagnostics.is_empty() {
+        return Err(ProductMediaPrepareError {
+            message: "prepare self-contained authoring media".into(),
+            diagnostics,
+        });
+    }
+    Ok(())
+}
+
+fn authoring_media_product_source(
+    source_map: &ProductSourceMap,
+    media_id: &str,
+    filename: &str,
+) -> String {
+    source_map
+        .source_for_diagnostic_path(media_id)
+        .or_else(|| source_map.source_for_diagnostic_path(filename))
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("project.media[{filename:?}]"))
+}
+
+struct ReadAuthoringPathMediaParams<'a> {
+    path: &'a str,
+    base: &'a Path,
+    inline_limit: usize,
+    filename: &'a str,
+    source_path: String,
+}
+
+fn read_authoring_path_media_for_inline(
+    params: ReadAuthoringPathMediaParams<'_>,
+) -> Result<Vec<u8>, ProductMediaPrepareError> {
+    let ReadAuthoringPathMediaParams {
+        path,
+        base,
+        inline_limit,
+        filename,
+        source_path,
+    } = params;
+    let raw_path = Path::new(path);
+    if path.is_empty() || raw_path.is_absolute() || path_has_parent_component(raw_path) {
+        return Err(authoring_path_media_error(
+            "MEDIA.UNSAFE_SOURCE_PATH",
+            format!("source.path must be relative and stay below base_dir: {path}"),
+            source_path,
+        ));
+    }
+
+    let candidate = base.join(raw_path);
+    let canonical = candidate.canonicalize().map_err(|err| {
+        authoring_path_media_error(
+            "MEDIA.SOURCE_MISSING",
+            format!("read source.path {path}: {err}"),
+            source_path.clone(),
+        )
+    })?;
+    if !canonical.starts_with(base) {
+        return Err(authoring_path_media_error(
+            "MEDIA.UNSAFE_SOURCE_PATH",
+            format!("source.path escapes base_dir: {path}"),
+            source_path,
+        ));
+    }
+
+    let metadata = std::fs::metadata(&canonical).map_err(|err| {
+        authoring_path_media_error(
+            "MEDIA.SOURCE_READ_FAILED",
+            format!("stat media source {}: {err}", canonical.display()),
+            source_path.clone(),
+        )
+    })?;
+    if !metadata.is_file() {
+        return Err(authoring_path_media_error(
+            "MEDIA.SOURCE_NOT_REGULAR_FILE",
+            format!(
+                "media source must be a regular file: {}",
+                canonical.display()
+            ),
+            source_path,
+        ));
+    }
+    if metadata.len() > inline_limit as u64 {
+        return Err(authoring_path_media_error(
+            "MEDIA.INLINE_TOO_LARGE",
+            format!(
+                "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {inline_limit}",
+                metadata.len(),
+            ),
+            source_path,
+        ));
+    }
+
+    std::fs::read(&canonical).map_err(|err| {
+        authoring_path_media_error(
+            "MEDIA.SOURCE_READ_FAILED",
+            format!("read media source file {}: {err}", canonical.display()),
+            source_path,
+        )
+    })
+}
+
+fn authoring_path_media_error(
+    code: &'static str,
+    message: String,
+    source_path: String,
+) -> ProductMediaPrepareError {
+    let help = product_diagnostic_help(code, Some(&source_path));
+    ProductMediaPrepareError {
+        message: "prepare self-contained authoring media".into(),
+        diagnostics: vec![Diagnostic {
+            code: DiagnosticCode::new(code),
+            severity: Severity::Error,
+            message,
+            source: Some(SourcePath::new(source_path)),
+            help,
+        }],
+    }
+}
+
+fn path_has_parent_component(path: &Path) -> bool {
+    path.components()
+        .any(|component| matches!(component, std::path::Component::ParentDir))
 }
 
 fn paths_are_same_file(left: &Path, right: &Path) -> anyhow::Result<bool> {
@@ -2781,6 +3135,7 @@ fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCan
 struct ProjectNormalizeOutput {
     normalized_ir: authoring_core::NormalizedIr,
     diagnostics: Vec<Diagnostic>,
+    media_source_modes: BTreeMap<String, MediaSourceMode>,
 }
 
 fn replace_output_atomically(
@@ -2909,6 +3264,7 @@ struct ProjectNormalizeError {
     message: String,
     diagnostics: Vec<Diagnostic>,
     normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
+    media_source_modes: BTreeMap<String, MediaSourceMode>,
 }
 
 struct ProductMediaPrepareError {
@@ -2950,16 +3306,17 @@ impl ProductMediaPrepareError {
     }
 
     fn single(code: &'static str, message: String, export_filename: String) -> Self {
+        let source_path = format!("project.media[{export_filename:?}]");
+        let help = product_diagnostic_help(code, Some(&source_path))
+            .unwrap_or_else(|| "inspect product media registrations and source files".into());
         Self {
             message: "prepare product media".into(),
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new(code),
                 severity: Severity::Error,
                 message,
-                source: Some(SourcePath::new(format!(
-                    "project.media[{export_filename:?}]"
-                ))),
-                help: Some("inspect product media registrations and source files".into()),
+                source: Some(SourcePath::new(source_path)),
+                help: Some(help),
             }],
         }
     }
@@ -3067,7 +3424,7 @@ fn product_diagnostic_help(code: &str, source: Option<&str>) -> Option<String> {
             "An existing media-store object did not match the expected content hash. Rebuild in a clean artifacts directory or remove the corrupt media-store object before retrying."
         }
         "MEDIA.INLINE_TOO_LARGE" => {
-            "This inline media payload exceeds the configured limit. Register large assets with project.media_mut().add_file(...).export_as(...) so they stay path-backed until normalization."
+            "This inline media payload exceeds the configured limit. Use the default path-backed build path with write_apkg()/build(...), or remove self_contained() so file-backed media is staged by path instead of embedded inline."
         }
         _ => return None,
     };
@@ -3149,6 +3506,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
 fn invalid_report_without_artifact(
     diagnostics: Vec<Diagnostic>,
     normalized: &authoring_core::NormalizedIr,
+    media_source_modes: &BTreeMap<String, MediaSourceMode>,
     started: Instant,
 ) -> BuildReport {
     BuildReport {
@@ -3158,7 +3516,11 @@ fn invalid_report_without_artifact(
             cards: count_phase1_cards_without_inspect(normalized),
             media: normalized.media_bindings.len(),
         },
-        media: MediaSummary::from_normalized_ir(normalized, &diagnostics),
+        media: MediaSummary::from_normalized_ir_with_source_modes(
+            normalized,
+            &diagnostics,
+            media_source_modes,
+        ),
         diagnostics,
         metrics: BuildMetrics {
             duration: started.elapsed(),

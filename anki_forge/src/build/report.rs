@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -19,7 +19,7 @@ pub struct BuildCounts {
     pub media: usize,
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct MediaSummary {
     pub objects: usize,
     pub bindings: usize,
@@ -28,6 +28,31 @@ pub struct MediaSummary {
     pub unsafe_references: usize,
     pub unused_bindings: usize,
     pub unique_bytes: u64,
+    pub entries: Vec<MediaEntrySummary>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MediaEntrySummary {
+    pub id: String,
+    pub filename: String,
+    pub source_mode: MediaSourceMode,
+    pub size_bytes: u64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MediaSourceMode {
+    Inline,
+    PathBacked,
+}
+
+impl MediaSourceMode {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Inline => "inline",
+            Self::PathBacked => "path_backed",
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -139,6 +164,17 @@ impl BuildReport {
             format!("  unused_bindings: {}", self.media.unused_bindings),
             format!("  unique_bytes: {}", self.media.unique_bytes),
         ];
+        if !self.media.entries.is_empty() {
+            lines.push("  entries:".into());
+            for entry in &self.media.entries {
+                lines.push(format!(
+                    "    {}: {}, {} bytes",
+                    entry.filename,
+                    entry.source_mode.as_str(),
+                    entry.size_bytes
+                ));
+            }
+        }
 
         lines.extend(
             sorted_diagnostics(&self.diagnostics)
@@ -236,9 +272,10 @@ impl BuildReport {
 }
 
 impl MediaSummary {
-    pub(crate) fn from_normalized_ir(
+    pub(crate) fn from_normalized_ir_with_source_modes(
         normalized_ir: &authoring_core::NormalizedIr,
         diagnostics: &[Diagnostic],
+        source_modes: &BTreeMap<String, MediaSourceMode>,
     ) -> Self {
         let mut referenced_media_ids = BTreeSet::new();
         let mut missing_references = 0;
@@ -273,6 +310,29 @@ impl MediaSummary {
             .map(|object| object.size_bytes)
             .sum();
 
+        let object_sizes = normalized_ir
+            .media_objects
+            .iter()
+            .map(|object| (object.id.as_str(), object.size_bytes))
+            .collect::<BTreeMap<_, _>>();
+        let entries = normalized_ir
+            .media_bindings
+            .iter()
+            .filter_map(|binding| {
+                let source_mode = source_modes.get(&binding.id).copied()?;
+                let size_bytes = object_sizes
+                    .get(binding.object_id.as_str())
+                    .copied()
+                    .unwrap_or_default();
+                Some(MediaEntrySummary {
+                    id: binding.id.clone(),
+                    filename: binding.export_filename.clone(),
+                    source_mode,
+                    size_bytes,
+                })
+            })
+            .collect();
+
         Self {
             objects: normalized_ir.media_objects.len(),
             bindings: normalized_ir.media_bindings.len(),
@@ -281,6 +341,7 @@ impl MediaSummary {
             unsafe_references,
             unused_bindings,
             unique_bytes,
+            entries,
         }
     }
 }
