@@ -153,16 +153,18 @@ fn main() -> anyhow::Result<()> {
             output,
         } => {
             match contract_tools::product_build_cmd::run(
-                &manifest,
-                &product_input,
-                &apkg_out,
-                compare_to.as_deref(),
-                fail_on.as_deref(),
-                report_json.as_deref(),
-                identity_lockfile.as_deref(),
-                write_identity_lockfile,
-                update_safety.as_deref(),
-                &output,
+                contract_tools::product_build_cmd::ProductBuildRequest {
+                    manifest: &manifest,
+                    product_input: &product_input,
+                    apkg_out: &apkg_out,
+                    compare_to: compare_to.as_deref(),
+                    fail_on: fail_on.as_deref(),
+                    report_json: report_json.as_deref(),
+                    identity_lockfile: identity_lockfile.as_deref(),
+                    write_identity_lockfile,
+                    update_safety: update_safety.as_deref(),
+                    output: &output,
+                },
             )? {
                 contract_tools::product_build_cmd::ProductBuildOutcome::Success(body) => {
                     print!("{body}");

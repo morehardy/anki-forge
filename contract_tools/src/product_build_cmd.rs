@@ -10,18 +10,33 @@ pub enum ProductBuildOutcome {
     ReportFailure { json: String, exit_code: i32 },
 }
 
-pub fn run(
-    manifest: &str,
-    product_input: &str,
-    apkg_out: &str,
-    compare_to: Option<&str>,
-    fail_on: Option<&str>,
-    report_json: Option<&str>,
-    identity_lockfile: Option<&str>,
-    write_identity_lockfile: bool,
-    update_safety: Option<&str>,
-    output: &str,
-) -> anyhow::Result<ProductBuildOutcome> {
+pub struct ProductBuildRequest<'a> {
+    pub manifest: &'a str,
+    pub product_input: &'a str,
+    pub apkg_out: &'a str,
+    pub compare_to: Option<&'a str>,
+    pub fail_on: Option<&'a str>,
+    pub report_json: Option<&'a str>,
+    pub identity_lockfile: Option<&'a str>,
+    pub write_identity_lockfile: bool,
+    pub update_safety: Option<&'a str>,
+    pub output: &'a str,
+}
+
+pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutcome> {
+    let ProductBuildRequest {
+        manifest,
+        product_input,
+        apkg_out,
+        compare_to,
+        fail_on,
+        report_json,
+        identity_lockfile,
+        write_identity_lockfile,
+        update_safety,
+        output,
+    } = request;
+
     let manifest = crate::manifest::load_manifest(manifest)?;
     crate::manifest::resolve_asset_path(&manifest, "build_report_schema")?;
     let runtime_bundle = anki_forge::runtime::load_bundle_from_manifest(&manifest.path)?;
