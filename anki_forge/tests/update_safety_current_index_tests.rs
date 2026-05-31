@@ -222,6 +222,34 @@ fn identity_lockfile_path_must_not_equal_apkg_output_path() {
 }
 
 #[test]
+fn apkg_output_path_must_not_equal_report_json_path() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output_and_report = root.path().join("deck.apkg");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output_and_report)
+                .report_json(&output_and_report),
+        )
+        .expect_err("APKG output and report_json must be distinct paths");
+
+    let diagnostic = err
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "PROJECT.PATH_COLLISION")
+        .expect("path collision diagnostic");
+    assert_eq!(diagnostic.severity, Severity::Error);
+    assert!(!output_and_report.exists());
+}
+
+#[test]
 fn identity_lockfile_path_must_not_equal_report_json_path() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("deck.apkg");

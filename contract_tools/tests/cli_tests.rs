@@ -968,6 +968,27 @@ fn product_build_cli_rejects_identity_lockfile_apkg_path_collision() {
 }
 
 #[test]
+fn product_build_cli_rejects_apkg_report_json_path_collision() {
+    let temp = tempdir().expect("tempdir");
+    let colliding_path = temp.path().join("deck.apkg");
+    let output = run_product_build_fixture_to(
+        "basic-stock",
+        &colliding_path,
+        &[
+            OsString::from("--report-json"),
+            colliding_path.as_os_str().to_os_string(),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(!output.status.success());
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
+    assert!(!colliding_path.exists());
+}
+
+#[test]
 fn product_build_policy_failure_prints_report_before_nonzero_exit() {
     let temp = tempdir().expect("tempdir");
     let baseline = build_basic_stock_baseline(temp.path());

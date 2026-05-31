@@ -394,7 +394,7 @@ impl Project {
 
         let validation = self.validate();
         let mut diagnostics = validation.diagnostics;
-        push_identity_lockfile_path_collision_if_needed(&options, &mut diagnostics);
+        push_build_output_path_collision_if_needed(&options, &mut diagnostics);
 
         let normalized_output =
             self.normalize_with_dirs(&media_input_dir, &media_store_dir, normalize_options);
@@ -3341,34 +3341,60 @@ fn invalid_report_without_artifact(
     }
 }
 
-fn push_identity_lockfile_path_collision_if_needed(
+fn push_build_output_path_collision_if_needed(
     options: &BuildOptions,
     diagnostics: &mut Vec<Diagnostic>,
 ) {
-    if !identity_lockfile_path_collision(options) {
+    let Some((message, source)) = build_output_path_collision(options) else {
         return;
-    }
+    };
 
     diagnostics.push(Diagnostic {
         code: DiagnosticCode::new("PROJECT.PATH_COLLISION"),
         severity: Severity::Error,
         domain: None,
         stage: None,
-        message: "build output path collides with identity lockfile path".into(),
-        source: Some(SourcePath::new("build.identity_lockfile")),
+        message,
+        source: Some(SourcePath::new(source)),
         help: Some(
             "choose distinct paths for apkg output, report_json, and identity lockfile".into(),
         ),
     });
 }
 
-fn identity_lockfile_path_collision(options: &BuildOptions) -> bool {
+fn build_output_path_collision(options: &BuildOptions) -> Option<(String, &'static str)> {
+    if output_collides_with_identity_lockfile(options) {
+        return Some((
+            "build output path collides with identity lockfile path".into(),
+            "build.identity_lockfile",
+        ));
+    }
+    if report_json_collides_with_identity_lockfile(options) {
+        return Some((
+            "report_json path collides with identity lockfile path".into(),
+            "build.report_json",
+        ));
+    }
+    if report_json_collides_with_output(options) {
+        return Some((
+            "build output path collides with report_json path".into(),
+            "build.report_json",
+        ));
+    }
+    None
+}
+
+fn output_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
+    options
+        .identity_lockfile
+        .as_ref()
+        .zip(options.output.as_ref())
+        .is_some_and(|(identity_lockfile, output)| output == identity_lockfile)
+}
+
+fn report_json_collides_with_any_output(options: &BuildOptions) -> bool {
     report_json_collides_with_identity_lockfile(options)
-        || options
-            .identity_lockfile
-            .as_ref()
-            .zip(options.output.as_ref())
-            .is_some_and(|(identity_lockfile, output)| output == identity_lockfile)
+        || report_json_collides_with_output(options)
 }
 
 fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
@@ -3377,6 +3403,14 @@ fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
         .as_ref()
         .zip(options.report_json.as_ref())
         .is_some_and(|(identity_lockfile, report_json)| report_json == identity_lockfile)
+}
+
+fn report_json_collides_with_output(options: &BuildOptions) -> bool {
+    options
+        .output
+        .as_ref()
+        .zip(options.report_json.as_ref())
+        .is_some_and(|(output, report_json)| report_json == output)
 }
 
 fn attach_artifact_diff_risk_if_needed(
@@ -3416,7 +3450,7 @@ fn maybe_write_report_json(
     let Some(path) = options.report_json.as_ref() else {
         return Ok(report);
     };
-    if report_json_collides_with_identity_lockfile(options) {
+    if report_json_collides_with_any_output(options) {
         return Ok(report);
     }
 
