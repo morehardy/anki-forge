@@ -31,6 +31,7 @@ pub enum ErrorCode {
     MediaSourceMissing,
     MediaSourceNotRegularFile,
     MediaSourceReadFailed,
+    MediaSourceChanged,
     MediaEmptySource,
     MediaInvalidSourceLabel,
     MediaInlineTooLarge,
@@ -43,6 +44,10 @@ pub enum ErrorCode {
     ProjectBuildIo,
     ProjectBuildInternal,
     ProjectBuildStatusFailed,
+    ProjectProductDocumentSourceMixed,
+    ProjectProductMediaFailed,
+    ProjectProductMediaStagingCollision,
+    ProjectLowerFailed,
     ProjectNormalizeFailed,
     ProjectWriterFailed,
     Unknown(String),
@@ -82,6 +87,7 @@ impl ErrorCode {
             Self::MediaSourceMissing => "MEDIA.SOURCE_MISSING",
             Self::MediaSourceNotRegularFile => "MEDIA.SOURCE_NOT_REGULAR_FILE",
             Self::MediaSourceReadFailed => "MEDIA.SOURCE_READ_FAILED",
+            Self::MediaSourceChanged => "MEDIA.SOURCE_CHANGED",
             Self::MediaEmptySource => "MEDIA.EMPTY_SOURCE",
             Self::MediaInvalidSourceLabel => "MEDIA.INVALID_SOURCE_LABEL",
             Self::MediaInlineTooLarge => "MEDIA.INLINE_TOO_LARGE",
@@ -94,6 +100,10 @@ impl ErrorCode {
             Self::ProjectBuildIo => "PROJECT.BUILD_IO",
             Self::ProjectBuildInternal => "PROJECT.BUILD_INTERNAL",
             Self::ProjectBuildStatusFailed => "PROJECT.BUILD_STATUS_FAILED",
+            Self::ProjectProductDocumentSourceMixed => "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED",
+            Self::ProjectProductMediaFailed => "PROJECT.PRODUCT_MEDIA_FAILED",
+            Self::ProjectProductMediaStagingCollision => "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION",
+            Self::ProjectLowerFailed => "PROJECT.LOWER_FAILED",
             Self::ProjectNormalizeFailed => "PROJECT.NORMALIZE_FAILED",
             Self::ProjectWriterFailed => "PROJECT.WRITER_FAILED",
             Self::Unknown(code) => code.as_str(),
@@ -140,6 +150,7 @@ impl ErrorCode {
             "MEDIA.SOURCE_MISSING" => Self::MediaSourceMissing,
             "MEDIA.SOURCE_NOT_REGULAR_FILE" => Self::MediaSourceNotRegularFile,
             "MEDIA.SOURCE_READ_FAILED" => Self::MediaSourceReadFailed,
+            "MEDIA.SOURCE_CHANGED" => Self::MediaSourceChanged,
             "MEDIA.EMPTY_SOURCE" => Self::MediaEmptySource,
             "MEDIA.INVALID_SOURCE_LABEL" => Self::MediaInvalidSourceLabel,
             "MEDIA.INLINE_TOO_LARGE" => Self::MediaInlineTooLarge,
@@ -152,6 +163,10 @@ impl ErrorCode {
             "PROJECT.BUILD_IO" => Self::ProjectBuildIo,
             "PROJECT.BUILD_INTERNAL" => Self::ProjectBuildInternal,
             "PROJECT.BUILD_STATUS_FAILED" => Self::ProjectBuildStatusFailed,
+            "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" => Self::ProjectProductDocumentSourceMixed,
+            "PROJECT.PRODUCT_MEDIA_FAILED" => Self::ProjectProductMediaFailed,
+            "PROJECT.PRODUCT_MEDIA_STAGING_COLLISION" => Self::ProjectProductMediaStagingCollision,
+            "PROJECT.LOWER_FAILED" => Self::ProjectLowerFailed,
             "PROJECT.NORMALIZE_FAILED" => Self::ProjectNormalizeFailed,
             "PROJECT.WRITER_FAILED" => Self::ProjectWriterFailed,
             _ => Self::Unknown(code),
@@ -307,6 +322,11 @@ impl ErrorCodeExt for anyhow::Error {
             return error.code();
         }
         if let Some(error) = self.downcast_ref::<crate::product::ProductLoweringError>() {
+            return error.code();
+        }
+        if let Some(error) =
+            self.downcast_ref::<crate::product::project::ProductMediaPrepareError>()
+        {
             return error.code();
         }
 

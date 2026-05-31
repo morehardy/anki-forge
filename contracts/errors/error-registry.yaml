@@ -140,6 +140,9 @@ codes:
   - id: MEDIA.SOURCE_READ_FAILED
     status: active
     summary: media source could not be read
+  - id: MEDIA.SOURCE_CHANGED
+    status: active
+    summary: media source bytes changed after registration
   - id: MEDIA.EMPTY_SOURCE
     status: active
     summary: media source is empty
@@ -218,6 +221,12 @@ codes:
   - id: PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED
     status: active
     summary: ProductDocument-backed project mixed direct Project sources
+  - id: PROJECT.PRODUCT_MEDIA_FAILED
+    status: active
+    summary: product media preparation failed without a more specific diagnostic
+  - id: PROJECT.PRODUCT_MEDIA_STAGING_COLLISION
+    status: active
+    summary: product media staging would overwrite an existing target
   - id: PROJECT.LOWER_FAILED
     status: active
     summary: product lowering failed without a more specific diagnostic

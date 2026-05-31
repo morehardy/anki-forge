@@ -2394,7 +2394,25 @@ fn note_field_source_names_for_authoring(
 fn product_media_to_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
 ) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
-    media.map(product_media_item_to_authoring_media).collect()
+    let mut prepared = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for item in media {
+        match product_media_item_to_authoring_media(item) {
+            Ok(media) => prepared.push(media),
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if diagnostics.is_empty() {
+        Ok(prepared)
+    } else {
+        Err(ProductMediaPrepareError {
+            message: "prepare product media".into(),
+            diagnostics,
+        }
+        .into())
+    }
 }
 
 fn record_project_media_source_paths<'a>(
@@ -2436,22 +2454,38 @@ fn product_media_to_path_backed_authoring_media<'a>(
 
 fn product_media_item_to_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
-) -> anyhow::Result<crate::AuthoringMedia> {
+) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
             media
                 .verify_registered_source()
-                .map_err(|diagnostic| anyhow::anyhow!(diagnostic.message))?;
-            anyhow::ensure!(
-                media.observed_size_bytes()
-                    <= crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64,
-                "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {}",
-                media.observed_size_bytes(),
-                crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
-                filename = &media.export_filename,
-            );
-            let bytes = std::fs::read(path)
-                .with_context(|| format!("read media source file: {}", path.display()))?;
+                .map_err(ProductMediaPrepareError::from_source_diagnostic)?;
+            if media.observed_size_bytes()
+                > crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64
+            {
+                return Err(ProductMediaPrepareError::single(
+                    "MEDIA.INLINE_TOO_LARGE",
+                    format!(
+                        "project.media[{filename:?}] has {} bytes, above inline limit {}",
+                        media.observed_size_bytes(),
+                        crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
+                        filename = &media.export_filename,
+                    ),
+                    media.export_filename.clone(),
+                ));
+            }
+            let bytes = std::fs::read(path).map_err(|err| {
+                let code = if err.kind() == std::io::ErrorKind::NotFound {
+                    "MEDIA.SOURCE_MISSING"
+                } else {
+                    "MEDIA.SOURCE_READ_FAILED"
+                };
+                ProductMediaPrepareError::single(
+                    code,
+                    format!("read media source file {}: {err}", path.display()),
+                    media.export_filename.clone(),
+                )
+            })?;
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
@@ -2971,12 +3005,24 @@ struct ProjectNormalizeError {
     normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
 }
 
-struct ProductMediaPrepareError {
+#[derive(Debug)]
+pub(crate) struct ProductMediaPrepareError {
     message: String,
     diagnostics: Vec<Diagnostic>,
 }
 
 impl ProductMediaPrepareError {
+    pub(crate) fn code(&self) -> crate::diagnostics::ErrorCode {
+        self.diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.diagnostics.first())
+            .map(|diagnostic| diagnostic.code.error_code())
+            .unwrap_or_else(|| {
+                crate::diagnostics::ErrorCode::from_code("PROJECT.PRODUCT_MEDIA_FAILED")
+            })
+    }
+
     fn from_source_diagnostic(
         diagnostic: crate::product::media_registry::ProductMediaSourceDiagnostic,
     ) -> Self {
@@ -3040,6 +3086,35 @@ impl ProductMediaPrepareError {
             ),
             export_filename,
         )
+    }
+}
+
+impl std::fmt::Display for ProductMediaPrepareError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(diagnostic) = self
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.diagnostics.first())
+        {
+            write!(
+                f,
+                "{}: {}: {}",
+                self.message,
+                diagnostic.code.as_str(),
+                diagnostic.message
+            )
+        } else {
+            f.write_str(&self.message)
+        }
+    }
+}
+
+impl std::error::Error for ProductMediaPrepareError {}
+
+impl crate::diagnostics::ErrorCodeExt for ProductMediaPrepareError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        ProductMediaPrepareError::code(self)
     }
 }
 

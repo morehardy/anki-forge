@@ -167,6 +167,29 @@ fn product_media_builder_errors_have_stable_codes() {
 }
 
 #[test]
+fn product_lower_media_source_changed_errors_have_stable_codes() {
+    let temp = tempfile::tempdir().expect("tempdir");
+    let source = temp.path().join("asset.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+
+    let mut project = Project::new("Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("register media")
+        .export_as("asset.bin")
+        .expect("export media");
+    std::fs::write(&source, b"changed bytes").expect("change source");
+
+    let err = project
+        .lower()
+        .expect_err("changed source should fail lower");
+
+    assert_eq!(err.code(), ErrorCode::MediaSourceChanged);
+    assert_eq!(err.code().as_str(), "MEDIA.SOURCE_CHANGED");
+}
+
+#[test]
 fn product_lowering_errors_are_downcastable_from_anyhow() {
     let mut project = Project::from_product_document(ProductDocument::new("doc"));
     project
@@ -177,5 +200,6 @@ fn product_lowering_errors_are_downcastable_from_anyhow() {
         .lower()
         .expect_err("mixed ProductDocument and direct Project state must fail");
 
+    assert_eq!(err.code(), ErrorCode::ProjectProductDocumentSourceMixed);
     assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
 }
