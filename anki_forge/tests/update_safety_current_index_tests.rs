@@ -102,6 +102,37 @@ fn report_only_update_safety_missing_project_stable_id_is_warning() {
 }
 
 #[test]
+fn report_only_update_safety_write_identity_lockfile_requires_project_stable_id() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root
+        .path()
+        .join("missing-project-stable-id-report-only-write.apkg");
+    let lockfile = root.path().join("anki-forge.lock.json");
+    let mut project = Project::new("Missing Project Stable Id");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::ReportOnly),
+        )
+        .expect_err("writing a lockfile requires Project::stable_id before writer runs");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"UPDATE.PROJECT_STABLE_ID_MISSING".into()));
+    assert!(!output.exists());
+    assert!(!lockfile.exists());
+}
+
+#[test]
 fn disabled_update_safety_allows_identity_lockfile_without_project_stable_id() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("disabled-no-project-stable-id.apkg");
@@ -123,6 +154,37 @@ fn disabled_update_safety_allows_identity_lockfile_without_project_stable_id() {
 
     assert!(report.ensure_success().is_ok());
     assert!(output.exists());
+}
+
+#[test]
+fn disabled_update_safety_write_identity_lockfile_requires_project_stable_id() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root
+        .path()
+        .join("missing-project-stable-id-disabled-write.apkg");
+    let lockfile = root.path().join("anki-forge.lock.json");
+    let mut project = Project::new("Missing Project Stable Id");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::Disabled),
+        )
+        .expect_err("writing a lockfile requires Project::stable_id before writer runs");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"UPDATE.PROJECT_STABLE_ID_MISSING".into()));
+    assert!(!output.exists());
+    assert!(!lockfile.exists());
 }
 
 #[test]
@@ -247,6 +309,59 @@ fn apkg_output_path_must_not_equal_report_json_path() {
         .expect("path collision diagnostic");
     assert_eq!(diagnostic.severity, Severity::Error);
     assert!(!output_and_report.exists());
+}
+
+#[test]
+fn implicit_apkg_output_path_must_not_equal_report_json_path() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let artifacts_dir = root.path().join("artifacts");
+    let package = artifacts_dir.join("package.apkg");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .artifacts_dir(&artifacts_dir)
+                .report_json(&package),
+        )
+        .expect_err("implicit APKG output and report_json must be distinct paths");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(!package.exists());
+}
+
+#[test]
+fn implicit_apkg_output_path_must_not_equal_identity_lockfile_path() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let artifacts_dir = root.path().join("artifacts");
+    let package = artifacts_dir.join("package.apkg");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .artifacts_dir(&artifacts_dir)
+                .identity_lockfile(&package)
+                .write_identity_lockfile(true),
+        )
+        .expect_err("implicit APKG output and lockfile must be distinct paths");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(!package.exists());
 }
 
 #[test]

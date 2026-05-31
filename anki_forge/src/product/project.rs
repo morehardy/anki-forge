@@ -585,7 +585,11 @@ impl Project {
             if let Some(code) = classified.diagnostic_code {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new(code),
-                    severity: update_safety_blocking_severity(update_mode),
+                    severity: if options.write_identity_lockfile {
+                        Severity::Error
+                    } else {
+                        update_safety_blocking_severity(update_mode)
+                    },
                     domain: None,
                     stage: None,
                     message: "project stable id is missing for update-safety proof".into(),
@@ -3388,8 +3392,8 @@ fn output_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
     options
         .identity_lockfile
         .as_ref()
-        .zip(options.output.as_ref())
-        .is_some_and(|(identity_lockfile, output)| output == identity_lockfile)
+        .zip(effective_apkg_output_path(options))
+        .is_some_and(|(identity_lockfile, output)| &output == identity_lockfile)
 }
 
 fn report_json_collides_with_any_output(options: &BuildOptions) -> bool {
@@ -3406,11 +3410,18 @@ fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
 }
 
 fn report_json_collides_with_output(options: &BuildOptions) -> bool {
-    options
-        .output
-        .as_ref()
+    effective_apkg_output_path(options)
         .zip(options.report_json.as_ref())
-        .is_some_and(|(output, report_json)| report_json == output)
+        .is_some_and(|(output, report_json)| &output == report_json)
+}
+
+fn effective_apkg_output_path(options: &BuildOptions) -> Option<PathBuf> {
+    options.output.clone().or_else(|| {
+        options
+            .artifacts_dir
+            .as_ref()
+            .map(|artifacts_dir| artifacts_dir.join("package.apkg"))
+    })
 }
 
 fn attach_artifact_diff_risk_if_needed(
