@@ -105,12 +105,25 @@ class Project:
         compare_to: str | os.PathLike[str] | None = None,
         fail_on: str | None = None,
         report_json: str | os.PathLike[str] | None = None,
+        identity_lockfile: str | os.PathLike[str] | None = None,
+        write_identity_lockfile: bool = False,
+        update_safety: str | None = None,
         runtime: RuntimeOverride | None = None,
     ) -> BuildReport:
         target_path = Path(path).resolve()
         compare_path = Path(compare_to).resolve() if compare_to is not None else None
         report_path = Path(report_json).resolve() if report_json is not None else None
-        _validate_write_paths(target_path, compare_path, report_path, fail_on)
+        identity_lockfile_path = Path(identity_lockfile).resolve() if identity_lockfile is not None else None
+        _validate_write_paths(
+            target_path,
+            compare_path,
+            report_path,
+            fail_on,
+            identity_lockfile_path,
+            write_identity_lockfile,
+            update_safety,
+            self.stable_id,
+        )
         resolved_runtime = resolve_runtime(runtime)
 
         try:
@@ -133,6 +146,9 @@ class Project:
                     compare_to=compare_path,
                     fail_on=fail_on,
                     report_json=report_path,
+                    identity_lockfile=identity_lockfile_path,
+                    write_identity_lockfile=write_identity_lockfile,
+                    update_safety=update_safety,
                 )
         except OSError as error:
             raise RuntimeInvocationError(str(error), kind="setup_failed") from error
@@ -247,17 +263,39 @@ def _validate_write_paths(
     compare_to: Path | None,
     report_json: Path | None,
     fail_on: str | None,
+    identity_lockfile: Path | None,
+    write_identity_lockfile: bool,
+    update_safety: str | None,
+    project_stable_id: str | None,
 ) -> None:
     if fail_on is not None and fail_on not in ALLOWED_FAIL_ON:
         raise ValidationError(f"unknown fail_on level: {fail_on}")
     if fail_on is not None and compare_to is None:
         raise ValidationError("fail_on requires compare_to")
+    if update_safety is not None and update_safety not in {"strict", "report_only", "report-only", "disabled"}:
+        raise ValidationError(f"unknown update_safety mode: {update_safety}")
+    if write_identity_lockfile and identity_lockfile is None:
+        raise ValidationError("write_identity_lockfile requires identity_lockfile")
+    explicit_strict_requires_stable_id = update_safety == "strict"
+    baseline_strict_requires_stable_id = update_safety is None and (
+        identity_lockfile is not None or compare_to is not None
+    )
+    if (
+        write_identity_lockfile
+        or explicit_strict_requires_stable_id
+        or baseline_strict_requires_stable_id
+    ) and project_stable_id is None:
+        raise ValidationError("update-safe builds require Project.stable_id")
     if compare_to is not None and target == compare_to:
         raise ValidationError("apkg output path must differ from compare_to")
     if report_json is not None and target == report_json:
         raise ValidationError("apkg output path must differ from report_json")
     if compare_to is not None and report_json is not None and compare_to == report_json:
         raise ValidationError("compare_to path must differ from report_json")
+    if identity_lockfile is not None and target == identity_lockfile:
+        raise ValidationError("apkg output path must differ from identity_lockfile")
+    if report_json is not None and identity_lockfile is not None and report_json == identity_lockfile:
+        raise ValidationError("report_json path must differ from identity_lockfile")
 
 
 def _write_report_json(report: BuildReport, path: Path) -> None:
