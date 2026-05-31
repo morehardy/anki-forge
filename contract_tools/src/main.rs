@@ -63,6 +63,12 @@ enum Command {
         fail_on: Option<String>,
         #[arg(long)]
         report_json: Option<String>,
+        #[arg(long)]
+        identity_lockfile: Option<String>,
+        #[arg(long)]
+        write_identity_lockfile: bool,
+        #[arg(long)]
+        update_safety: Option<String>,
         #[arg(long, default_value = "contract-json")]
         output: String,
     },
@@ -141,6 +147,9 @@ fn main() -> anyhow::Result<()> {
             compare_to,
             fail_on,
             report_json,
+            identity_lockfile,
+            write_identity_lockfile,
+            update_safety,
             output,
         } => {
             match contract_tools::product_build_cmd::run(
@@ -150,6 +159,9 @@ fn main() -> anyhow::Result<()> {
                 compare_to.as_deref(),
                 fail_on.as_deref(),
                 report_json.as_deref(),
+                identity_lockfile.as_deref(),
+                write_identity_lockfile,
+                update_safety.as_deref(),
                 &output,
             )? {
                 contract_tools::product_build_cmd::ProductBuildOutcome::Success(body) => {
