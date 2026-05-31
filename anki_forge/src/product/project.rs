@@ -394,6 +394,7 @@ impl Project {
 
         let validation = self.validate();
         let mut diagnostics = validation.diagnostics;
+        push_identity_lockfile_path_collision_if_needed(&options, &mut diagnostics);
 
         let normalized_output =
             self.normalize_with_dirs(&media_input_dir, &media_store_dir, normalize_options);
@@ -3340,6 +3341,44 @@ fn invalid_report_without_artifact(
     }
 }
 
+fn push_identity_lockfile_path_collision_if_needed(
+    options: &BuildOptions,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
+    if !identity_lockfile_path_collision(options) {
+        return;
+    }
+
+    diagnostics.push(Diagnostic {
+        code: DiagnosticCode::new("PROJECT.PATH_COLLISION"),
+        severity: Severity::Error,
+        domain: None,
+        stage: None,
+        message: "build output path collides with identity lockfile path".into(),
+        source: Some(SourcePath::new("build.identity_lockfile")),
+        help: Some(
+            "choose distinct paths for apkg output, report_json, and identity lockfile".into(),
+        ),
+    });
+}
+
+fn identity_lockfile_path_collision(options: &BuildOptions) -> bool {
+    report_json_collides_with_identity_lockfile(options)
+        || options
+            .identity_lockfile
+            .as_ref()
+            .zip(options.output.as_ref())
+            .is_some_and(|(identity_lockfile, output)| output == identity_lockfile)
+}
+
+fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
+    options
+        .identity_lockfile
+        .as_ref()
+        .zip(options.report_json.as_ref())
+        .is_some_and(|(identity_lockfile, report_json)| report_json == identity_lockfile)
+}
+
 fn attach_artifact_diff_risk_if_needed(
     risk: &mut Option<crate::risk::ImportRiskReport>,
     diff: Option<&crate::diff::BuildDiffSummary>,
@@ -3377,6 +3416,9 @@ fn maybe_write_report_json(
     let Some(path) = options.report_json.as_ref() else {
         return Ok(report);
     };
+    if report_json_collides_with_identity_lockfile(options) {
+        return Ok(report);
+    }
 
     if let Err(err) = crate::build::write_report_json_atomic(path, &report) {
         report.diagnostics.push(Diagnostic {

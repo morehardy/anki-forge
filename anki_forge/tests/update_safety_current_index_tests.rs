@@ -182,6 +182,108 @@ fn missing_identity_lockfile_path_uses_message_without_redundant_help() {
 }
 
 #[test]
+fn identity_lockfile_path_must_not_equal_apkg_output_path() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output_and_lockfile = root.path().join("deck.apkg");
+    let report_json = root.path().join("report.json");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output_and_lockfile)
+                .identity_lockfile(&output_and_lockfile)
+                .report_json(&report_json)
+                .write_identity_lockfile(true),
+        )
+        .expect_err("APKG output and lockfile must be distinct paths");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(!output_and_lockfile.exists());
+    assert!(report_json.exists());
+    let report_json: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&report_json).expect("read report_json"))
+            .expect("parse report_json");
+    assert!(report_json["diagnostics"]
+        .as_array()
+        .expect("diagnostics array")
+        .iter()
+        .any(
+            |diagnostic| diagnostic.get("code").and_then(|code| code.as_str())
+                == Some("PROJECT.PATH_COLLISION")
+        ));
+}
+
+#[test]
+fn identity_lockfile_path_must_not_equal_report_json_path() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("deck.apkg");
+    let lockfile_and_report = root.path().join("anki-forge.lock.json");
+    let sentinel = "sentinel lockfile contents";
+    std::fs::write(&lockfile_and_report, sentinel).expect("write sentinel lockfile");
+    let mut project = Project::new("Spanish").stable_id("spanish");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile_and_report)
+                .report_json(&lockfile_and_report),
+        )
+        .expect_err("report_json and lockfile must be distinct paths");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert_eq!(
+        std::fs::read_to_string(&lockfile_and_report).expect("read sentinel lockfile"),
+        sentinel
+    );
+    assert!(!output.exists());
+}
+
+#[test]
+fn identity_lockfile_report_json_collision_preserves_lockfile_on_early_empty_project_failure() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("deck.apkg");
+    let lockfile_and_report = root.path().join("anki-forge.lock.json");
+    let sentinel = "sentinel lockfile contents";
+    std::fs::write(&lockfile_and_report, sentinel).expect("write sentinel lockfile");
+    let project = Project::new("Empty").stable_id("empty");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile_and_report)
+                .report_json(&lockfile_and_report),
+        )
+        .expect_err("report_json and lockfile must be distinct paths before early failures");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert_eq!(
+        std::fs::read_to_string(&lockfile_and_report).expect("read sentinel lockfile"),
+        sentinel
+    );
+    assert!(!output.exists());
+}
+
+#[test]
 fn custom_update_safety_identity_recipe_derives_stable_note_id_in_strict_mode() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("custom-derived.apkg");
