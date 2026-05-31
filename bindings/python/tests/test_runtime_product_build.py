@@ -129,6 +129,33 @@ def test_report_parses_schema_media_summary_unique_bytes():
     assert report.media["unique_bytes"] == 987
 
 
+def test_report_projects_update_safety_summary_dict():
+    report = BuildReport.from_json(build_report_payload(update_safety={
+        "mode": "strict",
+        "baseline_sources": [
+            {
+                "source_kind": "lockfile",
+                "source_ref": "baseline.identity_lockfile.primary",
+                "display_path": "anki-forge.lock.json",
+                "status": "loaded",
+                "used_for_reconcile": True,
+                "limitations": [],
+                "diagnostic_codes": [],
+            }
+        ],
+        "notes_preserved": 1,
+        "notes_derived": 0,
+        "notes_failed": 0,
+        "baseline_conflicts": 0,
+        "blocking_diagnostics": [],
+        "lockfile_written": False,
+    }))
+
+    assert report.update_safety["mode"] == "strict"
+    assert report.update_safety["baseline_sources"][0]["source_kind"] == "lockfile"
+    assert report.update_safety["lockfile_written"] is False
+
+
 def test_report_rejects_legacy_media_bytes_payload():
     payload = build_report_payload(media={"objects": 0, "bindings": 0, "bytes": 0})
 
