@@ -48,6 +48,84 @@ fn strict_update_safety_allows_explicit_stable_id() {
 }
 
 #[test]
+fn strict_update_safety_requires_project_stable_id_even_without_baseline() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("missing-project-stable-id.apkg");
+    let mut project = Project::new("Missing Project Stable Id");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let err = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .update_safety(UpdateSafetyMode::Strict),
+        )
+        .expect_err("strict update-safe builds require Project::stable_id");
+
+    assert!(err
+        .report
+        .diagnostic_codes()
+        .contains(&"UPDATE.PROJECT_STABLE_ID_MISSING".into()));
+    assert!(!output.exists());
+}
+
+#[test]
+fn report_only_update_safety_missing_project_stable_id_is_warning() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root
+        .path()
+        .join("missing-project-stable-id-report-only.apkg");
+    let mut project = Project::new("Missing Project Stable Id");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .update_safety(UpdateSafetyMode::ReportOnly),
+        )
+        .expect("report-only update safety should warn without blocking");
+
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "UPDATE.PROJECT_STABLE_ID_MISSING")
+        .expect("project stable id diagnostic");
+    assert_eq!(diagnostic.severity, Severity::Warning);
+    assert!(output.exists());
+}
+
+#[test]
+fn disabled_update_safety_allows_identity_lockfile_without_project_stable_id() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let output = root.path().join("disabled-no-project-stable-id.apkg");
+    let lockfile = root.path().join("ignored.lock.json");
+    let mut project = Project::new("Missing Project Stable Id");
+
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("es:hola"))
+        .expect("add note");
+
+    let report = project
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile)
+                .update_safety(UpdateSafetyMode::Disabled),
+        )
+        .expect("disabled update safety should ignore lockfile baselines");
+
+    assert!(report.ensure_success().is_ok());
+    assert!(output.exists());
+}
+
+#[test]
 fn strict_update_safety_blocks_invalid_anki_guid_candidate() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("invalid-guid.apkg");

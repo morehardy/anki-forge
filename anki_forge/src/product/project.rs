@@ -566,11 +566,14 @@ impl Project {
             }
         };
 
-        if self.stable_id.is_none()
-            && (options.compare_to.is_some()
-                || options.identity_lockfile.is_some()
-                || options.write_identity_lockfile)
-        {
+        let project_stable_id_required =
+            if matches!(update_mode, crate::update_safety::EffectiveMode::Disabled) {
+                options.write_identity_lockfile
+            } else {
+                true
+            };
+
+        if self.stable_id.is_none() && project_stable_id_required {
             let condition =
                 if options.identity_lockfile.is_some() || options.write_identity_lockfile {
                     crate::update_safety::EvidenceCondition::LockfileRequired
@@ -581,7 +584,7 @@ impl Project {
             if let Some(code) = classified.diagnostic_code {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new(code),
-                    severity: classified.severity,
+                    severity: update_safety_blocking_severity(update_mode),
                     domain: None,
                     stage: None,
                     message: "project stable id is missing for update-safety proof".into(),
@@ -710,6 +713,13 @@ impl Project {
                                         lockfile.identity_index.limitations.clone(),
                                     ),
                                 );
+                                push_project_stable_id_mismatch_if_needed(
+                                    &mut diagnostics,
+                                    self.stable_id.as_deref(),
+                                    Some(lockfile.project_stable_id.as_str()),
+                                    path.display().to_string(),
+                                    update_error_severity,
+                                );
                                 Some(lockfile)
                             }
                             Err(err) => {
@@ -773,6 +783,13 @@ impl Project {
                                     path,
                                     index.limitations.clone(),
                                 ),
+                            );
+                            push_project_stable_id_mismatch_if_needed(
+                                &mut diagnostics,
+                                self.stable_id.as_deref(),
+                                index.project_stable_id.as_deref(),
+                                path.display().to_string(),
+                                update_error_severity,
                             );
                             Some(index)
                         }
@@ -3445,6 +3462,36 @@ fn update_safety_blocking_severity(mode: crate::update_safety::EffectiveMode) ->
         crate::update_safety::EffectiveMode::ReportOnly
         | crate::update_safety::EffectiveMode::Disabled => Severity::Warning,
     }
+}
+
+fn push_project_stable_id_mismatch_if_needed(
+    diagnostics: &mut Vec<Diagnostic>,
+    current_project_stable_id: Option<&str>,
+    baseline_project_stable_id: Option<&str>,
+    source_ref: impl Into<String>,
+    severity: Severity,
+) {
+    let (Some(current), Some(baseline)) = (current_project_stable_id, baseline_project_stable_id)
+    else {
+        return;
+    };
+    if current == baseline {
+        return;
+    }
+    diagnostics.push(Diagnostic {
+        code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISMATCH"),
+        severity,
+        domain: None,
+        stage: None,
+        message: format!(
+            "project stable id {current:?} differs from baseline project stable id {baseline:?}"
+        ),
+        source: Some(SourcePath::new(source_ref.into())),
+        help: Some(
+            "use the matching lockfile for this project or choose an explicit migration path"
+                .into(),
+        ),
+    });
 }
 
 fn downgrade_update_errors_to_warnings(diagnostics: &mut [Diagnostic]) {
