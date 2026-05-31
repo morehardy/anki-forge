@@ -133,6 +133,19 @@ impl BuildOptions {
         self
     }
 
+    pub fn first_update_safe_build(mut self, lockfile: impl Into<PathBuf>) -> Self {
+        self.identity_lockfile = Some(lockfile.into());
+        self.write_identity_lockfile = true;
+        self.update_safety = Some(UpdateSafetyMode::Strict);
+        self
+    }
+
+    pub fn update_safe(mut self, lockfile: impl Into<PathBuf>) -> Self {
+        self.identity_lockfile = Some(lockfile.into());
+        self.update_safety = Some(UpdateSafetyMode::Strict);
+        self
+    }
+
     pub fn update_safety(mut self, mode: UpdateSafetyMode) -> Self {
         self.update_safety = Some(mode);
         self
