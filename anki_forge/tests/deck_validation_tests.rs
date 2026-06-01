@@ -387,6 +387,35 @@ fn media_registry_rejects_pathlike_names_at_add_time() {
 }
 
 #[test]
+fn media_registry_rejects_helper_unsafe_names_at_add_time() {
+    let mut deck = Deck::new("Anatomy");
+
+    for invalid_name in [
+        "space name.png",
+        "bad&name.png",
+        "bad]name.mp3",
+        "unicodé.png",
+    ] {
+        let err = deck
+            .media()
+            .add(MediaSource::from_bytes(invalid_name, vec![1, 2, 3]))
+            .expect_err("helper-unsafe media names must fail");
+        let filename_error = err
+            .downcast_ref::<authoring_core::MediaFilenameError>()
+            .expect("error should preserve media filename error type");
+
+        assert!(
+            matches!(
+                filename_error,
+                authoring_core::MediaFilenameError::UnsafeCharacters(name)
+                    if name == invalid_name
+            ),
+            "unexpected error for {invalid_name}: {err}"
+        );
+    }
+}
+
+#[test]
 fn image_occlusion_lane_accepts_tags() {
     let mut deck = Deck::new("Anatomy");
     let image = deck

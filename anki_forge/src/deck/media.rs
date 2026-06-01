@@ -3,7 +3,7 @@ use base64::Engine as _;
 use sha1::{Digest, Sha1};
 use std::collections::BTreeMap;
 use std::io::Read;
-use std::path::{Component, Path};
+use std::path::Path;
 
 use crate::deck::model::{
     Deck, MediaRef, RasterImageMetadata, RegisteredMedia, RegisteredMediaSource,
@@ -309,25 +309,7 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
-    anyhow::ensure!(!name.is_empty(), "media filename must not be empty");
-    anyhow::ensure!(
-        !name.contains(['/', '\\']),
-        "media filename must be a bare filename without path separators: {}",
-        name
-    );
-
-    let mut components = Path::new(name).components();
-    let only_component = matches!(components.next(), Some(Component::Normal(_)))
-        && components.next().is_none()
-        && !Path::new(name).is_absolute();
-
-    anyhow::ensure!(
-        only_component,
-        "media filename must be a bare filename without path traversal: {}",
-        name
-    );
-
-    Ok(())
+    authoring_core::validate_authoring_media_filename(name).map_err(anyhow::Error::new)
 }
 
 fn mime_from_name(name: &str) -> String {
