@@ -6,8 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from anki_forge import DiagnosticsError, Note, Project, ProtocolError, RuntimeInvocationError, ValidationError
+from anki_forge import Diagnostic, DiagnosticsError, Note, Project, ProtocolError, RuntimeInvocationError, ValidationError
 import anki_forge.runtime as runtime_module
+from anki_forge.project import _report_to_json
 from anki_forge.report import BuildReport
 from anki_forge.runtime import RuntimeOverride, build_product_build_argv, parse_completed_process
 
@@ -111,6 +112,55 @@ def test_report_rejects_v2_diagnostic_missing_required_fields():
         BuildReport.from_json(build_report_payload(
             diagnostics=[diagnostic_payload(domain="")],
         ))
+
+
+@pytest.mark.parametrize(
+    ("code", "domain", "stage"),
+    [
+        ("AFID.BLANK", "identity", "validate"),
+        ("COMPARE.MISSING_BASELINE", "comparison", "compare"),
+        ("DECK.STABLE_ID_BLANK", "deck", "validate"),
+        ("MEDIA.SOURCE_MISSING", "media", "normalize"),
+        ("NOTETYPE.FIELD_MISSING", "notetype", "validate"),
+        ("TEMPLATE.INVALID", "notetype", "validate"),
+        ("PRODUCT.CLOZE_MARKER_MISSING", "product", "validate"),
+        ("PROJECT.BUILD_INTERNAL", "project", "build"),
+        ("RISK.THRESHOLD_EXCEEDED", "risk", "risk"),
+        ("UPDATE.BASELINE_APKG_UNREADABLE", "update_safety", "update_safety"),
+        ("UNKNOWN", "unknown", "unknown"),
+    ],
+)
+def test_python_report_json_infers_required_diagnostic_domain_and_stage(code, domain, stage):
+    report = BuildReport(
+        status="invalid",
+        comparison="not_requested",
+        artifact=None,
+        counts={"notes": 0, "cards": 0, "media": 0},
+        media={
+            "objects": 0,
+            "bindings": 0,
+            "references": 0,
+            "missing_references": 0,
+            "unsafe_references": 0,
+            "unused_bindings": 0,
+            "unique_bytes": 0,
+        },
+        diagnostics=(
+            Diagnostic(
+                code=code,
+                severity="error",
+                message="missing media",
+            ),
+        ),
+    )
+
+    payload = _report_to_json(report)
+
+    assert payload["diagnostics"][0]["domain"] == domain
+    assert payload["diagnostics"][0]["stage"] == stage
+    parsed = BuildReport.from_json(payload)
+    assert parsed.diagnostics[0].domain == domain
+    assert parsed.diagnostics[0].stage == stage
 
 
 def test_report_parses_schema_media_summary_unique_bytes():
