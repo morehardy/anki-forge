@@ -315,6 +315,9 @@ impl ErrorCodeExt for anyhow::Error {
         if let Some(error) = self.downcast_ref::<crate::deck::DeckError>() {
             return error.code();
         }
+        if let Some(error) = self.downcast_ref::<authoring_core::MediaFilenameError>() {
+            return error.code();
+        }
         if let Some(error) = self.downcast_ref::<crate::deck::MediaError>() {
             return error.code();
         }
@@ -331,6 +334,12 @@ impl ErrorCodeExt for anyhow::Error {
         }
 
         code_from_message(&self.to_string())
+    }
+}
+
+impl ErrorCodeExt for authoring_core::MediaFilenameError {
+    fn code(&self) -> ErrorCode {
+        ErrorCode::MediaUnsafeFilename
     }
 }
 

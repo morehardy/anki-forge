@@ -436,13 +436,7 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
-    authoring_core::validate_authoring_media_filename(name).map_err(|message| {
-        MediaError::UnsafeFilename {
-            name: name.to_string(),
-            message,
-        }
-        .into()
-    })
+    authoring_core::validate_authoring_media_filename(name).map_err(anyhow::Error::new)
 }
 
 fn mime_from_name(name: &str) -> String {

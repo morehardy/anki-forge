@@ -19,6 +19,7 @@ MEDIA_FIELDS = (
     "unused_bindings",
     "unique_bytes",
 )
+MEDIA_SOURCE_MODES = {"inline", "path_backed"}
 POLICY_FIELDS = {"status", "threshold", "highest_risk", "blocking_findings"}
 POLICY_STATUSES = {"passed", "blocked", "not_evaluated"}
 RISK_LEVELS = {"info", "low", "medium", "high", "critical"}
@@ -30,7 +31,7 @@ class BuildReport:
     comparison: str
     artifact: Mapping[str, Any] | None
     counts: Mapping[str, int]
-    media: Mapping[str, int]
+    media: Mapping[str, Any]
     diagnostics: tuple[Diagnostic, ...]
     inspect: Mapping[str, Any] | None = None
     previous_inspect: Mapping[str, Any] | None = None
@@ -56,7 +57,7 @@ class BuildReport:
 
         artifact = _artifact(payload.get("artifact"))
         counts = _required_int_map(payload, "counts", COUNT_FIELDS)
-        media = _required_int_map(payload, "media", MEDIA_FIELDS)
+        media = _required_media(payload)
         diagnostics = _diagnostics(payload.get("diagnostics"))
 
         _metrics(payload.get("metrics"))
@@ -98,6 +99,48 @@ def _required_int_map(payload: dict[str, Any], key: str, fields: tuple[str, ...]
     parsed: dict[str, int] = {}
     for field in fields:
         parsed[field] = _non_negative_int(value.get(field), f"{key}.{field}")
+    return parsed
+
+
+def _required_media(payload: dict[str, Any]) -> dict[str, Any]:
+    value = payload.get("media")
+    if not isinstance(value, dict):
+        raise ProtocolError("build report media must be an object")
+    if not set(MEDIA_FIELDS).issubset(value):
+        raise ProtocolError("build report media is missing required fields")
+
+    parsed: dict[str, Any] = {}
+    for field in MEDIA_FIELDS:
+        parsed[field] = _non_negative_int(value.get(field), f"media.{field}")
+
+    entries = value.get("entries", [])
+    if not isinstance(entries, list):
+        raise ProtocolError("build report media.entries must be an array")
+    parsed_entries: list[dict[str, Any]] = []
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            raise ProtocolError(f"build report media.entries[{index}] must be an object")
+        media_id = entry.get("id")
+        filename = entry.get("filename")
+        source_mode = entry.get("source_mode")
+        if not isinstance(media_id, str) or not media_id:
+            raise ProtocolError(f"build report media.entries[{index}].id must be a non-empty string")
+        if not isinstance(filename, str) or not filename:
+            raise ProtocolError(f"build report media.entries[{index}].filename must be a non-empty string")
+        if not isinstance(source_mode, str) or source_mode not in MEDIA_SOURCE_MODES:
+            raise ProtocolError(f"build report media.entries[{index}].source_mode is unsupported")
+        parsed_entries.append(
+            {
+                "id": media_id,
+                "filename": filename,
+                "source_mode": source_mode,
+                "size_bytes": _non_negative_int(
+                    entry.get("size_bytes"),
+                    f"media.entries[{index}].size_bytes",
+                ),
+            }
+        )
+    parsed["entries"] = parsed_entries
     return parsed
 
 

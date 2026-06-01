@@ -200,6 +200,7 @@ class Project:
                     "unsafe_references": 0,
                     "unused_bindings": 0,
                     "unique_bytes": 0,
+                    "entries": [],
                 },
                 diagnostics=(
                     Diagnostic(

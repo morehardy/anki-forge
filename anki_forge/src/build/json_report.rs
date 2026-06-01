@@ -5,7 +5,8 @@ use std::path::Path;
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildMetrics, BuildPolicyResult, BuildReport, BuildStatus,
-    ComparisonStatus, InspectSummary, MediaSummary, UpdateSafetySummary,
+    ComparisonStatus, InspectSummary, MediaEntrySummary, MediaSourceMode, MediaSummary,
+    UpdateSafetySummary,
 };
 use crate::diagnostics::{Diagnostic, Severity};
 
@@ -50,6 +51,15 @@ pub struct MediaSummaryJson {
     pub unsafe_references: usize,
     pub unused_bindings: usize,
     pub unique_bytes: u64,
+    pub entries: Vec<MediaEntrySummaryJson>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct MediaEntrySummaryJson {
+    pub id: String,
+    pub filename: String,
+    pub source_mode: MediaSourceMode,
+    pub size_bytes: u64,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -100,7 +110,7 @@ impl BuildReportJson {
             status: report.status,
             comparison: report.comparison,
             counts: BuildCountsJson::from(report.counts),
-            media: MediaSummaryJson::from(report.media),
+            media: MediaSummaryJson::from(&report.media),
             diagnostics: report
                 .diagnostics
                 .iter()
@@ -193,8 +203,8 @@ impl From<BuildCounts> for BuildCountsJson {
     }
 }
 
-impl From<MediaSummary> for MediaSummaryJson {
-    fn from(value: MediaSummary) -> Self {
+impl From<&MediaSummary> for MediaSummaryJson {
+    fn from(value: &MediaSummary) -> Self {
         Self {
             objects: value.objects,
             bindings: value.bindings,
@@ -203,6 +213,22 @@ impl From<MediaSummary> for MediaSummaryJson {
             unsafe_references: value.unsafe_references,
             unused_bindings: value.unused_bindings,
             unique_bytes: value.unique_bytes,
+            entries: value
+                .entries
+                .iter()
+                .map(MediaEntrySummaryJson::from)
+                .collect(),
+        }
+    }
+}
+
+impl From<&MediaEntrySummary> for MediaEntrySummaryJson {
+    fn from(value: &MediaEntrySummary) -> Self {
+        Self {
+            id: value.id.clone(),
+            filename: value.filename.clone(),
+            source_mode: value.source_mode,
+            size_bytes: value.size_bytes,
         }
     }
 }

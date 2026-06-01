@@ -823,3 +823,42 @@ fn phase4_build_report_schema_is_valid_json_schema() {
     let schema: serde_json::Value = serde_json::from_str(&raw).expect("schema JSON");
     jsonschema::JSONSchema::compile(&schema).expect("schema compiles");
 }
+
+#[test]
+fn phase4_build_report_schema_accepts_v1_media_without_entries() {
+    let manifest =
+        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
+            .expect("repo manifest should load");
+    let schema_path =
+        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
+            .expect("build_report_schema should resolve");
+    let schema = load_schema(schema_path).expect("load build report schema");
+    let value = json!({
+        "kind": "anki-forge-build-report",
+        "schema_version": "phase4-build-report-v1",
+        "tool_version": "test",
+        "status": "success",
+        "comparison": "not_requested",
+        "artifact": { "path": "deck.apkg" },
+        "counts": { "notes": 1, "cards": 1, "media": 0 },
+        "media": {
+            "objects": 0,
+            "bindings": 0,
+            "references": 0,
+            "missing_references": 0,
+            "unsafe_references": 0,
+            "unused_bindings": 0,
+            "unique_bytes": 0
+        },
+        "diagnostics": [],
+        "metrics": { "duration_ms": 1 },
+        "policy": {
+            "status": "not_evaluated",
+            "threshold": null,
+            "highest_risk": null,
+            "blocking_findings": []
+        }
+    });
+
+    assert!(validate_value(&schema, &value).is_ok());
+}

@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
 use anki_forge::build::{
-    ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior, ProjectMediaPolicy,
-    ProjectNormalizeOptions,
+    MediaSourceMode, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
+    ProjectMediaPolicy, ProjectNormalizeOptions,
 };
 use anki_forge::prelude::*;
 use anki_forge::AuthoringMediaSource;
@@ -121,6 +121,257 @@ fn project_build_report_includes_media_summary_with_unique_object_bytes() {
     assert_eq!(report.media.unsafe_references, 0);
     assert_eq!(report.media.unused_bindings, 1);
     assert_eq!(report.media.unique_bytes, PNG.len() as u64);
+    assert_eq!(report.media.entries.len(), 2);
+    assert!(report
+        .media
+        .entries
+        .iter()
+        .all(|entry| entry.source_mode == MediaSourceMode::Inline));
+}
+
+#[test]
+fn project_write_apkg_defaults_file_media_to_path_backed_staging() {
+    let root = unique_artifacts_dir("project-large-file-media");
+    let source = root.join("large.bin");
+    std::fs::write(&source, vec![b'x'; 70 * 1024]).expect("write large media");
+
+    let mut project = Project::new("Large Media")
+        .stable_id("large-media")
+        .default_deck("Large Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("large.bin")
+        .expect("large media export");
+    project
+        .add_note(Note::basic("front", "back").stable_id("large-media:note"))
+        .expect("add note");
+
+    let report = project
+        .write_apkg(root.join("large.apkg"))
+        .expect("default file media build should use path-backed staging");
+
+    report.ensure_success().expect("path-backed build succeeds");
+    let entry = report
+        .media
+        .entries
+        .iter()
+        .find(|entry| entry.filename == "large.bin")
+        .expect("large media entry");
+    assert_eq!(entry.source_mode, MediaSourceMode::PathBacked);
+    assert_eq!(entry.size_bytes, 70 * 1024);
+    assert!(report
+        .pretty_report()
+        .contains("large.bin: path_backed, 71680 bytes"));
+}
+
+#[test]
+fn invalid_empty_project_report_keeps_path_backed_media_entry() {
+    let root = unique_artifacts_dir("project-empty-media-source-mode");
+    let source = root.join("chart.png");
+    std::fs::write(&source, PNG).expect("write png media");
+
+    let mut project = Project::new("Empty Media")
+        .stable_id("empty-media")
+        .default_deck("Empty Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("chart.png")
+        .expect("png media export");
+
+    let error = project
+        .build(BuildOptions::new().output(root.join("empty.apkg")))
+        .expect_err("empty project is invalid");
+
+    assert_eq!(error.report.media.entries.len(), 1);
+    assert_eq!(
+        error.report.media.entries[0].source_mode,
+        MediaSourceMode::PathBacked
+    );
+}
+
+#[test]
+fn explicit_self_contained_file_media_reports_path_backed_fix_when_inline_limit_is_exceeded() {
+    let root = unique_artifacts_dir("project-self-contained-large-media");
+    let source = root.join("large.bin");
+    std::fs::write(&source, vec![b'x'; 70 * 1024]).expect("write large media");
+
+    let mut project = Project::new("Large Media")
+        .stable_id("self-contained-large-media")
+        .default_deck("Large Media");
+    project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("large.bin")
+        .expect("large media export");
+    project
+        .add_note(Note::basic("front", "back").stable_id("large-media:note"))
+        .expect("add note");
+
+    let error = project
+        .build(
+            BuildOptions::new()
+                .output(root.join("large.apkg"))
+                .self_contained(),
+        )
+        .expect_err("self-contained file media should enforce inline limit");
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.INLINE_TOO_LARGE")
+        .expect("inline size diagnostic");
+
+    assert!(diagnostic.help.as_deref().is_some_and(|help| {
+        help.contains("path-backed") && help.contains("remove self_contained()")
+    }));
+}
+
+#[test]
+fn product_document_self_contained_inlines_file_media() {
+    let root = unique_artifacts_dir("product-document-self-contained-media");
+    let source = root.join("chart.png");
+    std::fs::write(&source, PNG).expect("write png media");
+    let document: anki_forge::product::ProductDocument = serde_json::from_str(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "product-v2-file-media",
+          "default_deck_name": "Media",
+          "note_types": [
+            {
+              "kind": "stock",
+              "id": "basic",
+              "name": "Basic",
+              "fields": [
+                {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true},
+                {"name": "Back", "key": "back", "identity": false, "sort": false, "required": false}
+              ],
+              "templates": [
+                {"name": "Card 1", "key": "card_1", "front": "{{Front}}", "back": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}", "generation_rule": {"kind": "anki_default"}}
+              ],
+              "css": null
+            }
+          ],
+          "notes": [
+            {
+              "kind": "stock",
+              "note_type_id": "basic",
+              "stable_id": "product-v2:file-media",
+              "deck_name": "Media",
+              "fields": {
+                "front": {"kind": "text", "value": "front"},
+                "back": {"kind": "image", "media_id": "media:chart"}
+              },
+              "tags": []
+            }
+          ],
+          "media": [
+            {
+              "id": "media:chart",
+              "source": {"kind": "file", "path": "chart.png"},
+              "export_as": "chart.png"
+            }
+          ]
+        }"#,
+    )
+    .expect("parse product-v2 document");
+
+    let report = Project::from_product_document(document)
+        .build(
+            BuildOptions::new()
+                .output(root.join("product-v2-file.apkg"))
+                .normalize_options(ProjectNormalizeOptions::strict().base_dir(&root))
+                .self_contained(),
+        )
+        .expect("self-contained product document build");
+
+    report.ensure_success().expect("successful build");
+    let entry = report
+        .media
+        .entries
+        .iter()
+        .find(|entry| entry.filename == "chart.png")
+        .expect("chart media entry");
+    assert_eq!(entry.source_mode, MediaSourceMode::Inline);
+}
+
+#[test]
+fn product_document_self_contained_reports_all_bad_file_media() {
+    let root = unique_artifacts_dir("product-document-self-contained-bad-media");
+    let document: anki_forge::product::ProductDocument = serde_json::from_value(serde_json::json!({
+        "product_document_version": "product-v2",
+        "document_id": "product-v2-bad-file-media",
+        "default_deck_name": "Media",
+        "note_types": [
+            {
+                "kind": "stock",
+                "id": "basic",
+                "name": "Basic",
+                "fields": [
+                    {"name": "Front", "key": "front", "identity": false, "sort": true, "required": true},
+                    {"name": "Back", "key": "back", "identity": false, "sort": false, "required": false}
+                ],
+                "templates": [
+                    {"name": "Card 1", "key": "card_1", "front": "{{Front}}", "back": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}", "generation_rule": {"kind": "anki_default"}}
+                ],
+                "css": null
+            }
+        ],
+        "notes": [
+            {
+                "kind": "stock",
+                "note_type_id": "basic",
+                "stable_id": "product-v2:bad-file-media",
+                "deck_name": "Media",
+                "fields": {
+                    "front": {"kind": "text", "value": "front"},
+                    "back": {"kind": "text", "value": "back"}
+                },
+                "tags": []
+            }
+        ],
+        "media": [
+            {
+                "id": "media:missing-a",
+                "source": {"kind": "file", "path": "missing-a.png"},
+                "export_as": "missing-a.png"
+            },
+            {
+                "id": "media:missing-b",
+                "source": {"kind": "file", "path": "missing-b.png"},
+                "export_as": "missing-b.png"
+            }
+        ]
+    }))
+    .expect("parse product-v2 document");
+
+    let error = Project::from_product_document(document)
+        .build(
+            BuildOptions::new()
+                .output(root.join("product-v2-bad-file.apkg"))
+                .normalize_options(ProjectNormalizeOptions::strict().base_dir(&root))
+                .self_contained(),
+        )
+        .expect_err("missing product-v2 file media should fail");
+
+    let sources = error
+        .report
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.SOURCE_MISSING")
+        .map(|diagnostic| diagnostic.source.as_ref().map(|source| source.as_str()))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        sources,
+        vec![
+            Some("project.media[\"missing-a.png\"]"),
+            Some("project.media[\"missing-b.png\"]"),
+        ]
+    );
 }
 
 #[test]

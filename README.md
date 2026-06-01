@@ -111,6 +111,11 @@ Media export names must be helper-safe bare filenames such as `taberu.mp3`.
 Avoid path components, absolute paths, URL escapes, and unsafe characters.
 Register files with `project.media_mut().add_file(...).export_as("taberu.mp3")`;
 inline examples can use `project.media_mut().add_bytes(...).export_as(...)`.
+`write_apkg()` stages file-backed media by path by default, so large images,
+audio, and video do not need to fit the inline-media limit. Use
+`BuildOptions::self_contained()` only when you explicitly want a self-contained
+inline authoring payload; large file-backed media should stay on the default
+path-backed build path.
 
 Common media diagnostics:
 
@@ -133,12 +138,16 @@ Common media diagnostics:
 - MIME mismatch: the export filename or declared MIME does not match the
   observed source bytes. Change the export filename/declared MIME, or replace
   the source file.
+- Inline too large: an explicitly self-contained build tried to inline media
+  beyond the configured inline limit. Remove `self_contained()` and use the
+  default path-backed build path for large assets.
 
 `anki-forge` does not automatically rewrite filenames, HTML, or CSS because
 those edits can change deck behavior and hide the authoring intent. Keep the
 registered `export_as(...)` filename and local references in sync yourself.
-`BuildReport::pretty_report()` is a human-facing summary. For stable machine
-output, use `BuildOptions::report_json(...)` or `report.to_report_json()`.
+`BuildReport::pretty_report()` is a human-facing summary. For stable
+machine-readable output, use `BuildOptions::report_json(...)` or
+`report.to_report_json()`; structured report JSON includes media mode details.
 
 ## 4. Advanced: Contract Tools And Runtime
 

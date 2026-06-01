@@ -102,6 +102,30 @@ pub enum MediaReferenceResolution {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum MediaFilenameError {
+    Empty,
+    NotBare(String),
+    UnsafeCharacters(String),
+}
+
+impl std::fmt::Display for MediaFilenameError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Empty => write!(f, "media filename must not be empty"),
+            Self::NotBare(name) => write!(f, "media filename must be a bare filename: {name}"),
+            Self::UnsafeCharacters(name) => {
+                write!(
+                    f,
+                    "media filename contains helper-unsafe characters: {name}"
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for MediaFilenameError {}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MediaIngestDiagnostic {
     pub level: String,
     pub code: String,
@@ -149,10 +173,10 @@ pub fn ingest_authoring_media(
             continue;
         }
 
-        if let Err(message) = validate_authoring_media_filename(&item.desired_filename) {
+        if let Err(err) = validate_authoring_media_filename(&item.desired_filename) {
             diagnostics.push(error(
                 "MEDIA.UNSAFE_FILENAME",
-                message,
+                err.to_string(),
                 Some(item.desired_filename.clone()),
             ));
             continue;
@@ -396,26 +420,24 @@ fn resolve_path_source(
     Ok((canonical, metadata.len()))
 }
 
-pub fn validate_authoring_media_filename(name: &str) -> Result<(), String> {
+pub fn validate_authoring_media_filename(name: &str) -> Result<(), MediaFilenameError> {
     if name.is_empty() {
-        return Err("media filename must not be empty".into());
+        return Err(MediaFilenameError::Empty);
     }
     if name.contains(['/', '\\'])
         || Path::new(name).is_absolute()
         || has_parent_component(Path::new(name))
     {
-        return Err(format!("media filename must be a bare filename: {name}"));
+        return Err(MediaFilenameError::NotBare(name.into()));
     }
     let mut components = Path::new(name).components();
     let is_bare =
         matches!(components.next(), Some(Component::Normal(_))) && components.next().is_none();
     if !is_bare {
-        return Err(format!("media filename must be a bare filename: {name}"));
+        return Err(MediaFilenameError::NotBare(name.into()));
     }
     if !is_helper_safe_filename(name) {
-        return Err(format!(
-            "media filename contains helper-unsafe characters: {name}"
-        ));
+        return Err(MediaFilenameError::UnsafeCharacters(name.into()));
     }
 
     Ok(())
