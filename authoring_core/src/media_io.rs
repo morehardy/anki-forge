@@ -462,6 +462,8 @@ fn text_mime(bytes: &[u8]) -> &'static str {
 }
 
 fn looks_like_css(trimmed: &str, lowered_prefix: &str) -> bool {
+    const CSS_SHAPE_SCAN_CHARS: usize = 1024;
+
     if lowered_prefix.starts_with("@charset")
         || lowered_prefix.starts_with("@import")
         || lowered_prefix.starts_with("@font-face")
@@ -470,9 +472,24 @@ fn looks_like_css(trimmed: &str, lowered_prefix: &str) -> bool {
         return true;
     }
 
-    matches!(trimmed.chars().next(), Some('.' | '#' | ':' | '*' | '['))
-        && trimmed.contains('{')
-        && trimmed.contains('}')
+    if !matches!(trimmed.chars().next(), Some('.' | '#' | ':' | '*' | '[')) {
+        return false;
+    }
+
+    let mut has_open_brace = false;
+    let mut has_close_brace = false;
+    for ch in trimmed.chars().take(CSS_SHAPE_SCAN_CHARS) {
+        match ch {
+            '{' => has_open_brace = true,
+            '}' => has_close_brace = true,
+            _ => {}
+        }
+        if has_open_brace && has_close_brace {
+            return true;
+        }
+    }
+
+    false
 }
 
 fn high(mime: &str) -> SniffedMime {

@@ -468,7 +468,8 @@ fn populate_latest_collection(
             .iter()
             .find(|candidate| candidate.id == note.notetype_id)
             .expect("normalized note should reference a known notetype");
-        let storage = note_storage_values(note, notetype)?;
+        let mut stripped_fields = StrippedNoteFields::new(note);
+        let storage = note_storage_values(note, notetype, &mut stripped_fields)?;
         let note_row = note_row_id;
         let guid = guid_assignments
             .get(&note.id)
@@ -498,7 +499,7 @@ fn populate_latest_collection(
             normalized_tags.insert(tag.clone());
         }
         for (template_index, template) in notetype.templates.iter().enumerate() {
-            if !template_generates_card(note, notetype, template) {
+            if !template_generates_card(notetype, template, &mut stripped_fields) {
                 continue;
             }
             let target_deck_id = resolve_card_deck_id(note, template, &deck_ids);
@@ -657,24 +658,58 @@ struct NoteStorageValues {
     mtime_secs: i64,
 }
 
+struct StrippedNoteFields<'a> {
+    note: &'a NormalizedNote,
+    values: std::collections::BTreeMap<String, String>,
+}
+
+impl<'a> StrippedNoteFields<'a> {
+    fn new(note: &'a NormalizedNote) -> Self {
+        Self {
+            note,
+            values: Default::default(),
+        }
+    }
+
+    fn get(&mut self, field_name: &str) -> Option<&str> {
+        if !self.values.contains_key(field_name) {
+            let value = self.note.fields.get(field_name)?;
+            self.values.insert(
+                field_name.to_string(),
+                strip_html_preserving_media_filenames(value),
+            );
+        }
+        self.values.get(field_name).map(String::as_str)
+    }
+}
+
 fn note_storage_values(
     note: &NormalizedNote,
     notetype: &NormalizedNotetype,
+    stripped_fields: &mut StrippedNoteFields<'_>,
 ) -> Result<NoteStorageValues> {
     let fields = ordered_notetype_fields(notetype);
     let values = ordered_field_values(note, &fields);
-    let first_field = values.first().map(String::as_str).unwrap_or("");
-    let first_field_stripped = strip_html_preserving_media_filenames(first_field);
     let sort_field_index = fields.iter().position(|field| field.sort).unwrap_or(0);
+    let first_field_checksum = fields
+        .first()
+        .and_then(|field| stripped_fields.get(&field.name))
+        .map(field_checksum)
+        .unwrap_or_else(|| field_checksum(""));
     let sort_field_stripped = values
         .get(sort_field_index)
-        .map(|field| strip_html_preserving_media_filenames(field))
-        .unwrap_or_default();
+        .and_then(|_| {
+            fields
+                .get(sort_field_index)
+                .and_then(|field| stripped_fields.get(&field.name))
+        })
+        .unwrap_or("")
+        .to_string();
 
     Ok(NoteStorageValues {
         flds: values.join("\u{1f}"),
         sfld: sort_field_stripped,
-        csum: field_checksum(&first_field_stripped),
+        csum: first_field_checksum,
         mtime_secs: note.mtime_secs.unwrap_or(1),
     })
 }
@@ -696,9 +731,9 @@ fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&authoring_core
 }
 
 fn template_generates_card(
-    note: &NormalizedNote,
     notetype: &NormalizedNotetype,
     template: &authoring_core::NormalizedTemplate,
+    stripped_fields: &mut StrippedNoteFields<'_>,
 ) -> bool {
     let Some(requirement) = template.generation_requirement.as_ref() else {
         return true;
@@ -709,17 +744,17 @@ fn template_generates_card(
         "all" => requirement
             .field_names
             .iter()
-            .all(|name| note_field_is_nonempty(note, notetype, name)),
+            .all(|name| note_field_is_nonempty(notetype, stripped_fields, name)),
         _ => requirement
             .field_names
             .iter()
-            .any(|name| note_field_is_nonempty(note, notetype, name)),
+            .any(|name| note_field_is_nonempty(notetype, stripped_fields, name)),
     }
 }
 
 fn note_field_is_nonempty(
-    note: &NormalizedNote,
     notetype: &NormalizedNotetype,
+    stripped_fields: &mut StrippedNoteFields<'_>,
     field_name: &str,
 ) -> bool {
     if !notetype
@@ -730,13 +765,9 @@ fn note_field_is_nonempty(
         return false;
     }
 
-    note.fields
+    stripped_fields
         .get(field_name)
-        .map(|value| {
-            !strip_html_preserving_media_filenames(value)
-                .trim()
-                .is_empty()
-        })
+        .map(|value| !value.trim().is_empty())
         .unwrap_or(false)
 }
 
