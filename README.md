@@ -65,8 +65,28 @@ fn main() -> anyhow::Result<()> {
 ```
 
 `BuildReport` includes the artifact path, note/card/media counts, diagnostics,
-warning count, inspect summary, and duration. `inspect.observation_status` is
-writer-layer reporting metadata passed through from the inspection step.
+warning count, inspect summary, and duration. Diagnostics expose stable codes
+and structured metadata (`severity`, `domain`, `stage`, `path`,
+`suggested_fix`) so callers do not need to match human-facing strings.
+`inspect.observation_status` is writer-layer reporting metadata passed through
+from the inspection step.
+
+```rust
+use anki_forge::diagnostics::{ErrorCode, ErrorCodeExt};
+use anki_forge::prelude::*;
+
+fn add_note(deck: &mut Deck) -> anyhow::Result<()> {
+    if let Err(err) = deck.basic().note("hola", "hello").stable_id("   ").add() {
+        match err.code() {
+            ErrorCode::StableIdBlank => eprintln!("choose a non-empty stable_id"),
+            ErrorCode::StableIdDuplicate => eprintln!("choose a unique stable_id"),
+            other => eprintln!("anki-forge error: {}", other.as_str()),
+        }
+        return Err(err);
+    }
+    Ok(())
+}
+```
 
 Custom note types, stable field/template keys, and project media are shown in:
 
@@ -78,6 +98,12 @@ cargo run -q -p anki_forge --example target_api_media
 `Note::cloze(...)` intentionally stores the cloze `Text` field as explicit HTML
 so Anki receives raw `{{cN::...}}` markers. Do not assume cloze text is escaped
 like `Note::basic(...)` text.
+
+HTML escaping happens before the writer layer. `ProductFieldContentV2::Text`
+escapes text once, `ProductFieldContentV2::Html` passes trusted HTML through,
+and media field content emits Anki-compatible `[sound:...]` or `<img src="...">`
+markup. Stock `basic`, `cloze`, and custom notes that reach `writer_core` are
+already HTML-ready; the writer only strips HTML to derive Anki `sfld` and `csum`.
 
 ### 3.1 Media Troubleshooting
 
@@ -119,8 +145,9 @@ Common media diagnostics:
 `anki-forge` does not automatically rewrite filenames, HTML, or CSS because
 those edits can change deck behavior and hide the authoring intent. Keep the
 registered `export_as(...)` filename and local references in sync yourself.
-`BuildReport::pretty_report()` is a human-facing summary; use structured
-report JSON when callers need machine-readable media mode details.
+`BuildReport::pretty_report()` is a human-facing summary. For stable
+machine-readable output, use `BuildOptions::report_json(...)` or
+`report.to_report_json()`; structured report JSON includes media mode details.
 
 ## 4. Advanced: Contract Tools And Runtime
 

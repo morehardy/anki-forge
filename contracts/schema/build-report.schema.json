@@ -17,7 +17,7 @@
   ],
   "properties": {
     "kind": { "const": "anki-forge-build-report" },
-    "schema_version": { "const": "phase4-build-report-v1" },
+    "schema_version": { "enum": ["phase4-build-report-v1", "phase4-build-report-v2"] },
     "tool_version": { "type": "string", "minLength": 1 },
     "artifact": {
       "type": ["object", "null"],
@@ -63,7 +63,31 @@
       },
       "additionalProperties": false
     },
-    "diagnostics": { "type": "array", "items": { "type": "object" } },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "domain",
+          "stage",
+          "path",
+          "message",
+          "suggested_fix"
+        ],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["error", "warning", "info"] },
+          "domain": { "type": "string", "minLength": 1 },
+          "stage": { "type": "string", "minLength": 1 },
+          "path": { "type": ["string", "null"] },
+          "message": { "type": "string", "minLength": 1 },
+          "suggested_fix": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
     "metrics": {
       "type": "object",
       "required": ["duration_ms"],

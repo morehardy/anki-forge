@@ -6,7 +6,7 @@ use anki_forge::build::{
     BuildPolicyResult, BuildPolicyStatus, BuildReport, BuildReportJson, BuildStatus,
     ComparisonStatus, MediaSummary, RiskLevel, SerializableBuildReport,
 };
-use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
+use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, ErrorCode, Severity, SourcePath};
 
 #[test]
 fn build_report_ensure_success_accepts_successful_artifact() {
@@ -54,6 +54,8 @@ fn build_report_ensure_success_rejects_error_diagnostic() {
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: "missing media reference hola.mp3".into(),
             source: None,
             help: Some("register the media before adding the note".into()),
@@ -92,6 +94,8 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: "normalization failed".into(),
             source: None,
             help: None,
@@ -146,6 +150,35 @@ fn build_report_ensure_success_uses_status_precedence_over_policy_status() {
 
     let err = report.ensure_success().expect_err("report should fail");
     assert_eq!(err.cause, BuildFailureCause::Internal);
+    assert_eq!(err.code(), ErrorCode::ProjectBuildInternal);
+}
+
+#[test]
+fn build_error_without_diagnostics_uses_stable_cause_code() {
+    let report = BuildReport {
+        artifact: None,
+        counts: BuildCounts::default(),
+        media: MediaSummary::default(),
+        diagnostics: vec![],
+        metrics: BuildMetrics {
+            duration: Duration::from_millis(1),
+        },
+        inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+        comparison: ComparisonStatus::NotRequested,
+        diff: None,
+        risk: None,
+        policy: BuildPolicyResult::default(),
+        status: BuildStatus::Success,
+    };
+
+    let err = report
+        .ensure_success()
+        .expect_err("missing artifact should fail");
+    assert_eq!(err.cause, BuildFailureCause::MissingArtifact);
+    assert_eq!(err.code(), ErrorCode::ProjectBuildMissingArtifact);
+    assert_eq!(err.code().as_str(), "PROJECT.BUILD_MISSING_ARTIFACT");
 }
 
 #[test]
@@ -172,6 +205,8 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new("MEDIA.UNUSED_BINDING"),
             severity: Severity::Warning,
+            domain: None,
+            stage: None,
             message: "registered media is not referenced.".into(),
             source: Some(SourcePath::new("project.media[\"unused.png\"]")),
             help: Some("Remove it or reference it from a note, template, or CSS.".into()),
@@ -219,6 +254,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("MEDIA.Z_LAST"),
                 severity: Severity::Warning,
+                domain: None,
+                stage: None,
                 message: "zulu warning.".into(),
                 source: Some(SourcePath::new("project.media[\"b.png\"]")),
                 help: None,
@@ -226,6 +263,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("MEDIA.A_FIRST"),
                 severity: Severity::Warning,
+                domain: None,
+                stage: None,
                 message: "alpha warning.".into(),
                 source: Some(SourcePath::new("project.media[\"a.png\"]")),
                 help: Some("Alpha help.".into()),
@@ -233,6 +272,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("MEDIA.B_SECOND"),
                 severity: Severity::Warning,
+                domain: None,
+                stage: None,
                 message: "beta warning.".into(),
                 source: Some(SourcePath::new("project.media[\"a.png\"]")),
                 help: None,
@@ -240,6 +281,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("MEDIA.A_FIRST"),
                 severity: Severity::Warning,
+                domain: None,
+                stage: None,
                 message: "aardvark warning.".into(),
                 source: Some(SourcePath::new("project.media[\"a.png\"]")),
                 help: None,
@@ -247,6 +290,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("PROJECT.INFO"),
                 severity: Severity::Info,
+                domain: None,
+                stage: None,
                 message: "informational note.".into(),
                 source: None,
                 help: None,
@@ -254,6 +299,8 @@ fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
             Diagnostic {
                 code: DiagnosticCode::new("MEDIA.ERROR"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "fatal media issue.".into(),
                 source: Some(SourcePath::new("project.media[\"c.png\"]")),
                 help: None,
@@ -436,7 +483,7 @@ fn build_report_projection_has_phase4_contract_header() {
 
     assert_eq!(projected.kind, "anki-forge-build-report");
     assert_eq!(projected_from_trait.kind, "anki-forge-build-report");
-    assert_eq!(projected.schema_version, "phase4-build-report-v1");
+    assert_eq!(projected.schema_version, "phase4-build-report-v2");
     assert!(!projected.tool_version.is_empty());
     assert_eq!(projected.status, BuildStatus::Success);
     assert_eq!(projected.comparison, ComparisonStatus::NotRequested);
@@ -459,6 +506,8 @@ fn build_report_projection_serializes_diagnostics_as_strings() {
     report.diagnostics.push(Diagnostic {
         code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
         severity: Severity::Error,
+        domain: Some(anki_forge::diagnostics::DiagnosticDomain::new("project")),
+        stage: Some(anki_forge::diagnostics::DiagnosticStage::new("normalize")),
         message: "normalization failed".to_string(),
         source: Some(SourcePath::new("project")),
         help: Some("inspect the Product input".to_string()),
@@ -467,7 +516,15 @@ fn build_report_projection_serializes_diagnostics_as_strings() {
     let json = serde_json::to_value(BuildReportJson::from_report(&report)).unwrap();
     assert_eq!(json["diagnostics"][0]["code"], "PROJECT.NORMALIZE_FAILED");
     assert_eq!(json["diagnostics"][0]["severity"], "error");
-    assert_eq!(json["diagnostics"][0]["source"], "project");
+    assert_eq!(json["diagnostics"][0]["domain"], "project");
+    assert_eq!(json["diagnostics"][0]["stage"], "normalize");
+    assert_eq!(json["diagnostics"][0]["path"], "project");
+    assert_eq!(
+        json["diagnostics"][0]["suggested_fix"],
+        "inspect the Product input"
+    );
+    assert!(json["diagnostics"][0].get("source").is_none());
+    assert!(json["diagnostics"][0].get("help").is_none());
 }
 
 #[test]

@@ -36,6 +36,8 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("COMPARE.CURRENT_UNAVAILABLE"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message,
                 source: Some(SourcePath::new(
                     input.current_artifact.display().to_string(),
@@ -74,6 +76,8 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message,
                 source: Some(SourcePath::new(previous_artifact.display().to_string())),
                 help: Some("verify the previous APKG path and package contents".to_string()),
@@ -97,6 +101,8 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("COMPARE.DIFF_FAILED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message,
                     source: Some(SourcePath::new("compare.diff")),
                     help: Some("inspect both APKG files before comparing".to_string()),

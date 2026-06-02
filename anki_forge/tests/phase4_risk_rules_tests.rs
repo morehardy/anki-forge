@@ -10,6 +10,8 @@ fn diagnostic(code: &str, severity: Severity) -> Diagnostic {
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity,
+        domain: None,
+        stage: None,
         message: format!("{code} message"),
         source: None,
         help: None,
@@ -20,6 +22,8 @@ fn diagnostic_with_source(code: &str, severity: Severity, source: &str) -> Diagn
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity,
+        domain: None,
+        stage: None,
         message: format!("{code} message"),
         source: Some(SourcePath::new(source)),
         help: None,

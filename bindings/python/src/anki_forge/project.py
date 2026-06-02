@@ -24,6 +24,30 @@ STOCK_FIELD_KEYS = {
 }
 ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
 CLOZE_MARKER_PATTERN = re.compile(r"\{\{[cC][1-9][0-9]*::")
+DIAGNOSTIC_DOMAIN_BY_PREFIX = {
+    "AFID": "identity",
+    "COMPARE": "comparison",
+    "DECK": "deck",
+    "MEDIA": "media",
+    "NOTETYPE": "notetype",
+    "TEMPLATE": "notetype",
+    "PRODUCT": "product",
+    "PROJECT": "project",
+    "RISK": "risk",
+    "UPDATE": "update_safety",
+}
+DIAGNOSTIC_STAGE_BY_PREFIX = {
+    "AFID": "validate",
+    "COMPARE": "compare",
+    "DECK": "validate",
+    "MEDIA": "normalize",
+    "NOTETYPE": "validate",
+    "TEMPLATE": "validate",
+    "PRODUCT": "validate",
+    "PROJECT": "build",
+    "RISK": "risk",
+    "UPDATE": "update_safety",
+}
 
 
 @dataclass
@@ -182,9 +206,11 @@ class Project:
                     Diagnostic(
                         code="PRODUCT.CLOZE_MARKER_MISSING",
                         severity="error",
+                        domain="product",
+                        stage="validate",
                         message="cloze note text must contain at least one cloze marker",
-                        source=f"project.notes[{index}].fields[\"text\"]",
-                        help="add a marker like {{c1::text}} to the cloze note text",
+                        path=f"project.notes[{index}].fields[\"text\"]",
+                        suggested_fix="add a marker like {{c1::text}} to the cloze note text",
                     ),
                 ),
             )
@@ -264,10 +290,27 @@ def _write_report_json(report: BuildReport, path: Path) -> None:
     path.write_text(json.dumps(_report_to_json(report), ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def _diagnostic_prefix(code: str) -> str | None:
+    prefix, separator, _ = code.partition(".")
+    if not separator:
+        return None
+    return prefix
+
+
+def _inferred_diagnostic_domain(code: str) -> str:
+    prefix = _diagnostic_prefix(code)
+    return DIAGNOSTIC_DOMAIN_BY_PREFIX.get(prefix, "unknown")
+
+
+def _inferred_diagnostic_stage(code: str) -> str:
+    prefix = _diagnostic_prefix(code)
+    return DIAGNOSTIC_STAGE_BY_PREFIX.get(prefix, "unknown")
+
+
 def _report_to_json(report: BuildReport) -> dict[str, object]:
     return {
         "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
+        "schema_version": "phase4-build-report-v2",
         "tool_version": "anki-forge-python",
         "status": report.status,
         "comparison": report.comparison,
@@ -278,9 +321,11 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
             {
                 "code": diagnostic.code,
                 "severity": diagnostic.severity,
+                "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
+                "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
+                "path": diagnostic.path,
                 "message": diagnostic.message,
-                "source": diagnostic.source,
-                "help": diagnostic.help,
+                "suggested_fix": diagnostic.suggested_fix,
             }
             for diagnostic in report.diagnostics
         ],

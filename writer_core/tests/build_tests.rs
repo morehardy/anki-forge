@@ -1,7 +1,8 @@
 use authoring_core::stock::resolve_stock_notetype;
 use authoring_core::{
-    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedIr, NormalizedNote,
-    NormalizedNotetype,
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedField,
+    NormalizedGenerationRequirement, NormalizedIr, NormalizedNote, NormalizedNotetype,
+    NormalizedTemplate,
 };
 use prost::Message;
 use rusqlite::Connection;
@@ -962,6 +963,34 @@ fn latest_collection_derives_sfld_and_csum_from_first_notetype_field() {
 }
 
 #[test]
+fn latest_collection_derives_sfld_from_marked_sort_field_and_csum_from_first_field() {
+    let root = unique_artifact_root("note-storage-sort-field");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-sort-field");
+    let mut normalized = sample_basic_normalized_ir();
+    normalized.notetypes[0].fields[1].sort = true;
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let row: (String, u32) = conn
+        .query_row(
+            "select cast(sfld as text), csum from notes where guid = 'note-1'",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .unwrap();
+
+    assert_eq!(row.0, "back");
+    assert_eq!(row.1, test_field_checksum("front"));
+}
+
+#[test]
 fn latest_collection_strips_html_when_deriving_sort_field_and_checksum() {
     let root = unique_artifact_root("note-storage-html");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-storage-html");
@@ -1022,6 +1051,57 @@ fn latest_collection_ignores_script_style_and_comment_bodies_for_sfld_and_csum()
 
     assert_eq!(row.0, "front");
     assert_eq!(row.1, 460_909_371);
+}
+
+#[test]
+fn latest_collection_skips_custom_template_when_generation_requirement_is_not_met() {
+    let root = unique_artifact_root("custom-generation-skip");
+    let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/custom-generation-skip");
+    let mut normalized = sample_custom_generation_normalized_ir();
+    normalized.notes[0]
+        .fields
+        .insert("Audio".into(), String::new());
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let count: i64 = conn
+        .query_row("select count(*) from cards", [], |row| row.get(0))
+        .unwrap();
+
+    assert_eq!(count, 0);
+}
+
+#[test]
+fn latest_collection_uses_template_ord_for_generated_card_ord() {
+    let root = unique_artifact_root("custom-generation-template-ord");
+    let target = BuildArtifactTarget::new(
+        root.clone(),
+        "artifacts/phase3/custom-generation-template-ord",
+    );
+    let mut normalized = sample_custom_generation_normalized_ir();
+    normalized.notetypes[0].templates[0].ord = Some(3);
+
+    build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+
+    let conn = latest_collection_from_built_apkg(&root);
+    let ord: i64 = conn
+        .query_row("select ord from cards", [], |row| row.get(0))
+        .unwrap();
+
+    assert_eq!(ord, 3);
 }
 
 #[test]
@@ -1779,6 +1859,72 @@ fn sample_cloze_normalized_ir() -> NormalizedIr {
     }
 }
 
+fn sample_custom_generation_normalized_ir() -> NormalizedIr {
+    NormalizedIr {
+        kind: "normalized-ir".into(),
+        schema_version: "0.1.0".into(),
+        document_id: "custom-generation".into(),
+        resolved_identity: "document:custom-generation".into(),
+        notetypes: vec![NormalizedNotetype {
+            id: "media-card".into(),
+            kind: "normal".into(),
+            name: "Media Card".into(),
+            original_stock_kind: None,
+            original_id: None,
+            fields: vec![
+                NormalizedField {
+                    name: "Prompt".into(),
+                    ord: Some(0),
+                    config_id: Some(101),
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: true,
+                },
+                NormalizedField {
+                    name: "Audio".into(),
+                    ord: Some(1),
+                    config_id: Some(102),
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: false,
+                },
+            ],
+            templates: vec![NormalizedTemplate {
+                name: "Card".into(),
+                ord: Some(0),
+                config_id: Some(201),
+                question_format: "{{Prompt}} {{Audio}}".into(),
+                answer_format: "{{Prompt}}".into(),
+                browser_question_format: None,
+                browser_answer_format: None,
+                target_deck_name: None,
+                browser_font_name: None,
+                browser_font_size: None,
+                generation_requirement: Some(NormalizedGenerationRequirement {
+                    kind: "all".into(),
+                    field_names: vec!["Prompt".into(), "Audio".into()],
+                }),
+            }],
+            css: String::new(),
+            field_metadata: vec![],
+        }],
+        notes: vec![NormalizedNote {
+            id: "note-1".into(),
+            notetype_id: "media-card".into(),
+            deck_name: "Default".into(),
+            fields: BTreeMap::from([
+                ("Prompt".into(), "front".into()),
+                ("Audio".into(), "audio".into()),
+            ]),
+            tags: vec![],
+            mtime_secs: None,
+        }],
+        media_objects: vec![],
+        media_bindings: vec![],
+        media_references: vec![],
+    }
+}
+
 fn sample_basic_normalized_ir_with_cas_media(
     media_store: &Path,
     filename: &str,
@@ -1920,6 +2066,11 @@ fn resolved_stock_notetype(id: &str, kind: &str, name: &str) -> NormalizedNotety
     .expect("resolve stock notetype");
     notetype.id = id.into();
     notetype
+}
+
+fn test_field_checksum(text: &str) -> u32 {
+    let digest = sha1::Sha1::digest(text.as_bytes());
+    u32::from_be_bytes(digest[..4].try_into().expect("sha1 digest has four bytes"))
 }
 
 fn unique_artifact_root(case: &str) -> PathBuf {

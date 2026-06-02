@@ -12,6 +12,7 @@ pub mod update_safety;
 pub mod writer;
 
 pub use deck::*;
+pub use diagnostics::Severity;
 
 // Backward-compatible root re-exports. New user docs should use `prelude`,
 // `authoring`, or `writer`.

@@ -150,6 +150,35 @@ impl BuildError {
             cause,
         }
     }
+
+    pub fn code(&self) -> crate::diagnostics::ErrorCode {
+        self.report
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.report.diagnostics.first())
+            .map(|diagnostic| diagnostic.code.error_code())
+            .unwrap_or_else(|| self.cause.code())
+    }
+}
+
+impl BuildFailureCause {
+    pub fn code(self) -> crate::diagnostics::ErrorCode {
+        match self {
+            Self::MissingArtifact => crate::diagnostics::ErrorCode::ProjectBuildMissingArtifact,
+            Self::Diagnostics => crate::diagnostics::ErrorCode::ProjectBuildDiagnostics,
+            Self::PolicyBlocked => crate::diagnostics::ErrorCode::ProjectBuildPolicyBlocked,
+            Self::Invalid => crate::diagnostics::ErrorCode::ProjectBuildInvalid,
+            Self::Io => crate::diagnostics::ErrorCode::ProjectBuildIo,
+            Self::Internal => crate::diagnostics::ErrorCode::ProjectBuildInternal,
+        }
+    }
+}
+
+impl crate::diagnostics::ErrorCodeExt for BuildError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        BuildError::code(self)
+    }
 }
 
 impl BuildReport {
@@ -406,7 +435,23 @@ fn diagnostic_source(diagnostic: &Diagnostic) -> &str {
 
 impl std::fmt::Display for BuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "build failed: {:?}", self.cause)
+        if let Some(diagnostic) = self
+            .report
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.report.diagnostics.first())
+        {
+            write!(
+                f,
+                "build failed: {:?}: {}: {}",
+                self.cause,
+                diagnostic.code.as_str(),
+                diagnostic.message
+            )
+        } else {
+            write!(f, "build failed: {:?}: {}", self.cause, self.code())
+        }
     }
 }
 

@@ -6,7 +6,7 @@ from typing import Any, Mapping
 from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
-BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v1"
+BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
 ALLOWED_STATUSES = {"success", "blocked", "invalid", "error"}
 ALLOWED_COMPARISONS = {"not_requested", "complete", "partial", "unavailable"}
 COUNT_FIELDS = ("notes", "cards", "media")
@@ -191,27 +191,35 @@ def _diagnostics(value: object) -> tuple[Diagnostic, ...]:
     if not isinstance(value, list):
         raise ProtocolError("build report diagnostics must be an array")
     diagnostics: list[Diagnostic] = []
+    required_fields = {"code", "severity", "domain", "stage", "path", "message", "suggested_fix"}
     for item in value:
         if not isinstance(item, dict):
             raise ProtocolError("build report diagnostic must be an object")
+        if not required_fields.issubset(item):
+            raise ProtocolError("build report diagnostic is missing required v2 fields")
+        severity = _required_non_empty_string(item, "severity")
+        if severity not in {"error", "warning", "info"}:
+            raise ProtocolError("build report diagnostic severity is unsupported")
         diagnostics.append(
             Diagnostic(
                 code=_required_non_empty_string(item, "code"),
-                severity=_required_non_empty_string(item, "severity"),
+                severity=severity,
                 message=_required_non_empty_string(item, "message"),
-                source=_optional_string(item, "source"),
-                help=_optional_string(item, "help"),
+                domain=_required_non_empty_string(item, "domain"),
+                stage=_required_non_empty_string(item, "stage"),
+                path=_nullable_string(item, "path"),
+                suggested_fix=_nullable_string(item, "suggested_fix"),
             )
         )
     return tuple(diagnostics)
 
 
-def _optional_string(payload: dict[str, Any], key: str) -> str | None:
-    value = payload.get(key)
+def _nullable_string(payload: dict[str, Any], key: str) -> str | None:
+    value = payload[key]
     if value is None:
         return None
     if not isinstance(value, str):
-        raise ProtocolError(f"build report diagnostic {key} must be a string")
+        raise ProtocolError(f"build report diagnostic {key} must be a string or null")
     return value
 
 

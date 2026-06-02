@@ -114,6 +114,8 @@ impl Project {
                 Err(error) => diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.DECK_VALIDATE_FAILED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message: error.to_string(),
                     source: Some(SourcePath::new("project.deck")),
                     help: Some("inspect deck notes before building".into()),
@@ -124,6 +126,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.DECK_SOURCE_AUTHORING_STATE_UNSUPPORTED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message:
                         "deck-backed projects cannot mix direct Project notes or note types yet"
                             .into(),
@@ -147,6 +151,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_BLANK"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: "stable_id cannot be blank".into(),
                         source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a non-empty stable_id or omit it".into()),
@@ -155,6 +161,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("AFID.STABLE_ID_DUPLICATE"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: format!("duplicate stable_id '{stable_id}'"),
                         source: Some(SourcePath::new(format!("project.notes[{index}]"))),
                         help: Some("choose a unique stable_id for each note".into()),
@@ -169,6 +177,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.UNSUPPORTED_NOTE_TYPE"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message: format!(
                         "note type '{}' is not registered on the project",
                         note.note_type_id()
@@ -215,6 +225,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.ID_DUPLICATE"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message,
                     source: Some(SourcePath::new(format!("project.note_types[{index}]"))),
                     help: Some("choose a unique id for each custom note type".into()),
@@ -245,6 +257,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
                     severity: Severity::Warning,
+                    domain: None,
+                    stage: None,
                     message: format!(
                         "custom note type '{}' has no identity recipe",
                         note_type.id()
@@ -262,6 +276,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("NOTETYPE.FIELD_KEY_AUTO_DERIVED"),
                         severity: Severity::Warning,
+                        domain: None,
+                        stage: None,
                         message: format!(
                             "field '{}' in note type '{}' uses an auto-derived key",
                             field.name(),
@@ -295,21 +311,25 @@ impl Project {
     /// path-backed until normalization unless `BuildOptions::self_contained()`
     /// is selected explicitly.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
-        if let Some(diagnostic) = self.product_document_source_mixed_diagnostic() {
-            anyhow::bail!("{}: {}", diagnostic.code.as_str(), diagnostic.message);
+        if self.product_document_source_mixed_diagnostic().is_some() {
+            return Err(ProductLoweringError {
+                product_diagnostics: vec![ProductDiagnostic {
+                    code: "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED",
+                    message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
+                    source_path: Some("project".to_string()),
+                }],
+                lowering_diagnostics: vec![],
+            }
+            .into());
         }
 
         if let Some(product) = &self.product_document_source {
-            return product
-                .lower()
-                .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err));
+            return product.lower().map_err(anyhow::Error::from);
         }
 
         if let Some(deck) = &self.deck_source {
             let product = deck.clone().into_product_document()?;
-            let mut plan = product
-                .lower()
-                .map_err(|err| anyhow::anyhow!("lower deck product document: {:?}", err))?;
+            let mut plan = product.lower().map_err(anyhow::Error::from)?;
             self.apply_note_source_paths(&mut plan);
             self.apply_notetype_source_paths(&mut plan);
             return Ok(plan);
@@ -318,7 +338,7 @@ impl Project {
         let mut plan = self
             .to_product_document()
             .lower()
-            .map_err(|err| anyhow::anyhow!("lower product document: {:?}", err))?;
+            .map_err(anyhow::Error::from)?;
         self.apply_note_source_paths(&mut plan);
         self.apply_notetype_source_paths(&mut plan);
         plan.authoring_document
@@ -391,6 +411,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
                     severity: Severity::Error,
+                    domain: None,
+                    stage: None,
                     message,
                     source: Some(SourcePath::new("project")),
                     help: Some("inspect product notes and media registrations".into()),
@@ -441,6 +463,8 @@ impl Project {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.EMPTY"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "project contains no notes".into(),
                 source: Some(SourcePath::new("project.notes")),
                 help: Some("add at least one note before building".into()),
@@ -526,6 +550,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: err.code,
                     severity: err.severity,
+                    domain: None,
+                    stage: None,
                     message: err.message,
                     source: Some(SourcePath::new("build.options")),
                     help: None,
@@ -576,6 +602,8 @@ impl Project {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new(code),
                     severity: classified.severity,
+                    domain: None,
+                    stage: None,
                     message: "project stable id is missing for update-safety proof".into(),
                     source: Some(SourcePath::new("project.stable_id")),
                     help: Some("set Project::stable_id(value) for update-safe builds".into()),
@@ -636,6 +664,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("UPDATE.BASELINE_IGNORED_DISABLED"),
                     severity: Severity::Info,
+                    domain: None,
+                    stage: None,
                     message: "compare_to baseline ignored because update safety is disabled".into(),
                     source: Some(SourcePath::new(path.display().to_string())),
                     help: Some("remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline".into()),
@@ -716,6 +746,8 @@ impl Project {
                                         "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
                                     ),
                                     severity: update_error_severity,
+                                    domain: None,
+                                    stage: None,
                                     message: err.to_string(),
                                     source: Some(SourcePath::new(path.display().to_string())),
                                     help: Some("fix or regenerate the identity lockfile".into()),
@@ -735,6 +767,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
                         severity: update_error_severity,
+                        domain: None,
+                        stage: None,
                         message: format!("identity lockfile {} does not exist", path.display()),
                         source: Some(SourcePath::new(path.display().to_string())),
                         help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
@@ -774,6 +808,8 @@ impl Project {
                             diagnostics.push(Diagnostic {
                                 code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
                                 severity: update_error_severity,
+                                domain: None,
+                                stage: None,
                                 message: err.to_string(),
                                 source: Some(SourcePath::new(path.display().to_string())),
                                 help: Some(
@@ -801,6 +837,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                             code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
                             severity: Severity::Error,
+                            domain: None,
+                            stage: None,
                             message: format!(
                                 "APKG could not be inspected for comparison: {}",
                                 path.display()
@@ -897,6 +935,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: err.to_string(),
                         source: Some(SourcePath::new("update_safety.reconcile")),
                         help: Some(
@@ -1031,19 +1071,23 @@ impl Project {
             }
         })?;
 
-        diagnostics.extend(
-            package_build_result
-                .diagnostics
-                .items
-                .iter()
-                .map(|item| Diagnostic {
-                    code: DiagnosticCode::new(item.code.clone()),
-                    severity: severity_from_level(&item.level),
-                    message: item.summary.clone(),
-                    source: item.path.clone().map(SourcePath::new),
-                    help: None,
-                }),
-        );
+        diagnostics.extend(package_build_result.diagnostics.items.iter().map(|item| {
+            Diagnostic {
+                code: DiagnosticCode::new(item.code.clone()),
+                severity: severity_from_level(&item.level),
+                domain: item
+                    .domain
+                    .clone()
+                    .map(crate::diagnostics::DiagnosticDomain::new),
+                stage: item
+                    .stage
+                    .clone()
+                    .map(crate::diagnostics::DiagnosticStage::new),
+                message: item.summary.clone(),
+                source: item.path.clone().map(SourcePath::new),
+                help: None,
+            }
+        }));
         if package_build_result.result_status != "success"
             && !diagnostics
                 .iter()
@@ -1052,6 +1096,8 @@ impl Project {
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.BUILD_STATUS_FAILED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: format!("build status was {}", package_build_result.result_status),
                 source: Some(SourcePath::new("project.build")),
                 help: Some("inspect writer diagnostics for the failed stage".into()),
@@ -1099,6 +1145,8 @@ impl Project {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISSING"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message:
                             "project stable id is required before writing an identity lockfile"
                                 .into(),
@@ -1158,6 +1206,8 @@ impl Project {
                         diagnostics.push(Diagnostic {
                             code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
                             severity: Severity::Error,
+                            domain: None,
+                            stage: None,
                             message: err.to_string(),
                             source: Some(SourcePath::new(path.display().to_string())),
                             help: Some("verify the lockfile path is writable".into()),
@@ -1304,6 +1354,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("DIFF.TEMP_DIR_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: err.to_string(),
                         source: Some(SourcePath::new("project.diff_against_apkg")),
                         help: Some(
@@ -1758,6 +1810,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("PROJECT.DECK_MEDIA_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: error.to_string(),
                         source: Some(SourcePath::new("project.deck.media")),
                         help: Some("inspect deck media registrations and media paths".into()),
@@ -1892,6 +1946,8 @@ impl Project {
                     diagnostics: vec![Diagnostic {
                         code: DiagnosticCode::new("PROJECT.DECK_LOWER_FAILED"),
                         severity: Severity::Error,
+                        domain: None,
+                        stage: None,
                         message: error.to_string(),
                         source: Some(SourcePath::new("project.deck")),
                         help: Some("inspect deck notes before lowering".into()),
@@ -1928,6 +1984,8 @@ impl Project {
             Some(Diagnostic {
                 code: DiagnosticCode::new("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
                 source: Some(SourcePath::new("project")),
                 help: Some(
@@ -2426,7 +2484,25 @@ fn note_field_source_names_for_authoring(
 fn product_media_to_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
 ) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
-    media.map(product_media_item_to_authoring_media).collect()
+    let mut prepared = Vec::new();
+    let mut diagnostics = Vec::new();
+
+    for item in media {
+        match product_media_item_to_authoring_media(item) {
+            Ok(media) => prepared.push(media),
+            Err(mut error) => diagnostics.append(&mut error.diagnostics),
+        }
+    }
+
+    if diagnostics.is_empty() {
+        Ok(prepared)
+    } else {
+        Err(ProductMediaPrepareError {
+            message: "prepare product media".into(),
+            diagnostics,
+        }
+        .into())
+    }
 }
 
 fn record_project_media_source_paths<'a>(
@@ -2557,22 +2633,38 @@ fn product_media_item_to_self_contained_authoring_media(
 
 fn product_media_item_to_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
-) -> anyhow::Result<crate::AuthoringMedia> {
+) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
             media
                 .verify_registered_source()
-                .map_err(|diagnostic| anyhow::anyhow!(diagnostic.message))?;
-            anyhow::ensure!(
-                media.observed_size_bytes()
-                    <= crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64,
-                "MEDIA.INLINE_TOO_LARGE: project.media[{filename:?}] has {} bytes, above inline limit {}",
-                media.observed_size_bytes(),
-                crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
-                filename = &media.export_filename,
-            );
-            let bytes = std::fs::read(path)
-                .with_context(|| format!("read media source file: {}", path.display()))?;
+                .map_err(ProductMediaPrepareError::from_source_diagnostic)?;
+            if media.observed_size_bytes()
+                > crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES as u64
+            {
+                return Err(ProductMediaPrepareError::single(
+                    "MEDIA.INLINE_TOO_LARGE",
+                    format!(
+                        "project.media[{filename:?}] has {} bytes, above inline limit {}",
+                        media.observed_size_bytes(),
+                        crate::product::media_registry::INLINE_MEDIA_LIMIT_BYTES,
+                        filename = &media.export_filename,
+                    ),
+                    media.export_filename.clone(),
+                ));
+            }
+            let bytes = std::fs::read(path).map_err(|err| {
+                let code = if err.kind() == std::io::ErrorKind::NotFound {
+                    "MEDIA.SOURCE_MISSING"
+                } else {
+                    "MEDIA.SOURCE_READ_FAILED"
+                };
+                ProductMediaPrepareError::single(
+                    code,
+                    format!("read media source file {}: {err}", path.display()),
+                    media.export_filename.clone(),
+                )
+            })?;
             crate::AuthoringMediaSource::InlineBytes {
                 data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
@@ -2818,6 +2910,8 @@ fn authoring_path_media_error(
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new(code),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message,
             source: Some(SourcePath::new(source_path)),
             help,
@@ -3095,6 +3189,8 @@ fn append_missing_media_reference_diagnostics(
         diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("MEDIA.MISSING_REFERENCE"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: missing_media_reference_summary(&candidate),
             help: product_diagnostic_help(
                 "MEDIA.MISSING_REFERENCE",
@@ -3267,12 +3363,24 @@ struct ProjectNormalizeError {
     media_source_modes: BTreeMap<String, MediaSourceMode>,
 }
 
-struct ProductMediaPrepareError {
+#[derive(Debug)]
+pub(crate) struct ProductMediaPrepareError {
     message: String,
     diagnostics: Vec<Diagnostic>,
 }
 
 impl ProductMediaPrepareError {
+    pub(crate) fn code(&self) -> crate::diagnostics::ErrorCode {
+        self.diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.diagnostics.first())
+            .map(|diagnostic| diagnostic.code.error_code())
+            .unwrap_or_else(|| {
+                crate::diagnostics::ErrorCode::from_code("PROJECT.PRODUCT_MEDIA_FAILED")
+            })
+    }
+
     fn from_source_diagnostic(
         diagnostic: crate::product::media_registry::ProductMediaSourceDiagnostic,
     ) -> Self {
@@ -3285,6 +3393,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new(code),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: diagnostic.message,
                 source: Some(SourcePath::new(source_path)),
                 help: Some(help),
@@ -3298,6 +3408,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new("PROJECT.PRODUCT_MEDIA_FAILED"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: error.to_string(),
                 source: Some(SourcePath::new("project.media")),
                 help: Some("inspect product media registrations and media paths".into()),
@@ -3314,6 +3426,8 @@ impl ProductMediaPrepareError {
             diagnostics: vec![Diagnostic {
                 code: DiagnosticCode::new(code),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message,
                 source: Some(SourcePath::new(source_path)),
                 help: Some(help),
@@ -3331,6 +3445,35 @@ impl ProductMediaPrepareError {
             ),
             export_filename,
         )
+    }
+}
+
+impl std::fmt::Display for ProductMediaPrepareError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(diagnostic) = self
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+            .or_else(|| self.diagnostics.first())
+        {
+            write!(
+                f,
+                "{}: {}: {}",
+                self.message,
+                diagnostic.code.as_str(),
+                diagnostic.message
+            )
+        } else {
+            f.write_str(&self.message)
+        }
+    }
+}
+
+impl std::error::Error for ProductMediaPrepareError {}
+
+impl crate::diagnostics::ErrorCodeExt for ProductMediaPrepareError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        ProductMediaPrepareError::code(self)
     }
 }
 
@@ -3367,6 +3510,8 @@ fn normalization_diagnostic_to_product_diagnostic(
     Diagnostic {
         code: DiagnosticCode::new(code),
         severity: severity_from_level(&item.level),
+        domain: None,
+        stage: None,
         message,
         source,
         help,
@@ -3444,6 +3589,8 @@ fn map_product_diagnostics(diagnostics: Vec<ProductDiagnostic>) -> Vec<Diagnosti
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: diagnostic.message,
             source: Some(SourcePath::new(
                 diagnostic
@@ -3461,6 +3608,8 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
         .map(|diagnostic| Diagnostic {
             code: DiagnosticCode::new(diagnostic.code),
             severity: lowering_diagnostic_severity(diagnostic.code),
+            domain: None,
+            stage: None,
             message: diagnostic.message,
             source: Some(SourcePath::new("project.lower")),
             help: None,
@@ -3485,6 +3634,8 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
         diagnostics: vec![Diagnostic {
             code: DiagnosticCode::new(code),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message,
             source: Some(SourcePath::new("project.build")),
             help: None,
@@ -3578,6 +3729,8 @@ fn maybe_write_report_json(
         report.diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("PROJECT.REPORT_JSON_WRITE_FAILED"),
             severity: Severity::Error,
+            domain: None,
+            stage: None,
             message: format!("failed to write report_json: {err}"),
             source: Some(SourcePath::new(path.display().to_string())),
             help: Some("choose a writable report_json path".to_string()),
@@ -3682,7 +3835,9 @@ fn deck_validation_diagnostic_to_project_diagnostic(
 ) -> Diagnostic {
     Diagnostic {
         code: DiagnosticCode::new(deck_validation_code(&diagnostic.code)),
-        severity: severity_from_deck_validation(&diagnostic.severity),
+        severity: diagnostic.severity,
+        domain: None,
+        stage: None,
         message: diagnostic.message.clone(),
         source: Some(SourcePath::new("project.deck")),
         help: None,
@@ -3705,14 +3860,6 @@ fn deck_validation_code(code: &crate::deck::ValidationCode) -> &'static str {
     }
 }
 
-fn severity_from_deck_validation(severity: &str) -> Severity {
-    match severity {
-        "error" => Severity::Error,
-        "warning" => Severity::Warning,
-        _ => Severity::Info,
-    }
-}
-
 fn combine_lowering_and_normalization_diagnostics(
     mut lowering_diagnostics: Vec<Diagnostic>,
     normalization_diagnostics: Vec<Diagnostic>,
@@ -3729,6 +3876,8 @@ mod tests {
         Diagnostic {
             code: DiagnosticCode::new(code),
             severity,
+            domain: None,
+            stage: None,
             message: code.into(),
             source: None,
             help: None,

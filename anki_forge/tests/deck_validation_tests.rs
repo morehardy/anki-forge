@@ -1,3 +1,4 @@
+use anki_forge::diagnostics::Severity;
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, Deck, IoMode, MediaSource, ValidationCode,
 };
@@ -62,7 +63,8 @@ fn note_level_override_emits_warning_diagnostic() {
     let report = deck.validate_report().expect("validation report");
     assert!(!report.has_errors());
     assert!(report.diagnostics().iter().any(|item| {
-        item.code == ValidationCode::NoteLevelIdentityOverrideUsed && item.severity == "warning"
+        item.code == ValidationCode::NoteLevelIdentityOverrideUsed
+            && item.severity == Severity::Warning
     }));
 }
 
@@ -93,7 +95,8 @@ fn legacy_generated_note_still_deserializes_and_reports_warning() {
     assert!(report
         .diagnostics()
         .iter()
-        .any(|item| item.code == ValidationCode::MissingStableId && item.severity == "warning"));
+        .any(|item| item.code == ValidationCode::MissingStableId
+            && item.severity == Severity::Warning));
 }
 
 #[test]

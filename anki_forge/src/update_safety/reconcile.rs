@@ -62,6 +62,8 @@ pub fn reconcile_guid_plan(
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.BASELINE_CONFLICT_GUID"),
                         severity: Severity::Warning,
+                        domain: None,
+                        stage: None,
                         message: format!(
                             "previous APKG GUID {} overrides lockfile GUID {} for {}",
                             previous.anki_guid, locked.anki_guid, note.stable_id
@@ -92,6 +94,8 @@ pub fn reconcile_guid_plan(
         diagnostics.push(Diagnostic {
             code: DiagnosticCode::new(info_code),
             severity: Severity::Info,
+            domain: None,
+            stage: None,
             message: format!("selected GUID {guid} for stable id {}", note.stable_id),
             source: Some(SourcePath::new(note.source_path.clone())),
             help: None,
@@ -110,6 +114,8 @@ pub fn reconcile_guid_plan(
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("UPDATE.GUID_DERIVATION_DRIFT"),
                 severity: Severity::Warning,
+                domain: None,
+                stage: None,
                 message: format!(
                     "selected GUID {guid} differs from current derivation {}",
                     note.current_guid_candidate
@@ -179,6 +185,8 @@ fn push_writer_policy_mismatch_diagnostics(
         diagnostics.push(Diagnostic {
             code: DiagnosticCode::new("UPDATE.WRITER_POLICY_MISMATCH"),
             severity: Severity::Warning,
+            domain: None,
+            stage: None,
             message: format!(
                 "{label} writer policy {} differs from current {}",
                 baseline.writer_policy_ref, current.writer_policy_ref

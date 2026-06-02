@@ -158,9 +158,7 @@ fn explicit_provenance_cannot_claim_reserved_afid_namespace() {
     }))
     .expect_err("explicit provenance cannot claim reserved AFID namespace");
 
-    assert!(err
-        .to_string()
-        .contains("AFID.IDENTITY_SNAPSHOT_INCOMPLETE"));
+    assert!(err.to_string().contains("DECK.RESERVED_AFID_NAMESPACE"));
 }
 
 #[test]
@@ -185,9 +183,7 @@ fn legacy_explicit_stable_id_cannot_claim_reserved_afid_namespace() {
     }))
     .expect_err("legacy explicit stable_id cannot claim reserved AFID namespace");
 
-    assert!(err
-        .to_string()
-        .contains("AFID.IDENTITY_SNAPSHOT_INCOMPLETE"));
+    assert!(err.to_string().contains("DECK.RESERVED_AFID_NAMESPACE"));
 }
 
 #[test]

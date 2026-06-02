@@ -56,3 +56,43 @@ pub struct ProductLoweringError {
     pub product_diagnostics: Vec<ProductDiagnostic>,
     pub lowering_diagnostics: Vec<LoweringDiagnostic>,
 }
+
+impl ProductLoweringError {
+    pub fn code(&self) -> crate::diagnostics::ErrorCode {
+        self.product_diagnostics
+            .first()
+            .map(|diagnostic| crate::diagnostics::ErrorCode::from_code(diagnostic.code))
+            .or_else(|| {
+                self.lowering_diagnostics
+                    .first()
+                    .map(|diagnostic| crate::diagnostics::ErrorCode::from_code(diagnostic.code))
+            })
+            .unwrap_or_else(|| crate::diagnostics::ErrorCode::from_code("PROJECT.LOWER_FAILED"))
+    }
+
+    fn message(&self) -> &str {
+        self.product_diagnostics
+            .first()
+            .map(|diagnostic| diagnostic.message.as_str())
+            .or_else(|| {
+                self.lowering_diagnostics
+                    .first()
+                    .map(|diagnostic| diagnostic.message.as_str())
+            })
+            .unwrap_or("product lowering failed")
+    }
+}
+
+impl std::fmt::Display for ProductLoweringError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", self.code(), self.message())
+    }
+}
+
+impl std::error::Error for ProductLoweringError {}
+
+impl crate::diagnostics::ErrorCodeExt for ProductLoweringError {
+    fn code(&self) -> crate::diagnostics::ErrorCode {
+        ProductLoweringError::code(self)
+    }
+}

@@ -1,9 +1,11 @@
 use anyhow::{Context, Result};
 use authoring_core::{
-    NormalizedField, NormalizedFieldMetadata, NormalizedNotetype, NormalizedTemplate,
+    NormalizedField, NormalizedFieldMetadata, NormalizedGenerationRequirement, NormalizedNotetype,
+    NormalizedTemplate,
 };
 use prost::{Enumeration, Message};
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Clone, PartialEq, Message)]
 pub(crate) struct DeckCommon {
@@ -289,6 +291,10 @@ pub(crate) struct NotetypeMetadata {
     pub anki_forge_notetype_id: String,
     #[serde(default)]
     pub field_metadata: Vec<NormalizedFieldMetadata>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub field_sort: BTreeMap<String, bool>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub template_generation_requirements: BTreeMap<String, NormalizedGenerationRequirement>,
 }
 
 pub(crate) fn default_deck_common_bytes() -> Vec<u8> {
@@ -363,11 +369,26 @@ pub(crate) fn encode_notetype_config(notetype: &NormalizedNotetype) -> Result<Ve
     let metadata = NotetypeMetadata {
         anki_forge_notetype_id: notetype.id.clone(),
         field_metadata: notetype.field_metadata.clone(),
+        field_sort: notetype
+            .fields
+            .iter()
+            .map(|field| (field.name.clone(), field.sort))
+            .collect(),
+        template_generation_requirements: notetype
+            .templates
+            .iter()
+            .filter_map(|template| {
+                template
+                    .generation_requirement
+                    .clone()
+                    .map(|requirement| (template.name.clone(), requirement))
+            })
+            .collect(),
     };
 
     Ok(NotetypeConfig {
         kind: storage_notetype_kind(notetype) as i32,
-        sort_field_idx: 0,
+        sort_field_idx: storage_sort_field_idx(notetype),
         css: notetype.css.clone(),
         latex_pre: String::new(),
         latex_post: String::new(),
@@ -378,6 +399,13 @@ pub(crate) fn encode_notetype_config(notetype: &NormalizedNotetype) -> Result<Ve
         other: serde_json::to_vec(&metadata).context("encode notetype storage metadata")?,
     }
     .encode_to_vec())
+}
+
+fn storage_sort_field_idx(notetype: &NormalizedNotetype) -> u32 {
+    ordered_notetype_fields(notetype)
+        .iter()
+        .position(|field| field.sort)
+        .unwrap_or(0) as u32
 }
 
 pub(crate) fn encode_field_config(field: &NormalizedField) -> Vec<u8> {
@@ -481,14 +509,53 @@ fn storage_card_requirements(notetype: &NormalizedNotetype) -> Vec<CardRequireme
             .enumerate()
             .map(|(index, template)| CardRequirement {
                 card_ord: template.ord.unwrap_or(index as u32),
-                kind: CardRequirementKind::Any as i32,
-                field_ords: notetype
-                    .fields
-                    .iter()
-                    .enumerate()
-                    .map(|(field_index, field)| field.ord.unwrap_or(field_index as u32))
-                    .collect(),
+                kind: storage_generation_requirement_kind(
+                    template
+                        .generation_requirement
+                        .as_ref()
+                        .map(|req| req.kind.as_str()),
+                ) as i32,
+                field_ords: storage_generation_requirement_field_ords(notetype, template),
             })
             .collect(),
     }
+}
+
+fn storage_generation_requirement_kind(kind: Option<&str>) -> CardRequirementKind {
+    match kind.unwrap_or("any") {
+        "none" => CardRequirementKind::None,
+        "all" => CardRequirementKind::All,
+        _ => CardRequirementKind::Any,
+    }
+}
+
+fn storage_generation_requirement_field_ords(
+    notetype: &NormalizedNotetype,
+    template: &NormalizedTemplate,
+) -> Vec<u32> {
+    let fields = ordered_notetype_fields(notetype);
+    let ord_by_name = fields
+        .iter()
+        .enumerate()
+        .map(|(field_index, field)| (field.name.as_str(), field.ord.unwrap_or(field_index as u32)))
+        .collect::<std::collections::BTreeMap<_, _>>();
+
+    match template.generation_requirement.as_ref() {
+        Some(requirement) => requirement
+            .field_names
+            .iter()
+            .filter_map(|name| ord_by_name.get(name.as_str()).copied())
+            .collect(),
+        None => fields
+            .iter()
+            .enumerate()
+            .map(|(field_index, field)| field.ord.unwrap_or(field_index as u32))
+            .collect(),
+    }
+}
+
+fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&NormalizedField> {
+    let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
+    fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
+    fields.into_iter().map(|(_, field)| field).collect()
 }

@@ -6,8 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from anki_forge import DiagnosticsError, Note, Project, ProtocolError, RuntimeInvocationError, ValidationError
+from anki_forge import Diagnostic, DiagnosticsError, Note, Project, ProtocolError, RuntimeInvocationError, ValidationError
 import anki_forge.runtime as runtime_module
+from anki_forge.project import _report_to_json
 from anki_forge.report import BuildReport
 from anki_forge.runtime import RuntimeOverride, build_product_build_argv, parse_completed_process
 
@@ -21,7 +22,7 @@ from anki_forge_python.runtime import ResolvedRuntime as LowLevelRuntime
 def build_report_payload(**overrides):
     payload = {
         "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
+        "schema_version": "phase4-build-report-v2",
         "tool_version": "test",
         "status": "success",
         "comparison": "not_requested",
@@ -50,9 +51,30 @@ def build_report_payload(**overrides):
     return payload
 
 
+def diagnostic_payload(
+    *,
+    code="E",
+    severity="error",
+    message="bad",
+    domain="project",
+    stage="build",
+    path=None,
+    suggested_fix=None,
+):
+    return {
+        "code": code,
+        "severity": severity,
+        "domain": domain,
+        "stage": stage,
+        "path": path,
+        "message": message,
+        "suggested_fix": suggested_fix,
+    }
+
+
 def test_report_success_warning_does_not_raise():
     report = BuildReport.from_json(build_report_payload(
-        diagnostics=[{"code": "W", "severity": "warning", "message": "warn"}],
+        diagnostics=[diagnostic_payload(code="W", severity="warning", message="warn")],
     ))
     report.ensure_success()
 
@@ -62,7 +84,7 @@ def test_report_ensure_success_raises_for_invalid_report():
         status="invalid",
         artifact=None,
         counts={"notes": 0, "cards": 0, "media": 0},
-        diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+        diagnostics=[diagnostic_payload()],
     )
     with pytest.raises(DiagnosticsError):
         BuildReport.from_json(payload).ensure_success()
@@ -80,6 +102,66 @@ def test_report_rejects_wrong_kind_and_schema_version():
         BuildReport.from_json({**base, "kind": "wrong"})
     with pytest.raises(ProtocolError):
         BuildReport.from_json({**base, "schema_version": "future"})
+
+
+def test_report_rejects_v2_diagnostic_missing_required_fields():
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(
+            diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+        ))
+    with pytest.raises(ProtocolError):
+        BuildReport.from_json(build_report_payload(
+            diagnostics=[diagnostic_payload(domain="")],
+        ))
+
+
+@pytest.mark.parametrize(
+    ("code", "domain", "stage"),
+    [
+        ("AFID.BLANK", "identity", "validate"),
+        ("COMPARE.MISSING_BASELINE", "comparison", "compare"),
+        ("DECK.STABLE_ID_BLANK", "deck", "validate"),
+        ("MEDIA.SOURCE_MISSING", "media", "normalize"),
+        ("NOTETYPE.FIELD_MISSING", "notetype", "validate"),
+        ("TEMPLATE.INVALID", "notetype", "validate"),
+        ("PRODUCT.CLOZE_MARKER_MISSING", "product", "validate"),
+        ("PROJECT.BUILD_INTERNAL", "project", "build"),
+        ("RISK.THRESHOLD_EXCEEDED", "risk", "risk"),
+        ("UPDATE.BASELINE_APKG_UNREADABLE", "update_safety", "update_safety"),
+        ("UNKNOWN", "unknown", "unknown"),
+    ],
+)
+def test_python_report_json_infers_required_diagnostic_domain_and_stage(code, domain, stage):
+    report = BuildReport(
+        status="invalid",
+        comparison="not_requested",
+        artifact=None,
+        counts={"notes": 0, "cards": 0, "media": 0},
+        media={
+            "objects": 0,
+            "bindings": 0,
+            "references": 0,
+            "missing_references": 0,
+            "unsafe_references": 0,
+            "unused_bindings": 0,
+            "unique_bytes": 0,
+        },
+        diagnostics=(
+            Diagnostic(
+                code=code,
+                severity="error",
+                message="missing media",
+            ),
+        ),
+    )
+
+    payload = _report_to_json(report)
+
+    assert payload["diagnostics"][0]["domain"] == domain
+    assert payload["diagnostics"][0]["stage"] == stage
+    parsed = BuildReport.from_json(payload)
+    assert parsed.diagnostics[0].domain == domain
+    assert parsed.diagnostics[0].stage == stage
 
 
 def test_report_parses_schema_media_summary_unique_bytes():
@@ -225,7 +307,7 @@ def test_write_apkg_returns_invalid_report_without_raising(monkeypatch):
             status="invalid",
             artifact=None,
             counts={"notes": 0, "cards": 0, "media": 0},
-            diagnostics=[{"code": "E", "severity": "error", "message": "bad"}],
+            diagnostics=[diagnostic_payload()],
         )), stderr="")
     monkeypatch.setattr(subprocess, "run", fake_run)
 
@@ -316,7 +398,7 @@ def test_negative_returncode_with_report_json_returns_report():
         status="error",
         artifact=None,
         counts={"notes": 0, "cards": 0, "media": 0},
-        diagnostics=[{"code": "E", "severity": "error", "message": "interrupted after report"}],
+        diagnostics=[diagnostic_payload(message="interrupted after report")],
     )), stderr="signal")
     report = parse_completed_process(completed)
     assert report.status == "error"

@@ -523,6 +523,10 @@ fn object_kind(value: &serde_json::Value) -> Result<String, &'static str> {
 fn convert_note_type_v2(notetype: &ProductNoteTypeV2) -> Option<ProductNoteType> {
     match notetype {
         ProductNoteTypeV2::Stock(stock) => Some(match stock.id.as_str() {
+            "basic" => ProductNoteType::Basic(BasicNoteType {
+                id: stock.id.clone(),
+                name: stock.name.clone(),
+            }),
             "cloze" => ProductNoteType::Cloze(ClozeNoteType {
                 id: stock.id.clone(),
                 name: stock.name.clone(),
@@ -531,10 +535,7 @@ fn convert_note_type_v2(notetype: &ProductNoteTypeV2) -> Option<ProductNoteType>
                 id: stock.id.clone(),
                 name: stock.name.clone(),
             }),
-            _ => ProductNoteType::Basic(BasicNoteType {
-                id: stock.id.clone(),
-                name: stock.name.clone(),
-            }),
+            _ => return None,
         }),
         ProductNoteTypeV2::Custom(custom) => Some(ProductNoteType::Custom(CustomNoteType {
             id: custom.id.clone(),
@@ -589,7 +590,7 @@ fn convert_note_v2(note: &ProductNoteV2) -> Option<ProductNote> {
                 comments: field_content_text(stock.fields.get("comments")),
                 tags: stock.tags.clone(),
             })),
-            _ => Some(ProductNote::Basic(BasicNote {
+            "basic" => Some(ProductNote::Basic(BasicNote {
                 id: note_v2_id(stock.stable_id.as_deref(), stock.source_path.as_deref()),
                 note_type_id: stock.note_type_id.clone(),
                 deck_name: stock.deck_name.clone(),
@@ -597,6 +598,7 @@ fn convert_note_v2(note: &ProductNoteV2) -> Option<ProductNote> {
                 back: field_content_text(stock.fields.get("back")),
                 tags: stock.tags.clone(),
             })),
+            _ => None,
         },
         ProductNoteV2::Custom(custom) => Some(ProductNote::Custom(CustomNote {
             id: note_v2_id(custom.stable_id.as_deref(), custom.source_path.as_deref()),

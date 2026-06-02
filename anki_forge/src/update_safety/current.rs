@@ -30,6 +30,8 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
         diagnostics.push(Diagnostic {
             code: err.code,
             severity: err.severity,
+            domain: None,
+            stage: None,
             message: err.message,
             source: Some(SourcePath::new("writer_policy")),
             help: Some("remove @ and control characters from writer policy id/version".into()),
@@ -44,6 +46,8 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("UPDATE.STABLE_ID_MISSING_IN_STRICT_MODE"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: "current output note has no resolved stable id in strict mode".into(),
                 source: Some(SourcePath::new(format!("note[id='{}']", note.id))),
                 help: Some("provide Note::stable_id(value) or an identity recipe".into()),
@@ -54,6 +58,8 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("UPDATE.ANKI_GUID_INVALID"),
                 severity: Severity::Error,
+                domain: None,
+                stage: None,
                 message: format!("stable id {stable_id:?} cannot be used as a Phase 3 Anki GUID candidate"),
                 source: Some(SourcePath::new(format!("note[id='{}']", note.id))),
                 help: Some("use a non-empty stable id without ASCII control characters and at most 255 bytes".into()),

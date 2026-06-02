@@ -127,6 +127,10 @@
         "prevent_deletion": {
           "type": "boolean",
           "default": false
+        },
+        "sort": {
+          "type": "boolean",
+          "default": false
         }
       }
     },
@@ -173,6 +177,27 @@
         "browser_font_size": {
           "type": "integer",
           "minimum": 0
+        },
+        "generation_requirement": {
+          "$ref": "#/$defs/generation_requirement"
+        }
+      }
+    },
+    "generation_requirement": {
+      "type": "object",
+      "required": ["kind", "field_names"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": ["all", "any"]
+        },
+        "field_names": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },

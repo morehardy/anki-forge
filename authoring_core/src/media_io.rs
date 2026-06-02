@@ -1,3 +1,4 @@
+use crate::mime::APPLICATION_OCTET_STREAM;
 use sha1::{Digest, Sha1};
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
@@ -339,27 +340,155 @@ pub fn sniff_mime(bytes: &[u8]) -> Option<SniffedMime> {
         Some(high("image/jpeg"))
     } else if bytes.starts_with(b"GIF87a") || bytes.starts_with(b"GIF89a") {
         Some(high("image/gif"))
+    } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WEBP") {
+        Some(high("image/webp"))
     } else if bytes.starts_with(b"ID3") {
         Some(high("audio/mpeg"))
     } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WAVE") {
         Some(high("audio/wav"))
+    } else if bytes.starts_with(b"OggS") {
+        Some(high("audio/ogg"))
+    } else if is_aac_adts(bytes) {
+        Some(high("audio/aac"))
+    } else if is_mp4_family(bytes) {
+        Some(high(mp4_family_mime(bytes)))
+    } else if is_webm(bytes) {
+        Some(high("video/webm"))
+    } else if bytes.starts_with(b"%PDF-") {
+        Some(high("application/pdf"))
+    } else if bytes.starts_with(b"wOFF") {
+        Some(high("font/woff"))
+    } else if bytes.starts_with(b"wOF2") {
+        Some(high("font/woff2"))
+    } else if is_sfnt_font(bytes, &[0x00, 0x01, 0x00, 0x00]) || is_sfnt_font(bytes, b"true") {
+        Some(high("font/ttf"))
+    } else if is_sfnt_font(bytes, b"OTTO") {
+        Some(high("font/otf"))
     } else if !bytes.is_empty()
         && bytes.iter().all(|byte| {
             byte.is_ascii() && (!byte.is_ascii_control() || matches!(*byte, b'\n' | b'\r' | b'\t'))
         })
     {
-        Some(SniffedMime {
-            mime: "text/plain".into(),
-            confidence: MediaSniffConfidence::Low,
-        })
+        Some(low(text_mime(bytes)))
     } else {
         None
     }
+}
+
+fn is_aac_adts(bytes: &[u8]) -> bool {
+    bytes.len() >= 2 && bytes[0] == 0xff && matches!(bytes[1] & 0xf6, 0xf0)
+}
+
+fn is_mp4_family(bytes: &[u8]) -> bool {
+    bytes.len() >= 12 && bytes.get(4..8) == Some(b"ftyp")
+}
+
+fn mp4_family_mime(bytes: &[u8]) -> &'static str {
+    match bytes.get(8..12) {
+        Some(b"M4A ") | Some(b"M4B ") | Some(b"M4P ") => "audio/mp4",
+        _ => "video/mp4",
+    }
+}
+
+fn is_webm(bytes: &[u8]) -> bool {
+    bytes.starts_with(&[0x1a, 0x45, 0xdf, 0xa3])
+        && bytes
+            .windows(4)
+            .take(2048)
+            .any(|window| window.eq_ignore_ascii_case(b"webm"))
+}
+
+fn is_sfnt_font(bytes: &[u8], version: &[u8]) -> bool {
+    if bytes.len() < 12 || !bytes.starts_with(version) {
+        return false;
+    }
+
+    let num_tables = u16::from_be_bytes([bytes[4], bytes[5]]);
+    if num_tables == 0 || num_tables > 512 {
+        return false;
+    }
+
+    let search_range = u16::from_be_bytes([bytes[6], bytes[7]]) as u32;
+    let entry_selector = u16::from_be_bytes([bytes[8], bytes[9]]) as u32;
+    let range_shift = u16::from_be_bytes([bytes[10], bytes[11]]) as u32;
+    let (expected_search_range, expected_entry_selector, expected_range_shift) =
+        sfnt_table_directory_fields(num_tables as u32);
+
+    search_range == expected_search_range
+        && entry_selector == expected_entry_selector
+        && range_shift == expected_range_shift
+}
+
+fn sfnt_table_directory_fields(num_tables: u32) -> (u32, u32, u32) {
+    let mut max_power_of_two = 1;
+    let mut entry_selector = 0;
+    while max_power_of_two * 2 <= num_tables {
+        max_power_of_two *= 2;
+        entry_selector += 1;
+    }
+
+    let search_range = max_power_of_two * 16;
+    let range_shift = num_tables * 16 - search_range;
+    (search_range, entry_selector, range_shift)
+}
+
+fn text_mime(bytes: &[u8]) -> &'static str {
+    let text = std::str::from_utf8(bytes).unwrap_or("");
+    let trimmed = text.trim_start();
+    let lowered = trimmed
+        .chars()
+        .take(128)
+        .collect::<String>()
+        .to_ascii_lowercase();
+    if lowered.starts_with("<!doctype html")
+        || lowered.starts_with("<html")
+        || lowered.starts_with("<head")
+        || lowered.starts_with("<body")
+    {
+        "text/html"
+    } else if lowered.starts_with("import ")
+        || lowered.starts_with("export ")
+        || lowered.starts_with("function ")
+        || lowered.starts_with("const ")
+        || lowered.starts_with("let ")
+        || lowered.starts_with("var ")
+    {
+        "text/javascript"
+    } else if looks_like_css(trimmed, &lowered) {
+        "text/css"
+    } else {
+        "text/plain"
+    }
+}
+
+fn looks_like_css(trimmed: &str, lowered_prefix: &str) -> bool {
+    if lowered_prefix.starts_with("@charset")
+        || lowered_prefix.starts_with("@import")
+        || lowered_prefix.starts_with("@font-face")
+        || lowered_prefix.starts_with("@media")
+    {
+        return true;
+    }
+
+    matches!(trimmed.chars().next(), Some('.' | '#' | ':' | '*' | '['))
+        && trimmed.contains('{')
+        && trimmed.contains('}')
 }
 
 fn high(mime: &str) -> SniffedMime {
     SniffedMime {
         mime: mime.into(),
         confidence: MediaSniffConfidence::High,
+    }
+}
+
+fn low(mime: &str) -> SniffedMime {
+    SniffedMime {
+        mime: if mime.is_empty() {
+            APPLICATION_OCTET_STREAM.into()
+        } else {
+            mime.into()
+        },
+        confidence: MediaSniffConfidence::Low,
     }
 }

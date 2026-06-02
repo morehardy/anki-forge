@@ -7,8 +7,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 use anyhow::{ensure, Context, Result};
 use authoring_core::{
-    MediaReferenceResolution, NormalizedField, NormalizedIr, NormalizedNote, NormalizedNotetype,
-    NormalizedTemplate,
+    MediaReferenceResolution, NormalizedField, NormalizedGenerationRequirement, NormalizedIr,
+    NormalizedNote, NormalizedNotetype, NormalizedTemplate,
 };
 use prost::Message;
 use rusqlite::Connection;
@@ -20,8 +20,9 @@ use zstd::stream::decode_all;
 
 use crate::anki_proto::{
     decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
-    NotetypeKind, OriginalStockKind,
+    CardRequirement, CardRequirementKind, NotetypeKind, OriginalStockKind,
 };
+use crate::apkg::strip_html_preserving_media_filenames;
 use crate::canonical_json::to_canonical_json;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::staging::{
@@ -168,7 +169,7 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &manifest.normalized_ir,
         &media,
         &manifest.template_target_decks,
-        &BTreeMap::new(),
+        None,
         &note_identity_metadata,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
@@ -238,7 +239,7 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         &normalized_ir,
         &media,
         &template_target_decks,
-        &actual_card_decks,
+        Some(&actual_card_decks),
         &note_identity_metadata,
     );
     limitations.observation_status =
@@ -343,7 +344,7 @@ fn build_observations(
     normalized_ir: &NormalizedIr,
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
-    actual_card_decks: &BTreeMap<(String, usize), String>,
+    actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
     note_identity_metadata: &[Value],
 ) -> InspectObservations {
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
@@ -389,7 +390,7 @@ fn build_observations(
 
         for (field_index, field) in notetype.fields.iter().enumerate() {
             let field_name = field.name.as_str();
-            field_entries.push(json!({
+            let mut field_entry = json!({
                 "selector": format!("notetype[id='{}']::field[{}]", notetype_id, field_name),
                 "notetype_id": notetype_id,
                 "name": field_name,
@@ -397,7 +398,11 @@ fn build_observations(
                 "config_id": field.config_id,
                 "tag": field.tag,
                 "evidence_refs": [format!("field:{}:{}", notetype_id, field_name)],
-            }));
+            });
+            if field.sort {
+                field_entry["sort"] = json!(true);
+            }
+            field_entries.push(field_entry);
         }
 
         for field_metadata in &notetype.field_metadata {
@@ -414,7 +419,7 @@ fn build_observations(
 
         for (template_index, template) in notetype.templates.iter().enumerate() {
             let template_name = template.name.as_str();
-            template_entries.push(json!({
+            let mut template_entry = json!({
                 "selector": format!("notetype[id='{}']::template[{}]", notetype_id, template_name),
                 "notetype_id": notetype_id,
                 "name": template_name,
@@ -423,7 +428,11 @@ fn build_observations(
                 "question_format": template.question_format.as_str(),
                 "answer_format": template.answer_format.as_str(),
                 "evidence_refs": [format!("template:{}:{}", notetype_id, template_name)],
-            }));
+            });
+            if let Some(requirement) = template.generation_requirement.as_ref() {
+                template_entry["generation_requirement"] = json!(requirement);
+            }
+            template_entries.push(template_entry);
 
             if template.browser_question_format.is_some()
                 || template.browser_answer_format.is_some()
@@ -479,20 +488,31 @@ fn build_observations(
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
-        for (ord, template) in notetype.templates.iter().enumerate() {
+        for (template_index, template) in notetype.templates.iter().enumerate() {
+            if !template_generates_card(note, notetype, template) {
+                continue;
+            }
             let template_name = template.name.as_str();
-            let card_deck_name = actual_card_decks
-                .get(&(note_id.to_string(), ord))
-                .map(String::as_str)
-                .or(template.target_deck_name.as_deref())
-                .unwrap_or(note.deck_name.as_str());
+            let card_ord = template.ord.unwrap_or(template_index as u32);
+            let card_key = (note_id.to_string(), card_ord as usize);
+            let card_deck_name = if let Some(actual_card_decks) = actual_card_decks {
+                let Some(deck_name) = actual_card_decks.get(&card_key) else {
+                    continue;
+                };
+                deck_name.as_str()
+            } else {
+                template
+                    .target_deck_name
+                    .as_deref()
+                    .unwrap_or(note.deck_name.as_str())
+            };
             card_entries.push(json!({
-                "selector": format!("card[note_id='{}'][ord={}]", note_id, ord),
+                "selector": format!("card[note_id='{}'][ord={}]", note_id, card_ord),
                 "note_id": note_id,
-                "ord": ord,
+                "ord": card_ord,
                 "template_name": template_name,
                 "deck_name": card_deck_name,
-                "evidence_refs": [format!("card:{}:{}", note_id, ord)],
+                "evidence_refs": [format!("card:{}:{}", note_id, card_ord)],
             }));
         }
     }
@@ -666,6 +686,51 @@ fn evidence_component(value: &str) -> String {
         }
     }
     escaped
+}
+
+fn template_generates_card(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    template: &NormalizedTemplate,
+) -> bool {
+    let Some(requirement) = template.generation_requirement.as_ref() else {
+        return true;
+    };
+
+    match requirement.kind.as_str() {
+        "none" => true,
+        "all" => requirement
+            .field_names
+            .iter()
+            .all(|name| note_field_is_nonempty(note, notetype, name)),
+        _ => requirement
+            .field_names
+            .iter()
+            .any(|name| note_field_is_nonempty(note, notetype, name)),
+    }
+}
+
+fn note_field_is_nonempty(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    field_name: &str,
+) -> bool {
+    if !notetype
+        .fields
+        .iter()
+        .any(|field| field.name.as_str() == field_name)
+    {
+        return false;
+    }
+
+    note.fields
+        .get(field_name)
+        .map(|value| {
+            !strip_html_preserving_media_filenames(value)
+                .trim()
+                .is_empty()
+        })
+        .unwrap_or(false)
 }
 
 fn resolve_staging_media(
@@ -957,18 +1022,51 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                 .as_ref()
                 .map(|metadata| metadata.field_metadata.clone())
                 .unwrap_or_default();
+            let has_exact_forge_semantics = metadata
+                .as_ref()
+                .is_some_and(|metadata| !metadata.field_sort.is_empty());
+            let field_sort = metadata
+                .as_ref()
+                .map(|metadata| &metadata.field_sort)
+                .filter(|field_sort| !field_sort.is_empty());
             let fields = fields_by_row_id
                 .remove(&row_id)
                 .unwrap_or_default()
                 .into_iter()
-                .map(|(ord, name, config)| NormalizedField {
-                    name,
-                    ord: Some(ord as u32),
-                    config_id: config.id,
-                    tag: config.tag,
-                    prevent_deletion: config.prevent_deletion,
+                .enumerate()
+                .map(|(field_index, (ord, name, field_config))| {
+                    let sort = field_sort
+                        .and_then(|field_sort| field_sort.get(name.as_str()).copied())
+                        .unwrap_or(field_index == config.sort_field_idx as usize);
+                    NormalizedField {
+                        name,
+                        ord: Some(ord as u32),
+                        config_id: field_config.id,
+                        tag: field_config.tag,
+                        prevent_deletion: field_config.prevent_deletion,
+                        sort,
+                    }
                 })
                 .collect::<Vec<_>>();
+            let field_names_by_ord = fields
+                .iter()
+                .enumerate()
+                .map(|(field_index, field)| {
+                    (field.ord.unwrap_or(field_index as u32), field.name.clone())
+                })
+                .collect::<BTreeMap<_, _>>();
+            let requirements_by_ord = config
+                .reqs
+                .iter()
+                .filter_map(|requirement| {
+                    generation_requirement_from_card_requirement(requirement, &field_names_by_ord)
+                        .map(|normalized| (requirement.card_ord, normalized))
+                })
+                .collect::<BTreeMap<_, _>>();
+            let metadata_requirements = metadata
+                .as_ref()
+                .map(|metadata| &metadata.template_generation_requirements)
+                .filter(|requirements| !requirements.is_empty());
             let templates = templates_by_row_id
                 .remove(&row_id)
                 .unwrap_or_default()
@@ -993,6 +1091,14 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                             resolved_target_deck_id: template.target_deck_id,
                         });
                     }
+                    let generation_requirement = if has_exact_forge_semantics {
+                        metadata_requirements
+                            .and_then(|requirements| requirements.get(name.as_str()).cloned())
+                    } else {
+                        metadata_requirements
+                            .and_then(|requirements| requirements.get(name.as_str()).cloned())
+                            .or_else(|| requirements_by_ord.get(&(ord as u32)).cloned())
+                    };
                     NormalizedTemplate {
                         name,
                         ord: Some(ord as u32),
@@ -1020,6 +1126,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                         } else {
                             Some(template.browser_font_size)
                         },
+                        generation_requirement,
                     }
                 })
                 .collect::<Vec<_>>();
@@ -1181,6 +1288,30 @@ fn original_stock_kind(config: &crate::anki_proto::NotetypeConfig) -> Option<Str
         Some(OriginalStockKind::ImageOcclusion) => Some("image_occlusion".into()),
         _ => None,
     }
+}
+
+fn generation_requirement_from_card_requirement(
+    requirement: &CardRequirement,
+    field_names_by_ord: &BTreeMap<u32, String>,
+) -> Option<NormalizedGenerationRequirement> {
+    let kind = match CardRequirementKind::try_from(requirement.kind).ok()? {
+        CardRequirementKind::All => "all",
+        CardRequirementKind::Any => "any",
+        CardRequirementKind::None => return None,
+    };
+    let field_names = requirement
+        .field_ords
+        .iter()
+        .filter_map(|ord| field_names_by_ord.get(ord).cloned())
+        .collect::<Vec<_>>();
+    if field_names.is_empty() {
+        return None;
+    }
+
+    Some(NormalizedGenerationRequirement {
+        kind: kind.into(),
+        field_names,
+    })
 }
 
 fn with_temp_sqlite<T>(bytes: &[u8], f: impl FnOnce(&Connection) -> Result<T>) -> Result<T> {

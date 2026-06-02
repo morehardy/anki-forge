@@ -237,6 +237,7 @@ fn lower_legacy_product_document(
                             )),
                             tag: None,
                             prevent_deletion: false,
+                            sort: false,
                         }
                     })
                     .collect();
@@ -274,6 +275,11 @@ fn lower_legacy_product_document(
                             browser_font_size: document
                                 .browser_appearance_for(&custom.id, &template.name)
                                 .and_then(|declaration| declaration.font_size),
+                            generation_requirement: custom_generation_requirement(
+                                &custom.id,
+                                template,
+                                &field_name_by_key,
+                            )?,
                         })
                     })
                     .collect::<Result<Vec<_>, ProductDiagnostic>>()
@@ -771,6 +777,7 @@ fn lower_product_v2_custom_notetype(
             )),
             tag: None,
             prevent_deletion: false,
+            sort: field.sort,
         })
         .collect();
     let templates = custom
@@ -800,6 +807,10 @@ fn lower_product_v2_custom_notetype(
             target_deck_name: None,
             browser_font_name: None,
             browser_font_size: None,
+            generation_requirement: product_v2_generation_requirement(
+                template.generation_rule.as_ref(),
+                &field_name_by_key,
+            ),
         })
         .collect();
 
@@ -893,6 +904,36 @@ fn lower_product_v2_generation_rule_front(
         ProductGenerationRuleV2::Cloze { .. } | ProductGenerationRuleV2::Unknown(_) => {
             front.to_string()
         }
+    }
+}
+
+fn product_v2_generation_requirement(
+    rule: Option<&ProductGenerationRuleV2>,
+    field_name_by_key: &BTreeMap<String, String>,
+) -> Option<authoring_core::AuthoringGenerationRequirement> {
+    match rule {
+        Some(ProductGenerationRuleV2::All { fields }) => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "all".into(),
+                field_names: fields
+                    .iter()
+                    .filter_map(|field| field_name_by_key.get(field).cloned())
+                    .collect(),
+            })
+        }
+        Some(ProductGenerationRuleV2::Any { fields }) => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "any".into(),
+                field_names: fields
+                    .iter()
+                    .filter_map(|field| field_name_by_key.get(field).cloned())
+                    .collect(),
+            })
+        }
+        Some(ProductGenerationRuleV2::AnkiDefault)
+        | Some(ProductGenerationRuleV2::Cloze { .. })
+        | Some(ProductGenerationRuleV2::Unknown(_))
+        | None => None,
     }
 }
 
@@ -1682,6 +1723,7 @@ fn lower_stock_notetype(
                     .as_ref()
                     .and_then(|declaration| declaration.font_size)
                     .or(template.browser_font_size),
+                generation_requirement: template.generation_requirement,
             })
         })
         .collect::<Result<Vec<_>, ProductDiagnostic>>()?;
@@ -1734,6 +1776,40 @@ fn lower_generation_rule_front(
             ))
         }
         crate::product::model::CustomGenerationRule::Cloze { .. } => Err(ProductDiagnostic {
+            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE",
+            message: format!(
+                "custom normal note type '{}' template '{}' cannot use cloze generation",
+                note_type_id, template.name
+            ),
+            source_path: None,
+        }),
+    }
+}
+
+fn custom_generation_requirement(
+    note_type_id: &str,
+    template: &crate::product::model::CustomTemplate,
+    field_name_by_key: &BTreeMap<String, String>,
+) -> Result<Option<authoring_core::AuthoringGenerationRequirement>, ProductDiagnostic> {
+    match &template.generation_rule {
+        Some(crate::product::model::CustomGenerationRule::All { fields }) => {
+            let field_names =
+                generation_field_names(note_type_id, template, fields, field_name_by_key)?;
+            Ok(Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "all".into(),
+                field_names,
+            }))
+        }
+        Some(crate::product::model::CustomGenerationRule::Any { fields }) => {
+            let field_names =
+                generation_field_names(note_type_id, template, fields, field_name_by_key)?;
+            Ok(Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "any".into(),
+                field_names,
+            }))
+        }
+        Some(crate::product::model::CustomGenerationRule::AnkiDefault) | None => Ok(None),
+        Some(crate::product::model::CustomGenerationRule::Cloze { .. }) => Err(ProductDiagnostic {
             code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE",
             message: format!(
                 "custom normal note type '{}' template '{}' cannot use cloze generation",

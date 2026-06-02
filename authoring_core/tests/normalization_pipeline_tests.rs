@@ -672,6 +672,7 @@ fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
                     config_id: Some(1101),
                     tag: Some(1),
                     prevent_deletion: true,
+                    sort: false,
                 },
                 AuthoringField {
                     name: "Image".into(),
@@ -679,6 +680,7 @@ fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
                     config_id: Some(1102),
                     tag: Some(2),
                     prevent_deletion: true,
+                    sort: false,
                 },
             ]),
             templates: Some(vec![AuthoringTemplate {
@@ -692,6 +694,7 @@ fn explicit_lowered_notetype_identities_and_io_config_survive_normalization() {
                 target_deck_name: Some("Target Deck".into()),
                 browser_font_name: Some("Arial".into()),
                 browser_font_size: Some(18),
+                generation_requirement: None,
             }]),
             css: Some(".card { color: black; }".into()),
             field_metadata: vec![AuthoringFieldMetadata {

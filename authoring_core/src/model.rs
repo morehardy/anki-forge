@@ -46,6 +46,8 @@ pub struct AuthoringField {
     pub tag: Option<u32>,
     #[serde(default)]
     pub prevent_deletion: bool,
+    #[serde(default)]
+    pub sort: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -67,6 +69,14 @@ pub struct AuthoringTemplate {
     pub browser_font_name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub browser_font_size: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub generation_requirement: Option<AuthoringGenerationRequirement>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AuthoringGenerationRequirement {
+    pub kind: String,
+    pub field_names: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -183,6 +193,8 @@ pub struct NormalizedField {
     pub tag: Option<u32>,
     #[serde(default)]
     pub prevent_deletion: bool,
+    #[serde(default)]
+    pub sort: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -204,6 +216,14 @@ pub struct NormalizedTemplate {
     pub browser_font_name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub browser_font_size: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub generation_requirement: Option<NormalizedGenerationRequirement>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NormalizedGenerationRequirement {
+    pub kind: String,
+    pub field_names: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

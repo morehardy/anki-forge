@@ -44,6 +44,36 @@ codes:
   - id: AFID.STABLE_ID_DUPLICATE
     status: active
     summary: explicit or mixed identity records use a duplicate stable id
+  - id: DECK.BLANK_STABLE_ID
+    status: active
+    summary: explicit deck stable id cannot be blank
+  - id: DECK.RESERVED_AFID_NAMESPACE
+    status: active
+    summary: explicit stable id cannot use the reserved inferred AFID namespace
+  - id: DECK.MISSING_STABLE_ID
+    status: active
+    summary: legacy deck note was assigned a generated id instead of a stable id
+  - id: DECK.DUPLICATE_STABLE_ID
+    status: active
+    summary: deck note ids contain a duplicate stable id
+  - id: DECK.EMPTY_IO_MASKS
+    status: active
+    summary: image occlusion note has no mask rectangles
+  - id: DECK.UNKNOWN_MEDIA_REF
+    status: active
+    summary: deck note references a media handle that is not registered
+  - id: DECK.NOTE_LEVEL_IDENTITY_OVERRIDE_USED
+    status: active
+    summary: note-level identity override was used
+  - id: DECK.IDENTITY_DUPLICATE_PAYLOAD
+    status: active
+    summary: deck identity payload duplicates an existing resolved identity
+  - id: DECK.IDENTITY_COLLISION
+    status: active
+    summary: deck identity payload collides with an existing stable id
+  - id: DECK.STABLE_ID_DUPLICATE
+    status: active
+    summary: deck contains a duplicate stable id
   - id: AFID.NOTE_LEVEL_IDENTITY_OVERRIDE_REASON_REQUIRED
     status: active
     summary: note-level identity override requires a non-empty reason code
@@ -68,6 +98,138 @@ codes:
   - id: AFID.IO_RECT_DUPLICATE
     status: active
     summary: image occlusion identity rejects duplicate rect masks
+  - id: MEDIA.UNSAFE_FILENAME
+    status: active
+    summary: media export filename is not a helper-safe bare filename
+  - id: MEDIA.DUPLICATE_MEDIA_ID
+    status: active
+    summary: media id is duplicated
+  - id: MEDIA.DUPLICATE_FILENAME_CONFLICT
+    status: active
+    summary: media export filename is bound to different content
+  - id: MEDIA.DUPLICATE_EXPORT_FILENAME
+    status: active
+    summary: writer-ready media bindings contain a duplicate export filename
+  - id: MEDIA.INVALID_MEDIA_OBJECT_INVARIANT
+    status: active
+    summary: media object hash, id, ref, size, or MIME invariant is invalid
+  - id: MEDIA.MEDIA_OBJECT_MISSING
+    status: active
+    summary: media binding references a missing media object
+  - id: MEDIA.INVALID_MEDIA_BINDING_INVARIANT
+    status: active
+    summary: media binding object id does not match the expected object id shape
+  - id: MEDIA.MEDIA_BINDING_MISSING
+    status: active
+    summary: media reference resolves to a missing media binding
+  - id: MEDIA.MISSING_REFERENCE
+    status: active
+    summary: media reference is unresolved
+  - id: MEDIA.UNSAFE_REFERENCE
+    status: active
+    summary: media reference cannot be packaged safely
+  - id: MEDIA.UNUSED_BINDING
+    status: active
+    summary: media binding is not referenced by packaged content
+  - id: MEDIA.SOURCE_MISSING
+    status: active
+    summary: media source is missing
+  - id: MEDIA.SOURCE_NOT_REGULAR_FILE
+    status: active
+    summary: media source is not a regular file
+  - id: MEDIA.SOURCE_READ_FAILED
+    status: active
+    summary: media source could not be read
+  - id: MEDIA.SOURCE_CHANGED
+    status: active
+    summary: media source bytes changed after registration
+  - id: MEDIA.EMPTY_SOURCE
+    status: active
+    summary: media source is empty
+  - id: MEDIA.INVALID_SOURCE_LABEL
+    status: active
+    summary: inline media source label is invalid
+  - id: MEDIA.UNSAFE_SOURCE_PATH
+    status: active
+    summary: media source path is unsafe or escapes the base directory
+  - id: MEDIA.INLINE_BASE64_DECODE_FAILED
+    status: active
+    summary: inline media bytes are not valid base64
+  - id: MEDIA.INLINE_TOO_LARGE
+    status: active
+    summary: inline media payload exceeds the configured limit
+  - id: MEDIA.SIZE_LIMIT_EXCEEDED
+    status: active
+    summary: media object exceeds the configured size limit
+  - id: MEDIA.DECLARED_MIME_MISMATCH
+    status: active
+    summary: declared MIME type conflicts with observed media bytes
+  - id: MEDIA.UNKNOWN_MIME
+    status: active
+    summary: media MIME type could not be determined
+  - id: MEDIA.DEDUPED_BINDING
+    status: active
+    summary: duplicate media binding was merged because it referenced the same object
+  - id: MEDIA.DEDUPED_OBJECT
+    status: active
+    summary: media object bytes were deduplicated
+  - id: MEDIA.CAS_WRITE_FAILED
+    status: active
+    summary: media CAS object could not be written
+  - id: MEDIA.CAS_OBJECT_INTEGRITY_CONFLICT
+    status: active
+    summary: existing media CAS object failed integrity validation
+  - id: MEDIA.CAS_OBJECT_MISSING
+    status: active
+    summary: media CAS object is missing during writer materialization
+  - id: MEDIA.CAS_OBJECT_SIZE_MISMATCH
+    status: active
+    summary: media CAS object size does not match normalized metadata
+  - id: MEDIA.CAS_OBJECT_BLAKE3_MISMATCH
+    status: active
+    summary: media CAS object BLAKE3 hash does not match normalized metadata
+  - id: MEDIA.CAS_OBJECT_SHA1_MISMATCH
+    status: active
+    summary: media CAS object SHA-1 hash does not match normalized metadata
+  - id: MEDIA.CAS_OBJECT_READ_FAILED
+    status: active
+    summary: media CAS object could not be read
+  - id: MEDIA.CAS_OBJECT_COPY_FAILED
+    status: active
+    summary: media CAS object could not be copied to the package output
+  - id: MEDIA.NORMALIZE_OPTIONS_REQUIRED
+    status: active
+    summary: media normalization requires explicit normalization options
+  - id: PROJECT.BUILD_MISSING_ARTIFACT
+    status: active
+    summary: build report did not include an APKG artifact
+  - id: PROJECT.BUILD_DIAGNOSTICS
+    status: active
+    summary: build report contained error diagnostics
+  - id: PROJECT.BUILD_POLICY_BLOCKED
+    status: active
+    summary: build policy blocked the output
+  - id: PROJECT.BUILD_INVALID
+    status: active
+    summary: build report status was invalid
+  - id: PROJECT.BUILD_IO
+    status: active
+    summary: project build failed while reading or writing files
+  - id: PROJECT.BUILD_INTERNAL
+    status: active
+    summary: project build failed with an internal error status
+  - id: PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED
+    status: active
+    summary: ProductDocument-backed project mixed direct Project sources
+  - id: PROJECT.PRODUCT_MEDIA_FAILED
+    status: active
+    summary: product media preparation failed without a more specific diagnostic
+  - id: PROJECT.PRODUCT_MEDIA_STAGING_COLLISION
+    status: active
+    summary: product media staging would overwrite an existing target
+  - id: PROJECT.LOWER_FAILED
+    status: active
+    summary: product lowering failed without a more specific diagnostic
   - id: UPDATE.BASELINE_APKG_UNREADABLE
     status: active
     summary: previous APKG baseline could not be read

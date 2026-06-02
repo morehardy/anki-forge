@@ -100,6 +100,7 @@ mod tests {
                     target_deck_name: None,
                     browser_font_name: None,
                     browser_font_size: None,
+                    generation_requirement: None,
                 }],
                 css: String::new(),
                 field_metadata: Vec::new(),

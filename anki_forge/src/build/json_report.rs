@@ -8,6 +8,7 @@ use crate::build::{
     ComparisonStatus, InspectSummary, MediaEntrySummary, MediaSourceMode, MediaSummary,
     UpdateSafetySummary,
 };
+use crate::diagnostics::{Diagnostic, Severity};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct BuildReportJson {
@@ -19,7 +20,7 @@ pub struct BuildReportJson {
     pub comparison: ComparisonStatus,
     pub counts: BuildCountsJson,
     pub media: MediaSummaryJson,
-    pub diagnostics: Vec<crate::diagnostics::Diagnostic>,
+    pub diagnostics: Vec<DiagnosticJson>,
     pub metrics: BuildMetricsJson,
     pub inspect: Option<InspectSummaryJson>,
     pub previous_inspect: Option<InspectSummaryJson>,
@@ -78,6 +79,17 @@ pub struct InspectSummaryJson {
     pub media: usize,
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct DiagnosticJson {
+    pub code: String,
+    pub severity: Severity,
+    pub domain: String,
+    pub stage: String,
+    pub path: Option<String>,
+    pub message: String,
+    pub suggested_fix: Option<String>,
+}
+
 pub trait SerializableBuildReport {
     fn to_report_json(&self) -> BuildReportJson;
 }
@@ -92,14 +104,18 @@ impl BuildReportJson {
     pub fn from_report(report: &BuildReport) -> Self {
         Self {
             kind: "anki-forge-build-report",
-            schema_version: "phase4-build-report-v1",
+            schema_version: "phase4-build-report-v2",
             tool_version: crate::facade_api_version().to_string(),
             artifact: report.artifact.as_ref().map(ApkgArtifactJson::from),
             status: report.status,
             comparison: report.comparison,
             counts: BuildCountsJson::from(report.counts),
             media: MediaSummaryJson::from(&report.media),
-            diagnostics: report.diagnostics.clone(),
+            diagnostics: report
+                .diagnostics
+                .iter()
+                .map(DiagnosticJson::from)
+                .collect(),
             metrics: BuildMetricsJson::from(report.metrics),
             inspect: report.inspect.as_ref().map(InspectSummaryJson::from),
             previous_inspect: report
@@ -111,6 +127,61 @@ impl BuildReportJson {
             risk: report.risk.clone(),
             policy: report.policy.clone(),
         }
+    }
+}
+
+impl From<&Diagnostic> for DiagnosticJson {
+    fn from(value: &Diagnostic) -> Self {
+        let code = value.code.as_str();
+        Self {
+            code: code.to_string(),
+            severity: value.severity,
+            domain: value
+                .domain
+                .as_ref()
+                .map(|domain| domain.as_str().to_string())
+                .unwrap_or_else(|| inferred_domain(code).to_string()),
+            stage: value
+                .stage
+                .as_ref()
+                .map(|stage| stage.as_str().to_string())
+                .unwrap_or_else(|| inferred_stage(code).to_string()),
+            path: value
+                .source
+                .as_ref()
+                .map(|source| source.as_str().to_string()),
+            message: value.message.clone(),
+            suggested_fix: value.help.clone(),
+        }
+    }
+}
+
+fn inferred_domain(code: &str) -> &'static str {
+    match code.split_once('.').map(|(prefix, _)| prefix) {
+        Some("AFID") => "identity",
+        Some("COMPARE") => "comparison",
+        Some("DECK") => "deck",
+        Some("MEDIA") => "media",
+        Some("NOTETYPE") | Some("TEMPLATE") => "notetype",
+        Some("PRODUCT") => "product",
+        Some("PROJECT") => "project",
+        Some("RISK") => "risk",
+        Some("UPDATE") => "update_safety",
+        _ => "unknown",
+    }
+}
+
+fn inferred_stage(code: &str) -> &'static str {
+    match code.split_once('.').map(|(prefix, _)| prefix) {
+        Some("AFID") | Some("DECK") | Some("PRODUCT") | Some("NOTETYPE") | Some("TEMPLATE") => {
+            "validate"
+        }
+        Some("COMPARE") => "compare",
+        Some("MEDIA") => "normalize",
+        Some("PROJECT") => "build",
+        Some("RISK") => "risk",
+        Some("UPDATE") => "update_safety",
+        _ => "unknown",
     }
 }
 
