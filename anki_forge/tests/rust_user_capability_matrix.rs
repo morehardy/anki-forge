@@ -25,6 +25,61 @@ fn scenario_dir() -> PathBuf {
     path
 }
 
+fn capability_mode() -> String {
+    std::env::var("ANKI_FORGE_CAPABILITY_MODE").unwrap_or_else(|_| "automated".into())
+}
+
+fn write_inspect_json(path: &Path, inspect: &InspectReport) {
+    let json = serde_json::to_string_pretty(inspect).expect("serialize inspect");
+    std::fs::write(path, json).expect("write inspect json");
+}
+
+fn write_manual_checklist(
+    scenario: &str,
+    package: &Path,
+    inspect: &InspectReport,
+    diagnostics: &[anki_forge::diagnostics::Diagnostic],
+) {
+    // Keep `scenario` equal to the ignored Rust test function name.
+    if capability_mode() != "manual-desktop" {
+        return;
+    }
+    let root = package.parent().expect("package parent");
+    let diagnostic_codes = if diagnostics.is_empty() {
+        "N/A".to_string()
+    } else {
+        diagnostics
+            .iter()
+            .map(|diagnostic| diagnostic.code.as_str().to_string())
+            .collect::<Vec<_>>()
+            .join(", ")
+    };
+    let body = format!(
+        "# Manual Desktop Check: {scenario}\n\n\
+- Date:\n\
+- Platform:\n\
+- Anki version:\n\
+- anki-forge commit:\n\
+- Package path: {}\n\
+- Package SHA-256: ANKI_FORGE_SHA256_PENDING\n\
+- Import action: file_import | double_click_apkg\n\
+- Notes before import:\n\
+- Notes after import:\n\
+- Cards before import:\n\
+- Cards after import:\n\
+- GUID/update result: N/A\n\
+- Duplicate note result: N/A\n\
+- Media rendering result:\n\
+- Media files verified:\n\
+- Relevant diagnostics: {diagnostic_codes}\n\
+- Pass/fail:\n\
+- Notes:\n",
+        package.display()
+    );
+    std::fs::write(root.join("manual-checklist.md"), body).expect("write checklist");
+    write_inspect_json(&root.join("apkg.inspect.json"), inspect);
+}
+
 fn expect_error_report(result: Result<BuildReport, BuildError>, code: &str) -> BuildReport {
     let error = result.expect_err("scenario should return BuildError");
     assert!(
@@ -759,6 +814,7 @@ fn deck_basic_apkg() {
     assert!(apkg.is_file());
 
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist("deck_basic_apkg", &apkg, &inspected, &report.diagnostics);
     let counts = counts(&inspected);
     assert_eq!(counts["note_count"], 1);
     assert_eq!(counts["card_count"], 1);
@@ -786,6 +842,7 @@ fn deck_cloze_apkg() {
     assert_eq!(report.counts.notes, 1);
     assert_eq!(report.counts.cards, 1);
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist("deck_cloze_apkg", &apkg, &inspected, &report.diagnostics);
     assert_eq!(counts(&inspected)["note_count"], 1);
     assert_eq!(counts(&inspected)["card_count"], 1);
     assert!(inspected
@@ -821,6 +878,12 @@ fn deck_image_occlusion_apkg() {
     assert_eq!(report.counts.cards, 1);
     assert_eq!(report.counts.media, 1);
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist(
+        "deck_image_occlusion_apkg",
+        &apkg,
+        &inspected,
+        &report.diagnostics,
+    );
     assert_eq!(counts(&inspected)["card_count"], 1);
     assert!(has_selector(
         &inspected.observations.notetypes,
@@ -843,6 +906,7 @@ fn deck_bytes_export() {
     assert!(!bytes.is_empty());
     std::fs::write(&apkg, bytes).expect("write bytes");
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist("deck_bytes_export", &apkg, &inspected, &[]);
     assert_eq!(counts(&inspected)["note_count"], 1);
     assert_eq!(counts(&inspected)["card_count"], 1);
 }
@@ -866,6 +930,12 @@ fn project_stock_notes_apkg() {
     assert_eq!(report.counts.notes, 2);
     assert_eq!(report.counts.cards, 2);
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist(
+        "project_stock_notes_apkg",
+        &apkg,
+        &inspected,
+        &report.diagnostics,
+    );
     assert_eq!(counts(&inspected)["note_count"], 2);
     assert_eq!(counts(&inspected)["card_count"], 2);
 }
@@ -894,6 +964,12 @@ fn project_custom_notetype_apkg() {
     assert_eq!(report.counts.notes, 1);
     assert_eq!(report.counts.cards, 1);
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist(
+        "project_custom_notetype_apkg",
+        &apkg,
+        &inspected,
+        &report.diagnostics,
+    );
     assert!(has_observation(
         &inspected.observations.notetypes,
         "id",
@@ -941,6 +1017,12 @@ fn project_media_references_apkg() {
     assert_eq!(report.media.unsafe_references, 0);
     assert_eq!(report.media.unused_bindings, 0);
     let inspected = inspect_complete(&apkg);
+    write_manual_checklist(
+        "project_media_references_apkg",
+        &apkg,
+        &inspected,
+        &report.diagnostics,
+    );
     assert!(inspected
         .observations
         .media
