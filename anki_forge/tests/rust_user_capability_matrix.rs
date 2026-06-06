@@ -19,12 +19,27 @@ fn scenario_dir() -> PathBuf {
     path
 }
 
-#[allow(dead_code)]
-fn normalize_report(result: Result<BuildReport, BuildError>) -> BuildReport {
-    match result {
-        Ok(report) => report,
-        Err(error) => *error.report,
-    }
+fn expect_error_report(result: Result<BuildReport, BuildError>, code: &str) -> BuildReport {
+    let error = result.expect_err("scenario should return BuildError");
+    assert!(
+        error.report.diagnostic_codes().contains(&code.to_string()),
+        "missing diagnostic {code}; got {:?}",
+        error.report.diagnostic_codes()
+    );
+    assert!(
+        error.report.ensure_success().is_err(),
+        "error report must not ensure_success"
+    );
+    *error.report
+}
+
+fn assert_diagnostic_severity(report: &BuildReport, code: &str, severity: anki_forge::Severity) {
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == code)
+        .unwrap_or_else(|| panic!("missing diagnostic {code}"));
+    assert_eq!(diagnostic.severity, severity);
 }
 
 fn inspect_complete(path: &Path) -> InspectReport {
@@ -66,6 +81,233 @@ const PNG_1X1: &[u8] = &[
 ];
 
 const MP3_BYTES: &[u8] = b"fake-mp3-bytes-for-capability-test";
+
+#[ignore]
+#[test]
+fn duplicate_stable_id() {
+    let root = scenario_dir();
+    let mut project = Project::new("Duplicate")
+        .stable_id("dup")
+        .default_deck("Duplicate");
+    project
+        .add_note(Note::basic("one", "one").stable_id("dup-note"))
+        .expect("add first");
+    project
+        .add_note(Note::basic("two", "two").stable_id("dup-note"))
+        .expect("add second");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(root.join("package.apkg"))),
+        "AFID.STABLE_ID_DUPLICATE",
+    );
+    assert_diagnostic_severity(
+        &report,
+        "AFID.STABLE_ID_DUPLICATE",
+        anki_forge::Severity::Error,
+    );
+}
+
+#[ignore]
+#[test]
+fn blank_stable_id() {
+    let mut deck = Deck::new("Blank");
+    let error = deck
+        .basic()
+        .note("front", "back")
+        .stable_id(" ")
+        .add()
+        .expect_err("blank stable id should fail");
+    assert!(error.to_string().contains("DECK.BLANK_STABLE_ID"));
+}
+
+#[ignore]
+#[test]
+fn cloze_inferred_identity_requires_marker() {
+    let mut deck = Deck::new("Cloze");
+    let error = deck
+        .cloze()
+        .note("plain text")
+        .add()
+        .expect_err("markerless inferred cloze should fail");
+    assert!(error.to_string().contains("AFID.IDENTITY_COMPONENT_EMPTY"));
+}
+
+#[ignore]
+#[test]
+fn missing_media_source() {
+    let root = scenario_dir();
+    let source = root.join("source.bin");
+    std::fs::write(&source, b"original bytes").expect("write source");
+    let mut project = Project::new("Media")
+        .stable_id("missing-media")
+        .default_deck("Media");
+    let media = project
+        .media_mut()
+        .add_file(&source)
+        .expect("file media")
+        .export_as("source.bin")
+        .expect("export");
+    std::fs::remove_file(&source).expect("delete source");
+    project
+        .add_note(
+            Note::basic("source", "")
+                .stable_id("media:source")
+                .sound("Back", media),
+        )
+        .expect("add note");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(root.join("package.apkg"))),
+        "MEDIA.SOURCE_MISSING",
+    );
+    assert_diagnostic_severity(&report, "MEDIA.SOURCE_MISSING", anki_forge::Severity::Error);
+}
+
+#[ignore]
+#[test]
+fn missing_media_reference() {
+    let root = scenario_dir();
+    let mut project = Project::new("Missing Ref")
+        .stable_id("missing-ref")
+        .default_deck("Missing Ref");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("media:missing")
+                .text("Front", "front")
+                .html("Back", r#"<img src="missing.png">"#),
+        )
+        .expect("add note");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(root.join("package.apkg"))),
+        "MEDIA.MISSING_REFERENCE",
+    );
+    assert_diagnostic_severity(
+        &report,
+        "MEDIA.MISSING_REFERENCE",
+        anki_forge::Severity::Error,
+    );
+}
+
+#[ignore]
+#[test]
+fn unused_media_binding() {
+    let root = scenario_dir();
+    let mut project = Project::new("Unused Media")
+        .stable_id("unused-media")
+        .default_deck("Unused Media");
+    project
+        .media_mut()
+        .add_bytes("unused.bin", MP3_BYTES.to_vec())
+        .expect("bytes")
+        .export_as("unused.mp3")
+        .expect("export");
+    project
+        .add_note(Note::basic("front", "back").stable_id("unused:note"))
+        .expect("add note");
+    let report = project
+        .build(BuildOptions::new().output(root.join("package.apkg")))
+        .expect("warning-only build");
+    report.ensure_success().expect("unused binding is warning");
+    assert_eq!(report.media.unused_bindings, 1);
+    assert_diagnostic_severity(
+        &report,
+        "MEDIA.UNUSED_BINDING",
+        anki_forge::Severity::Warning,
+    );
+    assert!(root.join("package.apkg").is_file());
+}
+
+#[ignore]
+#[test]
+fn unsafe_media_reference() {
+    let root = scenario_dir();
+    let mut project = Project::new("Unsafe Ref")
+        .stable_id("unsafe-ref")
+        .default_deck("Unsafe Ref");
+    project
+        .add_note(
+            Note::new("basic")
+                .stable_id("unsafe:note")
+                .text("Front", "front")
+                .html("Back", r#"<img src="bad%2Fname.png">"#),
+        )
+        .expect("add note");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(root.join("package.apkg"))),
+        "MEDIA.UNSAFE_REFERENCE",
+    );
+    assert_eq!(report.media.unsafe_references, 1);
+    assert_diagnostic_severity(
+        &report,
+        "MEDIA.UNSAFE_REFERENCE",
+        anki_forge::Severity::Error,
+    );
+}
+
+#[ignore]
+#[test]
+fn unsafe_media_export_filename() {
+    let mut project = Project::new("Unsafe Filename");
+    let error = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG_1X1.to_vec())
+        .expect("bytes")
+        .export_as("../chart.png")
+        .expect_err("unsafe export filename fails");
+    assert!(error.to_string().contains("MEDIA.UNSAFE_FILENAME"));
+}
+
+#[ignore]
+#[test]
+fn mime_mismatch() {
+    let root = scenario_dir();
+    let mut project = Project::new("Mime").stable_id("mime").default_deck("Mime");
+    let media = project
+        .media_mut()
+        .add_bytes("raw-image.bin", PNG_1X1.to_vec())
+        .expect("bytes")
+        .export_as("chart.mp3")
+        .expect("export");
+    project
+        .add_note(
+            Note::basic("chart", "")
+                .stable_id("mime:note")
+                .sound("Back", media),
+        )
+        .expect("add note");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(root.join("package.apkg"))),
+        "MEDIA.DECLARED_MIME_MISMATCH",
+    );
+    assert_diagnostic_severity(
+        &report,
+        "MEDIA.DECLARED_MIME_MISMATCH",
+        anki_forge::Severity::Error,
+    );
+}
+
+#[ignore]
+#[test]
+fn baseline_apkg_unreadable() {
+    let root = scenario_dir();
+    let missing = root.join("missing.apkg");
+    let output = root.join("package.apkg");
+    let mut project = Project::new("Baseline")
+        .stable_id("baseline")
+        .default_deck("Baseline");
+    project
+        .add_note(Note::basic("front", "back").stable_id("baseline:note"))
+        .expect("add note");
+    let report = expect_error_report(
+        project.build(BuildOptions::new().output(&output).compare_to(&missing)),
+        "UPDATE.BASELINE_APKG_UNREADABLE",
+    );
+    assert!(!output.exists());
+    assert_diagnostic_severity(
+        &report,
+        "UPDATE.BASELINE_APKG_UNREADABLE",
+        anki_forge::Severity::Error,
+    );
+}
 
 fn io_fixture_image_path() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
