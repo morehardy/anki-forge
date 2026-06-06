@@ -4,6 +4,7 @@ use anki_forge::build::{BuildError, BuildReport};
 use anki_forge::prelude::*;
 use anki_forge::writer::{inspect_apkg, InspectReport};
 use anki_forge::Deck;
+use rusqlite::Connection;
 use serde_json::Value;
 
 fn scenario_dir() -> PathBuf {
@@ -72,6 +73,108 @@ fn has_observation(values: &[Value], key: &str, expected: &str) -> bool {
     values
         .iter()
         .any(|value| value[key].as_str() == Some(expected))
+}
+
+fn read_latest_collection_bytes(path: &Path) -> Vec<u8> {
+    let file = std::fs::File::open(path).expect("open apkg");
+    let mut zip = zip::ZipArchive::new(file).expect("zip");
+    let mut entry = zip
+        .by_name("collection.anki21b")
+        .expect("latest collection");
+    let mut compressed = Vec::new();
+    std::io::Read::read_to_end(&mut entry, &mut compressed).expect("read collection");
+    zstd::stream::decode_all(compressed.as_slice()).expect("decode collection")
+}
+
+fn read_single_guid(path: &Path) -> String {
+    let tmp = tempfile::tempdir().expect("tempdir");
+    let db_path = tmp.path().join("collection.sqlite");
+    std::fs::write(&db_path, read_latest_collection_bytes(path)).expect("write sqlite");
+    let conn = Connection::open(db_path).expect("open sqlite");
+    conn.query_row("select guid from notes", [], |row| row.get(0))
+        .expect("guid")
+}
+
+fn rewrite_single_note_guid(path: &Path, guid: &str) {
+    let tmp = tempfile::tempdir().expect("tempdir");
+    let file = std::fs::File::open(path).expect("open apkg");
+    let mut zip = zip::ZipArchive::new(file).expect("zip");
+    let mut entries = std::collections::BTreeMap::<String, Vec<u8>>::new();
+    for index in 0..zip.len() {
+        let mut entry = zip.by_index(index).expect("entry");
+        let mut bytes = Vec::new();
+        std::io::Read::read_to_end(&mut entry, &mut bytes).expect("read entry");
+        entries.insert(entry.name().to_string(), bytes);
+    }
+    let decoded = zstd::stream::decode_all(
+        entries
+            .get("collection.anki21b")
+            .expect("collection")
+            .as_slice(),
+    )
+    .expect("decode collection");
+    let collection = tmp.path().join("collection.sqlite");
+    std::fs::write(&collection, decoded).expect("write sqlite");
+    let conn = Connection::open(&collection).expect("open sqlite");
+    let data: String = conn
+        .query_row("select data from notes", [], |row| row.get(0))
+        .expect("data");
+    let mut data_json: serde_json::Value = serde_json::from_str(&data).expect("identity json");
+    data_json["anki_forge_identity"]["selected_anki_guid"] = serde_json::json!(guid);
+    conn.execute(
+        "update notes set guid = ?1, data = ?2",
+        rusqlite::params![
+            guid,
+            serde_json::to_string(&data_json).expect("serialize data")
+        ],
+    )
+    .expect("update guid and metadata");
+    drop(conn);
+    let updated = std::fs::read(&collection).expect("read sqlite");
+    entries.insert(
+        "collection.anki21b".into(),
+        zstd::stream::encode_all(updated.as_slice(), 0).expect("encode collection"),
+    );
+    let output = std::fs::File::create(path).expect("replace apkg");
+    let mut writer = zip::ZipWriter::new(output);
+    let options: zip::write::FileOptions<'_, ()> =
+        zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Stored);
+    for (entry, bytes) in entries {
+        writer.start_file(entry, options).expect("start file");
+        std::io::Write::write_all(&mut writer, &bytes).expect("write entry");
+    }
+    writer.finish().expect("finish");
+}
+
+fn stable_project(front: &str) -> Project {
+    let mut project = Project::new("Update")
+        .stable_id("update")
+        .default_deck("Update");
+    project
+        .add_note(Note::basic(front, "back").stable_id("update:one"))
+        .expect("add note");
+    project
+}
+
+fn two_template_notetype(order: [&str; 2]) -> NoteType {
+    let mut notetype = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .field(Field::new("Meaning").key("meaning"));
+    for key in order {
+        let name = if key == "recognition" {
+            "Recognition"
+        } else {
+            "Production"
+        };
+        notetype = notetype.template(
+            Template::new(name)
+                .key(key)
+                .front("{{Expression}}")
+                .back("{{Meaning}}")
+                .generate_when(GenerationRule::all(["expr"])),
+        );
+    }
+    notetype
 }
 
 const PNG_1X1: &[u8] = &[
@@ -307,6 +410,182 @@ fn baseline_apkg_unreadable() {
         "UPDATE.BASELINE_APKG_UNREADABLE",
         anki_forge::Severity::Error,
     );
+}
+
+#[ignore]
+#[test]
+fn update_preserves_guid() {
+    let root = scenario_dir();
+    let previous = root.join("previous.apkg");
+    let updated = root.join("updated.apkg");
+    stable_project("front")
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+    rewrite_single_note_guid(&previous, "legacy-guid");
+    let report = stable_project("front updated")
+        .build(BuildOptions::new().output(&updated).compare_to(&previous))
+        .expect("updated build");
+    report.ensure_success().expect("successful update");
+    assert_eq!(
+        report
+            .update_safety
+            .as_ref()
+            .expect("update")
+            .notes_preserved,
+        1
+    );
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.GUID_PRESERVED_FROM_PREVIOUS".into()));
+    assert_eq!(read_single_guid(&updated), "legacy-guid");
+}
+
+#[ignore]
+#[test]
+fn update_adds_new_note() {
+    let root = scenario_dir();
+    let previous = root.join("previous.apkg");
+    let updated = root.join("updated.apkg");
+    stable_project("front")
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+    let mut project = stable_project("front");
+    project
+        .add_note(Note::basic("new", "back").stable_id("update:two"))
+        .expect("add new");
+    let report = project
+        .build(BuildOptions::new().output(&updated).compare_to(&previous))
+        .expect("updated build");
+    report.ensure_success().expect("successful update");
+    assert_eq!(report.counts.notes, 2);
+    assert_eq!(
+        report
+            .update_safety
+            .as_ref()
+            .expect("update")
+            .notes_preserved,
+        1
+    );
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.GUID_DERIVED_FOR_NEW_NOTE".into()));
+    inspect_complete(&updated);
+}
+
+#[ignore]
+#[test]
+fn field_rename_stable_key_safe() {
+    let root = scenario_dir();
+    let previous = root.join("previous.apkg");
+    let updated = root.join("updated.apkg");
+    let mut first = Project::new("Japanese")
+        .stable_id("jp-core")
+        .default_deck("Japanese");
+    first.add_notetype(vocab_notetype()).expect("notetype");
+    first
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "taberu")
+                .text("meaning", "to eat"),
+        )
+        .expect("note");
+    first
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+
+    let renamed = NoteType::custom("jp-vocab")
+        .field(Field::new("Prompt").key("expr"))
+        .field(Field::new("Meaning").key("meaning"))
+        .template(
+            Template::new("Recognition")
+                .key("recognition")
+                .front("{{Prompt}}")
+                .back("{{Meaning}}")
+                .generate_when(GenerationRule::all(["expr"])),
+        );
+    let mut second = Project::new("Japanese")
+        .stable_id("jp-core")
+        .default_deck("Japanese");
+    second.add_notetype(renamed).expect("notetype");
+    second
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "taberu")
+                .text("meaning", "to eat"),
+        )
+        .expect("note");
+    let report = second
+        .build(BuildOptions::new().output(&updated).compare_to(&previous))
+        .expect("updated build");
+    report.ensure_success().expect("field rename is safe");
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.FIELD_RENAMED".into()));
+    assert!(!report
+        .diagnostic_codes()
+        .contains(&"UPDATE.FIELD_MERGE_ID_CHANGED".into()));
+    inspect_complete(&updated);
+}
+
+#[ignore]
+#[test]
+fn template_reorder_risk() {
+    let root = scenario_dir();
+    let previous = root.join("previous.apkg");
+    let updated = root.join("updated.apkg");
+    let mut first = Project::new("Japanese")
+        .stable_id("jp-core")
+        .default_deck("Japanese");
+    first
+        .add_notetype(two_template_notetype(["recognition", "production"]))
+        .expect("notetype");
+    first
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "taberu")
+                .text("meaning", "to eat"),
+        )
+        .expect("note");
+    first
+        .build(BuildOptions::new().output(&previous))
+        .expect("previous build");
+
+    let mut second = Project::new("Japanese")
+        .stable_id("jp-core")
+        .default_deck("Japanese");
+    second
+        .add_notetype(two_template_notetype(["production", "recognition"]))
+        .expect("notetype");
+    second
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "taberu")
+                .text("meaning", "to eat"),
+        )
+        .expect("note");
+    let report = second
+        .build(BuildOptions::new().output(&updated).compare_to(&previous))
+        .expect("updated build");
+    report
+        .ensure_success()
+        .expect("template reorder is warning without fail_on");
+    assert_diagnostic_severity(
+        &report,
+        "UPDATE.TEMPLATE_ORD_CHANGED",
+        anki_forge::Severity::Warning,
+    );
+    assert!(report
+        .risk
+        .as_ref()
+        .expect("risk")
+        .findings
+        .iter()
+        .any(|finding| finding.code == "RISK.TEMPLATE_REORDER"));
+    inspect_complete(&updated);
 }
 
 fn io_fixture_image_path() -> PathBuf {
