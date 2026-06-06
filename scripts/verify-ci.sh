@@ -60,6 +60,9 @@ python_path="$repo_root/bindings/python/src"
 run cargo fmt --all -- --check
 run cargo clippy --workspace --all-targets -- -D warnings
 run cargo test --workspace -v
+if [[ "$mode" == "ci" ]]; then
+  run ./scripts/run_rust_user_capabilities.sh
+fi
 check_worktree_whitespace
 check_branch_whitespace
 
