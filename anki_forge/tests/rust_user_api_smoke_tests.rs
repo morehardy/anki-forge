@@ -63,7 +63,9 @@ fn project_stock_write_apkg_smoke() {
 fn deck_to_apkg_bytes_smoke() {
     let root = tempfile::tempdir().expect("tempdir");
     let apkg = root.path().join("bytes.apkg");
-    let mut deck = Deck::builder("Bytes Smoke").stable_id("bytes-smoke").build();
+    let mut deck = Deck::builder("Bytes Smoke")
+        .stable_id("bytes-smoke")
+        .build();
 
     deck.basic()
         .note("front", "back")
