@@ -2,6 +2,11 @@ use std::path::{Path, PathBuf};
 
 use anki_forge::build::{BuildError, BuildReport};
 use anki_forge::prelude::*;
+use anki_forge::update_safety::lockfile::write_lockfile_atomic;
+use anki_forge::update_safety::model::{
+    FieldMergeEntry, GeneratedBy, IdentityIndex, IdentityLockfile, NotetypeIdentityEntry,
+    TemplateMergeEntry,
+};
 use anki_forge::writer::{inspect_apkg, InspectReport};
 use anki_forge::Deck;
 use rusqlite::Connection;
@@ -153,6 +158,78 @@ fn stable_project(front: &str) -> Project {
     project
         .add_note(Note::basic(front, "back").stable_id("update:one"))
         .expect("add note");
+    project
+}
+
+fn write_drift_lockfile(
+    path: &Path,
+    fields: Vec<FieldMergeEntry>,
+    templates: Vec<TemplateMergeEntry>,
+) {
+    let mut index = IdentityIndex::empty_lockfile("jp-core", "writer-policy.default@1.0.0");
+    index.notetypes.push(NotetypeIdentityEntry {
+        note_type_id: "jp-vocab".into(),
+        anki_model_id: None,
+        name: "jp-vocab".into(),
+        fields,
+        templates,
+    });
+    let lockfile = IdentityLockfile {
+        schema_version: "identity-lockfile-v1".into(),
+        project_stable_id: "jp-core".into(),
+        writer_policy_ref: "writer-policy.default@1.0.0".into(),
+        identity_index: index,
+        generated_by: GeneratedBy {
+            tool: "anki-forge".into(),
+            tool_version: env!("CARGO_PKG_VERSION").into(),
+            writer_policy_ref: "writer-policy.default@1.0.0".into(),
+        },
+    };
+    write_lockfile_atomic(path, &lockfile).expect("write lockfile");
+}
+
+fn write_field_config_drift_lockfile(path: &Path) {
+    let current = anki_forge::product::stable_config_id("field", "jp-vocab", "expr");
+    write_drift_lockfile(
+        path,
+        vec![FieldMergeEntry {
+            field_key: format!("field:config:{current}"),
+            field_name: "Expression".into(),
+            ord: 0,
+            config_id: current + 1,
+            tag: 0,
+        }],
+        vec![],
+    );
+}
+
+fn write_template_config_drift_lockfile(path: &Path) {
+    let current = anki_forge::product::stable_config_id("template", "jp-vocab", "recognition");
+    write_drift_lockfile(
+        path,
+        vec![],
+        vec![TemplateMergeEntry {
+            template_key: format!("template:config:{current}"),
+            template_name: "Recognition".into(),
+            ord: 0,
+            config_id: current + 1,
+        }],
+    );
+}
+
+fn drift_project() -> Project {
+    let mut project = Project::new("Japanese")
+        .stable_id("jp-core")
+        .default_deck("Japanese");
+    project.add_notetype(vocab_notetype()).expect("notetype");
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "taberu")
+                .text("meaning", "to eat"),
+        )
+        .expect("note");
     project
 }
 
@@ -586,6 +663,54 @@ fn template_reorder_risk() {
         .iter()
         .any(|finding| finding.code == "RISK.TEMPLATE_REORDER"));
     inspect_complete(&updated);
+}
+
+#[ignore]
+#[test]
+fn field_config_id_drift_blocks() {
+    let root = scenario_dir();
+    let lockfile = root.join("identity-lockfile.json");
+    let output = root.join("package.apkg");
+    write_field_config_drift_lockfile(&lockfile);
+    let report = expect_error_report(
+        drift_project().build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile),
+        ),
+        "UPDATE.FIELD_MERGE_ID_CHANGED",
+    );
+    assert_eq!(report.status, anki_forge::build::BuildStatus::Invalid);
+    assert!(!output.exists());
+    assert_diagnostic_severity(
+        &report,
+        "UPDATE.FIELD_MERGE_ID_CHANGED",
+        anki_forge::Severity::Error,
+    );
+}
+
+#[ignore]
+#[test]
+fn template_config_id_drift_blocks() {
+    let root = scenario_dir();
+    let lockfile = root.join("identity-lockfile.json");
+    let output = root.join("package.apkg");
+    write_template_config_drift_lockfile(&lockfile);
+    let report = expect_error_report(
+        drift_project().build(
+            BuildOptions::new()
+                .output(&output)
+                .identity_lockfile(&lockfile),
+        ),
+        "UPDATE.TEMPLATE_MERGE_ID_CHANGED",
+    );
+    assert_eq!(report.status, anki_forge::build::BuildStatus::Invalid);
+    assert!(!output.exists());
+    assert_diagnostic_severity(
+        &report,
+        "UPDATE.TEMPLATE_MERGE_ID_CHANGED",
+        anki_forge::Severity::Error,
+    );
 }
 
 fn io_fixture_image_path() -> PathBuf {
