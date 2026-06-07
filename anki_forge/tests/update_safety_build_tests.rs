@@ -136,6 +136,7 @@ fn rewrite_single_note_guid(path: &std::path::Path, guid: &str) {
         std::io::Read::read_to_end(&mut entry, &mut bytes).expect("read entry");
         entries.insert(entry.name().to_string(), bytes);
     }
+    drop(zip);
 
     let compressed = entries
         .get("collection.anki21b")
