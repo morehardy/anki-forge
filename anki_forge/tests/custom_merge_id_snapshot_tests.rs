@@ -191,14 +191,13 @@ fn custom_notetype_rejects_duplicate_field_keys() {
     let mut project = Project::new("Japanese Core")
         .stable_id("jp-core")
         .default_deck("Japanese::Core");
-    project.add_notetype(notetype).expect("add notetype");
 
     let err = project
-        .normalize()
-        .expect_err("duplicate field keys must not collide");
-    assert!(
-        err.to_string().contains("NOTETYPE.FIELD_KEY_DUPLICATE"),
-        "unexpected error: {err}"
+        .add_notetype(notetype)
+        .expect_err("duplicate field keys must fail at add-time");
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.FIELD_KEY_DUPLICATE"
     );
 }
 
@@ -222,14 +221,13 @@ fn custom_notetype_rejects_duplicate_template_keys() {
     let mut project = Project::new("Japanese Core")
         .stable_id("jp-core")
         .default_deck("Japanese::Core");
-    project.add_notetype(notetype).expect("add notetype");
 
     let err = project
-        .normalize()
-        .expect_err("duplicate template keys must not collide");
-    assert!(
-        err.to_string().contains("NOTETYPE.TEMPLATE_KEY_DUPLICATE"),
-        "unexpected error: {err}"
+        .add_notetype(notetype)
+        .expect_err("duplicate template keys must fail at add-time");
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.TEMPLATE_KEY_DUPLICATE"
     );
 }
 

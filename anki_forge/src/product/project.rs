@@ -117,7 +117,8 @@ impl Project {
         self
     }
 
-    pub fn add_notetype(&mut self, note_type: NoteType) -> anyhow::Result<&mut Self> {
+    pub fn add_notetype(&mut self, note_type: NoteType) -> Result<&mut Self, ProjectAddError> {
+        self.validate_notetype_for_add(&note_type)?;
         self.note_types.push(note_type);
         Ok(self)
     }
@@ -333,6 +334,158 @@ impl Project {
         }
 
         ValidationReport { diagnostics }
+    }
+
+    fn validate_notetype_for_add(&self, note_type: &NoteType) -> Result<(), ProjectAddError> {
+        let notetype_index = self.note_types.len();
+        let notetype_source = format!("project.note_types[{notetype_index}]");
+        let note_type_id = note_type.id();
+
+        if note_type_id.trim().is_empty() {
+            return Err(project_add_error(
+                "NOTETYPE.ID_BLANK",
+                "note type id cannot be blank",
+                notetype_source,
+                "choose a non-empty custom note type id",
+            ));
+        }
+
+        if is_supported_stock_notetype_id(note_type_id) {
+            return Err(project_add_error(
+                "NOTETYPE.ID_RESERVED",
+                format!("custom note type id '{note_type_id}' is reserved for stock notes"),
+                notetype_source,
+                "choose a non-stock custom note type id",
+            ));
+        }
+
+        if let Some((first_index, first)) = self
+            .note_types
+            .iter()
+            .enumerate()
+            .find(|(_, existing)| existing.id() == note_type_id)
+        {
+            return Err(project_add_error(
+                "NOTETYPE.ID_DUPLICATE",
+                duplicate_notetype_message(
+                    note_type_id,
+                    first_index,
+                    first.name_ref(),
+                    notetype_index,
+                    note_type.name_ref(),
+                ),
+                notetype_source,
+                "choose a unique id for each custom note type",
+            ));
+        }
+
+        let mut seen_field_keys = BTreeMap::<&str, &str>::new();
+        let mut seen_field_names = BTreeSet::<&str>::new();
+        let mut sort_field: Option<&str> = None;
+        for field in note_type.fields() {
+            let key = field.key_ref().as_str();
+            if let Some(first_name) = seen_field_keys.insert(key, field.name()) {
+                return Err(project_add_error(
+                    "NOTETYPE.FIELD_KEY_DUPLICATE",
+                    format!(
+                        "custom note type '{note_type_id}' uses field key '{key}' for both '{first_name}' and '{}'",
+                        field.name()
+                    ),
+                    format!("project.note_types[{notetype_index}].fields[{:?}]", field.name()),
+                    "choose a unique key for each field",
+                ));
+            }
+
+            if !seen_field_names.insert(field.name()) {
+                return Err(project_add_error(
+                    "NOTETYPE.FIELD_NAME_DUPLICATE",
+                    format!(
+                        "custom note type '{note_type_id}' uses duplicate field name '{}'",
+                        field.name()
+                    ),
+                    format!(
+                        "project.note_types[{notetype_index}].fields[{:?}]",
+                        field.name()
+                    ),
+                    "choose a unique name for each field",
+                ));
+            }
+
+            if field.is_sort() {
+                if let Some(first_sort) = sort_field {
+                    return Err(project_add_error(
+                        "NOTETYPE.SORT_FIELD_DUPLICATE",
+                        format!(
+                            "custom note type '{note_type_id}' marks both '{first_sort}' and '{}' as sort fields",
+                            field.name()
+                        ),
+                        format!("project.note_types[{notetype_index}].fields[{:?}]", field.name()),
+                        "mark at most one field as the sort field",
+                    ));
+                }
+                sort_field = Some(field.name());
+            }
+        }
+
+        let field_keys = note_type
+            .fields()
+            .iter()
+            .map(|field| field.key_ref().as_str())
+            .collect::<BTreeSet<_>>();
+
+        let mut seen_template_keys = BTreeMap::<&str, &str>::new();
+        for template in note_type.templates() {
+            let key = template.key_ref().as_str();
+            if let Some(first_name) = seen_template_keys.insert(key, template.name()) {
+                return Err(project_add_error(
+                    "NOTETYPE.TEMPLATE_KEY_DUPLICATE",
+                    format!(
+                        "custom note type '{note_type_id}' uses template key '{key}' for both '{first_name}' and '{}'",
+                        template.name()
+                    ),
+                    format!(
+                        "project.note_types[{notetype_index}].templates[{:?}]",
+                        template.name()
+                    ),
+                    "choose a unique key for each template",
+                ));
+            }
+
+            for field_key in generation_rule_field_keys(template.generation_rule()) {
+                if !field_keys.contains(field_key) {
+                    return Err(project_add_error(
+                        "TEMPLATE.FIELD_UNKNOWN",
+                        format!(
+                            "template '{}' for note type '{note_type_id}' references unknown field key '{field_key}'",
+                            template.name()
+                        ),
+                        format!(
+                            "project.note_types[{notetype_index}].templates[{:?}]",
+                            template.name()
+                        ),
+                        "use field keys declared on the custom NoteType",
+                    ));
+                }
+            }
+        }
+
+        if let Some(recipe) = note_type.identity_ref() {
+            for field_key in recipe.field_keys() {
+                if !field_keys.contains(field_key.as_str()) {
+                    return Err(project_add_error(
+                        "PRODUCT.IDENTITY_FIELD_UNKNOWN",
+                        format!(
+                            "custom note type '{note_type_id}' identity references unknown field key '{}'",
+                            field_key.as_str()
+                        ),
+                        notetype_source,
+                        "use field keys declared on the custom NoteType",
+                    ));
+                }
+            }
+        }
+
+        Ok(())
     }
 
     fn validate_note_for_add(&self, note: &Note) -> Result<(), ProjectAddError> {
@@ -2261,7 +2414,6 @@ fn stock_field_keys(note_type_id: &str) -> Option<&'static [&'static str]> {
     }
 }
 
-#[allow(dead_code)]
 fn generation_rule_field_keys(rule: &GenerationRule) -> Vec<&str> {
     match rule {
         GenerationRule::AnkiDefault => Vec::new(),
@@ -4105,6 +4257,7 @@ fn combine_lowering_and_normalization_diagnostics(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::product::{Field, Template};
 
     fn diagnostic(code: &str, severity: Severity) -> Diagnostic {
         Diagnostic {
@@ -4254,6 +4407,223 @@ mod tests {
                 .map(SourcePath::as_str),
             Some("project.notes[0]")
         );
+    }
+
+    #[test]
+    fn lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit() {
+        let mut project = Project::new("Shifted Note Types")
+            .stable_id("shifted-notetypes")
+            .default_deck("Shifted Note Types");
+        project
+            .notes
+            .push(Note::basic("front", "back").stable_id("basic:1"));
+        project.note_types.push(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}")
+                        .browser_back("{{Prompt}}"),
+                ),
+        );
+        project.note_types.push(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recall")
+                        .key("recall")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}")
+                        .browser_front("{{Prompt}}"),
+                ),
+        );
+
+        let plan = project.lower().expect("lower project");
+
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                "authoring.note_types[1].templates[\"Recognition\"].front"
+            ),
+            Some("project.note_types[0].templates[\"Recognition\"].front")
+        );
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                "authoring.note_types[1].templates[\"Recognition\"].browser_back"
+            ),
+            Some("project.note_types[0].templates[\"Recognition\"].browser_back")
+        );
+        assert_eq!(
+            plan.source_map
+                .source_for_authoring_path("authoring.note_types[1].css"),
+            Some("project.note_types[0].css")
+        );
+        assert_eq!(
+            plan.source_map
+                .source_for_authoring_path("authoring.note_types[2].templates[\"Recall\"].back"),
+            Some("project.note_types[1].templates[\"Recall\"].back")
+        );
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                "authoring.note_types[2].templates[\"Recall\"].browser_front"
+            ),
+            Some("project.note_types[1].templates[\"Recall\"].browser_front")
+        );
+        assert_eq!(
+            plan.source_map
+                .source_for_authoring_path("authoring.note_types[2].css"),
+            Some("project.note_types[1].css")
+        );
+    }
+
+    #[test]
+    fn lower_maps_custom_notetype_stock_collision_sources_to_project_index() {
+        let mut project = Project::new("Implicit Duplicate")
+            .stable_id("implicit-duplicate")
+            .default_deck("Implicit Duplicate");
+        project
+            .notes
+            .push(Note::basic("front", "back").stable_id("basic:1"));
+        project.note_types.push(
+            NoteType::custom("basic")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Custom Basic")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}"),
+                ),
+        );
+
+        let plan = project.lower().expect("lower project");
+
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                "authoring.note_types[1].templates[\"Custom Basic\"].front"
+            ),
+            Some("project.note_types[0].templates[\"Custom Basic\"].front")
+        );
+        assert_eq!(
+            plan.source_map
+                .source_for_authoring_path("authoring.note_types[1].css"),
+            Some("project.note_types[0].css")
+        );
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                "authoring.note_types[\"basic\"].templates[\"Custom Basic\"].front"
+            ),
+            None
+        );
+    }
+
+    #[test]
+    fn build_maps_stock_collision_template_media_to_custom_notetype_index() {
+        let mut project = Project::new("Implicit Duplicate Media")
+            .stable_id("implicit-duplicate-media")
+            .default_deck("Implicit Duplicate Media");
+        project
+            .notes
+            .push(Note::basic("front", "back").stable_id("basic:1"));
+        project.note_types.push(
+            NoteType::custom("basic")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Custom Basic")
+                        .front(r#"<img src="missing-custom-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-custom-css.png"); }"#),
+        );
+
+        let error = project
+            .build(BuildOptions::new().inspect(false))
+            .expect_err("implicit stock collision and missing custom media fail build");
+
+        let duplicate = error
+            .report
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
+            .expect("duplicate notetype diagnostic");
+        assert_eq!(
+            duplicate.source.as_ref().map(|source| source.as_str()),
+            Some("project.note_types[0]")
+        );
+        assert!(duplicate.message.contains("implicit stock"));
+
+        let sources = error
+            .report
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+            .map(|diagnostic| {
+                diagnostic
+                    .source
+                    .as_ref()
+                    .map(|source| source.as_str())
+                    .expect("missing media diagnostic source")
+            })
+            .collect::<Vec<_>>();
+
+        assert!(sources.contains(&"project.note_types[0].templates[\"Custom Basic\"].front"));
+        assert!(sources.contains(&"project.note_types[0].css"));
+    }
+
+    #[test]
+    fn build_reports_duplicate_notetype_template_and_css_media_sources_by_index() {
+        let mut project = Project::new("Duplicate Note Type Media")
+            .stable_id("duplicate-notetype-media")
+            .default_deck("Duplicate Note Type Media");
+        project.note_types.push(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recognition")
+                        .front(r#"<img src="missing-first-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-first-css.png"); }"#),
+        );
+        project.note_types.push(
+            NoteType::custom("dup")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Recall")
+                        .front(r#"<img src="missing-second-template.png"> {{Prompt}}"#)
+                        .back("{{Prompt}}"),
+                )
+                .css(r#".card { background: url("missing-second-css.png"); }"#),
+        );
+
+        let error = project
+            .build(BuildOptions::new().inspect(false))
+            .expect_err("duplicate notetype id and missing media references fail build");
+
+        assert!(error
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE"));
+
+        let sources = error
+            .report
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+            .map(|diagnostic| {
+                assert_eq!(diagnostic.severity, Severity::Error);
+                diagnostic
+                    .source
+                    .as_ref()
+                    .map(|source| source.as_str())
+                    .expect("missing media diagnostic source")
+            })
+            .collect::<Vec<_>>();
+
+        assert!(sources.contains(&"project.note_types[0].templates[\"Recognition\"].front"));
+        assert!(sources.contains(&"project.note_types[0].css"));
+        assert!(sources.contains(&"project.note_types[1].templates[\"Recall\"].front"));
+        assert!(sources.contains(&"project.note_types[1].css"));
     }
 
     #[test]
