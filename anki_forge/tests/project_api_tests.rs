@@ -2,6 +2,7 @@ use anki_forge::build::{
     BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectNormalizeOptions,
 };
+use anki_forge::diagnostics::ErrorCode;
 use anki_forge::prelude::*;
 use anki_forge::product::ProductDocument;
 use std::path::PathBuf;
@@ -1120,6 +1121,254 @@ fn project_build_accepts_custom_inputs_after_lowering_lands() {
     assert!(!codes
         .iter()
         .any(|code| code == "PROJECT.UNSUPPORTED_NOTE_TYPE"));
+}
+
+#[test]
+fn project_add_note_rejects_blank_note_type_id() {
+    let mut project = Project::new("Blank Note Type")
+        .stable_id("blank-note-type")
+        .default_deck("Blank Note Type");
+
+    let err = project
+        .add_note(Note::new(" \n\t").stable_id("blank:type"))
+        .expect_err("blank note type id must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_prioritizes_blank_note_type_id_before_blank_stable_id() {
+    let mut project = Project::new("Priority")
+        .stable_id("priority")
+        .default_deck("Priority");
+
+    let err = project
+        .add_note(Note::new(" \n\t").stable_id(" \n\t"))
+        .expect_err("blank note type id has higher priority");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+}
+
+#[test]
+fn project_add_note_rejects_blank_stable_id_without_mutating_project() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+
+    let err = project
+        .add_note(Note::basic("hola", "hello").stable_id(" \t\n"))
+        .expect_err("blank stable id must fail at add-time");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.diagnostic().code.as_str(), "AFID.STABLE_ID_BLANK");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notes.len(), 0);
+}
+
+#[test]
+fn project_add_note_rejects_duplicate_stable_id_without_mutating_project() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("dup"))
+        .expect("first note");
+
+    let err = project
+        .add_note(Note::basic("adios", "goodbye").stable_id("dup"))
+        .expect_err("duplicate stable id must fail at add-time");
+
+    assert_eq!(err.code(), ErrorCode::StableIdDuplicate);
+    assert_eq!(err.diagnostic().code.as_str(), "AFID.STABLE_ID_DUPLICATE");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[1]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notes.len(), 1);
+    assert_eq!(normalized.notes[0].id, "dup");
+}
+
+#[test]
+fn project_add_note_rejects_unsupported_note_type() {
+    let mut project = Project::new("Unknown Type")
+        .stable_id("unknown-type")
+        .default_deck("Unknown Type");
+
+    let err = project
+        .add_note(Note::new("missing").stable_id("missing:1"))
+        .expect_err("unsupported note type must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_unknown_stock_field_key_case_sensitively() {
+    let mut project = Project::new("Stock Fields")
+        .stable_id("stock-fields")
+        .default_deck("Stock Fields");
+
+    let err = project
+        .add_note(
+            Note::new("basic")
+                .stable_id("basic:case")
+                .text("front", "lowercase is not a Rust Product stock field"),
+        )
+        .expect_err("unknown stock field key must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.FIELD_UNKNOWN");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0].fields[\"front\"]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_unknown_custom_field_key() {
+    let note_type = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .identity(IdentityRecipe::fields(["expr"]));
+    let mut project = Project::new("Custom Fields")
+        .stable_id("custom-fields")
+        .default_deck("Custom Fields");
+    project.add_notetype(note_type).expect("add note type");
+
+    let err = project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("missing", "食べる"),
+        )
+        .expect_err("unknown custom field key must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.FIELD_UNKNOWN");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0].fields[\"missing\"]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_note_identity_override_unknown_field_key() {
+    let note_type = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .identity(IdentityRecipe::fields(["expr"]));
+    let mut project = Project::new("Identity Override")
+        .stable_id("identity-override")
+        .default_deck("Identity Override");
+    project.add_notetype(note_type).expect("add note type");
+
+    let err = project
+        .add_note(
+            Note::new("jp-vocab")
+                .identity(["missing"])
+                .text("expr", "食べる"),
+        )
+        .expect_err("unknown identity field key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PRODUCT.IDENTITY_FIELD_UNKNOWN"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_custom_note_without_stable_id_or_identity_recipe() {
+    let note_type = NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr"));
+    let mut project = Project::new("Missing Identity")
+        .stable_id("missing-identity")
+        .default_deck("Missing Identity");
+    project
+        .add_notetype(note_type)
+        .expect("add note type without identity");
+
+    let err = project
+        .add_note(Note::new("jp-vocab").text("expr", "食べる"))
+        .expect_err("missing note identity must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.IDENTITY_MISSING");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_accepts_custom_note_with_explicit_stable_id_without_notetype_identity() {
+    let note_type = NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr"));
+    let mut project = Project::new("Explicit Identity")
+        .stable_id("explicit-identity")
+        .default_deck("Explicit Identity");
+    project
+        .add_notetype(note_type)
+        .expect("add note type without identity");
+
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "食べる"),
+        )
+        .expect("explicit stable id should satisfy add-time identity requirement");
+
+    let normalized = project.normalize().expect("normalize");
+    assert_eq!(normalized.notes.len(), 1);
+    assert_eq!(normalized.notes[0].id, "jp:taberu");
 }
 
 fn unique_artifacts_dir(label: &str) -> PathBuf {
