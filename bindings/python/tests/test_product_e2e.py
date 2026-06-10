@@ -45,6 +45,26 @@ def test_python_basic_project_writes_apkg(tmp_path):
     assert (tmp_path / "deck.apkg").is_file()
 
 
+def test_python_image_occlusion_runtime_build(tmp_path):
+    project = Project("IO")
+    image = project.media.add_bytes(source_label="heart.png", data=b"heart", export_as="heart.png")
+    project.add_note(
+        Note.image_occlusion(image, stable_id="io:1")
+        .rect(0, 0, 10, 10)
+        .header("Heart")
+        .back_extra("Identify it")
+        .build()
+    )
+
+    report = project.write_apkg(tmp_path / "io.apkg")
+
+    report.ensure_success()
+    assert report.counts["notes"] == 1
+    assert report.counts["cards"] == 1
+    assert report.counts["media"] == 1
+    assert (tmp_path / "io.apkg").is_file()
+
+
 def test_python_custom_media_project_writes_apkg(tmp_path):
     audio = tmp_path / "hello.wav"
     audio.write_bytes(minimal_wav_bytes())

@@ -113,3 +113,27 @@ def test_custom_media_project_serializes_typed_content():
     project.add_note(Note("media-card").text("prompt", "hello").html("answer", "<b>world</b>").sound("audio", ref))
     expected = json.loads((REPO_ROOT / "contracts/fixtures/product-v2/custom-typed-media.json").read_text(encoding="utf-8"))
     assert project.to_product_document() == expected
+
+
+def test_project_declares_image_occlusion_stock_notetype():
+    project = Project("IO", stable_id="io", default_deck="IO")
+    image = project.media.add_bytes(source_label="heart.png", data=b"heart", export_as="heart.png")
+    project.add_note(
+        Note.image_occlusion(image, stable_id="io:1")
+        .rect(0, 0, 10, 10)
+        .build()
+    )
+
+    document = project.to_product_document()
+
+    assert any(
+        note_type["kind"] == "stock" and note_type["id"] == "image_occlusion"
+        for note_type in document["note_types"]
+    )
+    note = document["notes"][0]
+    assert note["kind"] == "stock"
+    assert note["note_type_id"] == "image_occlusion"
+    assert note["fields"]["image"] == {
+        "kind": "image",
+        "media_id": image.media_id,
+    }

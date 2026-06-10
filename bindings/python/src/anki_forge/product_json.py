@@ -98,6 +98,66 @@ _CLOZE_STOCK_NOTETYPE: dict[str, object] = {
     "source_path": 'project.note_types["cloze"]',
 }
 
+_IMAGE_OCCLUSION_STOCK_NOTETYPE: dict[str, object] = {
+    "kind": "stock",
+    "id": "image_occlusion",
+    "name": "Image Occlusion",
+    "fields": [
+        {
+            "name": "Occlusion",
+            "key": "occlusion",
+            "identity": False,
+            "sort": True,
+            "required": True,
+            "source_path": 'project.note_types["image_occlusion"].fields["occlusion"]',
+        },
+        {
+            "name": "Image",
+            "key": "image",
+            "identity": False,
+            "sort": False,
+            "required": True,
+            "source_path": 'project.note_types["image_occlusion"].fields["image"]',
+        },
+        {
+            "name": "Header",
+            "key": "header",
+            "identity": False,
+            "sort": False,
+            "required": True,
+            "source_path": 'project.note_types["image_occlusion"].fields["header"]',
+        },
+        {
+            "name": "Back Extra",
+            "key": "back_extra",
+            "identity": False,
+            "sort": False,
+            "required": True,
+            "source_path": 'project.note_types["image_occlusion"].fields["back_extra"]',
+        },
+        {
+            "name": "Comments",
+            "key": "comments",
+            "identity": False,
+            "sort": False,
+            "required": False,
+            "source_path": 'project.note_types["image_occlusion"].fields["comments"]',
+        },
+    ],
+    "templates": [
+        {
+            "name": "Image Occlusion",
+            "key": "image_occlusion",
+            "front": "{{cloze:Occlusion}}",
+            "back": "{{cloze:Occlusion}}<br>{{Image}}",
+            "generation_rule": {"kind": "cloze", "field": "occlusion"},
+            "source_path": 'project.note_types["image_occlusion"].templates["image_occlusion"]',
+        }
+    ],
+    "css": None,
+    "source_path": 'project.note_types["image_occlusion"]',
+}
+
 
 def basic_stock_notetype_json() -> dict[str, object]:
     return copy.deepcopy(_BASIC_STOCK_NOTETYPE)
@@ -105,6 +165,10 @@ def basic_stock_notetype_json() -> dict[str, object]:
 
 def cloze_stock_notetype_json() -> dict[str, object]:
     return copy.deepcopy(_CLOZE_STOCK_NOTETYPE)
+
+
+def image_occlusion_stock_notetype_json() -> dict[str, object]:
+    return copy.deepcopy(_IMAGE_OCCLUSION_STOCK_NOTETYPE)
 
 
 def generation_rule_to_json(rule: GenerationRule) -> dict[str, object]:
@@ -185,7 +249,7 @@ def field_content_to_json(content: FieldContent) -> dict[str, object]:
 
 def note_to_json(note: Note, index: int, deck_name: str) -> dict[str, object]:
     result: dict[str, object] = {
-        "kind": "stock" if note.note_type_id in {"basic", "cloze"} else "custom",
+        "kind": "stock" if note.note_type_id in {"basic", "cloze", "image_occlusion"} else "custom",
         "note_type_id": note.note_type_id,
     }
     if note.stable_id is not None:
