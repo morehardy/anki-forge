@@ -149,6 +149,44 @@ registered `export_as(...)` filename and local references in sync yourself.
 machine-readable output, use `BuildOptions::report_json(...)` or
 `report.to_report_json()`; structured report JSON includes media mode details.
 
+### 3.2 Update-Safe Builds
+
+For long-lived decks, commit an identity lockfile next to your source.
+
+First build:
+
+```rust
+use anki_forge::prelude::*;
+
+let mut project = Project::new("Japanese Core")
+    .stable_id("jp-core")
+    .default_deck("Japanese::Core");
+project.add_note(Note::basic("食べる", "to eat").stable_id("jp:taberu"))?;
+project
+    .build(
+        BuildOptions::new()
+            .output("dist/jp-core.apkg")
+            .first_update_safe_build("anki-forge.lock.json"),
+    )?
+    .ensure_success()?;
+```
+
+Next build:
+
+```rust
+project
+    .build(
+        BuildOptions::new()
+            .output("dist/jp-core.apkg")
+            .update_safe("anki-forge.lock.json"),
+    )?
+    .ensure_success()?;
+```
+
+`update_safe(lockfile)` reads lockfile evidence but does not rewrite the file.
+Use `write_identity_lockfile(true)` on release builds when you want new notes
+and absent entries recorded for future updates.
+
 ## 4. Advanced: Contract Tools And Runtime
 
 The lower-level contract flow is:

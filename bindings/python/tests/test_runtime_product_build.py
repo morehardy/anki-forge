@@ -198,6 +198,33 @@ def test_report_accepts_v1_media_summary_without_entries():
     assert report.media["entries"] == []
 
 
+def test_report_projects_update_safety_summary_dict():
+    report = BuildReport.from_json(build_report_payload(update_safety={
+        "mode": "strict",
+        "baseline_sources": [
+            {
+                "source_kind": "lockfile",
+                "source_ref": "baseline.identity_lockfile.primary",
+                "display_path": "anki-forge.lock.json",
+                "status": "loaded",
+                "used_for_reconcile": True,
+                "limitations": [],
+                "diagnostic_codes": [],
+            }
+        ],
+        "notes_preserved": 1,
+        "notes_derived": 0,
+        "notes_failed": 0,
+        "baseline_conflicts": 0,
+        "blocking_diagnostics": [],
+        "lockfile_written": False,
+    }))
+
+    assert report.update_safety["mode"] == "strict"
+    assert report.update_safety["baseline_sources"][0]["source_kind"] == "lockfile"
+    assert report.update_safety["lockfile_written"] is False
+
+
 def test_report_rejects_legacy_media_bytes_payload():
     payload = build_report_payload(media={"objects": 0, "bindings": 0, "bytes": 0})
 
@@ -245,6 +272,26 @@ def test_report_rejects_invalid_policy_shape_and_status():
         "blocking_findings": [],
         "extra": "ok",
     }))
+
+
+def test_runtime_argv_includes_update_safety_flags():
+    argv = build_product_build_argv(
+        executable=Path("contract_tools"),
+        manifest=Path("contracts/manifest.yaml"),
+        product_input=Path("project.json"),
+        apkg_out=Path("out.apkg"),
+        compare_to=None,
+        fail_on=None,
+        report_json=None,
+        identity_lockfile=Path("anki-forge.lock.json"),
+        write_identity_lockfile=True,
+        update_safety="strict",
+    )
+
+    assert "--identity-lockfile" in argv
+    assert "anki-forge.lock.json" in argv
+    assert "--write-identity-lockfile" in argv
+    assert argv[argv.index("--update-safety") + 1] == "strict"
 
 
 def test_report_accepts_forward_compatible_summary_fields():
@@ -367,6 +414,43 @@ def test_cloze_marker_detection_accepts_uppercase_c(monkeypatch):
     assert report.status == "success"
 
 
+def test_write_apkg_passes_update_safety_args_to_runtime(monkeypatch, tmp_path):
+    captured = {}
+
+    def fake_run(args, **kwargs):
+        captured["args"] = list(args)
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(build_report_payload(update_safety={
+                "mode": "strict",
+                "baseline_sources": [],
+                "notes_preserved": 0,
+                "notes_derived": 1,
+                "notes_failed": 0,
+                "baseline_conflicts": 0,
+                "blocking_diagnostics": [],
+                "lockfile_written": True,
+            })),
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    report = Project("Deck", stable_id="deck").add_note(Note.basic("front", "back")).write_apkg(
+        tmp_path / "out.apkg",
+        identity_lockfile=tmp_path / "anki-forge.lock.json",
+        write_identity_lockfile=True,
+        update_safety="strict",
+        runtime=RuntimeOverride(manifest=tmp_path / "manifest.yaml", executable=Path("contract_tools")),
+    )
+
+    assert report.update_safety["lockfile_written"] is True
+    assert "--identity-lockfile" in captured["args"]
+    assert "--write-identity-lockfile" in captured["args"]
+    assert captured["args"][captured["args"].index("--update-safety") + 1] == "strict"
+
+
 def test_cloze_report_json_creates_parent_directories(tmp_path):
     report_json = tmp_path / "nested" / "reports" / "report.json"
     project = Project("Deck")
@@ -417,6 +501,9 @@ def test_runtime_argv_helpers_use_list_args_without_shell(tmp_path):
         compare_to=None,
         fail_on=None,
         report_json=None,
+        identity_lockfile=None,
+        write_identity_lockfile=False,
+        update_safety=None,
     )
     low_level = _build_args(
         "normalize",
