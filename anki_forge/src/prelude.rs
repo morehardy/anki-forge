@@ -6,5 +6,5 @@ pub use crate::diagnostics::{
 };
 pub use crate::product::{
     Content, Field, FieldKey, GenerationRule, IdentityRecipe, MediaRef, Note, NoteType, Project,
-    Template, TemplateKey,
+    ProjectAddError, Template, TemplateKey,
 };

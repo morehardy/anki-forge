@@ -17,11 +17,13 @@ use crate::build::{
     BuildPolicyResult, BuildReport, BuildStatus, ComparisonStatus, MediaSourceMode, MediaSummary,
     ProjectMediaMode, ProjectNormalizeOptions,
 };
-use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
+use crate::diagnostics::{
+    Diagnostic, DiagnosticCode, ErrorCode, ErrorCodeExt, Severity, SourcePath, ValidationReport,
+};
 use crate::product::lowering::ProductSourceMap;
 use crate::product::{
-    LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
-    ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
+    GenerationRule, LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic,
+    ProductDocument, ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
 };
 
 #[derive(Debug, Clone)]
@@ -39,6 +41,41 @@ pub struct Project {
 enum NotetypeDuplicateFirst<'a> {
     ImplicitStock,
     Project { index: usize, name: Option<&'a str> },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProjectAddError {
+    diagnostic: Box<Diagnostic>,
+}
+
+impl ProjectAddError {
+    fn new(diagnostic: Diagnostic) -> Self {
+        Self {
+            diagnostic: Box::new(diagnostic),
+        }
+    }
+
+    pub fn diagnostic(&self) -> &Diagnostic {
+        self.diagnostic.as_ref()
+    }
+
+    pub fn code(&self) -> ErrorCode {
+        self.diagnostic.code.error_code()
+    }
+}
+
+impl std::fmt::Display for ProjectAddError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", self.diagnostic.code, self.diagnostic.message)
+    }
+}
+
+impl std::error::Error for ProjectAddError {}
+
+impl ErrorCodeExt for ProjectAddError {
+    fn code(&self) -> ErrorCode {
+        ProjectAddError::code(self)
+    }
 }
 
 impl Project {
@@ -85,7 +122,8 @@ impl Project {
         Ok(self)
     }
 
-    pub fn add_note(&mut self, note: Note) -> anyhow::Result<&mut Self> {
+    pub fn add_note(&mut self, note: Note) -> Result<&mut Self, ProjectAddError> {
+        self.validate_note_for_add(&note)?;
         self.notes.push(note);
         Ok(self)
     }
@@ -295,6 +333,156 @@ impl Project {
         }
 
         ValidationReport { diagnostics }
+    }
+
+    fn validate_note_for_add(&self, note: &Note) -> Result<(), ProjectAddError> {
+        let note_index = self.notes.len();
+        let note_source = format!("project.notes[{note_index}]");
+        let note_type_id = note.note_type_id();
+
+        if note_type_id.trim().is_empty() {
+            return Err(project_add_error(
+                "PROJECT.UNSUPPORTED_NOTE_TYPE",
+                "note type id cannot be blank",
+                note_source,
+                "choose a stock note type id or add a matching custom NoteType",
+            ));
+        }
+
+        if let Some(stable_id) = note.stable_id_ref() {
+            if stable_id.trim().is_empty() {
+                return Err(project_add_error(
+                    "AFID.STABLE_ID_BLANK",
+                    "stable_id cannot be blank",
+                    format!("project.notes[{note_index}]"),
+                    "choose a non-empty stable_id or omit it",
+                ));
+            }
+        }
+
+        if let Some(stable_id) = note.stable_id_ref() {
+            if let Some((existing_index, _)) = self
+                .notes
+                .iter()
+                .enumerate()
+                .filter_map(|(index, note)| {
+                    note.stable_id_ref().map(|stable_id| (index, stable_id))
+                })
+                .find(|(_, existing)| !existing.trim().is_empty() && *existing == stable_id)
+            {
+                return Err(project_add_error(
+                    "AFID.STABLE_ID_DUPLICATE",
+                    format!(
+                        "duplicate stable_id '{stable_id}' at project.notes[{note_index}]; first definition is project.notes[{existing_index}]"
+                    ),
+                    format!("project.notes[{note_index}]"),
+                    "choose a unique stable_id for each note",
+                ));
+            }
+        }
+
+        let matching_custom = self
+            .note_types
+            .iter()
+            .find(|note_type| note_type.id() == note_type_id);
+
+        if is_supported_stock_notetype_id(note_type_id) && matching_custom.is_some() {
+            return Err(project_add_error(
+                "NOTETYPE.ID_RESERVED",
+                format!("stock note type id '{note_type_id}' is already registered as custom"),
+                note_source,
+                "remove the custom note type or use a non-stock custom note type id",
+            ));
+        }
+
+        if !is_supported_stock_notetype_id(note_type_id) && matching_custom.is_none() {
+            return Err(project_add_error(
+                "PROJECT.UNSUPPORTED_NOTE_TYPE",
+                format!("note type '{note_type_id}' is not registered on the project"),
+                note_source,
+                "add a matching NoteType with Project::add_notetype",
+            ));
+        }
+
+        if let Some(allowed_keys) = stock_field_keys(note_type_id) {
+            for field_key in note.field_keys() {
+                if !allowed_keys
+                    .iter()
+                    .copied()
+                    .any(|allowed_key| allowed_key == field_key)
+                {
+                    return Err(project_add_error(
+                        "PRODUCT.FIELD_UNKNOWN",
+                        format!(
+                            "stock note for note type '{note_type_id}' contains unknown field key '{field_key}'"
+                        ),
+                        format!("project.notes[{note_index}].fields[{field_key:?}]"),
+                        "use the exact Rust Product stock field name",
+                    ));
+                }
+            }
+            return Ok(());
+        }
+
+        let Some(note_type) = matching_custom else {
+            return Ok(());
+        };
+
+        let custom_field_keys = note_type
+            .fields()
+            .iter()
+            .map(|field| field.key_ref().as_str())
+            .collect::<BTreeSet<_>>();
+        let custom_field_names = note_type
+            .fields()
+            .iter()
+            .map(|field| field.name())
+            .collect::<BTreeSet<_>>();
+
+        for field_key in note.field_keys() {
+            if !custom_field_keys.contains(field_key) && !custom_field_names.contains(field_key) {
+                return Err(project_add_error(
+                    "PRODUCT.FIELD_UNKNOWN",
+                    format!(
+                        "custom note for note type '{note_type_id}' contains unknown field key '{field_key}'"
+                    ),
+                    format!("project.notes[{note_index}].fields[{field_key:?}]"),
+                    "use a field key or field name declared on the custom NoteType",
+                ));
+            }
+        }
+
+        if let Some(recipe) = note.identity_ref() {
+            for field_key in recipe.field_keys() {
+                if !custom_field_keys.contains(field_key.as_str()) {
+                    return Err(project_add_error(
+                        "PRODUCT.IDENTITY_FIELD_UNKNOWN",
+                        format!(
+                            "note identity for note type '{note_type_id}' references unknown field key '{}'",
+                            field_key.as_str()
+                        ),
+                        format!("project.notes[{note_index}]"),
+                        "use field keys declared on the custom NoteType",
+                    ));
+                }
+            }
+        }
+
+        if note.stable_id_ref().is_none()
+            && note.identity_ref().is_none()
+            && note_type.identity_ref().is_none()
+        {
+            return Err(project_add_error(
+                "PRODUCT.IDENTITY_MISSING",
+                format!(
+                    "custom note type '{note_type_id}' needs an explicit stable_id or identity recipe"
+                ),
+                format!("project.notes[{note_index}]"),
+                "set Note::stable_id(...), Note::identity(...), or NoteType::identity(...)",
+            ));
+        }
+
+        Ok(())
     }
 
     /// Lowers this project into an authoring plan for inspection or serialization.
@@ -2053,6 +2241,52 @@ fn duplicate_implicit_stock_notetype_message(
         "duplicate note type id '{id}' at project.note_types[{duplicate_index}]{}; first definition is an implicit stock note type inserted for stock {id} notes",
         display_name_suffix(duplicate_name),
     )
+}
+
+const SUPPORTED_STOCK_NOTETYPE_IDS: &[&str] = &[STOCK_BASIC_ID, STOCK_CLOZE_ID];
+
+fn supported_stock_notetype_ids() -> &'static [&'static str] {
+    SUPPORTED_STOCK_NOTETYPE_IDS
+}
+
+fn is_supported_stock_notetype_id(id: &str) -> bool {
+    supported_stock_notetype_ids().contains(&id)
+}
+
+fn stock_field_keys(note_type_id: &str) -> Option<&'static [&'static str]> {
+    match note_type_id {
+        STOCK_BASIC_ID => Some(&["Front", "Back"]),
+        STOCK_CLOZE_ID => Some(&["Text", "Back Extra"]),
+        _ => None,
+    }
+}
+
+#[allow(dead_code)]
+fn generation_rule_field_keys(rule: &GenerationRule) -> Vec<&str> {
+    match rule {
+        GenerationRule::AnkiDefault => Vec::new(),
+        GenerationRule::All(fields) | GenerationRule::Any(fields) => {
+            fields.iter().map(|field| field.as_str()).collect()
+        }
+        GenerationRule::Cloze { field } => vec![field.as_str()],
+    }
+}
+
+fn project_add_error(
+    code: &'static str,
+    message: impl Into<String>,
+    source: impl Into<String>,
+    help: impl Into<String>,
+) -> ProjectAddError {
+    ProjectAddError::new(Diagnostic {
+        code: DiagnosticCode::new(code),
+        severity: Severity::Error,
+        domain: None,
+        stage: None,
+        message: message.into(),
+        source: Some(SourcePath::new(source.into())),
+        help: Some(help.into()),
+    })
 }
 
 fn display_name_suffix(name: Option<&str>) -> String {

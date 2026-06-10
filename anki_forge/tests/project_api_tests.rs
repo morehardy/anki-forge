@@ -134,50 +134,6 @@ fn product_document_backed_project_rejects_project_media_state() {
 }
 
 #[test]
-fn project_validate_reports_duplicate_stable_ids() {
-    let mut project = Project::new("Spanish A1")
-        .stable_id("spanish-a1")
-        .default_deck("Spanish::A1");
-
-    project
-        .add_note(Note::basic("hola", "hello").stable_id("dup"))
-        .expect("add first note");
-    project
-        .add_note(Note::basic("adios", "goodbye").stable_id("dup"))
-        .expect("add second note");
-
-    let report = project.validate();
-
-    assert!(report.has_errors());
-    assert!(report
-        .diagnostics
-        .iter()
-        .any(|diagnostic| diagnostic.code.as_str() == "AFID.STABLE_ID_DUPLICATE"));
-}
-
-#[test]
-fn project_validate_reports_blank_stable_id() {
-    let mut project = Project::new("Spanish A1")
-        .stable_id("spanish-a1")
-        .default_deck("Spanish::A1");
-
-    project
-        .add_note(Note::basic("hola", "hello").stable_id("   "))
-        .expect("add note");
-
-    let report = project.validate();
-
-    assert!(report.has_errors());
-    assert!(report.diagnostics.iter().any(|diagnostic| {
-        diagnostic.code.as_str() == "AFID.STABLE_ID_BLANK"
-            && diagnostic
-                .source
-                .as_ref()
-                .is_some_and(|source| source.as_str() == "project.notes[0]")
-    }));
-}
-
-#[test]
 fn project_validate_reports_duplicate_notetype_ids_with_index_sources_and_names() {
     let mut project = Project::new("Duplicate Note Types")
         .stable_id("duplicate-notetypes")
@@ -761,34 +717,31 @@ fn project_build_explains_missing_css_import_media_reference() {
 }
 
 #[test]
-fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
+fn project_build_maps_missing_media_reference_to_index_source_for_generated_note_ids() {
     let mut project = Project::new("Media")
         .stable_id("media")
         .default_deck("Media");
     project
         .add_note(
             Note::new("basic")
-                .stable_id("")
-                .text("Front", "blank")
-                .html("Back", "<img src=\"blank.png\">"),
-        )
-        .expect("add blank note");
-    project
-        .add_note(
-            Note::new("basic")
-                .stable_id("dup")
-                .text("Front", "dup 1")
+                .text("Front", "generated 1")
                 .html("Back", "<img src=\"one.png\">"),
         )
-        .expect("add first duplicate note");
+        .expect("add first generated note");
     project
         .add_note(
             Note::new("basic")
-                .stable_id("dup")
-                .text("Front", "dup 2")
+                .text("Front", "generated 2")
                 .html("Back", "<img src=\"two.png\">"),
         )
-        .expect("add second duplicate note");
+        .expect("add second generated note");
+    project
+        .add_note(
+            Note::new("basic")
+                .text("Front", "generated 3")
+                .html("Back", "<img src=\"three.png\">"),
+        )
+        .expect("add third generated note");
 
     let error = project
         .build(BuildOptions::new().inspect(false))

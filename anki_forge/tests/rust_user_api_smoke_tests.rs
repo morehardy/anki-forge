@@ -43,7 +43,7 @@ fn project_stock_write_apkg_smoke() {
         .add_note(
             Note::cloze("A {{c1::cloze}} fact")
                 .stable_id("stock:cloze")
-                .text("Extra", "extra"),
+                .extra("extra"),
         )
         .expect("add cloze note");
 

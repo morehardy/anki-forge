@@ -113,7 +113,7 @@ impl ErrorCode {
     pub fn from_code(code: impl Into<String>) -> Self {
         let code = code.into();
         match code.as_str() {
-            "DECK.BLANK_STABLE_ID" => Self::StableIdBlank,
+            "DECK.BLANK_STABLE_ID" | "AFID.STABLE_ID_BLANK" => Self::StableIdBlank,
             "AFID.STABLE_ID_DUPLICATE" | "DECK.STABLE_ID_DUPLICATE" => Self::StableIdDuplicate,
             "AFID.IDENTITY_DUPLICATE_PAYLOAD" | "DECK.IDENTITY_DUPLICATE_PAYLOAD" => {
                 Self::IdentityDuplicatePayload
