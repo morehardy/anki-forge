@@ -540,7 +540,7 @@ fn lower_product_v2_document(
     for (index, notetype) in v2.note_types.iter().enumerate() {
         match notetype {
             ProductNoteTypeV2::Stock(stock) => {
-                if stock.id != "basic" && stock.id != "cloze" {
+                if !is_supported_stock_notetype_id(&stock.id) {
                     push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.STOCK_NOTE_TYPE_INVALID",
@@ -577,7 +577,7 @@ fn lower_product_v2_document(
                 plan.authoring_document.notetypes.push(lowered);
             }
             ProductNoteTypeV2::Custom(custom) => {
-                if custom.id == "basic" || custom.id == "cloze" {
+                if is_supported_stock_notetype_id(&custom.id) {
                     push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.RESERVED_ID_KIND_MISMATCH",
@@ -737,6 +737,26 @@ fn lower_product_v2_document(
     }
 
     plan
+}
+
+fn is_supported_stock_notetype_id(id: &str) -> bool {
+    // Keep in sync with the Project stock allowlist.
+    matches!(id, "basic" | "cloze" | "image_occlusion")
+}
+
+fn stock_field_map(note_type_id: &str) -> &'static [(&'static str, &'static str)] {
+    match note_type_id {
+        "basic" => &[("front", "Front"), ("back", "Back")],
+        "cloze" => &[("text", "Text"), ("back_extra", "Back Extra")],
+        "image_occlusion" => &[
+            ("occlusion", "Occlusion"),
+            ("image", "Image"),
+            ("header", "Header"),
+            ("back_extra", "Back Extra"),
+            ("comments", "Comments"),
+        ],
+        _ => &[],
+    }
 }
 
 fn lower_product_v2_stock_notetype(
@@ -1012,11 +1032,10 @@ fn lower_product_v2_stock_note(
     serialized_index: usize,
     media_export_by_id: &BTreeMap<String, String>,
 ) {
-    let field_map = match stock.note_type_id.as_str() {
-        "basic" => BTreeMap::from([("front", "Front"), ("back", "Back")]),
-        "cloze" => BTreeMap::from([("text", "Text"), ("back_extra", "Back Extra")]),
-        _ => BTreeMap::new(),
-    };
+    let field_map = stock_field_map(&stock.note_type_id)
+        .iter()
+        .copied()
+        .collect::<BTreeMap<_, _>>();
     let mut invalid = false;
     for key in stock.fields.keys() {
         if !field_map.contains_key(key.as_str()) {
@@ -1092,7 +1111,7 @@ fn lower_product_v2_stock_note(
                 return;
             }
         }
-    } else {
+    } else if stock.note_type_id == "cloze" {
         match crate::deck::identity::derive_cloze_stock_stable_id_from_text(
             fields.get("Text").map(String::as_str).unwrap_or_default(),
         ) {
@@ -1107,6 +1126,16 @@ fn lower_product_v2_stock_note(
                 return;
             }
         }
+    } else if stock.note_type_id == "image_occlusion" {
+        push_product_diagnostic_at(
+            plan,
+            "PRODUCT.IDENTITY_MISSING",
+            "image occlusion stock notes require stable_id until IO identity inference is supported",
+            stock.source_path.as_deref(),
+        );
+        return;
+    } else {
+        return;
     };
 
     let authoring_index = plan.authoring_document.notes.len();

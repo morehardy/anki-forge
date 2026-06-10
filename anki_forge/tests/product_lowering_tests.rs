@@ -526,6 +526,52 @@ const PRODUCT_V2_BASIC_MISSING_FRONT: &str = r#"{
   "media": []
 }"#;
 
+const PRODUCT_V2_IO_STOCK: &str = r#"{
+  "product_document_version": "product-v2",
+  "document_id": "io-stock",
+  "default_deck_name": "IO",
+  "note_types": [{
+    "kind": "stock",
+    "id": "image_occlusion",
+    "name": "Image Occlusion",
+    "fields": [
+      {"name": "Occlusion", "key": "occlusion", "required": true},
+      {"name": "Image", "key": "image", "required": true},
+      {"name": "Header", "key": "header", "required": true},
+      {"name": "Back Extra", "key": "back_extra", "required": true},
+      {"name": "Comments", "key": "comments", "required": false}
+    ],
+    "templates": [{
+      "name": "Image Occlusion",
+      "key": "image_occlusion",
+      "front": "{{cloze:Occlusion}}",
+      "back": "{{cloze:Occlusion}}<br>{{Image}}",
+      "generation_rule": {"kind": "cloze", "field": "occlusion"}
+    }],
+    "css": null
+  }],
+  "notes": [{
+    "kind": "stock",
+    "note_type_id": "image_occlusion",
+    "stable_id": "io:1",
+    "deck_name": "IO",
+    "fields": {
+      "occlusion": {"kind": "html", "value": "{{c1::image-occlusion:rect:left=0:top=0:width=1:height=1}}<br>"},
+      "image": {"kind": "image", "media_id": "media:heart"},
+      "header": {"kind": "text", "value": "Heart"},
+      "back_extra": {"kind": "text", "value": "Identify it"},
+      "comments": {"kind": "text", "value": "Review"}
+    },
+    "tags": ["io"],
+    "source_path": "project.notes[0]"
+  }],
+  "media": [{
+    "id": "media:heart",
+    "source": {"kind": "inline_base64", "source_label": "heart.png", "data_base64": "aGVhcnQ="},
+    "export_as": "heart.png"
+  }]
+}"#;
+
 #[test]
 fn product_v2_workspace_runtime_prerequisite_is_available() {
     let start = workspace_runtime_start_dir();
@@ -800,6 +846,94 @@ fn product_v2_custom_identity_matches_builder_product_recipe() {
         builder_identity.canonical_payload_hash
     );
     assert_eq!(product_identity.provenance, builder_identity.provenance);
+}
+
+#[test]
+fn product_v2_stock_image_occlusion_lowers_to_authoring_fields() {
+    let plan = product_v2_inline(PRODUCT_V2_IO_STOCK)
+        .lower()
+        .expect("lower io product-v2");
+
+    let notetype = plan.authoring_document.notetypes.first().expect("notetype");
+    assert_eq!(
+        notetype.original_stock_kind.as_deref(),
+        Some("image_occlusion")
+    );
+    assert_eq!(notetype.kind, "cloze");
+
+    let note = plan.authoring_document.notes.first().expect("note");
+    assert_eq!(note.notetype_id, "image_occlusion");
+    assert_eq!(note.fields.get("Header").map(String::as_str), Some("Heart"));
+    assert_eq!(
+        note.fields.get("Image").map(String::as_str),
+        Some("<img src=\"heart.png\">")
+    );
+    assert_eq!(note.tags, vec!["io"]);
+}
+
+#[test]
+fn product_v2_stock_image_occlusion_typed_image_resolves_media() {
+    let plan = product_v2_inline(PRODUCT_V2_IO_STOCK)
+        .lower()
+        .expect("lower io product-v2");
+    let note = plan.authoring_document.notes.first().expect("note");
+
+    assert_eq!(
+        note.fields.get("Image").map(String::as_str),
+        Some("<img src=\"heart.png\">")
+    );
+}
+
+#[test]
+fn product_v2_stock_image_occlusion_unknown_field_source_path() {
+    let document = PRODUCT_V2_IO_STOCK.replace(
+        "\"comments\": {\"kind\": \"text\", \"value\": \"Review\"}",
+        "\"comments\": {\"kind\": \"text\", \"value\": \"Review\"}, \"extra\": {\"kind\": \"text\", \"value\": \"ignored\"}",
+    );
+    let plan = product_v2_inline(&document)
+        .lower()
+        .expect("lower invalid io product-v2 with diagnostics");
+    let diagnostic = plan
+        .product_diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code == "PRODUCT.FIELD_UNKNOWN")
+        .expect("unknown field diagnostic");
+
+    assert_eq!(
+        diagnostic.source_path.as_deref(),
+        Some("project.notes[0].fields[\"extra\"]")
+    );
+}
+
+#[test]
+fn product_v2_stock_image_occlusion_missing_required_field() {
+    let document = PRODUCT_V2_IO_STOCK.replace(
+        "\"image\": {\"kind\": \"image\", \"media_id\": \"media:heart\"},",
+        "",
+    );
+    let plan = product_v2_inline(&document)
+        .lower()
+        .expect("lower invalid io product-v2 with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
+}
+
+#[test]
+fn product_v2_stock_image_occlusion_without_stable_id_is_identity_missing() {
+    let document = PRODUCT_V2_IO_STOCK.replace("\"stable_id\": \"io:1\",", "");
+    let plan = product_v2_inline(&document)
+        .lower()
+        .expect("lower invalid io product-v2 with diagnostics");
+
+    assert!(plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.IDENTITY_MISSING"));
+    assert!(plan.authoring_document.notes.is_empty());
 }
 
 #[test]
