@@ -676,6 +676,23 @@ Note::image_occlusion(image_ref)
     .back_extra("Identify the chamber");
 ```
 
+Project 中的直接 Image Occlusion 用法：
+
+```rust
+let image = project
+    .media_mut()
+    .add_file("heart.png")?
+    .export_as("heart.png")?;
+
+project.add_note(
+    Note::image_occlusion(image)
+        .stable_id("heart:io:1")
+        .mode(IoMode::HideAllGuessOne)
+        .rect(10, 20, 80, 40)
+        .build()?,
+)?;
+```
+
 ### 8.7 `Content`
 
 `Content` 是 anki-forge 相比 genanki 应该明显改进的地方。
