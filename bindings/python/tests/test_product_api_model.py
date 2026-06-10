@@ -112,6 +112,27 @@ def test_note_image_occlusion_builder_rejects_missing_stable_id(project_media_re
         Note.image_occlusion(project_media_ref).rect(0, 0, 10, 10).build()
 
 
+def test_note_image_occlusion_builder_rejects_blank_stable_id(project_media_ref):
+    with pytest.raises(ValidationError, match="stable id"):
+        Note.image_occlusion(project_media_ref, stable_id=" ")
+
+
+def test_note_image_occlusion_builder_rejects_bad_rects(project_media_ref):
+    with pytest.raises(ValidationError, match="at least one rect"):
+        Note.image_occlusion(project_media_ref, stable_id="io:empty").build()
+    with pytest.raises(ValidationError, match="positive"):
+        Note.image_occlusion(project_media_ref, stable_id="io:zero").rect(0, 0, 0, 10).build()
+    with pytest.raises(ValidationError, match="non-negative"):
+        Note.image_occlusion(project_media_ref, stable_id="io:negative").rect(-1, 0, 10, 10)
+    with pytest.raises(ValidationError, match="duplicate"):
+        (
+            Note.image_occlusion(project_media_ref, stable_id="io:duplicate")
+            .rect(0, 0, 10, 10)
+            .rect(0, 0, 10, 10)
+            .build()
+        )
+
+
 def test_note_image_occlusion_builder_renders_fields(project_media_ref):
     note = (
         Note.image_occlusion(project_media_ref, stable_id="io:1")

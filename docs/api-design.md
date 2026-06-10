@@ -693,6 +693,11 @@ project.add_note(
 )?;
 ```
 
+`Note::image_occlusion(...).build()` 要求显式 `stable_id`。这个 Project
+builder 会验证至少存在一个 mask、rect 的宽高非零、以及重复 rect；它当前不校验
+rect 是否落在图片边界内。直接使用低层 `Note::new("image_occlusion")` 也应显式提供
+`stable_id`，直到 Project media identity 与 Deck IO identity 完全对齐。
+
 ### 8.7 `Content`
 
 `Content` 是 anki-forge 相比 genanki 应该明显改进的地方。
