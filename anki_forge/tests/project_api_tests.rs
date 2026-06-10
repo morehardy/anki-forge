@@ -2,7 +2,7 @@ use anki_forge::build::{
     BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectNormalizeOptions,
 };
-use anki_forge::diagnostics::ErrorCode;
+use anki_forge::diagnostics::{ErrorCode, Severity};
 use anki_forge::prelude::*;
 use anki_forge::product::ProductDocument;
 use std::path::PathBuf;
@@ -1336,4 +1336,270 @@ fn unique_artifacts_dir(label: &str) -> PathBuf {
     ));
     std::fs::create_dir_all(&dir).expect("create temp artifacts dir");
     dir
+}
+
+#[test]
+fn project_add_notetype_rejects_blank_id_without_mutating_project() {
+    let mut project = Project::new("Blank Type")
+        .stable_id("blank-type")
+        .default_deck("Blank Type");
+
+    let err = project
+        .add_notetype(NoteType::custom(" \n\t"))
+        .expect_err("blank note type id must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_BLANK");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 0);
+}
+
+#[test]
+fn project_add_notetype_rejects_reserved_stock_id() {
+    let mut project = Project::new("Reserved Type")
+        .stable_id("reserved-type")
+        .default_deck("Reserved Type");
+
+    let err = project
+        .add_notetype(NoteType::custom("basic"))
+        .expect_err("stock note type ids are reserved");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_RESERVED");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+}
+
+#[test]
+fn project_add_notetype_prioritizes_reserved_stock_id_before_field_errors() {
+    let mut project = Project::new("Reserved Priority")
+        .stable_id("reserved-priority")
+        .default_deck("Reserved Priority");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("basic")
+                .field(Field::new("Front").key("front"))
+                .field(Field::new("Duplicate Front").key("front")),
+        )
+        .expect_err("reserved stock id has higher priority than field errors");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_RESERVED");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_custom_id_without_mutating_project() {
+    let mut project = Project::new("Duplicate Type")
+        .stable_id("duplicate-type")
+        .default_deck("Duplicate Type");
+    project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr")))
+        .expect("first note type");
+
+    let err = project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Meaning").key("meaning")))
+        .expect_err("duplicate note type id must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_DUPLICATE");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[1]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 1);
+    assert_eq!(normalized.notetypes[0].id, "jp-vocab");
+    assert_eq!(normalized.notetypes[0].fields.len(), 1);
+    assert_eq!(normalized.notetypes[0].fields[0].name, "Expression");
+
+    let report = project.validate();
+    assert!(!report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE"));
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_field_key() {
+    let mut project = Project::new("Duplicate Field Key")
+        .stable_id("duplicate-field-key")
+        .default_deck("Duplicate Field Key");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .field(Field::new("Prompt").key("expr")),
+        )
+        .expect_err("duplicate field key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.FIELD_KEY_DUPLICATE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0].fields[\"Prompt\"]")
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_field_name() {
+    let mut project = Project::new("Duplicate Field Name")
+        .stable_id("duplicate-field-name")
+        .default_deck("Duplicate Field Name");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .field(Field::new("Expression").key("expr2")),
+        )
+        .expect_err("duplicate field name must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.FIELD_NAME_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_sort_field() {
+    let mut project = Project::new("Duplicate Sort")
+        .stable_id("duplicate-sort")
+        .default_deck("Duplicate Sort");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr").sort())
+                .field(Field::new("Reading").key("reading").sort()),
+        )
+        .expect_err("duplicate sort field must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.SORT_FIELD_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_template_key() {
+    let mut project = Project::new("Duplicate Template")
+        .stable_id("duplicate-template")
+        .default_deck("Duplicate Template");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("card")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .template(
+                    Template::new("Production")
+                        .key("card")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect_err("duplicate template key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.TEMPLATE_KEY_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_template_rule_unknown_field_key() {
+    let mut project = Project::new("Template Unknown Field")
+        .stable_id("template-unknown-field")
+        .default_deck("Template Unknown Field");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}")
+                        .generate_when(GenerationRule::all(["missing"])),
+                ),
+        )
+        .expect_err("unknown template rule field must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "TEMPLATE.FIELD_UNKNOWN");
+}
+
+#[test]
+fn project_add_notetype_rejects_identity_recipe_unknown_field_key() {
+    let mut project = Project::new("Identity Unknown Field")
+        .stable_id("identity-unknown-field")
+        .default_deck("Identity Unknown Field");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .identity(IdentityRecipe::fields(["missing"])),
+        )
+        .expect_err("unknown identity recipe field must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PRODUCT.IDENTITY_FIELD_UNKNOWN"
+    );
+}
+
+#[test]
+fn project_add_notetype_allows_missing_identity_recipe_and_validate_warns() {
+    let mut project = Project::new("Identity Warning")
+        .stable_id("identity-warning")
+        .default_deck("Identity Warning");
+
+    project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr")))
+        .expect("missing identity recipe is an add-time warning candidate, not an add-time error");
+
+    let report = project.validate();
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.IDENTITY_RECIPE_MISSING")
+        .expect("missing identity recipe warning");
+    assert_eq!(diagnostic.severity, Severity::Warning);
 }
