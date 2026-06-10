@@ -5,6 +5,10 @@ pub const STOCK_BASIC_ID: &str = "basic";
 pub const STOCK_CLOZE_ID: &str = "cloze";
 pub const STOCK_IMAGE_OCCLUSION_ID: &str = "image_occlusion";
 
+/// Renders Anki stock Image Occlusion cloze markup for one or more rect masks.
+///
+/// Callers must pass at least one rect. The Project Image Occlusion builder
+/// validates that precondition before calling this helper.
 pub fn render_image_occlusion_cloze(mode: IoMode, rects: &[IoRect]) -> anyhow::Result<String> {
     anyhow::ensure!(
         !rects.is_empty(),

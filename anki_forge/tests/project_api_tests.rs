@@ -6,6 +6,12 @@ use anki_forge::prelude::*;
 use anki_forge::product::ProductDocument;
 use std::path::PathBuf;
 
+const IO_PNG: &[u8] = &[
+    137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0,
+    0, 0, 31, 21, 196, 137, 0, 0, 0, 12, 73, 68, 65, 84, 120, 156, 99, 248, 15, 4, 0, 9, 251, 3,
+    253, 167, 102, 129, 94, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
+];
+
 #[test]
 fn note_basic_constructor_uses_stock_basic_fields() {
     let note = Note::basic("AT&T", "<b>phone</b>").stable_id("basic:att");
@@ -36,6 +42,131 @@ fn note_html_constructor_preserves_raw_html() {
     assert_eq!(
         note.rendered_fields().get("answer").map(String::as_str),
         Some("<b>Bell</b>")
+    );
+}
+
+#[test]
+fn note_image_occlusion_builder_accumulates_rects_and_renders_fields() {
+    let mut project = Project::new("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    let note = Note::image_occlusion(image)
+        .stable_id("  heart:io:1  ")
+        .mode(anki_forge::IoMode::HideOneGuessOne)
+        .rect(10, 20, 30, 40)
+        .rect(100, 20, 30, 40)
+        .header("Heart")
+        .back_extra("Identify it")
+        .comments("review carefully")
+        .tag("anatomy")
+        .build()
+        .expect("build image occlusion note");
+
+    assert_eq!(note.note_type_id(), "image_occlusion");
+    assert_eq!(note.stable_id_ref(), Some("heart:io:1"));
+    let fields = note.rendered_fields();
+    assert_eq!(
+        fields.get("Occlusion").map(String::as_str),
+        Some("{{c1,2::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>{{c1,2::image-occlusion:rect:left=100:top=20:width=30:height=40}}<br>")
+    );
+    assert_eq!(
+        fields.get("Image").map(String::as_str),
+        Some("<img src=\"heart.png\">")
+    );
+    assert_eq!(fields.get("Header").map(String::as_str), Some("Heart"));
+    assert_eq!(
+        fields.get("Back Extra").map(String::as_str),
+        Some("Identify it")
+    );
+    assert_eq!(
+        fields.get("Comments").map(String::as_str),
+        Some("review carefully")
+    );
+    assert_eq!(note.tags(), ["anatomy".to_string()].as_slice());
+}
+
+#[test]
+fn note_image_occlusion_builder_requires_stable_id() {
+    let mut project = Project::new("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    let err = Note::image_occlusion(image)
+        .rect(10, 20, 30, 40)
+        .build()
+        .expect_err("stable id required");
+
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::DeckMissingStableId
+    );
+}
+
+#[test]
+fn note_image_occlusion_builder_rejects_blank_stable_id() {
+    let mut project = Project::new("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    let err = Note::image_occlusion(image)
+        .stable_id("   ")
+        .rect(10, 20, 30, 40)
+        .build()
+        .expect_err("blank stable id rejected");
+
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::StableIdBlank
+    );
+}
+
+#[test]
+fn note_image_occlusion_builder_rejects_bad_rects() {
+    let mut project = Project::new("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    let err = Note::image_occlusion(image.clone())
+        .stable_id("heart:empty")
+        .build()
+        .expect_err("empty masks rejected");
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::ImageOcclusionEmptyMasks
+    );
+
+    let err = Note::image_occlusion(image.clone())
+        .stable_id("heart:zero")
+        .rect(10, 20, 0, 40)
+        .build()
+        .expect_err("zero width rejected");
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::ImageOcclusionRectEmpty
+    );
+
+    let err = Note::image_occlusion(image)
+        .stable_id("heart:dup")
+        .rect(10, 20, 30, 40)
+        .rect(10, 20, 30, 40)
+        .build()
+        .expect_err("duplicate rect rejected");
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::ImageOcclusionRectDuplicate
     );
 }
 
