@@ -21,7 +21,7 @@ use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, Valid
 use crate::product::lowering::ProductSourceMap;
 use crate::product::{
     LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
-    ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
+    ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
 
 #[derive(Debug, Clone)]
@@ -39,6 +39,13 @@ pub struct Project {
 enum NotetypeDuplicateFirst<'a> {
     ImplicitStock,
     Project { index: usize, name: Option<&'a str> },
+}
+
+fn is_supported_stock_notetype_id(id: &str) -> bool {
+    matches!(
+        id,
+        STOCK_BASIC_ID | STOCK_CLOZE_ID | STOCK_IMAGE_OCCLUSION_ID
+    )
 }
 
 impl Project {
@@ -170,8 +177,7 @@ impl Project {
                 }
             }
 
-            if note.note_type_id() != STOCK_BASIC_ID
-                && note.note_type_id() != STOCK_CLOZE_ID
+            if !is_supported_stock_notetype_id(note.note_type_id())
                 && !custom_note_type_ids.contains(note.note_type_id())
             {
                 diagnostics.push(Diagnostic {
@@ -1476,6 +1482,13 @@ impl Project {
         {
             product = product.with_cloze(STOCK_CLOZE_ID);
         }
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID)
+        {
+            product = product.with_image_occlusion(STOCK_IMAGE_OCCLUSION_ID);
+        }
 
         for note_type in &self.note_types {
             let custom = crate::product::model::CustomNoteType {
@@ -1563,6 +1576,18 @@ impl Project {
                     fields.get("Back Extra").cloned().unwrap_or_default(),
                     note.tags().iter().cloned(),
                 );
+            } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
+                product = product.add_image_occlusion_note_with_tags(
+                    STOCK_IMAGE_OCCLUSION_ID,
+                    note_id,
+                    deck_name,
+                    fields.get("Occlusion").cloned().unwrap_or_default(),
+                    fields.get("Image").cloned().unwrap_or_default(),
+                    fields.get("Header").cloned().unwrap_or_default(),
+                    fields.get("Back Extra").cloned().unwrap_or_default(),
+                    fields.get("Comments").cloned().unwrap_or_default(),
+                    note.tags().iter().cloned(),
+                );
             } else {
                 let fields = custom_note_fields_for_authoring(self, note);
                 product = product.add_custom_note(crate::product::model::CustomNote {
@@ -1626,6 +1651,13 @@ impl Project {
             .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
         {
             ids.push(STOCK_CLOZE_ID);
+        }
+        if self
+            .notes
+            .iter()
+            .any(|note| note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID)
+        {
+            ids.push(STOCK_IMAGE_OCCLUSION_ID);
         }
         ids
     }

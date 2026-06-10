@@ -171,6 +171,257 @@ fn note_image_occlusion_builder_rejects_bad_rects() {
 }
 
 #[test]
+fn project_validate_accepts_stock_image_occlusion() {
+    let mut project = Project::new("IO").stable_id("io").default_deck("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+
+    project
+        .add_note(
+            Note::new("image_occlusion")
+                .stable_id("io:raw")
+                .html(
+                    "Occlusion",
+                    "{{c1::image-occlusion:rect:left=0:top=0:width=1:height=1}}<br>",
+                )
+                .image("Image", image)
+                .text("Header", "")
+                .text("Back Extra", "")
+                .text("Comments", ""),
+        )
+        .expect("add raw io note");
+
+    let report = project.validate();
+    assert!(!report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "PROJECT.UNSUPPORTED_NOTE_TYPE"));
+}
+
+#[test]
+fn project_validate_reports_custom_image_occlusion_collision_with_implicit_stock() {
+    let mut project = Project::new("IO").stable_id("io").default_deck("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    project
+        .add_note(
+            Note::new("image_occlusion")
+                .stable_id("io:raw")
+                .html(
+                    "Occlusion",
+                    "{{c1::image-occlusion:rect:left=0:top=0:width=1:height=1}}<br>",
+                )
+                .image("Image", image)
+                .text("Header", "")
+                .text("Back Extra", "")
+                .text("Comments", ""),
+        )
+        .expect("add raw io note");
+    project
+        .add_notetype(NoteType::custom("image_occlusion").name("Custom IO"))
+        .expect("add colliding notetype");
+
+    let report = project.validate();
+    let duplicate = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
+        .expect("duplicate notetype diagnostic");
+    assert!(duplicate.message.contains("implicit stock"));
+    assert!(duplicate.message.contains("image_occlusion"));
+}
+
+#[test]
+fn project_image_occlusion_build_writes_apkg() {
+    let root = unique_artifacts_dir("project-image-occlusion-build");
+    let mut project = Project::new("Anatomy")
+        .stable_id("anatomy")
+        .default_deck("Anatomy");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+
+    project
+        .add_note(
+            Note::image_occlusion(image)
+                .stable_id("heart:io:1")
+                .mode(anki_forge::IoMode::HideAllGuessOne)
+                .rect(0, 0, 1, 1)
+                .header("Heart")
+                .back_extra("Identify it")
+                .build()
+                .expect("build io note"),
+        )
+        .expect("add io note");
+
+    let report = project
+        .write_apkg(root.join("io.apkg"))
+        .expect("write io apkg");
+
+    report.ensure_success().expect("successful report");
+    assert_eq!(report.counts.notes, 1);
+    assert_eq!(report.counts.cards, 1);
+    assert_eq!(report.counts.media, 1);
+}
+
+#[test]
+fn project_image_occlusion_builder_missing_stable_id_fails_before_project_add_note() {
+    let mut project = Project::new("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+
+    let err = Note::image_occlusion(image)
+        .rect(0, 0, 1, 1)
+        .build()
+        .expect_err("builder rejects missing stable id");
+
+    assert_eq!(
+        err.code(),
+        anki_forge::diagnostics::ErrorCode::DeckMissingStableId
+    );
+    assert_eq!(project.validate().diagnostics.len(), 0);
+}
+
+#[test]
+fn project_raw_image_occlusion_without_stable_id_keeps_generated_fallback() {
+    let mut project = Project::new("IO").stable_id("io").default_deck("IO");
+    let image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+
+    project
+        .add_note(
+            Note::new("image_occlusion")
+                .html(
+                    "Occlusion",
+                    "{{c1::image-occlusion:rect:left=0:top=0:width=1:height=1}}<br>",
+                )
+                .image("Image", image)
+                .text("Header", "")
+                .text("Back Extra", "")
+                .text("Comments", ""),
+        )
+        .expect("add raw io note");
+
+    let plan = project.lower().expect("lower raw io note");
+    let note = plan.authoring_document.notes.first().expect("note");
+    assert_eq!(note.id, "generated:1");
+    assert_eq!(note.notetype_id, "image_occlusion");
+}
+
+#[test]
+fn project_image_occlusion_cross_project_media_reports_missing_reference() {
+    let mut owner = Project::new("Owner");
+    let image = owner
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    let mut project = Project::new("Target")
+        .stable_id("target")
+        .default_deck("Target");
+    project
+        .add_note(
+            Note::image_occlusion(image)
+                .stable_id("target:io")
+                .rect(0, 0, 1, 1)
+                .build()
+                .expect("build io note"),
+        )
+        .expect("add io note");
+
+    let err = project
+        .normalize()
+        .expect_err("unregistered media reference should fail");
+    assert!(err.to_string().contains("MEDIA"));
+}
+
+#[test]
+fn project_image_occlusion_lower_matches_deck_product_shape() {
+    let mut deck = Deck::builder("Anatomy").stable_id("anatomy").build();
+    let deck_image = deck
+        .media()
+        .add(anki_forge::MediaSource::from_bytes(
+            "heart.png",
+            IO_PNG.to_vec(),
+        ))
+        .expect("deck media");
+    deck.image_occlusion()
+        .note(deck_image)
+        .mode(anki_forge::IoMode::HideAllGuessOne)
+        .rect(0, 0, 1, 1)
+        .stable_id("heart:io:1")
+        .add()
+        .expect("deck io");
+
+    let mut project = Project::new("Anatomy")
+        .stable_id("anatomy")
+        .default_deck("Anatomy");
+    let project_image = project
+        .media_mut()
+        .add_bytes("heart-source.png", IO_PNG.to_vec())
+        .expect("media bytes")
+        .export_as("heart.png")
+        .expect("image export");
+    project
+        .add_note(
+            Note::image_occlusion(project_image)
+                .stable_id("heart:io:1")
+                .mode(anki_forge::IoMode::HideAllGuessOne)
+                .rect(0, 0, 1, 1)
+                .build()
+                .expect("project io"),
+        )
+        .expect("add project io");
+
+    let deck_plan = deck
+        .into_product_document()
+        .expect("deck product")
+        .lower()
+        .expect("deck lower");
+    let project_plan = project.lower().expect("project lower");
+    let deck_io_notetype = deck_plan
+        .authoring_document
+        .notetypes
+        .iter()
+        .find(|notetype| notetype.original_stock_kind.as_deref() == Some("image_occlusion"))
+        .expect("deck image occlusion notetype");
+    let project_io_notetype = project_plan
+        .authoring_document
+        .notetypes
+        .iter()
+        .find(|notetype| notetype.original_stock_kind.as_deref() == Some("image_occlusion"))
+        .expect("project image occlusion notetype");
+    assert_eq!(
+        deck_io_notetype.original_stock_kind,
+        project_io_notetype.original_stock_kind
+    );
+    assert_eq!(
+        deck_plan.authoring_document.notes[0].fields,
+        project_plan.authoring_document.notes[0].fields
+    );
+}
+
+#[test]
 fn project_basic_note_writes_apkg_and_returns_report() {
     let root = unique_artifacts_dir("project-basic-build");
     let output = root.join("spanish-a1.apkg");
