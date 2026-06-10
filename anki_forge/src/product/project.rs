@@ -19,6 +19,7 @@ use crate::build::{
 };
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath, ValidationReport};
 use crate::product::lowering::ProductSourceMap;
+use crate::product::stock::is_supported_stock_notetype_id;
 use crate::product::{
     LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic, ProductDocument,
     ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
@@ -39,13 +40,6 @@ pub struct Project {
 enum NotetypeDuplicateFirst<'a> {
     ImplicitStock,
     Project { index: usize, name: Option<&'a str> },
-}
-
-fn is_supported_stock_notetype_id(id: &str) -> bool {
-    matches!(
-        id,
-        STOCK_BASIC_ID | STOCK_CLOZE_ID | STOCK_IMAGE_OCCLUSION_ID
-    )
 }
 
 impl Project {
@@ -1468,26 +1462,13 @@ impl Project {
             .clone()
             .unwrap_or_else(|| self.name.clone());
         let mut product = ProductDocument::new(document_id).with_default_deck(default_deck.clone());
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_BASIC_ID)
-        {
-            product = product.with_basic(STOCK_BASIC_ID);
-        }
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
-        {
-            product = product.with_cloze(STOCK_CLOZE_ID);
-        }
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID)
-        {
-            product = product.with_image_occlusion(STOCK_IMAGE_OCCLUSION_ID);
+        for stock_id in self.implicit_stock_notetype_ids() {
+            product = match stock_id {
+                STOCK_BASIC_ID => product.with_basic(STOCK_BASIC_ID),
+                STOCK_CLOZE_ID => product.with_cloze(STOCK_CLOZE_ID),
+                STOCK_IMAGE_OCCLUSION_ID => product.with_image_occlusion(STOCK_IMAGE_OCCLUSION_ID),
+                _ => unreachable!("implicit stock note type ids are filtered by Project"),
+            };
         }
 
         for note_type in &self.note_types {

@@ -17,6 +17,7 @@ use super::{
         ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteTypeV2,
         ProductStockNoteV2, ProductTemplateV2,
     },
+    stock::is_supported_stock_notetype_id,
     ProductDocument,
 };
 
@@ -737,11 +738,6 @@ fn lower_product_v2_document(
     }
 
     plan
-}
-
-fn is_supported_stock_notetype_id(id: &str) -> bool {
-    // Keep in sync with the Project stock allowlist.
-    matches!(id, "basic" | "cloze" | "image_occlusion")
 }
 
 fn stock_field_map(note_type_id: &str) -> &'static [(&'static str, &'static str)] {

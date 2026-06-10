@@ -272,9 +272,7 @@ impl ImageOcclusionNoteBuilder {
         if let Some(deck_name) = self.deck_name {
             note = note.deck(deck_name);
         }
-        for tag in self.tags {
-            note = note.tag(tag);
-        }
+        note.tags = self.tags;
         Ok(note)
     }
 }
