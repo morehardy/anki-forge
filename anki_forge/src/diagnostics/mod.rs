@@ -386,6 +386,9 @@ impl ErrorCodeExt for anyhow::Error {
         {
             return error.code();
         }
+        if let Some(error) = self.downcast_ref::<crate::product::ProjectAddError>() {
+            return error.code();
+        }
 
         code_from_message(&self.to_string())
     }

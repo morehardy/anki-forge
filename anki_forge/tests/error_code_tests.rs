@@ -7,6 +7,7 @@ use anki_forge::product::{Note, ProductDocument, Project};
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
 };
+use anyhow::Context;
 use serde_json::json;
 
 fn repo_root() -> PathBuf {
@@ -204,6 +205,33 @@ fn product_lowering_errors_are_downcastable_from_anyhow() {
 
     assert_eq!(err.code(), ErrorCode::ProjectProductDocumentSourceMixed);
     assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
+}
+
+#[test]
+fn product_add_error_exposes_stable_code_and_downcasts_from_anyhow() {
+    let mut project = Project::new("Spanish");
+    let err = project
+        .add_note(Note::basic("hola", "hello").stable_id("   "))
+        .context("add note failed")
+        .expect_err("blank stable id");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn afid_blank_stable_id_maps_to_stable_id_blank_error_code() {
+    let code = anki_forge::diagnostics::DiagnosticCode::new("AFID.STABLE_ID_BLANK");
+
+    assert_eq!(code.error_code(), ErrorCode::StableIdBlank);
+    assert_eq!(code.error_code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn project_add_error_is_send_sync_static_for_anyhow_downcast() {
+    fn assert_send_sync_static<T: Send + Sync + 'static>() {}
+
+    assert_send_sync_static::<anki_forge::product::ProjectAddError>();
 }
 
 #[test]
