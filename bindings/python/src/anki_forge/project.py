@@ -17,10 +17,11 @@ from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empt
 from .report import BuildReport
 from .runtime import RuntimeOverride, resolve_runtime, run_product_build
 
-STOCK_NOTE_TYPE_IDS = {"basic", "cloze"}
+STOCK_NOTE_TYPE_IDS = {"basic", "cloze", "image_occlusion"}
 STOCK_FIELD_KEYS = {
     "basic": {"front", "back"},
     "cloze": {"text", "back_extra"},
+    "image_occlusion": {"occlusion", "image", "header", "back_extra", "comments"},
 }
 ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
 CLOZE_MARKER_PATTERN = re.compile(r"\{\{[cC][1-9][0-9]*::")
@@ -100,6 +101,7 @@ class Project:
             basic_stock_notetype_json,
             cloze_stock_notetype_json,
             custom_notetype_json,
+            image_occlusion_stock_notetype_json,
             media_to_json,
             note_to_json,
         )
@@ -111,6 +113,8 @@ class Project:
                 note_types.append(basic_stock_notetype_json())
             elif note_type_id == "cloze":
                 note_types.append(cloze_stock_notetype_json())
+            elif note_type_id == "image_occlusion":
+                note_types.append(image_occlusion_stock_notetype_json())
         note_types.extend(custom_notetype_json(self._note_types[note_type_id]) for note_type_id in self._note_type_order)
 
         return {
@@ -234,7 +238,7 @@ class Project:
 
     def _stock_note_types(self) -> list[str]:
         used = {note.note_type_id for note in self._notes}
-        return [note_type_id for note_type_id in ("basic", "cloze") if note_type_id in used]
+        return [note_type_id for note_type_id in ("basic", "cloze", "image_occlusion") if note_type_id in used]
 
     def _resolve_deck(self, note: Note) -> str:
         return note.deck_name or self.default_deck or self.name
