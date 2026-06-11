@@ -209,8 +209,7 @@ impl Project {
                 }
             }
 
-            if note.note_type_id() != STOCK_BASIC_ID
-                && note.note_type_id() != STOCK_CLOZE_ID
+            if !is_supported_stock_notetype_id(note.note_type_id())
                 && !custom_note_type_ids.contains(note.note_type_id())
             {
                 diagnostics.push(Diagnostic {
@@ -1803,19 +1802,12 @@ impl Project {
             .clone()
             .unwrap_or_else(|| self.name.clone());
         let mut product = ProductDocument::new(document_id).with_default_deck(default_deck.clone());
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_BASIC_ID)
-        {
-            product = product.with_basic(STOCK_BASIC_ID);
-        }
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
-        {
-            product = product.with_cloze(STOCK_CLOZE_ID);
+        for stock_id in self.implicit_stock_notetype_ids() {
+            product = match stock_id {
+                STOCK_BASIC_ID => product.with_basic(STOCK_BASIC_ID),
+                STOCK_CLOZE_ID => product.with_cloze(STOCK_CLOZE_ID),
+                _ => product,
+            };
         }
 
         for note_type in &self.note_types {
@@ -1953,22 +1945,15 @@ impl Project {
     }
 
     fn implicit_stock_notetype_ids(&self) -> Vec<&'static str> {
-        let mut ids = Vec::new();
-        if self
-            .notes
+        supported_stock_notetype_ids()
             .iter()
-            .any(|note| note.note_type_id() == STOCK_BASIC_ID)
-        {
-            ids.push(STOCK_BASIC_ID);
-        }
-        if self
-            .notes
-            .iter()
-            .any(|note| note.note_type_id() == STOCK_CLOZE_ID)
-        {
-            ids.push(STOCK_CLOZE_ID);
-        }
-        ids
+            .copied()
+            .filter(|stock_id| {
+                self.notes
+                    .iter()
+                    .any(|note| note.note_type_id() == *stock_id)
+            })
+            .collect()
     }
 
     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
@@ -4271,6 +4256,64 @@ mod tests {
         }
     }
 
+    fn project_with_private_state(name: &str) -> Project {
+        Project::new(name).stable_id(name).default_deck(name)
+    }
+
+    fn diagnostics_include_code(report: &ValidationReport, code: &str) -> bool {
+        report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == code)
+    }
+
+    #[test]
+    fn validate_still_reports_duplicate_stable_ids_for_internal_invalid_state() {
+        let mut project = project_with_private_state("duplicate-stable-id");
+        project
+            .notes
+            .push(Note::basic("front 1", "back 1").stable_id("same"));
+        project
+            .notes
+            .push(Note::basic("front 2", "back 2").stable_id("same"));
+
+        let report = project.validate();
+
+        assert!(diagnostics_include_code(
+            &report,
+            "AFID.STABLE_ID_DUPLICATE"
+        ));
+    }
+
+    #[test]
+    fn validate_still_reports_blank_stable_id_for_internal_invalid_state() {
+        let mut project = project_with_private_state("blank-stable-id");
+        project
+            .notes
+            .push(Note::basic("front", "back").stable_id("   "));
+
+        let report = project.validate();
+
+        assert!(diagnostics_include_code(&report, "AFID.STABLE_ID_BLANK"));
+    }
+
+    #[test]
+    fn validate_still_reports_implicit_stock_collision_for_internal_invalid_state() {
+        let mut project = project_with_private_state("implicit-stock-collision");
+        project
+            .notes
+            .push(Note::basic("front", "back").stable_id("basic:1"));
+        project.note_types.push(
+            NoteType::custom(STOCK_BASIC_ID)
+                .field(Field::new("Prompt").key("prompt"))
+                .template(Template::new("Card").front("{{Prompt}}").back("{{Prompt}}")),
+        );
+
+        let report = project.validate();
+
+        assert!(diagnostics_include_code(&report, "NOTETYPE.ID_DUPLICATE"));
+    }
+
     #[test]
     fn normalization_failure_diagnostics_include_lowering_diagnostics() {
         let diagnostics = combine_lowering_and_normalization_diagnostics(
@@ -4567,6 +4610,62 @@ mod tests {
 
         assert!(sources.contains(&"project.note_types[0].templates[\"Custom Basic\"].front"));
         assert!(sources.contains(&"project.note_types[0].css"));
+    }
+
+    #[test]
+    fn build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
+        let mut project = project_with_private_state("invalid-note-ids-media");
+        project.notes.push(
+            Note::new(STOCK_BASIC_ID)
+                .stable_id("   ")
+                .text("Front", "blank stable id")
+                .html("Back", r#"<img src="blank.png">"#),
+        );
+        project.notes.push(
+            Note::new(STOCK_BASIC_ID)
+                .stable_id("dup")
+                .text("Front", "duplicate stable id 1")
+                .html("Back", r#"<img src="dup-one.png">"#),
+        );
+        project.notes.push(
+            Note::new(STOCK_BASIC_ID)
+                .stable_id("dup")
+                .text("Front", "duplicate stable id 2")
+                .html("Back", r#"<img src="dup-two.png">"#),
+        );
+
+        let error = project
+            .build(BuildOptions::new().inspect(false))
+            .expect_err("invalid stable ids and missing media references fail build");
+
+        assert!(error
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "AFID.STABLE_ID_BLANK"));
+        assert!(error
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "AFID.STABLE_ID_DUPLICATE"));
+
+        let sources = error
+            .report
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+            .map(|diagnostic| {
+                diagnostic
+                    .source
+                    .as_ref()
+                    .map(|source| source.as_str())
+                    .expect("missing media diagnostic source")
+            })
+            .collect::<Vec<_>>();
+
+        assert!(sources.contains(&"project.notes[0].fields[\"Back\"]"));
+        assert!(sources.contains(&"project.notes[1].fields[\"Back\"]"));
+        assert!(sources.contains(&"project.notes[2].fields[\"Back\"]"));
     }
 
     #[test]
