@@ -59,10 +59,18 @@ fn main() -> anyhow::Result<()> {
         .stable_id("jp-core")
         .default_deck("Japanese::Core");
     project.add_note(Note::basic("食べる", "to eat").stable_id("jp:taberu"))?;
+    project.validate().ensure_success()?;
     project.write_apkg("jp-core.apkg")?.ensure_success()?;
     Ok(())
 }
 ```
+
+`Project::add_note(...)` and `Project::add_notetype(...)` fail fast for errors
+that are knowable at add time, such as blank or duplicate explicit stable ids,
+unknown note type ids, and unknown field keys. Call
+`project.validate().ensure_success()?` when you want a full Project diagnostic
+checkpoint before building; build still performs normalization, media, writer,
+comparison, and update-safety checks.
 
 `BuildReport` includes the artifact path, note/card/media counts, diagnostics,
 warning count, inspect summary, and duration. Diagnostics expose stable codes
