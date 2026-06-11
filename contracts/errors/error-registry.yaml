@@ -107,12 +107,21 @@ codes:
   - id: NOTETYPE.ID_RESERVED
     status: active
     summary: custom note type id uses a reserved stock note type id
+  - id: NOTETYPE.FIELD_KEY_DUPLICATE
+    status: active
+    summary: custom note type fields contain duplicate keys
   - id: NOTETYPE.FIELD_NAME_DUPLICATE
     status: active
     summary: custom note type fields contain duplicate names
   - id: NOTETYPE.SORT_FIELD_DUPLICATE
     status: active
     summary: custom note type marks more than one field as sort field
+  - id: NOTETYPE.TEMPLATE_KEY_DUPLICATE
+    status: active
+    summary: custom note type templates contain duplicate keys
+  - id: NOTETYPE.TEMPLATE_NAME_DUPLICATE
+    status: active
+    summary: custom note type templates contain duplicate names
   - id: TEMPLATE.FIELD_UNKNOWN
     status: active
     summary: template generation rule references an unknown field key

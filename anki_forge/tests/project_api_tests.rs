@@ -1260,6 +1260,49 @@ fn project_add_notetype_rejects_duplicate_template_key() {
 }
 
 #[test]
+fn project_add_notetype_rejects_duplicate_template_name_without_mutating_project() {
+    let mut project = Project::new("Duplicate Template Name")
+        .stable_id("duplicate-template-name")
+        .default_deck("Duplicate Template Name");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .template(
+                    Template::new("Recognition")
+                        .key("production")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect_err("duplicate template name must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.TEMPLATE_NAME_DUPLICATE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0].templates[\"Recognition\"]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 0);
+}
+
+#[test]
 fn project_add_notetype_rejects_template_rule_unknown_field_key() {
     let mut project = Project::new("Template Unknown Field")
         .stable_id("template-unknown-field")

@@ -433,6 +433,7 @@ impl Project {
             .collect::<BTreeSet<_>>();
 
         let mut seen_template_keys = BTreeMap::<&str, &str>::new();
+        let mut seen_template_names = BTreeSet::<&str>::new();
         for template in note_type.templates() {
             let key = template.key_ref().as_str();
             if let Some(first_name) = seen_template_keys.insert(key, template.name()) {
@@ -447,6 +448,21 @@ impl Project {
                         template.name()
                     ),
                     "choose a unique key for each template",
+                ));
+            }
+
+            if !seen_template_names.insert(template.name()) {
+                return Err(project_add_error(
+                    "NOTETYPE.TEMPLATE_NAME_DUPLICATE",
+                    format!(
+                        "custom note type '{note_type_id}' uses duplicate template name '{}'",
+                        template.name()
+                    ),
+                    format!(
+                        "project.note_types[{notetype_index}].templates[{:?}]",
+                        template.name()
+                    ),
+                    "choose a unique name for each template",
                 ));
             }
 
