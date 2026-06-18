@@ -2,6 +2,7 @@ use anki_forge::build::{
     BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectNormalizeOptions,
 };
+use anki_forge::diagnostics::{ErrorCode, Severity};
 use anki_forge::prelude::*;
 use anki_forge::product::ProductDocument;
 use std::path::PathBuf;
@@ -203,40 +204,21 @@ fn project_validate_accepts_stock_image_occlusion() {
 }
 
 #[test]
-fn project_validate_reports_custom_image_occlusion_collision_with_implicit_stock() {
+fn project_add_notetype_rejects_custom_image_occlusion_reserved_stock_id() {
     let mut project = Project::new("IO").stable_id("io").default_deck("IO");
-    let image = project
-        .media_mut()
-        .add_bytes("heart-source.png", IO_PNG.to_vec())
-        .expect("media bytes")
-        .export_as("heart.png")
-        .expect("image export");
-    project
-        .add_note(
-            Note::new("image_occlusion")
-                .stable_id("io:raw")
-                .html(
-                    "Occlusion",
-                    "{{c1::image-occlusion:rect:left=0:top=0:width=1:height=1}}<br>",
-                )
-                .image("Image", image)
-                .text("Header", "")
-                .text("Back Extra", "")
-                .text("Comments", ""),
-        )
-        .expect("add raw io note");
-    project
-        .add_notetype(NoteType::custom("image_occlusion").name("Custom IO"))
-        .expect("add colliding notetype");
 
-    let report = project.validate();
-    let duplicate = report
-        .diagnostics
-        .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
-        .expect("duplicate notetype diagnostic");
-    assert!(duplicate.message.contains("implicit stock"));
-    assert!(duplicate.message.contains("image_occlusion"));
+    let err = project
+        .add_notetype(NoteType::custom("image_occlusion").name("Custom IO"))
+        .expect_err("image occlusion is a reserved stock note type id");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_RESERVED");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
 }
 
 #[test]
@@ -512,105 +494,6 @@ fn product_document_backed_project_rejects_project_media_state() {
         .diagnostics
         .iter()
         .any(|diagnostic| { diagnostic.code.as_str() == "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" }));
-}
-
-#[test]
-fn project_validate_reports_duplicate_stable_ids() {
-    let mut project = Project::new("Spanish A1")
-        .stable_id("spanish-a1")
-        .default_deck("Spanish::A1");
-
-    project
-        .add_note(Note::basic("hola", "hello").stable_id("dup"))
-        .expect("add first note");
-    project
-        .add_note(Note::basic("adios", "goodbye").stable_id("dup"))
-        .expect("add second note");
-
-    let report = project.validate();
-
-    assert!(report.has_errors());
-    assert!(report
-        .diagnostics
-        .iter()
-        .any(|diagnostic| diagnostic.code.as_str() == "AFID.STABLE_ID_DUPLICATE"));
-}
-
-#[test]
-fn project_validate_reports_blank_stable_id() {
-    let mut project = Project::new("Spanish A1")
-        .stable_id("spanish-a1")
-        .default_deck("Spanish::A1");
-
-    project
-        .add_note(Note::basic("hola", "hello").stable_id("   "))
-        .expect("add note");
-
-    let report = project.validate();
-
-    assert!(report.has_errors());
-    assert!(report.diagnostics.iter().any(|diagnostic| {
-        diagnostic.code.as_str() == "AFID.STABLE_ID_BLANK"
-            && diagnostic
-                .source
-                .as_ref()
-                .is_some_and(|source| source.as_str() == "project.notes[0]")
-    }));
-}
-
-#[test]
-fn project_validate_reports_duplicate_notetype_ids_with_index_sources_and_names() {
-    let mut project = Project::new("Duplicate Note Types")
-        .stable_id("duplicate-notetypes")
-        .default_deck("Duplicate Note Types");
-
-    project
-        .add_notetype(NoteType::custom("jp-vocab").name("Japanese Vocabulary"))
-        .expect("add first note type");
-    project
-        .add_notetype(NoteType::custom("jp-vocab").name("Japanese Vocab Copy"))
-        .expect("add second note type");
-
-    let report = project.validate();
-    let duplicate = report
-        .diagnostics
-        .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
-        .expect("duplicate notetype diagnostic");
-
-    assert_eq!(
-        duplicate.source.as_ref().map(|source| source.as_str()),
-        Some("project.note_types[1]")
-    );
-    assert!(duplicate.message.contains("Japanese Vocabulary"));
-    assert!(duplicate.message.contains("Japanese Vocab Copy"));
-}
-
-#[test]
-fn project_validate_reports_custom_notetype_id_collision_with_implicit_stock() {
-    let mut project = Project::new("Implicit Duplicate")
-        .stable_id("implicit-duplicate")
-        .default_deck("Implicit Duplicate");
-    project
-        .add_note(Note::basic("front", "back").stable_id("basic:1"))
-        .expect("add stock note");
-    project
-        .add_notetype(NoteType::custom("basic").name("Custom Basic"))
-        .expect("add custom basic notetype");
-
-    let report = project.validate();
-    let duplicate = report
-        .diagnostics
-        .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
-        .expect("duplicate notetype diagnostic");
-
-    assert_eq!(
-        duplicate.source.as_ref().map(|source| source.as_str()),
-        Some("project.note_types[0]")
-    );
-    assert!(duplicate.message.contains("implicit stock"));
-    assert!(duplicate.message.contains("Custom Basic"));
 }
 
 #[test]
@@ -1142,34 +1025,31 @@ fn project_build_explains_missing_css_import_media_reference() {
 }
 
 #[test]
-fn project_build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids() {
+fn project_build_maps_missing_media_reference_to_index_source_for_generated_note_ids() {
     let mut project = Project::new("Media")
         .stable_id("media")
         .default_deck("Media");
     project
         .add_note(
             Note::new("basic")
-                .stable_id("")
-                .text("Front", "blank")
-                .html("Back", "<img src=\"blank.png\">"),
-        )
-        .expect("add blank note");
-    project
-        .add_note(
-            Note::new("basic")
-                .stable_id("dup")
-                .text("Front", "dup 1")
+                .text("Front", "generated 1")
                 .html("Back", "<img src=\"one.png\">"),
         )
-        .expect("add first duplicate note");
+        .expect("add first generated note");
     project
         .add_note(
             Note::new("basic")
-                .stable_id("dup")
-                .text("Front", "dup 2")
+                .text("Front", "generated 2")
                 .html("Back", "<img src=\"two.png\">"),
         )
-        .expect("add second duplicate note");
+        .expect("add second generated note");
+    project
+        .add_note(
+            Note::new("basic")
+                .text("Front", "generated 3")
+                .html("Back", "<img src=\"three.png\">"),
+        )
+        .expect("add third generated note");
 
     let error = project
         .build(BuildOptions::new().inspect(false))
@@ -1238,234 +1118,6 @@ fn deck_backed_project_lower_maps_note_fields_to_deck_note_index_source() {
 }
 
 #[test]
-fn project_lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit()
-{
-    let mut project = Project::new("Shifted Note Types")
-        .stable_id("shifted-notetypes")
-        .default_deck("Shifted Note Types");
-    project
-        .add_note(Note::basic("front", "back").stable_id("basic:1"))
-        .expect("add stock note");
-    project
-        .add_notetype(
-            NoteType::custom("dup")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Recognition")
-                        .key("recognition")
-                        .front("{{Prompt}}")
-                        .back("{{Prompt}}")
-                        .browser_back("{{Prompt}}"),
-                ),
-        )
-        .expect("add first custom notetype");
-    project
-        .add_notetype(
-            NoteType::custom("dup")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Recall")
-                        .key("recall")
-                        .front("{{Prompt}}")
-                        .back("{{Prompt}}")
-                        .browser_front("{{Prompt}}"),
-                ),
-        )
-        .expect("add second custom notetype");
-
-    let plan = project.lower().expect("lower project");
-
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[1].templates[\"Recognition\"].front"),
-        Some("project.note_types[0].templates[\"Recognition\"].front")
-    );
-    assert_eq!(
-        plan.source_map.source_for_authoring_path(
-            "authoring.note_types[1].templates[\"Recognition\"].browser_back"
-        ),
-        Some("project.note_types[0].templates[\"Recognition\"].browser_back")
-    );
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[1].css"),
-        Some("project.note_types[0].css")
-    );
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[2].templates[\"Recall\"].back"),
-        Some("project.note_types[1].templates[\"Recall\"].back")
-    );
-    assert_eq!(
-        plan.source_map.source_for_authoring_path(
-            "authoring.note_types[2].templates[\"Recall\"].browser_front"
-        ),
-        Some("project.note_types[1].templates[\"Recall\"].browser_front")
-    );
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[2].css"),
-        Some("project.note_types[1].css")
-    );
-}
-
-#[test]
-fn project_lower_maps_custom_notetype_stock_collision_sources_to_project_index() {
-    let mut project = Project::new("Implicit Duplicate")
-        .stable_id("implicit-duplicate")
-        .default_deck("Implicit Duplicate");
-    project
-        .add_note(Note::basic("front", "back").stable_id("basic:1"))
-        .expect("add stock note");
-    project
-        .add_notetype(
-            NoteType::custom("basic")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Custom Basic")
-                        .front("{{Prompt}}")
-                        .back("{{Prompt}}"),
-                ),
-        )
-        .expect("add custom basic notetype");
-
-    let plan = project.lower().expect("lower project");
-
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[1].templates[\"Custom Basic\"].front"),
-        Some("project.note_types[0].templates[\"Custom Basic\"].front")
-    );
-    assert_eq!(
-        plan.source_map
-            .source_for_authoring_path("authoring.note_types[1].css"),
-        Some("project.note_types[0].css")
-    );
-    assert_eq!(
-        plan.source_map.source_for_authoring_path(
-            "authoring.note_types[\"basic\"].templates[\"Custom Basic\"].front"
-        ),
-        None
-    );
-}
-
-#[test]
-fn project_build_maps_stock_collision_template_media_to_custom_notetype_index() {
-    let mut project = Project::new("Implicit Duplicate Media")
-        .stable_id("implicit-duplicate-media")
-        .default_deck("Implicit Duplicate Media");
-    project
-        .add_note(Note::basic("front", "back").stable_id("basic:1"))
-        .expect("add stock note");
-    project
-        .add_notetype(
-            NoteType::custom("basic")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Custom Basic")
-                        .front(r#"<img src="missing-custom-template.png"> {{Prompt}}"#)
-                        .back("{{Prompt}}"),
-                )
-                .css(r#".card { background: url("missing-custom-css.png"); }"#),
-        )
-        .expect("add custom basic notetype");
-
-    let error = project
-        .build(BuildOptions::new().inspect(false))
-        .expect_err("implicit stock collision and missing custom media fail build");
-
-    let duplicate = error
-        .report
-        .diagnostics
-        .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE")
-        .expect("duplicate notetype diagnostic");
-    assert_eq!(
-        duplicate.source.as_ref().map(|source| source.as_str()),
-        Some("project.note_types[0]")
-    );
-    assert!(duplicate.message.contains("implicit stock"));
-
-    let sources = error
-        .report
-        .diagnostics
-        .iter()
-        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
-        .map(|diagnostic| {
-            diagnostic
-                .source
-                .as_ref()
-                .map(|source| source.as_str())
-                .expect("missing media diagnostic source")
-        })
-        .collect::<Vec<_>>();
-
-    assert!(sources.contains(&"project.note_types[0].templates[\"Custom Basic\"].front"));
-    assert!(sources.contains(&"project.note_types[0].css"));
-}
-
-#[test]
-fn project_build_reports_duplicate_notetype_template_and_css_media_sources_by_index() {
-    let mut project = Project::new("Duplicate Note Type Media")
-        .stable_id("duplicate-notetype-media")
-        .default_deck("Duplicate Note Type Media");
-    project
-        .add_notetype(
-            NoteType::custom("dup")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Recognition")
-                        .front(r#"<img src="missing-first-template.png"> {{Prompt}}"#)
-                        .back("{{Prompt}}"),
-                )
-                .css(r#".card { background: url("missing-first-css.png"); }"#),
-        )
-        .expect("add first custom notetype");
-    project
-        .add_notetype(
-            NoteType::custom("dup")
-                .field(Field::new("Prompt").key("prompt"))
-                .template(
-                    Template::new("Recall")
-                        .front(r#"<img src="missing-second-template.png"> {{Prompt}}"#)
-                        .back("{{Prompt}}"),
-                )
-                .css(r#".card { background: url("missing-second-css.png"); }"#),
-        )
-        .expect("add second custom notetype");
-
-    let error = project
-        .build(BuildOptions::new().inspect(false))
-        .expect_err("duplicate notetype id and missing media references fail build");
-
-    assert!(error
-        .report
-        .diagnostics
-        .iter()
-        .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE"));
-
-    let sources = error
-        .report
-        .diagnostics
-        .iter()
-        .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
-        .map(|diagnostic| {
-            assert_eq!(diagnostic.severity, Severity::Error);
-            diagnostic
-                .source
-                .as_ref()
-                .map(|source| source.as_str())
-                .expect("missing media diagnostic source")
-        })
-        .collect::<Vec<_>>();
-
-    assert!(sources.contains(&"project.note_types[0].templates[\"Recognition\"].front"));
-    assert!(sources.contains(&"project.note_types[0].css"));
-    assert!(sources.contains(&"project.note_types[1].templates[\"Recall\"].front"));
-    assert!(sources.contains(&"project.note_types[1].css"));
-}
-
-#[test]
 fn project_build_accepts_custom_inputs_after_lowering_lands() {
     let custom_notetype = NoteType::custom("custom")
         .field(Field::new("Prompt").key("prompt"))
@@ -1504,6 +1156,254 @@ fn project_build_accepts_custom_inputs_after_lowering_lands() {
         .any(|code| code == "PROJECT.UNSUPPORTED_NOTE_TYPE"));
 }
 
+#[test]
+fn project_add_note_rejects_blank_note_type_id() {
+    let mut project = Project::new("Blank Note Type")
+        .stable_id("blank-note-type")
+        .default_deck("Blank Note Type");
+
+    let err = project
+        .add_note(Note::new(" \n\t").stable_id("blank:type"))
+        .expect_err("blank note type id must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_prioritizes_blank_note_type_id_before_blank_stable_id() {
+    let mut project = Project::new("Priority")
+        .stable_id("priority")
+        .default_deck("Priority");
+
+    let err = project
+        .add_note(Note::new(" \n\t").stable_id(" \n\t"))
+        .expect_err("blank note type id has higher priority");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+}
+
+#[test]
+fn project_add_note_rejects_blank_stable_id_without_mutating_project() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+
+    let err = project
+        .add_note(Note::basic("hola", "hello").stable_id(" \t\n"))
+        .expect_err("blank stable id must fail at add-time");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.diagnostic().code.as_str(), "AFID.STABLE_ID_BLANK");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notes.len(), 0);
+}
+
+#[test]
+fn project_add_note_rejects_duplicate_stable_id_without_mutating_project() {
+    let mut project = Project::new("Spanish A1")
+        .stable_id("spanish-a1")
+        .default_deck("Spanish::A1");
+    project
+        .add_note(Note::basic("hola", "hello").stable_id("dup"))
+        .expect("first note");
+
+    let err = project
+        .add_note(Note::basic("adios", "goodbye").stable_id("dup"))
+        .expect_err("duplicate stable id must fail at add-time");
+
+    assert_eq!(err.code(), ErrorCode::StableIdDuplicate);
+    assert_eq!(err.diagnostic().code.as_str(), "AFID.STABLE_ID_DUPLICATE");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[1]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notes.len(), 1);
+    assert_eq!(normalized.notes[0].id, "dup");
+}
+
+#[test]
+fn project_add_note_rejects_unsupported_note_type() {
+    let mut project = Project::new("Unknown Type")
+        .stable_id("unknown-type")
+        .default_deck("Unknown Type");
+
+    let err = project
+        .add_note(Note::new("missing").stable_id("missing:1"))
+        .expect_err("unsupported note type must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PROJECT.UNSUPPORTED_NOTE_TYPE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_unknown_stock_field_key_case_sensitively() {
+    let mut project = Project::new("Stock Fields")
+        .stable_id("stock-fields")
+        .default_deck("Stock Fields");
+
+    let err = project
+        .add_note(
+            Note::new("basic")
+                .stable_id("basic:case")
+                .text("front", "lowercase is not a Rust Product stock field"),
+        )
+        .expect_err("unknown stock field key must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.FIELD_UNKNOWN");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0].fields[\"front\"]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_unknown_custom_field_key() {
+    let note_type = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .identity(IdentityRecipe::fields(["expr"]));
+    let mut project = Project::new("Custom Fields")
+        .stable_id("custom-fields")
+        .default_deck("Custom Fields");
+    project.add_notetype(note_type).expect("add note type");
+
+    let err = project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("missing", "食べる"),
+        )
+        .expect_err("unknown custom field key must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.FIELD_UNKNOWN");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0].fields[\"missing\"]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_note_identity_override_unknown_field_key() {
+    let note_type = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr"))
+        .identity(IdentityRecipe::fields(["expr"]));
+    let mut project = Project::new("Identity Override")
+        .stable_id("identity-override")
+        .default_deck("Identity Override");
+    project.add_notetype(note_type).expect("add note type");
+
+    let err = project
+        .add_note(
+            Note::new("jp-vocab")
+                .identity(["missing"])
+                .text("expr", "食べる"),
+        )
+        .expect_err("unknown identity field key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PRODUCT.IDENTITY_FIELD_UNKNOWN"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_rejects_custom_note_without_stable_id_or_identity_recipe() {
+    let note_type = NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr"));
+    let mut project = Project::new("Missing Identity")
+        .stable_id("missing-identity")
+        .default_deck("Missing Identity");
+    project
+        .add_notetype(note_type)
+        .expect("add note type without identity");
+
+    let err = project
+        .add_note(Note::new("jp-vocab").text("expr", "食べる"))
+        .expect_err("missing note identity must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "PRODUCT.IDENTITY_MISSING");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.notes[0]")
+    );
+}
+
+#[test]
+fn project_add_note_accepts_custom_note_with_explicit_stable_id_without_notetype_identity() {
+    let note_type = NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr"));
+    let mut project = Project::new("Explicit Identity")
+        .stable_id("explicit-identity")
+        .default_deck("Explicit Identity");
+    project
+        .add_notetype(note_type)
+        .expect("add note type without identity");
+
+    project
+        .add_note(
+            Note::new("jp-vocab")
+                .stable_id("jp:taberu")
+                .text("expr", "食べる"),
+        )
+        .expect("explicit stable id should satisfy add-time identity requirement");
+
+    let normalized = project.normalize().expect("normalize");
+    assert_eq!(normalized.notes.len(), 1);
+    assert_eq!(normalized.notes[0].id, "jp:taberu");
+}
+
 fn unique_artifacts_dir(label: &str) -> PathBuf {
     let mut dir = std::env::temp_dir();
     dir.push(format!(
@@ -1516,4 +1416,313 @@ fn unique_artifacts_dir(label: &str) -> PathBuf {
     ));
     std::fs::create_dir_all(&dir).expect("create temp artifacts dir");
     dir
+}
+
+#[test]
+fn project_add_notetype_rejects_blank_id_without_mutating_project() {
+    let mut project = Project::new("Blank Type")
+        .stable_id("blank-type")
+        .default_deck("Blank Type");
+
+    let err = project
+        .add_notetype(NoteType::custom(" \n\t"))
+        .expect_err("blank note type id must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_BLANK");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 0);
+}
+
+#[test]
+fn project_add_notetype_rejects_reserved_stock_id() {
+    let mut project = Project::new("Reserved Type")
+        .stable_id("reserved-type")
+        .default_deck("Reserved Type");
+
+    let err = project
+        .add_notetype(NoteType::custom("basic"))
+        .expect_err("stock note type ids are reserved");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_RESERVED");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+}
+
+#[test]
+fn project_add_notetype_prioritizes_reserved_stock_id_before_field_errors() {
+    let mut project = Project::new("Reserved Priority")
+        .stable_id("reserved-priority")
+        .default_deck("Reserved Priority");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("basic")
+                .field(Field::new("Front").key("front"))
+                .field(Field::new("Duplicate Front").key("front")),
+        )
+        .expect_err("reserved stock id has higher priority than field errors");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_RESERVED");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0]")
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_custom_id_without_mutating_project() {
+    let mut project = Project::new("Duplicate Type")
+        .stable_id("duplicate-type")
+        .default_deck("Duplicate Type");
+    project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr")))
+        .expect("first note type");
+
+    let err = project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Meaning").key("meaning")))
+        .expect_err("duplicate note type id must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "NOTETYPE.ID_DUPLICATE");
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[1]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 1);
+    assert_eq!(normalized.notetypes[0].id, "jp-vocab");
+    assert_eq!(normalized.notetypes[0].fields.len(), 1);
+    assert_eq!(normalized.notetypes[0].fields[0].name, "Expression");
+
+    let report = project.validate();
+    assert!(!report
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.ID_DUPLICATE"));
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_field_key() {
+    let mut project = Project::new("Duplicate Field Key")
+        .stable_id("duplicate-field-key")
+        .default_deck("Duplicate Field Key");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .field(Field::new("Prompt").key("expr")),
+        )
+        .expect_err("duplicate field key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.FIELD_KEY_DUPLICATE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0].fields[\"Prompt\"]")
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_field_name() {
+    let mut project = Project::new("Duplicate Field Name")
+        .stable_id("duplicate-field-name")
+        .default_deck("Duplicate Field Name");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .field(Field::new("Expression").key("expr2")),
+        )
+        .expect_err("duplicate field name must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.FIELD_NAME_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_sort_field() {
+    let mut project = Project::new("Duplicate Sort")
+        .stable_id("duplicate-sort")
+        .default_deck("Duplicate Sort");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr").sort())
+                .field(Field::new("Reading").key("reading").sort()),
+        )
+        .expect_err("duplicate sort field must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.SORT_FIELD_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_template_key() {
+    let mut project = Project::new("Duplicate Template")
+        .stable_id("duplicate-template")
+        .default_deck("Duplicate Template");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("card")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .template(
+                    Template::new("Production")
+                        .key("card")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect_err("duplicate template key must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.TEMPLATE_KEY_DUPLICATE"
+    );
+}
+
+#[test]
+fn project_add_notetype_rejects_duplicate_template_name_without_mutating_project() {
+    let mut project = Project::new("Duplicate Template Name")
+        .stable_id("duplicate-template-name")
+        .default_deck("Duplicate Template Name");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                )
+                .template(
+                    Template::new("Recognition")
+                        .key("production")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}"),
+                ),
+        )
+        .expect_err("duplicate template name must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "NOTETYPE.TEMPLATE_NAME_DUPLICATE"
+    );
+    assert_eq!(
+        err.diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0].templates[\"Recognition\"]")
+    );
+
+    let normalized = project
+        .normalize()
+        .expect("failed add must not mutate project");
+    assert_eq!(normalized.notetypes.len(), 0);
+}
+
+#[test]
+fn project_add_notetype_rejects_template_rule_unknown_field_key() {
+    let mut project = Project::new("Template Unknown Field")
+        .stable_id("template-unknown-field")
+        .default_deck("Template Unknown Field");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .template(
+                    Template::new("Recognition")
+                        .key("recognition")
+                        .front("{{Expression}}")
+                        .back("{{Expression}}")
+                        .generate_when(GenerationRule::all(["missing"])),
+                ),
+        )
+        .expect_err("unknown template rule field must fail at add-time");
+
+    assert_eq!(err.diagnostic().code.as_str(), "TEMPLATE.FIELD_UNKNOWN");
+}
+
+#[test]
+fn project_add_notetype_rejects_identity_recipe_unknown_field_key() {
+    let mut project = Project::new("Identity Unknown Field")
+        .stable_id("identity-unknown-field")
+        .default_deck("Identity Unknown Field");
+
+    let err = project
+        .add_notetype(
+            NoteType::custom("jp-vocab")
+                .field(Field::new("Expression").key("expr"))
+                .identity(IdentityRecipe::fields(["missing"])),
+        )
+        .expect_err("unknown identity recipe field must fail at add-time");
+
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "PRODUCT.IDENTITY_FIELD_UNKNOWN"
+    );
+}
+
+#[test]
+fn project_add_notetype_allows_missing_identity_recipe_and_validate_warns() {
+    let mut project = Project::new("Identity Warning")
+        .stable_id("identity-warning")
+        .default_deck("Identity Warning");
+
+    project
+        .add_notetype(NoteType::custom("jp-vocab").field(Field::new("Expression").key("expr")))
+        .expect("missing identity recipe is an add-time warning candidate, not an add-time error");
+
+    let report = project.validate();
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "NOTETYPE.IDENTITY_RECIPE_MISSING")
+        .expect("missing identity recipe warning");
+    assert_eq!(diagnostic.severity, Severity::Warning);
 }

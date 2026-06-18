@@ -147,6 +147,10 @@ impl Note {
         self.identity.as_ref()
     }
 
+    pub(crate) fn field_keys(&self) -> impl Iterator<Item = &str> {
+        self.fields.keys().map(String::as_str)
+    }
+
     pub fn deck_name(&self) -> Option<&str> {
         self.deck_name.as_deref()
     }

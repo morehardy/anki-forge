@@ -25,6 +25,7 @@ fn main() -> anyhow::Result<()> {
             .text("meaning", "to eat"),
     )?;
 
+    project.validate().ensure_success()?;
     project.write_apkg("jp-core.apkg")?.ensure_success()?;
     Ok(())
 }

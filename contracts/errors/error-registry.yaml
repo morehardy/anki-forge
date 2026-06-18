@@ -44,6 +44,9 @@ codes:
   - id: AFID.STABLE_ID_DUPLICATE
     status: active
     summary: explicit or mixed identity records use a duplicate stable id
+  - id: AFID.STABLE_ID_BLANK
+    status: active
+    summary: explicit product stable id cannot be blank
   - id: DECK.BLANK_STABLE_ID
     status: active
     summary: explicit deck stable id cannot be blank
@@ -98,6 +101,39 @@ codes:
   - id: AFID.IO_RECT_DUPLICATE
     status: active
     summary: image occlusion identity rejects duplicate rect masks
+  - id: NOTETYPE.ID_BLANK
+    status: active
+    summary: custom note type id cannot be blank
+  - id: NOTETYPE.ID_RESERVED
+    status: active
+    summary: custom note type id uses a reserved stock note type id
+  - id: NOTETYPE.FIELD_KEY_DUPLICATE
+    status: active
+    summary: custom note type fields contain duplicate keys
+  - id: NOTETYPE.FIELD_NAME_DUPLICATE
+    status: active
+    summary: custom note type fields contain duplicate names
+  - id: NOTETYPE.SORT_FIELD_DUPLICATE
+    status: active
+    summary: custom note type marks more than one field as sort field
+  - id: NOTETYPE.TEMPLATE_KEY_DUPLICATE
+    status: active
+    summary: custom note type templates contain duplicate keys
+  - id: NOTETYPE.TEMPLATE_NAME_DUPLICATE
+    status: active
+    summary: custom note type templates contain duplicate names
+  - id: TEMPLATE.FIELD_UNKNOWN
+    status: active
+    summary: template generation rule references an unknown field key
+  - id: PRODUCT.FIELD_UNKNOWN
+    status: active
+    summary: product note contains a field key not declared by its note type
+  - id: PRODUCT.IDENTITY_MISSING
+    status: active
+    summary: product note cannot derive a stable identity
+  - id: PRODUCT.IDENTITY_FIELD_UNKNOWN
+    status: active
+    summary: product identity recipe references an unknown field key
   - id: MEDIA.UNSAFE_FILENAME
     status: active
     summary: media export filename is not a helper-safe bare filename

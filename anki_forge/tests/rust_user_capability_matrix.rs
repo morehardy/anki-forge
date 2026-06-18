@@ -321,25 +321,17 @@ const MP3_BYTES: &[u8] = b"fake-mp3-bytes-for-capability-test";
 #[ignore]
 #[test]
 fn duplicate_stable_id() {
-    let root = scenario_dir();
     let mut project = Project::new("Duplicate")
         .stable_id("dup")
         .default_deck("Duplicate");
     project
         .add_note(Note::basic("one", "one").stable_id("dup-note"))
         .expect("add first");
-    project
+    let error = project
         .add_note(Note::basic("two", "two").stable_id("dup-note"))
-        .expect("add second");
-    let report = expect_error_report(
-        project.build(BuildOptions::new().output(root.join("package.apkg"))),
-        "AFID.STABLE_ID_DUPLICATE",
-    );
-    assert_diagnostic_severity(
-        &report,
-        "AFID.STABLE_ID_DUPLICATE",
-        anki_forge::Severity::Error,
-    );
+        .expect_err("duplicate stable id should fail at add-time");
+    assert_eq!(error.diagnostic().code.as_str(), "AFID.STABLE_ID_DUPLICATE");
+    assert_eq!(error.diagnostic().severity, anki_forge::Severity::Error);
 }
 
 #[ignore]

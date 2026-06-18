@@ -1,10 +1,13 @@
 use std::path::PathBuf;
 
-use anki_forge::diagnostics::{ErrorCode, ErrorCodeExt};
+use anki_forge::diagnostics::{
+    Diagnostic, DiagnosticCode, ErrorCode, ErrorCodeExt, Severity, SourcePath, ValidationReport,
+};
 use anki_forge::product::{Note, ProductDocument, Project};
 use anki_forge::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
 };
+use anyhow::Context;
 use serde_json::json;
 
 fn repo_root() -> PathBuf {
@@ -201,5 +204,84 @@ fn product_lowering_errors_are_downcastable_from_anyhow() {
         .expect_err("mixed ProductDocument and direct Project state must fail");
 
     assert_eq!(err.code(), ErrorCode::ProjectProductDocumentSourceMixed);
+    assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
+}
+
+#[test]
+fn product_add_error_exposes_stable_code_and_downcasts_from_anyhow() {
+    let mut project = Project::new("Spanish");
+    let err = project
+        .add_note(Note::basic("hola", "hello").stable_id("   "))
+        .context("add note failed")
+        .expect_err("blank stable id");
+
+    assert_eq!(err.code(), ErrorCode::StableIdBlank);
+    assert_eq!(err.code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn afid_blank_stable_id_maps_to_stable_id_blank_error_code() {
+    let code = anki_forge::diagnostics::DiagnosticCode::new("AFID.STABLE_ID_BLANK");
+
+    assert_eq!(code.error_code(), ErrorCode::StableIdBlank);
+    assert_eq!(code.error_code().as_str(), "DECK.BLANK_STABLE_ID");
+}
+
+#[test]
+fn project_add_error_is_send_sync_static_for_anyhow_downcast() {
+    fn assert_send_sync_static<T: Send + Sync + 'static>() {}
+
+    assert_send_sync_static::<anki_forge::product::ProjectAddError>();
+}
+
+#[test]
+fn product_validation_report_ensure_success_allows_warning_only_reports() {
+    let report = ValidationReport {
+        diagnostics: vec![Diagnostic {
+            code: DiagnosticCode::new("NOTETYPE.IDENTITY_RECIPE_MISSING"),
+            severity: Severity::Warning,
+            domain: None,
+            stage: None,
+            message: "custom note type has no identity recipe".into(),
+            source: Some(SourcePath::new("project.note_types[\"custom\"]")),
+            help: Some("add IdentityRecipe::fields([...])".into()),
+        }],
+    };
+
+    report
+        .ensure_success()
+        .expect("warning-only report is successful");
+}
+
+#[test]
+fn product_validation_report_ensure_success_returns_typed_error() {
+    let report = ValidationReport {
+        diagnostics: vec![Diagnostic {
+            code: DiagnosticCode::new("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
+            severity: Severity::Error,
+            domain: None,
+            stage: None,
+            message: "ProductDocument-backed projects cannot mix direct Project notes".into(),
+            source: Some(SourcePath::new("project")),
+            help: Some("build either from ProductDocument or direct Project state".into()),
+        }],
+    };
+
+    let err = report
+        .ensure_success()
+        .expect_err("error diagnostic must fail validation report");
+
+    assert_eq!(
+        err.primary_code().as_str(),
+        "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"
+    );
+    assert_eq!(
+        err.report()
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.severity == Severity::Error)
+            .count(),
+        1
+    );
     assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
 }

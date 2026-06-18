@@ -360,6 +360,7 @@ fn main() -> anyhow::Result<()> {
     project.add_note(Note::basic("hola", "hello").stable_id("es:hola"))?;
     project.add_note(Note::basic("adios", "goodbye").stable_id("es:adios"))?;
 
+    project.validate().ensure_success()?;
     let report = project.write_apkg("spanish-a1.apkg")?;
 
     report.ensure_success()?;
@@ -385,8 +386,8 @@ impl Project {
     pub fn default_deck(self, deck_name: impl Into<String>) -> Self;
     pub fn deck(self, deck: DeckSpec) -> Self;
 
-    pub fn add_notetype(&mut self, note_type: NoteType) -> Result<&mut Self>;
-    pub fn add_note(&mut self, note: Note) -> Result<&mut Self>;
+    pub fn add_notetype(&mut self, note_type: NoteType) -> Result<&mut Self, ProjectAddError>;
+    pub fn add_note(&mut self, note: Note) -> Result<&mut Self, ProjectAddError>;
 
     pub fn media(&self) -> &MediaRegistry;
     pub fn media_mut(&mut self) -> &mut MediaRegistry;
@@ -964,6 +965,7 @@ Phase 4 full BuildReport:
 目标 API：
 
 ```rust
+project.validate().ensure_success()?;
 let report = project.build(
     BuildOptions::new()
         .output("jp-core.apkg")
@@ -979,6 +981,7 @@ report.ensure_success()?;
 `build()` 使用 Rust `Result`，但错误不能只是字符串。失败时也必须能取到 diagnostics 和 partial report。
 
 ```rust
+project.validate().ensure_success()?;
 match project.build(options) {
     Ok(report) => report.ensure_success()?,
     Err(err) => {
@@ -1112,6 +1115,7 @@ fn main() -> anyhow::Result<()> {
     project.add_note(Note::basic("hola", "hello").stable_id("es:hola"))?;
     project.add_note(Note::basic("adios", "goodbye").stable_id("es:adios"))?;
 
+    project.validate().ensure_success()?;
     let report = project.write_apkg("spanish-a1.apkg")?;
     report.ensure_success()?;
 
@@ -1162,6 +1166,7 @@ fn main() -> anyhow::Result<()> {
             .tag("jlpt-n5")
     )?;
 
+    project.validate().ensure_success()?;
     let report = project.build(
         BuildOptions::new()
             .output("jp-core.apkg")
@@ -1176,6 +1181,7 @@ fn main() -> anyhow::Result<()> {
 ### 11.3 Diff / update safety
 
 ```rust
+project.validate().ensure_success()?;
 let report = project.build(
     BuildOptions::new()
         .output("jp-core.apkg")
@@ -1231,6 +1237,7 @@ let mut project = Project::new("Japanese Core")
 
 project.add_note(Note::basic("食べる", "to eat").stable_id("jp:taberu"))?;
 
+project.validate().ensure_success()?;
 let report = project.write_apkg("jp-core.apkg")?;
 report.ensure_success()?;
 ```
@@ -1497,6 +1504,7 @@ anki-forge risk --fail-on high
 或通过 library：
 
 ```rust
+project.validate().ensure_success()?;
 let report = project.build(
     BuildOptions::new()
         .output("deck.apkg")

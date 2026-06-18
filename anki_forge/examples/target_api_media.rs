@@ -64,6 +64,7 @@ fn main() -> anyhow::Result<()> {
             .image("picture", picture),
     )?;
 
+    project.validate().ensure_success()?;
     let report = project.write_apkg("spanish-media.apkg")?;
     println!("{}", report.pretty_report());
 

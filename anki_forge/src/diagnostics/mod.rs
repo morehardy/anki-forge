@@ -113,7 +113,7 @@ impl ErrorCode {
     pub fn from_code(code: impl Into<String>) -> Self {
         let code = code.into();
         match code.as_str() {
-            "DECK.BLANK_STABLE_ID" => Self::StableIdBlank,
+            "DECK.BLANK_STABLE_ID" | "AFID.STABLE_ID_BLANK" => Self::StableIdBlank,
             "AFID.STABLE_ID_DUPLICATE" | "DECK.STABLE_ID_DUPLICATE" => Self::StableIdDuplicate,
             "AFID.IDENTITY_DUPLICATE_PAYLOAD" | "DECK.IDENTITY_DUPLICATE_PAYLOAD" => {
                 Self::IdentityDuplicatePayload
@@ -302,11 +302,65 @@ pub struct ValidationReport {
     pub diagnostics: Vec<Diagnostic>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ValidationError {
+    report: ValidationReport,
+    primary_code: DiagnosticCode,
+}
+
+impl ValidationError {
+    pub fn report(&self) -> &ValidationReport {
+        &self.report
+    }
+
+    pub fn primary_code(&self) -> &DiagnosticCode {
+        &self.primary_code
+    }
+}
+
+impl std::fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(diagnostic) = self
+            .report
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            write!(f, "{}: {}", diagnostic.code, diagnostic.message)
+        } else {
+            write!(f, "{}: validation failed", self.primary_code)
+        }
+    }
+}
+
+impl std::error::Error for ValidationError {}
+
+impl ErrorCodeExt for ValidationError {
+    fn code(&self) -> ErrorCode {
+        self.primary_code.error_code()
+    }
+}
+
 impl ValidationReport {
     pub fn has_errors(&self) -> bool {
         self.diagnostics
             .iter()
             .any(|diagnostic| diagnostic.severity == Severity::Error)
+    }
+
+    pub fn ensure_success(&self) -> Result<(), ValidationError> {
+        if let Some(diagnostic) = self
+            .diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.severity == Severity::Error)
+        {
+            Err(ValidationError {
+                report: self.clone(),
+                primary_code: diagnostic.code.clone(),
+            })
+        } else {
+            Ok(())
+        }
     }
 }
 
@@ -330,6 +384,9 @@ impl ErrorCodeExt for anyhow::Error {
         if let Some(error) =
             self.downcast_ref::<crate::product::project::ProductMediaPrepareError>()
         {
+            return error.code();
+        }
+        if let Some(error) = self.downcast_ref::<crate::product::ProjectAddError>() {
             return error.code();
         }
 
