@@ -1,5 +1,5 @@
+use anki_forge::authoring::{normalize, to_authoring_canonical_json, NormalizationRequest};
 use anki_forge::product::{HelperDeclaration, ProductDocument};
-use anki_forge::{normalize, NormalizationRequest};
 
 fn main() -> anyhow::Result<()> {
     let lowering = ProductDocument::new("example-doc")
@@ -16,7 +16,7 @@ fn main() -> anyhow::Result<()> {
         .map_err(|err| anyhow::anyhow!("lower product example: {:?}", err))?;
 
     let normalized = normalize(NormalizationRequest::new(lowering.authoring_document));
-    println!("{}", anki_forge::to_authoring_canonical_json(&normalized)?);
+    println!("{}", to_authoring_canonical_json(&normalized)?);
 
     Ok(())
 }

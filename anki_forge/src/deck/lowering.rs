@@ -55,7 +55,7 @@ impl Deck {
     /// File-backed media is embedded as inline base64 in this form. For builds,
     /// prefer `write_apkg()` or `lower_authoring_with_media_source_dir(...)` so
     /// large media stays path-backed through normalization.
-    pub fn lower_authoring(&self) -> anyhow::Result<crate::AuthoringDocument> {
+    pub fn lower_authoring(&self) -> anyhow::Result<crate::authoring::AuthoringDocument> {
         let product = self.clone().into_product_document()?;
         let mut lowered = product
             .lower()
@@ -73,7 +73,7 @@ impl Deck {
     pub fn lower_authoring_with_media_source_dir(
         &self,
         media_source_dir: &Path,
-    ) -> anyhow::Result<crate::AuthoringDocument> {
+    ) -> anyhow::Result<crate::authoring::AuthoringDocument> {
         let product = self.clone().into_product_document()?;
         let mut lowered = product
             .lower()

@@ -1,5 +1,5 @@
 use anki_forge::product::ProductNote;
-use anki_forge::{AuthoringMediaSource, Deck, IoMode, MediaSource};
+use anki_forge::{authoring::AuthoringMediaSource, Deck, IoMode, MediaSource};
 
 #[test]
 fn deck_lowers_notes_in_original_mixed_order() {

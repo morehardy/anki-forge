@@ -1,11 +1,11 @@
 use std::path::Path;
 
-use crate::InspectReport;
+use crate::writer::InspectReport;
 
 pub fn inspect_staging_path(path: impl AsRef<Path>) -> anyhow::Result<InspectReport> {
-    crate::inspect_staging(path)
+    crate::writer::inspect_staging(path)
 }
 
 pub fn inspect_apkg_path(path: impl AsRef<Path>) -> anyhow::Result<InspectReport> {
-    crate::inspect_apkg(path)
+    crate::writer::inspect_apkg(path)
 }

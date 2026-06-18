@@ -1,6 +1,6 @@
+use anki_forge::authoring::AuthoringMediaSource;
 use anki_forge::product::model::{CustomField, CustomNoteType, CustomTemplate};
 use anki_forge::product::ProductDocument;
-use anki_forge::AuthoringMediaSource;
 use std::collections::BTreeMap;
 
 #[test]

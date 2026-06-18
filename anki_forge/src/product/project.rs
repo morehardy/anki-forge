@@ -2903,7 +2903,7 @@ fn note_field_source_names_for_authoring(
 
 fn product_media_to_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
-) -> anyhow::Result<Vec<crate::AuthoringMedia>> {
+) -> anyhow::Result<Vec<crate::authoring::AuthoringMedia>> {
     let mut prepared = Vec::new();
     let mut diagnostics = Vec::new();
 
@@ -2939,14 +2939,16 @@ fn record_project_media_source_paths<'a>(
 }
 
 fn authoring_media_source_modes(
-    media: &[crate::AuthoringMedia],
+    media: &[crate::authoring::AuthoringMedia],
 ) -> BTreeMap<String, MediaSourceMode> {
     media
         .iter()
         .map(|item| {
             let mode = match &item.source {
-                crate::AuthoringMediaSource::Path { .. } => MediaSourceMode::PathBacked,
-                crate::AuthoringMediaSource::InlineBytes { .. } => MediaSourceMode::Inline,
+                crate::authoring::AuthoringMediaSource::Path { .. } => MediaSourceMode::PathBacked,
+                crate::authoring::AuthoringMediaSource::InlineBytes { .. } => {
+                    MediaSourceMode::Inline
+                }
             };
             (item.id.clone(), mode)
         })
@@ -2955,7 +2957,7 @@ fn authoring_media_source_modes(
 
 fn product_media_to_self_contained_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
-) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
+) -> Result<Vec<crate::authoring::AuthoringMedia>, ProductMediaPrepareError> {
     let mut prepared = Vec::new();
     let mut diagnostics = Vec::new();
 
@@ -2979,7 +2981,7 @@ fn product_media_to_self_contained_authoring_media<'a>(
 fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
-) -> Result<Vec<crate::AuthoringMedia>, ProductMediaPrepareError> {
+) -> Result<Vec<crate::authoring::AuthoringMedia>, ProductMediaPrepareError> {
     let mut prepared = Vec::new();
     let mut diagnostics = Vec::new();
 
@@ -3002,7 +3004,7 @@ fn product_media_to_path_backed_authoring_media<'a>(
 
 fn product_media_item_to_self_contained_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
-) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
+) -> Result<crate::authoring::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
             media
@@ -3032,18 +3034,18 @@ fn product_media_item_to_self_contained_authoring_media(
                     media.export_filename.clone(),
                 )
             })?;
-            crate::AuthoringMediaSource::InlineBytes {
+            crate::authoring::AuthoringMediaSource::InlineBytes {
                 data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
         }
         crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
-            crate::AuthoringMediaSource::InlineBytes {
+            crate::authoring::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
         }
     };
 
-    Ok(crate::AuthoringMedia {
+    Ok(crate::authoring::AuthoringMedia {
         id: media.id.clone(),
         desired_filename: media.export_filename.clone(),
         source,
@@ -3053,7 +3055,7 @@ fn product_media_item_to_self_contained_authoring_media(
 
 fn product_media_item_to_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
-) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
+) -> Result<crate::authoring::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
             media
@@ -3085,18 +3087,18 @@ fn product_media_item_to_authoring_media(
                     media.export_filename.clone(),
                 )
             })?;
-            crate::AuthoringMediaSource::InlineBytes {
+            crate::authoring::AuthoringMediaSource::InlineBytes {
                 data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
             }
         }
         crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
-            crate::AuthoringMediaSource::InlineBytes {
+            crate::authoring::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
         }
     };
 
-    Ok(crate::AuthoringMedia {
+    Ok(crate::authoring::AuthoringMedia {
         id: media.id.clone(),
         desired_filename: media.export_filename.clone(),
         source,
@@ -3107,7 +3109,7 @@ fn product_media_item_to_authoring_media(
 fn product_media_item_to_path_backed_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
     media_input_dir: &Path,
-) -> Result<crate::AuthoringMedia, ProductMediaPrepareError> {
+) -> Result<crate::authoring::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
             media
@@ -3148,18 +3150,18 @@ fn product_media_item_to_path_backed_authoring_media(
                     )
                 })?;
             }
-            crate::AuthoringMediaSource::Path {
+            crate::authoring::AuthoringMediaSource::Path {
                 path: media.export_filename.clone(),
             }
         }
         crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
-            crate::AuthoringMediaSource::InlineBytes {
+            crate::authoring::AuthoringMediaSource::InlineBytes {
                 data_base64: data_base64.clone(),
             }
         }
     };
 
-    Ok(crate::AuthoringMedia {
+    Ok(crate::authoring::AuthoringMedia {
         id: media.id.clone(),
         desired_filename: media.export_filename.clone(),
         source,
@@ -3168,7 +3170,7 @@ fn product_media_item_to_path_backed_authoring_media(
 }
 
 fn self_contain_authoring_path_media(
-    media: &mut [crate::AuthoringMedia],
+    media: &mut [crate::authoring::AuthoringMedia],
     base_dir: &Path,
     inline_limit: usize,
     source_map: &ProductSourceMap,
@@ -3177,7 +3179,7 @@ fn self_contain_authoring_path_media(
     let mut canonical_base: Option<Result<PathBuf, String>> = None;
 
     for item in media {
-        let crate::AuthoringMediaSource::Path { path } = &item.source else {
+        let crate::authoring::AuthoringMediaSource::Path { path } = &item.source else {
             continue;
         };
         let source_path =
@@ -3210,7 +3212,7 @@ fn self_contain_authoring_path_media(
             source_path,
         }) {
             Ok(bytes) => {
-                item.source = crate::AuthoringMediaSource::InlineBytes {
+                item.source = crate::authoring::AuthoringMediaSource::InlineBytes {
                     data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
                 };
             }

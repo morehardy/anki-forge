@@ -3,7 +3,8 @@ use std::{fs, path::Path};
 use anyhow::Context;
 use serde_json::Value;
 
-use crate::{writer_build, BuildArtifactTarget, NormalizedIr, PackageBuildResult};
+use crate::authoring::NormalizedIr;
+use crate::writer::{build as writer_build, BuildArtifactTarget, PackageBuildResult};
 
 use super::{
     load_build_context, load_bundle_from_manifest, load_writer_policy, schema::load_schema_asset,

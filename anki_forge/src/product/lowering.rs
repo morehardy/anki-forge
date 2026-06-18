@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
 
-use crate::{
+use crate::authoring::{
     AuthoringDocument, AuthoringField, AuthoringNote, AuthoringNotetype, AuthoringTemplate,
 };
 
@@ -79,7 +79,7 @@ fn lower_legacy_product_document(
 ) -> Result<LoweringPlan, ProductLoweringError> {
     let mut notetypes: Vec<AuthoringNotetype> = Vec::new();
     let mut notes: Vec<AuthoringNote> = Vec::new();
-    let mut media: Vec<crate::AuthoringMedia> = Vec::new();
+    let mut media: Vec<crate::authoring::AuthoringMedia> = Vec::new();
     let mut media_by_identity: BTreeMap<String, String> = BTreeMap::new();
     let mut mappings: Vec<LoweringMapping> = Vec::new();
     let mut source_map = ProductSourceMap::default();
@@ -433,10 +433,10 @@ fn lower_legacy_product_document(
                 let lowered_filename = asset.lowered_filename();
                 let authoring_media_id = format!("media:{lowered_filename}");
                 media_by_identity.insert(asset.identity(), lowered_filename.clone());
-                media.push(crate::AuthoringMedia {
+                media.push(crate::authoring::AuthoringMedia {
                     id: authoring_media_id.clone(),
                     desired_filename: lowered_filename.clone(),
-                    source: crate::AuthoringMediaSource::InlineBytes {
+                    source: crate::authoring::AuthoringMediaSource::InlineBytes {
                         data_base64: asset.data_base64().into(),
                     },
                     declared_mime: Some(asset.mime().into()),
@@ -636,12 +636,14 @@ fn lower_product_v2_document(
     for media in &v2.media {
         match &media.source {
             ProductMediaSourceV2::File { path } => {
-                plan.authoring_document.media.push(crate::AuthoringMedia {
-                    id: media.id.clone(),
-                    desired_filename: media.export_as.clone(),
-                    source: crate::AuthoringMediaSource::Path { path: path.clone() },
-                    declared_mime: None,
-                });
+                plan.authoring_document
+                    .media
+                    .push(crate::authoring::AuthoringMedia {
+                        id: media.id.clone(),
+                        desired_filename: media.export_as.clone(),
+                        source: crate::authoring::AuthoringMediaSource::Path { path: path.clone() },
+                        declared_mime: None,
+                    });
                 record_v2_media_source_path(
                     &mut plan.source_map,
                     &media.id,
@@ -653,14 +655,16 @@ fn lower_product_v2_document(
                 source_label: _,
                 data_base64,
             } => {
-                plan.authoring_document.media.push(crate::AuthoringMedia {
-                    id: media.id.clone(),
-                    desired_filename: media.export_as.clone(),
-                    source: crate::AuthoringMediaSource::InlineBytes {
-                        data_base64: data_base64.clone(),
-                    },
-                    declared_mime: None,
-                });
+                plan.authoring_document
+                    .media
+                    .push(crate::authoring::AuthoringMedia {
+                        id: media.id.clone(),
+                        desired_filename: media.export_as.clone(),
+                        source: crate::authoring::AuthoringMediaSource::InlineBytes {
+                            data_base64: data_base64.clone(),
+                        },
+                        declared_mime: None,
+                    });
                 record_v2_media_source_path(
                     &mut plan.source_map,
                     &media.id,

@@ -4,7 +4,7 @@ use anyhow::Context;
 use serde::Deserialize;
 use serde_json::Value;
 
-use crate::{
+use crate::authoring::{
     normalize_with_options, AuthoringDocument, AuthoringMedia, AuthoringNote, AuthoringNotetype,
     MediaPolicy, NormalizationRequest, NormalizationResult, NormalizeOptions,
 };

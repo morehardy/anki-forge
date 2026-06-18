@@ -260,7 +260,7 @@ impl RegisteredMedia {
     pub(crate) fn to_authoring_media(
         &self,
         media_source_dir: &Path,
-    ) -> anyhow::Result<crate::AuthoringMedia> {
+    ) -> anyhow::Result<crate::authoring::AuthoringMedia> {
         let source = match &self.source {
             RegisteredMediaSource::File { path } => {
                 ensure_safe_media_source_dir(media_source_dir)?;
@@ -273,18 +273,18 @@ impl RegisteredMedia {
                         target.display()
                     )
                 })?;
-                crate::AuthoringMediaSource::Path {
+                crate::authoring::AuthoringMediaSource::Path {
                     path: self.name.clone(),
                 }
             }
             RegisteredMediaSource::InlineBytes { data_base64 } => {
-                crate::AuthoringMediaSource::InlineBytes {
+                crate::authoring::AuthoringMediaSource::InlineBytes {
                     data_base64: data_base64.clone(),
                 }
             }
         };
 
-        Ok(crate::AuthoringMedia {
+        Ok(crate::authoring::AuthoringMedia {
             id: format!("media:{}", self.name),
             desired_filename: self.name.clone(),
             source,
@@ -294,23 +294,23 @@ impl RegisteredMedia {
 
     pub(crate) fn to_self_contained_authoring_media(
         &self,
-    ) -> anyhow::Result<crate::AuthoringMedia> {
+    ) -> anyhow::Result<crate::authoring::AuthoringMedia> {
         let source = match &self.source {
             RegisteredMediaSource::File { path } => {
                 let bytes = std::fs::read(path)
                     .with_context(|| format!("read media source file: {}", path.display()))?;
-                crate::AuthoringMediaSource::InlineBytes {
+                crate::authoring::AuthoringMediaSource::InlineBytes {
                     data_base64: base64::engine::general_purpose::STANDARD.encode(bytes),
                 }
             }
             RegisteredMediaSource::InlineBytes { data_base64 } => {
-                crate::AuthoringMediaSource::InlineBytes {
+                crate::authoring::AuthoringMediaSource::InlineBytes {
                     data_base64: data_base64.clone(),
                 }
             }
         };
 
-        Ok(crate::AuthoringMedia {
+        Ok(crate::authoring::AuthoringMedia {
             id: format!("media:{}", self.name),
             desired_filename: self.name.clone(),
             source,

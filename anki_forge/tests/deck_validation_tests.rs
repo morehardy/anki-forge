@@ -125,7 +125,8 @@ fn legacy_inline_media_shape_deserializes_as_self_contained_media() {
     );
     assert!(matches!(
         &lowered.media[0].source,
-        anki_forge::AuthoringMediaSource::InlineBytes { data_base64 } if data_base64 == "aGVsbG8="
+        anki_forge::authoring::AuthoringMediaSource::InlineBytes { data_base64 }
+            if data_base64 == "aGVsbG8="
     ));
 }
 

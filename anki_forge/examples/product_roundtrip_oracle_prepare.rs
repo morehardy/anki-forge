@@ -4,7 +4,12 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anki_forge::{normalize, product::ProductDocument, NormalizationRequest};
+use anki_forge::authoring::{normalize, NormalizationRequest};
+use anki_forge::product::ProductDocument;
+use anki_forge::writer::{
+    build as writer_build, inspect_apkg, BuildArtifactTarget, BuildContext, InspectReport,
+    WriterPolicy,
+};
 use anyhow::{bail, ensure, Context};
 use serde::Serialize;
 use serde_json::Value;
@@ -106,11 +111,11 @@ fn build_phase5a_case_apkg(
             .with_context(|| format!("remove old artifact root {}", artifact_root.display()))?;
     }
 
-    let target = writer_core::BuildArtifactTarget::new(
+    let target = BuildArtifactTarget::new(
         artifact_root.to_path_buf(),
         format!("artifacts/phase5a-roundtrip/{label}-{suffix}"),
     );
-    let build_result = writer_core::build(
+    let build_result = writer_build(
         &normalized_ir,
         &phase5a_writer_policy(),
         &phase5a_build_context(),
@@ -128,7 +133,7 @@ fn build_phase5a_case_apkg(
         .as_deref()
         .context("phase5a roundtrip build must emit an apkg_ref")?;
     let apkg_path = artifact_path_from_ref(&target, apkg_ref);
-    let inspect_report = writer_core::inspect_apkg(&apkg_path)
+    let inspect_report = inspect_apkg(&apkg_path)
         .with_context(|| format!("inspect phase5a apkg {}", apkg_path.display()))?;
 
     Ok(PreparedPackage {
@@ -138,7 +143,7 @@ fn build_phase5a_case_apkg(
 }
 
 fn inspect_notetype_ids_by_name(
-    inspect_report: &writer_core::InspectReport,
+    inspect_report: &InspectReport,
 ) -> anyhow::Result<BTreeMap<String, String>> {
     let mut ids_by_name = BTreeMap::new();
     for notetype in &inspect_report.observations.notetypes {
@@ -153,7 +158,7 @@ fn inspect_notetype_ids_by_name(
     Ok(ids_by_name)
 }
 
-fn artifact_path_from_ref(target: &writer_core::BuildArtifactTarget, reference: &str) -> PathBuf {
+fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> PathBuf {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');
     let trimmed = reference
         .strip_prefix(prefix)
@@ -189,8 +194,8 @@ fn repo_root() -> PathBuf {
         .to_path_buf()
 }
 
-fn phase5a_writer_policy() -> writer_core::WriterPolicy {
-    writer_core::WriterPolicy {
+fn phase5a_writer_policy() -> WriterPolicy {
+    WriterPolicy {
         id: "writer-policy.default".into(),
         version: "1.0.0".into(),
         compatibility_target: "latest-only".into(),
@@ -200,8 +205,8 @@ fn phase5a_writer_policy() -> writer_core::WriterPolicy {
     }
 }
 
-fn phase5a_build_context() -> writer_core::BuildContext {
-    writer_core::BuildContext {
+fn phase5a_build_context() -> BuildContext {
+    BuildContext {
         id: "build-context.default".into(),
         version: "1.0.0".into(),
         emit_apkg: true,
