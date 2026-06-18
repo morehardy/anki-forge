@@ -111,7 +111,7 @@ fn main() -> anyhow::Result<()> {
             let runtime = resolve_runtime(&envelope.runtime_options)?;
             let input_path = resolve_request_path(&cwd, &request.input_path);
             let result = anki_forge::runtime::normalize_from_path(&runtime, &input_path)?;
-            print_json(anki_forge::to_authoring_canonical_json(&result)?);
+            print_json(anki_forge::authoring::to_authoring_canonical_json(&result)?);
         }
         "build" => {
             let request: BuildRequest =
@@ -126,7 +126,7 @@ fn main() -> anyhow::Result<()> {
                 &request.build_context,
                 &artifacts_dir,
             )?;
-            print_json(anki_forge::to_writer_canonical_json(&result)?);
+            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
         }
         "inspect" => {
             let request: InspectRequest =
@@ -140,7 +140,7 @@ fn main() -> anyhow::Result<()> {
                 }
                 _ => bail!("inspect request requires exactly one of staging or apkg"),
             };
-            print_json(anki_forge::to_writer_canonical_json(&result)?);
+            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
         }
         "diff" => {
             let request: DiffRequest =
@@ -148,7 +148,7 @@ fn main() -> anyhow::Result<()> {
             let left_path = resolve_request_path(&cwd, &request.left_path);
             let right_path = resolve_request_path(&cwd, &request.right_path);
             let result = anki_forge::runtime::diff_from_paths(&left_path, &right_path)?;
-            print_json(anki_forge::to_writer_canonical_json(&result)?);
+            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
         }
         other => bail!("unsupported command: {other}"),
     }

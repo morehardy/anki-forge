@@ -18,7 +18,7 @@ pub fn run(
     )?;
 
     match output {
-        "contract-json" => anki_forge::to_writer_canonical_json(&result),
+        "contract-json" => anki_forge::writer::to_writer_canonical_json(&result),
         "human" => Ok(format!("status: {}", result.result_status)),
         other => bail!("unsupported build output mode: {other}"),
     }

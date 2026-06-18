@@ -1,11 +1,11 @@
 use std::path::PathBuf;
 
+use anki_forge::authoring::AuthoringMediaSource;
 use anki_forge::build::{
     MediaSourceMode, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectNormalizeOptions,
 };
 use anki_forge::prelude::*;
-use anki_forge::AuthoringMediaSource;
 use anki_forge::MediaSource;
 
 const MP3: &[u8] = b"fake-mp3-bytes-for-package-test";

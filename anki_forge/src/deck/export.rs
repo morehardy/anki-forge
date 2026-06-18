@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use anyhow::{ensure, Context};
 use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
 
-use crate::{inspect_apkg, inspect_staging};
+use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
 
 use super::model::{Deck, Package};
@@ -29,11 +29,11 @@ impl BuildResult {
         &self.staging_manifest_path
     }
 
-    pub fn inspect_staging(&self) -> anyhow::Result<crate::InspectReport> {
+    pub fn inspect_staging(&self) -> anyhow::Result<InspectReport> {
         inspect_staging(&self.staging_manifest_path)
     }
 
-    pub fn inspect_apkg(&self) -> anyhow::Result<crate::InspectReport> {
+    pub fn inspect_apkg(&self) -> anyhow::Result<InspectReport> {
         inspect_apkg(&self.apkg_path)
     }
 }
@@ -135,7 +135,7 @@ fn build_package(
         .unwrap_or_else(|| "artifacts".into());
     let artifact_target = BuildArtifactTarget::new(artifacts_dir.to_path_buf(), stable_ref_prefix)
         .with_media_store_dir(media_store_dir);
-    let package_build_result = crate::writer_build(
+    let package_build_result = crate::writer::build(
         &normalized_ir,
         &writer_policy,
         &build_context,

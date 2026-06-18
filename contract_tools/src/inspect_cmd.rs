@@ -8,7 +8,7 @@ pub fn run(staging: Option<&str>, apkg: Option<&str>, output: &str) -> anyhow::R
     };
 
     match output {
-        "contract-json" => anki_forge::to_writer_canonical_json(&report),
+        "contract-json" => anki_forge::writer::to_writer_canonical_json(&report),
         "human" => Ok(format!("status: {}", report.observation_status)),
         other => bail!("unsupported inspect output mode: {other}"),
     }

@@ -1204,7 +1204,7 @@ let normalized = project.normalize()?;
 
 std::fs::write(
     "normalized-ir.json",
-    anki_forge::to_authoring_canonical_json(&normalized)?
+    anki_forge::authoring::to_authoring_canonical_json(&normalized)?
 )?;
 ```
 
