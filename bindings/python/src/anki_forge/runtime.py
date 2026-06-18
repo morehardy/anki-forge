@@ -93,6 +93,9 @@ def build_product_build_argv(
     compare_to: Path | None,
     fail_on: str | None,
     report_json: Path | None,
+    identity_lockfile: Path | None,
+    write_identity_lockfile: bool,
+    update_safety: str | None,
 ) -> list[str]:
     argv = [
         str(executable),
@@ -112,6 +115,12 @@ def build_product_build_argv(
         argv.extend(["--fail-on", fail_on])
     if report_json is not None:
         argv.extend(["--report-json", str(report_json)])
+    if identity_lockfile is not None:
+        argv.extend(["--identity-lockfile", str(identity_lockfile)])
+    if write_identity_lockfile:
+        argv.append("--write-identity-lockfile")
+    if update_safety is not None:
+        argv.extend(["--update-safety", update_safety])
     return argv
 
 
@@ -123,6 +132,9 @@ def run_product_build(
     compare_to: Path | None = None,
     fail_on: str | None = None,
     report_json: Path | None = None,
+    identity_lockfile: Path | None = None,
+    write_identity_lockfile: bool = False,
+    update_safety: str | None = None,
 ) -> BuildReport:
     argv = build_product_build_argv(
         executable=runtime.executable,
@@ -132,6 +144,9 @@ def run_product_build(
         compare_to=compare_to,
         fail_on=fail_on,
         report_json=report_json,
+        identity_lockfile=identity_lockfile,
+        write_identity_lockfile=write_identity_lockfile,
+        update_safety=update_safety,
     )
     try:
         completed = subprocess.run(

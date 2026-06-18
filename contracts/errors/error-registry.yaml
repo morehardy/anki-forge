@@ -254,6 +254,9 @@ codes:
   - id: PROJECT.BUILD_INTERNAL
     status: active
     summary: project build failed with an internal error status
+  - id: PROJECT.PATH_COLLISION
+    status: active
+    summary: output paths must not collide
   - id: PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED
     status: active
     summary: ProductDocument-backed project mixed direct Project sources

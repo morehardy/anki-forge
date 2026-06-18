@@ -77,6 +77,27 @@ fn build_options_expose_update_safety_builder_methods() {
 }
 
 #[test]
+fn build_options_expose_update_safe_workflow_sugar() {
+    use anki_forge::build::{BuildOptions, UpdateSafetyMode};
+
+    let first = BuildOptions::new().first_update_safe_build("anki-forge.lock.json");
+    assert_eq!(
+        first.identity_lockfile.as_deref(),
+        Some(std::path::Path::new("anki-forge.lock.json"))
+    );
+    assert!(first.write_identity_lockfile);
+    assert_eq!(first.update_safety, Some(UpdateSafetyMode::Strict));
+
+    let next = BuildOptions::new().update_safe("anki-forge.lock.json");
+    assert_eq!(
+        next.identity_lockfile.as_deref(),
+        Some(std::path::Path::new("anki-forge.lock.json"))
+    );
+    assert!(!next.write_identity_lockfile);
+    assert_eq!(next.update_safety, Some(UpdateSafetyMode::Strict));
+}
+
+#[test]
 fn build_api_exports_phase4_report_types() {
     use anki_forge::build::{
         BuildPolicyResult, BuildPolicyStatus, BuildStatus, ComparisonStatus, RiskLevel,

@@ -15,3 +15,25 @@ Python validates field keys and identity availability, but Rust owns required-fi
 ## Comparison
 
 `fail_on=None` disables the risk threshold. It does not ignore missing or unreadable `compare_to` baselines; those still produce invalid reports with comparison diagnostics. `compare_to` without `fail_on` still computes diff and risk when the baseline is readable.
+
+## Update-Safe Builds
+
+`Project.write_apkg()` accepts `identity_lockfile`,
+`write_identity_lockfile`, and `update_safety`.
+
+```python
+project = Project("Japanese Core", stable_id="jp-core")
+project.add_note(Note.basic("食べる", "to eat", stable_id="jp:taberu"))
+project.write_apkg(
+    "dist/jp-core.apkg",
+    identity_lockfile="anki-forge.lock.json",
+    write_identity_lockfile=True,
+    update_safety="strict",
+).ensure_success()
+```
+
+Strict update-safe Python builds, default baseline-driven update-safe builds,
+and any build that writes an identity lockfile require `Project.stable_id`.
+`update_safety="disabled"` ignores baseline inputs; `update_safety="report_only"`
+keeps update-safety diagnostics visible as warnings without blocking writer
+execution.

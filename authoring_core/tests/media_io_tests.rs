@@ -124,6 +124,18 @@ fn sniff_mime_keeps_json_like_text_as_plain_text() {
 }
 
 #[test]
+fn sniff_mime_limits_css_shape_detection_to_text_prefix() {
+    let mut text = String::from("* markdown list item\n");
+    text.push_str(&"plain text ".repeat(120));
+    text.push_str("{ late brace }");
+
+    let sniffed = sniff_mime(text.as_bytes()).expect("sniff ASCII text");
+
+    assert_eq!(sniffed.mime, "text/plain");
+    assert_eq!(sniffed.confidence, MediaSniffConfidence::Low);
+}
+
+#[test]
 fn sniff_mime_does_not_treat_text_prefixes_as_fonts() {
     for bytes in [
         &b"true"[..],

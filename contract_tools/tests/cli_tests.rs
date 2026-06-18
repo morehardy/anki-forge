@@ -846,6 +846,149 @@ fn product_build_contract_json_stdout_is_only_report_json() {
 }
 
 #[test]
+fn product_build_cli_writes_identity_lockfile() {
+    let temp = tempdir().expect("tempdir");
+    let lockfile = temp.path().join("anki-forge.lock.json");
+    let output = run_product_build_fixture(
+        "basic-stock",
+        temp.path(),
+        &[
+            OsString::from("--identity-lockfile"),
+            lockfile.as_os_str().to_os_string(),
+            OsString::from("--write-identity-lockfile"),
+            OsString::from("--update-safety"),
+            OsString::from("strict"),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(lockfile.exists());
+
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert_eq!(report["update_safety"]["mode"], "strict");
+    assert_eq!(
+        report["update_safety"]["lockfile_written"].as_bool(),
+        Some(true)
+    );
+}
+
+#[test]
+fn product_build_cli_disabled_mode_ignores_missing_identity_lockfile() {
+    let temp = tempdir().expect("tempdir");
+    let missing_lockfile = temp.path().join("missing.lock.json");
+    let output = run_product_build_fixture(
+        "basic-stock",
+        temp.path(),
+        &[
+            OsString::from("--identity-lockfile"),
+            missing_lockfile.as_os_str().to_os_string(),
+            OsString::from("--update-safety"),
+            OsString::from("disabled"),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert_eq!(report["update_safety"]["mode"], "disabled");
+    let sources = report["update_safety"]["baseline_sources"]
+        .as_array()
+        .expect("baseline sources");
+    assert!(sources.iter().any(|source| {
+        source["source_kind"] == "lockfile" && source["status"] == "ignored_disabled"
+    }));
+}
+
+#[test]
+fn product_build_cli_report_only_missing_identity_lockfile_warns_without_blocking() {
+    let temp = tempdir().expect("tempdir");
+    let missing_lockfile = temp.path().join("missing.lock.json");
+    let output = run_product_build_fixture(
+        "basic-stock",
+        temp.path(),
+        &[
+            OsString::from("--identity-lockfile"),
+            missing_lockfile.as_os_str().to_os_string(),
+            OsString::from("--update-safety"),
+            OsString::from("report-only"),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(
+        output.status.success(),
+        "stdout: {}\nstderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert_eq!(report["update_safety"]["mode"], "report_only");
+    let diagnostic = report["diagnostics"]
+        .as_array()
+        .expect("diagnostics")
+        .iter()
+        .find(|diagnostic| diagnostic["code"] == "UPDATE.BASELINE_LOCKFILE_UNREADABLE")
+        .expect("missing lockfile warning");
+    assert_eq!(diagnostic["severity"], "warning");
+}
+
+#[test]
+fn product_build_cli_rejects_identity_lockfile_apkg_path_collision() {
+    let temp = tempdir().expect("tempdir");
+    let colliding_path = temp.path().join("deck.apkg");
+    let output = run_product_build_fixture_to(
+        "basic-stock",
+        &colliding_path,
+        &[
+            OsString::from("--identity-lockfile"),
+            colliding_path.as_os_str().to_os_string(),
+            OsString::from("--write-identity-lockfile"),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(!output.status.success());
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
+}
+
+#[test]
+fn product_build_cli_rejects_apkg_report_json_path_collision() {
+    let temp = tempdir().expect("tempdir");
+    let colliding_path = temp.path().join("deck.apkg");
+    let output = run_product_build_fixture_to(
+        "basic-stock",
+        &colliding_path,
+        &[
+            OsString::from("--report-json"),
+            colliding_path.as_os_str().to_os_string(),
+            OsString::from("--output"),
+            OsString::from("contract-json"),
+        ],
+    );
+
+    assert!(!output.status.success());
+    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
+    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
+    assert!(!colliding_path.exists());
+}
+
+#[test]
 fn product_build_policy_failure_prints_report_before_nonzero_exit() {
     let temp = tempdir().expect("tempdir");
     let baseline = build_basic_stock_baseline(temp.path());

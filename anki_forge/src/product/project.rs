@@ -24,6 +24,7 @@ use crate::product::lowering::ProductSourceMap;
 use crate::product::{
     GenerationRule, LoweringDiagnostic, LoweringPlan, Note, NoteType, ProductDiagnostic,
     ProductDocument, ProductLoweringError, STOCK_BASIC_ID, STOCK_CLOZE_ID,
+    STOCK_IMAGE_OCCLUSION_ID,
 };
 
 #[derive(Debug, Clone)]
@@ -574,11 +575,7 @@ impl Project {
 
         if let Some(allowed_keys) = stock_field_keys(note_type_id) {
             for field_key in note.field_keys() {
-                if !allowed_keys
-                    .iter()
-                    .copied()
-                    .any(|allowed_key| allowed_key == field_key)
-                {
+                if !allowed_keys.contains(&field_key) {
                     return Err(project_add_error(
                         "PRODUCT.FIELD_UNKNOWN",
                         format!(
@@ -596,19 +593,12 @@ impl Project {
             return Ok(());
         };
 
-        let custom_field_keys = note_type
-            .fields()
-            .iter()
-            .map(|field| field.key_ref().as_str())
-            .collect::<BTreeSet<_>>();
-        let custom_field_names = note_type
-            .fields()
-            .iter()
-            .map(|field| field.name())
-            .collect::<BTreeSet<_>>();
-
         for field_key in note.field_keys() {
-            if !custom_field_keys.contains(field_key) && !custom_field_names.contains(field_key) {
+            let field_known = note_type
+                .fields()
+                .iter()
+                .any(|field| field.key_ref().as_str() == field_key || field.name() == field_key);
+            if !field_known {
                 return Err(project_add_error(
                     "PRODUCT.FIELD_UNKNOWN",
                     format!(
@@ -622,7 +612,11 @@ impl Project {
 
         if let Some(recipe) = note.identity_ref() {
             for field_key in recipe.field_keys() {
-                if !custom_field_keys.contains(field_key.as_str()) {
+                let field_known = note_type
+                    .fields()
+                    .iter()
+                    .any(|field| field.key_ref().as_str() == field_key.as_str());
+                if !field_known {
                     return Err(project_add_error(
                         "PRODUCT.IDENTITY_FIELD_UNKNOWN",
                         format!(
@@ -751,6 +745,7 @@ impl Project {
 
         let validation = self.validate();
         let mut diagnostics = validation.diagnostics;
+        push_build_output_path_collision_if_needed(&options, &mut diagnostics);
 
         let normalized_output =
             self.normalize_with_dirs(&media_input_dir, &media_store_dir, normalize_options);
@@ -942,11 +937,14 @@ impl Project {
             }
         };
 
-        if self.stable_id.is_none()
-            && (options.compare_to.is_some()
-                || options.identity_lockfile.is_some()
-                || options.write_identity_lockfile)
-        {
+        let project_stable_id_required =
+            if matches!(update_mode, crate::update_safety::EffectiveMode::Disabled) {
+                options.write_identity_lockfile
+            } else {
+                true
+            };
+
+        if self.stable_id.is_none() && project_stable_id_required {
             let condition =
                 if options.identity_lockfile.is_some() || options.write_identity_lockfile {
                     crate::update_safety::EvidenceCondition::LockfileRequired
@@ -957,7 +955,11 @@ impl Project {
             if let Some(code) = classified.diagnostic_code {
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new(code),
-                    severity: classified.severity,
+                    severity: if options.write_identity_lockfile {
+                        Severity::Error
+                    } else {
+                        update_safety_blocking_severity(update_mode)
+                    },
                     domain: None,
                     stage: None,
                     message: "project stable id is missing for update-safety proof".into(),
@@ -1094,6 +1096,13 @@ impl Project {
                                         lockfile.identity_index.limitations.clone(),
                                     ),
                                 );
+                                push_project_stable_id_mismatch_if_needed(
+                                    &mut diagnostics,
+                                    self.stable_id.as_deref(),
+                                    Some(lockfile.project_stable_id.as_str()),
+                                    path.display().to_string(),
+                                    update_error_severity,
+                                );
                                 Some(lockfile)
                             }
                             Err(err) => {
@@ -1157,6 +1166,13 @@ impl Project {
                                     path,
                                     index.limitations.clone(),
                                 ),
+                            );
+                            push_project_stable_id_mismatch_if_needed(
+                                &mut diagnostics,
+                                self.stable_id.as_deref(),
+                                index.project_stable_id.as_deref(),
+                                path.display().to_string(),
+                                update_error_severity,
                             );
                             Some(index)
                         }
@@ -1822,7 +1838,8 @@ impl Project {
             product = match stock_id {
                 STOCK_BASIC_ID => product.with_basic(STOCK_BASIC_ID),
                 STOCK_CLOZE_ID => product.with_cloze(STOCK_CLOZE_ID),
-                _ => product,
+                STOCK_IMAGE_OCCLUSION_ID => product.with_image_occlusion(STOCK_IMAGE_OCCLUSION_ID),
+                _ => unreachable!("implicit stock note type ids are filtered by Project"),
             };
         }
 
@@ -1910,6 +1927,18 @@ impl Project {
                     deck_name,
                     fields.get("Text").cloned().unwrap_or_default(),
                     fields.get("Back Extra").cloned().unwrap_or_default(),
+                    note.tags().iter().cloned(),
+                );
+            } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
+                product = product.add_image_occlusion_note_with_tags(
+                    STOCK_IMAGE_OCCLUSION_ID,
+                    note_id,
+                    deck_name,
+                    fields.get("Occlusion").cloned().unwrap_or_default(),
+                    fields.get("Image").cloned().unwrap_or_default(),
+                    fields.get("Header").cloned().unwrap_or_default(),
+                    fields.get("Back Extra").cloned().unwrap_or_default(),
+                    fields.get("Comments").cloned().unwrap_or_default(),
                     note.tags().iter().cloned(),
                 );
             } else {
@@ -2397,7 +2426,8 @@ fn duplicate_implicit_stock_notetype_message(
     )
 }
 
-const SUPPORTED_STOCK_NOTETYPE_IDS: &[&str] = &[STOCK_BASIC_ID, STOCK_CLOZE_ID];
+const SUPPORTED_STOCK_NOTETYPE_IDS: &[&str] =
+    &[STOCK_BASIC_ID, STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID];
 
 fn supported_stock_notetype_ids() -> &'static [&'static str] {
     SUPPORTED_STOCK_NOTETYPE_IDS
@@ -2411,6 +2441,9 @@ fn stock_field_keys(note_type_id: &str) -> Option<&'static [&'static str]> {
     match note_type_id {
         STOCK_BASIC_ID => Some(&["Front", "Back"]),
         STOCK_CLOZE_ID => Some(&["Text", "Back Extra"]),
+        STOCK_IMAGE_OCCLUSION_ID => {
+            Some(&["Occlusion", "Image", "Header", "Back Extra", "Comments"])
+        }
         _ => None,
     }
 }
@@ -4074,6 +4107,85 @@ fn invalid_report_without_artifact(
     }
 }
 
+fn push_build_output_path_collision_if_needed(
+    options: &BuildOptions,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
+    let Some((message, source)) = build_output_path_collision(options) else {
+        return;
+    };
+
+    diagnostics.push(Diagnostic {
+        code: DiagnosticCode::new("PROJECT.PATH_COLLISION"),
+        severity: Severity::Error,
+        domain: None,
+        stage: None,
+        message,
+        source: Some(SourcePath::new(source)),
+        help: Some(
+            "choose distinct paths for apkg output, report_json, and identity lockfile".into(),
+        ),
+    });
+}
+
+fn build_output_path_collision(options: &BuildOptions) -> Option<(String, &'static str)> {
+    if output_collides_with_identity_lockfile(options) {
+        return Some((
+            "build output path collides with identity lockfile path".into(),
+            "build.identity_lockfile",
+        ));
+    }
+    if report_json_collides_with_identity_lockfile(options) {
+        return Some((
+            "report_json path collides with identity lockfile path".into(),
+            "build.report_json",
+        ));
+    }
+    if report_json_collides_with_output(options) {
+        return Some((
+            "build output path collides with report_json path".into(),
+            "build.report_json",
+        ));
+    }
+    None
+}
+
+fn output_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
+    options
+        .identity_lockfile
+        .as_ref()
+        .zip(effective_apkg_output_path(options))
+        .is_some_and(|(identity_lockfile, output)| &output == identity_lockfile)
+}
+
+fn report_json_collides_with_any_output(options: &BuildOptions) -> bool {
+    report_json_collides_with_identity_lockfile(options)
+        || report_json_collides_with_output(options)
+}
+
+fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
+    options
+        .identity_lockfile
+        .as_ref()
+        .zip(options.report_json.as_ref())
+        .is_some_and(|(identity_lockfile, report_json)| report_json == identity_lockfile)
+}
+
+fn report_json_collides_with_output(options: &BuildOptions) -> bool {
+    effective_apkg_output_path(options)
+        .zip(options.report_json.as_ref())
+        .is_some_and(|(output, report_json)| &output == report_json)
+}
+
+fn effective_apkg_output_path(options: &BuildOptions) -> Option<PathBuf> {
+    options.output.clone().or_else(|| {
+        options
+            .artifacts_dir
+            .as_ref()
+            .map(|artifacts_dir| artifacts_dir.join("package.apkg"))
+    })
+}
+
 fn attach_artifact_diff_risk_if_needed(
     risk: &mut Option<crate::risk::ImportRiskReport>,
     diff: Option<&crate::diff::BuildDiffSummary>,
@@ -4111,6 +4223,9 @@ fn maybe_write_report_json(
     let Some(path) = options.report_json.as_ref() else {
         return Ok(report);
     };
+    if report_json_collides_with_any_output(options) {
+        return Ok(report);
+    }
 
     if let Err(err) = crate::build::write_report_json_atomic(path, &report) {
         report.diagnostics.push(Diagnostic {
@@ -4196,6 +4311,36 @@ fn update_safety_blocking_severity(mode: crate::update_safety::EffectiveMode) ->
         crate::update_safety::EffectiveMode::ReportOnly
         | crate::update_safety::EffectiveMode::Disabled => Severity::Warning,
     }
+}
+
+fn push_project_stable_id_mismatch_if_needed(
+    diagnostics: &mut Vec<Diagnostic>,
+    current_project_stable_id: Option<&str>,
+    baseline_project_stable_id: Option<&str>,
+    source_ref: impl Into<String>,
+    severity: Severity,
+) {
+    let (Some(current), Some(baseline)) = (current_project_stable_id, baseline_project_stable_id)
+    else {
+        return;
+    };
+    if current == baseline {
+        return;
+    }
+    diagnostics.push(Diagnostic {
+        code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISMATCH"),
+        severity,
+        domain: None,
+        stage: None,
+        message: format!(
+            "project stable id {current:?} differs from baseline project stable id {baseline:?}"
+        ),
+        source: Some(SourcePath::new(source_ref.into())),
+        help: Some(
+            "use the matching lockfile for this project or choose an explicit migration path"
+                .into(),
+        ),
+    });
 }
 
 fn downgrade_update_errors_to_warnings(diagnostics: &mut [Diagnostic]) {

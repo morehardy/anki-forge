@@ -29,7 +29,7 @@ pub use model::{
     BasicNoteType, CustomField, CustomGenerationRule, CustomNote, CustomNoteType, CustomTemplate,
     ProductDocument, ProductNote, ProductNoteType,
 };
-pub use note::Note;
+pub use note::{ImageOcclusionNoteBuilder, Note, ProductNoteError};
 pub use notetype::{Field, FieldKey, NoteType};
 pub use project::{Project, ProjectAddError};
 pub use stock::{

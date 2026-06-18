@@ -10,15 +10,33 @@ pub enum ProductBuildOutcome {
     ReportFailure { json: String, exit_code: i32 },
 }
 
-pub fn run(
-    manifest: &str,
-    product_input: &str,
-    apkg_out: &str,
-    compare_to: Option<&str>,
-    fail_on: Option<&str>,
-    report_json: Option<&str>,
-    output: &str,
-) -> anyhow::Result<ProductBuildOutcome> {
+pub struct ProductBuildRequest<'a> {
+    pub manifest: &'a str,
+    pub product_input: &'a str,
+    pub apkg_out: &'a str,
+    pub compare_to: Option<&'a str>,
+    pub fail_on: Option<&'a str>,
+    pub report_json: Option<&'a str>,
+    pub identity_lockfile: Option<&'a str>,
+    pub write_identity_lockfile: bool,
+    pub update_safety: Option<&'a str>,
+    pub output: &'a str,
+}
+
+pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutcome> {
+    let ProductBuildRequest {
+        manifest,
+        product_input,
+        apkg_out,
+        compare_to,
+        fail_on,
+        report_json,
+        identity_lockfile,
+        write_identity_lockfile,
+        update_safety,
+        output,
+    } = request;
+
     let manifest = crate::manifest::load_manifest(manifest)?;
     crate::manifest::resolve_asset_path(&manifest, "build_report_schema")?;
     let runtime_bundle = anki_forge::runtime::load_bundle_from_manifest(&manifest.path)?;
@@ -43,6 +61,15 @@ pub fn run(
     }
     if let Some(report_json) = report_json {
         options = options.report_json(report_json);
+    }
+    if let Some(identity_lockfile) = identity_lockfile {
+        options = options.identity_lockfile(identity_lockfile);
+    }
+    if write_identity_lockfile {
+        options = options.write_identity_lockfile(true);
+    }
+    if let Some(update_safety) = update_safety {
+        options = options.update_safety(parse_update_safety_mode(update_safety)?);
     }
 
     let result = anki_forge::runtime::build_product_document_with_writer_stack(
@@ -98,6 +125,15 @@ fn parse_risk_level(value: &str) -> anyhow::Result<RiskLevel> {
         "high" => Ok(RiskLevel::High),
         "critical" => Ok(RiskLevel::Critical),
         other => anyhow::bail!("unsupported fail-on level: {other}"),
+    }
+}
+
+fn parse_update_safety_mode(value: &str) -> anyhow::Result<anki_forge::build::UpdateSafetyMode> {
+    match value {
+        "strict" => Ok(anki_forge::build::UpdateSafetyMode::Strict),
+        "report-only" | "report_only" => Ok(anki_forge::build::UpdateSafetyMode::ReportOnly),
+        "disabled" => Ok(anki_forge::build::UpdateSafetyMode::Disabled),
+        other => anyhow::bail!("unsupported update-safety mode: {other}"),
     }
 }
 

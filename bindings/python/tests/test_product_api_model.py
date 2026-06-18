@@ -3,6 +3,12 @@ import pytest
 from anki_forge import Field, GenerationRule, MediaRef, Note, NoteType, Project, Template, ValidationError
 
 
+@pytest.fixture
+def project_media_ref():
+    project = Project("Media")
+    return project.media.add_bytes(source_label="heart.png", data=b"heart", export_as="heart.png")
+
+
 def test_notetype_custom_templates_and_duplicate_validation():
     nt = NoteType.custom("jp")
     assert nt.css(None).css_value is None
@@ -99,6 +105,79 @@ def test_note_media_content_and_cloze_defaults_validate_shape():
         Note("custom").text("front", 123)
     with pytest.raises(ValidationError):
         Note("custom").html("front", object())
+
+
+def test_note_image_occlusion_builder_rejects_missing_stable_id(project_media_ref):
+    with pytest.raises(ValidationError, match="stable id"):
+        Note.image_occlusion(project_media_ref).rect(0, 0, 10, 10).build()
+
+
+def test_note_image_occlusion_builder_rejects_blank_stable_id(project_media_ref):
+    with pytest.raises(ValidationError, match="stable id"):
+        Note.image_occlusion(project_media_ref, stable_id=" ")
+
+
+def test_note_image_occlusion_builder_rejects_bad_rects(project_media_ref):
+    with pytest.raises(ValidationError, match="at least one rect"):
+        Note.image_occlusion(project_media_ref, stable_id="io:empty").build()
+    with pytest.raises(ValidationError, match="positive"):
+        Note.image_occlusion(project_media_ref, stable_id="io:zero").rect(0, 0, 0, 10).build()
+    with pytest.raises(ValidationError, match="non-negative"):
+        Note.image_occlusion(project_media_ref, stable_id="io:negative").rect(-1, 0, 10, 10)
+    with pytest.raises(ValidationError, match="duplicate"):
+        (
+            Note.image_occlusion(project_media_ref, stable_id="io:duplicate")
+            .rect(0, 0, 10, 10)
+            .rect(0, 0, 10, 10)
+            .build()
+        )
+
+
+def test_note_image_occlusion_builder_renders_fields(project_media_ref):
+    note = (
+        Note.image_occlusion(project_media_ref, stable_id="io:1")
+        .mode("hide_one_guess_one")
+        .rect(0, 0, 10, 10)
+        .rect(20, 0, 10, 10)
+        .header("Heart")
+        .back_extra("Identify it")
+        .comments("Review")
+        .tag("io")
+        .build()
+    )
+
+    assert note.note_type_id == "image_occlusion"
+    assert note.stable_id == "io:1"
+    assert note.fields["occlusion"].kind == "html"
+    assert note.fields["occlusion"].value == (
+        "{{c1,2::image-occlusion:rect:left=0:top=0:width=10:height=10}}<br>"
+        "{{c1,2::image-occlusion:rect:left=20:top=0:width=10:height=10}}<br>"
+    )
+    assert note.fields["image"].kind == "image"
+    assert note.fields["image"].media_id == project_media_ref.media_id
+    assert note.tag_values == ["io"]
+
+
+def test_image_occlusion_renderer_matches_rust_expected_strings(project_media_ref):
+    hide_all = (
+        Note.image_occlusion(project_media_ref, stable_id="io:all")
+        .mode("hide_all_guess_one")
+        .rect(10, 20, 30, 40)
+        .build()
+    )
+    hide_one = (
+        Note.image_occlusion(project_media_ref, stable_id="io:one")
+        .mode("hide_one_guess_one")
+        .rect(10, 20, 30, 40)
+        .build()
+    )
+
+    assert hide_all.fields["occlusion"].value == (
+        "{{c1::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
+    )
+    assert hide_one.fields["occlusion"].value == (
+        "{{c1,2::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
+    )
 
 
 def test_media_registry_validates_export_names_and_duplicates(tmp_path):
