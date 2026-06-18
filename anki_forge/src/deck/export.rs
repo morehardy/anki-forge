@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use anyhow::{ensure, Context};
 use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
 
-use crate::writer::{inspect_apkg, inspect_staging};
+use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
 use writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
 
 use super::model::{Deck, Package};
@@ -29,11 +29,11 @@ impl BuildResult {
         &self.staging_manifest_path
     }
 
-    pub fn inspect_staging(&self) -> anyhow::Result<crate::writer::InspectReport> {
+    pub fn inspect_staging(&self) -> anyhow::Result<InspectReport> {
         inspect_staging(&self.staging_manifest_path)
     }
 
-    pub fn inspect_apkg(&self) -> anyhow::Result<crate::writer::InspectReport> {
+    pub fn inspect_apkg(&self) -> anyhow::Result<InspectReport> {
         inspect_apkg(&self.apkg_path)
     }
 }
