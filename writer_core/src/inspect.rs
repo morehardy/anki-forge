@@ -22,8 +22,8 @@ use crate::anki_proto::{
     decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
     CardRequirement, CardRequirementKind, NotetypeKind, OriginalStockKind,
 };
-use crate::apkg::strip_html_preserving_media_filenames;
 use crate::canonical_json::to_canonical_json;
+use crate::card_plan::plan_cards;
 use crate::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::staging::{
     validated_media_output_path, BuildArtifactTarget, ResolvedTemplateTargetDeck,
@@ -488,12 +488,10 @@ fn build_observations(
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
-        for (template_index, template) in notetype.templates.iter().enumerate() {
-            if !template_generates_card(note, notetype, template) {
-                continue;
-            }
+        for planned_card in plan_cards(note, notetype) {
+            let template = &notetype.templates[planned_card.template_index];
             let template_name = template.name.as_str();
-            let card_ord = template.ord.unwrap_or(template_index as u32);
+            let card_ord = planned_card.card_ord;
             let card_key = (note_id.to_string(), card_ord as usize);
             let card_deck_name = if let Some(actual_card_decks) = actual_card_decks {
                 let Some(deck_name) = actual_card_decks.get(&card_key) else {
@@ -686,51 +684,6 @@ fn evidence_component(value: &str) -> String {
         }
     }
     escaped
-}
-
-fn template_generates_card(
-    note: &NormalizedNote,
-    notetype: &NormalizedNotetype,
-    template: &NormalizedTemplate,
-) -> bool {
-    let Some(requirement) = template.generation_requirement.as_ref() else {
-        return true;
-    };
-
-    match requirement.kind.as_str() {
-        "none" => true,
-        "all" => requirement
-            .field_names
-            .iter()
-            .all(|name| note_field_is_nonempty(note, notetype, name)),
-        _ => requirement
-            .field_names
-            .iter()
-            .any(|name| note_field_is_nonempty(note, notetype, name)),
-    }
-}
-
-fn note_field_is_nonempty(
-    note: &NormalizedNote,
-    notetype: &NormalizedNotetype,
-    field_name: &str,
-) -> bool {
-    if !notetype
-        .fields
-        .iter()
-        .any(|field| field.name.as_str() == field_name)
-    {
-        return false;
-    }
-
-    note.fields
-        .get(field_name)
-        .map(|value| {
-            !strip_html_preserving_media_filenames(value)
-                .trim()
-                .is_empty()
-        })
-        .unwrap_or(false)
 }
 
 fn resolve_staging_media(

@@ -221,6 +221,30 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
     let authoring_ir_schema = load_schema(&authoring_ir_schema_path)?;
     let service_envelope_schema = load_schema(&service_envelope_schema_path)?;
     let validation_report_schema = load_schema(&validation_report_schema_path)?;
+    let product_document_v3_schema = if catalog
+        .cases
+        .iter()
+        .any(|case| case.category == "product-v3")
+    {
+        Some(load_schema(&resolve_asset_path(
+            &manifest,
+            "product_document_v3_schema",
+        )?)?)
+    } else {
+        None
+    };
+    let template_bundle_schema = if catalog
+        .cases
+        .iter()
+        .any(|case| case.category == "template-bundle")
+    {
+        Some(load_schema(&resolve_asset_path(
+            &manifest,
+            "template_bundle_schema",
+        )?)?)
+    } else {
+        None
+    };
     let has_phase3_cases = catalog
         .cases
         .iter()
@@ -433,6 +457,32 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                     "phase3 update-safety fixture must declare scenario: {}",
                     case.id
                 );
+            }
+            "product-v3" => {
+                let input_value = load_json_value(&input_path)?;
+                let schema = product_document_v3_schema
+                    .as_ref()
+                    .context("product-v3 fixture schema must be loaded")?;
+                validate_value(schema, &input_value).with_context(|| {
+                    format!(
+                        "product-v3 fixture must satisfy product_document_v3_schema: {}",
+                        case.id
+                    )
+                })?;
+            }
+            "template-bundle" => {
+                let input_value =
+                    serde_json::to_value(load_yaml_model::<serde_yaml::Value>(&input_path)?)
+                        .context("template bundle YAML must convert to JSON")?;
+                let schema = template_bundle_schema
+                    .as_ref()
+                    .context("template-bundle fixture schema must be loaded")?;
+                validate_value(schema, &input_value).with_context(|| {
+                    format!(
+                        "template-bundle fixture must satisfy template_bundle_schema: {}",
+                        case.id
+                    )
+                })?;
             }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;

@@ -42,7 +42,7 @@ fn package_command_emits_a_bundle_artifact_with_manifest_and_contract_assets() {
 
     assert_eq!(
         artifact_path.file_name().and_then(|name| name.to_str()),
-        Some("anki-forge-contract-bundle-0.1.1.tar.gz")
+        Some("anki-forge-contract-bundle-0.2.0.tar.gz")
     );
 
     let extracted_root = extract_artifact(&artifact_path);

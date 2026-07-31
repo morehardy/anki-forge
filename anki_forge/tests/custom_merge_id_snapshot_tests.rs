@@ -248,14 +248,11 @@ fn custom_notetype_rejects_cloze_generation_rule() {
     let mut project = Project::new("Japanese Core")
         .stable_id("jp-core")
         .default_deck("Japanese::Core");
-    project.add_notetype(vocab).expect("add notetype");
-
     let err = project
-        .normalize()
-        .expect_err("custom cloze is out of scope");
-    assert!(
-        err.to_string()
-            .contains("TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE"),
-        "unexpected error: {err}"
+        .add_notetype(vocab)
+        .expect_err("custom Cloze must be declared on the note type");
+    assert_eq!(
+        err.diagnostic().code.as_str(),
+        "TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE"
     );
 }

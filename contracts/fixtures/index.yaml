@@ -181,3 +181,15 @@ cases:
     upgrade_rules:
       - fixture_updates_required
     input: fixtures/update-safety/field-ord-warning.case.yaml
+  - id: product-v3-custom-cloze
+    category: product-v3
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/product-v3/custom-cloze.json
+  - id: template-bundle-custom-cloze
+    category: template-bundle
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/template-bundle/custom-cloze/anki-template.yaml

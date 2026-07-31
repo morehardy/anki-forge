@@ -16,6 +16,7 @@ use crate::anki_proto::{
     default_deck_common_bytes, default_deck_config_bytes, default_deck_kind_bytes,
     encode_field_config, encode_notetype_config, encode_template_config,
 };
+use crate::card_plan::plan_cards;
 use crate::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
 use crate::staging::{
     load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
@@ -457,6 +458,7 @@ fn populate_latest_collection(
     }
 
     let mut note_row_id = 1_i64;
+    let mut card_row_id = 1_i64;
     let mut normalized_tags = std::collections::BTreeSet::new();
     for note in &normalized_ir.notes {
         let ntid = notetype_ids
@@ -498,23 +500,21 @@ fn populate_latest_collection(
         for tag in &note.tags {
             normalized_tags.insert(tag.clone());
         }
-        for (template_index, template) in notetype.templates.iter().enumerate() {
-            if !template_generates_card(notetype, template, &mut stripped_fields) {
-                continue;
-            }
+        for planned_card in plan_cards(note, notetype) {
+            let template = &notetype.templates[planned_card.template_index];
             let target_deck_id = resolve_card_deck_id(note, template, &deck_ids);
-            let card_ord = template.ord.unwrap_or(template_index as u32);
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
-                    note_row * 10 + template_index as i64,
+                    card_row_id,
                     note_row,
                     target_deck_id,
-                    card_ord as i64,
+                    planned_card.card_ord as i64,
                     note_row,
                     "{}"
                 ],
             )?;
+            card_row_id += 1;
         }
         note_row_id += 1;
     }
@@ -728,47 +728,6 @@ fn ordered_notetype_fields(notetype: &NormalizedNotetype) -> Vec<&authoring_core
     let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
     fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
     fields.into_iter().map(|(_, field)| field).collect()
-}
-
-fn template_generates_card(
-    notetype: &NormalizedNotetype,
-    template: &authoring_core::NormalizedTemplate,
-    stripped_fields: &mut StrippedNoteFields<'_>,
-) -> bool {
-    let Some(requirement) = template.generation_requirement.as_ref() else {
-        return true;
-    };
-
-    match requirement.kind.as_str() {
-        "none" => true,
-        "all" => requirement
-            .field_names
-            .iter()
-            .all(|name| note_field_is_nonempty(notetype, stripped_fields, name)),
-        _ => requirement
-            .field_names
-            .iter()
-            .any(|name| note_field_is_nonempty(notetype, stripped_fields, name)),
-    }
-}
-
-fn note_field_is_nonempty(
-    notetype: &NormalizedNotetype,
-    stripped_fields: &mut StrippedNoteFields<'_>,
-    field_name: &str,
-) -> bool {
-    if !notetype
-        .fields
-        .iter()
-        .any(|field| field.name.as_str() == field_name)
-    {
-        return false;
-    }
-
-    stripped_fields
-        .get(field_name)
-        .map(|value| !value.trim().is_empty())
-        .unwrap_or(false)
 }
 
 fn field_checksum(text: &str) -> u32 {

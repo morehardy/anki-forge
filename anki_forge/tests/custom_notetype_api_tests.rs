@@ -42,3 +42,65 @@ fn custom_notetype_builder_records_keys_and_identity_recipe() {
         vec![FieldKey::new("expr")]
     );
 }
+
+#[test]
+fn project_rejects_template_field_references_missing_from_notetype() {
+    let note_type = NoteType::custom("jp-vocab")
+        .field(Field::new("Expression").key("expr").identity().sort())
+        .template(
+            Template::new("Recognition")
+                .key("recognition")
+                .front("{{TypoField}}")
+                .back("{{Expression}}"),
+        )
+        .identity(IdentityRecipe::fields(["expr"]));
+    let mut project = Project::new("Japanese");
+
+    let error = project
+        .add_notetype(note_type)
+        .expect_err("unknown template field should be rejected");
+
+    assert_eq!(
+        error.diagnostic().code.as_str(),
+        "TEMPLATE.RENDER_FIELD_UNKNOWN"
+    );
+    assert!(error.diagnostic().message.contains("TypoField"));
+    assert_eq!(
+        error
+            .diagnostic()
+            .source
+            .as_ref()
+            .map(|source| source.as_str()),
+        Some("project.note_types[0].templates[\"Recognition\"].front")
+    );
+}
+
+#[test]
+fn project_validate_preserves_unknown_filter_as_a_warning() {
+    let note_type = NoteType::custom("portable-template")
+        .field(Field::new("Front").key("front").identity())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front("{{addon_filter:Front}}")
+                .back("{{Front}}"),
+        )
+        .identity(IdentityRecipe::fields(["front"]));
+    let mut project = Project::new("Portable");
+    project
+        .add_notetype(note_type)
+        .expect("unknown filters are portability warnings");
+
+    let report = project.validate();
+    let diagnostic = report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "TEMPLATE.FILTER_UNKNOWN")
+        .expect("unknown filter warning");
+
+    assert_eq!(diagnostic.severity, Severity::Warning);
+    assert_eq!(
+        diagnostic.source.as_ref().map(|source| source.as_str()),
+        Some("project.note_types[\"portable-template\"].templates[\"Card\"].front")
+    );
+}

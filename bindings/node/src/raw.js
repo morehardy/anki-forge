@@ -34,6 +34,34 @@ function buildArgs(command, request, runtime) {
         '--output',
         request.output ?? 'contract-json',
       ];
+    case 'product-build': {
+      const args = [
+        ...runtime.launcherPrefix,
+        'product-build',
+        '--manifest',
+        runtime.manifestPath,
+        '--product-input',
+        request.inputPath,
+        '--apkg-out',
+        request.apkgOut,
+      ];
+      for (const [flag, value] of [
+        ['--compare-to', request.compareTo],
+        ['--fail-on', request.failOn],
+        ['--report-json', request.reportJson],
+        ['--identity-lockfile', request.identityLockfile],
+        ['--update-safety', request.updateSafety],
+      ]) {
+        if (value != null) {
+          args.push(flag, value);
+        }
+      }
+      if (request.writeIdentityLockfile) {
+        args.push('--write-identity-lockfile');
+      }
+      args.push('--output', request.output ?? 'contract-json');
+      return args;
+    }
     case 'inspect':
       return request.stagingPath
         ? [

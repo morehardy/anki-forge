@@ -130,6 +130,43 @@ impl Project {
         Ok(self)
     }
 
+    pub fn import_template_bundle(
+        &mut self,
+        root: impl AsRef<std::path::Path>,
+    ) -> Result<&mut Self, crate::product::TemplateBundleError> {
+        let loaded = crate::product::template_bundle::load_template_bundle(root)?;
+        self.validate_notetype_for_add(&loaded.note_type)
+            .map_err(|error| {
+                crate::product::TemplateBundleError::new(
+                    error.diagnostic().code.as_str(),
+                    error.diagnostic().message.clone(),
+                    error
+                        .diagnostic()
+                        .source
+                        .as_ref()
+                        .map(|source| std::path::PathBuf::from(source.as_str())),
+                )
+            })?;
+
+        let mut staged_media = self.media.clone();
+        for asset in loaded.assets {
+            staged_media
+                .add_file(&asset.path)
+                .and_then(|pending| pending.export_as(&asset.export_as))
+                .map_err(|error| {
+                    crate::product::TemplateBundleError::new(
+                        "TEMPLATE.BUNDLE_ASSET_INVALID",
+                        error.to_string(),
+                        Some(asset.path.clone()),
+                    )
+                })?;
+        }
+
+        self.note_types.push(loaded.note_type);
+        self.media = staged_media;
+        Ok(self)
+    }
+
     pub fn media_mut(&mut self) -> &mut crate::product::MediaRegistry {
         &mut self.media
     }
@@ -310,6 +347,48 @@ impl Project {
                 });
             }
 
+            let field_names = note_type
+                .fields()
+                .iter()
+                .map(|field| field.name())
+                .collect::<Vec<_>>();
+            for template in note_type.templates() {
+                for (location, source) in [
+                    ("front", Some(template.front_source())),
+                    ("back", Some(template.back_source())),
+                    ("browser_front", template.browser_front_source()),
+                    ("browser_back", template.browser_back_source()),
+                ] {
+                    let Some(source) = source else {
+                        continue;
+                    };
+                    for issue in
+                        crate::product::TemplateEngine::validate(source.as_str(), &field_names)
+                            .into_iter()
+                            .filter(|issue| {
+                                issue.severity == crate::product::TemplateIssueSeverity::Warning
+                            })
+                    {
+                        diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new(issue.code),
+                            severity: Severity::Warning,
+                            domain: None,
+                            stage: None,
+                            message: issue.message,
+                            source: Some(SourcePath::new(format!(
+                                "{}.templates[{:?}].{location}",
+                                note_type_source,
+                                template.name()
+                            ))),
+                            help: Some(format!(
+                                "replace or explicitly support the filter near byte offset {}",
+                                issue.byte_offset
+                            )),
+                        });
+                    }
+                }
+            }
+
             for field in note_type.fields() {
                 if field.key_auto_derived() {
                     diagnostics.push(Diagnostic {
@@ -432,6 +511,72 @@ impl Project {
             .iter()
             .map(|field| field.key_ref().as_str())
             .collect::<BTreeSet<_>>();
+        let field_names = note_type
+            .fields()
+            .iter()
+            .map(|field| field.name())
+            .collect::<Vec<_>>();
+
+        if let crate::product::NoteTypeKind::Cloze { field } = note_type.kind() {
+            let Some(cloze_field) = note_type
+                .fields()
+                .iter()
+                .find(|candidate| candidate.key_ref() == field)
+            else {
+                return Err(project_add_error(
+                    "TEMPLATE.CLOZE_FIELD_UNKNOWN",
+                    format!(
+                        "custom Cloze note type '{note_type_id}' references unknown field key '{}'",
+                        field.as_str()
+                    ),
+                    notetype_source,
+                    "declare the Cloze field on the custom NoteType",
+                ));
+            };
+            if note_type.templates().len() != 1 {
+                return Err(project_add_error(
+                    "TEMPLATE.CLOZE_TEMPLATE_COUNT_INVALID",
+                    format!(
+                        "custom Cloze note type '{note_type_id}' must declare exactly one template"
+                    ),
+                    notetype_source,
+                    "keep one card template for the custom Cloze note type",
+                ));
+            }
+            let template = &note_type.templates()[0];
+            let referenced =
+                crate::product::TemplateEngine::cloze_fields(template.front_source().as_str());
+            if !referenced.contains(cloze_field.name()) {
+                return Err(project_add_error(
+                    "TEMPLATE.CLOZE_FILTER_REQUIRED",
+                    format!(
+                        "custom Cloze template '{}' must render field '{}' with the cloze filter",
+                        template.name(),
+                        cloze_field.name()
+                    ),
+                    format!(
+                        "project.note_types[{notetype_index}].templates[{:?}].front",
+                        template.name()
+                    ),
+                    format!("add {{{{cloze:{}}}}}", cloze_field.name()),
+                ));
+            }
+            if referenced.iter().any(|name| name != cloze_field.name()) {
+                return Err(project_add_error(
+                    "TEMPLATE.CLOZE_FIELD_MISMATCH",
+                    format!(
+                        "custom Cloze template '{}' renders a field other than declared Cloze field '{}'",
+                        template.name(),
+                        cloze_field.name()
+                    ),
+                    format!(
+                        "project.note_types[{notetype_index}].templates[{:?}].front",
+                        template.name()
+                    ),
+                    "use the declared Cloze field in every cloze filter".to_string(),
+                ));
+            }
+        }
 
         let mut seen_template_keys = BTreeMap::<&str, &str>::new();
         let mut seen_template_names = BTreeSet::<&str>::new();
@@ -468,6 +613,26 @@ impl Project {
             }
 
             for field_key in generation_rule_field_keys(template.generation_rule()) {
+                if matches!(
+                    (note_type.kind(), template.generation_rule()),
+                    (
+                        crate::product::NoteTypeKind::Normal,
+                        crate::product::GenerationRule::Cloze { .. }
+                    )
+                ) {
+                    return Err(project_add_error(
+                        "TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE",
+                        format!(
+                            "template '{}' uses a Cloze generation rule on normal note type '{note_type_id}'",
+                            template.name()
+                        ),
+                        format!(
+                            "project.note_types[{notetype_index}].templates[{:?}]",
+                            template.name()
+                        ),
+                        "construct the note type with NoteType::custom_cloze",
+                    ));
+                }
                 if !field_keys.contains(field_key) {
                     return Err(project_add_error(
                         "TEMPLATE.FIELD_UNKNOWN",
@@ -480,6 +645,38 @@ impl Project {
                             template.name()
                         ),
                         "use field keys declared on the custom NoteType",
+                    ));
+                }
+            }
+
+            let template_source = format!(
+                "project.note_types[{notetype_index}].templates[{:?}]",
+                template.name()
+            );
+            for (location, source) in [
+                ("front", Some(template.front_source())),
+                ("back", Some(template.back_source())),
+                ("browser_front", template.browser_front_source()),
+                ("browser_back", template.browser_back_source()),
+            ] {
+                let Some(source) = source else {
+                    continue;
+                };
+                if let Some(issue) =
+                    crate::product::TemplateEngine::validate(source.as_str(), &field_names)
+                        .into_iter()
+                        .find(|issue| {
+                            issue.severity == crate::product::TemplateIssueSeverity::Error
+                        })
+                {
+                    return Err(project_add_error(
+                        issue.code,
+                        issue.message,
+                        format!("{template_source}.{location}"),
+                        format!(
+                            "fix the template expression near byte offset {}",
+                            issue.byte_offset
+                        ),
                     ));
                 }
             }
@@ -1858,12 +2055,24 @@ impl Project {
                 templates: note_type
                     .templates()
                     .iter()
-                    .map(|template| crate::product::model::CustomTemplate {
-                        name: template.name().to_string(),
-                        key: Some(template.key_ref().as_str().to_string()),
-                        question_format: template.front_source().as_str().to_string(),
-                        answer_format: template.back_source().as_str().to_string(),
-                        generation_rule: Some(custom_generation_rule(template.generation_rule())),
+                    .map(|template| {
+                        let generation_rule = match note_type.kind() {
+                            crate::product::NoteTypeKind::Normal => {
+                                custom_generation_rule(template.generation_rule())
+                            }
+                            crate::product::NoteTypeKind::Cloze { field } => {
+                                crate::product::model::CustomGenerationRule::Cloze {
+                                    field: field.as_str().to_string(),
+                                }
+                            }
+                        };
+                        crate::product::model::CustomTemplate {
+                            name: template.name().to_string(),
+                            key: Some(template.key_ref().as_str().to_string()),
+                            question_format: template.front_source().as_str().to_string(),
+                            answer_format: template.back_source().as_str().to_string(),
+                            generation_rule: Some(generation_rule),
+                        }
                     })
                     .collect(),
                 css: note_type.css_ref().map(ToOwned::to_owned),
@@ -4031,7 +4240,11 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
             domain: None,
             stage: None,
             message: diagnostic.message,
-            source: Some(SourcePath::new("project.lower")),
+            source: Some(SourcePath::new(
+                diagnostic
+                    .source_path
+                    .unwrap_or_else(|| "project.lower".to_string()),
+            )),
             help: None,
         })
         .collect()
@@ -4497,14 +4710,17 @@ mod tests {
             LoweringDiagnostic {
                 code: "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE",
                 message: "missing notetype".into(),
+                source_path: None,
             },
             LoweringDiagnostic {
                 code: "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
                 message: "missing asset".into(),
+                source_path: None,
             },
             LoweringDiagnostic {
                 code: "PHASE5A.ADVISORY",
                 message: "advisory".into(),
+                source_path: None,
             },
         ]);
 

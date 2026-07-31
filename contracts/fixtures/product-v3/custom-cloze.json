@@ -1,0 +1,44 @@
+{
+  "product_document_version": "product-v3",
+  "document_id": "contract-custom-cloze",
+  "default_deck_name": "Languages",
+  "note_types": [
+    {
+      "kind": "custom",
+      "note_type_kind": "cloze",
+      "cloze_field": "text",
+      "id": "language-cloze",
+      "name": "Language Cloze",
+      "fields": [
+        {"name": "Sentence", "key": "text", "identity": true, "sort": true, "required": true},
+        {"name": "Extra", "key": "extra"}
+      ],
+      "templates": [
+        {
+          "name": "Cloze",
+          "key": "cloze",
+          "front": "{{cloze:Sentence}}",
+          "back": "{{cloze:Sentence}}<br>{{Extra}}",
+          "browser_front": "{{text:Sentence}}",
+          "target_deck": "Languages::Cloze"
+        }
+      ],
+      "identity": {"kind": "fields", "fields": ["text"]},
+      "css": ".cloze { color: #c00; }"
+    }
+  ],
+  "notes": [
+    {
+      "kind": "custom",
+      "note_type_id": "language-cloze",
+      "stable_id": "contract:cloze:1",
+      "deck_name": "Languages",
+      "fields": {
+        "text": {"kind": "text", "value": "{{c1::Madrid}} is in {{c2::Spain}}"},
+        "extra": {"kind": "text", "value": "geography"}
+      },
+      "tags": ["contract"]
+    }
+  ],
+  "media": []
+}

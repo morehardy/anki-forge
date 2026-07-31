@@ -204,6 +204,47 @@ fn lower_legacy_product_document(
                     product_diagnostics.extend(duplicate_key_diagnostics);
                     continue;
                 }
+                let template_field_names = custom
+                    .fields
+                    .iter()
+                    .map(|field| field.name.as_str())
+                    .collect::<Vec<_>>();
+                let mut template_sources_valid = true;
+                for template in &custom.templates {
+                    for (location, source) in [
+                        ("front", template.question_format.as_str()),
+                        ("back", template.answer_format.as_str()),
+                    ] {
+                        for issue in
+                            crate::product::TemplateEngine::validate(source, &template_field_names)
+                        {
+                            let source_path = Some(format!(
+                                "project.note_types[{:?}].templates[{:?}].{location}",
+                                custom.id, template.name
+                            ));
+                            match issue.severity {
+                                crate::product::TemplateIssueSeverity::Error => {
+                                    template_sources_valid = false;
+                                    product_diagnostics.push(ProductDiagnostic {
+                                        code: issue.code,
+                                        message: issue.message,
+                                        source_path,
+                                    });
+                                }
+                                crate::product::TemplateIssueSeverity::Warning => {
+                                    lowering_diagnostics.push(LoweringDiagnostic {
+                                        code: issue.code,
+                                        message: issue.message,
+                                        source_path,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                if !template_sources_valid {
+                    continue;
+                }
 
                 let helpers = document.helpers_for(&custom.id);
                 if !helpers.is_empty() {
@@ -224,6 +265,16 @@ fn lower_legacy_product_document(
                         (key, field.name.clone())
                     })
                     .collect::<BTreeMap<_, _>>();
+                let custom_kind = if custom.templates.iter().any(|template| {
+                    matches!(
+                        template.generation_rule,
+                        Some(crate::product::model::CustomGenerationRule::Cloze { .. })
+                    )
+                }) {
+                    "cloze"
+                } else {
+                    "normal"
+                };
                 let fields = custom
                     .fields
                     .iter()
@@ -294,7 +345,7 @@ fn lower_legacy_product_document(
 
                 let notetype = AuthoringNotetype {
                     id: custom.id.clone(),
-                    kind: "normal".into(),
+                    kind: custom_kind.into(),
                     name: custom.name.clone(),
                     original_stock_kind: None,
                     original_id: None,
@@ -466,6 +517,7 @@ fn lower_legacy_product_document(
                     "font binding for note type '{}' could not resolve a lowered notetype",
                     binding.note_type_id
                 ),
+                source_path: None,
             });
             continue;
         };
@@ -477,6 +529,7 @@ fn lower_legacy_product_document(
                     "font binding for note type '{}' would reference unregistered bundled asset '{}'",
                     binding.note_type_id, binding.filename
                 ),
+                source_path: None,
             });
             continue;
         };
@@ -598,7 +651,61 @@ fn lower_product_v2_document(
                         custom.source_path.as_deref(),
                     );
                 }
-                let lowered = lower_product_v2_custom_notetype(&mut plan, custom);
+                let diagnostics_before = plan.product_diagnostics.len();
+                if v2.version >= 3 {
+                    validate_product_v3_custom_kind(&mut plan, custom);
+                }
+                if plan.product_diagnostics.len() > diagnostics_before {
+                    continue;
+                }
+                let template_field_names = custom
+                    .fields
+                    .iter()
+                    .map(|field| field.name.as_str())
+                    .collect::<Vec<_>>();
+                let diagnostics_before = plan.product_diagnostics.len();
+                for template in &custom.templates {
+                    for (location, source) in [
+                        ("front", template.front.as_str()),
+                        ("back", template.back.as_str()),
+                    ] {
+                        for issue in
+                            crate::product::TemplateEngine::validate(source, &template_field_names)
+                        {
+                            let source_path = template
+                                .source_path
+                                .as_deref()
+                                .map(|path| format!("{path}.{location}"))
+                                .or_else(|| {
+                                    Some(format!(
+                                        "project.note_types[{index}].templates[{:?}].{location}",
+                                        template.key
+                                    ))
+                                });
+                            match issue.severity {
+                                crate::product::TemplateIssueSeverity::Error => {
+                                    push_product_diagnostic_at(
+                                        &mut plan,
+                                        issue.code,
+                                        issue.message,
+                                        source_path.as_deref(),
+                                    );
+                                }
+                                crate::product::TemplateIssueSeverity::Warning => {
+                                    plan.lowering_diagnostics.push(LoweringDiagnostic {
+                                        code: issue.code,
+                                        message: issue.message,
+                                        source_path,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                if plan.product_diagnostics.len() > diagnostics_before {
+                    continue;
+                }
+                let lowered = lower_product_v2_custom_notetype(&mut plan, custom, v2.version >= 3);
                 record_v2_notetype_source_paths(
                     &mut plan.source_map,
                     &lowered,
@@ -775,6 +882,7 @@ fn lower_product_v2_stock_notetype(
 fn lower_product_v2_custom_notetype(
     plan: &mut LoweringPlan,
     custom: &ProductCustomNoteTypeV2,
+    allow_custom_cloze: bool,
 ) -> AuthoringNotetype {
     let field_name_by_key = custom
         .fields
@@ -796,43 +904,61 @@ fn lower_product_v2_custom_notetype(
             sort: field.sort,
         })
         .collect();
+    let custom_cloze_field = allow_custom_cloze
+        .then_some(custom.note_type_kind.as_deref())
+        .flatten()
+        .filter(|kind| *kind == "cloze")
+        .and(custom.cloze_field.as_deref());
     let templates = custom
         .templates
         .iter()
         .enumerate()
-        .map(|(ord, template)| AuthoringTemplate {
-            name: template.name.clone(),
-            ord: Some(ord as u32),
-            config_id: Some(crate::product::stable_config_id(
-                "template",
-                &custom.id,
-                &template.key,
-            )),
-            question_format: lower_product_v2_generation_rule_front(
-                plan,
-                &custom.id,
-                &template.name,
-                &template.front,
-                template.generation_rule.as_ref(),
-                template.source_path.as_deref(),
-                &field_name_by_key,
-            ),
-            answer_format: template.back.clone(),
-            browser_question_format: None,
-            browser_answer_format: None,
-            target_deck_name: None,
-            browser_font_name: None,
-            browser_font_size: None,
-            generation_requirement: product_v2_generation_requirement(
-                template.generation_rule.as_ref(),
-                &field_name_by_key,
-            ),
+        .map(|(ord, template)| {
+            let implicit_cloze_rule =
+                custom_cloze_field.map(|field| ProductGenerationRuleV2::Cloze {
+                    field: field.to_string(),
+                });
+            let generation_rule = implicit_cloze_rule
+                .as_ref()
+                .or(template.generation_rule.as_ref());
+            AuthoringTemplate {
+                name: template.name.clone(),
+                ord: Some(ord as u32),
+                config_id: Some(crate::product::stable_config_id(
+                    "template",
+                    &custom.id,
+                    &template.key,
+                )),
+                question_format: lower_product_v2_generation_rule_front(
+                    plan,
+                    &custom.id,
+                    &template.name,
+                    &template.front,
+                    generation_rule,
+                    template.source_path.as_deref(),
+                    &field_name_by_key,
+                ),
+                answer_format: template.back.clone(),
+                browser_question_format: template.browser_front.clone(),
+                browser_answer_format: template.browser_back.clone(),
+                target_deck_name: template.target_deck.clone(),
+                browser_font_name: None,
+                browser_font_size: None,
+                generation_requirement: product_v2_generation_requirement(
+                    generation_rule,
+                    &field_name_by_key,
+                ),
+            }
         })
         .collect();
 
     AuthoringNotetype {
         id: custom.id.clone(),
-        kind: "normal".into(),
+        kind: if custom_cloze_field.is_some() {
+            "cloze".into()
+        } else {
+            "normal".into()
+        },
         name: custom.name.clone(),
         original_stock_kind: None,
         original_id: None,
@@ -840,6 +966,101 @@ fn lower_product_v2_custom_notetype(
         templates: Some(templates),
         css: Some(custom.css.clone().unwrap_or_default()),
         field_metadata: Vec::new(),
+    }
+}
+
+fn validate_product_v3_custom_kind(plan: &mut LoweringPlan, custom: &ProductCustomNoteTypeV2) {
+    let source_path = custom.source_path.as_deref();
+    match custom.note_type_kind.as_deref().unwrap_or("normal") {
+        "normal" => {
+            if custom.cloze_field.is_some() {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_FIELD_UNEXPECTED",
+                    format!(
+                        "normal custom note type '{}' must not declare cloze_field",
+                        custom.id
+                    ),
+                    source_path,
+                );
+            }
+        }
+        "cloze" => {
+            let Some(cloze_field) = custom.cloze_field.as_deref() else {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_FIELD_REQUIRED",
+                    format!(
+                        "cloze custom note type '{}' requires cloze_field",
+                        custom.id
+                    ),
+                    source_path,
+                );
+                return;
+            };
+            let Some(field_name) = custom
+                .fields
+                .iter()
+                .find(|field| field.key == cloze_field)
+                .map(|field| field.name.as_str())
+            else {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_FIELD_UNKNOWN",
+                    format!(
+                        "cloze custom note type '{}' references unknown field key '{}'",
+                        custom.id, cloze_field
+                    ),
+                    source_path,
+                );
+                return;
+            };
+            if custom.templates.len() != 1 {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_TEMPLATE_COUNT_INVALID",
+                    format!(
+                        "cloze custom note type '{}' must declare exactly one template",
+                        custom.id
+                    ),
+                    source_path,
+                );
+                return;
+            }
+            let template = &custom.templates[0];
+            let cloze_fields = crate::product::TemplateEngine::cloze_fields(&template.front);
+            if !cloze_fields.iter().any(|field| field == field_name) {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_FILTER_REQUIRED",
+                    format!(
+                        "cloze template '{}' must render field '{}' with the cloze filter",
+                        template.name, field_name
+                    ),
+                    template.source_path.as_deref().or(source_path),
+                );
+            }
+            if let Some(other_field) = cloze_fields.iter().find(|field| *field != field_name) {
+                push_product_diagnostic_at(
+                    plan,
+                    "PRODUCT.CLOZE_FIELD_MISMATCH",
+                    format!(
+                        "cloze template '{}' renders '{}' instead of declared field '{}'",
+                        template.name, other_field, field_name
+                    ),
+                    template.source_path.as_deref().or(source_path),
+                );
+            }
+        }
+        kind => push_product_diagnostic_at(
+            plan,
+            "PRODUCT.NOTE_TYPE_KIND_UNSUPPORTED",
+            format!(
+                "custom note type '{}' uses unsupported note_type_kind '{}'",
+                custom.id, kind
+            ),
+            source_path,
+        ),
     }
 }
 
@@ -946,8 +1167,13 @@ fn product_v2_generation_requirement(
                     .collect(),
             })
         }
+        Some(ProductGenerationRuleV2::Cloze { field }) => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "cloze".into(),
+                field_names: field_name_by_key.get(field).cloned().into_iter().collect(),
+            })
+        }
         Some(ProductGenerationRuleV2::AnkiDefault)
-        | Some(ProductGenerationRuleV2::Cloze { .. })
         | Some(ProductGenerationRuleV2::Unknown(_))
         | None => None,
     }
@@ -1800,14 +2026,9 @@ fn lower_generation_rule_front(
                 &field_names,
             ))
         }
-        crate::product::model::CustomGenerationRule::Cloze { .. } => Err(ProductDiagnostic {
-            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE",
-            message: format!(
-                "custom normal note type '{}' template '{}' cannot use cloze generation",
-                note_type_id, template.name
-            ),
-            source_path: None,
-        }),
+        crate::product::model::CustomGenerationRule::Cloze { .. } => {
+            Ok(template.question_format.clone())
+        }
     }
 }
 
@@ -1834,14 +2055,18 @@ fn custom_generation_requirement(
             }))
         }
         Some(crate::product::model::CustomGenerationRule::AnkiDefault) | None => Ok(None),
-        Some(crate::product::model::CustomGenerationRule::Cloze { .. }) => Err(ProductDiagnostic {
-            code: "TEMPLATE.CLOZE_RULE_REQUIRES_STOCK_CLOZE",
-            message: format!(
-                "custom normal note type '{}' template '{}' cannot use cloze generation",
-                note_type_id, template.name
-            ),
-            source_path: None,
-        }),
+        Some(crate::product::model::CustomGenerationRule::Cloze { field }) => {
+            let field_names = generation_field_names(
+                note_type_id,
+                template,
+                std::slice::from_ref(field),
+                field_name_by_key,
+            )?;
+            Ok(Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "cloze".into(),
+                field_names,
+            }))
+        }
     }
 }
 

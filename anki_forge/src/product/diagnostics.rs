@@ -49,6 +49,7 @@ impl ProductDiagnostic {
 pub struct LoweringDiagnostic {
     pub code: &'static str,
     pub message: String,
+    pub source_path: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

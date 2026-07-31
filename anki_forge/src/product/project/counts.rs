@@ -1,5 +1,3 @@
-use std::collections::{BTreeMap, BTreeSet};
-
 use crate::build::InspectSummary;
 
 pub(super) fn card_count_from_inspect_or_fallback(
@@ -14,62 +12,13 @@ pub(super) fn card_count_from_inspect_or_fallback(
 pub(super) fn count_phase1_cards_without_inspect(
     normalized: &authoring_core::NormalizedIr,
 ) -> usize {
-    let templates_by_notetype = normalized
-        .notetypes
-        .iter()
-        .map(|notetype| {
-            let template_count = if notetype.kind == "cloze" {
-                0
-            } else {
-                notetype
-                    .templates
-                    .iter()
-                    .filter(|template| {
-                        !template.question_format.trim().is_empty()
-                            && !template.answer_format.trim().is_empty()
-                    })
-                    .count()
-            };
-            (
-                notetype.id.as_str(),
-                (notetype.kind.as_str(), template_count),
-            )
-        })
-        .collect::<BTreeMap<_, _>>();
-    normalized
-        .notes
-        .iter()
-        .map(|note| {
-            let Some((kind, template_count)) = templates_by_notetype.get(note.notetype_id.as_str())
-            else {
-                return 0;
-            };
-            if *kind == "cloze" {
-                distinct_cloze_ords(note.fields.values().map(String::as_str))
-            } else {
-                *template_count
-            }
-        })
-        .sum()
-}
-
-fn distinct_cloze_ords<'a>(fields: impl Iterator<Item = &'a str>) -> usize {
-    let mut ords = BTreeSet::new();
-    for value in fields {
-        for part in value.split("{{c").skip(1) {
-            let end = part
-                .find(|ch: char| !ch.is_ascii_digit())
-                .unwrap_or(part.len());
-            if end > 0 {
-                ords.insert(&part[..end]);
-            }
-        }
-    }
-    ords.len()
+    writer_core::card_plan::count_cards(normalized)
 }
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use super::*;
 
     fn normalized_with_one_fallback_card() -> authoring_core::NormalizedIr {

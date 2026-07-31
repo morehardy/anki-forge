@@ -49,6 +49,61 @@ def test_document_id_defaults_to_project_name_without_slugging():
     assert project.to_product_document()["document_id"] == "Japanese::Core"
 
 
+def test_custom_cloze_project_serializes_product_v3_note_type_kind():
+    note_type = (
+        NoteType.custom_cloze("language-cloze", "text")
+        .field(Field("Sentence", key="text", identity=True, sort=True))
+        .field(Field("Extra", key="extra"))
+        .template(
+            Template(
+                "Cloze",
+                key="cloze",
+                front="{{cloze:Sentence}}",
+                back="{{cloze:Sentence}}<br>{{Extra}}",
+            )
+        )
+    )
+    project = (
+        Project("Custom Cloze", stable_id="custom-cloze")
+        .add_notetype(note_type)
+        .add_note(
+            Note("language-cloze", stable_id="custom:1")
+            .text("text", "{{c1::Madrid}} is in {{c2::Spain}}")
+            .text("extra", "geography")
+        )
+    )
+
+    document = project.to_product_document()
+
+    assert document["product_document_version"] == "product-v3"
+    assert document["note_types"][0]["note_type_kind"] == "cloze"
+    assert document["note_types"][0]["cloze_field"] == "text"
+
+
+def test_custom_template_serializes_browser_templates_and_target_deck():
+    note_type = (
+        NoteType.custom("portable")
+        .field(Field("Front", key="front", identity=True))
+        .template(
+            Template(
+                "Card",
+                "{{Front}}",
+                "{{FrontSide}}",
+                key="card",
+                browser_front="{{text:Front}}",
+                browser_back="{{Front}}",
+                target_deck="Languages::Spanish",
+            )
+        )
+    )
+    document = Project("Portable").add_notetype(note_type).to_product_document()
+    template = document["note_types"][0]["templates"][0]
+
+    assert template["browser_front"] == "{{text:Front}}"
+    assert template["browser_back"] == "{{Front}}"
+    assert template["target_deck"] == "Languages::Spanish"
+
+
 def test_custom_identity_missing_stable_id_fast_fails():
     nt = NoteType.custom("custom").field(Field("Front", key="front"))
     project = Project("Deck").add_notetype(nt).add_note(Note("custom").text("front", "x"))

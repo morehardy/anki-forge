@@ -367,7 +367,7 @@ fn summary_command_prints_bundle_version_and_public_axis() {
     );
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    assert!(stdout.contains("bundle_version: 0.1.1"), "stdout: {stdout}");
+    assert!(stdout.contains("bundle_version: 0.2.0"), "stdout: {stdout}");
     assert!(
         stdout.contains("public_axis: bundle_version"),
         "stdout: {stdout}"

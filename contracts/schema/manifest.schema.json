@@ -93,7 +93,10 @@
         "identity_lockfile_schema",
         "update_safety_summary_schema",
         "build_report_schema",
-        "identity_update_safety_semantics"
+        "identity_update_safety_semantics",
+        "product_document_v3_schema",
+        "template_bundle_schema",
+        "template_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -286,6 +289,18 @@
           "minLength": 1
         },
         "identity_update_safety_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product_document_v3_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "template_bundle_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "template_semantics": {
           "type": "string",
           "minLength": 1
         }

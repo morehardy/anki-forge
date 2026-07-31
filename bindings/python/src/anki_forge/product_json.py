@@ -201,7 +201,7 @@ def template_to_json(note_type_id: str, template: Template) -> dict[str, object]
         raise ValidationError("template key must not be None after validation")
     if template.generate_when is None:
         raise ValidationError("template generation rule must not be None after validation")
-    return {
+    result: dict[str, object] = {
         "name": template.name,
         "key": template.key,
         "front": template.front,
@@ -209,6 +209,13 @@ def template_to_json(note_type_id: str, template: Template) -> dict[str, object]
         "generation_rule": generation_rule_to_json(template.generate_when),
         "source_path": _template_source_path(note_type_id, template.key),
     }
+    if template.browser_front is not None:
+        result["browser_front"] = template.browser_front
+    if template.browser_back is not None:
+        result["browser_back"] = template.browser_back
+    if template.target_deck is not None:
+        result["target_deck"] = template.target_deck
+    return result
 
 
 def custom_notetype_json(note_type: NoteType) -> dict[str, object]:
@@ -221,6 +228,9 @@ def custom_notetype_json(note_type: NoteType) -> dict[str, object]:
         "fields": fields,
         "templates": templates,
     }
+    if note_type.kind_value == "cloze":
+        result["note_type_kind"] = "cloze"
+        result["cloze_field"] = note_type.cloze_field
     identity_fields: list[str] = []
     for field in note_type.fields:
         if not field.identity:

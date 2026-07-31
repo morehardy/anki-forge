@@ -22,6 +22,19 @@ const CONTRACT_RULES = {
     ],
     versionFields: [['tool_contract_version', 'phase3-v1']],
   },
+  'product-build': {
+    kind: 'anki-forge-build-report',
+    required: [
+      'kind',
+      'schema_version',
+      'status',
+      'comparison',
+      'counts',
+      'diagnostics',
+      'policy',
+    ],
+    versionFields: [['schema_version', 'phase4-build-report-v2']],
+  },
   inspect: {
     kind: 'inspect-report',
     required: [

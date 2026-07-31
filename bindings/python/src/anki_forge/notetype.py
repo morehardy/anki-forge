@@ -142,12 +142,18 @@ class Template:
     back: str
     key: str | None = None
     generate_when: GenerationRule | None = None
+    browser_front: str | None = None
+    browser_back: str | None = None
+    target_deck: str | None = None
 
     def __post_init__(self) -> None:
         name = _validate_non_empty(self.name, "template name")
         key = _validate_id(self.key, "template key") if self.key is not None else _slug(name)
         front = _validate_non_empty(self.front, "template front")
         back = _validate_non_empty(self.back, "template back")
+        browser_front = _validate_optional_non_empty(self.browser_front, "browser front")
+        browser_back = _validate_optional_non_empty(self.browser_back, "browser back")
+        target_deck = _validate_optional_non_empty(self.target_deck, "target deck")
         generate_when = self.generate_when or GenerationRule.anki_default()
         if not isinstance(generate_when, GenerationRule):
             raise ValidationError("template generate_when must be a GenerationRule")
@@ -155,6 +161,9 @@ class Template:
         object.__setattr__(self, "key", key)
         object.__setattr__(self, "front", front)
         object.__setattr__(self, "back", back)
+        object.__setattr__(self, "browser_front", browser_front)
+        object.__setattr__(self, "browser_back", browser_back)
+        object.__setattr__(self, "target_deck", target_deck)
         object.__setattr__(self, "generate_when", generate_when)
 
 
@@ -166,6 +175,8 @@ class NoteType:
     templates: list[Template] = field(default_factory=list)
     css_value: str | None = None
     custom_value: bool = True
+    kind_value: str = "normal"
+    cloze_field: str | None = None
 
     def __setattr__(self, name: str, value: object) -> None:
         if name == "id" and "id" in self.__dict__:
@@ -181,12 +192,41 @@ class NoteType:
         note_type_id = _validate_id(self.id, "note type id")
         object.__setattr__(self, "id", note_type_id)
         object.__setattr__(self, "name", _validate_optional_non_empty(self.name, "note type name") or note_type_id)
+        if self.kind_value not in {"normal", "cloze"}:
+            raise ValidationError("note type kind must be normal or cloze")
+        if self.kind_value == "cloze":
+            object.__setattr__(
+                self,
+                "cloze_field",
+                _validate_id(self.cloze_field, "cloze field")
+                if self.cloze_field is not None
+                else None,
+            )
+        elif self.cloze_field is not None:
+            raise ValidationError("normal note type must not set cloze_field")
         if self.css_value is not None:
             _reject_ascii_control(self.css_value, "css")
 
     @classmethod
     def custom(cls, note_type_id: str, name: str | None = None, css: str | None = None) -> NoteType:
         return cls(note_type_id, name=name, css_value=css, custom_value=True)
+
+    @classmethod
+    def custom_cloze(
+        cls,
+        note_type_id: str,
+        cloze_field: str,
+        name: str | None = None,
+        css: str | None = None,
+    ) -> NoteType:
+        return cls(
+            note_type_id,
+            name=name,
+            css_value=css,
+            custom_value=True,
+            kind_value="cloze",
+            cloze_field=cloze_field,
+        )
 
     def css(self, css: str | None) -> NoteType:
         """Set CSS for this note type, or clear CSS when passed None."""
@@ -235,6 +275,13 @@ class NoteType:
                 sort_count += 1
         if sort_count > 1:
             raise ValidationError("only one sort field is allowed")
+        if self.kind_value == "cloze":
+            if self.cloze_field not in seen_field_keys:
+                raise ValidationError(
+                    f"cloze field key is not declared on the note type: {self.cloze_field}"
+                )
+            if len(self.templates) != 1:
+                raise ValidationError("custom Cloze note type requires exactly one template")
 
         seen_template_keys: set[str] = set()
         for current_template in self.templates:
