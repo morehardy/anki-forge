@@ -3,6 +3,7 @@ mod anki_proto;
 pub mod apkg;
 pub mod build;
 pub mod canonical_json;
+pub mod card_plan;
 pub mod diff;
 pub mod inspect;
 pub mod media;

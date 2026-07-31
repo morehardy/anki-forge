@@ -8,7 +8,7 @@ use crate::build::{
     ComparisonStatus, InspectSummary, MediaEntrySummary, MediaSourceMode, MediaSummary,
     UpdateSafetySummary,
 };
-use crate::diagnostics::{Diagnostic, Severity};
+use crate::diagnostics::{Diagnostic, Severity, SourceSpan};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct BuildReportJson {
@@ -86,6 +86,7 @@ pub struct DiagnosticJson {
     pub domain: String,
     pub stage: String,
     pub path: Option<String>,
+    pub span: Option<SourceSpan>,
     pub message: String,
     pub suggested_fix: Option<String>,
 }
@@ -150,6 +151,7 @@ impl From<&Diagnostic> for DiagnosticJson {
                 .source
                 .as_ref()
                 .map(|source| source.as_str().to_string()),
+            span: value.source_span(),
             message: value.message.clone(),
             suggested_fix: value.help.clone(),
         }

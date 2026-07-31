@@ -459,7 +459,6 @@ def test_cloze_report_json_creates_parent_directories(tmp_path):
     report = project.write_apkg(
         tmp_path / "no-cloze.apkg",
         report_json=report_json,
-        runtime=RuntimeOverride(manifest=Path("contracts/manifest.yaml"), executable=Path("contract_tools")),
     )
 
     assert report.status == "invalid"

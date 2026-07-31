@@ -3,6 +3,7 @@ pub struct ProductDiagnostic {
     pub code: &'static str,
     pub message: String,
     pub source_path: Option<String>,
+    pub byte_offset: Option<usize>,
 }
 
 impl ProductDiagnostic {
@@ -11,6 +12,7 @@ impl ProductDiagnostic {
             code: "PHASE5A.IO_IMAGE_REQUIRED",
             message: format!("Image occlusion note '{note_id}' requires a non-empty image."),
             source_path: None,
+            byte_offset: None,
         }
     }
 
@@ -26,6 +28,7 @@ impl ProductDiagnostic {
                 "custom note type '{note_type_id}' uses field key '{key}' for both '{first_field}' and '{duplicate_field}'"
             ),
             source_path: None,
+            byte_offset: None,
         }
     }
 
@@ -41,6 +44,7 @@ impl ProductDiagnostic {
                 "custom note type '{note_type_id}' uses template key '{key}' for both '{first_template}' and '{duplicate_template}'"
             ),
             source_path: None,
+            byte_offset: None,
         }
     }
 }
@@ -49,6 +53,8 @@ impl ProductDiagnostic {
 pub struct LoweringDiagnostic {
     pub code: &'static str,
     pub message: String,
+    pub source_path: Option<String>,
+    pub byte_offset: Option<usize>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

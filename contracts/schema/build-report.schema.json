@@ -82,6 +82,20 @@
           "domain": { "type": "string", "minLength": 1 },
           "stage": { "type": "string", "minLength": 1 },
           "path": { "type": ["string", "null"] },
+          "span": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "required": ["byte_start", "byte_end"],
+                "properties": {
+                  "byte_start": { "type": "integer", "minimum": 0 },
+                  "byte_end": { "type": "integer", "minimum": 0 }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
           "message": { "type": "string", "minLength": 1 },
           "suggested_fix": { "type": ["string", "null"] }
         },

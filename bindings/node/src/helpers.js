@@ -1,8 +1,12 @@
 import path from 'node:path';
 
 export function warningCount(result) {
-  const diagnostics = result.diagnostics?.items ?? [];
-  return diagnostics.filter((item) => item.level === 'warning').length;
+  const diagnostics = Array.isArray(result.diagnostics)
+    ? result.diagnostics
+    : (result.diagnostics?.items ?? []);
+  return diagnostics.filter(
+    (item) => (item.level ?? item.severity) === 'warning',
+  ).length;
 }
 
 function artifactPathFromRef(artifactsDir, ref) {
@@ -15,7 +19,8 @@ function artifactPathFromRef(artifactsDir, ref) {
 
 export function helperView(command, result, request) {
   return {
-    isInvalid: result.result_status === 'invalid',
+    isInvalid:
+      result.result_status === 'invalid' || result.status === 'invalid',
     isDegraded: result.observation_status === 'degraded',
     isPartial: result.comparison_status === 'partial',
     warningCount: warningCount(result),

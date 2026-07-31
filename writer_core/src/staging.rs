@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 use sha1::Digest;
 
 use crate::canonical_json::to_canonical_json;
+use crate::card_plan::{has_malformed_cloze, plan_cards};
 use crate::media_refs::extract_media_references;
 use crate::model::{
     BuildContext, BuildDiagnosticItem, BuildDiagnostics, PackageBuildResult, WriterPolicy,
@@ -477,7 +478,9 @@ fn validate_normalized_ir(
             continue;
         }
 
-        diagnostics.extend(validate_stock_notetype_shape(index, notetype));
+        if notetype.original_stock_kind.is_some() {
+            diagnostics.extend(validate_stock_notetype_shape(index, notetype));
+        }
 
         if !matches!(notetype.kind.as_str(), "normal" | "cloze") {
             diagnostics.push(BuildDiagnosticItem {
@@ -528,6 +531,32 @@ fn validate_normalized_ir(
             });
             continue;
         };
+        if has_malformed_cloze(note, notetype) {
+            diagnostics.push(BuildDiagnosticItem {
+                level: "error".into(),
+                code: "PRODUCT.CLOZE_MARKER_MALFORMED".into(),
+                summary: format!("cloze note '{}' contains malformed cloze markup", note.id),
+                domain: Some("notes".into()),
+                path: Some(format!("notes[{index}].fields")),
+                target_selector: Some(format!("note[id='{}']", note.id)),
+                stage: Some("validate".into()),
+                operation: Some("plan-cards".into()),
+            });
+        } else if notetype.kind == "cloze" && plan_cards(note, notetype).is_empty() {
+            diagnostics.push(BuildDiagnosticItem {
+                level: "error".into(),
+                code: "PRODUCT.CLOZE_MARKER_MISSING".into(),
+                summary: format!(
+                    "cloze note '{}' must contain at least one valid cloze marker",
+                    note.id
+                ),
+                domain: Some("notes".into()),
+                path: Some(format!("notes[{index}].fields")),
+                target_selector: Some(format!("note[id='{}']", note.id)),
+                stage: Some("validate".into()),
+                operation: Some("plan-cards".into()),
+            });
+        }
 
         let mut expected_fields: Vec<_> = notetype
             .fields

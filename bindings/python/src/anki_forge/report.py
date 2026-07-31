@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError
+from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError, SourceSpan
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
 BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
@@ -208,10 +208,23 @@ def _diagnostics(value: object) -> tuple[Diagnostic, ...]:
                 domain=_required_non_empty_string(item, "domain"),
                 stage=_required_non_empty_string(item, "stage"),
                 path=_nullable_string(item, "path"),
+                span=_source_span(item.get("span")),
                 suggested_fix=_nullable_string(item, "suggested_fix"),
             )
         )
     return tuple(diagnostics)
+
+
+def _source_span(value: object) -> SourceSpan | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ProtocolError("build report diagnostic span must be an object or null")
+    byte_start = _non_negative_int(value.get("byte_start"), "diagnostics.span.byte_start")
+    byte_end = _non_negative_int(value.get("byte_end"), "diagnostics.span.byte_end")
+    if byte_end < byte_start:
+        raise ProtocolError("build report diagnostic span byte_end must not precede byte_start")
+    return SourceSpan(byte_start=byte_start, byte_end=byte_end)
 
 
 def _nullable_string(payload: dict[str, Any], key: str) -> str | None:

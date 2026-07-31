@@ -5,7 +5,16 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { build, diff, inspect, normalize, ProtocolParseError } from '../src/index.js';
+import {
+  build,
+  diff,
+  inspect,
+  normalize,
+  productBuild,
+  productValidate,
+  templateValidate,
+  ProtocolParseError,
+} from '../src/index.js';
 
 const bindingsNodeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(bindingsNodeRoot, '../..');
@@ -89,6 +98,45 @@ test('structured build derives helper artifact paths from returned refs', async 
   assert.equal(typeof result.resolvedRuntime.bundleVersion, 'string');
   assert.match(result.helper.artifactPaths.stagingManifest, /alt\/staging\/manifest\.json$/);
   assert.match(result.helper.artifactPaths.apkg, /alt\/package\.apkg$/);
+});
+
+test('product APIs share the Rust product-build contract', async () => {
+  const fakeScript = fakeLauncherScript(`
+    process.stdout.write(JSON.stringify({
+      kind: 'anki-forge-build-report',
+      schema_version: 'phase4-build-report-v2',
+      tool_version: 'test',
+      status: 'success',
+      comparison: 'not_requested',
+      artifact: { path: 'deck.apkg' },
+      counts: { notes: 1, cards: 2, media: 0 },
+      media: {},
+      diagnostics: [],
+      metrics: { duration_ms: 1 },
+      policy: { status: 'not_evaluated', blocking_findings: [] }
+    }));
+  `);
+  const runtime = {
+    mode: 'installed',
+    manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'),
+    bundleRoot: path.join(repoRoot, 'contracts'),
+    launcherExecutable: process.execPath,
+    launcherPrefix: [fakeScript],
+  };
+  const productDocument = {
+    product_document_version: 'product-v3',
+    document_id: 'node-custom-cloze',
+    note_types: [],
+    notes: [],
+  };
+
+  for (const validate of [productBuild, productValidate, templateValidate]) {
+    const result = await validate({ productDocument }, runtime);
+    assert.equal(result.status, 'success');
+    assert.equal(result.counts.cards, 2);
+    assert.equal(result.helper.isInvalid, false);
+    assert.equal(result.rawCommand.command, 'product-build');
+  }
 });
 
 test('structured normalize raises ProtocolParseError for invalid json stdout', async () => {

@@ -59,6 +59,7 @@ struct ProductDocumentLegacy {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct ProductDocumentV2Payload {
+    pub(crate) version: u8,
     pub(crate) note_types: Vec<ProductNoteTypeV2>,
     pub(crate) notes: Vec<ProductNoteV2>,
     pub(crate) media: Vec<ProductMediaV2>,
@@ -67,6 +68,19 @@ pub(crate) struct ProductDocumentV2Payload {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 struct ProductDocumentV2 {
+    document_id: String,
+    #[serde(default)]
+    default_deck_name: Option<String>,
+    #[serde(default)]
+    note_types: Vec<ProductNoteTypeV2>,
+    #[serde(default)]
+    notes: Vec<ProductNoteV2>,
+    #[serde(default)]
+    media: Vec<ProductMediaV2>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+struct ProductDocumentV3 {
     document_id: String,
     #[serde(default)]
     default_deck_name: Option<String>,
@@ -104,6 +118,10 @@ pub(crate) struct ProductCustomNoteTypeV2 {
     pub(crate) id: String,
     pub(crate) name: Option<String>,
     #[serde(default)]
+    pub(crate) note_type_kind: Option<String>,
+    #[serde(default)]
+    pub(crate) cloze_field: Option<String>,
+    #[serde(default)]
     pub(crate) fields: Vec<ProductFieldV2>,
     #[serde(default)]
     pub(crate) templates: Vec<ProductTemplateV2>,
@@ -135,6 +153,12 @@ pub(crate) struct ProductTemplateV2 {
     pub(crate) key: String,
     pub(crate) front: String,
     pub(crate) back: String,
+    #[serde(default)]
+    pub(crate) browser_front: Option<String>,
+    #[serde(default)]
+    pub(crate) browser_back: Option<String>,
+    #[serde(default)]
+    pub(crate) target_deck: Option<String>,
     #[serde(default)]
     pub(crate) generation_rule: Option<ProductGenerationRuleV2>,
     #[serde(default)]
@@ -239,6 +263,11 @@ impl<'de> Deserialize<'de> for ProductDocument {
                     .map(ProductDocument::from)
                     .map_err(serde::de::Error::custom)
             }
+            Some(serde_json::Value::String(version)) if version == "product-v3" => {
+                serde_json::from_value::<ProductDocumentV3>(value)
+                    .map(ProductDocument::from)
+                    .map_err(serde::de::Error::custom)
+            }
             Some(version) => Ok(ProductDocument::from_unknown_version(&value, version)),
             None => serde_json::from_value::<ProductDocumentLegacy>(value)
                 .map(ProductDocument::from)
@@ -276,9 +305,31 @@ impl From<ProductDocumentV2> for ProductDocument {
             .collect();
         document.notes = v2.notes.iter().filter_map(convert_note_v2).collect();
         document.product_v2 = Some(ProductDocumentV2Payload {
+            version: 2,
             note_types: v2.note_types,
             notes: v2.notes,
             media: v2.media,
+            transport_diagnostics: Vec::new(),
+        });
+        document
+    }
+}
+
+impl From<ProductDocumentV3> for ProductDocument {
+    fn from(v3: ProductDocumentV3) -> Self {
+        let mut document = ProductDocument::new(v3.document_id);
+        document.default_deck_name = v3.default_deck_name;
+        document.note_types = v3
+            .note_types
+            .iter()
+            .filter_map(convert_note_type_v2)
+            .collect();
+        document.notes = v3.notes.iter().filter_map(convert_note_v2).collect();
+        document.product_v2 = Some(ProductDocumentV2Payload {
+            version: 3,
+            note_types: v3.note_types,
+            notes: v3.notes,
+            media: v3.media,
             transport_diagnostics: Vec::new(),
         });
         document
@@ -793,6 +844,7 @@ impl ProductDocument {
             .and_then(serde_json::Value::as_str)
             .map(str::to_owned);
         document.product_v2 = Some(ProductDocumentV2Payload {
+            version: 0,
             note_types: Vec::new(),
             notes: Vec::new(),
             media: Vec::new(),
@@ -800,6 +852,7 @@ impl ProductDocument {
                 code: "PRODUCT.VERSION_UNSUPPORTED",
                 message: format!("Unsupported product document version '{version}'."),
                 source_path: None,
+                byte_offset: None,
             }],
         });
         document
@@ -846,7 +899,7 @@ mod tests {
     #[test]
     fn unsupported_string_product_version_records_transport_diagnostic() {
         let raw = r#"{
-            "product_document_version": "product-v3",
+            "product_document_version": "product-v999",
             "document_id": "future",
             "note_types": [],
             "notes": []

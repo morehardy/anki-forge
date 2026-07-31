@@ -98,6 +98,7 @@ impl Field {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NoteType {
     id: String,
+    kind: NoteTypeKind,
     name: Option<String>,
     fields: Vec<Field>,
     templates: Vec<Template>,
@@ -105,15 +106,31 @@ pub struct NoteType {
     identity: Option<IdentityRecipe>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum NoteTypeKind {
+    Normal,
+    Cloze { field: FieldKey },
+}
+
 impl NoteType {
     pub fn custom(id: impl Into<String>) -> Self {
         Self {
             id: id.into(),
+            kind: NoteTypeKind::Normal,
             name: None,
             fields: Vec::new(),
             templates: Vec::new(),
             css: None,
             identity: None,
+        }
+    }
+
+    pub fn custom_cloze(id: impl Into<String>, field: impl Into<String>) -> Self {
+        Self {
+            kind: NoteTypeKind::Cloze {
+                field: FieldKey::new(field),
+            },
+            ..Self::custom(id)
         }
     }
 
@@ -144,6 +161,10 @@ impl NoteType {
 
     pub fn id(&self) -> &str {
         &self.id
+    }
+
+    pub fn kind(&self) -> &NoteTypeKind {
+        &self.kind
     }
 
     pub fn name_ref(&self) -> Option<&str> {

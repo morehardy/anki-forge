@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anki Forge Template Bundle v1",
+  "type": "object",
+  "required": ["format_version", "note_type"],
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {"const": "template-bundle-v1"},
+    "css_file": {"type": "string", "minLength": 1},
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "export_as"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {"$ref": "#/definitions/relativePath"},
+          "export_as": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "note_type": {
+      "type": "object",
+      "required": ["id", "fields", "templates"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["normal", "cloze"], "default": "normal"},
+        "cloze_field": {"type": "string", "minLength": 1},
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/definitions/field"}
+        },
+        "templates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/definitions/template"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"kind": {"const": "cloze"}},
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["cloze_field"],
+            "properties": {"templates": {"maxItems": 1}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"kind": {"const": "normal"}},
+            "required": ["kind"]
+          },
+          "then": {"not": {"required": ["cloze_field"]}}
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {"pattern": "(^/|^[A-Za-z]:[\\\\/]|(^|[\\\\/])\\.\\.([\\\\/]|$))"}
+    },
+    "field": {
+      "type": "object",
+      "required": ["key", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "key": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "identity": {"type": "boolean", "default": false},
+        "sort": {"type": "boolean", "default": false},
+        "required": {"type": "boolean", "default": false},
+        "optional": {"type": "boolean", "default": false}
+      }
+    },
+    "template": {
+      "type": "object",
+      "required": ["key", "name", "front_file", "back_file"],
+      "additionalProperties": false,
+      "properties": {
+        "key": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "front_file": {"$ref": "#/definitions/relativePath"},
+        "back_file": {"$ref": "#/definitions/relativePath"},
+        "browser_front_file": {"$ref": "#/definitions/relativePath"},
+        "browser_back_file": {"$ref": "#/definitions/relativePath"},
+        "target_deck": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

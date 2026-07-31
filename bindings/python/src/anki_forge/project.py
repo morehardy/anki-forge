@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import shutil
 import tempfile
 from dataclasses import dataclass, field
@@ -10,7 +9,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping, Sequence
 
-from .diagnostics import Diagnostic, RuntimeInvocationError, ValidationError
+from .diagnostics import RuntimeInvocationError, ValidationError
 from .media import MediaRegistry
 from .note import Note
 from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empty
@@ -24,7 +23,6 @@ STOCK_FIELD_KEYS = {
     "image_occlusion": {"occlusion", "image", "header", "back_extra", "comments"},
 }
 ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
-CLOZE_MARKER_PATTERN = re.compile(r"\{\{[cC][1-9][0-9]*::")
 DIAGNOSTIC_DOMAIN_BY_PREFIX = {
     "AFID": "identity",
     "COMPARE": "comparison",
@@ -117,8 +115,13 @@ class Project:
                 note_types.append(image_occlusion_stock_notetype_json())
         note_types.extend(custom_notetype_json(self._note_types[note_type_id]) for note_type_id in self._note_type_order)
 
+        product_version = (
+            "product-v3"
+            if any(note_type.kind_value == "cloze" for note_type in self._note_types.values())
+            else "product-v2"
+        )
         return {
-            "product_document_version": "product-v2",
+            "product_document_version": product_version,
             "document_id": self.stable_id or self.name,
             "default_deck_name": self.default_deck,
             "note_types": note_types,
@@ -157,11 +160,6 @@ class Project:
         try:
             with tempfile.TemporaryDirectory(prefix="anki-forge-product-") as temp_dir:
                 product_input = Path(temp_dir) / "project.product-v2.json"
-                report = self._cloze_marker_report()
-                if report is not None:
-                    if report_path is not None:
-                        _write_report_json(report, report_path)
-                    return report
                 product_document = self._runtime_product_document(product_input.parent)
                 product_input.write_text(
                     json.dumps(product_document, ensure_ascii=False),
@@ -199,42 +197,6 @@ class Project:
             if item.path.is_file():
                 shutil.copy2(item.path, runtime_dir / item.ref.export_as)
         return product_document
-
-    def _cloze_marker_report(self) -> BuildReport | None:
-        for index, note in enumerate(self._notes):
-            if note.note_type_id != "cloze":
-                continue
-            text = note.fields.get("text")
-            if text is None or text.value is None or CLOZE_MARKER_PATTERN.search(text.value):
-                continue
-            return BuildReport(
-                status="invalid",
-                comparison="not_requested",
-                artifact=None,
-                counts={"notes": 0, "cards": 0, "media": 0},
-                media={
-                    "objects": 0,
-                    "bindings": 0,
-                    "references": 0,
-                    "missing_references": 0,
-                    "unsafe_references": 0,
-                    "unused_bindings": 0,
-                    "unique_bytes": 0,
-                    "entries": [],
-                },
-                diagnostics=(
-                    Diagnostic(
-                        code="PRODUCT.CLOZE_MARKER_MISSING",
-                        severity="error",
-                        domain="product",
-                        stage="validate",
-                        message="cloze note text must contain at least one cloze marker",
-                        path=f"project.notes[{index}].fields[\"text\"]",
-                        suggested_fix="add a marker like {{c1::text}} to the cloze note text",
-                    ),
-                ),
-            )
-        return None
 
     def _stock_note_types(self) -> list[str]:
         used = {note.note_type_id for note in self._notes}
@@ -327,11 +289,6 @@ def _validate_write_paths(
         raise ValidationError("report_json path must differ from identity_lockfile")
 
 
-def _write_report_json(report: BuildReport, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(_report_to_json(report), ensure_ascii=False, indent=2), encoding="utf-8")
-
-
 def _diagnostic_prefix(code: str) -> str | None:
     prefix, separator, _ = code.partition(".")
     if not separator:
@@ -341,11 +298,15 @@ def _diagnostic_prefix(code: str) -> str | None:
 
 def _inferred_diagnostic_domain(code: str) -> str:
     prefix = _diagnostic_prefix(code)
+    if prefix is None:
+        return "unknown"
     return DIAGNOSTIC_DOMAIN_BY_PREFIX.get(prefix, "unknown")
 
 
 def _inferred_diagnostic_stage(code: str) -> str:
     prefix = _diagnostic_prefix(code)
+    if prefix is None:
+        return "unknown"
     return DIAGNOSTIC_STAGE_BY_PREFIX.get(prefix, "unknown")
 
 
@@ -366,6 +327,14 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
                 "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
                 "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
                 "path": diagnostic.path,
+                "span": (
+                    {
+                        "byte_start": diagnostic.span.byte_start,
+                        "byte_end": diagnostic.span.byte_end,
+                    }
+                    if diagnostic.span is not None
+                    else None
+                ),
                 "message": diagnostic.message,
                 "suggested_fix": diagnostic.suggested_fix,
             }

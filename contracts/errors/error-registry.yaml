@@ -386,3 +386,81 @@ codes:
   - id: UPDATE.NOTE_DATA_METADATA_UNMERGEABLE
     status: active
     summary: note data could not be merged with identity metadata
+  - id: TEMPLATE.SYNTAX_INVALID
+    status: active
+    summary: template delimiters or expressions are syntactically invalid
+  - id: TEMPLATE.RENDER_FIELD_UNKNOWN
+    status: active
+    summary: template rendering references an undeclared field
+  - id: TEMPLATE.SECTION_MISMATCH
+    status: active
+    summary: template section open and close expressions do not match
+  - id: TEMPLATE.FILTER_UNKNOWN
+    status: active
+    summary: template uses a syntactically valid but unsupported filter
+  - id: TEMPLATE.CLOZE_FIELD_REQUIRED
+    status: active
+    summary: custom Cloze template bundle is missing its cloze field
+  - id: TEMPLATE.CLOZE_FIELD_UNKNOWN
+    status: active
+    summary: custom Cloze declaration references an undeclared field
+  - id: TEMPLATE.CLOZE_TEMPLATE_COUNT_INVALID
+    status: active
+    summary: custom Cloze note type must contain exactly one template
+  - id: TEMPLATE.CLOZE_FILTER_REQUIRED
+    status: active
+    summary: custom Cloze front template does not render its field with the cloze filter
+  - id: TEMPLATE.CLOZE_FIELD_MISMATCH
+    status: active
+    summary: custom Cloze template filter references a field other than the declared cloze field
+  - id: TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE
+    status: active
+    summary: Cloze generation rule is attached to a normal high-level note type
+  - id: TEMPLATE.BUNDLE_PATH_UNSAFE
+    status: active
+    summary: template bundle path escapes or may escape its root directory
+  - id: TEMPLATE.BUNDLE_FILE_INVALID
+    status: active
+    summary: template bundle file is missing unreadable invalid UTF-8 non-regular or oversized
+  - id: TEMPLATE.BUNDLE_ROOT_INVALID
+    status: active
+    summary: template bundle root is missing unreadable or not a directory
+  - id: TEMPLATE.BUNDLE_MANIFEST_INVALID
+    status: active
+    summary: template bundle manifest is unreadable or does not match its format
+  - id: TEMPLATE.BUNDLE_VERSION_UNSUPPORTED
+    status: active
+    summary: template bundle format version is unsupported
+  - id: TEMPLATE.BUNDLE_KIND_INVALID
+    status: active
+    summary: template bundle note type kind is unsupported
+  - id: TEMPLATE.BUNDLE_ASSET_INVALID
+    status: active
+    summary: template bundle asset could not be registered atomically
+  - id: PRODUCT.CLOZE_MARKER_MISSING
+    status: active
+    summary: Cloze note has no valid deletion markers
+  - id: PRODUCT.CLOZE_MARKER_MALFORMED
+    status: active
+    summary: Cloze note contains malformed deletion markup
+  - id: PRODUCT.CLOZE_FIELD_REQUIRED
+    status: active
+    summary: Product v3 custom Cloze note type is missing cloze_field
+  - id: PRODUCT.CLOZE_FIELD_UNKNOWN
+    status: active
+    summary: Product v3 custom Cloze note type references an undeclared field key
+  - id: PRODUCT.CLOZE_FIELD_UNEXPECTED
+    status: active
+    summary: Product v3 normal custom note type unexpectedly declares cloze_field
+  - id: PRODUCT.CLOZE_TEMPLATE_COUNT_INVALID
+    status: active
+    summary: Product v3 custom Cloze note type must contain exactly one template
+  - id: PRODUCT.CLOZE_FILTER_REQUIRED
+    status: active
+    summary: Product v3 custom Cloze front template is missing the required cloze filter
+  - id: PRODUCT.CLOZE_FIELD_MISMATCH
+    status: active
+    summary: Product v3 custom Cloze template references the wrong cloze field
+  - id: PRODUCT.NOTE_TYPE_KIND_UNSUPPORTED
+    status: active
+    summary: Product v3 custom note type kind is unsupported
