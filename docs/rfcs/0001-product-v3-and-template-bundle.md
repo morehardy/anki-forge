@@ -1,6 +1,6 @@
 # RFC 0001: ProductDocument v3 and Template Bundle v1
 
-Status: implemented for review  
+Status: implemented for review
 Related: ADR 0003, GitHub issue #27
 
 ## Proposal
