@@ -852,6 +852,7 @@ impl ProductDocument {
                 code: "PRODUCT.VERSION_UNSUPPORTED",
                 message: format!("Unsupported product document version '{version}'."),
                 source_path: None,
+                byte_offset: None,
             }],
         });
         document

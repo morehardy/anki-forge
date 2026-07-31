@@ -297,6 +297,26 @@ pub struct Diagnostic {
     pub help: Option<String>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SourceSpan {
+    pub byte_start: usize,
+    pub byte_end: usize,
+}
+
+impl Diagnostic {
+    pub fn source_span(&self) -> Option<SourceSpan> {
+        let help = self.help.as_deref()?;
+        let marker = "byte offset ";
+        let start = help.find(marker)? + marker.len();
+        let digits = help[start..].bytes().take_while(u8::is_ascii_digit).count();
+        let byte_start = help[start..start + digits].parse().ok()?;
+        Some(SourceSpan {
+            byte_start,
+            byte_end: byte_start.saturating_add(2),
+        })
+    }
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ValidationReport {
     pub diagnostics: Vec<Diagnostic>,

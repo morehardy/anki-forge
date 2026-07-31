@@ -87,6 +87,85 @@ fn product_v3_rejects_unknown_template_field_before_writing_apkg() {
         .report
         .diagnostic_codes()
         .contains(&"TEMPLATE.RENDER_FIELD_UNKNOWN".to_string()));
+    let diagnostic = error
+        .report
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code.as_str() == "TEMPLATE.RENDER_FIELD_UNKNOWN")
+        .expect("template diagnostic");
+    assert_eq!(
+        diagnostic.source_span().map(|span| span.byte_start),
+        Some(0)
+    );
+    assert!(!apkg.exists());
+}
+
+#[test]
+fn product_v3_validates_browser_template_fields() {
+    let document: ProductDocument = serde_json::from_value(serde_json::json!({
+        "product_document_version": "product-v3",
+        "document_id": "product-v3-invalid-browser-template",
+        "note_types": [{
+            "kind": "custom",
+            "note_type_kind": "normal",
+            "id": "custom",
+            "fields": [{"name": "Back Extra", "key": "back_extra", "identity": true}],
+            "templates": [{
+                "name": "Card",
+                "key": "card",
+                "front": "{{Back Extra}}",
+                "back": "{{FrontSide}}",
+                "browser_front": "{{Back Extr}}"
+            }]
+        }],
+        "notes": []
+    }))
+    .expect("product-v3 document");
+    let output = tempfile::tempdir().expect("output");
+    let apkg = output.path().join("invalid-browser.apkg");
+
+    let error = Project::from_product_document(document)
+        .build(BuildOptions::new().output(&apkg))
+        .expect_err("invalid browser template should fail");
+
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"TEMPLATE.RENDER_FIELD_UNKNOWN".to_string()));
+    assert!(!apkg.exists());
+}
+
+#[test]
+fn product_v2_custom_cloze_generation_rule_requires_product_v3() {
+    let document: ProductDocument = serde_json::from_value(serde_json::json!({
+        "product_document_version": "product-v2",
+        "document_id": "product-v2-explicit-cloze-rule",
+        "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "fields": [{"name": "Text", "key": "text", "identity": true}],
+            "templates": [{
+                "name": "Card",
+                "key": "card",
+                "front": "{{cloze:Text}}",
+                "back": "{{cloze:Text}}",
+                "generation_rule": {"kind": "cloze", "field": "text"}
+            }]
+        }],
+        "notes": []
+    }))
+    .expect("product-v2 document");
+    let output = tempfile::tempdir().expect("output");
+    let apkg = output.path().join("invalid-v2-cloze.apkg");
+
+    let error = Project::from_product_document(document)
+        .build(BuildOptions::new().output(&apkg))
+        .expect_err("product-v2 custom Cloze rule should fail");
+
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE".to_string()));
     assert!(!apkg.exists());
 }
 

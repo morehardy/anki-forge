@@ -229,6 +229,7 @@ fn lower_legacy_product_document(
                                         code: issue.code,
                                         message: issue.message,
                                         source_path,
+                                        byte_offset: Some(issue.byte_offset),
                                     });
                                 }
                                 crate::product::TemplateIssueSeverity::Warning => {
@@ -236,6 +237,7 @@ fn lower_legacy_product_document(
                                         code: issue.code,
                                         message: issue.message,
                                         source_path,
+                                        byte_offset: Some(issue.byte_offset),
                                     });
                                 }
                             }
@@ -518,6 +520,7 @@ fn lower_legacy_product_document(
                     binding.note_type_id
                 ),
                 source_path: None,
+                byte_offset: None,
             });
             continue;
         };
@@ -530,6 +533,7 @@ fn lower_legacy_product_document(
                     binding.note_type_id, binding.filename
                 ),
                 source_path: None,
+                byte_offset: None,
             });
             continue;
         };
@@ -654,6 +658,23 @@ fn lower_product_v2_document(
                 let diagnostics_before = plan.product_diagnostics.len();
                 if v2.version >= 3 {
                     validate_product_v3_custom_kind(&mut plan, custom);
+                } else {
+                    for template in &custom.templates {
+                        if matches!(
+                            template.generation_rule,
+                            Some(ProductGenerationRuleV2::Cloze { .. })
+                        ) {
+                            push_product_diagnostic_at(
+                                &mut plan,
+                                "TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE",
+                                format!(
+                                    "template '{}' in note type '{}' uses custom Cloze semantics; upgrade the document to product-v3 and declare note_type_kind 'cloze'",
+                                    template.name, custom.id
+                                ),
+                                template.source_path.as_deref(),
+                            );
+                        }
+                    }
                 }
                 if plan.product_diagnostics.len() > diagnostics_before {
                     continue;
@@ -666,9 +687,20 @@ fn lower_product_v2_document(
                 let diagnostics_before = plan.product_diagnostics.len();
                 for template in &custom.templates {
                     for (location, source) in [
-                        ("front", template.front.as_str()),
-                        ("back", template.back.as_str()),
-                    ] {
+                        Some(("front", template.front.as_str())),
+                        Some(("back", template.back.as_str())),
+                        template
+                            .browser_front
+                            .as_deref()
+                            .map(|source| ("browser_front", source)),
+                        template
+                            .browser_back
+                            .as_deref()
+                            .map(|source| ("browser_back", source)),
+                    ]
+                    .into_iter()
+                    .flatten()
+                    {
                         for issue in
                             crate::product::TemplateEngine::validate(source, &template_field_names)
                         {
@@ -684,18 +716,19 @@ fn lower_product_v2_document(
                                 });
                             match issue.severity {
                                 crate::product::TemplateIssueSeverity::Error => {
-                                    push_product_diagnostic_at(
-                                        &mut plan,
-                                        issue.code,
-                                        issue.message,
-                                        source_path.as_deref(),
-                                    );
+                                    plan.product_diagnostics.push(ProductDiagnostic {
+                                        code: issue.code,
+                                        message: issue.message,
+                                        source_path,
+                                        byte_offset: Some(issue.byte_offset),
+                                    });
                                 }
                                 crate::product::TemplateIssueSeverity::Warning => {
                                     plan.lowering_diagnostics.push(LoweringDiagnostic {
                                         code: issue.code,
                                         message: issue.message,
                                         source_path,
+                                        byte_offset: Some(issue.byte_offset),
                                     });
                                 }
                             }
@@ -1765,6 +1798,7 @@ fn push_product_diagnostic_at(
         code,
         message: message.into(),
         source_path: source_path.map(str::to_owned),
+        byte_offset: None,
     });
 }
 
@@ -2086,6 +2120,7 @@ fn generation_field_names(
                     template.name, note_type_id, field
                 ),
                 source_path: None,
+                byte_offset: None,
             });
         };
         field_names.push(field_name.clone());

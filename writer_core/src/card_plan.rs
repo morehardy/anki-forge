@@ -123,6 +123,9 @@ fn scan_cloze_card_ords<'a>(values: impl Iterator<Item = &'a str>) -> (BTreeSet<
             let after_prefix = &remaining[start + 3..];
             let digit_count = after_prefix.bytes().take_while(u8::is_ascii_digit).count();
             if digit_count == 0 {
+                if after_prefix.starts_with("::") {
+                    malformed = true;
+                }
                 remaining = &after_prefix[after_prefix.len().min(1)..];
                 continue;
             }
@@ -178,7 +181,7 @@ fn template_generates_card(
     template: &NormalizedTemplate,
 ) -> bool {
     let Some(requirement) = template.generation_requirement.as_ref() else {
-        return true;
+        return default_template_generates_card(note, notetype, &template.question_format);
     };
 
     match requirement.kind.as_str() {
@@ -192,6 +195,49 @@ fn template_generates_card(
             .iter()
             .any(|name| note_field_is_nonempty(note, notetype, name)),
     }
+}
+
+fn default_template_generates_card(
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    source: &str,
+) -> bool {
+    let mut rendered = String::new();
+    let mut cursor = 0;
+    let mut active_sections = Vec::new();
+
+    while let Some(relative_open) = source[cursor..].find("{{") {
+        let open = cursor + relative_open;
+        if active_sections.iter().all(|active| *active) {
+            rendered.push_str(&source[cursor..open]);
+        }
+        let Some(relative_close) = source[open + 2..].find("}}") else {
+            break;
+        };
+        let close = open + 2 + relative_close;
+        let expression = source[open + 2..close].trim();
+
+        if let Some(field) = expression.strip_prefix('#') {
+            active_sections.push(note_field_is_nonempty(note, notetype, field.trim()));
+        } else if let Some(field) = expression.strip_prefix('^') {
+            active_sections.push(!note_field_is_nonempty(note, notetype, field.trim()));
+        } else if expression.starts_with('/') {
+            active_sections.pop();
+        } else if !expression.starts_with('!') && active_sections.iter().all(|active| *active) {
+            let field = expression.rsplit(':').next().unwrap_or_default().trim();
+            if let Some(value) = note.fields.get(field) {
+                rendered.push_str(value);
+            }
+        }
+        cursor = close + 2;
+    }
+    if active_sections.iter().all(|active| *active) {
+        rendered.push_str(&source[cursor..]);
+    }
+
+    !strip_html_preserving_media_filenames(&rendered)
+        .trim()
+        .is_empty()
 }
 
 fn note_field_is_nonempty(
@@ -220,6 +266,63 @@ fn note_field_is_nonempty(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use authoring_core::{NormalizedField, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
+    use std::collections::BTreeMap;
+
+    fn normal_card_fixture(front: &str, value: &str) -> (NormalizedNote, NormalizedNotetype) {
+        (
+            NormalizedNote {
+                id: "note".into(),
+                notetype_id: "normal".into(),
+                deck_name: "Deck".into(),
+                fields: BTreeMap::from([("Front".into(), value.into())]),
+                tags: Vec::new(),
+                mtime_secs: None,
+            },
+            NormalizedNotetype {
+                id: "normal".into(),
+                kind: "normal".into(),
+                name: "Normal".into(),
+                original_stock_kind: None,
+                original_id: None,
+                fields: vec![NormalizedField {
+                    name: "Front".into(),
+                    ord: Some(0),
+                    config_id: None,
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: true,
+                }],
+                templates: vec![NormalizedTemplate {
+                    name: "Card".into(),
+                    ord: Some(0),
+                    config_id: None,
+                    question_format: front.into(),
+                    answer_format: "{{Front}}".into(),
+                    browser_question_format: None,
+                    browser_answer_format: None,
+                    target_deck_name: None,
+                    browser_font_name: None,
+                    browser_font_size: None,
+                    generation_requirement: None,
+                }],
+                css: String::new(),
+                field_metadata: Vec::new(),
+            },
+        )
+    }
+
+    #[test]
+    fn anki_default_uses_rendered_front_emptiness() {
+        let (empty_note, notetype) = normal_card_fixture("<div>{{Front}}</div>", "");
+        assert!(plan_cards(&empty_note, &notetype).is_empty());
+
+        let (filled_note, notetype) = normal_card_fixture("<div>{{Front}}</div>", "answer");
+        assert_eq!(plan_cards(&filled_note, &notetype).len(), 1);
+
+        let (static_note, notetype) = normal_card_fixture("Prompt {{Front}}", "");
+        assert_eq!(plan_cards(&static_note, &notetype).len(), 1);
+    }
 
     #[test]
     fn cloze_card_ords_are_distinct_sorted_and_zero_based() {
@@ -237,6 +340,22 @@ mod tests {
 
         assert!(ords.is_empty());
         assert!(malformed);
+    }
+
+    #[test]
+    fn missing_cloze_ordinal_is_malformed_by_itself() {
+        let (ords, malformed) = scan_cloze_card_ords(["{{c::missing}}"].into_iter());
+
+        assert!(ords.is_empty());
+        assert!(malformed);
+    }
+
+    #[test]
+    fn unrelated_mustache_text_starting_with_c_is_not_cloze() {
+        let (ords, malformed) = scan_cloze_card_ords(["{{custom}}"].into_iter());
+
+        assert!(ords.is_empty());
+        assert!(!malformed);
     }
 
     #[test]

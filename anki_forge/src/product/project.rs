@@ -146,6 +146,7 @@ impl Project {
                         .as_ref()
                         .map(|source| std::path::PathBuf::from(source.as_str())),
                 )
+                .with_byte_offset(error.diagnostic().source_span().map(|span| span.byte_start))
             })?;
 
         let mut staged_media = self.media.clone();
@@ -375,11 +376,15 @@ impl Project {
                             domain: None,
                             stage: None,
                             message: issue.message,
-                            source: Some(SourcePath::new(format!(
-                                "{}.templates[{:?}].{location}",
-                                note_type_source,
-                                template.name()
-                            ))),
+                            source: Some(SourcePath::new(
+                                source.origin().map(str::to_string).unwrap_or_else(|| {
+                                    format!(
+                                        "{}.templates[{:?}].{location}",
+                                        note_type_source,
+                                        template.name()
+                                    )
+                                }),
+                            )),
                             help: Some(format!(
                                 "replace or explicitly support the filter near byte offset {}",
                                 issue.byte_offset
@@ -672,7 +677,10 @@ impl Project {
                     return Err(project_add_error(
                         issue.code,
                         issue.message,
-                        format!("{template_source}.{location}"),
+                        source
+                            .origin()
+                            .map(str::to_string)
+                            .unwrap_or_else(|| format!("{template_source}.{location}")),
                         format!(
                             "fix the template expression near byte offset {}",
                             issue.byte_offset
@@ -864,6 +872,7 @@ impl Project {
                     code: "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED",
                     message: "ProductDocument-backed projects cannot mix direct Project notes, note types, media, or deck sources".to_string(),
                     source_path: Some("project".to_string()),
+                    byte_offset: None,
                 }],
                 lowering_diagnostics: vec![],
             }
@@ -4226,7 +4235,9 @@ fn map_product_diagnostics(diagnostics: Vec<ProductDiagnostic>) -> Vec<Diagnosti
                     .source_path
                     .unwrap_or_else(|| "project.lower".to_string()),
             )),
-            help: None,
+            help: diagnostic
+                .byte_offset
+                .map(|offset| format!("fix the template expression near byte offset {offset}")),
         })
         .collect()
 }
@@ -4245,7 +4256,9 @@ fn map_lowering_diagnostics(diagnostics: Vec<LoweringDiagnostic>) -> Vec<Diagnos
                     .source_path
                     .unwrap_or_else(|| "project.lower".to_string()),
             )),
-            help: None,
+            help: diagnostic
+                .byte_offset
+                .map(|offset| format!("fix the template expression near byte offset {offset}")),
         })
         .collect()
 }
@@ -4711,16 +4724,19 @@ mod tests {
                 code: "PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE",
                 message: "missing notetype".into(),
                 source_path: None,
+                byte_offset: None,
             },
             LoweringDiagnostic {
                 code: "PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED",
                 message: "missing asset".into(),
                 source_path: None,
+                byte_offset: None,
             },
             LoweringDiagnostic {
                 code: "PHASE5A.ADVISORY",
                 message: "advisory".into(),
                 source_path: None,
+                byte_offset: None,
             },
         ]);
 

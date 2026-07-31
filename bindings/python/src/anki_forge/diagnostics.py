@@ -64,6 +64,12 @@ class DiagnosticsError(AnkiForgeError):
 
 
 @dataclass(frozen=True)
+class SourceSpan:
+    byte_start: int
+    byte_end: int
+
+
+@dataclass(frozen=True)
 class Diagnostic:
     code: str
     severity: str
@@ -71,6 +77,7 @@ class Diagnostic:
     domain: str | None = None
     stage: str | None = None
     path: str | None = None
+    span: SourceSpan | None = None
     suggested_fix: str | None = None
 
     @property

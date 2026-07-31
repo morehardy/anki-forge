@@ -327,6 +327,14 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
                 "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
                 "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
                 "path": diagnostic.path,
+                "span": (
+                    {
+                        "byte_start": diagnostic.span.byte_start,
+                        "byte_end": diagnostic.span.byte_end,
+                    }
+                    if diagnostic.span is not None
+                    else None
+                ),
                 "message": diagnostic.message,
                 "suggested_fix": diagnostic.suggested_fix,
             }

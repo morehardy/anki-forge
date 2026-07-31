@@ -132,9 +132,6 @@ fn validate_render_expression(
     let Some(field) = segments.last().copied() else {
         return;
     };
-    if field.contains(char::is_whitespace) {
-        return;
-    }
 
     for filter in segments.iter().take(segments.len().saturating_sub(1)) {
         if !matches!(*filter, "cloze" | "hint" | "text" | "type") {
@@ -186,6 +183,15 @@ fn syntax_issue(message: &str, byte_offset: usize) -> TemplateIssue {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn validates_multi_word_field_names_as_complete_names() {
+        assert!(TemplateEngine::validate("{{Back Extra}}", ["Back Extra"]).is_empty());
+
+        let issues = TemplateEngine::validate("{{Back Extr}}", ["Back Extra"]);
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].code, "TEMPLATE.RENDER_FIELD_UNKNOWN");
+    }
 
     #[test]
     fn validates_fields_filters_and_balanced_sections() {

@@ -22,15 +22,32 @@ impl TemplateKey {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TemplateSource(String);
+pub struct TemplateSource {
+    source: String,
+    origin: Option<String>,
+}
 
 impl TemplateSource {
     pub fn new(source: impl Into<String>) -> Self {
-        Self(source.into())
+        Self {
+            source: source.into(),
+            origin: None,
+        }
+    }
+
+    pub(crate) fn with_origin(source: impl Into<String>, origin: impl Into<String>) -> Self {
+        Self {
+            source: source.into(),
+            origin: Some(origin.into()),
+        }
     }
 
     pub fn as_str(&self) -> &str {
-        &self.0
+        &self.source
+    }
+
+    pub(crate) fn origin(&self) -> Option<&str> {
+        self.origin.as_deref()
     }
 }
 
@@ -112,6 +129,24 @@ impl Template {
         self
     }
 
+    pub(crate) fn front_with_origin(
+        mut self,
+        front: impl Into<String>,
+        origin: impl Into<String>,
+    ) -> Self {
+        self.front = TemplateSource::with_origin(front, origin);
+        self
+    }
+
+    pub(crate) fn back_with_origin(
+        mut self,
+        back: impl Into<String>,
+        origin: impl Into<String>,
+    ) -> Self {
+        self.back = TemplateSource::with_origin(back, origin);
+        self
+    }
+
     pub fn browser_front(mut self, source: impl Into<String>) -> Self {
         self.browser_front = Some(TemplateSource::new(source));
         self
@@ -119,6 +154,24 @@ impl Template {
 
     pub fn browser_back(mut self, source: impl Into<String>) -> Self {
         self.browser_back = Some(TemplateSource::new(source));
+        self
+    }
+
+    pub(crate) fn browser_front_with_origin(
+        mut self,
+        source: impl Into<String>,
+        origin: impl Into<String>,
+    ) -> Self {
+        self.browser_front = Some(TemplateSource::with_origin(source, origin));
+        self
+    }
+
+    pub(crate) fn browser_back_with_origin(
+        mut self,
+        source: impl Into<String>,
+        origin: impl Into<String>,
+    ) -> Self {
+        self.browser_back = Some(TemplateSource::with_origin(source, origin));
         self
     }
 

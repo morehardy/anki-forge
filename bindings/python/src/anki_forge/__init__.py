@@ -6,6 +6,7 @@ from .diagnostics import (
     ProtocolError,
     RuntimeInvocationError,
     RuntimeNotFoundError,
+    SourceSpan,
     ValidationError,
 )
 from .media import MediaRef, MediaRegistry
@@ -20,6 +21,7 @@ __all__ = [
     "ProtocolError",
     "RuntimeInvocationError",
     "RuntimeNotFoundError",
+    "SourceSpan",
     "ValidationError",
     "MediaRef",
     "MediaRegistry",

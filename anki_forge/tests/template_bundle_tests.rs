@@ -120,6 +120,92 @@ note_type:
     assert_eq!(error.code(), "TEMPLATE.BUNDLE_PATH_UNSAFE");
 }
 
+#[test]
+fn template_bundle_rejects_empty_fields_and_normal_cloze_field() {
+    for (name, note_type) in [
+        (
+            "empty-fields",
+            r#"
+  id: invalid
+  kind: normal
+  fields: []
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+"#,
+        ),
+        (
+            "normal-cloze-field",
+            r#"
+  id: invalid
+  kind: normal
+  cloze_field: text
+  fields:
+    - key: text
+      name: Text
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+"#,
+        ),
+    ] {
+        let bundle = tempfile::tempdir().expect("bundle");
+        std::fs::write(bundle.path().join("front.html"), "{{Text}}").expect("front");
+        std::fs::write(bundle.path().join("back.html"), "{{Text}}").expect("back");
+        std::fs::write(
+            bundle.path().join("anki-template.yaml"),
+            format!("format_version: template-bundle-v1\nnote_type:\n{note_type}"),
+        )
+        .expect("manifest");
+        let mut project = Project::new(name);
+
+        let error = project
+            .import_template_bundle(bundle.path())
+            .expect_err("invalid manifest should fail");
+
+        assert_eq!(error.code(), "TEMPLATE.BUNDLE_MANIFEST_INVALID");
+    }
+}
+
+#[test]
+fn template_bundle_template_errors_report_the_source_file() {
+    let bundle = tempfile::tempdir().expect("bundle");
+    std::fs::write(bundle.path().join("front.html"), "{{Typo}}").expect("front");
+    std::fs::write(bundle.path().join("back.html"), "{{Front}}").expect("back");
+    std::fs::write(
+        bundle.path().join("anki-template.yaml"),
+        r#"
+format_version: template-bundle-v1
+note_type:
+  id: invalid-source
+  kind: normal
+  fields:
+    - key: front
+      name: Front
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+"#,
+    )
+    .expect("manifest");
+    let mut project = Project::new("Invalid source");
+
+    let error = project
+        .import_template_bundle(bundle.path())
+        .expect_err("unknown field should fail");
+
+    assert_eq!(error.code(), "TEMPLATE.RENDER_FIELD_UNKNOWN");
+    let expected_path = bundle.path().join("front.html").canonicalize().unwrap();
+    assert_eq!(error.path(), Some(expected_path.as_path()));
+    assert_eq!(error.byte_offset(), Some(0));
+}
+
 #[cfg(unix)]
 #[test]
 fn template_bundle_rejects_symlink_escape() {

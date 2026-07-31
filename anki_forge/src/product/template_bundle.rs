@@ -14,6 +14,7 @@ pub struct TemplateBundleError {
     code: String,
     message: String,
     path: Option<PathBuf>,
+    byte_offset: Option<usize>,
 }
 
 impl TemplateBundleError {
@@ -25,6 +26,10 @@ impl TemplateBundleError {
         self.path.as_deref()
     }
 
+    pub fn byte_offset(&self) -> Option<usize> {
+        self.byte_offset
+    }
+
     pub(crate) fn new(
         code: impl Into<String>,
         message: impl Into<String>,
@@ -34,7 +39,13 @@ impl TemplateBundleError {
             code: code.into(),
             message: message.into(),
             path,
+            byte_offset: None,
         }
+    }
+
+    pub(crate) fn with_byte_offset(mut self, byte_offset: Option<usize>) -> Self {
+        self.byte_offset = byte_offset;
+        self
     }
 }
 
@@ -164,6 +175,27 @@ pub(crate) fn load_template_bundle(
             Some(manifest_path),
         ));
     }
+    if manifest.note_type.fields.is_empty() {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "template bundle note_type.fields must contain at least one field",
+            Some(canonical_root.join(MANIFEST_NAME)),
+        ));
+    }
+    if manifest.note_type.templates.is_empty() {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "template bundle note_type.templates must contain at least one template",
+            Some(canonical_root.join(MANIFEST_NAME)),
+        ));
+    }
+    if manifest.note_type.kind == "normal" && manifest.note_type.cloze_field.is_some() {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "normal template bundles must not declare note_type.cloze_field",
+            Some(canonical_root.join(MANIFEST_NAME)),
+        ));
+    }
 
     let mut note_type = match manifest.note_type.kind.as_str() {
         "normal" => NoteType::custom(&manifest.note_type.id),
@@ -236,19 +268,29 @@ pub(crate) fn load_template_bundle(
         )?;
         let mut product_template = Template::new(template.name)
             .key(template.key)
-            .front(read_utf8(&front_path, "TEMPLATE.BUNDLE_FILE_INVALID")?)
-            .back(read_utf8(&back_path, "TEMPLATE.BUNDLE_FILE_INVALID")?);
+            .front_with_origin(
+                read_utf8(&front_path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
+                front_path.to_string_lossy(),
+            )
+            .back_with_origin(
+                read_utf8(&back_path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
+                back_path.to_string_lossy(),
+            );
         if let Some(path) = template.browser_front_file {
             let path =
                 resolve_bundle_file(&canonical_root, &path, TEXT_FILE_LIMIT, "browser front")?;
-            product_template =
-                product_template.browser_front(read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?);
+            product_template = product_template.browser_front_with_origin(
+                read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
+                path.to_string_lossy(),
+            );
         }
         if let Some(path) = template.browser_back_file {
             let path =
                 resolve_bundle_file(&canonical_root, &path, TEXT_FILE_LIMIT, "browser back")?;
-            product_template =
-                product_template.browser_back(read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?);
+            product_template = product_template.browser_back_with_origin(
+                read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
+                path.to_string_lossy(),
+            );
         }
         if let Some(deck) = template.target_deck {
             product_template = product_template.target_deck(deck);
