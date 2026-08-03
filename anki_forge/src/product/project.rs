@@ -965,6 +965,7 @@ impl Project {
                     media_source_modes,
                 } = error;
                 diagnostics.append(&mut normalize_diagnostics);
+                deduplicate_diagnostics(&mut diagnostics);
                 diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("PROJECT.NORMALIZE_FAILED"),
                     severity: Severity::Error,
@@ -1015,6 +1016,7 @@ impl Project {
         let normalized = normalized_output.normalized_ir;
         let media_source_modes = normalized_output.media_source_modes;
         diagnostics.extend(normalized_output.diagnostics);
+        deduplicate_diagnostics(&mut diagnostics);
 
         if normalized.notes.is_empty() {
             diagnostics.push(Diagnostic {
@@ -4628,6 +4630,30 @@ fn combine_lowering_and_normalization_diagnostics(
     lowering_diagnostics
 }
 
+fn deduplicate_diagnostics(diagnostics: &mut Vec<Diagnostic>) {
+    let mut seen = BTreeSet::new();
+    diagnostics.retain(|diagnostic| {
+        seen.insert((
+            diagnostic.code.as_str().to_string(),
+            diagnostic.severity as u8,
+            diagnostic
+                .domain
+                .as_ref()
+                .map(|domain| domain.as_str().to_string()),
+            diagnostic
+                .stage
+                .as_ref()
+                .map(|stage| stage.as_str().to_string()),
+            diagnostic
+                .source
+                .as_ref()
+                .map(|source| source.as_str().to_string()),
+            diagnostic.message.clone(),
+            diagnostic.help.clone(),
+        ))
+    });
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -4717,6 +4743,18 @@ mod tests {
                 .collect::<Vec<_>>(),
             vec!["LOWERING.WARNING", "NORMALIZE.ERROR"]
         );
+    }
+
+    #[test]
+    fn duplicate_diagnostics_with_the_same_source_are_collapsed() {
+        let mut diagnostics = vec![
+            diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning),
+            diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning),
+        ];
+
+        deduplicate_diagnostics(&mut diagnostics);
+
+        assert_eq!(diagnostics.len(), 1);
     }
 
     #[test]

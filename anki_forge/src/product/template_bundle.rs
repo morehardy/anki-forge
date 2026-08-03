@@ -189,6 +189,18 @@ pub(crate) fn load_template_bundle(
             Some(canonical_root.join(MANIFEST_NAME)),
         ));
     }
+    if manifest
+        .note_type
+        .fields
+        .iter()
+        .any(|field| field.key.trim().is_empty())
+    {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "template bundle field keys must be non-empty",
+            Some(canonical_root.join(MANIFEST_NAME)),
+        ));
+    }
     if manifest.note_type.kind == "normal" && manifest.note_type.cloze_field.is_some() {
         return Err(TemplateBundleError::new(
             "TEMPLATE.BUNDLE_MANIFEST_INVALID",

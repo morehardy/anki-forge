@@ -215,6 +215,39 @@ fn product_v3_rejects_incomplete_or_unknown_custom_notetype_kinds() {
 }
 
 #[test]
+fn product_v3_rejects_cloze_rule_on_normal_custom_notetype() {
+    let document: ProductDocument = serde_json::from_value(serde_json::json!({
+        "product_document_version": "product-v3",
+        "document_id": "normal-with-cloze-rule",
+        "note_types": [{
+            "kind": "custom",
+            "note_type_kind": "normal",
+            "id": "custom",
+            "fields": [{"name": "Text", "key": "text", "identity": true}],
+            "templates": [{
+                "name": "Card",
+                "key": "card",
+                "front": "{{cloze:Text}}",
+                "back": "{{cloze:Text}}",
+                "generation_rule": {"kind": "cloze", "field": "text"}
+            }]
+        }],
+        "notes": []
+    }))
+    .expect("product-v3 document");
+    let output = tempfile::tempdir().expect("output");
+
+    let error = Project::from_product_document(document)
+        .build(BuildOptions::new().output(output.path().join("invalid.apkg")))
+        .expect_err("normal note types must reject Cloze generation rules");
+
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE".to_string()));
+}
+
+#[test]
 fn product_v3_preserves_browser_templates_and_target_deck() {
     let document: ProductDocument = serde_json::from_value(serde_json::json!({
         "product_document_version": "product-v3",

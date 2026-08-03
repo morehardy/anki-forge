@@ -161,7 +161,9 @@ fn validate_field(
         "Tags",
         "Type",
     ];
-    if !field.is_empty() && !fields.contains(field) && !SPECIAL_FIELDS.contains(&field) {
+    if field.is_empty() {
+        issues.push(syntax_issue("template field name cannot be empty", offset));
+    } else if !fields.contains(field) && !SPECIAL_FIELDS.contains(&field) {
         issues.push(TemplateIssue {
             code: "TEMPLATE.RENDER_FIELD_UNKNOWN",
             severity: TemplateIssueSeverity::Error,
@@ -212,5 +214,18 @@ mod tests {
             issues.iter().map(|issue| issue.code).collect::<Vec<_>>(),
             vec!["TEMPLATE.RENDER_FIELD_UNKNOWN", "TEMPLATE.SECTION_MISMATCH"]
         );
+    }
+
+    #[test]
+    fn rejects_empty_render_and_section_fields() {
+        for source in ["{{text:}}", "{{#}}{{/}}"] {
+            let issues = TemplateEngine::validate(source, ["Front"]);
+            assert!(
+                issues
+                    .iter()
+                    .any(|issue| issue.code == "TEMPLATE.SYNTAX_INVALID"),
+                "{source}: {issues:?}"
+            );
+        }
     }
 }

@@ -268,6 +268,13 @@ fn lower_legacy_product_document(
                         (key, field.name.clone())
                     })
                     .collect::<BTreeMap<_, _>>();
+                if !validate_legacy_custom_cloze(
+                    custom,
+                    &field_name_by_key,
+                    &mut product_diagnostics,
+                ) {
+                    continue;
+                }
                 let custom_kind = if custom.templates.iter().any(|template| {
                     matches!(
                         template.generation_rule,
@@ -1018,6 +1025,22 @@ fn validate_product_v3_custom_kind(plan: &mut LoweringPlan, custom: &ProductCust
                     source_path,
                 );
             }
+            for template in &custom.templates {
+                if matches!(
+                    template.generation_rule,
+                    Some(ProductGenerationRuleV2::Cloze { .. })
+                ) {
+                    push_product_diagnostic_at(
+                        plan,
+                        "TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE",
+                        format!(
+                            "template '{}' uses a Cloze generation rule on normal note type '{}'",
+                            template.name, custom.id
+                        ),
+                        template.source_path.as_deref().or(source_path),
+                    );
+                }
+            }
         }
         "cloze" => {
             let Some(cloze_field) = custom.cloze_field.as_deref() else {
@@ -1096,6 +1119,78 @@ fn validate_product_v3_custom_kind(plan: &mut LoweringPlan, custom: &ProductCust
             source_path,
         ),
     }
+}
+
+fn validate_legacy_custom_cloze(
+    custom: &CustomNoteType,
+    field_name_by_key: &BTreeMap<String, String>,
+    diagnostics: &mut Vec<ProductDiagnostic>,
+) -> bool {
+    let cloze_templates = custom
+        .templates
+        .iter()
+        .filter_map(|template| match template.generation_rule.as_ref() {
+            Some(crate::product::model::CustomGenerationRule::Cloze { field }) => {
+                Some((template, field))
+            }
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    if cloze_templates.is_empty() {
+        return true;
+    }
+
+    let source_path = Some(format!("project.note_types[{:?}]", custom.id));
+    if custom.templates.len() != 1 || cloze_templates.len() != 1 {
+        diagnostics.push(ProductDiagnostic {
+            code: "TEMPLATE.CLOZE_TEMPLATE_COUNT_INVALID",
+            message: format!(
+                "custom Cloze note type '{}' requires exactly one Cloze template",
+                custom.id
+            ),
+            source_path,
+            byte_offset: None,
+        });
+        return false;
+    }
+
+    let (template, field_key) = cloze_templates[0];
+    let template_path = Some(format!(
+        "project.note_types[{:?}].templates[{:?}]",
+        custom.id, template.name
+    ));
+    let Some(field_name) = field_name_by_key.get(field_key) else {
+        diagnostics.push(ProductDiagnostic {
+            code: "TEMPLATE.CLOZE_FIELD_UNKNOWN",
+            message: format!(
+                "custom Cloze note type '{}' references unknown field key '{}'",
+                custom.id, field_key
+            ),
+            source_path: template_path,
+            byte_offset: None,
+        });
+        return false;
+    };
+
+    let cloze_fields = crate::product::TemplateEngine::cloze_fields(&template.question_format);
+    if !cloze_fields.contains(field_name) {
+        diagnostics.push(ProductDiagnostic {
+            code: if cloze_fields.is_empty() {
+                "TEMPLATE.CLOZE_FILTER_REQUIRED"
+            } else {
+                "TEMPLATE.CLOZE_FIELD_MISMATCH"
+            },
+            message: format!(
+                "custom Cloze template '{}' must render '{{{{cloze:{}}}}}'",
+                template.name, field_name
+            ),
+            source_path: template_path,
+            byte_offset: None,
+        });
+        return false;
+    }
+
+    true
 }
 
 fn validate_v2_stock_generation_rules(

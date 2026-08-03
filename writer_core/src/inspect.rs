@@ -488,30 +488,42 @@ fn build_observations(
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
-        for planned_card in plan_cards(note, notetype) {
-            let template = &notetype.templates[planned_card.template_index];
-            let template_name = template.name.as_str();
-            let card_ord = planned_card.card_ord;
-            let card_key = (note_id.to_string(), card_ord as usize);
-            let card_deck_name = if let Some(actual_card_decks) = actual_card_decks {
-                let Some(deck_name) = actual_card_decks.get(&card_key) else {
-                    continue;
-                };
-                deck_name.as_str()
-            } else {
-                template
+        if let Some(actual_card_decks) = actual_card_decks {
+            for ((actual_note_id, actual_ord), deck_name) in actual_card_decks
+                .iter()
+                .filter(|((actual_note_id, _), _)| actual_note_id == note_id)
+            {
+                let card_ord = *actual_ord as u32;
+                let template_name = template_for_card_ord(notetype, card_ord)
+                    .map(|template| template.name.as_str())
+                    .unwrap_or("<missing template>");
+                card_entries.push(json!({
+                    "selector": format!("card[note_id='{}'][ord={}]", actual_note_id, card_ord),
+                    "note_id": actual_note_id,
+                    "ord": card_ord,
+                    "template_name": template_name,
+                    "deck_name": deck_name,
+                    "evidence_refs": [format!("card:{}:{}", actual_note_id, card_ord)],
+                }));
+            }
+        } else {
+            for planned_card in plan_cards(note, notetype) {
+                let template = &notetype.templates[planned_card.template_index];
+                let template_name = template.name.as_str();
+                let card_ord = planned_card.card_ord;
+                let card_deck_name = template
                     .target_deck_name
                     .as_deref()
-                    .unwrap_or(note.deck_name.as_str())
-            };
-            card_entries.push(json!({
-                "selector": format!("card[note_id='{}'][ord={}]", note_id, card_ord),
-                "note_id": note_id,
-                "ord": card_ord,
-                "template_name": template_name,
-                "deck_name": card_deck_name,
-                "evidence_refs": [format!("card:{}:{}", note_id, card_ord)],
-            }));
+                    .unwrap_or(note.deck_name.as_str());
+                card_entries.push(json!({
+                    "selector": format!("card[note_id='{}'][ord={}]", note_id, card_ord),
+                    "note_id": note_id,
+                    "ord": card_ord,
+                    "template_name": template_name,
+                    "deck_name": card_deck_name,
+                    "evidence_refs": [format!("card:{}:{}", note_id, card_ord)],
+                }));
+            }
         }
     }
 
@@ -598,6 +610,21 @@ fn build_observations(
             .chain(media_reference_entries)
             .collect(),
     }
+}
+
+fn template_for_card_ord(
+    notetype: &NormalizedNotetype,
+    card_ord: u32,
+) -> Option<&NormalizedTemplate> {
+    if notetype.kind == "cloze" {
+        return notetype.templates.first();
+    }
+    notetype
+        .templates
+        .iter()
+        .enumerate()
+        .find(|(index, template)| template.ord.unwrap_or(*index as u32) == card_ord)
+        .map(|(_, template)| template)
 }
 
 fn build_note_identity_metadata_from_normalized_ir(normalized_ir: &NormalizedIr) -> Vec<Value> {
@@ -1349,6 +1376,66 @@ fn contains_parent_dir(path: &Path) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty() {
+        let normalized_ir = NormalizedIr {
+            kind: "normalized-ir".into(),
+            schema_version: "phase2-v1".into(),
+            document_id: "inspect-actual-cards".into(),
+            resolved_identity: "inspect-actual-cards".into(),
+            notetypes: vec![NormalizedNotetype {
+                id: "basic".into(),
+                kind: "normal".into(),
+                name: "Basic".into(),
+                original_stock_kind: None,
+                original_id: None,
+                fields: vec![NormalizedField {
+                    name: "Front".into(),
+                    ord: Some(0),
+                    config_id: None,
+                    tag: None,
+                    prevent_deletion: false,
+                    sort: true,
+                }],
+                templates: vec![NormalizedTemplate {
+                    name: "Card".into(),
+                    ord: Some(0),
+                    config_id: None,
+                    question_format: "{{Front}}".into(),
+                    answer_format: "{{Front}}".into(),
+                    browser_question_format: None,
+                    browser_answer_format: None,
+                    target_deck_name: None,
+                    browser_font_name: None,
+                    browser_font_size: None,
+                    generation_requirement: None,
+                }],
+                css: String::new(),
+                field_metadata: Vec::new(),
+            }],
+            notes: vec![NormalizedNote {
+                id: "note-1".into(),
+                notetype_id: "basic".into(),
+                deck_name: "Deck".into(),
+                fields: BTreeMap::from([("Front".into(), String::new())]),
+                tags: Vec::new(),
+                mtime_secs: None,
+            }],
+            media_objects: Vec::new(),
+            media_bindings: Vec::new(),
+            media_references: Vec::new(),
+        };
+        let actual_cards = BTreeMap::from([(("note-1".into(), 0), "Deck".into())]);
+
+        let observations = build_observations(&normalized_ir, &[], &[], Some(&actual_cards), &[]);
+
+        assert!(observations
+            .references
+            .iter()
+            .any(|value| value["selector"] == "card[note_id='note-1'][ord=0]"));
+        assert_eq!(observations.metadata[0]["card_count"], 1);
+    }
 
     #[test]
     fn artifact_path_from_ref_does_not_strip_prefix_collisions() {
