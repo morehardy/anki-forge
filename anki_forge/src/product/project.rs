@@ -4649,7 +4649,6 @@ fn deduplicate_diagnostics(diagnostics: &mut Vec<Diagnostic>) {
                 .as_ref()
                 .map(|source| source.as_str().to_string()),
             diagnostic.message.clone(),
-            diagnostic.help.clone(),
         ))
     });
 }
@@ -4747,10 +4746,11 @@ mod tests {
 
     #[test]
     fn duplicate_diagnostics_with_the_same_source_are_collapsed() {
-        let mut diagnostics = vec![
-            diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning),
-            diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning),
-        ];
+        let mut first = diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning);
+        first.help = Some("replace the unsupported filter".into());
+        let mut second = diagnostic("TEMPLATE.FILTER_UNKNOWN", Severity::Warning);
+        second.help = Some("fix the template expression".into());
+        let mut diagnostics = vec![first, second];
 
         deduplicate_diagnostics(&mut diagnostics);
 
