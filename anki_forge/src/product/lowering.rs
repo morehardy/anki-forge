@@ -985,9 +985,13 @@ fn lower_product_v2_custom_notetype(
                 target_deck_name: template.target_deck.clone(),
                 browser_font_name: None,
                 browser_font_size: None,
-                generation_requirement: product_v2_generation_requirement(
+                generation_requirement: product_generation_requirement(
+                    plan,
+                    custom,
+                    template,
                     generation_rule,
                     &field_name_by_key,
+                    allow_custom_cloze,
                 ),
             }
         })
@@ -1305,6 +1309,63 @@ fn product_v2_generation_requirement(
         Some(ProductGenerationRuleV2::AnkiDefault)
         | Some(ProductGenerationRuleV2::Unknown(_))
         | None => None,
+    }
+}
+
+fn product_generation_requirement(
+    plan: &mut LoweringPlan,
+    custom: &ProductCustomNoteTypeV2,
+    template: &ProductTemplateV2,
+    rule: Option<&ProductGenerationRuleV2>,
+    field_name_by_key: &BTreeMap<String, String>,
+    product_v3: bool,
+) -> Option<authoring_core::AuthoringGenerationRequirement> {
+    let explicit = product_v2_generation_requirement(rule, field_name_by_key);
+    if explicit.is_some() || !product_v3 || custom.note_type_kind.as_deref() == Some("cloze") {
+        return explicit;
+    }
+    if !matches!(rule, None | Some(ProductGenerationRuleV2::AnkiDefault)) {
+        return explicit;
+    }
+
+    match authoring_core::infer_generation_requirement(&template.front, field_name_by_key.values())
+    {
+        authoring_core::TemplateGenerationRequirement::Always => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "none".into(),
+                field_names: Vec::new(),
+            })
+        }
+        authoring_core::TemplateGenerationRequirement::All(field_names) => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "all".into(),
+                field_names,
+            })
+        }
+        authoring_core::TemplateGenerationRequirement::Any(field_names) => {
+            Some(authoring_core::AuthoringGenerationRequirement {
+                kind: "any".into(),
+                field_names,
+            })
+        }
+        authoring_core::TemplateGenerationRequirement::Unrepresentable => {
+            let front_source_path = template
+                .source_path
+                .as_ref()
+                .map(|source_path| format!("{source_path}.front"));
+            push_product_diagnostic_at(
+                plan,
+                "TEMPLATE.GENERATION_RULE_REQUIRED",
+                format!(
+                    "template '{}' on note type '{}' cannot express its front-side generation logic as an Anki requirement; declare an explicit all/any generation rule",
+                    template.name, custom.id
+                ),
+                front_source_path
+                    .as_deref()
+                    .or(custom.source_path.as_deref()),
+            );
+            None
+        }
     }
 }
 

@@ -1,8 +1,9 @@
+use std::collections::BTreeSet;
 use std::path::{Component, Path, PathBuf};
 
 use serde::Deserialize;
 
-use super::{Field, IdentityRecipe, NoteType, Template};
+use super::{Field, GenerationRule, IdentityRecipe, NoteType, Template};
 
 const MANIFEST_NAME: &str = "anki-template.yaml";
 const MANIFEST_LIMIT: u64 = 256 * 1024;
@@ -122,6 +123,16 @@ struct BundleTemplate {
     browser_back_file: Option<String>,
     #[serde(default)]
     target_deck: Option<String>,
+    #[serde(default)]
+    generation_rule: Option<BundleGenerationRule>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+enum BundleGenerationRule {
+    AnkiDefault,
+    All { fields: Vec<String> },
+    Any { fields: Vec<String> },
 }
 
 #[derive(Debug, Deserialize)]
@@ -201,6 +212,18 @@ pub(crate) fn load_template_bundle(
             Some(canonical_root.join(MANIFEST_NAME)),
         ));
     }
+    if manifest
+        .note_type
+        .fields
+        .iter()
+        .any(|field| field.required && field.optional)
+    {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_FIELD_MODE_CONFLICT",
+            "template bundle fields cannot be both required and optional",
+            Some(canonical_root.join(MANIFEST_NAME)),
+        ));
+    }
     if manifest.note_type.kind == "normal" && manifest.note_type.cloze_field.is_some() {
         return Err(TemplateBundleError::new(
             "TEMPLATE.BUNDLE_MANIFEST_INVALID",
@@ -209,6 +232,7 @@ pub(crate) fn load_template_bundle(
         ));
     }
 
+    let is_cloze = manifest.note_type.kind == "cloze";
     let mut note_type = match manifest.note_type.kind.as_str() {
         "normal" => NoteType::custom(&manifest.note_type.id),
         "cloze" => {
@@ -266,6 +290,13 @@ pub(crate) fn load_template_bundle(
     }
 
     for template in manifest.note_type.templates {
+        if is_cloze && template.generation_rule.is_some() {
+            return Err(TemplateBundleError::new(
+                "TEMPLATE.BUNDLE_GENERATION_RULE_CONFLICT",
+                "Cloze template bundles derive generation from note_type.cloze_field and must not declare generation_rule",
+                Some(canonical_root.join(MANIFEST_NAME)),
+            ));
+        }
         let front_path = resolve_bundle_file(
             &canonical_root,
             &template.front_file,
@@ -307,6 +338,12 @@ pub(crate) fn load_template_bundle(
         if let Some(deck) = template.target_deck {
             product_template = product_template.target_deck(deck);
         }
+        if let Some(rule) = template.generation_rule {
+            product_template = product_template.generate_when(bundle_generation_rule(
+                rule,
+                &canonical_root.join(MANIFEST_NAME),
+            )?);
+        }
         note_type = note_type.template(product_template);
     }
 
@@ -328,6 +365,28 @@ pub(crate) fn load_template_bundle(
         .collect::<Result<Vec<_>, TemplateBundleError>>()?;
 
     Ok(LoadedTemplateBundle { note_type, assets })
+}
+
+fn bundle_generation_rule(
+    rule: BundleGenerationRule,
+    manifest_path: &Path,
+) -> Result<GenerationRule, TemplateBundleError> {
+    match rule {
+        BundleGenerationRule::AnkiDefault => Ok(GenerationRule::AnkiDefault),
+        BundleGenerationRule::All { fields } | BundleGenerationRule::Any { fields }
+            if fields.is_empty()
+                || fields.iter().any(|field| field.trim().is_empty())
+                || fields.iter().collect::<BTreeSet<_>>().len() != fields.len() =>
+        {
+            Err(TemplateBundleError::new(
+                "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+                "template generation_rule fields must be non-empty, unique field keys",
+                Some(manifest_path.to_path_buf()),
+            ))
+        }
+        BundleGenerationRule::All { fields } => Ok(GenerationRule::all(fields)),
+        BundleGenerationRule::Any { fields } => Ok(GenerationRule::any(fields)),
+    }
 }
 
 fn resolve_bundle_file(

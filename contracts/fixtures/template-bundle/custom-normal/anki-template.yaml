@@ -1,0 +1,29 @@
+format_version: template-bundle-v1
+note_type:
+  id: language-card
+  name: Language Card
+  kind: normal
+  fields:
+    - key: prompt
+      name: Prompt
+      identity: true
+      required: true
+    - key: extra
+      name: Extra
+      sort: true
+      optional: true
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+      browser_front_file: browser-front.html
+      browser_back_file: browser-back.html
+      target_deck: Languages::Custom
+      generation_rule:
+        kind: all
+        fields: [prompt]
+css_file: style.css
+assets:
+  - path: assets/icon.svg
+    export_as: icon.svg

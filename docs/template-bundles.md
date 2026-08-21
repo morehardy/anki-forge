@@ -22,6 +22,24 @@ templates, an optional target deck, and optional assets with explicit
 `contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml` for a
 complete example.
 
+Normal templates may also declare a generation rule:
+
+```yaml
+generation_rule:
+  kind: all
+  fields: [prompt]
+```
+
+The field names in `generation_rule` are stable field keys. Kinds `all`, `any`,
+and `anki_default` are supported. When `anki_default` cannot be represented by
+one Anki card requirement, the build asks for an explicit `all` or `any` rule
+instead of storing an approximation.
+
+`required: true` rejects missing or empty note content. `optional: true` allows
+the field to be omitted and lowers it as an empty value. A field cannot declare
+both modes. At most one field may declare `sort: true`; without one, Anki uses
+the first field.
+
 Rust usage:
 
 ```rust

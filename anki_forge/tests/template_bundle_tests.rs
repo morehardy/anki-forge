@@ -86,6 +86,124 @@ css_file: style.css
 }
 
 #[test]
+fn external_normal_bundle_preserves_field_template_and_asset_semantics() {
+    let bundle = tempfile::tempdir().expect("bundle");
+    std::fs::create_dir(bundle.path().join("assets")).expect("assets dir");
+    std::fs::write(
+        bundle.path().join("anki-template.yaml"),
+        r#"
+format_version: template-bundle-v1
+note_type:
+  id: language-card
+  name: Language Card
+  kind: normal
+  fields:
+    - key: prompt
+      name: Prompt
+      identity: true
+      required: true
+    - key: extra
+      name: Extra
+      sort: true
+      optional: true
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+      browser_front_file: browser-front.html
+      browser_back_file: browser-back.html
+      target_deck: Languages::Custom
+      generation_rule:
+        kind: all
+        fields: [prompt]
+css_file: style.css
+assets:
+  - path: assets/icon.svg
+    export_as: icon.svg
+"#,
+    )
+    .expect("manifest");
+    std::fs::write(bundle.path().join("front.html"), "{{Prompt}}").expect("front");
+    std::fs::write(
+        bundle.path().join("back.html"),
+        "{{Prompt}}<br>{{Extra}}<img src=\"icon.svg\">",
+    )
+    .expect("back");
+    std::fs::write(bundle.path().join("browser-front.html"), "{{Prompt}}").expect("browser front");
+    std::fs::write(bundle.path().join("browser-back.html"), "{{Extra}}").expect("browser back");
+    std::fs::write(
+        bundle.path().join("style.css"),
+        ".card { background-image: url(icon.svg); }",
+    )
+    .expect("css");
+    std::fs::write(
+        bundle.path().join("assets/icon.svg"),
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>"#,
+    )
+    .expect("asset");
+
+    let output = tempfile::tempdir().expect("output");
+    let apkg = output.path().join("normal-bundle.apkg");
+    let mut project = Project::new("Bundle")
+        .stable_id("normal-bundle")
+        .default_deck("Bundle");
+    project
+        .import_template_bundle(bundle.path())
+        .expect("import bundle");
+    project
+        .add_note(
+            Note::new("language-card")
+                .stable_id("bundle:normal:1")
+                .text("prompt", "hello"),
+        )
+        .expect("add note");
+
+    let report = project.write_apkg(&apkg).expect("write apkg");
+    assert_eq!(report.counts.cards, 1);
+    assert_eq!(report.counts.media, 1);
+
+    let inspected = inspect_apkg(&apkg).expect("inspect");
+    let extra = inspected
+        .observations
+        .fields
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='language-card']::field[Extra]")
+        .expect("extra field");
+    assert_eq!(extra["sort"], true);
+    let template = inspected
+        .observations
+        .templates
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='language-card']::template[Card]")
+        .expect("template");
+    assert_eq!(
+        template["generation_requirement"],
+        serde_json::json!({"kind": "all", "field_names": ["Prompt"]})
+    );
+    assert!(inspected
+        .observations
+        .browser_templates
+        .iter()
+        .any(|value| {
+            value["notetype_id"] == "language-card" && value["browser_answer_format"] == "{{Extra}}"
+        }));
+    assert!(inspected
+        .observations
+        .template_target_decks
+        .iter()
+        .any(|value| {
+            value["notetype_id"] == "language-card"
+                && value["target_deck_name"] == "Languages::Custom"
+        }));
+    assert!(inspected
+        .observations
+        .media
+        .iter()
+        .any(|value| value["filename"] == "icon.svg"));
+}
+
+#[test]
 fn template_bundle_rejects_parent_directory_paths() {
     let root = tempfile::tempdir().expect("root");
     let bundle_path = root.path().join("bundle");
@@ -184,6 +302,52 @@ fn template_bundle_rejects_empty_fields_and_normal_cloze_field() {
 
         assert_eq!(error.code(), "TEMPLATE.BUNDLE_MANIFEST_INVALID");
     }
+}
+
+#[test]
+fn template_bundle_rejects_conflicting_field_modes_without_mutating_project() {
+    let bundle = tempfile::tempdir().expect("bundle");
+    std::fs::write(bundle.path().join("front.html"), "{{Prompt}}").expect("front");
+    std::fs::write(bundle.path().join("back.html"), "{{Prompt}}").expect("back");
+    std::fs::write(
+        bundle.path().join("anki-template.yaml"),
+        r#"
+format_version: template-bundle-v1
+note_type:
+  id: conflicting-card
+  kind: normal
+  fields:
+    - key: prompt
+      name: Prompt
+      required: true
+      optional: true
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+"#,
+    )
+    .expect("manifest");
+    let mut project = Project::new("Conflicting field");
+
+    let error = project
+        .import_template_bundle(bundle.path())
+        .expect_err("conflicting field modes must fail");
+
+    assert_eq!(error.code(), "TEMPLATE.BUNDLE_FIELD_MODE_CONFLICT");
+    project
+        .add_notetype(
+            NoteType::custom("conflicting-card")
+                .field(Field::new("Prompt").key("prompt"))
+                .template(
+                    Template::new("Card")
+                        .key("card")
+                        .front("{{Prompt}}")
+                        .back("{{Prompt}}"),
+                ),
+        )
+        .expect("failed bundle import must not register its note type");
 }
 
 #[test]

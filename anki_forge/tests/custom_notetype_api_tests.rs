@@ -140,3 +140,32 @@ fn project_build_reports_each_template_warning_once() {
         1
     );
 }
+
+#[test]
+fn project_rejects_conflicting_field_key_and_name_values() {
+    let note_type = NoteType::custom("alias-card")
+        .field(Field::new("Prompt").key("prompt").identity())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front("{{Prompt}}")
+                .back("{{Prompt}}"),
+        )
+        .identity(IdentityRecipe::fields(["prompt"]));
+    let mut project = Project::new("Aliases");
+    project.add_notetype(note_type).expect("add note type");
+
+    let error = project
+        .add_note(
+            Note::new("alias-card")
+                .stable_id("alias:1")
+                .text("prompt", "stable-key value")
+                .text("Prompt", "display-name value"),
+        )
+        .expect_err("conflicting aliases must fail");
+
+    assert_eq!(
+        error.diagnostic().code.as_str(),
+        "PRODUCT.FIELD_ALIAS_CONFLICT"
+    );
+}

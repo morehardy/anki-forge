@@ -798,6 +798,29 @@ impl Project {
             return Ok(());
         };
 
+        let rendered_fields = note.rendered_fields();
+        for field in note_type.fields() {
+            let key = field.key_ref().as_str();
+            let name = field.name();
+            if key == name {
+                continue;
+            }
+            if let (Some(key_value), Some(name_value)) =
+                (rendered_fields.get(key), rendered_fields.get(name))
+            {
+                if key_value != name_value {
+                    return Err(project_add_error(
+                        "PRODUCT.FIELD_ALIAS_CONFLICT",
+                        format!(
+                            "custom note for note type '{note_type_id}' provides different values for field key '{key}' and display name '{name}'"
+                        ),
+                        format!("project.notes[{note_index}].fields[{key:?}]"),
+                        "provide the field once by stable key, or use the same value for both aliases",
+                    ));
+                }
+            }
+        }
+
         for field_key in note.field_keys() {
             let field_known = note_type
                 .fields()
@@ -2041,88 +2064,115 @@ impl Project {
             .default_deck
             .clone()
             .unwrap_or_else(|| self.name.clone());
-        let mut product = ProductDocument::new(document_id).with_default_deck(default_deck.clone());
-        for stock_id in self.implicit_stock_notetype_ids() {
-            product = match stock_id {
-                STOCK_BASIC_ID => product.with_basic(STOCK_BASIC_ID),
-                STOCK_CLOZE_ID => product.with_cloze(STOCK_CLOZE_ID),
-                STOCK_IMAGE_OCCLUSION_ID => product.with_image_occlusion(STOCK_IMAGE_OCCLUSION_ID),
-                _ => unreachable!("implicit stock note type ids are filtered by Project"),
-            };
+        let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
+        let mut note_type_id_counts = BTreeMap::<&str, usize>::new();
+        for stock_id in &implicit_stock_notetype_ids {
+            *note_type_id_counts.entry(*stock_id).or_default() += 1;
         }
-
         for note_type in &self.note_types {
-            let custom = crate::product::model::CustomNoteType {
-                id: note_type.id().to_string(),
-                name: note_type.name_ref().map(ToOwned::to_owned),
-                fields: note_type
-                    .fields()
-                    .iter()
-                    .map(|field| crate::product::model::CustomField {
-                        name: field.name().to_string(),
-                        key: Some(field.key_ref().as_str().to_string()),
-                    })
-                    .collect(),
-                templates: note_type
-                    .templates()
-                    .iter()
-                    .map(|template| {
-                        let generation_rule = match note_type.kind() {
-                            crate::product::NoteTypeKind::Normal => {
-                                custom_generation_rule(template.generation_rule())
-                            }
-                            crate::product::NoteTypeKind::Cloze { field } => {
-                                crate::product::model::CustomGenerationRule::Cloze {
-                                    field: field.as_str().to_string(),
-                                }
-                            }
-                        };
-                        crate::product::model::CustomTemplate {
-                            name: template.name().to_string(),
-                            key: Some(template.key_ref().as_str().to_string()),
-                            question_format: template.front_source().as_str().to_string(),
-                            answer_format: template.back_source().as_str().to_string(),
-                            generation_rule: Some(generation_rule),
-                        }
-                    })
-                    .collect(),
-                css: note_type.css_ref().map(ToOwned::to_owned),
-            };
-            product = product.with_custom_notetype(custom);
-
-            for template in note_type.templates() {
-                if template.browser_front_source().is_some()
-                    || template.browser_back_source().is_some()
-                {
-                    product = product.with_browser_appearance(
-                        note_type.id().to_string(),
-                        crate::product::metadata::TemplateBrowserAppearanceDeclaration {
-                            template_name: template.name().to_string(),
-                            question_format: template
-                                .browser_front_source()
-                                .map(|source| source.as_str().to_string()),
-                            answer_format: template
-                                .browser_back_source()
-                                .map(|source| source.as_str().to_string()),
-                            font_name: None,
-                            font_size: None,
-                        },
-                    );
-                }
-
-                if let Some(deck_name) = template.target_deck_name() {
-                    product = product.with_template_target_deck(
-                        note_type.id().to_string(),
-                        crate::product::metadata::TemplateTargetDeckDeclaration {
-                            template_name: template.name().to_string(),
-                            deck_name: deck_name.to_string(),
-                        },
-                    );
-                }
-            }
+            *note_type_id_counts.entry(note_type.id()).or_default() += 1;
         }
+        let mut note_types = implicit_stock_notetype_ids
+            .into_iter()
+            .map(|stock_id| {
+                crate::product::model::ProductNoteTypeV2::Stock(
+                    crate::product::model::ProductStockNoteTypeV2 {
+                        id: stock_id.to_string(),
+                        name: None,
+                        fields: Vec::new(),
+                        templates: Vec::new(),
+                        css: None,
+                        source_path: None,
+                    },
+                )
+            })
+            .collect::<Vec<_>>();
+
+        note_types.extend(
+            self.note_types
+                .iter()
+                .enumerate()
+                .map(|(index, note_type)| {
+                    let note_type_source = if note_type_id_counts
+                        .get(note_type.id())
+                        .copied()
+                        .unwrap_or_default()
+                        > 1
+                    {
+                        format!("project.note_types[{index}]")
+                    } else {
+                        format!("project.note_types[{:?}]", note_type.id())
+                    };
+                    let (note_type_kind, cloze_field) = match note_type.kind() {
+                        crate::product::NoteTypeKind::Normal => (Some("normal".to_string()), None),
+                        crate::product::NoteTypeKind::Cloze { field } => {
+                            (Some("cloze".to_string()), Some(field.as_str().to_string()))
+                        }
+                    };
+                    let identity = note_type.identity_ref().map(|recipe| {
+                        crate::product::model::ProductIdentityV2::Fields {
+                            fields: recipe
+                                .field_keys()
+                                .iter()
+                                .map(|field| field.as_str().to_string())
+                                .collect(),
+                        }
+                    });
+                    crate::product::model::ProductNoteTypeV2::Custom(
+                        crate::product::model::ProductCustomNoteTypeV2 {
+                            id: note_type.id().to_string(),
+                            name: note_type.name_ref().map(ToOwned::to_owned),
+                            note_type_kind,
+                            cloze_field,
+                            fields: note_type
+                                .fields()
+                                .iter()
+                                .map(|field| crate::product::model::ProductFieldV2 {
+                                    name: field.name().to_string(),
+                                    key: field.key_ref().as_str().to_string(),
+                                    identity: field.is_identity(),
+                                    sort: field.is_sort(),
+                                    required: field.is_required(),
+                                    source_path: None,
+                                })
+                                .collect(),
+                            templates: note_type
+                                .templates()
+                                .iter()
+                                .map(|template| crate::product::model::ProductTemplateV2 {
+                                    name: template.name().to_string(),
+                                    key: template.key_ref().as_str().to_string(),
+                                    front: template.front_source().as_str().to_string(),
+                                    back: template.back_source().as_str().to_string(),
+                                    browser_front: template
+                                        .browser_front_source()
+                                        .map(|source| source.as_str().to_string()),
+                                    browser_back: template
+                                        .browser_back_source()
+                                        .map(|source| source.as_str().to_string()),
+                                    target_deck: template.target_deck_name().map(ToOwned::to_owned),
+                                    generation_rule: match note_type.kind() {
+                                        crate::product::NoteTypeKind::Normal => Some(
+                                            product_v3_generation_rule(template.generation_rule()),
+                                        ),
+                                        crate::product::NoteTypeKind::Cloze { .. } => None,
+                                    },
+                                    source_path: Some(format!(
+                                        "{note_type_source}.templates[{:?}]",
+                                        template.name()
+                                    )),
+                                })
+                                .collect(),
+                            identity,
+                            css: note_type.css_ref().map(ToOwned::to_owned),
+                            source_path: Some(note_type_source),
+                        },
+                    )
+                }),
+        );
 
         let stable_id_counts = self.note_stable_id_counts();
+        let mut notes = Vec::with_capacity(self.notes.len());
         for (index, note) in self.notes.iter().enumerate() {
             let note_id =
                 resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
@@ -2132,47 +2182,61 @@ impl Project {
                 .to_string();
             let fields = note.rendered_fields();
             if note.note_type_id() == STOCK_BASIC_ID {
-                product = product.add_basic_note_with_tags(
-                    STOCK_BASIC_ID,
+                notes.push(product_v3_stock_note(
+                    note,
                     note_id,
                     deck_name,
-                    fields.get("Front").cloned().unwrap_or_default(),
-                    fields.get("Back").cloned().unwrap_or_default(),
-                    note.tags().iter().cloned(),
-                );
+                    [("front", fields.get("Front")), ("back", fields.get("Back"))],
+                    index,
+                ));
             } else if note.note_type_id() == STOCK_CLOZE_ID {
-                product = product.add_cloze_note_with_tags(
-                    STOCK_CLOZE_ID,
+                notes.push(product_v3_stock_note(
+                    note,
                     note_id,
                     deck_name,
-                    fields.get("Text").cloned().unwrap_or_default(),
-                    fields.get("Back Extra").cloned().unwrap_or_default(),
-                    note.tags().iter().cloned(),
-                );
+                    [
+                        ("text", fields.get("Text")),
+                        ("back_extra", fields.get("Back Extra")),
+                    ],
+                    index,
+                ));
             } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
-                product = product.add_image_occlusion_note_with_tags(
-                    STOCK_IMAGE_OCCLUSION_ID,
+                notes.push(product_v3_stock_note(
+                    note,
                     note_id,
                     deck_name,
-                    fields.get("Occlusion").cloned().unwrap_or_default(),
-                    fields.get("Image").cloned().unwrap_or_default(),
-                    fields.get("Header").cloned().unwrap_or_default(),
-                    fields.get("Back Extra").cloned().unwrap_or_default(),
-                    fields.get("Comments").cloned().unwrap_or_default(),
-                    note.tags().iter().cloned(),
-                );
+                    [
+                        ("occlusion", fields.get("Occlusion")),
+                        ("image", fields.get("Image")),
+                        ("header", fields.get("Header")),
+                        ("back_extra", fields.get("Back Extra")),
+                        ("comments", fields.get("Comments")),
+                    ],
+                    index,
+                ));
             } else {
-                let fields = custom_note_fields_for_authoring(self, note);
-                product = product.add_custom_note(crate::product::model::CustomNote {
-                    id: note_id,
-                    note_type_id: note.note_type_id().to_string(),
-                    deck_name,
-                    fields,
-                    tags: note.tags().to_vec(),
-                });
+                let fields = custom_note_fields_for_product_v3(self, note)
+                    .into_iter()
+                    .map(|(key, value)| {
+                        (
+                            key,
+                            crate::product::model::ProductFieldContentV2::Html { value },
+                        )
+                    })
+                    .collect();
+                notes.push(crate::product::model::ProductNoteV2::Custom(
+                    crate::product::model::ProductCustomNoteV2 {
+                        note_type_id: note.note_type_id().to_string(),
+                        stable_id: Some(note_id),
+                        deck_name,
+                        fields,
+                        tags: note.tags().to_vec(),
+                        source_path: Some(format!("project.notes[{index}]")),
+                    },
+                ));
             }
         }
-        product
+        ProductDocument::from_product_v3_parts(document_id, Some(default_deck), note_types, notes)
     }
 
     fn note_stable_id_counts(&self) -> BTreeMap<&str, usize> {
@@ -2590,15 +2654,15 @@ impl Project {
     }
 }
 
-fn custom_generation_rule(
+fn product_v3_generation_rule(
     rule: &crate::product::GenerationRule,
-) -> crate::product::model::CustomGenerationRule {
+) -> crate::product::model::ProductGenerationRuleV2 {
     match rule {
         crate::product::GenerationRule::AnkiDefault => {
-            crate::product::model::CustomGenerationRule::AnkiDefault
+            crate::product::model::ProductGenerationRuleV2::AnkiDefault
         }
         crate::product::GenerationRule::All(fields) => {
-            crate::product::model::CustomGenerationRule::All {
+            crate::product::model::ProductGenerationRuleV2::All {
                 fields: fields
                     .iter()
                     .map(|field| field.as_str().to_string())
@@ -2606,7 +2670,7 @@ fn custom_generation_rule(
             }
         }
         crate::product::GenerationRule::Any(fields) => {
-            crate::product::model::CustomGenerationRule::Any {
+            crate::product::model::ProductGenerationRuleV2::Any {
                 fields: fields
                     .iter()
                     .map(|field| field.as_str().to_string())
@@ -2614,11 +2678,88 @@ fn custom_generation_rule(
             }
         }
         crate::product::GenerationRule::Cloze { field } => {
-            crate::product::model::CustomGenerationRule::Cloze {
+            crate::product::model::ProductGenerationRuleV2::Cloze {
                 field: field.as_str().to_string(),
             }
         }
     }
+}
+
+fn product_v3_stock_note<const N: usize>(
+    note: &crate::product::Note,
+    stable_id: String,
+    deck_name: String,
+    fields: [(&'static str, Option<&String>); N],
+    index: usize,
+) -> crate::product::model::ProductNoteV2 {
+    crate::product::model::ProductNoteV2::Stock(crate::product::model::ProductStockNoteV2 {
+        note_type_id: note.note_type_id().to_string(),
+        stable_id: Some(stable_id),
+        deck_name,
+        fields: fields
+            .into_iter()
+            .map(|(key, value)| {
+                (
+                    key.to_string(),
+                    crate::product::model::ProductFieldContentV2::Html {
+                        value: value.cloned().unwrap_or_default(),
+                    },
+                )
+            })
+            .collect(),
+        tags: note.tags().to_vec(),
+        source_path: Some(format!("project.notes[{index}]")),
+    })
+}
+
+fn custom_note_fields_for_product_v3(
+    project: &Project,
+    note: &crate::product::Note,
+) -> BTreeMap<String, String> {
+    let rendered = note.rendered_fields();
+    let Some(note_type) = project
+        .note_types
+        .iter()
+        .find(|note_type| note_type.id() == note.note_type_id())
+    else {
+        return rendered;
+    };
+
+    let key_by_name = note_type
+        .fields()
+        .iter()
+        .map(|field| (field.name(), field.key_ref().as_str()))
+        .collect::<BTreeMap<_, _>>();
+    let field_keys = note_type
+        .fields()
+        .iter()
+        .map(|field| field.key_ref().as_str())
+        .collect::<BTreeSet<_>>();
+
+    let mut fields = BTreeMap::new();
+    let mut field_priorities = BTreeMap::new();
+    for (field_key_or_name, value) in rendered {
+        let is_stable_key = field_keys.contains(field_key_or_name.as_str());
+        let field_key = if is_stable_key {
+            field_key_or_name
+        } else {
+            key_by_name
+                .get(field_key_or_name.as_str())
+                .copied()
+                .unwrap_or(field_key_or_name.as_str())
+                .to_string()
+        };
+        let priority = u8::from(is_stable_key);
+        if field_priorities
+            .get(&field_key)
+            .is_some_and(|existing| *existing > priority)
+        {
+            continue;
+        }
+        field_priorities.insert(field_key.clone(), priority);
+        fields.insert(field_key, value);
+    }
+    fields
 }
 
 fn duplicate_notetype_message(
@@ -3016,56 +3157,6 @@ fn derive_product_note_identity(
         used_override,
         selected_fields,
     )
-}
-
-fn custom_note_fields_for_authoring(
-    project: &Project,
-    note: &crate::product::Note,
-) -> BTreeMap<String, String> {
-    let rendered = note.rendered_fields();
-    let Some(note_type) = project
-        .note_types
-        .iter()
-        .find(|note_type| note_type.id() == note.note_type_id())
-    else {
-        return rendered;
-    };
-
-    let name_by_key = note_type
-        .fields()
-        .iter()
-        .map(|field| (field.key_ref().as_str(), field.name()))
-        .collect::<BTreeMap<_, _>>();
-    let field_names = note_type
-        .fields()
-        .iter()
-        .map(|field| field.name())
-        .collect::<BTreeSet<_>>();
-
-    let mut fields = BTreeMap::new();
-    let mut field_priorities = BTreeMap::new();
-    for (field_key_or_name, value) in rendered {
-        let is_visible_name = field_names.contains(field_key_or_name.as_str());
-        let field_name = if is_visible_name {
-            field_key_or_name
-        } else {
-            name_by_key
-                .get(field_key_or_name.as_str())
-                .copied()
-                .unwrap_or(field_key_or_name.as_str())
-                .to_string()
-        };
-        let priority = u8::from(is_visible_name);
-        if field_priorities
-            .get(&field_name)
-            .is_some_and(|existing| *existing > priority)
-        {
-            continue;
-        }
-        field_priorities.insert(field_name.clone(), priority);
-        fields.insert(field_name, value);
-    }
-    fields
 }
 
 fn note_field_source_names_for_authoring(
@@ -4954,7 +5045,7 @@ mod tests {
     }
 
     #[test]
-    fn lower_maps_custom_notetype_stock_collision_sources_to_project_index() {
+    fn lower_rejects_custom_notetype_stock_collision_before_authoring() {
         let mut project = Project::new("Implicit Duplicate")
             .stable_id("implicit-duplicate")
             .default_deck("Implicit Duplicate");
@@ -4973,27 +5064,20 @@ mod tests {
 
         let plan = project.lower().expect("lower project");
 
+        let diagnostic = plan
+            .product_diagnostics
+            .iter()
+            .find(|diagnostic| diagnostic.code == "PRODUCT.RESERVED_ID_KIND_MISMATCH")
+            .expect("reserved custom id diagnostic");
         assert_eq!(
-            plan.source_map.source_for_authoring_path(
-                "authoring.note_types[1].templates[\"Custom Basic\"].front"
-            ),
-            Some("project.note_types[0].templates[\"Custom Basic\"].front")
+            diagnostic.source_path.as_deref(),
+            Some("project.note_types[0]")
         );
-        assert_eq!(
-            plan.source_map
-                .source_for_authoring_path("authoring.note_types[1].css"),
-            Some("project.note_types[0].css")
-        );
-        assert_eq!(
-            plan.source_map.source_for_authoring_path(
-                "authoring.note_types[\"basic\"].templates[\"Custom Basic\"].front"
-            ),
-            None
-        );
+        assert_eq!(plan.authoring_document.notetypes.len(), 1);
     }
 
     #[test]
-    fn build_maps_stock_collision_template_media_to_custom_notetype_index() {
+    fn build_rejects_stock_collision_before_scanning_custom_template_media() {
         let mut project = Project::new("Implicit Duplicate Media")
             .stable_id("implicit-duplicate-media")
             .default_deck("Implicit Duplicate Media");
@@ -5027,22 +5111,21 @@ mod tests {
         );
         assert!(duplicate.message.contains("implicit stock"));
 
-        let sources = error
+        let reserved = error
             .report
             .diagnostics
             .iter()
-            .filter(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
-            .map(|diagnostic| {
-                diagnostic
-                    .source
-                    .as_ref()
-                    .map(|source| source.as_str())
-                    .expect("missing media diagnostic source")
-            })
-            .collect::<Vec<_>>();
-
-        assert!(sources.contains(&"project.note_types[0].templates[\"Custom Basic\"].front"));
-        assert!(sources.contains(&"project.note_types[0].css"));
+            .find(|diagnostic| diagnostic.code.as_str() == "PRODUCT.RESERVED_ID_KIND_MISMATCH")
+            .expect("reserved custom id diagnostic");
+        assert_eq!(
+            reserved.source.as_ref().map(|source| source.as_str()),
+            Some("project.note_types[0]")
+        );
+        assert!(!error
+            .report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE"));
     }
 
     #[test]
@@ -5096,7 +5179,10 @@ mod tests {
             })
             .collect::<Vec<_>>();
 
-        assert!(sources.contains(&"project.notes[0].fields[\"Back\"]"));
+        assert!(
+            sources.contains(&"project.notes[0].fields[\"Back\"]"),
+            "{sources:?}"
+        );
         assert!(sources.contains(&"project.notes[1].fields[\"Back\"]"));
         assert!(sources.contains(&"project.notes[2].fields[\"Back\"]"));
     }

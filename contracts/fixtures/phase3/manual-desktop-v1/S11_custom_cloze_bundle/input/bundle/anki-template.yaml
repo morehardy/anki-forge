@@ -1,0 +1,24 @@
+format_version: template-bundle-v1
+note_type:
+  id: desktop-custom-cloze
+  name: Desktop Custom Cloze
+  kind: cloze
+  cloze_field: text
+  fields:
+    - key: text
+      name: Text
+      identity: true
+      sort: true
+      required: true
+    - key: extra
+      name: Extra
+      optional: true
+  templates:
+    - key: cloze
+      name: Cloze
+      front_file: front.html
+      back_file: back.html
+      browser_front_file: browser-front.html
+      browser_back_file: browser-back.html
+      target_deck: Anki Forge Manual::Custom Cloze
+css_file: style.css
