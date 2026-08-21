@@ -25,6 +25,16 @@ async function runStructured(command, request, runtimeOptions) {
   try {
     parsed = JSON.parse(raw.stdout);
   } catch (error) {
+    if (raw.exitStatus !== 0) {
+      throw new RuntimeInvocationError(`${command} exited with status ${raw.exitStatus}`, {
+        command,
+        exitStatus: raw.exitStatus,
+        stdout: raw.stdout,
+        stderr: raw.stderr,
+        resolvedRuntime: raw.resolvedRuntime,
+        failurePhase: 'process-exit',
+      });
+    }
     throw new ProtocolParseError(error.message, {
       command,
       exitStatus: raw.exitStatus,
@@ -38,6 +48,16 @@ async function runStructured(command, request, runtimeOptions) {
   try {
     validateContractPayload(command, parsed);
   } catch (error) {
+    if (raw.exitStatus !== 0) {
+      throw new RuntimeInvocationError(`${command} exited with status ${raw.exitStatus}`, {
+        command,
+        exitStatus: raw.exitStatus,
+        stdout: raw.stdout,
+        stderr: raw.stderr,
+        resolvedRuntime: raw.resolvedRuntime,
+        failurePhase: 'process-exit',
+      });
+    }
     throw new ProtocolParseError(error.message, {
       command,
       exitStatus: raw.exitStatus,
@@ -68,7 +88,7 @@ export function build(request, runtimeOptions = {}) {
   return runStructured('build', request, runtimeOptions);
 }
 
-export async function productBuild(request, runtimeOptions = {}) {
+async function runProductBuild(request, runtimeOptions) {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'anki-forge-node-product-'));
   try {
     let inputPath = request.inputPath;
@@ -93,8 +113,16 @@ export async function productBuild(request, runtimeOptions = {}) {
   }
 }
 
-export function productValidate(request, runtimeOptions = {}) {
-  return productBuild(request, runtimeOptions);
+export async function productBuild(request, runtimeOptions = {}) {
+  if (!request.apkgOut) {
+    throw new TypeError('productBuild requires apkgOut so the built artifact can be retained');
+  }
+  return await runProductBuild(request, runtimeOptions);
+}
+
+export async function productValidate(request, runtimeOptions = {}) {
+  const result = await runProductBuild(request, runtimeOptions);
+  return { ...result, artifact: null };
 }
 
 export function templateValidate(request, runtimeOptions = {}) {

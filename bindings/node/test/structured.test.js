@@ -14,6 +14,7 @@ import {
   productValidate,
   templateValidate,
   ProtocolParseError,
+  RuntimeInvocationError,
 } from '../src/index.js';
 
 const bindingsNodeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -130,13 +131,84 @@ test('product APIs share the Rust product-build contract', async () => {
     notes: [],
   };
 
-  for (const validate of [productBuild, productValidate, templateValidate]) {
+  const apkgOut = path.join(
+    fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-product-output-')),
+    'deck.apkg',
+  );
+  const buildResult = await productBuild({ productDocument, apkgOut }, runtime);
+  assert.equal(buildResult.status, 'success');
+
+  for (const validate of [productValidate, templateValidate]) {
     const result = await validate({ productDocument }, runtime);
     assert.equal(result.status, 'success');
     assert.equal(result.counts.cards, 2);
+    assert.equal(result.artifact, null);
     assert.equal(result.helper.isInvalid, false);
     assert.equal(result.rawCommand.command, 'product-build');
   }
+});
+
+test('productBuild requires an explicit retained artifact path', async () => {
+  await assert.rejects(
+    () => productBuild({ productDocument: {} }),
+    (error) => error instanceof TypeError && /requires apkgOut/.test(error.message),
+  );
+});
+
+test('productBuild retains the explicitly requested artifact', async () => {
+  const fakeScript = fakeLauncherScript(`
+    const fs = require('node:fs');
+    const outputIndex = process.argv.indexOf('--apkg-out');
+    const output = process.argv[outputIndex + 1];
+    fs.writeFileSync(output, 'apkg');
+    process.stdout.write(JSON.stringify({
+      kind: 'anki-forge-build-report',
+      schema_version: 'phase4-build-report-v2',
+      status: 'success',
+      comparison: 'not_requested',
+      counts: { notes: 0, cards: 0, media: 0 },
+      diagnostics: [],
+      policy: {},
+      artifact: { path: output }
+    }));
+  `);
+  const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-retained-'));
+  const apkgOut = path.join(outputDir, 'deck.apkg');
+
+  await productBuild(
+    { productDocument: {}, apkgOut },
+    {
+      mode: 'installed',
+      manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'),
+      bundleRoot: path.join(repoRoot, 'contracts'),
+      launcherExecutable: process.execPath,
+      launcherPrefix: [fakeScript],
+    },
+  );
+
+  assert.equal(fs.existsSync(apkgOut), true);
+});
+
+test('productBuild preserves nonzero runtime failures without a valid report', async () => {
+  const fakeScript = fakeLauncherScript("process.stderr.write('boom'); process.exit(2);");
+
+  await assert.rejects(
+    () =>
+      productBuild(
+        { productDocument: {}, apkgOut: path.join(os.tmpdir(), 'unused.apkg') },
+        {
+          mode: 'installed',
+          manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'),
+          bundleRoot: path.join(repoRoot, 'contracts'),
+          launcherExecutable: process.execPath,
+          launcherPrefix: [fakeScript],
+        },
+      ),
+    (error) =>
+      error instanceof RuntimeInvocationError &&
+      error.exitStatus === 2 &&
+      error.failurePhase === 'process-exit',
+  );
 });
 
 test('structured normalize raises ProtocolParseError for invalid json stdout', async () => {

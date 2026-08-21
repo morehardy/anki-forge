@@ -119,6 +119,44 @@ fn cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes() 
 }
 
 #[test]
+fn legacy_custom_cloze_rejects_multiple_templates() {
+    let document: ProductDocument = serde_json::from_value(serde_json::json!({
+        "document_id": "legacy-invalid-cloze",
+        "note_types": [{
+            "Custom": {
+                "id": "legacy-cloze",
+                "name": "Legacy Cloze",
+                "fields": [{"name": "Text", "key": "text"}],
+                "templates": [
+                    {
+                        "name": "Normal",
+                        "question_format": "{{Text}}",
+                        "answer_format": "{{Text}}"
+                    },
+                    {
+                        "name": "Cloze",
+                        "question_format": "{{cloze:Text}}",
+                        "answer_format": "{{cloze:Text}}",
+                        "generation_rule": {"cloze": {"field": "text"}}
+                    }
+                ]
+            }
+        }],
+        "notes": []
+    }))
+    .expect("legacy product document");
+
+    let error = document
+        .lower()
+        .expect_err("invalid legacy Cloze shape should fail lowering");
+
+    assert!(error
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| { diagnostic.code == "TEMPLATE.CLOZE_TEMPLATE_COUNT_INVALID" }));
+}
+
+#[test]
 fn image_occlusion_missing_image_emits_product_diagnostic() {
     let err = ProductDocument::new("io-doc")
         .with_image_occlusion("io-main")

@@ -104,3 +104,39 @@ fn project_validate_preserves_unknown_filter_as_a_warning() {
         Some("project.note_types[\"portable-template\"].templates[\"Card\"].front")
     );
 }
+
+#[test]
+fn project_build_reports_each_template_warning_once() {
+    let note_type = NoteType::custom("portable-template")
+        .field(Field::new("Front").key("front").identity())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front("{{addon_filter:Front}}")
+                .back("{{Front}}"),
+        )
+        .identity(IdentityRecipe::fields(["front"]));
+    let mut project = Project::new("Portable").default_deck("Portable");
+    project.add_notetype(note_type).expect("add note type");
+    project
+        .add_note(
+            Note::new("portable-template")
+                .stable_id("portable:1")
+                .text("front", "hello"),
+        )
+        .expect("add note");
+    let output = tempfile::tempdir().expect("output");
+
+    let report = project
+        .write_apkg(output.path().join("portable.apkg"))
+        .expect("warning-only build succeeds");
+
+    assert_eq!(
+        report
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code.as_str() == "TEMPLATE.FILTER_UNKNOWN")
+            .count(),
+        1
+    );
+}

@@ -181,7 +181,7 @@ fn template_generates_card(
     template: &NormalizedTemplate,
 ) -> bool {
     let Some(requirement) = template.generation_requirement.as_ref() else {
-        return default_template_generates_card(note, notetype, &template.question_format);
+        return default_template_generates_card(note, notetype, template);
     };
 
     match requirement.kind.as_str() {
@@ -200,8 +200,9 @@ fn template_generates_card(
 fn default_template_generates_card(
     note: &NormalizedNote,
     notetype: &NormalizedNotetype,
-    source: &str,
+    template: &NormalizedTemplate,
 ) -> bool {
+    let source = &template.question_format;
     let mut rendered = String::new();
     let mut cursor = 0;
     let mut active_sections = Vec::new();
@@ -218,15 +219,27 @@ fn default_template_generates_card(
         let expression = source[open + 2..close].trim();
 
         if let Some(field) = expression.strip_prefix('#') {
-            active_sections.push(note_field_is_nonempty(note, notetype, field.trim()));
+            active_sections.push(template_field_is_nonempty(
+                field.trim(),
+                note,
+                notetype,
+                template,
+            ));
         } else if let Some(field) = expression.strip_prefix('^') {
-            active_sections.push(!note_field_is_nonempty(note, notetype, field.trim()));
+            active_sections.push(!template_field_is_nonempty(
+                field.trim(),
+                note,
+                notetype,
+                template,
+            ));
         } else if expression.starts_with('/') {
             active_sections.pop();
         } else if !expression.starts_with('!') && active_sections.iter().all(|active| *active) {
             let field = expression.rsplit(':').next().unwrap_or_default().trim();
             if let Some(value) = note.fields.get(field) {
                 rendered.push_str(value);
+            } else if let Some(value) = special_field_value(field, note, notetype, template) {
+                rendered.push_str(&value);
             }
         }
         cursor = close + 2;
@@ -238,6 +251,42 @@ fn default_template_generates_card(
     !strip_html_preserving_media_filenames(&rendered)
         .trim()
         .is_empty()
+}
+
+fn template_field_is_nonempty(
+    field: &str,
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    template: &NormalizedTemplate,
+) -> bool {
+    note_field_is_nonempty(note, notetype, field)
+        || special_field_value(field, note, notetype, template).is_some_and(|value| {
+            !strip_html_preserving_media_filenames(&value)
+                .trim()
+                .is_empty()
+        })
+}
+
+fn special_field_value(
+    field: &str,
+    note: &NormalizedNote,
+    notetype: &NormalizedNotetype,
+    template: &NormalizedTemplate,
+) -> Option<String> {
+    match field {
+        "Card" => Some(template.name.clone()),
+        "Deck" => Some(note.deck_name.clone()),
+        "Subdeck" => Some(
+            note.deck_name
+                .rsplit("::")
+                .next()
+                .unwrap_or(note.deck_name.as_str())
+                .to_string(),
+        ),
+        "Tags" => Some(note.tags.join(" ")),
+        "Type" => Some(notetype.name.clone()),
+        _ => None,
+    }
 }
 
 fn note_field_is_nonempty(
@@ -322,6 +371,19 @@ mod tests {
 
         let (static_note, notetype) = normal_card_fixture("Prompt {{Front}}", "");
         assert_eq!(plan_cards(&static_note, &notetype).len(), 1);
+    }
+
+    #[test]
+    fn anki_default_renders_nonempty_special_fields() {
+        for front in [
+            "{{Deck}}",
+            "{{Type}}",
+            "{{Card}}",
+            "{{#Deck}}{{Deck}}{{/Deck}}",
+        ] {
+            let (note, notetype) = normal_card_fixture(front, "");
+            assert_eq!(plan_cards(&note, &notetype).len(), 1, "{front}");
+        }
     }
 
     #[test]
