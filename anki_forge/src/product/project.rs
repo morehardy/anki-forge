@@ -798,29 +798,6 @@ impl Project {
             return Ok(());
         };
 
-        let rendered_fields = note.rendered_fields();
-        for field in note_type.fields() {
-            let key = field.key_ref().as_str();
-            let name = field.name();
-            if key == name {
-                continue;
-            }
-            if let (Some(key_value), Some(name_value)) =
-                (rendered_fields.get(key), rendered_fields.get(name))
-            {
-                if key_value != name_value {
-                    return Err(project_add_error(
-                        "PRODUCT.FIELD_ALIAS_CONFLICT",
-                        format!(
-                            "custom note for note type '{note_type_id}' provides different values for field key '{key}' and display name '{name}'"
-                        ),
-                        format!("project.notes[{note_index}].fields[{key:?}]"),
-                        "provide the field once by stable key, or use the same value for both aliases",
-                    ));
-                }
-            }
-        }
-
         for field_key in note.field_keys() {
             let field_known = note_type
                 .fields()
@@ -2739,17 +2716,18 @@ fn custom_note_fields_for_product_v3(
     let mut fields = BTreeMap::new();
     let mut field_priorities = BTreeMap::new();
     for (field_key_or_name, value) in rendered {
+        let visible_name_key = key_by_name.get(field_key_or_name.as_str()).copied();
         let is_stable_key = field_keys.contains(field_key_or_name.as_str());
-        let field_key = if is_stable_key {
-            field_key_or_name
+        let field_key = visible_name_key
+            .unwrap_or(field_key_or_name.as_str())
+            .to_string();
+        let priority = if visible_name_key.is_some() {
+            2
+        } else if is_stable_key {
+            1
         } else {
-            key_by_name
-                .get(field_key_or_name.as_str())
-                .copied()
-                .unwrap_or(field_key_or_name.as_str())
-                .to_string()
+            0
         };
-        let priority = u8::from(is_stable_key);
         if field_priorities
             .get(&field_key)
             .is_some_and(|existing| *existing > priority)
