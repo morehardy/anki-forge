@@ -363,6 +363,39 @@ fn project_static_front_persists_an_always_generate_requirement() {
 }
 
 #[test]
+fn project_media_attribute_depends_on_its_field() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let apkg = root.path().join("project-media-front.apkg");
+    let note_type = NoteType::custom("media-card")
+        .field(Field::new("Image").key("image").optional())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front(r#"<img src="{{Image}}">"#)
+                .back("{{Image}}"),
+        );
+    let mut project = Project::new("Media Front").stable_id("media-front");
+    project.add_notetype(note_type).expect("add note type");
+    project
+        .add_note(Note::new("media-card").stable_id("media:empty"))
+        .expect("add note");
+
+    let report = project.write_apkg(&apkg).expect("write apkg");
+    assert_eq!(report.counts.cards, 0);
+    let inspected = inspect_apkg(&apkg).expect("inspect apkg");
+    let template = inspected
+        .observations
+        .templates
+        .iter()
+        .find(|value| value["selector"] == "notetype[id='media-card']::template[Card]")
+        .expect("template observation");
+    assert_eq!(
+        template["generation_requirement"],
+        serde_json::json!({"kind": "all", "field_names": ["Image"]})
+    );
+}
+
+#[test]
 fn project_section_front_persists_an_all_fields_requirement() {
     let root = tempfile::tempdir().expect("tempdir");
     let apkg = root.path().join("project-section-front.apkg");

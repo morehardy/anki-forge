@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TemplateGenerationRequirement {
@@ -12,186 +12,120 @@ pub fn infer_generation_requirement(
     source: &str,
     declared_fields: impl IntoIterator<Item = impl AsRef<str>>,
 ) -> TemplateGenerationRequirement {
-    let declared_fields = declared_fields
+    let fields = declared_fields
         .into_iter()
         .map(|field| field.as_ref().to_string())
         .collect::<BTreeSet<_>>();
-    let mut sections = Vec::<SectionCondition>::new();
-    let mut terms = Vec::<BTreeSet<String>>::new();
-    let mut has_unrepresentable_term = false;
-    let mut cursor = 0;
-
-    while let Some(relative_open) = source[cursor..].find("{{") {
-        let open = cursor + relative_open;
-        if static_fragment_is_visible(&source[cursor..open]) {
-            record_term(&sections, None, &mut terms, &mut has_unrepresentable_term);
-        }
-        let Some(relative_close) = source[open + 2..].find("}}") else {
-            return TemplateGenerationRequirement::Unrepresentable;
-        };
-        let close = open + 2 + relative_close;
-        let expression = source[open + 2..close].trim();
-        if expression.starts_with('!') {
-            cursor = close + 2;
-            continue;
-        }
-        if let Some(field) = expression.strip_prefix('#') {
-            let Some(condition) = section_condition(field.trim(), true, &declared_fields) else {
-                return TemplateGenerationRequirement::Unrepresentable;
-            };
-            sections.push(condition);
-            cursor = close + 2;
-            continue;
-        }
-        if let Some(field) = expression.strip_prefix('^') {
-            let Some(condition) = section_condition(field.trim(), false, &declared_fields) else {
-                return TemplateGenerationRequirement::Unrepresentable;
-            };
-            sections.push(condition);
-            cursor = close + 2;
-            continue;
-        }
-        if expression.starts_with('/') {
-            if sections.pop().is_none() {
-                return TemplateGenerationRequirement::Unrepresentable;
-            }
-            cursor = close + 2;
-            continue;
-        }
-
-        let field = expression.rsplit(':').next().unwrap_or_default().trim();
-        if declared_fields.contains(field) {
-            record_term(
-                &sections,
-                Some(field),
-                &mut terms,
-                &mut has_unrepresentable_term,
-            );
-        } else if matches!(field, "Card" | "Deck" | "Subdeck" | "Type") {
-            record_term(&sections, None, &mut terms, &mut has_unrepresentable_term);
-        } else {
-            return TemplateGenerationRequirement::Unrepresentable;
-        }
-        cursor = close + 2;
-    }
-
-    if static_fragment_is_visible(&source[cursor..]) {
-        record_term(&sections, None, &mut terms, &mut has_unrepresentable_term);
-    }
-    if !sections.is_empty() {
+    let parsed = crate::parse_template(source);
+    if !parsed.issues.is_empty() || !template_is_monotone(&parsed.tokens, &fields) {
         return TemplateGenerationRequirement::Unrepresentable;
     }
 
-    terms.sort();
-    terms.dedup();
-    if terms.iter().any(BTreeSet::is_empty) {
+    if template_renders_nonempty(&parsed.tokens, &BTreeSet::new()) {
         return TemplateGenerationRequirement::Always;
     }
-    if has_unrepresentable_term {
+
+    let singleton_fields = fields
+        .iter()
+        .filter(|field| {
+            template_renders_nonempty(&parsed.tokens, &BTreeSet::from([(*field).clone()]))
+        })
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    if !singleton_fields.is_empty() {
+        let outside_singletons = fields
+            .difference(&singleton_fields)
+            .cloned()
+            .collect::<BTreeSet<_>>();
+        return if template_renders_nonempty(&parsed.tokens, &outside_singletons) {
+            TemplateGenerationRequirement::Unrepresentable
+        } else if singleton_fields.len() == 1 {
+            TemplateGenerationRequirement::All(singleton_fields.into_iter().collect())
+        } else {
+            TemplateGenerationRequirement::Any(singleton_fields.into_iter().collect())
+        };
+    }
+
+    if !template_renders_nonempty(&parsed.tokens, &fields) {
         return TemplateGenerationRequirement::Unrepresentable;
     }
-    let all_terms = terms.clone();
-    terms.retain(|candidate| {
-        !all_terms
-            .iter()
-            .any(|other| other.len() < candidate.len() && other.is_subset(candidate))
-    });
-    match terms.as_slice() {
-        [] => TemplateGenerationRequirement::Unrepresentable,
-        [only] => TemplateGenerationRequirement::All(only.iter().cloned().collect()),
-        many if many.iter().all(|term| term.len() == 1) => TemplateGenerationRequirement::Any(
-            many.iter()
-                .flat_map(|term| term.iter().cloned())
-                .collect::<BTreeSet<_>>()
-                .into_iter()
-                .collect(),
-        ),
-        _ => TemplateGenerationRequirement::Unrepresentable,
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-enum SectionCondition {
-    Field { name: String, positive: bool },
-    Always(bool),
-}
-
-fn section_condition(
-    field: &str,
-    positive: bool,
-    declared_fields: &BTreeSet<String>,
-) -> Option<SectionCondition> {
-    if declared_fields.contains(field) {
-        Some(SectionCondition::Field {
-            name: field.to_string(),
-            positive,
+    let required = fields
+        .iter()
+        .filter(|field| {
+            let values = fields
+                .iter()
+                .filter(|candidate| *candidate != *field)
+                .cloned()
+                .collect::<BTreeSet<_>>();
+            !template_renders_nonempty(&parsed.tokens, &values)
         })
-    } else if matches!(field, "Card" | "Deck" | "Subdeck" | "Type") {
-        Some(SectionCondition::Always(positive))
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    if required.is_empty() || !template_renders_nonempty(&parsed.tokens, &required) {
+        TemplateGenerationRequirement::Unrepresentable
     } else {
-        None
+        TemplateGenerationRequirement::All(required.into_iter().collect())
     }
 }
 
-fn record_term(
-    sections: &[SectionCondition],
-    rendered_field: Option<&str>,
-    terms: &mut Vec<BTreeSet<String>>,
-    has_unrepresentable_term: &mut bool,
-) {
-    let mut fields = BTreeSet::new();
-    let mut inverted_fields = BTreeSet::new();
-    for condition in sections {
-        match condition {
-            SectionCondition::Always(true) => {}
-            SectionCondition::Always(false) => return,
-            SectionCondition::Field {
-                name,
-                positive: true,
-            } => {
-                fields.insert(name.clone());
-            }
-            SectionCondition::Field {
-                name,
-                positive: false,
-            } => {
-                inverted_fields.insert(name.clone());
-            }
+fn template_is_monotone(tokens: &[crate::TemplateToken], fields: &BTreeSet<String>) -> bool {
+    tokens.iter().all(|token| match token {
+        crate::TemplateToken::SectionStart {
+            field, inverted, ..
+        } => !inverted && (fields.contains(field) || always_nonempty_special_field(field)),
+        crate::TemplateToken::Render { field, .. } => {
+            fields.contains(field) || always_nonempty_special_field(field)
         }
-    }
-    // A branch guarded by both {{#Field}} and {{^Field}} is unreachable and
-    // therefore contributes no generation condition.
-    if !fields.is_disjoint(&inverted_fields) {
-        return;
-    }
-    if !inverted_fields.is_empty() {
-        *has_unrepresentable_term = true;
-        return;
-    }
-    if let Some(field) = rendered_field {
-        fields.insert(field.to_string());
-    }
-    terms.push(fields);
-}
-
-fn static_fragment_is_visible(fragment: &str) -> bool {
-    let lower = fragment.to_ascii_lowercase();
-    if lower.contains("<img") || lower.contains("<audio") || lower.contains("<video") {
-        return true;
-    }
-
-    let mut in_tag = false;
-    fragment.chars().any(|ch| match ch {
-        '<' => {
-            in_tag = true;
-            false
-        }
-        '>' => {
-            in_tag = false;
-            false
-        }
-        _ => !in_tag && !ch.is_whitespace(),
+        _ => true,
     })
+}
+
+fn always_nonempty_special_field(field: &str) -> bool {
+    matches!(field, "Card" | "Deck" | "Subdeck" | "Type")
+}
+
+fn template_renders_nonempty(
+    tokens: &[crate::TemplateToken],
+    nonempty_fields: &BTreeSet<String>,
+) -> bool {
+    let mut rendered = String::new();
+    let mut active_sections = Vec::new();
+    let special_values = BTreeMap::from([
+        ("Card", "Card 1"),
+        ("Deck", "Deck"),
+        ("Subdeck", "Deck"),
+        ("Type", "Note Type"),
+    ]);
+
+    for token in tokens {
+        match token {
+            crate::TemplateToken::SectionStart { field, .. } => active_sections.push(
+                nonempty_fields.contains(field) || special_values.contains_key(field.as_str()),
+            ),
+            crate::TemplateToken::SectionEnd { .. } => {
+                active_sections.pop();
+            }
+            crate::TemplateToken::Text(text) if active_sections.iter().all(|active| *active) => {
+                rendered.push_str(text);
+            }
+            crate::TemplateToken::Render { field, .. }
+                if active_sections.iter().all(|active| *active) =>
+            {
+                if nonempty_fields.contains(field) {
+                    rendered.push_str("field-value");
+                } else if let Some(value) = special_values.get(field.as_str()) {
+                    rendered.push_str(value);
+                }
+            }
+            crate::TemplateToken::Text(_)
+            | crate::TemplateToken::Render { .. }
+            | crate::TemplateToken::Comment => {}
+        }
+    }
+
+    !crate::strip_html_preserving_media_filenames(&rendered)
+        .trim()
+        .is_empty()
 }
 
 #[cfg(test)]
@@ -234,13 +168,21 @@ mod tests {
     }
 
     #[test]
-    fn unreachable_inverted_branch_does_not_poison_other_terms() {
+    fn media_attribute_depends_on_its_field() {
+        assert_eq!(
+            infer_generation_requirement(r#"<img src="{{Image}}">"#, ["Image"]),
+            TemplateGenerationRequirement::All(vec!["Image".into()])
+        );
+    }
+
+    #[test]
+    fn script_style_and_whitespace_entities_are_not_visible_static_content() {
         assert_eq!(
             infer_generation_requirement(
-                "{{#Prompt}}{{^Prompt}}never{{/Prompt}}{{/Prompt}}{{Context}}",
-                ["Prompt", "Context"],
+                "<script>ignored()</script><style>.x{}</style>&nbsp;{{Front}}",
+                ["Front"],
             ),
-            TemplateGenerationRequirement::All(vec!["Context".into()])
+            TemplateGenerationRequirement::All(vec!["Front".into()])
         );
     }
 }

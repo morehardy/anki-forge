@@ -101,6 +101,41 @@ fn product_v3_rejects_unknown_template_field_before_writing_apkg() {
 }
 
 #[test]
+fn product_v3_rejects_duplicate_generation_rule_fields() {
+    let document: ProductDocument = serde_json::from_value(serde_json::json!({
+        "product_document_version": "product-v3",
+        "document_id": "duplicate-generation-fields",
+        "note_types": [{
+            "kind": "custom",
+            "note_type_kind": "normal",
+            "id": "custom",
+            "fields": [{"name": "Front", "key": "front", "identity": true}],
+            "templates": [{
+                "name": "Card",
+                "key": "card",
+                "front": "{{Front}}",
+                "back": "{{Front}}",
+                "generation_rule": {"kind": "all", "fields": ["front", "front"]}
+            }]
+        }],
+        "notes": []
+    }))
+    .expect("product-v3 document");
+    let output = tempfile::tempdir().expect("output");
+    let apkg = output.path().join("invalid.apkg");
+
+    let error = Project::from_product_document(document)
+        .build(BuildOptions::new().output(&apkg))
+        .expect_err("duplicate generation fields must fail");
+
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"PRODUCT.GENERATION_RULE_INVALID".to_string()));
+    assert!(!apkg.exists());
+}
+
+#[test]
 fn product_v3_validates_browser_template_fields() {
     let document: ProductDocument = serde_json::from_value(serde_json::json!({
         "product_document_version": "product-v3",

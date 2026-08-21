@@ -200,18 +200,7 @@ pub(crate) fn load_template_bundle(
             Some(canonical_root.join(MANIFEST_NAME)),
         ));
     }
-    if manifest
-        .note_type
-        .fields
-        .iter()
-        .any(|field| field.key.trim().is_empty())
-    {
-        return Err(TemplateBundleError::new(
-            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
-            "template bundle field keys must be non-empty",
-            Some(canonical_root.join(MANIFEST_NAME)),
-        ));
-    }
+    validate_manifest_semantics(&manifest, &canonical_root.join(MANIFEST_NAME))?;
     if manifest
         .note_type
         .fields
@@ -365,6 +354,99 @@ pub(crate) fn load_template_bundle(
         .collect::<Result<Vec<_>, TemplateBundleError>>()?;
 
     Ok(LoadedTemplateBundle { note_type, assets })
+}
+
+fn validate_manifest_semantics(
+    manifest: &TemplateBundleManifest,
+    manifest_path: &Path,
+) -> Result<(), TemplateBundleError> {
+    let invalid_identifier = manifest.note_type.id.trim().is_empty()
+        || manifest
+            .note_type
+            .name
+            .as_deref()
+            .is_some_and(|name| name.trim().is_empty())
+        || manifest
+            .note_type
+            .fields
+            .iter()
+            .any(|field| field.key.trim().is_empty() || field.name.trim().is_empty())
+        || manifest.note_type.templates.iter().any(|template| {
+            template.key.trim().is_empty()
+                || template.name.trim().is_empty()
+                || template
+                    .target_deck
+                    .as_deref()
+                    .is_some_and(|deck| deck.trim().is_empty())
+        });
+    if invalid_identifier {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "note type, field, template, and target deck identifiers must be non-blank",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+
+    let field_keys = manifest
+        .note_type
+        .fields
+        .iter()
+        .map(|field| field.key.as_str())
+        .collect::<BTreeSet<_>>();
+    let field_names = manifest
+        .note_type
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<BTreeSet<_>>();
+    let template_keys = manifest
+        .note_type
+        .templates
+        .iter()
+        .map(|template| template.key.as_str())
+        .collect::<BTreeSet<_>>();
+    let template_names = manifest
+        .note_type
+        .templates
+        .iter()
+        .map(|template| template.name.as_str())
+        .collect::<BTreeSet<_>>();
+    if field_keys.len() != manifest.note_type.fields.len()
+        || field_names.len() != manifest.note_type.fields.len()
+        || template_keys.len() != manifest.note_type.templates.len()
+        || template_names.len() != manifest.note_type.templates.len()
+        || manifest
+            .note_type
+            .fields
+            .iter()
+            .filter(|field| field.sort)
+            .count()
+            > 1
+    {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "field keys/names and template keys/names must be unique, with at most one sort field",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+
+    if manifest.note_type.templates.iter().any(|template| {
+        let fields = match template.generation_rule.as_ref() {
+            Some(BundleGenerationRule::All { fields })
+            | Some(BundleGenerationRule::Any { fields }) => fields,
+            _ => return false,
+        };
+        fields
+            .iter()
+            .any(|field| !field_keys.contains(field.as_str()))
+    }) {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "template generation_rule references an unknown field key",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+    Ok(())
 }
 
 fn bundle_generation_rule(

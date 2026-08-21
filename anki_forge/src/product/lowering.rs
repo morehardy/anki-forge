@@ -746,7 +746,11 @@ fn lower_product_v2_document(
                 if plan.product_diagnostics.len() > diagnostics_before {
                     continue;
                 }
-                let lowered = lower_product_v2_custom_notetype(&mut plan, custom, v2.version >= 3);
+                let lowered = lower_product_v2_custom_notetype(
+                    &mut plan,
+                    custom,
+                    ProductLoweringDialect::from_version(v2.version),
+                );
                 record_v2_notetype_source_paths(
                     &mut plan.source_map,
                     &lowered,
@@ -920,10 +924,34 @@ fn lower_product_v2_stock_notetype(
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ProductLoweringDialect {
+    V2,
+    V3,
+}
+
+impl ProductLoweringDialect {
+    fn from_version(version: u8) -> Self {
+        if version >= 3 {
+            Self::V3
+        } else {
+            Self::V2
+        }
+    }
+
+    fn supports_custom_cloze(self) -> bool {
+        self == Self::V3
+    }
+
+    fn infers_default_generation_requirement(self) -> bool {
+        self == Self::V3
+    }
+}
+
 fn lower_product_v2_custom_notetype(
     plan: &mut LoweringPlan,
     custom: &ProductCustomNoteTypeV2,
-    allow_custom_cloze: bool,
+    dialect: ProductLoweringDialect,
 ) -> AuthoringNotetype {
     let field_name_by_key = custom
         .fields
@@ -945,7 +973,8 @@ fn lower_product_v2_custom_notetype(
             sort: field.sort,
         })
         .collect();
-    let custom_cloze_field = allow_custom_cloze
+    let custom_cloze_field = dialect
+        .supports_custom_cloze()
         .then_some(custom.note_type_kind.as_deref())
         .flatten()
         .filter(|kind| *kind == "cloze")
@@ -991,7 +1020,7 @@ fn lower_product_v2_custom_notetype(
                     template,
                     generation_rule,
                     &field_name_by_key,
-                    allow_custom_cloze,
+                    dialect.infers_default_generation_requirement(),
                 ),
             }
         })
@@ -1318,10 +1347,13 @@ fn product_generation_requirement(
     template: &ProductTemplateV2,
     rule: Option<&ProductGenerationRuleV2>,
     field_name_by_key: &BTreeMap<String, String>,
-    product_v3: bool,
+    infer_default_requirement: bool,
 ) -> Option<authoring_core::AuthoringGenerationRequirement> {
     let explicit = product_v2_generation_requirement(rule, field_name_by_key);
-    if explicit.is_some() || !product_v3 || custom.note_type_kind.as_deref() == Some("cloze") {
+    if explicit.is_some()
+        || !infer_default_requirement
+        || custom.note_type_kind.as_deref() == Some("cloze")
+    {
         return explicit;
     }
     if !matches!(rule, None | Some(ProductGenerationRuleV2::AnkiDefault)) {
@@ -1381,12 +1413,12 @@ fn validate_product_v2_generation_rule(
     match rule {
         ProductGenerationRuleV2::AnkiDefault => true,
         ProductGenerationRuleV2::All { fields } | ProductGenerationRuleV2::Any { fields } => {
-            if fields.is_empty() {
+            if fields.is_empty() || fields.iter().collect::<BTreeSet<_>>().len() != fields.len() {
                 push_product_diagnostic_at(
                     plan,
                     "PRODUCT.GENERATION_RULE_INVALID",
                     format!(
-                        "template '{template_name}' in note type '{note_type_id}' has an empty generation field list"
+                        "template '{template_name}' in note type '{note_type_id}' has an empty or duplicate generation field list"
                     ),
                     source_path,
                 );

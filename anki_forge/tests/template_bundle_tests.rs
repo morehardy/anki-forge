@@ -285,6 +285,52 @@ fn template_bundle_rejects_empty_fields_and_normal_cloze_field() {
       back_file: back.html
 "#,
         ),
+        (
+            "blank-field-name",
+            r#"
+  id: invalid
+  kind: normal
+  fields:
+    - key: text
+      name: " "
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+"#,
+        ),
+        (
+            "blank-template-name",
+            r#"
+  id: invalid
+  kind: normal
+  fields:
+    - key: text
+      name: Text
+  templates:
+    - key: card
+      name: " "
+      front_file: front.html
+      back_file: back.html
+"#,
+        ),
+        (
+            "blank-target-deck",
+            r#"
+  id: invalid
+  kind: normal
+  fields:
+    - key: text
+      name: Text
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+      target_deck: " "
+"#,
+        ),
     ] {
         let bundle = tempfile::tempdir().expect("bundle");
         std::fs::write(bundle.path().join("front.html"), "{{Text}}").expect("front");
