@@ -24,6 +24,33 @@ fn authoring_ir_schema_accepts_the_minimal_valid_shape() {
 }
 
 #[test]
+fn product_v3_schema_rejects_duplicate_generation_rule_fields() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "product_document_v3_schema").unwrap()).unwrap();
+    let value = json!({
+        "product_document_version": "product-v3",
+        "document_id": "duplicate-generation-fields",
+        "note_types": [{
+            "kind": "custom",
+            "note_type_kind": "normal",
+            "id": "custom",
+            "fields": [{"name": "Prompt", "key": "prompt"}],
+            "templates": [{
+                "name": "Card",
+                "key": "card",
+                "front": "{{Prompt}}",
+                "back": "{{Prompt}}",
+                "generation_rule": {"kind": "all", "fields": ["prompt", "prompt"]}
+            }]
+        }],
+        "notes": []
+    });
+
+    assert!(validate_value(&schema, &value).is_err());
+}
+
+#[test]
 fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =

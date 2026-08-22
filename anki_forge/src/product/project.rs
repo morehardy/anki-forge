@@ -2282,8 +2282,22 @@ impl Project {
             return;
         }
         let stable_id_counts = self.note_stable_id_counts();
-        for (index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
-            let Some(product_note) = self.notes.get(index) else {
+        let mut project_indexes_by_authoring_id = BTreeMap::<String, Vec<usize>>::new();
+        for (project_index, product_note) in self.notes.iter().enumerate() {
+            let identity =
+                resolve_product_note_identity(self, product_note, project_index, &stable_id_counts);
+            project_indexes_by_authoring_id
+                .entry(identity.stable_id)
+                .or_default()
+                .push(project_index);
+        }
+        for (authoring_index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
+            let project_index = project_indexes_by_authoring_id
+                .get(&authoring_note.id)
+                .filter(|indexes| indexes.len() == 1)
+                .map(|indexes| indexes[0])
+                .unwrap_or(authoring_index);
+            let Some(product_note) = self.notes.get(project_index) else {
                 continue;
             };
             let field_source_names = note_field_source_names_for_authoring(self, product_note);
@@ -2294,7 +2308,7 @@ impl Project {
                 {
                     format!("project.notes[{stable_id:?}]")
                 }
-                _ => format!("project.notes[{index}]"),
+                _ => format!("project.notes[{project_index}]"),
             };
             for field_name in authoring_note.fields.keys() {
                 let product_field_name = field_source_names
@@ -4766,6 +4780,70 @@ mod tests {
             &report,
             "AFID.STABLE_ID_DUPLICATE"
         ));
+    }
+
+    #[test]
+    fn lower_keeps_later_note_source_after_required_note_is_skipped() {
+        let note_type = NoteType::custom("source-card")
+            .field(Field::new("Prompt").key("prompt").required())
+            .field(Field::new("Extra").key("extra").optional())
+            .template(
+                Template::new("Card")
+                    .key("card")
+                    .front("{{Prompt}}")
+                    .back("{{Extra}}"),
+            );
+        let mut project = Project::new("Shifted Notes").stable_id("shifted-notes");
+        project.add_notetype(note_type).expect("add note type");
+        project
+            .add_note(
+                Note::new("source-card")
+                    .stable_id("missing-required")
+                    .text("extra", "first"),
+            )
+            .expect("add invalid note for lowering diagnostic");
+        project
+            .add_note(
+                Note::new("source-card")
+                    .stable_id("later-note")
+                    .text("prompt", "valid")
+                    .html("extra", "<img src=missing.png>"),
+            )
+            .expect("add later note");
+
+        let plan = project.lower().expect("lower project");
+
+        assert!(plan
+            .product_diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                &crate::product::lowering::authoring_note_field_path("later-note", "Extra")
+            ),
+            Some("project.notes[\"later-note\"].fields[\"extra\"]")
+        );
+
+        let temp = tempfile::tempdir().expect("tempdir");
+        let error = match project.normalize_with_dirs(
+            temp.path(),
+            temp.path().join("media-store"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("missing media and required field should fail normalization"),
+            Err(error) => error,
+        };
+        assert_eq!(
+            error
+                .diagnostics
+                .iter()
+                .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.notes[\"later-note\"].fields[\"extra\"]"),
+            "{:?}",
+            error.diagnostics
+        );
     }
 
     #[test]

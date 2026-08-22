@@ -1381,6 +1381,46 @@ fn product_v2_generation_rule_lowers_to_writer_requirement_metadata() {
 }
 
 #[test]
+fn product_v2_duplicate_generation_fields_remain_compatible() {
+    let plan = product_v2_inline(
+        r#"{
+          "product_document_version": "product-v2",
+          "document_id": "duplicate-generation-fields",
+          "note_types": [{
+            "kind": "custom",
+            "id": "custom",
+            "fields": [{"name": "Prompt", "key": "prompt"}],
+            "templates": [{
+              "name": "Card",
+              "key": "card",
+              "front": "{{Prompt}}",
+              "back": "{{Prompt}}",
+              "generation_rule": {"kind": "all", "fields": ["prompt", "prompt"]}
+            }],
+            "identity": {"kind": "fields", "fields": ["prompt"]}
+          }],
+          "notes": [],
+          "media": []
+        }"#,
+    )
+    .lower()
+    .expect("product-v2 duplicate fields remain accepted");
+
+    assert!(!plan
+        .product_diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code == "PRODUCT.GENERATION_RULE_INVALID"));
+    let requirement = plan.authoring_document.notetypes[0]
+        .templates
+        .as_ref()
+        .unwrap()[0]
+        .generation_requirement
+        .as_ref()
+        .expect("generation requirement");
+    assert_eq!(requirement.field_names, vec!["Prompt", "Prompt"]);
+}
+
+#[test]
 fn product_v2_unknown_stock_notetype_is_diagnostic_not_basic_lowering() {
     let plan = product_v2_inline(
         r#"{

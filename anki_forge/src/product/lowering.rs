@@ -619,7 +619,11 @@ fn lower_product_v2_document(
                     continue;
                 }
                 stock_declarations.insert(stock.id.clone(), stock.clone());
-                validate_v2_stock_generation_rules(&mut plan, stock);
+                validate_v2_stock_generation_rules(
+                    &mut plan,
+                    stock,
+                    ProductLoweringDialect::from_version(v2.version),
+                );
                 let defaults = stock_lowering_defaults(&stock.id)
                     .expect("phase 5 stock note type id should have defaults");
                 let mut lowered = lower_product_v2_stock_notetype(stock, defaults);
@@ -946,6 +950,10 @@ impl ProductLoweringDialect {
     fn infers_default_generation_requirement(self) -> bool {
         self == Self::V3
     }
+
+    fn rejects_duplicate_generation_fields(self) -> bool {
+        self == Self::V3
+    }
 }
 
 fn lower_product_v2_custom_notetype(
@@ -1001,12 +1009,15 @@ fn lower_product_v2_custom_notetype(
                 )),
                 question_format: lower_product_v2_generation_rule_front(
                     plan,
-                    &custom.id,
-                    &template.name,
                     &template.front,
                     generation_rule,
-                    template.source_path.as_deref(),
-                    &field_name_by_key,
+                    GenerationRuleValidationContext {
+                        note_type_id: &custom.id,
+                        template_name: &template.name,
+                        source_path: template.source_path.as_deref(),
+                        field_name_by_key: &field_name_by_key,
+                        dialect,
+                    },
                 ),
                 answer_format: template.back.clone(),
                 browser_question_format: template.browser_front.clone(),
@@ -1229,12 +1240,8 @@ fn validate_legacy_custom_cloze(
 fn validate_v2_stock_generation_rules(
     plan: &mut LoweringPlan,
     stock: &crate::product::model::ProductStockNoteTypeV2,
+    dialect: ProductLoweringDialect,
 ) {
-    let field_keys = stock
-        .fields
-        .iter()
-        .map(|field| field.key.as_str())
-        .collect::<BTreeSet<_>>();
     let field_names = stock
         .fields
         .iter()
@@ -1244,12 +1251,14 @@ fn validate_v2_stock_generation_rules(
         if let Some(rule) = template.generation_rule.as_ref() {
             validate_product_v2_generation_rule(
                 plan,
-                &stock.id,
-                &template.name,
                 rule,
-                template.source_path.as_deref(),
-                &field_keys,
-                &field_names,
+                GenerationRuleValidationContext {
+                    note_type_id: &stock.id,
+                    template_name: &template.name,
+                    source_path: template.source_path.as_deref(),
+                    field_name_by_key: &field_names,
+                    dialect,
+                },
             );
         }
     }
@@ -1257,30 +1266,15 @@ fn validate_v2_stock_generation_rules(
 
 fn lower_product_v2_generation_rule_front(
     plan: &mut LoweringPlan,
-    note_type_id: &str,
-    template_name: &str,
     front: &str,
     rule: Option<&ProductGenerationRuleV2>,
-    source_path: Option<&str>,
-    field_name_by_key: &BTreeMap<String, String>,
+    context: GenerationRuleValidationContext<'_>,
 ) -> String {
-    let field_keys = field_name_by_key
-        .keys()
-        .map(String::as_str)
-        .collect::<BTreeSet<_>>();
     let Some(rule) = rule else {
         return front.to_string();
     };
 
-    if !validate_product_v2_generation_rule(
-        plan,
-        note_type_id,
-        template_name,
-        rule,
-        source_path,
-        &field_keys,
-        field_name_by_key,
-    ) {
+    if !validate_product_v2_generation_rule(plan, rule, context) {
         return front.to_string();
     }
 
@@ -1289,14 +1283,14 @@ fn lower_product_v2_generation_rule_front(
         ProductGenerationRuleV2::All { fields } => {
             let field_names = fields
                 .iter()
-                .filter_map(|field| field_name_by_key.get(field).cloned())
+                .filter_map(|field| context.field_name_by_key.get(field).cloned())
                 .collect::<Vec<_>>();
             wrap_front_with_all_conditions(front, &field_names)
         }
         ProductGenerationRuleV2::Any { fields } => {
             let field_names = fields
                 .iter()
-                .filter_map(|field| field_name_by_key.get(field).cloned())
+                .filter_map(|field| context.field_name_by_key.get(field).cloned())
                 .collect::<Vec<_>>();
             wrap_front_with_any_conditions(front, &field_names)
         }
@@ -1401,24 +1395,45 @@ fn product_generation_requirement(
     }
 }
 
+#[derive(Clone, Copy)]
+struct GenerationRuleValidationContext<'a> {
+    note_type_id: &'a str,
+    template_name: &'a str,
+    source_path: Option<&'a str>,
+    field_name_by_key: &'a BTreeMap<String, String>,
+    dialect: ProductLoweringDialect,
+}
+
 fn validate_product_v2_generation_rule(
     plan: &mut LoweringPlan,
-    note_type_id: &str,
-    template_name: &str,
     rule: &ProductGenerationRuleV2,
-    source_path: Option<&str>,
-    field_keys: &BTreeSet<&str>,
-    field_name_by_key: &BTreeMap<String, String>,
+    context: GenerationRuleValidationContext<'_>,
 ) -> bool {
+    let GenerationRuleValidationContext {
+        note_type_id,
+        template_name,
+        source_path,
+        field_name_by_key,
+        dialect,
+    } = context;
     match rule {
         ProductGenerationRuleV2::AnkiDefault => true,
         ProductGenerationRuleV2::All { fields } | ProductGenerationRuleV2::Any { fields } => {
-            if fields.is_empty() || fields.iter().collect::<BTreeSet<_>>().len() != fields.len() {
+            let invalid_list = if fields.is_empty() {
+                Some("empty")
+            } else if dialect.rejects_duplicate_generation_fields()
+                && fields.iter().collect::<BTreeSet<_>>().len() != fields.len()
+            {
+                Some("duplicate")
+            } else {
+                None
+            };
+            if let Some(invalid_list) = invalid_list {
                 push_product_diagnostic_at(
                     plan,
                     "PRODUCT.GENERATION_RULE_INVALID",
                     format!(
-                        "template '{template_name}' in note type '{note_type_id}' has an empty or duplicate generation field list"
+                        "template '{template_name}' in note type '{note_type_id}' has a generation field list that is {invalid_list}"
                     ),
                     source_path,
                 );
@@ -1426,7 +1441,7 @@ fn validate_product_v2_generation_rule(
             }
             let mut valid = true;
             for field in fields {
-                if !field_keys.contains(field.as_str()) {
+                if !field_name_by_key.contains_key(field) {
                     push_product_diagnostic_at(
                         plan,
                         "PRODUCT.GENERATION_RULE_INVALID",
