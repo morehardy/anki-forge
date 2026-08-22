@@ -193,3 +193,9 @@ cases:
     upgrade_rules:
       - fixture_updates_required
     input: fixtures/template-bundle/custom-cloze/anki-template.yaml
+  - id: template-bundle-custom-normal
+    category: template-bundle
+    compatibility_class: additive_compatible
+    upgrade_rules:
+      - fixture_updates_required
+    input: fixtures/template-bundle/custom-normal/anki-template.yaml

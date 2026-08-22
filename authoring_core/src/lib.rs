@@ -1,4 +1,5 @@
 pub mod canonical_json;
+pub mod html_text;
 pub mod identity;
 pub mod media;
 pub mod media_io;
@@ -9,8 +10,11 @@ pub mod normalize;
 pub mod risk;
 pub mod selector;
 pub mod stock;
+pub mod template_parser;
+pub mod template_semantics;
 
 pub use canonical_json::to_canonical_json;
+pub use html_text::strip_html_preserving_media_filenames;
 pub use identity::{resolve_identity, DefaultNonceSource, NonceSource};
 pub use media::{
     ingest_authoring_media, media_object_id, media_object_ref, sort_media_bindings,
@@ -40,6 +44,11 @@ pub use risk::assess_risk;
 pub use selector::{
     parse_selector, resolve_selector, Selector, SelectorError, SelectorResolveError, SelectorTarget,
 };
+pub use template_parser::{
+    is_special_template_field, parse_template, ParsedTemplate, TemplateParseIssue,
+    TemplateParseIssueKind, TemplateToken,
+};
+pub use template_semantics::{infer_generation_requirement, TemplateGenerationRequirement};
 
 pub fn tool_contract_version() -> &'static str {
     "phase2-v1"

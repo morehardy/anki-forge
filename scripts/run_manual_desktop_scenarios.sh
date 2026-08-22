@@ -17,6 +17,8 @@ SCENARIOS=(
   "S07_cloze_mixed_media"
   "S08_io_plus_audio"
   "S09_io_rect"
+  "S10_custom_normal_bundle"
+  "S11_custom_cloze_bundle"
 )
 
 usage() {
@@ -49,12 +51,27 @@ run_one() {
   local normalize_result_path="${out_dir}/normalize.result.json"
   local normalized_ir_path="${out_dir}/normalized-ir.json"
 
+  mkdir -p "${out_dir}"
+
+  if [[ "${scene}" == "S10_custom_normal_bundle" || "${scene}" == "S11_custom_cloze_bundle" ]]; then
+    echo "==> ${scene}: build template bundle"
+    cargo run -q -p anki_forge --example manual_template_bundle_scenario -- \
+      "${scene}" \
+      "${SCENARIO_ROOT}/${scene}/input/bundle" \
+      "${out_dir}/package.apkg"
+
+    echo "==> ${scene}: inspect apkg"
+    cargo run -q -p contract_tools -- inspect \
+      --apkg "${out_dir}/package.apkg" \
+      --output contract-json > "${out_dir}/apkg.inspect.json"
+    echo "done: ${out_dir}/package.apkg"
+    return
+  fi
+
   if [[ ! -f "${input_path}" ]]; then
     echo "missing scenario input: ${input_path}" >&2
     return 1
   fi
-
-  mkdir -p "${out_dir}"
 
   echo "==> ${scene}: normalize"
   cargo run -q -p contract_tools -- normalize \

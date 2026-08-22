@@ -45,6 +45,22 @@ ordinals come from complete `{{cN::body}}` deletions in that field:
 The same CardPlanner supplies writer materialization, BuildReport card counts,
 and inspect observations.
 
+## Normal card requirements
+
+ProductDocument v3 and typed Project normal templates compile front-side card
+generation into the same requirement stored in the Anki NoteType:
+
+- a statically visible front uses `none` (no non-empty field is required);
+- alternatives consisting of direct field replacements use `any`;
+- a single positive conditional path uses `all`;
+- an explicit `all` or `any` generation rule overrides default inference.
+
+If the rendered-front predicate cannot be represented by one Anki `none`,
+`all`, or `any` requirement, the build reports
+`TEMPLATE.GENERATION_RULE_REQUIRED`. It does not persist an approximation that
+would change card creation after import. Product v2 retains its existing normal
+custom-note-type interpretation.
+
 ## External template bundle
 
 `template-bundle-v1` is a directory containing `anki-template.yaml`. All
@@ -56,3 +72,9 @@ the entire bundle has loaded and validated.
 Stable note type, field, and template keys are explicit; display names, file
 names, and declaration order are not identity substitutes. Product v2 remains
 normal-only. Product v3 is required for custom Cloze semantics.
+
+Normal bundle templates may declare `generation_rule` with kind
+`anki_default`, `all`, or `any`; `all` and `any` name one or more stable field
+keys. Custom Cloze bundles must not declare a normal generation rule. A bundle
+field cannot be both `required` and `optional`, and at most one field may be the
+Anki sort field.

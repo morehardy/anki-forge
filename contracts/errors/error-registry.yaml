@@ -416,6 +416,9 @@ codes:
   - id: TEMPLATE.CLOZE_RULE_REQUIRES_CLOZE_NOTETYPE
     status: active
     summary: Cloze generation rule is attached to a normal high-level note type
+  - id: TEMPLATE.GENERATION_RULE_REQUIRED
+    status: active
+    summary: front template generation logic requires an explicit all or any rule
   - id: TEMPLATE.BUNDLE_PATH_UNSAFE
     status: active
     summary: template bundle path escapes or may escape its root directory
@@ -437,6 +440,12 @@ codes:
   - id: TEMPLATE.BUNDLE_ASSET_INVALID
     status: active
     summary: template bundle asset could not be registered atomically
+  - id: TEMPLATE.BUNDLE_FIELD_MODE_CONFLICT
+    status: active
+    summary: template bundle field is declared as both required and optional
+  - id: TEMPLATE.BUNDLE_GENERATION_RULE_CONFLICT
+    status: active
+    summary: Cloze template bundle declares a conflicting normal generation rule
   - id: PRODUCT.CLOZE_MARKER_MISSING
     status: active
     summary: Cloze note has no valid deletion markers

@@ -336,6 +336,28 @@ impl From<ProductDocumentV3> for ProductDocument {
     }
 }
 
+impl ProductDocument {
+    pub(crate) fn from_product_v3_parts(
+        document_id: String,
+        default_deck_name: Option<String>,
+        note_types: Vec<ProductNoteTypeV2>,
+        notes: Vec<ProductNoteV2>,
+    ) -> Self {
+        let mut document = ProductDocument::new(document_id);
+        document.default_deck_name = default_deck_name;
+        document.note_types = note_types.iter().filter_map(convert_note_type_v2).collect();
+        document.notes = notes.iter().filter_map(convert_note_v2).collect();
+        document.product_v2 = Some(ProductDocumentV2Payload {
+            version: 3,
+            note_types,
+            notes,
+            media: Vec::new(),
+            transport_diagnostics: Vec::new(),
+        });
+        document
+    }
+}
+
 impl<'de> Deserialize<'de> for ProductNoteTypeV2 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
