@@ -72,25 +72,10 @@ fn template_is_monotone(tokens: &[crate::TemplateToken], fields: &BTreeSet<Strin
     tokens.iter().all(|token| match token {
         crate::TemplateToken::SectionStart {
             field, inverted, ..
-        } => !inverted && (fields.contains(field) || always_nonempty_special_field(field)),
-        crate::TemplateToken::Render { field, .. } => {
-            fields.contains(field) || always_nonempty_special_field(field)
-        }
+        } => !inverted && fields.contains(field),
+        crate::TemplateToken::Render { field, .. } => fields.contains(field),
         _ => true,
     })
-}
-
-fn always_nonempty_special_field(field: &str) -> bool {
-    always_nonempty_special_field_value(field).is_some()
-}
-
-fn always_nonempty_special_field_value(field: &str) -> Option<&'static str> {
-    match field {
-        "Card" => Some("Card 1"),
-        "Deck" => Some("Deck"),
-        "Type" => Some("Note Type"),
-        _ => None,
-    }
 }
 
 fn template_renders_nonempty(
@@ -101,8 +86,9 @@ fn template_renders_nonempty(
     let mut active_sections = Vec::new();
     for token in tokens {
         match token {
-            crate::TemplateToken::SectionStart { field, .. } => active_sections
-                .push(nonempty_fields.contains(field) || always_nonempty_special_field(field)),
+            crate::TemplateToken::SectionStart { field, .. } => {
+                active_sections.push(nonempty_fields.contains(field))
+            }
             crate::TemplateToken::SectionEnd { .. } => {
                 active_sections.pop();
             }
@@ -114,8 +100,6 @@ fn template_renders_nonempty(
             {
                 if nonempty_fields.contains(field) {
                     rendered.push_str("field-value");
-                } else if let Some(value) = always_nonempty_special_field_value(field) {
-                    rendered.push_str(value);
                 }
             }
             crate::TemplateToken::Text(_)
@@ -188,10 +172,24 @@ mod tests {
     }
 
     #[test]
-    fn subdeck_is_not_inferred_as_always_nonempty() {
-        assert_eq!(
-            infer_generation_requirement("{{Subdeck}}", ["Front"]),
-            TemplateGenerationRequirement::Unrepresentable
-        );
+    fn runtime_metadata_special_fields_are_not_inferred_as_always_nonempty() {
+        for field in ["Card", "Deck", "Subdeck", "Type"] {
+            assert_eq!(
+                infer_generation_requirement(&format!("{{{{{field}}}}}"), ["Front"]),
+                TemplateGenerationRequirement::Unrepresentable,
+                "{field}"
+            );
+        }
+    }
+
+    #[test]
+    fn declared_fields_take_precedence_over_runtime_metadata_names() {
+        for field in ["Card", "Deck", "Subdeck", "Type"] {
+            assert_eq!(
+                infer_generation_requirement(&format!("{{{{{field}}}}}"), [field]),
+                TemplateGenerationRequirement::All(vec![field.into()]),
+                "{field}"
+            );
+        }
     }
 }

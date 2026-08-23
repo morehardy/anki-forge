@@ -476,35 +476,50 @@ fn project_requires_an_explicit_rule_for_unrepresentable_front_logic() {
 }
 
 #[test]
-fn project_requires_an_explicit_rule_for_subdeck_only_front() {
+fn project_requires_an_explicit_rule_for_runtime_metadata_only_front() {
     let root = tempfile::tempdir().expect("tempdir");
-    let apkg = root.path().join("project-subdeck-front.apkg");
-    let note_type = NoteType::custom("subdeck-card")
-        .field(Field::new("Context").key("context").optional())
-        .template(
-            Template::new("Card")
-                .key("card")
-                .front("{{Subdeck}}")
-                .back("{{Context}}"),
+    for (case, special_field, deck_name, note_type_name, template_name) in [
+        ("card", "Card", "Deck", None, " "),
+        ("deck", "Deck", " ", None, "Card"),
+        ("subdeck", "Subdeck", "Parent::", None, "Card"),
+        ("type", "Type", "Deck", Some(" "), "Card"),
+    ] {
+        let note_type_id = format!("{case}-runtime-metadata-card");
+        let mut note_type = NoteType::custom(&note_type_id)
+            .field(Field::new("Context").key("context").optional())
+            .template(
+                Template::new(template_name)
+                    .key("card")
+                    .front(format!("{{{{{special_field}}}}}"))
+                    .back("{{Context}}"),
+            );
+        if let Some(note_type_name) = note_type_name {
+            note_type = note_type.name(note_type_name);
+        }
+
+        let mut project = Project::new(format!("{case} Runtime Metadata Front"))
+            .stable_id(format!("{case}-runtime-metadata-front"))
+            .default_deck(deck_name);
+        project.add_notetype(note_type).expect("add note type");
+        project
+            .add_note(Note::new(&note_type_id).stable_id(format!("runtime-metadata:{case}:1")))
+            .expect("add note");
+
+        let apkg = root.path().join(format!("project-{case}-front.apkg"));
+        let error = project
+            .write_apkg(&apkg)
+            .expect_err("runtime-metadata-only default rule must be explicit");
+
+        assert!(
+            error
+                .report
+                .diagnostic_codes()
+                .contains(&"TEMPLATE.GENERATION_RULE_REQUIRED".to_string()),
+            "{case}: {:?}",
+            error.report.diagnostics
         );
-
-    let mut project = Project::new("Subdeck Front")
-        .stable_id("subdeck-front")
-        .default_deck("Parent::");
-    project.add_notetype(note_type).expect("add note type");
-    project
-        .add_note(Note::new("subdeck-card").stable_id("subdeck:1"))
-        .expect("add note");
-
-    let error = project
-        .write_apkg(&apkg)
-        .expect_err("Subdeck-only default rule must be explicit");
-
-    assert!(error
-        .report
-        .diagnostic_codes()
-        .contains(&"TEMPLATE.GENERATION_RULE_REQUIRED".to_string()));
-    assert!(!apkg.exists());
+        assert!(!apkg.exists(), "{case}");
+    }
 }
 
 #[test]
