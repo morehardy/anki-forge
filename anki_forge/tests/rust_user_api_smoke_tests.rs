@@ -476,6 +476,38 @@ fn project_requires_an_explicit_rule_for_unrepresentable_front_logic() {
 }
 
 #[test]
+fn project_requires_an_explicit_rule_for_subdeck_only_front() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let apkg = root.path().join("project-subdeck-front.apkg");
+    let note_type = NoteType::custom("subdeck-card")
+        .field(Field::new("Context").key("context").optional())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front("{{Subdeck}}")
+                .back("{{Context}}"),
+        );
+
+    let mut project = Project::new("Subdeck Front")
+        .stable_id("subdeck-front")
+        .default_deck("Parent::");
+    project.add_notetype(note_type).expect("add note type");
+    project
+        .add_note(Note::new("subdeck-card").stable_id("subdeck:1"))
+        .expect("add note");
+
+    let error = project
+        .write_apkg(&apkg)
+        .expect_err("Subdeck-only default rule must be explicit");
+
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"TEMPLATE.GENERATION_RULE_REQUIRED".to_string()));
+    assert!(!apkg.exists());
+}
+
+#[test]
 fn project_custom_cloze_rejects_malformed_marker() {
     let root = tempfile::tempdir().expect("tempdir");
     let apkg = root.path().join("malformed-custom-cloze.apkg");

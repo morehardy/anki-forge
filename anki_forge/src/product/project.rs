@@ -2291,12 +2291,14 @@ impl Project {
                 .or_default()
                 .push(project_index);
         }
-        for (authoring_index, authoring_note) in plan.authoring_document.notes.iter().enumerate() {
-            let project_index = project_indexes_by_authoring_id
+        for authoring_note in &plan.authoring_document.notes {
+            let Some(project_index) = project_indexes_by_authoring_id
                 .get(&authoring_note.id)
                 .filter(|indexes| indexes.len() == 1)
                 .map(|indexes| indexes[0])
-                .unwrap_or(authoring_index);
+            else {
+                continue;
+            };
             let Some(product_note) = self.notes.get(project_index) else {
                 continue;
             };
@@ -4841,6 +4843,78 @@ mod tests {
                 .and_then(|diagnostic| diagnostic.source.as_ref())
                 .map(SourcePath::as_str),
             Some("project.notes[\"later-note\"].fields[\"extra\"]"),
+            "{:?}",
+            error.diagnostics
+        );
+    }
+
+    #[test]
+    fn lower_keeps_index_source_when_colliding_identity_note_is_skipped() {
+        let note_type = NoteType::custom("colliding-source-card")
+            .field(Field::new("Identity").key("identity").optional())
+            .field(Field::new("Prompt").key("prompt").required())
+            .field(Field::new("Extra").key("extra").optional())
+            .template(
+                Template::new("Card")
+                    .key("card")
+                    .front("{{Prompt}}")
+                    .back("{{Extra}}"),
+            )
+            .identity(crate::product::IdentityRecipe::fields(["identity"]));
+        let mut project =
+            Project::new("Colliding Shifted Notes").stable_id("colliding-shifted-notes");
+        project.add_notetype(note_type).expect("add note type");
+        project
+            .add_note(
+                Note::new("colliding-source-card")
+                    .text("identity", "shared")
+                    .text("extra", "first"),
+            )
+            .expect("add invalid note for lowering diagnostic");
+        project
+            .add_note(
+                Note::new("colliding-source-card")
+                    .text("identity", "shared")
+                    .text("prompt", "valid")
+                    .html("extra", "<img src=missing.png>"),
+            )
+            .expect("add later note");
+
+        let plan = project.lower().expect("lower project");
+        let authoring_note = plan
+            .authoring_document
+            .notes
+            .first()
+            .expect("later note should survive lowering");
+
+        assert!(plan
+            .product_diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.code == "PRODUCT.REQUIRED_FIELD_MISSING"));
+        assert_eq!(
+            plan.source_map.source_for_authoring_path(
+                &crate::product::lowering::authoring_note_field_path(&authoring_note.id, "Extra",)
+            ),
+            Some("project.notes[1].fields[\"extra\"]")
+        );
+
+        let temp = tempfile::tempdir().expect("tempdir");
+        let error = match project.normalize_with_dirs(
+            temp.path(),
+            temp.path().join("media-store"),
+            ProjectNormalizeOptions::default(),
+        ) {
+            Ok(_) => panic!("missing media and required field should fail normalization"),
+            Err(error) => error,
+        };
+        assert_eq!(
+            error
+                .diagnostics
+                .iter()
+                .find(|diagnostic| diagnostic.code.as_str() == "MEDIA.MISSING_REFERENCE")
+                .and_then(|diagnostic| diagnostic.source.as_ref())
+                .map(SourcePath::as_str),
+            Some("project.notes[1].fields[\"extra\"]"),
             "{:?}",
             error.diagnostics
         );

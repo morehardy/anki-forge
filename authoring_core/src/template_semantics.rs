@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TemplateGenerationRequirement {
@@ -81,7 +81,16 @@ fn template_is_monotone(tokens: &[crate::TemplateToken], fields: &BTreeSet<Strin
 }
 
 fn always_nonempty_special_field(field: &str) -> bool {
-    matches!(field, "Card" | "Deck" | "Subdeck" | "Type")
+    always_nonempty_special_field_value(field).is_some()
+}
+
+fn always_nonempty_special_field_value(field: &str) -> Option<&'static str> {
+    match field {
+        "Card" => Some("Card 1"),
+        "Deck" => Some("Deck"),
+        "Type" => Some("Note Type"),
+        _ => None,
+    }
 }
 
 fn template_renders_nonempty(
@@ -90,18 +99,10 @@ fn template_renders_nonempty(
 ) -> bool {
     let mut rendered = String::new();
     let mut active_sections = Vec::new();
-    let special_values = BTreeMap::from([
-        ("Card", "Card 1"),
-        ("Deck", "Deck"),
-        ("Subdeck", "Deck"),
-        ("Type", "Note Type"),
-    ]);
-
     for token in tokens {
         match token {
-            crate::TemplateToken::SectionStart { field, .. } => active_sections.push(
-                nonempty_fields.contains(field) || special_values.contains_key(field.as_str()),
-            ),
+            crate::TemplateToken::SectionStart { field, .. } => active_sections
+                .push(nonempty_fields.contains(field) || always_nonempty_special_field(field)),
             crate::TemplateToken::SectionEnd { .. } => {
                 active_sections.pop();
             }
@@ -113,7 +114,7 @@ fn template_renders_nonempty(
             {
                 if nonempty_fields.contains(field) {
                     rendered.push_str("field-value");
-                } else if let Some(value) = special_values.get(field.as_str()) {
+                } else if let Some(value) = always_nonempty_special_field_value(field) {
                     rendered.push_str(value);
                 }
             }
@@ -183,6 +184,14 @@ mod tests {
                 ["Front"],
             ),
             TemplateGenerationRequirement::All(vec!["Front".into()])
+        );
+    }
+
+    #[test]
+    fn subdeck_is_not_inferred_as_always_nonempty() {
+        assert_eq!(
+            infer_generation_requirement("{{Subdeck}}", ["Front"]),
+            TemplateGenerationRequirement::Unrepresentable
         );
     }
 }
