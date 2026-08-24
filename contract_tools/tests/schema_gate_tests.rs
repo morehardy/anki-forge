@@ -51,6 +51,75 @@ fn product_v3_schema_rejects_duplicate_generation_rule_fields() {
 }
 
 #[test]
+fn template_bundle_schema_rejects_blank_identifiers() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "template_bundle_schema").unwrap()).unwrap();
+    let valid = json!({
+        "format_version": "template-bundle-v1",
+        "note_type": {
+            "id": "language-card",
+            "name": "Language Card",
+            "kind": "normal",
+            "fields": [{"key": "prompt", "name": "Prompt"}],
+            "templates": [{
+                "key": "card",
+                "name": "Card",
+                "front_file": "front.html",
+                "back_file": "back.html",
+                "target_deck": "Languages",
+                "generation_rule": {"kind": "all", "fields": ["prompt"]}
+            }]
+        }
+    });
+    assert!(validate_value(&schema, &valid).is_ok());
+
+    for pointer in [
+        "/note_type/id",
+        "/note_type/name",
+        "/note_type/fields/0/key",
+        "/note_type/fields/0/name",
+        "/note_type/templates/0/key",
+        "/note_type/templates/0/name",
+        "/note_type/templates/0/target_deck",
+        "/note_type/templates/0/generation_rule/fields/0",
+    ] {
+        let mut invalid = valid.clone();
+        *invalid.pointer_mut(pointer).expect("identifier pointer") = json!(" \t\n ");
+        assert!(
+            validate_value(&schema, &invalid).is_err(),
+            "schema accepted blank identifier at {pointer}"
+        );
+    }
+
+    let blank_cloze_field = json!({
+        "format_version": "template-bundle-v1",
+        "note_type": {
+            "id": "language-cloze",
+            "kind": "cloze",
+            "cloze_field": " \t\n ",
+            "fields": [{"key": "text", "name": "Text"}],
+            "templates": [{
+                "key": "cloze",
+                "name": "Cloze",
+                "front_file": "front.html",
+                "back_file": "back.html"
+            }]
+        }
+    });
+    assert!(
+        validate_value(&schema, &blank_cloze_field).is_err(),
+        "schema accepted a blank Cloze field key"
+    );
+
+    let mut padded_identifier = valid;
+    *padded_identifier
+        .pointer_mut("/note_type/id")
+        .expect("note type id") = json!(" language-card ");
+    assert!(validate_value(&schema, &padded_identifier).is_ok());
+}
+
+#[test]
 fn authoring_ir_schema_accepts_stock_notetype_note_and_media_entries() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =
