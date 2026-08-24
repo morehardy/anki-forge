@@ -363,6 +363,47 @@ fn project_static_front_persists_an_always_generate_requirement() {
 }
 
 #[test]
+fn project_unconditional_front_with_inverted_section_persists_none_requirement() {
+    let root = tempfile::tempdir().expect("tempdir");
+    let apkg = root
+        .path()
+        .join("project-unconditional-inverted-front.apkg");
+    let note_type = NoteType::custom("unconditional-inverted-card")
+        .field(Field::new("Prompt").key("prompt").optional())
+        .template(
+            Template::new("Card")
+                .key("card")
+                .front("Always{{^Prompt}}fallback{{/Prompt}}")
+                .back("{{Prompt}}"),
+        );
+
+    let mut project = Project::new("Unconditional Inverted Front")
+        .stable_id("unconditional-inverted-front")
+        .default_deck("Unconditional Inverted Front");
+    project.add_notetype(note_type).expect("add note type");
+    project
+        .add_note(Note::new("unconditional-inverted-card").stable_id("unconditional-inverted:1"))
+        .expect("add note");
+
+    let report = project.write_apkg(&apkg).expect("write apkg");
+    assert_eq!(report.counts.cards, 1);
+
+    let inspected = inspect_apkg(&apkg).expect("inspect apkg");
+    let template = inspected
+        .observations
+        .templates
+        .iter()
+        .find(|value| {
+            value["selector"] == "notetype[id='unconditional-inverted-card']::template[Card]"
+        })
+        .expect("template observation");
+    assert_eq!(
+        template["generation_requirement"],
+        serde_json::json!({"kind": "none", "field_names": []})
+    );
+}
+
+#[test]
 fn project_media_attribute_depends_on_its_field() {
     let root = tempfile::tempdir().expect("tempdir");
     let apkg = root.path().join("project-media-front.apkg");

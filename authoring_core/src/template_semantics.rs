@@ -17,12 +17,16 @@ pub fn infer_generation_requirement(
         .map(|field| field.as_ref().to_string())
         .collect::<BTreeSet<_>>();
     let parsed = crate::parse_template(source);
-    if !parsed.issues.is_empty() || !template_is_monotone(&parsed.tokens, &fields) {
+    if !parsed.issues.is_empty() {
         return TemplateGenerationRequirement::Unrepresentable;
     }
 
-    if template_renders_nonempty(&parsed.tokens, &BTreeSet::new()) {
+    if template_has_unconditional_visible_content(&parsed.tokens) {
         return TemplateGenerationRequirement::Always;
+    }
+
+    if !template_is_monotone(&parsed.tokens, &fields) {
+        return TemplateGenerationRequirement::Unrepresentable;
     }
 
     let singleton_fields = fields
@@ -78,6 +82,25 @@ fn template_is_monotone(tokens: &[crate::TemplateToken], fields: &BTreeSet<Strin
     })
 }
 
+fn template_has_unconditional_visible_content(tokens: &[crate::TemplateToken]) -> bool {
+    let mut rendered = String::new();
+    let mut section_depth = 0;
+    for token in tokens {
+        match token {
+            crate::TemplateToken::SectionStart { .. } => section_depth += 1,
+            crate::TemplateToken::SectionEnd { .. } => section_depth -= 1,
+            crate::TemplateToken::Text(text) if section_depth == 0 => rendered.push_str(text),
+            crate::TemplateToken::Text(_)
+            | crate::TemplateToken::Render { .. }
+            | crate::TemplateToken::Comment => {}
+        }
+    }
+
+    !crate::strip_html_preserving_media_filenames(&rendered)
+        .trim()
+        .is_empty()
+}
+
 fn template_renders_nonempty(
     tokens: &[crate::TemplateToken],
     nonempty_fields: &BTreeSet<String>,
@@ -122,6 +145,29 @@ mod tests {
         assert_eq!(
             infer_generation_requirement("<div>Always visible</div>", ["Context"]),
             TemplateGenerationRequirement::Always
+        );
+    }
+
+    #[test]
+    fn unconditional_visible_content_survives_inverted_sections() {
+        assert_eq!(
+            infer_generation_requirement("Always{{^Prompt}}fallback{{/Prompt}}", ["Prompt"],),
+            TemplateGenerationRequirement::Always
+        );
+    }
+
+    #[test]
+    fn inverted_only_visibility_is_not_always() {
+        assert_eq!(
+            infer_generation_requirement("{{^Prompt}}fallback{{/Prompt}}", ["Prompt"]),
+            TemplateGenerationRequirement::Unrepresentable
+        );
+        assert_eq!(
+            infer_generation_requirement(
+                "<script>ignored()</script>&nbsp;{{^Prompt}}fallback{{/Prompt}}",
+                ["Prompt"],
+            ),
+            TemplateGenerationRequirement::Unrepresentable
         );
     }
 
@@ -180,6 +226,11 @@ mod tests {
                 "{field}"
             );
         }
+
+        assert_eq!(
+            infer_generation_requirement("{{Card}}{{^Prompt}}fallback{{/Prompt}}", ["Prompt"],),
+            TemplateGenerationRequirement::Unrepresentable
+        );
     }
 
     #[test]
