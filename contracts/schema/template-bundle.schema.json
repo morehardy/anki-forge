@@ -24,10 +24,10 @@
       "required": ["id", "fields", "templates"],
       "additionalProperties": false,
       "properties": {
-        "id": {"type": "string", "minLength": 1},
-        "name": {"type": "string", "minLength": 1},
+        "id": {"$ref": "#/definitions/nonBlankString"},
+        "name": {"$ref": "#/definitions/nonBlankString"},
         "kind": {"enum": ["normal", "cloze"], "default": "normal"},
-        "cloze_field": {"type": "string", "minLength": 1},
+        "cloze_field": {"$ref": "#/definitions/nonBlankString"},
         "fields": {
           "type": "array",
           "minItems": 1,
@@ -47,7 +47,12 @@
           },
           "then": {
             "required": ["cloze_field"],
-            "properties": {"templates": {"maxItems": 1}}
+            "properties": {
+              "templates": {
+                "maxItems": 1,
+                "items": {"not": {"required": ["generation_rule"]}}
+              }
+            }
           }
         },
         {
@@ -61,6 +66,11 @@
     }
   },
   "definitions": {
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
     "relativePath": {
       "type": "string",
       "minLength": 1,
@@ -71,26 +81,62 @@
       "required": ["key", "name"],
       "additionalProperties": false,
       "properties": {
-        "key": {"type": "string", "minLength": 1},
-        "name": {"type": "string", "minLength": 1},
+        "key": {"$ref": "#/definitions/nonBlankString"},
+        "name": {"$ref": "#/definitions/nonBlankString"},
         "identity": {"type": "boolean", "default": false},
         "sort": {"type": "boolean", "default": false},
         "required": {"type": "boolean", "default": false},
         "optional": {"type": "boolean", "default": false}
-      }
+      },
+      "allOf": [
+        {
+          "not": {
+            "required": ["required", "optional"],
+            "properties": {
+              "required": {"const": true},
+              "optional": {"const": true}
+            }
+          }
+        }
+      ]
+    },
+    "generationRule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {"kind": {"const": "anki_default"}}
+        },
+        {
+          "type": "object",
+          "required": ["kind", "fields"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"enum": ["all", "any"]},
+            "fields": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"$ref": "#/definitions/nonBlankString"}
+            }
+          }
+        }
+      ]
     },
     "template": {
       "type": "object",
       "required": ["key", "name", "front_file", "back_file"],
       "additionalProperties": false,
       "properties": {
-        "key": {"type": "string", "minLength": 1},
-        "name": {"type": "string", "minLength": 1},
+        "key": {"$ref": "#/definitions/nonBlankString"},
+        "name": {"$ref": "#/definitions/nonBlankString"},
         "front_file": {"$ref": "#/definitions/relativePath"},
         "back_file": {"$ref": "#/definitions/relativePath"},
         "browser_front_file": {"$ref": "#/definitions/relativePath"},
         "browser_back_file": {"$ref": "#/definitions/relativePath"},
-        "target_deck": {"type": "string", "minLength": 1}
+        "target_deck": {"$ref": "#/definitions/nonBlankString"},
+        "generation_rule": {"$ref": "#/definitions/generationRule"}
       }
     }
   }

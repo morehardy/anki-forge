@@ -29,112 +29,68 @@ impl TemplateEngine {
     }
 
     pub fn cloze_fields(source: &str) -> BTreeSet<String> {
-        let mut fields = BTreeSet::new();
-        let mut remaining = source;
-        while let Some(open) = remaining.find("{{") {
-            let after_open = &remaining[open + 2..];
-            let Some(close) = after_open.find("}}") else {
-                break;
-            };
-            let expression = after_open[..close].trim();
-            let segments = expression.split(':').map(str::trim).collect::<Vec<_>>();
-            if segments.len() >= 2 && segments[..segments.len() - 1].contains(&"cloze") {
-                if let Some(field) = segments.last().filter(|field| !field.is_empty()) {
-                    fields.insert((*field).to_string());
+        authoring_core::parse_template(source)
+            .tokens
+            .into_iter()
+            .filter_map(|token| match token {
+                authoring_core::TemplateToken::Render { field, filters, .. }
+                    if !field.is_empty() && filters.iter().any(|filter| filter == "cloze") =>
+                {
+                    Some(field)
                 }
-            }
-            remaining = &after_open[close + 2..];
-        }
-        fields
+                _ => None,
+            })
+            .collect()
     }
 }
 
 fn validate_template_source(source: &str, fields: &BTreeSet<String>) -> Vec<TemplateIssue> {
-    let mut issues = Vec::new();
-    let mut sections = Vec::<(String, usize)>::new();
-    let mut cursor = 0;
-
-    while cursor < source.len() {
-        let next_open = source[cursor..].find("{{").map(|offset| cursor + offset);
-        let next_close = source[cursor..].find("}}").map(|offset| cursor + offset);
-        if next_close.is_some_and(|close| next_open.is_none_or(|open| close < open)) {
-            let offset = next_close.expect("checked as some");
-            issues.push(syntax_issue("unexpected closing delimiter", offset));
-            cursor = offset + 2;
-            continue;
-        }
-        let Some(open) = next_open else {
-            break;
-        };
-        let Some(relative_close) = source[open + 2..].find("}}") else {
-            issues.push(syntax_issue("unclosed template expression", open));
-            break;
-        };
-        let close = open + 2 + relative_close;
-        let expression = source[open + 2..close].trim();
-        if expression.is_empty() {
-            issues.push(syntax_issue("template expression cannot be empty", open));
-            cursor = close + 2;
-            continue;
-        }
-
-        if let Some(field) = expression
-            .strip_prefix('#')
-            .or_else(|| expression.strip_prefix('^'))
-        {
-            let field = field.trim();
-            validate_field(field, fields, open, &mut issues);
-            sections.push((field.to_string(), open));
-        } else if let Some(field) = expression.strip_prefix('/') {
-            let field = field.trim();
-            match sections.pop() {
-                Some((expected, _)) if expected == field => {}
-                Some((expected, _)) => issues.push(TemplateIssue {
-                    code: "TEMPLATE.SECTION_MISMATCH",
-                    severity: TemplateIssueSeverity::Error,
-                    message: format!(
-                        "template section closes '{field}' but the open section is '{expected}'"
-                    ),
-                    byte_offset: open,
-                }),
-                None => issues.push(TemplateIssue {
-                    code: "TEMPLATE.SECTION_MISMATCH",
-                    severity: TemplateIssueSeverity::Error,
-                    message: format!("template closes unopened section '{field}'"),
-                    byte_offset: open,
-                }),
-            }
-        } else if !expression.starts_with('!') {
-            validate_render_expression(expression, fields, open, &mut issues);
-        }
-
-        cursor = close + 2;
-    }
-
-    for (field, offset) in sections {
-        issues.push(TemplateIssue {
-            code: "TEMPLATE.SECTION_MISMATCH",
+    let parsed = authoring_core::parse_template(source);
+    let mut issues = parsed
+        .issues
+        .into_iter()
+        .map(|issue| TemplateIssue {
+            code: match issue.kind {
+                authoring_core::TemplateParseIssueKind::Syntax => "TEMPLATE.SYNTAX_INVALID",
+                authoring_core::TemplateParseIssueKind::SectionMismatch => {
+                    "TEMPLATE.SECTION_MISMATCH"
+                }
+            },
             severity: TemplateIssueSeverity::Error,
-            message: format!("template section '{field}' is not closed"),
-            byte_offset: offset,
-        });
+            message: issue.message,
+            byte_offset: issue.byte_offset,
+        })
+        .collect::<Vec<_>>();
+    for token in parsed.tokens {
+        match token {
+            authoring_core::TemplateToken::SectionStart {
+                field, byte_offset, ..
+            } => {
+                validate_field(&field, fields, byte_offset, &mut issues);
+            }
+            authoring_core::TemplateToken::Render {
+                field,
+                filters,
+                byte_offset,
+            } => validate_render_expression(&field, &filters, fields, byte_offset, &mut issues),
+            authoring_core::TemplateToken::Text(_)
+            | authoring_core::TemplateToken::SectionEnd { .. }
+            | authoring_core::TemplateToken::Comment => {}
+        }
     }
+    issues.sort_by_key(|issue| issue.byte_offset);
     issues
 }
 
 fn validate_render_expression(
-    expression: &str,
+    field: &str,
+    filters: &[String],
     fields: &BTreeSet<String>,
     offset: usize,
     issues: &mut Vec<TemplateIssue>,
 ) {
-    let segments = expression.split(':').map(str::trim).collect::<Vec<_>>();
-    let Some(field) = segments.last().copied() else {
-        return;
-    };
-
-    for filter in segments.iter().take(segments.len().saturating_sub(1)) {
-        if !matches!(*filter, "cloze" | "hint" | "text" | "type") {
+    for filter in filters {
+        if !matches!(filter.as_str(), "cloze" | "hint" | "text" | "type") {
             issues.push(TemplateIssue {
                 code: "TEMPLATE.FILTER_UNKNOWN",
                 severity: TemplateIssueSeverity::Warning,
@@ -152,18 +108,9 @@ fn validate_field(
     offset: usize,
     issues: &mut Vec<TemplateIssue>,
 ) {
-    const SPECIAL_FIELDS: &[&str] = &[
-        "Card",
-        "CardFlag",
-        "Deck",
-        "FrontSide",
-        "Subdeck",
-        "Tags",
-        "Type",
-    ];
     if field.is_empty() {
         issues.push(syntax_issue("template field name cannot be empty", offset));
-    } else if !fields.contains(field) && !SPECIAL_FIELDS.contains(&field) {
+    } else if !fields.contains(field) && !authoring_core::is_special_template_field(field) {
         issues.push(TemplateIssue {
             code: "TEMPLATE.RENDER_FIELD_UNKNOWN",
             severity: TemplateIssueSeverity::Error,

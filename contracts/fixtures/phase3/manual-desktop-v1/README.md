@@ -13,11 +13,16 @@ This directory contains manual validation scenarios for Anki Desktop importabili
 - `S07_cloze_mixed_media`
 - `S08_io_plus_audio`
 - `S09_io_rect`
+- `S10_custom_normal_bundle`
+- `S11_custom_cloze_bundle`
 
 Each scenario includes:
 
 - `input/authoring-ir.json`: source input for `normalize -> build -> inspect`
 - `assets/`: source copies of media files mirrored under `input/assets/` for path-based media sources
+
+Scenarios `S10` and `S11` instead contain `input/bundle/` and exercise the
+typed Rust `Project::import_template_bundle -> write_apkg -> inspect` path.
 
 ## Generate APKG
 

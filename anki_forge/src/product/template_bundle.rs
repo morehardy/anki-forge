@@ -1,8 +1,9 @@
+use std::collections::BTreeSet;
 use std::path::{Component, Path, PathBuf};
 
 use serde::Deserialize;
 
-use super::{Field, IdentityRecipe, NoteType, Template};
+use super::{Field, GenerationRule, IdentityRecipe, NoteType, Template};
 
 const MANIFEST_NAME: &str = "anki-template.yaml";
 const MANIFEST_LIMIT: u64 = 256 * 1024;
@@ -122,6 +123,16 @@ struct BundleTemplate {
     browser_back_file: Option<String>,
     #[serde(default)]
     target_deck: Option<String>,
+    #[serde(default)]
+    generation_rule: Option<BundleGenerationRule>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+enum BundleGenerationRule {
+    AnkiDefault,
+    All { fields: Vec<String> },
+    Any { fields: Vec<String> },
 }
 
 #[derive(Debug, Deserialize)]
@@ -189,15 +200,16 @@ pub(crate) fn load_template_bundle(
             Some(canonical_root.join(MANIFEST_NAME)),
         ));
     }
+    validate_manifest_semantics(&manifest, &canonical_root.join(MANIFEST_NAME))?;
     if manifest
         .note_type
         .fields
         .iter()
-        .any(|field| field.key.trim().is_empty())
+        .any(|field| field.required && field.optional)
     {
         return Err(TemplateBundleError::new(
-            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
-            "template bundle field keys must be non-empty",
+            "TEMPLATE.BUNDLE_FIELD_MODE_CONFLICT",
+            "template bundle fields cannot be both required and optional",
             Some(canonical_root.join(MANIFEST_NAME)),
         ));
     }
@@ -209,6 +221,7 @@ pub(crate) fn load_template_bundle(
         ));
     }
 
+    let is_cloze = manifest.note_type.kind == "cloze";
     let mut note_type = match manifest.note_type.kind.as_str() {
         "normal" => NoteType::custom(&manifest.note_type.id),
         "cloze" => {
@@ -266,6 +279,13 @@ pub(crate) fn load_template_bundle(
     }
 
     for template in manifest.note_type.templates {
+        if is_cloze && template.generation_rule.is_some() {
+            return Err(TemplateBundleError::new(
+                "TEMPLATE.BUNDLE_GENERATION_RULE_CONFLICT",
+                "Cloze template bundles derive generation from note_type.cloze_field and must not declare generation_rule",
+                Some(canonical_root.join(MANIFEST_NAME)),
+            ));
+        }
         let front_path = resolve_bundle_file(
             &canonical_root,
             &template.front_file,
@@ -307,6 +327,12 @@ pub(crate) fn load_template_bundle(
         if let Some(deck) = template.target_deck {
             product_template = product_template.target_deck(deck);
         }
+        if let Some(rule) = template.generation_rule {
+            product_template = product_template.generate_when(bundle_generation_rule(
+                rule,
+                &canonical_root.join(MANIFEST_NAME),
+            )?);
+        }
         note_type = note_type.template(product_template);
     }
 
@@ -328,6 +354,121 @@ pub(crate) fn load_template_bundle(
         .collect::<Result<Vec<_>, TemplateBundleError>>()?;
 
     Ok(LoadedTemplateBundle { note_type, assets })
+}
+
+fn validate_manifest_semantics(
+    manifest: &TemplateBundleManifest,
+    manifest_path: &Path,
+) -> Result<(), TemplateBundleError> {
+    let invalid_identifier = manifest.note_type.id.trim().is_empty()
+        || manifest
+            .note_type
+            .name
+            .as_deref()
+            .is_some_and(|name| name.trim().is_empty())
+        || manifest
+            .note_type
+            .fields
+            .iter()
+            .any(|field| field.key.trim().is_empty() || field.name.trim().is_empty())
+        || manifest.note_type.templates.iter().any(|template| {
+            template.key.trim().is_empty()
+                || template.name.trim().is_empty()
+                || template
+                    .target_deck
+                    .as_deref()
+                    .is_some_and(|deck| deck.trim().is_empty())
+        });
+    if invalid_identifier {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "note type, field, template, and target deck identifiers must be non-blank",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+
+    let field_keys = manifest
+        .note_type
+        .fields
+        .iter()
+        .map(|field| field.key.as_str())
+        .collect::<BTreeSet<_>>();
+    let field_names = manifest
+        .note_type
+        .fields
+        .iter()
+        .map(|field| field.name.as_str())
+        .collect::<BTreeSet<_>>();
+    let template_keys = manifest
+        .note_type
+        .templates
+        .iter()
+        .map(|template| template.key.as_str())
+        .collect::<BTreeSet<_>>();
+    let template_names = manifest
+        .note_type
+        .templates
+        .iter()
+        .map(|template| template.name.as_str())
+        .collect::<BTreeSet<_>>();
+    if field_keys.len() != manifest.note_type.fields.len()
+        || field_names.len() != manifest.note_type.fields.len()
+        || template_keys.len() != manifest.note_type.templates.len()
+        || template_names.len() != manifest.note_type.templates.len()
+        || manifest
+            .note_type
+            .fields
+            .iter()
+            .filter(|field| field.sort)
+            .count()
+            > 1
+    {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "field keys/names and template keys/names must be unique, with at most one sort field",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+
+    if manifest.note_type.templates.iter().any(|template| {
+        let fields = match template.generation_rule.as_ref() {
+            Some(BundleGenerationRule::All { fields })
+            | Some(BundleGenerationRule::Any { fields }) => fields,
+            _ => return false,
+        };
+        fields
+            .iter()
+            .any(|field| !field_keys.contains(field.as_str()))
+    }) {
+        return Err(TemplateBundleError::new(
+            "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+            "template generation_rule references an unknown field key",
+            Some(manifest_path.to_path_buf()),
+        ));
+    }
+    Ok(())
+}
+
+fn bundle_generation_rule(
+    rule: BundleGenerationRule,
+    manifest_path: &Path,
+) -> Result<GenerationRule, TemplateBundleError> {
+    match rule {
+        BundleGenerationRule::AnkiDefault => Ok(GenerationRule::AnkiDefault),
+        BundleGenerationRule::All { fields } | BundleGenerationRule::Any { fields }
+            if fields.is_empty()
+                || fields.iter().any(|field| field.trim().is_empty())
+                || fields.iter().collect::<BTreeSet<_>>().len() != fields.len() =>
+        {
+            Err(TemplateBundleError::new(
+                "TEMPLATE.BUNDLE_MANIFEST_INVALID",
+                "template generation_rule fields must be non-empty, unique field keys",
+                Some(manifest_path.to_path_buf()),
+            ))
+        }
+        BundleGenerationRule::All { fields } => Ok(GenerationRule::all(fields)),
+        BundleGenerationRule::Any { fields } => Ok(GenerationRule::any(fields)),
+    }
 }
 
 fn resolve_bundle_file(

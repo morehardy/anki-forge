@@ -1,0 +1,32 @@
+format_version: template-bundle-v1
+note_type:
+  id: desktop-custom-normal
+  name: Desktop Custom Normal
+  kind: normal
+  fields:
+    - key: prompt
+      name: Prompt
+      identity: true
+      required: true
+    - key: sort_key
+      name: Sort Key
+      sort: true
+      optional: true
+    - key: extra
+      name: Extra
+      optional: true
+  templates:
+    - key: card
+      name: Card
+      front_file: front.html
+      back_file: back.html
+      browser_front_file: browser-front.html
+      browser_back_file: browser-back.html
+      target_deck: Anki Forge Manual::Custom Normal
+      generation_rule:
+        kind: all
+        fields: [prompt]
+css_file: style.css
+assets:
+  - path: assets/icon.svg
+    export_as: manual-icon.svg
