@@ -17,35 +17,15 @@ use crate::writer_core::anki_proto::{
     encode_field_config, encode_notetype_config, encode_template_config,
 };
 use crate::writer_core::card_plan::plan_cards;
+use crate::writer_core::compat_schema::{
+    SCHEMA11_SQL, SCHEMA14_UPGRADE_SQL, SCHEMA15_UPGRADE_SQL, SCHEMA17_UPGRADE_SQL,
+    SCHEMA18_UPGRADE_SQL,
+};
 use crate::writer_core::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
 use crate::writer_core::staging::{
     load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
     MaterializedStaging,
 };
-
-// The local docs/source/rslib tree is an ignored reference mirror that CI does
-// not receive, so writer_core snapshots the exact SQL anchors it needs under
-// writer_core/assets/rslib/.
-const SCHEMA11_SQL: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/rslib/storage/schema11.sql"
-));
-const SCHEMA14_UPGRADE_SQL: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/rslib/storage/upgrades/schema14_upgrade.sql"
-));
-const SCHEMA15_UPGRADE_SQL: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/rslib/storage/upgrades/schema15_upgrade.sql"
-));
-const SCHEMA17_UPGRADE_SQL: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/rslib/storage/upgrades/schema17_upgrade.sql"
-));
-const SCHEMA18_UPGRADE_SQL: &str = include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/assets/rslib/storage/upgrades/schema18_upgrade.sql"
-));
 
 pub struct ApkgMaterialization {
     pub apkg_ref: String,

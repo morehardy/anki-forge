@@ -10,7 +10,10 @@ if [[ "${ANKI_FORGE_ALLOW_DIRTY_PACKAGE:-0}" == "1" ]]; then
 fi
 
 cd "$repo_root"
-cargo package -p anki_forge "${dirty_args[@]}" --locked --offline --list >"$work_root/files.txt"
+cargo package -p anki_forge "${dirty_args[@]}" --locked --offline --list \
+  | sed 's/\r$//' >"$work_root/files.txt"
+
+diff -u "$repo_root/anki_forge/PACKAGE_FILES.txt" "$work_root/files.txt"
 
 required=(
   "Cargo.toml"
@@ -18,9 +21,9 @@ required=(
   "README.md"
   "CHANGELOG.md"
   "LICENSE"
+  "PACKAGE_FILES.txt"
   "src/lib.rs"
   "assets/contracts/anki-forge-contract-bundle-0.3.0.tar.gz"
-  "assets/rslib/storage/schema11.sql"
   "tests/packaged_contract_tests.rs"
 )
 
@@ -31,7 +34,7 @@ for path in "${required[@]}"; do
   }
 done
 
-for forbidden in "../" "contract_tools/" "docs/source/" "target/"; do
+for forbidden in "../" "assets/rslib/" "contract_tools/" "docs/source/" "target/"; do
   if grep -Fq "$forbidden" "$work_root/files.txt"; then
     echo "forbidden package payload entry contains: $forbidden" >&2
     exit 1

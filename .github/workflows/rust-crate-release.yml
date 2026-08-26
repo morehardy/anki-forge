@@ -20,16 +20,8 @@ jobs:
         with:
           toolchain: 1.92.0
           components: rustfmt,clippy
-      - name: Validate release identity
-        run: bash scripts/check_rust_release_metadata.sh "$GITHUB_REF_NAME"
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
-      - run: cargo test --workspace --all-features --locked
-      - run: cargo test -p anki_forge --doc --locked
-      - run: RUSTDOCFLAGS="-D warnings" cargo doc -p anki_forge --all-features --no-deps --locked
-      - run: bash scripts/check_embedded_contract_bundle.sh
-      - run: bash scripts/check_rust_crate_payload.sh
-      - run: bash scripts/check_rust_crate_package.sh
+      - name: Run release quality gates
+        run: bash scripts/check_rust_crate_quality.sh "$GITHUB_REF_NAME"
       - uses: EmbarkStudios/cargo-deny-action@v2
         with:
           command: check advisories licenses bans sources
@@ -52,6 +44,7 @@ jobs:
           test -n "$sbom_path"
           cp "$crate_path" release-evidence/
           cp "$sbom_path" release-evidence/anki_forge.cdx.json
+          cp anki_forge/CHANGELOG.md release-evidence/CHANGELOG.md
           sha256sum "$crate_path" > release-evidence/SHA256SUMS
           version="${GITHUB_REF_NAME#anki-forge-v}"
           bundle_version="$(sed -n 's/^const EMBEDDED_BUNDLE_VERSION: &str = "\([^"]*\)";/\1/p' anki_forge/src/runtime/embedded.rs)"
@@ -62,7 +55,8 @@ jobs:
             --arg crate_version "$version" \
             --arg bundle_version "$bundle_version" \
             --arg package_sha256 "$checksum" \
-            '{schema_version:"anki-forge-rust-release-v1",tag:$tag,commit:$commit,crate_version:$crate_version,bundle_version:$bundle_version,msrv:"1.92.0",stable_verified:true,tier1_platforms:["x86_64-unknown-linux-gnu","x86_64-pc-windows-msvc","x86_64-apple-darwin","aarch64-apple-darwin"],package_sha256:$package_sha256,sbom:"anki_forge.cdx.json"}' \
+            --arg ci_evidence "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            '{schema_version:"anki-forge-rust-release-v1",tag:$tag,commit:$commit,crate_version:$crate_version,bundle_version:$bundle_version,msrv:"1.92.0",stable_verified:true,tier1_platforms:["x86_64-unknown-linux-gnu","x86_64-pc-windows-msvc","x86_64-apple-darwin","aarch64-apple-darwin"],package_sha256:$package_sha256,sbom:"anki_forge.cdx.json",changelog:"CHANGELOG.md",ci_evidence:$ci_evidence,security_exceptions:[]}' \
             > release-evidence/release-record.json
       - uses: actions/upload-artifact@v4
         with:
@@ -70,8 +64,25 @@ jobs:
           path: release-evidence/
           if-no-files-found: error
 
+  tier1:
+    name: release-tier1 (${{ matrix.os }}, Rust ${{ matrix.toolchain }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-14]
+        toolchain: [1.92.0, stable]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - run: cargo fetch --locked
+      - shell: bash
+        run: bash scripts/check_rust_crate_package.sh
+
   publish:
-    needs: candidate
+    needs: [candidate, tier1]
     runs-on: ubuntu-latest
     environment: crates-io
     steps:
@@ -96,7 +107,19 @@ jobs:
           consumer="$(mktemp -d)"
           cargo init --bin --name anki_forge_release_verify "$consumer"
           cargo add --manifest-path "$consumer/Cargo.toml" "anki_forge@=$version"
-          cargo check --manifest-path "$consumer/Cargo.toml"
+          cat > "$consumer/src/main.rs" <<'RS'
+          use anki_forge::runtime::{embedded_bundle_version, load_default_writer_stack, RuntimeMode};
+
+          fn main() {
+              assert_eq!(embedded_bundle_version(), "0.3.0");
+              let (runtime, _, _) = load_default_writer_stack().expect("load embedded contracts");
+              assert_eq!(runtime.mode, RuntimeMode::Installed);
+              assert_eq!(runtime.bundle_version, "0.3.0");
+          }
+          RS
+          cargo run --manifest-path "$consumer/Cargo.toml" --locked
+          curl --fail --location --retry 12 --retry-delay 10 --retry-all-errors \
+            "https://docs.rs/anki_forge/$version/anki_forge/"
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

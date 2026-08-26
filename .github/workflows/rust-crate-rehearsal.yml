@@ -1,16 +1,13 @@
-name: rust-crate-ci
+name: rust-crate-rehearsal
 
 on:
-  pull_request:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  quality:
+  candidate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,27 +18,20 @@ jobs:
           toolchain: 1.92.0
           components: rustfmt,clippy
       - run: bash scripts/check_rust_crate_quality.sh
-
-  dependency-policy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - run: bash scripts/check_rust_crate_package.sh
       - uses: EmbarkStudios/cargo-deny-action@v2
         with:
           command: check advisories licenses bans sources
-
-  semver:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: obi1kenobi/cargo-semver-checks-action@v2
         with:
           package: anki_forge
+      - run: cargo publish --dry-run -p anki_forge --locked
+      - run: |
+          cargo install cargo-cyclonedx --version 0.5.9 --locked
+          cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json
 
-  packaged-consumer:
-    name: packaged-consumer (${{ matrix.os }}, Rust ${{ matrix.toolchain }})
+  tier1:
+    name: rehearsal-tier1 (${{ matrix.os }}, Rust ${{ matrix.toolchain }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

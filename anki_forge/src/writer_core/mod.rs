@@ -1,4 +1,5 @@
 mod anki_proto;
+mod compat_schema;
 
 pub mod apkg;
 pub mod build;

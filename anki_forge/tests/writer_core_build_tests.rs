@@ -254,24 +254,6 @@ fn build_materializes_basic_staging_into_caller_owned_root() {
 }
 
 #[test]
-fn tracked_rslib_storage_sql_snapshots_exist() {
-    for relative in [
-        "assets/rslib/storage/schema11.sql",
-        "assets/rslib/storage/upgrades/schema14_upgrade.sql",
-        "assets/rslib/storage/upgrades/schema15_upgrade.sql",
-        "assets/rslib/storage/upgrades/schema17_upgrade.sql",
-        "assets/rslib/storage/upgrades/schema18_upgrade.sql",
-    ] {
-        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(relative);
-        assert!(
-            path.exists(),
-            "expected tracked rslib storage snapshot at {}",
-            path.display()
-        );
-    }
-}
-
-#[test]
 fn build_accepts_numeric_html_entity_media_references() {
     let root = unique_artifact_root("html-entity-media");
     let media_store = root.join("media-store");

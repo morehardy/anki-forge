@@ -26,11 +26,22 @@ allow = [
 exceptions = []
 
 [bans]
-multiple-versions = "warn"
+multiple-versions = "deny"
 wildcards = "deny"
 highlight = "all"
 deny = []
-skip = []
+# Existing transitive version splits are explicitly reviewed. Any new split is
+# release-blocking and requires its own reviewed entry.
+skip = [
+    { name = "cpufeatures", version = "0.2.17" },
+    { name = "getrandom", version = "0.2.15" },
+    { name = "hashbrown", version = "0.14.5" },
+    { name = "linux-raw-sys", version = "0.4.15" },
+    { name = "rustix", version = "0.38.44" },
+    { name = "syn", version = "2.0.115" },
+    { name = "windows-sys", version = "0.59.0" },
+    { name = "zerocopy", version = "0.7.35" },
+]
 skip-tree = []
 
 [sources]
