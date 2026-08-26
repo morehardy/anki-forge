@@ -148,12 +148,12 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
 
 #[derive(Debug, Clone)]
 struct InspectedArtifact {
-    report: writer_core::InspectReport,
+    report: crate::writer_core::InspectReport,
     summary: InspectSummary,
 }
 
 fn inspect_artifact(path: &Path) -> Result<InspectedArtifact, String> {
-    writer_core::inspect_apkg(path)
+    crate::writer_core::inspect_apkg(path)
         .map_err(|err| format!("APKG could not be inspected: {}: {err}", path.display()))
         .map(|report| {
             let summary = inspect_summary_from_report(&report);
@@ -161,7 +161,7 @@ fn inspect_artifact(path: &Path) -> Result<InspectedArtifact, String> {
         })
 }
 
-fn inspect_summary_from_report(report: &writer_core::InspectReport) -> InspectSummary {
+fn inspect_summary_from_report(report: &crate::writer_core::InspectReport) -> InspectSummary {
     InspectSummary {
         notes: inspect_metadata_count(report, "note_count"),
         cards: inspect_metadata_count(report, "card_count"),
@@ -174,7 +174,7 @@ fn inspect_summary_from_report(report: &writer_core::InspectReport) -> InspectSu
     }
 }
 
-fn inspect_metadata_count(report: &writer_core::InspectReport, key: &str) -> usize {
+fn inspect_metadata_count(report: &crate::writer_core::InspectReport, key: &str) -> usize {
     report
         .observations
         .metadata
@@ -184,10 +184,10 @@ fn inspect_metadata_count(report: &writer_core::InspectReport, key: &str) -> usi
 }
 
 fn writer_diff_from_reports(
-    current_report: &writer_core::InspectReport,
-    previous_report: &writer_core::InspectReport,
+    current_report: &crate::writer_core::InspectReport,
+    previous_report: &crate::writer_core::InspectReport,
 ) -> Result<(BuildDiffSummary, ComparisonStatus), String> {
-    let report = writer_core::diff_reports(previous_report, current_report)
+    let report = crate::writer_core::diff_reports(previous_report, current_report)
         .map_err(|err| err.to_string())?;
     let status = writer_comparison_status(&report, previous_report, current_report);
     let mut summary = summarize_writer_diff(&report);
@@ -212,9 +212,9 @@ fn writer_diff_from_reports(
 }
 
 fn writer_comparison_status(
-    report: &writer_core::DiffReport,
-    previous: &writer_core::InspectReport,
-    current: &writer_core::InspectReport,
+    report: &crate::writer_core::DiffReport,
+    previous: &crate::writer_core::InspectReport,
+    current: &crate::writer_core::InspectReport,
 ) -> ComparisonStatus {
     let core_missing = report.uncompared_domains.iter().any(|domain| {
         matches!(
@@ -249,7 +249,7 @@ enum CardEvidenceStatus {
     Missing,
 }
 
-fn card_evidence_status(report: &writer_core::InspectReport) -> CardEvidenceStatus {
+fn card_evidence_status(report: &crate::writer_core::InspectReport) -> CardEvidenceStatus {
     let has_card_count = report.observations.metadata.iter().any(|value| {
         value
             .get("card_count")

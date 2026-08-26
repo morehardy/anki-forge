@@ -29,11 +29,11 @@ impl TemplateEngine {
     }
 
     pub fn cloze_fields(source: &str) -> BTreeSet<String> {
-        authoring_core::parse_template(source)
+        crate::authoring_core::parse_template(source)
             .tokens
             .into_iter()
             .filter_map(|token| match token {
-                authoring_core::TemplateToken::Render { field, filters, .. }
+                crate::authoring_core::TemplateToken::Render { field, filters, .. }
                     if !field.is_empty() && filters.iter().any(|filter| filter == "cloze") =>
                 {
                     Some(field)
@@ -45,14 +45,14 @@ impl TemplateEngine {
 }
 
 fn validate_template_source(source: &str, fields: &BTreeSet<String>) -> Vec<TemplateIssue> {
-    let parsed = authoring_core::parse_template(source);
+    let parsed = crate::authoring_core::parse_template(source);
     let mut issues = parsed
         .issues
         .into_iter()
         .map(|issue| TemplateIssue {
             code: match issue.kind {
-                authoring_core::TemplateParseIssueKind::Syntax => "TEMPLATE.SYNTAX_INVALID",
-                authoring_core::TemplateParseIssueKind::SectionMismatch => {
+                crate::authoring_core::TemplateParseIssueKind::Syntax => "TEMPLATE.SYNTAX_INVALID",
+                crate::authoring_core::TemplateParseIssueKind::SectionMismatch => {
                     "TEMPLATE.SECTION_MISMATCH"
                 }
             },
@@ -63,19 +63,19 @@ fn validate_template_source(source: &str, fields: &BTreeSet<String>) -> Vec<Temp
         .collect::<Vec<_>>();
     for token in parsed.tokens {
         match token {
-            authoring_core::TemplateToken::SectionStart {
+            crate::authoring_core::TemplateToken::SectionStart {
                 field, byte_offset, ..
             } => {
                 validate_field(&field, fields, byte_offset, &mut issues);
             }
-            authoring_core::TemplateToken::Render {
+            crate::authoring_core::TemplateToken::Render {
                 field,
                 filters,
                 byte_offset,
             } => validate_render_expression(&field, &filters, fields, byte_offset, &mut issues),
-            authoring_core::TemplateToken::Text(_)
-            | authoring_core::TemplateToken::SectionEnd { .. }
-            | authoring_core::TemplateToken::Comment => {}
+            crate::authoring_core::TemplateToken::Text(_)
+            | crate::authoring_core::TemplateToken::SectionEnd { .. }
+            | crate::authoring_core::TemplateToken::Comment => {}
         }
     }
     issues.sort_by_key(|issue| issue.byte_offset);
@@ -110,7 +110,7 @@ fn validate_field(
 ) {
     if field.is_empty() {
         issues.push(syntax_issue("template field name cannot be empty", offset));
-    } else if !fields.contains(field) && !authoring_core::is_special_template_field(field) {
+    } else if !fields.contains(field) && !crate::authoring_core::is_special_template_field(field) {
         issues.push(TemplateIssue {
             code: "TEMPLATE.RENDER_FIELD_UNKNOWN",
             severity: TemplateIssueSeverity::Error,

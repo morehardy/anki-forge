@@ -412,5 +412,5 @@ fn validate_media_filename(filename: &str) -> anyhow::Result<()> {
 }
 
 fn mime_from_name(name: &str) -> String {
-    authoring_core::mime_from_filename_or_octet(name)
+    crate::authoring_core::mime_from_filename_or_octet(name)
 }

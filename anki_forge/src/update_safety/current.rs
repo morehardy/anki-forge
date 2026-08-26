@@ -1,8 +1,8 @@
-use authoring_core::NormalizedIr;
+use crate::authoring_core::NormalizedIr;
 use std::collections::BTreeMap;
 
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
-use writer_core::WriterPolicy;
+use crate::writer_core::WriterPolicy;
 
 use super::model::{
     validate_writer_policy_ref, EffectiveMode, IdentityIndex, ResolvedNoteIdentity,

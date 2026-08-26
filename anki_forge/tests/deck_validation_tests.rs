@@ -405,13 +405,13 @@ fn media_registry_rejects_helper_unsafe_names_at_add_time() {
             .add(MediaSource::from_bytes(invalid_name, vec![1, 2, 3]))
             .expect_err("helper-unsafe media names must fail");
         let filename_error = err
-            .downcast_ref::<authoring_core::MediaFilenameError>()
+            .downcast_ref::<anki_forge::authoring::MediaFilenameError>()
             .expect("error should preserve media filename error type");
 
         assert!(
             matches!(
                 filename_error,
-                authoring_core::MediaFilenameError::UnsafeCharacters(name)
+                anki_forge::authoring::MediaFilenameError::UnsafeCharacters(name)
                     if name == invalid_name
             ),
             "unexpected error for {invalid_name}: {err}"

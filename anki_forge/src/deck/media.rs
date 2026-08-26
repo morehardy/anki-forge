@@ -436,15 +436,15 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
-    authoring_core::validate_authoring_media_filename(name).map_err(anyhow::Error::new)
+    crate::authoring_core::validate_authoring_media_filename(name).map_err(anyhow::Error::new)
 }
 
 fn mime_from_name(name: &str) -> String {
-    authoring_core::mime_from_filename_or_octet(name)
+    crate::authoring_core::mime_from_filename_or_octet(name)
 }
 
 fn raster_image_metadata_from_path(name: &str, path: &Path) -> Option<RasterImageMetadata> {
-    match authoring_core::mime_from_filename(name) {
+    match crate::authoring_core::mime_from_filename(name) {
         Some("image/png" | "image/jpeg" | "image/gif" | "image/webp") => {
             imagesize::size(path).ok().map(|size| RasterImageMetadata {
                 width_px: size.width as u32,
@@ -456,7 +456,7 @@ fn raster_image_metadata_from_path(name: &str, path: &Path) -> Option<RasterImag
 }
 
 fn raster_image_metadata_from_bytes(name: &str, bytes: &[u8]) -> Option<RasterImageMetadata> {
-    match authoring_core::mime_from_filename(name) {
+    match crate::authoring_core::mime_from_filename(name) {
         Some("image/png" | "image/jpeg" | "image/gif" | "image/webp") => {
             imagesize::blob_size(bytes)
                 .ok()

@@ -556,7 +556,7 @@ impl<'de> Deserialize<'de> for RegisteredMedia {
 }
 
 fn legacy_mime_from_name(name: &str) -> String {
-    authoring_core::mime_from_filename_or_octet(name)
+    crate::authoring_core::mime_from_filename_or_octet(name)
 }
 
 impl Deck {

@@ -47,7 +47,7 @@ pub fn run_policy_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
 pub fn load_writer_policy_asset(
     manifest: &crate::manifest::LoadedManifest,
     selector: &str,
-) -> anyhow::Result<writer_core::WriterPolicy> {
+) -> anyhow::Result<anki_forge::writer::WriterPolicy> {
     ensure!(
         selector == "default",
         "only default writer_policy selector is supported initially"
@@ -63,7 +63,7 @@ pub fn load_writer_policy_asset(
 pub fn load_build_context_asset(
     manifest: &crate::manifest::LoadedManifest,
     selector: &str,
-) -> anyhow::Result<writer_core::BuildContext> {
+) -> anyhow::Result<anki_forge::writer::BuildContext> {
     ensure!(
         selector == "default",
         "only default build_context selector is supported initially"

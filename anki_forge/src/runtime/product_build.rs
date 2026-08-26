@@ -1,6 +1,6 @@
 use crate::build::{BuildOptions, BuildReport};
 use crate::product::ProductDocument;
-use writer_core::{BuildContext, WriterPolicy};
+use crate::writer_core::{BuildContext, WriterPolicy};
 
 pub fn build_product_document(
     document: ProductDocument,

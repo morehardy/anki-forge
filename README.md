@@ -9,6 +9,17 @@ Most users should start with the typed Rust API:
 - `Project` for long-term decks that need stable IDs, custom note types, media,
   validation, and build reports
 
+For downstream Rust applications, add the production crate directly:
+
+```bash
+cargo add anki_forge
+```
+
+The crates.io Rust Distribution is self-contained. It embeds the default
+contract bundle and does not require this repository at runtime. Release
+requirements and recovery procedures are documented in
+`docs/rust-crate-release-readiness.md` and `docs/rust-release-runbook.md`.
+
 ## 1. Requirements
 
 - Rust `1.92.0` (see `rust-toolchain.toml`)

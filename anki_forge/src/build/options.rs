@@ -223,7 +223,7 @@ impl ProjectNormalizeOptions {
     }
 
     #[allow(dead_code)]
-    pub(crate) fn to_authoring_media_policy(&self) -> authoring_core::MediaPolicy {
+    pub(crate) fn to_authoring_media_policy(&self) -> crate::authoring_core::MediaPolicy {
         self.media_policy.to_authoring_media_policy()
     }
 }
@@ -259,8 +259,8 @@ impl ProjectMediaPolicy {
         Self::from_behaviors(unused_binding_behavior, unknown_mime_behavior, behavior)
     }
 
-    fn to_authoring_media_policy(self) -> authoring_core::MediaPolicy {
-        let mut policy = authoring_core::MediaPolicy::default_strict();
+    fn to_authoring_media_policy(self) -> crate::authoring_core::MediaPolicy {
+        let mut policy = crate::authoring_core::MediaPolicy::default_strict();
         let (unused_binding_behavior, unknown_mime_behavior, declared_mime_mismatch_behavior) =
             self.behaviors();
         policy.unused_binding_behavior = unused_binding_behavior.to_authoring_behavior();
@@ -316,23 +316,31 @@ impl ProjectMediaPolicy {
 }
 
 impl ProjectMediaDiagnosticBehavior {
-    fn to_authoring_behavior(self) -> authoring_core::DiagnosticBehavior {
+    fn to_authoring_behavior(self) -> crate::authoring_core::DiagnosticBehavior {
         match self {
-            ProjectMediaDiagnosticBehavior::Ignore => authoring_core::DiagnosticBehavior::Ignore,
-            ProjectMediaDiagnosticBehavior::Info => authoring_core::DiagnosticBehavior::Info,
-            ProjectMediaDiagnosticBehavior::Warning => authoring_core::DiagnosticBehavior::Warning,
-            ProjectMediaDiagnosticBehavior::Error => authoring_core::DiagnosticBehavior::Error,
+            ProjectMediaDiagnosticBehavior::Ignore => {
+                crate::authoring_core::DiagnosticBehavior::Ignore
+            }
+            ProjectMediaDiagnosticBehavior::Info => crate::authoring_core::DiagnosticBehavior::Info,
+            ProjectMediaDiagnosticBehavior::Warning => {
+                crate::authoring_core::DiagnosticBehavior::Warning
+            }
+            ProjectMediaDiagnosticBehavior::Error => {
+                crate::authoring_core::DiagnosticBehavior::Error
+            }
         }
     }
 }
 
 impl ProjectDeclaredMimeMismatchBehavior {
-    fn to_authoring_behavior(self) -> authoring_core::DiagnosticBehavior {
+    fn to_authoring_behavior(self) -> crate::authoring_core::DiagnosticBehavior {
         match self {
             ProjectDeclaredMimeMismatchBehavior::Warning => {
-                authoring_core::DiagnosticBehavior::Warning
+                crate::authoring_core::DiagnosticBehavior::Warning
             }
-            ProjectDeclaredMimeMismatchBehavior::Error => authoring_core::DiagnosticBehavior::Error,
+            ProjectDeclaredMimeMismatchBehavior::Error => {
+                crate::authoring_core::DiagnosticBehavior::Error
+            }
         }
     }
 }

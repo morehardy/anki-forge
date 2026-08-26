@@ -82,3 +82,21 @@ fn package_command_excludes_transient_media_store_tmp_files() {
         "artifact should not include transient media-store tmp files"
     );
 }
+
+#[test]
+fn package_command_is_reproducible() {
+    let manifest_path = contract_tools::contract_manifest_path();
+    let first_out = tempdir().expect("first output dir");
+    let second_out = tempdir().expect("second output dir");
+
+    let first = contract_tools::package::build_artifact(&manifest_path, first_out.path())
+        .expect("first package artifact");
+    let second = contract_tools::package::build_artifact(&manifest_path, second_out.path())
+        .expect("second package artifact");
+
+    assert_eq!(
+        fs::read(first).expect("read first artifact"),
+        fs::read(second).expect("read second artifact"),
+        "equal contract inputs must produce byte-identical bundles"
+    );
+}

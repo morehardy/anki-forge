@@ -28,7 +28,7 @@ pub fn write_lockfile_atomic(path: impl AsRef<Path>, lockfile: &IdentityLockfile
             .unwrap_or("anki-forge.lock.json"),
         std::process::id()
     ));
-    let bytes = writer_core::to_canonical_json(lockfile)
+    let bytes = crate::writer_core::to_canonical_json(lockfile)
         .context("serialize canonical identity lockfile")?;
     std::fs::write(&tmp, bytes)
         .with_context(|| format!("write temporary lockfile {}", tmp.display()))?;

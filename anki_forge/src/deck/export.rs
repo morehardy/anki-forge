@@ -2,11 +2,13 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
+use crate::authoring_core::{
+    normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions,
+};
 use anyhow::{ensure, Context};
-use authoring_core::{normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions};
 
 use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
-use writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
+use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
 
 use super::model::{Deck, Package};
 
@@ -125,9 +127,7 @@ fn build_package(
         .normalized_ir
         .context("normalization did not produce a normalized_ir")?;
 
-    let current_dir = std::env::current_dir().context("resolve current directory")?;
-    let (_runtime, writer_policy, build_context) =
-        crate::runtime::load_default_writer_stack(current_dir)?;
+    let (_runtime, writer_policy, build_context) = crate::runtime::load_default_writer_stack()?;
     let stable_ref_prefix = package
         .stable_id
         .as_deref()

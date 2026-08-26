@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
-use writer_core::WriterGuidAssignment;
+use crate::writer_core::WriterGuidAssignment;
 
 use super::model::IdentityIndex;
 

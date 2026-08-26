@@ -54,7 +54,7 @@ pub fn validate_writer_policy_ref(id: &str, version: &str) -> Result<String, Mod
             message: "writer policy id and version must be non-empty and must not contain @ or control characters".into(),
         });
     }
-    Ok(writer_core::policy_ref(id, version))
+    Ok(crate::writer_core::policy_ref(id, version))
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -154,13 +154,16 @@ impl IdentityIndex {
 
     pub fn current(
         project_stable_id: Option<&str>,
-        writer_policy: &writer_core::WriterPolicy,
+        writer_policy: &crate::writer_core::WriterPolicy,
     ) -> Self {
         Self {
             schema_version: "identity-index-v1".into(),
             source_kind: "current".into(),
             source_ref: "current".into(),
-            writer_policy_ref: writer_core::policy_ref(&writer_policy.id, &writer_policy.version),
+            writer_policy_ref: crate::writer_core::policy_ref(
+                &writer_policy.id,
+                &writer_policy.version,
+            ),
             project_stable_id: project_stable_id.map(str::to_string),
             notes: vec![],
             notetypes: vec![],
@@ -170,7 +173,7 @@ impl IdentityIndex {
 
     pub fn push_current_note(
         &mut self,
-        note: &authoring_core::NormalizedNote,
+        note: &crate::authoring_core::NormalizedNote,
         resolved: Option<&ResolvedNoteIdentity>,
     ) {
         let stable_id = resolved
@@ -208,7 +211,7 @@ impl IdentityIndex {
         });
     }
 
-    pub fn push_current_notetype(&mut self, notetype: &authoring_core::NormalizedNotetype) {
+    pub fn push_current_notetype(&mut self, notetype: &crate::authoring_core::NormalizedNotetype) {
         self.notetypes.push(NotetypeIdentityEntry {
             note_type_id: notetype.id.clone(),
             anki_model_id: None,
