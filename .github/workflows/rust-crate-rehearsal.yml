@@ -18,6 +18,10 @@ jobs:
           toolchain: 1.92.0
           components: rustfmt,clippy
       - run: bash scripts/check_rust_crate_quality.sh
+      - name: Validate simulated release tag
+        run: |
+          version="$(awk '/^version = / { gsub(/version = |"/, ""); print; exit }' anki_forge/Cargo.toml)"
+          bash scripts/check_rust_release_metadata.sh "anki-forge-v$version"
       - run: bash scripts/check_rust_crate_package.sh
       - uses: EmbarkStudios/cargo-deny-action@v2
         with:
@@ -29,6 +33,17 @@ jobs:
       - run: |
           cargo install cargo-cyclonedx --version 0.5.9 --locked
           cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json
+      - name: Create rehearsal release evidence
+        run: |
+          version="$(awk '/^version = / { gsub(/version = |"/, ""); print; exit }' anki_forge/Cargo.toml)"
+          crate_path="$(find target/package -maxdepth 1 -name 'anki_forge-*.crate' -print -quit)"
+          bash scripts/create_rust_release_evidence.sh \
+            "anki-forge-v$version" "$crate_path" anki_forge/bom.json release-evidence
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rust-crate-rehearsal-candidate
+          path: release-evidence/
+          if-no-files-found: error
 
   tier1:
     name: rehearsal-tier1 (${{ matrix.os }}, Rust ${{ matrix.toolchain }})
@@ -46,3 +61,17 @@ jobs:
       - run: cargo fetch --locked
       - shell: bash
         run: bash scripts/check_rust_crate_package.sh
+
+  promotion-boundary:
+    needs: [candidate, tier1]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rust-crate-rehearsal-candidate
+          path: release-evidence
+      - name: Stop before protected publication approval
+        run: |
+          test -f release-evidence/release-record.json
+          test -f release-evidence/SHA256SUMS
+          echo "Rehearsal complete; no OIDC token requested and nothing published."

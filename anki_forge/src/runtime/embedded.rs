@@ -6,9 +6,8 @@ use tempfile::TempDir;
 
 use super::{load_bundle_from_manifest, RuntimeBundle, RuntimeMode};
 
-const EMBEDDED_BUNDLE_VERSION: &str = "0.3.0";
-const EMBEDDED_BUNDLE: &[u8] =
-    include_bytes!("../../assets/contracts/anki-forge-contract-bundle-0.3.0.tar.gz");
+const EMBEDDED_BUNDLE_VERSION: &str = env!("ANKI_FORGE_EMBEDDED_BUNDLE_VERSION");
+const EMBEDDED_BUNDLE: &[u8] = include_bytes!(env!("ANKI_FORGE_EMBEDDED_BUNDLE_PATH"));
 
 struct EmbeddedRuntime {
     _extraction_dir: TempDir,

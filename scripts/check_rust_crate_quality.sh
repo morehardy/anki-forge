@@ -13,3 +13,4 @@ RUSTDOCFLAGS="-D warnings" cargo doc -p anki_forge --all-features --no-deps --lo
 bash scripts/check_embedded_contract_bundle.sh
 bash scripts/check_rust_crate_payload.sh
 bash scripts/check_rust_release_metadata.sh "$release_tag"
+bash scripts/check_dependency_policy_exceptions.sh

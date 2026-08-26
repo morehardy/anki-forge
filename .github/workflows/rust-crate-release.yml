@@ -37,27 +37,9 @@ jobs:
       - name: Create release evidence
         shell: bash
         run: |
-          mkdir -p release-evidence
           crate_path="$(find target/package -maxdepth 1 -name 'anki_forge-*.crate' -print -quit)"
-          sbom_path="anki_forge/bom.json"
-          test -n "$crate_path"
-          test -n "$sbom_path"
-          cp "$crate_path" release-evidence/
-          cp "$sbom_path" release-evidence/anki_forge.cdx.json
-          cp anki_forge/CHANGELOG.md release-evidence/CHANGELOG.md
-          sha256sum "$crate_path" > release-evidence/SHA256SUMS
-          version="${GITHUB_REF_NAME#anki-forge-v}"
-          bundle_version="$(sed -n 's/^const EMBEDDED_BUNDLE_VERSION: &str = "\([^"]*\)";/\1/p' anki_forge/src/runtime/embedded.rs)"
-          checksum="$(cut -d ' ' -f1 release-evidence/SHA256SUMS)"
-          jq -n \
-            --arg tag "$GITHUB_REF_NAME" \
-            --arg commit "$GITHUB_SHA" \
-            --arg crate_version "$version" \
-            --arg bundle_version "$bundle_version" \
-            --arg package_sha256 "$checksum" \
-            --arg ci_evidence "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
-            '{schema_version:"anki-forge-rust-release-v1",tag:$tag,commit:$commit,crate_version:$crate_version,bundle_version:$bundle_version,msrv:"1.92.0",stable_verified:true,tier1_platforms:["x86_64-unknown-linux-gnu","x86_64-pc-windows-msvc","x86_64-apple-darwin","aarch64-apple-darwin"],package_sha256:$package_sha256,sbom:"anki_forge.cdx.json",changelog:"CHANGELOG.md",ci_evidence:$ci_evidence,security_exceptions:[]}' \
-            > release-evidence/release-record.json
+          bash scripts/create_rust_release_evidence.sh \
+            "$GITHUB_REF_NAME" "$crate_path" anki_forge/bom.json release-evidence
       - uses: actions/upload-artifact@v4
         with:
           name: rust-crate-candidate
@@ -111,10 +93,10 @@ jobs:
           use anki_forge::runtime::{embedded_bundle_version, load_default_writer_stack, RuntimeMode};
 
           fn main() {
-              assert_eq!(embedded_bundle_version(), "0.3.0");
+              assert!(!embedded_bundle_version().is_empty());
               let (runtime, _, _) = load_default_writer_stack().expect("load embedded contracts");
               assert_eq!(runtime.mode, RuntimeMode::Installed);
-              assert_eq!(runtime.bundle_version, "0.3.0");
+              assert_eq!(runtime.bundle_version, embedded_bundle_version());
           }
           RS
           cargo run --manifest-path "$consumer/Cargo.toml" --locked

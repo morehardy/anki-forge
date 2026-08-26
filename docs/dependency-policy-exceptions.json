@@ -1,0 +1,58 @@
+[
+  {
+    "crate": "cpufeatures",
+    "version": "0.2.17",
+    "owner": "release-maintainers",
+    "reason": "sha1 and blake3 currently require different compatible major lines",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "getrandom",
+    "version": "0.2.15",
+    "owner": "release-maintainers",
+    "reason": "runtime and development dependency trees currently require 0.2 and 0.3",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "hashbrown",
+    "version": "0.14.5",
+    "owner": "release-maintainers",
+    "reason": "rusqlite and serialization dependencies currently require separate lines",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "linux-raw-sys",
+    "version": "0.4.15",
+    "owner": "release-maintainers",
+    "reason": "tempfile and tar transitive trees currently require separate rustix lines",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "rustix",
+    "version": "0.38.44",
+    "owner": "release-maintainers",
+    "reason": "tempfile and tar transitive trees currently require 0.38 and 1.x",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "syn",
+    "version": "2.0.115",
+    "owner": "release-maintainers",
+    "reason": "current derive dependencies have not converged on the same syn line",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "windows-sys",
+    "version": "0.59.0",
+    "owner": "release-maintainers",
+    "reason": "current platform transitive dependencies require 0.59 and 0.61",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "zerocopy",
+    "version": "0.7.35",
+    "owner": "release-maintainers",
+    "reason": "ahash and random-number dependencies currently require separate lines",
+    "expires": "2027-08-26"
+  }
+]

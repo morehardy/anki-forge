@@ -43,12 +43,12 @@ use anki_forge::runtime::{
 
 fn main() {
     assert_eq!(anki_forge::facade_api_version(), "0.1.0");
-    assert_eq!(embedded_bundle_version(), "0.3.0");
+    assert!(!embedded_bundle_version().is_empty());
 
     let (runtime, _writer_policy, _build_context) =
         load_default_writer_stack().expect("load embedded default writer stack");
     assert_eq!(runtime.mode, RuntimeMode::Installed);
-    assert_eq!(runtime.bundle_version, "0.3.0");
+    assert_eq!(runtime.bundle_version, embedded_bundle_version());
 }
 EOF
 
