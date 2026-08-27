@@ -4,13 +4,13 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 work_root="$(mktemp -d "${TMPDIR:-/tmp}/anki-forge-payload.XXXXXX")"
 trap 'rm -rf "$work_root"' EXIT
-dirty_args=()
+package_args=(-p anki_forge --locked --offline --list)
 if [[ "${ANKI_FORGE_ALLOW_DIRTY_PACKAGE:-0}" == "1" ]]; then
-  dirty_args+=(--allow-dirty)
+  package_args+=(--allow-dirty)
 fi
 
 cd "$repo_root"
-cargo package -p anki_forge "${dirty_args[@]}" --locked --offline --list \
+cargo package "${package_args[@]}" \
   | sed 's/\r$//' >"$work_root/files.txt"
 
 diff -u "$repo_root/anki_forge/PACKAGE_FILES.txt" "$work_root/files.txt"

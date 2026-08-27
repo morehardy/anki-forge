@@ -1,4 +1,6 @@
-use anki_forge::{
+#![cfg(feature = "internal-tools")]
+
+use anki_forge::deck::{
     BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, ClozeNote, Deck,
     DeckError, DeckNote, IoMode, MediaSource, Package,
 };

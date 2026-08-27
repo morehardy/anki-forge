@@ -1,6 +1,6 @@
 # Rust Crate Release Readiness
 
-Audit date: 2026-08-26
+Audit date: 2026-08-27
 
 ## Scope and verdict
 
@@ -10,9 +10,9 @@ does not claim that generated APKG artifacts are production-ready.
 The repository now contains a release-candidate and publication flow. The crate
 can be packaged as a single self-contained product and consumed outside the
 workspace. Repository-level P0 blockers from the original audit are closed.
-One repository-level P1 remains: the historical public surface still has
-blanket `missing_docs` exemptions and must be documented or deliberately
-narrowed before production publication.
+The repository-level documentation P1 is closed by narrowing the supported 0.1
+consumer interface to the documented facade. Deep repository interfaces are
+available only through the unsupported, hidden `internal-tools` feature.
 
 Production publication is still blocked until maintainers verify the external
 crates.io/GitHub controls and the hosted Tier 1 workflow passes on the release
@@ -29,8 +29,9 @@ implementation.
 | Registry identity | Description, MIT license, repository, homepage, docs.rs URL, keywords, categories, README, and changelog are present | Implemented |
 | Explicit payload | Cargo `include` allowlist plus required/forbidden path audit | Implemented |
 | Hermetic package | `cargo package --locked --offline` verifies committed package contents | Implemented |
-| Packaged consumer | Fresh external project uses only extracted package source and runs the embedded writer stack offline after dependency prefetch | Implemented |
-| Documentation | Crate guide, compiling doctest, errors/concurrency notes, and warning-free rustdoc exist; blanket module exemptions still bypass complete public-item coverage | Blocked |
+| Packaged consumer | Fresh external project uses only extracted package source and builds an APKG through the supported facade offline after dependency prefetch | Implemented |
+| Documentation | Crate guide, compiling doctest, errors/concurrency notes, warning-free rustdoc, documented facade, and a compile boundary that hides repository internals by default | Implemented |
+| API surface | Default consumers receive only `prelude`, root `Deck`/`Project`/`Severity`, and version inspection; unpublished tooling explicitly enables hidden `internal-tools` modules | Implemented |
 | Dependency policy | `cargo-deny` blocks advisories, unapproved licenses, wildcard registry dependencies, unknown sources, and unreviewed duplicate-version splits | Implemented |
 | Security remediation | Vulnerable locked versions of `anyhow`, `url`/`idna`, `rand`, and `tar` were upgraded without advisory exceptions | Implemented |
 | API compatibility | `cargo-semver-checks` is required by CI and release workflows | Implemented |
@@ -58,16 +59,14 @@ their required evidence comes from `.github/workflows/rust-crate-ci.yml`.
 
 ## Remaining publication blockers
 
-The first item is a repository documentation decision; the remaining items
-require external authority or hosted state:
+The remaining items require external authority or hosted state:
 
-1. Remove blanket `#[allow(missing_docs)]` exemptions by documenting the supported public surface or narrowing the supported 0.1 API before publication.
-2. Confirm that the crates.io `anki_forge` name is available/owned by the intended maintainers.
-3. Configure the crates.io Trusted Publisher for this repository and workflow.
-4. Configure the protected GitHub `crates-io` environment with required reviewers.
-5. Protect release tags and require the Rust crate CI checks on the exact release commit.
-6. Observe a green Tier 1/MSRV/stable matrix and review candidate evidence.
-7. Obtain explicit human approval before creating the first authoritative tag.
+1. Confirm that the crates.io `anki_forge` name is available/owned by the intended maintainers.
+2. Configure the crates.io Trusted Publisher for this repository and workflow.
+3. Configure the protected GitHub `crates-io` environment with required reviewers.
+4. Protect release tags and require the Rust crate CI checks on the exact release commit.
+5. Observe a green Tier 1/MSRV/stable matrix and review candidate evidence.
+6. Obtain explicit human approval before creating the first authoritative tag.
 
 Until those are satisfied, the correct action is rehearsal (`cargo publish
 --dry-run`), not publication.
@@ -77,8 +76,8 @@ Until those are satisfied, the correct action is rehearsal (`cargo publish
 - Code, packaging, documentation, security, or compatibility failures are fixed
   in the release PR; they are not waived by publishing manually.
 - Security exceptions are allowed only when unavoidable and must include owner,
-  rationale, and expiry in the Release Record. There are no such exceptions in
-  the current candidate.
+  rationale, and expiry in the Release Record. Current duplicate-dependency
+  policy exceptions are recorded in `docs/dependency-policy-exceptions.json`.
 - External configuration failures stop before the OIDC publish step.
 - A defect discovered after publication is fixed in a higher immutable version;
   severe versions may be yanked, and release tags are never moved or reused.

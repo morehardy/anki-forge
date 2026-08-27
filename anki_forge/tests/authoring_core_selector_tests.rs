@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::selector::{
     parse_selector, resolve_selector, SelectorError, SelectorResolveError, SelectorTarget,
 };

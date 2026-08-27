@@ -1,7 +1,9 @@
-use anki_forge::diagnostics::Severity;
-use anki_forge::{
+#![cfg(feature = "internal-tools")]
+
+use anki_forge::deck::{
     BasicIdentityField, BasicIdentityOverride, Deck, IoMode, MediaSource, ValidationCode,
 };
+use anki_forge::diagnostics::Severity;
 use serde_json::json;
 use std::path::PathBuf;
 
@@ -158,7 +160,7 @@ fn cloze_lane_sugar_adds_note_with_metadata() {
 
     let note = &deck.notes()[0];
     assert_eq!(note.id(), "cloze-1");
-    assert!(matches!(note, anki_forge::DeckNote::Cloze(_)));
+    assert!(matches!(note, anki_forge::deck::DeckNote::Cloze(_)));
 }
 
 #[test]
@@ -195,7 +197,7 @@ fn image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects() {
     assert!(deck.notes()[0].id().starts_with("afid:v1:"));
     assert!(matches!(
         deck.notes()[0],
-        anki_forge::DeckNote::ImageOcclusion(_)
+        anki_forge::deck::DeckNote::ImageOcclusion(_)
     ));
 }
 
@@ -336,7 +338,7 @@ fn validate_report_detects_unknown_media_ref_from_deserialized_note() {
 #[test]
 fn add_time_rejects_forged_unknown_media_ref() {
     let mut deck = Deck::new("Anatomy");
-    let image: anki_forge::MediaRef =
+    let image: anki_forge::deck::MediaRef =
         serde_json::from_value(json!("missing.png")).expect("forge media ref");
 
     let err = deck

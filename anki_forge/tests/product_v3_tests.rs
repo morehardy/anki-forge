@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::BuildOptions;
 use anki_forge::product::{ProductDocument, Project};
 use anki_forge::writer::inspect_apkg;

@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::path::{Path, PathBuf};
 
 use anki_forge::build::{BuildError, BuildReport};
@@ -8,7 +10,6 @@ use anki_forge::update_safety::model::{
     TemplateMergeEntry,
 };
 use anki_forge::writer::{inspect_apkg, InspectReport};
-use anki_forge::Deck;
 use rusqlite::Connection;
 use serde_json::Value;
 
@@ -855,11 +856,11 @@ fn deck_image_occlusion_apkg() {
     let mut deck = Deck::builder("IO").stable_id("cap-deck-io").build();
     let image = deck
         .media()
-        .add(anki_forge::MediaSource::from_file(io_fixture_image_path()))
+        .add(MediaSource::from_file(io_fixture_image_path()))
         .expect("image media");
     deck.image_occlusion()
         .note(image)
-        .mode(anki_forge::IoMode::HideAllGuessOne)
+        .mode(IoMode::HideAllGuessOne)
         .rect(0, 0, 50, 50)
         .stable_id("io:one")
         .add()

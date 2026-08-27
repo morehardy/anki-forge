@@ -1,5 +1,5 @@
 use crate::deck::model::IoRect;
-use crate::IoMode;
+use crate::deck::IoMode;
 
 pub const STOCK_BASIC_ID: &str = "basic";
 pub const STOCK_CLOZE_ID: &str = "cloze";

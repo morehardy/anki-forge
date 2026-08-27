@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::{extract_media_reference_candidates, MediaReferenceCandidateKind};
 
 type ReferenceSummary<'a> = (

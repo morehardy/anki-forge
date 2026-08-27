@@ -1,5 +1,7 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{BuildOptions, BuildStatus};
-use anki_forge::{Deck, IoMode, MediaSource, Package};
+use anki_forge::deck::{Deck, IoMode, MediaSource, Package};
 use serde_json::json;
 
 #[test]
@@ -32,10 +34,7 @@ fn deck_build_uses_cas_media_without_normalized_base64_payload() {
         .build();
     let media = deck
         .media()
-        .add(anki_forge::MediaSource::from_bytes(
-            "hello.txt",
-            b"hello".to_vec(),
-        ))
+        .add(MediaSource::from_bytes("hello.txt", b"hello".to_vec()))
         .unwrap();
     deck.basic()
         .note("front", format!("<img src=\"{}\">", media.name()))
@@ -62,9 +61,7 @@ fn deck_build_keeps_file_media_path_backed_until_normalize() {
         .build();
     let media = deck
         .media()
-        .add(anki_forge::MediaSource::from_file(
-            source_dir.join("hello.txt"),
-        ))
+        .add(MediaSource::from_file(source_dir.join("hello.txt")))
         .unwrap();
     deck.basic()
         .note("front", format!("<img src=\"{}\">", media.name()))
@@ -98,9 +95,7 @@ fn deck_build_rejects_preexisting_media_input_target_symlink() {
         .build();
     let media = deck
         .media()
-        .add(anki_forge::MediaSource::from_file(
-            source_dir.join("hello.txt"),
-        ))
+        .add(MediaSource::from_file(source_dir.join("hello.txt")))
         .unwrap();
     deck.basic()
         .note("front", format!("<img src=\"{}\">", media.name()))

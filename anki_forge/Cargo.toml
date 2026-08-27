@@ -25,6 +25,12 @@ include = [
     "LICENSE",
 ]
 
+[features]
+default = []
+# Repository-only seam for the unpublished contract tool and deep conformance
+# tests. It is not part of the supported 0.1 consumer interface.
+internal-tools = []
+
 [dependencies]
 anyhow = "1.0.103"
 base64 = "0.22"
@@ -53,3 +59,23 @@ proptest = "1.6"
 
 [lints]
 workspace = true
+
+[[example]]
+name = "conformance_surface"
+required-features = ["internal-tools"]
+
+[[example]]
+name = "deck_basic_flow"
+required-features = ["internal-tools"]
+
+[[example]]
+name = "minimal_flow"
+required-features = ["internal-tools"]
+
+[[example]]
+name = "product_basic_flow"
+required-features = ["internal-tools"]
+
+[[example]]
+name = "product_roundtrip_oracle_prepare"
+required-features = ["internal-tools"]

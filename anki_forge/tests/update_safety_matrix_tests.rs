@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 #[test]
 fn update_safety_diagnostic_matrix_lists_every_update_code() {
     let matrix = include_str!("../../docs/manual-validation/phase3-update-safety-oracle.md");

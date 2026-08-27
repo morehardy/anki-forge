@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::{
     decode_inline_bytes, ingest_media_read_source_to_cas, media_io::sniff_mime, object_store_path,
     CasExistingIntegrityReason, MediaIoError, MediaReadSource, MediaSniffConfidence,

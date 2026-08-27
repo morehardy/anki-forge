@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::{normalize, AuthoringDocument, NormalizationRequest};
 use anki_forge::writer_tool_contract_version;
 

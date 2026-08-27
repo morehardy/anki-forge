@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::time::Instant;
 
 use anki_forge::build::{BuildOptions, BuildStatus, ComparisonStatus};

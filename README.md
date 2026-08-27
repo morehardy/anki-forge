@@ -91,7 +91,6 @@ and structured metadata (`severity`, `domain`, `stage`, `path`,
 from the inspection step.
 
 ```rust
-use anki_forge::diagnostics::{ErrorCode, ErrorCodeExt};
 use anki_forge::prelude::*;
 
 fn add_note(deck: &mut Deck) -> anyhow::Result<()> {

@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::BuildOptions;
 use anki_forge::prelude::*;
 use anki_forge::update_safety::baseline::load_previous_apkg_identity_index;

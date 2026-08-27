@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::{fs, process::Command};
 
 use anki_forge::prelude::*;

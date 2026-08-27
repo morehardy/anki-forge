@@ -1,12 +1,14 @@
+#![cfg(feature = "internal-tools")]
+
 use std::path::PathBuf;
 
+use anki_forge::deck::{
+    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
+};
 use anki_forge::diagnostics::{
     Diagnostic, DiagnosticCode, ErrorCode, ErrorCodeExt, Severity, SourcePath, ValidationReport,
 };
 use anki_forge::product::{Note, ProductDocument, Project};
-use anki_forge::{
-    BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, Deck, IoMode, MediaSource,
-};
 use anyhow::Context;
 use serde_json::json;
 

@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::BuildOptions;
 use anki_forge::prelude::*;
 use rusqlite::Connection;

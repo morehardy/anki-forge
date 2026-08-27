@@ -8,14 +8,14 @@ trap 'rm -rf "$work_root"' EXIT
 package_target="$work_root/package-target"
 consumer_root="$work_root/consumer"
 consumer_target="$work_root/consumer-target"
-dirty_args=()
+package_args=(-p anki_forge --locked --offline)
 if [[ "${ANKI_FORGE_ALLOW_DIRTY_PACKAGE:-0}" == "1" ]]; then
-  dirty_args+=(--allow-dirty)
+  package_args+=(--allow-dirty)
 fi
 
 cd "$repo_root"
 CARGO_TARGET_DIR="$package_target" \
-  cargo package -p anki_forge "${dirty_args[@]}" --locked --offline
+  cargo package "${package_args[@]}"
 
 package_dir="$(find "$package_target/package" \
   -mindepth 1 -maxdepth 1 -type d -name 'anki_forge-*' -print -quit)"
@@ -37,18 +37,28 @@ anki_forge = { path = "$package_dir" }
 EOF
 
 cat >"$consumer_root/src/main.rs" <<'EOF'
-use anki_forge::runtime::{
-    embedded_bundle_version, load_default_writer_stack, RuntimeMode,
-};
+use anki_forge::prelude::*;
 
 fn main() {
     assert_eq!(anki_forge::facade_api_version(), "0.1.0");
-    assert!(!embedded_bundle_version().is_empty());
+    assert!(!anki_forge::embedded_contract_version().is_empty());
 
-    let (runtime, _writer_policy, _build_context) =
-        load_default_writer_stack().expect("load embedded default writer stack");
-    assert_eq!(runtime.mode, RuntimeMode::Installed);
-    assert_eq!(runtime.bundle_version, embedded_bundle_version());
+    let apkg = std::env::temp_dir().join(format!(
+        "anki-forge-packaged-consumer-{}.apkg",
+        std::process::id()
+    ));
+    let mut deck = Deck::new("Packaged Consumer");
+    deck.basic()
+        .note("front", "back")
+        .stable_id("packaged:consumer")
+        .add()
+        .expect("add packaged note");
+    deck.write_apkg(&apkg)
+        .expect("build through embedded contracts")
+        .ensure_success()
+        .expect("successful packaged build");
+    assert!(apkg.is_file());
+    std::fs::remove_file(apkg).expect("remove packaged consumer artifact");
 }
 EOF
 

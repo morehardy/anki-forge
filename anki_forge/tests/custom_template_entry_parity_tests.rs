@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::path::Path;
 
 use anki_forge::build::BuildOptions;

@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
 

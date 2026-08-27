@@ -16,6 +16,14 @@ _Avoid_: GitHub release, source checkout
 `anki_forge` is the sole crate published as the Rust Distribution. Authoring and writing cores are internal boundaries, not independently versioned products.
 _Avoid_: Public core crates, multi-crate release
 
+**Supported Consumer Interface**:
+The documented Rust interface whose compatibility is governed by the Crate Version. Publicly reachable repository-only symbols are not part of this promise.
+_Avoid_: All public symbols, internal interface
+
+**Internal Tools Interface**:
+The repository-only Rust interface used for contract verification and deep conformance work. It is excluded from Rust Distribution compatibility commitments.
+_Avoid_: Supported API, consumer interface
+
 **Self-Contained Distribution**:
 The Rust Distribution carries the default contract resources required by its public behavior. Normal use does not depend on a source checkout, the process working directory, or separately installed contract files.
 _Avoid_: Repository-relative runtime, implicit contract discovery

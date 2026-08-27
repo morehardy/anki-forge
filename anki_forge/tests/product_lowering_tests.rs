@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{BuildOptions, UpdateSafetyMode};
 use anki_forge::prelude::{Field, IdentityRecipe, Note, NoteType, Project, Template};
 use anki_forge::product::model::{CustomField, CustomNote, CustomNoteType, CustomTemplate};

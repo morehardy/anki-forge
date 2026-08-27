@@ -1,4 +1,6 @@
-use anki_forge::{BasicNote, Deck, IdentityProvenance};
+#![cfg(feature = "internal-tools")]
+
+use anki_forge::deck::{BasicNote, Deck, IdentityProvenance};
 use serde_json::json;
 
 fn afid(canonical_payload: &str) -> String {

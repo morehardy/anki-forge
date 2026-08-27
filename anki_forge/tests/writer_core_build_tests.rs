@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::stock::resolve_stock_notetype;
 use anki_forge::authoring::{
     AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedField,

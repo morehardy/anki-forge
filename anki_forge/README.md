@@ -22,6 +22,19 @@ The crate version is `0.1.0`; it embeds contract bundle `0.3.0`. These are
 independent compatibility axes. Rust 1.92.0 is the minimum supported compiler
 for the 0.1.x line.
 
+## Supported 0.1 interface
+
+The supported consumer interface is intentionally small: import
+`anki_forge::prelude::*`, or use the root `Deck`, `Project`, and `Severity`
+exports. `facade_api_version()` and `embedded_contract_version()` expose the
+two compatibility axes. Normal consumers do not need contract loading,
+normalization IR, writer, inspection, or persistence modules.
+
+The `internal-tools` Cargo feature exists only for this repository's
+unpublished contract tool and deep conformance tests. Its hidden modules are
+not covered by the 0.1 compatibility promise and must not be enabled by
+downstream applications.
+
 ## Errors and concurrency
 
 High-level `Deck` and `Project` operations return structured errors and build

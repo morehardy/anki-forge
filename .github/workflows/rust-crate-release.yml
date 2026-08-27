@@ -90,13 +90,23 @@ jobs:
           cargo init --bin --name anki_forge_release_verify "$consumer"
           cargo add --manifest-path "$consumer/Cargo.toml" "anki_forge@=$version"
           cat > "$consumer/src/main.rs" <<'RS'
-          use anki_forge::runtime::{embedded_bundle_version, load_default_writer_stack, RuntimeMode};
+          use anki_forge::prelude::*;
 
           fn main() {
-              assert!(!embedded_bundle_version().is_empty());
-              let (runtime, _, _) = load_default_writer_stack().expect("load embedded contracts");
-              assert_eq!(runtime.mode, RuntimeMode::Installed);
-              assert_eq!(runtime.bundle_version, embedded_bundle_version());
+              assert!(!anki_forge::embedded_contract_version().is_empty());
+              let apkg = std::env::temp_dir().join("anki-forge-release-verify.apkg");
+              let mut deck = Deck::new("Release Verify");
+              deck.basic()
+                  .note("front", "back")
+                  .stable_id("release:verify")
+                  .add()
+                  .expect("add release verification note");
+              deck.write_apkg(&apkg)
+                  .expect("build through embedded contracts")
+                  .ensure_success()
+                  .expect("successful published build");
+              assert!(apkg.is_file());
+              std::fs::remove_file(apkg).expect("remove release verification artifact");
           }
           RS
           cargo run --manifest-path "$consumer/Cargo.toml" --locked

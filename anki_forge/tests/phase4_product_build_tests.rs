@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{
     BuildFailureCause, BuildOptions, BuildPolicyStatus, BuildStatus, ComparisonStatus, RiskLevel,
 };

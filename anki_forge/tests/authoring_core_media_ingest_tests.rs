@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::{
     ingest_authoring_media, normalize, normalize_with_options, object_store_path,
     sort_media_bindings, sort_media_objects, sort_media_references, AuthoringDocument,

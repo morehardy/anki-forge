@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::{
     normalize, normalize_with_options, AuthoringDocument, AuthoringField, AuthoringFieldMetadata,
     AuthoringMedia, AuthoringMediaSource, AuthoringNote, AuthoringNotetype, AuthoringTemplate,

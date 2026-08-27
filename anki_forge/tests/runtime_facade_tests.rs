@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::{
     fs,
     path::{Path, PathBuf},
