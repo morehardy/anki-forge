@@ -17,12 +17,23 @@ cd "$repo_root"
 CARGO_TARGET_DIR="$package_target" \
   cargo package "${package_args[@]}"
 
-package_dir="$(find "$package_target/package" \
-  -mindepth 1 -maxdepth 1 -type d -name 'anki_forge-*' -print -quit)"
+package_dir=""
+for candidate in "$package_target"/package/anki_forge-*; do
+  [[ -d "$candidate" ]] || continue
+  if [[ -n "$package_dir" ]]; then
+    echo "multiple packaged anki_forge source directories were created" >&2
+    exit 1
+  fi
+  package_dir="$candidate"
+done
 if [[ -z "$package_dir" ]]; then
   echo "packaged anki_forge source directory was not created" >&2
   exit 1
 fi
+
+# Cargo resolves dependency paths relative to the consumer manifest. Keeping
+# this relative avoids leaking an MSYS /tmp path into Cargo.toml on Windows.
+package_dependency_path="../package-target/package/$(basename "$package_dir")"
 
 mkdir -p "$consumer_root/src"
 cat >"$consumer_root/Cargo.toml" <<EOF
@@ -33,7 +44,7 @@ edition = "2021"
 rust-version = "1.92"
 
 [dependencies]
-anki_forge = { path = "$package_dir" }
+anki_forge = { path = "$package_dependency_path" }
 EOF
 
 cat >"$consumer_root/src/main.rs" <<'EOF'

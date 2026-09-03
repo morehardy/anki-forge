@@ -12,6 +12,11 @@ crate_path="$2"
 sbom_path="$3"
 output_dir="$4"
 
+[[ "${ANKI_FORGE_TIER1_VERIFIED:-0}" == "1" ]] || {
+  echo "release evidence requires a completed Tier 1 matrix" >&2
+  exit 1
+}
+
 bash "$repo_root/scripts/check_rust_release_metadata.sh" "$release_tag" >/dev/null
 bash "$repo_root/scripts/check_dependency_policy_exceptions.sh"
 [[ -f "$crate_path" ]] || { echo "crate archive is missing: $crate_path" >&2; exit 1; }

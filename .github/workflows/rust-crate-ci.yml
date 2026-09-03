@@ -36,9 +36,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: obi1kenobi/cargo-semver-checks-action@v2
+      - name: Resolve compatible-release baseline
+        id: baseline
+        run: bash scripts/resolve_rust_semver_baseline.sh >> "$GITHUB_OUTPUT"
+      - if: steps.baseline.outputs.required == 'true'
+        uses: obi1kenobi/cargo-semver-checks-action@v2
         with:
           package: anki_forge
+      - if: steps.baseline.outputs.required == 'false'
+        run: echo "No crates.io SemVer baseline exists for initial release 0.1.0."
 
   packaged-consumer:
     name: packaged-consumer (${{ matrix.os }}, Rust ${{ matrix.toolchain }})

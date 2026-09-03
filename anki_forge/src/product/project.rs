@@ -904,6 +904,7 @@ impl Project {
         Ok(plan)
     }
 
+    #[cfg(feature = "internal-tools")]
     pub fn normalize(&self) -> anyhow::Result<crate::authoring_core::NormalizedIr> {
         let temp_dir = tempfile::Builder::new()
             .prefix("anki-forge-project-normalize-")

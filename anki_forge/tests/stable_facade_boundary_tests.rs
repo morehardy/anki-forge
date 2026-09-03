@@ -96,3 +96,28 @@ fn default_features_hide_repository_internal_modules() {
         );
     }
 }
+
+#[test]
+fn default_features_hide_project_normalization_ir() {
+    let output = FacadeProbe::new().check(
+        r#"
+use anki_forge::Project;
+
+fn main() {
+    let project = Project::new("Stable Project");
+    let _ = project.normalize();
+}
+"#,
+    );
+
+    assert!(
+        !output.status.success(),
+        "Project::normalize unexpectedly exposed internal normalization IR"
+    );
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(
+        stderr.contains("no method named `normalize`")
+            || stderr.contains("no method named 'normalize'"),
+        "unexpected compiler output for Project::normalize:\n{stderr}"
+    );
+}

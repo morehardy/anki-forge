@@ -38,8 +38,15 @@ publication blocker even when local tests pass.
 2. Confirm the main-branch CI run is green on the exact commit.
 3. Create the protected `anki-forge-vX.Y.Z` tag on that commit.
 4. Review candidate package, checksum, CycloneDX SBOM, and release record.
-5. Approve the protected `crates-io` environment. The workflow obtains a short-lived OIDC token and runs `cargo publish`; no long-lived registry token is stored.
-6. Verify the exact crates.io version in a fresh consumer and confirm docs.rs builds.
+5. Approve the protected `crates-io` environment. The isolated publish job
+   obtains a short-lived OIDC token and runs `cargo publish`; no long-lived
+   registry token is stored.
+6. A separately retryable, read-only post-publication job downloads the exact
+   crates.io archive, matches it to the candidate checksum, exercises it in a
+   fresh consumer, and confirms docs.rs builds.
+7. Only after that verification succeeds, a dedicated write-scoped job creates
+   or completes the evidence release on GitHub. A retry may add a missing
+   asset, but it refuses to replace an existing asset whose bytes differ.
 
 Actual first publication remains an explicit release operation; development
 and rehearsal must use `cargo publish --dry-run` and must not create the tag.

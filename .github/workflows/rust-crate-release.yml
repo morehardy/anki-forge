@@ -6,8 +6,7 @@ on:
       - "anki-forge-v*"
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
 
 jobs:
   candidate:
@@ -25,25 +24,30 @@ jobs:
       - uses: EmbarkStudios/cargo-deny-action@v2
         with:
           command: check advisories licenses bans sources
-      - uses: obi1kenobi/cargo-semver-checks-action@v2
+      - name: Resolve compatible-release baseline
+        id: baseline
+        run: bash scripts/resolve_rust_semver_baseline.sh >> "$GITHUB_OUTPUT"
+      - if: steps.baseline.outputs.required == 'true'
+        uses: obi1kenobi/cargo-semver-checks-action@v2
         with:
           package: anki_forge
+      - if: steps.baseline.outputs.required == 'false'
+        run: echo "No crates.io SemVer baseline exists for initial release 0.1.0."
       - name: Build crate archive
         run: cargo package -p anki_forge --locked
       - name: Generate CycloneDX SBOM
         run: |
           cargo install cargo-cyclonedx --version 0.5.9 --locked
           cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json
-      - name: Create release evidence
-        shell: bash
+      - name: Stage release candidate inputs
         run: |
-          crate_path="$(find target/package -maxdepth 1 -name 'anki_forge-*.crate' -print -quit)"
-          bash scripts/create_rust_release_evidence.sh \
-            "$GITHUB_REF_NAME" "$crate_path" anki_forge/bom.json release-evidence
+          mkdir release-inputs
+          cp target/package/anki_forge-*.crate release-inputs/
+          cp anki_forge/bom.json release-inputs/
       - uses: actions/upload-artifact@v4
         with:
-          name: rust-crate-candidate
-          path: release-evidence/
+          name: rust-crate-candidate-inputs
+          path: release-inputs/
           if-no-files-found: error
 
   tier1:
@@ -63,15 +67,41 @@ jobs:
       - shell: bash
         run: bash scripts/check_rust_crate_package.sh
 
-  publish:
+  evidence:
     needs: [candidate, tier1]
     runs-on: ubuntu-latest
-    environment: crates-io
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: 1.92.0
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: rust-crate-candidate-inputs
+          path: release-inputs
+      - name: Create release evidence after Tier 1 passes
+        env:
+          ANKI_FORGE_TIER1_VERIFIED: "1"
+        run: |
+          crate_path="$(find release-inputs -name 'anki_forge-*.crate' -print -quit)"
+          bash scripts/create_rust_release_evidence.sh \
+            "$GITHUB_REF_NAME" "$crate_path" release-inputs/bom.json release-evidence
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rust-crate-candidate
+          path: release-evidence/
+          if-no-files-found: error
+
+  publish:
+    needs: evidence
+    runs-on: ubuntu-latest
+    environment: crates-io
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install release toolchain
+        run: rustup toolchain install 1.92.0 --profile minimal
       - uses: actions/download-artifact@v4
         with:
           name: rust-crate-candidate
@@ -79,16 +109,34 @@ jobs:
       - id: crates_io_auth
         uses: rust-lang/crates-io-auth-action@v1
       - name: Publish immutable crates.io version
-        run: cargo publish -p anki_forge --locked
+        run: cargo +1.92.0 publish -p anki_forge --locked
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.crates_io_auth.outputs.token }}
+
+  post-publish-verify:
+    needs: [evidence, publish]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install verification toolchain
+        run: rustup toolchain install 1.92.0 --profile minimal
+      - uses: actions/download-artifact@v4
+        with:
+          name: rust-crate-candidate
+          path: release-evidence
       - name: Verify exact published version
         shell: bash
         run: |
           version="${GITHUB_REF_NAME#anki-forge-v}"
+          expected_checksum="$(awk '{ print $1 }' release-evidence/SHA256SUMS)"
+          curl --fail --location --retry 12 --retry-delay 10 --retry-all-errors \
+            "https://crates.io/api/v1/crates/anki_forge/$version/download" \
+            --output published.crate
+          actual_checksum="$(sha256sum published.crate | awk '{ print $1 }')"
+          test "$actual_checksum" = "$expected_checksum"
           consumer="$(mktemp -d)"
-          cargo init --bin --name anki_forge_release_verify "$consumer"
-          cargo add --manifest-path "$consumer/Cargo.toml" "anki_forge@=$version"
+          cargo +1.92.0 init --bin --name anki_forge_release_verify "$consumer"
+          cargo +1.92.0 add --manifest-path "$consumer/Cargo.toml" "anki_forge@=$version"
           cat > "$consumer/src/main.rs" <<'RS'
           use anki_forge::prelude::*;
 
@@ -109,10 +157,39 @@ jobs:
               std::fs::remove_file(apkg).expect("remove release verification artifact");
           }
           RS
-          cargo run --manifest-path "$consumer/Cargo.toml" --locked
+          cargo +1.92.0 run --manifest-path "$consumer/Cargo.toml" --locked
           curl --fail --location --retry 12 --retry-delay 10 --retry-all-errors \
             "https://docs.rs/anki_forge/$version/anki_forge/"
-      - uses: softprops/action-gh-release@v2
+
+  evidence-release:
+    needs: [evidence, post-publish-verify]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
         with:
-          generate_release_notes: true
-          files: release-evidence/*
+          name: rust-crate-candidate
+          path: release-evidence
+      - name: Create or complete immutable GitHub evidence release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            existing_assets="$(mktemp -d)"
+            for asset in release-evidence/*; do
+              name="$(basename "$asset")"
+              if gh release download "$GITHUB_REF_NAME" \
+                --pattern "$name" --dir "$existing_assets"; then
+                cmp -s "$asset" "$existing_assets/$name" || {
+                  echo "refusing to replace immutable release asset: $name" >&2
+                  exit 1
+                }
+              else
+                gh release upload "$GITHUB_REF_NAME" "$asset"
+              fi
+            done
+          else
+            gh release create "$GITHUB_REF_NAME" release-evidence/* \
+              --generate-notes --verify-tag
+          fi

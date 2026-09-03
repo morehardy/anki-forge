@@ -1198,6 +1198,9 @@ for change in report.diff().changes() {
 
 ### 11.4 高级 IR 访问
 
+该接口仅供仓库工具和深度一致性测试使用，需要显式启用不受兼容性承诺的
+`internal-tools` feature；它不属于默认的 0.1 消费者接口。
+
 ```rust
 let lowering = project.lower()?;
 let normalized = project.normalize()?;

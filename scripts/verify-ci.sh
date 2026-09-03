@@ -71,8 +71,8 @@ if [[ "$mode" == "fast" ]]; then
   exit 0
 fi
 
-run cargo test -p anki_forge --example conformance_surface
-run cargo run -p anki_forge --example minimal_flow
+run cargo test -p anki_forge --features internal-tools --example conformance_surface
+run cargo run -p anki_forge --features internal-tools --example minimal_flow
 run node --test bindings/node/test/raw.test.js
 run node --test bindings/node/test/structured.test.js
 run npm --prefix bindings/node run example:minimal

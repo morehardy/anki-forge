@@ -52,7 +52,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 list_file="$(mktemp "${TMPDIR:-/tmp}/anki-forge-rust-capabilities-list.XXXXXX")"
-if ! cargo test -p anki_forge --test rust_user_capability_matrix -- --ignored --list >"$list_file"; then
+if ! cargo test -p anki_forge --features internal-tools \
+  --test rust_user_capability_matrix -- --ignored --list >"$list_file"; then
   printf 'fail harness %s kept\n' "$list_file" >&2
   exit 2
 fi
@@ -191,7 +192,8 @@ for scenario in "${selected[@]}"; do
 
   if ANKI_FORGE_CAPABILITY_MODE="$mode" \
     ANKI_FORGE_CAPABILITY_ARTIFACT_DIR="$artifact_dir" \
-    cargo test -p anki_forge --test rust_user_capability_matrix "$scenario" -- --ignored --exact --nocapture
+    cargo test -p anki_forge --features internal-tools \
+      --test rust_user_capability_matrix "$scenario" -- --ignored --exact --nocapture
   then
     if [[ "$mode" == "manual-desktop" ]] && ! finalize_manual_artifacts "$artifact_dir"; then
       failed=$((failed + 1))
