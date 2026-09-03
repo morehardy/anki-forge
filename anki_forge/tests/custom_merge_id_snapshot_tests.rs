@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::prelude::*;
 use anki_forge::product::stable_config_id;
 

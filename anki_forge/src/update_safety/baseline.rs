@@ -13,7 +13,7 @@ pub fn load_previous_apkg_identity_index(
     lockfile: Option<&IdentityIndex>,
 ) -> Result<IdentityIndex> {
     let path = path.as_ref();
-    let inspect = writer_core::inspect_apkg(path)
+    let inspect = crate::writer_core::inspect_apkg(path)
         .with_context(|| format!("inspect previous APKG {}", path.display()))?;
     let mut index = IdentityIndex {
         schema_version: "identity-index-v1".into(),
@@ -96,7 +96,7 @@ pub fn load_previous_apkg_identity_index(
 
 fn recover_notetype_merge_metadata(
     index: &mut IdentityIndex,
-    inspect: &writer_core::InspectReport,
+    inspect: &crate::writer_core::InspectReport,
 ) {
     let mut fields_by_notetype = std::collections::BTreeMap::<String, Vec<FieldMergeEntry>>::new();
     for field in &inspect.observations.fields {
@@ -176,7 +176,7 @@ fn recover_notetype_merge_metadata(
 
 fn recover_guid_equals_stable_id(
     index: &mut IdentityIndex,
-    inspect: &writer_core::InspectReport,
+    inspect: &crate::writer_core::InspectReport,
     current: Option<&IdentityIndex>,
     lockfile: Option<&IdentityIndex>,
 ) {

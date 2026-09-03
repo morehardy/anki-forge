@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::update_safety::model::{IdentityIndex, NoteIdentityEntry};
 use anki_forge::update_safety::reconcile::{reconcile_guid_plan, GuidSource};
 

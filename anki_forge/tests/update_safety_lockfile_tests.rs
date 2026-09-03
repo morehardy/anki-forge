@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::update_safety::lockfile::{read_lockfile, write_lockfile_atomic};
 use anki_forge::update_safety::model::{
     GeneratedBy, IdentityIndex, IdentityLockfile, NoteIdentityEntry,

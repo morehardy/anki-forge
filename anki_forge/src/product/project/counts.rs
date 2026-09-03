@@ -2,7 +2,7 @@ use crate::build::InspectSummary;
 
 pub(super) fn card_count_from_inspect_or_fallback(
     inspect: Option<&InspectSummary>,
-    normalized: &authoring_core::NormalizedIr,
+    normalized: &crate::authoring_core::NormalizedIr,
 ) -> usize {
     inspect
         .map(|summary| summary.cards)
@@ -10,9 +10,9 @@ pub(super) fn card_count_from_inspect_or_fallback(
 }
 
 pub(super) fn count_phase1_cards_without_inspect(
-    normalized: &authoring_core::NormalizedIr,
+    normalized: &crate::authoring_core::NormalizedIr,
 ) -> usize {
-    writer_core::card_plan::count_cards(normalized)
+    crate::writer_core::card_plan::count_cards(normalized)
 }
 
 #[cfg(test)]
@@ -21,24 +21,24 @@ mod tests {
 
     use super::*;
 
-    fn normalized_with_one_fallback_card() -> authoring_core::NormalizedIr {
+    fn normalized_with_one_fallback_card() -> crate::authoring_core::NormalizedIr {
         let mut fields = BTreeMap::new();
         fields.insert("Front".into(), "front".into());
         fields.insert("Back".into(), "back".into());
 
-        authoring_core::NormalizedIr {
+        crate::authoring_core::NormalizedIr {
             kind: "normalized-ir".into(),
             schema_version: "0.1.0".into(),
             document_id: "doc".into(),
             resolved_identity: "doc".into(),
-            notetypes: vec![authoring_core::NormalizedNotetype {
+            notetypes: vec![crate::authoring_core::NormalizedNotetype {
                 id: "basic".into(),
                 kind: "normal".into(),
                 name: "Basic".into(),
                 original_stock_kind: None,
                 original_id: None,
                 fields: Vec::new(),
-                templates: vec![authoring_core::NormalizedTemplate {
+                templates: vec![crate::authoring_core::NormalizedTemplate {
                     name: "Card 1".into(),
                     ord: Some(0),
                     config_id: None,
@@ -54,7 +54,7 @@ mod tests {
                 css: String::new(),
                 field_metadata: Vec::new(),
             }],
-            notes: vec![authoring_core::NormalizedNote {
+            notes: vec![crate::authoring_core::NormalizedNote {
                 id: "n1".into(),
                 notetype_id: "basic".into(),
                 deck_name: "Deck".into(),

@@ -1,4 +1,4 @@
-use anki_forge::{Deck, IoMode, MediaSource};
+use anki_forge::prelude::{Deck, IoMode, MediaSource};
 
 const HEART_PNG: &[u8] = &[
     137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0,

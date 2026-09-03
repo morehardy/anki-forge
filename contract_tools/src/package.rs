@@ -3,14 +3,14 @@ use crate::{
     manifest::{load_manifest, resolve_contract_relative_path, LoadedManifest},
 };
 use anyhow::{ensure, Context, Result};
-use flate2::{write::GzEncoder, Compression};
+use flate2::{Compression, GzBuilder};
 use serde::Deserialize;
 use std::{
     collections::{BTreeMap, BTreeSet},
     fs::{self, File},
     path::{Path, PathBuf},
 };
-use tar::Builder;
+use tar::{Builder, Header};
 
 #[derive(Debug, Deserialize)]
 struct Phase2FixtureCaseTransitivePaths {
@@ -53,12 +53,25 @@ pub fn build_artifact(
     let artifact_path = out_dir.join(artifact_name(&manifest.data.bundle_version));
     let file = File::create(&artifact_path)
         .with_context(|| format!("failed to create artifact: {}", artifact_path.display()))?;
-    let encoder = GzEncoder::new(file, Compression::default());
+    let encoder = GzBuilder::new()
+        .mtime(0)
+        .write(file, Compression::default());
     let mut builder = Builder::new(encoder);
 
     for (archive_path, source_path) in package_entries(&manifest)? {
+        let mut source = File::open(&source_path)
+            .with_context(|| format!("failed to open package entry: {}", source_path.display()))?;
+        let metadata = source.metadata().with_context(|| {
+            format!("failed to inspect package entry: {}", source_path.display())
+        })?;
+        let mut header = Header::new_gnu();
+        header.set_size(metadata.len());
+        header.set_mode(0o644);
+        header.set_mtime(0);
+        header.set_uid(0);
+        header.set_gid(0);
         builder
-            .append_path_with_name(&source_path, &archive_path)
+            .append_data(&mut header, &archive_path, &mut source)
             .with_context(|| {
                 format!(
                     "failed to add package entry to artifact: {} -> {}",

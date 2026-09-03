@@ -1,0 +1,64 @@
+name: rust-crate-ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+          components: rustfmt,clippy
+      - run: bash scripts/check_rust_crate_quality.sh
+
+  dependency-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check advisories licenses bans sources
+
+  semver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Resolve compatible-release baseline
+        id: baseline
+        run: bash scripts/resolve_rust_semver_baseline.sh >> "$GITHUB_OUTPUT"
+      - if: steps.baseline.outputs.required == 'true'
+        uses: obi1kenobi/cargo-semver-checks-action@v2
+        with:
+          package: anki_forge
+      - if: steps.baseline.outputs.required == 'false'
+        run: echo "No crates.io SemVer baseline exists for initial release 0.1.0."
+
+  packaged-consumer:
+    name: packaged-consumer (${{ matrix.os }}, Rust ${{ matrix.toolchain }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-14]
+        toolchain: [1.92.0, stable]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - run: cargo fetch --locked
+      - shell: bash
+        run: bash scripts/check_rust_crate_package.sh

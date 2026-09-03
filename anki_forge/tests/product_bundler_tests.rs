@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::authoring::AuthoringMediaSource;
 use anki_forge::product::model::{CustomField, CustomNoteType, CustomTemplate};
 use anki_forge::product::ProductDocument;

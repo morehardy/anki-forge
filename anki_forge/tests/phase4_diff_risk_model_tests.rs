@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{BuildStatus, ComparisonStatus, RiskLevel};
 use anki_forge::diff::{
     ArtifactDiffChange, ArtifactDiffSummary, BuildDiffSummary, DiffSummaryCounts, EvidenceRef,
@@ -78,7 +80,7 @@ fn import_risk_report_computes_highest_level() {
 
 #[test]
 fn writer_diff_summary_maps_template_removal_to_semantic_risk() {
-    let writer = writer_core::DiffReport {
+    let writer = anki_forge::writer::DiffReport {
         kind: "inspect-diff".to_string(),
         comparison_status: "complete".to_string(),
         left_fingerprint: "left".to_string(),
@@ -88,7 +90,7 @@ fn writer_diff_summary_maps_template_removal_to_semantic_risk() {
         summary: "1 change".to_string(),
         uncompared_domains: Vec::new(),
         comparison_limitations: Vec::new(),
-        changes: vec![writer_core::DiffChange {
+        changes: vec![anki_forge::writer::DiffChange {
             category: "removed".to_string(),
             domain: "templates".to_string(),
             severity: "medium".to_string(),
@@ -135,7 +137,7 @@ fn project_diff_report_roundtrips_through_json() {
 
 #[test]
 fn writer_diff_summary_does_not_map_generic_template_modified_diff_to_reorder_risk() {
-    let writer = writer_core::DiffReport {
+    let writer = anki_forge::writer::DiffReport {
         kind: "inspect-diff".to_string(),
         comparison_status: "complete".to_string(),
         left_fingerprint: "left".to_string(),
@@ -145,7 +147,7 @@ fn writer_diff_summary_does_not_map_generic_template_modified_diff_to_reorder_ri
         summary: "1 change".to_string(),
         uncompared_domains: Vec::new(),
         comparison_limitations: Vec::new(),
-        changes: vec![writer_core::DiffChange {
+        changes: vec![anki_forge::writer::DiffChange {
             category: "modified".to_string(),
             domain: "templates".to_string(),
             severity: "medium".to_string(),
@@ -163,7 +165,7 @@ fn writer_diff_summary_does_not_map_generic_template_modified_diff_to_reorder_ri
 
 #[test]
 fn writer_diff_summary_maps_template_modified_ord_evidence_to_reorder_risk() {
-    let writer = writer_core::DiffReport {
+    let writer = anki_forge::writer::DiffReport {
         kind: "inspect-diff".to_string(),
         comparison_status: "complete".to_string(),
         left_fingerprint: "left".to_string(),
@@ -173,7 +175,7 @@ fn writer_diff_summary_maps_template_modified_ord_evidence_to_reorder_risk() {
         summary: "1 change".to_string(),
         uncompared_domains: Vec::new(),
         comparison_limitations: Vec::new(),
-        changes: vec![writer_core::DiffChange {
+        changes: vec![anki_forge::writer::DiffChange {
             category: "modified".to_string(),
             domain: "templates".to_string(),
             severity: "medium".to_string(),
@@ -200,7 +202,7 @@ fn writer_diff_summary_maps_template_modified_ord_evidence_to_reorder_risk() {
 
 #[test]
 fn writer_diff_summary_maps_real_counts_metadata_diff_to_card_count_risk() {
-    let writer = writer_core::DiffReport {
+    let writer = anki_forge::writer::DiffReport {
         kind: "inspect-diff".to_string(),
         comparison_status: "complete".to_string(),
         left_fingerprint: "left".to_string(),
@@ -210,7 +212,7 @@ fn writer_diff_summary_maps_real_counts_metadata_diff_to_card_count_risk() {
         summary: "1 change".to_string(),
         uncompared_domains: Vec::new(),
         comparison_limitations: Vec::new(),
-        changes: vec![writer_core::DiffChange {
+        changes: vec![anki_forge::writer::DiffChange {
             category: "modified".to_string(),
             domain: "metadata".to_string(),
             severity: "medium".to_string(),

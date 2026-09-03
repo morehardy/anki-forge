@@ -5,11 +5,11 @@ use std::{
     sync::{Mutex, OnceLock},
 };
 
+use crate::writer_core::{BuildContext, WriterPolicy};
 use anyhow::{bail, ensure, Context};
 use jsonschema::JSONSchema;
 use serde::Deserialize;
 use serde_json::Value as JsonValue;
-use writer_core::{BuildContext, WriterPolicy};
 
 use super::discovery::{ResolvedRuntime, RuntimeMode};
 

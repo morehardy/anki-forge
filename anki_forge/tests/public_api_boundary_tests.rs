@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::{fs, process::Command};
 
 use anki_forge::prelude::*;
@@ -162,6 +164,7 @@ anki_forge = {{ path = {manifest_dir} }}
         let output = Command::new(&cargo)
             .arg("check")
             .arg("--quiet")
+            .arg("--offline")
             .current_dir(probe.path())
             .env("CARGO_TARGET_DIR", probe.path().join("target"))
             .output()

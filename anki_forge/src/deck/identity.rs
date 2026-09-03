@@ -125,7 +125,7 @@ pub(crate) fn hash_payload<T: Serialize>(
         notetype_key,
         components,
     };
-    let canonical_payload = authoring_core::to_canonical_json(&payload)?;
+    let canonical_payload = crate::authoring_core::to_canonical_json(&payload)?;
     let stable_id = format!(
         "afid:v1:{}",
         blake3::hash(canonical_payload.as_bytes()).to_hex()

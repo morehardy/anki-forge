@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{ComparisonStatus, RiskLevel};
 use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 use anki_forge::diff::{

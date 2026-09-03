@@ -3,7 +3,7 @@ use crate::diff::{
     EvidenceRefKind, SemanticDiffCategory, SemanticDiffChange, SemanticDiffChangeKind,
 };
 
-pub fn summarize_writer_diff(report: &writer_core::DiffReport) -> BuildDiffSummary {
+pub fn summarize_writer_diff(report: &crate::writer_core::DiffReport) -> BuildDiffSummary {
     let changes = report
         .changes
         .iter()
@@ -68,7 +68,7 @@ pub fn summarize_writer_diff(report: &writer_core::DiffReport) -> BuildDiffSumma
 }
 
 fn semantic_change_from_writer_change(
-    change: &writer_core::DiffChange,
+    change: &crate::writer_core::DiffChange,
 ) -> Option<SemanticDiffChange> {
     let (category, change_kind, risk_code) =
         match (change.domain.as_str(), change.category.as_str()) {

@@ -1198,6 +1198,9 @@ for change in report.diff().changes() {
 
 ### 11.4 高级 IR 访问
 
+该接口仅供仓库工具和深度一致性测试使用，需要显式启用不受兼容性承诺的
+`internal-tools` feature；它不属于默认的 0.1 消费者接口。
+
 ```rust
 let lowering = project.lower()?;
 let normalized = project.normalize()?;
@@ -1374,13 +1377,10 @@ Phase 1 开始就应该收紧 public API 边界，避免开发期便利 re-expor
 | 入口 | 稳定性 | 目标 |
 | --- | --- | --- |
 | `anki_forge::prelude` | stable | 普通用户主入口，只导出 Product/Build/Diagnostics 常用类型 |
-| `anki_forge::product` | stable | `Project`、`Deck`、`NoteType`、`Note`、`MediaRegistry` 等产品 API |
-| `anki_forge::build` | stable | `BuildOptions`、`BuildReport`、`BuildError`、`BuildMetrics` |
-| `anki_forge::diagnostics` | stable | `Diagnostic`、`DiagnosticCode`、`SourcePath` |
-| `anki_forge::authoring` | advanced/unstable | IR、normalize、canonical JSON、fixture/testing helpers |
-| `anki_forge::writer` | advanced/feature-gated | low-level writer/inspect primitives |
+| crate root | stable | 仅保留 `Deck`、`Project`、`Severity` 和 crate/contract 版本查询 |
+| `internal-tools` feature modules | unsupported | 仅供未发布的 contract tool 和仓库深层一致性测试使用，不进入 0.1 兼容承诺 |
 
-crate root 可以保留 `Deck`、`Project` 和少量最常用类型的 re-export，但不应直接摊平 `authoring_core`、`writer_core`、`NormalizedIr`、`MergeRiskReport`、`diff_reports`、`inspect_apkg` 等底层或高级接口。README 和 examples 应优先引导用户使用 `prelude`、`Deck` 和 `Project`。
+crate root 不直接摊平 `authoring_core`、`writer_core`、`NormalizedIr`、`MergeRiskReport`、`diff_reports`、`inspect_apkg` 等底层或高级接口。默认依赖也不能导入 product/build/diagnostics/authoring/writer/runtime 等实现模块；README 和公开 examples 只引导用户使用 `prelude`、`Deck` 和 `Project`。
 
 ## 14. Diagnostics 设计
 

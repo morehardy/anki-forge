@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{
     BuildStatus, ProjectDeclaredMimeMismatchBehavior, ProjectMediaDiagnosticBehavior,
     ProjectMediaPolicy, ProjectNormalizeOptions,
@@ -57,7 +59,7 @@ fn note_image_occlusion_builder_accumulates_rects_and_renders_fields() {
         .expect("image export");
     let note = Note::image_occlusion(image)
         .stable_id("  heart:io:1  ")
-        .mode(anki_forge::IoMode::HideOneGuessOne)
+        .mode(IoMode::HideOneGuessOne)
         .rect(10, 20, 30, 40)
         .rect(100, 20, 30, 40)
         .header("Heart")
@@ -238,7 +240,7 @@ fn project_image_occlusion_build_writes_apkg() {
         .add_note(
             Note::image_occlusion(image)
                 .stable_id("heart:io:1")
-                .mode(anki_forge::IoMode::HideAllGuessOne)
+                .mode(IoMode::HideAllGuessOne)
                 .rect(0, 0, 1, 1)
                 .header("Heart")
                 .back_extra("Identify it")
@@ -342,14 +344,11 @@ fn project_image_occlusion_lower_matches_deck_product_shape() {
     let mut deck = Deck::builder("Anatomy").stable_id("anatomy").build();
     let deck_image = deck
         .media()
-        .add(anki_forge::MediaSource::from_bytes(
-            "heart.png",
-            IO_PNG.to_vec(),
-        ))
+        .add(MediaSource::from_bytes("heart.png", IO_PNG.to_vec()))
         .expect("deck media");
     deck.image_occlusion()
         .note(deck_image)
-        .mode(anki_forge::IoMode::HideAllGuessOne)
+        .mode(IoMode::HideAllGuessOne)
         .rect(0, 0, 1, 1)
         .stable_id("heart:io:1")
         .add()
@@ -368,7 +367,7 @@ fn project_image_occlusion_lower_matches_deck_product_shape() {
         .add_note(
             Note::image_occlusion(project_image)
                 .stable_id("heart:io:1")
-                .mode(anki_forge::IoMode::HideAllGuessOne)
+                .mode(IoMode::HideAllGuessOne)
                 .rect(0, 0, 1, 1)
                 .build()
                 .expect("project io"),

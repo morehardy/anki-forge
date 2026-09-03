@@ -4,11 +4,11 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+use crate::authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
+use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 use anyhow::Context;
-use authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
 use base64::Engine as _;
 use tempfile::TempDir;
-use writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 
 use counts::{card_count_from_inspect_or_fallback, count_phase1_cards_without_inspect};
 
@@ -904,7 +904,8 @@ impl Project {
         Ok(plan)
     }
 
-    pub fn normalize(&self) -> anyhow::Result<authoring_core::NormalizedIr> {
+    #[cfg(feature = "internal-tools")]
+    pub fn normalize(&self) -> anyhow::Result<crate::authoring_core::NormalizedIr> {
         let temp_dir = tempfile::Builder::new()
             .prefix("anki-forge-project-normalize-")
             .tempdir()
@@ -1073,16 +1074,8 @@ impl Project {
         let (writer_policy, build_context) = match writer_stack {
             Some((writer_policy, build_context)) => (writer_policy, build_context),
             None => {
-                let current_dir = std::env::current_dir().map_err(|err| {
-                    let report =
-                        failure_report(started, "PROJECT.CURRENT_DIR_FAILED", err.to_string());
-                    match maybe_write_report_json(&options, report) {
-                        Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                        Err(err) => err,
-                    }
-                })?;
                 let (_runtime, writer_policy, build_context) =
-                    crate::runtime::load_default_writer_stack(current_dir).map_err(|err| {
+                    crate::runtime::load_default_writer_stack().map_err(|err| {
                         let report = failure_report(
                             started,
                             "PROJECT.RUNTIME_DEFAULTS_FAILED",
@@ -1278,7 +1271,7 @@ impl Project {
                         Err(err) => err,
                     }
                 })?;
-                let writer_guid_plan = writer_core::WriterGuidPlan {
+                let writer_guid_plan = crate::writer_core::WriterGuidPlan {
                     assignments: reconcile.assignments.clone(),
                 };
                 let summary = crate::update_safety::report::summary_from_disabled_mode(
@@ -1621,7 +1614,7 @@ impl Project {
                     };
                     return return_report_error(&options, report, BuildFailureCause::Diagnostics);
                 }
-                let writer_guid_plan = writer_core::WriterGuidPlan {
+                let writer_guid_plan = crate::writer_core::WriterGuidPlan {
                     assignments: reconcile.assignments.clone(),
                 };
                 let summary = crate::update_safety::report::summary_from_reconcile(
@@ -1636,7 +1629,7 @@ impl Project {
 
         let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
-        let package_build_result = writer_core::build_with_guid_plan(
+        let package_build_result = crate::writer_core::build_with_guid_plan(
             &normalized,
             &writer_policy,
             &build_context,
@@ -1769,7 +1762,7 @@ impl Project {
                     lockfile_index.as_ref(),
                 );
                 let writer_policy_ref =
-                    writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
+                    crate::writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
                 let lockfile = crate::update_safety::model::IdentityLockfile {
                     schema_version: "identity-lockfile-v1".into(),
                     project_stable_id,
@@ -3766,7 +3759,7 @@ impl From<crate::deck::Deck> for Project {
 }
 
 fn duplicate_notetype_media_reference_diagnostics(
-    document: &authoring_core::AuthoringDocument,
+    document: &crate::authoring_core::AuthoringDocument,
     source_map: &ProductSourceMap,
 ) -> Vec<Diagnostic> {
     let mut notetype_id_counts = BTreeMap::<&str, usize>::new();
@@ -3893,7 +3886,7 @@ fn append_missing_media_reference_diagnostics(
     source_map: &ProductSourceMap,
     scan: MissingMediaReferenceScan<'_>,
 ) {
-    for candidate in authoring_core::extract_media_reference_candidates(
+    for candidate in crate::authoring_core::extract_media_reference_candidates(
         scan.owner_kind,
         scan.owner_id,
         scan.location_kind,
@@ -3928,7 +3921,9 @@ fn append_missing_media_reference_diagnostics(
     }
 }
 
-fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCandidate) -> String {
+fn missing_media_reference_summary(
+    candidate: &crate::authoring_core::MediaReferenceCandidate,
+) -> String {
     if candidate.ref_kind == "css_url" {
         let raw_ref = candidate
             .diagnostic_ref
@@ -3956,7 +3951,7 @@ fn missing_media_reference_summary(candidate: &authoring_core::MediaReferenceCan
 }
 
 struct ProjectNormalizeOutput {
-    normalized_ir: authoring_core::NormalizedIr,
+    normalized_ir: crate::authoring_core::NormalizedIr,
     diagnostics: Vec<Diagnostic>,
     media_source_modes: BTreeMap<String, MediaSourceMode>,
 }
@@ -4076,7 +4071,9 @@ impl ArtifactWorkspace {
     fn persist_if_requested(self) {
         if self.persist_temp {
             if let Some(temp_dir) = self.temp_dir {
-                let _persisted_artifacts_dir = temp_dir.into_path();
+                let persisted_artifacts_dir = temp_dir.path().to_path_buf();
+                std::mem::forget(temp_dir);
+                let _persisted_artifacts_dir = persisted_artifacts_dir;
             }
         }
     }
@@ -4086,7 +4083,7 @@ impl ArtifactWorkspace {
 struct ProjectNormalizeError {
     message: String,
     diagnostics: Vec<Diagnostic>,
-    normalized_ir: Option<Box<authoring_core::NormalizedIr>>,
+    normalized_ir: Option<Box<crate::authoring_core::NormalizedIr>>,
     media_source_modes: BTreeMap<String, MediaSourceMode>,
 }
 
@@ -4223,7 +4220,7 @@ impl std::fmt::Display for ProjectNormalizeError {
 impl std::error::Error for ProjectNormalizeError {}
 
 fn normalization_diagnostic_to_product_diagnostic(
-    item: authoring_core::model::DiagnosticItem,
+    item: crate::authoring_core::model::DiagnosticItem,
     source_map: &ProductSourceMap,
 ) -> Diagnostic {
     let source = item.path.as_deref().and_then(|path| {
@@ -4391,7 +4388,7 @@ fn failure_report(started: Instant, code: &str, message: String) -> BuildReport 
 
 fn invalid_report_without_artifact(
     diagnostics: Vec<Diagnostic>,
-    normalized: &authoring_core::NormalizedIr,
+    normalized: &crate::authoring_core::NormalizedIr,
     media_source_modes: &BTreeMap<String, MediaSourceMode>,
     started: Instant,
 ) -> BuildReport {

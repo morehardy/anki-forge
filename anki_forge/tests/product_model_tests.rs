@@ -1,8 +1,10 @@
+#![cfg(feature = "internal-tools")]
+
+use anki_forge::deck::{IoMode, IoRect};
 use anki_forge::product::{
     render_image_occlusion_cloze, ProductDocument, ProductNote, ProductNoteType, STOCK_BASIC_ID,
     STOCK_CLOZE_ID, STOCK_IMAGE_OCCLUSION_ID,
 };
-use anki_forge::IoRect;
 
 #[test]
 fn product_document_registers_a_basic_notetype() {
@@ -172,7 +174,7 @@ fn legacy_stock_builders_remain_usable_without_tags() {
 #[test]
 fn stock_image_occlusion_helper_renders_rect_markup() {
     let rendered = render_image_occlusion_cloze(
-        anki_forge::IoMode::HideAllGuessOne,
+        IoMode::HideAllGuessOne,
         &[IoRect {
             x: 10,
             y: 20,
@@ -191,7 +193,7 @@ fn stock_image_occlusion_helper_renders_rect_markup() {
 #[test]
 fn stock_image_occlusion_helper_renders_hide_one_guess_one_markup() {
     let rendered = render_image_occlusion_cloze(
-        anki_forge::IoMode::HideOneGuessOne,
+        IoMode::HideOneGuessOne,
         &[IoRect {
             x: 1,
             y: 2,
@@ -209,7 +211,7 @@ fn stock_image_occlusion_helper_renders_hide_one_guess_one_markup() {
 
 #[test]
 fn stock_image_occlusion_helper_rejects_empty_rects() {
-    let err = render_image_occlusion_cloze(anki_forge::IoMode::HideAllGuessOne, &[])
+    let err = render_image_occlusion_cloze(IoMode::HideAllGuessOne, &[])
         .expect_err("empty rects should fail");
 
     assert_eq!(

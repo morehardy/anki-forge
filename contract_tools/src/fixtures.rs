@@ -9,7 +9,7 @@ use std::{
     path::{Component, Path, PathBuf},
 };
 
-use authoring_core::{
+use anki_forge::authoring::{
     AuthoringMedia, AuthoringNote, AuthoringNotetype, MediaPolicy, NormalizeOptions,
 };
 
@@ -656,8 +656,8 @@ fn validate_note_identity_stable_id(
     };
     let parsed_payload: Value = serde_json::from_str(canonical_payload)
         .with_context(|| format!("note-identity canonical_payload must be JSON: {case_id}"))?;
-    let canonical_payload_text =
-        authoring_core::to_canonical_json(&parsed_payload).with_context(|| {
+    let canonical_payload_text = anki_forge::authoring::to_canonical_json(&parsed_payload)
+        .with_context(|| {
             format!("note-identity canonical_payload must serialize canonically: {case_id}")
         })?;
     ensure!(
@@ -742,7 +742,7 @@ fn run_phase2_normalization_case(
     );
 
     let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
-    let actual = authoring_core::normalize(request);
+    let actual = anki_forge::authoring::normalize(request);
 
     if let Some(expected_result) = &case.expected_result {
         compare_canonical_json(
@@ -813,7 +813,7 @@ fn run_phase2_risk_case(
     );
 
     let request = build_phase2_request(manifest, authoring_ir_schema, &case.request)?;
-    let actual = authoring_core::normalize(request);
+    let actual = anki_forge::authoring::normalize(request);
     let report = actual.merge_risk_report.as_ref().with_context(|| {
         format!(
             "phase2 risk fixture must emit merge_risk_report for case {}",
@@ -932,8 +932,8 @@ fn run_phase3_e2e_case(
         .map(Path::to_path_buf)
         .unwrap_or_else(|| PathBuf::from("."));
     let media_store_dir = base_dir.join(".anki-forge-media");
-    let normalization = authoring_core::normalize_with_options(
-        authoring_core::NormalizationRequest::new(input),
+    let normalization = anki_forge::authoring::normalize_with_options(
+        anki_forge::authoring::NormalizationRequest::new(input),
         NormalizeOptions {
             media_store_dir: media_store_dir.clone(),
             base_dir,
@@ -971,7 +971,7 @@ fn run_phase3_e2e_case(
 fn execute_phase3_case(
     manifest: &crate::manifest::LoadedManifest,
     resources: &Phase3FixtureResources,
-    normalized_ir: &authoring_core::NormalizedIr,
+    normalized_ir: &anki_forge::authoring::NormalizedIr,
     writer_policy_selector: &str,
     build_context_selector: &str,
     artifacts_dir: &str,
@@ -987,12 +987,13 @@ fn execute_phase3_case(
         crate::policies::load_build_context_asset(manifest, build_context_selector)?;
     let artifact_root = resolve_contract_relative_dir(&manifest.contracts_root, artifacts_dir)
         .with_context(|| format!("phase3 artifacts_dir must resolve safely for case {case_id}"))?;
-    let mut artifact_target = writer_core::BuildArtifactTarget::new(artifact_root, "artifacts");
+    let mut artifact_target =
+        anki_forge::writer::BuildArtifactTarget::new(artifact_root, "artifacts");
     if let Some(media_store_dir) = media_store_dir {
         artifact_target = artifact_target.with_media_store_dir(media_store_dir);
     }
 
-    let build_result = writer_core::build(
+    let build_result = anki_forge::writer::build(
         normalized_ir,
         &writer_policy,
         &build_context,
@@ -1025,7 +1026,7 @@ fn execute_phase3_case(
         case_id
     );
 
-    let expected_build_result: writer_core::PackageBuildResult = load_validated_json_model(
+    let expected_build_result: anki_forge::writer::PackageBuildResult = load_validated_json_model(
         manifest,
         &resources.package_build_result_schema,
         expected_build,
@@ -1039,14 +1040,14 @@ fn execute_phase3_case(
         "phase3 build output mismatch",
     )?;
 
-    let expected_inspect_report: writer_core::InspectReport = load_validated_json_model(
+    let expected_inspect_report: anki_forge::writer::InspectReport = load_validated_json_model(
         manifest,
         &resources.inspect_report_schema,
         expected_inspect,
         case_id,
         "phase3 expected inspect artifact",
     )?;
-    let mut staging_report = writer_core::inspect_staging(&staging_path)?;
+    let mut staging_report = anki_forge::writer::inspect_staging(&staging_path)?;
     staging_report.source_ref = staging_ref.to_string();
     compare_expected_json(
         &staging_report,
@@ -1055,11 +1056,11 @@ fn execute_phase3_case(
         "phase3 inspect output mismatch",
     )?;
 
-    let mut apkg_report = writer_core::inspect_apkg(&apkg_path)?;
+    let mut apkg_report = anki_forge::writer::inspect_apkg(&apkg_path)?;
     apkg_report.source_ref = apkg_ref.to_string();
-    let diff_report = writer_core::diff_reports(&staging_report, &apkg_report)?;
+    let diff_report = anki_forge::writer::diff_reports(&staging_report, &apkg_report)?;
     if let Some(expected_diff) = expected_diff {
-        let expected_diff_report: writer_core::DiffReport = load_validated_json_model(
+        let expected_diff_report: anki_forge::writer::DiffReport = load_validated_json_model(
             manifest,
             &resources.diff_report_schema,
             expected_diff,
@@ -1089,9 +1090,9 @@ fn build_phase2_request(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
     params: &Phase2RequestParams,
-) -> anyhow::Result<authoring_core::NormalizationRequest> {
+) -> anyhow::Result<anki_forge::authoring::NormalizationRequest> {
     let input = load_authoring_input(manifest, authoring_ir_schema, &params.authoring_input)?;
-    let mut request = authoring_core::NormalizationRequest::new(input);
+    let mut request = anki_forge::authoring::NormalizationRequest::new(input);
     if let Some(context) = params.comparison_context.clone() {
         request.comparison_context = Some(
             serde_json::from_value(context)
@@ -1110,7 +1111,7 @@ fn load_authoring_input(
     manifest: &crate::manifest::LoadedManifest,
     authoring_ir_schema: &JSONSchema,
     authoring_input: &str,
-) -> anyhow::Result<authoring_core::AuthoringDocument> {
+) -> anyhow::Result<anki_forge::authoring::AuthoringDocument> {
     let input_path = resolve_contract_relative_path(&manifest.contracts_root, authoring_input)?;
     let input_value = load_json_value(&input_path)?;
     validate_value(authoring_ir_schema, &input_value).with_context(|| {
@@ -1126,7 +1127,7 @@ fn load_authoring_input(
         )
     })?;
 
-    Ok(authoring_core::AuthoringDocument {
+    Ok(anki_forge::authoring::AuthoringDocument {
         kind: input.kind,
         schema_version: input.schema_version,
         metadata_document_id: input.metadata.document_id,
@@ -1179,7 +1180,7 @@ fn resolve_contract_relative_dir(
 }
 
 fn resolve_phase3_artifact_path(
-    artifact_target: &writer_core::BuildArtifactTarget,
+    artifact_target: &anki_forge::writer::BuildArtifactTarget,
     artifact_ref: &str,
 ) -> anyhow::Result<PathBuf> {
     let stable_prefix = artifact_target.stable_ref_prefix.trim_end_matches('/');
@@ -1206,7 +1207,7 @@ fn compare_canonical_json(
     case_id: &str,
     mismatch_message: &str,
 ) -> anyhow::Result<()> {
-    let actual_text = authoring_core::to_canonical_json(actual)?;
+    let actual_text = anki_forge::authoring::to_canonical_json(actual)?;
     let expected_path =
         resolve_contract_relative_path(&manifest.contracts_root, expected_relative_path)
             .with_context(|| {
@@ -1216,7 +1217,7 @@ fn compare_canonical_json(
                 )
             })?;
     let expected_value = load_json_value(&expected_path)?;
-    let expected_text = authoring_core::to_canonical_json(&expected_value)?;
+    let expected_text = anki_forge::authoring::to_canonical_json(&expected_value)?;
 
     ensure!(
         actual_text == expected_text,
@@ -1233,8 +1234,8 @@ fn compare_expected_json(
     case_id: &str,
     mismatch_message: &str,
 ) -> anyhow::Result<()> {
-    let actual_text = authoring_core::to_canonical_json(actual)?;
-    let expected_text = authoring_core::to_canonical_json(expected)?;
+    let actual_text = anki_forge::authoring::to_canonical_json(actual)?;
+    let expected_text = anki_forge::authoring::to_canonical_json(expected)?;
     ensure!(
         actual_text == expected_text,
         "{}: {}",

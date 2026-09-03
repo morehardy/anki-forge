@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use std::path::PathBuf;
 use std::time::Duration;
 

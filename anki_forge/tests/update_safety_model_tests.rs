@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::build::{BuildOptions, UpdateSafetyMode};
 use anki_forge::update_safety::{
     classify_project_stable_id_missing, effective_mode, validate_writer_policy_ref, EffectiveMode,

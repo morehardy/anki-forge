@@ -1,3 +1,4 @@
+use anki_forge::writer::build_context_ref;
 use serde_json::Value;
 use std::{
     ffi::OsString,
@@ -7,7 +8,6 @@ use std::{
     sync::atomic::{AtomicU64, Ordering},
 };
 use tempfile::tempdir;
-use writer_core::build_context_ref;
 
 fn cargo_bin() -> &'static str {
     env!("CARGO_BIN_EXE_contract_tools")
@@ -237,7 +237,7 @@ fn load_declared_build_context_ref() -> String {
         contract_tools::manifest::resolve_asset_path(&manifest, "build_context_default")
             .expect("build context asset should resolve");
     let raw = fs::read_to_string(context_path).expect("read build context asset");
-    let context: writer_core::BuildContext =
+    let context: anki_forge::writer::BuildContext =
         serde_yaml::from_str(&raw).expect("decode build context asset");
     build_context_ref(&context).expect("build context ref")
 }
@@ -249,9 +249,9 @@ fn load_declared_writer_policy_ref() -> String {
     let policy_path = contract_tools::manifest::resolve_asset_path(&manifest, "writer_policy")
         .expect("writer policy asset should resolve");
     let raw = fs::read_to_string(policy_path).expect("read writer policy asset");
-    let policy: writer_core::WriterPolicy =
+    let policy: anki_forge::writer::WriterPolicy =
         serde_yaml::from_str(&raw).expect("decode writer policy asset");
-    writer_core::policy_ref(&policy.id, &policy.version)
+    anki_forge::writer::policy_ref(&policy.id, &policy.version)
 }
 
 fn build_basic_package(

@@ -3,8 +3,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use super::{
     render_image_occlusion_cloze, Content, IdentityRecipe, MediaRef, STOCK_IMAGE_OCCLUSION_ID,
 };
+use crate::deck::{IoMode, IoRect};
 use crate::diagnostics::{ErrorCode, ErrorCodeExt};
-use crate::{IoMode, IoRect};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ProductNoteError {

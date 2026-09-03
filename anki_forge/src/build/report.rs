@@ -302,7 +302,7 @@ impl BuildReport {
 
 impl MediaSummary {
     pub(crate) fn from_normalized_ir_with_source_modes(
-        normalized_ir: &authoring_core::NormalizedIr,
+        normalized_ir: &crate::authoring_core::NormalizedIr,
         diagnostics: &[Diagnostic],
         source_modes: &BTreeMap<String, MediaSourceMode>,
     ) -> Self {
@@ -310,13 +310,13 @@ impl MediaSummary {
         let mut missing_references = 0;
         for reference in &normalized_ir.media_references {
             match &reference.resolution {
-                authoring_core::MediaReferenceResolution::Resolved { media_id } => {
+                crate::authoring_core::MediaReferenceResolution::Resolved { media_id } => {
                     referenced_media_ids.insert(media_id.as_str());
                 }
-                authoring_core::MediaReferenceResolution::Missing => {
+                crate::authoring_core::MediaReferenceResolution::Missing => {
                     missing_references += 1;
                 }
-                authoring_core::MediaReferenceResolution::Skipped { .. } => {}
+                crate::authoring_core::MediaReferenceResolution::Skipped { .. } => {}
             }
         }
 

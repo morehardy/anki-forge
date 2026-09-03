@@ -1,3 +1,5 @@
+#![cfg(feature = "internal-tools")]
+
 use anki_forge::update_safety::merge_safety::compare_notetype_merge_safety;
 use anki_forge::update_safety::model::{
     FieldMergeEntry, IdentityIndex, NotetypeIdentityEntry, TemplateMergeEntry,

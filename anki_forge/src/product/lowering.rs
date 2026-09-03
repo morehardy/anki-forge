@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
+use crate::authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
 
 use crate::authoring::{
     AuthoringDocument, AuthoringField, AuthoringMedia, AuthoringMediaSource, AuthoringNote,
@@ -1303,10 +1303,10 @@ fn lower_product_v2_generation_rule_front(
 fn product_v2_generation_requirement(
     rule: Option<&ProductGenerationRuleV2>,
     field_name_by_key: &BTreeMap<String, String>,
-) -> Option<authoring_core::AuthoringGenerationRequirement> {
+) -> Option<crate::authoring_core::AuthoringGenerationRequirement> {
     match rule {
         Some(ProductGenerationRuleV2::All { fields }) => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "all".into(),
                 field_names: fields
                     .iter()
@@ -1315,7 +1315,7 @@ fn product_v2_generation_requirement(
             })
         }
         Some(ProductGenerationRuleV2::Any { fields }) => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "any".into(),
                 field_names: fields
                     .iter()
@@ -1324,7 +1324,7 @@ fn product_v2_generation_requirement(
             })
         }
         Some(ProductGenerationRuleV2::Cloze { field }) => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "cloze".into(),
                 field_names: field_name_by_key.get(field).cloned().into_iter().collect(),
             })
@@ -1342,7 +1342,7 @@ fn product_generation_requirement(
     rule: Option<&ProductGenerationRuleV2>,
     field_name_by_key: &BTreeMap<String, String>,
     infer_default_requirement: bool,
-) -> Option<authoring_core::AuthoringGenerationRequirement> {
+) -> Option<crate::authoring_core::AuthoringGenerationRequirement> {
     let explicit = product_v2_generation_requirement(rule, field_name_by_key);
     if explicit.is_some()
         || !infer_default_requirement
@@ -1354,27 +1354,29 @@ fn product_generation_requirement(
         return explicit;
     }
 
-    match authoring_core::infer_generation_requirement(&template.front, field_name_by_key.values())
-    {
-        authoring_core::TemplateGenerationRequirement::Always => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+    match crate::authoring_core::infer_generation_requirement(
+        &template.front,
+        field_name_by_key.values(),
+    ) {
+        crate::authoring_core::TemplateGenerationRequirement::Always => {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "none".into(),
                 field_names: Vec::new(),
             })
         }
-        authoring_core::TemplateGenerationRequirement::All(field_names) => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+        crate::authoring_core::TemplateGenerationRequirement::All(field_names) => {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "all".into(),
                 field_names,
             })
         }
-        authoring_core::TemplateGenerationRequirement::Any(field_names) => {
-            Some(authoring_core::AuthoringGenerationRequirement {
+        crate::authoring_core::TemplateGenerationRequirement::Any(field_names) => {
+            Some(crate::authoring_core::AuthoringGenerationRequirement {
                 kind: "any".into(),
                 field_names,
             })
         }
-        authoring_core::TemplateGenerationRequirement::Unrepresentable => {
+        crate::authoring_core::TemplateGenerationRequirement::Unrepresentable => {
             let front_source_path = template
                 .source_path
                 .as_ref()
@@ -2274,23 +2276,27 @@ fn custom_generation_requirement(
     note_type_id: &str,
     template: &crate::product::model::CustomTemplate,
     field_name_by_key: &BTreeMap<String, String>,
-) -> Result<Option<authoring_core::AuthoringGenerationRequirement>, ProductDiagnostic> {
+) -> Result<Option<crate::authoring_core::AuthoringGenerationRequirement>, ProductDiagnostic> {
     match &template.generation_rule {
         Some(crate::product::model::CustomGenerationRule::All { fields }) => {
             let field_names =
                 generation_field_names(note_type_id, template, fields, field_name_by_key)?;
-            Ok(Some(authoring_core::AuthoringGenerationRequirement {
-                kind: "all".into(),
-                field_names,
-            }))
+            Ok(Some(
+                crate::authoring_core::AuthoringGenerationRequirement {
+                    kind: "all".into(),
+                    field_names,
+                },
+            ))
         }
         Some(crate::product::model::CustomGenerationRule::Any { fields }) => {
             let field_names =
                 generation_field_names(note_type_id, template, fields, field_name_by_key)?;
-            Ok(Some(authoring_core::AuthoringGenerationRequirement {
-                kind: "any".into(),
-                field_names,
-            }))
+            Ok(Some(
+                crate::authoring_core::AuthoringGenerationRequirement {
+                    kind: "any".into(),
+                    field_names,
+                },
+            ))
         }
         Some(crate::product::model::CustomGenerationRule::AnkiDefault) | None => Ok(None),
         Some(crate::product::model::CustomGenerationRule::Cloze { field }) => {
@@ -2300,10 +2306,12 @@ fn custom_generation_requirement(
                 std::slice::from_ref(field),
                 field_name_by_key,
             )?;
-            Ok(Some(authoring_core::AuthoringGenerationRequirement {
-                kind: "cloze".into(),
-                field_names,
-            }))
+            Ok(Some(
+                crate::authoring_core::AuthoringGenerationRequirement {
+                    kind: "cloze".into(),
+                    field_names,
+                },
+            ))
         }
     }
 }
@@ -2361,8 +2369,8 @@ fn escape_css_string_literal(value: &str) -> String {
 
 fn authoring_field_metadata(
     field: FieldMetadataDeclaration,
-) -> authoring_core::AuthoringFieldMetadata {
-    authoring_core::AuthoringFieldMetadata {
+) -> crate::authoring_core::AuthoringFieldMetadata {
+    crate::authoring_core::AuthoringFieldMetadata {
         field_name: field.field_name,
         label: field.label,
         role_hint: field.role_hint,
