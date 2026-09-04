@@ -1185,7 +1185,7 @@ fn latest_collection_uses_explicit_normalized_note_mtime_when_present() {
 }
 
 #[test]
-fn latest_collection_places_cards_in_note_deck_when_template_has_no_target_deck() {
+fn latest_collection_writes_native_hierarchical_deck_names_and_parent() {
     let root = unique_artifact_root("note-deck-routing");
     let target = BuildArtifactTarget::new(root.clone(), "artifacts/phase3/note-deck-routing");
     let mut normalized = sample_basic_normalized_ir();
@@ -1200,19 +1200,39 @@ fn latest_collection_places_cards_in_note_deck_when_template_has_no_target_deck(
     .unwrap();
 
     let conn = latest_collection_from_built_apkg(&root);
-    let card_deck_name: String = conn
+    let deck_rows: Vec<(i64, String, String)> = conn
+        .prepare("select id, name, hex(name) from decks order by id")
+        .unwrap()
+        .query_map([], |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)))
+        .unwrap()
+        .map(|row| row.unwrap())
+        .collect();
+    assert_eq!(
+        deck_rows,
+        vec![
+            (1, "Default".into(), "44656661756C74".into()),
+            (2, "Biology".into(), "42696F6C6F6779".into()),
+            (
+                3,
+                "Biology\u{1f}Cells".into(),
+                "42696F6C6F67791F43656C6C73".into(),
+            ),
+        ]
+    );
+
+    let card_deck: (i64, String) = conn
         .query_row(
-            "select decks.name
+            "select cards.did, decks.name
              from cards
              join decks on decks.id = cards.did
              join notes on notes.id = cards.nid
              where notes.guid = 'note-1' and cards.ord = 0",
             [],
-            |row| row.get(0),
+            |row| Ok((row.get(0)?, row.get(1)?)),
         )
         .unwrap();
 
-    assert_eq!(card_deck_name, "Biology::Cells");
+    assert_eq!(card_deck, (3, "Biology\u{1f}Cells".into()));
 }
 
 #[test]
@@ -1232,19 +1252,19 @@ fn latest_collection_template_target_deck_overrides_note_deck_for_cards() {
     .unwrap();
 
     let conn = latest_collection_from_built_apkg(&root);
-    let card_deck_name: String = conn
+    let card_deck: (i64, String) = conn
         .query_row(
-            "select decks.name
+            "select cards.did, decks.name
              from cards
              join decks on decks.id = cards.did
              join notes on notes.id = cards.nid
              where notes.guid = 'note-1' and cards.ord = 0",
             [],
-            |row| row.get(0),
+            |row| Ok((row.get(0)?, row.get(1)?)),
         )
         .unwrap();
 
-    assert_eq!(card_deck_name, "Biology::Overrides");
+    assert_eq!(card_deck, (4, "Biology\u{1f}Overrides".into()));
 
     let deck_names: std::collections::BTreeSet<String> = conn
         .prepare("select name from decks order by name")
@@ -1254,8 +1274,15 @@ fn latest_collection_template_target_deck_overrides_note_deck_for_cards() {
         .map(|row| row.unwrap())
         .collect();
 
-    assert!(deck_names.contains("Biology::Cells"));
-    assert!(deck_names.contains("Biology::Overrides"));
+    assert_eq!(
+        deck_names,
+        std::collections::BTreeSet::from([
+            "Default".into(),
+            "Biology".into(),
+            "Biology\u{1f}Cells".into(),
+            "Biology\u{1f}Overrides".into(),
+        ])
+    );
 }
 
 #[test]

@@ -24,6 +24,7 @@ use crate::writer_core::anki_proto::{
 };
 use crate::writer_core::canonical_json::to_canonical_json;
 use crate::writer_core::card_plan::plan_cards;
+use crate::writer_core::deck_name::native_deck_name_to_human;
 use crate::writer_core::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::writer_core::staging::{
     validated_media_output_path, BuildArtifactTarget, ResolvedTemplateTargetDeck,
@@ -913,8 +914,8 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
         let deck_values = deck_rows
             .query_map([], |row| {
                 let id: i64 = row.get(0)?;
-                let name: String = row.get(1)?;
-                Ok((id, name))
+                let native_name: String = row.get(1)?;
+                Ok((id, native_deck_name_to_human(&native_name)))
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?;
         let deck_names_by_id: BTreeMap<i64, String> = deck_values.into_iter().collect();
@@ -1148,7 +1149,12 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
             Ok((row.get::<_, i64>(0)?, row.get::<_, Option<String>>(1)?))
         })? {
             let (note_id, deck_name) = row?;
-            note_decks_by_row_id.insert(note_id, deck_name.unwrap_or_else(|| "Default".into()));
+            note_decks_by_row_id.insert(
+                note_id,
+                deck_name
+                    .map(|name| native_deck_name_to_human(&name))
+                    .unwrap_or_else(|| "Default".into()),
+            );
         }
 
         let mut actual_card_decks = BTreeMap::<(String, usize), String>::new();
@@ -1169,7 +1175,9 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
             let (note_guid, ord, deck_name) = row?;
             actual_card_decks.insert(
                 (note_guid, ord as usize),
-                deck_name.unwrap_or_else(|| "Default".into()),
+                deck_name
+                    .map(|name| native_deck_name_to_human(&name))
+                    .unwrap_or_else(|| "Default".into()),
             );
         }
 

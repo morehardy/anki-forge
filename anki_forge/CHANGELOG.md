@@ -6,6 +6,11 @@ new minor release.
 
 ## [Unreleased]
 
+### Fixed
+
+- Write hierarchical deck names with Anki's native `U+001F` separator and
+  include all parent decks in generated APKG collections.
+
 ## [0.1.0] - 2026-08-26
 
 ### Added

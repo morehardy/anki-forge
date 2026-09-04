@@ -227,7 +227,7 @@ fn inspect_emits_browser_template_and_field_label_observations() {
         .iter()
         .any(|value| value["template_name"] == "Card 1"
             && value["target_deck_name"] == "Custom::Deck"
-            && value["resolved_target_deck_id"] == 2));
+            && value["resolved_target_deck_id"] == 3));
 
     let apkg_report = inspect_apkg(root.join("package.apkg")).unwrap();
     assert!(apkg_report
@@ -236,7 +236,7 @@ fn inspect_emits_browser_template_and_field_label_observations() {
         .iter()
         .any(|value| value["template_name"] == "Card 1"
             && value["target_deck_name"] == "Custom::Deck"
-            && value["resolved_target_deck_id"] == 2));
+            && value["resolved_target_deck_id"] == 3));
 }
 
 #[test]
