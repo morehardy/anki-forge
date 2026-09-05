@@ -1,4 +1,4 @@
-# RFC 0004: Deterministic baseline-driven note revisions
+# RFC 0005: Deterministic baseline-driven note revisions
 
 Status: implemented; PR review follow-up included.
 
@@ -88,7 +88,7 @@ content alongside preserved GUIDs, note/card IDs, and review state.
   off/on. Exactly one changed note updated and one unchanged note was skipped;
   reimport applied zero further updates. GUIDs, model/note/card IDs and review
   state remained unchanged. No real user collection was opened.
-- The original RFC 0003 reproduction was also rerun without modifying the target
+- The original RFC 0004 reproduction was also rerun without modifying the target
   collection's note times: `[alpha, beta]` to `[gamma, beta, alpha]`. Both merge
   modes updated the two changed answers, added exactly one note/type, and retained
   both original identities and review states with zero conflicts.
@@ -119,4 +119,4 @@ bytes intact; strict builds still require recovery. Invalid requested lockfiles
 remain high risk, so policy rejection preserves published files and lockfiles.
 Valid APKG migration and normal report-only creation/updates remain supported.
 The observation model advances to v2, with legacy/mixed-version binding coverage;
-see RFC 0003's review follow-up for the version boundary.
+see RFC 0004's review follow-up for the version boundary.

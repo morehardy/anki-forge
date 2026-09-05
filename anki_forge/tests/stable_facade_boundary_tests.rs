@@ -53,7 +53,9 @@ fn main() {
     let _deck = Deck::new("Stable Deck");
     let _project = Project::new("Stable Project");
     let _severity = Severity::Warning;
-    let _options = BuildOptions::new();
+    let mut limits = InspectLimits::default();
+    limits.max_collection_bytes = 128 << 20;
+    let _options = BuildOptions::new().inspect_limits(limits);
     assert!(!anki_forge::facade_api_version().is_empty());
     assert!(!anki_forge::embedded_contract_version().is_empty());
 }

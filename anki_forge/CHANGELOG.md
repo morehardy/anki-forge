@@ -8,6 +8,10 @@ new minor release.
 
 ### Fixed
 
+- Bound APKG inspection, including ZIP/ZIP64 indexing, nested zstd windows,
+  per-entry and cumulative expansion. Stream media hashes and temporary
+  collections; expose `InspectLimits` overrides and terminal resource diagnostics.
+  Include the documented security acceptance limits in contract bundle `0.5.0`.
 - Reject output, report, or writable lockfile aliases of the comparison baseline
   before writes, including symlinks, hard links, and the implicit artifact package.
 - Check actual staging-manifest aliases and recheck newly created destinations

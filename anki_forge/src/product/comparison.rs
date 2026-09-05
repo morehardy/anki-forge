@@ -7,6 +7,7 @@ use crate::diff::{summarize_writer_diff, BuildDiffSummary};
 use crate::risk::rules::{classify_import_risk, RiskInput};
 use crate::risk::ImportRiskReport;
 use crate::update_safety::model::IdentityIndex;
+use crate::writer_core::{InspectError, InspectLimits};
 
 #[derive(Debug, Clone)]
 pub struct ComparisonInput<'a> {
@@ -38,14 +39,18 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
 /// reconciliation and diff. No later stage reopens the caller's baseline path.
 pub(crate) struct BaselineSnapshot {
     path: PathBuf,
-    inspected: Result<InspectedArtifact, String>,
+    inspected: Result<InspectedArtifact, InspectError>,
 }
 
 impl BaselineSnapshot {
     pub(crate) fn capture(path: &Path) -> Self {
+        Self::capture_with_limits(path, &InspectLimits::default())
+    }
+
+    pub(crate) fn capture_with_limits(path: &Path, limits: &InspectLimits) -> Self {
         Self {
             path: path.to_owned(),
-            inspected: inspect_artifact(path),
+            inspected: inspect_artifact(path, limits),
         }
     }
 
@@ -53,7 +58,7 @@ impl BaselineSnapshot {
         &self,
         current: Option<&IdentityIndex>,
         lockfile: Option<&IdentityIndex>,
-    ) -> Result<IdentityIndex, String> {
+    ) -> Result<IdentityIndex, InspectError> {
         self.inspected
             .as_ref()
             .map_err(Clone::clone)
@@ -64,7 +69,7 @@ impl BaselineSnapshot {
                     current,
                     lockfile,
                 )
-                .map_err(|error| error.to_string())
+                .map_err(InspectError::from_anyhow)
             })
     }
 }
@@ -73,16 +78,30 @@ pub(crate) fn assemble_comparison_with_baseline(
     input: ComparisonInput<'_>,
     baseline: Option<&BaselineSnapshot>,
 ) -> ComparisonOutput {
+    assemble_comparison_with_limits(input, baseline, &InspectLimits::default())
+}
+
+pub(crate) fn assemble_comparison_with_limits(
+    input: ComparisonInput<'_>,
+    baseline: Option<&BaselineSnapshot>,
+    limits: &InspectLimits,
+) -> ComparisonOutput {
     let mut diagnostics = input.diagnostics.to_vec();
-    let current = match inspect_artifact(input.current_artifact) {
+    let current = match inspect_artifact(input.current_artifact, limits) {
         Ok(artifact) => Some(artifact),
-        Err(message) => {
+        Err(error) => {
+            push_resource_diagnostic(
+                &mut diagnostics,
+                &error,
+                input.current_artifact,
+                Severity::Error,
+            );
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("COMPARE.CURRENT_UNAVAILABLE"),
                 severity: Severity::Error,
                 domain: None,
                 stage: None,
-                message,
+                message: error.to_string(),
                 source: Some(SourcePath::new(
                     input.current_artifact.display().to_string(),
                 )),
@@ -115,14 +134,15 @@ pub(crate) fn assemble_comparison_with_baseline(
     let mut baseline_unavailable = false;
     let previous = match &baseline.inspected {
         Ok(artifact) => Some(artifact),
-        Err(message) => {
+        Err(error) => {
             baseline_unavailable = true;
+            push_resource_diagnostic(&mut diagnostics, error, &baseline.path, Severity::Warning);
             diagnostics.push(Diagnostic {
                 code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
                 severity: Severity::Error,
                 domain: None,
                 stage: None,
-                message: message.clone(),
+                message: error.to_string(),
                 source: Some(SourcePath::new(baseline.path.display().to_string())),
                 help: Some("verify the previous APKG path and package contents".to_string()),
             });
@@ -196,13 +216,36 @@ struct InspectedArtifact {
     summary: InspectSummary,
 }
 
-fn inspect_artifact(path: &Path) -> Result<InspectedArtifact, String> {
-    crate::writer_core::inspect_apkg(path)
-        .map_err(|err| format!("APKG could not be inspected: {}: {err}", path.display()))
-        .map(|report| {
-            let summary = inspect_summary_from_report(&report);
-            InspectedArtifact { report, summary }
-        })
+fn inspect_artifact(
+    path: &Path,
+    limits: &InspectLimits,
+) -> Result<InspectedArtifact, InspectError> {
+    crate::writer_core::inspect_apkg_with_limits(path, limits).map(|report| {
+        let summary = inspect_summary_from_report(&report);
+        InspectedArtifact { report, summary }
+    })
+}
+
+pub(crate) fn push_resource_diagnostic(
+    diagnostics: &mut Vec<Diagnostic>,
+    error: &InspectError,
+    path: &Path,
+    severity: Severity,
+) {
+    if let Some(limit) = error.limit_exceeded() {
+        let diagnostic = Diagnostic {
+            code: DiagnosticCode::new("INSPECT.RESOURCE_LIMIT_EXCEEDED"),
+            severity,
+            domain: Some(crate::diagnostics::DiagnosticDomain::new("inspection")),
+            stage: Some(crate::diagnostics::DiagnosticStage::new("inspect")),
+            message: limit.to_string(),
+            source: Some(SourcePath::new(path.display().to_string())),
+            help: Some("use a smaller APKG or explicitly raise the relevant InspectLimits budget for a trusted input".into()),
+        };
+        if !diagnostics.contains(&diagnostic) {
+            diagnostics.push(diagnostic);
+        }
+    }
 }
 
 #[cfg(test)]

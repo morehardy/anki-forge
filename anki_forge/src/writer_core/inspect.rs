@@ -1,10 +1,10 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs;
-use std::fs::File;
-use std::io::Read;
+use std::io::Write;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 
+use super::apkg_reader::ApkgReader;
+use super::inspect_limits::{check, InspectError, InspectLimits};
 use crate::authoring_core::{
     MediaReferenceResolution, NormalizedField, NormalizedGenerationRequirement, NormalizedIr,
     NormalizedNote, NormalizedNotetype, NormalizedTemplate,
@@ -15,8 +15,6 @@ use rusqlite::Connection;
 use serde::Deserialize;
 use serde_json::{json, Value};
 use sha1::Digest;
-use zip::ZipArchive;
-use zstd::stream::decode_all;
 
 use crate::writer_core::anki_proto::{
     decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
@@ -37,7 +35,6 @@ const DOMAIN_TEMPLATES: &str = "templates";
 const DOMAIN_FIELDS: &str = "fields";
 const DOMAIN_MEDIA: &str = "media";
 const DOMAIN_REFERENCES: &str = "references";
-static TEMP_PATH_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, PartialEq, Message)]
 struct PackageMetadata {
@@ -190,20 +187,33 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
     ))
 }
 
-pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
-    let path = path.as_ref();
-    let file = File::open(path).with_context(|| format!("open apkg {}", path.display()))?;
-    let mut archive =
-        ZipArchive::new(file).with_context(|| format!("open apkg archive {}", path.display()))?;
+pub fn inspect_apkg(path: impl AsRef<Path>) -> std::result::Result<InspectReport, InspectError> {
+    inspect_apkg_with_limits(path, &InspectLimits::default())
+}
+
+pub fn inspect_apkg_with_limits(
+    path: impl AsRef<Path>,
+    limits: &InspectLimits,
+) -> std::result::Result<InspectReport, InspectError> {
+    inspect_apkg_inner(path.as_ref(), limits).map_err(InspectError::from_anyhow)
+}
+
+fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectReport> {
+    let mut archive = ApkgReader::open(path, limits)?;
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
     let media = match read_media_entries(&mut archive, version) {
         Ok(media) => media,
         Err(err) => {
+            // Resource errors are terminal, unlike ordinary missing-media degradation.
+            let error = InspectError::from_anyhow(err);
+            if let InspectError::LimitExceeded(limit) = error {
+                return Err(limit.into());
+            }
             limitations.missing_domains.insert(DOMAIN_MEDIA.into());
             limitations
                 .degradation_reasons
-                .push(format!("media map unavailable: {err}"));
+                .push(format!("media map unavailable: {error}"));
             vec![]
         }
     };
@@ -225,8 +235,21 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     let mut note_identity_metadata = vec![];
     let mut notetype_model_ids = BTreeMap::new();
 
-    if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
-        let collection = read_collection_data(&collection_bytes)?;
+    let collection_root = tempfile::tempdir().context("create inspect collection directory")?;
+    let collection_path = collection_root.path().join("collection.sqlite");
+    let mut collection_file = std::fs::File::create(&collection_path)?;
+    if archive
+        .copy(
+            version.expected_collection_filename(),
+            version.zstd_compressed(),
+            "collection_bytes",
+            limits.max_collection_bytes,
+            &mut collection_file,
+        )?
+        .is_some()
+    {
+        drop(collection_file);
+        let collection = read_collection_data(&collection_path)?;
         normalized_ir.notetypes = collection.notetypes;
         notetype_model_ids = collection.notetype_model_ids;
         normalized_ir.notes = collection.notes;
@@ -823,10 +846,10 @@ fn resolve_staging_media(
     Ok((resolved, limitations))
 }
 
-fn read_package_version(
-    archive: &mut ZipArchive<File>,
-) -> Result<(PackageVersion, ReadLimitations)> {
-    if let Some(meta_bytes) = read_zip_entry_bytes(archive, "meta")? {
+fn read_package_version(archive: &mut ApkgReader<'_>) -> Result<(PackageVersion, ReadLimitations)> {
+    if let Some(meta_bytes) =
+        archive.bytes("meta", false, "meta_bytes", archive.limits.max_meta_bytes)?
+    {
         let meta = PackageMetadata::decode(meta_bytes.as_slice()).context("decode package meta")?;
         Ok((
             match meta.version {
@@ -844,103 +867,140 @@ fn read_package_version(
     }
 }
 
-fn infer_version_from_archive(archive: &mut ZipArchive<File>) -> PackageVersion {
-    if archive.by_name("collection.anki21b").is_ok() {
+fn infer_version_from_archive(archive: &ApkgReader<'_>) -> PackageVersion {
+    if archive.contains("collection.anki21b") {
         PackageVersion::Latest
-    } else if archive.by_name("collection.anki21").is_ok() {
+    } else if archive.contains("collection.anki21") {
         PackageVersion::Legacy2
     } else {
         PackageVersion::Legacy1
     }
 }
 
-fn read_expected_collection_bytes(
-    archive: &mut ZipArchive<File>,
-    version: PackageVersion,
-) -> Result<Option<Vec<u8>>> {
-    let collection_name = version.expected_collection_filename();
-    let Some(raw_bytes) = read_zip_entry_bytes(archive, collection_name)? else {
-        return Ok(None);
-    };
-    if version.zstd_compressed() {
-        Ok(Some(
-            decode_all(raw_bytes.as_slice()).context("decode zstd collection")?,
-        ))
-    } else {
-        Ok(Some(raw_bytes))
-    }
-}
-
 fn read_media_entries(
-    archive: &mut ZipArchive<File>,
+    archive: &mut ApkgReader<'_>,
     version: PackageVersion,
 ) -> Result<Vec<ResolvedMedia>> {
-    let Some(raw_bytes) = read_zip_entry_bytes(archive, "media")? else {
-        return Err(anyhow::anyhow!("media map missing"));
-    };
-
-    let decoded = if version.zstd_compressed() {
-        decode_all(raw_bytes.as_slice()).context("decode zstd media map")?
-    } else {
-        raw_bytes
-    };
-
-    if version.media_map_is_hashmap() {
+    let decoded = archive
+        .bytes(
+            "media",
+            version.zstd_compressed(),
+            "media_map_bytes",
+            archive.limits.max_media_map_bytes,
+        )?
+        .context("media map missing")?;
+    check_media_map_count(&decoded, version, archive.limits.max_entries)?;
+    let entries: Vec<(usize, String)> = if version.media_map_is_hashmap() {
         let media_map: HashMap<String, String> =
             serde_json::from_slice(&decoded).context("decode legacy media map")?;
-        let mut resolved = vec![];
-        let mut entries: BTreeMap<usize, String> = BTreeMap::new();
+        let mut entries = BTreeMap::new();
         for (index, name) in media_map {
-            let parsed_index = index
-                .parse::<usize>()
-                .with_context(|| format!("parse legacy media index {index}"))?;
-            entries.insert(parsed_index, name);
+            let index = index.parse::<usize>().context("parse legacy media index")?;
+            ensure!(
+                entries.insert(index, name).is_none(),
+                "duplicate media index"
+            );
         }
-        for (index, name) in entries {
-            let payload = read_zip_entry_bytes(archive, &index.to_string())?
-                .ok_or_else(|| anyhow::anyhow!("missing legacy media payload {}", index))?;
-            let payload = if version.zstd_compressed() {
-                decode_all(payload.as_slice()).context("decode compressed media payload")?
-            } else {
-                payload
-            };
-            resolved.push(ResolvedMedia {
-                filename: name,
-                size: payload.len(),
-                sha1_hex: hex::encode(sha1::Sha1::digest(&payload)),
-                binding_id: None,
-                object_id: None,
-                object_ref: None,
-            });
-        }
-        Ok(resolved)
+        entries.into_iter().collect()
     } else {
         let entries = MediaEntries::decode(decoded.as_slice()).context("decode media map")?;
-        let mut resolved = vec![];
-        for (index, entry) in entries.entries.into_iter().enumerate() {
-            let payload = read_zip_entry_bytes(archive, &index.to_string())?
-                .ok_or_else(|| anyhow::anyhow!("missing media payload {}", index))?;
-            let payload = if version.zstd_compressed() {
-                decode_all(payload.as_slice()).context("decode compressed media payload")?
-            } else {
-                payload
-            };
-            let sha1_hex = hex::encode(sha1::Sha1::digest(&payload));
-            resolved.push(ResolvedMedia {
-                filename: entry.name,
-                size: payload.len(),
-                sha1_hex,
-                binding_id: None,
-                object_id: None,
-                object_ref: None,
-            });
+        entries
+            .entries
+            .into_iter()
+            .enumerate()
+            .map(|(index, entry)| (index, entry.name))
+            .collect()
+    };
+    let mut resolved = Vec::new();
+    for (index, name) in entries {
+        let mut hash = MediaHash(sha1::Sha1::new());
+        let size = archive
+            .copy(
+                &index.to_string(),
+                version.zstd_compressed(),
+                "media_bytes",
+                archive.limits.max_media_bytes,
+                &mut hash,
+            )?
+            .with_context(|| format!("missing media payload {index}"))?;
+        resolved.push(ResolvedMedia {
+            filename: name,
+            size: usize::try_from(size).context("media size exceeds address space")?,
+            sha1_hex: hex::encode(hash.0.finalize()),
+            binding_id: None,
+            object_id: None,
+            object_ref: None,
+        });
+    }
+    Ok(resolved)
+}
+
+// Count entries without allocating their strings/messages. In particular, an
+// attacker can encode millions of empty protobuf messages in a small byte map.
+fn check_media_map_count(bytes: &[u8], version: PackageVersion, limit: u64) -> Result<()> {
+    if version.media_map_is_hashmap() {
+        use serde::de::{Error, IgnoredAny, MapAccess, Visitor};
+        use serde::Deserializer;
+        struct Counter<'a> {
+            count: &'a std::cell::Cell<u64>,
+            limit: u64,
         }
-        Ok(resolved)
+        impl<'de> Visitor<'de> for Counter<'_> {
+            type Value = ();
+            fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                formatter.write_str("a media map")
+            }
+            fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> std::result::Result<(), A::Error> {
+                while map.next_key::<IgnoredAny>()?.is_some() {
+                    self.count.set(self.count.get() + 1);
+                    if self.count.get() > self.limit {
+                        return Err(A::Error::custom("media entry limit exceeded"));
+                    }
+                    map.next_value::<IgnoredAny>()?;
+                }
+                Ok(())
+            }
+        }
+        let count = std::cell::Cell::new(0);
+        let mut decoder = serde_json::Deserializer::from_slice(bytes);
+        let result = decoder.deserialize_map(Counter {
+            count: &count,
+            limit,
+        });
+        // Keep a typed limit error across serde's string-only custom error API.
+        check("media_entries", Some("media"), limit, count.get())?;
+        result.context("decode legacy media map")?;
+        decoder.end()?;
+    } else {
+        use prost::encoding::{decode_key, skip_field, DecodeContext};
+        let mut remaining = bytes;
+        let mut count = 0;
+        while !remaining.is_empty() {
+            let (tag, wire) = decode_key(&mut remaining)?;
+            if tag == 1 {
+                count += 1;
+                check("media_entries", Some("media"), limit, count)?;
+            }
+            skip_field(wire, tag, &mut remaining, DecodeContext::default())?;
+        }
+    }
+    Ok(())
+}
+
+struct MediaHash(sha1::Sha1);
+
+impl Write for MediaHash {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        self.0.update(bytes);
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
     }
 }
 
-fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
-    with_temp_sqlite(bytes, |conn| {
+fn read_collection_data(path: &Path) -> Result<CollectionData> {
+    with_readonly_sqlite(path, |conn| {
         let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
         let deck_values = deck_rows
             .query_map([], |row| {
@@ -1340,29 +1400,10 @@ fn generation_requirement_from_card_requirement(
     })
 }
 
-fn with_temp_sqlite<T>(bytes: &[u8], f: impl FnOnce(&Connection) -> Result<T>) -> Result<T> {
-    let path = unique_temp_path("writer-core-inspect.sqlite");
-    fs::write(&path, bytes).with_context(|| format!("write temp sqlite {}", path.display()))?;
-    let result = (|| {
-        let conn = Connection::open(&path)
-            .with_context(|| format!("open temp sqlite {}", path.display()))?;
-        f(&conn)
-    })();
-    let _ = fs::remove_file(&path);
-    result
-}
-
-fn read_zip_entry_bytes(archive: &mut ZipArchive<File>, name: &str) -> Result<Option<Vec<u8>>> {
-    match archive.by_name(name) {
-        Ok(mut file) => {
-            let mut buf = vec![];
-            file.read_to_end(&mut buf)
-                .with_context(|| format!("read zip entry {}", name))?;
-            Ok(Some(buf))
-        }
-        Err(zip::result::ZipError::FileNotFound) => Ok(None),
-        Err(err) => Err(err.into()),
-    }
+fn with_readonly_sqlite<T>(path: &Path, f: impl FnOnce(&Connection) -> Result<T>) -> Result<T> {
+    let conn = Connection::open_with_flags(path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)
+        .context("open inspected collection read-only")?;
+    f(&conn)
 }
 
 pub fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> Result<PathBuf> {
@@ -1521,18 +1562,6 @@ fn derive_status(all_domains_present: bool, has_core_data: bool) -> String {
     } else {
         "degraded".into()
     }
-}
-
-fn unique_temp_path(name: &str) -> PathBuf {
-    let counter = TEMP_PATH_COUNTER.fetch_add(1, Ordering::Relaxed);
-    let nanos = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_nanos();
-    std::env::temp_dir().join(format!(
-        "anki-forge-{name}-{}-{nanos}-{counter}",
-        std::process::id()
-    ))
 }
 
 #[derive(Debug, Deserialize)]

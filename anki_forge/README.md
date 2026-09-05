@@ -59,6 +59,14 @@ rejected requested lockfiles are high risk and can be blocked with
 
 ## Errors and concurrency
 
+APKG inspection has finite archive, entry-count, expansion, and zstd-window
+budgets. `BuildOptions::inspect_limits(InspectLimits)` applies the same policy to
+current and baseline APKGs. Start with `InspectLimits::default()` and explicitly
+raise individual fields only for trusted large decks. Resource failures carry
+`INSPECT.RESOURCE_LIMIT_EXCEEDED`; report-only baselines remain unavailable, and
+current-artifact failures prevent publication. These are decompression budgets,
+not a total process memory or CPU sandbox.
+
 High-level `Deck` and `Project` operations return structured errors and build
 reports; callers should inspect stable diagnostic codes instead of matching
 human-readable messages. File-writing operations are synchronous and may leave

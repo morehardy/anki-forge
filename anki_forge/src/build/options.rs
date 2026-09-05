@@ -62,6 +62,7 @@ pub struct BuildOptions {
     pub artifacts_dir: Option<PathBuf>,
     pub normalize_options: Option<ProjectNormalizeOptions>,
     pub inspect: bool,
+    pub inspect_limits: crate::writer_core::InspectLimits,
     pub fail_on: Option<RiskLevel>,
     pub report_json: Option<PathBuf>,
     pub compare_to: Option<PathBuf>,
@@ -79,6 +80,7 @@ impl Default for BuildOptions {
             artifacts_dir: None,
             normalize_options: None,
             inspect: true,
+            inspect_limits: crate::writer_core::InspectLimits::default(),
             fail_on: None,
             report_json: None,
             compare_to: None,
@@ -123,6 +125,12 @@ impl BuildOptions {
 
     pub fn inspect(mut self, inspect: bool) -> Self {
         self.inspect = inspect;
+        self
+    }
+
+    /// Override the finite budgets used for current and baseline APKG inspection.
+    pub fn inspect_limits(mut self, limits: crate::writer_core::InspectLimits) -> Self {
+        self.inspect_limits = limits;
         self
     }
 

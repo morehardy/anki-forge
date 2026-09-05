@@ -1,4 +1,4 @@
-# ADR 0014: Baseline-driven deterministic note revisions
+# ADR 0015: Baseline-driven deterministic note revisions
 
 ## Decision
 
@@ -18,4 +18,4 @@ strict updates and remains explicit high risk in report-only mode.
 - Report-only never persists fallback revisions/model IDs as recovered baseline
   evidence: incomplete or rejected baselines suppress lockfile writes. Rejected
   requested lockfiles remain high risk even when their diagnostics are warnings.
-- See RFC 0004 for the content hash, migration rules, and real-import verification.
+- See RFC 0005 for the content hash, migration rules, and real-import verification.

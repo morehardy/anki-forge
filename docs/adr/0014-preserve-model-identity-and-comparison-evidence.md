@@ -1,4 +1,4 @@
-# ADR 0013: Preserve model identity and compare all observed domains
+# ADR 0014: Preserve model identity and compare all observed domains
 
 ## Decision
 
@@ -19,10 +19,10 @@ unavailable comparison status.
 - Reordering or adding note types no longer renumbers existing types.
 - Old APKGs migrate by preserving their actual IDs. Legacy lockfiles with null
   model IDs require an APKG baseline for a strict migration.
-- Contract bundle 0.4.0 documents the changed pre-1.0 derivation and stricter
+- Contract bundle 0.5.0 documents the changed pre-1.0 derivation and stricter
   validation while retaining existing note GUID and wire schema versions.
 - Detailed rationale, migration requirements, and regression coverage are in
-  RFC 0003.
+  RFC 0004.
 - Review follow-up: bundle 0.5.0 advances the observation model to
   `phase3-inspect-v2`; saved v1 reports remain readable but cross-version diffs
   are partial. Unverified report-only baselines must not rewrite lockfiles.

@@ -21,7 +21,7 @@ Lockfile JSON must use lexicographic object-key ordering by Unicode scalar value
 
 Limitations describe source evidence and diagnostics describe build events. Implementations must derive overlapping values from one internal classifier pass.
 
-## Numeric notetype identity (bundle 0.4.0)
+## Numeric notetype identity (bundle 0.5.0)
 
 The logical `note_type_id` and numeric `anki_model_id` are distinct identities.
 Model assignments are selected before writing, persisted in staging, written to

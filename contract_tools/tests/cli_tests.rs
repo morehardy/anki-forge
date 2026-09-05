@@ -691,6 +691,92 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
 }
 
 #[test]
+fn inspect_resource_limits_reach_cli_runtime_and_baseline_loading() {
+    use std::io::Write;
+    let root = tempdir().unwrap();
+    let apkg = root.path().join("meta-bomb.apkg");
+    let mut archive = zip::ZipWriter::new(fs::File::create(&apkg).unwrap());
+    archive
+        .start_file(
+            "meta",
+            zip::write::SimpleFileOptions::default()
+                .compression_method(zip::CompressionMethod::Deflated),
+        )
+        .unwrap();
+    archive.write_all(&[8, 3, 18, 128, 128, 4]).unwrap();
+    archive.write_all(&vec![0; 65_536]).unwrap();
+    archive.finish().unwrap();
+    let runtime = anki_forge::runtime::inspect_apkg_path(&apkg).unwrap_err();
+    assert!(runtime
+        .to_string()
+        .contains("INSPECT.RESOURCE_LIMIT_EXCEEDED"));
+    let baseline =
+        anki_forge::update_safety::baseline::load_previous_apkg_identity_index(&apkg, None, None)
+            .unwrap_err();
+    assert!(baseline
+        .downcast_ref::<anki_forge::writer::InspectError>()
+        .and_then(|error| error.limit_exceeded())
+        .is_some());
+    let output = run_cli(&[
+        "inspect",
+        "--apkg",
+        apkg.to_str().unwrap(),
+        "--output",
+        "contract-json",
+    ]);
+    assert!(!output.status.success());
+    assert!(
+        output.stdout.is_empty(),
+        "no successful partial report on limit errors"
+    );
+    assert!(String::from_utf8_lossy(&output.stderr).contains("INSPECT.RESOURCE_LIMIT_EXCEEDED"));
+}
+
+#[test]
+fn inspect_cleans_temporary_collection_on_success_and_sqlite_failure() {
+    use std::io::Write;
+    let root = tempdir().unwrap();
+    let baseline = build_basic_stock_baseline(root.path());
+    let scratch = root.path().join("inspect-tmp");
+    fs::create_dir(&scratch).unwrap();
+    for valid in [true, false] {
+        if !valid {
+            let mut archive = zip::ZipWriter::new(fs::File::create(&baseline).unwrap());
+            archive
+                .start_file(
+                    "collection.anki21b",
+                    zip::write::SimpleFileOptions::default(),
+                )
+                .unwrap();
+            archive
+                .write_all(&zstd::stream::encode_all(&b"not a database"[..], 0).unwrap())
+                .unwrap();
+            archive.finish().unwrap();
+        }
+        let output = Command::new(cargo_bin())
+            .args([
+                "inspect",
+                "--apkg",
+                baseline.to_str().unwrap(),
+                "--output",
+                "contract-json",
+            ])
+            .env("TMPDIR", &scratch)
+            .env("TMP", &scratch)
+            .env("TEMP", &scratch)
+            .output()
+            .unwrap();
+        assert_eq!(
+            output.status.success(),
+            valid,
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(fs::read_dir(&scratch).unwrap().count(), 0);
+    }
+}
+
+#[test]
 fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     let manifest = contract_tools::contract_manifest_path();
     let repo_root = manifest.parent().unwrap().parent().unwrap();

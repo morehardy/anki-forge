@@ -1,4 +1,4 @@
-# RFC 0003: Preserve model identity and close update comparison gaps
+# RFC 0004: Preserve model identity and close update comparison gaps
 
 Status: implemented; PR review follow-up included.
 
@@ -43,7 +43,7 @@ separate work items.
 
 ## Compatibility and rollout
 
-The bundle advances to 0.4.0 as a pre-1.0 compatibility change. New unbaselined
+The integrated bundle advances to 0.5.0 as a pre-1.0 compatibility change. New unbaselined
 builds use deterministic model IDs. Existing installations must use `compare_to`
 or a lockfile with populated model IDs on the first build after upgrading. The
 selected IDs are retained in subsequent lockfiles. Old APKG numeric IDs are
@@ -108,9 +108,9 @@ defect is left unchanged and needs a separate policy for persisted note revision
 times, unchanged-note handling, and deterministic builds. It should be the next
 update-safety repair before claiming end-to-end update readiness.
 
-Follow-up: RFC 0004 implements baseline-driven note revisions and records the
+Follow-up: RFC 0005 implements baseline-driven note revisions and records the
 successful replay of this content-update reproduction. The limitation above
-describes the result of RFC 0003 in isolation, before that follow-up repair.
+describes the result of RFC 0004 in isolation, before that follow-up repair.
 
 ### PR 36 review follow-up
 
