@@ -210,7 +210,7 @@ css_file: style.css
     let product_apkg = root.path().join("product.apkg");
     build_project(&direct, &direct_apkg);
     build_project(&bundled, &bundle_apkg);
-    Project::from_product_document(product)
+    product
         .build(BuildOptions::new().output(&product_apkg))
         .expect("product build");
 
@@ -302,7 +302,7 @@ css_file: style.css
     let product_apkg = root.path().join("product-cloze.apkg");
     build_project(&direct, &direct_apkg);
     build_project(&bundled, &bundle_apkg);
-    Project::from_product_document(product)
+    product
         .build(BuildOptions::new().output(&product_apkg))
         .expect("product build");
 

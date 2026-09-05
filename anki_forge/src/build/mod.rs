@@ -1,3 +1,4 @@
+pub(crate) mod artifact;
 pub mod json_report;
 pub mod options;
 pub mod policy;

@@ -190,7 +190,7 @@ fn inferred_stage(code: &str) -> &'static str {
 impl From<&ApkgArtifact> for ApkgArtifactJson {
     fn from(value: &ApkgArtifact) -> Self {
         Self {
-            path: value.path.display().to_string(),
+            path: value.path().display().to_string(),
         }
     }
 }

@@ -5,7 +5,7 @@
 //! may change without notice before 1.0.
 
 /// Build configuration and observable build results.
-pub use crate::build::{BuildOptions, BuildReport, MediaSummary, UpdateSafetyMode};
+pub use crate::build::{ApkgArtifact, BuildOptions, BuildReport, MediaSummary, UpdateSafetyMode};
 /// High-level deck construction, image-occlusion modes, and deck media inputs.
 pub use crate::deck::{Deck, IoMode, MediaSource};
 /// Structured diagnostics returned by validation and build operations.

@@ -73,7 +73,7 @@ fn project_from_deck_preserves_existing_image_occlusion_support() {
 }
 
 #[test]
-fn project_from_deck_rejects_extra_project_authoring_state() {
+fn project_from_deck_can_append_project_notes() {
     let root = unique_artifacts_dir("deck-project-extra-state");
     let mut deck = Deck::builder("Spanish").stable_id("spanish-v1").build();
     deck.basic()
@@ -86,15 +86,146 @@ fn project_from_deck_rejects_extra_project_authoring_state() {
         .add_note(Note::basic("adios", "goodbye").stable_id("es-adios"))
         .expect("add project note");
 
-    let err = project
+    let report = project
         .build(BuildOptions::new().output(root.join("deck.apkg")))
-        .expect_err("deck-backed project must not silently drop extra project notes");
+        .expect("an imported Deck is an editable Project");
 
-    assert!(err
-        .report
-        .diagnostic_codes()
+    assert_eq!(report.counts.notes, 2);
+    assert_eq!(report.counts.cards, 2);
+}
+
+#[test]
+fn imported_deck_media_and_new_project_media_share_one_registry() {
+    let mut deck = Deck::builder("Media").stable_id("imported-media").build();
+    deck.media()
+        .add(MediaSource::from_bytes("original.png", PNG.to_vec()))
+        .unwrap();
+    deck.basic()
+        .note("<b>front</b>", "<img src=\"original.png\">")
+        .stable_id("original")
+        .add()
+        .unwrap();
+    let mut project = Project::from(deck);
+    let image = project
+        .media_mut()
+        .add_bytes("extra", PNG.to_vec())
+        .unwrap()
+        .export_as("extra.png")
+        .unwrap();
+    project
+        .add_notetype(
+            NoteType::custom("custom")
+                .field(Field::new("Question").key("question"))
+                .template(
+                    Template::new("Card")
+                        .key("card")
+                        .front("{{Question}}")
+                        .back("{{FrontSide}}"),
+                ),
+        )
+        .unwrap();
+    project
+        .add_note(
+            Note::new("custom")
+                .stable_id("extra")
+                .image("question", image),
+        )
+        .unwrap();
+    let plan = project.lower().unwrap();
+    assert_eq!(
+        plan.authoring_document.notes[0].fields["Front"],
+        "<b>front</b>"
+    );
+    assert_eq!(plan.authoring_document.notes[0].id, "original");
+    let report = project.build(BuildOptions::new()).unwrap();
+    assert_eq!(report.counts.notes, 2);
+    assert_eq!(report.media.bindings, 2);
+    assert_eq!(report.media.references, 2);
+    assert_eq!(report.media.missing_references, 0);
+    assert!(project
+        .media_mut()
+        .add_bytes("conflict", b"different".to_vec())
+        .unwrap()
+        .export_as("original.png")
+        .is_err());
+}
+
+#[test]
+fn imported_deck_identity_provenance_survives_project_edits() {
+    let root = tempfile::tempdir().unwrap();
+    let mut deck = Deck::builder("Identity")
+        .stable_id("imported-identity")
+        .build();
+    deck.basic().note("<b>front</b>", "back").add().unwrap();
+    let snapshot = deck.notes()[0].resolved_identity().unwrap().clone();
+    let mut project = Project::from(deck);
+    project
+        .add_note(Note::basic("other", "answer").stable_id("other"))
+        .unwrap();
+    let lockfile = root.path().join("identity.json");
+    let report = project
+        .build(BuildOptions::new().first_update_safe_build(&lockfile))
+        .unwrap();
+    assert_eq!(report.counts.notes, 2);
+    let json: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(lockfile).unwrap()).unwrap();
+    let note = json["identity_index"]["notes"]
+        .as_array()
+        .unwrap()
         .iter()
-        .any(|code| code == "PROJECT.DECK_SOURCE_AUTHORING_STATE_UNSUPPORTED"));
+        .find(|note| note["stable_id"] == snapshot.stable_id)
+        .unwrap();
+    assert_eq!(note["recipe_id"], snapshot.recipe_id.unwrap());
+    assert_eq!(note["provenance"], "InferredFromStockRecipe");
+    assert_eq!(
+        note["canonical_payload_hash"],
+        format!(
+            "blake3:{}",
+            blake3::hash(snapshot.canonical_payload.unwrap().as_bytes())
+        )
+    );
+}
+
+#[test]
+fn imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata() {
+    let mut deck = Deck::builder("Original").stable_id("original").build();
+    deck.basic()
+        .note("front", "back")
+        .stable_id("note-1")
+        .add()
+        .unwrap();
+    let legacy = deck
+        .clone()
+        .into_product_document()
+        .unwrap()
+        .lower()
+        .unwrap();
+    let imported = Project::from(deck)
+        .stable_id("renamed")
+        .default_deck("Renamed")
+        .lower()
+        .unwrap();
+    assert_eq!(imported.authoring_document.metadata_document_id, "renamed");
+    assert_eq!(imported.authoring_document.notes[0].deck_name, "Renamed");
+    assert_eq!(imported.authoring_document.notetypes.len(), 3);
+    for (before, after) in legacy
+        .authoring_document
+        .notetypes
+        .iter()
+        .zip(&imported.authoring_document.notetypes)
+    {
+        assert_eq!(before.id, after.id);
+        assert_eq!(before.original_id, after.original_id);
+        assert_eq!(
+            before.fields, after.fields,
+            "stock field identities and order"
+        );
+        assert_eq!(
+            before.templates, after.templates,
+            "stock template identities and order"
+        );
+        assert_eq!(before.css, after.css);
+    }
 }
 
 fn unique_artifacts_dir(label: &str) -> PathBuf {

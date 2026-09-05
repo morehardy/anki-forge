@@ -18,7 +18,7 @@ fn deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths() {
         .build(BuildOptions::new().output(artifacts_dir.join("deck.apkg")))
         .expect("build facade");
 
-    assert!(build.artifact.as_ref().expect("artifact").path.exists());
+    assert!(build.artifact.as_ref().expect("artifact").path().exists());
     assert_eq!(build.status, BuildStatus::Success);
     assert_eq!(build.counts.notes, 1);
 

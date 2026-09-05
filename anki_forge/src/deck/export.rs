@@ -2,10 +2,7 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use crate::authoring_core::{
-    normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions,
-};
-use anyhow::{ensure, Context};
+use anyhow::Context;
 
 use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
 use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
@@ -82,7 +79,7 @@ impl Deck {
             let artifact_path = report
                 .artifact
                 .as_ref()
-                .map(|artifact| artifact.path.as_path())
+                .map(|artifact| artifact.path())
                 .unwrap_or(output.as_path());
             fs::read(artifact_path)
                 .with_context(|| format!("read apkg bytes: {}", artifact_path.display()))
@@ -107,45 +104,14 @@ fn build_package(
     artifacts_dir: impl AsRef<Path>,
 ) -> anyhow::Result<BuildResult> {
     let artifacts_dir = artifacts_dir.as_ref();
-    let root_deck = package.root_deck.clone();
-    root_deck.validate()?;
-    let media_source_dir = artifacts_dir.join(".anki-forge-media-input");
-    let media_store_dir = artifacts_dir.join(".anki-forge-media");
-    let lowered = root_deck.lower_authoring_with_media_source_dir(&media_source_dir)?;
-    let normalize_options = NormalizeOptions {
-        base_dir: media_source_dir.clone(),
-        media_store_dir: media_store_dir.clone(),
-        media_policy: MediaPolicy::default_strict(),
-    };
-    let normalized = normalize_with_options(NormalizationRequest::new(lowered), normalize_options);
-    ensure!(
-        normalized.result_status == "success",
-        "normalization failed with status {}",
-        normalized.result_status
-    );
-    let normalized_ir = normalized
-        .normalized_ir
-        .context("normalization did not produce a normalized_ir")?;
-
-    let (_runtime, writer_policy, build_context) = crate::runtime::load_default_writer_stack()?;
     let stable_ref_prefix = package
         .stable_id
         .as_deref()
         .map(|stable_id| format!("artifacts/{stable_id}"))
         .unwrap_or_else(|| "artifacts".into());
-    let artifact_target = BuildArtifactTarget::new(artifacts_dir.to_path_buf(), stable_ref_prefix)
-        .with_media_store_dir(media_store_dir);
-    let package_build_result = crate::writer::build(
-        &normalized_ir,
-        &writer_policy,
-        &build_context,
-        &artifact_target,
-    )?;
-    ensure!(
-        package_build_result.result_status == "success",
-        "build failed with status {}",
-        package_build_result.result_status
-    );
+    let artifact_target = BuildArtifactTarget::new(artifacts_dir, stable_ref_prefix.clone());
+    let (_report, package_build_result) = crate::product::Project::from(package.root_deck.clone())
+        .build_package_artifacts(artifacts_dir, stable_ref_prefix)?;
 
     let apkg_ref = package_build_result
         .apkg_ref

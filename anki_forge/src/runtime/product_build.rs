@@ -6,7 +6,7 @@ pub fn build_product_document(
     document: ProductDocument,
     options: BuildOptions,
 ) -> Result<BuildReport, crate::build::BuildError> {
-    crate::product::Project::from_product_document(document).build(options)
+    document.build(options)
 }
 
 pub fn build_product_document_with_writer_stack(
@@ -15,9 +15,5 @@ pub fn build_product_document_with_writer_stack(
     writer_policy: WriterPolicy,
     build_context: BuildContext,
 ) -> Result<BuildReport, crate::build::BuildError> {
-    crate::product::Project::from_product_document(document).build_with_writer_stack(
-        options,
-        writer_policy,
-        build_context,
-    )
+    document.build_with_writer_stack(options, writer_policy, build_context)
 }

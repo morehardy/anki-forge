@@ -1,5 +1,4 @@
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::PathBuf;
 use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
@@ -7,10 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::build::{BuildPolicyResult, BuildStatus, ComparisonStatus};
 use crate::diagnostics::{Diagnostic, Severity};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ApkgArtifact {
-    pub path: PathBuf,
-}
+pub use super::artifact::ApkgArtifact;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct BuildCounts {
@@ -254,37 +250,10 @@ impl BuildReport {
     }
 
     pub fn ensure_success(&self) -> Result<(), BuildError> {
-        if self
-            .diagnostics
-            .iter()
-            .any(|diagnostic| diagnostic.severity == Severity::Error)
-        {
-            return Err(BuildError::new(
-                self.clone(),
-                BuildFailureCause::Diagnostics,
-            ));
+        match failure_cause(&self.diagnostics, self.status, self.artifact.is_some()) {
+            Some(cause) => Err(BuildError::new(self.clone(), cause)),
+            None => Ok(()),
         }
-
-        if !self.status.is_success() {
-            let cause = match self.status {
-                BuildStatus::Invalid => BuildFailureCause::Invalid,
-                BuildStatus::Error => BuildFailureCause::Internal,
-                BuildStatus::Blocked => BuildFailureCause::PolicyBlocked,
-                BuildStatus::Success => BuildFailureCause::Internal,
-            };
-            return Err(BuildError::new(self.clone(), cause));
-        }
-
-        // Rejected candidates are intentionally not published. Preserve the
-        // failure status above instead of reporting a missing artifact for them.
-        if self.artifact.is_none() {
-            return Err(BuildError::new(
-                self.clone(),
-                BuildFailureCause::MissingArtifact,
-            ));
-        }
-
-        Ok(())
     }
 
     pub fn warning_count(&self) -> usize {
@@ -458,3 +427,25 @@ impl std::fmt::Display for BuildError {
 }
 
 impl std::error::Error for BuildError {}
+
+pub(crate) fn failure_cause(
+    diagnostics: &[Diagnostic],
+    status: BuildStatus,
+    has_artifact: bool,
+) -> Option<BuildFailureCause> {
+    if diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.severity == Severity::Error)
+    {
+        return Some(BuildFailureCause::Diagnostics);
+    }
+    if !status.is_success() {
+        return Some(match status {
+            BuildStatus::Invalid => BuildFailureCause::Invalid,
+            BuildStatus::Error => BuildFailureCause::Internal,
+            BuildStatus::Blocked => BuildFailureCause::PolicyBlocked,
+            BuildStatus::Success => unreachable!(),
+        });
+    }
+    (!has_artifact).then_some(BuildFailureCause::MissingArtifact)
+}

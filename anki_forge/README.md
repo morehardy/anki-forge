@@ -57,6 +57,29 @@ lockfile unchanged, even if writing was requested, and report
 rejected requested lockfiles are high risk and can be blocked with
 `.fail_on(RiskLevel::High)`.
 
+## Artifact ownership
+
+`Project::from(deck)` imports the Deck into editable Project state. You can then
+add notes, custom note types, template bundles, and media normally. Imported
+HTML, note identities, media sources, and diagnostic locations are preserved.
+
+`build(BuildOptions::new())` returns a temporary `ApkgArtifact`. Keep the report
+or clone its artifact handle while using `artifact.path()`. The last report,
+error, or artifact clone removes the temporary APKG; staging files are already
+cleaned up when the build returns. Copying only the path does not keep it alive.
+
+For a permanent file, use `write_apkg(path)`, `BuildOptions::output(path)`, or
+`artifact.persist_to(path)?`. The latter atomically copies the APKG and returns
+a persistent handle without changing the lifetime of existing clones. Explicit
+`output` and `artifacts_dir` destinations are never deleted by handle cleanup.
+Persisting a temporary artifact onto its own path is rejected.
+
+Automatic `report_json` requires an explicit `output` or `artifacts_dir`, since
+JSON cannot own a temporary file. Manually serialized reports are snapshots;
+persist the artifact first if its path must remain usable after the handle drops.
+A late lockfile/report failure retains any already-published artifact in the
+returned error report.
+
 ## Errors and concurrency
 
 APKG inspection has finite archive, entry-count, expansion, and zstd-window

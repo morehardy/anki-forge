@@ -139,6 +139,8 @@ impl BuildOptions {
         self
     }
 
+    /// Write a report snapshot. Requires an explicit `output` or `artifacts_dir`
+    /// because serialized JSON cannot retain a temporary artifact's lifetime.
     pub fn report_json(mut self, path: impl Into<PathBuf>) -> Self {
         self.report_json = Some(path.into());
         self

@@ -13,9 +13,9 @@ use anki_forge::diagnostics::{Diagnostic, DiagnosticCode, ErrorCode, Severity, S
 #[test]
 fn build_report_ensure_success_accepts_successful_artifact() {
     let report = BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/spanish.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/spanish.apkg",
+        ))),
         counts: BuildCounts {
             notes: 2,
             cards: 2,
@@ -44,9 +44,9 @@ fn build_report_ensure_success_accepts_successful_artifact() {
 #[test]
 fn build_report_ensure_success_rejects_error_diagnostic() {
     let report = BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/spanish.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/spanish.apkg",
+        ))),
         counts: BuildCounts {
             notes: 1,
             cards: 1,
@@ -122,9 +122,9 @@ fn build_report_ensure_success_prefers_diagnostics_over_missing_artifact() {
 #[test]
 fn build_report_ensure_success_uses_status_precedence_over_policy_status() {
     let report = BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/internal-error.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/internal-error.apkg",
+        ))),
         counts: BuildCounts {
             notes: 1,
             cards: 1,
@@ -186,9 +186,9 @@ fn build_error_without_diagnostics_uses_stable_cause_code() {
 #[test]
 fn build_report_ensure_success_accepts_warning_diagnostics() {
     let report = BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/spanish.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/spanish.apkg",
+        ))),
         counts: BuildCounts {
             notes: 1,
             cards: 1,
@@ -234,9 +234,9 @@ fn build_report_ensure_success_accepts_warning_diagnostics() {
 #[test]
 fn build_report_pretty_report_prints_media_rows_and_sorted_diagnostics() {
     let report = BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/media.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/media.apkg",
+        ))),
         counts: BuildCounts {
             notes: 1,
             cards: 1,
@@ -453,9 +453,9 @@ fn comparison_status_serializes_as_snake_case() {
 
 fn successful_report_fixture() -> BuildReport {
     BuildReport {
-        artifact: Some(ApkgArtifact {
-            path: PathBuf::from("out/success.apkg"),
-        }),
+        artifact: Some(ApkgArtifact::from_persistent_path(PathBuf::from(
+            "out/success.apkg",
+        ))),
         counts: BuildCounts {
             notes: 1,
             cards: 1,

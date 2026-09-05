@@ -8,6 +8,14 @@ new minor release.
 
 ### Fixed
 
+- Import Decks into a single editable Project state, preserving raw HTML,
+  identity evidence, source locations, stock declaration order, and media.
+  Project additions no longer fail late or silently lose media after import.
+- Share versioned-document and Project builds through private pipeline stages
+  and one report finalizer. Late failures preserve completed counts and evidence;
+  candidates remain private until inspection and policy acceptance.
+- Own temporary APKG output with shared artifact handles instead of leaking
+  the entire staging workspace. Late errors retain published artifact ownership.
 - Register every built-in diagnostic and risk code and check production source
   coverage. Discover semantics from the manifest and require exact baseline
   change evidence with version bumps in repository/release contract gates.
@@ -53,6 +61,14 @@ new minor release.
 
 ### Compatibility
 
+- Breaking Rust interface change: replace `artifact.path` with `artifact.path()`.
+  Keep the report/artifact handle alive or call `artifact.persist_to(path)`;
+  copying a temporary path no longer retains its file. Automatic `report_json`
+  now requires `output` or `artifacts_dir`. These changes require a new minor
+  crate release, not a patch release in the published 0.1 line.
+- Internal-tools callers build versioned inputs with `ProductDocument::build`
+  (or the runtime adapter), not `Project::from_product_document`. Documents are
+  not editable Projects, and Product v2/v3 interpretation remains unchanged.
 - Embedded contract bundle advances to `0.6.0`, adding registry coverage and
   executable contract governance to the 0.5.0 update-safety changes. To update
   previously distributed decks, provide `compare_to(previous.apkg)` or a lockfile
