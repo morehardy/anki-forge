@@ -1,4 +1,229 @@
 codes:
+  - id: COMPARE.BASELINE_UNAVAILABLE
+    status: active
+    summary: baseline APKG could not be inspected for comparison
+  - id: COMPARE.CURRENT_UNAVAILABLE
+    status: active
+    summary: current APKG could not be inspected for comparison
+  - id: COMPARE.DIFF_FAILED
+    status: active
+    summary: inspected artifacts could not be compared
+  - id: DIFF.TEMP_DIR_FAILED
+    status: active
+    summary: temporary workspace for project comparison could not be created
+  - id: MEDIA.EXPORT_NAME_CONTAINS_SEPARATOR
+    status: active
+    summary: media export name contains a path separator
+  - id: MEDIA.EXPORT_NAME_EMPTY
+    status: active
+    summary: media export name is empty
+  - id: MEDIA.EXPORT_NAME_NOT_BARE_FILENAME
+    status: active
+    summary: media export name is not a bare filename
+  - id: MEDIA.EXPORT_NAME_UNSAFE_CHARACTER
+    status: active
+    summary: media export name contains an unsafe character
+  - id: NOTETYPE.FIELD_KEY_AUTO_DERIVED
+    status: active
+    summary: field key was derived automatically from its display name
+  - id: NOTETYPE.IDENTITY_RECIPE_MISSING
+    status: active
+    summary: custom note type has no identity recipe
+  - id: NOTETYPE.ID_DUPLICATE
+    status: active
+    summary: note type id is declared more than once
+  - id: PHASE2.EXTERNAL_ID_REQUIRED
+    status: active
+    summary: external identity override requires an external id
+  - id: PHASE2.IDENTITY_OVERRIDE_UNSUPPORTED
+    status: active
+    summary: identity override mode is not supported
+  - id: PHASE2.IDENTITY_RANDOM_OVERRIDE
+    status: active
+    summary: random identity override reduces reproducibility
+  - id: PHASE2.MISSING_DOCUMENT_ID
+    status: active
+    summary: authoring document id is missing
+  - id: PHASE2.REASON_CODE_REQUIRED
+    status: active
+    summary: identity override requires a reason code
+  - id: PHASE2.SELECTOR_AMBIGUOUS
+    status: active
+    summary: target selector matches more than one object
+  - id: PHASE2.SELECTOR_INVALID
+    status: active
+    summary: target selector syntax is invalid
+  - id: PHASE2.SELECTOR_UNMATCHED
+    status: active
+    summary: target selector matches no object
+  - id: PHASE3.APKG_EMISSION_FAILED
+    status: active
+    summary: staging artifact could not be emitted as APKG
+  - id: PHASE3.DUPLICATE_NOTETYPE_ID
+    status: active
+    summary: normalized note type id is duplicated
+  - id: PHASE3.INVALID_NOTE_MTIME
+    status: active
+    summary: normalized note modification time is invalid
+  - id: PHASE3.NOTE_FIELD_MISMATCH
+    status: active
+    summary: note fields do not match the declared note type
+  - id: PHASE3.STAGING_DISABLED
+    status: active
+    summary: writer policy disables staging materialization
+  - id: PHASE3.STAGING_MATERIALIZATION_FAILED
+    status: active
+    summary: writer could not materialize the staging artifact
+  - id: PHASE3.STOCK_NOTETYPE_SHAPE_MISMATCH
+    status: active
+    summary: stock note type differs from the supported canonical shape
+  - id: PHASE3.UNKNOWN_NOTETYPE_ID
+    status: active
+    summary: note references an unknown normalized note type
+  - id: PHASE3.UNRESOLVED_MEDIA_REFERENCE
+    status: active
+    summary: writer input contains an unresolved media reference
+  - id: PHASE3.UNSUPPORTED_MEDIA_RESOLUTION_MODE
+    status: active
+    summary: normalized media resolution mode is unsupported
+  - id: PHASE3.UNSUPPORTED_NOTETYPE_KIND
+    status: active
+    summary: writer does not support the normalized note type kind
+  - id: PHASE3.UNSUPPORTED_STOCK_KIND
+    status: active
+    summary: normalization does not support the requested stock note type
+  - id: PHASE5A.FONT_BINDING_UNKNOWN_NOTETYPE
+    status: active
+    summary: font binding references an unknown note type
+  - id: PHASE5A.HELPER_SCOPE_INVALID
+    status: active
+    summary: product helper is used outside its supported scope
+  - id: PHASE5A.IO_IMAGE_REQUIRED
+    status: active
+    summary: image occlusion requires an image
+  - id: PRODUCT.CUSTOM_NOTE_TYPE_MISSING
+    status: active
+    summary: custom note references a missing note type
+  - id: PRODUCT.FIELD_CONTENT_KIND_UNSUPPORTED
+    status: active
+    summary: typed field content kind is unsupported
+  - id: PRODUCT.GENERATION_RULE_INVALID
+    status: active
+    summary: card generation rule is invalid
+  - id: PRODUCT.IDENTITY_KIND_UNSUPPORTED
+    status: active
+    summary: product identity recipe kind is unsupported
+  - id: PRODUCT.MEDIA_HELPER_REFERENCE_UNREGISTERED
+    status: active
+    summary: media helper references unregistered media
+  - id: PRODUCT.MEDIA_MISSING
+    status: active
+    summary: typed field content references missing media
+  - id: PRODUCT.MEDIA_SOURCE_KIND_UNSUPPORTED
+    status: active
+    summary: product media source kind is unsupported
+  - id: PRODUCT.REQUIRED_FIELD_MISSING
+    status: active
+    summary: required product note field is empty or missing
+  - id: PRODUCT.RESERVED_ID_KIND_MISMATCH
+    status: active
+    summary: reserved stock note type id has the wrong kind
+  - id: PRODUCT.STOCK_NOTE_TYPE_INVALID
+    status: active
+    summary: stock note type declaration differs from its canonical definition
+  - id: PRODUCT.STOCK_NOTE_TYPE_MISSING
+    status: active
+    summary: stock note references a missing stock note type
+  - id: PRODUCT.UNSUPPORTED_KIND
+    status: active
+    summary: product document contains an unsupported note or note type kind
+  - id: PRODUCT.VERSION_UNSUPPORTED
+    status: active
+    summary: explicit product document version is unsupported
+  - id: PROJECT.ARTIFACTS_DIR_FAILED
+    status: active
+    summary: artifact workspace could not be created
+  - id: PROJECT.ARTIFACT_REF_FAILED
+    status: active
+    summary: writer artifact reference could not be resolved
+  - id: PROJECT.BUILD_STATUS_FAILED
+    status: active
+    summary: writer returned a non-success build status
+  - id: PROJECT.DECK_LOWER_FAILED
+    status: active
+    summary: deck source could not be lowered into a product document
+  - id: PROJECT.DECK_MEDIA_FAILED
+    status: active
+    summary: deck media could not be prepared for normalization
+  - id: PROJECT.DECK_SOURCE_AUTHORING_STATE_UNSUPPORTED
+    status: active
+    summary: deck-backed project contains unsupported direct authoring state
+  - id: PROJECT.DECK_VALIDATE_FAILED
+    status: active
+    summary: deck source validation failed
+  - id: PROJECT.EMPTY
+    status: active
+    summary: project contains no notes to build
+  - id: PROJECT.NORMALIZE_FAILED
+    status: active
+    summary: project normalization failed
+  - id: PROJECT.OUTPUT_WRITE_FAILED
+    status: active
+    summary: APKG output could not be published
+  - id: PROJECT.REPORT_JSON_WRITE_FAILED
+    status: active
+    summary: build report JSON could not be written
+  - id: PROJECT.RUNTIME_DEFAULTS_FAILED
+    status: active
+    summary: embedded runtime defaults could not be loaded
+  - id: PROJECT.UNSUPPORTED_NOTE_TYPE
+    status: active
+    summary: project note references an unsupported note type
+  - id: PROJECT.WRITER_FAILED
+    status: active
+    summary: project writer invocation failed
+  - id: RISK.ARTIFACT_DIFF
+    status: active
+    summary: artifact comparison contains compatibility-relevant changes
+  - id: RISK.BASELINE_UNAVAILABLE
+    status: active
+    summary: baseline evidence is unavailable or unverified
+  - id: RISK.CARD_COUNT_CHANGED
+    status: active
+    summary: generated card count changed
+  - id: RISK.FIELD_ADDED
+    status: active
+    summary: a note type field was added
+  - id: RISK.FIELD_REMOVED_OR_RENAMED
+    status: active
+    summary: a note type field was removed or renamed
+  - id: RISK.MEDIA_REFERENCE_BROKEN
+    status: active
+    summary: artifact contains a broken media reference
+  - id: RISK.MEDIA_REMOVED
+    status: active
+    summary: previously present media was removed
+  - id: RISK.NOTETYPE_CONFIG_ID_DRIFT
+    status: active
+    summary: note type merge identity changed
+  - id: RISK.NOTE_GUID_DRIFT
+    status: active
+    summary: note GUID assignment changed
+  - id: RISK.NOTE_UPDATE_UNVERIFIED
+    status: active
+    summary: note update cannot be verified against baseline revision evidence
+  - id: RISK.TEMPLATE_REMOVED
+    status: active
+    summary: a card template was removed
+  - id: RISK.TEMPLATE_REORDER
+    status: active
+    summary: card template ordering changed
+  - id: RISK.TEMPLATE_TARGET_DECK_CHANGED
+    status: active
+    summary: card template target deck changed
+  - id: TEMPLATE.REQUIRED_FIELD_MISSING
+    status: active
+    summary: template generation requires a field that is empty or missing
   - id: INSPECT.RESOURCE_LIMIT_EXCEEDED
     status: active
     summary: APKG inspection exceeded a finite archive, decoding, or entry budget

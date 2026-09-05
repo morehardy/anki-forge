@@ -8,6 +8,9 @@ use crate::{
     schema::{load_schema, validate_value},
 };
 
+mod source;
+pub use source::run_source_registry_gates;
+
 #[derive(Debug, Deserialize)]
 pub struct ErrorCode {
     pub id: String,

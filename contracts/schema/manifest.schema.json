@@ -6,7 +6,8 @@
   "properties": {
     "bundle_version": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
     },
     "component_versions": {
       "type": "object",
@@ -100,6 +101,10 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "bundle_change": {
+          "type": "string",
+          "minLength": 1
+        },
         "manifest_schema": {
           "type": "string",
           "minLength": 1

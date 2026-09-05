@@ -13,6 +13,22 @@ enum Command {
     Verify {
         #[arg(long)]
         manifest: String,
+        /// Repository root whose production diagnostics must be registered.
+        #[arg(long)]
+        source_root: Option<std::path::PathBuf>,
+        /// Previous bundle manifest used to enforce the real version bump.
+        #[arg(long)]
+        baseline_manifest: Option<std::path::PathBuf>,
+        /// Require an older bundle baseline for release verification.
+        #[arg(long, requires = "baseline_manifest")]
+        release: bool,
+    },
+    /// Print a change-record template with the exact published asset digests.
+    Changes {
+        #[arg(long)]
+        manifest: std::path::PathBuf,
+        #[arg(long)]
+        baseline_manifest: std::path::PathBuf,
     },
     Summary {
         #[arg(long)]
@@ -94,9 +110,40 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Command::Verify { manifest } => {
+        Command::Verify {
+            manifest,
+            source_root,
+            baseline_manifest,
+            release,
+        } => {
             contract_tools::gates::run_all(&manifest)?;
+            if let Some(root) = source_root {
+                contract_tools::registry::run_source_registry_gates(
+                    std::path::Path::new(&manifest),
+                    &root,
+                )?;
+            }
+            if let Some(baseline) = baseline_manifest {
+                let check = if release {
+                    contract_tools::versioning::run_release_change_gates
+                } else {
+                    contract_tools::versioning::run_change_gates
+                };
+                check(std::path::Path::new(&manifest), &baseline)?;
+            }
             println!("verification passed");
+        }
+        Command::Changes {
+            manifest,
+            baseline_manifest,
+        } => {
+            print!(
+                "{}",
+                serde_yaml::to_string(&contract_tools::versioning::change_record_template(
+                    &manifest,
+                    &baseline_manifest
+                )?)?
+            );
         }
         Command::Summary { manifest } => {
             println!("{}", contract_tools::summary::render(&manifest)?);

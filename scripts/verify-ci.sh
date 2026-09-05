@@ -8,7 +8,7 @@ Usage: scripts/verify-ci.sh [--fast|--ci]
 Runs the verification gates expected before a PR is marked ready.
 
 Modes:
-  --fast  Rust formatting, clippy, workspace tests, and whitespace checks.
+  --fast  Rust formatting, contract governance, clippy, workspace tests, and whitespace checks.
   --ci    Full local mirror of .github/workflows/contract-ci.yml. This is the default.
 USAGE
 }
@@ -58,6 +58,7 @@ dist_dir="$repo_root/dist"
 python_path="$repo_root/bindings/python/src"
 
 run cargo fmt --all -- --check
+run bash ./scripts/check_contract_governance.sh
 run cargo clippy --workspace --all-targets -- -D warnings
 run cargo test --workspace -v
 if [[ "$mode" == "ci" ]]; then

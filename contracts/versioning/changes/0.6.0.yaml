@@ -1,0 +1,17 @@
+baseline_version: 0.5.0
+bundle_version: 0.6.0
+compatibility_class: behavior_tightening_compatible
+summary: >-
+  Register existing production diagnostic and risk codes without renaming them,
+  require valid SemVer manifest versions, and enforce source coverage and exact
+  baseline change evidence in repository and release contract verification.
+changes:
+  - path: errors/error-registry.yaml
+    before: blake3:087a1f1532c8800a90a72154ca439bf2de5d2ee1c0e2f0bad536aa5bc96234bb
+    after: blake3:7fca0cb851ca157078b80aa22123f75b22c6296b5e2c82ddcd21e3d212b115f7
+  - path: schema/manifest.schema.json
+    before: blake3:cab9d9c046d22ff681f17c933da953ebe75e9bfa5749c23da61679bc7974f4b1
+    after: blake3:223e9ca30b986d8add1de2ba9a56690c55685a633188e4524b9ddc8898864775
+  - path: versioning/policy.md
+    before: blake3:48d7ddbd4a0c3a9f01f83e121184da29874b937f4d71e4744371431f119f842e
+    after: blake3:54d5b5cef5695084e67ac7ec2fc313f3431787c456f3f6080a438a7127486bf7

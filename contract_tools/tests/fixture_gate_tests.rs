@@ -24,7 +24,7 @@ fn missing_template_bundle_dependencies_fail_verify_and_package() {
     let output = tempfile::tempdir().expect("package output");
     let artifact = output
         .path()
-        .join("anki-forge-contract-bundle-0.5.0.tar.gz");
+        .join("anki-forge-contract-bundle-0.6.0.tar.gz");
     fs::write(&artifact, b"previous artifact").expect("seed previous artifact");
 
     for (bundle, files) in [

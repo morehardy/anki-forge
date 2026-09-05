@@ -8,6 +8,9 @@ new minor release.
 
 ### Fixed
 
+- Register every built-in diagnostic and risk code and check production source
+  coverage. Discover semantics from the manifest and require exact baseline
+  change evidence with version bumps in repository/release contract gates.
 - Bound APKG inspection, including ZIP/ZIP64 indexing, nested zstd windows,
   per-entry and cumulative expansion. Stream media hashes and temporary
   collections; expose `InspectLimits` overrides and terminal resource diagnostics.
@@ -50,8 +53,10 @@ new minor release.
 
 ### Compatibility
 
-- Embedded contract bundle advances to `0.5.0`. To update previously distributed
-  decks, provide `compare_to(previous.apkg)` or a lockfile with numeric model IDs.
+- Embedded contract bundle advances to `0.6.0`, adding registry coverage and
+  executable contract governance to the 0.5.0 update-safety changes. To update
+  previously distributed decks, provide `compare_to(previous.apkg)` or a lockfile
+  with numeric model IDs.
   A legacy lockfile with null model IDs needs the previous APKG in strict mode;
   rewrite the lockfile after migration. Note GUID derivation is unchanged.
 - Strict updates also require note revision evidence. Legacy lockfiles recover it

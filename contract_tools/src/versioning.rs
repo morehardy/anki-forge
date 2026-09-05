@@ -7,6 +7,11 @@ use crate::{
     manifest::{load_manifest, resolve_asset_path, resolve_contract_relative_path},
 };
 
+mod changes;
+pub use changes::{
+    change_record_template, run_change_gates, run_release_change_gates, BundleChangeRecord,
+};
+
 #[derive(Debug, Deserialize)]
 struct CompatibilityClasses {
     classes: Vec<String>,
@@ -24,6 +29,7 @@ struct UpgradeRule {
 
 pub fn run_versioning_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
+    changes::validate_current_record(&manifest)?;
     let policy_path = resolve_asset_path(&manifest, "version_policy")?;
     let classes_path = resolve_asset_path(&manifest, "compatibility_classes")?;
     let rules_path = resolve_asset_path(&manifest, "upgrade_rules")?;
