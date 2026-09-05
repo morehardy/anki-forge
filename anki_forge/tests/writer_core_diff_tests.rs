@@ -7,8 +7,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use anki_forge::authoring::stock::resolve_stock_notetype;
 use anki_forge::authoring::{
-    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedIr, NormalizedNote,
-    NormalizedNotetype,
+    AuthoringNotetype, MediaReference, MediaReferenceResolution, NormalizedFieldMetadata,
+    NormalizedIr, NormalizedNote, NormalizedNotetype,
 };
 use anki_forge::writer::{
     build, diff_reports, inspect_apkg, inspect_staging, BuildArtifactTarget, BuildContext,
@@ -40,6 +40,83 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
     assert!(diff.uncompared_domains.is_empty());
     assert!(diff.comparison_limitations.is_empty());
     assert!(diff.changes.is_empty(), "{:#?}", diff.changes);
+}
+
+#[test]
+fn staging_and_apkg_agree_on_browser_template_sentinels() {
+    for question in [None, Some(""), Some("{{Front}}"), Some(" \t\n")] {
+        for answer in [None, Some(""), Some("{{Back}}"), Some(" \t\n")] {
+            for font in [None, Some(""), Some("Arial"), Some(" \t\n")] {
+                for size in [None, Some(0), Some(18)] {
+                    let root = tempfile::tempdir().unwrap();
+                    let target = BuildArtifactTarget::new(
+                        root.path().to_path_buf(),
+                        "artifacts/phase3/diff-browser-sentinels",
+                    );
+                    let mut normalized = sample_basic_normalized_ir();
+                    let template = &mut normalized.notetypes[0].templates[0];
+                    template.browser_question_format = question.map(str::to_owned);
+                    template.browser_answer_format = answer.map(str::to_owned);
+                    template.browser_font_name = font.map(str::to_owned);
+                    template.browser_font_size = size;
+                    let input = json!([question, answer, font, size]);
+
+                    build(
+                        &normalized,
+                        &sample_writer_policy(),
+                        &sample_build_context(true),
+                        &target,
+                    )
+                    .unwrap();
+                    let staging = inspect_staging(target.staging_manifest_path()).unwrap();
+                    let apkg = inspect_apkg(root.path().join("package.apkg")).unwrap();
+                    assert_eq!(
+                        staging.observations.browser_templates, apkg.observations.browser_templates,
+                        "{input}"
+                    );
+                    for (before, after) in [(&staging, &apkg), (&apkg, &staging)] {
+                        let diff = diff_reports(before, after).unwrap();
+                        assert_eq!(diff.comparison_status, "complete", "{input}");
+                        assert!(diff.changes.is_empty(), "{input}: {:#?}", diff.changes);
+                    }
+
+                    // Empty/zero sentinels mean no override; whitespace is significant.
+                    let expected = json!({
+                        "browser_question_format": match question {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_answer_format": match answer {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_font_name": match font {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_font_size": match size {
+                            Some(0) => None,
+                            value => value,
+                        },
+                    });
+                    let has_override = expected
+                        .as_object()
+                        .unwrap()
+                        .values()
+                        .any(|value| !value.is_null());
+                    for report in [&staging, &apkg] {
+                        let entries = &report.observations.browser_templates;
+                        assert_eq!(entries.len(), usize::from(has_override), "{input}");
+                        if has_override {
+                            for (key, value) in expected.as_object().unwrap() {
+                                assert_eq!(&entries[0][key], value, "{input}: {key}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[test]
@@ -182,6 +259,35 @@ fn diff_reports_emit_stable_selector_and_evidence_refs_for_domain_changes() {
 }
 
 #[test]
+fn legacy_staging_recovers_positional_ids_but_explicit_empty_plan_is_invalid() {
+    let root = tempfile::tempdir().unwrap();
+    let target = BuildArtifactTarget::new(root.path(), "artifacts");
+    build(
+        &sample_basic_normalized_ir(),
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+    let path = target.staging_manifest_path();
+    let mut manifest: serde_json::Value =
+        serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    manifest
+        .as_object_mut()
+        .unwrap()
+        .remove("notetype_model_ids");
+    fs::write(&path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+    let legacy = inspect_staging(&path).unwrap();
+    assert_eq!(legacy.observations.notetypes[0]["anki_model_id"], 1);
+    manifest["notetype_model_ids"] = json!({});
+    fs::write(&path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+    let error = inspect_staging(&path).unwrap_err();
+    assert!(error
+        .to_string()
+        .contains("UPDATE.WRITER_NOTETYPE_ID_PLAN_MISMATCH"));
+}
+
+#[test]
 fn diff_reports_only_strip_media_provenance_from_media_domain() {
     let left = sample_inspect_report("Basic");
     let mut right = left.clone();
@@ -192,6 +298,128 @@ fn diff_reports_only_strip_media_provenance_from_media_domain() {
     assert_eq!(diff.changes.len(), 1);
     assert_eq!(diff.changes[0].domain, "references");
     assert_eq!(diff.changes[0].selector, "note[id='note-1']");
+}
+
+#[test]
+fn diff_covers_field_metadata_browser_templates_and_target_decks() {
+    let left = sample_inspect_report("Basic");
+    let mut right = left.clone();
+    right.observations.field_metadata.push(json!({
+        "selector": "notetype[id='basic-main']::field-metadata[Front]",
+        "label": "Prompt",
+    }));
+    right.observations.browser_templates.push(json!({
+        "selector": "notetype[id='basic-main']::browser-template[Card 1]",
+        "browser_question_format": "{{Front}}",
+    }));
+    right.observations.template_target_decks.push(json!({
+        "selector": "notetype[id='basic-main']::template-target-deck[Card 1]",
+        "target_deck_name": "Study",
+        "resolved_target_deck_id": 42,
+    }));
+    for (before, after, category) in [(&left, &right, "added"), (&right, &left, "removed")] {
+        let diff = diff_reports(before, after).unwrap();
+        for domain in [
+            "field_metadata",
+            "browser_templates",
+            "template_target_decks",
+        ] {
+            assert!(
+                diff.changes
+                    .iter()
+                    .any(|change| change.domain == domain && change.category == category),
+                "missing {domain}: {diff:#?}"
+            );
+        }
+    }
+    let mut modified = right.clone();
+    modified.observations.field_metadata[0]["label"] = json!("Question");
+    modified.observations.browser_templates[0]["browser_question_format"] =
+        json!("<b>{{Front}}</b>");
+    modified.observations.template_target_decks[0]["resolved_target_deck_id"] = json!(43);
+    let diff = diff_reports(&right, &modified).unwrap();
+    assert_eq!(diff.changes.len(), 3);
+    assert!(diff
+        .changes
+        .iter()
+        .all(|change| change.category == "modified"));
+}
+
+#[test]
+fn diff_marks_unavailable_extended_domains_and_unknown_domains_as_partial() {
+    for domain in [
+        "field_metadata",
+        "browser_templates",
+        "template_target_decks",
+        "future_domain",
+    ] {
+        let left = sample_inspect_report("Basic");
+        let mut right = left.clone();
+        right.missing_domains.push(domain.into());
+        let diff = diff_reports(&left, &right).unwrap();
+        assert_eq!(diff.comparison_status, "partial", "{domain}");
+        assert!(diff.uncompared_domains.contains(&domain.to_string()));
+        assert_ne!(diff.summary, "no compatibility-significant changes");
+    }
+}
+
+#[test]
+fn extended_metadata_changes_survive_apkg_roundtrip_and_reach_risk_report() {
+    let root = tempfile::tempdir().unwrap();
+    let mut before = sample_basic_normalized_ir();
+    before.notetypes[0].field_metadata = vec![NormalizedFieldMetadata {
+        field_name: "Front".into(),
+        label: Some("Prompt".into()),
+        role_hint: Some("question".into()),
+    }];
+    before.notetypes[0].templates[0].browser_question_format = Some("{{Front}}".into());
+    before.notetypes[0].templates[0].target_deck_name = Some("Deck A".into());
+    // Keep note and actual card deck observations aligned as well.
+    before.notes[0].deck_name = "Deck A".into();
+    let mut after = before.clone();
+    after.notetypes[0].field_metadata[0].label = Some("Question".into());
+    after.notetypes[0].templates[0].browser_question_format = Some("<b>{{Front}}</b>".into());
+    after.notetypes[0].templates[0].target_deck_name = Some("Deck B".into());
+    after.notes[0].deck_name = "Deck B".into();
+    let mut reports = Vec::new();
+    for (name, normalized) in [("before", before), ("after", after)] {
+        let target = BuildArtifactTarget::new(root.path().join(name), "artifacts");
+        build(
+            &normalized,
+            &sample_writer_policy(),
+            &sample_build_context(true),
+            &target,
+        )
+        .unwrap();
+        let apkg = inspect_apkg(root.path().join(name).join("package.apkg")).unwrap();
+        let staging = inspect_staging(target.staging_manifest_path()).unwrap();
+        let roundtrip = diff_reports(&staging, &apkg).unwrap();
+        assert!(roundtrip.changes.is_empty(), "{roundtrip:#?}");
+        reports.push(apkg);
+    }
+    let diff = diff_reports(&reports[0], &reports[1]).unwrap();
+    for domain in [
+        "field_metadata",
+        "browser_templates",
+        "template_target_decks",
+    ] {
+        assert!(
+            diff.changes.iter().any(|change| change.domain == domain),
+            "{diff:#?}"
+        );
+    }
+    let summary = anki_forge::diff::summarize_writer_diff(&diff);
+    let risk = anki_forge::risk::rules::classify_import_risk(anki_forge::risk::rules::RiskInput {
+        diagnostics: &[],
+        comparison: anki_forge::build::ComparisonStatus::Complete,
+        diff: Some(&summary),
+        current_inspect: None,
+        previous_inspect: None,
+        update_safety: None,
+    });
+    assert!(risk.findings.iter().any(|finding| finding.code
+        == "RISK.TEMPLATE_TARGET_DECK_CHANGED"
+        && finding.level == anki_forge::build::RiskLevel::Medium));
 }
 
 fn sample_writer_policy() -> WriterPolicy {

@@ -29,7 +29,7 @@ use crate::writer_core::staging::{
     ResolvedTemplateTargetDeck,
 };
 
-const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v1";
+const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v2";
 const DOMAIN_NOTETYPES: &str = "notetypes";
 const DOMAIN_TEMPLATES: &str = "templates";
 const DOMAIN_FIELDS: &str = "fields";
@@ -105,6 +105,7 @@ struct ResolvedMedia {
 #[derive(Debug, Clone)]
 struct CollectionData {
     notetypes: Vec<NormalizedNotetype>,
+    notetype_model_ids: BTreeMap<String, i64>,
     notes: Vec<NormalizedNote>,
     note_identity_metadata: Vec<Value>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
@@ -170,6 +171,10 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &manifest.template_target_decks,
         None,
         &note_identity_metadata,
+        &crate::writer_core::staging::staging_notetype_ids(
+            &manifest.normalized_ir,
+            manifest.notetype_model_ids,
+        )?,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
@@ -228,6 +233,7 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
     let mut template_target_decks = vec![];
     let mut actual_card_decks = BTreeMap::new();
     let mut note_identity_metadata = vec![];
+    let mut notetype_model_ids = BTreeMap::new();
 
     let collection_root = tempfile::tempdir().context("create inspect collection directory")?;
     let collection_path = collection_root.path().join("collection.sqlite");
@@ -245,6 +251,7 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
         drop(collection_file);
         let collection = read_collection_data(&collection_path)?;
         normalized_ir.notetypes = collection.notetypes;
+        notetype_model_ids = collection.notetype_model_ids;
         normalized_ir.notes = collection.notes;
         note_identity_metadata = collection.note_identity_metadata;
         template_target_decks = collection.template_target_decks;
@@ -255,6 +262,14 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
         limitations.missing_domains.insert(DOMAIN_TEMPLATES.into());
         limitations.missing_domains.insert(DOMAIN_FIELDS.into());
         limitations.missing_domains.insert(DOMAIN_REFERENCES.into());
+        for domain in [
+            "field_metadata",
+            "browser_templates",
+            "template_target_decks",
+            "metadata",
+        ] {
+            limitations.missing_domains.insert(domain.into());
+        }
         limitations
             .degradation_reasons
             .push("collection database is unavailable".into());
@@ -266,6 +281,7 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
         &template_target_decks,
         Some(&actual_card_decks),
         &note_identity_metadata,
+        &notetype_model_ids,
     );
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
@@ -336,17 +352,18 @@ fn fingerprint_report(
 }
 
 fn strip_evidence_refs(observations: &InspectObservations) -> Value {
-    json!({
-        "notetypes": observations.notetypes.iter().map(strip_value).collect::<Vec<_>>(),
-        "templates": observations.templates.iter().map(strip_value).collect::<Vec<_>>(),
-        "fields": observations.fields.iter().map(strip_value).collect::<Vec<_>>(),
-        "media": observations.media.iter().map(strip_value).collect::<Vec<_>>(),
-        "field_metadata": observations.field_metadata.iter().map(strip_value).collect::<Vec<_>>(),
-        "browser_templates": observations.browser_templates.iter().map(strip_value).collect::<Vec<_>>(),
-        "template_target_decks": observations.template_target_decks.iter().map(strip_value).collect::<Vec<_>>(),
-        "metadata": observations.metadata.iter().map(strip_value).collect::<Vec<_>>(),
-        "references": observations.references.iter().map(strip_value).collect::<Vec<_>>(),
-    })
+    Value::Object(
+        observations
+            .domains()
+            .into_iter()
+            .map(|(domain, values)| {
+                (
+                    domain.to_string(),
+                    Value::Array(values.iter().map(strip_value).collect()),
+                )
+            })
+            .collect(),
+    )
 }
 
 fn strip_value(value: &Value) -> Value {
@@ -371,6 +388,7 @@ fn build_observations(
     template_target_decks: &[ResolvedTemplateTargetDeck],
     actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
     note_identity_metadata: &[Value],
+    notetype_model_ids: &BTreeMap<String, i64>,
 ) -> InspectObservations {
     let staging_decks = actual_card_decks
         .is_none()
@@ -414,6 +432,7 @@ fn build_observations(
         notetype_entries.push(json!({
             "selector": format!("notetype[id='{}']", notetype_id),
             "id": notetype_id,
+            "anki_model_id": notetype_model_ids.get(notetype_id),
             "kind": notetype_kind,
             "original_stock_kind": notetype.original_stock_kind,
             "name": notetype_name,
@@ -469,19 +488,34 @@ fn build_observations(
             }
             template_entries.push(template_entry);
 
-            if template.browser_question_format.is_some()
-                || template.browser_answer_format.is_some()
-                || template.browser_font_name.is_some()
-                || template.browser_font_size.is_some()
+            // Anki stores absent browser overrides as empty strings or zero.
+            // Match APKG inspection before deciding whether an entry exists.
+            let browser_question_format = template
+                .browser_question_format
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_answer_format = template
+                .browser_answer_format
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_font_name = template
+                .browser_font_name
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_font_size = template.browser_font_size.filter(|value| *value != 0);
+            if browser_question_format.is_some()
+                || browser_answer_format.is_some()
+                || browser_font_name.is_some()
+                || browser_font_size.is_some()
             {
                 browser_template_entries.push(json!({
                     "selector": format!("notetype[id='{}']::browser-template[{}]", notetype_id, template_name),
                     "notetype_id": notetype_id,
                     "template_name": template_name,
-                    "browser_question_format": template.browser_question_format,
-                    "browser_answer_format": template.browser_answer_format,
-                    "browser_font_name": template.browser_font_name,
-                    "browser_font_size": template.browser_font_size,
+                    "browser_question_format": browser_question_format,
+                    "browser_answer_format": browser_answer_format,
+                    "browser_font_name": browser_font_name,
+                    "browser_font_size": browser_font_size,
                     "evidence_refs": [format!("browser-template:{}:{}", notetype_id, template_name)],
                 }));
             }
@@ -520,6 +554,7 @@ fn build_observations(
             "deck_name": observed_deck_name(&note.deck_name),
             "tags": &note.tags,
             "fields": &note.fields,
+            "revision": super::note_revision::NoteRevision::from_note(note),
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
@@ -1069,6 +1104,7 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
         }
 
         let mut notetypes_by_row_id = BTreeMap::new();
+        let mut notetype_model_ids = BTreeMap::new();
         let mut notetype_values = vec![];
         let mut template_target_decks = vec![];
         for (row_id, name, config_bytes) in raw_notetypes {
@@ -1200,6 +1236,7 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
                 css: config.css,
                 field_metadata,
             };
+            notetype_model_ids.insert(notetype.id.clone(), row_id);
             notetypes_by_row_id.insert(row_id, notetype.clone());
             notetype_values.push(notetype);
         }
@@ -1266,14 +1303,12 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
                 let notetype = notetypes_by_row_id
                     .get(&mid)
                     .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
-                let field_values: Vec<_> = if flds.is_empty() {
-                    vec![]
-                } else {
-                    flds.split('\u{1f}').map(|s| s.to_string()).collect()
-                };
+                // Empty storage is one empty field, not an absent field list.
+                // split also retains empty values between/trailing separators.
+                let field_values = flds.split('\u{1f}');
                 let mut fields = BTreeMap::new();
                 for (field, value) in notetype.fields.iter().zip(field_values) {
-                    fields.insert(field.name.clone(), value);
+                    fields.insert(field.name.clone(), value.to_string());
                 }
                 let note = NormalizedNote {
                     id: guid.clone(),
@@ -1324,6 +1359,7 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
 
         Ok(CollectionData {
             notetypes: notetype_values,
+            notetype_model_ids,
             notes,
             note_identity_metadata,
             template_target_decks,
@@ -1492,7 +1528,14 @@ mod tests {
         };
         let actual_cards = BTreeMap::from([(("note-1".into(), 0), "Deck".into())]);
 
-        let observations = build_observations(&normalized_ir, &[], &[], Some(&actual_cards), &[]);
+        let observations = build_observations(
+            &normalized_ir,
+            &[],
+            &[],
+            Some(&actual_cards),
+            &[],
+            &BTreeMap::new(),
+        );
 
         assert!(observations
             .references
@@ -1537,6 +1580,8 @@ fn derive_status(all_domains_present: bool, has_core_data: bool) -> String {
 #[derive(Debug, Deserialize)]
 struct StagingManifest {
     normalized_ir: NormalizedIr,
+    #[serde(default)]
+    notetype_model_ids: Option<BTreeMap<String, i64>>,
     #[serde(default)]
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
 }

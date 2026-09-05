@@ -94,7 +94,7 @@ fn workspace_runtime_discovers_manifest_bundle_root_and_bundle_version() {
     assert_eq!(resolved.mode, RuntimeMode::Workspace);
     assert!(resolved.manifest_path.ends_with("contracts/manifest.yaml"));
     assert!(resolved.bundle_root.ends_with("contracts"));
-    assert_eq!(resolved.bundle_version, "0.4.0");
+    assert_eq!(resolved.bundle_version, "0.5.0");
 }
 
 #[test]
@@ -220,4 +220,37 @@ fn runtime_build_accepts_serialized_normalized_output_from_normalize() {
 
     assert_eq!(build_result.kind, "package-build-result");
     assert_eq!(build_result.result_status, "success");
+}
+
+#[test]
+fn saved_legacy_inspection_compares_partially_with_current_evidence() {
+    let root = tempfile::tempdir().unwrap();
+    let apkg = root.path().join("deck.apkg");
+    let mut project = anki_forge::Project::new("Versioned evidence");
+    project
+        .add_note(anki_forge::prelude::Note::basic("Question", "Answer").stable_id("note"))
+        .unwrap();
+    project.write_apkg(&apkg).unwrap();
+    let current = inspect_apkg_path(&apkg).unwrap();
+    let mut legacy = current.clone();
+    legacy.observation_model_version = "phase3-inspect-v1".into();
+    for notetype in &mut legacy.observations.notetypes {
+        notetype.as_object_mut().unwrap().remove("anki_model_id");
+    }
+    for reference in &mut legacy.observations.references {
+        reference.as_object_mut().unwrap().remove("revision");
+    }
+    let old_path = root.path().join("old.inspect.json");
+    let new_path = root.path().join("new.inspect.json");
+    write_json_fixture(&old_path, &legacy);
+    write_json_fixture(&new_path, &current);
+
+    let diff = diff_from_paths(&old_path, &new_path).unwrap();
+    assert_eq!(diff.comparison_status, "partial", "{diff:?}");
+    assert!(diff
+        .comparison_limitations
+        .contains(&"observation model versions differ".into()));
+    let same_model = diff_from_paths(&new_path, &new_path).unwrap();
+    assert_eq!(same_model.comparison_status, "complete");
+    assert!(same_model.changes.is_empty());
 }

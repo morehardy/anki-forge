@@ -395,3 +395,41 @@ test('structured diff returns partial result without throwing', async () => {
   assert.equal(result.comparison_status, 'partial');
   assert.equal(result.helper.isPartial, true);
 });
+
+test('structured observation versions support legacy, current, and mixed reports', async () => {
+  const fixture = (name) => JSON.parse(fs.readFileSync(
+    path.join(repoRoot, 'contracts/fixtures/phase3/expected', name), 'utf8',
+  ));
+  const runtimeFor = (payload) => ({
+    mode: 'installed',
+    manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'),
+    bundleRoot: path.join(repoRoot, 'contracts'),
+    launcherExecutable: process.execPath,
+    launcherPrefix: [fakeLauncherScript(`process.stdout.write(${JSON.stringify(JSON.stringify(payload))});`)],
+  });
+  for (const version of ['phase3-inspect-v1', 'phase3-inspect-v2']) {
+    const payload = fixture('basic.inspect.json');
+    payload.observation_model_version = version;
+    const result = await inspect({ apkgPath: 'unused.apkg' }, runtimeFor(payload));
+    assert.equal(result.observation_model_version, version);
+  }
+  for (const [left, right] of [
+    ['phase3-inspect-v1', 'phase3-inspect-v2'],
+    ['phase3-inspect-v2', 'phase3-inspect-v1'],
+    ['phase3-inspect-v2', 'phase3-inspect-v2'],
+  ]) {
+    const payload = fixture('basic.diff.json');
+    payload.left_observation_model_version = left;
+    payload.right_observation_model_version = right;
+    payload.comparison_status = left === right ? 'complete' : 'partial';
+    payload.comparison_limitations = left === right ? [] : ['observation model versions differ'];
+    const result = await diff({ leftPath: 'left.json', rightPath: 'right.json' }, runtimeFor(payload));
+    assert.equal(result.comparison_status, payload.comparison_status);
+  }
+  const unknown = fixture('basic.inspect.json');
+  unknown.observation_model_version = 'phase3-inspect-v999';
+  await assert.rejects(
+    () => inspect({ apkgPath: 'unused.apkg' }, runtimeFor(unknown)),
+    (error) => error instanceof ProtocolParseError && error.parsePhase === 'contract-version',
+  );
+});

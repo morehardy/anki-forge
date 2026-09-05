@@ -72,6 +72,12 @@ pub fn build_current_identity_index(input: CurrentIdentityInput<'_>) -> CurrentI
     for notetype in &input.normalized.notetypes {
         index.push_current_notetype(notetype);
     }
+    for notetype in &mut index.notetypes {
+        notetype.anki_model_id = Some(crate::writer_core::identity::derived_notetype_id(
+            &input.normalized.document_id,
+            &notetype.note_type_id,
+        ));
+    }
 
     CurrentIdentityOutput { index, diagnostics }
 }

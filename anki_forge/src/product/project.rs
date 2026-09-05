@@ -1040,7 +1040,7 @@ impl Project {
                 return return_report_error(&options, report, BuildFailureCause::Diagnostics);
             }
         };
-        let normalized = normalized_output.normalized_ir;
+        let mut normalized = normalized_output.normalized_ir;
         let media_source_modes = normalized_output.media_source_modes;
         diagnostics.extend(normalized_output.diagnostics);
         deduplicate_diagnostics(&mut diagnostics);
@@ -1196,7 +1196,7 @@ impl Project {
             }
         }
 
-        let current_identity = crate::update_safety::current::build_current_identity_index(
+        let mut current_identity = crate::update_safety::current::build_current_identity_index(
             crate::update_safety::current::CurrentIdentityInput {
                 project_stable_id: self.stable_id.as_deref(),
                 normalized: &normalized,
@@ -1379,7 +1379,6 @@ impl Project {
                 let lf_index = lockfile
                     .as_ref()
                     .map(|lockfile| lockfile.identity_index.clone());
-                let lockfile_index = lf_index.clone();
 
                 let previous_index = if let Some(path) = options.compare_to.as_ref() {
                     match baseline
@@ -1580,8 +1579,45 @@ impl Project {
                     }
                 })?;
                 diagnostics.extend(reconcile.diagnostics.clone());
-                let baseline_for_merge = previous_index.as_ref().or(lf_index.as_ref());
-                if let Some(baseline_for_merge) = baseline_for_merge {
+                let mut model_diagnostics =
+                    crate::update_safety::notetype_ids::reconcile_notetype_ids(
+                        &mut current_identity.index,
+                        previous_index.as_ref(),
+                        lf_index.as_ref(),
+                    );
+                let model_id_collision = model_diagnostics.iter().any(|diagnostic| {
+                    diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_COLLISION"
+                });
+                if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
+                    for diagnostic in &mut model_diagnostics {
+                        if diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_MISSING" {
+                            diagnostic.severity = Severity::Warning;
+                        }
+                    }
+                }
+                diagnostics.extend(model_diagnostics);
+                let mut revision_diagnostics = crate::update_safety::note_revisions::reconcile(
+                    &mut current_identity.index,
+                    &mut normalized,
+                    previous_index.as_ref(),
+                    lf_index.as_ref(),
+                );
+                let revision_overflow = revision_diagnostics
+                    .iter()
+                    .any(|diagnostic| diagnostic.code.as_str() == "UPDATE.NOTE_MTIME_OVERFLOW");
+                if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
+                    for diagnostic in &mut revision_diagnostics {
+                        if diagnostic.code.as_str() == "UPDATE.NOTE_REVISION_MISSING" {
+                            diagnostic.severity = Severity::Warning;
+                        }
+                    }
+                }
+                diagnostics.extend(revision_diagnostics);
+                let lockfile_index = crate::update_safety::notetype_ids::combined_baseline(
+                    previous_index.as_ref(),
+                    lf_index.as_ref(),
+                );
+                if let Some(baseline_for_merge) = lockfile_index.as_ref() {
                     let mut merge_diagnostics =
                         crate::update_safety::merge_safety::compare_notetype_merge_safety(
                             &current_identity.index,
@@ -1592,10 +1628,12 @@ impl Project {
                     }
                     diagnostics.extend(merge_diagnostics);
                 }
-                if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
-                    && diagnostics
-                        .iter()
-                        .any(|diagnostic| diagnostic.severity == Severity::Error)
+                if model_id_collision
+                    || revision_overflow
+                    || (matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                        && diagnostics
+                            .iter()
+                            .any(|diagnostic| diagnostic.severity == Severity::Error))
                 {
                     let update_safety_summary =
                         crate::update_safety::report::summary_from_reconcile(
@@ -1659,6 +1697,35 @@ impl Project {
                 (reconcile, writer_guid_plan, summary, lockfile_index)
             };
 
+        let lockfile_evidence_unverified =
+            matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly)
+                && diagnostics.iter().any(|diagnostic| {
+                    matches!(
+                        diagnostic.code.as_str(),
+                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE"
+                            | "UPDATE.BASELINE_APKG_UNREADABLE"
+                            | "UPDATE.NOTETYPE_MODEL_ID_MISSING"
+                            | "UPDATE.NOTE_REVISION_MISSING"
+                    )
+                });
+        let write_identity_lockfile =
+            options.write_identity_lockfile && !lockfile_evidence_unverified;
+        if options.write_identity_lockfile && lockfile_evidence_unverified {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED"),
+                severity: Severity::Warning,
+                domain: None,
+                stage: None,
+                message: "identity lockfile was not written because baseline evidence is unverified"
+                    .into(),
+                source: options
+                    .identity_lockfile
+                    .as_ref()
+                    .map(|path| SourcePath::new(path.display().to_string())),
+                help: Some("restore readable baseline evidence and recover missing identities or revisions from the previous APKG before writing the lockfile".into()),
+            });
+        }
+
         let candidate_dir = artifact_workspace.create_candidate_dir().map_err(|error| {
             let report = failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", error.to_string());
             match maybe_write_report_json(&options, report) {
@@ -1671,13 +1738,24 @@ impl Project {
                 .with_media_store_dir(media_store_dir.clone());
         let apkg_target = BuildArtifactTarget::new(candidate_dir.path(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
-        let package_build_result = crate::writer_core::build::build_with_guid_plan_and_apkg_target(
+        let notetype_ids = current_identity
+            .index
+            .notetypes
+            .iter()
+            .filter_map(|notetype| {
+                notetype
+                    .anki_model_id
+                    .map(|id| (notetype.note_type_id.clone(), id))
+            })
+            .collect::<BTreeMap<_, _>>();
+        let package_build_result = crate::writer_core::build_with_identity_plan(
             &normalized,
             &writer_policy,
             &build_context,
             &artifact_target,
             &apkg_target,
             Some(&writer_guid_plan),
+            Some(&notetype_ids),
         )
         .map_err(|err| {
             let report = failure_report(started, "PROJECT.WRITER_FAILED", err.to_string());
@@ -1848,7 +1926,7 @@ impl Project {
         if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
             return return_path_validation_error(&options, report, *diagnostic);
         }
-        if options.write_identity_lockfile {
+        if write_identity_lockfile {
             if let Some(path) = options.identity_lockfile.as_ref() {
                 let selected_index = crate::update_safety::reconcile::selected_identity_index(
                     &current_identity.index,

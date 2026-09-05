@@ -305,6 +305,9 @@ codes:
   - id: UPDATE.LOCKFILE_PATH_REQUIRED
     status: active
     summary: lockfile write was requested without a lockfile path
+  - id: UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED
+    status: active
+    summary: report-only lockfile write was skipped because baseline identity or revision evidence is unverified
   - id: UPDATE.LOCKFILE_ABSENT_ENTRIES_HIGH
     status: active
     summary: lockfile contains many absent entries
@@ -353,6 +356,42 @@ codes:
   - id: UPDATE.NOTETYPE_SET_CHANGED
     status: active
     summary: notetype set changed
+  - id: UPDATE.NOTETYPE_MODEL_ID_CHANGED
+    status: active
+    summary: numeric Anki model ID changed for the same logical note type
+  - id: UPDATE.NOTE_REVISION_MISSING
+    status: active
+    summary: baseline lacks full-content revision evidence required for a strict note update
+  - id: UPDATE.NOTE_REVISION_INVALID
+    status: active
+    summary: note revision requires a positive modification time and a supported full-content hash
+  - id: UPDATE.NOTE_REVISION_CONFLICT
+    status: active
+    summary: actual APKG note content and modification time override conflicting lockfile evidence
+  - id: UPDATE.NOTE_MTIME_OVERFLOW
+    status: active
+    summary: changed note cannot advance beyond the maximum modification time
+  - id: UPDATE.NOTETYPE_MODEL_ID_MISSING
+    status: active
+    summary: legacy baseline lacks numeric model ID evidence required for strict updates
+  - id: UPDATE.NOTETYPE_MODEL_ID_CONFLICT
+    status: active
+    summary: actual APKG model ID overrides conflicting lockfile evidence
+  - id: UPDATE.NOTETYPE_MODEL_ID_COLLISION
+    status: active
+    summary: distinct or duplicated logical note type identities share a reserved numeric ID
+  - id: UPDATE.NOTETYPE_MODEL_ID_INVALID
+    status: active
+    summary: baseline numeric model ID is not positive
+  - id: UPDATE.WRITER_NOTETYPE_ID_PLAN_MISMATCH
+    status: active
+    summary: writer model assignments do not match the normalized note types
+  - id: UPDATE.FIELD_ADDED
+    status: active
+    summary: field key was added and existing note content needs review
+  - id: UPDATE.FIELD_REMOVED
+    status: active
+    summary: field key was removed and existing note content may be discarded
   - id: UPDATE.NOTETYPE_RENAMED
     status: active
     summary: notetype was renamed while stable id remained unchanged

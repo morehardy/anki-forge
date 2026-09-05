@@ -1,9 +1,9 @@
 {
-  "artifact_fingerprint": "artifact:ea596ed056d3bfed3c9eed90dc26fd33c6aa9ddc",
+  "artifact_fingerprint": "artifact:83338ee5021d0bdcb07b25cf1059f8e464fb4b7a",
   "degradation_reasons": [],
   "kind": "inspect-report",
   "missing_domains": [],
-  "observation_model_version": "phase3-inspect-v1",
+  "observation_model_version": "phase3-inspect-v2",
   "observation_status": "complete",
   "observations": {
     "browser_templates": [],
@@ -112,6 +112,7 @@
     ],
     "notetypes": [
       {
+        "anki_model_id": 6081320750580002,
         "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
         "evidence_refs": [
           "notetype:io-main"
@@ -140,6 +141,10 @@
         },
         "id": "note-io-1",
         "notetype_id": "io-main",
+        "revision": {
+          "content_hash": "note-content.v1:blake3:9ba239fae8fb6a62fee07c80b2e4973c9b6ab2db6ec31920dba439caf0484c5d",
+          "mtime_secs": 1
+        },
         "selector": "note[id='note-io-1']",
         "tags": [
           "demo"

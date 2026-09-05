@@ -8,6 +8,34 @@ use serde_json::Value;
 use std::fs;
 
 #[test]
+fn identity_index_schema_accepts_legacy_and_valid_revisions_but_rejects_invalid_evidence() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "identity_index_schema").unwrap()).unwrap();
+    let mut index: Value = serde_json::from_str(
+        &fs::read_to_string(
+            manifest
+                .contracts_root
+                .join("fixtures/update-safety/current-index.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    assert!(validate_value(&schema, &index).is_ok());
+    let revision = json!({"content_hash": format!("note-content.v1:blake3:{}", "a".repeat(64)), "mtime_secs": 42});
+    index["notes"][0]["revision"] = revision.clone();
+    assert!(validate_value(&schema, &index).is_ok());
+    for invalid in [
+        json!({"content_hash": "wrong", "mtime_secs": 42}),
+        json!({"content_hash": revision["content_hash"], "mtime_secs": 0}),
+        json!({"content_hash": revision["content_hash"]}),
+    ] {
+        index["notes"][0]["revision"] = invalid;
+        assert!(validate_value(&schema, &index).is_err());
+    }
+}
+
+#[test]
 fn authoring_ir_schema_accepts_the_minimal_valid_shape() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =

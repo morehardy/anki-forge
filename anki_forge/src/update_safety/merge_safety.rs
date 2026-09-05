@@ -50,6 +50,15 @@ fn compare_notetype(
     baseline: &NotetypeIdentityEntry,
     diagnostics: &mut Vec<Diagnostic>,
 ) {
+    if let (Some(current_id), Some(baseline_id)) = (current.anki_model_id, baseline.anki_model_id) {
+        if current_id != baseline_id {
+            diagnostics.push(error(
+                "UPDATE.NOTETYPE_MODEL_ID_CHANGED",
+                &current.note_type_id,
+                "Anki notetype model ID changed",
+            ));
+        }
+    }
     if current.name != baseline.name {
         diagnostics.push(warning(
             "UPDATE.NOTETYPE_RENAMED",
@@ -66,6 +75,11 @@ fn compare_fields(
     baseline: &NotetypeIdentityEntry,
     diagnostics: &mut Vec<Diagnostic>,
 ) {
+    let current_by_key: BTreeMap<_, _> = current
+        .fields
+        .iter()
+        .map(|field| (field.field_key.as_str(), field))
+        .collect();
     let baseline_by_key: BTreeMap<_, _> = baseline
         .fields
         .iter()
@@ -74,8 +88,27 @@ fn compare_fields(
     for field in &current.fields {
         if let Some(old) = baseline_by_key.get(field.field_key.as_str()) {
             compare_field(field, old, &current.note_type_id, diagnostics);
+        } else {
+            diagnostics.push(warning(
+                "UPDATE.FIELD_ADDED",
+                &field_source(&current.note_type_id, &field.field_name),
+                "field was added; review how existing notes receive its value",
+            ));
         }
     }
+    for old in &baseline.fields {
+        if !current_by_key.contains_key(old.field_key.as_str()) {
+            diagnostics.push(error(
+                "UPDATE.FIELD_REMOVED",
+                &field_source(&current.note_type_id, &old.field_name),
+                "field was removed; importing may discard existing field content",
+            ));
+        }
+    }
+}
+
+fn field_source(notetype_id: &str, field_name: &str) -> String {
+    format!("notetype[id='{notetype_id}']::field[{field_name}]")
 }
 
 fn compare_field(

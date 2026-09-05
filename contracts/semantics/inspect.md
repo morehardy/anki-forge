@@ -17,12 +17,38 @@ and the structured observation buckets required by the schema.
 Inspection must preserve compatibility-relevant structure and avoid packaging
 noise that does not help compare writer outputs.
 
+Bundle 0.5.0 emits observation model `phase3-inspect-v2` for the numeric model-ID
+and full-content revision evidence below. Saved `phase3-inspect-v1` reports remain
+readable, but comparing v1 and v2 reports is partial and records that observation
+model versions differ. Node and Python bindings accept both supported versions,
+including mixed-version diff reports, and continue rejecting unknown versions.
+
+Each notetype observation includes its numeric `anki_model_id`. APKG inspection
+reads it from the collection, while staging inspection reads the selected model
+assignment. It is not inferred from declaration order for new staging artifacts.
+
+Each note reference observation also carries full-content `revision` evidence:
+the versioned content digest and effective `mtime_secs`. Inspection recomputes the
+digest and reads actual APKG modification times; embedded identity metadata does
+not override note storage. Staging uses its selected time, or the legacy default
+`1` if no explicit note time exists.
+
+Field storage preserves empty values, including the single-field case where
+`notes.flds` is an empty string. It represents one empty field value, not an
+absent field map, and contributes the declared field name/value to the digest.
+
 `Phase 5A` inspect output includes three additional structured observation
 buckets beyond the existing core note/card/media data:
 
 - `field_metadata` for field labels and role hints
 - `browser_templates` for browser-specific template appearance declarations
 - `template_target_decks` for template deck declarations with resolved deck ids
+
+Browser template observations use Anki's absent-override semantics: empty browser
+question/answer formats and font names, and font size `0`, are observed as `null`.
+A template with no remaining browser overrides has no `browser_templates` entry.
+Staging and APKG inspection apply the same rules; nonempty strings (including
+whitespace-only strings) and nonzero font sizes remain unchanged.
 
 Deck routing observations expose `deck_name` on note and card reference entries.
 For staging sources, note deck names follow normalized IR and card deck names

@@ -6,15 +6,6 @@ use serde_json::Value;
 use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
 use crate::writer_core::to_canonical_json;
 
-const DOMAINS: [&str; 6] = [
-    "notetypes",
-    "templates",
-    "fields",
-    "media",
-    "metadata",
-    "references",
-];
-
 pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
     let mut uncompared_domains = BTreeSet::new();
     let mut comparison_limitations = BTreeSet::new();
@@ -22,24 +13,30 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
 
     let mut comparison_status = compare_status(left, right);
 
-    for domain in DOMAINS {
-        if left.missing_domains.iter().any(|missing| missing == domain) {
-            uncompared_domains.insert(domain.to_string());
-            comparison_limitations.insert(format!("left report missing {domain} domain"));
-            continue;
+    for (side, report) in [("left", left), ("right", right)] {
+        for domain in &report.missing_domains {
+            uncompared_domains.insert(domain.clone());
+            comparison_limitations.insert(format!("{side} report missing {domain} domain"));
         }
-        if right
-            .missing_domains
-            .iter()
-            .any(|missing| missing == domain)
-        {
-            uncompared_domains.insert(domain.to_string());
-            comparison_limitations.insert(format!("right report missing {domain} domain"));
+    }
+    if left.observation_model_version != right.observation_model_version {
+        comparison_limitations.insert("observation model versions differ".into());
+        if comparison_status == "complete" {
+            comparison_status = "partial".into();
+        }
+    }
+    for ((domain, left_values), (_, right_values)) in left
+        .observations
+        .domains()
+        .into_iter()
+        .zip(right.observations.domains())
+    {
+        if uncompared_domains.contains(domain) {
             continue;
         }
 
-        let left_entries = domain_entries(left, domain);
-        let right_entries = domain_entries(right, domain);
+        let left_entries = domain_entries(left_values);
+        let right_entries = domain_entries(right_values);
         let mut selectors = BTreeSet::new();
         selectors.extend(left_entries.keys().cloned());
         selectors.extend(right_entries.keys().cloned());
@@ -78,7 +75,9 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         };
     }
 
-    let summary = if changes.is_empty() {
+    let summary = if changes.is_empty() && comparison_status != "complete" {
+        "no changes detected in compared domains; comparison is incomplete".into()
+    } else if changes.is_empty() {
         "no compatibility-significant changes".into()
     } else {
         format!("{} change(s) detected", changes.len())
@@ -123,17 +122,7 @@ fn compare_status(left: &InspectReport, right: &InspectReport) -> String {
     }
 }
 
-fn domain_entries(report: &InspectReport, domain: &str) -> BTreeMap<String, Value> {
-    let values = match domain {
-        "notetypes" => &report.observations.notetypes,
-        "templates" => &report.observations.templates,
-        "fields" => &report.observations.fields,
-        "media" => &report.observations.media,
-        "metadata" => &report.observations.metadata,
-        "references" => &report.observations.references,
-        _ => return BTreeMap::new(),
-    };
-
+fn domain_entries(values: &[Value]) -> BTreeMap<String, Value> {
     let mut entries = BTreeMap::new();
     for value in values {
         let Some(selector) = value.get("selector").and_then(Value::as_str) else {
@@ -220,6 +209,7 @@ fn change_for_removed(domain: &str, selector: &str, left: &Value) -> Result<Diff
 fn severity_for_domain(domain: &str) -> &'static str {
     match domain {
         "metadata" => "low",
+        "field_metadata" | "browser_templates" => "low",
         _ => "medium",
     }
 }
@@ -232,6 +222,11 @@ fn compatibility_hint(domain: &str) -> String {
         "media" => "compare the media layout and payload metadata".into(),
         "metadata" => "compare aggregate counts and package metadata".into(),
         "references" => "compare note, card, and media-reference selectors".into(),
+        "field_metadata" => "compare field labels and role hints".into(),
+        "browser_templates" => "compare browser-specific template appearance".into(),
+        "template_target_decks" => {
+            "review template deck routing and resolved deck identities".into()
+        }
         _ => "compare the selected observation domain".into(),
     }
 }

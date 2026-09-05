@@ -37,11 +37,21 @@
         "note_type_id": { "type": "string", "minLength": 1 },
         "recipe_id": { "type": "string", "minLength": 1 },
         "canonical_payload_hash": { "type": "string", "pattern": "^blake3:[0-9a-f]{64}$" },
+        "revision": { "$ref": "#/definitions/note_revision" },
         "provenance": { "enum": ["ExplicitStableId", "InferredFromNoteFields", "InferredFromNotetypeFields", "InferredFromStockRecipe", "unknown_baseline"] },
         "used_override": { "type": "boolean" },
         "entry_lifecycle": { "enum": ["active", "absent_from_current"] },
         "source_path": { "type": "string" },
         "recovery_method": { "enum": ["current_resolution", "embedded_metadata", "lockfile_join", "guid_equals_stable_id", "unrecoverable"] }
+      }
+    },
+    "note_revision": {
+      "type": "object",
+      "required": ["content_hash", "mtime_secs"],
+      "additionalProperties": false,
+      "properties": {
+        "content_hash": { "type": "string", "pattern": "^note-content\\.v1:blake3:[0-9a-f]{64}$" },
+        "mtime_secs": { "type": "integer", "minimum": 1 }
       }
     },
     "notetype_identity_entry": {
@@ -50,7 +60,7 @@
       "additionalProperties": false,
       "properties": {
         "note_type_id": { "type": "string", "minLength": 1 },
-        "anki_model_id": { "type": ["integer", "null"] },
+        "anki_model_id": { "type": ["integer", "null"], "minimum": 1 },
         "name": { "type": "string", "minLength": 1 },
         "fields": { "type": "array", "items": { "$ref": "#/definitions/field_merge_entry" } },
         "templates": { "type": "array", "items": { "$ref": "#/definitions/template_merge_entry" } }

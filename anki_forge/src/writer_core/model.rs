@@ -92,6 +92,34 @@ pub struct InspectObservations {
     pub references: Vec<Value>,
 }
 
+impl InspectObservations {
+    pub(crate) fn domains(&self) -> [(&'static str, &[Value]); 9] {
+        // An exhaustive destructure makes adding a field require updating this inventory.
+        let Self {
+            notetypes,
+            templates,
+            fields,
+            media,
+            field_metadata,
+            browser_templates,
+            template_target_decks,
+            metadata,
+            references,
+        } = self;
+        [
+            ("notetypes", notetypes),
+            ("templates", templates),
+            ("fields", fields),
+            ("media", media),
+            ("field_metadata", field_metadata),
+            ("browser_templates", browser_templates),
+            ("template_target_decks", template_target_decks),
+            ("metadata", metadata),
+            ("references", references),
+        ]
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InspectReport {
     pub kind: String,

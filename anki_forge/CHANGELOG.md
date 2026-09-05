@@ -11,7 +11,7 @@ new minor release.
 - Bound APKG inspection, including ZIP/ZIP64 indexing, nested zstd windows,
   per-entry and cumulative expansion. Stream media hashes and temporary
   collections; expose `InspectLimits` overrides and terminal resource diagnostics.
-  Embed contract bundle `0.4.0` with the documented security acceptance limits.
+  Include the documented security acceptance limits in contract bundle `0.5.0`.
 - Reject output, report, or writable lockfile aliases of the comparison baseline
   before writes, including symlinks, hard links, and the implicit artifact package.
 - Check actual staging-manifest aliases and recheck newly created destinations
@@ -28,6 +28,35 @@ new minor release.
   include all parent decks in generated APKG collections.
 - Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and
   use the same canonical human deck names in staging and APKG observations.
+- Preserve numeric Anki notetype IDs across reordering, insertion, and baselined
+  updates; carry model assignments through staging, APKG inspection, and lockfiles.
+- Detect field additions and removals with lockfile-only update safety, and compare
+  all nine inspect observation domains without overstating partial comparisons.
+- Advance modification times for changed notes using full-content baseline
+  revisions, while preserving unchanged times and reproducible builds. This fixes
+  answer/tag changes being skipped by Anki because every export used time `1`.
+- Preserve existing lockfiles when report-only builds lack verified baseline
+  identity/revision evidence; rejected lockfiles remain high risk for policy gates.
+- Version the expanded inspection evidence as `phase3-inspect-v2`; cross-version
+  saved-report comparisons are partial and supported by Node/Python bindings.
+- Preserve single empty fields during APKG inspection so unchanged notes retain
+  their full-content revision and modification time.
+- Coalesce diagnostic and diff evidence for the same removed field, retaining the
+  higher risk level without duplicating the finding.
+- Keep identity-rejected APKG baselines high risk even when raw comparison is
+  complete; `fail_on(High)` blocks publication and preserves existing files.
+- Canonicalize empty browser overrides and zero font sizes in staging inspection
+  so APKG roundtrips do not report false browser-template changes.
+
+### Compatibility
+
+- Embedded contract bundle advances to `0.5.0`. To update previously distributed
+  decks, provide `compare_to(previous.apkg)` or a lockfile with numeric model IDs.
+  A legacy lockfile with null model IDs needs the previous APKG in strict mode;
+  rewrite the lockfile after migration. Note GUID derivation is unchanged.
+- Strict updates also require note revision evidence. Legacy lockfiles recover it
+  from the previous APKG. Use the latest distributed baseline, and persist revised
+  lockfiles for future releases; baseline-free exports remain first-release builds.
 
 ## [0.1.0] - 2026-08-26
 
