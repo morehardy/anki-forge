@@ -24,9 +24,15 @@ buckets beyond the existing core note/card/media data:
 - `template_target_decks` for template deck declarations with resolved deck ids
 
 Deck routing observations expose `deck_name` on note and card reference entries.
-For staging sources, note deck names come directly from normalized IR and card
-deck names are computed as `template.target_deck_name ?? note.deck_name`. For
-APKG sources, the original note-level import deck is not stored separately in
+For staging sources, note deck names follow normalized IR and card deck names
+are computed as `template.target_deck_name ?? note.deck_name`. These names and
+template target names are then expressed using the writer's canonical human
+deck names, including component normalization and the selected spelling of
+case-insensitive aliases and their parents. APKG inspection converts the native
+`U+001F` hierarchy separator back to human-readable `::` and preserves the
+spelling stored in the collection.
+
+For APKG sources, the original note-level import deck is not stored separately in
 Anki's collection schema, so inspection reconstructs `notes[].deck_name` from
 the first existing card deck, matching Anki's text export behavior. This APKG
 note deck is an observational reconstruction, not authoritative source recovery:

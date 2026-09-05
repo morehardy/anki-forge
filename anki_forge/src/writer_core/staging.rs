@@ -12,6 +12,7 @@ use sha1::Digest;
 
 use crate::writer_core::canonical_json::to_canonical_json;
 use crate::writer_core::card_plan::{has_malformed_cloze, plan_cards};
+use crate::writer_core::deck_name::DeckRegistry;
 use crate::writer_core::media_refs::extract_media_references;
 use crate::writer_core::model::{
     BuildContext, BuildDiagnosticItem, BuildDiagnostics, PackageBuildResult, WriterPolicy,
@@ -766,41 +767,25 @@ fn resolved_build_context_ref(build_context: &BuildContext) -> String {
     build_context_ref(build_context).expect("build context ref should serialize")
 }
 
-pub(crate) fn resolve_deck_ids(normalized_ir: &NormalizedIr) -> BTreeMap<String, i64> {
-    let mut names: BTreeSet<String> = normalized_ir
+pub(crate) fn resolve_deck_registry(normalized_ir: &NormalizedIr) -> DeckRegistry {
+    let names = normalized_ir
         .notes
         .iter()
         .map(|note| note.deck_name.clone())
-        .collect();
+        .chain(normalized_ir.notetypes.iter().flat_map(|notetype| {
+            notetype
+                .templates
+                .iter()
+                .filter_map(|template| template.target_deck_name.clone())
+        }));
 
-    names.extend(normalized_ir.notetypes.iter().flat_map(|notetype| {
-        notetype
-            .templates
-            .iter()
-            .filter_map(|template| template.target_deck_name.clone())
-    }));
-
-    let mut resolved = BTreeMap::from([("Default".into(), 1_i64)]);
-    let mut occupied_ids: BTreeSet<i64> = BTreeSet::from([1_i64]);
-
-    names.remove("Default");
-
-    for name in names {
-        let mut next_id = 2_i64;
-        while occupied_ids.contains(&next_id) {
-            next_id += 1;
-        }
-        resolved.insert(name, next_id);
-        occupied_ids.insert(next_id);
-    }
-
-    resolved
+    DeckRegistry::from_human_names(names)
 }
 
 pub(crate) fn resolve_template_target_decks(
     normalized_ir: &NormalizedIr,
 ) -> Vec<ResolvedTemplateTargetDeck> {
-    let deck_ids = resolve_deck_ids(normalized_ir);
+    let deck_registry = resolve_deck_registry(normalized_ir);
     let mut resolved = vec![];
 
     for notetype in &normalized_ir.notetypes {
@@ -808,12 +793,14 @@ pub(crate) fn resolve_template_target_decks(
             let Some(target_deck_name) = template.target_deck_name.as_ref() else {
                 continue;
             };
-            let resolved_target_deck_id = deck_ids.get(target_deck_name).copied().unwrap_or(1);
+            let deck = deck_registry
+                .deck_for_human_name(target_deck_name)
+                .expect("template target deck should be registered");
             resolved.push(ResolvedTemplateTargetDeck {
                 notetype_id: notetype.id.clone(),
                 template_name: template.name.clone(),
-                target_deck_name: target_deck_name.clone(),
-                resolved_target_deck_id,
+                target_deck_name: deck.human_name(),
+                resolved_target_deck_id: deck.id,
             });
         }
     }

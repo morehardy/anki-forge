@@ -68,6 +68,12 @@ For `Phase 5A`, the writer also preserves product-layer template metadata:
   lowering and preserved through build materialization
 - note deck names and template target deck names are resolved into one stable
   package deck registry during staging and APKG materialization
+- the registry normalizes human `::` names into Anki's native `U+001F` form,
+  includes every parent, and deduplicates names using Anki's Unicode `unicase`
+  comparison. `Default` keeps ID 1; explicitly requested spellings take priority
+  over implicit parent spellings, with native lexical order breaking ties.
+  Descendants reuse their parents' chosen spellings. IDs are assigned in native
+  lexical order after deduplication and do not depend on input order
 - template configs only receive a nonzero/resolved `target_deck_id` from
   `template.target_deck_name`; templates without deck override keep Anki's
   native `0`/none target-deck representation

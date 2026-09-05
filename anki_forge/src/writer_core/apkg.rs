@@ -21,9 +21,10 @@ use crate::writer_core::compat_schema::{
     SCHEMA11_SQL, SCHEMA14_UPGRADE_SQL, SCHEMA15_UPGRADE_SQL, SCHEMA17_UPGRADE_SQL,
     SCHEMA18_UPGRADE_SQL,
 };
+use crate::writer_core::deck_name::DeckRegistry;
 use crate::writer_core::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
 use crate::writer_core::staging::{
-    load_normalized_ir_from_staging_manifest, resolve_deck_ids, BuildArtifactTarget,
+    load_normalized_ir_from_staging_manifest, resolve_deck_registry, BuildArtifactTarget,
     MaterializedStaging,
 };
 
@@ -367,7 +368,7 @@ fn populate_latest_collection(
     guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
 ) -> Result<()> {
     let default_deck_config_id = 1_i64;
-    let deck_ids = resolve_deck_ids(normalized_ir);
+    let deck_registry = resolve_deck_registry(normalized_ir);
 
     conn.execute(
         "update col set conf = ?, models = ?, decks = ?, dconf = ?, tags = ? where id = 1",
@@ -390,15 +391,15 @@ fn populate_latest_collection(
             default_deck_kind_bytes(default_deck_config_id)
         ],
     )?;
-    for (deck_name, deck_id) in &deck_ids {
-        if deck_name == "Default" {
+    for deck in deck_registry.rows() {
+        if deck.id == 1 {
             continue;
         }
         conn.execute(
             "insert into decks (id, name, mtime_secs, usn, common, kind) values (?1, ?2, 0, 0, ?3, ?4)",
             rusqlite::params![
-                deck_id,
-                deck_name,
+                deck.id,
+                deck.native_name.as_str(),
                 default_deck_common_bytes(),
                 default_deck_kind_bytes(default_deck_config_id)
             ],
@@ -425,7 +426,7 @@ fn populate_latest_collection(
             )?;
         }
         for (template_ord, template) in notetype.templates.iter().enumerate() {
-            let target_deck_id = resolve_template_target_deck_id(template, &deck_ids, 0_i64);
+            let target_deck_id = resolve_template_target_deck_id(template, &deck_registry, 0_i64);
             conn.execute(
                 "insert into templates (ntid, ord, name, mtime_secs, usn, config) values (?1, ?2, ?3, 0, 0, ?4)",
                 rusqlite::params![
@@ -483,7 +484,7 @@ fn populate_latest_collection(
         }
         for planned_card in plan_cards(note, notetype) {
             let template = &notetype.templates[planned_card.template_index];
-            let target_deck_id = resolve_card_deck_id(note, template, &deck_ids);
+            let target_deck_id = resolve_card_deck_id(note, template, &deck_registry);
             conn.execute(
                 "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
                 rusqlite::params![
@@ -513,33 +514,29 @@ fn populate_latest_collection(
 fn resolve_card_deck_id(
     note: &NormalizedNote,
     template: &crate::authoring_core::NormalizedTemplate,
-    deck_ids: &std::collections::BTreeMap<String, i64>,
+    deck_registry: &DeckRegistry,
 ) -> i64 {
     let deck_name = template
         .target_deck_name
         .as_deref()
         .unwrap_or(note.deck_name.as_str());
-    resolve_deck_id(deck_name, deck_ids, 1_i64)
+    deck_registry.id_for_human_name(deck_name).unwrap_or(1_i64)
 }
 
 fn resolve_template_target_deck_id(
     template: &crate::authoring_core::NormalizedTemplate,
-    deck_ids: &std::collections::BTreeMap<String, i64>,
+    deck_registry: &DeckRegistry,
     default_id: i64,
 ) -> i64 {
     template
         .target_deck_name
         .as_deref()
-        .map(|deck_name| resolve_deck_id(deck_name, deck_ids, default_id))
+        .map(|deck_name| {
+            deck_registry
+                .id_for_human_name(deck_name)
+                .unwrap_or(default_id)
+        })
         .unwrap_or(default_id)
-}
-
-fn resolve_deck_id(
-    deck_name: &str,
-    deck_ids: &std::collections::BTreeMap<String, i64>,
-    default_id: i64,
-) -> i64 {
-    deck_ids.get(deck_name).copied().unwrap_or(default_id)
 }
 
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {
