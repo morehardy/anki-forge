@@ -27,7 +27,8 @@ use crate::writer_core::card_plan::plan_cards;
 use crate::writer_core::deck_name::native_deck_name_to_human;
 use crate::writer_core::model::{InspectObservations, InspectReport, PackageBuildResult};
 use crate::writer_core::staging::{
-    validated_media_output_path, BuildArtifactTarget, ResolvedTemplateTargetDeck,
+    resolve_deck_registry, validated_media_output_path, BuildArtifactTarget,
+    ResolvedTemplateTargetDeck,
 };
 
 const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v1";
@@ -348,6 +349,16 @@ fn build_observations(
     actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
     note_identity_metadata: &[Value],
 ) -> InspectObservations {
+    let staging_decks = actual_card_decks
+        .is_none()
+        .then(|| resolve_deck_registry(normalized_ir));
+    let observed_deck_name = |name: &str| {
+        staging_decks
+            .as_ref()
+            .and_then(|registry| registry.deck_for_human_name(name))
+            .map(|deck| deck.human_name())
+            .unwrap_or_else(|| name.to_string())
+    };
     let notetypes_by_id: BTreeMap<_, _> = normalized_ir
         .notetypes
         .iter()
@@ -463,7 +474,7 @@ fn build_observations(
             ),
             "notetype_id": template_target_deck.notetype_id,
             "template_name": template_target_deck.template_name,
-            "target_deck_name": template_target_deck.target_deck_name,
+            "target_deck_name": observed_deck_name(&template_target_deck.target_deck_name),
             "resolved_target_deck_id": template_target_deck.resolved_target_deck_id,
             "evidence_refs": [format!(
                 "template-target-deck:{}:{}",
@@ -483,7 +494,7 @@ fn build_observations(
             "selector": format!("note[id='{}']", note_id),
             "id": note_id,
             "notetype_id": notetype_id,
-            "deck_name": note.deck_name.as_str(),
+            "deck_name": observed_deck_name(&note.deck_name),
             "tags": &note.tags,
             "fields": &note.fields,
             "evidence_refs": [format!("note:{}", note_id)],
@@ -521,7 +532,7 @@ fn build_observations(
                     "note_id": note_id,
                     "ord": card_ord,
                     "template_name": template_name,
-                    "deck_name": card_deck_name,
+                    "deck_name": observed_deck_name(card_deck_name),
                     "evidence_refs": [format!("card:{}:{}", note_id, card_ord)],
                 }));
             }

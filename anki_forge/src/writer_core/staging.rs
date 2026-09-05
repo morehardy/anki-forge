@@ -793,14 +793,14 @@ pub(crate) fn resolve_template_target_decks(
             let Some(target_deck_name) = template.target_deck_name.as_ref() else {
                 continue;
             };
-            let resolved_target_deck_id = deck_registry
-                .id_for_human_name(target_deck_name)
-                .unwrap_or(1);
+            let deck = deck_registry
+                .deck_for_human_name(target_deck_name)
+                .expect("template target deck should be registered");
             resolved.push(ResolvedTemplateTargetDeck {
                 notetype_id: notetype.id.clone(),
                 template_name: template.name.clone(),
-                target_deck_name: target_deck_name.clone(),
-                resolved_target_deck_id,
+                target_deck_name: deck.human_name(),
+                resolved_target_deck_id: deck.id,
             });
         }
     }

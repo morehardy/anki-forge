@@ -1286,6 +1286,90 @@ fn latest_collection_template_target_deck_overrides_note_deck_for_cards() {
 }
 
 #[test]
+fn latest_collection_deduplicates_deck_aliases_and_preserves_card_routing() {
+    let root = tempfile::tempdir().unwrap();
+    let target = BuildArtifactTarget::new(
+        root.path().to_path_buf(),
+        "artifacts/phase3/case-insensitive-decks",
+    );
+    let mut normalized = sample_basic_normalized_ir();
+    let note = normalized.notes[0].clone();
+    normalized.notes = [
+        "Foo",
+        "foo::Child",
+        "FOO::child",
+        "default::Child",
+        "DEFAULT::child",
+        "Straße",
+        "STRASSE::Child",
+        "straße::child",
+        "Σ",
+        "ς::Child",
+        "σ::child",
+    ]
+    .into_iter()
+    .enumerate()
+    .map(|(index, deck_name)| {
+        let mut note = note.clone();
+        note.id = format!("note-{index}");
+        note.deck_name = deck_name.into();
+        note
+    })
+    .collect();
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+    assert_eq!(result.result_status, "success");
+
+    let conn = latest_collection_from_built_apkg(root.path());
+    let deck_names: Vec<String> = conn
+        .prepare("select name from decks order by name")
+        .unwrap()
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .map(Result::unwrap)
+        .collect();
+    assert_eq!(
+        deck_names,
+        vec![
+            "Default",
+            "Default\u{1f}child",
+            "Foo",
+            "Foo\u{1f}child",
+            "Straße",
+            "Straße\u{1f}Child",
+            "Σ",
+            "Σ\u{1f}Child",
+        ]
+    );
+
+    let card_decks: BTreeMap<String, i64> = conn
+        .prepare("select notes.guid, cards.did from cards join notes on notes.id = cards.nid")
+        .unwrap()
+        .query_map([], |row| Ok((row.get(0)?, row.get(1)?)))
+        .unwrap()
+        .map(Result::unwrap)
+        .collect();
+    for (left, right) in [
+        ("note-1", "note-2"),
+        ("note-3", "note-4"),
+        ("note-6", "note-7"),
+        ("note-9", "note-10"),
+    ] {
+        assert_eq!(card_decks[left], card_decks[right]);
+        assert_ne!(card_decks[left], 1, "a child must not fall back to Default");
+    }
+    assert_ne!(card_decks["note-0"], card_decks["note-1"]);
+    assert_ne!(card_decks["note-5"], card_decks["note-6"]);
+    assert_ne!(card_decks["note-8"], card_decks["note-9"]);
+}
+
+#[test]
 fn build_rejects_non_positive_explicit_normalized_note_mtime() {
     let root = unique_artifact_root("note-storage-invalid-mtime");
     let target =

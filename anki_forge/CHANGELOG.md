@@ -10,6 +10,8 @@ new minor release.
 
 - Write hierarchical deck names with Anki's native `U+001F` separator and
   include all parent decks in generated APKG collections.
+- Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and
+  use the same canonical human deck names in staging and APKG observations.
 
 ## [0.1.0] - 2026-08-26
 

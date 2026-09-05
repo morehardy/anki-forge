@@ -43,6 +43,130 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
 }
 
 #[test]
+fn staging_and_apkg_agree_on_canonical_deck_names() {
+    for (requested, canonical) in [
+        (" Biology ", "Biology"),
+        (" Cafe\u{301} :: Re\u{301}vision ", "Café::Révision"),
+        (" English :::: Listening ", "English::blank::Listening"),
+        ("fo\u{1f}o::ba\nr", "foo::bar"),
+    ] {
+        for template_override in [false, true] {
+            let root = tempfile::tempdir().unwrap();
+            let target = BuildArtifactTarget::new(
+                root.path().to_path_buf(),
+                "artifacts/phase3/diff-canonical-decks",
+            );
+            let mut normalized = sample_basic_normalized_ir();
+            normalized.notes[0].deck_name = requested.into();
+            if template_override {
+                normalized.notetypes[0].templates[0].target_deck_name = Some(requested.into());
+            }
+
+            let result = build(
+                &normalized,
+                &sample_writer_policy(),
+                &sample_build_context(true),
+                &target,
+            )
+            .unwrap();
+            assert_eq!(result.result_status, "success");
+
+            let staging = inspect_staging(target.staging_manifest_path()).unwrap();
+            let apkg = inspect_apkg(root.path().join("package.apkg")).unwrap();
+            let diff = diff_reports(&staging, &apkg).unwrap();
+            assert_eq!(diff.comparison_status, "complete");
+            assert!(
+                diff.changes.is_empty(),
+                "{requested:?}, template override {template_override}: {:#?}",
+                diff.changes
+            );
+            for report in [&staging, &apkg] {
+                for selector in ["note[id='note-1']", "card[note_id='note-1'][ord=0]"] {
+                    let entry = report
+                        .observations
+                        .references
+                        .iter()
+                        .find(|entry| entry["selector"] == selector)
+                        .unwrap();
+                    assert_eq!(entry["deck_name"], canonical);
+                }
+                if template_override {
+                    assert_eq!(
+                        report.observations.template_target_decks[0]["target_deck_name"],
+                        canonical
+                    );
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn staging_and_apkg_agree_on_deck_aliases_with_template_overrides() {
+    let root = tempfile::tempdir().unwrap();
+    let target = BuildArtifactTarget::new(
+        root.path().to_path_buf(),
+        "artifacts/phase3/diff-deck-aliases",
+    );
+    let mut normalized = sample_basic_normalized_ir();
+    let note = normalized.notes[0].clone();
+    normalized.notes = [
+        "Foo",
+        "foo::Child",
+        "FOO::child",
+        "default::Child",
+        "DEFAULT::child",
+    ]
+    .into_iter()
+    .enumerate()
+    .map(|(index, deck_name)| {
+        let mut note = note.clone();
+        note.id = format!("note-{index}");
+        note.deck_name = deck_name.into();
+        note
+    })
+    .collect();
+    // Keep the first card in the note deck so APKG note-deck reconstruction is exact.
+    normalized.notetypes[0].kind = "normal".into();
+    normalized.notetypes[0].original_stock_kind = None;
+    let mut template = normalized.notetypes[0].templates[0].clone();
+    template.name = "Override".into();
+    template.ord = Some(1);
+    template.target_deck_name = Some("foo::Child".into());
+    normalized.notetypes[0].templates.push(template);
+
+    let result = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(true),
+        &target,
+    )
+    .unwrap();
+    assert_eq!(result.result_status, "success");
+    let staging = inspect_staging(target.staging_manifest_path()).unwrap();
+    let apkg = inspect_apkg(root.path().join("package.apkg")).unwrap();
+    let diff = diff_reports(&staging, &apkg).unwrap();
+    assert_eq!(diff.comparison_status, "complete");
+    assert!(diff.changes.is_empty(), "{:#?}", diff.changes);
+    for report in [&staging, &apkg] {
+        assert_eq!(
+            report.observations.template_target_decks[0]["target_deck_name"],
+            "Foo::child"
+        );
+        let overridden_cards = report
+            .observations
+            .references
+            .iter()
+            .filter(|entry| entry["template_name"] == "Override")
+            .collect::<Vec<_>>();
+        assert_eq!(overridden_cards.len(), normalized.notes.len());
+        assert!(overridden_cards
+            .iter()
+            .all(|entry| entry["deck_name"] == "Foo::child"));
+    }
+}
+
+#[test]
 fn diff_reports_emit_stable_selector_and_evidence_refs_for_domain_changes() {
     let left = sample_inspect_report("Basic");
     let mut right = left.clone();
