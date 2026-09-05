@@ -231,7 +231,20 @@ pub fn selected_identity_index(
             absent.source_path = "baseline.identity_lockfile.primary".into();
             selected.notes.push(absent);
         }
+        let current_notetype_ids: BTreeSet<_> = selected
+            .notetypes
+            .iter()
+            .map(|notetype| notetype.note_type_id.clone())
+            .collect();
+        for notetype in &previous_lockfile_index.notetypes {
+            if !current_notetype_ids.contains(&notetype.note_type_id) {
+                selected.notetypes.push(notetype.clone());
+            }
+        }
     }
+    selected
+        .notetypes
+        .sort_by(|left, right| left.note_type_id.cmp(&right.note_type_id));
     selected
         .notes
         .sort_by(|left, right| left.stable_id.cmp(&right.stable_id));

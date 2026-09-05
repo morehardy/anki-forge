@@ -32,25 +32,27 @@ pub fn build_with_guid_plan(
     artifact_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
 ) -> Result<PackageBuildResult> {
-    build_with_guid_plan_and_apkg_target(
+    build_with_identity_plan(
         normalized_ir,
         writer_policy,
         build_context,
         artifact_target,
         artifact_target,
         guid_plan,
+        None,
     )
 }
 
 /// Product builds retain staging artifacts but keep the APKG private until
 /// comparison and policy evaluation have succeeded.
-pub(crate) fn build_with_guid_plan_and_apkg_target(
+pub(crate) fn build_with_identity_plan(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,
     build_context: &BuildContext,
     artifact_target: &BuildArtifactTarget,
     apkg_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
+    notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
 ) -> Result<PackageBuildResult> {
     if !build_context.materialize_staging {
         return Ok(error_result(
@@ -64,8 +66,12 @@ pub(crate) fn build_with_guid_plan_and_apkg_target(
         ));
     }
 
-    let package = match StagingPackage::from_normalized(normalized_ir, writer_policy, build_context)
-    {
+    let package = match StagingPackage::from_normalized_with_ids(
+        normalized_ir,
+        writer_policy,
+        build_context,
+        notetype_ids,
+    ) {
         Ok(package) => package,
         Err(diagnostics) => return Ok(invalid_result(writer_policy, build_context, diagnostics)),
     };

@@ -108,6 +108,7 @@ struct ResolvedMedia {
 #[derive(Debug, Clone)]
 struct CollectionData {
     notetypes: Vec<NormalizedNotetype>,
+    notetype_model_ids: BTreeMap<String, i64>,
     notes: Vec<NormalizedNote>,
     note_identity_metadata: Vec<Value>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
@@ -173,6 +174,10 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &manifest.template_target_decks,
         None,
         &note_identity_metadata,
+        &crate::writer_core::staging::staging_notetype_ids(
+            &manifest.normalized_ir,
+            manifest.notetype_model_ids,
+        )?,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
@@ -218,10 +223,12 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
     let mut template_target_decks = vec![];
     let mut actual_card_decks = BTreeMap::new();
     let mut note_identity_metadata = vec![];
+    let mut notetype_model_ids = BTreeMap::new();
 
     if let Some(collection_bytes) = read_expected_collection_bytes(&mut archive, version)? {
         let collection = read_collection_data(&collection_bytes)?;
         normalized_ir.notetypes = collection.notetypes;
+        notetype_model_ids = collection.notetype_model_ids;
         normalized_ir.notes = collection.notes;
         note_identity_metadata = collection.note_identity_metadata;
         template_target_decks = collection.template_target_decks;
@@ -232,6 +239,14 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         limitations.missing_domains.insert(DOMAIN_TEMPLATES.into());
         limitations.missing_domains.insert(DOMAIN_FIELDS.into());
         limitations.missing_domains.insert(DOMAIN_REFERENCES.into());
+        for domain in [
+            "field_metadata",
+            "browser_templates",
+            "template_target_decks",
+            "metadata",
+        ] {
+            limitations.missing_domains.insert(domain.into());
+        }
         limitations
             .degradation_reasons
             .push("collection database is unavailable".into());
@@ -243,6 +258,7 @@ pub fn inspect_apkg(path: impl AsRef<Path>) -> Result<InspectReport> {
         &template_target_decks,
         Some(&actual_card_decks),
         &note_identity_metadata,
+        &notetype_model_ids,
     );
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
@@ -313,17 +329,18 @@ fn fingerprint_report(
 }
 
 fn strip_evidence_refs(observations: &InspectObservations) -> Value {
-    json!({
-        "notetypes": observations.notetypes.iter().map(strip_value).collect::<Vec<_>>(),
-        "templates": observations.templates.iter().map(strip_value).collect::<Vec<_>>(),
-        "fields": observations.fields.iter().map(strip_value).collect::<Vec<_>>(),
-        "media": observations.media.iter().map(strip_value).collect::<Vec<_>>(),
-        "field_metadata": observations.field_metadata.iter().map(strip_value).collect::<Vec<_>>(),
-        "browser_templates": observations.browser_templates.iter().map(strip_value).collect::<Vec<_>>(),
-        "template_target_decks": observations.template_target_decks.iter().map(strip_value).collect::<Vec<_>>(),
-        "metadata": observations.metadata.iter().map(strip_value).collect::<Vec<_>>(),
-        "references": observations.references.iter().map(strip_value).collect::<Vec<_>>(),
-    })
+    Value::Object(
+        observations
+            .domains()
+            .into_iter()
+            .map(|(domain, values)| {
+                (
+                    domain.to_string(),
+                    Value::Array(values.iter().map(strip_value).collect()),
+                )
+            })
+            .collect(),
+    )
 }
 
 fn strip_value(value: &Value) -> Value {
@@ -348,6 +365,7 @@ fn build_observations(
     template_target_decks: &[ResolvedTemplateTargetDeck],
     actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
     note_identity_metadata: &[Value],
+    notetype_model_ids: &BTreeMap<String, i64>,
 ) -> InspectObservations {
     let staging_decks = actual_card_decks
         .is_none()
@@ -391,6 +409,7 @@ fn build_observations(
         notetype_entries.push(json!({
             "selector": format!("notetype[id='{}']", notetype_id),
             "id": notetype_id,
+            "anki_model_id": notetype_model_ids.get(notetype_id),
             "kind": notetype_kind,
             "original_stock_kind": notetype.original_stock_kind,
             "name": notetype_name,
@@ -497,6 +516,7 @@ fn build_observations(
             "deck_name": observed_deck_name(&note.deck_name),
             "tags": &note.tags,
             "fields": &note.fields,
+            "revision": super::note_revision::NoteRevision::from_note(note),
             "evidence_refs": [format!("note:{}", note_id)],
         }));
 
@@ -1009,6 +1029,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
         }
 
         let mut notetypes_by_row_id = BTreeMap::new();
+        let mut notetype_model_ids = BTreeMap::new();
         let mut notetype_values = vec![];
         let mut template_target_decks = vec![];
         for (row_id, name, config_bytes) in raw_notetypes {
@@ -1140,6 +1161,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
                 css: config.css,
                 field_metadata,
             };
+            notetype_model_ids.insert(notetype.id.clone(), row_id);
             notetypes_by_row_id.insert(row_id, notetype.clone());
             notetype_values.push(notetype);
         }
@@ -1264,6 +1286,7 @@ fn read_collection_data(bytes: &[u8]) -> Result<CollectionData> {
 
         Ok(CollectionData {
             notetypes: notetype_values,
+            notetype_model_ids,
             notes,
             note_identity_metadata,
             template_target_decks,
@@ -1451,7 +1474,14 @@ mod tests {
         };
         let actual_cards = BTreeMap::from([(("note-1".into(), 0), "Deck".into())]);
 
-        let observations = build_observations(&normalized_ir, &[], &[], Some(&actual_cards), &[]);
+        let observations = build_observations(
+            &normalized_ir,
+            &[],
+            &[],
+            Some(&actual_cards),
+            &[],
+            &BTreeMap::new(),
+        );
 
         assert!(observations
             .references
@@ -1508,6 +1538,8 @@ fn unique_temp_path(name: &str) -> PathBuf {
 #[derive(Debug, Deserialize)]
 struct StagingManifest {
     normalized_ir: NormalizedIr,
+    #[serde(default)]
+    notetype_model_ids: Option<BTreeMap<String, i64>>,
     #[serde(default)]
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
 }

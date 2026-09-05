@@ -56,15 +56,16 @@ impl BaselineSnapshot {
     ) -> Result<IdentityIndex, String> {
         self.inspected
             .as_ref()
-            .map(|artifact| {
+            .map_err(Clone::clone)
+            .and_then(|artifact| {
                 crate::update_safety::baseline::identity_index_from_inspect(
                     &self.path,
                     &artifact.report,
                     current,
                     lockfile,
                 )
+                .map_err(|error| error.to_string())
             })
-            .map_err(Clone::clone)
     }
 }
 
@@ -212,7 +213,7 @@ mod snapshot_tests {
     fn build(path: &Path, stable_id: &str) {
         let mut project = Project::new("Snapshot").stable_id("snapshot");
         project
-            .add_note(Note::basic("front", "back").stable_id(stable_id))
+            .add_note(Note::basic(stable_id, "back").stable_id(stable_id))
             .unwrap();
         project.write_apkg(path).unwrap();
     }
@@ -225,11 +226,18 @@ mod snapshot_tests {
         build(&previous, "previous-note");
         build(&current, "current-note");
         let snapshot = BaselineSnapshot::capture(&previous);
+        let captured_identity = snapshot.identity_index(None, None).unwrap();
         // Deterministically simulate another writer replacing the baseline
         // between preflight and the later comparison stage.
         std::fs::copy(&current, &previous).unwrap();
         let index = snapshot.identity_index(None, None).unwrap();
         assert_eq!(index.notes[0].stable_id, "previous-note");
+        assert!(index.notes[0].revision.is_some());
+        assert_eq!(index.notes[0].revision, captured_identity.notes[0].revision);
+        let replaced_identity = BaselineSnapshot::capture(&previous)
+            .identity_index(None, None)
+            .unwrap();
+        assert_ne!(index.notes[0].revision, replaced_identity.notes[0].revision);
         let input = || ComparisonInput {
             current_artifact: &current,
             previous_artifact: Some(&previous),

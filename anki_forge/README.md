@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
 }
 ```
 
-The crate version is `0.1.0`; it embeds contract bundle `0.3.0`. These are
+The crate version is `0.1.0`; it embeds contract bundle `0.5.0`. These are
 independent compatibility axes. Rust 1.92.0 is the minimum supported compiler
 for the 0.1.x line.
 
@@ -34,6 +34,22 @@ The `internal-tools` Cargo feature exists only for this repository's
 unpublished contract tool and deep conformance tests. Its hidden modules are
 not covered by the 0.1 compatibility promise and must not be enabled by
 downstream applications.
+
+## Updating distributed decks
+
+For a project with stable project/note identities, build updates using
+`BuildOptions::new().output("v2.apkg").compare_to("v1.apkg")`, where `v1.apkg` is
+the latest distributed version. Alternatively, use a maintained identity lockfile
+with `.update_safe("identity.json").write_identity_lockfile(true)` after the first
+`.first_update_safe_build("identity.json")` build. Keep the baseline separate from
+the new output and advance it only after verifying the release.
+
+Changed note content advances its baseline modification time; unchanged content
+preserves it. This also covers answer-only edits, tags, and content reverts while
+keeping same-input/same-baseline builds reproducible. Legacy lockfiles without
+revision evidence require a previous APKG for strict migration. Baseline-free
+`write_apkg` is a first-release export, not a guarantee that Anki will update
+existing notes. Newer local edits remain governed by Anki's import settings.
 
 ## Errors and concurrency
 

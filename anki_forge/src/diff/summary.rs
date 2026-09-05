@@ -72,6 +72,15 @@ fn semantic_change_from_writer_change(
 ) -> Option<SemanticDiffChange> {
     let (category, change_kind, risk_code) =
         match (change.domain.as_str(), change.category.as_str()) {
+            ("template_target_decks", kind) => (
+                SemanticDiffCategory::Template,
+                match kind {
+                    "added" => SemanticDiffChangeKind::Added,
+                    "removed" => SemanticDiffChangeKind::Removed,
+                    _ => SemanticDiffChangeKind::Modified,
+                },
+                "RISK.TEMPLATE_TARGET_DECK_CHANGED",
+            ),
             ("templates", "removed") => (
                 SemanticDiffCategory::Template,
                 SemanticDiffChangeKind::Removed,

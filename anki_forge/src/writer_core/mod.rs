@@ -1,6 +1,8 @@
 mod anki_proto;
 mod compat_schema;
 mod deck_name;
+pub(crate) mod identity;
+pub(crate) mod note_revision;
 
 pub mod apkg;
 pub mod build;
@@ -14,6 +16,7 @@ pub mod model;
 pub mod policy;
 pub mod staging;
 
+pub(crate) use build::build_with_identity_plan;
 pub use build::BuildArtifactTarget;
 pub use build::{build, build_with_guid_plan};
 pub use canonical_json::to_canonical_json;

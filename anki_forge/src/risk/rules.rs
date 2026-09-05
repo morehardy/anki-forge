@@ -33,6 +33,19 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
 
     for (index, diagnostic) in input.diagnostics.iter().enumerate() {
         let code = diagnostic.code.as_str();
+        if matches!(
+            code,
+            "UPDATE.NOTE_REVISION_MISSING"
+                | "UPDATE.NOTE_REVISION_CONFLICT"
+                | "UPDATE.NOTE_MTIME_OVERFLOW"
+        ) {
+            let mut item = finding("RISK.NOTE_UPDATE_UNVERIFIED", RiskLevel::High, "note_revision",
+                "note content revision evidence is missing, conflicting, or cannot advance",
+                vec![EvidenceRef { kind: EvidenceRefKind::Diagnostic, ref_id: format!("diagnostic:{index}:{code}") }],
+                "supply the latest distributed APKG and refresh the identity lockfile after verification");
+            item.source = diagnostic.source.clone();
+            findings.push(item);
+        }
         if matches!(code, "MEDIA.MISSING_REFERENCE" | "MEDIA.UNSAFE_REFERENCE")
             && diagnostic.severity == Severity::Error
         {
@@ -95,6 +108,35 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
             continue;
         }
 
+        if matches!(code, "UPDATE.FIELD_REMOVED" | "UPDATE.FIELD_ADDED") {
+            let removed = code == "UPDATE.FIELD_REMOVED";
+            let mut item = finding(
+                if removed {
+                    "RISK.FIELD_REMOVED_OR_RENAMED"
+                } else {
+                    "RISK.FIELD_ADDED"
+                },
+                if removed {
+                    RiskLevel::High
+                } else {
+                    RiskLevel::Medium
+                },
+                "field",
+                &diagnostic.message,
+                vec![EvidenceRef {
+                    kind: EvidenceRefKind::Diagnostic,
+                    ref_id: format!("diagnostic:{index}:{code}"),
+                }],
+                if removed {
+                    "restore the field's stable key or review and back up the field migration"
+                } else {
+                    "review defaults and required content for the added field on existing notes"
+                },
+            );
+            item.source = diagnostic.source.clone();
+            findings.push(item);
+        }
+
         if matches!(
             code,
             "UPDATE.FIELD_MERGE_ID_CHANGED"
@@ -102,6 +144,10 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
                 | "UPDATE.FIELD_ORD_CHANGED"
                 | "UPDATE.NOTETYPE_SET_CHANGED"
                 | "UPDATE.TEMPLATE_SET_CHANGED"
+                | "UPDATE.NOTETYPE_MODEL_ID_CHANGED"
+                | "UPDATE.NOTETYPE_MODEL_ID_MISSING"
+                | "UPDATE.NOTETYPE_MODEL_ID_CONFLICT"
+                | "UPDATE.NOTETYPE_MODEL_ID_COLLISION"
         ) {
             let mut item = finding(
                 "RISK.NOTETYPE_CONFIG_ID_DRIFT",
@@ -181,6 +227,8 @@ fn level_for_semantic_code(code: &str) -> RiskLevel {
         "RISK.TEMPLATE_REMOVED" => RiskLevel::Critical,
         "RISK.TEMPLATE_REORDER" => RiskLevel::High,
         "RISK.FIELD_REMOVED_OR_RENAMED" => RiskLevel::Medium,
+        "RISK.FIELD_ADDED" => RiskLevel::Medium,
+        "RISK.TEMPLATE_TARGET_DECK_CHANGED" => RiskLevel::Medium,
         "RISK.CARD_COUNT_CHANGED" => RiskLevel::Medium,
         "RISK.MEDIA_REMOVED" => RiskLevel::Medium,
         "RISK.NOTE_GUID_DRIFT" => RiskLevel::High,
@@ -200,6 +248,9 @@ fn suggested_action_for_code(code: &str) -> Option<&'static str> {
         }
         "RISK.CARD_COUNT_CHANGED" => {
             Some("review expected card generation changes before importing")
+        }
+        "RISK.TEMPLATE_TARGET_DECK_CHANGED" => {
+            Some("review the destination deck for existing and newly generated cards")
         }
         "RISK.MEDIA_REMOVED" => Some("restore removed media or verify no notes reference it"),
         _ => None,

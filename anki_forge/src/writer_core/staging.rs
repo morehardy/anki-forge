@@ -77,6 +77,8 @@ struct StagingManifest {
     writer_policy_ref: String,
     build_context_ref: String,
     normalized_ir: NormalizedIr,
+    #[serde(default)]
+    notetype_model_ids: Option<BTreeMap<String, i64>>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
 }
 
@@ -96,11 +98,44 @@ pub(crate) fn load_normalized_ir_from_staging_manifest(path: &Path) -> Result<No
     Ok(manifest.normalized_ir)
 }
 
+pub(crate) fn load_notetype_ids_from_staging_manifest(
+    path: &Path,
+) -> Result<BTreeMap<String, i64>> {
+    let manifest: StagingManifest = serde_json::from_slice(&fs::read(path)?)?;
+    staging_notetype_ids(&manifest.normalized_ir, manifest.notetype_model_ids)
+}
+
+pub(crate) fn staging_notetype_ids(
+    normalized: &NormalizedIr,
+    ids: Option<BTreeMap<String, i64>>,
+) -> Result<BTreeMap<String, i64>> {
+    let ids = ids.unwrap_or_else(|| {
+        // Pre-0.4 staging manifests used positional IDs. Reading them must retain
+        // the IDs of the corresponding old APKG, not infer the new derivation.
+        normalized
+            .notetypes
+            .iter()
+            .enumerate()
+            .map(|(index, notetype)| (notetype.id.clone(), (index + 1) as i64))
+            .collect()
+    });
+    crate::writer_core::identity::resolve_notetype_ids(normalized, Some(&ids))
+}
+
 impl StagingPackage {
     pub fn from_normalized(
         normalized_ir: &NormalizedIr,
         writer_policy: &WriterPolicy,
         build_context: &BuildContext,
+    ) -> std::result::Result<Self, Vec<BuildDiagnosticItem>> {
+        Self::from_normalized_with_ids(normalized_ir, writer_policy, build_context, None)
+    }
+
+    pub(crate) fn from_normalized_with_ids(
+        normalized_ir: &NormalizedIr,
+        writer_policy: &WriterPolicy,
+        build_context: &BuildContext,
+        selected_ids: Option<&BTreeMap<String, i64>>,
     ) -> std::result::Result<Self, Vec<BuildDiagnosticItem>> {
         let diagnostics = validate_normalized_ir(normalized_ir, build_context);
         let (errors, warnings): (Vec<_>, Vec<_>) = diagnostics
@@ -110,6 +145,29 @@ impl StagingPackage {
             return Err(errors);
         }
 
+        let notetype_model_ids =
+            crate::writer_core::identity::resolve_notetype_ids(normalized_ir, selected_ids)
+                .map_err(|error| {
+                    vec![BuildDiagnosticItem {
+                        level: "error".into(),
+                        code: if error
+                            .to_string()
+                            .starts_with("UPDATE.NOTETYPE_MODEL_ID_COLLISION")
+                        {
+                            "UPDATE.NOTETYPE_MODEL_ID_COLLISION"
+                        } else {
+                            "UPDATE.WRITER_NOTETYPE_ID_PLAN_MISMATCH"
+                        }
+                        .into(),
+                        summary: error.to_string(),
+                        domain: Some("identity".into()),
+                        path: Some("notetypes".into()),
+                        target_selector: None,
+                        stage: Some("validate".into()),
+                        operation: Some("validate_notetype_ids".into()),
+                    }]
+                })?;
+
         Ok(Self {
             manifest: StagingManifest {
                 kind: "staging-package".into(),
@@ -117,6 +175,7 @@ impl StagingPackage {
                 writer_policy_ref: policy_ref(&writer_policy.id, &writer_policy.version),
                 build_context_ref: resolved_build_context_ref(build_context),
                 normalized_ir: normalized_ir.clone(),
+                notetype_model_ids: Some(notetype_model_ids),
                 template_target_decks: resolve_template_target_decks(normalized_ir),
             },
             diagnostics: warnings,

@@ -2,6 +2,8 @@ use crate::build::{BuildOptions, UpdateSafetyMode};
 use crate::diagnostics::{DiagnosticCode, Severity};
 use serde::{Deserialize, Serialize};
 
+pub use crate::writer_core::note_revision::NoteRevision;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EffectiveMode {
     Disabled,
@@ -79,6 +81,8 @@ pub struct NoteIdentityEntry {
     pub note_type_id: String,
     pub recipe_id: String,
     pub canonical_payload_hash: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub revision: Option<NoteRevision>,
     pub provenance: String,
     pub used_override: bool,
     pub entry_lifecycle: String,
@@ -203,6 +207,7 @@ impl IdentityIndex {
             note_type_id: note.notetype_id.clone(),
             recipe_id,
             canonical_payload_hash,
+            revision: Some(NoteRevision::from_note(note)),
             provenance,
             used_override,
             entry_lifecycle: "active".into(),

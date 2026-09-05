@@ -163,6 +163,11 @@ pub fn emit_apkg(
     let normalized_ir = load_normalized_ir_from_staging_manifest(&materialized.manifest_path)?;
 
     let guid_assignments = validate_guid_plan(&normalized_ir, guid_plan)?;
+    let staged_ids = crate::writer_core::staging::load_notetype_ids_from_staging_manifest(
+        &materialized.manifest_path,
+    )?;
+    let notetype_ids =
+        crate::writer_core::identity::resolve_notetype_ids(&normalized_ir, Some(&staged_ids))?;
 
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
@@ -184,6 +189,7 @@ pub fn emit_apkg(
         &artifact_target.root_dir,
         &normalized_ir,
         &guid_assignments,
+        &notetype_ids,
     )?;
     write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
@@ -318,6 +324,7 @@ fn create_latest_collection_bytes(
     root_dir: &Path,
     normalized_ir: &NormalizedIr,
     guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
 ) -> Result<Vec<u8>> {
     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
     let _ = fs::remove_file(&path);
@@ -329,7 +336,7 @@ fn create_latest_collection_bytes(
     execute_schema16_marker(&conn)?;
     execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL)?;
     execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
-    populate_latest_collection(&conn, normalized_ir, guid_assignments)?;
+    populate_latest_collection(&conn, normalized_ir, guid_assignments, notetype_ids)?;
     conn.execute_batch("VACUUM;")?;
     drop(conn);
     let bytes = fs::read(&path).with_context(|| format!("read collection {}", path.display()))?;
@@ -366,6 +373,7 @@ fn populate_latest_collection(
     conn: &Connection,
     normalized_ir: &NormalizedIr,
     guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
 ) -> Result<()> {
     let default_deck_config_id = 1_i64;
     let deck_registry = resolve_deck_registry(normalized_ir);
@@ -406,10 +414,8 @@ fn populate_latest_collection(
         )?;
     }
 
-    let mut notetype_ids = std::collections::BTreeMap::new();
-    for (index, notetype) in normalized_ir.notetypes.iter().enumerate() {
-        let ntid = (index + 1) as i64;
-        notetype_ids.insert(notetype.id.clone(), ntid);
+    for notetype in &normalized_ir.notetypes {
+        let ntid = notetype_ids[&notetype.id];
         conn.execute(
             "insert into notetypes (id, name, mtime_secs, usn, config) values (?1, ?2, 0, 0, ?3)",
             rusqlite::params![ntid, notetype.name, encode_notetype_config(notetype)?],
@@ -688,7 +694,9 @@ fn note_storage_values(
         flds: values.join("\u{1f}"),
         sfld: sort_field_stripped,
         csum: first_field_checksum,
-        mtime_secs: note.mtime_secs.unwrap_or(1),
+        mtime_secs: note
+            .mtime_secs
+            .unwrap_or(super::note_revision::INITIAL_MTIME_SECS),
     })
 }
 

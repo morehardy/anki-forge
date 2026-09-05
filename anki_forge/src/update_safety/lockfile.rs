@@ -47,6 +47,7 @@ pub fn write_lockfile_atomic(path: impl AsRef<Path>, lockfile: &IdentityLockfile
 }
 
 fn validate_lockfile(lockfile: &IdentityLockfile) -> Result<()> {
+    super::notetype_ids::validate_baseline_model_ids(&lockfile.identity_index)?;
     anyhow::ensure!(
         lockfile.schema_version == "identity-lockfile-v1",
         "UPDATE.BASELINE_SCHEMA_UNSUPPORTED: {}",
@@ -63,6 +64,9 @@ fn validate_lockfile(lockfile: &IdentityLockfile) -> Result<()> {
     let mut stable_ids = BTreeSet::new();
     let mut anki_guids = BTreeSet::new();
     for note in &lockfile.identity_index.notes {
+        if let Some(revision) = &note.revision {
+            revision.validate()?;
+        }
         if note.entry_lifecycle == "active" {
             anyhow::ensure!(
                 note.normalized_note_id.as_deref() == Some(note.stable_id.as_str()),

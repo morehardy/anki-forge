@@ -4,6 +4,8 @@ pub mod diagnostics;
 pub mod lockfile;
 pub mod merge_safety;
 pub mod model;
+pub(crate) mod note_revisions;
+pub(crate) mod notetype_ids;
 pub mod reconcile;
 pub mod report;
 

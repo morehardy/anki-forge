@@ -24,6 +24,23 @@ new minor release.
   include all parent decks in generated APKG collections.
 - Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and
   use the same canonical human deck names in staging and APKG observations.
+- Preserve numeric Anki notetype IDs across reordering, insertion, and baselined
+  updates; carry model assignments through staging, APKG inspection, and lockfiles.
+- Detect field additions and removals with lockfile-only update safety, and compare
+  all nine inspect observation domains without overstating partial comparisons.
+- Advance modification times for changed notes using full-content baseline
+  revisions, while preserving unchanged times and reproducible builds. This fixes
+  answer/tag changes being skipped by Anki because every export used time `1`.
+
+### Compatibility
+
+- Embedded contract bundle advances to `0.5.0`. To update previously distributed
+  decks, provide `compare_to(previous.apkg)` or a lockfile with numeric model IDs.
+  A legacy lockfile with null model IDs needs the previous APKG in strict mode;
+  rewrite the lockfile after migration. Note GUID derivation is unchanged.
+- Strict updates also require note revision evidence. Legacy lockfiles recover it
+  from the previous APKG. Use the latest distributed baseline, and persist revised
+  lockfiles for future releases; baseline-free exports remain first-release builds.
 
 ## [0.1.0] - 2026-08-26
 

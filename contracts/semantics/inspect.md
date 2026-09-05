@@ -16,6 +16,16 @@ and the structured observation buckets required by the schema.
 Inspection must preserve compatibility-relevant structure and avoid packaging
 noise that does not help compare writer outputs.
 
+Each notetype observation includes its numeric `anki_model_id`. APKG inspection
+reads it from the collection, while staging inspection reads the selected model
+assignment. It is not inferred from declaration order for new staging artifacts.
+
+Each note reference observation also carries full-content `revision` evidence:
+the versioned content digest and effective `mtime_secs`. Inspection recomputes the
+digest and reads actual APKG modification times; embedded identity metadata does
+not override note storage. Staging uses its selected time, or the legacy default
+`1` if no explicit note time exists.
+
 `Phase 5A` inspect output includes three additional structured observation
 buckets beyond the existing core note/card/media data:
 

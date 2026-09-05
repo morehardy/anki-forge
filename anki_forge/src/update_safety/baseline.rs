@@ -15,9 +15,7 @@ pub fn load_previous_apkg_identity_index(
     let path = path.as_ref();
     let inspect = crate::writer_core::inspect_apkg(path)
         .with_context(|| format!("inspect previous APKG {}", path.display()))?;
-    Ok(identity_index_from_inspect(
-        path, &inspect, current, lockfile,
-    ))
+    identity_index_from_inspect(path, &inspect, current, lockfile)
 }
 
 pub(crate) fn identity_index_from_inspect(
@@ -25,7 +23,7 @@ pub(crate) fn identity_index_from_inspect(
     inspect: &crate::writer_core::InspectReport,
     current: Option<&IdentityIndex>,
     lockfile: Option<&IdentityIndex>,
-) -> IdentityIndex {
+) -> Result<IdentityIndex> {
     let mut index = IdentityIndex {
         schema_version: "identity-index-v1".into(),
         source_kind: "previous_apkg".into(),
@@ -75,6 +73,7 @@ pub(crate) fn identity_index_from_inspect(
                 .unwrap_or("guid.raw-stable-id.v1")
                 .into(),
             note_type_id: "unknown".into(),
+            revision: None,
             recipe_id: metadata
                 .get("recipe_id")
                 .and_then(|value| value.as_str())
@@ -99,10 +98,32 @@ pub(crate) fn identity_index_from_inspect(
         recover_guid_equals_stable_id(&mut index, inspect, current, lockfile);
     }
     recover_notetype_merge_metadata(&mut index, inspect);
+    recover_note_revisions(&mut index, inspect)?;
+    super::notetype_ids::validate_baseline_model_ids(&index)?;
 
     index.limitations.sort();
     index.limitations.dedup();
-    index
+    Ok(index)
+}
+
+fn recover_note_revisions(
+    index: &mut IdentityIndex,
+    inspect: &crate::writer_core::InspectReport,
+) -> Result<()> {
+    let by_guid: std::collections::BTreeMap<_, _> = inspect
+        .observations
+        .references
+        .iter()
+        .filter_map(|entry| Some((entry.get("id")?.as_str()?, entry.get("revision")?)))
+        .collect();
+    for note in &mut index.notes {
+        if let Some(value) = by_guid.get(note.anki_guid.as_str()) {
+            let revision: super::model::NoteRevision = serde_json::from_value((*value).clone())?;
+            revision.validate()?;
+            note.revision = Some(revision);
+        }
+    }
+    Ok(())
 }
 
 fn recover_notetype_merge_metadata(
@@ -175,7 +196,9 @@ fn recover_notetype_merge_metadata(
         };
         index.notetypes.push(NotetypeIdentityEntry {
             note_type_id: note_type_id.to_string(),
-            anki_model_id: None,
+            anki_model_id: notetype
+                .get("anki_model_id")
+                .and_then(|value| value.as_i64()),
             name: name.to_string(),
             fields: fields_by_notetype.remove(note_type_id).unwrap_or_default(),
             templates: templates_by_notetype
@@ -221,6 +244,7 @@ fn recover_guid_equals_stable_id(
                 current_guid_candidate: guid.into(),
                 guid_derivation_version: "guid.raw-stable-id.v1".into(),
                 note_type_id: "unknown".into(),
+                revision: None,
                 recipe_id: "unknown".into(),
                 canonical_payload_hash: None,
                 provenance: "unknown_baseline".into(),
