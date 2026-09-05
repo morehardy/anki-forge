@@ -1,4 +1,5 @@
 use std::collections::BTreeSet;
+use std::io::Write;
 use std::path::Path;
 
 use anyhow::{Context, Result};
@@ -21,18 +22,26 @@ pub fn write_lockfile_atomic(path: impl AsRef<Path>, lockfile: &IdentityLockfile
     let parent = path.parent().unwrap_or_else(|| Path::new("."));
     std::fs::create_dir_all(parent)
         .with_context(|| format!("create lockfile directory {}", parent.display()))?;
-    let tmp = parent.join(format!(
-        ".{}.tmp-{}",
-        path.file_name()
-            .and_then(|name| name.to_str())
-            .unwrap_or("anki-forge.lock.json"),
-        std::process::id()
-    ));
     let bytes = crate::writer_core::to_canonical_json(lockfile)
         .context("serialize canonical identity lockfile")?;
-    std::fs::write(&tmp, bytes)
-        .with_context(|| format!("write temporary lockfile {}", tmp.display()))?;
-    std::fs::rename(&tmp, path)
+    // Reserve a new file exclusively: a predictable path can already be the
+    // baseline, published APKG, or a link to either. Write through the reserved
+    // handle, not by reopening its path, and let RAII clean up failed writes.
+    let mut temporary = tempfile::Builder::new()
+        .prefix(".anki-forge-lockfile-")
+        .suffix(".tmp")
+        .tempfile_in(parent)
+        .with_context(|| format!("create temporary identity lockfile in {}", parent.display()))?;
+    temporary
+        .write_all(bytes.as_bytes())
+        .with_context(|| format!("write temporary lockfile {}", temporary.path().display()))?;
+    temporary
+        .as_file()
+        .sync_all()
+        .with_context(|| format!("sync temporary lockfile {}", temporary.path().display()))?;
+    temporary
+        .persist(path)
+        .map_err(|error| error.error)
         .with_context(|| format!("replace identity lockfile {}", path.display()))?;
     Ok(())
 }

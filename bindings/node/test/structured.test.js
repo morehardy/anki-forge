@@ -39,6 +39,54 @@ function fakeLauncherScript(source) {
   return fakeScript;
 }
 
+test('real product runtime protects the baseline and does not publish blocked candidates', async (t) => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-baseline-'));
+  t.after(() => fs.rmSync(tempDir, { recursive: true, force: true }));
+  const baseline = path.join(tempDir, 'previous.apkg');
+  const output = path.join(tempDir, 'output.apkg');
+  const identityLockfile = path.join(tempDir, 'identity.json');
+  const runtime = { cwd: bindingsNodeRoot };
+  const fixture = (name) => path.join(repoRoot, 'contracts/fixtures/product-v2', `${name}.json`);
+  const first = await productBuild({
+    inputPath: fixture('basic-stock'),
+    apkgOut: baseline,
+    identityLockfile,
+    writeIdentityLockfile: true,
+  }, runtime);
+  assert.equal(first.status, 'success');
+  const original = fs.readFileSync(baseline);
+  const originalLockfile = fs.readFileSync(identityLockfile);
+
+  const collision = await productBuild({
+    inputPath: fixture('compare-risk'),
+    apkgOut: baseline,
+    compareTo: baseline,
+    failOn: 'low',
+  }, runtime);
+  assert.equal(collision.status, 'invalid');
+  assert.equal(collision.artifact, null);
+  assert.ok(collision.diagnostics.some(({ code }) => code === 'PROJECT.PATH_COLLISION'));
+  assert.ok(fs.readFileSync(baseline).equals(original), 'baseline bytes must stay unchanged');
+
+  fs.writeFileSync(output, 'previous publication');
+  const blocked = await productBuild({
+    inputPath: fixture('compare-risk'),
+    apkgOut: output,
+    compareTo: baseline,
+    failOn: 'low',
+    identityLockfile,
+    writeIdentityLockfile: true,
+  }, runtime);
+  assert.equal(blocked.status, 'blocked');
+  assert.equal(blocked.artifact, null);
+  assert.equal(blocked.update_safety.lockfile_written, false);
+  assert.ok(blocked.diff.artifact_diff.changes.length > 0);
+  assert.ok(blocked.risk.findings.length > 0);
+  assert.equal(fs.readFileSync(output, 'utf8'), 'previous publication');
+  assert.ok(fs.readFileSync(baseline).equals(original), 'baseline bytes must stay unchanged');
+  assert.ok(fs.readFileSync(identityLockfile).equals(originalLockfile), 'lockfile bytes must stay unchanged');
+});
+
 test('structured normalize returns invalid result without throwing on contract-invalid output', async () => {
   const fakeScript = fakeLauncherScript(`
     process.stdout.write(JSON.stringify({

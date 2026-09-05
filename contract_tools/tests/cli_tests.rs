@@ -989,6 +989,62 @@ fn product_build_cli_rejects_apkg_report_json_path_collision() {
 }
 
 #[test]
+fn product_build_cli_rejects_output_baseline_alias_and_preserves_baseline() {
+    let temp = tempdir().expect("tempdir");
+    let baseline = build_basic_stock_baseline(temp.path());
+    let original = fs::read(&baseline).unwrap();
+    let manifest = contract_tools::contract_manifest_path();
+    let input = product_v2_fixture_path("compare-risk");
+    let output = run_cli_in_dir(
+        &[
+            "product-build",
+            "--manifest",
+            manifest.to_str().unwrap(),
+            "--product-input",
+            input.to_str().unwrap(),
+            "--apkg-out",
+            "./basic-stock-baseline.apkg",
+            "--compare-to",
+            baseline.to_str().unwrap(),
+            "--fail-on",
+            "low",
+            "--output",
+            "contract-json",
+        ],
+        temp.path(),
+    );
+    assert_eq!(fs::read(&baseline).unwrap(), original);
+    assert_eq!(output.status.code(), Some(3));
+    let report: Value = serde_json::from_slice(&output.stdout).expect("structured failure report");
+    assert_eq!(report["status"], "invalid");
+    assert!(report["artifact"].is_null());
+    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
+}
+
+#[test]
+fn product_build_cli_does_not_publish_a_policy_blocked_candidate() {
+    let temp = tempdir().expect("tempdir");
+    let baseline = build_basic_stock_baseline(temp.path());
+    let original = fs::read(&baseline).unwrap();
+    let apkg = temp.path().join("output.apkg");
+    fs::write(&apkg, b"previous publication").unwrap();
+    let mut args = compare_to_arg(&baseline);
+    args.extend(fail_on_arg("low"));
+    args.extend(os_args(&["--output", "contract-json"]));
+    let output = run_product_build_fixture_to("compare-risk", &apkg, &args);
+    assert_eq!(output.status.code(), Some(2));
+    assert_eq!(fs::read(&apkg).unwrap(), b"previous publication");
+    assert_eq!(fs::read(&baseline).unwrap(), original);
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["status"], "blocked");
+    assert!(report["artifact"].is_null());
+    assert!(!report["diff"]["artifact_diff"]["changes"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+}
+
+#[test]
 fn product_build_policy_failure_prints_report_before_nonzero_exit() {
     let temp = tempdir().expect("tempdir");
     let baseline = build_basic_stock_baseline(temp.path());

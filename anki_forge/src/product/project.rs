@@ -1,4 +1,5 @@
 mod counts;
+mod paths;
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
@@ -11,6 +12,7 @@ use base64::Engine as _;
 use tempfile::TempDir;
 
 use counts::{card_count_from_inspect_or_fallback, count_phase1_cards_without_inspect};
+use paths::BuildPathPlan;
 
 use crate::build::{
     ApkgArtifact, BuildCounts, BuildError, BuildFailureCause, BuildMetrics, BuildOptions,
@@ -938,6 +940,29 @@ impl Project {
         writer_stack: Option<(WriterPolicy, BuildContext)>,
     ) -> Result<BuildReport, BuildError> {
         let started = Instant::now();
+        if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
+            let cause = if diagnostic.code.as_str() == "PROJECT.PATH_COLLISION" {
+                BuildFailureCause::Diagnostics
+            } else {
+                BuildFailureCause::Io
+            };
+            let mut report = failure_report(
+                started,
+                diagnostic.code.as_str(),
+                diagnostic.message.clone(),
+            );
+            report.status = if matches!(cause, BuildFailureCause::Io) {
+                BuildStatus::Error
+            } else {
+                BuildStatus::Invalid
+            };
+            report.diagnostics = vec![*diagnostic];
+            return return_report_error(&options, report, cause);
+        }
+        let baseline = options
+            .compare_to
+            .as_deref()
+            .map(crate::product::comparison::BaselineSnapshot::capture);
         let artifact_workspace = ArtifactWorkspace::new(&options, started)?;
         let artifacts_dir = artifact_workspace.path.clone();
         let normalize_options = options.normalize_options.clone().unwrap_or_default();
@@ -952,7 +977,6 @@ impl Project {
 
         let validation = self.validate();
         let mut diagnostics = validation.diagnostics;
-        push_build_output_path_collision_if_needed(&options, &mut diagnostics);
 
         let normalized_output =
             self.normalize_with_dirs(&media_input_dir, &media_store_dir, normalize_options);
@@ -1216,7 +1240,7 @@ impl Project {
         let disabled_update_safety =
             matches!(update_mode, crate::update_safety::EffectiveMode::Disabled);
 
-        let (reconcile, writer_guid_plan, mut update_safety_summary_val, lockfile_index) =
+        let (reconcile, writer_guid_plan, update_safety_summary_val, lockfile_index) =
             if disabled_update_safety {
                 let mut baseline_sources = Vec::new();
                 if let Some(path) = options.compare_to.as_ref() {
@@ -1356,11 +1380,11 @@ impl Project {
                 let lockfile_index = lf_index.clone();
 
                 let previous_index = if let Some(path) = options.compare_to.as_ref() {
-                    match crate::update_safety::baseline::load_previous_apkg_identity_index(
-                        path,
-                        Some(&current_identity.index),
-                        lf_index.as_ref(),
-                    ) {
+                    match baseline
+                        .as_ref()
+                        .expect("requested baseline was captured")
+                        .identity_index(Some(&current_identity.index), lf_index.as_ref())
+                    {
                         Ok(index) => {
                             baseline_sources.push(
                                 crate::update_safety::report::loaded_previous_apkg_source(
@@ -1627,13 +1651,24 @@ impl Project {
                 (reconcile, writer_guid_plan, summary, lockfile_index)
             };
 
-        let artifact_target = BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix)
+        let candidate_dir = artifact_workspace.create_candidate_dir().map_err(|error| {
+            let report = failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", error.to_string());
+            match maybe_write_report_json(&options, report) {
+                Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                Err(error) => error,
+            }
+        })?;
+        let artifact_target =
+            BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix.clone())
+                .with_media_store_dir(media_store_dir.clone());
+        let apkg_target = BuildArtifactTarget::new(candidate_dir.path(), stable_ref_prefix)
             .with_media_store_dir(media_store_dir);
-        let package_build_result = crate::writer_core::build_with_guid_plan(
+        let package_build_result = crate::writer_core::build::build_with_guid_plan_and_apkg_target(
             &normalized,
             &writer_policy,
             &build_context,
             &artifact_target,
+            &apkg_target,
             Some(&writer_guid_plan),
         )
         .map_err(|err| {
@@ -1676,155 +1711,20 @@ impl Project {
                 help: Some("inspect writer diagnostics for the failed stage".into()),
             });
         }
-        let writer_failed = package_build_result.result_status != "success"
-            || diagnostics
-                .iter()
-                .any(|diagnostic| diagnostic.severity == Severity::Error);
-
-        let mut artifact = None;
-        if let Some(apkg_ref) = package_build_result.apkg_ref.as_deref() {
-            let built_path = artifact_path_from_ref(&artifact_target, apkg_ref).map_err(|err| {
+        let artifact = package_build_result
+            .apkg_ref
+            .as_deref()
+            .map(|apkg_ref| artifact_path_from_ref(&apkg_target, apkg_ref))
+            .transpose()
+            .map_err(|error| {
                 let report =
-                    failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", err.to_string());
+                    failure_report(started, "PROJECT.ARTIFACT_REF_FAILED", error.to_string());
                 match maybe_write_report_json(&options, report) {
                     Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                    Err(err) => err,
+                    Err(error) => error,
                 }
-            })?;
-            let final_path = if let Some(output) = options.output.as_ref() {
-                replace_output_atomically(
-                    &built_path,
-                    output,
-                    options.output_replace_failure_for_test(),
-                )
-                .map_err(|err| {
-                    let report =
-                        failure_report(started, "PROJECT.OUTPUT_WRITE_FAILED", err.to_string());
-                    match maybe_write_report_json(&options, report) {
-                        Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                        Err(err) => err,
-                    }
-                })?;
-                output.clone()
-            } else {
-                built_path
-            };
-            artifact = Some(ApkgArtifact { path: final_path });
-        }
-
-        if options.write_identity_lockfile && !writer_failed {
-            if let Some(path) = options.identity_lockfile.as_ref() {
-                let Some(project_stable_id) = self.stable_id.clone() else {
-                    diagnostics.push(Diagnostic {
-                        code: DiagnosticCode::new("UPDATE.PROJECT_STABLE_ID_MISSING"),
-                        severity: Severity::Error,
-                        domain: None,
-                        stage: None,
-                        message:
-                            "project stable id is required before writing an identity lockfile"
-                                .into(),
-                        source: Some(SourcePath::new("project.stable_id")),
-                        help: Some(
-                            "set Project::stable_id(value) before write_identity_lockfile(true)"
-                                .into(),
-                        ),
-                    });
-                    let report = BuildReport {
-                        artifact: artifact.clone(),
-                        counts: BuildCounts {
-                            notes: normalized.notes.len(),
-                            cards: count_phase1_cards_without_inspect(&normalized),
-                            media: normalized.media_bindings.len(),
-                        },
-                        media: MediaSummary::from_normalized_ir_with_source_modes(
-                            &normalized,
-                            &diagnostics,
-                            &media_source_modes,
-                        ),
-                        diagnostics: diagnostics.clone(),
-                        metrics: BuildMetrics {
-                            duration: started.elapsed(),
-                        },
-                        inspect: None,
-                        previous_inspect: None,
-                        update_safety: None,
-                        comparison: ComparisonStatus::NotRequested,
-                        diff: None,
-                        risk: None,
-                        policy: BuildPolicyResult::default(),
-                        status: BuildStatus::Error,
-                    };
-                    return return_report_error(&options, report, BuildFailureCause::Diagnostics);
-                };
-                let selected_index = crate::update_safety::reconcile::selected_identity_index(
-                    &current_identity.index,
-                    &reconcile,
-                    lockfile_index.as_ref(),
-                );
-                let writer_policy_ref =
-                    crate::writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
-                let lockfile = crate::update_safety::model::IdentityLockfile {
-                    schema_version: "identity-lockfile-v1".into(),
-                    project_stable_id,
-                    writer_policy_ref: writer_policy_ref.clone(),
-                    identity_index: selected_index,
-                    generated_by: crate::update_safety::model::GeneratedBy {
-                        tool: "anki-forge".into(),
-                        tool_version: env!("CARGO_PKG_VERSION").into(),
-                        writer_policy_ref,
-                    },
-                };
-                crate::update_safety::lockfile::write_lockfile_atomic(path, &lockfile).map_err(
-                    |err| {
-                        diagnostics.push(Diagnostic {
-                            code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
-                            severity: Severity::Error,
-                            domain: None,
-                            stage: None,
-                            message: err.to_string(),
-                            source: Some(SourcePath::new(path.display().to_string())),
-                            help: Some("verify the lockfile path is writable".into()),
-                        });
-                        let report = BuildReport {
-                            artifact: artifact.clone(),
-                            counts: BuildCounts {
-                                notes: normalized.notes.len(),
-                                cards: count_phase1_cards_without_inspect(&normalized),
-                                media: normalized.media_bindings.len(),
-                            },
-                            media: MediaSummary::from_normalized_ir_with_source_modes(
-                                &normalized,
-                                &diagnostics,
-                                &media_source_modes,
-                            ),
-                            diagnostics: diagnostics.clone(),
-                            metrics: BuildMetrics {
-                                duration: started.elapsed(),
-                            },
-                            inspect: None,
-                            previous_inspect: None,
-                            update_safety: None,
-                            comparison: ComparisonStatus::NotRequested,
-                            diff: None,
-                            risk: None,
-                            policy: BuildPolicyResult::default(),
-                            status: BuildStatus::Error,
-                        };
-                        match maybe_write_report_json(&options, report) {
-                            Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                            Err(err) => err,
-                        }
-                    },
-                )?;
-                update_safety_summary_val = crate::update_safety::report::summary_from_reconcile(
-                    update_mode,
-                    &reconcile,
-                    &diagnostics,
-                    update_safety_summary_val.baseline_sources.clone(),
-                    true,
-                );
-            }
-        }
+            })?
+            .map(|path| ApkgArtifact { path });
 
         let media = MediaSummary::from_normalized_ir_with_source_modes(
             &normalized,
@@ -1840,7 +1740,7 @@ impl Project {
         let mut policy = BuildPolicyResult::default();
         let mut status = BuildStatus::highest([writer_status, diagnostics_status(&diagnostics)]);
         if let Some(artifact) = artifact.as_ref() {
-            let comparison_output = crate::product::comparison::assemble_comparison(
+            let comparison_output = crate::product::comparison::assemble_comparison_with_baseline(
                 crate::product::comparison::ComparisonInput {
                     current_artifact: &artifact.path,
                     previous_artifact: options.compare_to.as_deref(),
@@ -1848,6 +1748,7 @@ impl Project {
                     update_safety: Some(&update_safety_summary_val),
                     started,
                 },
+                baseline.as_ref(),
             );
             diagnostics = comparison_output.diagnostics;
             if options.inspect {
@@ -1884,7 +1785,7 @@ impl Project {
             cards: card_count_from_inspect_or_fallback(inspect.as_ref(), &normalized),
             media: normalized.media_bindings.len(),
         };
-        let report = BuildReport {
+        let mut report = BuildReport {
             artifact,
             counts,
             media,
@@ -1902,10 +1803,87 @@ impl Project {
             status,
         };
 
-        let report = maybe_write_report_json(&options, report)?;
-        report.ensure_success()?;
+        if let Err(error) = report.ensure_success() {
+            // Candidate files are private and cleaned up on return. A rejected
+            // report must not advertise a path that was never published.
+            report.artifact = None;
+            return return_report_error(&options, report, error.cause);
+        }
+        if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
+            report.artifact = None;
+            return return_path_validation_error(&options, report, *diagnostic);
+        }
+
+        let candidate = report.artifact.take().expect("successful candidate exists");
+        match artifact_workspace.publish(&candidate.path, &options) {
+            Ok(path) => report.artifact = Some(ApkgArtifact { path }),
+            Err(error) => {
+                report.status = BuildStatus::Error;
+                report.diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("PROJECT.OUTPUT_WRITE_FAILED"),
+                    severity: Severity::Error,
+                    domain: None,
+                    stage: None,
+                    source: Some(SourcePath::new("build.output")),
+                    message: error.to_string(),
+                    help: None,
+                });
+                return return_report_error(&options, report, BuildFailureCause::Io);
+            }
+        }
+        // Keep any published temporary artifact valid even if a later lockfile
+        // or report write fails. The separate candidate directory still drops.
         artifact_workspace.persist_if_requested();
-        Ok(report)
+        // New paths can only reveal case-folding aliases after creation. Keep
+        // the published APKG intact and reject any conflicting follow-up write.
+        if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
+            return return_path_validation_error(&options, report, *diagnostic);
+        }
+        if options.write_identity_lockfile {
+            if let Some(path) = options.identity_lockfile.as_ref() {
+                let selected_index = crate::update_safety::reconcile::selected_identity_index(
+                    &current_identity.index,
+                    &reconcile,
+                    lockfile_index.as_ref(),
+                );
+                let writer_policy_ref =
+                    crate::writer_core::policy_ref(&writer_policy.id, &writer_policy.version);
+                let lockfile = crate::update_safety::model::IdentityLockfile {
+                    schema_version: "identity-lockfile-v1".into(),
+                    project_stable_id: self
+                        .stable_id
+                        .clone()
+                        .expect("lockfile project identity was validated"),
+                    writer_policy_ref: writer_policy_ref.clone(),
+                    identity_index: selected_index,
+                    generated_by: crate::update_safety::model::GeneratedBy {
+                        tool: "anki-forge".into(),
+                        tool_version: env!("CARGO_PKG_VERSION").into(),
+                        writer_policy_ref,
+                    },
+                };
+                if let Err(error) =
+                    crate::update_safety::lockfile::write_lockfile_atomic(path, &lockfile)
+                {
+                    report.status = BuildStatus::Error;
+                    report.diagnostics.push(Diagnostic {
+                        code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_FAILED"),
+                        severity: Severity::Error,
+                        domain: None,
+                        stage: None,
+                        source: Some(SourcePath::new(path.display().to_string())),
+                        message: error.to_string(),
+                        help: Some("verify the lockfile path is writable".into()),
+                    });
+                    return return_report_error(&options, report, BuildFailureCause::Io);
+                }
+                if let Some(summary) = report.update_safety.as_mut() {
+                    summary.lockfile_written = true;
+                }
+            }
+        }
+        report.metrics.duration = started.elapsed();
+        maybe_write_report_json(&options, report)
     }
 
     pub fn write_apkg(&self, path: impl AsRef<Path>) -> Result<BuildReport, BuildError> {
@@ -4068,6 +4046,32 @@ impl ArtifactWorkspace {
         })
     }
 
+    fn create_candidate_dir(&self) -> std::io::Result<TempDir> {
+        // Keep private APKG generation on the caller-selected filesystem.
+        // TempDir reserves a fresh directory and removes it on every exit path.
+        std::fs::create_dir_all(&self.path)?;
+        tempfile::Builder::new()
+            .prefix("anki-forge-candidate-")
+            .tempdir_in(&self.path)
+    }
+
+    fn publish(&self, candidate: &Path, options: &BuildOptions) -> std::io::Result<PathBuf> {
+        let package_path = self.path.join("package.apkg");
+        if self.temp_dir.is_none() || self.persist_temp {
+            replace_output_atomically(candidate, &package_path, false)?;
+        }
+        if let Some(output) = options.output.as_ref() {
+            replace_output_atomically(
+                candidate,
+                output,
+                options.output_replace_failure_for_test(),
+            )?;
+            Ok(output.clone())
+        } else {
+            Ok(package_path)
+        }
+    }
+
     fn persist_if_requested(self) {
         if self.persist_temp {
             if let Some(temp_dir) = self.temp_dir {
@@ -4419,85 +4423,6 @@ fn invalid_report_without_artifact(
     }
 }
 
-fn push_build_output_path_collision_if_needed(
-    options: &BuildOptions,
-    diagnostics: &mut Vec<Diagnostic>,
-) {
-    let Some((message, source)) = build_output_path_collision(options) else {
-        return;
-    };
-
-    diagnostics.push(Diagnostic {
-        code: DiagnosticCode::new("PROJECT.PATH_COLLISION"),
-        severity: Severity::Error,
-        domain: None,
-        stage: None,
-        message,
-        source: Some(SourcePath::new(source)),
-        help: Some(
-            "choose distinct paths for apkg output, report_json, and identity lockfile".into(),
-        ),
-    });
-}
-
-fn build_output_path_collision(options: &BuildOptions) -> Option<(String, &'static str)> {
-    if output_collides_with_identity_lockfile(options) {
-        return Some((
-            "build output path collides with identity lockfile path".into(),
-            "build.identity_lockfile",
-        ));
-    }
-    if report_json_collides_with_identity_lockfile(options) {
-        return Some((
-            "report_json path collides with identity lockfile path".into(),
-            "build.report_json",
-        ));
-    }
-    if report_json_collides_with_output(options) {
-        return Some((
-            "build output path collides with report_json path".into(),
-            "build.report_json",
-        ));
-    }
-    None
-}
-
-fn output_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
-    options
-        .identity_lockfile
-        .as_ref()
-        .zip(effective_apkg_output_path(options))
-        .is_some_and(|(identity_lockfile, output)| &output == identity_lockfile)
-}
-
-fn report_json_collides_with_any_output(options: &BuildOptions) -> bool {
-    report_json_collides_with_identity_lockfile(options)
-        || report_json_collides_with_output(options)
-}
-
-fn report_json_collides_with_identity_lockfile(options: &BuildOptions) -> bool {
-    options
-        .identity_lockfile
-        .as_ref()
-        .zip(options.report_json.as_ref())
-        .is_some_and(|(identity_lockfile, report_json)| report_json == identity_lockfile)
-}
-
-fn report_json_collides_with_output(options: &BuildOptions) -> bool {
-    effective_apkg_output_path(options)
-        .zip(options.report_json.as_ref())
-        .is_some_and(|(output, report_json)| &output == report_json)
-}
-
-fn effective_apkg_output_path(options: &BuildOptions) -> Option<PathBuf> {
-    options.output.clone().or_else(|| {
-        options
-            .artifacts_dir
-            .as_ref()
-            .map(|artifacts_dir| artifacts_dir.join("package.apkg"))
-    })
-}
-
 fn attach_artifact_diff_risk_if_needed(
     risk: &mut Option<crate::risk::ImportRiskReport>,
     diff: Option<&crate::diff::BuildDiffSummary>,
@@ -4535,7 +4460,13 @@ fn maybe_write_report_json(
     let Some(path) = options.report_json.as_ref() else {
         return Ok(report);
     };
-    if report_json_collides_with_any_output(options) {
+    if let Err(diagnostic) = BuildPathPlan::new(options).validate_report() {
+        // Never overwrite a protected file while reporting an earlier failure.
+        // A newly discovered alias must not silently turn a successful build
+        // into one with a missing report (e.g. a new case-variant lockfile).
+        if report.status.is_success() {
+            return return_path_validation_error(options, report, *diagnostic);
+        }
         return Ok(report);
     }
 
@@ -4554,6 +4485,22 @@ fn maybe_write_report_json(
     }
 
     Ok(report)
+}
+
+fn return_path_validation_error(
+    options: &BuildOptions,
+    mut report: BuildReport,
+    diagnostic: Diagnostic,
+) -> Result<BuildReport, BuildError> {
+    let cause = if diagnostic.code.as_str() == "PROJECT.PATH_COLLISION" {
+        report.status = BuildStatus::Invalid;
+        BuildFailureCause::Diagnostics
+    } else {
+        report.status = BuildStatus::Error;
+        BuildFailureCause::Io
+    };
+    report.diagnostics.push(diagnostic);
+    return_report_error(options, report, cause)
 }
 
 fn return_report_error(
@@ -5423,5 +5370,70 @@ mod tests {
         };
 
         assert!(!temp_path.exists());
+    }
+
+    #[test]
+    fn private_candidates_follow_the_artifact_workspace_and_are_cleaned_up() {
+        for explicit_artifacts in [true, false] {
+            let root = tempfile::tempdir().unwrap();
+            let mut options = BuildOptions::new().output(root.path().join("output.apkg"));
+            if explicit_artifacts {
+                options = options.artifacts_dir(root.path().join("new/artifacts"));
+            }
+            let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+            let candidate_path = {
+                let candidate = workspace.create_candidate_dir().unwrap();
+                assert_eq!(candidate.path().parent(), Some(workspace.path.as_path()));
+                assert!(!candidate.path().join("package.apkg").exists());
+                std::fs::write(candidate.path().join("package.apkg"), b"candidate bytes").unwrap();
+                candidate.path().to_path_buf()
+            };
+            assert!(!candidate_path.exists());
+            assert!(!workspace.path.join("package.apkg").exists());
+        }
+    }
+
+    #[test]
+    fn output_only_publication_does_not_copy_package_into_disposable_workspace() {
+        let root = tempfile::tempdir().unwrap();
+        let candidate = root.path().join("candidate.apkg");
+        std::fs::write(&candidate, b"candidate bytes").unwrap();
+        let output = root.path().join("output.apkg");
+        let options = BuildOptions::new().output(&output);
+        let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+
+        let published = workspace.publish(&candidate, &options).unwrap();
+
+        assert_eq!(published, output);
+        assert_eq!(std::fs::read(published).unwrap(), b"candidate bytes");
+        assert!(
+            !workspace.path.join("package.apkg").exists(),
+            "output-only builds must not allocate a second temporary APKG"
+        );
+    }
+
+    #[test]
+    fn publication_keeps_packages_when_the_workspace_is_retained() {
+        for (explicit_artifacts, explicit_output) in [(true, true), (true, false), (false, false)] {
+            let root = tempfile::tempdir().unwrap();
+            let candidate = root.path().join("candidate.apkg");
+            std::fs::write(&candidate, b"candidate bytes").unwrap();
+            let output = root.path().join("output.apkg");
+            let mut options = BuildOptions::new();
+            if explicit_artifacts {
+                options = options.artifacts_dir(root.path().join("artifacts"));
+            }
+            if explicit_output {
+                options = options.output(&output);
+            }
+            let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+
+            let published = workspace.publish(&candidate, &options).unwrap();
+
+            assert_eq!(std::fs::read(&published).unwrap(), b"candidate bytes");
+            let package = workspace.path.join("package.apkg");
+            assert_eq!(std::fs::read(&package).unwrap(), b"candidate bytes");
+            assert_eq!(published, if explicit_output { output } else { package });
+        }
     }
 }

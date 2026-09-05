@@ -45,6 +45,64 @@ def test_python_basic_project_writes_apkg(tmp_path):
     assert (tmp_path / "deck.apkg").is_file()
 
 
+def test_python_hard_link_baseline_alias_is_rejected_by_rust_runtime(tmp_path):
+    project = Project("Deck", stable_id="baseline-guard")
+    project.add_note(Note.basic("Front", "Back", stable_id="note-1"))
+    baseline = tmp_path / "previous.apkg"
+    project.write_apkg(baseline).ensure_success()
+    original = baseline.read_bytes()
+    alias = tmp_path / "alias.apkg"
+    os.link(baseline, alias)
+
+    report = project.write_apkg(alias, compare_to=baseline)
+
+    assert report.status == "invalid"
+    assert report.artifact is None
+    assert any(diagnostic.code == "PROJECT.PATH_COLLISION" for diagnostic in report.diagnostics)
+    assert baseline.read_bytes() == original
+    assert alias.read_bytes() == original
+
+
+def test_python_policy_block_preserves_output_and_lockfile(tmp_path):
+    baseline = tmp_path / "previous.apkg"
+    lockfile = tmp_path / "identity.json"
+    output = tmp_path / "output.apkg"
+    report_path = tmp_path / "report.json"
+    project = Project("Deck", stable_id="baseline-guard")
+    project.add_note(Note.basic("Front", "Back", stable_id="note-1"))
+    project.write_apkg(
+        baseline, identity_lockfile=lockfile, write_identity_lockfile=True
+    ).ensure_success()
+    original = baseline.read_bytes()
+    original_lockfile = lockfile.read_bytes()
+    output.write_bytes(b"previous publication")
+    changed = Project("Deck", stable_id="baseline-guard")
+    changed.add_note(Note.basic("Front", "Changed", stable_id="note-1"))
+
+    report = changed.write_apkg(
+        output,
+        compare_to=baseline,
+        fail_on="low",
+        identity_lockfile=lockfile,
+        write_identity_lockfile=True,
+        report_json=report_path,
+    )
+
+    assert report.status == "blocked"
+    assert report.artifact is None
+    assert report.diff["artifact_diff"]["changes"]
+    assert report.risk["findings"]
+    assert report.update_safety["lockfile_written"] is False
+    with pytest.raises(DiagnosticsError):
+        report.ensure_success()
+    assert baseline.read_bytes() == original
+    assert output.read_bytes() == b"previous publication"
+    assert lockfile.read_bytes() == original_lockfile
+    persisted = json.loads(report_path.read_text(encoding="utf-8"))
+    assert persisted["status"] == "blocked"
+    assert persisted["artifact"] is None
+
+
 def test_python_image_occlusion_runtime_build(tmp_path):
     project = Project("IO")
     image = project.media.add_bytes(source_label="heart.png", data=b"heart", export_as="heart.png")

@@ -8,6 +8,18 @@ new minor release.
 
 ### Fixed
 
+- Reject output, report, or writable lockfile aliases of the comparison baseline
+  before writes, including symlinks, hard links, and the implicit artifact package.
+- Check actual staging-manifest aliases and recheck newly created destinations
+  before lockfile/report writes to preserve files on case-insensitive filesystems.
+- Keep outputs, retained packages, baselines, and identity lockfiles outside
+  writable staging/media directories so policy rejection preserves their bytes.
+- Avoid an extra temporary APKG copy when only an explicit output is retained.
+- Create private candidates on the artifact workspace's filesystem and reserve
+  lockfile temporary files exclusively to avoid truncating aliased inputs/outputs.
+- Reuse one baseline inspection for identity reconciliation and diff; publish
+  APKG outputs and identity lockfiles only after comparison and risk gates pass.
+  Blocked reports retain diff/risk evidence without an unpublished artifact path.
 - Write hierarchical deck names with Anki's native `U+001F` separator and
   include all parent decks in generated APKG collections.
 - Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and

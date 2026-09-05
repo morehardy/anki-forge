@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
 use crate::build::{BuildStatus, ComparisonStatus, InspectSummary, UpdateSafetySummary};
@@ -6,6 +6,7 @@ use crate::diagnostics::{Diagnostic, DiagnosticCode, Severity, SourcePath};
 use crate::diff::{summarize_writer_diff, BuildDiffSummary};
 use crate::risk::rules::{classify_import_risk, RiskInput};
 use crate::risk::ImportRiskReport;
+use crate::update_safety::model::IdentityIndex;
 
 #[derive(Debug, Clone)]
 pub struct ComparisonInput<'a> {
@@ -29,6 +30,48 @@ pub struct ComparisonOutput {
 }
 
 pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
+    let baseline = input.previous_artifact.map(BaselineSnapshot::capture);
+    assemble_comparison_with_baseline(input, baseline.as_ref())
+}
+
+/// Inspection facts are captured before any build writes, then shared by GUID
+/// reconciliation and diff. No later stage reopens the caller's baseline path.
+pub(crate) struct BaselineSnapshot {
+    path: PathBuf,
+    inspected: Result<InspectedArtifact, String>,
+}
+
+impl BaselineSnapshot {
+    pub(crate) fn capture(path: &Path) -> Self {
+        Self {
+            path: path.to_owned(),
+            inspected: inspect_artifact(path),
+        }
+    }
+
+    pub(crate) fn identity_index(
+        &self,
+        current: Option<&IdentityIndex>,
+        lockfile: Option<&IdentityIndex>,
+    ) -> Result<IdentityIndex, String> {
+        self.inspected
+            .as_ref()
+            .map(|artifact| {
+                crate::update_safety::baseline::identity_index_from_inspect(
+                    &self.path,
+                    &artifact.report,
+                    current,
+                    lockfile,
+                )
+            })
+            .map_err(Clone::clone)
+    }
+}
+
+pub(crate) fn assemble_comparison_with_baseline(
+    input: ComparisonInput<'_>,
+    baseline: Option<&BaselineSnapshot>,
+) -> ComparisonOutput {
     let mut diagnostics = input.diagnostics.to_vec();
     let current = match inspect_artifact(input.current_artifact) {
         Ok(artifact) => Some(artifact),
@@ -47,7 +90,7 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
             None
         }
     };
-    let Some(previous_artifact) = input.previous_artifact else {
+    let Some(baseline) = baseline else {
         let risk = classify_import_risk(RiskInput {
             diagnostics: &diagnostics,
             comparison: ComparisonStatus::NotRequested,
@@ -69,7 +112,7 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
     };
 
     let mut baseline_unavailable = false;
-    let previous = match inspect_artifact(previous_artifact) {
+    let previous = match &baseline.inspected {
         Ok(artifact) => Some(artifact),
         Err(message) => {
             baseline_unavailable = true;
@@ -78,8 +121,8 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
                 severity: Severity::Error,
                 domain: None,
                 stage: None,
-                message,
-                source: Some(SourcePath::new(previous_artifact.display().to_string())),
+                message: message.clone(),
+                source: Some(SourcePath::new(baseline.path.display().to_string())),
                 help: Some("verify the previous APKG path and package contents".to_string()),
             });
             None
@@ -137,7 +180,7 @@ pub fn assemble_comparison(input: ComparisonInput<'_>) -> ComparisonOutput {
     ComparisonOutput {
         comparison,
         current_inspect: current.map(|artifact| artifact.summary),
-        previous_inspect: previous.map(|artifact| artifact.summary),
+        previous_inspect: previous.map(|artifact| artifact.summary.clone()),
         diff,
         risk: Some(risk),
         diagnostics,
@@ -159,6 +202,88 @@ fn inspect_artifact(path: &Path) -> Result<InspectedArtifact, String> {
             let summary = inspect_summary_from_report(&report);
             InspectedArtifact { report, summary }
         })
+}
+
+#[cfg(test)]
+mod snapshot_tests {
+    use super::*;
+    use crate::product::{Note, Project};
+
+    fn build(path: &Path, stable_id: &str) {
+        let mut project = Project::new("Snapshot").stable_id("snapshot");
+        project
+            .add_note(Note::basic("front", "back").stable_id(stable_id))
+            .unwrap();
+        project.write_apkg(path).unwrap();
+    }
+
+    #[test]
+    fn captured_baseline_survives_replacement_for_identity_and_diff() {
+        let root = tempfile::tempdir().unwrap();
+        let previous = root.path().join("previous.apkg");
+        let current = root.path().join("current.apkg");
+        build(&previous, "previous-note");
+        build(&current, "current-note");
+        let snapshot = BaselineSnapshot::capture(&previous);
+        // Deterministically simulate another writer replacing the baseline
+        // between preflight and the later comparison stage.
+        std::fs::copy(&current, &previous).unwrap();
+        let index = snapshot.identity_index(None, None).unwrap();
+        assert_eq!(index.notes[0].stable_id, "previous-note");
+        let input = || ComparisonInput {
+            current_artifact: &current,
+            previous_artifact: Some(&previous),
+            diagnostics: &[],
+            update_safety: None,
+            started: Instant::now(),
+        };
+        let captured = assemble_comparison_with_baseline(input(), Some(&snapshot));
+        assert_eq!(captured.comparison, ComparisonStatus::Complete);
+        assert!(!captured
+            .diff
+            .unwrap()
+            .artifact_diff
+            .unwrap()
+            .changes
+            .is_empty());
+        let reopened = assemble_comparison(input());
+        assert!(reopened
+            .diff
+            .unwrap()
+            .artifact_diff
+            .unwrap()
+            .changes
+            .is_empty());
+    }
+
+    #[test]
+    fn unreadable_baseline_stays_unavailable_after_a_file_appears() {
+        let root = tempfile::tempdir().unwrap();
+        let previous = root.path().join("previous.apkg");
+        let snapshot = BaselineSnapshot::capture(&previous);
+        build(&previous, "note");
+        assert!(snapshot.identity_index(None, None).is_err());
+        let report = assemble_comparison_with_baseline(
+            ComparisonInput {
+                current_artifact: &previous,
+                previous_artifact: Some(&previous),
+                diagnostics: &[],
+                update_safety: None,
+                started: Instant::now(),
+            },
+            Some(&snapshot),
+        );
+        assert_eq!(report.comparison, ComparisonStatus::Unavailable);
+        let diagnostic = report
+            .diagnostics
+            .iter()
+            .find(|item| item.code.as_str() == "COMPARE.BASELINE_UNAVAILABLE")
+            .unwrap();
+        assert_eq!(
+            diagnostic.source.as_ref().unwrap().as_str(),
+            previous.to_str().unwrap()
+        );
+    }
 }
 
 fn inspect_summary_from_report(report: &crate::writer_core::InspectReport) -> InspectSummary {

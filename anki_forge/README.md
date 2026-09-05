@@ -42,6 +42,21 @@ reports; callers should inspect stable diagnostic codes instead of matching
 human-readable messages. File-writing operations are synchronous and may leave
 diagnostic evidence in a requested report path when a build fails.
 
+`compare_to(...)` baselines are read-only: output, report, and writable lockfile
+paths must not alias them, including through symlinks or hard links. Baselines,
+outputs, retained packages, and identity lockfiles must also stay
+outside writable staging/media directories, including directory aliases.
+Comparison and risk checks use a snapshot captured before building and run before APKG or
+lockfile publication. A policy-blocked build preserves existing outputs and
+lockfiles and reports diff/risk evidence with no artifact path. Publication is
+atomic per file, not transactional across all requested files.
+New destinations are rechecked after creation, so a late path-collision error
+may leave a valid published APKG but cannot replace it with lockfile/report JSON.
+Private candidates follow the artifact workspace's filesystem and are cleaned
+up after building. Lockfile publication uses an exclusively reserved temporary
+file beside its target, without reusing predictable names that may alias inputs
+or outputs.
+
 Values are ordinary owned Rust values and may be moved between threads when
 their fields permit it. A single builder or project is not designed for
 concurrent mutation; coordinate shared mutation in the calling application.

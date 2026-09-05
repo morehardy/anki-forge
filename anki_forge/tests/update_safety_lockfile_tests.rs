@@ -31,6 +31,25 @@ fn lockfile_roundtrip_uses_canonical_json_and_generated_by() {
 }
 
 #[test]
+fn lockfile_replace_failure_cleans_up_its_reserved_temporary_file() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("identity.json");
+    std::fs::create_dir(&path).unwrap();
+    let sentinel = path.join("sentinel");
+    std::fs::write(&sentinel, b"unchanged").unwrap();
+
+    let error = write_lockfile_atomic(&path, &sample_lockfile_with_entries(0))
+        .expect_err("cannot replace a nonempty directory");
+    assert!(error.to_string().contains("replace identity lockfile"));
+    assert_eq!(std::fs::read(sentinel).unwrap(), b"unchanged");
+    assert_eq!(
+        std::fs::read_dir(root.path()).unwrap().count(),
+        1,
+        "failed publication must remove its temporary file"
+    );
+}
+
+#[test]
 fn lockfile_rejects_unknown_schema_version() {
     let root = tempfile::tempdir().expect("tempdir");
     let path = root.path().join("anki-forge.lock.json");
