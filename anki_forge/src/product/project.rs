@@ -1689,6 +1689,35 @@ impl Project {
                 (reconcile, writer_guid_plan, summary, lockfile_index)
             };
 
+        let lockfile_evidence_unverified =
+            matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly)
+                && diagnostics.iter().any(|diagnostic| {
+                    matches!(
+                        diagnostic.code.as_str(),
+                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE"
+                            | "UPDATE.BASELINE_APKG_UNREADABLE"
+                            | "UPDATE.NOTETYPE_MODEL_ID_MISSING"
+                            | "UPDATE.NOTE_REVISION_MISSING"
+                    )
+                });
+        let write_identity_lockfile =
+            options.write_identity_lockfile && !lockfile_evidence_unverified;
+        if options.write_identity_lockfile && lockfile_evidence_unverified {
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED"),
+                severity: Severity::Warning,
+                domain: None,
+                stage: None,
+                message: "identity lockfile was not written because baseline evidence is unverified"
+                    .into(),
+                source: options
+                    .identity_lockfile
+                    .as_ref()
+                    .map(|path| SourcePath::new(path.display().to_string())),
+                help: Some("restore readable baseline evidence and recover missing identities or revisions from the previous APKG before writing the lockfile".into()),
+            });
+        }
+
         let candidate_dir = artifact_workspace.create_candidate_dir().map_err(|error| {
             let report = failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", error.to_string());
             match maybe_write_report_json(&options, report) {
@@ -1888,7 +1917,7 @@ impl Project {
         if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
             return return_path_validation_error(&options, report, *diagnostic);
         }
-        if options.write_identity_lockfile {
+        if write_identity_lockfile {
             if let Some(path) = options.identity_lockfile.as_ref() {
                 let selected_index = crate::update_safety::reconcile::selected_identity_index(
                     &current_identity.index,

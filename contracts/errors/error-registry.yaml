@@ -302,6 +302,9 @@ codes:
   - id: UPDATE.LOCKFILE_PATH_REQUIRED
     status: active
     summary: lockfile write was requested without a lockfile path
+  - id: UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED
+    status: active
+    summary: report-only lockfile write was skipped because baseline identity or revision evidence is unverified
   - id: UPDATE.LOCKFILE_ABSENT_ENTRIES_HIGH
     status: active
     summary: lockfile contains many absent entries

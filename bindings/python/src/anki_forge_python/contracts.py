@@ -4,6 +4,9 @@ class ContractValidationError(Exception):
         self.parse_phase = parse_phase
 
 
+OBSERVATION_MODEL_VERSIONS = ("phase3-inspect-v1", "phase3-inspect-v2")
+
+
 CONTRACT_RULES = {
     "normalize": {
         "kind": "normalization-result",
@@ -35,7 +38,7 @@ CONTRACT_RULES = {
             "degradation_reasons",
             "observations",
         ],
-        "version_fields": [("observation_model_version", "phase3-inspect-v1")],
+        "version_fields": [("observation_model_version", OBSERVATION_MODEL_VERSIONS)],
     },
     "diff": {
         "kind": "diff-report",
@@ -52,8 +55,8 @@ CONTRACT_RULES = {
             "changes",
         ],
         "version_fields": [
-            ("left_observation_model_version", "phase3-inspect-v1"),
-            ("right_observation_model_version", "phase3-inspect-v1"),
+            ("left_observation_model_version", OBSERVATION_MODEL_VERSIONS),
+            ("right_observation_model_version", OBSERVATION_MODEL_VERSIONS),
         ],
     },
 }
@@ -76,8 +79,9 @@ def validate_contract_payload(command: str, payload: object) -> None:
                 f"{command} contract payload missing required field {field}",
             )
     for field, expected in rules["version_fields"]:
-        if payload.get(field) != expected:
+        supported = expected if isinstance(expected, tuple) else (expected,)
+        if payload.get(field) not in supported:
             raise ContractValidationError(
                 "contract-version",
-                f"{command} contract field {field} must be {expected}",
+                f"{command} contract field {field} must be {' or '.join(supported)}",
             )

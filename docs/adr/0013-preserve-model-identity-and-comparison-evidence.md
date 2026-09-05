@@ -23,3 +23,6 @@ unavailable comparison status.
   validation while retaining existing note GUID and wire schema versions.
 - Detailed rationale, migration requirements, and regression coverage are in
   RFC 0003.
+- Review follow-up: bundle 0.5.0 advances the observation model to
+  `phase3-inspect-v2`; saved v1 reports remain readable but cross-version diffs
+  are partial. Unverified report-only baselines must not rewrite lockfiles.

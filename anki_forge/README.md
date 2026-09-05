@@ -51,6 +51,12 @@ revision evidence require a previous APKG for strict migration. Baseline-free
 `write_apkg` is a first-release export, not a guarantee that Anki will update
 existing notes. Newer local edits remain governed by Anki's import settings.
 
+Report-only builds with missing or unreadable baseline evidence leave the identity
+lockfile unchanged, even if writing was requested, and report
+`UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED`. Recover the evidence before retrying;
+rejected requested lockfiles are high risk and can be blocked with
+`.fail_on(RiskLevel::High)`.
+
 ## Errors and concurrency
 
 High-level `Deck` and `Project` operations return structured errors and build

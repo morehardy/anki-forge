@@ -87,3 +87,20 @@ must use their latest distributed APKG, or persist the updated identity lockfile
 after each release (`write_identity_lockfile(true)`). Baseline-free/disabled builds
 remain deterministic first-release exports, not update-safe replacements. Anki's
 own import conditions still govern newer local edits in the receiving collection.
+
+## Report-only persistence and rejected baselines
+
+Report-only permission to emit a best-effort APKG is not permission to turn
+unverified baseline evidence into a trusted lockfile. If a requested APKG or
+lockfile baseline is unreadable, or an existing note/type still lacks revision
+or model-ID evidence, skip the entire requested lockfile write. Preserve any
+existing lockfile byte-for-byte, emit `UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED`,
+and leave `update_safety.lockfile_written` false. A later strict build must still
+require recovery. A readable previous APKG can supply missing legacy evidence;
+normal first-release lockfile creation and verified report-only updates still write.
+
+`UPDATE.BASELINE_LOCKFILE_UNREADABLE` always contributes high risk
+`RISK.BASELINE_UNAVAILABLE`, even when report-only downgrades its diagnostic to
+a warning. This includes invalid model IDs/revisions and parse/read failures.
+The finding retains the lockfile source and diagnostic evidence. `fail_on(High)`
+blocks publication without changing existing output or lockfile bytes.

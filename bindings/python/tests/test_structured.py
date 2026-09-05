@@ -249,6 +249,46 @@ class StructuredBindingsTests(unittest.TestCase):
         self.assertEqual(context.exception.exit_status, 3)
         self.assertIn("normalize failed", context.exception.stderr)
 
+    def test_observation_versions_support_legacy_current_and_mixed_reports(self) -> None:
+        fixtures = REPO_ROOT / "contracts/fixtures/phase3/expected"
+
+        def runtime_for(payload: dict) -> dict:
+            return installed_runtime_options(
+                fake_launcher_script(f"print({json.dumps(payload)!r})")
+            )
+
+        for version in ("phase3-inspect-v1", "phase3-inspect-v2"):
+            with self.subTest(version=version):
+                payload = json.loads((fixtures / "basic.inspect.json").read_text())
+                payload["observation_model_version"] = version
+                result = inspect({"apkg_path": "unused.apkg"}, **runtime_for(payload))
+                self.assertEqual(result["observation_model_version"], version)
+
+        for left, right in (
+            ("phase3-inspect-v1", "phase3-inspect-v2"),
+            ("phase3-inspect-v2", "phase3-inspect-v1"),
+            ("phase3-inspect-v2", "phase3-inspect-v2"),
+        ):
+            with self.subTest(left=left, right=right):
+                payload = json.loads((fixtures / "basic.diff.json").read_text())
+                payload["left_observation_model_version"] = left
+                payload["right_observation_model_version"] = right
+                payload["comparison_status"] = "complete" if left == right else "partial"
+                payload["comparison_limitations"] = (
+                    [] if left == right else ["observation model versions differ"]
+                )
+                result = diff(
+                    {"left_path": "left.json", "right_path": "right.json"},
+                    **runtime_for(payload),
+                )
+                self.assertEqual(result["comparison_status"], payload["comparison_status"])
+
+        unknown = json.loads((fixtures / "basic.inspect.json").read_text())
+        unknown["observation_model_version"] = "phase3-inspect-v999"
+        with self.assertRaises(ProtocolParseError) as context:
+            inspect({"apkg_path": "unused.apkg"}, **runtime_for(unknown))
+        self.assertEqual(context.exception.parse_phase, "contract-version")
+
 
 if __name__ == "__main__":
     unittest.main()

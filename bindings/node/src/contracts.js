@@ -4,6 +4,8 @@ function fail(parsePhase, message) {
   throw error;
 }
 
+const OBSERVATION_MODEL_VERSIONS = ['phase3-inspect-v1', 'phase3-inspect-v2'];
+
 const CONTRACT_RULES = {
   normalize: {
     kind: 'normalization-result',
@@ -48,7 +50,7 @@ const CONTRACT_RULES = {
       'degradation_reasons',
       'observations',
     ],
-    versionFields: [['observation_model_version', 'phase3-inspect-v1']],
+    versionFields: [['observation_model_version', OBSERVATION_MODEL_VERSIONS]],
   },
   diff: {
     kind: 'diff-report',
@@ -65,8 +67,8 @@ const CONTRACT_RULES = {
       'changes',
     ],
     versionFields: [
-      ['left_observation_model_version', 'phase3-inspect-v1'],
-      ['right_observation_model_version', 'phase3-inspect-v1'],
+      ['left_observation_model_version', OBSERVATION_MODEL_VERSIONS],
+      ['right_observation_model_version', OBSERVATION_MODEL_VERSIONS],
     ],
   },
 };
@@ -85,8 +87,9 @@ export function validateContractPayload(command, payload) {
     }
   }
   for (const [field, expected] of rules.versionFields) {
-    if (payload[field] !== expected) {
-      fail('contract-version', `${command} contract field ${field} must be ${expected}`);
+    const supported = Array.isArray(expected) ? expected : [expected];
+    if (!supported.includes(payload[field])) {
+      fail('contract-version', `${command} contract field ${field} must be ${supported.join(' or ')}`);
     }
   }
 }

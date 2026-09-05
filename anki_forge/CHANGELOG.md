@@ -31,6 +31,10 @@ new minor release.
 - Advance modification times for changed notes using full-content baseline
   revisions, while preserving unchanged times and reproducible builds. This fixes
   answer/tag changes being skipped by Anki because every export used time `1`.
+- Preserve existing lockfiles when report-only builds lack verified baseline
+  identity/revision evidence; rejected lockfiles remain high risk for policy gates.
+- Version the expanded inspection evidence as `phase3-inspect-v2`; cross-version
+  saved-report comparisons are partial and supported by Node/Python bindings.
 
 ### Compatibility
 

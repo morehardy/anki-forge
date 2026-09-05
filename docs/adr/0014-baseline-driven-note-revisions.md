@@ -15,4 +15,7 @@ strict updates and remains explicit high risk in report-only mode.
 - No wall clock or new public Interface is introduced. Baseline-free exports are
   initial releases, not a proof that an existing collection will be updated.
 - Legacy lockfiles need a previous APKG to recover revision evidence in strict mode.
+- Report-only never persists fallback revisions/model IDs as recovered baseline
+  evidence: incomplete or rejected baselines suppress lockfile writes. Rejected
+  requested lockfiles remain high risk even when their diagnostics are warnings.
 - See RFC 0004 for the content hash, migration rules, and real-import verification.

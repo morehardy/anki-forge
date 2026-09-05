@@ -187,6 +187,222 @@ fn report_only_missing_revision_is_explicit_and_high_risk() {
     assert_eq!(report.risk.unwrap().highest_level, Some(RiskLevel::High));
 }
 
+fn assert_report_only_cannot_launder_missing_evidence(missing_model_id: bool) {
+    let root = tempfile::tempdir().unwrap();
+    let lock = root.path().join("identity.json");
+    let first = root.path().join("first.apkg");
+    project("A", &[])
+        .build(
+            BuildOptions::new()
+                .output(&first)
+                .first_update_safe_build(&lock),
+        )
+        .unwrap();
+    let mut legacy: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&lock).unwrap()).unwrap();
+    let missing_code = if missing_model_id {
+        legacy["identity_index"]["notetypes"][0]["anki_model_id"] = serde_json::Value::Null;
+        "UPDATE.NOTETYPE_MODEL_ID_MISSING"
+    } else {
+        for note in legacy["identity_index"]["notes"].as_array_mut().unwrap() {
+            note.as_object_mut().unwrap().remove("revision");
+        }
+        "UPDATE.NOTE_REVISION_MISSING"
+    };
+    std::fs::write(&lock, serde_json::to_vec(&legacy).unwrap()).unwrap();
+    let before = std::fs::read(&lock).unwrap();
+    let report = project("B", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("report-only.apkg"))
+                .identity_lockfile(&lock)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::ReportOnly),
+        )
+        .unwrap();
+    assert!(report.diagnostic_codes().contains(&missing_code.into()));
+    assert!(
+        !report.update_safety.as_ref().unwrap().lockfile_written,
+        "report-only must not turn missing evidence into trusted baseline facts"
+    );
+    assert_eq!(std::fs::read(&lock).unwrap(), before);
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED".into()));
+    let strict = project("B", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("strict.apkg"))
+                .update_safe(&lock),
+        )
+        .unwrap_err();
+    assert!(strict
+        .report
+        .diagnostic_codes()
+        .contains(&missing_code.into()));
+    assert!(!root.path().join("strict.apkg").exists());
+
+    let migrated = project("B", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("migrated.apkg"))
+                .identity_lockfile(&lock)
+                .compare_to(&first)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::ReportOnly),
+        )
+        .unwrap();
+    assert!(migrated.update_safety.unwrap().lockfile_written);
+    project("B", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("verified.apkg"))
+                .update_safe(&lock),
+        )
+        .unwrap();
+}
+
+#[test]
+fn report_only_lockfile_rewrite_does_not_manufacture_model_ids() {
+    assert_report_only_cannot_launder_missing_evidence(true);
+}
+
+#[test]
+fn report_only_lockfile_rewrite_does_not_manufacture_note_revisions() {
+    assert_report_only_cannot_launder_missing_evidence(false);
+}
+
+fn assert_rejected_lockfile_is_high_risk(invalid_model_id: bool) {
+    let root = tempfile::tempdir().unwrap();
+    let lock = root.path().join("identity.json");
+    project("A", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("first.apkg"))
+                .first_update_safe_build(&lock),
+        )
+        .unwrap();
+    let mut invalid: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&lock).unwrap()).unwrap();
+    let cause = if invalid_model_id {
+        invalid["identity_index"]["notetypes"][0]["anki_model_id"] = 0.into();
+        "UPDATE.NOTETYPE_MODEL_ID_INVALID"
+    } else {
+        invalid["identity_index"]["notes"][0]["revision"]["content_hash"] = "bad".into();
+        "UPDATE.NOTE_REVISION_INVALID"
+    };
+    std::fs::write(&lock, serde_json::to_vec(&invalid).unwrap()).unwrap();
+    let before = std::fs::read(&lock).unwrap();
+    let output = root.path().join("report-only.apkg");
+    let options = || {
+        BuildOptions::new()
+            .output(&output)
+            .identity_lockfile(&lock)
+            .write_identity_lockfile(true)
+            .update_safety(UpdateSafetyMode::ReportOnly)
+    };
+    let report = project("B", &[]).build(options()).unwrap();
+    assert!(report.diagnostics.iter().any(|diagnostic| {
+        diagnostic.code.as_str() == "UPDATE.BASELINE_LOCKFILE_UNREADABLE"
+            && diagnostic.severity == Severity::Warning
+            && diagnostic.message.contains(cause)
+    }));
+    assert_eq!(
+        report.risk.as_ref().unwrap().highest_level,
+        Some(RiskLevel::High),
+        "rejected requested baseline must remain high risk: {report:?}"
+    );
+    assert!(report
+        .risk
+        .as_ref()
+        .unwrap()
+        .findings
+        .iter()
+        .any(|finding| {
+            finding.code == "RISK.BASELINE_UNAVAILABLE"
+                && finding.source.as_ref().unwrap().as_str() == lock.to_str().unwrap()
+                && finding.evidence_refs.iter().any(|evidence| {
+                    evidence
+                        .ref_id
+                        .contains("UPDATE.BASELINE_LOCKFILE_UNREADABLE")
+                })
+        }));
+    assert!(!report.update_safety.unwrap().lockfile_written);
+    assert_eq!(std::fs::read(&lock).unwrap(), before);
+    let published = std::fs::read(&output).unwrap();
+    let blocked = project("C", &[])
+        .build(options().fail_on(RiskLevel::High))
+        .unwrap_err();
+    assert_eq!(
+        blocked.cause,
+        anki_forge::build::BuildFailureCause::PolicyBlocked
+    );
+    assert!(blocked.report.artifact.is_none());
+    assert!(!blocked.report.update_safety.unwrap().lockfile_written);
+    assert_eq!(std::fs::read(&output).unwrap(), published);
+    assert_eq!(std::fs::read(&lock).unwrap(), before);
+}
+
+#[test]
+fn report_only_rejected_model_id_baseline_is_high_risk() {
+    assert_rejected_lockfile_is_high_risk(true);
+}
+
+#[test]
+fn report_only_rejected_revision_baseline_is_high_risk() {
+    assert_rejected_lockfile_is_high_risk(false);
+}
+
+#[test]
+fn report_only_first_build_and_verified_updates_can_write_lockfiles() {
+    let root = tempfile::tempdir().unwrap();
+    let lock = root.path().join("identity.json");
+    for (index, answer) in ["A", "B"].into_iter().enumerate() {
+        let output = root.path().join(format!("release-{index}.apkg"));
+        let report = project(answer, &[])
+            .build(
+                BuildOptions::new()
+                    .output(&output)
+                    .identity_lockfile(&lock)
+                    .write_identity_lockfile(true)
+                    .update_safety(UpdateSafetyMode::ReportOnly),
+            )
+            .unwrap();
+        assert!(report.update_safety.unwrap().lockfile_written);
+        assert_eq!(report.risk.unwrap().highest_level, None);
+        let saved = anki_forge::update_safety::lockfile::read_lockfile(&lock).unwrap();
+        let revision = saved.identity_index.notes[0].revision.as_ref().unwrap();
+        assert_eq!(revision.mtime_secs, index as i64 + 1);
+        assert_eq!(revision.mtime_secs, mtimes(&output)["changed"]);
+    }
+}
+
+#[test]
+fn report_only_unreadable_apkg_does_not_create_a_trusted_lockfile() {
+    let root = tempfile::tempdir().unwrap();
+    let baseline = root.path().join("invalid.apkg");
+    std::fs::write(&baseline, b"unreadable baseline").unwrap();
+    let lock = root.path().join("identity.json");
+    let report = project("A", &[])
+        .build(
+            BuildOptions::new()
+                .output(root.path().join("report-only.apkg"))
+                .compare_to(&baseline)
+                .identity_lockfile(&lock)
+                .write_identity_lockfile(true)
+                .update_safety(UpdateSafetyMode::ReportOnly),
+        )
+        .unwrap();
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.BASELINE_APKG_UNREADABLE".into()));
+    assert!(report
+        .diagnostic_codes()
+        .contains(&"UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED".into()));
+    assert!(!report.update_safety.unwrap().lockfile_written);
+    assert!(!lock.exists());
+}
+
 #[test]
 fn tag_order_duplicates_and_storage_whitespace_do_not_advance_revision() {
     let root = tempfile::tempdir().unwrap();

@@ -33,6 +33,21 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
 
     for (index, diagnostic) in input.diagnostics.iter().enumerate() {
         let code = diagnostic.code.as_str();
+        if code == "UPDATE.BASELINE_LOCKFILE_UNREADABLE" {
+            let mut item = finding(
+                "RISK.BASELINE_UNAVAILABLE",
+                RiskLevel::High,
+                "baseline",
+                "requested identity lockfile could not be read or validated",
+                vec![EvidenceRef {
+                    kind: EvidenceRefKind::Diagnostic,
+                    ref_id: format!("diagnostic:{index}:{code}"),
+                }],
+                "restore a valid identity lockfile or recover baseline evidence from the previous APKG",
+            );
+            item.source = diagnostic.source.clone();
+            findings.push(item);
+        }
         if matches!(
             code,
             "UPDATE.NOTE_REVISION_MISSING"

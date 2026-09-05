@@ -31,7 +31,7 @@ use crate::writer_core::staging::{
     ResolvedTemplateTargetDeck,
 };
 
-const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v1";
+const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v2";
 const DOMAIN_NOTETYPES: &str = "notetypes";
 const DOMAIN_TEMPLATES: &str = "templates";
 const DOMAIN_FIELDS: &str = "fields";

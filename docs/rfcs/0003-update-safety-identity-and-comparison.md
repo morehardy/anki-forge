@@ -1,6 +1,6 @@
 # RFC 0003: Preserve model identity and close update comparison gaps
 
-Status: implemented locally; pending review.
+Status: implemented; PR review follow-up included.
 
 ## Problem and reproduced evidence
 
@@ -49,7 +49,7 @@ or a lockfile with populated model IDs on the first build after upgrading. The
 selected IDs are retained in subsequent lockfiles. Old APKG numeric IDs are
 preserved rather than rewritten to the new derivation.
 
-Schemas keep their existing wire versions: `anki_model_id` was already a nullable
+Identity schemas keep their existing wire versions: `anki_model_id` was already a nullable
 identity-index field, and the three observation arrays already existed. New
 diagnostics are registered, normative semantics are updated, and fixture
 fingerprints plus the embedded bundle are regenerated from the changed writer.
@@ -111,3 +111,22 @@ update-safety repair before claiming end-to-end update readiness.
 Follow-up: RFC 0004 implements baseline-driven note revisions and records the
 successful replay of this content-update reproduction. The limitation above
 describes the result of RFC 0003 in isolation, before that follow-up repair.
+
+### PR 36 review follow-up
+
+The new numeric model IDs and note revision evidence must not share the old
+observation model version. Bundle 0.5.0 now emits `phase3-inspect-v2`. A saved v1
+report compared with freshly inspected evidence is partial, with an explicit
+version-mismatch limitation. Node/Python accept v1, v2, and mixed-version diff
+reports while rejecting unknown versions. A path-based runtime regression first
+reproduced the falsely complete comparison, then passed with the new version.
+
+Report-only fallback identities must not become authoritative through lockfile
+rewrites. Missing model IDs/revisions and unreadable requested baselines suppress
+the entire lockfile write, retaining the original bytes and emitting an explicit
+skipped-write warning. Missing or invalid evidence therefore still requires
+recovery on a subsequent strict build. A rejected requested lockfile also yields
+high import risk, preserving its source and diagnostic evidence for `fail_on`.
+Regression coverage includes both missing-evidence cases, invalid IDs/revisions,
+policy-blocked output preservation, unreadable APKGs, valid APKG migration, and
+normal first-release/verified report-only writes.

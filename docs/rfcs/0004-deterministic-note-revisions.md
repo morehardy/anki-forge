@@ -1,6 +1,6 @@
 # RFC 0004: Deterministic baseline-driven note revisions
 
-Status: implemented locally; pending review.
+Status: implemented; PR review follow-up included.
 
 ## Problem and evidence
 
@@ -57,7 +57,7 @@ subject to Anki's import policy; IfNewer is not a forced-overwrite promise.
 
 ## Compatibility and validation
 
-Advance the bundle to 0.5.0; keep existing wire versions and make revision optional
+Advance the bundle to 0.5.0; keep identity wire versions and make revision optional
 for legacy reads. Document strict migration, register diagnostics, update inspect
 goldens, regenerate the embedded bundle, and keep the Rust supported facade intact.
 
@@ -108,3 +108,15 @@ cargo test -p anki_forge --features internal-tools \
 
 The oracle lives in `anki_forge/tests/support/note_revision_import_oracle.py` and
 is intentionally opt-in: ordinary Rust CI does not require an Anki installation.
+
+## PR 36 review follow-up
+
+Five failing-first Rust cases reproduced the review findings: falsely complete
+cross-version report comparison, two report-only rewrites that manufactured
+missing baseline evidence, and two rejected-lockfile cases with no import risk.
+Report-only now suppresses unverified lockfile writes and leaves the original
+bytes intact; strict builds still require recovery. Invalid requested lockfiles
+remain high risk, so policy rejection preserves published files and lockfiles.
+Valid APKG migration and normal report-only creation/updates remain supported.
+The observation model advances to v2, with legacy/mixed-version binding coverage;
+see RFC 0003's review follow-up for the version boundary.
