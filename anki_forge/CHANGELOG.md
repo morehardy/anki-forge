@@ -8,6 +8,11 @@ new minor release.
 
 ### Fixed
 
+- Reject output, report, or writable lockfile aliases of the comparison baseline
+  before writes, including symlinks, hard links, and the implicit artifact package.
+- Reuse one baseline inspection for identity reconciliation and diff; publish
+  APKG outputs and identity lockfiles only after comparison and risk gates pass.
+  Blocked reports retain diff/risk evidence without an unpublished artifact path.
 - Write hierarchical deck names with Anki's native `U+001F` separator and
   include all parent decks in generated APKG collections.
 - Deduplicate deck aliases with Anki's Unicode case-insensitive comparison and

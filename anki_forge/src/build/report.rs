@@ -265,13 +265,6 @@ impl BuildReport {
             ));
         }
 
-        if self.artifact.is_none() {
-            return Err(BuildError::new(
-                self.clone(),
-                BuildFailureCause::MissingArtifact,
-            ));
-        }
-
         if !self.status.is_success() {
             let cause = match self.status {
                 BuildStatus::Invalid => BuildFailureCause::Invalid,
@@ -280,6 +273,15 @@ impl BuildReport {
                 BuildStatus::Success => BuildFailureCause::Internal,
             };
             return Err(BuildError::new(self.clone(), cause));
+        }
+
+        // Rejected candidates are intentionally not published. Preserve the
+        // failure status above instead of reporting a missing artifact for them.
+        if self.artifact.is_none() {
+            return Err(BuildError::new(
+                self.clone(),
+                BuildFailureCause::MissingArtifact,
+            ));
         }
 
         Ok(())

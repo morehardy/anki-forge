@@ -205,6 +205,21 @@ project
 Use `write_identity_lockfile(true)` on release builds when you want new notes
 and absent entries recorded for future updates.
 
+When using `compare_to(previous_apkg)`, keep the baseline separate from the
+output, `artifacts_dir/package.apkg`, report JSON, and any writable identity
+lockfile. Builds reject same-file aliases (including relative paths, symlinks,
+and hard links) with `PROJECT.PATH_COLLISION` before writing. The baseline must
+also stay outside the artifact directory's replaceable `staging/` tree.
+
+The baseline is inspected once before building; GUID reconciliation and diff
+use that same snapshot. The candidate APKG is compared and checked against
+`fail_on(...)` before publishing the APKG or updating the identity lockfile.
+On a blocked build, existing outputs and lockfiles remain unchanged, and the
+report retains diff/risk evidence with `artifact: null`. A separate report JSON
+can still be written; intermediate staging/media files may remain in an explicit
+artifact directory. Successful publication uses atomic replacement per file,
+not a transaction spanning the APKG, lockfile, and report.
+
 ## 4. Advanced: Contract Tools And Runtime
 
 The lower-level contract flow is:

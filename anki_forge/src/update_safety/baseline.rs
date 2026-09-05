@@ -15,6 +15,17 @@ pub fn load_previous_apkg_identity_index(
     let path = path.as_ref();
     let inspect = crate::writer_core::inspect_apkg(path)
         .with_context(|| format!("inspect previous APKG {}", path.display()))?;
+    Ok(identity_index_from_inspect(
+        path, &inspect, current, lockfile,
+    ))
+}
+
+pub(crate) fn identity_index_from_inspect(
+    path: &Path,
+    inspect: &crate::writer_core::InspectReport,
+    current: Option<&IdentityIndex>,
+    lockfile: Option<&IdentityIndex>,
+) -> IdentityIndex {
     let mut index = IdentityIndex {
         schema_version: "identity-index-v1".into(),
         source_kind: "previous_apkg".into(),
@@ -85,13 +96,13 @@ pub fn load_previous_apkg_identity_index(
     }
 
     if index.notes.is_empty() {
-        recover_guid_equals_stable_id(&mut index, &inspect, current, lockfile);
+        recover_guid_equals_stable_id(&mut index, inspect, current, lockfile);
     }
-    recover_notetype_merge_metadata(&mut index, &inspect);
+    recover_notetype_merge_metadata(&mut index, inspect);
 
     index.limitations.sort();
     index.limitations.dedup();
-    Ok(index)
+    index
 }
 
 fn recover_notetype_merge_metadata(

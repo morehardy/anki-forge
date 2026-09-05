@@ -32,6 +32,26 @@ pub fn build_with_guid_plan(
     artifact_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
 ) -> Result<PackageBuildResult> {
+    build_with_guid_plan_and_apkg_target(
+        normalized_ir,
+        writer_policy,
+        build_context,
+        artifact_target,
+        artifact_target,
+        guid_plan,
+    )
+}
+
+/// Product builds retain staging artifacts but keep the APKG private until
+/// comparison and policy evaluation have succeeded.
+pub(crate) fn build_with_guid_plan_and_apkg_target(
+    normalized_ir: &NormalizedIr,
+    writer_policy: &WriterPolicy,
+    build_context: &BuildContext,
+    artifact_target: &BuildArtifactTarget,
+    apkg_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
+) -> Result<PackageBuildResult> {
     if !build_context.materialize_staging {
         return Ok(error_result(
             writer_policy,
@@ -88,7 +108,7 @@ pub fn build_with_guid_plan(
     };
 
     let apkg = if build_context.emit_apkg {
-        match emit_apkg(&materialized, artifact_target, guid_plan) {
+        match emit_apkg(&materialized, apkg_target, guid_plan) {
             Ok(apkg) => Some(apkg),
             Err(err) => {
                 if err
@@ -128,7 +148,7 @@ pub fn build_with_guid_plan(
                 return Ok(apkg_error_result(
                     writer_policy,
                     build_context,
-                    artifact_target,
+                    apkg_target,
                     err,
                 ));
             }
