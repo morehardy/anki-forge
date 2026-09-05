@@ -2,12 +2,9 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use crate::authoring_core::{
-    normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions,
-};
-use anyhow::{ensure, Context};
+use anyhow::Context;
 
-use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
+use crate::writer::{inspect_apkg_with_limits, inspect_staging, InspectLimits, InspectReport};
 use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
 
 use super::model::{Deck, Package};
@@ -16,6 +13,7 @@ pub struct BuildResult {
     package_build_result: PackageBuildResult,
     apkg_path: PathBuf,
     staging_manifest_path: PathBuf,
+    inspect_limits: InspectLimits,
 }
 
 impl BuildResult {
@@ -36,13 +34,30 @@ impl BuildResult {
     }
 
     pub fn inspect_apkg(&self) -> anyhow::Result<InspectReport> {
-        Ok(inspect_apkg(&self.apkg_path)?)
+        Ok(inspect_apkg_with_limits(
+            &self.apkg_path,
+            &self.inspect_limits,
+        )?)
     }
 }
 
 impl Package {
     pub fn build(&self, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
-        build_package(self, artifacts_dir)
+        self.build_with_limits(artifacts_dir, InspectLimits::default())
+    }
+
+    /// Build with explicit, finite APKG inspection budgets.
+    ///
+    /// A limit violation still prevents publication; larger legitimate packages
+    /// require the caller to raise the relevant limit. The returned result uses
+    /// these same limits when `inspect_apkg()` is called. Byte/write convenience
+    /// methods retain the defaults; use this build's artifact for custom budgets.
+    pub fn build_with_limits(
+        &self,
+        artifacts_dir: impl AsRef<Path>,
+        limits: InspectLimits,
+    ) -> anyhow::Result<BuildResult> {
+        build_package(self, artifacts_dir, limits)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
@@ -82,7 +97,7 @@ impl Deck {
             let artifact_path = report
                 .artifact
                 .as_ref()
-                .map(|artifact| artifact.path.as_path())
+                .map(|artifact| artifact.path())
                 .unwrap_or(output.as_path());
             fs::read(artifact_path)
                 .with_context(|| format!("read apkg bytes: {}", artifact_path.display()))
@@ -105,47 +120,17 @@ impl Deck {
 fn build_package(
     package: &Package,
     artifacts_dir: impl AsRef<Path>,
+    inspect_limits: InspectLimits,
 ) -> anyhow::Result<BuildResult> {
     let artifacts_dir = artifacts_dir.as_ref();
-    let root_deck = package.root_deck.clone();
-    root_deck.validate()?;
-    let media_source_dir = artifacts_dir.join(".anki-forge-media-input");
-    let media_store_dir = artifacts_dir.join(".anki-forge-media");
-    let lowered = root_deck.lower_authoring_with_media_source_dir(&media_source_dir)?;
-    let normalize_options = NormalizeOptions {
-        base_dir: media_source_dir.clone(),
-        media_store_dir: media_store_dir.clone(),
-        media_policy: MediaPolicy::default_strict(),
-    };
-    let normalized = normalize_with_options(NormalizationRequest::new(lowered), normalize_options);
-    ensure!(
-        normalized.result_status == "success",
-        "normalization failed with status {}",
-        normalized.result_status
-    );
-    let normalized_ir = normalized
-        .normalized_ir
-        .context("normalization did not produce a normalized_ir")?;
-
-    let (_runtime, writer_policy, build_context) = crate::runtime::load_default_writer_stack()?;
     let stable_ref_prefix = package
         .stable_id
         .as_deref()
         .map(|stable_id| format!("artifacts/{stable_id}"))
         .unwrap_or_else(|| "artifacts".into());
-    let artifact_target = BuildArtifactTarget::new(artifacts_dir.to_path_buf(), stable_ref_prefix)
-        .with_media_store_dir(media_store_dir);
-    let package_build_result = crate::writer::build(
-        &normalized_ir,
-        &writer_policy,
-        &build_context,
-        &artifact_target,
-    )?;
-    ensure!(
-        package_build_result.result_status == "success",
-        "build failed with status {}",
-        package_build_result.result_status
-    );
+    let artifact_target = BuildArtifactTarget::new(artifacts_dir, stable_ref_prefix.clone());
+    let (_report, package_build_result) = crate::product::Project::from(package.root_deck.clone())
+        .build_package_artifacts(artifacts_dir, stable_ref_prefix, inspect_limits.clone())?;
 
     let apkg_ref = package_build_result
         .apkg_ref
@@ -159,6 +144,7 @@ fn build_package(
     Ok(BuildResult {
         apkg_path: artifact_path_from_ref(&artifact_target, apkg_ref)?,
         staging_manifest_path: artifact_path_from_ref(&artifact_target, staging_ref)?,
+        inspect_limits,
         package_build_result,
     })
 }

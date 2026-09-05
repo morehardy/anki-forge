@@ -281,7 +281,7 @@ fn product_document_self_contained_inlines_file_media() {
     )
     .expect("parse product-v2 document");
 
-    let report = Project::from_product_document(document)
+    let report = document
         .build(
             BuildOptions::new()
                 .output(root.join("product-v2-file.apkg"))
@@ -350,7 +350,7 @@ fn product_document_self_contained_reports_all_bad_file_media() {
     }))
     .expect("parse product-v2 document");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(
             BuildOptions::new()
                 .output(root.join("product-v2-bad-file.apkg"))

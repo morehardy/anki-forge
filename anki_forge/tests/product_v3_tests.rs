@@ -1,7 +1,7 @@
 #![cfg(feature = "internal-tools")]
 
 use anki_forge::build::BuildOptions;
-use anki_forge::product::{ProductDocument, Project};
+use anki_forge::product::ProductDocument;
 use anki_forge::writer::inspect_apkg;
 
 #[test]
@@ -44,7 +44,7 @@ fn product_v3_custom_cloze_builds_through_product_build_pipeline() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("product-v3.apkg");
 
-    let report = Project::from_product_document(document)
+    let report = document
         .build(BuildOptions::new().output(&apkg))
         .expect("product-v3 build");
 
@@ -81,7 +81,7 @@ fn product_v3_rejects_unknown_template_field_before_writing_apkg() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("invalid.apkg");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(BuildOptions::new().output(&apkg))
         .expect_err("invalid template should fail");
 
@@ -126,7 +126,7 @@ fn product_v3_rejects_duplicate_generation_rule_fields() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("invalid.apkg");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(BuildOptions::new().output(&apkg))
         .expect_err("duplicate generation fields must fail");
 
@@ -161,7 +161,7 @@ fn product_v3_validates_browser_template_fields() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("invalid-browser.apkg");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(BuildOptions::new().output(&apkg))
         .expect_err("invalid browser template should fail");
 
@@ -195,7 +195,7 @@ fn product_v2_custom_cloze_generation_rule_requires_product_v3() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("invalid-v2-cloze.apkg");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(BuildOptions::new().output(&apkg))
         .expect_err("product-v2 custom Cloze rule should fail");
 
@@ -235,7 +235,7 @@ fn product_v3_rejects_incomplete_or_unknown_custom_notetype_kinds() {
         let output = tempfile::tempdir().expect("output");
         let apkg = output.path().join("invalid.apkg");
 
-        let error = Project::from_product_document(document)
+        let error = document
             .build(BuildOptions::new().output(&apkg))
             .expect_err("invalid custom note type kind should fail");
 
@@ -274,7 +274,7 @@ fn product_v3_rejects_cloze_rule_on_normal_custom_notetype() {
     .expect("product-v3 document");
     let output = tempfile::tempdir().expect("output");
 
-    let error = Project::from_product_document(document)
+    let error = document
         .build(BuildOptions::new().output(output.path().join("invalid.apkg")))
         .expect_err("normal note types must reject Cloze generation rules");
 
@@ -316,7 +316,7 @@ fn product_v3_preserves_browser_templates_and_target_deck() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("metadata.apkg");
 
-    Project::from_product_document(document)
+    document
         .build(BuildOptions::new().output(&apkg))
         .expect("product-v3 build");
 
@@ -371,7 +371,7 @@ fn product_v2_does_not_silently_enable_custom_cloze_semantics() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("legacy.apkg");
 
-    let report = Project::from_product_document(document)
+    let report = document
         .build(BuildOptions::new().output(&apkg))
         .expect("product-v2 build");
 
@@ -414,7 +414,7 @@ fn product_v3_unknown_filter_builds_with_a_structured_warning() {
     let output = tempfile::tempdir().expect("output");
     let apkg = output.path().join("warning.apkg");
 
-    let report = Project::from_product_document(document)
+    let report = document
         .build(BuildOptions::new().output(&apkg))
         .expect("warning-only build succeeds");
     let diagnostic = report

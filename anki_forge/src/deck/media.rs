@@ -148,10 +148,6 @@ impl Deck {
     pub fn media(&mut self) -> MediaRegistry<'_> {
         MediaRegistry { deck: self }
     }
-
-    pub(crate) fn registered_media(&self) -> &BTreeMap<String, RegisteredMedia> {
-        &self.media
-    }
 }
 
 impl<'a> MediaRegistry<'a> {

@@ -46,7 +46,9 @@ pub struct ProductMedia {
     pub source: ProductMediaSource,
     pub declared_mime: Option<String>,
     pub sha1_hex: String,
-    pub(crate) observed_fingerprint: MediaFingerprint,
+    // Persisted Deck registrations predate BLAKE3 fingerprints. Keep their
+    // original SHA-1 evidence until build time instead of rereading at import.
+    pub(crate) observed_fingerprint: Option<MediaFingerprint>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -90,6 +92,40 @@ impl MediaRef {
 }
 
 impl MediaRegistry {
+    pub(crate) fn from_deck_media(
+        media: BTreeMap<String, crate::deck::model::RegisteredMedia>,
+    ) -> Self {
+        Self {
+            media: media
+                .into_iter()
+                .map(|(filename, registered)| {
+                    let source = match registered.source {
+                        crate::deck::model::RegisteredMediaSource::File { path } => {
+                            ProductMediaSource::File { path }
+                        }
+                        crate::deck::model::RegisteredMediaSource::InlineBytes { data_base64 } => {
+                            ProductMediaSource::InlineBytes {
+                                source_label: filename.clone(),
+                                data_base64,
+                            }
+                        }
+                    };
+                    (
+                        filename.clone(),
+                        ProductMedia {
+                            id: format!("media:{filename}"),
+                            export_filename: filename,
+                            source,
+                            declared_mime: registered.declared_mime,
+                            sha1_hex: registered.sha1_hex,
+                            observed_fingerprint: None,
+                        },
+                    )
+                })
+                .collect(),
+        }
+    }
+
     pub fn add_file(&mut self, path: impl AsRef<Path>) -> anyhow::Result<PendingMedia<'_>> {
         let path = path.as_ref().to_path_buf();
         let observed = observe_file_source(&path, EmptySourceBehavior::Reject)
@@ -144,16 +180,16 @@ impl MediaRegistry {
 }
 
 impl ProductMedia {
-    pub(crate) fn observed_size_bytes(&self) -> u64 {
-        self.observed_fingerprint.size_bytes
-    }
-
-    pub(crate) fn verify_registered_source(&self) -> Result<(), ProductMediaSourceDiagnostic> {
+    pub(crate) fn verify_registered_source(&self) -> Result<u64, ProductMediaSourceDiagnostic> {
         match &self.source {
             ProductMediaSource::File { path } => {
                 let observed = observe_file_source(path, EmptySourceBehavior::Allow)
                     .map_err(|err| err.to_diagnostic(&self.export_filename))?;
-                if observed.fingerprint != self.observed_fingerprint {
+                let changed = match &self.observed_fingerprint {
+                    Some(fingerprint) => observed.fingerprint != *fingerprint,
+                    None => observed.sha1_hex != self.sha1_hex,
+                };
+                if changed {
                     return Err(ProductMediaSourceDiagnostic {
                         code: "MEDIA.SOURCE_CHANGED",
                         message: format!(
@@ -163,9 +199,18 @@ impl ProductMedia {
                         source_path: media_source_path(&self.export_filename),
                     });
                 }
-                Ok(())
+                Ok(observed.fingerprint.size_bytes)
             }
-            ProductMediaSource::InlineBytes { .. } => Ok(()),
+            ProductMediaSource::InlineBytes { data_base64, .. } => {
+                base64::engine::general_purpose::STANDARD
+                    .decode(data_base64)
+                    .map(|bytes| bytes.len() as u64)
+                    .map_err(|error| ProductMediaSourceDiagnostic {
+                        code: "PROJECT.PRODUCT_MEDIA_FAILED",
+                        message: error.to_string(),
+                        source_path: media_source_path(&self.export_filename),
+                    })
+            }
         }
     }
 }
@@ -176,7 +221,11 @@ impl PendingMedia<'_> {
         validate_media_filename(&filename)?;
 
         if let Some(existing) = self.registry.media.get(&filename) {
-            if existing.observed_fingerprint != self.fingerprint {
+            let matches = match &existing.observed_fingerprint {
+                Some(fingerprint) => *fingerprint == self.fingerprint,
+                None => existing.sha1_hex == self.sha1_hex,
+            };
+            if !matches {
                 return Err(MediaError::ConflictingPayload { name: filename }.into());
             }
             return Ok(MediaRef::new(filename));
@@ -188,7 +237,7 @@ impl PendingMedia<'_> {
             source: self.source,
             declared_mime: Some(mime_from_name(&filename)),
             sha1_hex: self.sha1_hex,
-            observed_fingerprint: self.fingerprint,
+            observed_fingerprint: Some(self.fingerprint),
         };
         self.registry.media.insert(filename.clone(), media);
         Ok(MediaRef::new(filename))

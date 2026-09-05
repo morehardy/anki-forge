@@ -196,17 +196,14 @@ fn product_lower_media_source_changed_errors_have_stable_codes() {
 
 #[test]
 fn product_lowering_errors_are_downcastable_from_anyhow() {
-    let mut project = Project::from_product_document(ProductDocument::new("doc"));
-    project
-        .add_note(Note::basic("hola", "hello").stable_id("note-1"))
-        .expect("add direct note");
-
-    let err = project
+    let document = ProductDocument::new("invalid-image")
+        .with_image_occlusion("io")
+        .add_image_occlusion_note("io", "note-1", "Default", "{{c1::mask}}", "", "", "", "");
+    let err: anyhow::Error = document
         .lower()
-        .expect_err("mixed ProductDocument and direct Project state must fail");
-
-    assert_eq!(err.code(), ErrorCode::ProjectProductDocumentSourceMixed);
-    assert_eq!(err.code().as_str(), "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED");
+        .expect_err("empty IO image must fail")
+        .into();
+    assert_eq!(err.code().as_str(), "PHASE5A.IO_IMAGE_REQUIRED");
 }
 
 #[test]

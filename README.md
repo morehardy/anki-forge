@@ -83,12 +83,18 @@ unknown note type ids, and unknown field keys. Call
 checkpoint before building; build still performs normalization, media, writer,
 comparison, and update-safety checks.
 
-`BuildReport` includes the artifact path, note/card/media counts, diagnostics,
+`BuildReport` includes an owned artifact handle, note/card/media counts, diagnostics,
 warning count, inspect summary, and duration. Diagnostics expose stable codes
 and structured metadata (`severity`, `domain`, `stage`, `path`,
 `suggested_fix`) so callers do not need to match human-facing strings.
 `inspect.observation_status` is writer-layer reporting metadata passed through
 from the inspection step.
+
+`Project::from(deck)` produces an editable Project, including the Deck's media
+and identity evidence. With no `output` or `artifacts_dir`, the returned APKG is
+temporary: retain its report/handle while using `artifact.path()`, or call
+`artifact.persist_to(path)` for a permanent copy. The final handle's drop removes
+temporary output. Explicit destinations are caller-owned and survive drop.
 
 ```rust
 use anki_forge::prelude::*;
@@ -166,6 +172,8 @@ registered `export_as(...)` filename and local references in sync yourself.
 `BuildReport::pretty_report()` is a human-facing summary. For stable
 machine-readable output, use `BuildOptions::report_json(...)` or
 `report.to_report_json()`; structured report JSON includes media mode details.
+Automatic `report_json` requires `output` or `artifacts_dir`; JSON cannot keep a
+temporary APKG alive. See [artifact ownership](anki_forge/README.md#artifact-ownership).
 
 ### 3.2 Update-Safe Builds
 

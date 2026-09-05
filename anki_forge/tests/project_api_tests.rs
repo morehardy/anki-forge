@@ -422,10 +422,7 @@ fn project_basic_note_writes_apkg_and_returns_report() {
     assert_eq!(report.counts.cards, 1);
     assert_eq!(report.counts.media, 0);
     assert_eq!(
-        report
-            .artifact
-            .as_ref()
-            .map(|artifact| artifact.path.as_path()),
+        report.artifact.as_ref().map(|artifact| artifact.path()),
         Some(output.as_path())
     );
     assert!(output.exists());
@@ -453,46 +450,13 @@ fn project_normalize_basic_note_returns_normalized_ir() {
 }
 
 #[test]
-fn product_document_backed_project_rejects_project_media_state() {
+fn product_document_builds_directly_without_project_authoring_state() {
     let document = ProductDocument::new("direct-doc")
         .with_basic("basic-main")
         .add_basic_note("basic-main", "note-1", "Default", "front", "back");
-    let mut project = Project::from_product_document(document);
-    project
-        .media_mut()
-        .add_bytes("unused.bin", b"media".to_vec())
-        .expect("add media bytes")
-        .export_as("unused.bin")
-        .expect("export media");
-
-    let validation = project.validate();
-    assert!(validation.has_errors());
-    assert!(validation
-        .diagnostics
-        .iter()
-        .any(|diagnostic| { diagnostic.code.as_str() == "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" }));
-
-    let normalize_error = project
-        .normalize()
-        .expect_err("normalize should reject mixed state");
-    assert!(
-        normalize_error
-            .to_string()
-            .contains("PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED"),
-        "{normalize_error}"
-    );
-
-    let build_error = project
-        .build(
-            BuildOptions::new()
-                .output(unique_artifacts_dir("product-document-mixed-media").join("deck.apkg")),
-        )
-        .expect_err("build should reject mixed state");
-    assert!(build_error
-        .report
-        .diagnostics
-        .iter()
-        .any(|diagnostic| { diagnostic.code.as_str() == "PROJECT.PRODUCT_DOCUMENT_SOURCE_MIXED" }));
+    let report = document.build(BuildOptions::new()).unwrap();
+    assert_eq!(report.counts.notes, 1);
+    assert_eq!(report.counts.cards, 1);
 }
 
 #[test]

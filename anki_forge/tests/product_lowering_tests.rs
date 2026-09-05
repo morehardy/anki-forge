@@ -1325,9 +1325,7 @@ fn product_v2_normalization_uses_export_extension_mime_without_declared_mime() {
         }"#,
     );
 
-    let normalized = Project::from_product_document(document)
-        .normalize()
-        .expect("normalize product-v2 media");
+    let normalized = document.normalize().expect("normalize product-v2 media");
     let mime_by_binding = normalized
         .media_bindings
         .iter()
@@ -1695,7 +1693,8 @@ fn product_v2_build_surfaces_unknown_media_source_product_diagnostic() {
         }"#,
     );
 
-    let normalize_err = Project::from_product_document(document.clone())
+    let normalize_err = document
+        .clone()
         .normalize()
         .expect_err("product diagnostics should make normalization unsuccessful");
     assert!(
@@ -1731,7 +1730,8 @@ fn product_v2_build_surfaces_required_field_source_path() {
     let temp = tempfile::tempdir().expect("tempdir");
     let document = product_v2_inline(PRODUCT_V2_BASIC_MISSING_FRONT);
 
-    let normalize_err = Project::from_product_document(document.clone())
+    let normalize_err = document
+        .clone()
         .normalize()
         .expect_err("product diagnostics should make normalization unsuccessful");
     assert!(

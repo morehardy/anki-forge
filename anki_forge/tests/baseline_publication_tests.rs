@@ -405,6 +405,14 @@ fn candidate_workspace_failure_preserves_existing_published_files() {
     );
     assert_eq!(fs::read(lockfile).unwrap(), original_lockfile);
     assert_eq!(fs::read(artifact_file).unwrap(), b"not a directory");
+    assert_eq!(
+        error.report.counts.notes, 1,
+        "a late failure must retain normalized counts"
+    );
+    assert!(
+        error.report.update_safety.is_some(),
+        "identity reconciliation already completed"
+    );
 }
 
 #[test]
@@ -426,7 +434,7 @@ fn lockfile_temporary_name_cannot_remove_the_published_apkg() {
         anki_forge::writer::inspect_apkg(&output).is_ok(),
         "lockfile publication must not truncate or rename the APKG output"
     );
-    assert_eq!(report.artifact.as_ref().unwrap().path, output);
+    assert_eq!(report.artifact.as_ref().unwrap().path(), output);
     assert!(report.update_safety.as_ref().unwrap().lockfile_written);
     assert!(anki_forge::update_safety::lockfile::read_lockfile(lockfile).is_ok());
 }
@@ -539,7 +547,7 @@ fn new_case_variant_lockfile_never_replaces_the_published_apkg() {
                     .unwrap()
                     .lockfile_written
             );
-            assert_eq!(error.report.artifact.as_ref().unwrap().path, output);
+            assert_eq!(error.report.artifact.as_ref().unwrap().path(), output);
         } else {
             let report = result.expect("case-sensitive filesystems permit these distinct paths");
             assert!(report.update_safety.as_ref().unwrap().lockfile_written);
@@ -881,7 +889,7 @@ fn distinct_outputs_publish_after_comparison_and_update_report_paths() {
         .unwrap()
         .changes
         .is_empty());
-    assert_eq!(report.artifact.as_ref().unwrap().path, output);
+    assert_eq!(report.artifact.as_ref().unwrap().path(), output);
     assert!(report.update_safety.as_ref().unwrap().lockfile_written);
     assert_eq!(fs::read(previous).unwrap(), original);
     assert_eq!(
