@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
 }
 ```
 
-The crate version is `0.1.0`; it embeds contract bundle `0.5.0`. These are
+The crate version is `0.1.0`; it embeds contract bundle `0.6.0`. These are
 independent compatibility axes. Rust 1.92.0 is the minimum supported compiler
 for the 0.1.x line.
 

@@ -25,6 +25,8 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install --upgrade pytest
       - run: ./scripts/verify-ci.sh
+        env:
+          CONTRACT_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
 
   python-wheel-smoke:
     name: python-wheel-smoke (${{ matrix.os }}, py${{ matrix.python-version }}, ${{ matrix.arch }})

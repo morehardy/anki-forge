@@ -35,21 +35,15 @@ pub fn load_semantics_doc(path: impl AsRef<Path>) -> anyhow::Result<SemanticsDoc
 
 pub fn run_semantics_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
-    for key in [
-        "validation_semantics",
-        "path_semantics",
-        "compatibility_semantics",
-        "note_stable_id_semantics",
-        "normalization_semantics",
-        "build_semantics",
-        "inspect_semantics",
-        "diff_semantics",
-        "golden_regression_semantics",
-        "template_semantics",
-    ] {
+    for (key, relative) in &manifest.data.assets {
         let doc_path = resolve_asset_path(&manifest, key)?;
+        if !key.ends_with("_semantics")
+            && !doc_path.starts_with(manifest.contracts_root.join("semantics"))
+        {
+            continue;
+        }
         let doc = load_semantics_doc(&doc_path)
-            .with_context(|| format!("failed semantics gate for {}", doc_path.display()))?;
+            .with_context(|| format!("failed semantics gate for {key}: {relative}"))?;
 
         ensure!(
             !doc.asset_refs.is_empty(),

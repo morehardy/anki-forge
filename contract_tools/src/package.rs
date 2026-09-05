@@ -122,7 +122,7 @@ pub fn runtime_asset_relative_paths(manifest: &LoadedManifest) -> anyhow::Result
     Ok(paths.into_iter().collect())
 }
 
-fn package_entries(
+pub(crate) fn package_entries(
     manifest: &crate::manifest::LoadedManifest,
 ) -> Result<BTreeMap<PathBuf, PathBuf>> {
     let mut entries = BTreeMap::from([(
