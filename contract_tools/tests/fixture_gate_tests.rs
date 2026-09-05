@@ -17,6 +17,91 @@ fn fixture_gates_accept_the_bundled_catalog_and_fixtures() {
 }
 
 #[test]
+fn missing_template_bundle_dependencies_fail_verify_and_package() {
+    let root = tempfile::tempdir().expect("contracts copy");
+    copy_tree(&contracts_root(), root.path());
+    let manifest = root.path().join("manifest.yaml");
+    let output = tempfile::tempdir().expect("package output");
+    let artifact = output
+        .path()
+        .join("anki-forge-contract-bundle-0.3.0.tar.gz");
+    fs::write(&artifact, b"previous artifact").expect("seed previous artifact");
+
+    for (bundle, files) in [
+        (
+            "custom-normal",
+            &[
+                "front.html",
+                "back.html",
+                "browser-front.html",
+                "browser-back.html",
+                "style.css",
+                "assets/icon.svg",
+            ][..],
+        ),
+        (
+            "custom-cloze",
+            &["front.html", "back.html", "browser-front.html", "style.css"][..],
+        ),
+    ] {
+        for file in files {
+            let path = root
+                .path()
+                .join("fixtures/template-bundle")
+                .join(bundle)
+                .join(file);
+            let original = fs::read(&path).expect("fixture dependency");
+            fs::remove_file(&path).expect("remove fixture dependency");
+            let result = run_fixture_gates(&manifest);
+            let package_result = contract_tools::package::build_artifact(&manifest, output.path());
+            fs::write(&path, original).expect("restore fixture dependency");
+
+            for (operation, result) in [("verify", result), ("package", package_result.map(|_| ()))]
+            {
+                let error =
+                    result.expect_err(&format!("missing {bundle}/{file} must fail {operation}"));
+                let details = format!("{error:#}");
+                assert!(
+                    details.contains(&format!("template-bundle-{bundle}")),
+                    "{details}"
+                );
+                assert!(
+                    details.contains("TEMPLATE.BUNDLE_FILE_INVALID"),
+                    "{details}"
+                );
+            }
+            assert_eq!(
+                fs::read(&artifact).expect("previous artifact"),
+                b"previous artifact"
+            );
+        }
+    }
+}
+
+#[test]
+fn fixture_gates_validate_template_contents_through_project() {
+    let root = tempfile::tempdir().expect("contracts copy");
+    copy_tree(&contracts_root(), root.path());
+    let manifest = root.path().join("manifest.yaml");
+    let front = root
+        .path()
+        .join("fixtures/template-bundle/custom-normal/front.html");
+    for (contents, code) in [
+        (&b"{{UnknownField}}"[..], "TEMPLATE.RENDER_FIELD_UNKNOWN"),
+        (&b"\xff"[..], "TEMPLATE.BUNDLE_FILE_INVALID"),
+    ] {
+        fs::write(&front, contents).expect("invalid template");
+        let error = run_fixture_gates(&manifest).expect_err("invalid template must fail verify");
+        let details = format!("{error:#}");
+        assert!(
+            details.contains("template-bundle-custom-normal"),
+            "{details}"
+        );
+        assert!(details.contains(code), "{details}");
+    }
+}
+
+#[test]
 fn bundled_catalog_declares_phase3_writer_cases() {
     let manifest = load_manifest(contract_manifest_path()).expect("load bundled manifest");
     let catalog_path = resolve_asset_path(&manifest, "fixture_catalog").expect("fixture catalog");

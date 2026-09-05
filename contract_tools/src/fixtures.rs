@@ -201,6 +201,17 @@ pub fn load_fixture_catalog(path: impl AsRef<Path>) -> anyhow::Result<FixtureCat
     })
 }
 
+pub(crate) fn template_bundle_fixture_root(input_path: &Path) -> anyhow::Result<&Path> {
+    ensure!(
+        input_path.file_name().and_then(|name| name.to_str()) == Some("anki-template.yaml"),
+        "template-bundle fixture input must be anki-template.yaml: {}",
+        input_path.display()
+    );
+    input_path
+        .parent()
+        .context("template-bundle fixture manifest must have a parent directory")
+}
+
 pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> {
     let manifest = load_manifest(manifest_path)?;
 
@@ -483,6 +494,18 @@ pub fn run_fixture_gates(manifest_path: impl AsRef<Path>) -> anyhow::Result<()> 
                         case.id
                     )
                 })?;
+                let root = manifest
+                    .contracts_root
+                    .join(template_bundle_fixture_root(Path::new(&case.input))?);
+                anki_forge::Project::new(&case.id)
+                    .import_template_bundle(root)
+                    .with_context(|| {
+                        format!(
+                            "template-bundle fixture must load through Project: {} ({})",
+                            case.id,
+                            input_path.display()
+                        )
+                    })?;
             }
             "evolution" => {
                 let evolution: EvolutionFixture = load_yaml_model(&input_path)?;
