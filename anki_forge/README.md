@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
 }
 ```
 
-The crate version is `0.1.0`; it embeds contract bundle `0.3.0`. These are
+The crate version is `0.1.0`; it embeds contract bundle `0.4.0`. These are
 independent compatibility axes. Rust 1.92.0 is the minimum supported compiler
 for the 0.1.x line.
 
@@ -36,6 +36,14 @@ not covered by the 0.1 compatibility promise and must not be enabled by
 downstream applications.
 
 ## Errors and concurrency
+
+APKG inspection has finite archive, entry-count, expansion, and zstd-window
+budgets. `BuildOptions::inspect_limits(InspectLimits)` applies the same policy to
+current and baseline APKGs. Start with `InspectLimits::default()` and explicitly
+raise individual fields only for trusted large decks. Resource failures carry
+`INSPECT.RESOURCE_LIMIT_EXCEEDED`; report-only baselines remain unavailable, and
+current-artifact failures prevent publication. These are decompression budgets,
+not a total process memory or CPU sandbox.
 
 High-level `Deck` and `Project` operations return structured errors and build
 reports; callers should inspect stable diagnostic codes instead of matching

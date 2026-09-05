@@ -18,3 +18,5 @@ pub use crate::product::{
     Content, Field, FieldKey, GenerationRule, IdentityRecipe, MediaRef, Note, NoteType,
     NoteTypeKind, ProductNoteError, Project, ProjectAddError, Template, TemplateKey,
 };
+/// Finite budgets for APKG inspection during builds and comparisons.
+pub use crate::writer_core::InspectLimits;

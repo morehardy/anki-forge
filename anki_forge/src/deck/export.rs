@@ -36,7 +36,7 @@ impl BuildResult {
     }
 
     pub fn inspect_apkg(&self) -> anyhow::Result<InspectReport> {
-        inspect_apkg(&self.apkg_path)
+        Ok(inspect_apkg(&self.apkg_path)?)
     }
 }
 
