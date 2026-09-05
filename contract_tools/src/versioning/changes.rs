@@ -50,10 +50,26 @@ pub fn change_record_template(current: &Path, baseline: &Path) -> Result<BundleC
 /// Compare two independent bundles. CI supplies a baseline extracted from the
 /// PR base / push-before commit; an installed bundle needs no checkout or Git.
 pub fn run_change_gates(current: &Path, baseline: &Path) -> Result<()> {
+    compare_bundles(current, baseline, false)
+}
+
+/// A release must compare with an older bundle, even when the asset diff is
+/// empty. Different Git commits alone do not imply different bundle versions.
+pub fn run_release_change_gates(current: &Path, baseline: &Path) -> Result<()> {
+    compare_bundles(current, baseline, true)
+}
+
+fn compare_bundles(current: &Path, baseline: &Path, release: bool) -> Result<()> {
     let current = load_manifest(current)?;
     let baseline = load_manifest(baseline)?;
     let current_version = version(&current.data.bundle_version)?;
     let baseline_version = version(&baseline.data.bundle_version)?;
+    if release {
+        ensure!(
+            current_version.cmp_precedence(&baseline_version).is_gt(),
+            "release baseline bundle_version must be older than the current bundle: {baseline_version} -> {current_version}"
+        );
+    }
     ensure!(
         !current_version.cmp_precedence(&baseline_version).is_lt(),
         "bundle_version must not decrease: {baseline_version} -> {current_version}"

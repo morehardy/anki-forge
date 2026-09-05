@@ -185,6 +185,84 @@ fn source_gate_rejects_removed_codes_and_missing_source_trees() {
 }
 
 #[test]
+fn source_gate_filters_test_only_impl_and_trait_members_without_skipping_production() {
+    let temp = tempdir().unwrap();
+    for dir in ["anki_forge/src", "contract_tools/src"] {
+        fs::create_dir_all(temp.path().join(dir)).unwrap();
+    }
+    for container in ["impl Example", "trait Example"] {
+        for (cfg, test_only) in [
+            ("test", true),
+            ("all(test, feature = \"optional\")", true),
+            ("not(test)", false),
+            ("any(test, feature = \"optional\")", false),
+            ("feature = \"optional\"", false),
+        ] {
+            let source = format!(
+                r#"{container} {{
+                    #[cfg({cfg})]
+                    fn helper() {{ emit!("FUTURE.METHOD"); }}
+                    #[cfg({cfg})]
+                    const CODE: &'static str = "FUTURE.CONST";
+                    #[cfg({cfg})]
+                    type Value = member_type!("FUTURE.TYPE");
+                    #[cfg({cfg})]
+                    members!("FUTURE.MACRO");
+                }}"#,
+            );
+            fs::write(temp.path().join("anki_forge/src/lib.rs"), source).unwrap();
+            let result = contract_tools::registry::run_source_registry_gates(
+                &contract_manifest_path(),
+                temp.path(),
+            );
+            if test_only {
+                result.unwrap_or_else(|error| panic!("{container} cfg({cfg}): {error:#}"));
+            } else {
+                let error = result.unwrap_err().to_string();
+                for code in [
+                    "FUTURE.METHOD",
+                    "FUTURE.CONST",
+                    "FUTURE.TYPE",
+                    "FUTURE.MACRO",
+                ] {
+                    assert!(error.contains(code), "{container} cfg({cfg}): {error}");
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn release_verification_rejects_an_identical_bundle_baseline() {
+    let (_temp, manifest) = bundle();
+    let output = Command::new(env!("CARGO_BIN_EXE_contract_tools"))
+        .args(["verify", "--release", "--manifest"])
+        .arg(&manifest)
+        .arg("--baseline-manifest")
+        .arg(&manifest)
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr)
+            .contains("release baseline bundle_version must be older"),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn release_verification_requires_a_baseline_manifest() {
+    let output = Command::new(env!("CARGO_BIN_EXE_contract_tools"))
+        .args(["verify", "--release", "--manifest"])
+        .arg(contract_manifest_path())
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("--baseline-manifest"));
+}
+
+#[test]
 fn manifest_versions_obey_semver_in_the_published_schema() {
     for version in ["01.0.0", "0.6", "../escape", "0.6.0-01", "0.6.0+"] {
         let (_temp, path) = bundle();
@@ -207,18 +285,21 @@ fn verify_cli_enforces_baseline_and_accepts_a_fresh_record() {
         format!("{old_text}\nAdditional normative clarification.\n"),
     )
     .unwrap();
-    let verify = || {
-        Command::new(env!("CARGO_BIN_EXE_contract_tools"))
+    let verify = |release| {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_contract_tools"));
+        command
             .arg("verify")
             .arg("--manifest")
             .arg(&current)
             .arg("--baseline-manifest")
-            .arg(&baseline)
-            .output()
-            .unwrap()
+            .arg(&baseline);
+        if release {
+            command.arg("--release");
+        }
+        command.output().unwrap()
     };
     assert!(
-        !verify().status.success(),
+        !verify(false).status.success(),
         "changed bytes without a matching record must fail"
     );
 
@@ -243,10 +324,12 @@ fn verify_cli_enforces_baseline_and_accepts_a_fresh_record() {
     .unwrap();
     manifest["assets"]["bundle_change"] = record_path.into();
     fs::write(&current, serde_yaml::to_string(&manifest).unwrap()).unwrap();
-    let result = verify();
-    assert!(
-        result.status.success(),
-        "{}",
-        String::from_utf8_lossy(&result.stderr)
-    );
+    for release in [false, true] {
+        let result = verify(release);
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+    }
 }

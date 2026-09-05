@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       baseline_ref:
-        description: Commit or tag of the previous contract bundle
+        description: Ancestor commit or tag containing an older contract bundle version
         required: true
         type: string
 
@@ -19,7 +19,7 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy -p contract_tools --all-targets -- -D warnings
       - run: cargo test -p contract_tools -v
-      - run: bash ./scripts/check_contract_governance.sh
+      - run: bash ./scripts/check_contract_governance.sh --release
         env:
           CONTRACT_BASE_REF: ${{ inputs.baseline_ref }}
       - id: package

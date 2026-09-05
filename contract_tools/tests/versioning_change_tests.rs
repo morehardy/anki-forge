@@ -1,4 +1,6 @@
-use contract_tools::versioning::{change_record_template, run_change_gates};
+use contract_tools::versioning::{
+    change_record_template, run_change_gates, run_release_change_gates,
+};
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -76,6 +78,41 @@ fn edit_manifest(path: &Path, edit: impl FnOnce(&mut serde_yaml::Value)) {
 #[test]
 fn unchanged_bundle_needs_no_change_record() {
     Bundles::new().check().unwrap();
+}
+
+#[test]
+fn release_requires_an_older_version_even_when_assets_are_unchanged() {
+    let b = Bundles::new();
+    for version in ["0.5.0", "0.5.0+build2", "0.5.0-rc.1", "0.4.0"] {
+        b.version(version);
+        let error = run_release_change_gates(&b.current, &b.baseline).unwrap_err();
+        assert!(
+            error
+                .to_string()
+                .contains("release baseline bundle_version must be older"),
+            "{error:#}"
+        );
+    }
+}
+
+#[test]
+fn release_with_older_baseline_still_requires_exact_change_evidence() {
+    let b = Bundles::new();
+    b.version("0.6.0");
+    b.change();
+    let check = || run_release_change_gates(&b.current, &b.baseline);
+    assert!(check().unwrap_err().to_string().contains("bundle_change"));
+    b.record("additive_compatible");
+    check().unwrap();
+    fs::write(
+        b.current.parent().unwrap().join("schema/example.json"),
+        "{}",
+    )
+    .unwrap();
+    assert!(check()
+        .unwrap_err()
+        .to_string()
+        .contains("actual asset changes"));
 }
 
 #[test]

@@ -156,6 +156,32 @@ impl<'ast> Visit<'ast> for CodeLiterals {
             visit::visit_item(self, node);
         }
     }
+
+    fn visit_impl_item(&mut self, node: &'ast syn::ImplItem) {
+        let attrs = match node {
+            syn::ImplItem::Const(v) => &v.attrs,
+            syn::ImplItem::Fn(v) => &v.attrs,
+            syn::ImplItem::Type(v) => &v.attrs,
+            syn::ImplItem::Macro(v) => &v.attrs,
+            _ => return visit::visit_impl_item(self, node),
+        };
+        if !test_only(attrs) {
+            visit::visit_impl_item(self, node);
+        }
+    }
+
+    fn visit_trait_item(&mut self, node: &'ast syn::TraitItem) {
+        let attrs = match node {
+            syn::TraitItem::Const(v) => &v.attrs,
+            syn::TraitItem::Fn(v) => &v.attrs,
+            syn::TraitItem::Type(v) => &v.attrs,
+            syn::TraitItem::Macro(v) => &v.attrs,
+            _ => return visit::visit_trait_item(self, node),
+        };
+        if !test_only(attrs) {
+            visit::visit_trait_item(self, node);
+        }
+    }
 }
 
 fn test_only(attrs: &[syn::Attribute]) -> bool {

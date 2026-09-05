@@ -19,6 +19,9 @@ enum Command {
         /// Previous bundle manifest used to enforce the real version bump.
         #[arg(long)]
         baseline_manifest: Option<std::path::PathBuf>,
+        /// Require an older bundle baseline for release verification.
+        #[arg(long, requires = "baseline_manifest")]
+        release: bool,
     },
     /// Print a change-record template with the exact published asset digests.
     Changes {
@@ -111,6 +114,7 @@ fn main() -> anyhow::Result<()> {
             manifest,
             source_root,
             baseline_manifest,
+            release,
         } => {
             contract_tools::gates::run_all(&manifest)?;
             if let Some(root) = source_root {
@@ -120,10 +124,12 @@ fn main() -> anyhow::Result<()> {
                 )?;
             }
             if let Some(baseline) = baseline_manifest {
-                contract_tools::versioning::run_change_gates(
-                    std::path::Path::new(&manifest),
-                    &baseline,
-                )?;
+                let check = if release {
+                    contract_tools::versioning::run_release_change_gates
+                } else {
+                    contract_tools::versioning::run_change_gates
+                };
+                check(std::path::Path::new(&manifest), &baseline)?;
             }
             println!("verification passed");
         }

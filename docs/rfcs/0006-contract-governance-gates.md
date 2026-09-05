@@ -40,7 +40,11 @@ a temporary directory and invokes both repository checks. `make verify-ci` and
 `make verify-fast` include it. Local work defaults to the merge-base with
 `origin/main`. Pull requests provide their base SHA and main pushes provide the
 before SHA, avoiding a self-comparison after merge. Contract release dispatch
-requires an explicit previous bundle ref. Missing history fails visibly.
+uses `--release` and requires an explicit previous bundle ref. The script rejects
+the current commit (including branch/tag aliases) and non-ancestors before
+verification. The CLI also rejects same/newer bundle versions, including a
+same-version older commit or build-metadata-only differences. Missing history
+fails visibly. Ordinary local checks retain unchanged-bundle support.
 
 The source registry is also checked in normal workspace integration tests.
 Extracted package tests still use plain `verify`, which validates the current

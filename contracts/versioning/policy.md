@@ -12,6 +12,14 @@ with the PR base commit, or the previous commit on a push. Standalone `verify`
 continues to check an extracted bundle without requiring Git or source files.
 `verify --baseline-manifest <path>` additionally checks the actual version change.
 
+Release automation uses `check_contract_governance.sh --release`: the explicit
+baseline ref must resolve to a strict ancestor of the current commit. It invokes
+`verify --release --baseline-manifest <path>`, which also requires a strictly
+older bundle version by SemVer precedence, even when assets are unchanged. A
+different commit containing the same version, or only different build metadata,
+is not a previous release baseline. Ordinary repository verification still
+accepts unchanged bundles without requiring a new release.
+
 The comparison uses the same asset closure as the packager, including transitive
 fixture dependencies. Changed files are identified by before/after BLAKE3
 digests. The manifest is compared as a canonical projection of its asset map and
@@ -57,8 +65,9 @@ helper arguments, match arms and macro arguments), use `UPPERCASE.CODE` or legac
 `AF` plus digits, and be active or deprecated. Do not synthesize built-in codes
 with formatting or concatenation; adapters may forward existing codes.
 The Rust syntax scanner ignores comments, documentation and explicitly test-only
-items, and checks all production feature/platform branches. Registry coverage is
-also exercised by a repository integration test.
+items, including associated items inside impls and traits, and checks all
+potential production feature/platform branches. Registry coverage is also
+exercised by a repository integration test.
 
 Semantic assets are discovered from the manifest: all entries resolving under
 `semantics/`, plus keys ending in `_semantics` even if relocated, must have

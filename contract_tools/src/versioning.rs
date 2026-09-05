@@ -8,7 +8,9 @@ use crate::{
 };
 
 mod changes;
-pub use changes::{change_record_template, run_change_gates, BundleChangeRecord};
+pub use changes::{
+    change_record_template, run_change_gates, run_release_change_gates, BundleChangeRecord,
+};
 
 #[derive(Debug, Deserialize)]
 struct CompatibilityClasses {

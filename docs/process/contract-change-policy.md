@@ -13,6 +13,9 @@ the way contract assets are validated.
 - Run `bash scripts/check_contract_governance.sh` against the branch merge-base.
   CI sets `CONTRACT_BASE_REF` to the PR base SHA or push-before SHA; an explicit
   previous commit/tag may also be supplied locally or for a contract release.
+- Contract releases use the script's `--release` mode and an explicit
+  `CONTRACT_BASE_REF`. The ref must be a strict ancestor containing a strictly
+  older bundle version, not the current commit or an older same-version commit.
 - Add every built-in diagnostic/risk code to the registry before use. Production
   codes must be whole Rust string literals, never synthesized strings; the source
   gate checks constants, helpers, macros, and optional feature/platform branches.
