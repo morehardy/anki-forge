@@ -227,6 +227,10 @@ artifact directory. Successful publication uses atomic replacement per file,
 not a transaction spanning the APKG, lockfile, and report.
 Output-only builds copy directly from the private candidate to the requested
 output; no extra package copy is made in the disposable artifact workspace.
+Private candidates live inside the artifact workspace, so an explicit
+`artifacts_dir(...)` also selects their filesystem; they are removed after the
+build. Lockfiles use an exclusively reserved temporary file beside the target,
+so temporary names cannot overwrite existing baselines or outputs.
 
 ## 4. Advanced: Contract Tools And Runtime
 

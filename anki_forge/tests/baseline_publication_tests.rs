@@ -218,6 +218,140 @@ fn staging_manifest_hard_link_cannot_overwrite_external_baseline() {
 }
 
 #[test]
+fn candidate_workspace_failure_preserves_existing_published_files() {
+    let root = tempdir().unwrap();
+    let output = root.path().join("output.apkg");
+    let lockfile = root.path().join("identity.json");
+    project("previous")
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .first_update_safe_build(&lockfile),
+        )
+        .unwrap();
+    let original_output = fs::read(&output).unwrap();
+    let original_lockfile = fs::read(&lockfile).unwrap();
+    let artifact_file = root.path().join("artifact-root-is-file");
+    fs::write(&artifact_file, b"not a directory").unwrap();
+
+    let error = project("changed")
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .artifacts_dir(&artifact_file)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true),
+        )
+        .unwrap_err();
+    assert_eq!(error.cause, BuildFailureCause::Io);
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.ARTIFACTS_DIR_FAILED".into()));
+    assert!(error.report.artifact.is_none());
+    assert!(
+        fs::read(output).unwrap() == original_output,
+        "output changed"
+    );
+    assert_eq!(fs::read(lockfile).unwrap(), original_lockfile);
+    assert_eq!(fs::read(artifact_file).unwrap(), b"not a directory");
+}
+
+#[test]
+fn lockfile_temporary_name_cannot_remove_the_published_apkg() {
+    let root = tempdir().unwrap();
+    let lockfile = root.path().join("identity.json");
+    let output = root
+        .path()
+        .join(format!(".identity.json.tmp-{}", std::process::id()));
+    let report = project("previous")
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .first_update_safe_build(&lockfile),
+        )
+        .unwrap();
+
+    assert!(
+        anki_forge::writer::inspect_apkg(&output).is_ok(),
+        "lockfile publication must not truncate or rename the APKG output"
+    );
+    assert_eq!(report.artifact.as_ref().unwrap().path, output);
+    assert!(report.update_safety.as_ref().unwrap().lockfile_written);
+    assert!(anki_forge::update_safety::lockfile::read_lockfile(lockfile).is_ok());
+}
+
+#[test]
+fn lockfile_temporary_name_cannot_modify_the_comparison_baseline() {
+    let root = tempdir().unwrap();
+    let lockfile = root.path().join("identity.json");
+    let previous = root
+        .path()
+        .join(format!(".identity.json.tmp-{}", std::process::id()));
+    let original = baseline(&previous);
+    let output = root.path().join("output.apkg");
+    let report = project("changed")
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .compare_to(&previous)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true),
+        )
+        .unwrap();
+
+    assert!(
+        previous.exists(),
+        "lockfile publication must not move the baseline"
+    );
+    assert!(fs::read(previous).unwrap() == original, "baseline changed");
+    assert_eq!(report.comparison, ComparisonStatus::Complete);
+    assert!(anki_forge::writer::inspect_apkg(output).is_ok());
+    assert!(anki_forge::update_safety::lockfile::read_lockfile(lockfile).is_ok());
+}
+
+#[test]
+fn lockfile_temporary_hard_link_cannot_modify_the_comparison_baseline() {
+    assert_lockfile_temporary_alias_preserves_baseline(|previous, temporary| {
+        fs::hard_link(previous, temporary).unwrap();
+    });
+}
+
+#[cfg(unix)]
+#[test]
+fn lockfile_temporary_symlink_cannot_modify_the_comparison_baseline() {
+    assert_lockfile_temporary_alias_preserves_baseline(|previous, temporary| {
+        std::os::unix::fs::symlink(previous, temporary).unwrap();
+    });
+}
+
+fn assert_lockfile_temporary_alias_preserves_baseline(make_alias: impl Fn(&Path, &Path)) {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let lockfile = root.path().join("identity.json");
+    let temporary = root
+        .path()
+        .join(format!(".identity.json.tmp-{}", std::process::id()));
+    make_alias(&previous, &temporary);
+    let output = root.path().join("output.apkg");
+    project("changed")
+        .build(
+            BuildOptions::new()
+                .output(&output)
+                .compare_to(&previous)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true),
+        )
+        .unwrap();
+
+    assert!(fs::read(previous).unwrap() == original, "baseline changed");
+    assert!(fs::read(temporary).unwrap() == original, "alias changed");
+    assert!(anki_forge::writer::inspect_apkg(output).is_ok());
+    assert!(anki_forge::update_safety::lockfile::read_lockfile(lockfile).is_ok());
+}
+
+#[test]
 fn new_case_variant_lockfile_never_replaces_the_published_apkg() {
     let root = tempdir().unwrap();
     let case_insensitive = filesystem_is_case_insensitive(root.path());

@@ -1651,17 +1651,13 @@ impl Project {
                 (reconcile, writer_guid_plan, summary, lockfile_index)
             };
 
-        let candidate_dir = tempfile::Builder::new()
-            .prefix("anki-forge-candidate-")
-            .tempdir()
-            .map_err(|error| {
-                let report =
-                    failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", error.to_string());
-                match maybe_write_report_json(&options, report) {
-                    Ok(report) => BuildError::new(report, BuildFailureCause::Io),
-                    Err(error) => error,
-                }
-            })?;
+        let candidate_dir = artifact_workspace.create_candidate_dir().map_err(|error| {
+            let report = failure_report(started, "PROJECT.ARTIFACTS_DIR_FAILED", error.to_string());
+            match maybe_write_report_json(&options, report) {
+                Ok(report) => BuildError::new(report, BuildFailureCause::Io),
+                Err(error) => error,
+            }
+        })?;
         let artifact_target =
             BuildArtifactTarget::new(artifacts_dir.clone(), stable_ref_prefix.clone())
                 .with_media_store_dir(media_store_dir.clone());
@@ -4050,6 +4046,15 @@ impl ArtifactWorkspace {
         })
     }
 
+    fn create_candidate_dir(&self) -> std::io::Result<TempDir> {
+        // Keep private APKG generation on the caller-selected filesystem.
+        // TempDir reserves a fresh directory and removes it on every exit path.
+        std::fs::create_dir_all(&self.path)?;
+        tempfile::Builder::new()
+            .prefix("anki-forge-candidate-")
+            .tempdir_in(&self.path)
+    }
+
     fn publish(&self, candidate: &Path, options: &BuildOptions) -> std::io::Result<PathBuf> {
         let package_path = self.path.join("package.apkg");
         if self.temp_dir.is_none() || self.persist_temp {
@@ -5365,6 +5370,27 @@ mod tests {
         };
 
         assert!(!temp_path.exists());
+    }
+
+    #[test]
+    fn private_candidates_follow_the_artifact_workspace_and_are_cleaned_up() {
+        for explicit_artifacts in [true, false] {
+            let root = tempfile::tempdir().unwrap();
+            let mut options = BuildOptions::new().output(root.path().join("output.apkg"));
+            if explicit_artifacts {
+                options = options.artifacts_dir(root.path().join("new/artifacts"));
+            }
+            let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+            let candidate_path = {
+                let candidate = workspace.create_candidate_dir().unwrap();
+                assert_eq!(candidate.path().parent(), Some(workspace.path.as_path()));
+                assert!(!candidate.path().join("package.apkg").exists());
+                std::fs::write(candidate.path().join("package.apkg"), b"candidate bytes").unwrap();
+                candidate.path().to_path_buf()
+            };
+            assert!(!candidate_path.exists());
+            assert!(!workspace.path.join("package.apkg").exists());
+        }
     }
 
     #[test]

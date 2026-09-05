@@ -13,6 +13,8 @@ new minor release.
 - Check actual staging-manifest aliases and recheck newly created destinations
   before lockfile/report writes to preserve files on case-insensitive filesystems.
 - Avoid an extra temporary APKG copy when only an explicit output is retained.
+- Create private candidates on the artifact workspace's filesystem and reserve
+  lockfile temporary files exclusively to avoid truncating aliased inputs/outputs.
 - Reuse one baseline inspection for identity reconciliation and diff; publish
   APKG outputs and identity lockfiles only after comparison and risk gates pass.
   Blocked reports retain diff/risk evidence without an unpublished artifact path.

@@ -168,8 +168,11 @@ fn update_safety_build_does_not_write_lockfile_when_writer_fails() {
     let root = tempfile::tempdir().expect("tempdir");
     let output = root.path().join("out.apkg");
     let lockfile = root.path().join("anki-forge.lock.json");
-    let artifact_file = root.path().join("artifact-root-is-file");
-    std::fs::write(&artifact_file, b"not a directory").expect("seed artifact file");
+    let artifacts = root.path().join("artifacts");
+    std::fs::create_dir(&artifacts).expect("create artifact directory");
+    // Leave candidate allocation valid, but fail inside writer materialization.
+    let staging_file = artifacts.join("staging");
+    std::fs::write(&staging_file, b"not a directory").expect("seed staging file");
 
     let mut project = Project::new("Spanish").stable_id("spanish");
     project
@@ -180,7 +183,7 @@ fn update_safety_build_does_not_write_lockfile_when_writer_fails() {
         .build(
             BuildOptions::new()
                 .output(&output)
-                .artifacts_dir(&artifact_file)
+                .artifacts_dir(&artifacts)
                 .identity_lockfile(&lockfile)
                 .write_identity_lockfile(true),
         )
@@ -190,4 +193,7 @@ fn update_safety_build_does_not_write_lockfile_when_writer_fails() {
         diagnostic.severity == Severity::Error && diagnostic.code.as_str().starts_with("PHASE3.")
     }));
     assert!(!lockfile.exists());
+    assert!(!output.exists());
+    assert_eq!(std::fs::read(staging_file).unwrap(), b"not a directory");
+    assert_eq!(std::fs::read_dir(artifacts).unwrap().count(), 1);
 }
