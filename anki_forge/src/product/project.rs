@@ -1815,33 +1815,11 @@ impl Project {
         }
         if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
             report.artifact = None;
-            let cause = if diagnostic.code.as_str() == "PROJECT.PATH_COLLISION" {
-                report.status = BuildStatus::Invalid;
-                BuildFailureCause::Diagnostics
-            } else {
-                report.status = BuildStatus::Error;
-                BuildFailureCause::Io
-            };
-            report.diagnostics.push(*diagnostic);
-            return return_report_error(&options, report, cause);
+            return return_path_validation_error(&options, report, *diagnostic);
         }
 
         let candidate = report.artifact.take().expect("successful candidate exists");
-        let package_path = artifacts_dir.join("package.apkg");
-        let publish = || -> std::io::Result<PathBuf> {
-            replace_output_atomically(&candidate.path, &package_path, false)?;
-            if let Some(output) = options.output.as_ref() {
-                replace_output_atomically(
-                    &candidate.path,
-                    output,
-                    options.output_replace_failure_for_test(),
-                )?;
-                Ok(output.clone())
-            } else {
-                Ok(package_path)
-            }
-        };
-        match publish() {
+        match artifact_workspace.publish(&candidate.path, &options) {
             Ok(path) => report.artifact = Some(ApkgArtifact { path }),
             Err(error) => {
                 report.status = BuildStatus::Error;
@@ -1860,6 +1838,11 @@ impl Project {
         // Keep any published temporary artifact valid even if a later lockfile
         // or report write fails. The separate candidate directory still drops.
         artifact_workspace.persist_if_requested();
+        // New paths can only reveal case-folding aliases after creation. Keep
+        // the published APKG intact and reject any conflicting follow-up write.
+        if let Err(diagnostic) = BuildPathPlan::new(&options).validate() {
+            return return_path_validation_error(&options, report, *diagnostic);
+        }
         if options.write_identity_lockfile {
             if let Some(path) = options.identity_lockfile.as_ref() {
                 let selected_index = crate::update_safety::reconcile::selected_identity_index(
@@ -4067,6 +4050,23 @@ impl ArtifactWorkspace {
         })
     }
 
+    fn publish(&self, candidate: &Path, options: &BuildOptions) -> std::io::Result<PathBuf> {
+        let package_path = self.path.join("package.apkg");
+        if self.temp_dir.is_none() || self.persist_temp {
+            replace_output_atomically(candidate, &package_path, false)?;
+        }
+        if let Some(output) = options.output.as_ref() {
+            replace_output_atomically(
+                candidate,
+                output,
+                options.output_replace_failure_for_test(),
+            )?;
+            Ok(output.clone())
+        } else {
+            Ok(package_path)
+        }
+    }
+
     fn persist_if_requested(self) {
         if self.persist_temp {
             if let Some(temp_dir) = self.temp_dir {
@@ -4455,7 +4455,13 @@ fn maybe_write_report_json(
     let Some(path) = options.report_json.as_ref() else {
         return Ok(report);
     };
-    if !BuildPathPlan::new(options).report_is_safe() {
+    if let Err(diagnostic) = BuildPathPlan::new(options).validate_report() {
+        // Never overwrite a protected file while reporting an earlier failure.
+        // A newly discovered alias must not silently turn a successful build
+        // into one with a missing report (e.g. a new case-variant lockfile).
+        if report.status.is_success() {
+            return return_path_validation_error(options, report, *diagnostic);
+        }
         return Ok(report);
     }
 
@@ -4474,6 +4480,22 @@ fn maybe_write_report_json(
     }
 
     Ok(report)
+}
+
+fn return_path_validation_error(
+    options: &BuildOptions,
+    mut report: BuildReport,
+    diagnostic: Diagnostic,
+) -> Result<BuildReport, BuildError> {
+    let cause = if diagnostic.code.as_str() == "PROJECT.PATH_COLLISION" {
+        report.status = BuildStatus::Invalid;
+        BuildFailureCause::Diagnostics
+    } else {
+        report.status = BuildStatus::Error;
+        BuildFailureCause::Io
+    };
+    report.diagnostics.push(diagnostic);
+    return_report_error(options, report, cause)
 }
 
 fn return_report_error(
@@ -5343,5 +5365,49 @@ mod tests {
         };
 
         assert!(!temp_path.exists());
+    }
+
+    #[test]
+    fn output_only_publication_does_not_copy_package_into_disposable_workspace() {
+        let root = tempfile::tempdir().unwrap();
+        let candidate = root.path().join("candidate.apkg");
+        std::fs::write(&candidate, b"candidate bytes").unwrap();
+        let output = root.path().join("output.apkg");
+        let options = BuildOptions::new().output(&output);
+        let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+
+        let published = workspace.publish(&candidate, &options).unwrap();
+
+        assert_eq!(published, output);
+        assert_eq!(std::fs::read(published).unwrap(), b"candidate bytes");
+        assert!(
+            !workspace.path.join("package.apkg").exists(),
+            "output-only builds must not allocate a second temporary APKG"
+        );
+    }
+
+    #[test]
+    fn publication_keeps_packages_when_the_workspace_is_retained() {
+        for (explicit_artifacts, explicit_output) in [(true, true), (true, false), (false, false)] {
+            let root = tempfile::tempdir().unwrap();
+            let candidate = root.path().join("candidate.apkg");
+            std::fs::write(&candidate, b"candidate bytes").unwrap();
+            let output = root.path().join("output.apkg");
+            let mut options = BuildOptions::new();
+            if explicit_artifacts {
+                options = options.artifacts_dir(root.path().join("artifacts"));
+            }
+            if explicit_output {
+                options = options.output(&output);
+            }
+            let workspace = ArtifactWorkspace::new(&options, Instant::now()).unwrap();
+
+            let published = workspace.publish(&candidate, &options).unwrap();
+
+            assert_eq!(std::fs::read(&published).unwrap(), b"candidate bytes");
+            let package = workspace.path.join("package.apkg");
+            assert_eq!(std::fs::read(&package).unwrap(), b"candidate bytes");
+            assert_eq!(published, if explicit_output { output } else { package });
+        }
     }
 }

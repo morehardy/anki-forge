@@ -207,9 +207,15 @@ and absent entries recorded for future updates.
 
 When using `compare_to(previous_apkg)`, keep the baseline separate from the
 output, `artifacts_dir/package.apkg`, report JSON, and any writable identity
-lockfile. Builds reject same-file aliases (including relative paths, symlinks,
-and hard links) with `PROJECT.PATH_COLLISION` before writing. The baseline must
-also stay outside the artifact directory's replaceable `staging/` tree.
+lockfile. Builds reject existing same-file aliases (including relative paths,
+symlinks, and hard links) with `PROJECT.PATH_COLLISION` before writing. This
+includes the actual `staging/manifest.json` destination, whose links may point
+outside the artifact directory. The baseline must also stay outside the writable
+`staging/` tree.
+
+New destinations are rechecked after creation and before lockfile/report writes,
+so filesystem-specific case folding cannot turn an APKG into JSON. A collision
+detected after publication returns an error but keeps the valid published APKG.
 
 The baseline is inspected once before building; GUID reconciliation and diff
 use that same snapshot. The candidate APKG is compared and checked against
@@ -219,6 +225,8 @@ report retains diff/risk evidence with `artifact: null`. A separate report JSON
 can still be written; intermediate staging/media files may remain in an explicit
 artifact directory. Successful publication uses atomic replacement per file,
 not a transaction spanning the APKG, lockfile, and report.
+Output-only builds copy directly from the private candidate to the requested
+output; no extra package copy is made in the disposable artifact workspace.
 
 ## 4. Advanced: Contract Tools And Runtime
 

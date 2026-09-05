@@ -13,6 +13,7 @@ use crate::diagnostics::{
 pub(super) struct BuildPathPlan<'a> {
     options: &'a BuildOptions,
     package: Option<PathBuf>,
+    staging_manifest: Option<PathBuf>,
 }
 
 impl<'a> BuildPathPlan<'a> {
@@ -23,6 +24,10 @@ impl<'a> BuildPathPlan<'a> {
                 .artifacts_dir
                 .as_ref()
                 .map(|dir| dir.join("package.apkg")),
+            staging_manifest: options
+                .artifacts_dir
+                .as_ref()
+                .map(|dir| dir.join("staging/manifest.json")),
         }
     }
 
@@ -30,6 +35,7 @@ impl<'a> BuildPathPlan<'a> {
         [
             ("output", self.options.output.as_deref()),
             ("package", self.package.as_deref()),
+            ("staging_manifest", self.staging_manifest.as_deref()),
             ("report_json", self.options.report_json.as_deref()),
             (
                 "identity_lockfile",
@@ -55,43 +61,20 @@ impl<'a> BuildPathPlan<'a> {
                 {
                     continue;
                 }
-                match paths_alias(left, right) {
-                    Ok(false) => {}
-                    Ok(true) => {
-                        return Err(path_diagnostic(
-                            "PROJECT.PATH_COLLISION",
-                            right_name,
-                            format!(
-                                "{left_name} path collides with {right_name}: {} and {}",
-                                left.display(),
-                                right.display()
-                            ),
-                        ))
-                    }
-                    Err(error) => {
-                        return Err(path_diagnostic(
-                            "PROJECT.BUILD_IO",
-                            right_name,
-                            format!("cannot verify {left_name} and {right_name} paths: {error}"),
-                        ))
-                    }
-                }
+                validate_distinct_paths(left_name, left, right_name, right)?;
             }
         }
-        // The writer also replaces its staging tree. A baseline must not live
-        // there even if its filename is different from package.apkg.
+        // The writer also writes staging files. A baseline must not live there
+        // even if its filename is different from package.apkg. Check the actual
+        // manifest destination above too: a link can point outside this tree.
         if let (Some(artifacts), Some(baseline)) = (
             self.options.artifacts_dir.as_ref(),
             self.options.compare_to.as_ref(),
         ) {
             let staging = artifacts.join("staging");
-            let overlaps = resolved_destination(baseline)
-                .and_then(|baseline| {
-                    resolved_destination(&staging).map(|staging| baseline.starts_with(staging))
-                })
-                .map_err(|error| {
-                    path_diagnostic("PROJECT.BUILD_IO", "compare_to", error.to_string())
-                })?;
+            let overlaps = path_enters_directory(baseline, &staging).map_err(|error| {
+                path_diagnostic("PROJECT.BUILD_IO", "compare_to", error.to_string())
+            })?;
             if overlaps {
                 return Err(path_diagnostic(
                     "PROJECT.PATH_COLLISION",
@@ -106,14 +89,68 @@ impl<'a> BuildPathPlan<'a> {
 
     /// Error reporting must never destroy one of the files the error describes.
     /// Recheck immediately before writing, including after a failed preflight.
-    pub(super) fn report_is_safe(&self) -> bool {
+    pub(super) fn validate_report(&self) -> Result<(), Box<Diagnostic>> {
         let Some(report) = self.options.report_json.as_deref() else {
-            return false;
+            return Ok(());
         };
-        self.paths()
-            .filter(|(name, _)| *name != "report_json")
-            .all(|(_, protected)| matches!(paths_alias(report, protected), Ok(false)))
+        for (name, protected) in self.paths().filter(|(name, _)| *name != "report_json") {
+            validate_distinct_paths(name, protected, "report_json", report)?;
+        }
+        Ok(())
     }
+}
+
+fn validate_distinct_paths(
+    left_name: &str,
+    left: &Path,
+    right_name: &str,
+    right: &Path,
+) -> Result<(), Box<Diagnostic>> {
+    match paths_alias(left, right) {
+        Ok(false) => Ok(()),
+        Ok(true) => Err(path_diagnostic(
+            "PROJECT.PATH_COLLISION",
+            right_name,
+            format!(
+                "{left_name} path collides with {right_name}: {} and {}",
+                left.display(),
+                right.display()
+            ),
+        )),
+        Err(error) => Err(path_diagnostic(
+            "PROJECT.BUILD_IO",
+            right_name,
+            format!("cannot verify {left_name} and {right_name} paths: {error}"),
+        )),
+    }
+}
+
+fn path_enters_directory(path: &Path, directory: &Path) -> io::Result<bool> {
+    let directory = resolved_destination(directory)?;
+    if resolved_destination(path)?.starts_with(&directory) {
+        return Ok(true);
+    }
+
+    // A path can enter staging and then follow a link out of it. Replacing that
+    // link would still change the caller's baseline path. Resolve each ancestor
+    // to account for aliased artifact roots, but normalize parent components so
+    // ordinary paths such as staging/../previous.apkg remain valid.
+    let mut lexical = PathBuf::new();
+    for component in std::path::absolute(path)?.components() {
+        match component {
+            Component::ParentDir => {
+                lexical.pop();
+            }
+            Component::CurDir => {}
+            _ => lexical.push(component.as_os_str()),
+        }
+    }
+    for ancestor in lexical.ancestors() {
+        if resolved_destination(ancestor)?.starts_with(&directory) {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 fn path_diagnostic(code: &str, field: &str, message: String) -> Box<Diagnostic> {
@@ -124,7 +161,7 @@ fn path_diagnostic(code: &str, field: &str, message: String) -> Box<Diagnostic> 
         stage: Some(DiagnosticStage::new("validate")),
         source: Some(SourcePath::new(format!("build.{field}"))),
         message,
-        help: Some("choose distinct, accessible paths for APKG output, artifact package, report_json, identity lockfile, and compare_to".into()),
+        help: Some("choose distinct, accessible paths for APKG output, artifact package, staging manifest, report_json, identity lockfile, and compare_to".into()),
     })
 }
 
@@ -132,8 +169,10 @@ fn paths_alias(left: &Path, right: &Path) -> io::Result<bool> {
     if resolved_destination(left)? == resolved_destination(right)? {
         return Ok(true);
     }
-    // Canonical paths handle symlinks and case folding on the actual filesystem;
-    // file identity also detects hard links on Unix and Windows.
+    // Existing paths account for the actual filesystem's case folding, and
+    // file identity also detects hard links on Unix and Windows. New suffixes
+    // remain unverified until creation, so callers must recheck after publishing
+    // and before subsequent lockfile/report writes.
     match same_file::is_same_file(left, right) {
         Ok(same) => Ok(same),
         Err(error)

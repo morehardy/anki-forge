@@ -19,6 +19,14 @@ fn baseline(path: &Path) -> Vec<u8> {
     fs::read(path).unwrap()
 }
 
+fn filesystem_is_case_insensitive(root: &Path) -> bool {
+    let probe = root.join("CaseProbe");
+    fs::write(&probe, b"probe").unwrap();
+    let case_insensitive = root.join("caseprobe").exists();
+    fs::remove_file(probe).unwrap();
+    case_insensitive
+}
+
 fn assert_collision(options: BuildOptions, baseline_path: &Path, original: &[u8]) {
     let result = project("changed").build(options);
     assert!(
@@ -106,7 +114,7 @@ fn parent_directory_baseline_alias_is_rejected() {
 }
 
 #[test]
-fn baseline_inside_replaced_staging_tree_is_rejected() {
+fn baseline_inside_writable_staging_tree_is_rejected() {
     let root = tempdir().unwrap();
     let staging = root.path().join("staging");
     fs::create_dir(&staging).unwrap();
@@ -120,6 +128,193 @@ fn baseline_inside_replaced_staging_tree_is_rejected() {
         &original,
     );
     assert!(!root.path().join("package.apkg").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn staging_manifest_symlink_cannot_overwrite_external_baseline() {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let artifacts = root.path().join("artifacts");
+    let staging = artifacts.join("staging");
+    fs::create_dir_all(&staging).unwrap();
+    let manifest = staging.join("manifest.json");
+    std::os::unix::fs::symlink(&previous, &manifest).unwrap();
+
+    assert_collision(
+        BuildOptions::new()
+            .artifacts_dir(&artifacts)
+            .compare_to(&previous),
+        &previous,
+        &original,
+    );
+    assert!(!artifacts.join("package.apkg").exists());
+    assert!(fs::symlink_metadata(manifest)
+        .unwrap()
+        .file_type()
+        .is_symlink());
+}
+
+#[cfg(unix)]
+#[test]
+fn baseline_cannot_escape_writable_staging_through_a_symlink() {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let artifacts = root.path().join("artifacts");
+    let media = artifacts.join("staging/media");
+    fs::create_dir_all(&media).unwrap();
+    let alias = media.join("previous.apkg");
+    std::os::unix::fs::symlink(&previous, &alias).unwrap();
+    let artifacts_alias = root.path().join("artifacts-alias");
+    std::os::unix::fs::symlink(&artifacts, &artifacts_alias).unwrap();
+    for artifacts in [&artifacts, &artifacts_alias] {
+        assert_collision(
+            BuildOptions::new()
+                .artifacts_dir(artifacts)
+                .compare_to(&alias),
+            &previous,
+            &original,
+        );
+    }
+}
+
+#[test]
+fn parent_components_can_select_a_baseline_outside_staging() {
+    let root = tempdir().unwrap();
+    let staging = root.path().join("staging");
+    fs::create_dir(&staging).unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let report = project("changed")
+        .build(
+            BuildOptions::new()
+                .artifacts_dir(root.path())
+                .compare_to(staging.join("../previous.apkg")),
+        )
+        .unwrap();
+    assert_eq!(report.comparison, ComparisonStatus::Complete);
+    assert!(fs::read(previous).unwrap() == original);
+}
+
+#[test]
+fn staging_manifest_hard_link_cannot_overwrite_external_baseline() {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let artifacts = root.path().join("artifacts");
+    fs::create_dir_all(artifacts.join("staging")).unwrap();
+    fs::hard_link(&previous, artifacts.join("staging/manifest.json")).unwrap();
+
+    assert_collision(
+        BuildOptions::new()
+            .artifacts_dir(&artifacts)
+            .compare_to(&previous),
+        &previous,
+        &original,
+    );
+    assert!(!artifacts.join("package.apkg").exists());
+}
+
+#[test]
+fn new_case_variant_lockfile_never_replaces_the_published_apkg() {
+    let root = tempdir().unwrap();
+    let case_insensitive = filesystem_is_case_insensitive(root.path());
+
+    for explicit_output in [false, true] {
+        let artifacts = root
+            .path()
+            .join(if explicit_output { "output" } else { "package" });
+        let output = artifacts.join("package.apkg");
+        let lockfile = artifacts.join("PACKAGE.APKG");
+        let mut options = BuildOptions::new().first_update_safe_build(&lockfile);
+        if explicit_output {
+            options = options.output(&output);
+        } else {
+            options = options.artifacts_dir(&artifacts);
+        }
+        let result = project("previous").build(options);
+
+        assert!(
+            anki_forge::writer::inspect_apkg(&output).is_ok(),
+            "the published path must remain an APKG, not lockfile JSON"
+        );
+        if case_insensitive {
+            let error = result.expect_err("case-folding aliases must not succeed");
+            assert_eq!(error.report.status, BuildStatus::Invalid);
+            assert!(error
+                .report
+                .diagnostic_codes()
+                .contains(&"PROJECT.PATH_COLLISION".into()));
+            assert!(
+                !error
+                    .report
+                    .update_safety
+                    .as_ref()
+                    .unwrap()
+                    .lockfile_written
+            );
+            assert_eq!(error.report.artifact.as_ref().unwrap().path, output);
+        } else {
+            let report = result.expect("case-sensitive filesystems permit these distinct paths");
+            assert!(report.update_safety.as_ref().unwrap().lockfile_written);
+            assert!(
+                serde_json::from_slice::<serde_json::Value>(&fs::read(lockfile).unwrap()).is_ok()
+            );
+        }
+    }
+}
+
+#[test]
+fn new_case_variant_report_never_overwrites_a_published_file() {
+    for alias_lockfile in [false, true] {
+        let root = tempdir().unwrap();
+        let case_insensitive = filesystem_is_case_insensitive(root.path());
+        let output = root.path().join("deck.apkg");
+        let lockfile = root.path().join("identity.json");
+        let report_path = root.path().join(if alias_lockfile {
+            "IDENTITY.JSON"
+        } else {
+            "DECK.APKG"
+        });
+        let result = project("previous").build(
+            BuildOptions::new()
+                .output(&output)
+                .first_update_safe_build(&lockfile)
+                .report_json(&report_path),
+        );
+
+        assert!(anki_forge::writer::inspect_apkg(&output).is_ok());
+        if case_insensitive {
+            let error = result.expect_err("a conflicting report must not be silently skipped");
+            assert_eq!(error.report.status, BuildStatus::Invalid);
+            assert!(error
+                .report
+                .diagnostic_codes()
+                .contains(&"PROJECT.PATH_COLLISION".into()));
+            assert_eq!(
+                error
+                    .report
+                    .update_safety
+                    .as_ref()
+                    .unwrap()
+                    .lockfile_written,
+                alias_lockfile
+            );
+            assert_eq!(lockfile.exists(), alias_lockfile);
+        } else {
+            result.expect("case-sensitive filesystems permit distinct report paths");
+            let json: serde_json::Value =
+                serde_json::from_slice(&fs::read(report_path).unwrap()).unwrap();
+            assert_eq!(json["kind"], "anki-forge-build-report");
+        }
+        if lockfile.exists() {
+            let json: serde_json::Value =
+                serde_json::from_slice(&fs::read(lockfile).unwrap()).unwrap();
+            assert_eq!(json["schema_version"], "identity-lockfile-v1");
+        }
+    }
 }
 
 #[cfg(unix)]

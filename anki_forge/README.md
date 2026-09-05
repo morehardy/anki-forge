@@ -48,6 +48,8 @@ and risk checks use a snapshot captured before building and run before APKG or
 lockfile publication. A policy-blocked build preserves existing outputs and
 lockfiles and reports diff/risk evidence with no artifact path. Publication is
 atomic per file, not transactional across all requested files.
+New destinations are rechecked after creation, so a late path-collision error
+may leave a valid published APKG but cannot replace it with lockfile/report JSON.
 
 Values are ordinary owned Rust values and may be moved between threads when
 their fields permit it. A single builder or project is not designed for
