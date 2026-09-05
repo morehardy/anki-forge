@@ -69,14 +69,20 @@ impl BuildInput<'_> {
         let lowering_diagnostics =
             map_lowering_diagnostics(std::mem::take(&mut lowering.lowering_diagnostics));
         let media_mode = options.media_mode;
-        if let Self::Project(project) = self {
-            let media = match media_mode {
+        // Keep our input copies alive through ingestion, including error paths.
+        // Caller-owned source paths and aliases never enter this ownership set.
+        let _media_input_files = if let Self::Project(project) = self {
+            let PreparedProductMedia { media, input_files } = match media_mode {
                 ProjectMediaMode::PathBacked => {
                     product_media_to_path_backed_authoring_media(project.media.media(), &base_dir)
                 }
-                ProjectMediaMode::SelfContained => {
-                    product_media_to_self_contained_authoring_media(project.media.media())
-                }
+                ProjectMediaMode::SelfContained => product_media_to_self_contained_authoring_media(
+                    project.media.media(),
+                )
+                .map(|media| PreparedProductMedia {
+                    media,
+                    input_files: Vec::new(),
+                }),
             }
             .map_err(|error| ProjectNormalizeError {
                 message: error.message,
@@ -86,7 +92,10 @@ impl BuildInput<'_> {
             })?;
             lowering.authoring_document.media.extend(media);
             record_project_media_source_paths(&mut lowering, project.media.media());
-        }
+            input_files
+        } else {
+            Vec::new()
+        };
         if media_mode == ProjectMediaMode::SelfContained {
             let inline_limit = options.to_authoring_media_policy().inline_bytes_max;
             self_contain_authoring_path_media(

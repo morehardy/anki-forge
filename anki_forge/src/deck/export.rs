@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use anyhow::Context;
 
-use crate::writer::{inspect_apkg, inspect_staging, InspectReport};
+use crate::writer::{inspect_apkg_with_limits, inspect_staging, InspectLimits, InspectReport};
 use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, PackageBuildResult};
 
 use super::model::{Deck, Package};
@@ -13,6 +13,7 @@ pub struct BuildResult {
     package_build_result: PackageBuildResult,
     apkg_path: PathBuf,
     staging_manifest_path: PathBuf,
+    inspect_limits: InspectLimits,
 }
 
 impl BuildResult {
@@ -33,13 +34,30 @@ impl BuildResult {
     }
 
     pub fn inspect_apkg(&self) -> anyhow::Result<InspectReport> {
-        Ok(inspect_apkg(&self.apkg_path)?)
+        Ok(inspect_apkg_with_limits(
+            &self.apkg_path,
+            &self.inspect_limits,
+        )?)
     }
 }
 
 impl Package {
     pub fn build(&self, artifacts_dir: impl AsRef<Path>) -> anyhow::Result<BuildResult> {
-        build_package(self, artifacts_dir)
+        self.build_with_limits(artifacts_dir, InspectLimits::default())
+    }
+
+    /// Build with explicit, finite APKG inspection budgets.
+    ///
+    /// A limit violation still prevents publication; larger legitimate packages
+    /// require the caller to raise the relevant limit. The returned result uses
+    /// these same limits when `inspect_apkg()` is called. Byte/write convenience
+    /// methods retain the defaults; use this build's artifact for custom budgets.
+    pub fn build_with_limits(
+        &self,
+        artifacts_dir: impl AsRef<Path>,
+        limits: InspectLimits,
+    ) -> anyhow::Result<BuildResult> {
+        build_package(self, artifacts_dir, limits)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
@@ -102,6 +120,7 @@ impl Deck {
 fn build_package(
     package: &Package,
     artifacts_dir: impl AsRef<Path>,
+    inspect_limits: InspectLimits,
 ) -> anyhow::Result<BuildResult> {
     let artifacts_dir = artifacts_dir.as_ref();
     let stable_ref_prefix = package
@@ -111,7 +130,7 @@ fn build_package(
         .unwrap_or_else(|| "artifacts".into());
     let artifact_target = BuildArtifactTarget::new(artifacts_dir, stable_ref_prefix.clone());
     let (_report, package_build_result) = crate::product::Project::from(package.root_deck.clone())
-        .build_package_artifacts(artifacts_dir, stable_ref_prefix)?;
+        .build_package_artifacts(artifacts_dir, stable_ref_prefix, inspect_limits.clone())?;
 
     let apkg_ref = package_build_result
         .apkg_ref
@@ -125,6 +144,7 @@ fn build_package(
     Ok(BuildResult {
         apkg_path: artifact_path_from_ref(&artifact_target, apkg_ref)?,
         staging_manifest_path: artifact_path_from_ref(&artifact_target, staging_ref)?,
+        inspect_limits,
         package_build_result,
     })
 }

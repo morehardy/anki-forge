@@ -8,6 +8,12 @@ new minor release.
 
 ### Fixed
 
+- Clean up only build-owned file-media input copies after normalization,
+  including failed preparation, so repeated and incremental exports can reuse
+  an artifact directory without deleting caller-owned sources or aliases.
+- Let internal-tools Package callers select finite inspection budgets with
+  `build_with_limits`; result inspection retains the selected budgets. Default
+  exports continue to enforce resource limits before publication.
 - Import Decks into a single editable Project state, preserving raw HTML,
   identity evidence, source locations, stock declaration order, and media.
   Project additions no longer fail late or silently lose media after import.

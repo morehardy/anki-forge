@@ -857,10 +857,13 @@ impl Project {
         &self,
         artifacts_dir: &Path,
         artifact_ref_prefix: String,
+        inspect_limits: crate::writer_core::InspectLimits,
     ) -> Result<(BuildReport, crate::writer_core::PackageBuildResult), BuildError> {
         pipeline::execute(
             BuildInput::Project(self),
-            BuildOptions::new().artifacts_dir(artifacts_dir),
+            BuildOptions::new()
+                .artifacts_dir(artifacts_dir)
+                .inspect_limits(inspect_limits),
             None,
             Some(artifact_ref_prefix),
         )
@@ -2008,22 +2011,35 @@ fn product_media_to_self_contained_authoring_media<'a>(
     }
 }
 
+struct PreparedProductMedia {
+    media: Vec<crate::authoring::AuthoringMedia>,
+    input_files: Vec<tempfile::TempPath>,
+}
+
 fn product_media_to_path_backed_authoring_media<'a>(
     media: impl Iterator<Item = &'a crate::product::media_registry::ProductMedia>,
     media_input_dir: &Path,
-) -> Result<Vec<crate::authoring::AuthoringMedia>, ProductMediaPrepareError> {
+) -> Result<PreparedProductMedia, ProductMediaPrepareError> {
     let mut prepared = Vec::new();
+    let mut input_files = Vec::new();
     let mut diagnostics = Vec::new();
 
     for item in media {
-        match product_media_item_to_path_backed_authoring_media(item, media_input_dir) {
+        match product_media_item_to_path_backed_authoring_media(
+            item,
+            media_input_dir,
+            &mut input_files,
+        ) {
             Ok(media) => prepared.push(media),
             Err(mut error) => diagnostics.append(&mut error.diagnostics),
         }
     }
 
     if diagnostics.is_empty() {
-        Ok(prepared)
+        Ok(PreparedProductMedia {
+            media: prepared,
+            input_files,
+        })
     } else {
         Err(ProductMediaPrepareError {
             message: "prepare product media".into(),
@@ -2137,6 +2153,7 @@ fn product_media_item_to_authoring_media(
 fn product_media_item_to_path_backed_authoring_media(
     media: &crate::product::media_registry::ProductMedia,
     media_input_dir: &Path,
+    input_files: &mut Vec<tempfile::TempPath>,
 ) -> Result<crate::authoring::AuthoringMedia, ProductMediaPrepareError> {
     let source = match &media.source {
         crate::product::media_registry::ProductMediaSource::File { path } => {
@@ -2161,7 +2178,25 @@ fn product_media_item_to_path_backed_authoring_media(
                         media.export_filename.clone(),
                     ));
                 }
-                std::fs::copy(path, &target).map_err(|err| {
+                let copied = (|| {
+                    let mut source_file = std::fs::File::open(path)?;
+                    let owned_path = std::path::absolute(&target)?;
+                    let mut target_file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .create_new(true)
+                        .open(&owned_path)?;
+                    // Only files exclusively created by this preparation are ours.
+                    input_files.push(tempfile::TempPath::from_path(owned_path));
+                    std::io::copy(&mut source_file, &mut target_file)
+                })();
+                copied.map_err(|err| {
+                    if err.kind() == std::io::ErrorKind::AlreadyExists {
+                        return ProductMediaPrepareError::staging_collision(
+                            path.clone(),
+                            target.clone(),
+                            media.export_filename.clone(),
+                        );
+                    }
                     let code = if err.kind() == std::io::ErrorKind::NotFound {
                         "MEDIA.SOURCE_MISSING"
                     } else {

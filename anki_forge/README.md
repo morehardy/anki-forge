@@ -63,6 +63,11 @@ rejected requested lockfiles are high risk and can be blocked with
 add notes, custom note types, template bundles, and media normally. Imported
 HTML, note identities, media sources, and diagnostic locations are preserved.
 
+File-media input copies created during a build are owned only until
+normalization finishes and are cleaned up on failure too. Repeated builds and
+newly registered media updates can reuse an artifact directory. Existing
+caller-owned files and source aliases are never taken over or deleted.
+
 `build(BuildOptions::new())` returns a temporary `ApkgArtifact`. Keep the report
 or clone its artifact handle while using `artifact.path()`. The last report,
 error, or artifact clone removes the temporary APKG; staging files are already

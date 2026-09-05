@@ -72,7 +72,7 @@ fn deck_build_keeps_file_media_path_backed_until_normalize() {
     let build = Package::single(deck.clone()).build(&root).unwrap();
     let manifest = std::fs::read_to_string(build.staging_manifest_path()).unwrap();
 
-    assert!(root.join(".anki-forge-media-input/hello.txt").is_file());
+    assert!(!root.join(".anki-forge-media-input/hello.txt").exists());
     assert!(manifest.contains("media_objects"));
     assert!(!manifest.contains("data_base64"));
 }
@@ -121,6 +121,160 @@ fn deck_build_rejects_preexisting_media_input_target_symlink() {
         err.report.diagnostics
     );
     assert_eq!(std::fs::read(&victim_path).unwrap(), b"do not overwrite");
+}
+
+#[test]
+fn package_repeated_builds_keep_file_media() {
+    let root = tempfile::tempdir().unwrap();
+    let source = root.path().join("hello.txt");
+    std::fs::write(&source, b"hello").unwrap();
+    let mut deck = Deck::builder("Media Deck").stable_id("media-deck").build();
+    let media = deck.media().add(MediaSource::from_file(&source)).unwrap();
+    deck.basic()
+        .note("front", format!("<img src=\"{}\">", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+    let package = Package::single(deck);
+    let artifacts_dir = root.path().join("artifacts");
+
+    let first = package.build(&artifacts_dir).expect("first build");
+    let first_bytes = std::fs::read(first.apkg_path()).unwrap();
+    let second = package
+        .build(&artifacts_dir)
+        .unwrap_or_else(|error| panic!("repeated build should succeed: {error:#}"));
+
+    assert_eq!(std::fs::read(second.apkg_path()).unwrap(), first_bytes);
+    assert_eq!(std::fs::read(&source).unwrap(), b"hello");
+}
+
+#[test]
+fn package_retries_after_media_failure_without_leaving_input_copies() {
+    let root = tempfile::tempdir().unwrap();
+    let source_a = root.path().join("a.txt");
+    let source_b = root.path().join("b.txt");
+    std::fs::write(&source_a, b"first source").unwrap();
+    std::fs::write(&source_b, b"second source").unwrap();
+    let mut deck = Deck::builder("Media Deck").stable_id("media-deck").build();
+    let a = deck.media().add(MediaSource::from_file(&source_a)).unwrap();
+    let b = deck.media().add(MediaSource::from_file(&source_b)).unwrap();
+    deck.basic()
+        .note("front", format!("[sound:{}][sound:{}]", a.name(), b.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+    let package = Package::single(deck);
+    let artifacts_dir = root.path().join("artifacts");
+
+    std::fs::remove_file(&source_b).unwrap();
+    let failure = package.build(&artifacts_dir).err().expect("missing media");
+    assert!(failure.to_string().contains("MEDIA.SOURCE_MISSING"));
+    std::fs::write(&source_b, b"second source").unwrap();
+    let build = package.build(&artifacts_dir).expect("retry after repair");
+
+    build.inspect_apkg().expect("inspect repaired package");
+    assert_eq!(std::fs::read(&source_a).unwrap(), b"first source");
+    assert_eq!(std::fs::read(&source_b).unwrap(), b"second source");
+}
+
+#[test]
+fn package_rebuild_accepts_newly_registered_media_content() {
+    let root = tempfile::tempdir().unwrap();
+    let source = root.path().join("hello.txt");
+    let make_package = || {
+        let mut deck = Deck::builder("Media Deck").stable_id("media-deck").build();
+        let media = deck.media().add(MediaSource::from_file(&source)).unwrap();
+        deck.basic()
+            .note("front", format!("[sound:{}]", media.name()))
+            .stable_id("n1")
+            .add()
+            .unwrap();
+        Package::single(deck)
+    };
+    let artifacts_dir = root.path().join("artifacts");
+
+    std::fs::write(&source, b"original media").unwrap();
+    let first = make_package().build(&artifacts_dir).expect("initial build");
+    let original = std::fs::read(first.apkg_path()).unwrap();
+    std::fs::write(&source, b"updated media").unwrap();
+    let updated = make_package().build(&artifacts_dir).expect("updated build");
+
+    updated.inspect_apkg().expect("inspect updated package");
+    assert_ne!(std::fs::read(updated.apkg_path()).unwrap(), original);
+    assert_eq!(std::fs::read(&source).unwrap(), b"updated media");
+}
+
+#[test]
+fn package_build_limits_are_explicit_and_block_publication_until_raised() {
+    let root = tempfile::tempdir().unwrap();
+    let source = root.path().join("hello.txt");
+    std::fs::write(&source, b"hello").unwrap();
+    let mut deck = Deck::builder("Media Deck").stable_id("media-deck").build();
+    let media = deck.media().add(MediaSource::from_file(&source)).unwrap();
+    deck.basic()
+        .note("front", format!("[sound:{}]", media.name()))
+        .stable_id("n1")
+        .add()
+        .unwrap();
+    let package = Package::single(deck);
+    let artifacts_dir = root.path().join("artifacts");
+    let mut limits = anki_forge::writer::InspectLimits::default();
+    limits.max_media_bytes = 4;
+
+    let failure = package
+        .build_with_limits(&artifacts_dir, limits.clone())
+        .err()
+        .expect("media budget must block the candidate");
+    assert!(failure
+        .to_string()
+        .contains("INSPECT.RESOURCE_LIMIT_EXCEEDED"));
+    assert!(!artifacts_dir.join("package.apkg").exists());
+
+    limits.max_media_bytes = 5;
+    let build = package
+        .build_with_limits(&artifacts_dir, limits)
+        .expect("explicitly raised media budget");
+    build
+        .inspect_apkg()
+        .expect("inspect package with its budget");
+    assert!(build.apkg_path().is_file());
+    assert_eq!(std::fs::read(&source).unwrap(), b"hello");
+}
+
+#[test]
+fn package_result_retains_its_inspection_limits_for_later_reads() {
+    let root = tempfile::tempdir().unwrap();
+    let source = root.path().join("hello.txt");
+    let make_package = || {
+        let mut deck = Deck::builder("Media Deck").stable_id("media-deck").build();
+        let media = deck.media().add(MediaSource::from_file(&source)).unwrap();
+        deck.basic()
+            .note("front", format!("[sound:{}]", media.name()))
+            .stable_id("n1")
+            .add()
+            .unwrap();
+        Package::single(deck)
+    };
+    let artifacts_dir = root.path().join("artifacts");
+    let mut limits = anki_forge::writer::InspectLimits::default();
+    limits.max_media_bytes = 5;
+    std::fs::write(&source, b"hello").unwrap();
+    let limited = make_package()
+        .build_with_limits(&artifacts_dir, limits)
+        .expect("build with five-byte budget");
+
+    // The explicit output path can later be replaced by another successful build.
+    std::fs::write(&source, b"longer").unwrap();
+    let replaced = make_package().build(&artifacts_dir).unwrap();
+    replaced
+        .inspect_apkg()
+        .expect("default budget accepts replacement");
+    let failure = limited
+        .inspect_apkg()
+        .expect_err("earlier result must retain its selected budget");
+    assert!(failure
+        .to_string()
+        .contains("INSPECT.RESOURCE_LIMIT_EXCEEDED"));
 }
 
 #[test]
