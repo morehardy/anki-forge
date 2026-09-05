@@ -1,5 +1,5 @@
 use crate::{
-    fixtures::load_fixture_catalog,
+    fixtures::{load_fixture_catalog, template_bundle_fixture_root},
     manifest::{load_manifest, resolve_contract_relative_path, LoadedManifest},
 };
 use anyhow::{ensure, Context, Result};
@@ -50,6 +50,7 @@ pub fn build_artifact(
     fs::create_dir_all(out_dir)
         .with_context(|| format!("failed to create output directory: {}", out_dir.display()))?;
 
+    let entries = package_entries(&manifest)?;
     let artifact_path = out_dir.join(artifact_name(&manifest.data.bundle_version));
     let file = File::create(&artifact_path)
         .with_context(|| format!("failed to create artifact: {}", artifact_path.display()))?;
@@ -58,7 +59,7 @@ pub fn build_artifact(
         .write(file, Compression::default());
     let mut builder = Builder::new(encoder);
 
-    for (archive_path, source_path) in package_entries(&manifest)? {
+    for (archive_path, source_path) in entries {
         let mut source = File::open(&source_path)
             .with_context(|| format!("failed to open package entry: {}", source_path.display()))?;
         let metadata = source.metadata().with_context(|| {
@@ -282,6 +283,27 @@ fn add_case_transitive_entries(
     case: &crate::fixtures::FixtureCase,
 ) -> Result<()> {
     match case.category.as_str() {
+        "template-bundle" => {
+            let relative_root = template_bundle_fixture_root(Path::new(&case.input))?;
+            let root = contracts_root.join(relative_root);
+            let paths = anki_forge::product::template_bundle::template_bundle_relative_paths(root)
+                .with_context(|| {
+                    format!(
+                        "failed to collect template-bundle fixture inputs: {}",
+                        case.id
+                    )
+                })?;
+            for path in paths {
+                let relative = relative_root.join(path);
+                add_relative_entry(
+                    entries,
+                    contracts_root,
+                    relative
+                        .to_str()
+                        .context("template-bundle fixture path must be UTF-8")?,
+                )?;
+            }
+        }
         "phase2-normalization" | "phase2-risk" => {
             let case_path = resolve_contract_relative_path(contracts_root, &case.input)
                 .with_context(|| {

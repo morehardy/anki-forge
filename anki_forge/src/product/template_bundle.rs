@@ -62,6 +62,7 @@ impl std::error::Error for TemplateBundleError {}
 pub(crate) struct LoadedTemplateBundle {
     pub(crate) note_type: NoteType,
     pub(crate) assets: Vec<LoadedTemplateAsset>,
+    relative_paths: Vec<PathBuf>,
 }
 
 #[derive(Debug)]
@@ -146,6 +147,18 @@ fn normal_kind() -> String {
     "normal".into()
 }
 
+/// Returns the sorted, deduplicated input paths of a loadable template bundle.
+///
+/// Paths stay relative to the bundle root, including aliases used by the manifest.
+/// Resolution uses the same containment, file-size, and UTF-8 checks as import.
+/// This interface is only for repository contract packaging.
+#[cfg(feature = "internal-tools")]
+pub fn template_bundle_relative_paths(
+    root: impl AsRef<Path>,
+) -> Result<Vec<PathBuf>, TemplateBundleError> {
+    Ok(load_template_bundle(root)?.relative_paths)
+}
+
 pub(crate) fn load_template_bundle(
     root: impl AsRef<Path>,
 ) -> Result<LoadedTemplateBundle, TemplateBundleError> {
@@ -165,8 +178,13 @@ pub(crate) fn load_template_bundle(
         ));
     }
 
-    let manifest_path =
-        resolve_bundle_file(&canonical_root, MANIFEST_NAME, MANIFEST_LIMIT, "manifest")?;
+    let mut relative_paths = BTreeSet::new();
+    let mut resolve_file = |relative: &str, size_limit, role: &str| {
+        let path = resolve_bundle_file(&canonical_root, relative, size_limit, role)?;
+        relative_paths.insert(PathBuf::from(relative));
+        Ok::<_, TemplateBundleError>(path)
+    };
+    let manifest_path = resolve_file(MANIFEST_NAME, MANIFEST_LIMIT, "manifest")?;
     let manifest_source = read_utf8(&manifest_path, "TEMPLATE.BUNDLE_MANIFEST_INVALID")?;
     let manifest: TemplateBundleManifest =
         serde_yaml::from_str(&manifest_source).map_err(|error| {
@@ -286,18 +304,8 @@ pub(crate) fn load_template_bundle(
                 Some(canonical_root.join(MANIFEST_NAME)),
             ));
         }
-        let front_path = resolve_bundle_file(
-            &canonical_root,
-            &template.front_file,
-            TEXT_FILE_LIMIT,
-            "front template",
-        )?;
-        let back_path = resolve_bundle_file(
-            &canonical_root,
-            &template.back_file,
-            TEXT_FILE_LIMIT,
-            "back template",
-        )?;
+        let front_path = resolve_file(&template.front_file, TEXT_FILE_LIMIT, "front template")?;
+        let back_path = resolve_file(&template.back_file, TEXT_FILE_LIMIT, "back template")?;
         let mut product_template = Template::new(template.name)
             .key(template.key)
             .front_with_origin(
@@ -309,16 +317,14 @@ pub(crate) fn load_template_bundle(
                 back_path.to_string_lossy(),
             );
         if let Some(path) = template.browser_front_file {
-            let path =
-                resolve_bundle_file(&canonical_root, &path, TEXT_FILE_LIMIT, "browser front")?;
+            let path = resolve_file(&path, TEXT_FILE_LIMIT, "browser front")?;
             product_template = product_template.browser_front_with_origin(
                 read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
                 path.to_string_lossy(),
             );
         }
         if let Some(path) = template.browser_back_file {
-            let path =
-                resolve_bundle_file(&canonical_root, &path, TEXT_FILE_LIMIT, "browser back")?;
+            let path = resolve_file(&path, TEXT_FILE_LIMIT, "browser back")?;
             product_template = product_template.browser_back_with_origin(
                 read_utf8(&path, "TEMPLATE.BUNDLE_FILE_INVALID")?,
                 path.to_string_lossy(),
@@ -337,8 +343,7 @@ pub(crate) fn load_template_bundle(
     }
 
     if let Some(css_file) = manifest.css_file {
-        let css_path =
-            resolve_bundle_file(&canonical_root, &css_file, TEXT_FILE_LIMIT, "stylesheet")?;
+        let css_path = resolve_file(&css_file, TEXT_FILE_LIMIT, "stylesheet")?;
         note_type = note_type.css(read_utf8(&css_path, "TEMPLATE.BUNDLE_FILE_INVALID")?);
     }
 
@@ -347,13 +352,17 @@ pub(crate) fn load_template_bundle(
         .into_iter()
         .map(|asset| {
             Ok(LoadedTemplateAsset {
-                path: resolve_bundle_file(&canonical_root, &asset.path, ASSET_FILE_LIMIT, "asset")?,
+                path: resolve_file(&asset.path, ASSET_FILE_LIMIT, "asset")?,
                 export_as: asset.export_as,
             })
         })
         .collect::<Result<Vec<_>, TemplateBundleError>>()?;
 
-    Ok(LoadedTemplateBundle { note_type, assets })
+    Ok(LoadedTemplateBundle {
+        note_type,
+        assets,
+        relative_paths: relative_paths.into_iter().collect(),
+    })
 }
 
 fn validate_manifest_semantics(
