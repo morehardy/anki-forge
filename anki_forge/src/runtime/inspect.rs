@@ -7,5 +7,5 @@ pub fn inspect_staging_path(path: impl AsRef<Path>) -> anyhow::Result<InspectRep
 }
 
 pub fn inspect_apkg_path(path: impl AsRef<Path>) -> anyhow::Result<InspectReport> {
-    inspect_apkg(path)
+    Ok(inspect_apkg(path)?)
 }

@@ -6,7 +6,7 @@ Cargo.toml.orig
 LICENSE
 PACKAGE_FILES.txt
 README.md
-assets/contracts/anki-forge-contract-bundle-0.3.0.tar.gz
+assets/contracts/anki-forge-contract-bundle-0.4.0.tar.gz
 build.rs
 examples/target_api_basic.rs
 examples/target_api_custom_notetype.rs
@@ -94,6 +94,8 @@ src/update_safety/report.rs
 src/writer.rs
 src/writer_core/anki_proto.rs
 src/writer_core/apkg.rs
+src/writer_core/apkg_index.rs
+src/writer_core/apkg_reader.rs
 src/writer_core/build.rs
 src/writer_core/canonical_json.rs
 src/writer_core/card_plan.rs
@@ -101,6 +103,7 @@ src/writer_core/compat_schema.rs
 src/writer_core/deck_name.rs
 src/writer_core/diff.rs
 src/writer_core/inspect.rs
+src/writer_core/inspect_limits.rs
 src/writer_core/media.rs
 src/writer_core/media_refs.rs
 src/writer_core/mod.rs

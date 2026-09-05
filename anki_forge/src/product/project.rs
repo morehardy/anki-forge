@@ -959,10 +959,12 @@ impl Project {
             report.diagnostics = vec![*diagnostic];
             return return_report_error(&options, report, cause);
         }
-        let baseline = options
-            .compare_to
-            .as_deref()
-            .map(crate::product::comparison::BaselineSnapshot::capture);
+        let baseline = options.compare_to.as_deref().map(|path| {
+            crate::product::comparison::BaselineSnapshot::capture_with_limits(
+                path,
+                &options.inspect_limits,
+            )
+        });
         let artifact_workspace = ArtifactWorkspace::new(&options, started)?;
         let artifacts_dir = artifact_workspace.path.clone();
         let normalize_options = options.normalize_options.clone().unwrap_or_default();
@@ -1413,6 +1415,12 @@ impl Project {
                                     "verify the previous APKG path and package contents".into(),
                                 ),
                             });
+                            crate::product::comparison::push_resource_diagnostic(
+                                &mut diagnostics,
+                                &err,
+                                path,
+                                update_error_severity,
+                            );
                             baseline_sources.push(
                                 crate::update_safety::report::unreadable_previous_apkg_source(
                                     path,
@@ -1740,7 +1748,7 @@ impl Project {
         let mut policy = BuildPolicyResult::default();
         let mut status = BuildStatus::highest([writer_status, diagnostics_status(&diagnostics)]);
         if let Some(artifact) = artifact.as_ref() {
-            let comparison_output = crate::product::comparison::assemble_comparison_with_baseline(
+            let comparison_output = crate::product::comparison::assemble_comparison_with_limits(
                 crate::product::comparison::ComparisonInput {
                     current_artifact: &artifact.path,
                     previous_artifact: options.compare_to.as_deref(),
@@ -1749,6 +1757,7 @@ impl Project {
                     started,
                 },
                 baseline.as_ref(),
+                &options.inspect_limits,
             );
             diagnostics = comparison_output.diagnostics;
             if options.inspect {
@@ -1894,6 +1903,15 @@ impl Project {
         &self,
         path: impl AsRef<Path>,
     ) -> Result<crate::diff::ProjectDiffReport, crate::diff::ProjectDiffError> {
+        self.diff_against_apkg_with_limits(path, crate::writer_core::InspectLimits::default())
+    }
+
+    /// Compare with an explicitly selected, finite APKG inspection budget.
+    pub fn diff_against_apkg_with_limits(
+        &self,
+        path: impl AsRef<Path>,
+        limits: crate::writer_core::InspectLimits,
+    ) -> Result<crate::diff::ProjectDiffReport, crate::diff::ProjectDiffError> {
         let started = Instant::now();
         let temp = tempfile::Builder::new()
             .prefix("anki-forge-project-diff-")
@@ -1928,6 +1946,7 @@ impl Project {
             BuildOptions::new()
                 .output(&current_path)
                 .inspect(true)
+                .inspect_limits(limits)
                 .compare_to(path.as_ref())
                 .update_safety(crate::build::UpdateSafetyMode::ReportOnly),
         );
