@@ -488,19 +488,34 @@ fn build_observations(
             }
             template_entries.push(template_entry);
 
-            if template.browser_question_format.is_some()
-                || template.browser_answer_format.is_some()
-                || template.browser_font_name.is_some()
-                || template.browser_font_size.is_some()
+            // Anki stores absent browser overrides as empty strings or zero.
+            // Match APKG inspection before deciding whether an entry exists.
+            let browser_question_format = template
+                .browser_question_format
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_answer_format = template
+                .browser_answer_format
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_font_name = template
+                .browser_font_name
+                .as_deref()
+                .filter(|value| !value.is_empty());
+            let browser_font_size = template.browser_font_size.filter(|value| *value != 0);
+            if browser_question_format.is_some()
+                || browser_answer_format.is_some()
+                || browser_font_name.is_some()
+                || browser_font_size.is_some()
             {
                 browser_template_entries.push(json!({
                     "selector": format!("notetype[id='{}']::browser-template[{}]", notetype_id, template_name),
                     "notetype_id": notetype_id,
                     "template_name": template_name,
-                    "browser_question_format": template.browser_question_format,
-                    "browser_answer_format": template.browser_answer_format,
-                    "browser_font_name": template.browser_font_name,
-                    "browser_font_size": template.browser_font_size,
+                    "browser_question_format": browser_question_format,
+                    "browser_answer_format": browser_answer_format,
+                    "browser_font_name": browser_font_name,
+                    "browser_font_size": browser_font_size,
                     "evidence_refs": [format!("browser-template:{}:{}", notetype_id, template_name)],
                 }));
             }

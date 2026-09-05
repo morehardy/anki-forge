@@ -43,6 +43,83 @@ fn diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fi
 }
 
 #[test]
+fn staging_and_apkg_agree_on_browser_template_sentinels() {
+    for question in [None, Some(""), Some("{{Front}}"), Some(" \t\n")] {
+        for answer in [None, Some(""), Some("{{Back}}"), Some(" \t\n")] {
+            for font in [None, Some(""), Some("Arial"), Some(" \t\n")] {
+                for size in [None, Some(0), Some(18)] {
+                    let root = tempfile::tempdir().unwrap();
+                    let target = BuildArtifactTarget::new(
+                        root.path().to_path_buf(),
+                        "artifacts/phase3/diff-browser-sentinels",
+                    );
+                    let mut normalized = sample_basic_normalized_ir();
+                    let template = &mut normalized.notetypes[0].templates[0];
+                    template.browser_question_format = question.map(str::to_owned);
+                    template.browser_answer_format = answer.map(str::to_owned);
+                    template.browser_font_name = font.map(str::to_owned);
+                    template.browser_font_size = size;
+                    let input = json!([question, answer, font, size]);
+
+                    build(
+                        &normalized,
+                        &sample_writer_policy(),
+                        &sample_build_context(true),
+                        &target,
+                    )
+                    .unwrap();
+                    let staging = inspect_staging(target.staging_manifest_path()).unwrap();
+                    let apkg = inspect_apkg(root.path().join("package.apkg")).unwrap();
+                    assert_eq!(
+                        staging.observations.browser_templates, apkg.observations.browser_templates,
+                        "{input}"
+                    );
+                    for (before, after) in [(&staging, &apkg), (&apkg, &staging)] {
+                        let diff = diff_reports(before, after).unwrap();
+                        assert_eq!(diff.comparison_status, "complete", "{input}");
+                        assert!(diff.changes.is_empty(), "{input}: {:#?}", diff.changes);
+                    }
+
+                    // Empty/zero sentinels mean no override; whitespace is significant.
+                    let expected = json!({
+                        "browser_question_format": match question {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_answer_format": match answer {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_font_name": match font {
+                            Some("") => None,
+                            value => value,
+                        },
+                        "browser_font_size": match size {
+                            Some(0) => None,
+                            value => value,
+                        },
+                    });
+                    let has_override = expected
+                        .as_object()
+                        .unwrap()
+                        .values()
+                        .any(|value| !value.is_null());
+                    for report in [&staging, &apkg] {
+                        let entries = &report.observations.browser_templates;
+                        assert_eq!(entries.len(), usize::from(has_override), "{input}");
+                        if has_override {
+                            for (key, value) in expected.as_object().unwrap() {
+                                assert_eq!(&entries[0][key], value, "{input}: {key}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
 fn staging_and_apkg_agree_on_canonical_deck_names() {
     for (requested, canonical) in [
         (" Biology ", "Biology"),

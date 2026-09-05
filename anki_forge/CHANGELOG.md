@@ -45,6 +45,8 @@ new minor release.
   higher risk level without duplicating the finding.
 - Keep identity-rejected APKG baselines high risk even when raw comparison is
   complete; `fail_on(High)` blocks publication and preserves existing files.
+- Canonicalize empty browser overrides and zero font sizes in staging inspection
+  so APKG roundtrips do not report false browser-template changes.
 
 ### Compatibility
 

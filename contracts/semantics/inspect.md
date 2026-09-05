@@ -44,6 +44,12 @@ buckets beyond the existing core note/card/media data:
 - `browser_templates` for browser-specific template appearance declarations
 - `template_target_decks` for template deck declarations with resolved deck ids
 
+Browser template observations use Anki's absent-override semantics: empty browser
+question/answer formats and font names, and font size `0`, are observed as `null`.
+A template with no remaining browser overrides has no `browser_templates` entry.
+Staging and APKG inspection apply the same rules; nonempty strings (including
+whitespace-only strings) and nonzero font sizes remain unchanged.
+
 Deck routing observations expose `deck_name` on note and card reference entries.
 For staging sources, note deck names follow normalized IR and card deck names
 are computed as `template.target_deck_name ?? note.deck_name`. These names and
