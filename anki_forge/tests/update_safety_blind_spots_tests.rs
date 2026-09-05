@@ -240,6 +240,64 @@ fn legacy_lockfile_requires_apkg_in_strict_mode_and_can_be_migrated() {
 }
 
 #[test]
+fn report_only_apkg_field_removal_coalesces_evidence_per_field() {
+    use anki_forge::build::RiskLevel;
+    use anki_forge::diff::EvidenceRefKind;
+
+    for ids in [&["alpha"][..], &["alpha", "beta"][..]] {
+        let root = tempfile::tempdir().unwrap();
+        let previous = root.path().join("previous.apkg");
+        project_with_types(ids, true).write_apkg(&previous).unwrap();
+        let report = project_with_types(ids, false)
+            .build(
+                BuildOptions::new()
+                    .output(root.path().join("removed.apkg"))
+                    .compare_to(&previous)
+                    .update_safety(UpdateSafetyMode::ReportOnly),
+            )
+            .unwrap();
+        let risk = report.risk.unwrap();
+        let findings: Vec<_> = risk
+            .findings
+            .iter()
+            .filter(|finding| finding.code == "RISK.FIELD_REMOVED_OR_RENAMED")
+            .collect();
+        assert_eq!(
+            findings.len(),
+            ids.len(),
+            "same-field evidence must be coalesced: {findings:?}"
+        );
+        for id in ids {
+            let selector = format!("notetype[id='{id}']::field[Extra]");
+            let finding = findings
+                .iter()
+                .find(|finding| {
+                    finding
+                        .source
+                        .as_ref()
+                        .is_some_and(|source| source.as_str() == selector)
+                })
+                .unwrap();
+            assert_eq!(finding.level, RiskLevel::High);
+            assert_eq!(finding.evidence_refs.len(), 2);
+            for kind in [EvidenceRefKind::Diagnostic, EvidenceRefKind::DiffChange] {
+                assert!(finding
+                    .evidence_refs
+                    .iter()
+                    .any(|evidence| evidence.kind == kind));
+            }
+        }
+        assert_eq!(
+            risk.blocking_codes_at_or_above(RiskLevel::Medium)
+                .iter()
+                .filter(|code| code.as_str() == "RISK.FIELD_REMOVED_OR_RENAMED")
+                .count(),
+            ids.len()
+        );
+    }
+}
+
+#[test]
 fn actual_apkg_model_id_overrides_conflicting_lockfile_evidence() {
     let root = tempfile::tempdir().unwrap();
     let lock = root.path().join("identity.json");

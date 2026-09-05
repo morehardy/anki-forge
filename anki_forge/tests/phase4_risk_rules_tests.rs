@@ -87,6 +87,65 @@ fn baseline_unavailable_emits_high_risk() {
 }
 
 #[test]
+fn rejected_apkg_has_one_diagnostic_backed_risk_regardless_of_comparison_status() {
+    let diagnostics = [diagnostic_with_source(
+        "UPDATE.BASELINE_APKG_UNREADABLE",
+        Severity::Warning,
+        "previous.apkg",
+    )];
+    for comparison in [
+        ComparisonStatus::Complete,
+        ComparisonStatus::Partial,
+        ComparisonStatus::Unavailable,
+    ] {
+        let report = classify_import_risk(RiskInput {
+            diagnostics: &diagnostics,
+            comparison,
+            diff: None,
+            current_inspect: None,
+            previous_inspect: None,
+            update_safety: None,
+        });
+        assert_eq!(report.findings.len(), 1);
+        let finding = &report.findings[0];
+        assert_eq!(finding.code, "RISK.BASELINE_UNAVAILABLE");
+        assert_eq!(finding.level, RiskLevel::High);
+        assert_eq!(finding.source.as_ref().unwrap().as_str(), "previous.apkg");
+        assert_eq!(finding.evidence_refs[0].kind, EvidenceRefKind::Diagnostic);
+    }
+}
+
+#[test]
+fn field_removal_keeps_unmatched_and_diff_only_evidence_separate() {
+    let diagnostics = [diagnostic_with_source(
+        "UPDATE.FIELD_REMOVED",
+        Severity::Warning,
+        "another-field",
+    )];
+    let diff =
+        diff_with_semantic_change("RISK.FIELD_REMOVED_OR_RENAMED", SemanticDiffCategory::Field);
+    for diagnostics in [&[][..], &diagnostics[..]] {
+        let report = classify_import_risk(RiskInput {
+            diagnostics,
+            comparison: ComparisonStatus::Complete,
+            diff: Some(&diff),
+            current_inspect: None,
+            previous_inspect: None,
+            update_safety: None,
+        });
+        assert_eq!(report.findings.len(), diagnostics.len() + 1);
+        let semantic = report.findings.last().unwrap();
+        assert_eq!(semantic.level, RiskLevel::Medium);
+        assert_eq!(semantic.evidence_refs.len(), 1);
+        assert_eq!(semantic.evidence_refs[0].kind, EvidenceRefKind::DiffChange);
+        if !diagnostics.is_empty() {
+            assert_eq!(report.findings[0].level, RiskLevel::High);
+            assert_eq!(report.findings[0].evidence_refs.len(), 1);
+        }
+    }
+}
+
+#[test]
 fn broken_media_reference_emits_high_risk_without_baseline() {
     let diagnostics = vec![diagnostic("MEDIA.MISSING_REFERENCE", Severity::Error)];
     let report = classify_import_risk(RiskInput {

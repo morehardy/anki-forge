@@ -1288,14 +1288,12 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
                 let notetype = notetypes_by_row_id
                     .get(&mid)
                     .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
-                let field_values: Vec<_> = if flds.is_empty() {
-                    vec![]
-                } else {
-                    flds.split('\u{1f}').map(|s| s.to_string()).collect()
-                };
+                // Empty storage is one empty field, not an absent field list.
+                // split also retains empty values between/trailing separators.
+                let field_values = flds.split('\u{1f}');
                 let mut fields = BTreeMap::new();
                 for (field, value) in notetype.fields.iter().zip(field_values) {
-                    fields.insert(field.name.clone(), value);
+                    fields.insert(field.name.clone(), value.to_string());
                 }
                 let note = NormalizedNote {
                     id: guid.clone(),

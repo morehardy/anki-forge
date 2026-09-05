@@ -17,5 +17,6 @@ strict updates and remains explicit high risk in report-only mode.
 - Legacy lockfiles need a previous APKG to recover revision evidence in strict mode.
 - Report-only never persists fallback revisions/model IDs as recovered baseline
   evidence: incomplete or rejected baselines suppress lockfile writes. Rejected
-  requested lockfiles remain high risk even when their diagnostics are warnings.
+  requested lockfiles and APKG identity baselines remain high risk even when
+  their diagnostics are warnings or raw artifact comparison is complete.
 - See RFC 0005 for the content hash, migration rules, and real-import verification.

@@ -17,7 +17,11 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
     let mut findings = Vec::new();
     let _update_safety_evidence_is_carried_by_diagnostics = input.update_safety;
 
-    if matches!(input.comparison, ComparisonStatus::Unavailable) {
+    let rejected_apkg = input
+        .diagnostics
+        .iter()
+        .any(|diagnostic| diagnostic.code.as_str() == "UPDATE.BASELINE_APKG_UNREADABLE");
+    if matches!(input.comparison, ComparisonStatus::Unavailable) && !rejected_apkg {
         findings.push(finding(
             "RISK.BASELINE_UNAVAILABLE",
             RiskLevel::High,
@@ -33,17 +37,29 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
 
     for (index, diagnostic) in input.diagnostics.iter().enumerate() {
         let code = diagnostic.code.as_str();
-        if code == "UPDATE.BASELINE_LOCKFILE_UNREADABLE" {
+        if matches!(
+            code,
+            "UPDATE.BASELINE_LOCKFILE_UNREADABLE" | "UPDATE.BASELINE_APKG_UNREADABLE"
+        ) {
+            let apkg = code == "UPDATE.BASELINE_APKG_UNREADABLE";
             let mut item = finding(
                 "RISK.BASELINE_UNAVAILABLE",
                 RiskLevel::High,
                 "baseline",
-                "requested identity lockfile could not be read or validated",
+                if apkg {
+                    "requested APKG identity baseline could not be read or validated"
+                } else {
+                    "requested identity lockfile could not be read or validated"
+                },
                 vec![EvidenceRef {
                     kind: EvidenceRefKind::Diagnostic,
                     ref_id: format!("diagnostic:{index}:{code}"),
                 }],
-                "restore a valid identity lockfile or recover baseline evidence from the previous APKG",
+                if apkg {
+                    "restore a readable, valid previous APKG and verify its identity and revision evidence"
+                } else {
+                    "restore a valid identity lockfile or recover baseline evidence from the previous APKG"
+                },
             );
             item.source = diagnostic.source.clone();
             findings.push(item);
@@ -188,15 +204,19 @@ pub fn classify_import_risk(input: RiskInput<'_>) -> ImportRiskReport {
                     kind: EvidenceRefKind::DiffChange,
                     ref_id: format!("semantic:{index}:{}", change.selector),
                 };
-                if code == "RISK.TEMPLATE_REORDER" {
+                if matches!(
+                    code.as_str(),
+                    "RISK.TEMPLATE_REORDER" | "RISK.FIELD_REMOVED_OR_RENAMED"
+                ) {
                     if let Some(finding) = findings.iter_mut().find(|finding| {
-                        finding.code == "RISK.TEMPLATE_REORDER"
+                        finding.code == *code
                             && finding
                                 .source
                                 .as_ref()
                                 .map(|source| source.as_str() == change.selector)
                                 .unwrap_or(false)
                     }) {
+                        finding.level = finding.level.max(level);
                         push_evidence_ref_once(finding, evidence);
                         continue;
                     }

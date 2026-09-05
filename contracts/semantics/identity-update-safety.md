@@ -53,6 +53,11 @@ Field membership is compared by field key even with a lockfile-only baseline.
 removal diagnostic to a warning without lowering its risk. Existing field rename,
 order, and config-ID checks still apply.
 
+When diagnostic and semantic-diff evidence identify the same removed field,
+emit one `RISK.FIELD_REMOVED_OR_RENAMED` finding with both evidence references
+and the higher risk level. Different field selectors remain separate findings;
+diff-only field removal retains its existing medium-risk classification.
+
 ## Note content revision (bundle 0.5.0)
 
 An identity entry may carry `revision: {content_hash, mtime_secs}`. This is distinct
@@ -99,8 +104,12 @@ and leave `update_safety.lockfile_written` false. A later strict build must stil
 require recovery. A readable previous APKG can supply missing legacy evidence;
 normal first-release lockfile creation and verified report-only updates still write.
 
-`UPDATE.BASELINE_LOCKFILE_UNREADABLE` always contributes high risk
+`UPDATE.BASELINE_LOCKFILE_UNREADABLE` and `UPDATE.BASELINE_APKG_UNREADABLE`
+always contribute high risk
 `RISK.BASELINE_UNAVAILABLE`, even when report-only downgrades its diagnostic to
 a warning. This includes invalid model IDs/revisions and parse/read failures.
-The finding retains the lockfile source and diagnostic evidence. `fail_on(High)`
+Identity rejection remains high risk even if raw artifact comparison is complete.
+The finding retains the baseline source and diagnostic evidence. An APKG rejection
+and an unavailable comparison describe one APKG baseline risk, not two findings.
+`fail_on(High)`
 blocks publication without changing existing output or lockfile bytes.

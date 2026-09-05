@@ -120,3 +120,12 @@ remain high risk, so policy rejection preserves published files and lockfiles.
 Valid APKG migration and normal report-only creation/updates remain supported.
 The observation model advances to v2, with legacy/mixed-version binding coverage;
 see RFC 0004's review follow-up for the version boundary.
+
+The next review round exposed a single-empty-field reconstruction error, duplicate
+field-removal risks, and identity-rejected APKGs bypassing high-risk policy gates.
+Regression tests now cover unchanged empty-field revisions, both invalid APKG
+identity forms with/without a fallback lockfile, preserved publication bytes,
+per-field evidence coalescing, and comparison-status-independent baseline risk.
+The fixes retain the bounded-reader/resource-diagnostic guarantees merged from
+PR 37. Bundle 0.5.0 includes both branches' contract changes; ADR/RFC numbering
+preserves main's resource-budget decision and renumbers this PR's decisions.

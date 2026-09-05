@@ -39,6 +39,12 @@ new minor release.
   identity/revision evidence; rejected lockfiles remain high risk for policy gates.
 - Version the expanded inspection evidence as `phase3-inspect-v2`; cross-version
   saved-report comparisons are partial and supported by Node/Python bindings.
+- Preserve single empty fields during APKG inspection so unchanged notes retain
+  their full-content revision and modification time.
+- Coalesce diagnostic and diff evidence for the same removed field, retaining the
+  higher risk level without duplicating the finding.
+- Keep identity-rejected APKG baselines high risk even when raw comparison is
+  complete; `fail_on(High)` blocks publication and preserves existing files.
 
 ### Compatibility
 

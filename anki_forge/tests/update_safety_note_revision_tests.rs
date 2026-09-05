@@ -67,6 +67,73 @@ fn apkg_updates_advance_only_changed_notes_and_rebuild_deterministically() {
     assert_eq!(mtimes(&third), after);
 }
 
+fn assert_unchanged_optional_fields_keep_revision(value: &str, extra_field: bool) {
+    let root = tempfile::tempdir().unwrap();
+    let first = root.path().join("first.apkg");
+    let second = root.path().join("second.apkg");
+    let third = root.path().join("third.apkg");
+    let lock = root.path().join("identity.json");
+    let mut project = Project::new("Empty fields").stable_id("empty-fields");
+    let mut notetype = NoteType::custom("optional")
+        .field(Field::new("Value").key("value").optional())
+        .template(Template::new("Card").front("Prompt").back("{{Value}}"));
+    if extra_field {
+        notetype = notetype.field(Field::new("Extra").key("extra").optional());
+    }
+    project.add_notetype(notetype).unwrap();
+    project
+        .add_note(Note::new("optional").stable_id("note").text("value", value))
+        .unwrap();
+    project
+        .build(
+            BuildOptions::new()
+                .output(&first)
+                .first_update_safe_build(&lock),
+        )
+        .unwrap();
+    project
+        .build(BuildOptions::new().output(&second).compare_to(&first))
+        .unwrap();
+    project
+        .build(BuildOptions::new().output(&third).compare_to(&second))
+        .unwrap();
+    assert_eq!(mtimes(&first), mtimes(&second));
+    assert_eq!(mtimes(&second), mtimes(&third));
+
+    let inspected = anki_forge::writer::inspect_apkg(&first).unwrap();
+    let note = inspected
+        .observations
+        .references
+        .iter()
+        .find(|entry| entry["id"] == "note")
+        .unwrap();
+    assert_eq!(note["fields"]["Value"], value);
+    assert_eq!(
+        note["fields"].as_object().unwrap().len(),
+        if extra_field { 2 } else { 1 }
+    );
+    if extra_field {
+        assert_eq!(note["fields"]["Extra"], "");
+    }
+    let locked = anki_forge::update_safety::lockfile::read_lockfile(&lock).unwrap();
+    assert_eq!(
+        note["revision"],
+        serde_json::to_value(locked.identity_index.notes[0].revision.as_ref().unwrap()).unwrap()
+    );
+}
+
+#[test]
+fn unchanged_single_empty_field_preserves_revision() {
+    assert_unchanged_optional_fields_keep_revision("", false);
+}
+
+#[test]
+fn unchanged_nonempty_and_multiple_empty_fields_preserve_revision() {
+    assert_unchanged_optional_fields_keep_revision("value", false);
+    assert_unchanged_optional_fields_keep_revision("", true);
+    assert_unchanged_optional_fields_keep_revision("value", true);
+}
+
 #[test]
 fn lockfile_persists_full_content_revision_and_handles_reverts() {
     let root = tempfile::tempdir().unwrap();
@@ -351,6 +418,139 @@ fn report_only_rejected_model_id_baseline_is_high_risk() {
 #[test]
 fn report_only_rejected_revision_baseline_is_high_risk() {
     assert_rejected_lockfile_is_high_risk(false);
+}
+
+fn mutate_apkg_collection(path: &Path, mutate: impl Fn(&Connection)) {
+    let root = tempfile::tempdir().unwrap();
+    let db = root.path().join("collection.sqlite");
+    let entries = {
+        let mut archive = zip::ZipArchive::new(std::fs::File::open(path).unwrap()).unwrap();
+        (0..archive.len())
+            .map(|index| {
+                let mut entry = archive.by_index(index).unwrap();
+                let name = entry.name().to_owned();
+                let mut bytes = Vec::new();
+                entry.read_to_end(&mut bytes).unwrap();
+                if name == "collection.anki21b" {
+                    std::fs::write(&db, zstd::stream::decode_all(bytes.as_slice()).unwrap())
+                        .unwrap();
+                    let conn = Connection::open(&db).unwrap();
+                    mutate(&conn);
+                    drop(conn);
+                    bytes = zstd::stream::encode_all(std::fs::read(&db).unwrap().as_slice(), 0)
+                        .unwrap();
+                }
+                (name, bytes)
+            })
+            .collect::<Vec<_>>()
+    };
+    let mut archive = zip::ZipWriter::new(std::fs::File::create(path).unwrap());
+    for (name, bytes) in entries {
+        archive
+            .start_file(name, zip::write::SimpleFileOptions::default())
+            .unwrap();
+        archive.write_all(&bytes).unwrap();
+    }
+    archive.finish().unwrap();
+}
+
+fn assert_identity_rejected_apkg_is_high_risk(invalid_model_id: bool) {
+    let root = tempfile::tempdir().unwrap();
+    let baseline = root.path().join("baseline.apkg");
+    let lock = root.path().join("identity.json");
+    project("A", &[])
+        .build(
+            BuildOptions::new()
+                .output(&baseline)
+                .first_update_safe_build(&lock),
+        )
+        .unwrap();
+    let cause = if invalid_model_id {
+        "UPDATE.NOTETYPE_MODEL_ID_INVALID"
+    } else {
+        "UPDATE.NOTE_REVISION_INVALID"
+    };
+    mutate_apkg_collection(&baseline, |conn| {
+        conn.execute_batch(if invalid_model_id {
+            "update notetypes set id = 0; update fields set ntid = 0; update templates set ntid = 0; update notes set mid = 0;"
+        } else {
+            "update notes set mod = 0;"
+        }).unwrap();
+    });
+    let baseline_bytes = std::fs::read(&baseline).unwrap();
+    let lock_bytes = std::fs::read(&lock).unwrap();
+    for use_lockfile in [false, true] {
+        let output = root.path().join(format!("output-{use_lockfile}.apkg"));
+        let options = || {
+            let options = BuildOptions::new()
+                .output(&output)
+                .compare_to(&baseline)
+                .update_safety(UpdateSafetyMode::ReportOnly);
+            if use_lockfile {
+                options
+                    .identity_lockfile(&lock)
+                    .write_identity_lockfile(true)
+            } else {
+                options
+            }
+        };
+        let report = project("B", &[]).build(options()).unwrap();
+        assert_eq!(
+            report.comparison,
+            anki_forge::build::ComparisonStatus::Complete
+        );
+        assert!(report.diagnostics.iter().any(|diagnostic| {
+            diagnostic.code.as_str() == "UPDATE.BASELINE_APKG_UNREADABLE"
+                && diagnostic.severity == Severity::Warning
+                && diagnostic.message.contains(cause)
+        }));
+        let findings: Vec<_> = report
+            .risk
+            .as_ref()
+            .unwrap()
+            .findings
+            .iter()
+            .filter(|finding| finding.code == "RISK.BASELINE_UNAVAILABLE")
+            .collect();
+        assert_eq!(
+            findings.len(),
+            1,
+            "identity rejection must remain high risk: {report:?}"
+        );
+        assert_eq!(findings[0].level, RiskLevel::High);
+        assert_eq!(
+            findings[0].source.as_ref().unwrap().as_str(),
+            baseline.to_str().unwrap()
+        );
+        assert!(findings[0]
+            .evidence_refs
+            .iter()
+            .any(|evidence| { evidence.ref_id.contains("UPDATE.BASELINE_APKG_UNREADABLE") }));
+        assert!(!report.update_safety.unwrap().lockfile_written);
+        let published = std::fs::read(&output).unwrap();
+        let blocked = project("C", &[])
+            .build(options().fail_on(RiskLevel::High))
+            .unwrap_err();
+        assert_eq!(
+            blocked.cause,
+            anki_forge::build::BuildFailureCause::PolicyBlocked
+        );
+        assert!(blocked.report.artifact.is_none());
+        assert!(!blocked.report.update_safety.unwrap().lockfile_written);
+        assert_eq!(std::fs::read(&output).unwrap(), published);
+        assert_eq!(std::fs::read(&lock).unwrap(), lock_bytes);
+        assert_eq!(std::fs::read(&baseline).unwrap(), baseline_bytes);
+    }
+}
+
+#[test]
+fn identity_rejected_apkg_model_id_is_high_risk() {
+    assert_identity_rejected_apkg_is_high_risk(true);
+}
+
+#[test]
+fn identity_rejected_apkg_revision_is_high_risk() {
+    assert_identity_rejected_apkg_is_high_risk(false);
 }
 
 #[test]

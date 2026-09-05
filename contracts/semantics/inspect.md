@@ -33,6 +33,10 @@ digest and reads actual APKG modification times; embedded identity metadata does
 not override note storage. Staging uses its selected time, or the legacy default
 `1` if no explicit note time exists.
 
+Field storage preserves empty values, including the single-field case where
+`notes.flds` is an empty string. It represents one empty field value, not an
+absent field map, and contributes the declared field name/value to the digest.
+
 `Phase 5A` inspect output includes three additional structured observation
 buckets beyond the existing core note/card/media data:
 
