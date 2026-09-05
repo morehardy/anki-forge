@@ -43,8 +43,10 @@ human-readable messages. File-writing operations are synchronous and may leave
 diagnostic evidence in a requested report path when a build fails.
 
 `compare_to(...)` baselines are read-only: output, report, and writable lockfile
-paths must not alias them, including through symlinks or hard links. Comparison
-and risk checks use a snapshot captured before building and run before APKG or
+paths must not alias them, including through symlinks or hard links. Baselines,
+outputs, retained packages, and identity lockfiles must also stay
+outside writable staging/media directories, including directory aliases.
+Comparison and risk checks use a snapshot captured before building and run before APKG or
 lockfile publication. A policy-blocked build preserves existing outputs and
 lockfiles and reports diff/risk evidence with no artifact path. Publication is
 atomic per file, not transactional across all requested files.

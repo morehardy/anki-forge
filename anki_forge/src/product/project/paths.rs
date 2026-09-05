@@ -64,24 +64,34 @@ impl<'a> BuildPathPlan<'a> {
                 validate_distinct_paths(left_name, left, right_name, right)?;
             }
         }
-        // The writer also writes staging files. A baseline must not live there
-        // even if its filename is different from package.apkg. Check the actual
-        // manifest destination above too: a link can point outside this tree.
-        if let (Some(artifacts), Some(baseline)) = (
-            self.options.artifacts_dir.as_ref(),
-            self.options.compare_to.as_ref(),
-        ) {
+        // Materialization runs before the policy gate. Every file preserved on
+        // rejection must stay outside staging, including read-only lockfiles.
+        // Check media separately because that directory can link outside staging;
+        // the actual manifest destination is protected by the pairwise check.
+        if let Some(artifacts) = self.options.artifacts_dir.as_ref() {
             let staging = artifacts.join("staging");
-            let overlaps = path_enters_directory(baseline, &staging).map_err(|error| {
-                path_diagnostic("PROJECT.BUILD_IO", "compare_to", error.to_string())
-            })?;
-            if overlaps {
-                return Err(path_diagnostic(
-                    "PROJECT.PATH_COLLISION",
-                    "compare_to",
-                    "compare_to baseline must be outside the writable artifact staging directory"
-                        .into(),
-                ));
+            let media = staging.join("media");
+            for (name, path) in self.paths().filter(|(name, _)| {
+                matches!(
+                    *name,
+                    "output" | "package" | "identity_lockfile" | "compare_to"
+                )
+            }) {
+                for directory in [&staging, &media] {
+                    let overlaps = path_enters_directory(path, directory).map_err(|error| {
+                        path_diagnostic("PROJECT.BUILD_IO", name, error.to_string())
+                    })?;
+                    if overlaps {
+                        return Err(path_diagnostic(
+                            "PROJECT.PATH_COLLISION",
+                            name,
+                            format!(
+                                "{name} must be outside writable artifact staging directories: {}",
+                                directory.display()
+                            ),
+                        ));
+                    }
+                }
             }
         }
         Ok(())

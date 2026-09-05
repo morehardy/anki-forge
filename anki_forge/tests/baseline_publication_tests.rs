@@ -14,6 +14,17 @@ fn project(back: &str) -> Project {
     project
 }
 
+fn project_with_media(back: &str) -> Project {
+    let mut project = project(back);
+    project
+        .media_mut()
+        .add_bytes("shared.mp3", b"fake-mp3-bytes-for-package-test".to_vec())
+        .unwrap()
+        .export_as("shared.mp3")
+        .unwrap();
+    project
+}
+
 fn baseline(path: &Path) -> Vec<u8> {
     project("previous").write_apkg(path).unwrap();
     fs::read(path).unwrap()
@@ -215,6 +226,145 @@ fn staging_manifest_hard_link_cannot_overwrite_external_baseline() {
         &original,
     );
     assert!(!artifacts.join("package.apkg").exists());
+}
+
+#[test]
+fn staging_media_cannot_replace_output_before_the_policy_gate() {
+    assert_staging_media_preserves_protected_files(false, false);
+}
+
+#[test]
+fn staging_media_cannot_replace_writable_lockfile_before_the_policy_gate() {
+    assert_staging_media_preserves_protected_files(true, true);
+}
+
+#[test]
+fn staging_media_cannot_replace_read_only_lockfile_before_the_policy_gate() {
+    assert_staging_media_preserves_protected_files(true, false);
+}
+
+fn assert_staging_media_preserves_protected_files(protect_lockfile: bool, write_lockfile: bool) {
+    let root = tempdir().unwrap();
+    let artifacts = root.path().join("artifacts");
+    let media_path = artifacts.join("staging/media/shared.mp3");
+    let previous = root.path().join("previous.apkg");
+    let output = if protect_lockfile {
+        root.path().join("output.apkg")
+    } else {
+        media_path.clone()
+    };
+    let lockfile = if protect_lockfile {
+        media_path
+    } else {
+        root.path().join("identity.json")
+    };
+    project("previous")
+        .build(
+            BuildOptions::new()
+                .output(&previous)
+                .first_update_safe_build(&lockfile),
+        )
+        .unwrap();
+    fs::create_dir_all(output.parent().unwrap()).unwrap();
+    fs::copy(&previous, &output).unwrap();
+    let original_output = fs::read(&output).unwrap();
+    let original_lockfile = fs::read(&lockfile).unwrap();
+    let result = project_with_media("changed").build(
+        BuildOptions::new()
+            .output(&output)
+            .artifacts_dir(&artifacts)
+            .compare_to(&previous)
+            .identity_lockfile(&lockfile)
+            .write_identity_lockfile(write_lockfile)
+            .fail_on(RiskLevel::Low),
+    );
+
+    assert!(
+        fs::read(output).unwrap() == original_output,
+        "output changed"
+    );
+    assert!(
+        fs::read(lockfile).unwrap() == original_lockfile,
+        "lockfile changed"
+    );
+    assert!(
+        fs::read(previous).unwrap() == original_output,
+        "baseline changed"
+    );
+    let error = result.expect_err("protected files cannot live in writable staging");
+    assert_eq!(error.report.status, BuildStatus::Invalid);
+    assert!(error.report.artifact.is_none());
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(!artifacts.join("package.apkg").exists());
+    assert!(!artifacts.join("staging/manifest.json").exists());
+}
+
+#[test]
+#[cfg(unix)]
+fn staging_media_directory_alias_cannot_replace_an_external_output() {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let exports = root.path().join("exports");
+    fs::create_dir(&exports).unwrap();
+    let output = exports.join("shared.mp3");
+    fs::write(&output, &original).unwrap();
+    let artifacts = root.path().join("artifacts");
+    fs::create_dir_all(artifacts.join("staging")).unwrap();
+    std::os::unix::fs::symlink(&exports, artifacts.join("staging/media")).unwrap();
+    let result = project_with_media("changed").build(
+        BuildOptions::new()
+            .output(&output)
+            .artifacts_dir(&artifacts)
+            .compare_to(&previous)
+            .fail_on(RiskLevel::Low),
+    );
+
+    assert!(fs::read(output).unwrap() == original, "output changed");
+    assert!(fs::read(previous).unwrap() == original, "baseline changed");
+    let error = result.expect_err("aliased staging media cannot contain protected files");
+    assert_eq!(error.report.status, BuildStatus::Invalid);
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(!artifacts.join("staging/manifest.json").exists());
+}
+
+#[test]
+#[cfg(unix)]
+fn staging_media_cannot_replace_package_alias_before_the_policy_gate() {
+    let root = tempdir().unwrap();
+    let previous = root.path().join("previous.apkg");
+    let original = baseline(&previous);
+    let artifacts = root.path().join("artifacts");
+    let media = artifacts.join("staging/media/shared.mp3");
+    fs::create_dir_all(media.parent().unwrap()).unwrap();
+    fs::write(&media, &original).unwrap();
+    let package = artifacts.join("package.apkg");
+    std::os::unix::fs::symlink(&media, &package).unwrap();
+    let result = project_with_media("changed").build(
+        BuildOptions::new()
+            .artifacts_dir(&artifacts)
+            .compare_to(&previous)
+            .fail_on(RiskLevel::Low),
+    );
+
+    assert!(fs::read(&package).unwrap() == original, "package changed");
+    let error = result.expect_err("the retained package cannot alias staging media");
+    assert_eq!(error.report.status, BuildStatus::Invalid);
+    assert!(error
+        .report
+        .diagnostic_codes()
+        .contains(&"PROJECT.PATH_COLLISION".into()));
+    assert!(fs::symlink_metadata(package)
+        .unwrap()
+        .file_type()
+        .is_symlink());
+    assert!(!artifacts.join("staging/manifest.json").exists());
 }
 
 #[test]

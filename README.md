@@ -210,8 +210,10 @@ output, `artifacts_dir/package.apkg`, report JSON, and any writable identity
 lockfile. Builds reject existing same-file aliases (including relative paths,
 symlinks, and hard links) with `PROJECT.PATH_COLLISION` before writing. This
 includes the actual `staging/manifest.json` destination, whose links may point
-outside the artifact directory. The baseline must also stay outside the writable
-`staging/` tree.
+outside the artifact directory. Baselines, outputs, retained packages, and
+identity lockfiles (including read-only ones) must stay outside the writable
+`staging/` tree and its media directory, including directory aliases. Staging
+materialization must not overwrite these files before a risk rejection.
 
 New destinations are rechecked after creation and before lockfile/report writes,
 so filesystem-specific case folding cannot turn an APKG into JSON. A collision

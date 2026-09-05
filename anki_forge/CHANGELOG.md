@@ -12,6 +12,8 @@ new minor release.
   before writes, including symlinks, hard links, and the implicit artifact package.
 - Check actual staging-manifest aliases and recheck newly created destinations
   before lockfile/report writes to preserve files on case-insensitive filesystems.
+- Keep outputs, retained packages, baselines, and identity lockfiles outside
+  writable staging/media directories so policy rejection preserves their bytes.
 - Avoid an extra temporary APKG copy when only an explicit output is retained.
 - Create private candidates on the artifact workspace's filesystem and reserve
   lockfile temporary files exclusively to avoid truncating aliased inputs/outputs.
