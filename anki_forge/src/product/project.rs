@@ -41,6 +41,7 @@ pub struct Project {
     default_deck: Option<String>,
     note_types: Vec<NoteType>,
     notes: Vec<Note>,
+    note_index_by_stable_id: BTreeMap<String, usize>,
     media: crate::product::MediaRegistry,
     imported_stock_notetypes: Vec<&'static str>,
     imported_note_count: usize,
@@ -96,6 +97,7 @@ impl Project {
             default_deck: None,
             note_types: Vec::new(),
             notes: Vec::new(),
+            note_index_by_stable_id: BTreeMap::new(),
             media: crate::product::MediaRegistry::default(),
             imported_stock_notetypes: Vec::new(),
             imported_note_count: 0,
@@ -122,6 +124,10 @@ impl Project {
 
     pub fn add_note(&mut self, note: Note) -> Result<&mut Self, ProjectAddError> {
         self.validate_note_for_add(&note)?;
+        if let Some(stable_id) = note.stable_id_ref() {
+            self.note_index_by_stable_id
+                .insert(stable_id.to_string(), self.notes.len());
+        }
         self.notes.push(note);
         Ok(self)
     }
@@ -690,15 +696,7 @@ impl Project {
         }
 
         if let Some(stable_id) = note.stable_id_ref() {
-            if let Some((existing_index, _)) = self
-                .notes
-                .iter()
-                .enumerate()
-                .filter_map(|(index, note)| {
-                    note.stable_id_ref().map(|stable_id| (index, stable_id))
-                })
-                .find(|(_, existing)| !existing.trim().is_empty() && *existing == stable_id)
-            {
+            if let Some(existing_index) = self.note_index_by_stable_id.get(stable_id) {
                 return Err(project_add_error(
                     "AFID.STABLE_ID_DUPLICATE",
                     format!(
@@ -1156,7 +1154,7 @@ impl Project {
                     index,
                 ));
             } else {
-                let fields = custom_note_fields_for_product_v3(self, note)
+                let fields = custom_note_fields_for_product_v3(self, note, fields)
                     .into_iter()
                     .map(|(key, value)| {
                         (
@@ -1430,8 +1428,8 @@ fn product_v3_stock_note<const N: usize>(
 fn custom_note_fields_for_product_v3(
     project: &Project,
     note: &crate::product::Note,
+    rendered: BTreeMap<String, String>,
 ) -> BTreeMap<String, String> {
-    let rendered = note.rendered_fields();
     let Some(note_type) = project
         .note_types
         .iter()
@@ -1885,15 +1883,14 @@ fn note_field_source_names_for_authoring(
     project: &Project,
     note: &crate::product::Note,
 ) -> BTreeMap<String, String> {
-    let rendered = note.rendered_fields();
     let Some(note_type) = project
         .note_types
         .iter()
         .find(|note_type| note_type.id() == note.note_type_id())
     else {
-        return rendered
-            .keys()
-            .map(|field| (field.clone(), field.clone()))
+        return note
+            .field_keys()
+            .map(|field| (field.to_string(), field.to_string()))
             .collect();
     };
 
@@ -1910,15 +1907,15 @@ fn note_field_source_names_for_authoring(
 
     let mut sources = BTreeMap::new();
     let mut field_priorities = BTreeMap::new();
-    for field_key_or_name in rendered.keys() {
-        let is_visible_name = field_names.contains(field_key_or_name.as_str());
+    for field_key_or_name in note.field_keys() {
+        let is_visible_name = field_names.contains(field_key_or_name);
         let field_name = if is_visible_name {
-            field_key_or_name.clone()
+            field_key_or_name.to_string()
         } else {
             name_by_key
-                .get(field_key_or_name.as_str())
+                .get(field_key_or_name)
                 .copied()
-                .unwrap_or(field_key_or_name.as_str())
+                .unwrap_or(field_key_or_name)
                 .to_string()
         };
         let priority = u8::from(is_visible_name);
@@ -1929,7 +1926,7 @@ fn note_field_source_names_for_authoring(
             continue;
         }
         field_priorities.insert(field_name.clone(), priority);
-        sources.insert(field_name, field_key_or_name.clone());
+        sources.insert(field_name, field_key_or_name.to_string());
     }
     sources
 }

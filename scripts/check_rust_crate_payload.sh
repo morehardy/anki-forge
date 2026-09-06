@@ -23,7 +23,7 @@ required=(
   "LICENSE"
   "PACKAGE_FILES.txt"
   "src/lib.rs"
-  "assets/contracts/anki-forge-contract-bundle-0.6.0.tar.gz"
+  "assets/contracts/anki-forge-contract-bundle-0.6.2.tar.gz"
   "tests/packaged_contract_tests.rs"
 )
 

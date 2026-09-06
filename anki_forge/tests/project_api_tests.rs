@@ -1215,6 +1215,37 @@ fn project_add_note_rejects_duplicate_stable_id_without_mutating_project() {
 }
 
 #[test]
+fn project_add_note_keeps_duplicate_location_after_clone_and_failed_adds() {
+    let mut project = Project::new("Indexed IDs").default_deck("Indexed IDs");
+    project.add_note(Note::basic("implicit", "first")).unwrap();
+    project
+        .add_note(Note::basic("explicit", "second").stable_id("existing"))
+        .unwrap();
+    let mut cloned = project.clone();
+
+    cloned
+        .add_note(Note::new("missing").stable_id("available"))
+        .expect_err("a rejected note must not reserve its stable ID");
+    cloned
+        .add_note(Note::basic("valid", "third").stable_id("available"))
+        .unwrap();
+    let err = cloned
+        .add_note(Note::basic("duplicate", "fourth").stable_id("existing"))
+        .expect_err("cloning must preserve duplicate detection");
+    assert_eq!(err.code(), ErrorCode::StableIdDuplicate);
+    assert_eq!(
+        err.diagnostic().message,
+        "duplicate stable_id 'existing' at project.notes[3]; first definition is project.notes[1]"
+    );
+    assert_eq!(cloned.normalize().unwrap().notes.len(), 3);
+
+    project
+        .add_note(Note::basic("independent", "third").stable_id("available"))
+        .expect("a clone must not reserve IDs on the original project");
+    assert_eq!(project.normalize().unwrap().notes.len(), 3);
+}
+
+#[test]
 fn project_add_note_rejects_unsupported_note_type() {
     let mut project = Project::new("Unknown Type")
         .stable_id("unknown-type")

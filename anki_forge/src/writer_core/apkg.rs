@@ -24,7 +24,7 @@ use crate::writer_core::compat_schema::{
 use crate::writer_core::deck_name::DeckRegistry;
 use crate::writer_core::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
 use crate::writer_core::staging::{
-    load_normalized_ir_from_staging_manifest, resolve_deck_registry, BuildArtifactTarget,
+    load_staging_manifest, resolve_deck_registry, staging_notetype_ids, BuildArtifactTarget,
     MaterializedStaging,
 };
 
@@ -160,15 +160,40 @@ pub fn emit_apkg(
     artifact_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
 ) -> Result<ApkgMaterialization> {
-    let normalized_ir = load_normalized_ir_from_staging_manifest(&materialized.manifest_path)?;
-
+    let (normalized_ir, staged_ids) = load_staging_manifest(&materialized.manifest_path)?;
     let guid_assignments = validate_guid_plan(&normalized_ir, guid_plan)?;
-    let staged_ids = crate::writer_core::staging::load_notetype_ids_from_staging_manifest(
-        &materialized.manifest_path,
-    )?;
-    let notetype_ids =
-        crate::writer_core::identity::resolve_notetype_ids(&normalized_ir, Some(&staged_ids))?;
+    let notetype_ids = staging_notetype_ids(&normalized_ir, staged_ids)?;
+    emit_apkg_with_plans(
+        &normalized_ir,
+        &notetype_ids,
+        &guid_assignments,
+        artifact_target,
+    )
+}
 
+pub(crate) fn emit_apkg_from_normalized(
+    normalized_ir: &NormalizedIr,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+    artifact_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
+) -> Result<ApkgMaterialization> {
+    let guid_assignments = validate_guid_plan(normalized_ir, guid_plan)?;
+    let notetype_ids =
+        crate::writer_core::identity::resolve_notetype_ids(normalized_ir, Some(notetype_ids))?;
+    emit_apkg_with_plans(
+        normalized_ir,
+        &notetype_ids,
+        &guid_assignments,
+        artifact_target,
+    )
+}
+
+fn emit_apkg_with_plans(
+    normalized_ir: &NormalizedIr,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    artifact_target: &BuildArtifactTarget,
+) -> Result<ApkgMaterialization> {
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
             "create artifact root {}",
@@ -187,15 +212,15 @@ pub fn emit_apkg(
     write_meta(&mut zip)?;
     let latest_collection = create_latest_collection_bytes(
         &artifact_target.root_dir,
-        &normalized_ir,
-        &guid_assignments,
-        &notetype_ids,
+        normalized_ir,
+        guid_assignments,
+        notetype_ids,
     )?;
     write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
 
-    write_media_payloads_and_map(&mut zip, &normalized_ir, &artifact_target.media_store_dir)?;
+    write_media_payloads_and_map(&mut zip, normalized_ir, &artifact_target.media_store_dir)?;
 
     zip.finish()?;
     fs::rename(&temp_path, &apkg_path).with_context(|| {
@@ -330,16 +355,44 @@ fn create_latest_collection_bytes(
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
         .with_context(|| format!("open collection database {}", path.display()))?;
-    execute_source_schema(&conn, SCHEMA11_SQL)?;
-    execute_source_schema(&conn, SCHEMA14_UPGRADE_SQL)?;
-    execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL)?;
-    execute_schema16_marker(&conn)?;
-    execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL)?;
-    execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL)?;
+    {
+        let transaction = conn.unchecked_transaction()?;
+        execute_source_schema(&transaction, SCHEMA11_SQL)?;
+        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
+        execute_schema16_marker(&transaction)?;
+        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
+        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
+        transaction.commit()?;
+    }
     populate_latest_collection(&conn, normalized_ir, guid_assignments, notetype_ids)?;
-    conn.execute_batch("VACUUM;")?;
+
+    // Keep compaction without rewriting and journaling the source database.
+    // An empty, uniquely reserved file also cleans up on any error path.
+    let compacted =
+        tempfile::NamedTempFile::new_in(root_dir).context("create compacted collection file")?;
+    // Match Connection::open's native Unix filename handling instead of using
+    // lossy UTF-8 conversion. Binding the name also preserves quotes in paths.
+    #[cfg(unix)]
+    let compacted_path = {
+        use std::os::unix::ffi::OsStrExt;
+        compacted.path().as_os_str().as_bytes()
+    };
+    #[cfg(not(unix))]
+    let compacted_path = compacted
+        .path()
+        .to_str()
+        .context("compacted collection path is not UTF-8")?
+        .as_bytes();
+    conn.execute(
+        "VACUUM INTO ?1",
+        [rusqlite::types::ToSqlOutput::Borrowed(
+            rusqlite::types::ValueRef::Text(compacted_path),
+        )],
+    )?;
     drop(conn);
-    let bytes = fs::read(&path).with_context(|| format!("read collection {}", path.display()))?;
+    let bytes = fs::read(compacted.path())
+        .with_context(|| format!("read collection {}", compacted.path().display()))?;
     let _ = fs::remove_file(&path);
     Ok(bytes)
 }
@@ -370,6 +423,18 @@ fn execute_schema16_marker(conn: &Connection) -> Result<()> {
 }
 
 fn populate_latest_collection(
+    conn: &Connection,
+    normalized_ir: &NormalizedIr,
+    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+) -> Result<()> {
+    let transaction = conn.unchecked_transaction()?;
+    populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?;
+    transaction.commit()?;
+    Ok(())
+}
+
+fn populate_latest_collection_rows(
     conn: &Connection,
     normalized_ir: &NormalizedIr,
     guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
@@ -445,6 +510,12 @@ fn populate_latest_collection(
         }
     }
 
+    let mut insert_note = conn.prepare(
+        "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
+    )?;
+    let mut insert_card = conn.prepare(
+        "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
+    )?;
     let mut note_row_id = 1_i64;
     let mut card_row_id = 1_i64;
     let mut normalized_tags = std::collections::BTreeSet::new();
@@ -465,43 +536,34 @@ fn populate_latest_collection(
             .get(&note.id)
             .map(|assignment| assignment.selected_anki_guid.as_str())
             .unwrap_or(note.id.as_str());
-        conn.execute(
-            "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
-            rusqlite::params![
-                note_row,
-                guid,
-                ntid,
-                storage.mtime_secs,
-                note.tags.join(" "),
-                storage.flds,
-                storage.sfld,
-                storage.csum,
-                merge_identity_note_data(
-                    "{}",
-                    &note_identity_metadata_for_assignment(
-                        guid_assignments.get(&note.id),
-                        note,
-                    ),
-                )?,
-            ],
-        )?;
+        insert_note.execute(rusqlite::params![
+            note_row,
+            guid,
+            ntid,
+            storage.mtime_secs,
+            note.tags.join(" "),
+            storage.flds,
+            storage.sfld,
+            storage.csum,
+            merge_identity_note_data(
+                "{}",
+                &note_identity_metadata_for_assignment(guid_assignments.get(&note.id), note,),
+            )?,
+        ])?;
         for tag in &note.tags {
             normalized_tags.insert(tag.clone());
         }
         for planned_card in plan_cards(note, notetype) {
             let template = &notetype.templates[planned_card.template_index];
             let target_deck_id = resolve_card_deck_id(note, template, &deck_registry);
-            conn.execute(
-                "insert into cards (id, nid, did, ord, mod, usn, type, queue, due, ivl, factor, reps, lapses, left, odue, odid, flags, data) values (?1, ?2, ?3, ?4, 0, 0, 0, 0, ?5, 0, 0, 0, 0, 0, 0, 0, 0, ?6)",
-                rusqlite::params![
-                    card_row_id,
-                    note_row,
-                    target_deck_id,
-                    planned_card.card_ord as i64,
-                    note_row,
-                    "{}"
-                ],
-            )?;
+            insert_card.execute(rusqlite::params![
+                card_row_id,
+                note_row,
+                target_deck_id,
+                planned_card.card_ord as i64,
+                note_row,
+                "{}"
+            ])?;
             card_row_id += 1;
         }
         note_row_id += 1;
@@ -731,6 +793,142 @@ pub(crate) fn strip_html_preserving_media_filenames(input: &str) -> String {
 mod tests {
     use super::*;
     use proptest::prelude::*;
+
+    #[test]
+    fn collection_population_rolls_back_after_a_note_and_card_were_written() {
+        let root = tempfile::tempdir().unwrap();
+        let conn = Connection::open(root.path().join("collection.sqlite")).unwrap();
+        execute_source_schema(&conn, SCHEMA11_SQL).unwrap();
+        execute_source_schema(&conn, SCHEMA14_UPGRADE_SQL).unwrap();
+        execute_source_schema(&conn, SCHEMA15_UPGRADE_SQL).unwrap();
+        execute_schema16_marker(&conn).unwrap();
+        execute_source_schema(&conn, SCHEMA17_UPGRADE_SQL).unwrap();
+        execute_source_schema(&conn, SCHEMA18_UPGRADE_SQL).unwrap();
+        conn.execute_batch(
+            "create trigger fail_second_note before insert on notes
+             when new.id = 2
+               and (select count(*) from notes) = 1
+               and (select count(*) from cards) = 1
+             begin select raise(abort, 'injected failure after note and card'); end;",
+        )
+        .unwrap();
+        let original_conf: String = conn
+            .query_row("select conf from col where id = 1", [], |row| row.get(0))
+            .unwrap();
+        let normalized = two_basic_notes();
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+
+        // Exercise the same transaction boundary used by create_latest_collection_bytes.
+        let error =
+            populate_latest_collection(&conn, &normalized, &Default::default(), &ids).unwrap_err();
+
+        assert!(error
+            .to_string()
+            .contains("injected failure after note and card"));
+        assert!(conn.is_autocommit());
+        for table in [
+            "notes",
+            "cards",
+            "notetypes",
+            "fields",
+            "templates",
+            "decks",
+            "deck_config",
+        ] {
+            let count: i64 = conn
+                .query_row(&format!("select count(*) from {table}"), [], |row| {
+                    row.get(0)
+                })
+                .unwrap();
+            assert_eq!(count, 0, "partial writes remain in {table}");
+        }
+        let conf: String = conn
+            .query_row("select conf from col where id = 1", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(conf, original_conf);
+
+        // A failed build must not leave the connection in a poisoned transaction.
+        conn.execute_batch("drop trigger fail_second_note").unwrap();
+        populate_latest_collection(&conn, &normalized, &Default::default(), &ids).unwrap();
+        assert!(conn.is_autocommit());
+        for table in ["notes", "cards"] {
+            let count: i64 = conn
+                .query_row(&format!("select count(*) from {table}"), [], |row| {
+                    row.get(0)
+                })
+                .unwrap();
+            assert_eq!(count, 2);
+        }
+    }
+
+    #[test]
+    fn typed_writer_rejects_invalid_model_and_guid_plans_before_replacing_output() {
+        let root = tempfile::tempdir().unwrap();
+        let target = BuildArtifactTarget::new(root.path(), "artifacts");
+        let output = root.path().join("package.apkg");
+        fs::write(&output, b"previous package").unwrap();
+        let normalized = two_basic_notes();
+        let empty_ids = Default::default();
+
+        let error = emit_apkg_from_normalized(&normalized, &empty_ids, &target, None)
+            .err()
+            .expect("empty model plan must fail");
+        assert!(error
+            .to_string()
+            .contains("UPDATE.WRITER_NOTETYPE_ID_PLAN_MISMATCH"));
+        let error = emit_apkg_from_normalized(
+            &normalized,
+            &empty_ids,
+            &target,
+            Some(&WriterGuidPlan {
+                assignments: vec![],
+            }),
+        )
+        .err()
+        .expect("empty GUID plan must fail before the model plan");
+        assert!(error
+            .to_string()
+            .contains("UPDATE.WRITER_GUID_PLAN_MISMATCH"));
+        assert_eq!(fs::read(output).unwrap(), b"previous package");
+    }
+
+    fn two_basic_notes() -> NormalizedIr {
+        let notetype = resolve_stock_notetype(&AuthoringNotetype {
+            id: "basic".into(),
+            kind: "basic".into(),
+            name: Some("Basic".into()),
+            original_stock_kind: None,
+            original_id: None,
+            fields: None,
+            templates: None,
+            css: None,
+            field_metadata: vec![],
+        })
+        .unwrap();
+        NormalizedIr {
+            kind: "normalized-ir".into(),
+            schema_version: "0.1.0".into(),
+            document_id: "transaction-test".into(),
+            resolved_identity: "document:transaction-test".into(),
+            notes: (1..=2)
+                .map(|index| NormalizedNote {
+                    id: format!("note-{index}"),
+                    notetype_id: notetype.id.clone(),
+                    deck_name: "Default".into(),
+                    fields: std::collections::BTreeMap::from([
+                        ("Front".into(), format!("front-{index}")),
+                        ("Back".into(), format!("back-{index}")),
+                    ]),
+                    tags: vec![],
+                    mtime_secs: None,
+                })
+                .collect(),
+            notetypes: vec![notetype],
+            media_objects: vec![],
+            media_bindings: vec![],
+            media_references: vec![],
+        }
+    }
 
     #[derive(Clone, PartialEq, Message)]
     struct UpstreamShapeMediaEntry {

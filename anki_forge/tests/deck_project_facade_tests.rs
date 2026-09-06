@@ -95,6 +95,31 @@ fn project_from_deck_can_append_project_notes() {
 }
 
 #[test]
+fn imported_deck_keeps_duplicate_id_locations_after_clone() {
+    let mut deck = Deck::new("Imported IDs");
+    deck.basic()
+        .note("original", "answer")
+        .stable_id("existing")
+        .add()
+        .unwrap();
+    let project = Project::from(deck);
+    let mut cloned = project.clone();
+    cloned
+        .add_note(Note::basic("new", "answer").stable_id("new"))
+        .unwrap();
+    let error = cloned
+        .add_note(Note::basic("duplicate", "answer").stable_id("existing"))
+        .expect_err("an imported note must reserve its stable ID");
+    assert_eq!(error.code(), ErrorCode::StableIdDuplicate);
+    assert_eq!(
+        error.diagnostic().message,
+        "duplicate stable_id 'existing' at project.notes[2]; first definition is project.notes[0]"
+    );
+    assert_eq!(cloned.build(BuildOptions::new()).unwrap().counts.notes, 2);
+    assert_eq!(project.build(BuildOptions::new()).unwrap().counts.notes, 1);
+}
+
+#[test]
 fn imported_deck_media_and_new_project_media_share_one_registry() {
     let mut deck = Deck::builder("Media").stable_id("imported-media").build();
     deck.media()

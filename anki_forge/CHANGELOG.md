@@ -22,6 +22,18 @@ new minor release.
   candidates remain private until inspection and policy acceptance.
 - Own temporary APKG output with shared artifact handles instead of leaking
   the entire staging workspace. Late errors retain published artifact ownership.
+- Batch collection schema creation and compact into a private temporary database
+  before packaging, retaining compaction and atomic output publication. Avoid
+  repeated canonical-JSON sorting, source-map cloning, and media parsing for
+  text that cannot contain a supported reference.
+- Populate APKG note/card data in one transaction with reusable SQL statements,
+  and index actual cards and explicit Project stable IDs instead of repeatedly
+  scanning all prior entries. Failed writes still preserve published artifacts.
+- Reuse typed staging data internally while retaining staging files and the
+  owned `StagingPackage` interface. Builds without a comparison baseline inspect
+  actual APKG contents without constructing unused observation JSON/fingerprints;
+  standalone inspection and baseline comparison retain their full reports.
+- Avoid rendering custom fields twice and use field keys for source-name lookups.
 - Register every built-in diagnostic and risk code and check production source
   coverage. Discover semantics from the manifest and require exact baseline
   change evidence with version bumps in repository/release contract gates.
@@ -75,6 +87,10 @@ new minor release.
 - Internal-tools callers build versioned inputs with `ProductDocument::build`
   (or the runtime adapter), not `Project::from_product_document`. Documents are
   not editable Projects, and Product v2/v3 interpretation remains unchanged.
+- Contract bundle `0.6.2` updates only the three writer fixture package hashes:
+  batched SQLite transactions and compaction change header counters and APKG bytes, but
+  logical rows, media, staging fingerprints and full inspection semantics remain
+  unchanged. Existing package hashes must always be computed from actual bytes.
 - Embedded contract bundle advances to `0.6.0`, adding registry coverage and
   executable contract governance to the 0.5.0 update-safety changes. To update
   previously distributed decks, provide `compare_to(previous.apkg)` or a lockfile

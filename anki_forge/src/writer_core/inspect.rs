@@ -112,6 +112,29 @@ struct CollectionData {
     actual_card_decks: BTreeMap<(String, usize), String>,
 }
 
+struct ApkgFacts {
+    normalized_ir: NormalizedIr,
+    media: Vec<ResolvedMedia>,
+    template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+    actual_card_decks: BTreeMap<(String, usize), String>,
+    note_identity_metadata: Vec<Value>,
+    notetype_model_ids: BTreeMap<String, i64>,
+    limitations: ReadLimitations,
+}
+
+/// Facts consumed by a build without a comparison baseline. Unlike an
+/// InspectReport, this does not promise observation JSON or a fingerprint.
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) struct ApkgInspectSummary {
+    pub observation_status: String,
+    pub notes: usize,
+    pub cards: usize,
+    pub notetypes: usize,
+    pub templates: usize,
+    pub fields: usize,
+    pub media: usize,
+}
+
 pub fn inspect_build_result(
     build_result: &PackageBuildResult,
     artifact_target: &BuildArtifactTarget,
@@ -199,6 +222,60 @@ pub fn inspect_apkg_with_limits(
 }
 
 fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectReport> {
+    let facts = read_apkg_facts(path, limits)?;
+    let observations = build_observations(
+        &facts.normalized_ir,
+        &facts.media,
+        &facts.template_target_decks,
+        Some(&facts.actual_card_decks),
+        &facts.note_identity_metadata,
+        &facts.notetype_model_ids,
+    );
+
+    Ok(build_report(
+        "apkg",
+        path.display().to_string(),
+        b"",
+        observations,
+        facts.limitations,
+    ))
+}
+
+pub(crate) fn inspect_apkg_summary_with_limits(
+    path: &Path,
+    limits: &InspectLimits,
+) -> std::result::Result<ApkgInspectSummary, InspectError> {
+    let facts = read_apkg_facts(path, limits).map_err(InspectError::from_anyhow)?;
+    let mut notes = 0;
+    let mut cards = 0;
+    for (note, _) in observed_notes(&facts.normalized_ir) {
+        notes += 1;
+        cards += actual_cards_for_note(&facts.actual_card_decks, &note.id).count();
+    }
+    Ok(ApkgInspectSummary {
+        observation_status: facts.limitations.observation_status,
+        notes,
+        cards,
+        notetypes: facts.normalized_ir.notetypes.len(),
+        templates: facts
+            .normalized_ir
+            .notetypes
+            .iter()
+            .map(|notetype| notetype.templates.len())
+            .sum(),
+        fields: facts
+            .normalized_ir
+            .notetypes
+            .iter()
+            .map(|notetype| notetype.fields.len())
+            .sum(),
+        media: facts.media.len(),
+    })
+}
+
+// Both entry points must perform the same bounded archive reads and SQLite
+// decoding before deciding whether to collect full observations or just counts.
+fn read_apkg_facts(path: &Path, limits: &InspectLimits) -> Result<ApkgFacts> {
     let mut archive = ApkgReader::open(path, limits)?;
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
@@ -275,24 +352,18 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
             .push("collection database is unavailable".into());
     }
 
-    let observations = build_observations(
-        &normalized_ir,
-        &media,
-        &template_target_decks,
-        Some(&actual_card_decks),
-        &note_identity_metadata,
-        &notetype_model_ids,
-    );
     limitations.observation_status =
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
 
-    Ok(build_report(
-        "apkg",
-        path.display().to_string(),
-        b"",
-        observations,
+    Ok(ApkgFacts {
+        normalized_ir,
+        media,
+        template_target_decks,
+        actual_card_decks,
+        note_identity_metadata,
+        notetype_model_ids,
         limitations,
-    ))
+    })
 }
 
 fn build_report(
@@ -382,6 +453,28 @@ fn strip_value(value: &Value) -> Value {
     }
 }
 
+fn observed_notes(
+    normalized_ir: &NormalizedIr,
+) -> impl Iterator<Item = (&NormalizedNote, &NormalizedNotetype)> {
+    let notetypes_by_id: BTreeMap<_, _> = normalized_ir
+        .notetypes
+        .iter()
+        .map(|notetype| (notetype.id.as_str(), notetype))
+        .collect();
+    normalized_ir.notes.iter().filter_map(move |note| {
+        notetypes_by_id
+            .get(note.notetype_id.as_str())
+            .map(|notetype| (note, *notetype))
+    })
+}
+
+fn actual_cards_for_note<'a>(
+    cards: &'a BTreeMap<(String, usize), String>,
+    note_id: &str,
+) -> impl Iterator<Item = (&'a (String, usize), &'a String)> {
+    cards.range((note_id.to_owned(), 0)..=(note_id.to_owned(), usize::MAX))
+}
+
 fn build_observations(
     normalized_ir: &NormalizedIr,
     media: &[ResolvedMedia],
@@ -400,11 +493,6 @@ fn build_observations(
             .map(|deck| deck.human_name())
             .unwrap_or_else(|| name.to_string())
     };
-    let notetypes_by_id: BTreeMap<_, _> = normalized_ir
-        .notetypes
-        .iter()
-        .map(|notetype| (notetype.id.as_str(), notetype))
-        .collect();
     let media_by_binding_id: BTreeMap<_, _> = media
         .iter()
         .filter_map(|media| {
@@ -541,10 +629,7 @@ fn build_observations(
         }));
     }
 
-    for note in &normalized_ir.notes {
-        let Some(notetype) = notetypes_by_id.get(note.notetype_id.as_str()) else {
-            continue;
-        };
+    for (note, notetype) in observed_notes(normalized_ir) {
         let note_id = note.id.as_str();
         let notetype_id = note.notetype_id.as_str();
         note_entries.push(json!({
@@ -559,9 +644,8 @@ fn build_observations(
         }));
 
         if let Some(actual_card_decks) = actual_card_decks {
-            for ((actual_note_id, actual_ord), deck_name) in actual_card_decks
-                .iter()
-                .filter(|((actual_note_id, _), _)| actual_note_id == note_id)
+            for ((actual_note_id, actual_ord), deck_name) in
+                actual_cards_for_note(actual_card_decks, note_id)
             {
                 let card_ord = *actual_ord as u32;
                 let template_name = template_for_card_ord(notetype, card_ord)
@@ -1472,6 +1556,10 @@ fn contains_parent_dir(path: &Path) -> bool {
     path.components()
         .any(|component| matches!(component, std::path::Component::ParentDir))
 }
+
+#[cfg(test)]
+#[path = "inspect_summary_tests.rs"]
+mod summary_tests;
 
 #[cfg(test)]
 mod tests {

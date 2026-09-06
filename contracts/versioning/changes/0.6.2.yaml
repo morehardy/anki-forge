@@ -1,0 +1,18 @@
+baseline_version: 0.6.0
+bundle_version: 0.6.2
+compatibility_class: fixture_only_non_semantic
+summary: >-
+  Refresh three APKG byte fingerprints after batching SQLite schema and data
+  writes and compacting into a private output database. Only physical database
+  header counters change; logical rows, media entries, staging bytes, identity
+  rules, and complete inspection evidence remain unchanged.
+changes:
+- path: fixtures/phase3/expected/basic.build.json
+  before: blake3:e52f78a46d664fe85ee21b4e497b59dfbec8be0e7310809a4627f750f0976433
+  after: blake3:ad9d558208ed713e16ae03effcff10b4b52d268f0e1ef983ddd1e51da7e3abea
+- path: fixtures/phase3/expected/cloze.build.json
+  before: blake3:87d1fc53086a65146e8be4207c49e28023f55d3d1595aab4c77a38b6ab7fdc7a
+  after: blake3:8c0c04653746ef8ecd167d006eafde0696073a6f9a23391328b8691e2cf203f0
+- path: fixtures/phase3/expected/image-occlusion.build.json
+  before: blake3:00e0c70a0b79c2628f4c78c4552b3e1db214f36aebff2dba1e9a43ee7bc0a754
+  after: blake3:09a52919ce40b89ad2ce2b42616611db09cb1994857908a604ca23825605f2e3

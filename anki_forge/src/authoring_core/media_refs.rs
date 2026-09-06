@@ -31,6 +31,11 @@ pub fn extract_media_reference_candidates(
     location_name: &str,
     input: &str,
 ) -> Vec<MediaReferenceCandidate> {
+    // Every supported reference needs an HTML tag, a CSS function, or a sound
+    // marker. Other text cannot produce a candidate, even after comment removal.
+    if !input.contains('<') && !input.contains('(') && !input.contains("[sound:") {
+        return Vec::new();
+    }
     let input = strip_html_comments(input);
     let mut refs = Vec::new();
 

@@ -111,7 +111,7 @@ impl BuildInput<'_> {
                 media_source_modes: BTreeMap::new(),
             })?;
         }
-        let source_map = lowering.source_map.clone();
+        let source_map = lowering.source_map;
         let media_source_modes = authoring_media_source_modes(&lowering.authoring_document.media);
         let duplicate_notetype_media_diagnostics = duplicate_notetype_media_reference_diagnostics(
             &lowering.authoring_document,

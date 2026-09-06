@@ -4,7 +4,9 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anki_forge::authoring::{normalize, NormalizationRequest};
+use anki_forge::authoring::{
+    normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions,
+};
 use anki_forge::product::ProductDocument;
 use anki_forge::writer::{
     build as writer_build, inspect_apkg, BuildArtifactTarget, BuildContext, InspectReport,
@@ -101,20 +103,37 @@ fn build_phase5a_case_apkg(
             err
         )
     })?;
-    let normalized = normalize(NormalizationRequest::new(lowering.authoring_document));
-    let normalized_ir = normalized
-        .normalized_ir
-        .context("phase5a product fixture must normalize successfully")?;
-
     if artifact_root.exists() {
         fs::remove_dir_all(artifact_root)
             .with_context(|| format!("remove old artifact root {}", artifact_root.display()))?;
     }
 
+    let media_store_dir = artifact_root.join("media-store");
+    let normalized = normalize_with_options(
+        NormalizationRequest::new(lowering.authoring_document),
+        NormalizeOptions {
+            base_dir: case_path
+                .parent()
+                .context("fixture path must have a parent directory")?
+                .to_path_buf(),
+            media_store_dir: media_store_dir.clone(),
+            media_policy: MediaPolicy::default_strict(),
+        },
+    );
+    ensure!(
+        normalized.result_status == "success",
+        "phase5a product fixture must normalize successfully: {:?}",
+        normalized.diagnostics
+    );
+    let normalized_ir = normalized
+        .normalized_ir
+        .context("successful normalization must return normalized IR")?;
+
     let target = BuildArtifactTarget::new(
         artifact_root.to_path_buf(),
         format!("artifacts/phase5a-roundtrip/{label}-{suffix}"),
-    );
+    )
+    .with_media_store_dir(media_store_dir);
     let build_result = writer_build(
         &normalized_ir,
         &phase5a_writer_policy(),
