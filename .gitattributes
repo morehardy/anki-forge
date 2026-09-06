@@ -1,3 +1,6 @@
 # Contract packages and baseline evidence hash exact bytes. Preserve Git blob
 # bytes on every platform, including checkouts with core.autocrlf enabled.
 contracts/** -text
+
+# Runtime artifacts from different OS runners must carry identical npm notices.
+bindings/node/**/THIRD_PARTY_NOTICES.md text eol=lf
