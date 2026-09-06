@@ -1,11 +1,11 @@
 use crate::authoring_core::NormalizedIr;
 use anyhow::Result;
 
-use crate::writer_core::apkg::emit_apkg;
+use crate::writer_core::apkg::emit_apkg_from_normalized;
 use crate::writer_core::model::{BuildContext, PackageBuildResult, WriterGuidPlan, WriterPolicy};
 use crate::writer_core::staging::{
-    error_result, error_result_with_domain, invalid_result, success_result, ErrorResultDetails,
-    StagingPackage,
+    error_result, error_result_with_domain, invalid_result, success_result, BorrowedStagingPackage,
+    ErrorResultDetails,
 };
 
 pub use crate::writer_core::staging::BuildArtifactTarget;
@@ -66,7 +66,7 @@ pub(crate) fn build_with_identity_plan(
         ));
     }
 
-    let package = match StagingPackage::from_normalized_with_ids(
+    let package = match BorrowedStagingPackage::from_normalized_with_ids(
         normalized_ir,
         writer_policy,
         build_context,
@@ -114,7 +114,12 @@ pub(crate) fn build_with_identity_plan(
     };
 
     let apkg = if build_context.emit_apkg {
-        match emit_apkg(&materialized, apkg_target, guid_plan) {
+        match emit_apkg_from_normalized(
+            normalized_ir,
+            package.notetype_ids(),
+            apkg_target,
+            guid_plan,
+        ) {
             Ok(apkg) => Some(apkg),
             Err(err) => {
                 if err

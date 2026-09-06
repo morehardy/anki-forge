@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Component, Path, PathBuf};
@@ -59,7 +60,14 @@ impl BuildArtifactTarget {
 
 #[derive(Debug, Clone)]
 pub struct StagingPackage {
-    manifest: StagingManifest,
+    inner: StagingPackageData<NormalizedIr>,
+}
+
+pub(crate) type BorrowedStagingPackage<'a> = StagingPackageData<&'a NormalizedIr>;
+
+#[derive(Debug, Clone)]
+pub(crate) struct StagingPackageData<T> {
+    manifest: StagingManifest<T>,
     diagnostics: Vec<BuildDiagnosticItem>,
 }
 
@@ -71,12 +79,12 @@ pub struct MaterializedStaging {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-struct StagingManifest {
+struct StagingManifest<T> {
     kind: String,
     tool_contract_version: String,
     writer_policy_ref: String,
     build_context_ref: String,
-    normalized_ir: NormalizedIr,
+    normalized_ir: T,
     #[serde(default)]
     notetype_model_ids: Option<BTreeMap<String, i64>>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
@@ -90,19 +98,14 @@ pub(crate) struct ResolvedTemplateTargetDeck {
     pub(crate) resolved_target_deck_id: i64,
 }
 
-pub(crate) fn load_normalized_ir_from_staging_manifest(path: &Path) -> Result<NormalizedIr> {
+pub(crate) fn load_staging_manifest(
+    path: &Path,
+) -> Result<(NormalizedIr, Option<BTreeMap<String, i64>>)> {
     let manifest_json = fs::read_to_string(path)
         .with_context(|| format!("read staging manifest {}", path.display()))?;
-    let manifest: StagingManifest = serde_json::from_str(&manifest_json)
+    let manifest: StagingManifest<NormalizedIr> = serde_json::from_str(&manifest_json)
         .with_context(|| format!("decode staging manifest {}", path.display()))?;
-    Ok(manifest.normalized_ir)
-}
-
-pub(crate) fn load_notetype_ids_from_staging_manifest(
-    path: &Path,
-) -> Result<BTreeMap<String, i64>> {
-    let manifest: StagingManifest = serde_json::from_slice(&fs::read(path)?)?;
-    staging_notetype_ids(&manifest.normalized_ir, manifest.notetype_model_ids)
+    Ok((manifest.normalized_ir, manifest.notetype_model_ids))
 }
 
 pub(crate) fn staging_notetype_ids(
@@ -128,16 +131,33 @@ impl StagingPackage {
         writer_policy: &WriterPolicy,
         build_context: &BuildContext,
     ) -> std::result::Result<Self, Vec<BuildDiagnosticItem>> {
-        Self::from_normalized_with_ids(normalized_ir, writer_policy, build_context, None)
+        StagingPackageData::from_normalized_with_ids(
+            normalized_ir.clone(),
+            writer_policy,
+            build_context,
+            None,
+        )
+        .map(|inner| Self { inner })
     }
 
+    pub fn diagnostics(&self) -> &[BuildDiagnosticItem] {
+        self.inner.diagnostics()
+    }
+
+    pub fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
+        self.inner.materialize(target)
+    }
+}
+
+impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
     pub(crate) fn from_normalized_with_ids(
-        normalized_ir: &NormalizedIr,
+        normalized_ir: T,
         writer_policy: &WriterPolicy,
         build_context: &BuildContext,
         selected_ids: Option<&BTreeMap<String, i64>>,
     ) -> std::result::Result<Self, Vec<BuildDiagnosticItem>> {
-        let diagnostics = validate_normalized_ir(normalized_ir, build_context);
+        let normalized = normalized_ir.borrow();
+        let diagnostics = validate_normalized_ir(normalized, build_context);
         let (errors, warnings): (Vec<_>, Vec<_>) = diagnostics
             .into_iter()
             .partition(|item| item.level == "error");
@@ -146,8 +166,8 @@ impl StagingPackage {
         }
 
         let notetype_model_ids =
-            crate::writer_core::identity::resolve_notetype_ids(normalized_ir, selected_ids)
-                .map_err(|error| {
+            crate::writer_core::identity::resolve_notetype_ids(normalized, selected_ids).map_err(
+                |error| {
                     vec![BuildDiagnosticItem {
                         level: "error".into(),
                         code: if error
@@ -166,44 +186,52 @@ impl StagingPackage {
                         stage: Some("validate".into()),
                         operation: Some("validate_notetype_ids".into()),
                     }]
-                })?;
+                },
+            )?;
 
+        let template_target_decks = resolve_template_target_decks(normalized);
         Ok(Self {
             manifest: StagingManifest {
                 kind: "staging-package".into(),
                 tool_contract_version: crate::writer_core::tool_contract_version().into(),
                 writer_policy_ref: policy_ref(&writer_policy.id, &writer_policy.version),
                 build_context_ref: resolved_build_context_ref(build_context),
-                normalized_ir: normalized_ir.clone(),
+                normalized_ir,
                 notetype_model_ids: Some(notetype_model_ids),
-                template_target_decks: resolve_template_target_decks(normalized_ir),
+                template_target_decks,
             },
             diagnostics: warnings,
         })
     }
 
-    pub fn diagnostics(&self) -> &[BuildDiagnosticItem] {
+    pub(crate) fn diagnostics(&self) -> &[BuildDiagnosticItem] {
         &self.diagnostics
     }
 
-    pub fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
+    pub(crate) fn notetype_ids(&self) -> &BTreeMap<String, i64> {
+        self.manifest
+            .notetype_model_ids
+            .as_ref()
+            .expect("new staging packages always include validated model IDs")
+    }
+
+    pub(crate) fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
         let staging_dir = target.staging_dir();
         fs::create_dir_all(&staging_dir)
             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
 
-        if !self.manifest.normalized_ir.media_bindings.is_empty() {
+        let normalized = self.manifest.normalized_ir.borrow();
+        if !normalized.media_bindings.is_empty() {
             let media_dir = staging_dir.join("media");
             fs::create_dir_all(&media_dir).with_context(|| {
                 format!("create staging media directory {}", media_dir.display())
             })?;
-            let objects_by_id = self
-                .manifest
-                .normalized_ir
+            let objects_by_id = normalized
                 .media_objects
                 .iter()
                 .map(|object| (object.id.as_str(), object))
                 .collect::<BTreeMap<_, _>>();
-            for binding in &self.manifest.normalized_ir.media_bindings {
+            for binding in &normalized.media_bindings {
                 let object = objects_by_id
                     .get(binding.object_id.as_str())
                     .with_context(|| {

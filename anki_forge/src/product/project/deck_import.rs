@@ -105,6 +105,12 @@ impl From<Deck> for Project {
             for tag in tags {
                 note = note.tag(tag);
             }
+            if let Some(stable_id) = note.stable_id_ref().filter(|id| !id.trim().is_empty()) {
+                project
+                    .note_index_by_stable_id
+                    .entry(stable_id.to_string())
+                    .or_insert(project.notes.len());
+            }
             project.notes.push(note);
         }
         project

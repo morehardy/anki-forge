@@ -87,41 +87,23 @@ pub(crate) fn assemble_comparison_with_limits(
     limits: &InspectLimits,
 ) -> ComparisonOutput {
     let mut diagnostics = input.diagnostics.to_vec();
-    let current = match inspect_artifact(input.current_artifact, limits) {
-        Ok(artifact) => Some(artifact),
-        Err(error) => {
-            push_resource_diagnostic(
-                &mut diagnostics,
-                &error,
-                input.current_artifact,
-                Severity::Error,
-            );
-            diagnostics.push(Diagnostic {
-                code: DiagnosticCode::new("COMPARE.CURRENT_UNAVAILABLE"),
-                severity: Severity::Error,
-                domain: None,
-                stage: None,
-                message: error.to_string(),
-                source: Some(SourcePath::new(
-                    input.current_artifact.display().to_string(),
-                )),
-                help: Some("verify the current APKG path and package contents".to_string()),
-            });
-            None
-        }
-    };
     let Some(baseline) = baseline else {
+        let current = current_inspection(
+            inspect_artifact_summary(input.current_artifact, limits),
+            input.current_artifact,
+            &mut diagnostics,
+        );
         let risk = classify_import_risk(RiskInput {
             diagnostics: &diagnostics,
             comparison: ComparisonStatus::NotRequested,
             diff: None,
-            current_inspect: current.as_ref().map(|artifact| &artifact.summary),
+            current_inspect: current.as_ref(),
             previous_inspect: None,
             update_safety: input.update_safety,
         });
         return ComparisonOutput {
             comparison: ComparisonStatus::NotRequested,
-            current_inspect: current.map(|artifact| artifact.summary),
+            current_inspect: current,
             previous_inspect: None,
             diff: None,
             risk: Some(risk),
@@ -130,6 +112,14 @@ pub(crate) fn assemble_comparison_with_limits(
             duration: input.started.elapsed(),
         };
     };
+
+    // A requested baseline, even an unreadable snapshot, keeps the full
+    // inspection path. Comparison consumers require its observation evidence.
+    let current = current_inspection(
+        inspect_artifact(input.current_artifact, limits),
+        input.current_artifact,
+        &mut diagnostics,
+    );
 
     let mut baseline_unavailable = false;
     let previous = match &baseline.inspected {
@@ -224,6 +214,47 @@ fn inspect_artifact(
         let summary = inspect_summary_from_report(&report);
         InspectedArtifact { report, summary }
     })
+}
+
+fn inspect_artifact_summary(
+    path: &Path,
+    limits: &InspectLimits,
+) -> Result<InspectSummary, InspectError> {
+    crate::writer_core::inspect::inspect_apkg_summary_with_limits(path, limits).map(|summary| {
+        InspectSummary {
+            source_kind: "apkg".into(),
+            observation_status: summary.observation_status,
+            notes: summary.notes,
+            cards: summary.cards,
+            notetypes: summary.notetypes,
+            templates: summary.templates,
+            fields: summary.fields,
+            media: summary.media,
+        }
+    })
+}
+
+fn current_inspection<T>(
+    result: Result<T, InspectError>,
+    path: &Path,
+    diagnostics: &mut Vec<Diagnostic>,
+) -> Option<T> {
+    match result {
+        Ok(inspected) => Some(inspected),
+        Err(error) => {
+            push_resource_diagnostic(diagnostics, &error, path, Severity::Error);
+            diagnostics.push(Diagnostic {
+                code: DiagnosticCode::new("COMPARE.CURRENT_UNAVAILABLE"),
+                severity: Severity::Error,
+                domain: None,
+                stage: None,
+                message: error.to_string(),
+                source: Some(SourcePath::new(path.display().to_string())),
+                help: Some("verify the current APKG path and package contents".to_string()),
+            });
+            None
+        }
+    }
 }
 
 pub(crate) fn push_resource_diagnostic(

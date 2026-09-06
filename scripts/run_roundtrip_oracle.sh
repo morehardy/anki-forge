@@ -55,5 +55,5 @@ fi
 TMP_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/roundtrip-oracle.XXXXXX")
 PREPARED_INPUT="$TMP_ROOT/prepared-input.json"
 
-cargo run --locked -p anki_forge --example product_roundtrip_oracle_prepare -- "$PREPARED_INPUT" "$@"
+cargo run --locked -p anki_forge --features internal-tools --example product_roundtrip_oracle_prepare -- "$PREPARED_INPUT" "$@"
 cargo run --manifest-path "$MANIFEST_PATH" --locked -- "$PREPARED_INPUT"
