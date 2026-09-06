@@ -386,10 +386,17 @@ hashes, payload duplicates, and collisions.
 
 ### 4.6 Node Bindings
 
+The 0.2 SDK provides typed `Project`, `Deck`, `Note`, custom note types, media,
+validation, comparison, and APKG export through an embedded Rust Node-API addon.
+The npm packages are prepared locally; publication and the full platform matrix
+are still pending. See [Node SDK](bindings/node/README.md) for the release status.
+
 ```bash
-npm --prefix bindings/node install
+npm --prefix bindings/node run setup
+npm --prefix bindings/node run build
 npm --prefix bindings/node run example:minimal
 npm --prefix bindings/node test
+npm --prefix bindings/node run test:installed
 ```
 
 ### 4.7 Python Bindings
@@ -451,6 +458,7 @@ Run:
 
 ## 8. Related Docs
 
+- [Node SDK implementation plan (draft)](docs/plans/2026-09-06-node-sdk-implementation-plan.md)
 - `bindings/node/README.md`
 - `bindings/python/README.md`
 - `contracts/fixtures/phase3/manual-desktop-v1/README.md`

@@ -23,7 +23,11 @@ allow = [
     "Unicode-3.0",
     "Zlib",
 ]
-exceptions = []
+exceptions = [
+    # napi-sys loads the Node-API symbols through libloading. Its ISC copyright
+    # and permission notice ships with the Node SDK and every platform package.
+    { name = "libloading", version = "=0.9.0", allow = ["ISC"] },
+]
 
 [bans]
 multiple-versions = "deny"

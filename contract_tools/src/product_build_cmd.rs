@@ -13,6 +13,7 @@ pub enum ProductBuildOutcome {
 pub struct ProductBuildRequest<'a> {
     pub manifest: &'a str,
     pub product_input: &'a str,
+    pub base_dir: Option<&'a str>,
     pub apkg_out: &'a str,
     pub compare_to: Option<&'a str>,
     pub fail_on: Option<&'a str>,
@@ -27,6 +28,7 @@ pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutco
     let ProductBuildRequest {
         manifest,
         product_input,
+        base_dir,
         apkg_out,
         compare_to,
         fail_on,
@@ -43,9 +45,9 @@ pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutco
     let writer_policy = anki_forge::runtime::load_writer_policy(&runtime_bundle, "default")?;
     let build_context = anki_forge::runtime::load_build_context(&runtime_bundle, "default")?;
     let product_input_path = PathBuf::from(product_input);
-    let product_input_base_dir = product_input_path
-        .parent()
+    let product_input_base_dir = base_dir
         .map(PathBuf::from)
+        .or_else(|| product_input_path.parent().map(PathBuf::from))
         .unwrap_or_else(|| PathBuf::from("."));
     let raw = std::fs::read_to_string(&product_input_path)?;
     let document: ProductDocument = serde_json::from_str(&raw)?;

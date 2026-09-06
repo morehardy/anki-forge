@@ -32,7 +32,8 @@ export function resolveRuntime(options = {}) {
           options.launcherExecutable ??
           process.env.ANKI_FORGE_CONTRACT_TOOLS ??
           'cargo',
-        launcherPrefix: [...(options.launcherPrefix ?? ['run', '-q', '-p', 'contract_tools', '--'])],
+        launcherPrefix: [...(options.launcherPrefix ?? ((options.launcherExecutable ?? process.env.ANKI_FORGE_CONTRACT_TOOLS)
+          ? [] : ['run', '-q', '-p', 'contract_tools', '--']))],
       };
     }
 

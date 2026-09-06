@@ -1,0 +1,27 @@
+{
+  "name": "anki-forge-node-darwin-arm64",
+  "version": "0.2.0",
+  "description": "Native runtime for anki-forge-node (aarch64-apple-darwin)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morehardy/anki-forge.git",
+    "directory": "bindings/node"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "anki-forge.node",
+  "files": [
+    "anki-forge.node",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ]
+}

@@ -72,6 +72,8 @@ enum Command {
         #[arg(long)]
         product_input: String,
         #[arg(long)]
+        base_dir: Option<String>,
+        #[arg(long)]
         apkg_out: String,
         #[arg(long)]
         compare_to: Option<String>,
@@ -190,6 +192,7 @@ fn main() -> anyhow::Result<()> {
         Command::ProductBuild {
             manifest,
             product_input,
+            base_dir,
             apkg_out,
             compare_to,
             fail_on,
@@ -203,6 +206,7 @@ fn main() -> anyhow::Result<()> {
                 contract_tools::product_build_cmd::ProductBuildRequest {
                     manifest: &manifest,
                     product_input: &product_input,
+                    base_dir: base_dir.as_deref(),
                     apkg_out: &apkg_out,
                     compare_to: compare_to.as_deref(),
                     fail_on: fail_on.as_deref(),

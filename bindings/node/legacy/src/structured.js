@@ -89,6 +89,10 @@ export function build(request, runtimeOptions = {}) {
 }
 
 async function runProductBuild(request, runtimeOptions) {
+  if (request.inputPath !== undefined && request.productDocument !== undefined) throw new TypeError('Specify inputPath or productDocument, not both');
+  const baseDir = request.baseDir === undefined
+    ? (request.productDocument === undefined ? undefined : path.resolve(runtimeOptions.cwd ?? process.cwd()))
+    : path.resolve(runtimeOptions.cwd ?? process.cwd(), request.baseDir);
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'anki-forge-node-product-'));
   try {
     let inputPath = request.inputPath;
@@ -103,6 +107,7 @@ async function runProductBuild(request, runtimeOptions) {
       'product-build',
       {
         ...request,
+        baseDir,
         inputPath,
         apkgOut: request.apkgOut ?? path.join(tempDir, 'deck.apkg'),
       },
@@ -121,6 +126,9 @@ export async function productBuild(request, runtimeOptions = {}) {
 }
 
 export async function productValidate(request, runtimeOptions = {}) {
+  if (request.apkgOut !== undefined || request.reportJson !== undefined || request.writeIdentityLockfile === true) {
+    throw new TypeError('productValidate cannot publish apkgOut, reportJson or writeIdentityLockfile; use productBuild');
+  }
   const result = await runProductBuild(request, runtimeOptions);
   return { ...result, artifact: null };
 }
