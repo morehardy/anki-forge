@@ -1,0 +1,274 @@
+import copy
+import json
+import os
+import signal
+import sqlite3
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import bench
+import report
+import workload
+import verify
+
+
+class WorkloadTests(unittest.TestCase):
+    def test_frozen_corpus_and_prefixes(self):
+        evidence = workload.generate()
+        largest = json.loads((workload.ROOT / "inputs/basic-10000.json").read_text())
+        for size in workload.SIZES:
+            raw = (workload.ROOT / f"inputs/basic-{size}.json").read_bytes()
+            doc = json.loads(raw)
+            self.assertEqual(doc["notes"], largest["notes"][:size])
+            self.assertEqual(evidence["cases"][str(size)]["categories"],
+                             {"english": size // 2, "mixed": size * 4 // 10, "escaping": size // 10})
+            self.assertEqual(len({n["front"] for n in doc["notes"]}), size)
+            for note in doc["notes"]:
+                for field, bounds in (("front", (40, 100)), ("back", (120, 300))):
+                    self.assertTrue(bounds[0] <= len(note[field]) <= bounds[1])
+                    self.assertFalse(any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in note[field]))
+        sample = largest["notes"][18]
+        self.assertIn("<b>literal</b> &amp;", sample["front"])
+        self.assertEqual(verify.literal("&lt;b&gt;literal&lt;/b&gt; &amp;amp; &quot;x&quot; &#39;y&#39;"),
+                         '<b>literal</b> &amp; "x" \'y\'')
+
+    def test_balanced_adjacent_schedule(self):
+        schedule = bench.schedule()
+        self.assertEqual(len(schedule), 168)
+        self.assertEqual(schedule, bench.schedule())
+        for role, count in (("timing_warmup", 3), ("timing", 10), ("memory_warmup", 3), ("memory", 5)):
+            rows = [r for r in schedule if r["role"] == role]
+            for size in workload.SIZES:
+                cell = [r for r in rows if r["size"] == size]
+                self.assertEqual(len(cell), count * 2)
+                first = [r["adapter"] for r in cell[::2]]
+                self.assertLessEqual(abs(first.count("rust") - first.count("genanki")), 1)
+            for left, right in zip(rows[::2], rows[1::2]):
+                self.assertEqual((left["size"], left["round"]), (right["size"], right["round"]))
+                self.assertNotEqual(left["adapter"], right["adapter"])
+
+
+class CollectorTests(unittest.TestCase):
+    def collect(self, source, timeout=3):
+        with tempfile.TemporaryDirectory() as directory:
+            out, err = Path(directory) / "out", Path(directory) / "err"
+            raw = subprocess.check_output([str(bench.COLLECTOR), str(timeout), str(out), str(err), sys.executable, "-c", source], timeout=timeout + 10)
+            return json.loads(raw), out.stat().st_size, err.stat().st_size
+
+    def test_launch_exit_and_bounded_drain(self):
+        value, out, err = self.collect("import os; os.write(1,b'x'*1000000); os.write(2,b'y'*1000000)")
+        self.assertEqual(value["exit_code"], 0)
+        self.assertEqual((out, err), (65536, 65536))
+        self.assertEqual(value["stdout_bytes"], 1000000)
+        self.assertGreater(value["elapsed_ns"], 0)
+        self.assertTrue(value["reaped"])
+        self.assertGreater(value["peak_rss_raw"], 0)
+        multiplier = 1 if sys.platform == "darwin" else 1024
+        self.assertEqual(value["peak_rss_bytes"], value["peak_rss_raw"] * multiplier)
+
+    def test_os_peak_is_not_previous_child_or_large_parent(self):
+        large, _, _ = self.collect("x=bytearray(192*1024*1024); print(len(x))")
+        small, _, _ = self.collect("pass")
+        self.assertGreater(large["peak_rss_bytes"], small["peak_rss_bytes"] + 100 * 1024 ** 2)
+        parent_allocation = bytearray(192 * 1024 ** 2)
+        small_with_large_parent, _, _ = self.collect("pass")
+        self.assertLess(small_with_large_parent["peak_rss_bytes"], 80 * 1024 ** 2)
+        self.assertEqual(len(parent_allocation), 192 * 1024 ** 2)
+
+    def test_timeout_and_leftover_descendants(self):
+        value, _, _ = self.collect("import time; time.sleep(20)", timeout=1)
+        self.assertEqual(value["interrupted_signal"], signal.SIGALRM)
+        self.assertNotEqual(value["exit_code"], 0)
+        value, _, _ = self.collect("import subprocess,sys; subprocess.Popen([sys.executable,'-c','import time; time.sleep(20)'])")
+        self.assertTrue(value["leftover_descendants"])
+
+    def test_nonzero_and_missing_output_are_not_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory)
+            adapter = [{"id": "fake", "command": [sys.executable, "-c", "raise SystemExit(7)"]}]
+            item = {"id": "exit", "role": "timing", "size": 200, "adapter": "fake", "round": 1}
+            self.assertEqual(bench.run_attempt(item, run, adapter)["status"], "adapter_failure")
+            adapter[0]["command"] = [sys.executable, "-c", "pass"]
+            item["id"] = "missing"
+            self.assertEqual(bench.run_attempt(item, run, adapter)["status"], "missing_output")
+            with self.assertRaises(FileExistsError):
+                bench.run_attempt(item, run, adapter)
+
+
+class PhysicalVerifierTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        workload.generate()
+        cls.doc = json.loads((workload.ROOT / "inputs/basic-200.json").read_text())
+        cls.directory = tempfile.TemporaryDirectory()
+        cls.path = Path(cls.directory.name) / "baseline.apkg"
+        subprocess.run([sys.executable, str(workload.ROOT / "adapters/genanki/export.py"),
+                        str(workload.ROOT / "inputs/basic-200.json"), str(cls.path)], check=True,
+                       env={**os.environ, "TMPDIR": cls.directory.name})
+        cls.raw, _ = verify.read_package(cls.path)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.directory.cleanup()
+
+    def database(self):
+        db = sqlite3.connect(":memory:")
+        db.deserialize(self.raw)
+        self.addCleanup(db.close)
+        return db
+
+    def test_valid_legacy_with_whitespace_tags(self):
+        db = self.database()
+        self.assertEqual(db.execute("SELECT tags FROM notes LIMIT 1").fetchone()[0], "  ")
+        physical, _, _, semantic = verify.check_rows(db, self.doc)
+        self.assertEqual(physical["notes"], 200)
+        self.assertEqual(semantic["status"], "passed")
+
+    def test_raw_multiplicity_and_reference_counterexamples(self):
+        mutations = [
+            "UPDATE cards SET nid=(SELECT min(id) FROM notes) WHERE id=(SELECT max(id) FROM cards)",
+            "UPDATE cards SET nid=-1 WHERE id=(SELECT max(id) FROM cards)",
+            "UPDATE cards SET did=-1 WHERE id=(SELECT max(id) FROM cards)",
+            "UPDATE notes SET mid=-1 WHERE id=(SELECT max(id) FROM notes)",
+            "UPDATE notes SET flds=flds || char(31) || 'extra' WHERE id=(SELECT min(id) FROM notes)",
+            "UPDATE notes SET guid=(SELECT guid FROM notes ORDER BY id LIMIT 1) WHERE id=(SELECT max(id) FROM notes)",
+            "UPDATE notes SET guid='' WHERE id=(SELECT max(id) FROM notes)",
+            "UPDATE notes SET flds=(SELECT flds FROM notes ORDER BY id LIMIT 1) WHERE id=(SELECT max(id) FROM notes)",
+            "UPDATE cards SET ord=1 WHERE id=(SELECT max(id) FROM cards)",
+            "UPDATE notes SET flds='<b>changed</b>' || char(31) || 'answer' WHERE id=(SELECT max(id) FROM notes)",
+        ]
+        for sql in mutations:
+            with self.subTest(sql=sql):
+                db = self.database()
+                db.execute(sql)
+                with self.assertRaises(verify.InvalidArtifact):
+                    verify.check_rows(db, self.doc)
+
+    def test_wrong_template_and_original_corrupt_database(self):
+        db = self.database()
+        models = json.loads(db.execute("SELECT models FROM col").fetchone()[0])
+        next(iter(models.values()))["tmpls"][0]["qfmt"] = "{{Back}}"
+        db.execute("UPDATE col SET models=?", (json.dumps(models),))
+        with self.assertRaisesRegex(verify.InvalidArtifact, "templates"):
+            verify.check_rows(db, self.doc)
+        with self.assertRaises(verify.InvalidArtifact):
+            verify.literal("<b>literal</b>")
+        self.assertNotEqual(verify.literal("&amp;amp;"), "&")
+
+
+class EvidenceTests(unittest.TestCase):
+    def test_provenance_includes_untracked_runtime_sources_and_embedded_bundle(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            included = ["anki_forge/src/new.rs", "anki_forge/assets/contracts/new.tar.gz",
+                        "contracts/versioning/changes/new.yaml", "contract_tools/src/new.rs",
+                        "contracts/fixtures/inputs/new.json"]
+            excluded = ["anki_forge/target/cache", "contracts/artifacts/package.apkg",
+                        "benchmarks/.work/run/output.apkg"]
+            for name in included + excluded:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("new untracked file")
+            with patch.object(bench, "REPO", root), patch.object(bench, "SUITE", root / "benchmarks"), \
+                 patch.object(bench, "command", return_value="deleted-tracked-file.rs\0"):
+                paths = set(bench.source_paths())
+            self.assertTrue({root / name for name in included} <= paths)
+            self.assertFalse({root / name for name in excluded} & paths)
+            self.assertIn(root / "deleted-tracked-file.rs", paths)
+
+    def records(self, size=10000, adapter="rust"):
+        records, verification, anki = [], {}, {}
+        for role, count in (("timing", 10), ("memory", 5)):
+            for i in range(count):
+                key = f"{role}-{size}-{adapter}-{i + 1:02d}"
+                records.append({"id": key, "role": role, "round": i + 1, "size": size, "adapter": adapter,
+                    "status": "success", "measurement": {"elapsed_ns": (i + 1) * 1000000, "peak_rss_bytes": (i + 1) * 1000000},
+                    "memory": {"metric": bench.METRIC, "scope": "single_process", "status": "available"}})
+                verification[key] = {"status": "passed", "artifact_sha256": key, "artifact_bytes": 100 if role == "timing" else 99999}
+        selected = f"timing-{size}-{adapter}-01"
+        anki[selected] = {"status": "passed", "artifact_sha256": selected}
+        return records, verification, anki
+
+    def test_hand_calculated_statistics_and_timing_only_sizes(self):
+        self.assertEqual(report.stats([1, 2, 3, 4]), {"n": 4, "median": 2.5, "q1": 1.75, "q3": 3.25, "min": 1, "max": 4})
+        rows, checks, anki = self.records()
+        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        self.assertEqual(cell["time_ns"]["median"], 5500000)
+        self.assertEqual(cell["apkg_bytes"]["median"], 100)
+        self.assertEqual(cell["peak_rss_bytes"]["n"], 5)
+        self.assertEqual(cell["status"], "verified")
+
+    def test_failed_cell_does_not_hide_other_sizes_or_use_survivors(self):
+        rows, checks, anki = self.records()
+        rows[0]["status"] = "timeout"
+        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        self.assertIsNone(cell["time_ns"])
+        self.assertEqual(cell["timing_succeeded"], 9)
+        rows[0]["status"] = "success"
+        checks[rows[1]["id"]]["status"] = "invalid_artifact"
+        self.assertIsNone(report.cell_summary(rows, checks, anki, 10000, "rust")["time_ns"])
+
+    def test_unmatched_memory_and_missing_anki_are_distinct(self):
+        rows, checks, anki = self.records()
+        rows[-1]["memory"]["metric"] = "sampled_tree"
+        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        self.assertEqual(cell["status"], "verified")
+        self.assertIsNone(cell["peak_rss_bytes"])
+        cell = report.cell_summary(rows, checks, {}, 10000, "rust")
+        self.assertEqual(cell["status"], "unverified")
+        self.assertIsNotNone(cell["time_ns"])
+
+    def test_ratio_direction_dirty_provenance_and_no_headline(self):
+        rows, checks, anki = self.records()
+        other, c2, a2 = self.records(adapter="genanki")
+        for r in other:
+            r["measurement"]["elapsed_ns"] *= .8
+        m = {"run_id": "test", "git_status": "dirty", "identity_unchanged": False, "identity_before": {"upstream_dirty": ""}}
+        result = report.summarize(m, rows + other, checks | c2, anki | a2)
+        pair = result["comparisons"][-1]
+        self.assertAlmostEqual(pair["genanki_over_rust"], .8)
+        self.assertAlmostEqual(pair["genanki_minus_rust_ms"], -1.1)
+        self.assertEqual(len(result["cells"]), 8)
+        self.assertEqual(len(result["comparisons"]), 4)
+        self.assertFalse(result["headline_eligible"])
+        self.assertEqual(pair["status"], "draft")
+
+    def test_measuring_defers_verification_and_cancellation_stops_schedule(self):
+        for cancel in (False, True):
+            with self.subTest(cancel=cancel), tempfile.TemporaryDirectory() as directory:
+                events = []
+                def attempt(item, run, adapters):
+                    events.append("launch:" + item["role"])
+                    return {**item, "status": "cancelled" if cancel and item["role"] == "timing" else "success"}
+                def verification(run, records):
+                    events.append("verify")
+                    return {r["id"]: {"status": "passed"} for r in records if r["status"] == "success"}
+                m = {"host": {}, "interruptions": [], "identity_before": {}}
+                with patch.object(bench, "SUITE", Path(directory)), patch.object(sys, "prefix", str(Path(directory) / ".venv")), \
+                     patch.object(bench, "manifest", return_value=copy.deepcopy(m)), patch.object(bench.workload, "generate", return_value={}), \
+                     patch.object(bench, "run_attempt", side_effect=attempt), patch.object(bench, "verify_records", side_effect=verification), \
+                     patch.object(bench, "registry", return_value=[{"id": "rust"}, {"id": "genanki"}]), \
+                     patch.object(bench, "artifact_size", return_value=0), patch.object(bench, "complete_oracle"), \
+                     patch.object(bench, "identity_snapshot", return_value={}), patch.object(bench, "host_state", return_value={}), \
+                     patch.object(bench, "cleanup"), patch.object(report, "render"), patch("builtins.print"):
+                    code = bench.execute("full", "test")
+                self.assertEqual(events[:3], ["launch:preflight", "launch:preflight", "verify"])
+                self.assertEqual(events[-1], "verify")
+                self.assertEqual(events.count("verify"), 2)
+                if cancel:
+                    self.assertEqual(code, 1)
+                    self.assertEqual(events.count("launch:timing"), 1)
+                    self.assertNotIn("launch:memory", events)
+                else:
+                    self.assertEqual(code, 0)
+                    self.assertEqual(events.count("launch:timing"), 80)
+                    self.assertEqual(events.count("launch:memory"), 40)
+
+
+if __name__ == "__main__":
+    unittest.main()
