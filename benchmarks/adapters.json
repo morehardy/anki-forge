@@ -1,0 +1,7 @@
+{
+  "protocol": "basic-apkg-v1",
+  "adapters": [
+    {"id": "rust", "label": "anki-forge / Rust", "command": ["{suite}/adapters/rust/target/release/anki-forge-benchmark"], "capabilities": ["basic"], "process_scope": "single_process"},
+    {"id": "genanki", "label": "genanki / Python", "command": ["{suite}/.venv/bin/python", "{suite}/adapters/genanki/export.py"], "capabilities": ["basic"], "process_scope": "single_process"}
+  ]
+}
