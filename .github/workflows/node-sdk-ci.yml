@@ -1,0 +1,90 @@
+name: node-sdk-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-build:
+    name: Native runtime (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-15-intel, macos-14]
+    runs-on: ${{ matrix.os }}
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "11.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install build tools (platform packages are produced locally)
+        run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
+        working-directory: bindings/node/toolchain
+      - name: Build native SDK
+        run: npm run build -- --release
+        working-directory: bindings/node
+      - name: Product semantics
+        run: npm test
+        working-directory: bindings/node
+      - name: Independent Rust and Node product parity
+        run: npm run test:parity
+        working-directory: bindings/node
+      - name: Check this platform's release files
+        run: node scripts/check-package.mjs
+        working-directory: bindings/node
+      - name: macOS dynamic dependencies
+        if: runner.os == 'macOS'
+        shell: bash
+        run: otool -L bindings/node/npm/*/*.node
+      - name: Linux dynamic dependencies
+        if: runner.os == 'Linux'
+        shell: bash
+        run: ldd bindings/node/npm/*/*.node
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-runtime-${{ matrix.os }}
+          path: bindings/node/npm
+          if-no-files-found: error
+
+  installed-consumer:
+    needs: native-build
+    name: npm consumer (${{ matrix.os }}, Node ${{ matrix.node }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-15-intel, macos-14]
+        node: [22, 24, 26]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: node-runtime-*
+          merge-multiple: true
+          path: bindings/node/npm
+      - run: npm ci --ignore-scripts
+        working-directory: bindings/node/toolchain
+      - run: npm run build:js
+        working-directory: bindings/node
+      - name: Validate complete platform set and host metadata
+        run: npm run check:release
+        working-directory: bindings/node
+      - name: Install from registry containing all four platform tarballs
+        run: npm run test:installed -- --all
+        working-directory: bindings/node
+      - name: Product behavior on the supported Node line
+        run: npm test
+        working-directory: bindings/node

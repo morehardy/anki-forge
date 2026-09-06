@@ -1,13 +1,65 @@
 {
   "name": "anki-forge-node",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "description": "Typed Node.js product SDK for Anki decks, powered by the Rust anki_forge core",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morehardy/anki-forge.git",
+    "directory": "bindings/node"
+  },
   "type": "module",
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./legacy": "./legacy/src/index.js"
+  },
+  "files": [
+    "dist/cjs",
+    "dist/index.mjs",
+    "dist/index.d.mts",
+    "README.md",
+    "LICENSE",
+    "legacy",
+    "RELEASING.md",
+    "COVERAGE.md"
+  ],
+  "optionalDependencies": {
+    "anki-forge-node-darwin-arm64": "0.2.0",
+    "anki-forge-node-darwin-x64": "0.2.0",
+    "anki-forge-node-linux-x64-gnu": "0.2.0",
+    "anki-forge-node-win32-x64-msvc": "0.2.0"
   },
   "scripts": {
-    "test": "node --test test/*.test.js",
-    "example:minimal": "node examples/minimal-flow.mjs"
+    "build": "node scripts/build.mjs",
+    "build:js": "node toolchain/node_modules/typescript/bin/tsc -p tsconfig.json && node scripts/entries.mjs",
+    "check": "node toolchain/node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "node scripts/test.mjs",
+    "test:product": "node scripts/test.mjs",
+    "test:parity": "node scripts/test.mjs --parity",
+    "prepare:desktop": "node scripts/test.mjs --parity --evidence artifacts/desktop",
+    "test:legacy": "node --test test/raw.test.js test/structured.test.js",
+    "test:installed": "node scripts/installed-smoke.mjs",
+    "example:minimal": "node scripts/example.mjs",
+    "example:legacy": "node examples/minimal-flow.mjs",
+    "check:package": "node scripts/check-package.mjs",
+    "check:release": "node scripts/check-package.mjs --all",
+    "prepare:platforms": "node scripts/platforms.mjs",
+    "pack:local": "node scripts/pack.mjs",
+    "pack:release": "node scripts/pack.mjs --all",
+    "setup": "npm ci --prefix toolchain --ignore-scripts"
   }
 }

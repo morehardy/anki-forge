@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { build, diff, inspect, normalize, resolveRuntime } from '../src/index.js';
+import { build, diff, inspect, normalize, resolveRuntime } from '../legacy/src/index.js';
 
 const bindingsNodeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(bindingsNodeRoot, '../..');

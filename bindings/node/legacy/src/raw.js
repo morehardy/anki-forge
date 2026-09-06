@@ -46,6 +46,7 @@ function buildArgs(command, request, runtime) {
         request.apkgOut,
       ];
       for (const [flag, value] of [
+        ['--base-dir', request.baseDir],
         ['--compare-to', request.compareTo],
         ['--fail-on', request.failOn],
         ['--report-json', request.reportJson],

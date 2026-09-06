@@ -10,7 +10,7 @@ import {
   runRaw,
   RuntimeInvocationError,
   WRAPPER_API_VERSION,
-} from '../src/index.js';
+} from '../legacy/src/index.js';
 
 const bindingsNodeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(bindingsNodeRoot, '../..');
@@ -25,6 +25,13 @@ function bundledContractVersion() {
   assert.ok(line, 'bundled manifest must declare bundle_version');
   return line.split(':', 2)[1].trim().replace(/^['"]|['"]$/g, '');
 }
+
+test('explicit workspace launcher has no implicit cargo prefix', () => {
+  const runtime = resolveRuntime({ cwd: bindingsNodeRoot, launcherExecutable: 'custom-contract-tools' });
+  assert.equal(runtime.launcherExecutable, 'custom-contract-tools');
+  assert.deepEqual(runtime.launcherPrefix, []);
+  assert.deepEqual(resolveRuntime({ cwd: bindingsNodeRoot, launcherExecutable: 'custom', launcherPrefix: ['prefix'] }).launcherPrefix, ['prefix']);
+});
 
 test('resolveRuntime discovers workspace metadata and keeps wrapper version separate', () => {
   const runtime = resolveRuntime({ cwd: bindingsNodeRoot });

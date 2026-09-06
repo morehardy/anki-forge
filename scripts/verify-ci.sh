@@ -76,7 +76,15 @@ run cargo test -p anki_forge --features internal-tools --example conformance_sur
 run cargo run -p anki_forge --features internal-tools --example minimal_flow
 run node --test bindings/node/test/raw.test.js
 run node --test bindings/node/test/structured.test.js
+run npm --prefix bindings/node run example:legacy
+run npm --prefix bindings/node run setup
+run npm --prefix bindings/node run build
+run npm --prefix bindings/node run check
+run npm --prefix bindings/node run test:product
+run npm --prefix bindings/node run test:parity
+run npm --prefix bindings/node run test:installed
 run npm --prefix bindings/node run example:minimal
+run npm --prefix bindings/node run check:package
 run cargo build -p contract_tools --release
 run env "PYTHONPATH=$python_path" python3 -m pytest bindings/python/tests -q \
   --ignore=bindings/python/tests/test_import_isolation.py

@@ -126,6 +126,12 @@ impl MediaRegistry {
         }
     }
 
+    /// Maximum payload size accepted by [`Self::add_bytes`].
+    /// Larger inputs can use [`Self::add_file`] and retain the source until build.
+    pub const fn inline_limit_bytes() -> usize {
+        INLINE_MEDIA_LIMIT_BYTES
+    }
+
     pub fn add_file(&mut self, path: impl AsRef<Path>) -> anyhow::Result<PendingMedia<'_>> {
         let path = path.as_ref().to_path_buf();
         let observed = observe_file_source(&path, EmptySourceBehavior::Reject)

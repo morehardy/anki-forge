@@ -15,7 +15,7 @@ import {
   templateValidate,
   ProtocolParseError,
   RuntimeInvocationError,
-} from '../src/index.js';
+} from '../legacy/src/index.js';
 
 const bindingsNodeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(bindingsNodeRoot, '../..');
@@ -31,6 +31,33 @@ const validNormalizedInput = path.join(
   repoRoot,
   'contracts/fixtures/phase3/inputs/basic-normalized-ir.json',
 );
+
+test('legacy validate rejects publication options before invoking the runtime', async () => {
+  for (const option of [{ apkgOut: 'must-not-exist.apkg' }, { reportJson: 'must-not-exist.json' }, { writeIdentityLockfile: true }]) {
+    await assert.rejects(productValidate({ productDocument: {}, ...option }, { launcherExecutable: 'must-not-launch' }), TypeError);
+  }
+});
+
+test('inline legacy documents resolve relative media against the supplied baseDir', async t => {
+  const baseDir = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-relative-'));
+  t.after(() => fs.rmSync(baseDir, { recursive: true, force: true }));
+  const document = JSON.parse(fs.readFileSync(path.join(repoRoot, 'contracts/fixtures/product-v2/custom-typed-media.json'), 'utf8'));
+  fs.writeFileSync(path.join(baseDir, 'hello.wav'), Buffer.from(document.media[0].source.data_base64, 'base64'));
+  document.media[0].source = { kind: 'file', path: 'hello.wav' };
+  const apkgOut = path.join(baseDir, 'result.apkg');
+  const result = await productBuild({ productDocument: document, baseDir, apkgOut }, { cwd: bindingsNodeRoot });
+  assert.equal(result.status, 'success', JSON.stringify(result.diagnostics)); assert.equal(result.counts.media, 1); assert.ok(fs.existsSync(apkgOut));
+});
+
+test('legacy malformed field types are protocol errors', async t => {
+  const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-shape-'));
+  t.after(() => fs.rmSync(temporary, { recursive: true, force: true }));
+  const script = path.join(temporary, 'fake.cjs');
+  fs.writeFileSync(script, `process.stdout.write(JSON.stringify({kind:'anki-forge-build-report',schema_version:'phase4-build-report-v2',status:'success',comparison:'not_requested',counts:{notes:'1',cards:1,media:0},diagnostics:[],policy:{}}))`);
+  await assert.rejects(productBuild({ productDocument: {}, apkgOut: path.join(temporary, 'result.apkg') }, {
+    mode: 'installed', manifestPath: path.join(repoRoot, 'contracts/manifest.yaml'), bundleRoot: path.join(repoRoot, 'contracts'), launcherExecutable: process.execPath, launcherPrefix: [script],
+  }), error => error instanceof ProtocolParseError && error.parsePhase === 'contract-shape');
+});
 
 function fakeLauncherScript(source) {
   const fakeDir = fs.mkdtempSync(path.join(os.tmpdir(), 'anki-forge-node-fake-'));
