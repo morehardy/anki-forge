@@ -32,6 +32,11 @@ for (const target of targets) {
     assert.equal(metadata.nodeApiVersion, 8);
   }
   assert.equal(platform.scripts?.install, undefined);
+  assert.ok(platform.files.includes('THIRD_PARTY_NOTICES.md'));
+  assert.equal(
+    await fs.readFile(path.join(directory, 'THIRD_PARTY_NOTICES.md'), 'utf8'),
+    await fs.readFile(path.join(root, 'THIRD_PARTY_NOTICES.md'), 'utf8'),
+  );
 }
 assert.equal(manifest.scripts?.install, undefined);
 for (const file of [
@@ -41,6 +46,7 @@ for (const file of [
   'dist/cjs/index.d.ts',
   'README.md',
   'LICENSE',
+  'THIRD_PARTY_NOTICES.md',
 ])
   await fs.access(path.join(root, file));
 console.log(`Package metadata, versions and ${all ? 'all' : 'host'} native artifacts: passed`);

@@ -108,6 +108,10 @@ try {
       await fs.readFile(path.join(directory, "package.json"), "utf8"),
     );
     const bytes = await fs.readFile(path.join(tarballs, packed.filename));
+    assert.ok(
+      packed.files.some((file) => file.path === "THIRD_PARTY_NOTICES.md"),
+      `${packed.name} must distribute third-party notices`,
+    );
     packages.set(packed.filename, bytes);
     manifest.dist = {
       tarball: `${registry}/${packed.filename}`,

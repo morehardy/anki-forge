@@ -36,7 +36,7 @@ export async function preparePlatforms() {
           cpu: [item.cpu],
           ...(item.libc ? { libc: [item.libc] } : {}),
           main: 'anki-forge.node',
-          files: ['anki-forge.node', 'README.md', 'LICENSE'],
+          files: ['anki-forge.node', 'README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md'],
         },
         null,
         2,
@@ -47,6 +47,10 @@ export async function preparePlatforms() {
       `# ${main.name}-${item.suffix}\n\nPlatform runtime installed automatically by \`${main.name}\`.\n`,
     );
     await fs.copyFile(path.join(repo, 'LICENSE'), path.join(directory, 'LICENSE'));
+    await fs.copyFile(
+      path.join(root, 'THIRD_PARTY_NOTICES.md'),
+      path.join(directory, 'THIRD_PARTY_NOTICES.md'),
+    );
   }
   await fs.copyFile(path.join(repo, 'LICENSE'), path.join(root, 'LICENSE'));
 }

@@ -22,6 +22,14 @@ does not promise cancellation or rollback through a JavaScript timeout. Deck
 builds take a Rust snapshot in the worker using `Project::from(Deck)` while
 preserving the owned Deck and its identity indexes for future additions.
 
+Tasks run on napi-rs's built-in blocking runtime and settle through `JsDeferred`.
+The 3.12.2 `AsyncTask` completion callback can panic when a Worker is terminated
+with native work pending, reproduced in debug builds on Node 22 and 24. Deferred
+callbacks are drained when their environment closes, releasing the task and its
+project lease without trying to invoke JavaScript in that environment. The
+built-in runtime retains the addon image while native work can still run. Worker
+termination does not cancel a build or roll back its filesystem effects.
+
 Media references retain Rust's filename identity. A real registered reference
 may be used across projects; missing destination media is a core build error.
 The adapter neither invents media registrations nor rejects references based
@@ -43,6 +51,10 @@ current implementation. The native crate is a cdylib with Rust test/doctest
 harnesses disabled; its public behavior is tested through Node. The core keeps
 its workspace `unsafe_code = forbid`; the adapter uses `deny` so generated N-API
 FFI can apply its own scoped allowance. No handwritten unsafe block is added.
+The adapter specifies the core path dependency's version for the workspace
+dependency policy. The `libloading` 0.9.0 ISC exception is limited to that crate
+and version; its notice is included in the main npm tarball and all platform
+tarballs, with installation tests checking those file lists.
 
 The old API moves to `anki-forge-node/legacy` and still requires its configured
 CLI/contracts. Its validation preview forbids retained publication paths and

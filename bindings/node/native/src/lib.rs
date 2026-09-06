@@ -4,6 +4,7 @@ mod json_numbers;
 mod options;
 mod reports;
 mod state;
+mod tasks;
 
 use anki_forge::build::{BuildOptions, ProjectNormalizeOptions, RiskLevel, UpdateSafetyMode};
 use anki_forge::prelude::Project;
@@ -208,78 +209,79 @@ impl NativeProject {
     }
 
     #[napi]
-    pub fn add_media_file(
+    pub fn add_media_file<'env>(
         &self,
+        env: &'env Env,
         path: String,
         export_as: String,
-    ) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::media_file(
-            self.shared.reserve()?,
-            path.into(),
-            export_as,
-        )))
+    ) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            ProjectTask::media_file(self.shared.reserve()?, path.into(), export_as),
+        )
     }
 
     #[napi]
-    pub fn add_media_bytes(
+    pub fn add_media_bytes<'env>(
         &self,
+        env: &'env Env,
         label: String,
         export_as: String,
         bytes: Buffer,
         spool: bool,
-    ) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::media_bytes(
-            self.shared.reserve()?,
-            label,
-            export_as,
-            bytes.to_vec(),
-            spool,
-        )))
+    ) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            ProjectTask::media_bytes(
+                self.shared.reserve()?,
+                label,
+                export_as,
+                bytes.to_vec(),
+                spool,
+            ),
+        )
     }
 
     #[napi]
-    pub fn import_template_bundle(&self, path: String) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::template_bundle(
-            self.shared.reserve()?,
-            path.into(),
-        )))
-    }
-
-    #[napi]
-    pub fn validate(&self) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::validate(
-            self.shared.reserve()?,
-        )))
-    }
-
-    #[napi]
-    pub fn build(&self, options_json: String) -> Result<AsyncTask<ProjectTask>> {
-        let options = parse::<BuildInput>(&options_json)?.options()?;
-        Ok(AsyncTask::new(ProjectTask::build(
-            self.shared.reserve()?,
-            options,
-        )))
-    }
-
-    #[napi]
-    pub fn apkg_bytes(&self) -> Result<AsyncTask<state::BytesTask>> {
-        Ok(AsyncTask::new(state::BytesTask::new(
-            self.shared.reserve()?,
-        )))
-    }
-
-    #[napi]
-    pub fn diff_against_apkg(
+    pub fn import_template_bundle<'env>(
         &self,
+        env: &'env Env,
+        path: String,
+    ) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            ProjectTask::template_bundle(self.shared.reserve()?, path.into()),
+        )
+    }
+
+    #[napi]
+    pub fn validate<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        tasks::spawn(env, ProjectTask::validate(self.shared.reserve()?))
+    }
+
+    #[napi]
+    pub fn build<'env>(&self, env: &'env Env, options_json: String) -> Result<Object<'env>> {
+        let options = parse::<BuildInput>(&options_json)?.options()?;
+        tasks::spawn(env, ProjectTask::build(self.shared.reserve()?, options))
+    }
+
+    #[napi]
+    pub fn apkg_bytes<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        tasks::spawn(env, state::BytesTask::new(self.shared.reserve()?))
+    }
+
+    #[napi]
+    pub fn diff_against_apkg<'env>(
+        &self,
+        env: &'env Env,
         path: String,
         limits_json: String,
-    ) -> Result<AsyncTask<ProjectTask>> {
+    ) -> Result<Object<'env>> {
         let limits = parse::<options::InspectInput>(&limits_json)?.limits();
-        Ok(AsyncTask::new(ProjectTask::diff(
-            self.shared.reserve()?,
-            path.into(),
-            limits,
-        )))
+        tasks::spawn(
+            env,
+            ProjectTask::diff(self.shared.reserve()?, path.into(), limits),
+        )
     }
 }
 

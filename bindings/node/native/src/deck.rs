@@ -143,37 +143,46 @@ impl NativeDeck {
         })
     }
     #[napi]
-    pub fn add_media_file(&self, path: String) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::deck_media(
-            self.inner.shared.reserve()?,
-            MediaSource::from_file(path),
-        )))
+    pub fn add_media_file<'env>(&self, env: &'env Env, path: String) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            ProjectTask::deck_media(self.inner.shared.reserve()?, MediaSource::from_file(path)),
+        )
     }
     #[napi]
-    pub fn add_media_bytes(&self, name: String, bytes: Buffer) -> Result<AsyncTask<ProjectTask>> {
-        Ok(AsyncTask::new(ProjectTask::deck_media(
-            self.inner.shared.reserve()?,
-            MediaSource::from_bytes(name, bytes.to_vec()),
-        )))
-    }
-    #[napi]
-    pub fn validate(&self) -> Result<AsyncTask<ProjectTask>> {
-        self.inner.validate()
-    }
-    #[napi]
-    pub fn build(&self, input: String) -> Result<AsyncTask<ProjectTask>> {
-        self.inner.build(input)
-    }
-    #[napi]
-    pub fn apkg_bytes(&self) -> Result<AsyncTask<crate::state::BytesTask>> {
-        self.inner.apkg_bytes()
-    }
-    #[napi]
-    pub fn diff_against_apkg(
+    pub fn add_media_bytes<'env>(
         &self,
+        env: &'env Env,
+        name: String,
+        bytes: Buffer,
+    ) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            ProjectTask::deck_media(
+                self.inner.shared.reserve()?,
+                MediaSource::from_bytes(name, bytes.to_vec()),
+            ),
+        )
+    }
+    #[napi]
+    pub fn validate<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        self.inner.validate(env)
+    }
+    #[napi]
+    pub fn build<'env>(&self, env: &'env Env, input: String) -> Result<Object<'env>> {
+        self.inner.build(env, input)
+    }
+    #[napi]
+    pub fn apkg_bytes<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        self.inner.apkg_bytes(env)
+    }
+    #[napi]
+    pub fn diff_against_apkg<'env>(
+        &self,
+        env: &'env Env,
         path: String,
         limits: String,
-    ) -> Result<AsyncTask<ProjectTask>> {
-        self.inner.diff_against_apkg(path, limits)
+    ) -> Result<Object<'env>> {
+        self.inner.diff_against_apkg(env, path, limits)
     }
 }

@@ -14,8 +14,8 @@ doctest = false
 [dependencies]
 anyhow = "1"
 tempfile = "3"
-anki_forge = { path = "../../../anki_forge", features = ["internal-tools"] }
-napi = { version = "=3.12.2", default-features = false, features = ["napi8"] }
+anki_forge = { path = "../../../anki_forge", version = "0.1.0", features = ["internal-tools"] }
+napi = { version = "=3.12.2", default-features = false, features = ["napi8", "tokio_rt"] }
 napi-derive = "=3.6.3"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -25,7 +25,8 @@ jobs as verified support.
    loader version and lockfiles together. `node scripts/platforms.mjs` regenerates
    the platform manifests. Registry E404 alone does not establish publishing rights.
 5. Pack each platform and the main package with `npm pack --json --ignore-scripts`.
-   Review file lists, LICENSE, declarations, versions, checksums and sizes. The
+   Review file lists, LICENSE, THIRD_PARTY_NOTICES.md, declarations, versions,
+   checksums and sizes. Keep the libloading ISC notice in every native package. The
    main package must contain no Rust source, `.node` binary, contracts directory,
    build-time dependency or install script. Keep the reviewed tarballs as the
    immutable release artifacts; do not rebuild between review and publishing.

@@ -687,25 +687,29 @@ test("pending builds own the native project after JavaScript collection", async 
 test("worker teardown during a native task does not retire another project", async (t) => {
   const baseDir = await directory(t);
   const sdk = fileURLToPath(new URL("../dist/cjs/index.js", import.meta.url));
-  const worker = new Worker(
-    `
+  for (const output of ["path", "buffer"]) {
+    const worker = new Worker(
+      `
     const { parentPort, workerData } = require('node:worker_threads');
     const { Project, Note } = require(workerData.sdk);
     const project = new Project('Worker', { baseDir: workerData.baseDir });
     for (let index = 0; index < 500; index++) project.addNote(Note.basic('front-' + index, 'back'));
-    const task = project.writeApkg('worker.apkg');
+    const task = workerData.output === 'buffer'
+      ? project.toApkgBuffer()
+      : project.writeApkg('worker.apkg');
     task.catch(() => {});
     parentPort.postMessage('queued');
   `,
-    { eval: true, workerData: { sdk, baseDir } },
-  );
-  t.after(() => worker.terminate());
-  await new Promise((resolve, reject) => {
-    worker.once("message", resolve);
-    worker.once("error", reject);
-  });
-  await worker.terminate();
-  const project = new Project("After worker", { baseDir });
-  project.addNote(Note.basic("still", "working"));
-  (await project.writeApkg("after.apkg")).ensureSuccess();
+      { eval: true, workerData: { sdk, baseDir, output } },
+    );
+    t.after(() => worker.terminate());
+    await new Promise((resolve, reject) => {
+      worker.once("message", resolve);
+      worker.once("error", reject);
+    });
+    await worker.terminate();
+    const project = new Project("After worker", { baseDir });
+    project.addNote(Note.basic("still", "working"));
+    (await project.writeApkg(`after-${output}.apkg`)).ensureSuccess();
+  }
 });
