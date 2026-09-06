@@ -106,11 +106,26 @@ def source_paths():
     return sorted(paths)
 
 
+def file_identity(path):
+    from verify import sha256
+    try:
+        return sha256(path)
+    except OSError as error:
+        return "unavailable: " + str(error)
+
+
+def identity_error(path, expected):
+    observed = file_identity(path)
+    if observed.startswith("unavailable:"):
+        return observed
+    return "SHA-256 identity mismatch" if observed != expected else None
+
+
 def identity_snapshot(adapters):
     from verify import sha256
     paths = source_paths()
     source = {str(p.relative_to(REPO)): sha256(p) if p.is_file() else "missing" for p in paths}
-    executables = {str(p): sha256(p) if p.is_file() else "unavailable" for p in
+    executables = {str(p): file_identity(p) for p in
                    [COLLECTOR, INSPECTOR, ORACLE] + [Path(a["command"][0]).resolve() for a in adapters]}
     # RECORD content and installed package files are both identities, not merely version strings.
     dependencies = {}
@@ -134,6 +149,8 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
         raise RuntimeError("expected one embedded contract bundle")
     bundle = bundles[0].name.removeprefix("anki-forge-contract-bundle-").removesuffix(".tar.gz")
     metadata = {a["id"]: json.loads(command(a["command"] + ["--metadata"])) for a in adapters}
+    if metadata["rust"]["bundle_version"] != bundle:
+        raise RuntimeError("Rust adapter bundle version mismatch with source asset; run prepare to rebuild")
     if metadata["genanki"]["genanki"] != "0.13.1" or metadata["genanki"]["architecture"] != platform.machine():
         raise RuntimeError("wrong genanki version or cross-architecture comparator")
     feature_tree = command(["cargo", "tree", "--locked", "--offline", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml"), "-e", "features"])
@@ -152,7 +169,8 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
                           "rust_flags": os.environ.get("RUSTFLAGS", ""),
                           "cargo_encoded_rustflags": os.environ.get("CARGO_ENCODED_RUSTFLAGS", ""),
                           "rust_features": "default; no internal-tools", "feature_tree": feature_tree,
-                          "crate_version": metadata["rust"]["crate_version"], "bundle_version": bundle},
+                          "crate_version": metadata["rust"]["crate_version"],
+                          "bundle_version": metadata["rust"]["bundle_version"]},
             "runtime": {"python": sys.version, "python_version": platform.python_version(),
                         "executable": sys.executable, "architecture": platform.machine(),
                         "sqlite": sqlite3.sqlite_version, "zstandard": zstandard.__version__,
@@ -253,12 +271,14 @@ def complete_oracle(run):
             continue
         path = run / record.get("artifact", "missing")
         check = verification.get(key, {})
-        if not m["oracle"]["available_before_measurement"] or not ORACLE.is_file() or sha256(ORACLE) != frozen_sha:
-            evidence[key] = {"status": "missing_oracle", "reason": "same pinned oracle must be identified before measurement"}
+        oracle_error = identity_error(ORACLE, frozen_sha) if m["oracle"]["available_before_measurement"] else \
+                       "same pinned oracle must be identified before measurement"
+        if oracle_error:
+            evidence[key] = {"status": "missing_oracle", "reason": oracle_error}
         elif check.get("status") != "passed":
             evidence[key] = {"status": "unverified_artifact"}
-        elif not path.is_file() or sha256(path) != check["artifact_sha256"]:
-            evidence[key] = {"status": "missing_or_changed_artifact"}
+        elif artifact_error := identity_error(path, check["artifact_sha256"]):
+            evidence[key] = {"status": "missing_or_changed_artifact", "reason": artifact_error}
         else:
             destination = run / "oracle-evidence" / f"{key}.json"
             destination.parent.mkdir(exist_ok=True)
@@ -281,8 +301,8 @@ def complete_oracle(run):
                                      "logical_sha256": check["physical"]["logical_sha256"],
                                      "evidence_file": str(destination.relative_to(run)), "evidence_sha256": sha256(destination),
                                      "notes": outcome["notes"], "cards": outcome["cards"], "rendered_categories": 3}
-                    if sha256(path) != check["artifact_sha256"]:
-                        evidence[key] = {"status": "changed_during_oracle"}
+                    if artifact_error := identity_error(path, check["artifact_sha256"]):
+                        evidence[key] = {"status": "changed_during_oracle", "reason": artifact_error}
         save(evidence_path, evidence)
         print(f"Anki {key}: {evidence[key]['status']}", flush=True)
     save(evidence_path, evidence)

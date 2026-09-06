@@ -6,6 +6,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import zipfile
 from pathlib import Path
@@ -55,6 +56,47 @@ class WorkloadTests(unittest.TestCase):
 
 
 class CollectorTests(unittest.TestCase):
+    def test_diagnostic_logs_are_open_before_adapter_launch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            out, err, marker = root / "out", root / "err", root / "launched"
+            os.mkfifo(out)
+            source = "from pathlib import Path; import sys; Path(sys.argv[1]).touch()"
+            process = subprocess.Popen([str(bench.COLLECTOR), "3", str(out), str(err),
+                                        sys.executable, "-c", source, str(marker)], stdout=subprocess.PIPE)
+            reader = None
+            try:
+                # Hold the diagnostic open while the collector is free to schedule threads.
+                deadline = time.monotonic() + .3
+                while not marker.exists() and time.monotonic() < deadline:
+                    time.sleep(.01)
+                launched_before_log_open = marker.exists()
+                reader = os.open(out, os.O_RDONLY | os.O_NONBLOCK)
+                measured = json.loads(process.communicate(timeout=5)[0])
+                self.assertFalse(launched_before_log_open)
+                self.assertEqual(measured["exit_code"], 0)
+                self.assertTrue(marker.is_file())
+            finally:
+                if process.poll() is None:
+                    process.kill()
+                    process.communicate()
+                if reader is not None:
+                    os.close(reader)
+
+    def test_unavailable_diagnostic_log_prevents_launch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            marker = root / "launched"
+            source = "from pathlib import Path; import sys; Path(sys.argv[1]).touch()"
+            for failed_stream in ("stdout", "stderr"):
+                with self.subTest(failed_stream=failed_stream):
+                    out = root if failed_stream == "stdout" else root / "out"
+                    err = root if failed_stream == "stderr" else root / "err"
+                    p = subprocess.run([str(bench.COLLECTOR), "3", str(out), str(err),
+                                        sys.executable, "-c", source, str(marker)], capture_output=True, timeout=5)
+                    self.assertNotEqual(p.returncode, 0)
+                    self.assertFalse(marker.exists())
+
     def collect(self, source, timeout=3):
         with tempfile.TemporaryDirectory() as directory:
             out, err = Path(directory) / "out", Path(directory) / "err"
@@ -176,6 +218,37 @@ class PhysicalVerifierTests(unittest.TestCase):
                 with self.assertRaises(verify.InvalidArtifact):
                     verify.check_rows(db, self.doc)
 
+    def test_malformed_legacy_metadata_is_invalid_evidence(self):
+        for field, mutation in (("models", "alias"), ("decks", "alias"),
+                                ("models", "missing"), ("decks", "missing"),
+                                ("models", "wrong_type"), ("models", "nonnumeric")):
+            with self.subTest(field=field, mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                db = self.database()
+                metadata = json.loads(db.execute(f"SELECT {field} FROM col").fetchone()[0])
+                used = db.execute("SELECT mid FROM notes LIMIT 1" if field == "models" else
+                                  "SELECT did FROM cards LIMIT 1").fetchone()[0]
+                key = str(used)
+                if mutation == "alias":
+                    metadata["0" + key] = metadata.pop(key)
+                elif mutation == "missing":
+                    del metadata[key]["flds" if field == "models" else "name"]
+                elif mutation == "wrong_type":
+                    metadata[key]["flds"] = None
+                else:
+                    metadata["not-an-id"] = metadata.pop(key)
+                db.execute(f"UPDATE col SET {field}=?", (json.dumps(metadata),))
+                db.commit()
+                run = Path(directory)
+                with zipfile.ZipFile(run / "malformed.apkg", "w") as archive:
+                    archive.writestr("collection.anki2", db.serialize())
+                    archive.writestr("media", "{}")
+                (run / "valid.apkg").write_bytes(self.path.read_bytes())
+                records = [{"id": name, "status": "success", "size": 200, "artifact": f"{name}.apkg"}
+                           for name in ("malformed", "valid")]
+                results = bench.verify_records(run, records)
+                self.assertEqual(results["malformed"]["status"], "invalid_artifact")
+                self.assertEqual(results["valid"]["status"], "passed")
+
     def test_wrong_template_and_original_corrupt_database(self):
         db = self.database()
         models = json.loads(db.execute("SELECT models FROM col").fetchone()[0])
@@ -260,12 +333,68 @@ class EvidenceTests(unittest.TestCase):
             self.assertTrue((run / rows[0]["artifact"]).is_file())
             self.assertFalse((run / rows[1]["artifact"]).exists())
 
+    def test_oracle_identity_io_failures_preserve_remaining_evidence(self):
+        for failed_path in ("oracle", "artifact", "after_import"):
+            with self.subTest(failed_path=failed_path), tempfile.TemporaryDirectory() as directory:
+                run = Path(directory)
+                oracle = run / "oracle"
+                oracle.write_bytes(b"pinned executable")
+                frozen = verify.sha256(oracle)
+                rows, checks = [], {}
+                for adapter in ("rust", "genanki"):
+                    key = f"timing-200-{adapter}-01"
+                    artifact = run / "artifacts" / key / "output.apkg"
+                    artifact.parent.mkdir(parents=True)
+                    artifact.write_bytes(b"original artifact")
+                    rows.append({"id": key, "role": "timing", "round": 1, "size": 200,
+                                 "adapter": adapter, "artifact": str(artifact.relative_to(run))})
+                    checks[key] = {"status": "passed", "artifact_sha256": verify.sha256(artifact),
+                                   "physical": {"logical_sha256": "logical"}}
+                    bench.append(run / "attempts.jsonl", rows[-1])
+                bench.save(run / "verification.json", checks)
+                bench.save(run / "manifest.json", {"oracle": {"available_before_measurement": True},
+                           "identity_before": {"executables": {str(oracle): frozen}, "upstream_revision": "pinned"}})
+                original_sha = verify.sha256
+                artifact_reads = 0
+                def sha(path):
+                    nonlocal artifact_reads
+                    if path == oracle and failed_path == "oracle":
+                        raise PermissionError("oracle unreadable")
+                    if path == run / rows[0]["artifact"]:
+                        artifact_reads += 1
+                        if failed_path == "artifact" or (failed_path == "after_import" and artifact_reads == 2):
+                            raise FileNotFoundError("artifact disappeared after is_file")
+                    return original_sha(path)
+                def invoke(argv, **kwargs):
+                    bench.save(Path(argv[3]), {"status": "passed", "notes": 200, "cards": 200})
+                    return subprocess.CompletedProcess(argv, 0, stdout=b"", stderr=b"")
+                with patch.object(bench, "ORACLE", oracle), patch.object(verify, "sha256", side_effect=sha), \
+                     patch.object(subprocess, "run", side_effect=invoke):
+                    evidence = bench.complete_oracle(run)
+                    if failed_path == "oracle":
+                        with patch.object(bench, "source_paths", return_value=[]), \
+                             patch.object(bench.importlib.metadata, "distributions", return_value=[]), \
+                             patch.object(workload, "SIZES", ()), patch.object(bench, "command", return_value=""):
+                            snapshot = bench.identity_snapshot([])
+                        self.assertIn("oracle unreadable", snapshot["executables"][str(oracle)])
+                expected = {"oracle": "missing_oracle", "artifact": "missing_or_changed_artifact",
+                            "after_import": "changed_during_oracle"}[failed_path]
+                self.assertEqual(evidence[rows[0]["id"]]["status"], expected)
+                self.assertIn("reason", evidence[rows[0]["id"]])
+                self.assertEqual(evidence[rows[1]["id"]]["status"], "missing_oracle" if failed_path == "oracle" else "passed")
+                self.assertEqual(json.loads((run / "anki.json").read_text()), evidence)
+                bench.cleanup(run)
+                self.assertTrue((run / rows[0]["artifact"]).is_file())
+
     def test_captured_adapter_version_is_rendered(self):
         adapters = [{"id": "rust", "command": ["rust-adapter"]},
                     {"id": "genanki", "command": ["genanki-adapter"]}]
+        bundle = next((bench.REPO / "anki_forge/assets").rglob("anki-forge-contract-bundle-*.tar.gz")).name.removeprefix(
+            "anki-forge-contract-bundle-").removesuffix(".tar.gz")
+        reported_bundle = bundle
         def command(argv, **kwargs):
             if argv == ["rust-adapter", "--metadata"]:
-                return json.dumps({"crate_version": "0.2.3"})
+                return json.dumps({"crate_version": "0.2.3", "bundle_version": reported_bundle})
             if argv == ["genanki-adapter", "--metadata"]:
                 return json.dumps({"genanki": "0.13.1", "architecture": bench.platform.machine()})
             return ""
@@ -273,6 +402,9 @@ class EvidenceTests(unittest.TestCase):
         with patch.object(bench, "command", side_effect=command), \
              patch.object(bench, "identity_snapshot", return_value=identity), patch.object(bench, "host_state", return_value={}):
             m = bench.manifest(adapters, workload.generate(), "full", [], 1024)
+            reported_bundle = "stale-bundle"
+            with self.assertRaisesRegex(RuntimeError, "bundle.*mismatch"):
+                bench.manifest(adapters, {}, "full", [], 1024)
         with tempfile.TemporaryDirectory() as directory:
             run = Path(directory)
             m.update(run_id="version-test", identity_unchanged=True)
@@ -284,6 +416,7 @@ class EvidenceTests(unittest.TestCase):
                 report.render(run)
             self.assertIn("anki-forge 0.2.3", (run / "report.md").read_text())
         self.assertEqual(m["toolchain"]["crate_version"], "0.2.3")
+        self.assertEqual(m["toolchain"]["bundle_version"], bundle)
 
     def test_provenance_includes_untracked_runtime_sources_and_embedded_bundle(self):
         with tempfile.TemporaryDirectory() as directory:

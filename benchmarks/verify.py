@@ -98,6 +98,9 @@ def check_rows(db, expected):
     if schema == 11:
         model_raw, deck_raw = db.execute("SELECT models,decks FROM col").fetchone()
         models, decks = json.loads(model_raw), json.loads(deck_raw)
+        require(isinstance(models, dict) and isinstance(decks, dict), "legacy metadata must be objects")
+        require(all(str(int(k)) == k for mapping in (models, decks) for k in mapping),
+                "noncanonical legacy metadata ID")
         model_ids, deck_ids = {int(k) for k in models}, {int(k) for k in decks}
     elif schema in (15, 16, 17, 18):
         model_ids = {r[0] for r in db.execute("SELECT id FROM notetypes")}
@@ -216,8 +219,8 @@ def verify_artifact(path, expected, inspector):
         result["status"] = "passed"
     except UnsupportedVerifier as error:
         result.update(status="unsupported_verifier", reason=str(error))
-    except (InvalidArtifact, sqlite3.DatabaseError, zipfile.BadZipFile, zstandard.ZstdError,
-            json.JSONDecodeError, UnicodeDecodeError) as error:
+    except (ValueError, KeyError, TypeError, IndexError, AttributeError,
+            sqlite3.DatabaseError, zipfile.BadZipFile, zstandard.ZstdError) as error:
         result.update(status="invalid_artifact", reason=str(error))
     except (OSError, subprocess.TimeoutExpired) as error:
         result.update(status="verification_unavailable", reason=str(error))

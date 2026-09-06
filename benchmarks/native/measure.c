@@ -28,10 +28,10 @@ static uint64_t now_ns(void) {
     clock_gettime(CLOCK_MONOTONIC, &t);
     return (uint64_t)t.tv_sec * 1000000000ULL + t.tv_nsec;
 }
-struct drain { int fd; const char *path; size_t total; };
+struct drain { int fd; FILE *log; size_t total; };
 static void *drain_log(void *arg) {
     struct drain *d = arg;
-    FILE *out = fopen(d->path, "wb");
+    FILE *out = d->log;
     char buf[8192];
     ssize_t n;
     while ((n = read(d->fd, buf, sizeof buf)) != 0) {
@@ -52,7 +52,16 @@ int main(int argc, char **argv) {
     /* Avoid inherited unrelated descriptors. Python also launches us close_fds. */
     fcntl(p_out[0], F_SETFD, FD_CLOEXEC); fcntl(p_err[0], F_SETFD, FD_CLOEXEC);
     fcntl(p_out[1], F_SETFD, FD_CLOEXEC); fcntl(p_err[1], F_SETFD, FD_CLOEXEC);
-    struct drain out = {p_out[0], argv[2], 0}, err = {p_err[0], argv[3], 0};
+    /* Complete log creation before threads, timing, and exporter launch. */
+    FILE *outlog = fopen(argv[2], "wb");
+    if (!outlog) { perror("open stdout log"); return 3; }
+    FILE *errlog = fopen(argv[3], "wb");
+    if (!errlog) { perror("open stderr log"); fclose(outlog); return 3; }
+    if (fcntl(fileno(outlog), F_SETFD, FD_CLOEXEC) == -1 ||
+        fcntl(fileno(errlog), F_SETFD, FD_CLOEXEC) == -1) {
+        perror("close-on-exec log"); fclose(outlog); fclose(errlog); return 3;
+    }
+    struct drain out = {p_out[0], outlog, 0}, err = {p_err[0], errlog, 0};
     pthread_t tout, terr;
     if (pthread_create(&tout, NULL, drain_log, &out) || pthread_create(&terr, NULL, drain_log, &err)) return 3;
     struct sigaction sa = {0};
