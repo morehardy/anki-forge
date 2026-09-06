@@ -195,8 +195,10 @@ def check_projection(path, inspector, expected, by_guid, used_mid):
 
 
 def verify_artifact(path, expected, inspector):
-    result = {"artifact_sha256": sha256(path), "artifact_bytes": path.stat().st_size}
+    result = {}
     try:
+        result["artifact_sha256"] = sha256(path)
+        result["artifact_bytes"] = path.stat().st_size
         raw, package = read_package(path)
         result["package"] = package
         with tempfile.TemporaryDirectory(prefix="verify-") as directory:

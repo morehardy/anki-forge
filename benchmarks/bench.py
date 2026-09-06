@@ -152,7 +152,7 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
                           "rust_flags": os.environ.get("RUSTFLAGS", ""),
                           "cargo_encoded_rustflags": os.environ.get("CARGO_ENCODED_RUSTFLAGS", ""),
                           "rust_features": "default; no internal-tools", "feature_tree": feature_tree,
-                          "crate_version": "0.1.0", "bundle_version": bundle},
+                          "crate_version": metadata["rust"]["crate_version"], "bundle_version": bundle},
             "runtime": {"python": sys.version, "python_version": platform.python_version(),
                         "executable": sys.executable, "architecture": platform.machine(),
                         "sqlite": sqlite3.sqlite_version, "zstandard": zstandard.__version__,
@@ -262,19 +262,27 @@ def complete_oracle(run):
         else:
             destination = run / "oracle-evidence" / f"{key}.json"
             destination.parent.mkdir(exist_ok=True)
-            p = subprocess.run([str(ORACLE), str(SUITE / f"inputs/basic-{record['size']}.json"), str(path), str(destination)],
-                               capture_output=True, timeout=120)
-            if p.returncode:
-                evidence[key] = {"status": "oracle_failed", "reason": p.stderr.decode(errors="replace")[:3000]}
+            try:
+                p = subprocess.run([str(ORACLE), str(SUITE / f"inputs/basic-{record['size']}.json"), str(path), str(destination)],
+                                   capture_output=True, timeout=120)
+            except subprocess.TimeoutExpired as error:
+                evidence[key] = {"status": "oracle_failed", "failure_kind": "timeout",
+                                 "timeout_seconds": error.timeout, "reason": str(error),
+                                 "stdout": (error.stdout or b"").decode(errors="replace")[:3000],
+                                 "stderr": (error.stderr or b"").decode(errors="replace")[:3000],
+                                 "artifact_sha256": check["artifact_sha256"], "oracle_sha256": frozen_sha}
             else:
-                outcome = json.loads(destination.read_text())
-                evidence[key] = {"status": outcome["status"], "artifact_sha256": check["artifact_sha256"],
-                                 "oracle_sha256": frozen_sha, "upstream_revision": m["identity_before"]["upstream_revision"],
-                                 "logical_sha256": check["physical"]["logical_sha256"],
-                                 "evidence_file": str(destination.relative_to(run)), "evidence_sha256": sha256(destination),
-                                 "notes": outcome["notes"], "cards": outcome["cards"], "rendered_categories": 3}
-                if sha256(path) != check["artifact_sha256"]:
-                    evidence[key] = {"status": "changed_during_oracle"}
+                if p.returncode:
+                    evidence[key] = {"status": "oracle_failed", "reason": p.stderr.decode(errors="replace")[:3000]}
+                else:
+                    outcome = json.loads(destination.read_text())
+                    evidence[key] = {"status": outcome["status"], "artifact_sha256": check["artifact_sha256"],
+                                     "oracle_sha256": frozen_sha, "upstream_revision": m["identity_before"]["upstream_revision"],
+                                     "logical_sha256": check["physical"]["logical_sha256"],
+                                     "evidence_file": str(destination.relative_to(run)), "evidence_sha256": sha256(destination),
+                                     "notes": outcome["notes"], "cards": outcome["cards"], "rendered_categories": 3}
+                    if sha256(path) != check["artifact_sha256"]:
+                        evidence[key] = {"status": "changed_during_oracle"}
         save(evidence_path, evidence)
         print(f"Anki {key}: {evidence[key]['status']}", flush=True)
     save(evidence_path, evidence)
@@ -324,11 +332,16 @@ def execute(mode, name=None, budget_gib=8):
     print(f"Run: {run}", flush=True)
     append(run / "events.jsonl", {"phase": "preflight", "utc": utc()})
     preflight = []
+    stopped = None
     for adapter in adapters:
         r = run_attempt({"id": f"preflight-200-{adapter['id']}", "role": "preflight", "adapter": adapter["id"],
                          "size": 200, "round": 0, "order": -1}, run, adapters)
         preflight.append(r)
         append(run / "attempts.jsonl", r)
+        if r["status"] == "cancelled":
+            stopped = "cancelled"
+            m["interruptions"].append({"attempt": r["id"], "utc": utc()})
+            break
     verified = verify_records(run, preflight)
     records = list(preflight)
     preflight_ok = all(r["status"] == "success" and verified.get(r["id"], {}).get("status") == "passed" for r in records)
@@ -337,7 +350,8 @@ def execute(mode, name=None, budget_gib=8):
     m["storage_preflight"] = {"estimated_with_4x_headroom_bytes": int(projected), "available_bytes": available}
     save(run / "manifest.json", m)
     storage_floor = max(int(available * .2), available - budget_bytes)
-    stopped = "preflight_failed" if not preflight_ok else "storage_exhaustion" if projected > min(budget_bytes, available * 0.8) else None
+    if stopped is None:
+        stopped = "preflight_failed" if not preflight_ok else "storage_exhaustion" if projected > min(budget_bytes, available * 0.8) else None
     failed_cells = set()
     current_role = None
     # Between samples: launch/reap, stat the output, append a small record. No artifact hashing,

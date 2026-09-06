@@ -162,6 +162,102 @@ class PhysicalVerifierTests(unittest.TestCase):
 
 
 class EvidenceTests(unittest.TestCase):
+    def test_missing_deferred_artifact_preserves_other_checks_and_summary(self):
+        workload.generate()
+        rows, checks, anki = self.records()
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory)
+            missing = {**rows[0], "artifact": "missing.apkg"}
+            valid = {**rows[1], "artifact": "valid.apkg"}
+            subprocess.run([sys.executable, str(workload.ROOT / "adapters/genanki/export.py"),
+                            str(workload.ROOT / "inputs/basic-10000.json"), str(run / "valid.apkg")], check=True)
+            results = bench.verify_records(run, [missing, valid])
+            self.assertEqual(results[missing["id"]]["status"], "verification_unavailable")
+            self.assertNotIn("artifact_bytes", results[missing["id"]])
+            self.assertEqual(results[valid["id"]]["status"], "passed")
+            checks.update(results)
+            bench.save(run / "verification.json", checks)
+            cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+            self.assertEqual(cell["status"], "unverified")
+            self.assertIsNone(cell["apkg_bytes"])
+
+    def test_unreadable_artifact_metadata_is_failed_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "output.apkg"
+            path.write_bytes(b"retained artifact")
+            for operation in (patch.object(verify, "sha256", side_effect=PermissionError("unreadable")),
+                              patch.object(Path, "stat", side_effect=OSError("stat unavailable"))):
+                with operation:
+                    result = verify.verify_artifact(path, {}, None)
+                self.assertEqual(result["status"], "verification_unavailable")
+                self.assertIn("reason", result)
+
+    def test_oracle_timeout_is_persisted_and_next_cell_continues(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory)
+            oracle = run / "oracle"
+            oracle.write_text("pinned oracle executable")
+            frozen = verify.sha256(oracle)
+            rows = [{"id": f"timing-200-{adapter}-01", "role": "timing", "round": 1,
+                     "size": 200, "adapter": adapter,
+                     "artifact": f"artifacts/timing-200-{adapter}-01/output.apkg"}
+                    for adapter in ("rust", "genanki")]
+            checks = {}
+            for row in rows:
+                artifact = run / row["artifact"]
+                artifact.parent.mkdir(parents=True)
+                artifact.write_bytes(b"original measured bytes")
+                checks[row["id"]] = {"status": "passed", "artifact_sha256": verify.sha256(artifact),
+                                     "physical": {"logical_sha256": "logical"}}
+                bench.append(run / "attempts.jsonl", row)
+            bench.save(run / "verification.json", checks)
+            bench.save(run / "manifest.json", {"oracle": {"available_before_measurement": True},
+                       "identity_before": {"executables": {str(oracle): frozen}, "upstream_revision": "pinned"}})
+            def invoke(argv, **kwargs):
+                self.assertEqual(kwargs["timeout"], 120)
+                if "rust" in argv[2]:
+                    raise subprocess.TimeoutExpired(argv, 120, output=b"partial output", stderr=b"partial error")
+                bench.save(Path(argv[3]), {"status": "passed", "notes": 200, "cards": 200})
+                return subprocess.CompletedProcess(argv, 0, stdout=b"", stderr=b"")
+            with patch.object(bench, "ORACLE", oracle), patch.object(subprocess, "run", side_effect=invoke) as launch:
+                evidence = bench.complete_oracle(run)
+            self.assertEqual(launch.call_count, 2)
+            failure = evidence[rows[0]["id"]]
+            self.assertEqual(failure["status"], "oracle_failed")
+            self.assertEqual(failure["failure_kind"], "timeout")
+            self.assertEqual(failure["timeout_seconds"], 120)
+            self.assertEqual(failure["stderr"], "partial error")
+            self.assertEqual(evidence[rows[1]["id"]]["status"], "passed")
+            self.assertEqual(json.loads((run / "anki.json").read_text()), evidence)
+            bench.cleanup(run)
+            self.assertTrue((run / rows[0]["artifact"]).is_file())
+            self.assertFalse((run / rows[1]["artifact"]).exists())
+
+    def test_captured_adapter_version_is_rendered(self):
+        adapters = [{"id": "rust", "command": ["rust-adapter"]},
+                    {"id": "genanki", "command": ["genanki-adapter"]}]
+        def command(argv, **kwargs):
+            if argv == ["rust-adapter", "--metadata"]:
+                return json.dumps({"crate_version": "0.2.3"})
+            if argv == ["genanki-adapter", "--metadata"]:
+                return json.dumps({"genanki": "0.13.1", "architecture": bench.platform.machine()})
+            return ""
+        identity = {"source_files": {}, "upstream_revision": "pinned", "upstream_dirty": ""}
+        with patch.object(bench, "command", side_effect=command), \
+             patch.object(bench, "identity_snapshot", return_value=identity), patch.object(bench, "host_state", return_value={}):
+            m = bench.manifest(adapters, workload.generate(), "full", [], 1024)
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory)
+            m.update(run_id="version-test", identity_unchanged=True)
+            bench.save(run / "manifest.json", m)
+            for filename in ("verification.json", "anki.json"):
+                bench.save(run / filename, {})
+            (run / "attempts.jsonl").write_text("")
+            with patch.object(report, "plot"):
+                report.render(run)
+            self.assertIn("anki-forge 0.2.3", (run / "report.md").read_text())
+        self.assertEqual(m["toolchain"]["crate_version"], "0.2.3")
+
     def test_provenance_includes_untracked_runtime_sources_and_embedded_bundle(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -239,12 +335,12 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(pair["status"], "draft")
 
     def test_measuring_defers_verification_and_cancellation_stops_schedule(self):
-        for cancel in (False, True):
+        for cancel in (None, "timing", "preflight"):
             with self.subTest(cancel=cancel), tempfile.TemporaryDirectory() as directory:
                 events = []
                 def attempt(item, run, adapters):
                     events.append("launch:" + item["role"])
-                    return {**item, "status": "cancelled" if cancel and item["role"] == "timing" else "success"}
+                    return {**item, "status": "cancelled" if item["role"] == cancel else "success"}
                 def verification(run, records):
                     events.append("verify")
                     return {r["id"]: {"status": "passed"} for r in records if r["status"] == "success"}
@@ -257,13 +353,21 @@ class EvidenceTests(unittest.TestCase):
                      patch.object(bench, "identity_snapshot", return_value={}), patch.object(bench, "host_state", return_value={}), \
                      patch.object(bench, "cleanup"), patch.object(report, "render"), patch("builtins.print"):
                     code = bench.execute("full", "test")
-                self.assertEqual(events[:3], ["launch:preflight", "launch:preflight", "verify"])
+                preflight_count = 1 if cancel == "preflight" else 2
+                self.assertEqual(events[:preflight_count + 1], ["launch:preflight"] * preflight_count + ["verify"])
                 self.assertEqual(events[-1], "verify")
                 self.assertEqual(events.count("verify"), 2)
                 if cancel:
                     self.assertEqual(code, 1)
-                    self.assertEqual(events.count("launch:timing"), 1)
+                    self.assertEqual(events.count("launch:timing"), 1 if cancel == "timing" else 0)
                     self.assertNotIn("launch:memory", events)
+                    run = Path(directory) / ".work/runs/test"
+                    saved = json.loads((run / "manifest.json").read_text())
+                    self.assertEqual(len(saved["interruptions"]), 1)
+                    self.assertTrue(saved["interruptions"][0]["attempt"].startswith(cancel))
+                    rows = [json.loads(line) for line in (run / "attempts.jsonl").read_text().splitlines()]
+                    cancelled = next(i for i, r in enumerate(rows) if r["status"] == "cancelled")
+                    self.assertTrue(all(r["status"] == "not_run" and r["reason"] == "cancelled" for r in rows[cancelled + 1:]))
                 else:
                     self.assertEqual(code, 0)
                     self.assertEqual(events.count("launch:timing"), 80)

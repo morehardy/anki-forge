@@ -33,7 +33,8 @@ def cell_summary(records, verification, anki, size, adapter):
               (r["role"].startswith("memory") and r["status"] == "collector_failure")]
     complete = len(timed) == 10 and all(r["status"] == "success" for r in timed)
     time_stat = stats([r["measurement"]["elapsed_ns"] for r in timed]) if complete and artifact != "invalid_artifact" else None
-    size_stat = stats([verification[r["id"]]["artifact_bytes"] for r in timed]) if time_stat and all(r["id"] in verification for r in timed) else None
+    size_stat = stats([verification[r["id"]]["artifact_bytes"] for r in timed]) if time_stat and all(
+        verification.get(r["id"], {}).get("artifact_bytes") is not None for r in timed) else None
     rss_complete = len(memory) == 5 and all(r["status"] == "success" and
         r.get("memory", {}).get("metric") == METRIC and r["memory"].get("scope") == "single_process" and
         r["memory"].get("status") == "available" for r in memory)
@@ -147,7 +148,8 @@ def render(run):
     if summary["draft_reasons"]:
         lines += ["**Exploratory draft.** " + "; ".join(summary["draft_reasons"]) + ". Not a release/README advantage claim.", ""]
     lines += [f"Host: {manifest['host']['cpu']}; {manifest['host']['system']}; {manifest['host']['machine']}. "
-              f"CPython {manifest['runtime']['python_version']}, genanki 0.13.1; anki-forge 0.1.0, Rust release/default features.", "",
+              f"CPython {manifest['runtime']['python_version']}, genanki 0.13.1; "
+              f"anki-forge {manifest['toolchain']['crate_version']}, Rust release/default features.", "",
               "Synthetic `basic-mixed-text-v1` (seed 20260906), one Basic card per note, no media. "
               "Each field is escaped inside its adapter. The time includes process startup, imports, JSON input parsing, "
               "default identity/checks, export and shutdown. Filesystem caches are warmed and uncontrolled; writes are closed without an fsync guarantee.", "",
