@@ -92,7 +92,9 @@ def check_rows(db, expected):
     require(db.execute("PRAGMA integrity_check").fetchall() == [("ok",)], "SQLite integrity check")
     tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     require({"col", "notes", "cards", "revlog"} <= tables, "missing required tables")
-    schema = db.execute("SELECT ver FROM col").fetchone()[0]
+    collection_rows = db.execute("SELECT ver FROM col LIMIT 2").fetchall()
+    require(len(collection_rows) == 1, "expected exactly one collection row")
+    schema = collection_rows[0][0]
     if schema == 11:
         model_raw, deck_raw = db.execute("SELECT models,decks FROM col").fetchone()
         models, decks = json.loads(model_raw), json.loads(deck_raw)

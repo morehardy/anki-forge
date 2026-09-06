@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -128,6 +129,32 @@ class PhysicalVerifierTests(unittest.TestCase):
         physical, _, _, semantic = verify.check_rows(db, self.doc)
         self.assertEqual(physical["notes"], 200)
         self.assertEqual(semantic["status"], "passed")
+
+    def test_collection_row_cardinality_preserves_deferred_verification(self):
+        for count in (0, 2):
+            with self.subTest(collection_rows=count), tempfile.TemporaryDirectory() as directory:
+                run = Path(directory)
+                db = self.database()
+                if count == 0:
+                    db.execute("DELETE FROM col")
+                else:
+                    row = list(db.execute("SELECT * FROM col").fetchone())
+                    row[0] += 1
+                    db.execute("INSERT INTO col VALUES (" + ",".join("?" for _ in row) + ")", row)
+                self.assertEqual(db.execute("SELECT COUNT(*) FROM col").fetchone()[0], count)
+                db.commit()
+                with zipfile.ZipFile(run / "malformed.apkg", "w") as archive:
+                    archive.writestr("collection.anki2", db.serialize())
+                    archive.writestr("media", "{}")
+                (run / "valid.apkg").write_bytes(self.path.read_bytes())
+                records = [{"id": name, "status": "success", "size": 200, "artifact": f"{name}.apkg"}
+                           for name in ("malformed", "valid")]
+                results = bench.verify_records(run, records)
+                self.assertEqual(results["malformed"]["status"], "invalid_artifact")
+                self.assertIn("exactly one collection row", results["malformed"]["reason"])
+                self.assertEqual(results["valid"]["status"], "passed")
+                bench.save(run / "verification.json", results)
+                self.assertEqual(json.loads((run / "verification.json").read_text()), results)
 
     def test_raw_multiplicity_and_reference_counterexamples(self):
         mutations = [
