@@ -1,0 +1,67 @@
+{
+  "probe_patch_replay": {
+    "coarse": {
+      "files": 199,
+      "all_hashes_match_build": true,
+      "patch_sha256": "7edeecce722f799c3c0371938a6f8dd7a6041d93b4671b0b6e2e3248f15cce54",
+      "patch_output": "patching file anki_forge/src/authoring_core/normalize.rs\npatching file anki_forge/src/diag.rs\npatching file anki_forge/src/lib.rs\npatching file anki_forge/src/prepared_media.rs\npatching file anki_forge/src/product/project.rs\npatching file anki_forge/src/product/project/input.rs\npatching file anki_forge/src/product/project/pipeline.rs\npatching file anki_forge/src/product/project/pipeline/reconcile.rs\npatching file anki_forge/src/runtime/defaults.rs\npatching file anki_forge/src/writer_core/apkg.rs\npatching file anki_forge/src/writer_core/inspect.rs\npatching file anki_forge/src/writer_core/staging.rs\npatching file benchmarks/adapters/rust/src/main.rs\n"
+    },
+    "fine": {
+      "files": 199,
+      "all_hashes_match_build": true,
+      "patch_sha256": "b0d1922d4684e6b9eee628667e777200c86f51aebd6d53043dae853135ca6087",
+      "patch_output": "patching file anki_forge/src/authoring_core/normalize.rs\npatching file anki_forge/src/deck/identity.rs\npatching file anki_forge/src/deck/media.rs\npatching file anki_forge/src/diag.rs\npatching file anki_forge/src/lib.rs\npatching file anki_forge/src/prepared_media.rs\npatching file anki_forge/src/product/project.rs\npatching file anki_forge/src/product/project/deck_import.rs\npatching file anki_forge/src/product/project/input.rs\npatching file anki_forge/src/product/project/pipeline.rs\npatching file anki_forge/src/product/project/pipeline/reconcile.rs\npatching file anki_forge/src/runtime/defaults.rs\npatching file anki_forge/src/writer_core/apkg.rs\npatching file anki_forge/src/writer_core/inspect.rs\npatching file anki_forge/src/writer_core/note_data.rs\npatching file anki_forge/src/writer_core/note_revision.rs\npatching file anki_forge/src/writer_core/pipelined_sha1.rs\npatching file anki_forge/src/writer_core/staging.rs\npatching file anki_forge/src/writer_core/stream_zip.rs\npatching file benchmarks/adapters/rust/src/main.rs\n"
+    },
+    "memory": {
+      "files": 200,
+      "all_hashes_match_build": true,
+      "patch_sha256": "e35ce260c34df4fc82ef0d2ef80240e38dda42f5152d79c4f07a6e3e7680c2ac",
+      "patch_output": "patching file anki_forge/src/authoring_core/normalize.rs\npatching file anki_forge/src/diag.rs\npatching file anki_forge/src/lib.rs\npatching file anki_forge/src/prepared_media.rs\npatching file anki_forge/src/product/project.rs\npatching file anki_forge/src/product/project/input.rs\npatching file anki_forge/src/product/project/pipeline.rs\npatching file anki_forge/src/product/project/pipeline/reconcile.rs\npatching file anki_forge/src/runtime/defaults.rs\npatching file anki_forge/src/writer_core/apkg.rs\npatching file anki_forge/src/writer_core/inspect.rs\npatching file anki_forge/src/writer_core/pipelined_sha1.rs\npatching file anki_forge/src/writer_core/staging.rs\npatching file benchmarks/adapters/rust/src/main.rs\npatching file benchmarks/adapters/rust/src/memory.rs\n"
+    },
+    "scratch-sync-off": {
+      "files": 198,
+      "all_hashes_match_build": true,
+      "patch_sha256": "15c91750064520de37f15bb1b9e666ea1f8417641f86521547da7c5e87614e8b",
+      "patch_output": "patching file anki_forge/src/writer_core/apkg.rs\n"
+    },
+    "scratch-journal-memory": {
+      "files": 198,
+      "all_hashes_match_build": true,
+      "patch_sha256": "3488e39a9033d84b311d8c0c7a9fbbf72b4457c60d21398b623b6834e626ff55",
+      "patch_output": "patching file anki_forge/src/writer_core/apkg.rs\n"
+    },
+    "scratch-defer-indexes": {
+      "files": 198,
+      "all_hashes_match_build": true,
+      "patch_sha256": "be8b5af70da958950b960c7be7b4c41d715cba11b541b427bbe1b4554224fe7e",
+      "patch_output": "patching file anki_forge/src/writer_core/apkg.rs\n"
+    },
+    "larger-spool": {
+      "files": 198,
+      "all_hashes_match_build": true,
+      "patch_sha256": "d327f0ac33814d6114c7685c6acac8d411f010ef3c4f0b34027ec9923d299471",
+      "patch_output": "patching file anki_forge/src/prepared_media.rs\n"
+    }
+  },
+  "archived_python_scripts_parse": true,
+  "report_links_exist": true,
+  "prior_archives": {
+    "20260907-readme-comparison": {
+      "verified_files": 33,
+      "unchanged": true
+    },
+    "20260907-inspection-parallel-hash": {
+      "verified_files": 72,
+      "unchanged": true
+    },
+    "20260907-remaining-opportunities": {
+      "verified_files": 35,
+      "unchanged": true
+    },
+    "20260907-streaming-followup": {
+      "verified_files": 240,
+      "unchanged": true
+    }
+  },
+  "production_sources_unchanged": 198
+}

@@ -1,0 +1,17 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.40s
+     Running tests/deck_project_facade_tests.rs (target/debug/deps/deck_project_facade_tests-557715dfbcd031de)
+
+running 9 tests
+test imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata ... ok
+test imported_deck_identity_provenance_survives_project_edits ... ok
+test project_from_deck_can_append_project_notes ... ok
+test project_from_deck_preserves_existing_image_occlusion_support ... ok
+test borrowed_deck_can_repair_missing_media_after_failed_export ... ok
+test imported_deck_media_and_new_project_media_share_one_registry ... ok
+test imported_deck_keeps_duplicate_id_locations_after_clone ... ok
+test deck_build_matches_project_from_deck_for_stock_notes ... ok
+test borrowed_deck_exports_preserve_long_html_and_identity_evidence ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+

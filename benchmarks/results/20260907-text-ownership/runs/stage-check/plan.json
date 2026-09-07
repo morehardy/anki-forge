@@ -1,0 +1,45 @@
+{
+  "args": {
+    "name": "stage-check",
+    "variants": [
+      "current-stages",
+      "accepted-stages"
+    ],
+    "cases": [
+      "text-10000",
+      "long-back-quadruple-1000"
+    ],
+    "distinct_containers": false,
+    "env": [],
+    "warmups": 2,
+    "repeats": 5
+  },
+  "cases": [
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-quadruple-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+      "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 27409788,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+    }
+  ],
+  "binaries": {
+    "current-stages": "741df4f1bb4edd7213814d040a7a55d83f9a5d47fd9dde120807b61436aaa911",
+    "accepted-stages": "46d6a60480eea5fed71e77e7c9b85c114389b925ea4fe9e57f52934889ba1856"
+  },
+  "utc": "2026-09-07T14:58:09.676239+00:00",
+  "initial_power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t36%; charging; 3:17 remaining present: true\n",
+  "seed": 20260907
+}

@@ -1,0 +1,32 @@
+{
+  "base_revision": "ab7d261238619e99da9a6b8e5ffff8d952e6153b",
+  "changed_runtime_or_test_files": [
+    "anki_forge/tests/deck_project_facade_tests.rs",
+    "anki_forge/src/product/note.rs",
+    "anki_forge/src/product/project.rs",
+    "anki_forge/src/product/content.rs",
+    "anki_forge/src/deck/export.rs",
+    "anki_forge/src/product/project/input.rs",
+    "anki_forge/src/product/project/pipeline.rs",
+    "anki_forge/src/product/project/pipeline/reconcile.rs"
+  ],
+  "source_patch_replay_passed": true,
+  "accepted_core_source_files_unchanged": 199,
+  "source_objects": 745,
+  "all_measured_candidate_sources_match_build_records": true,
+  "previous_archives_verified_unchanged": {
+    "benchmarks/results/20260907-readme-comparison/SHA256SUMS": 33,
+    "benchmarks/results/20260907-basic-rust-genanki-optimized-04/SHA256SUMS": 123,
+    "benchmarks/results/20260907-inspection-parallel-hash/SHA256SUMS": 72,
+    "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/SHA256SUMS": 18,
+    "benchmarks/results/20260907-post-streaming-audit/SHA256SUMS": 101,
+    "benchmarks/results/20260906-basic-rust-genanki-optimized-03-mimalloc/SHA256SUMS": 18,
+    "benchmarks/results/20260907-streaming-followup/SHA256SUMS": 240,
+    "benchmarks/results/20260907-remaining-opportunities/SHA256SUMS": 35,
+    "benchmarks/results/20260907-bounded-media/SHA256SUMS": 279,
+    "benchmarks/results/20260907-media-export-pr/SHA256SUMS": 44,
+    "benchmarks/results/20260907-rust-export-pr/SHA256SUMS": 76,
+    "benchmarks/results/20260906-basic-rust-genanki-optimized-03/SHA256SUMS": 95
+  },
+  "main_adapter_matches_accepted": true
+}

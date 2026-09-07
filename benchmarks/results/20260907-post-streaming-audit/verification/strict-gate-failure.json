@@ -1,0 +1,26 @@
+{
+  "command": "benchmarks/.venv/bin/python benchmarks/.work/post-streaming-audit-20260907/verify_audit.py",
+  "initial_result": "AssertionError: text-1000 during strict full-table equality",
+  "follow_up": "All 3 cases have identical schema, learning tables and other ZIP entries; sqlite_stat1 differs. No row was excluded from the comparison. Candidate stays rejected.",
+  "current_sqlite_stat1": [
+    [
+      "col",
+      null,
+      "1"
+    ],
+    [
+      "cards",
+      "idx_cards_odid",
+      "0 0"
+    ]
+  ],
+  "candidate_sqlite_stat1": [
+    [
+      "col",
+      null,
+      "1"
+    ]
+  ],
+  "prior_completed_independent_checks": 5,
+  "original_anonymous_exit_code": 1
+}

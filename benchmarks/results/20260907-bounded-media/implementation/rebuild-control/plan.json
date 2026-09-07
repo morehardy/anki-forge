@@ -1,0 +1,87 @@
+{
+  "args": {
+    "name": "rebuild-control",
+    "variants": [
+      "current",
+      "current-rebuilt",
+      "pool"
+    ],
+    "cases": [
+      "text-1000",
+      "text-10000",
+      "long-back-1000",
+      "long-back-quadruple-1000",
+      "image-64x1m",
+      "image-skewed-128"
+    ],
+    "distinct_containers": false,
+    "env": [],
+    "warmups": 2,
+    "repeats": 7
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376
+    },
+    {
+      "name": "image-64x1m",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-64x1m/input.json",
+      "input_sha256": "27506b178976f5b80946884fe1e312c6cfd022a68f3c6dab682a4abb285e52a9",
+      "notes": 64,
+      "media": 64,
+      "media_bytes": 67108864,
+      "field_utf8_bytes": 30290
+    },
+    {
+      "name": "image-skewed-128",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-skewed-128/input.json",
+      "input_sha256": "bb3dd0f74fe56cb37e37c9a0f53942b3c276fe9d6ab869183d8d5dca07df2e7b",
+      "notes": 128,
+      "media": 128,
+      "media_bytes": 39713024,
+      "field_utf8_bytes": 59157
+    },
+    {
+      "name": "long-back-quadruple-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+      "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 27409788,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+    }
+  ],
+  "binaries": {
+    "current": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+    "current-rebuilt": "ab1aa6c1416feff3911f0636a9492fc036efccce559f4a808617706d5749d5fd",
+    "pool": "3f563f2f4bd6070a1389775d8d5494de2ca9d1fc21613287ea25652a0903be83"
+  },
+  "utc": "2026-09-07T13:40:33.623454+00:00",
+  "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t52%; discharging; 3:38 remaining present: true\n",
+  "seed": 20260907
+}

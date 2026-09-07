@@ -1,0 +1,57 @@
+"""Write descriptive before/after results; retain negative and inconclusive cells."""
+import hashlib
+import json
+from pathlib import Path
+import statistics
+
+WORK = Path(__file__).resolve().parent
+REPO = WORK.parents[2]
+OUT = REPO/'benchmarks/results/20260907-streaming-followup'
+DETAIL = OUT/'implementation'
+timing = json.loads((DETAIL/'before-after-timing/summary.json').read_text())
+rss = {r['case']: r['variants'] for r in json.loads((DETAIL/'before-after-rss/summary.json').read_text())}
+attempts = [json.loads(line) for line in (DETAIL/'before-after-timing/attempts.jsonl').read_text().splitlines()]
+lines = ['# 后续流式优化：实现与验证', '',
+    '本轮保留三项默认媒体路径优化：按块并行检查任意大小的媒体、重叠 ZIP 写入与包 SHA-1、在有界窗口内动态分配媒体准备任务。普通逐项注册 API、同步源指纹、全部内容校验和发布前落盘语义保持不变。SQLite 缓存和构建级身份复用未通过收益筛选，未进入最终代码。', '',
+    '这里的 before 是本轮开始时已经完成上一轮优化的版本，并非 Git 基础提交或 genanki；after 是本轮三项改动的组合。比较使用同轮交错的新进程，不跨会话相减，也不把三个独立原型的收益相加。README 的 genanki 对照来自另行预声明的[三轮完整矩阵](report.md)。', '',
+    '## 最终前后对照', '',
+    '覆盖原有 20 格和 7 个扩展负载。每个版本/场景先 3 次 warmup，再 10 次计时；之后另设 3 次 warmup 与 5 次 RSS 采样，共 1,134 次导出。计时包括普通逐项注册和整个导出进程。机器为 Apple M1 Pro，Rust 1.92.0 release/default features/system allocator。原生供电状态在每次导出前后记录；本轮为电池供电，不与早期交流电会话直接比较绝对耗时。所有样本保留，无异常值剔除，以下是描述性中位数，非显著性结论。', '',
+    '| 场景 | Before ms | After ms | 耗时减少 | 配对更快 / 10 | Before RSS MiB | After RSS MiB |',
+    '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+summary = []
+for row in timing:
+    name = row['case']; before = row['variants']['current']; after = row['variants']['accepted']
+    saved = 100*(1-after['median_ms']/before['median_ms'])
+    samples = {(r['sample'],r['variant']):r['measurement']['elapsed_ns'] for r in attempts if r['case']==name and r['sample']>=0}
+    faster = sum(samples[i,'accepted'] < samples[i,'current'] for i in range(10))
+    memory = rss[name]
+    lines.append(f"| {name} | {before['median_ms']:.3f} | {after['median_ms']:.3f} | {saved:.2f}% | {faster} | {memory['current']['median_rss_mib']:.2f} | {memory['accepted']['median_rss_mib']:.2f} |")
+    summary.append({'case':name,'before_ms':before['median_ms'],'after_ms':after['median_ms'],'time_saved_pct':saved,'faster_pairs':faster,
+                    'before_rss_mib':memory['current']['median_rss_mib'],'after_rss_mib':memory['accepted']['median_rss_mib']})
+lines += ['',
+    '扩展的 256 KiB、1 MiB 和大小混杂 PNG 使用合法 ancillary 块填充确定性的不可压缩字节，像素内容不变；它们隔离字节量和任务分配，不能代表所有真实大图。`boundary` 两组各有 1,000 张对应字节数的图片；`image-256x256k` 为 256 个 256 KiB 文件，`image-64x1m` 为 64 个 1 MiB 文件；`image-skewed-128` 每四个文件中第一个为 1 MiB，其余为 64,152 字节。长字段场景每条 Back 为 4,096 字符。', '',
+    '## 采用的实现', '',
+    '- 媒体检查使用 256 KiB 块，逐文件按序累积 SHA-1。超过 64 KiB 的文件不再退回串行路径。最多四个线程，额外解码 payload 缓冲上限 2.25 MiB；串行降级不分配块缓冲。解码、CRC 和全部资源限额仍在调用线程执行。',
+    '- ZIP 达到 256 KiB 后，可由一个线程顺序计算最终字节流的 SHA-1，调用线程继续写入。额外 payload 缓冲上限 768 KiB；小包和线程创建失败使用串行路径。成功与输出失败路径都会关闭队列并等待线程退出。',
+    '- 媒体准备保留最多四个线程与每个 payload 超过 512 KiB 时的临时文件机制。共同任务窗口最多为 `2 × worker_count + 1`，四线程时最多 9 个在途 payload、4.5 MiB 编码数据；消费者仍按规范顺序提交 ZIP 和诊断。每个任务独占回复发送端，工作线程停止时等待方会收到断开错误。', '',
+    '上述上限只约束额外 payload 数据；不是总 RSS 上限。编解码器上下文、线程栈、分配器和输入模型另占内存。检查与写包发生在不同阶段；动态分配也可能提高原先空闲线程的实际内存使用。实测 RSS 在上表完整列出。公开 API 和依赖列表没有变更。', '',
+    '## 独立原型与未采用方案', '',
+    '| 实验 | 对照方式 | 导出数 | 选择 |',
+    '| --- | --- | ---: | --- |',
+    '| 检查块大小 | 11 场景 × 原版/64 KiB/256 KiB × (3 warmup + 7 samples) | 330 | 采用 256 KiB 分块 |',
+    '| ZIP 流水线 | 11 场景 × 原版/候选 × (3 + 7) | 220 | 采用 |',
+    '| 其余候选 | 13 场景 × 原版/SQLite 缓存/身份复用/动态调度 × (3 + 7) | 520 | 仅采用动态调度 |', '',
+    'SQLite 的临时数据库缓存预算增为 8 MiB 后，万条笔记的端到端中位数反而慢约 0.9%，诊断 RSS 增加 17.66 MiB；长字段场景慢约 3.1%、RSS 增加 20.12 MiB。该候选没有修改 journal/sync/压实语义，但收益不成立。', '',
+    '构建级身份复用候选把三处解析与来源映射重用起来。万条笔记仅减少约 1.2% 耗时，诊断 RSS 增加 2.58 MiB；长字段慢约 3.7%、RSS 增加 6.80 MiB。因此没有引入额外状态和跨阶段存活，原路径保留。这个结论只否定当前候选，不说明 SQLite 或身份处理已无优化空间。', '',
+    '动态调度在独立大小混杂对照中减少 13.89% 耗时，7 次配对均更快，RSS 增加 3.89 MiB。均匀 1 MiB 场景的中位数慢 3.56%、但配对快慢混合；最终是否有收益以三项组合的上表为准。计时随机器状态变化，不能将这一轮的绝对毫秒数与其他原型轮次相减。原型 RSS 随计时收集，只有最终对照另设内存阶段。', '',
+    '最初 `media-stream` 尝试在第一个 warmup 后停止：沙箱供电读数与原生读数不一致。该次尝试原样保留，未进入候选摘要；随后在原生环境中冻结实际供电来源并重跑完整预定样本。后续每次计时都检查前后供电来源，未靠剔除慢样本或追加最佳轮次选择结果。', '',
+    '## 正确性与证据', '',
+    '最终前后 27 个场景各自保留的原版/新版产物，共 54 个包，均通过独立原始 SQLite 完整性、模型/字段/卡片和完整媒体检查；27 个新版包还通过固定上游 Anki 的导入、内容及代表性渲染检查。全部 2,204 次成功诊断/最终对照导出，都通过 SHA-256 绑定到对应的同字节已验证产物。完整 README 矩阵另有 2,520 次全量产物检查及 120 次 Anki 检查。', '',
+    '回归测试新增或扩展了多块解码和截断、累计限额、哈希状态重置与线程退出、短写及中途写入失败，以及混合文件缺失/注册后变更/恢复重试、反序输入、临时文件释放和 ZIP 字节确定性。Rust 质量脚本所列检查最终全部通过（新模块的包清单排序修正后重跑发布检查），包括默认公开接口、全部 workspace/all-features 测试、Clippy `-D warnings`、doctest、rustdoc、嵌入资源、crate payload、发布元数据和依赖政策；共 1,006 项 Rust 测试（含 doctest）及 43 项 Python 基准测试通过。', '',
+    'Anki 检查器沿用已记录的 `tokio/io-util` 构建特性补丁。本次不声称 GUI 或音频播放验证，也没有覆盖常驻多任务并发、其他机器、Cloze 或自定义多模板的性能；这些行为仍由现有功能测试覆盖。', '',
+    '[全部前后样本](implementation/before-after-timing/attempts.jsonl) · [单独 RSS 样本](implementation/before-after-rss/attempts.jsonl) · [候选样本](implementation/remaining-candidates/attempts.jsonl) · [独立产物/Anki 验证](implementation/verification/verification.json) · [所有产物哈希绑定](implementation/verification/attempt-bindings.json) · [质量检查日志](implementation/quality.log) · [机器可读汇总](implementation-summary.json)', '',
+    '原型补丁、源码/二进制哈希、构建命令、冻结输入哈希和执行脚本都保留在 `implementation/`。复现时把脚本放到 `benchmarks/.work/<新目录>/`，按源码记录构建独立 `profile-source` 与 `binaries`，恢复冻结输入后运行；不要把性能探针加入正式源码。扩展输入生成脚本位于[前轮诊断归档](../20260907-remaining-opportunities/scripts/cases.py)。最终默认源快照为[主实验补丁](source.patch)，包含新文件。生成产物和可执行文件不纳入仓库。', '',
+    '之前的[三轮报告](../20260907-inspection-parallel-hash/report.md)及[诊断选题](../20260907-remaining-opportunities/README.md)保持原样。', '']
+(OUT/'implementation.md').write_text('\n'.join(lines))
+(OUT/'implementation-summary.json').write_text(json.dumps(summary, indent=2)+'\n')
+print(OUT/'implementation.md')

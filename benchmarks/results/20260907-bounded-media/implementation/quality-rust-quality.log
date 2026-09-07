@@ -1,0 +1,1697 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.04s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-91d68e3e2c83214d)
+
+running 124 tests
+test authoring_core::template_parser::tests::reports_mismatched_section_names ... ok
+test authoring_core::template_parser::tests::parses_filters_and_balanced_sections ... ok
+test authoring_core::template_semantics::tests::static_front_is_always_generated ... ok
+test authoring_core::template_semantics::tests::unconditional_visible_content_survives_inverted_sections ... ok
+test authoring_core::template_semantics::tests::runtime_metadata_special_fields_are_not_inferred_as_always_nonempty ... ok
+test authoring_core::template_semantics::tests::direct_fields_form_an_any_requirement ... ok
+test authoring_core::template_semantics::tests::media_attribute_depends_on_its_field ... ok
+test authoring_core::template_semantics::tests::disjunction_of_conjunctions_is_unrepresentable ... ok
+test authoring_core::template_semantics::tests::positive_section_forms_an_all_requirement ... ok
+test authoring_core::template_semantics::tests::inverted_only_visibility_is_not_always ... ok
+test authoring_core::template_semantics::tests::script_style_and_whitespace_entities_are_not_visible_static_content ... ok
+test authoring_core::template_semantics::tests::declared_fields_take_precedence_over_runtime_metadata_names ... ok
+test prepared_media::tests::one_large_encoded_payload_uses_available_build_memory ... ok
+test deck::media::tests::same_sha_registration_repairs_missing_raster_metadata ... ok
+test prepared_media::payload::tests::empty_and_zero_budget_payloads_still_preserve_the_stream ... ok
+test deck::media::tests::media_source_dir_metadata_rejects_non_directory ... ok
+test product::content::tests::escape_html_escapes_text_once_in_source_order ... ok
+test prepared_media::payload::tests::idle_budget_is_shared_and_exhaustion_spills_without_losing_bytes ... ok
+test product::lowering::owned_tests::owned_lowering_moves_html_allocations_into_authoring_fields ... ok
+test prepared_media::payload::tests::concurrent_payloads_share_the_bound_and_return_buffers ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_custom_cloze_and_transport_diagnostics ... ok
+test prepared_media::payload::tests::short_output_errors_and_panics_release_all_leases ... ok
+test product::model::tests::non_string_product_version_records_transport_diagnostic ... ok
+test product::model::tests::unknown_field_content_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_generation_rule_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_media_source_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unsupported_string_product_version_records_transport_diagnostic ... ok
+test product::project::counts::tests::card_count_prefers_zero_card_inspect_result_over_fallback ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_duplicate_field_keys_names_and_notetype_resolution ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_diagnostic_order_and_partial_notes ... ok
+test product::project::tests::build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids ... ok
+test product::project::tests::duplicate_diagnostics_with_the_same_source_are_collapsed ... ok
+test product::project::tests::build_rejects_stock_collision_before_scanning_custom_template_media ... ok
+test product::project::tests::build_reports_duplicate_notetype_template_and_css_media_sources_by_index ... ok
+test product::project::tests::lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit ... ok
+test product::project::tests::lower_keeps_index_source_when_colliding_identity_note_is_skipped ... ok
+test product::project::tests::lower_keeps_later_note_source_after_required_note_is_skipped ... ok
+test product::project::tests::lower_rejects_custom_notetype_stock_collision_before_authoring ... ok
+test product::project::tests::normalization_failure_diagnostics_include_lowering_diagnostics ... ok
+test product::project::tests::product_diagnostic_help_covers_actionable_media_storage_codes ... ok
+test product::project::tests::product_helper_wiring_lowering_diagnostics_map_to_errors ... ok
+test product::project::tests::product_v2_normalize_preserves_unknown_media_source_path ... ok
+test product::project::tests::product_v2_normalize_preserves_required_field_source_path ... ok
+test product::project::tests::validate_still_reports_blank_stable_id_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_duplicate_stable_ids_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_implicit_stock_collision_for_internal_invalid_state ... ok
+test product::project::tests::writer_result_status_maps_to_typed_build_status ... ok
+test product::template_engine::tests::rejects_empty_render_and_section_fields ... ok
+test product::template_engine::tests::reports_unknown_fields_and_mismatched_sections ... ok
+test product::template_engine::tests::validates_fields_filters_and_balanced_sections ... ok
+test product::template_engine::tests::validates_multi_word_field_names_as_complete_names ... ok
+test prepared_media::tests::encoded_payload_spills_before_unbounded_growth_and_preserves_bytes ... ok
+test product::project::tests::project_owned_lowering_preserves_invalid_partial_plan_and_diagnostics ... ok
+test product::project::tests::project_owned_lowering_preserves_canonical_fields_and_source_paths ... ok
+test deck::media::tests::file_registration_matches_inline_fingerprints_and_dimensions ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_duplicate_and_conflicting_entries ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_links_and_gzip_corruption ... ok
+test runtime::schema::tests::load_schema_reuses_compiled_schema_for_the_same_path ... ok
+test writer_core::apkg::tests::apkg_media_size_accepts_uint32_max ... ok
+test writer_core::apkg::tests::apkg_media_size_rejects_values_above_uint32_range ... ok
+test product::project::atomic_output_tests::product_build_preserves_existing_target_when_replace_fails ... ok
+test product::comparison::snapshot_tests::unreadable_baseline_stays_unavailable_after_a_file_appears ... ok
+test writer_core::apkg::tests::collection_population_rolls_back_after_a_note_and_card_were_written ... ok
+test writer_core::apkg::tests::field_checksum_uses_stripped_first_field_text_for_html_boundaries ... ok
+test writer_core::apkg::tests::guid_plan_validation_keeps_assignments_and_exact_mismatch_errors ... ok
+test writer_core::apkg::tests::media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32 ... ok
+test writer_core::apkg::tests::storage_values_keep_field_order_sort_checksum_and_empty_values ... ok
+test writer_core::apkg::tests::embedded_upgrade_notice_matches_schema_generated_database ... ok
+test writer_core::apkg::tests::failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction ... ok
+ZipWriter drop failed: Io(Os { code: 9, kind: Uncategorized, message: test runtime::embedded::tests::in_memory_defaults_match_complete_path_runtime ... "Bad file descriptor" })ok
+test writer_core::apkg::tests::streamed_collection_propagates_input_and_output_io_errors ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_handles_anki_boundary_vectors ... ok
+test runtime::embedded::tests::in_memory_defaults_preserve_relative_path_resolution_inside_contracts ... ok
+test writer_core::apkg::tests::streamed_package_fingerprint_matches_byte_fingerprint ... ok
+test writer_core::apkg::tests::typed_writer_rejects_invalid_model_and_guid_plans_before_replacing_output ... ok
+test writer_core::build::tests::apkg_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::build::tests::apkg_non_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::card_plan::tests::anki_default_renders_nonempty_special_fields ... ok
+test writer_core::card_plan::tests::anki_default_uses_rendered_front_emptiness ... ok
+test writer_core::card_plan::tests::cloze_card_ords_are_distinct_sorted_and_zero_based ... ok
+test writer_core::card_plan::tests::malformed_and_zero_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::missing_cloze_ordinal_is_malformed_by_itself ... ok
+test writer_core::card_plan::tests::unclosed_and_nested_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::unrelated_mustache_text_starting_with_c_is_not_cloze ... ok
+test writer_core::deck_name::tests::human_names_use_native_separator_and_component_normalization ... ok
+test writer_core::deck_name::tests::registry_adds_each_parent_and_resolves_requested_leaf ... ok
+test writer_core::deck_name::tests::registry_keeps_parent_spellings_and_ids_independent_of_request_order ... ok
+test writer_core::apkg::tests::streamed_collection_keeps_compacted_sqlite_bytes_and_removes_its_tempfile ... ok
+test writer_core::inspect::summary_tests::interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest ... ok
+test product::comparison::snapshot_tests::captured_baseline_survives_replacement_for_identity_and_diff ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_never_panics ... ok
+test writer_core::inspect::summary_tests::serial_media_hash_does_not_allocate_payload_buffers ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_preserves_generated_media_attrs ... ok
+test writer_core::apkg::tests::streamed_collection_preserves_buffered_zip_bytes_across_block_boundaries ... ok
+test runtime::embedded::tests::in_memory_defaults_reject_invalid_policy_and_context ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_stock_custom_content_and_document_views ... ok
+test writer_core::inspect::summary_tests::summary_counts_mixed_notetypes_and_sparse_cloze_cards ... ok
+test writer_core::inspect::summary_tests::media_hash_streams_bounded_blocks_and_resets_between_files ... ok
+test writer_core::inspect::summary_tests::summary_distinguishes_negative_and_u32_max_ordinals_before_deduplication ... ok
+test writer_core::inspect::summary_tests::failed_current_summary_never_publishes_even_when_inspect_is_hidden ... ok
+test writer_core::inspect::summary_tests::summary_counts_actual_cards_with_sparse_ordinals_and_prefix_guids ... ok
+test writer_core::inspect::summary_tests::summary_enforces_identical_resource_limits_and_media_boundaries ... ok
+test writer_core::inspect::tests::apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_does_not_strip_prefix_collisions ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_rejects_path_traversal ... ok
+test writer_core::inspect::summary_tests::summary_keeps_missing_and_malformed_media_degradation ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_fallback_and_assignment_variants ... ok
+test writer_core::note_revision::tests::note_revision_keeps_canonical_hashes_for_empty_wide_and_escaped_fields ... ok
+test writer_core::inspect::summary_tests::summary_keeps_signed_ordinals_orphan_cards_and_missing_decks ... ok
+test writer_core::staging::canonical_stream_tests::streamed_manifest_matches_the_previous_canonical_bytes_and_hash ... ok
+test writer_core::stream_zip::tests::final_bytes_match_the_existing_zip_writer_and_fingerprint ... ok
+test writer_core::inspect::summary_tests::summary_keeps_archive_sqlite_and_protobuf_errors ... ok
+test writer_core::inspect::summary_tests::summary_keeps_duplicate_notetype_metadata_ids_and_names ... ok
+test writer_core::stream_zip::tests::wrong_length_and_destination_errors_abort_writing ... ok
+test writer_core::inspect::summary_tests::summary_preserves_existing_duplicate_guid_and_ordinal_observations ... ok
+test writer_core::stream_zip::tests::large_zip_propagates_midstream_output_errors ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_arbitrary_strings ... ok
+test writer_core::note_revision::tests::note_revision_matches_previous_canonical_serialization ... ok
+test writer_core::inspect::summary_tests::summary_preserves_tolerated_note_content_and_identity_json ... ok
+test writer_core::stream_zip::tests::large_zip_keeps_exact_bytes_and_fingerprint_with_short_writes ... ok
+test writer_core::inspect::summary_tests::summary_decodes_unused_sqlite_columns_and_keeps_error_precedence ... ok
+test writer_core::stream_zip::tests::zip64_entry_count_is_readable_by_independent_zip_reader ... ok
+test runtime::embedded::tests::in_memory_defaults_validate_the_whole_manifest_and_asset_inventory ... ok
+test prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures ... ok
+
+test result: ok. 124 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s
+
+     Running tests/custom_notetype_api_tests.rs (target/debug/deps/custom_notetype_api_tests-88422efe61f1c863)
+
+running 4 tests
+test custom_notetype_builder_records_keys_and_identity_recipe ... ok
+test project_rejects_template_field_references_missing_from_notetype ... ok
+test project_validate_preserves_unknown_filter_as_a_warning ... ok
+test project_build_reports_each_template_warning_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/deck_project_facade_tests.rs (target/debug/deps/deck_project_facade_tests-557715dfbcd031de)
+
+running 7 tests
+test imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata ... ok
+test imported_deck_media_and_new_project_media_share_one_registry ... ok
+test project_from_deck_can_append_project_notes ... ok
+test project_from_deck_preserves_existing_image_occlusion_support ... ok
+test imported_deck_identity_provenance_survives_project_edits ... ok
+test imported_deck_keeps_duplicate_id_locations_after_clone ... ok
+test deck_build_matches_project_from_deck_for_stock_notes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/packaged_contract_tests.rs (target/debug/deps/packaged_contract_tests-02a0f8a69839c34b)
+
+running 1 test
+test packaged_crate_runs_the_supported_facade_with_embedded_contracts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/stable_facade_boundary_tests.rs (target/debug/deps/stable_facade_boundary_tests-be22ad7d694e27ec)
+
+running 3 tests
+test default_features_hide_project_normalization_ir ... ok
+test default_features_compile_the_documented_facade ... ok
+test default_features_hide_repository_internal_modules ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.74s
+
+    Checking anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Checking contract_tools v0.1.0 (/Users/hp/Desktop/2026/anki-forge/contract_tools)
+    Checking anki_forge_node_native v0.2.0 (/Users/hp/Desktop/2026/anki-forge/bindings/node/native)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.53s
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+   Compiling contract_tools v0.1.0 (/Users/hp/Desktop/2026/anki-forge/contract_tools)
+   Compiling anki_forge_node_native v0.2.0 (/Users/hp/Desktop/2026/anki-forge/bindings/node/native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.83s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-a11c4e58cbf9de9f)
+
+running 124 tests
+test authoring_core::template_parser::tests::reports_mismatched_section_names ... ok
+test authoring_core::template_parser::tests::parses_filters_and_balanced_sections ... ok
+test authoring_core::template_semantics::tests::static_front_is_always_generated ... ok
+test authoring_core::template_semantics::tests::runtime_metadata_special_fields_are_not_inferred_as_always_nonempty ... ok
+test authoring_core::template_semantics::tests::unconditional_visible_content_survives_inverted_sections ... ok
+test authoring_core::template_semantics::tests::inverted_only_visibility_is_not_always ... ok
+test authoring_core::template_semantics::tests::disjunction_of_conjunctions_is_unrepresentable ... ok
+test authoring_core::template_semantics::tests::positive_section_forms_an_all_requirement ... ok
+test authoring_core::template_semantics::tests::script_style_and_whitespace_entities_are_not_visible_static_content ... ok
+test authoring_core::template_semantics::tests::direct_fields_form_an_any_requirement ... ok
+test authoring_core::template_semantics::tests::media_attribute_depends_on_its_field ... ok
+test authoring_core::template_semantics::tests::declared_fields_take_precedence_over_runtime_metadata_names ... ok
+test deck::media::tests::media_source_dir_metadata_rejects_non_directory ... ok
+test prepared_media::payload::tests::empty_and_zero_budget_payloads_still_preserve_the_stream ... ok
+test prepared_media::tests::one_large_encoded_payload_uses_available_build_memory ... ok
+test product::content::tests::escape_html_escapes_text_once_in_source_order ... ok
+test prepared_media::payload::tests::idle_budget_is_shared_and_exhaustion_spills_without_losing_bytes ... ok
+test prepared_media::payload::tests::concurrent_payloads_share_the_bound_and_return_buffers ... ok
+test deck::media::tests::same_sha_registration_repairs_missing_raster_metadata ... ok
+test prepared_media::payload::tests::short_output_errors_and_panics_release_all_leases ... ok
+test product::lowering::owned_tests::owned_lowering_moves_html_allocations_into_authoring_fields ... ok
+test product::model::tests::non_string_product_version_records_transport_diagnostic ... ok
+test product::model::tests::unknown_field_content_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_generation_rule_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_media_source_kind_deserializes_into_v2_payload ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_custom_cloze_and_transport_diagnostics ... ok
+test product::model::tests::unsupported_string_product_version_records_transport_diagnostic ... ok
+test product::project::counts::tests::card_count_prefers_zero_card_inspect_result_over_fallback ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_duplicate_field_keys_names_and_notetype_resolution ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_diagnostic_order_and_partial_notes ... ok
+test product::project::tests::build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids ... ok
+test product::project::tests::duplicate_diagnostics_with_the_same_source_are_collapsed ... ok
+test product::project::tests::build_rejects_stock_collision_before_scanning_custom_template_media ... ok
+test product::project::tests::build_reports_duplicate_notetype_template_and_css_media_sources_by_index ... ok
+test product::project::tests::lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit ... ok
+test product::project::tests::lower_keeps_later_note_source_after_required_note_is_skipped ... ok
+test product::project::tests::lower_rejects_custom_notetype_stock_collision_before_authoring ... ok
+test product::project::tests::normalization_failure_diagnostics_include_lowering_diagnostics ... ok
+test product::project::tests::product_diagnostic_help_covers_actionable_media_storage_codes ... ok
+test product::project::tests::product_helper_wiring_lowering_diagnostics_map_to_errors ... ok
+test product::project::tests::lower_keeps_index_source_when_colliding_identity_note_is_skipped ... ok
+test product::project::tests::product_v2_normalize_preserves_unknown_media_source_path ... ok
+test product::project::tests::product_v2_normalize_preserves_required_field_source_path ... ok
+test product::project::tests::validate_still_reports_blank_stable_id_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_duplicate_stable_ids_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_implicit_stock_collision_for_internal_invalid_state ... ok
+test product::project::tests::writer_result_status_maps_to_typed_build_status ... ok
+test product::template_engine::tests::rejects_empty_render_and_section_fields ... ok
+test product::template_engine::tests::reports_unknown_fields_and_mismatched_sections ... ok
+test product::template_engine::tests::validates_fields_filters_and_balanced_sections ... ok
+test product::template_engine::tests::validates_multi_word_field_names_as_complete_names ... ok
+test product::project::tests::project_owned_lowering_preserves_invalid_partial_plan_and_diagnostics ... ok
+test deck::media::tests::file_registration_matches_inline_fingerprints_and_dimensions ... ok
+test product::project::tests::project_owned_lowering_preserves_canonical_fields_and_source_paths ... ok
+test prepared_media::tests::encoded_payload_spills_before_unbounded_growth_and_preserves_bytes ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_duplicate_and_conflicting_entries ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_links_and_gzip_corruption ... ok
+test runtime::schema::tests::load_schema_reuses_compiled_schema_for_the_same_path ... ok
+test writer_core::apkg::tests::apkg_media_size_accepts_uint32_max ... ok
+test writer_core::apkg::tests::apkg_media_size_rejects_values_above_uint32_range ... ok
+test product::project::atomic_output_tests::product_build_preserves_existing_target_when_replace_fails ... ok
+test writer_core::apkg::tests::collection_population_rolls_back_after_a_note_and_card_were_written ... ok
+test product::comparison::snapshot_tests::unreadable_baseline_stays_unavailable_after_a_file_appears ... ok
+test writer_core::apkg::tests::field_checksum_uses_stripped_first_field_text_for_html_boundaries ... ok
+test writer_core::apkg::tests::guid_plan_validation_keeps_assignments_and_exact_mismatch_errors ... ok
+test writer_core::apkg::tests::media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32 ... ok
+test writer_core::apkg::tests::storage_values_keep_field_order_sort_checksum_and_empty_values ... ok
+test writer_core::apkg::tests::embedded_upgrade_notice_matches_schema_generated_database ... ok
+test runtime::embedded::tests::in_memory_defaults_match_complete_path_runtime ... ok
+ZipWriter drop failed: Io(Os { code: 9, kind: Uncategorized, message: "Bad file descriptor" })test writer_core::apkg::tests::streamed_collection_propagates_input_and_output_io_errors ... ok
+test writer_core::apkg::tests::streamed_package_fingerprint_matches_byte_fingerprint ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_handles_anki_boundary_vectors ... ok
+test writer_core::apkg::tests::failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction ... ok
+test runtime::embedded::tests::in_memory_defaults_preserve_relative_path_resolution_inside_contracts ... ok
+test writer_core::apkg::tests::typed_writer_rejects_invalid_model_and_guid_plans_before_replacing_output ... ok
+test writer_core::build::tests::apkg_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::build::tests::apkg_non_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::card_plan::tests::anki_default_renders_nonempty_special_fields ... ok
+test writer_core::card_plan::tests::anki_default_uses_rendered_front_emptiness ... ok
+test writer_core::card_plan::tests::cloze_card_ords_are_distinct_sorted_and_zero_based ... ok
+test writer_core::card_plan::tests::malformed_and_zero_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::missing_cloze_ordinal_is_malformed_by_itself ... ok
+test writer_core::card_plan::tests::unclosed_and_nested_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::unrelated_mustache_text_starting_with_c_is_not_cloze ... ok
+test writer_core::deck_name::tests::human_names_use_native_separator_and_component_normalization ... ok
+test writer_core::deck_name::tests::registry_adds_each_parent_and_resolves_requested_leaf ... ok
+test writer_core::deck_name::tests::registry_keeps_parent_spellings_and_ids_independent_of_request_order ... ok
+test product::comparison::snapshot_tests::captured_baseline_survives_replacement_for_identity_and_diff ... ok
+test writer_core::apkg::tests::streamed_collection_keeps_compacted_sqlite_bytes_and_removes_its_tempfile ... ok
+test writer_core::inspect::summary_tests::interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest ... ok
+test writer_core::inspect::summary_tests::serial_media_hash_does_not_allocate_payload_buffers ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_never_panics ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_preserves_generated_media_attrs ... ok
+test writer_core::apkg::tests::streamed_collection_preserves_buffered_zip_bytes_across_block_boundaries ... ok
+test runtime::embedded::tests::in_memory_defaults_reject_invalid_policy_and_context ... ok
+test writer_core::inspect::summary_tests::media_hash_streams_bounded_blocks_and_resets_between_files ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_stock_custom_content_and_document_views ... ok
+test writer_core::inspect::summary_tests::summary_counts_mixed_notetypes_and_sparse_cloze_cards ... ok
+test writer_core::inspect::summary_tests::summary_distinguishes_negative_and_u32_max_ordinals_before_deduplication ... ok
+test writer_core::inspect::summary_tests::summary_enforces_identical_resource_limits_and_media_boundaries ... ok
+test writer_core::inspect::summary_tests::failed_current_summary_never_publishes_even_when_inspect_is_hidden ... ok
+test writer_core::inspect::summary_tests::summary_counts_actual_cards_with_sparse_ordinals_and_prefix_guids ... ok
+test writer_core::inspect::tests::apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_does_not_strip_prefix_collisions ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_rejects_path_traversal ... ok
+test writer_core::inspect::summary_tests::summary_keeps_missing_and_malformed_media_degradation ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_fallback_and_assignment_variants ... ok
+test writer_core::note_revision::tests::note_revision_keeps_canonical_hashes_for_empty_wide_and_escaped_fields ... ok
+test writer_core::inspect::summary_tests::summary_keeps_archive_sqlite_and_protobuf_errors ... ok
+test writer_core::staging::canonical_stream_tests::streamed_manifest_matches_the_previous_canonical_bytes_and_hash ... ok
+test writer_core::inspect::summary_tests::summary_keeps_duplicate_notetype_metadata_ids_and_names ... ok
+test writer_core::stream_zip::tests::final_bytes_match_the_existing_zip_writer_and_fingerprint ... ok
+test writer_core::stream_zip::tests::large_zip_propagates_midstream_output_errors ... ok
+test writer_core::stream_zip::tests::wrong_length_and_destination_errors_abort_writing ... ok
+test writer_core::inspect::summary_tests::summary_keeps_signed_ordinals_orphan_cards_and_missing_decks ... ok
+test writer_core::inspect::summary_tests::summary_preserves_existing_duplicate_guid_and_ordinal_observations ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_arbitrary_strings ... ok
+test writer_core::note_revision::tests::note_revision_matches_previous_canonical_serialization ... ok
+test writer_core::stream_zip::tests::large_zip_keeps_exact_bytes_and_fingerprint_with_short_writes ... ok
+test writer_core::inspect::summary_tests::summary_preserves_tolerated_note_content_and_identity_json ... ok
+test writer_core::inspect::summary_tests::summary_decodes_unused_sqlite_columns_and_keeps_error_precedence ... ok
+test writer_core::stream_zip::tests::zip64_entry_count_is_readable_by_independent_zip_reader ... ok
+test runtime::embedded::tests::in_memory_defaults_validate_the_whole_manifest_and_asset_inventory ... ok
+test prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures ... ok
+
+test result: ok. 124 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s
+
+     Running tests/apkg_inspect_limits_tests.rs (target/debug/deps/apkg_inspect_limits_tests-3094345445d47dc7)
+
+running 16 tests
+test default_inspection_rejects_oversized_meta_instead_of_degrading ... ok
+test limits_cover_archive_directory_map_and_outer_zip_entry ... ok
+test malformed_zip_and_truncated_frames_are_not_complete_observations ... ok
+test later_frames_and_skippable_frames_cannot_reset_budgets ... ok
+test concatenated_frames_share_budget_and_high_window_is_typed ... ok
+test rejects_advertised_entry_count_before_the_zip_index_is_allocated ... ok
+test media_map_entry_count_is_checked_before_payloads_are_opened ... ok
+test actual_zip_output_is_bounded_even_with_forged_small_sizes ... ok
+test zip64_footer_uses_validated_64_bit_counts ... ok
+test multiple_media_entries_share_both_cumulative_budgets ... ok
+test legacy_and_nested_zstd_media_enforce_exact_decoded_boundary ... ok
+test project_diff_with_limits_never_claims_complete_comparison ... ok
+test baseline_limits_reach_build_reports_in_every_update_mode ... ok
+test collection_boundary_preserves_observations_and_failure_preserves_publication ... ok
+test many_media_keep_cumulative_limits_and_recover_after_late_failure ... ok
+test many_media_keep_exact_hashes_across_small_and_streamed_payloads ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.68s
+
+     Running tests/artifact_lifecycle_tests.rs (target/debug/deps/artifact_lifecycle_tests-d7021b801131d5d6)
+
+running 5 tests
+test automatic_json_report_requires_a_persistent_artifact_destination ... ok
+test temporary_artifact_is_removed_only_after_the_last_owner_drops ... ok
+test failed_persistence_keeps_temporary_artifact_usable ... ok
+test published_temporary_artifact_is_owned_by_late_failure_reports ... ok
+test explicit_destinations_and_persisted_copies_survive_report_drop ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/authoring_core_media_ingest_tests.rs (target/debug/deps/authoring_core_media_ingest_tests-4604051b15e44f47)
+
+running 35 tests
+test authoring_media_path_source_serializes_without_payload ... ok
+test ingest_rejects_inline_base64_decode_failure ... ok
+test ingest_rejects_empty_path_source_as_unsafe ... ok
+test inline_base64_decode_diagnostic_has_readable_summary ... ok
+test ingest_rejects_dot_component_path_source_as_unsafe ... ok
+test ingest_rejects_helper_unsafe_desired_filenames ... ok
+test ingest_rejects_path_source_that_is_not_regular_file ... ok
+test normalize_options_default_policy_is_explicit ... ok
+test normalize_keeps_skipped_references_in_valid_output ... ok
+test normalize_drops_empty_skipped_references_from_valid_output ... ok
+test normalize_rejects_media_without_explicit_options ... ok
+test ingest_rejects_symlink_escape ... ok
+test high_confidence_sniff_conflicts_with_known_extension_mime ... ok
+test declared_mime_comparison_is_case_insensitive_for_type_and_subtype ... ok
+test ingest_path_source_writes_original_bytes_to_cas ... ok
+test normalize_reports_template_and_css_reference_diagnostics_with_paths_and_css_line ... ok
+test declared_mime_high_confidence_conflict_is_error ... ok
+test normalized_ir_serializes_media_objects_bindings_and_references ... ok
+test different_filenames_for_same_object_are_allowed_with_deduped_object_info ... ok
+test normalize_outputs_media_objects_bindings_and_resolved_references ... ok
+test oversized_path_source_is_rejected_before_final_cas_object_is_written ... ok
+test sort_media_bindings_orders_by_export_filename_then_id ... ok
+test sort_media_objects_orders_by_id ... ok
+test normalize_rejects_unused_media_bindings_when_policy_errors ... ok
+test sort_media_references_orders_by_owner_location_raw_kind_and_resolution ... ok
+test normalize_reports_missing_and_unsafe_references ... ok
+test normalize_preserves_successful_media_ingest_diagnostics ... ok
+test normalize_warns_about_unused_media_bindings_by_default ... ok
+test rejected_object_does_not_count_toward_total_unique_size_limit ... ok
+test same_export_filename_and_same_object_merges_binding_with_info ... ok
+test unknown_mime_and_size_limits_follow_policy ... ok
+test same_export_filename_and_different_object_is_conflict ... ok
+test known_extension_mime_is_used_when_sniff_is_low_confidence_text ... ok
+test total_unique_media_size_limit_is_enforced ... ok
+test normalize_scans_templates_browser_templates_and_css_references ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/authoring_core_media_io_tests.rs (target/debug/deps/authoring_core_media_io_tests-f149f52aedda7cae)
+
+running 12 tests
+test inline_decode_preflights_encoded_size_before_decode_allocation ... ok
+test sniff_mime_does_not_treat_text_prefixes_as_fonts ... ok
+test sniff_mime_recognizes_common_binary_media_formats ... ok
+test sniff_mime_keeps_json_like_text_as_plain_text ... ok
+test sniff_mime_limits_css_shape_detection_to_text_prefix ... ok
+test inline_decode_reports_base64_and_size_errors_before_cas_ingest ... ok
+test object_store_path_rejects_uppercase_hex ... ok
+test cas_write_failure_is_typed ... ok
+test source_read_failure_reports_source_path ... ok
+test concurrent_same_object_ingest_uses_unique_temp_files ... ok
+test corrupt_existing_cas_object_reports_integrity_error_and_cleans_temp_file ... ok
+test streams_file_source_to_cas_without_loading_payload_into_authoring_json ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/authoring_core_media_refs_tests.rs (target/debug/deps/authoring_core_media_refs_tests-c3755daf77fd0195)
+
+running 26 tests
+test css_url_malformed_candidate_does_not_consume_later_valid_url_token ... ok
+test css_url_malformed_quoted_candidate_does_not_rescan_inner_url_token ... ok
+test css_url_refs_ignore_block_comments ... ok
+test css_url_line_hints_preserve_stripped_html_comment_and_script_newlines ... ok
+test css_url_percent_decodes_helper_safe_local_paths ... ok
+test css_url_reports_opening_url_line ... ok
+test css_url_refs_scan_inline_style_attributes_without_scanning_script_text ... ok
+test css_url_refs_ignore_script_text_and_css_strings ... ok
+test css_url_refs_require_url_function_boundary ... ok
+test classifies_external_and_data_uri_as_skipped ... ok
+test css_url_scanning_ignores_url_text_inside_quoted_html_tag_attributes ... ok
+test css_url_skips_malformed_nested_candidates_and_continues ... ok
+test extracts_sound_html_object_and_css_refs ... ok
+test helper_unsafe_local_characters_are_unsafe ... ok
+test html_attrs_ignore_fake_refs_inside_quoted_attribute_values ... ok
+test html_and_css_url_whitespace_is_helper_unsafe_but_empty_refs_skip ... ok
+test html_refs_handle_entities_case_unquoted_attributes_and_comments ... ok
+test html_src_refs_ignore_tag_like_text_inside_raw_text_elements ... ok
+test html_src_refs_only_scan_tag_attributes ... ok
+test incomplete_unquoted_css_url_does_not_consume_later_valid_url ... ok
+test invalid_percent_escapes_are_unsafe ... ok
+test percent_decodes_local_url_path_and_rejects_decoded_unsafe_paths ... ok
+test sound_refs_do_not_use_url_percent_decoding ... ok
+test query_fragment_only_refs_are_skipped_and_dot_paths_are_unsafe ... ok
+test unclosed_html_attribute_quotes_are_skipped_without_aborting_other_ref_forms ... ok
+test unquoted_css_url_wrapper_whitespace_is_trimmed_but_empty_refs_skip ... ok
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_normalization_pipeline_tests.rs (target/debug/deps/authoring_core_normalization_pipeline_tests-261a2446cf65afe5)
+
+running 18 tests
+test duplicate_notetype_ids_return_invalid_result ... ok
+test missing_document_id_returns_invalid_result_with_diagnostics ... ok
+test external_override_missing_external_id_is_invalid ... ok
+test random_override_missing_reason_code_is_invalid_with_reason_code_diagnostic ... ok
+test first_invalid_note_wins_before_media_ingestion ... ok
+test missing_reason_code_for_override_is_invalid ... ok
+test success_returns_normalized_ir_and_contract_envelope_keys ... ok
+test cloze_authoring_input_expands_to_source_grounded_cloze_template ... ok
+test random_override_emits_warning_success_and_random_identity_prefix ... ok
+test basic_authoring_input_expands_to_resolved_basic_notetype ... ok
+test success_with_comparison_context_preserves_risk_policy_ref ... ok
+test success_without_comparison_context_serializes_null_comparison_and_merge_report ... ok
+test unexpected_extra_field_on_stock_note_returns_invalid_result ... ok
+test unknown_notetype_id_returns_invalid_result ... ok
+test unmatched_target_selector_is_invalid ... ok
+test mixed_note_fields_and_tags_survive_success_and_media_reference_failure ... ok
+test explicit_lowered_notetype_identities_and_io_config_survive_normalization ... ok
+test image_occlusion_lane_uses_source_grounded_fields_and_css ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/authoring_core_risk_tests.rs (target/debug/deps/authoring_core_risk_tests-dad5bf8fb1579968)
+
+running 5 tests
+test strict_with_normalized_baseline_is_complete ... ok
+test no_comparison_context_yields_no_merge_risk_report ... ok
+test best_effort_identity_index_is_partial_with_identity_only_reason ... ok
+test strict_with_empty_baseline_fingerprint_is_unavailable ... ok
+test invalid_result_with_comparison_context_keeps_merge_risk_report_non_null ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_selector_tests.rs (target/debug/deps/authoring_core_selector_tests-a7ba0d3fb1cb42dc)
+
+running 8 tests
+test kind_only_selector_is_rejected ... ok
+test chained_predicate_blocks_are_rejected ... ok
+test rejects_array_index_segments ... ok
+test accepts_kind_with_predicates ... ok
+test resolver_returns_ambiguous_for_multiple_matches ... ok
+test quoted_bracket_digits_are_not_treated_as_array_index ... ok
+test resolver_returns_unmatched_for_zero_matches ... ok
+test accepts_slash_inside_quoted_value ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/baseline_publication_tests.rs (target/debug/deps/baseline_publication_tests-b9ac3e9604038745)
+
+running 31 tests
+test baseline_inside_writable_staging_tree_is_rejected ... ok
+test hard_link_baseline_alias_is_rejected ... ok
+test baseline_cannot_escape_writable_staging_through_a_symlink ... ok
+test lockfile_temporary_name_cannot_remove_the_published_apkg ... ok
+test candidate_workspace_failure_preserves_existing_published_files ... ok
+test lockfile_writer_cannot_overwrite_baseline_in_disabled_mode ... ok
+test lockfile_temporary_name_cannot_modify_the_comparison_baseline ... ok
+test distinct_outputs_publish_after_comparison_and_update_report_paths ... ok
+test lockfile_temporary_symlink_cannot_modify_the_comparison_baseline ... ok
+test implicit_package_cannot_replace_baseline_even_with_separate_output ... ok
+test parent_directory_baseline_alias_is_rejected ... ok
+test lockfile_temporary_hard_link_cannot_modify_the_comparison_baseline ... ok
+test path_collision_is_reported_before_normalization_and_safe_report_is_written ... ok
+test relative_and_absolute_baseline_aliases_are_rejected ... ok
+test policy_block_does_not_create_an_implicit_package ... ok
+test report_json_cannot_overwrite_baseline_even_on_early_failure ... ok
+test staging_manifest_symlink_cannot_overwrite_external_baseline ... ok
+test parent_components_can_select_a_baseline_outside_staging ... ok
+test staging_manifest_hard_link_cannot_overwrite_external_baseline ... ok
+test new_case_variant_lockfile_never_replaces_the_published_apkg ... ok
+test new_case_variant_report_never_overwrites_a_published_file ... ok
+test policy_block_preserves_output_package_and_identity_lockfile ... ok
+test output_cannot_replace_comparison_baseline_in_any_update_mode ... ok
+test staging_media_cannot_replace_output_before_the_policy_gate ... ok
+test symlink_baseline_aliases_are_rejected_in_both_directions ... ok
+test symlinked_parent_directory_alias_is_rejected ... ok
+test unverifiable_dangling_symlink_fails_before_writes ... ok
+test staging_media_cannot_replace_package_alias_before_the_policy_gate ... ok
+test staging_media_directory_alias_cannot_replace_an_external_output ... ok
+test staging_media_cannot_replace_read_only_lockfile_before_the_policy_gate ... ok
+test staging_media_cannot_replace_writable_lockfile_before_the_policy_gate ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+     Running tests/build_report_tests.rs (target/debug/deps/build_report_tests-d3c3db7a077c52b8)
+
+running 17 tests
+test build_report_ensure_success_accepts_successful_artifact ... ok
+test build_report_projection_has_phase4_contract_header ... ok
+test build_report_ensure_success_accepts_warning_diagnostics ... ok
+test build_report_ensure_success_rejects_error_diagnostic ... ok
+test build_report_can_carry_update_safety_summary ... ok
+test build_report_ensure_success_prefers_diagnostics_over_missing_artifact ... ok
+test build_error_without_diagnostics_uses_stable_cause_code ... ok
+test build_report_pretty_report_prints_media_rows_and_sorted_diagnostics ... ok
+test build_report_ensure_success_uses_status_precedence_over_policy_status ... ok
+test build_status_precedence_prefers_error_over_invalid_blocked_success ... ok
+test comparison_status_serializes_as_snake_case ... ok
+test build_report_projection_serializes_duration_as_milliseconds ... ok
+test build_report_projection_serializes_diagnostics_as_strings ... ok
+test policy_blocks_at_or_above_threshold ... ok
+test policy_passes_below_threshold ... ok
+test risk_level_order_matches_fail_on_thresholds ... ok
+test write_report_json_atomic_preserves_unrelated_tmp_sibling ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/custom_merge_id_snapshot_tests.rs (target/debug/deps/custom_merge_id_snapshot_tests-5392e1ae7f00b0ff)
+
+running 8 tests
+test stable_config_id_snapshot_values_do_not_drift ... ok
+test custom_notetype_rejects_duplicate_field_keys ... ok
+test custom_notetype_rejects_cloze_generation_rule ... ok
+test custom_notetype_rejects_duplicate_template_keys ... ok
+test custom_any_generation_rule_renders_front_at_most_once ... ok
+test custom_notetype_lowers_keys_to_config_ids ... ok
+test custom_note_visible_field_value_wins_over_duplicate_stable_key ... ok
+test custom_note_field_names_take_precedence_over_field_keys ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/custom_notetype_api_tests.rs (target/debug/deps/custom_notetype_api_tests-24e889fe6f3493bc)
+
+running 4 tests
+test custom_notetype_builder_records_keys_and_identity_recipe ... ok
+test project_rejects_template_field_references_missing_from_notetype ... ok
+test project_validate_preserves_unknown_filter_as_a_warning ... ok
+test project_build_reports_each_template_warning_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/custom_template_entry_parity_tests.rs (target/debug/deps/custom_template_entry_parity_tests-55ca3209d65ac7ac)
+
+running 2 tests
+test custom_normal_is_equivalent_across_project_bundle_and_product_v3 ... ok
+test custom_cloze_is_equivalent_across_project_bundle_and_product_v3 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/deck_export_tests.rs (target/debug/deps/deck_export_tests-33c3f97b4d37cc86)
+
+running 14 tests
+test deck_basic_flow_example_shape_matches_the_public_happy_path ... ok
+test deck_build_rejects_preexisting_media_input_target_symlink ... ok
+test deck_build_reports_invalid_deserialized_deck_validation ... ok
+test deck_export_rejects_invalid_deserialized_deck_during_bytes_export ... ok
+test deck_build_uses_cas_media_without_normalized_base64_payload ... ok
+test deck_build_keeps_file_media_path_backed_until_normalize ... ok
+test package_retries_after_media_failure_without_leaving_input_copies ... ok
+test deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths ... ok
+test package_repeated_builds_keep_file_media ... ok
+test package_rebuild_accepts_newly_registered_media_content ... ok
+test package_result_retains_its_inspection_limits_for_later_reads ... ok
+test package_build_limits_are_explicit_and_block_publication_until_raised ... ok
+test package_single_with_stable_id_keeps_root_deck_and_changes_export_identity ... ok
+test package_single_export_surfaces_support_bytes_and_package_stable_id ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+     Running tests/deck_identity_contract_tests.rs (target/debug/deps/deck_identity_contract_tests-d2e2c20433963794)
+
+running 39 tests
+test basic_note_override_selecting_front_and_back_sets_override_snapshot ... ok
+test basic_deck_policy_selecting_back_changes_canonical_payload ... ok
+test basic_front_only_contract_case_matches_expected_output ... ok
+test basic_identity_normalizes_unicode_and_newlines ... ok
+test basic_identity_keeps_leading_and_trailing_whitespace_significant ... ok
+test cloze_boundary_whitespace_changes_identity ... ok
+test cloze_hint_change_does_not_change_identity ... ok
+test cloze_ordinal_zero_reports_invalid_ordinal ... ok
+test cross_notetype_same_visible_text_produces_different_afids ... ok
+test cloze_malformed_contract_case_reports_expected_error_code ... ok
+test empty_cloze_body_reports_malformed ... ok
+test cloze_hint_ignored_contract_case_matches_expected_output ... ok
+test explicit_generated_prefix_is_preserved_as_explicit_stable_id ... ok
+test duplicate_inferred_cloze_identity_payload_fails_at_add_time ... ok
+test inferred_basic_note_uses_afid_instead_of_generated_id ... ok
+test inferred_duplicate_payload_is_error ... ok
+test invalid_raster_without_dimensions_fails_identity_resolution ... ok
+test cloze_whitespace_significant_contract_case_matches_expected_output ... ok
+test io_order_insensitive_fixture_input_is_not_already_canonical ... ok
+test io_duplicate_rect_fails_identity_resolution ... ok
+test io_out_of_bounds_rect_fails_identity_resolution ... ok
+test io_rect_touching_image_right_and_bottom_bounds_is_accepted ... ok
+test io_order_insensitive_contract_case_matches_expected_output ... ok
+test io_mask_order_does_not_change_identity ... ok
+test io_deserialized_png_media_without_raster_metadata_backfills_dimensions ... ok
+test io_zero_sized_rect_fails_identity_resolution ... ok
+test malformed_cloze_reports_afid_error ... ok
+test io_translation_different_contract_case_matches_expected_output ... ok
+test nested_cloze_reports_explicit_unsupported_error ... ok
+test literal_cloze_marker_positions_do_not_collide_with_deletion_positions ... ok
+test io_translation_changes_identity ... ok
+test literal_c_like_braces_are_not_treated_as_malformed_cloze ... ok
+test new_default_note_no_longer_uses_generated_id ... ok
+test overlapping_literal_c_prefix_does_not_hide_valid_cloze_start ... ok
+test repeated_cloze_ordinals_are_allowed_and_slot_ordered ... ok
+test unicode_and_newline_normalization_are_stable ... ok
+test bundled_catalog_declares_all_note_identity_cases ... ok
+test all_cataloged_note_identity_fixtures_exist_and_parse ... ok
+test all_cataloged_note_identity_fixtures_match_resolver_output ... ok
+
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/deck_identity_roundtrip_tests.rs (target/debug/deps/deck_identity_roundtrip_tests-d9d510806518641f)
+
+running 15 tests
+test identity_provenance_uses_snake_case_wire_names ... ok
+test forged_explicit_provenance_on_afid_note_fails_to_deserialize ... ok
+test incomplete_inferred_snapshot_fails_to_deserialize ... ok
+test explicit_provenance_cannot_claim_reserved_afid_namespace ... ok
+test inferred_afid_without_snapshot_fails_to_deserialize ... ok
+test inferred_snapshot_with_empty_canonical_payload_fails_to_deserialize ... ok
+test legacy_explicit_stable_id_cannot_claim_reserved_afid_namespace ... ok
+test legacy_explicit_duplicate_without_snapshots_fails_to_deserialize ... ok
+test inferred_snapshot_with_blank_recipe_id_fails_to_deserialize ... ok
+test legacy_duplicate_plain_ids_fail_to_deserialize ... ok
+test inferred_collision_fails_to_deserialize ... ok
+test load_time_duplicate_payload_is_classified ... ok
+test load_time_snapshot_hash_mismatch_is_rejected ... ok
+test snapshot_note_id_mismatch_fails_to_deserialize ... ok
+test roundtrip_preserves_explicit_identity_snapshot_and_duplicate_detection ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/deck_lowering_tests.rs (target/debug/deps/deck_lowering_tests-bd4edc3be70ba30d)
+
+running 2 tests
+test public_lower_authoring_inlines_file_media_without_hidden_base_dir ... ok
+test deck_lowers_notes_in_original_mixed_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/deck_model_tests.rs (target/debug/deps/deck_model_tests-18b3188a0a228822)
+
+running 18 tests
+test deck_builder_treats_blank_stable_id_as_none ... ok
+test deck_builder_stores_canonicalized_typed_identity_fields ... ok
+test deck_add_rejects_blank_stable_id ... ok
+test blank_basic_identity_override_reason_returns_coded_error ... ok
+test deck_add_rejects_reserved_afid_explicit_stable_id ... ok
+test default_deck_identity_policy_is_not_serialized ... ok
+test empty_basic_identity_selection_returns_coded_error ... ok
+test deserializing_empty_basic_identity_selection_returns_coded_error ... ok
+test deck_add_rejects_duplicate_stable_id ... ok
+test note_level_identity_override_is_constructed_atomically ... ok
+test deserializing_basic_identity_selection_canonicalizes_fields ... ok
+test deck_add_preserves_mixed_note_order ... ok
+test package_single_can_override_package_stable_id_without_changing_root_deck ... ok
+test package_with_stable_id_treats_blank_stable_id_as_none ... ok
+test deserializing_blank_basic_identity_override_reason_returns_coded_error ... ok
+test typed_identity_override_uses_stable_wire_names ... ok
+test basic_lane_sets_identity_override ... ok
+test deck_add_infers_image_occlusion_afid_even_when_generated_like_id_exists ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/deck_project_facade_tests.rs (target/debug/deps/deck_project_facade_tests-218debc81accb4b8)
+
+running 7 tests
+test imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata ... ok
+test project_from_deck_can_append_project_notes ... ok
+test project_from_deck_preserves_existing_image_occlusion_support ... ok
+test imported_deck_media_and_new_project_media_share_one_registry ... ok
+test imported_deck_identity_provenance_survives_project_edits ... ok
+test imported_deck_keeps_duplicate_id_locations_after_clone ... ok
+test deck_build_matches_project_from_deck_for_stock_notes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/deck_validation_tests.rs (target/debug/deps/deck_validation_tests-fc76855547209446)
+
+running 18 tests
+test blank_explicit_stable_id_fails_at_add_time ... ok
+test add_time_rejects_forged_unknown_media_ref ... ok
+test legacy_generated_note_still_deserializes_and_reports_warning ... ok
+test cloze_lane_sugar_adds_note_with_metadata ... ok
+test deserializing_duplicate_stable_id_even_when_one_note_is_generated_fails ... ok
+test image_occlusion_without_rects_fails_at_add_time ... ok
+test image_occlusion_lane_accepts_tags ... ok
+test media_registry_rejects_helper_unsafe_names_at_add_time ... ok
+test media_registry_rejects_pathlike_names_at_add_time ... ok
+test media_registry_reuses_same_name_same_content_and_rejects_conflicts ... ok
+test add_basic_infers_afid_and_validate_report_does_not_warn ... ok
+test image_occlusion_lane_requires_rect_at_add_time_and_accepts_rects ... ok
+test note_level_override_emits_warning_diagnostic ... ok
+test legacy_inline_media_shape_deserializes_as_self_contained_media ... ok
+test validate_report_detects_blank_stable_id_from_deserialized_note ... ok
+test validate_report_detects_empty_image_occlusion_geometry_and_validate_errors ... ok
+test validate_report_detects_unknown_media_ref_from_deserialized_note ... ok
+test validation_code_catalog_includes_note_identity_codes ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error_code_tests.rs (target/debug/deps/error_code_tests-36734b7da9e629b2)
+
+running 16 tests
+test afid_blank_stable_id_maps_to_stable_id_blank_error_code ... ok
+test blank_identity_override_reason_error_has_stable_code ... ok
+test empty_identity_selection_error_has_stable_code ... ok
+test blank_stable_id_error_has_stable_code ... ok
+test product_media_builder_errors_have_stable_codes ... ok
+test product_validation_report_ensure_success_allows_warning_only_reports ... ok
+test product_validation_report_ensure_success_returns_typed_error ... ok
+test project_add_error_is_send_sync_static_for_anyhow_downcast ... ok
+test reserved_afid_namespace_error_has_stable_code ... ok
+test deck_media_unsafe_filename_error_has_stable_code ... ok
+test product_lowering_errors_are_downcastable_from_anyhow ... ok
+test image_occlusion_empty_masks_error_has_stable_code ... ok
+test image_occlusion_rect_out_of_bounds_error_has_stable_code ... ok
+test deck_validate_error_preserves_diagnostic_code ... ok
+test product_add_error_exposes_stable_code_and_downcasts_from_anyhow ... ok
+test product_lower_media_source_changed_errors_have_stable_codes ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/media_export_optimization_tests.rs (target/debug/deps/media_export_optimization_tests-eaa4f1cdbaecfa45)
+
+running 4 tests
+test individual_file_registration_rejects_content_conflicts_immediately ... ok
+test concurrent_builds_keep_their_media_and_output_independent ... ok
+test parallel_source_failure_preserves_output_and_allows_retry ... ok
+test direct_media_matches_persistent_cas_and_keeps_inspect_artifacts ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+
+     Running tests/packaged_contract_tests.rs (target/debug/deps/packaged_contract_tests-c335c0a51e65e272)
+
+running 1 test
+test packaged_crate_runs_the_supported_facade_with_embedded_contracts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/phase4_comparison_tests.rs (target/debug/deps/phase4_comparison_tests-34960a9ced8a7383)
+
+running 3 tests
+test comparison_assembler_reports_current_unavailable_without_baseline_risk ... ok
+test comparison_assembler_reports_unavailable_baseline ... ok
+test comparison_assembler_compares_two_built_apkgs ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/phase4_diff_risk_model_tests.rs (target/debug/deps/phase4_diff_risk_model_tests-c8687a16665dcd65)
+
+running 7 tests
+test writer_diff_summary_maps_real_counts_metadata_diff_to_card_count_risk ... ok
+test writer_diff_summary_maps_template_modified_ord_evidence_to_reorder_risk ... ok
+test writer_diff_summary_maps_template_removal_to_semantic_risk ... ok
+test import_risk_report_computes_highest_level ... ok
+test writer_diff_summary_does_not_map_generic_template_modified_diff_to_reorder_risk ... ok
+test diff_summary_counts_artifact_and_semantic_changes ... ok
+test project_diff_report_roundtrips_through_json ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase4_product_build_tests.rs (target/debug/deps/phase4_product_build_tests-c4ee7cebb27c3a40)
+
+running 10 tests
+test product_build_unreadable_baseline_returns_invalid_report_with_risk ... ok
+test product_build_strict_update_diagnostics_attach_risk_and_policy ... ok
+test product_build_report_json_writes_invalid_baseline_report ... ok
+test product_build_report_json_write_failure_returns_io_error_report ... ok
+test project_diff_against_apkg_unreadable_baseline_returns_invalid_report ... ok
+test product_build_report_json_writes_success_report ... ok
+test oracle_template_removed_emits_critical_risk_with_evidence ... ok
+test product_build_compare_to_attaches_diff_risk_and_policy ... ok
+test oracle_template_reorder_emits_high_risk_with_evidence ... ok
+test project_diff_against_apkg_matches_build_comparison_sections ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/phase4_risk_rules_tests.rs (target/debug/deps/phase4_risk_rules_tests-7b4e3f8650485c4c)
+
+running 12 tests
+test baseline_unavailable_emits_high_risk ... ok
+test notetype_config_id_drift_preserves_diagnostic_source ... ok
+test field_removal_keeps_unmatched_and_diff_only_evidence_separate ... ok
+test broken_media_reference_emits_high_risk_without_baseline ... ok
+test guid_drift_preserves_diagnostic_source ... ok
+test template_ord_changed_does_not_attach_unrelated_template_artifact_diff ... ok
+test template_ord_changed_attaches_matching_template_artifact_diff ... ok
+test rejected_apkg_has_one_diagnostic_backed_risk_regardless_of_comparison_status ... ok
+test template_ord_changed_keeps_unmatched_semantic_reorder_separate ... ok
+test template_ord_changed_merges_semantic_evidence_without_duplicate_reorder_findings ... ok
+test template_ord_changed_preserves_source_and_only_skips_own_config_id_drift ... ok
+test template_removed_emits_critical_and_promotes_card_count ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/product_bundler_tests.rs (target/debug/deps/product_bundler_tests-7c8f4f2e6b4a561e)
+
+running 4 tests
+test inline_font_asset_lowering_escapes_css_literals ... ok
+test inline_font_asset_source_map_resolves_actual_authoring_media_id ... ok
+test inline_font_asset_lowers_to_media_and_font_face_css ... ok
+test font_binding_resolves_namespaced_asset_and_reports_missing_bindings ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/product_helper_tests.rs (target/debug/deps/product_helper_tests-7aa2da61c566328f)
+
+running 2 tests
+test back_extra_panel_helper_rejects_basic_note_types ... ok
+test answer_divider_helper_injects_a_named_divider_into_basic_answer_template ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/product_lowering_tests.rs (target/debug/deps/product_lowering_tests-f209fc99ab3fdff5)
+
+running 49 tests
+test product_default_deck_does_not_overwrite_explicit_note_deck ... ok
+test legacy_custom_cloze_rejects_multiple_templates ... ok
+test basic_product_document_lowers_to_authoring_ir_with_mapping_evidence ... ok
+test image_occlusion_missing_image_emits_product_diagnostic ... ok
+test cloze_and_image_occlusion_lanes_lower_to_stock_compatible_authoring_shapes ... ok
+test custom_escape_hatch_lowers_to_explicit_authoring_normal_notetype_shape ... ok
+test product_lowering_records_note_template_css_and_media_source_paths ... ok
+test duplicate_notetype_ids_use_index_source_paths_for_template_browser_and_css_surfaces ... ok
+test product_v2_basic_lowers_to_authoring_fields_and_stock_identity ... ok
+test product_v2_custom_identity_unknown_field_is_diagnostic ... ok
+test product_v2_custom_missing_optional_field_still_lowers_empty ... ok
+test product_v2_custom_note_field_source_paths_use_product_keys ... ok
+test product_v2_custom_note_missing_required_field_is_diagnostic ... ok
+test product_v2_custom_note_unknown_field_is_diagnostic ... ok
+test product_v2_custom_reorder_preserves_config_ids_and_updates_ords ... ok
+test product_v2_custom_required_render_failure_does_not_report_required_missing ... ok
+test product_v2_custom_sort_flag_is_preserved_on_lowered_authoring_field ... ok
+test product_v2_duplicate_generation_fields_remain_compatible ... ok
+test product_v2_empty_generation_rule_fields_are_diagnostic ... ok
+test product_v2_generation_rule_lowers_to_writer_requirement_metadata ... ok
+test product_v2_generation_rule_unknown_field_is_diagnostic ... ok
+test product_v2_image_content_renders_like_builder_media_ref ... ok
+test product_v2_build_surfaces_unknown_cloze_stock_field_source_path ... ok
+test product_v2_sound_content_renders_real_anki_sound_markup ... ok
+test product_v2_source_path_mixed_notes_use_absolute_indexes ... ok
+test product_v2_stock_basic_missing_front_is_required_field_diagnostic ... ok
+test product_v2_normalization_uses_export_extension_mime_without_declared_mime ... ok
+test product_v2_stock_basic_without_stable_id_derives_identity ... ok
+test product_v2_stock_cloze_missing_optional_back_extra_still_lowers ... ok
+test product_v2_stock_basic_missing_optional_back_still_lowers ... ok
+test product_v2_stock_cloze_missing_text_is_required_field_diagnostic ... ok
+test product_v2_stock_image_occlusion_lowers_to_authoring_fields ... ok
+test product_v2_build_surfaces_required_field_source_path ... ok
+test product_v2_stock_image_occlusion_missing_required_field ... ok
+test product_v2_build_surfaces_unknown_basic_stock_field_source_path ... ok
+test product_v2_stock_image_occlusion_unknown_field_source_path ... ok
+test product_v2_stock_image_occlusion_typed_image_resolves_media ... ok
+test product_v2_stock_note_without_declaration_is_diagnostic ... ok
+test product_v2_stock_image_occlusion_without_stable_id_is_identity_missing ... ok
+test product_v2_unknown_stock_notetype_is_diagnostic_not_basic_lowering ... ok
+test product_v2_build_surfaces_custom_unknown_field_source_path ... ok
+test product_v2_stock_notetype_order_is_semantic_not_positional ... ok
+test rust_product_media_registry_declares_expanded_mime_types_from_export_name ... ok
+test product_v2_build_surfaces_missing_media_field_source_path ... ok
+test product_v2_build_surfaces_stock_missing_notetype_source_path ... ok
+test product_v2_build_surfaces_unknown_media_source_product_diagnostic ... ok
+test product_v2_workspace_runtime_prerequisite_is_available ... ok
+test product_v2_basic_identity_matches_builder_stock_recipe ... ok
+test product_v2_custom_identity_matches_builder_product_recipe ... ok
+
+test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/product_model_tests.rs (target/debug/deps/product_model_tests-9ab2b3cb38b92a60)
+
+running 11 tests
+test stock_constants_match_default_notetype_ids ... ok
+test stock_image_occlusion_helper_renders_hide_one_guess_one_markup ... ok
+test legacy_stock_builders_remain_usable_without_tags ... ok
+test product_document_registers_a_basic_notetype ... ok
+test stock_builders_capture_tags_on_notes ... ok
+test stock_image_occlusion_helper_renders_rect_markup ... ok
+test stock_image_occlusion_helper_rejects_empty_rects ... ok
+test legacy_unversioned_product_document_still_deserializes ... ok
+test product_v2_unknown_stock_notetype_is_not_exposed_as_basic_in_compat_view ... ok
+test product_v2_basic_fixture_deserializes ... ok
+test product_v2_custom_typed_media_fixture_deserializes ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/product_pipeline_tests.rs (target/debug/deps/product_pipeline_tests-9e0c4ecef086922e)
+
+running 1 test
+test browser_appearance_and_template_target_deck_survive_lower_normalize_and_build ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/product_portability_tests.rs (target/debug/deps/product_portability_tests-bb8a8b1a3f7152cb)
+
+running 2 tests
+test product_cases_can_be_loaded_from_data_fixtures_and_lowered ... ok
+test io_font_bundle_case_can_be_loaded_from_data_fixtures_and_lowered ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/product_v3_tests.rs (target/debug/deps/product_v3_tests-27dac82a436cb707)
+
+running 10 tests
+test product_v3_rejects_cloze_rule_on_normal_custom_notetype ... ok
+test product_v3_validates_browser_template_fields ... ok
+test product_v2_custom_cloze_generation_rule_requires_product_v3 ... ok
+test product_v3_rejects_unknown_template_field_before_writing_apkg ... ok
+test product_v3_rejects_duplicate_generation_rule_fields ... ok
+test product_v3_rejects_incomplete_or_unknown_custom_notetype_kinds ... ok
+test product_v3_unknown_filter_builds_with_a_structured_warning ... ok
+test product_v2_does_not_silently_enable_custom_cloze_semantics ... ok
+test product_v3_custom_cloze_builds_through_product_build_pipeline ... ok
+test product_v3_preserves_browser_templates_and_target_deck ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/project_api_tests.rs (target/debug/deps/project_api_tests-3994e1e5eafe42c8)
+
+running 56 tests
+test note_html_constructor_preserves_raw_html ... ok
+test note_basic_constructor_uses_stock_basic_fields ... ok
+test note_image_occlusion_builder_rejects_blank_stable_id ... ok
+test note_image_occlusion_builder_requires_stable_id ... ok
+test note_image_occlusion_builder_rejects_bad_rects ... ok
+test note_image_occlusion_builder_accumulates_rects_and_renders_fields ... ok
+test project_add_note_rejects_blank_note_type_id ... ok
+test project_add_note_prioritizes_blank_note_type_id_before_blank_stable_id ... ok
+test project_add_note_rejects_custom_note_without_stable_id_or_identity_recipe ... ok
+test project_add_note_rejects_note_identity_override_unknown_field_key ... ok
+test project_add_note_rejects_unknown_stock_field_key_case_sensitively ... ok
+test project_add_note_rejects_unknown_custom_field_key ... ok
+test project_add_note_rejects_unsupported_note_type ... ok
+test project_add_notetype_allows_missing_identity_recipe_and_validate_warns ... ok
+test project_add_notetype_prioritizes_reserved_stock_id_before_field_errors ... ok
+test project_add_notetype_rejects_custom_image_occlusion_reserved_stock_id ... ok
+test project_add_note_rejects_blank_stable_id_without_mutating_project ... ok
+test project_add_note_accepts_custom_note_with_explicit_stable_id_without_notetype_identity ... ok
+test project_add_notetype_rejects_duplicate_field_key ... ok
+test deck_backed_project_lower_maps_note_fields_to_deck_note_index_source ... ok
+test project_add_notetype_rejects_duplicate_field_name ... ok
+test project_add_notetype_rejects_duplicate_custom_id_without_mutating_project ... ok
+test project_add_notetype_rejects_blank_id_without_mutating_project ... ok
+test project_add_notetype_rejects_duplicate_sort_field ... ok
+test project_add_notetype_rejects_identity_recipe_unknown_field_key ... ok
+test project_add_notetype_rejects_reserved_stock_id ... ok
+test project_add_notetype_rejects_template_rule_unknown_field_key ... ok
+test project_add_note_rejects_duplicate_stable_id_without_mutating_project ... ok
+test project_add_notetype_rejects_duplicate_template_key ... ok
+test project_add_notetype_rejects_duplicate_template_name_without_mutating_project ... ok
+test deck_backed_project_maps_missing_media_reference_to_deck_note_index_source ... ok
+test project_build_explains_missing_css_import_media_reference ... ok
+test project_add_note_keeps_duplicate_location_after_clone_and_failed_adds ... ok
+test project_build_maps_missing_css_media_reference_to_product_css_source ... ok
+test project_build_maps_custom_note_field_diagnostic_to_product_field_key ... ok
+test project_build_maps_missing_inline_style_media_reference_to_note_field_source ... ok
+test media_policy_does_not_demote_missing_or_unsafe_references ... ok
+test project_build_maps_missing_media_reference_to_index_source_for_generated_note_ids ... ok
+test project_build_maps_missing_media_reference_to_stable_note_field_source ... ok
+test project_build_maps_missing_template_media_reference_to_product_template_source ... ok
+test project_build_maps_unsafe_media_reference_to_product_note_field_source_and_help ... ok
+test project_image_occlusion_builder_missing_stable_id_fails_before_project_add_note ... ok
+test project_build_preserves_normalization_diagnostics_on_invalid_output ... ok
+test project_image_occlusion_lower_matches_deck_product_shape ... ok
+test project_raw_image_occlusion_without_stable_id_keeps_generated_fallback ... ok
+test project_validate_accepts_stock_image_occlusion ... ok
+test project_normalize_basic_note_returns_normalized_ir ... ok
+test project_validate_warns_for_auto_derived_custom_field_key ... ok
+test project_image_occlusion_cross_project_media_reports_missing_reference ... ok
+test project_build_missing_and_unsafe_refs_fail_in_normalization_not_writer ... ok
+test project_basic_note_writes_apkg_and_returns_report ... ok
+test project_cloze_card_count_fallback_counts_distinct_ords_when_inspect_disabled ... ok
+test project_image_occlusion_build_writes_apkg ... ok
+test project_build_accepts_custom_inputs_after_lowering_lands ... ok
+test product_document_builds_directly_without_project_authoring_state ... ok
+test project_build_uses_normalization_skips_for_non_packaged_media_refs ... ok
+
+test result: ok. 56 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/project_media_api_tests.rs (target/debug/deps/project_media_api_tests-7ac02b3ab705a8ad)
+
+running 38 tests
+test declared_mime_mismatch_policy_rejects_ignore_and_info_behaviors ... ok
+test media_export_names_reject_helper_unsafe_characters ... ok
+test add_bytes_and_add_file_reject_zero_byte_sources ... ok
+test add_bytes_validates_source_label_without_filename_rules ... ok
+test add_bytes_rejects_oversized_inline_payload_immediately ... ok
+test failed_export_does_not_mutate_registry ... ok
+test export_as_reuses_same_filename_for_same_content_and_conflicts_for_different_content ... ok
+test product_build_reports_file_source_missing_after_registration ... ok
+test product_build_reports_each_binding_when_shared_source_is_missing ... ok
+test product_build_reports_file_source_changed_after_registration ... ok
+test product_build_reports_file_source_changed_when_source_becomes_empty ... ok
+test product_media_helpers_render_anki_compatible_content ... ok
+test product_build_reports_each_binding_when_shared_source_changes ... ok
+test invalid_empty_project_report_keeps_path_backed_media_entry ... ok
+test product_build_reports_only_failing_bindings_when_media_is_mixed ... ok
+test explicit_self_contained_file_media_reports_path_backed_fix_when_inline_limit_is_exceeded ... ok
+test product_document_self_contained_reports_all_bad_file_media ... ok
+test project_build_maps_declared_mime_mismatch_to_product_media_source_and_help ... ok
+test project_build_rejects_product_media_staging_collision_without_overwriting_target ... ok
+test project_lower_inlines_file_media_instead_of_emitting_absolute_paths ... ok
+test project_lower_rejects_large_file_media_with_inline_limit_diagnostic ... ok
+test project_build_report_includes_media_summary_with_unique_object_bytes ... ok
+test project_build_keeps_file_media_path_backed_for_large_sources ... ok
+test deck_backed_project_build_maps_unused_media_binding_to_product_media_source ... ok
+test project_media_policy_can_promote_unknown_mime_to_error ... ok
+test project_media_policy_can_promote_unused_binding_to_error_and_keep_summary_count ... ok
+test project_build_uses_export_name_for_declared_mime ... ok
+test project_build_does_not_copy_over_hard_linked_staging_alias ... ok
+test project_media_policy_can_demote_declared_mime_mismatch_to_warning ... ok
+test same_content_can_export_under_different_filenames ... ok
+test project_build_packages_product_media_and_reports_count ... ok
+test product_document_self_contained_inlines_file_media ... ok
+test project_build_does_not_self_copy_when_base_dir_contains_source_media ... ok
+test project_build_maps_unused_media_binding_to_product_media_source ... ok
+test project_media_policy_can_ignore_unused_binding_while_summary_still_counts_it ... ok
+test project_media_policy_can_emit_unused_binding_as_info ... ok
+test project_media_policy_strict_keeps_default_warning_and_error_severities ... ok
+test project_write_apkg_defaults_file_media_to_path_backed_staging ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/public_api_boundary_tests.rs (target/debug/deps/public_api_boundary_tests-7061117126c41287)
+
+running 11 tests
+test advanced_writer_reexports_are_namespaced ... ok
+test build_api_exports_phase4_report_types ... ok
+test build_options_expose_phase4_builder_methods ... ok
+test advanced_authoring_reexports_are_namespaced ... ok
+test build_options_expose_update_safety_builder_methods ... ok
+test build_options_expose_update_safe_workflow_sugar ... ok
+test crate_root_does_not_reexport_core_surfaces ... ok
+test crate_root_preserves_intended_short_exports ... ok
+test prelude_exports_product_happy_path_types ... ok
+test product_source_map_is_not_a_public_mutation_surface ... ok
+test external_crates_cannot_import_advanced_symbols_from_root ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.46s
+
+     Running tests/runtime_facade_tests.rs (target/debug/deps/runtime_facade_tests-89a689b849536a07)
+
+running 7 tests
+test workspace_runtime_discovers_manifest_bundle_root_and_bundle_version ... ok
+test runtime_loads_default_phase3_assets_from_manifest ... ok
+test saved_legacy_inspection_compares_partially_with_current_evidence ... ok
+test runtime_build_accepts_serialized_normalized_output_from_normalize ... ok
+test runtime_normalize_and_build_from_paths_match_repository_contracts ... ok
+test runtime_bundle_loading_rejects_manifests_missing_component_versions ... ok
+test runtime_bundle_loading_rejects_invalid_asset_paths ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/rust_user_api_smoke_tests.rs (target/debug/deps/rust_user_api_smoke_tests-b94c9615e49d9227)
+
+running 16 tests
+test project_custom_notetype_rejects_missing_required_fields ... ok
+test project_requires_an_explicit_rule_for_unrepresentable_front_logic ... ok
+test project_requires_an_explicit_rule_for_runtime_metadata_only_front ... ok
+test project_custom_cloze_rejects_malformed_marker ... ok
+test project_custom_notetype_allows_omitting_optional_fields ... ok
+test project_static_front_persists_an_always_generate_requirement ... ok
+test project_custom_notetype_preserves_a_non_first_sort_field ... ok
+test project_stock_multi_cloze_writes_one_card_per_distinct_ordinal ... ok
+test project_custom_cloze_writes_one_card_per_distinct_ordinal ... ok
+test project_section_front_persists_an_all_fields_requirement ... ok
+test project_media_attribute_depends_on_its_field ... ok
+test deck_to_apkg_bytes_smoke ... ok
+test deck_basic_write_apkg_smoke ... ok
+test project_many_templates_assigns_unique_card_ids_across_notes ... ok
+test project_stock_write_apkg_smoke ... ok
+test project_unconditional_front_with_inverted_section_persists_none_requirement ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/rust_user_capability_matrix.rs (target/debug/deps/rust_user_capability_matrix-6d9e7356b1268a1d)
+
+running 23 tests
+test baseline_apkg_unreadable ... ignored
+test blank_stable_id ... ignored
+test cloze_inferred_identity_requires_marker ... ignored
+test deck_basic_apkg ... ignored
+test deck_bytes_export ... ignored
+test deck_cloze_apkg ... ignored
+test deck_image_occlusion_apkg ... ignored
+test duplicate_stable_id ... ignored
+test field_config_id_drift_blocks ... ignored
+test field_rename_stable_key_safe ... ignored
+test mime_mismatch ... ignored
+test missing_media_reference ... ignored
+test missing_media_source ... ignored
+test project_custom_notetype_apkg ... ignored
+test project_media_references_apkg ... ignored
+test project_stock_notes_apkg ... ignored
+test template_config_id_drift_blocks ... ignored
+test template_reorder_risk ... ignored
+test unsafe_media_export_filename ... ignored
+test unsafe_media_reference ... ignored
+test unused_media_binding ... ignored
+test update_adds_new_note ... ignored
+test update_preserves_guid ... ignored
+
+test result: ok. 0 passed; 0 failed; 23 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/stable_facade_boundary_tests.rs (target/debug/deps/stable_facade_boundary_tests-bd7e5388d1e683f1)
+
+running 3 tests
+test default_features_compile_the_documented_facade ... ok
+test default_features_hide_project_normalization_ir ... ok
+test default_features_hide_repository_internal_modules ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 30.81s
+
+     Running tests/template_bundle_tests.rs (target/debug/deps/template_bundle_tests-dd9b487ec39af0c8)
+
+running 7 tests
+test template_bundle_rejects_parent_directory_paths ... ok
+test template_bundle_rejects_conflicting_field_modes_without_mutating_project ... ok
+test template_bundle_template_errors_report_the_source_file ... ok
+test template_bundle_rejects_symlink_escape ... ok
+test template_bundle_rejects_empty_fields_and_normal_cloze_field ... ok
+test external_normal_bundle_preserves_field_template_and_asset_semantics ... ok
+test external_custom_cloze_bundle_builds_with_templates_css_and_card_ordinals ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/typed_core_tests.rs (target/debug/deps/typed_core_tests-af192794dfa320b9)
+
+running 1 test
+test typed_facade_exposes_core_surfaces_through_namespaced_modules ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/update_safety_baseline_tests.rs (target/debug/deps/update_safety_baseline_tests-9500a24ee3d90c1b)
+
+running 1 test
+test previous_apkg_identity_index_recovers_embedded_metadata ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/update_safety_blind_spots_tests.rs (target/debug/deps/update_safety_blind_spots_tests-65c8199ef4e02225)
+
+running 11 tests
+test lockfile_rejects_duplicate_and_nonpositive_model_ids ... ok
+test apkg_baseline_and_lockfile_record_actual_model_ids ... ok
+test reserved_absent_model_id_collision_is_fatal_even_in_report_only ... ok
+test strict_lockfile_only_field_removal_blocks_before_output ... ok
+test actual_apkg_model_id_overrides_conflicting_lockfile_evidence ... ok
+test field_addition_and_report_only_removal_are_visible ... ok
+test lockfile_only_updates_preserve_model_ids_and_reintroduced_types ... ok
+test apkg_only_migration_reserves_absent_types_in_new_lockfile ... ok
+test legacy_lockfile_requires_apkg_in_strict_mode_and_can_be_migrated ... ok
+test notetype_model_ids_survive_declaration_reordering_and_insertion ... ok
+test report_only_apkg_field_removal_coalesces_evidence_per_field ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+     Running tests/update_safety_build_tests.rs (target/debug/deps/update_safety_build_tests-e094a043478da2b3)
+
+running 3 tests
+test strict_compare_to_unreadable_previous_apkg_blocks_writer ... ok
+test update_safety_compare_to_previous_apkg_reports_field_rename_by_stable_merge_id ... ok
+test update_safety_project_build_compare_to_preserves_previous_guid ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/update_safety_current_index_tests.rs (target/debug/deps/update_safety_current_index_tests-d0da75a945b961ed)
+
+running 17 tests
+test identity_lockfile_report_json_collision_preserves_lockfile_on_early_empty_project_failure ... ok
+test implicit_apkg_output_path_must_not_equal_report_json_path ... ok
+test implicit_apkg_output_path_must_not_equal_identity_lockfile_path ... ok
+test apkg_output_path_must_not_equal_report_json_path ... ok
+test identity_lockfile_path_must_not_equal_report_json_path ... ok
+test identity_lockfile_path_must_not_equal_apkg_output_path ... ok
+test strict_update_safety_blocks_invalid_anki_guid_candidate ... ok
+test missing_identity_lockfile_path_uses_message_without_redundant_help ... ok
+test strict_update_safety_blocks_note_without_resolved_stable_id ... ok
+test disabled_update_safety_write_identity_lockfile_requires_project_stable_id ... ok
+test report_only_update_safety_write_identity_lockfile_requires_project_stable_id ... ok
+test strict_update_safety_requires_project_stable_id_even_without_baseline ... ok
+test report_only_update_safety_missing_project_stable_id_is_warning ... ok
+test strict_update_safety_allows_explicit_stable_id ... ok
+test disabled_update_safety_allows_identity_lockfile_without_project_stable_id ... ok
+test note_level_update_safety_identity_override_marks_snapshot_and_derives_id ... ok
+test custom_update_safety_identity_recipe_derives_stable_note_id_in_strict_mode ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/update_safety_lockfile_build_tests.rs (target/debug/deps/update_safety_lockfile_build_tests-4440a6e3b992a1d2)
+
+running 5 tests
+test update_safety_build_does_not_write_lockfile_when_writer_fails ... ok
+test strict_lockfile_project_stable_id_mismatch_blocks_build ... ok
+test build_writes_lockfile_and_second_build_preserves_guid_from_it ... ok
+test report_only_lockfile_project_stable_id_mismatch_is_warning ... ok
+test lockfile_carries_forward_absent_entries ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/update_safety_lockfile_tests.rs (target/debug/deps/update_safety_lockfile_tests-6a0233aa1ddf58ba)
+
+running 6 tests
+test lockfile_parse_scale_100k_entries ... ignored, manual performance boundary check
+test lockfile_rejects_duplicate_stable_id_and_guid ... ok
+test lockfile_rejects_active_normalized_note_id_mismatch ... ok
+test lockfile_rejects_unknown_schema_version ... ok
+test lockfile_roundtrip_uses_canonical_json_and_generated_by ... ok
+test lockfile_replace_failure_cleans_up_its_reserved_temporary_file ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/update_safety_matrix_tests.rs (target/debug/deps/update_safety_matrix_tests-03a7de2653777553)
+
+running 1 test
+test update_safety_diagnostic_matrix_lists_every_update_code ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/update_safety_merge_safety_tests.rs (target/debug/deps/update_safety_merge_safety_tests-64737e99e4baf154)
+
+running 4 tests
+test field_config_id_drift_is_error ... ok
+test template_ord_changed_source_names_the_template_selector ... ok
+test notetype_field_and_template_renames_are_warnings_when_ids_stay_stable ... ok
+test notetype_and_template_set_changes_include_change_kind ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/update_safety_model_tests.rs (target/debug/deps/update_safety_model_tests-7a530bf2f2173a5d)
+
+running 5 tests
+test effective_mode_requires_lockfile_path_when_writing ... ok
+test classifier_returns_limitation_and_diagnostic ... ok
+test effective_mode_upgrades_identity_lockfile_to_strict ... ok
+test writer_policy_ref_rejects_at_sign_and_control_characters ... ok
+test effective_mode_uses_explicit_disabled_even_with_baselines ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/update_safety_note_revision_tests.rs (target/debug/deps/update_safety_note_revision_tests-000ffe9c1fca04dc)
+
+running 21 tests
+test real_anki_applies_content_updates_without_changing_identity_or_review_state ... ignored, requires ANKI_FORGE_ANKI_PYTHON pointing to an installed Anki Python environment
+test overflow_blocks_both_modes_without_publishing_or_replacing_lockfile ... ok
+test invalid_revision_is_rejected_by_lockfile_reader ... ok
+test actual_apkg_revision_overrides_stale_lockfile ... ok
+test report_only_first_build_and_verified_updates_can_write_lockfiles ... ok
+test legacy_lockfile_needs_actual_apkg_revision_evidence_in_strict_mode ... ok
+test baseline_recovers_actual_stored_content_and_real_timestamp ... ok
+test report_only_lockfile_rewrite_does_not_manufacture_model_ids ... ok
+test report_only_unreadable_apkg_does_not_create_a_trusted_lockfile ... ok
+test report_only_missing_revision_is_explicit_and_high_risk ... ok
+test apkg_updates_advance_only_changed_notes_and_rebuild_deterministically ... ok
+test lockfile_persists_full_content_revision_and_handles_reverts ... ok
+test report_only_lockfile_rewrite_does_not_manufacture_note_revisions ... ok
+test report_only_rejected_model_id_baseline_is_high_risk ... ok
+test identity_rejected_apkg_revision_is_high_risk ... ok
+test identity_rejected_apkg_model_id_is_high_risk ... ok
+test report_only_rejected_revision_baseline_is_high_risk ... ok
+test tag_order_duplicates_and_storage_whitespace_do_not_advance_revision ... ok
+test unchanged_single_empty_field_preserves_revision ... ok
+test temporarily_absent_note_keeps_revision_history ... ok
+test unchanged_nonempty_and_multiple_empty_fields_preserve_revision ... ok
+
+test result: ok. 20 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.95s
+
+     Running tests/update_safety_reconcile_tests.rs (target/debug/deps/update_safety_reconcile_tests-3de239571f73f791)
+
+running 4 tests
+test reconcile_warns_on_writer_policy_mismatch ... ok
+test previous_apkg_wins_over_lockfile_for_same_stable_id ... ok
+test reconcile_emits_info_diagnostics_for_guid_sources ... ok
+test reconcile_rejects_duplicate_selected_guid ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/update_safety_report_tests.rs (target/debug/deps/update_safety_report_tests-2e04044ed3d8fbf0)
+
+running 2 tests
+test disabled_mode_ignores_baseline_but_records_summary ... ok
+test report_only_update_safety_records_unreadable_baseline_without_blocking_build ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/writer_core_build_tests.rs (target/debug/deps/writer_core_build_tests-3abb2e5c453fbac8)
+
+running 58 tests
+test build_context_ref_is_deterministic_for_equal_contexts ... ok
+test build_materializes_cloze_staging_into_caller_owned_root ... ok
+test build_materializes_basic_staging_into_caller_owned_root ... ok
+test build_accepts_safe_skipped_media_references_in_writer_ready_input ... ok
+test build_artifact_fingerprint_is_stable_across_roots ... ok
+test build_rejects_basic_notetype_that_drifts_from_source_grounded_shape ... ok
+test build_rejects_cloze_notetype_that_drifts_from_source_grounded_css ... ok
+test build_accepts_numeric_html_entity_media_references ... ok
+test build_rejects_missing_media_reference_in_writer_ready_input ... ok
+test build_accepts_html_entity_encoded_media_refs_when_payload_exists ... ok
+test build_rejects_non_positive_explicit_normalized_note_mtime ... ok
+test build_rejects_resolved_media_reference_without_binding ... ok
+test build_rejects_image_occlusion_notetype_that_drifts_from_source_grounded_shape ... ok
+test build_rejects_unknown_notetype_with_selector_and_path_diagnostics ... ok
+test build_rejects_unresolved_media_refs_when_behavior_is_fail ... ok
+test build_rejects_media_filenames_that_escape_staging_media_root ... ok
+test build_rejects_unquoted_src_media_refs_when_behavior_is_fail ... ok
+test build_rejects_unsafe_skipped_media_reference_in_writer_ready_input ... ok
+test build_preserves_bundled_media_entries ... ok
+test canonical_json_orders_phase3_report_keys_stably ... ok
+test build_rejects_unsupported_media_resolution_mode ... ok
+test diff_report_keeps_required_empty_arrays_when_no_changes_exist ... ok
+test build_warns_on_unresolved_media_refs_when_behavior_is_warn ... ok
+test build_materializes_media_payloads_into_staging_tree ... ok
+test inspect_report_serializes_with_expected_fixed_domains ... ok
+test cas_copy_verifies_exact_bytes_written_to_staging_in_single_pass ... ok
+test build_materializes_image_occlusion_apkg_into_caller_owned_root ... ok
+test apkg_media_entries_follow_export_filename_then_media_id_order ... ok
+test apkg_writes_duplicate_object_once_per_export_filename ... ok
+test latest_collection_derives_sfld_and_csum_from_first_notetype_field ... ok
+test exported_apkg_media_entries_do_not_emit_removed_tag4_legacy_filename ... ok
+test latest_collection_deduplicates_deck_aliases_and_preserves_card_routing ... ok
+test emit_apkg_reads_media_from_cas_without_staging_media_dir ... ok
+test build_apkg_package_fingerprint_is_stable_across_roots ... ok
+test emit_apkg_materializes_basic_package_from_staging_artifact ... ok
+test latest_collection_derives_sfld_from_marked_sort_field_and_csum_from_first_field ... ok
+test package_build_result_carries_writer_and_build_context_refs ... ok
+test phase3_models_serialize_with_expected_fields ... ok
+test policy_refs_use_id_and_version ... ok
+test latest_collection_ignores_script_style_and_comment_bodies_for_sfld_and_csum ... ok
+test latest_collection_preserves_media_filename_when_quoted_attr_contains_gt ... ok
+test writer_guid_plan_mismatch_returns_update_diagnostic_error ... ok
+test staging_materializes_media_from_cas_not_inline_payload ... ok
+test staging_media_copy_replaces_existing_symlink_without_following_it ... ok
+test writer_rejects_cross_field_media_invariant_violations ... ok
+test writer_rejects_malformed_media_invariant_shapes ... ok
+test writer_reports_corrupt_cas_blake3_mismatch_with_media_path ... ok
+test writer_reports_corrupt_cas_sha1_mismatch_with_media_path ... ok
+test writer_reports_corrupt_cas_size_mismatch_with_media_path ... ok
+test writer_reports_missing_cas_object_without_semantic_media_diagnostics ... ok
+test latest_collection_skips_custom_template_when_generation_requirement_is_not_met ... ok
+test latest_collection_strips_html_when_deriving_sort_field_and_checksum ... ok
+test latest_collection_template_target_deck_overrides_note_deck_for_cards ... ok
+test latest_collection_preserves_media_filename_with_case_insensitive_spaced_attr ... ok
+test latest_collection_uses_explicit_normalized_note_mtime_when_present ... ok
+test latest_collection_uses_template_ord_for_generated_card_ord ... ok
+test latest_collection_writes_native_hierarchical_deck_names_and_parent ... ok
+test writer_guid_plan_overrides_notes_guid ... ok
+
+test result: ok. 58 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/writer_core_diff_tests.rs (target/debug/deps/writer_core_diff_tests-2cf4dd8acaa1e79a)
+
+running 10 tests
+test diff_reports_only_strip_media_provenance_from_media_domain ... ok
+test diff_reports_emit_stable_selector_and_evidence_refs_for_domain_changes ... ok
+test diff_covers_field_metadata_browser_templates_and_target_decks ... ok
+test diff_marks_unavailable_extended_domains_and_unknown_domains_as_partial ... ok
+test legacy_staging_recovers_positional_ids_but_explicit_empty_plan_is_invalid ... ok
+test diff_reports_between_staging_and_apkg_are_complete_and_empty_for_supported_fixture ... ok
+test staging_and_apkg_agree_on_deck_aliases_with_template_overrides ... ok
+test extended_metadata_changes_survive_apkg_roundtrip_and_reach_risk_report ... ok
+test staging_and_apkg_agree_on_canonical_deck_names ... ok
+test staging_and_apkg_agree_on_browser_template_sentinels ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.30s
+
+     Running tests/writer_core_inspect_tests.rs (target/debug/deps/writer_core_inspect_tests-7bde9bfbb8a267dc)
+
+running 20 tests
+test extract_media_references_decodes_html_entities_across_reference_forms ... ok
+test inspect_apkg_preserves_sort_field_and_generation_requirement ... ok
+test inspect_apkg_reports_note_identity_metadata_from_notes_data ... ok
+test inspect_build_result_prefers_staging_when_available ... ok
+test inspect_apkg_reports_complete_observations_and_counts ... ok
+test inspect_apkg_reports_actual_card_decks_for_mixed_template_routing ... ok
+test inspect_apkg_marks_missing_media_map_as_degraded ... ok
+test inspect_apkg_does_not_report_forge_only_media_ids ... ok
+test inspect_reports_skip_cards_when_generation_requirement_is_unmet ... ok
+test inspect_apkg_reports_note_and_card_deck_names ... ok
+test inspect_staging_does_not_scan_raw_fields_for_media_ref_observations ... ok
+test inspect_emits_browser_template_and_field_label_observations ... ok
+test inspect_staging_escapes_media_ref_selector_values ... ok
+test inspect_staging_marks_manifest_media_mismatch_as_degraded ... ok
+test inspect_staging_media_ref_observations_come_from_normalized_references ... ok
+test inspect_staging_reports_complete_observations ... ok
+test inspect_staging_rejects_escaped_manifest_media_filename ... ok
+test inspect_staging_reports_manifest_media_object_and_binding_metadata ... ok
+test inspect_staging_fingerprint_is_independent_of_artifact_root ... ok
+test inspect_reports_use_template_ord_for_card_observations ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/writer_optimization_tests.rs (target/debug/deps/writer_optimization_tests-572e458d32af8c28)
+
+running 5 tests
+test build_rolls_back_sql_failure_and_does_not_replace_an_existing_package ... ok
+test staging_package_owns_a_snapshot_after_the_source_is_changed_and_dropped ... ok
+test repeated_exports_support_native_artifact_paths ... ok
+test materialized_writer_preserves_legacy_ids_and_rejects_invalid_identity_plans ... ok
+test typed_and_materialized_writers_preserve_staging_and_package_bytes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/json_numbers.rs (target/debug/deps/json_numbers-4dee83a25bd19ac8)
+
+running 1 test
+test json_boundary_preserves_signed_and_unsigned_integer_limits ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/contract_tools-acee873e15e6ed72)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/contract_tools-0e7eac2253d67b76)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cli_tests.rs (target/debug/deps/cli_tests-eb99603059b3b1d5)
+
+running 33 tests
+test contract_manifest_path_points_to_contracts_manifest ... ok
+test build_command_requires_artifacts_dir ... ok
+test inspect_resource_limits_reach_cli_runtime_and_baseline_loading ... ok
+test inspect_and_diff_commands_match_anki_forge_runtime_output ... ok
+test normalize_command_rejects_invalid_authoring_input_shape ... ok
+test normalize_command_matches_anki_forge_runtime_output ... ok
+test normalize_contract_json_includes_required_top_level_fields ... ok
+test product_build_cli_rejects_apkg_report_json_path_collision ... ok
+test product_build_cli_rejects_identity_lockfile_apkg_path_collision ... ok
+test build_command_defaults_writer_policy_and_build_context ... ok
+test build_command_matches_anki_forge_runtime_output ... ok
+test product_build_cli_disabled_mode_ignores_missing_identity_lockfile ... ok
+test inspect_cleans_temporary_collection_on_success_and_sqlite_failure ... ok
+test build_command_emits_contract_json_with_manifest_backed_refs ... ok
+test product_build_command_returns_invalid_exit_for_missing_baseline ... ok
+test product_build_cli_report_only_missing_identity_lockfile_warns_without_blocking ... ok
+test inspect_and_diff_commands_emit_contract_json_for_real_fixture ... ok
+test product_build_cli_rejects_output_baseline_alias_and_preserves_baseline ... ok
+test product_build_empty_project_is_invalid_and_writes_no_artifact ... ok
+test product_build_cli_writes_identity_lockfile ... ok
+test product_build_command_uses_manifest_when_invoked_outside_repo ... ok
+test product_v2_handwritten_missing_identity_is_diagnostic ... ok
+test product_build_command_writes_apkg_and_report_json ... ok
+test product_v2_handwritten_reserved_stock_id_is_diagnostic ... ok
+test product_build_contract_json_stdout_is_only_report_json ... ok
+test product_build_cli_does_not_publish_a_policy_blocked_candidate ... ok
+test verify_command_fails_when_manifest_is_missing ... ok
+test summary_command_prints_bundle_version_and_public_axis ... ok
+test product_build_report_json_write_failure_is_reported ... ok
+test product_build_report_validates_against_build_report_schema ... ok
+test product_build_compare_to_without_fail_on_attaches_diff_and_risk ... ok
+test product_build_policy_failure_prints_report_before_nonzero_exit ... ok
+test verify_command_succeeds_for_the_repo_contract_bundle ... ok
+
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.68s
+
+     Running tests/compat_oracle_tests.rs (target/debug/deps/compat_oracle_tests-7280fab50dd33880)
+
+running 7 tests
+test compat_oracle_rejects_basic_field_order_drift ... ok
+test compat_oracle_rejects_media_map_legacy_zip_filename_tag255 ... ok
+test compat_oracle_accepts_numeric_html_entity_media_references ... ok
+test compat_oracle_rejects_image_occlusion_template_drift ... ok
+test compat_oracle_rejects_dangling_media_refs_derived_from_note_fields ... ok
+test compat_oracle_skips_when_catalog_has_no_phase3_writer_cases ... ok
+test compat_oracle_gates_accept_bundled_writer_phase3_fixtures ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/fixture_gate_tests.rs (target/debug/deps/fixture_gate_tests-d073efd2a049f25b)
+
+running 17 tests
+test bundled_catalog_declares_phase3_writer_cases ... ok
+test bundled_catalog_declares_phase3_e2e_cases ... ok
+test fixture_gates_reject_evolution_metadata_drift ... ok
+test fixture_gates_execute_phase2_cases_and_compare_expected_output ... ok
+test fixture_gates_reject_phase2_expected_output_mismatch ... ok
+test fixture_gates_reject_unknown_error_codes_in_expected_reports ... ok
+test update_safety_contract_fixtures_validate ... ok
+test update_safety_fixture_catalog_lists_required_scenarios ... ok
+test fixture_gates_reject_phase3_inspect_golden_mismatch ... ok
+test fixture_gates_reject_note_identity_recipe_input_schema_mismatch ... ok
+test fixture_gates_reject_note_identity_stable_id_hash_mismatch ... ok
+test fixture_gates_reject_note_identity_noncanonical_payload_string ... ok
+test fixture_gates_reject_note_identity_error_codes_missing_from_registry ... ok
+test fixture_gates_accept_the_bundled_catalog_and_fixtures ... ok
+test fixture_gates_execute_phase3_writer_and_e2e_cases ... ok
+test fixture_gates_validate_template_contents_through_project ... ok
+test missing_template_bundle_dependencies_fail_verify_and_package ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.04s
+
+     Running tests/governance_tests.rs (target/debug/deps/governance_tests-2684b58f66c001d7)
+
+running 10 tests
+test release_verification_requires_a_baseline_manifest ... ok
+test source_gate_checks_constants_helpers_raw_strings_macros_and_feature_branches ... ok
+test semantics_gate_discovers_new_manifest_assets_without_code_changes ... ok
+test source_gate_rejects_removed_codes_and_missing_source_trees ... ok
+test source_gate_filters_test_only_impl_and_trait_members_without_skipping_production ... ok
+test release_verification_rejects_an_identical_bundle_baseline ... ok
+test manifest_versions_obey_semver_in_the_published_schema ... ok
+test semantics_gate_checks_every_manifest_semantics_asset ... ok
+test repository_diagnostic_literals_are_registered ... ok
+test verify_cli_enforces_baseline_and_accepts_a_fresh_record ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.29s
+
+     Running tests/manifest_tests.rs (target/debug/deps/manifest_tests-476706514f503af2)
+
+running 6 tests
+test relative_contract_paths_reject_directory_assets ... ok
+test relative_contract_paths_reject_symlink_escape ... ok
+test relative_contract_paths_reject_absolute_paths_and_escape_attempts ... ok
+test manifest_schema_is_loaded_from_each_manifest_root ... ok
+test manifest_uses_bundle_version_as_the_only_public_axis ... ok
+test manifest_resolves_asset_paths_relative_to_manifest_directory ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/package_tests.rs (target/debug/deps/package_tests-a61d2780eec0a922)
+
+running 6 tests
+test package_command_excludes_transient_media_store_tmp_files ... ok
+test package_command_is_reproducible ... ok
+test packaged_template_bundle_fixtures_build_and_inspect ... ok
+test package_template_bundles_include_only_declared_inputs_at_their_relative_paths ... ok
+test package_template_bundles_preserve_internal_symlink_aliases_and_reject_escapes ... ok
+test package_command_emits_a_bundle_artifact_with_manifest_and_contract_assets ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+
+     Running tests/policy_gate_tests.rs (target/debug/deps/policy_gate_tests-ffcfee3a2b54b3b7)
+
+running 2 tests
+test phase3_policy_assets_validate_against_declared_schemas ... ok
+test default_policy_assets_validate_against_declared_schemas ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/registry_gate_tests.rs (target/debug/deps/registry_gate_tests-699036c5419d4f81)
+
+running 4 tests
+test semantics_gate_rejects_unregistered_asset_refs ... ok
+test error_registry_gate_rejects_schema_violations ... ok
+test semantics_gate_runs_against_the_bundled_manifest ... ok
+test error_registry_gate_runs_against_the_bundled_manifest ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/release_governance_tests.rs (target/debug/deps/release_governance_tests-9fc4594dc01f5765)
+
+running 5 tests
+test release_requires_an_explicit_previous_ref ... ok
+test release_rejects_non_ancestor_before_invoking_verification ... ok
+test release_rejects_current_commit_through_head_branch_sha_and_tag ... ok
+test ordinary_local_verification_still_allows_an_unchanged_checkout ... ok
+test release_accepts_a_strict_ancestor_and_forwards_release_mode ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.61s
+
+     Running tests/schema_gate_tests.rs (target/debug/deps/schema_gate_tests-6c2b64d4a5f4742e)
+
+running 32 tests
+test manifest_registers_note_identity_schema_and_semantics_assets ... ok
+test manifest_registers_phase3_schema_policy_and_semantics_assets ... ok
+test manifest_registers_phase2_schema_assets ... ok
+test diagnostic_item_schema_matches_the_validation_report_local_definition ... ok
+test manifest_registers_update_safety_schema_and_semantics_assets ... ok
+test authoring_ir_schema_rejects_legacy_inline_media_payloads ... ok
+test authoring_ir_schema_accepts_explicit_lowered_stock_compatible_notetype_shape ... ok
+test authoring_ir_schema_accepts_path_and_inline_media_sources ... ok
+test authoring_ir_schema_accepts_stock_notetype_note_and_media_entries ... ok
+test authoring_ir_schema_accepts_the_minimal_valid_shape ... ok
+test normalization_diagnostics_schema_accepts_info_level_items ... ok
+test normalization_diagnostics_schema_accepts_items_with_source_path ... ok
+test identity_index_schema_accepts_legacy_and_valid_revisions_but_rejects_invalid_evidence ... ok
+test normalized_media_contract_invariants_reject_inconsistent_object_identity ... ok
+test normalization_result_schema_allows_null_comparison_context_without_merge_risk_report ... ok
+test normalized_media_contract_invariants_reject_missing_binding_object_and_duplicate_filename ... ok
+test normalization_result_schema_accepts_valid_merge_risk_report_when_comparison_context_is_present ... ok
+test normalization_result_schema_requires_merge_risk_report_when_comparison_context_is_present ... ok
+test normalization_result_schema_rejects_null_merge_risk_report_when_comparison_context_is_present ... ok
+test normalized_ir_schema_accepts_resolved_writer_ready_shape ... ok
+test normalized_ir_schema_accepts_media_objects_bindings_and_reference_states ... ok
+test phase4_build_report_schema_is_registered_in_manifest ... ok
+test normalized_ir_schema_requires_reference_state_fields ... ok
+test normalized_ir_schema_rejects_media_payload_fields ... ok
+test normalization_result_schema_allows_omitting_comparison_context_and_merge_risk_report ... ok
+test phase4_build_report_schema_is_valid_json_schema ... ok
+test phase4_build_report_schema_accepts_v1_media_without_entries ... ok
+test phase3_update_safety_schemas_are_valid_json_schema ... ok
+test validation_report_schema_requires_a_diagnostics_array ... ok
+test product_v3_schema_rejects_duplicate_generation_rule_fields ... ok
+test template_bundle_schema_rejects_blank_identifiers ... ok
+test schema_gates_run_against_the_bundled_contract_manifest ... ok
+
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/versioning_change_tests.rs (target/debug/deps/versioning_change_tests-b06fdab5480492a7)
+
+running 12 tests
+test release_requires_an_older_version_even_when_assets_are_unchanged ... ok
+test release_with_older_baseline_still_requires_exact_change_evidence ... ok
+test malformed_decreasing_and_metadata_only_versions_are_rejected ... ok
+test schema_changes_cannot_claim_documentation_or_fixture_only ... ok
+test duplicate_or_incomplete_change_records_fail ... ok
+test change_record_is_bound_to_exact_content_and_baseline ... ok
+test declared_breaking_change_requires_major_bump_and_migration_notes ... ok
+test unchanged_bundle_needs_no_change_record ... ok
+test actual_asset_change_requires_record_and_minor_bump ... ok
+test transitive_fixture_changes_are_inventoried_and_allow_patch_only_class ... ok
+test asset_removal_or_retargeting_cannot_claim_additive_compatibility ... ok
+test removal_or_retirement_of_registered_codes_forces_incompatible_class ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/versioning_gate_tests.rs (target/debug/deps/versioning_gate_tests-7ae3a94f0fb6dda3)
+
+running 3 tests
+test versioning_gates_reject_unknown_compatibility_classes ... ok
+test versioning_gates_reject_missing_compatible_or_incompatible_coverage ... ok
+test versioning_gates_accept_the_bundled_contract_bundle ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/workspace_smoke_tests.rs (target/debug/deps/workspace_smoke_tests-223de659543f3fbf)
+
+running 5 tests
+test roundtrip_oracle_script_exists ... ok
+test workspace_exposes_authoring_core_contract_version ... ok
+test repository_exposes_a_contract_bundle_entrypoint ... ok
+test workspace_exposes_writer_core_contract_version ... ok
+test contract_tools_manifest_does_not_default_depend_on_vendored_anki ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests anki_forge
+
+running 2 tests
+test anki_forge/src/lib.rs - (line 7) - compile ... ok
+test anki_forge/src/build/artifact.rs - build::artifact::ApkgArtifact (line 20) - compile ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+   Doc-tests contract_tools
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s
+   Doc-tests anki_forge
+
+running 2 tests
+test anki_forge/src/lib.rs - (line 7) - compile ... ok
+test anki_forge/src/build/artifact.rs - build::artifact::ApkgArtifact (line 20) - compile ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+ Documenting anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.42s
+   Generated /Users/hp/Desktop/2026/anki-forge/target/doc/anki_forge/index.html
+crate_version=0.1.0
+bundle_version=0.6.2

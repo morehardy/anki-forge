@@ -1,0 +1,112 @@
+{
+  "args": {
+    "name": "fine-pass",
+    "variants": [
+      "current",
+      "fine"
+    ],
+    "cases": [
+      "text-1000",
+      "text-10000",
+      "long-back-1000",
+      "image-1000",
+      "audio-1000",
+      "shared-1000",
+      "image-256x256k",
+      "image-64x1m",
+      "image-skewed-128"
+    ],
+    "warmups": 2,
+    "repeats": 5
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "image-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+      "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 64152000,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "audio-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/1000.json",
+      "input_sha256": "854a08b1df9e64c6fedb74838c36a25d50d7392adc47767d04144c3add65f3e5",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 32044000,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "shared-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/1000.json",
+      "input_sha256": "b804510fea577d1bec628c8f89ce4f91a41ad8799c196285db1178e0aa5e965c",
+      "notes": 1000,
+      "media": 49,
+      "media_bytes": 2469180,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376
+    },
+    {
+      "name": "image-256x256k",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-256x256k/input.json",
+      "input_sha256": "40afab2500dfb391d8f07bd28a0fc44965d1aedadb085d0422dbd3bd36e0234b",
+      "notes": 256,
+      "media": 256,
+      "media_bytes": 67108864,
+      "field_utf8_bytes": 118200
+    },
+    {
+      "name": "image-64x1m",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-64x1m/input.json",
+      "input_sha256": "27506b178976f5b80946884fe1e312c6cfd022a68f3c6dab682a4abb285e52a9",
+      "notes": 64,
+      "media": 64,
+      "media_bytes": 67108864,
+      "field_utf8_bytes": 30290
+    },
+    {
+      "name": "image-skewed-128",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-skewed-128/input.json",
+      "input_sha256": "bb3dd0f74fe56cb37e37c9a0f53942b3c276fe9d6ab869183d8d5dca07df2e7b",
+      "notes": 128,
+      "media": 128,
+      "media_bytes": 39713024,
+      "field_utf8_bytes": 59157
+    }
+  ],
+  "binaries": {
+    "current": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+    "fine": "76f551afb0af53a766de0b6c07948caa7ebab481b68713017373a9a0f8ab94a0"
+  },
+  "utc": "2026-09-07T12:59:19.077060+00:00",
+  "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t67%; discharging; 5:53 remaining present: true\n",
+  "seed": 20260907
+}

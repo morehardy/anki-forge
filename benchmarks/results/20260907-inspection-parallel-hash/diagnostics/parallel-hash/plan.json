@@ -1,0 +1,61 @@
+{
+  "name": "parallel-hash",
+  "variants": [
+    "before",
+    "parallel-hash"
+  ],
+  "repeats": 10,
+  "sizes": [
+    100,
+    1000
+  ],
+  "warmups": 3,
+  "binaries": {
+    "before": "6360d8c4b6ecc7179a46f73bd597b02f8fc9a24366a006ec70294aedf0b2be7b",
+    "parallel-hash": "771671f8097c521cd2642c655408fff36e94f42d05e0eeb8940803de25dacfd1"
+  },
+  "started_utc": "2026-09-07T09:29:59.238950+00:00",
+  "cells": [
+    [
+      "basic-mixed-text-v1",
+      100
+    ],
+    [
+      "basic-mixed-text-v1",
+      1000
+    ],
+    [
+      "basic-image-unique-v2",
+      100
+    ],
+    [
+      "basic-image-unique-v2",
+      1000
+    ],
+    [
+      "basic-audio-unique-v2",
+      100
+    ],
+    [
+      "basic-audio-unique-v2",
+      1000
+    ],
+    [
+      "basic-mixed-unique-v2",
+      100
+    ],
+    [
+      "basic-mixed-unique-v2",
+      1000
+    ],
+    [
+      "basic-mixed-shared-v2",
+      100
+    ],
+    [
+      "basic-mixed-shared-v2",
+      1000
+    ]
+  ],
+  "seed": 20260907
+}

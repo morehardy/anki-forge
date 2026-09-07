@@ -1,0 +1,140 @@
+[
+  {
+    "case": "text-1000",
+    "variants": {
+      "current": {
+        "median_ms": 67.99,
+        "median_rss_mib": 30.265625,
+        "stages_ms": {},
+        "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+      },
+      "current-rebuilt": {
+        "median_ms": 67.612,
+        "median_rss_mib": 30.375,
+        "stages_ms": {},
+        "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+      },
+      "pool": {
+        "median_ms": 67.742,
+        "median_rss_mib": 30.375,
+        "stages_ms": {},
+        "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+      }
+    }
+  },
+  {
+    "case": "text-10000",
+    "variants": {
+      "current": {
+        "median_ms": 536.749,
+        "median_rss_mib": 145.484375,
+        "stages_ms": {},
+        "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a"
+      },
+      "current-rebuilt": {
+        "median_ms": 538.665,
+        "median_rss_mib": 148.890625,
+        "stages_ms": {},
+        "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a"
+      },
+      "pool": {
+        "median_ms": 539.038,
+        "median_rss_mib": 149.890625,
+        "stages_ms": {},
+        "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a"
+      }
+    }
+  },
+  {
+    "case": "long-back-1000",
+    "variants": {
+      "current": {
+        "median_ms": 159.703,
+        "median_rss_mib": 61.015625,
+        "stages_ms": {},
+        "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4"
+      },
+      "current-rebuilt": {
+        "median_ms": 158.935,
+        "median_rss_mib": 60.453125,
+        "stages_ms": {},
+        "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4"
+      },
+      "pool": {
+        "median_ms": 162.842,
+        "median_rss_mib": 67.234375,
+        "stages_ms": {},
+        "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4"
+      }
+    }
+  },
+  {
+    "case": "image-64x1m",
+    "variants": {
+      "current": {
+        "median_ms": 171.578,
+        "median_rss_mib": 25.578125,
+        "stages_ms": {},
+        "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34"
+      },
+      "current-rebuilt": {
+        "median_ms": 170.209,
+        "median_rss_mib": 25.6875,
+        "stages_ms": {},
+        "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34"
+      },
+      "pool": {
+        "median_ms": 161.895,
+        "median_rss_mib": 27.09375,
+        "stages_ms": {},
+        "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34"
+      }
+    }
+  },
+  {
+    "case": "image-skewed-128",
+    "variants": {
+      "current": {
+        "median_ms": 130.158,
+        "median_rss_mib": 26.203125,
+        "stages_ms": {},
+        "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3"
+      },
+      "current-rebuilt": {
+        "median_ms": 130.997,
+        "median_rss_mib": 25.75,
+        "stages_ms": {},
+        "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3"
+      },
+      "pool": {
+        "median_ms": 117.732,
+        "median_rss_mib": 27.703125,
+        "stages_ms": {},
+        "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3"
+      }
+    }
+  },
+  {
+    "case": "long-back-quadruple-1000",
+    "variants": {
+      "current": {
+        "median_ms": 401.14,
+        "median_rss_mib": 154.71875,
+        "stages_ms": {},
+        "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6"
+      },
+      "current-rebuilt": {
+        "median_ms": 404.477,
+        "median_rss_mib": 154.75,
+        "stages_ms": {},
+        "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6"
+      },
+      "pool": {
+        "median_ms": 404.972,
+        "median_rss_mib": 162.78125,
+        "stages_ms": {},
+        "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6"
+      }
+    }
+  }
+]

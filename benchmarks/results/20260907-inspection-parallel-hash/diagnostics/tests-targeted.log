@@ -1,0 +1,228 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.17s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-dc12bcf7e3602d5d)
+
+running 113 tests
+test authoring_core::template_parser::tests::reports_mismatched_section_names ... ok
+test authoring_core::template_parser::tests::parses_filters_and_balanced_sections ... ok
+test authoring_core::template_semantics::tests::static_front_is_always_generated ... ok
+test authoring_core::template_semantics::tests::unconditional_visible_content_survives_inverted_sections ... ok
+test authoring_core::template_semantics::tests::runtime_metadata_special_fields_are_not_inferred_as_always_nonempty ... ok
+test authoring_core::template_semantics::tests::disjunction_of_conjunctions_is_unrepresentable ... ok
+test authoring_core::template_semantics::tests::inverted_only_visibility_is_not_always ... ok
+test authoring_core::template_semantics::tests::script_style_and_whitespace_entities_are_not_visible_static_content ... ok
+test authoring_core::template_semantics::tests::direct_fields_form_an_any_requirement ... ok
+test authoring_core::template_semantics::tests::positive_section_forms_an_all_requirement ... ok
+test authoring_core::template_semantics::tests::media_attribute_depends_on_its_field ... ok
+test authoring_core::template_semantics::tests::declared_fields_take_precedence_over_runtime_metadata_names ... ok
+test product::content::tests::escape_html_escapes_text_once_in_source_order ... ok
+test prepared_media::tests::encoded_payload_spills_before_unbounded_growth_and_preserves_bytes ... ok
+test deck::media::tests::media_source_dir_metadata_rejects_non_directory ... ok
+test product::model::tests::non_string_product_version_records_transport_diagnostic ... ok
+test product::model::tests::unknown_field_content_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_generation_rule_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_media_source_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unsupported_string_product_version_records_transport_diagnostic ... ok
+test deck::media::tests::same_sha_registration_repairs_missing_raster_metadata ... ok
+test product::project::counts::tests::card_count_prefers_zero_card_inspect_result_over_fallback ... ok
+test product::lowering::owned_tests::owned_lowering_moves_html_allocations_into_authoring_fields ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_custom_cloze_and_transport_diagnostics ... ok
+test product::project::tests::build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids ... ok
+test product::project::tests::build_rejects_stock_collision_before_scanning_custom_template_media ... ok
+test product::project::tests::duplicate_diagnostics_with_the_same_source_are_collapsed ... ok
+test product::project::tests::build_reports_duplicate_notetype_template_and_css_media_sources_by_index ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_duplicate_field_keys_names_and_notetype_resolution ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_diagnostic_order_and_partial_notes ... ok
+test product::project::tests::lower_rejects_custom_notetype_stock_collision_before_authoring ... ok
+test product::project::tests::normalization_failure_diagnostics_include_lowering_diagnostics ... ok
+test product::project::tests::product_diagnostic_help_covers_actionable_media_storage_codes ... ok
+test product::project::tests::product_helper_wiring_lowering_diagnostics_map_to_errors ... ok
+test product::project::tests::lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit ... ok
+test product::project::tests::lower_keeps_index_source_when_colliding_identity_note_is_skipped ... ok
+test product::project::tests::product_v2_normalize_preserves_unknown_media_source_path ... ok
+test product::project::tests::product_v2_normalize_preserves_required_field_source_path ... ok
+test product::project::tests::validate_still_reports_blank_stable_id_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_duplicate_stable_ids_for_internal_invalid_state ... ok
+test product::project::tests::lower_keeps_later_note_source_after_required_note_is_skipped ... ok
+test product::project::tests::validate_still_reports_implicit_stock_collision_for_internal_invalid_state ... ok
+test product::project::tests::writer_result_status_maps_to_typed_build_status ... ok
+test product::template_engine::tests::rejects_empty_render_and_section_fields ... ok
+test product::template_engine::tests::reports_unknown_fields_and_mismatched_sections ... ok
+test product::template_engine::tests::validates_fields_filters_and_balanced_sections ... ok
+test product::template_engine::tests::validates_multi_word_field_names_as_complete_names ... ok
+test product::project::tests::project_owned_lowering_preserves_invalid_partial_plan_and_diagnostics ... ok
+test product::project::tests::project_owned_lowering_preserves_canonical_fields_and_source_paths ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_duplicate_and_conflicting_entries ... ok
+test deck::media::tests::file_registration_matches_inline_fingerprints_and_dimensions ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_links_and_gzip_corruption ... ok
+test writer_core::apkg::tests::apkg_media_size_accepts_uint32_max ... ok
+test writer_core::apkg::tests::apkg_media_size_rejects_values_above_uint32_range ... ok
+test runtime::schema::tests::load_schema_reuses_compiled_schema_for_the_same_path ... ok
+test writer_core::apkg::tests::embedded_upgrade_notice_matches_schema_generated_database ... ok
+test product::project::atomic_output_tests::product_build_preserves_existing_target_when_replace_fails ... ok
+test writer_core::apkg::tests::field_checksum_uses_stripped_first_field_text_for_html_boundaries ... ok
+test writer_core::apkg::tests::guid_plan_validation_keeps_assignments_and_exact_mismatch_errors ... ok
+test writer_core::apkg::tests::media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32 ... ok
+test writer_core::apkg::tests::failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction ... ok
+test product::comparison::snapshot_tests::unreadable_baseline_stays_unavailable_after_a_file_appears ... ok
+test writer_core::apkg::tests::storage_values_keep_field_order_sort_checksum_and_empty_values ... ok
+test writer_core::apkg::tests::collection_population_rolls_back_after_a_note_and_card_were_written ... ok
+ZipWriter drop failed: Io(Os { code: 9, kind: Uncategorized, message: "Bad file descriptor" })test writer_core::apkg::tests::streamed_collection_propagates_input_and_output_io_errors ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_handles_anki_boundary_vectors ... ok
+test writer_core::apkg::tests::streamed_package_fingerprint_matches_byte_fingerprint ... ok
+test runtime::embedded::tests::in_memory_defaults_preserve_relative_path_resolution_inside_contracts ... ok
+test writer_core::apkg::tests::typed_writer_rejects_invalid_model_and_guid_plans_before_replacing_output ... ok
+test writer_core::apkg::tests::streamed_collection_keeps_compacted_sqlite_bytes_and_removes_its_tempfile ... ok
+test runtime::embedded::tests::in_memory_defaults_match_complete_path_runtime ... ok
+test writer_core::build::tests::apkg_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::build::tests::apkg_non_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::card_plan::tests::anki_default_renders_nonempty_special_fields ... ok
+test writer_core::card_plan::tests::anki_default_uses_rendered_front_emptiness ... ok
+test writer_core::card_plan::tests::cloze_card_ords_are_distinct_sorted_and_zero_based ... ok
+test writer_core::card_plan::tests::malformed_and_zero_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::missing_cloze_ordinal_is_malformed_by_itself ... ok
+test writer_core::card_plan::tests::unclosed_and_nested_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::unrelated_mustache_text_starting_with_c_is_not_cloze ... ok
+test writer_core::deck_name::tests::human_names_use_native_separator_and_component_normalization ... ok
+test writer_core::deck_name::tests::registry_adds_each_parent_and_resolves_requested_leaf ... ok
+test writer_core::deck_name::tests::registry_keeps_parent_spellings_and_ids_independent_of_request_order ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_never_panics ... ok
+test product::comparison::snapshot_tests::captured_baseline_survives_replacement_for_identity_and_diff ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_preserves_generated_media_attrs ... ok
+test writer_core::inspect::summary_tests::summary_counts_mixed_notetypes_and_sparse_cloze_cards ... ok
+test runtime::embedded::tests::in_memory_defaults_reject_invalid_policy_and_context ... ok
+test writer_core::apkg::tests::streamed_collection_preserves_buffered_zip_bytes_across_block_boundaries ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_stock_custom_content_and_document_views ... ok
+test writer_core::inspect::summary_tests::summary_distinguishes_negative_and_u32_max_ordinals_before_deduplication ... ok
+test writer_core::inspect::summary_tests::summary_enforces_identical_resource_limits_and_media_boundaries ... ok
+test writer_core::inspect::summary_tests::summary_counts_actual_cards_with_sparse_ordinals_and_prefix_guids ... ok
+test writer_core::inspect::tests::apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_does_not_strip_prefix_collisions ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_rejects_path_traversal ... ok
+test writer_core::inspect::summary_tests::summary_keeps_missing_and_malformed_media_degradation ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_fallback_and_assignment_variants ... ok
+test writer_core::inspect::summary_tests::summary_keeps_signed_ordinals_orphan_cards_and_missing_decks ... ok
+test writer_core::inspect::summary_tests::summary_preserves_existing_duplicate_guid_and_ordinal_observations ... ok
+test writer_core::note_revision::tests::note_revision_keeps_canonical_hashes_for_empty_wide_and_escaped_fields ... ok
+test writer_core::stream_zip::tests::final_bytes_match_the_existing_zip_writer_and_fingerprint ... ok
+test writer_core::stream_zip::tests::wrong_length_and_destination_errors_abort_writing ... ok
+test writer_core::staging::canonical_stream_tests::streamed_manifest_matches_the_previous_canonical_bytes_and_hash ... ok
+test writer_core::inspect::summary_tests::summary_keeps_archive_sqlite_and_protobuf_errors ... ok
+test writer_core::inspect::summary_tests::summary_keeps_duplicate_notetype_metadata_ids_and_names ... ok
+test writer_core::inspect::summary_tests::failed_current_summary_never_publishes_even_when_inspect_is_hidden ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_arbitrary_strings ... ok
+test writer_core::inspect::summary_tests::summary_preserves_tolerated_note_content_and_identity_json ... ok
+test writer_core::note_revision::tests::note_revision_matches_previous_canonical_serialization ... ok
+test writer_core::inspect::summary_tests::summary_decodes_unused_sqlite_columns_and_keeps_error_precedence ... ok
+test runtime::embedded::tests::in_memory_defaults_validate_the_whole_manifest_and_asset_inventory ... ok
+test writer_core::stream_zip::tests::zip64_entry_count_is_readable_by_independent_zip_reader ... ok
+
+test result: ok. 113 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+     Running tests/apkg_inspect_limits_tests.rs (target/debug/deps/apkg_inspect_limits_tests-f05e0cd844c5e461)
+
+running 16 tests
+test limits_cover_archive_directory_map_and_outer_zip_entry ... ok
+test default_inspection_rejects_oversized_meta_instead_of_degrading ... ok
+test later_frames_and_skippable_frames_cannot_reset_budgets ... ok
+test malformed_zip_and_truncated_frames_are_not_complete_observations ... ok
+test concatenated_frames_share_budget_and_high_window_is_typed ... ok
+test actual_zip_output_is_bounded_even_with_forged_small_sizes ... ok
+test media_map_entry_count_is_checked_before_payloads_are_opened ... ok
+test rejects_advertised_entry_count_before_the_zip_index_is_allocated ... ok
+test zip64_footer_uses_validated_64_bit_counts ... ok
+test multiple_media_entries_share_both_cumulative_budgets ... ok
+test legacy_and_nested_zstd_media_enforce_exact_decoded_boundary ... ok
+test many_media_keep_cumulative_limits_and_recover_after_late_failure ... ok
+test project_diff_with_limits_never_claims_complete_comparison ... ok
+test baseline_limits_reach_build_reports_in_every_update_mode ... ok
+test collection_boundary_preserves_observations_and_failure_preserves_publication ... ok
+test many_media_keep_exact_hashes_across_small_and_streamed_payloads ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/artifact_lifecycle_tests.rs (target/debug/deps/artifact_lifecycle_tests-477c7d58cf808ad1)
+
+running 5 tests
+test automatic_json_report_requires_a_persistent_artifact_destination ... ok
+test temporary_artifact_is_removed_only_after_the_last_owner_drops ... ok
+test published_temporary_artifact_is_owned_by_late_failure_reports ... ok
+test failed_persistence_keeps_temporary_artifact_usable ... ok
+test explicit_destinations_and_persisted_copies_survive_report_drop ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/deck_export_tests.rs (target/debug/deps/deck_export_tests-19150394fd996564)
+
+running 14 tests
+test deck_basic_flow_example_shape_matches_the_public_happy_path ... ok
+test deck_build_rejects_preexisting_media_input_target_symlink ... ok
+test deck_build_reports_invalid_deserialized_deck_validation ... ok
+test deck_export_rejects_invalid_deserialized_deck_during_bytes_export ... ok
+test deck_build_keeps_file_media_path_backed_until_normalize ... ok
+test deck_build_uses_cas_media_without_normalized_base64_payload ... ok
+test deck_export_surfaces_use_runtime_defaults_and_real_artifact_paths ... ok
+test package_retries_after_media_failure_without_leaving_input_copies ... ok
+test package_repeated_builds_keep_file_media ... ok
+test package_build_limits_are_explicit_and_block_publication_until_raised ... ok
+test package_result_retains_its_inspection_limits_for_later_reads ... ok
+test package_rebuild_accepts_newly_registered_media_content ... ok
+test package_single_with_stable_id_keeps_root_deck_and_changes_export_identity ... ok
+test package_single_export_surfaces_support_bytes_and_package_stable_id ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/media_export_optimization_tests.rs (target/debug/deps/media_export_optimization_tests-a68f968217b7243d)
+
+running 4 tests
+test individual_file_registration_rejects_content_conflicts_immediately ... ok
+test concurrent_builds_keep_their_media_and_output_independent ... ok
+test parallel_source_failure_preserves_output_and_allows_retry ... ok
+test direct_media_matches_persistent_cas_and_keeps_inspect_artifacts ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+     Running tests/project_media_api_tests.rs (target/debug/deps/project_media_api_tests-e3a151058da6c4e0)
+
+running 38 tests
+test declared_mime_mismatch_policy_rejects_ignore_and_info_behaviors ... ok
+test add_bytes_and_add_file_reject_zero_byte_sources ... ok
+test media_export_names_reject_helper_unsafe_characters ... ok
+test add_bytes_validates_source_label_without_filename_rules ... ok
+test add_bytes_rejects_oversized_inline_payload_immediately ... ok
+test failed_export_does_not_mutate_registry ... ok
+test export_as_reuses_same_filename_for_same_content_and_conflicts_for_different_content ... ok
+test product_build_reports_each_binding_when_shared_source_is_missing ... ok
+test product_build_reports_file_source_missing_after_registration ... ok
+test product_build_reports_file_source_changed_after_registration ... ok
+test product_build_reports_file_source_changed_when_source_becomes_empty ... ok
+test product_media_helpers_render_anki_compatible_content ... ok
+test product_build_reports_each_binding_when_shared_source_changes ... ok
+test invalid_empty_project_report_keeps_path_backed_media_entry ... ok
+test product_build_reports_only_failing_bindings_when_media_is_mixed ... ok
+test explicit_self_contained_file_media_reports_path_backed_fix_when_inline_limit_is_exceeded ... ok
+test project_build_maps_declared_mime_mismatch_to_product_media_source_and_help ... ok
+test product_document_self_contained_reports_all_bad_file_media ... ok
+test project_build_rejects_product_media_staging_collision_without_overwriting_target ... ok
+test project_lower_inlines_file_media_instead_of_emitting_absolute_paths ... ok
+test project_lower_rejects_large_file_media_with_inline_limit_diagnostic ... ok
+test deck_backed_project_build_maps_unused_media_binding_to_product_media_source ... ok
+test project_build_keeps_file_media_path_backed_for_large_sources ... ok
+test project_build_uses_export_name_for_declared_mime ... ok
+test project_build_report_includes_media_summary_with_unique_object_bytes ... ok
+test project_build_packages_product_media_and_reports_count ... ok
+test project_build_maps_unused_media_binding_to_product_media_source ... ok
+test project_media_policy_can_promote_unknown_mime_to_error ... ok
+test project_media_policy_can_promote_unused_binding_to_error_and_keep_summary_count ... ok
+test same_content_can_export_under_different_filenames ... ok
+test project_build_does_not_copy_over_hard_linked_staging_alias ... ok
+test project_build_does_not_self_copy_when_base_dir_contains_source_media ... ok
+test project_media_policy_can_demote_declared_mime_mismatch_to_warning ... ok
+test product_document_self_contained_inlines_file_media ... ok
+test project_media_policy_can_emit_unused_binding_as_info ... ok
+test project_media_policy_can_ignore_unused_binding_while_summary_still_counts_it ... ok
+test project_media_policy_strict_keeps_default_warning_and_error_severities ... ok
+test project_write_apkg_defaults_file_media_to_path_backed_staging ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+

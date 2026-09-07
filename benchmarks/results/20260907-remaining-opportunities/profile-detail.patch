@@ -1,0 +1,499 @@
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -77,6 +77,7 @@
+         items: &[AuthoringMedia],
+         options: &NormalizeOptions,
+     ) -> Vec<Option<Result<IngestedMediaBytes, MediaIngestError>>> {
++    let _scale_scope = crate::diag::Scope::new("media.prepare");
+         let mut seen = BTreeSet::new();
+         let mut jobs = items
+             .iter()
+@@ -118,6 +119,7 @@
+             |index: usize,
+              result: Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError>| {
+                 let item = &items[index];
++                let _accept = crate::diag::Accum::new("media.accept");
+                 ingested[index] = Some(result.and_then(|(metadata, mut payload)| {
+                     if names.insert(item.desired_filename.clone()) {
+                         payload.data.seek(SeekFrom::Start(0)).map_err(|error| {
+@@ -166,8 +168,12 @@
+                             .spawn_scoped(scope, move || {
+                                 let mut context = zstd::zstd_safe::CCtx::create();
+                                 for &(_, item) in jobs.iter().skip(worker).step_by(workers) {
++                                    let result = {
++                                        let _t = crate::diag::Accum::new(["media.worker0.compute", "media.worker1.compute", "media.worker2.compute", "media.worker3.compute"][worker]);
++                                        prepared.prepare_one(item, options, &mut context)
++                                    };
+                                     if sender
+-                                        .send(prepared.prepare_one(item, options, &mut context))
++                                        .send(result)
+                                         .is_err()
+                                     {
+                                         break;
+@@ -177,6 +183,7 @@
+                     );
+                 }
+                 for (job_index, &(index, item)) in jobs.iter().enumerate() {
++                    let wait = crate::diag::Accum::new("media.consumer_wait");
+                     let result = receivers[job_index % workers].recv().unwrap_or_else(|_| {
+                         Err(diagnostic(
+                             item,
+@@ -184,6 +191,7 @@
+                             "media preparation worker could not complete".into(),
+                         ))
+                     });
++                    drop(wait);
+                     accept(index, result);
+                 }
+                 for handle in handles.into_iter().flatten() {
+@@ -361,7 +369,7 @@
+ 
+ impl Write for EncodedPayload {
+     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+-        let written = self.data.write(bytes)?;
++        let written = { let _t = crate::diag::Accum::new("media.encoded_payload_write"); self.data.write(bytes)? };
+         self.size += written as u64;
+         self.crc.update(&bytes[..written]);
+         Ok(written)
+--- a/anki_forge/src/lib.rs
++++ b/anki_forge/src/lib.rs
+@@ -129,3 +129,6 @@
+ pub const fn embedded_contract_version() -> &'static str {
+     crate::runtime::embedded_bundle_version()
+ }
++
++#[allow(missing_docs)]
++pub mod diag;
+--- a/anki_forge/src/diag.rs
++++ b/anki_forge/src/diag.rs
+@@ -0,0 +1,19 @@
++//! Private coarse wall-time probes, excluded from production.
++use std::time::Instant;
++pub struct Scope(&'static str, Instant);
++impl Scope { pub fn new(label: &'static str) -> Self { Self(label, Instant::now()) } }
++impl Drop for Scope { fn drop(&mut self) {
++    eprintln!("[DEBUG-scale-opt] {} {}", self.0, self.1.elapsed().as_nanos());
++} }
++
++use std::{collections::BTreeMap, sync::{Mutex, OnceLock}};
++static TOTALS: OnceLock<Mutex<BTreeMap<&'static str, u128>>> = OnceLock::new();
++pub struct Accum(&'static str, Instant);
++impl Accum { pub fn new(label: &'static str) -> Self { Self(label, Instant::now()) } }
++impl Drop for Accum { fn drop(&mut self) {
++    let elapsed = self.1.elapsed().as_nanos();
++    *TOTALS.get_or_init(Default::default).lock().unwrap().entry(self.0).or_default() += elapsed;
++} }
++pub fn report() { if let Some(totals) = TOTALS.get() {
++    for (key, ns) in totals.lock().unwrap().iter() { eprintln!("[DEBUG-scale-opt] {} {}", key, ns); }
++} }
+--- a/anki_forge/src/runtime/defaults.rs
++++ b/anki_forge/src/runtime/defaults.rs
+@@ -15,6 +15,7 @@
+ }
+ 
+ pub(crate) fn load_embedded_writer_defaults() -> anyhow::Result<(WriterPolicy, BuildContext)> {
++    let _scale_scope = crate::diag::Scope::new("runtime.defaults");
+     super::embedded::load_writer_defaults()
+ }
+ 
+--- a/anki_forge/src/product/project.rs
++++ b/anki_forge/src/product/project.rs
+@@ -995,11 +995,13 @@
+     }
+ 
+     fn lower_product_document(&self) -> LoweringPlan {
++    let _scale_scope = crate::diag::Scope::new("project.lower_product");
+         let (document_id, payload) = self.to_product_v3_payload();
+         crate::product::lowering::lower_owned_product_v2_document(document_id, payload)
+     }
+ 
+     fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
++    let _scale_scope = crate::diag::Scope::new("project.payload");
+         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
+         let default_deck = self
+             .default_deck
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -160,6 +160,7 @@
+     artifact_target: &BuildArtifactTarget,
+     prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+ ) -> Result<ApkgMaterialization> {
++    let _scale_scope = crate::diag::Scope::new("apkg.total");
+     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
+         format!(
+             "create artifact root {}",
+@@ -240,6 +241,7 @@
+             size: 0,
+             crc: crc32fast::Hasher::new(),
+         };
++        let _compress = crate::diag::Scope::new("apkg.collection_zstd");
+         zstd::stream::copy_encode(File::open(collection.path())?, &mut measured, 0)?;
+         measured.flush()?;
+         let CrcWriter { output, size, crc } = measured;
+@@ -436,11 +438,13 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<tempfile::NamedTempFile> {
++    let _scale_scope = crate::diag::Scope::new("sqlite.total");
+     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
+     let _ = fs::remove_file(&path);
+     let conn = Connection::open(&path)
+         .with_context(|| format!("open collection database {}", path.display()))?;
+     {
++        let _schema = crate::diag::Scope::new("sqlite.schema");
+         let transaction = conn.unchecked_transaction()?;
+         execute_source_schema(&transaction, SCHEMA11_SQL)?;
+         execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+@@ -454,6 +458,7 @@
+ 
+     // Keep compaction without rewriting and journaling the source database.
+     // An empty, uniquely reserved file also cleans up on any error path.
++    let _compact = crate::diag::Scope::new("sqlite.compact");
+     let compacted =
+         tempfile::NamedTempFile::new_in(root_dir).context("create compacted collection file")?;
+     // Match Connection::open's native Unix filename handling instead of using
+@@ -517,8 +522,11 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<()> {
++    let _scale_scope = crate::diag::Scope::new("sqlite.populate");
+     let transaction = conn.unchecked_transaction()?;
+-    populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?;
++    { let _t = crate::diag::Scope::new("sqlite.rows");
++    populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?; }
++    let _t = crate::diag::Scope::new("sqlite.commit");
+     transaction.commit()?;
+     Ok(())
+ }
+@@ -630,6 +638,7 @@
+             .get(note.id.as_str())
+             .map(|assignment| assignment.selected_anki_guid.as_str())
+             .unwrap_or(note.id.as_str());
++        let insert_timer = crate::diag::Accum::new("sqlite.note_insert_including_data");
+         insert_note.execute(rusqlite::params![
+             note_row,
+             guid,
+@@ -644,12 +653,14 @@
+                 note,
+             ),
+         ])?;
++        drop(insert_timer);
+         for tag in &note.tags {
+             normalized_tags.insert(tag.clone());
+         }
+         for planned_card in plan_cards(note, notetype) {
+             let template = &notetype.templates[planned_card.template_index];
+             let target_deck_id = resolve_card_deck_id(note, template, &deck_registry);
++            let insert_timer = crate::diag::Accum::new("sqlite.card_insert");
+             insert_card.execute(rusqlite::params![
+                 card_row_id,
+                 note_row,
+@@ -658,6 +669,7 @@
+                 note_row,
+                 "{}"
+             ])?;
++            drop(insert_timer);
+             card_row_id += 1;
+         }
+         note_row_id += 1;
+@@ -852,6 +864,7 @@
+     prepared: &PreparedNotetype<'_>,
+     stripped_fields: &mut StrippedNoteFields<'_>,
+ ) -> Result<NoteStorageValues> {
++    let _detail = crate::diag::Accum::new("sqlite.field_storage");
+     let fields = &prepared.fields;
+     let values = ordered_field_values(note, fields);
+     let sort_field_index = prepared.sort_field_index;
+--- a/anki_forge/src/writer_core/staging.rs
++++ b/anki_forge/src/writer_core/staging.rs
+@@ -332,6 +332,7 @@
+         target: &BuildArtifactTarget,
+         prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+     ) -> Result<MaterializedStaging> {
++    let _scale_scope = crate::diag::Scope::new("writer.staging");
+         let staging_dir = target.staging_dir();
+         fs::create_dir_all(&staging_dir)
+             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
+@@ -658,6 +659,7 @@
+     normalized_ir: &NormalizedIr,
+     build_context: &BuildContext,
+ ) -> Vec<BuildDiagnosticItem> {
++    let _scale_scope = crate::diag::Scope::new("writer.validate");
+     let notetype_map: BTreeMap<_, _> = normalized_ir
+         .notetypes
+         .iter()
+--- a/anki_forge/src/writer_core/note_revision.rs
++++ b/anki_forge/src/writer_core/note_revision.rs
+@@ -16,6 +16,7 @@
+ 
+ impl NoteRevision {
+     pub(crate) fn from_note(note: &NormalizedNote) -> Self {
++    let _detail = crate::diag::Accum::new("note.revision");
+         let payload = revision_payload_json(note);
+         Self {
+             content_hash: format!("{HASH_PREFIX}{}", blake3::hash(payload.as_bytes()).to_hex()),
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -289,6 +289,7 @@
+     limits: &InspectLimits,
+     projection: ReadProjection,
+ ) -> Result<ApkgFacts> {
++    let _scale_scope = crate::diag::Scope::new("inspect.facts");
+     let mut archive = ApkgReader::open(path, limits)?;
+ 
+     let (version, mut limitations) = read_package_version(&mut archive)?;
+@@ -996,6 +997,7 @@
+     archive: &mut ApkgReader<'_>,
+     version: PackageVersion,
+ ) -> Result<Vec<ResolvedMedia>> {
++    let _scale_scope = crate::diag::Scope::new("inspect.media");
+     let decoded = archive
+         .bytes(
+             "media",
+@@ -1181,6 +1183,7 @@
+         {
+             pending.extend_from_slice(bytes);
+         } else {
++            let _t = crate::diag::Accum::new("inspect.serial_hash");
+             if let Some(pending) = self.pending.take() {
+                 self.hash.update(&pending);
+             }
+@@ -1194,6 +1197,7 @@
+ }
+ 
+ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<CollectionData> {
++    let _scale_scope = crate::diag::Scope::new("inspect.sqlite");
+     with_readonly_sqlite(path, |conn| {
+         let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
+         let deck_values = deck_rows
+--- a/anki_forge/src/writer_core/note_data.rs
++++ b/anki_forge/src/writer_core/note_data.rs
+@@ -66,6 +66,7 @@
+     assignment: Option<&WriterGuidAssignment>,
+     note: &NormalizedNote,
+ ) -> String {
++    let _detail = crate::diag::Accum::new("sqlite.identity_data");
+     #[derive(Serialize)]
+     struct NoteData<'a> {
+         anki_forge_identity: OrderedMetadata<'a>,
+--- a/anki_forge/src/writer_core/stream_zip.rs
++++ b/anki_forge/src/writer_core/stream_zip.rs
+@@ -166,8 +166,8 @@
+ 
+ impl<W: Write> Write for StreamZip<W> {
+     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+-        let written = self.output.write(bytes)?;
+-        self.hash.update(&bytes[..written]);
++        let written = { let _t = crate::diag::Accum::new("zip.write"); self.output.write(bytes)? };
++        { let _t = crate::diag::Accum::new("zip.hash"); self.hash.update(&bytes[..written]); }
+         self.position = self
+             .position
+             .checked_add(written as u64)
+--- a/anki_forge/src/authoring_core/normalize.rs
++++ b/anki_forge/src/authoring_core/normalize.rs
+@@ -68,6 +68,7 @@
+     options: NormalizeOptions,
+     prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+ ) -> NormalizationResult {
++    let _scale_scope = crate::diag::Scope::new("normalize.core");
+     let risk_policy_ref = request
+         .comparison_context
+         .as_ref()
+@@ -378,6 +379,7 @@
+     notetypes: &[NormalizedNotetype],
+     bindings: &[crate::authoring_core::media::MediaBinding],
+ ) -> (Vec<MediaReference>, Vec<DiagnosticItem>) {
++    let _scale_scope = crate::diag::Scope::new("normalize.media_refs");
+     let binding_by_filename = bindings
+         .iter()
+         .map(|binding| (binding.export_filename.as_str(), binding.id.as_str()))
+--- a/anki_forge/src/deck/media.rs
++++ b/anki_forge/src/deck/media.rs
+@@ -315,6 +315,7 @@
+ }
+ 
+ fn validate_source_file(path: &Path) -> anyhow::Result<()> {
++    let _detail = crate::diag::Accum::new("registration.stat");
+     let metadata = std::fs::metadata(path).map_err(|err| match err.kind() {
+         std::io::ErrorKind::NotFound => MediaError::SourceMissing {
+             path: path.to_path_buf(),
+@@ -403,7 +404,7 @@
+ }
+ 
+ fn observe_file(name: &str, path: &Path) -> anyhow::Result<(String, Option<RasterImageMetadata>)> {
+-    let mut file = std::fs::File::open(path).map_err(|err| match err.kind() {
++    let mut file = { let _t = crate::diag::Accum::new("registration.open"); std::fs::File::open(path) }.map_err(|err| match err.kind() {
+         std::io::ErrorKind::NotFound => MediaError::SourceMissing {
+             path: path.to_path_buf(),
+             message: err.to_string(),
+@@ -418,8 +419,7 @@
+     let mut raster_image = None;
+     let mut first_chunk = true;
+     loop {
+-        let read = file
+-            .read(&mut buffer)
++        let read = { let _t = crate::diag::Accum::new("registration.read"); file.read(&mut buffer) }
+             .map_err(|err| MediaError::SourceReadFailed {
+                 path: path.to_path_buf(),
+                 message: err.to_string(),
+@@ -432,7 +432,7 @@
+             raster_image = raster_image_metadata_from_bytes(name, &buffer[..read]);
+             first_chunk = false;
+         }
+-        hasher.update(&buffer[..read]);
++        { let _t = crate::diag::Accum::new("registration.hash"); hasher.update(&buffer[..read]); }
+     }
+     if raster_image.is_none()
+         && matches!(
+--- a/anki_forge/src/deck/identity.rs
++++ b/anki_forge/src/deck/identity.rs
+@@ -105,6 +105,7 @@
+ const BASIC_DEFAULT_FIELDS: [BasicIdentityField; 1] = [BasicIdentityField::Front];
+ 
+ pub(crate) fn normalize_field_text_for_identity(value: &str) -> String {
++    let _detail = crate::diag::Accum::new("note.identity_normalize");
+     value
+         .nfc()
+         .collect::<String>()
+@@ -118,6 +119,7 @@
+     notetype_key: &str,
+     components: T,
+ ) -> anyhow::Result<(String, String)> {
++    let _detail = crate::diag::Accum::new("note.identity_serialize_hash");
+     let payload = CanonicalIdentityPayload {
+         algo_version: 1,
+         recipe_id,
+--- a/anki_forge/src/product/project/input.rs
++++ b/anki_forge/src/product/project/input.rs
+@@ -16,6 +16,7 @@
+     }
+ 
+     pub(super) fn validate(&self) -> ValidationReport {
++    let _scale_scope = crate::diag::Scope::new("project.validate");
+         match self {
+             Self::Project(project) => project.validate(),
+             Self::Document(_) => ValidationReport {
+@@ -27,6 +28,7 @@
+     pub(super) fn resolved_note_identities(
+         &self,
+     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
++    let _scale_scope = crate::diag::Scope::new("project.resolved_identities");
+         match self {
+             Self::Project(project) => project.resolved_note_identities(),
+             Self::Document(document) => document
+@@ -37,6 +39,7 @@
+     }
+ 
+     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
++    let _scale_scope = crate::diag::Scope::new("normalize.lowering");
+         let result = match self {
+             Self::Project(project) => {
+                 let mut plan = project.lower_product_document();
+@@ -70,6 +73,7 @@
+         mut options: ProjectNormalizeOptions,
+         mut prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+     ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
++    let _scale_scope = crate::diag::Scope::new("normalize.total");
+         let base_dir = base_dir.into();
+         let media_store_dir = media_store_dir.into();
+         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
+--- a/anki_forge/src/product/project/pipeline.rs
++++ b/anki_forge/src/product/project/pipeline.rs
+@@ -125,6 +125,7 @@
+     writer_stack: Option<(WriterPolicy, BuildContext)>,
+     artifact_ref_prefix: Option<String>,
+ ) -> Result<(BuildReport, crate::writer_core::PackageBuildResult), BuildError> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.total");
+     let artifact_ref_prefix = artifact_ref_prefix.unwrap_or_else(|| {
+         input
+             .stable_id()
+@@ -164,6 +165,7 @@
+         &mut self,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+     ) -> Result<PreparedBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.prepare");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+@@ -342,6 +344,7 @@
+         &mut self,
+         mut state: ReconciledBuild,
+     ) -> Result<CandidateBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.generate");
+         let facts = &mut self.facts;
+         let prepared = &state.prepared;
+         let stable_ref_prefix = self.artifact_ref_prefix.clone();
+@@ -458,6 +461,7 @@
+         &mut self,
+         candidate: CandidateBuild,
+     ) -> Result<AcceptedCandidate, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.inspect");
+         let options = &self.options;
+         let facts = &mut self.facts;
+         let prepared = &candidate.state.prepared;
+@@ -551,6 +555,7 @@
+     }
+ 
+     fn publish(&mut self, candidate: AcceptedCandidate) -> Result<(), BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.publish");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+--- a/anki_forge/src/product/project/deck_import.rs
++++ b/anki_forge/src/product/project/deck_import.rs
+@@ -16,6 +16,7 @@
+ 
+ impl Project {
+     pub(crate) fn from_deck(deck: &Deck) -> Self {
++    let _detail = crate::diag::Scope::new("deck.to_project");
+         let mut project = Self::deck_import_context(deck);
+         project.media = crate::product::MediaRegistry::from_deck_media(deck.media.clone());
+         // The imported project needs note content, but not the Deck's duplicate
+--- a/anki_forge/src/product/project/pipeline/reconcile.rs
++++ b/anki_forge/src/product/project/pipeline/reconcile.rs
+@@ -6,6 +6,7 @@
+         &mut self,
+         prepared: PreparedBuild,
+     ) -> Result<ReconciledBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.reconcile");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+--- a/benchmarks/adapters/rust/src/main.rs
++++ b/benchmarks/adapters/rust/src/main.rs
+@@ -85,6 +85,8 @@
+     let [input, output] = args.as_slice() else {
+         bail!("usage: anki-forge-benchmark INPUT OUTPUT");
+     };
++    let _total = anki_forge::diag::Scope::new("adapter.total");
++    let parse = anki_forge::diag::Scope::new("adapter.parse");
+     let workload: Workload = serde_json::from_slice(&std::fs::read(input)?)?;
+     ensure!(
+         matches!(
+@@ -94,6 +96,8 @@
+         "unsupported workload"
+     );
+     ensure!(workload.notes.len() == workload.note_count, "wrong count");
++    drop(parse);
++    let register = anki_forge::diag::Scope::new("adapter.registration");
+     let mut deck = Deck::new(workload.deck_name);
+     let parent = Path::new(input).parent().context("input parent")?;
+     let mut media_by_id = BTreeMap::new();
+@@ -114,6 +118,8 @@
+             "duplicate media id"
+         );
+     }
++    drop(register);
++    let notes = anki_forge::diag::Scope::new("adapter.notes");
+     for note in workload.notes {
+         // Deck fields accept HTML, just like genanki. Escape plain text here,
+         // inside the measured invocation, without changing the shared fixture.
+@@ -124,6 +130,8 @@
+             )
+             .add()?;
+     }
++    drop(notes);
+     deck.write_apkg(output)?.ensure_success()?;
++    anki_forge::diag::report();
+     Ok(())
+ }

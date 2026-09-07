@@ -1,0 +1,11 @@
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -23,7 +23,7 @@
+ // The work window holds at most two payloads per worker plus one for
+ // the consumer. SpooledTempFile rolls before writes cross this length; Vec
+ // capacity and codec contexts add bounded overhead beyond the payload limit.
+-const PER_PAYLOAD_MEMORY: usize = 512 * 1024;
++const PER_PAYLOAD_MEMORY: usize = 2 * 1024 * 1024;
+ 
+ type CandidateArchive = StreamZip<tempfile::NamedTempFile>;
+ 

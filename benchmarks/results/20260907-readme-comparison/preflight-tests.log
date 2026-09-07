@@ -1,0 +1,59 @@
+test_allocator_metadata_must_match_the_adapter_feature_and_pinned_version (test_benchmark.BuildIdentityTests.test_allocator_metadata_must_match_the_adapter_feature_and_pinned_version) ... ok
+test_build_record_uses_the_build_environment_and_output_identity (test_benchmark.BuildIdentityTests.test_build_record_uses_the_build_environment_and_output_identity) ... ok
+test_failed_build_cannot_replace_a_previous_build_record (test_benchmark.BuildIdentityTests.test_failed_build_cannot_replace_a_previous_build_record) ... ok
+test_missing_or_stale_record_does_not_claim_a_verified_build (test_benchmark.BuildIdentityTests.test_missing_or_stale_record_does_not_claim_a_verified_build) ... ok
+test_prepare_bootstraps_without_third_party_python_packages (test_benchmark.BuildIdentityTests.test_prepare_bootstraps_without_third_party_python_packages) ... ok
+test_prepare_defaults_to_system_and_explicitly_selects_adapter_features (test_benchmark.BuildIdentityTests.test_prepare_defaults_to_system_and_explicitly_selects_adapter_features) ... ok
+test_profile_rust_and_target_native_overrides_are_recorded_without_secrets (test_benchmark.BuildIdentityTests.test_profile_rust_and_target_native_overrides_are_recorded_without_secrets) ... ok
+test_diagnostic_logs_are_open_before_adapter_launch (test_benchmark.CollectorTests.test_diagnostic_logs_are_open_before_adapter_launch) ... ok
+test_launch_exit_and_bounded_drain (test_benchmark.CollectorTests.test_launch_exit_and_bounded_drain) ... ok
+test_nonzero_and_missing_output_are_not_success (test_benchmark.CollectorTests.test_nonzero_and_missing_output_are_not_success) ... ok
+test_os_peak_is_not_previous_child_or_large_parent (test_benchmark.CollectorTests.test_os_peak_is_not_previous_child_or_large_parent) ... ok
+test_timeout_and_leftover_descendants (test_benchmark.CollectorTests.test_timeout_and_leftover_descendants) ... ok
+test_unavailable_diagnostic_log_prevents_launch (test_benchmark.CollectorTests.test_unavailable_diagnostic_log_prevents_launch) ... ok
+test_captured_adapter_version_is_rendered (test_benchmark.EvidenceTests.test_captured_adapter_version_is_rendered) ... ok
+test_failed_cell_does_not_hide_other_sizes_or_use_survivors (test_benchmark.EvidenceTests.test_failed_cell_does_not_hide_other_sizes_or_use_survivors) ... ok
+test_hand_calculated_statistics_and_timing_only_sizes (test_benchmark.EvidenceTests.test_hand_calculated_statistics_and_timing_only_sizes) ... ok
+test_measuring_defers_verification_and_cancellation_stops_schedule (test_benchmark.EvidenceTests.test_measuring_defers_verification_and_cancellation_stops_schedule) ... ok
+test_missing_deferred_artifact_preserves_other_checks_and_summary (test_benchmark.EvidenceTests.test_missing_deferred_artifact_preserves_other_checks_and_summary) ... VERIFY timing-1000-rust-01: {'status': 'verification_unavailable', 'reason': "[Errno 2] No such file or directory: '/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/tmp1a_wip9m/missing.apkg'"}
+ok
+test_oracle_identity_io_failures_preserve_remaining_evidence (test_benchmark.EvidenceTests.test_oracle_identity_io_failures_preserve_remaining_evidence) ... Anki timing-200-rust-01: missing_oracle
+Anki timing-200-genanki-01: missing_oracle
+Anki timing-200-rust-01: missing_or_changed_artifact
+Anki timing-200-genanki-01: passed
+Anki timing-200-rust-01: changed_during_oracle
+Anki timing-200-genanki-01: passed
+ok
+test_oracle_timeout_is_persisted_and_next_cell_continues (test_benchmark.EvidenceTests.test_oracle_timeout_is_persisted_and_next_cell_continues) ... Anki timing-200-rust-01: oracle_failed
+Anki timing-200-genanki-01: passed
+ok
+test_provenance_includes_untracked_runtime_sources_and_embedded_bundle (test_benchmark.EvidenceTests.test_provenance_includes_untracked_runtime_sources_and_embedded_bundle) ... ok
+test_ratio_direction_dirty_provenance_and_no_headline (test_benchmark.EvidenceTests.test_ratio_direction_dirty_provenance_and_no_headline) ... ok
+test_unmatched_memory_and_missing_anki_are_distinct (test_benchmark.EvidenceTests.test_unmatched_memory_and_missing_anki_are_distinct) ... ok
+test_unreadable_artifact_metadata_is_failed_evidence (test_benchmark.EvidenceTests.test_unreadable_artifact_metadata_is_failed_evidence) ... ok
+test_collection_row_cardinality_preserves_deferred_verification (test_benchmark.PhysicalVerifierTests.test_collection_row_cardinality_preserves_deferred_verification) ... VERIFY malformed: {'artifact_sha256': 'b116d2ba20ee597198c99396f5827b52b027d41a619313f5f4e2f9fcf98b8b77', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': 'expected exactly one collection row'}
+VERIFY malformed: {'artifact_sha256': '5b1b31a29a7c69b2c413b43a3e81865d4ada955d927fb65a5caf1582e03831d2', 'artifact_bytes': 217306, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 217088, 'decoded_zip_bytes': 217088, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': 'expected exactly one collection row'}
+ok
+test_malformed_legacy_metadata_is_invalid_evidence (test_benchmark.PhysicalVerifierTests.test_malformed_legacy_metadata_is_invalid_evidence) ... VERIFY malformed: {'artifact_sha256': 'd44e67b10b311efc9fdd98202ca7f5e410487e5f31cb1a173c77df95cbb937bc', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': 'noncanonical legacy metadata ID'}
+VERIFY malformed: {'artifact_sha256': '043365420b8475f283e9451b3246029d912069c5ce68517f4660f0057caee0f2', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': 'noncanonical legacy metadata ID'}
+VERIFY malformed: {'artifact_sha256': 'c5e631947fd8f24af85a8d75d35bdea9d9d640db7037c018fa27a78afecb5560', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': "'flds'"}
+VERIFY malformed: {'artifact_sha256': 'cf286e456b9c2c46dbe5618c793f8e402bac6548b0300d1cd5ba422bb7f69773', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': "'name'"}
+VERIFY malformed: {'artifact_sha256': '16d8aef203288ab166a64d6cfa7ac1362f6ebb33de474aae2e691786d914b8fc', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': "'NoneType' object is not iterable"}
+VERIFY malformed: {'artifact_sha256': '433a93694050e5e41208a5ba3acab22507f0cf77e7a3361d97252a2acf5b983a', 'artifact_bytes': 209114, 'package': {'version': 1, 'canonical_entry': 'collection.anki2', 'nested_compression': 'none', 'payloads': [{'name': 'collection.anki2', 'zip_method': 0, 'stored_bytes': 208896, 'decoded_zip_bytes': 208896, 'role': 'canonical'}, {'name': 'media', 'zip_method': 0, 'stored_bytes': 2, 'decoded_zip_bytes': 2, 'role': 'metadata'}], 'media_count': 0}, 'status': 'invalid_artifact', 'reason': "invalid literal for int() with base 10: 'not-an-id'"}
+ok
+test_raw_multiplicity_and_reference_counterexamples (test_benchmark.PhysicalVerifierTests.test_raw_multiplicity_and_reference_counterexamples) ... ok
+test_valid_legacy_with_whitespace_tags (test_benchmark.PhysicalVerifierTests.test_valid_legacy_with_whitespace_tags) ... ok
+test_wrong_template_and_original_corrupt_database (test_benchmark.PhysicalVerifierTests.test_wrong_template_and_original_corrupt_database) ... ok
+test_balanced_adjacent_schedule (test_benchmark.WorkloadTests.test_balanced_adjacent_schedule) ... ok
+test_frozen_corpus_and_prefixes (test_benchmark.WorkloadTests.test_frozen_corpus_and_prefixes) ... ok
+test_interrupted_and_failed_collectors_retain_attempts (test_media_benchmark.MediaFixtureTests.test_interrupted_and_failed_collectors_retain_attempts) ... ok
+test_media_references_are_checked_without_allowing_other_markup (test_media_benchmark.MediaFixtureTests.test_media_references_are_checked_without_allowing_other_markup) ... ok
+test_missing_extra_or_corrupt_media_are_rejected (test_media_benchmark.MediaFixtureTests.test_missing_extra_or_corrupt_media_are_rejected) ... ok
+test_only_requested_tiers_and_real_decodable_media (test_media_benchmark.MediaFixtureTests.test_only_requested_tiers_and_real_decodable_media) ... ok
+test_successful_collection_preserves_measurement (test_media_benchmark.MediaFixtureTests.test_successful_collection_preserves_measurement) ... ok
+test_timing_and_rss_passes_remain_separate (test_media_benchmark.MediaFixtureTests.test_timing_and_rss_passes_remain_separate) ... ok
+
+----------------------------------------------------------------------
+Ran 37 tests in 3.429s
+
+OK

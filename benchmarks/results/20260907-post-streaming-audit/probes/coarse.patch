@@ -1,0 +1,288 @@
+--- a/anki_forge/src/authoring_core/normalize.rs
++++ b/anki_forge/src/authoring_core/normalize.rs
+@@ -68,6 +68,7 @@
+     options: NormalizeOptions,
+     prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+ ) -> NormalizationResult {
++    let _scale_scope = crate::diag::Scope::new("normalize.core");
+     let risk_policy_ref = request
+         .comparison_context
+         .as_ref()
+@@ -378,6 +379,7 @@
+     notetypes: &[NormalizedNotetype],
+     bindings: &[crate::authoring_core::media::MediaBinding],
+ ) -> (Vec<MediaReference>, Vec<DiagnosticItem>) {
++    let _scale_scope = crate::diag::Scope::new("normalize.media_refs");
+     let binding_by_filename = bindings
+         .iter()
+         .map(|binding| (binding.export_filename.as_str(), binding.id.as_str()))
+--- /dev/null
++++ b/anki_forge/src/diag.rs
+@@ -0,0 +1,7 @@
++//! Private coarse wall-time probes, excluded from production.
++use std::time::Instant;
++pub struct Scope(&'static str, Instant);
++impl Scope { pub fn new(label: &'static str) -> Self { Self(label, Instant::now()) } }
++impl Drop for Scope { fn drop(&mut self) {
++    eprintln!("[DEBUG-scale-opt] {} {}", self.0, self.1.elapsed().as_nanos());
++} }
+--- a/anki_forge/src/lib.rs
++++ b/anki_forge/src/lib.rs
+@@ -129,3 +129,6 @@
+ pub const fn embedded_contract_version() -> &'static str {
+     crate::runtime::embedded_bundle_version()
+ }
++
++#[allow(missing_docs)]
++pub mod diag;
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -78,6 +78,7 @@
+         items: &[AuthoringMedia],
+         options: &NormalizeOptions,
+     ) -> Vec<Option<Result<IngestedMediaBytes, MediaIngestError>>> {
++    let _scale_scope = crate::diag::Scope::new("media.prepare");
+         let mut seen = BTreeSet::new();
+         let mut jobs = items
+             .iter()
+--- a/anki_forge/src/product/project.rs
++++ b/anki_forge/src/product/project.rs
+@@ -995,11 +995,13 @@
+     }
+ 
+     fn lower_product_document(&self) -> LoweringPlan {
++    let _scale_scope = crate::diag::Scope::new("project.lower_product");
+         let (document_id, payload) = self.to_product_v3_payload();
+         crate::product::lowering::lower_owned_product_v2_document(document_id, payload)
+     }
+ 
+     fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
++    let _scale_scope = crate::diag::Scope::new("project.payload");
+         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
+         let default_deck = self
+             .default_deck
+--- a/anki_forge/src/product/project/input.rs
++++ b/anki_forge/src/product/project/input.rs
+@@ -16,6 +16,7 @@
+     }
+ 
+     pub(super) fn validate(&self) -> ValidationReport {
++    let _scale_scope = crate::diag::Scope::new("project.validate");
+         match self {
+             Self::Project(project) => project.validate(),
+             Self::Document(_) => ValidationReport {
+@@ -27,6 +28,7 @@
+     pub(super) fn resolved_note_identities(
+         &self,
+     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
++    let _scale_scope = crate::diag::Scope::new("project.resolved_identities");
+         match self {
+             Self::Project(project) => project.resolved_note_identities(),
+             Self::Document(document) => document
+@@ -37,6 +39,7 @@
+     }
+ 
+     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
++    let _scale_scope = crate::diag::Scope::new("normalize.lowering");
+         let result = match self {
+             Self::Project(project) => {
+                 let mut plan = project.lower_product_document();
+@@ -70,6 +73,7 @@
+         mut options: ProjectNormalizeOptions,
+         mut prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+     ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
++    let _scale_scope = crate::diag::Scope::new("normalize.total");
+         let base_dir = base_dir.into();
+         let media_store_dir = media_store_dir.into();
+         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
+--- a/anki_forge/src/product/project/pipeline.rs
++++ b/anki_forge/src/product/project/pipeline.rs
+@@ -125,6 +125,7 @@
+     writer_stack: Option<(WriterPolicy, BuildContext)>,
+     artifact_ref_prefix: Option<String>,
+ ) -> Result<(BuildReport, crate::writer_core::PackageBuildResult), BuildError> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.total");
+     let artifact_ref_prefix = artifact_ref_prefix.unwrap_or_else(|| {
+         input
+             .stable_id()
+@@ -164,6 +165,7 @@
+         &mut self,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+     ) -> Result<PreparedBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.prepare");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+@@ -342,6 +344,7 @@
+         &mut self,
+         mut state: ReconciledBuild,
+     ) -> Result<CandidateBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.generate");
+         let facts = &mut self.facts;
+         let prepared = &state.prepared;
+         let stable_ref_prefix = self.artifact_ref_prefix.clone();
+@@ -458,6 +461,7 @@
+         &mut self,
+         candidate: CandidateBuild,
+     ) -> Result<AcceptedCandidate, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.inspect");
+         let options = &self.options;
+         let facts = &mut self.facts;
+         let prepared = &candidate.state.prepared;
+@@ -551,6 +555,7 @@
+     }
+ 
+     fn publish(&mut self, candidate: AcceptedCandidate) -> Result<(), BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.publish");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+--- a/anki_forge/src/product/project/pipeline/reconcile.rs
++++ b/anki_forge/src/product/project/pipeline/reconcile.rs
+@@ -6,6 +6,7 @@
+         &mut self,
+         prepared: PreparedBuild,
+     ) -> Result<ReconciledBuild, BuildFailureCause> {
++    let _scale_scope = crate::diag::Scope::new("pipeline.reconcile");
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+--- a/anki_forge/src/runtime/defaults.rs
++++ b/anki_forge/src/runtime/defaults.rs
+@@ -15,6 +15,7 @@
+ }
+ 
+ pub(crate) fn load_embedded_writer_defaults() -> anyhow::Result<(WriterPolicy, BuildContext)> {
++    let _scale_scope = crate::diag::Scope::new("runtime.defaults");
+     super::embedded::load_writer_defaults()
+ }
+ 
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -160,6 +160,7 @@
+     artifact_target: &BuildArtifactTarget,
+     prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+ ) -> Result<ApkgMaterialization> {
++    let _scale_scope = crate::diag::Scope::new("apkg.total");
+     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
+         format!(
+             "create artifact root {}",
+@@ -240,6 +241,7 @@
+             size: 0,
+             crc: crc32fast::Hasher::new(),
+         };
++        let _compress = crate::diag::Scope::new("apkg.collection_zstd");
+         zstd::stream::copy_encode(File::open(collection.path())?, &mut measured, 0)?;
+         measured.flush()?;
+         let CrcWriter { output, size, crc } = measured;
+@@ -436,11 +438,13 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<tempfile::NamedTempFile> {
++    let _scale_scope = crate::diag::Scope::new("sqlite.total");
+     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
+     let _ = fs::remove_file(&path);
+     let conn = Connection::open(&path)
+         .with_context(|| format!("open collection database {}", path.display()))?;
+     {
++        let _schema = crate::diag::Scope::new("sqlite.schema");
+         let transaction = conn.unchecked_transaction()?;
+         execute_source_schema(&transaction, SCHEMA11_SQL)?;
+         execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+@@ -454,6 +458,7 @@
+ 
+     // Keep compaction without rewriting and journaling the source database.
+     // An empty, uniquely reserved file also cleans up on any error path.
++    let _compact = crate::diag::Scope::new("sqlite.compact");
+     let compacted =
+         tempfile::NamedTempFile::new_in(root_dir).context("create compacted collection file")?;
+     // Match Connection::open's native Unix filename handling instead of using
+@@ -517,6 +522,7 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<()> {
++    let _scale_scope = crate::diag::Scope::new("sqlite.populate");
+     let transaction = conn.unchecked_transaction()?;
+     populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?;
+     transaction.commit()?;
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -289,6 +289,7 @@
+     limits: &InspectLimits,
+     projection: ReadProjection,
+ ) -> Result<ApkgFacts> {
++    let _scale_scope = crate::diag::Scope::new("inspect.facts");
+     let mut archive = ApkgReader::open(path, limits)?;
+ 
+     let (version, mut limitations) = read_package_version(&mut archive)?;
+@@ -996,6 +997,7 @@
+     archive: &mut ApkgReader<'_>,
+     version: PackageVersion,
+ ) -> Result<Vec<ResolvedMedia>> {
++    let _scale_scope = crate::diag::Scope::new("inspect.media");
+     let decoded = archive
+         .bytes(
+             "media",
+@@ -1239,6 +1241,7 @@
+ }
+ 
+ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<CollectionData> {
++    let _scale_scope = crate::diag::Scope::new("inspect.sqlite");
+     with_readonly_sqlite(path, |conn| {
+         let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
+         let deck_values = deck_rows
+--- a/anki_forge/src/writer_core/staging.rs
++++ b/anki_forge/src/writer_core/staging.rs
+@@ -332,6 +332,7 @@
+         target: &BuildArtifactTarget,
+         prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+     ) -> Result<MaterializedStaging> {
++    let _scale_scope = crate::diag::Scope::new("writer.staging");
+         let staging_dir = target.staging_dir();
+         fs::create_dir_all(&staging_dir)
+             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
+@@ -658,6 +659,7 @@
+     normalized_ir: &NormalizedIr,
+     build_context: &BuildContext,
+ ) -> Vec<BuildDiagnosticItem> {
++    let _scale_scope = crate::diag::Scope::new("writer.validate");
+     let notetype_map: BTreeMap<_, _> = normalized_ir
+         .notetypes
+         .iter()
+--- a/benchmarks/adapters/rust/src/main.rs
++++ b/benchmarks/adapters/rust/src/main.rs
+@@ -85,6 +85,8 @@
+     let [input, output] = args.as_slice() else {
+         bail!("usage: anki-forge-benchmark INPUT OUTPUT");
+     };
++    let _total = anki_forge::diag::Scope::new("adapter.total");
++    let parse = anki_forge::diag::Scope::new("adapter.parse");
+     let workload: Workload = serde_json::from_slice(&std::fs::read(input)?)?;
+     ensure!(
+         matches!(
+@@ -94,6 +96,8 @@
+         "unsupported workload"
+     );
+     ensure!(workload.notes.len() == workload.note_count, "wrong count");
++    drop(parse);
++    let register = anki_forge::diag::Scope::new("adapter.registration");
+     let mut deck = Deck::new(workload.deck_name);
+     let parent = Path::new(input).parent().context("input parent")?;
+     let mut media_by_id = BTreeMap::new();
+@@ -114,6 +118,8 @@
+             "duplicate media id"
+         );
+     }
++    drop(register);
++    let notes = anki_forge::diag::Scope::new("adapter.notes");
+     for note in workload.notes {
+         // Deck fields accept HTML, just like genanki. Escape plain text here,
+         // inside the measured invocation, without changing the shared fixture.
+@@ -124,6 +130,7 @@
+             )
+             .add()?;
+     }
++    drop(notes);
+     deck.write_apkg(output)?.ensure_success()?;
+     Ok(())
+ }

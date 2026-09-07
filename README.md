@@ -60,6 +60,89 @@ cargo run -q -p anki_forge --example target_api_basic
 
 This writes `spanish.apkg` in the current directory.
 
+### 2.1 Export benchmarks
+
+The native Rust `Deck` API is compared with genanki **0.13.1 / CPython 3.11.0**
+on five synthetic Basic workloads at **100, 200, 500 and 1,000 notes**.
+Three complete sessions provide **30 timings and 15 separate peak-RSS samples
+per implementation/cell**, excluding warmups. Time includes process startup,
+input parsing, media registration and default export checks.
+
+This frozen three-session comparison predates the text ownership optimization
+measured separately below.
+
+![Export time saved versus genanki, with both absolute median times for every workload and size](benchmarks/results/20260907-bounded-media/time-heatmap.svg)
+
+At 1,000 notes, text-only export uses **43.7% less time** and unique images use
+**15.8% less time**: 232.0 ms versus 275.6 ms. The three image sessions range
+from 15.00% to 16.75% time saved. Memory also depends on the workload:
+
+| Workload, 1,000 notes | Peak RSS MiB, Rust / genanki | APKG MiB, Rust / genanki |
+| --- | ---: | ---: |
+| Text only | 30.19 / 31.47 | 0.20 / 0.83 |
+| Unique images | 40.11 / 34.73 | 61.50 / 62.17 |
+| Unique audio | 39.75 / 35.12 | 30.72 / 31.51 |
+| Mixed, unique media | 38.52 / 33.86 | 33.87 / 34.57 |
+| Mixed, shared media | 35.39 / 32.20 | 2.56 / 3.22 |
+
+Values are pooled medians; RSS is the median of independent process peaks.
+Measured on **Apple M1 Pro, 32 GiB, macOS ARM64, battery power**, with Rust
+**1.92.0 release, default features and system allocator**, on 2026-09-07.
+The measured code is revision `ab7d261` plus a [frozen uncommitted patch](benchmarks/results/20260907-bounded-media/source.patch);
+source and binary hashes remained unchanged across all three sessions. Native
+power readings were checked before and after every export. PNG/WAV fixtures are
+frozen; mixed workloads contain 30% text, 40% images and 30% audio, with 49 distinct
+files in the shared case. File cache is uncontrolled. These local measurements
+cover the native Rust API; Node/Python bindings are outside this comparison.
+Default APKG formats differ: Rust uses modern zstd collections, while genanki
+uses legacy stored collections.
+
+All **2,520 exports** passed content/media checks, and **120 packages** passed
+Anki import/content/render checks. The pinned Anki checker includes a recorded
+`tokio/io-util` build-feature patch. See the [full report and raw evidence](benchmarks/results/20260907-bounded-media/report.md)
+for every cell's absolute values, IQR, session variation and reproduction steps.
+
+The [implementation report](benchmarks/results/20260907-bounded-media/implementation.md) separately compares
+the shared media buffer pool with the preceding version across **29 cases**.
+In that paired test, 64 × 1 MiB images used **6.0% less time** with
+**1.2 MiB more RSS**; mixed file sizes used **9.5% less time**
+with **1.6 MiB more RSS**. These synthetic large-file results describe
+the buffering change; the standard Rust/genanki matrix above uses smaller files.
+The [preceding three-session evidence](benchmarks/results/20260907-streaming-followup/report.md) remains available.
+
+The subsequent [text ownership optimization](benchmarks/results/20260907-text-ownership/README.md)
+moves strings out of the temporary Project during Deck export. In a new paired
+29-case comparison on **AC power**, peak RSS for 1,000 long-field notes fell from
+**60.9 to 53.6 MiB (12.0%)**; with four times the long-field content it fell from
+**155.4 to 124.2 MiB (20.1%)**. At 10,000 text notes, elapsed time fell from
+490.5 to 477.8 ms (2.6%). Time changes were small and mixed across other cases;
+the main gain is memory. All 928 exports were byte-identical between versions,
+and all 29 scenes passed Anki import/content/render checks. This comparison uses
+two Rust versions; its percentages are not added to the earlier genanki results.
+
+<details>
+<summary>Time scaling, resources and implementation comparisons</summary>
+
+Points show pooled median times; whiskers show Q1–Q3 sample spread, not confidence
+intervals. Faint dots retain the three individual session medians.
+
+![Export time scaling across five workloads, using identical linear axes](benchmarks/results/20260907-bounded-media/time-scaling.svg)
+
+Positive resource savings mean Rust uses less; negative values mean it uses more.
+
+![Peak RSS and APKG size savings across every workload and size](benchmarks/results/20260907-bounded-media/resources.svg)
+
+The separate before/after comparison uses 7 interleaved timings and 5 independent
+RSS samples per version/case, with unchanged inputs and byte-identical APKGs.
+
+![Large-media export time and RSS before and after shared buffers](benchmarks/results/20260907-bounded-media/bounded-media.svg)
+
+The later text ownership comparison also separates peak RSS from elapsed time:
+
+![Text export memory and time before and after consuming temporary Project fields](benchmarks/results/20260907-text-ownership/text-ownership.svg)
+
+</details>
+
 ## 3. Project For Long-Term Decks
 
 ```rust

@@ -1,0 +1,13 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+warning: use of deprecated associated function `tempfile::TempPath::from_path`: use TempPath::try_from_path
+    --> /Users/hp/Desktop/2026/anki-forge/anki_forge/src/product/project.rs:2283:58
+     |
+2283 |                     input_files.push(tempfile::TempPath::from_path(owned_path));
+     |                                                          ^^^^^^^^^
+     |
+     = note: `#[warn(deprecated)]` on by default
+
+warning: `anki_forge` (lib) generated 1 warning
+   Compiling anki-forge-benchmark v0.1.0 (/Users/hp/Desktop/2026/anki-forge/benchmarks/adapters/rust)
+    Finished `release` profile [optimized] target(s) in 16.17s
+accepted 4a3b8857ee9c1477f63990cb511fb221c71f18c32753bdd41f367d03c38ba4af

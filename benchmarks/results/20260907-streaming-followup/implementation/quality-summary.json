@@ -1,0 +1,19 @@
+{
+  "rust_workspace_tests_including_doctests": 1006,
+  "rust_suites_including_doctests": 78,
+  "python_benchmark_tests": 43,
+  "status": "all required checks passed",
+  "initial_failure": "PACKAGE_FILES.txt ordering for the new module; corrected without runtime changes. Embedded bundle, payload and remaining release checks then passed.",
+  "checks": [
+    "fmt",
+    "default public facade",
+    "clippy all targets all features -D warnings",
+    "workspace all features",
+    "doctests",
+    "rustdoc -D warnings",
+    "embedded contract bundle",
+    "crate payload",
+    "release metadata",
+    "dependency policy"
+  ]
+}

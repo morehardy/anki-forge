@@ -1,0 +1,271 @@
+--- a/anki_forge/src/product/project.rs
++++ b/anki_forge/src/product/project.rs
+@@ -819,9 +819,7 @@
+     /// path-backed until normalization unless `BuildOptions::self_contained()`
+     /// is selected explicitly.
+     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
+-        let mut plan = self.lower_product_document();
+-        self.apply_note_source_paths(&mut plan);
+-        self.apply_notetype_source_paths(&mut plan);
++        let (mut plan, _) = self.lower_product_document();
+         plan.authoring_document
+             .media
+             .extend(product_media_to_authoring_media(self.media.media())?);
+@@ -994,12 +992,28 @@
+         }
+     }
+ 
+-    fn lower_product_document(&self) -> LoweringPlan {
+-        let (document_id, payload) = self.to_product_v3_payload();
+-        crate::product::lowering::lower_owned_product_v2_document(document_id, payload)
+-    }
+-
++    fn lower_product_document(&self) -> (LoweringPlan, ResolvedNoteIdentities) {
++        let counts = self.note_stable_id_counts();
++        let identities = self.resolve_note_identities(&counts);
++        let (document_id, payload) = self.product_payload_with_identities(&identities);
++        let mut plan = crate::product::lowering::lower_owned_product_v2_document(document_id, payload);
++        self.apply_prepared_note_source_paths(&mut plan, &counts, &identities);
++        self.apply_notetype_source_paths(&mut plan);
++        let identities = identities.into_iter()
++            .map(|identity| (identity.stable_id.clone(), identity)).collect();
++        (plan, identities)
++    }
++
++    #[cfg(test)]
+     fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
++        let counts = self.note_stable_id_counts();
++        self.product_payload_with_identities(&self.resolve_note_identities(&counts))
++    }
++
++    fn product_payload_with_identities(
++        &self,
++        identities: &[crate::update_safety::model::ResolvedNoteIdentity],
++    ) -> (String, crate::product::model::ProductDocumentV2Payload) {
+         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
+         let default_deck = self
+             .default_deck
+@@ -1112,11 +1126,9 @@
+                 }),
+         );
+ 
+-        let stable_id_counts = self.note_stable_id_counts();
+         let mut notes = Vec::with_capacity(self.notes.len());
+-        for (index, note) in self.notes.iter().enumerate() {
+-            let note_id =
+-                resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
++        for (index, (note, identity)) in self.notes.iter().zip(identities).enumerate() {
++            let note_id = identity.stable_id.clone();
+             let deck_name = note
+                 .deck_name()
+                 .unwrap_or(default_deck.as_str())
+@@ -1206,17 +1218,12 @@
+         counts
+     }
+ 
+-    fn resolved_note_identities(
++    fn resolve_note_identities(
+         &self,
+-    ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+-        let stable_id_counts = self.note_stable_id_counts();
+-        self.notes
+-            .iter()
+-            .enumerate()
+-            .map(|(index, note)| {
+-                let identity = resolve_product_note_identity(self, note, index, &stable_id_counts);
+-                (identity.stable_id.clone(), identity)
+-            })
++        stable_id_counts: &BTreeMap<&str, usize>,
++    ) -> Vec<crate::update_safety::model::ResolvedNoteIdentity> {
++        self.notes.iter().enumerate()
++            .map(|(index, note)| resolve_product_note_identity(self, note, index, stable_id_counts))
+             .collect()
+     }
+ 
+@@ -1234,22 +1241,30 @@
+             .collect()
+     }
+ 
++    #[cfg(test)]
+     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
+-        let stable_id_counts = self.note_stable_id_counts();
+-        let mut project_indexes_by_authoring_id = BTreeMap::<String, Vec<usize>>::new();
+-        for (project_index, product_note) in self.notes.iter().enumerate() {
+-            let identity =
+-                resolve_product_note_identity(self, product_note, project_index, &stable_id_counts);
++        let counts = self.note_stable_id_counts();
++        self.apply_prepared_note_source_paths(plan, &counts, &self.resolve_note_identities(&counts));
++    }
++
++    fn apply_prepared_note_source_paths(
++        &self,
++        plan: &mut LoweringPlan,
++        stable_id_counts: &BTreeMap<&str, usize>,
++        identities: &[crate::update_safety::model::ResolvedNoteIdentity],
++    ) {
++        let mut project_indexes_by_authoring_id = BTreeMap::new();
++        for (project_index, identity) in identities.iter().enumerate() {
+             project_indexes_by_authoring_id
+-                .entry(identity.stable_id)
+-                .or_default()
+-                .push(project_index);
++                .entry(identity.stable_id.as_str())
++                .and_modify(|index| *index = None)
++                .or_insert(Some(project_index));
+         }
+         for authoring_note in &plan.authoring_document.notes {
+             let Some(project_index) = project_indexes_by_authoring_id
+-                .get(&authoring_note.id)
+-                .filter(|indexes| indexes.len() == 1)
+-                .map(|indexes| indexes[0])
++                .get(authoring_note.id.as_str())
++                .copied()
++                .flatten()
+             else {
+                 continue;
+             };
+@@ -1902,10 +1917,9 @@
+         .iter()
+         .find(|note_type| note_type.id() == note.note_type_id())
+     else {
+-        return note
+-            .field_keys()
+-            .map(|field| (field.to_string(), field.to_string()))
+-            .collect();
++        // Without custom field aliases, the caller already uses the same
++        // authoring field spelling as the source; no per-note identity map.
++        return BTreeMap::new();
+     };
+ 
+     let name_by_key = note_type
+@@ -2714,7 +2728,10 @@
+     }
+ }
+ 
++type ResolvedNoteIdentities = BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity>;
++
+ struct ProjectNormalizeOutput {
++    resolved_note_identities: ResolvedNoteIdentities,
+     normalized_ir: crate::authoring_core::NormalizedIr,
+     diagnostics: Vec<Diagnostic>,
+     media_source_modes: BTreeMap<String, MediaSourceMode>,
+--- a/anki_forge/src/product/project/input.rs
++++ b/anki_forge/src/product/project/input.rs
+@@ -24,27 +24,14 @@
+         }
+     }
+ 
+-    pub(super) fn resolved_note_identities(
+-        &self,
+-    ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+-        match self {
+-            Self::Project(project) => project.resolved_note_identities(),
+-            Self::Document(document) => document
+-                .product_v2()
+-                .map(product_v2_resolved_note_identities)
+-                .unwrap_or_default(),
+-        }
+-    }
+-
+-    fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
++    fn lower_with_project_error(&self) -> Result<(LoweringPlan, ResolvedNoteIdentities), ProjectNormalizeError> {
+         let result = match self {
+-            Self::Project(project) => {
+-                let mut plan = project.lower_product_document();
+-                project.apply_note_source_paths(&mut plan);
+-                project.apply_notetype_source_paths(&mut plan);
+-                Ok(plan)
+-            }
+-            Self::Document(document) => document.lower(),
++            Self::Project(project) => Ok(project.lower_product_document()),
++            Self::Document(document) => document.lower().map(|plan| {
++                let identities = document.product_v2()
++                    .map(product_v2_resolved_note_identities).unwrap_or_default();
++                (plan, identities)
++            }),
+         };
+         result.map_err(|error| ProjectNormalizeError {
+             message: "lower product document".into(),
+@@ -74,7 +61,7 @@
+         let media_store_dir = media_store_dir.into();
+         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
+         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
+-        let mut lowering = self.lower_with_project_error()?;
++        let (mut lowering, resolved_note_identities) = self.lower_with_project_error()?;
+         let product_diagnostics =
+             map_product_diagnostics(std::mem::take(&mut lowering.product_diagnostics));
+         let lowering_diagnostics =
+@@ -202,6 +189,7 @@
+             });
+         }
+         Ok(ProjectNormalizeOutput {
++            resolved_note_identities,
+             normalized_ir,
+             diagnostics,
+             media_source_modes,
+--- a/anki_forge/src/product/project/pipeline.rs
++++ b/anki_forge/src/product/project/pipeline.rs
+@@ -153,8 +153,8 @@
+         &mut self,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+     ) -> Result<(), BuildFailureCause> {
+-        let prepared = self.prepare(writer_stack)?;
+-        let reconciled = self.reconcile(prepared)?;
++        let (prepared, identities) = self.prepare(writer_stack)?;
++        let reconciled = self.reconcile(prepared, identities)?;
+         let candidate = self.generate(reconciled)?;
+         let accepted = self.inspect(candidate)?;
+         self.publish(accepted)
+@@ -163,7 +163,7 @@
+     fn prepare(
+         &mut self,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+-    ) -> Result<PreparedBuild, BuildFailureCause> {
++    ) -> Result<(PreparedBuild, ResolvedNoteIdentities), BuildFailureCause> {
+         let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+@@ -278,6 +278,7 @@
+             }
+         };
+         let normalized = normalized_output.normalized_ir;
++        let identities = normalized_output.resolved_note_identities;
+         let media_source_modes = normalized_output.media_source_modes;
+         facts.diagnostics.extend(normalized_output.diagnostics);
+         deduplicate_diagnostics(&mut facts.diagnostics);
+@@ -326,7 +327,7 @@
+                 (writer_policy, build_context)
+             }
+         };
+-        Ok(PreparedBuild {
++        Ok((PreparedBuild {
+             prepared_media,
+             artifact_workspace,
+             baseline,
+@@ -335,7 +336,7 @@
+             media_store_dir,
+             writer_policy,
+             build_context,
+-        })
++        }, identities))
+     }
+ 
+     fn generate(
+--- a/anki_forge/src/product/project/pipeline/reconcile.rs
++++ b/anki_forge/src/product/project/pipeline/reconcile.rs
+@@ -5,6 +5,7 @@
+     pub(super) fn reconcile(
+         &mut self,
+         prepared: PreparedBuild,
++        resolved_note_identities: ResolvedNoteIdentities,
+     ) -> Result<ReconciledBuild, BuildFailureCause> {
+         let input = self.input;
+         let options = &self.options;
+@@ -19,7 +20,6 @@
+             writer_policy,
+             build_context,
+         } = prepared;
+-        let resolved_note_identities = input.resolved_note_identities();
+ 
+         let update_mode = match crate::update_safety::effective_mode(options) {
+             Ok(mode) => mode,

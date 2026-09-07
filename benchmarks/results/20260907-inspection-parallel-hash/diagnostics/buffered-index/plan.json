@@ -1,0 +1,61 @@
+{
+  "name": "buffered-index",
+  "variants": [
+    "before",
+    "buffered-index"
+  ],
+  "repeats": 10,
+  "sizes": [
+    100,
+    1000
+  ],
+  "warmups": 3,
+  "binaries": {
+    "before": "6360d8c4b6ecc7179a46f73bd597b02f8fc9a24366a006ec70294aedf0b2be7b",
+    "buffered-index": "21c2c3883b88996765d194e1f17d5f52736d98c72090ec92a105d9950f574c7d"
+  },
+  "started_utc": "2026-09-07T09:16:58.643163+00:00",
+  "cells": [
+    [
+      "basic-mixed-text-v1",
+      100
+    ],
+    [
+      "basic-mixed-text-v1",
+      1000
+    ],
+    [
+      "basic-image-unique-v2",
+      100
+    ],
+    [
+      "basic-image-unique-v2",
+      1000
+    ],
+    [
+      "basic-audio-unique-v2",
+      100
+    ],
+    [
+      "basic-audio-unique-v2",
+      1000
+    ],
+    [
+      "basic-mixed-unique-v2",
+      100
+    ],
+    [
+      "basic-mixed-unique-v2",
+      1000
+    ],
+    [
+      "basic-mixed-shared-v2",
+      100
+    ],
+    [
+      "basic-mixed-shared-v2",
+      1000
+    ]
+  ],
+  "seed": 20260907
+}

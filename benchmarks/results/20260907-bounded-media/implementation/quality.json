@@ -1,0 +1,35 @@
+[
+  {
+    "name": "rust-quality",
+    "command": [
+      "bash",
+      "scripts/check_rust_crate_quality.sh"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 204.93429058301263
+  },
+  {
+    "name": "benchmark-tests",
+    "command": [
+      "benchmarks/.venv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "benchmarks/tests",
+      "-v"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 2.9969508330104873
+  },
+  {
+    "name": "diff-whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.024169999989680946
+  }
+]

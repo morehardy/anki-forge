@@ -1,0 +1,15 @@
+{
+  "candidate": "scratch-defer-indexes",
+  "variable": "Defer seven non-unique note/card indexes until after row insertion, inside the same transaction.",
+  "scope": "Only create_latest_collection_file() and its unpublished disposable SQLite file",
+  "unchanged": [
+    "Public API",
+    "registration fingerprints",
+    "media/source integrity checks",
+    "collection rows and schema",
+    "VACUUM INTO",
+    "mandatory inspection",
+    "final APKG flush/sync/atomic publication"
+  ],
+  "gate": "Physical container may differ; require deterministic bytes within each variant, complete raw schema/row equivalence, input/content validation and Anki import/render. No production adoption in this audit."
+}

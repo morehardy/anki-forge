@@ -1,0 +1,20 @@
+{
+  "objective": "Implement bounded reusable media payload storage, investigate text copy reduction, and retain only measured improvements with unchanged public behavior.",
+  "baseline_sha256": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+  "media_candidate": "A single lazy 4.5 MiB pool of fixed 64 KiB buffers for a build, shared by in-flight payloads; spill without waiting when exhausted; return buffers on consumption/error.",
+  "selection": "End-to-end gains on large files with controlled RSS; no material common-media regression. Measure actual RSS as well as the allocation bound.",
+  "constraints": [
+    "No bulk registration API",
+    "Synchronous full fingerprints and source-change checks",
+    "Full media bytes, CRC, resource limits, deterministic output order",
+    "Final package sync and publication",
+    "Do not adopt previously rejected SQLite candidates"
+  ],
+  "verification": [
+    "Red regression at the real encoded-payload seam",
+    "Concurrency/exhaustion/error cleanup and real mixed-source retry",
+    "Interleaved current/candidate performance plus separate RSS",
+    "Full Rust and benchmark checks for accepted changes",
+    "Final before/after and three complete unchanged genanki matrices before updating README"
+  ]
+}
