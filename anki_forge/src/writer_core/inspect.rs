@@ -110,6 +110,7 @@ struct CollectionData {
     note_identity_metadata: Vec<Value>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
     actual_card_decks: BTreeMap<(String, usize), String>,
+    summary_counts: NoteCardCounts,
 }
 
 struct ApkgFacts {
@@ -120,6 +121,19 @@ struct ApkgFacts {
     note_identity_metadata: Vec<Value>,
     notetype_model_ids: BTreeMap<String, i64>,
     limitations: ReadLimitations,
+    summary_counts: NoteCardCounts,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ReadProjection {
+    Observations,
+    Summary,
+}
+
+#[derive(Debug, Clone, Default)]
+struct NoteCardCounts {
+    notes: usize,
+    cards: usize,
 }
 
 /// Facts consumed by a build without a comparison baseline. Unlike an
@@ -222,7 +236,7 @@ pub fn inspect_apkg_with_limits(
 }
 
 fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectReport> {
-    let facts = read_apkg_facts(path, limits)?;
+    let facts = read_apkg_facts(path, limits, ReadProjection::Observations)?;
     let observations = build_observations(
         &facts.normalized_ir,
         &facts.media,
@@ -245,17 +259,12 @@ pub(crate) fn inspect_apkg_summary_with_limits(
     path: &Path,
     limits: &InspectLimits,
 ) -> std::result::Result<ApkgInspectSummary, InspectError> {
-    let facts = read_apkg_facts(path, limits).map_err(InspectError::from_anyhow)?;
-    let mut notes = 0;
-    let mut cards = 0;
-    for (note, _) in observed_notes(&facts.normalized_ir) {
-        notes += 1;
-        cards += actual_cards_for_note(&facts.actual_card_decks, &note.id).count();
-    }
+    let facts = read_apkg_facts(path, limits, ReadProjection::Summary)
+        .map_err(InspectError::from_anyhow)?;
     Ok(ApkgInspectSummary {
         observation_status: facts.limitations.observation_status,
-        notes,
-        cards,
+        notes: facts.summary_counts.notes,
+        cards: facts.summary_counts.cards,
         notetypes: facts.normalized_ir.notetypes.len(),
         templates: facts
             .normalized_ir
@@ -273,9 +282,13 @@ pub(crate) fn inspect_apkg_summary_with_limits(
     })
 }
 
-// Both entry points must perform the same bounded archive reads and SQLite
-// decoding before deciding whether to collect full observations or just counts.
-fn read_apkg_facts(path: &Path, limits: &InspectLimits) -> Result<ApkgFacts> {
+// Both projections perform the same bounded archive reads, SQLite column
+// decoding and model validation. Only retained observations differ.
+fn read_apkg_facts(
+    path: &Path,
+    limits: &InspectLimits,
+    projection: ReadProjection,
+) -> Result<ApkgFacts> {
     let mut archive = ApkgReader::open(path, limits)?;
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
@@ -311,6 +324,7 @@ fn read_apkg_facts(path: &Path, limits: &InspectLimits) -> Result<ApkgFacts> {
     let mut actual_card_decks = BTreeMap::new();
     let mut note_identity_metadata = vec![];
     let mut notetype_model_ids = BTreeMap::new();
+    let mut summary_counts = NoteCardCounts::default();
 
     let collection_root = tempfile::tempdir().context("create inspect collection directory")?;
     let collection_path = collection_root.path().join("collection.sqlite");
@@ -326,13 +340,14 @@ fn read_apkg_facts(path: &Path, limits: &InspectLimits) -> Result<ApkgFacts> {
         .is_some()
     {
         drop(collection_file);
-        let collection = read_collection_data(&collection_path)?;
+        let collection = read_collection_data(&collection_path, projection)?;
         normalized_ir.notetypes = collection.notetypes;
         notetype_model_ids = collection.notetype_model_ids;
         normalized_ir.notes = collection.notes;
         note_identity_metadata = collection.note_identity_metadata;
         template_target_decks = collection.template_target_decks;
         actual_card_decks = collection.actual_card_decks;
+        summary_counts = collection.summary_counts;
         has_core_data = true;
     } else {
         limitations.missing_domains.insert(DOMAIN_NOTETYPES.into());
@@ -363,6 +378,7 @@ fn read_apkg_facts(path: &Path, limits: &InspectLimits) -> Result<ApkgFacts> {
         note_identity_metadata,
         notetype_model_ids,
         limitations,
+        summary_counts,
     })
 }
 
@@ -1098,7 +1114,7 @@ impl Write for MediaHash {
     }
 }
 
-fn read_collection_data(path: &Path) -> Result<CollectionData> {
+fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<CollectionData> {
     with_readonly_sqlite(path, |conn| {
         let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
         let deck_values = deck_rows
@@ -1341,15 +1357,18 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
             Ok((row.get::<_, i64>(0)?, row.get::<_, Option<String>>(1)?))
         })? {
             let (note_id, deck_name) = row?;
-            note_decks_by_row_id.insert(
-                note_id,
-                deck_name
-                    .map(|name| native_deck_name_to_human(&name))
-                    .unwrap_or_else(|| "Default".into()),
-            );
+            if projection == ReadProjection::Observations {
+                note_decks_by_row_id.insert(
+                    note_id,
+                    deck_name
+                        .map(|name| native_deck_name_to_human(&name))
+                        .unwrap_or_else(|| "Default".into()),
+                );
+            }
         }
 
         let mut actual_card_decks = BTreeMap::<(String, usize), String>::new();
+        let mut summary_card_ordinals = BTreeMap::<String, BTreeSet<usize>>::new();
         let mut card_deck_rows = conn.prepare(
             "select notes.guid, cards.ord, decks.name
              from cards
@@ -1365,78 +1384,93 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
             ))
         })? {
             let (note_guid, ord, deck_name) = row?;
-            actual_card_decks.insert(
-                (note_guid, ord as usize),
-                deck_name
-                    .map(|name| native_deck_name_to_human(&name))
-                    .unwrap_or_else(|| "Default".into()),
-            );
+            // Both projections collapse identical (GUID, ord) pairs, including
+            // the existing signed-to-usize ordinal conversion. Summary does
+            // not retain deck names, but they were still decoded above.
+            let ord = ord as usize;
+            match projection {
+                ReadProjection::Observations => {
+                    actual_card_decks.insert(
+                        (note_guid, ord),
+                        deck_name
+                            .map(|name| native_deck_name_to_human(&name))
+                            .unwrap_or_else(|| "Default".into()),
+                    );
+                }
+                ReadProjection::Summary => {
+                    summary_card_ordinals
+                        .entry(note_guid)
+                        .or_default()
+                        .insert(ord);
+                }
+            }
         }
 
+        let mut notes = Vec::new();
+        let mut note_identity_metadata = Vec::new();
+        let mut summary_counts = NoteCardCounts::default();
         let mut note_rows =
             conn.prepare("select id, guid, mid, mod, tags, flds, data from notes order by id")?;
-        let rows = note_rows
-            .query_map([], |row| {
-                let id: i64 = row.get(0)?;
-                let guid: String = row.get(1)?;
-                let mid: i64 = row.get(2)?;
-                let mtime_secs: i64 = row.get(3)?;
-                let tags: String = row.get(4)?;
-                let flds: String = row.get(5)?;
-                let data: String = row.get(6)?;
-                let notetype = notetypes_by_row_id
-                    .get(&mid)
-                    .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
-                // Empty storage is one empty field, not an absent field list.
-                // split also retains empty values between/trailing separators.
-                let field_values = flds.split('\u{1f}');
-                let mut fields = BTreeMap::new();
-                for (field, value) in notetype.fields.iter().zip(field_values) {
-                    fields.insert(field.name.clone(), value.to_string());
-                }
-                let note = NormalizedNote {
-                    id: guid.clone(),
-                    notetype_id: notetype.id.clone(),
-                    deck_name: note_decks_by_row_id
-                        .get(&id)
-                        .cloned()
-                        .unwrap_or_else(|| "Default".into()),
-                    fields,
-                    tags: if tags.is_empty() {
-                        vec![]
-                    } else {
-                        tags.split(' ').map(|tag| tag.to_string()).collect()
-                    },
-                    mtime_secs: Some(mtime_secs),
-                };
-                let identity_metadata = serde_json::from_str::<Value>(&data)
-                    .ok()
-                    .and_then(|value| value.get("anki_forge_identity").cloned())
-                    .map(|mut observed| {
-                        if let Some(object) = observed.as_object_mut() {
-                            object.insert(
-                                "selector".into(),
-                                Value::String(format!(
-                                    "note[guid='{}']::anki_forge_identity",
-                                    guid
-                                )),
-                            );
-                            object.insert(
-                                "evidence_refs".into(),
-                                json!([format!("note-data:{}", guid)]),
-                            );
-                        }
-                        observed
-                    });
-                Ok((note, identity_metadata))
-            })?
-            .collect::<std::result::Result<Vec<_>, _>>()?;
-
-        let mut notes = Vec::with_capacity(rows.len());
-        let mut note_identity_metadata = Vec::new();
-        for (note, identity) in rows {
+        let mut rows = note_rows.query([])?;
+        while let Some(row) = rows.next()? {
+            let id: i64 = row.get(0)?;
+            let guid: String = row.get(1)?;
+            let mid: i64 = row.get(2)?;
+            let mtime_secs: i64 = row.get(3)?;
+            let tags: String = row.get(4)?;
+            let flds: String = row.get(5)?;
+            let data: String = row.get(6)?;
+            let notetype = notetypes_by_row_id
+                .get(&mid)
+                .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
+            if projection == ReadProjection::Summary {
+                // A known row-level notetype guarantees the note is eligible
+                // for observed_notes(). Repeated GUIDs each observe the same
+                // set of actual ordinals, matching full inspection.
+                summary_counts.notes += 1;
+                summary_counts.cards += summary_card_ordinals.get(&guid).map_or(0, BTreeSet::len);
+                continue;
+            }
+            // Empty storage is one empty field, not an absent field list.
+            // split also retains empty values between/trailing separators.
+            let field_values = flds.split('\u{1f}');
+            let mut fields = BTreeMap::new();
+            for (field, value) in notetype.fields.iter().zip(field_values) {
+                fields.insert(field.name.clone(), value.to_string());
+            }
+            let note = NormalizedNote {
+                id: guid.clone(),
+                notetype_id: notetype.id.clone(),
+                deck_name: note_decks_by_row_id
+                    .get(&id)
+                    .cloned()
+                    .unwrap_or_else(|| "Default".into()),
+                fields,
+                tags: if tags.is_empty() {
+                    vec![]
+                } else {
+                    tags.split(' ').map(|tag| tag.to_string()).collect()
+                },
+                mtime_secs: Some(mtime_secs),
+            };
+            let identity_metadata = serde_json::from_str::<Value>(&data)
+                .ok()
+                .and_then(|value| value.get("anki_forge_identity").cloned())
+                .map(|mut observed| {
+                    if let Some(object) = observed.as_object_mut() {
+                        object.insert(
+                            "selector".into(),
+                            Value::String(format!("note[guid='{}']::anki_forge_identity", guid)),
+                        );
+                        object.insert(
+                            "evidence_refs".into(),
+                            json!([format!("note-data:{}", guid)]),
+                        );
+                    }
+                    observed
+                });
             notes.push(note);
-            if let Some(identity) = identity {
+            if let Some(identity) = identity_metadata {
                 note_identity_metadata.push(identity);
             }
         }
@@ -1448,6 +1482,7 @@ fn read_collection_data(path: &Path) -> Result<CollectionData> {
             note_identity_metadata,
             template_target_decks,
             actual_card_decks,
+            summary_counts,
         })
     })
 }

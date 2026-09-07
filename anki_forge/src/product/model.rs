@@ -337,6 +337,9 @@ impl From<ProductDocumentV3> for ProductDocument {
 }
 
 impl ProductDocument {
+    // Retain the former Project conversion as a test reference for the internal
+    // owned payload path; public ProductDocument deserialization is unchanged.
+    #[cfg(test)]
     pub(crate) fn from_product_v3_parts(
         document_id: String,
         default_deck_name: Option<String>,

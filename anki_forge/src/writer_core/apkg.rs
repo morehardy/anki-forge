@@ -22,7 +22,7 @@ use crate::writer_core::compat_schema::{
     SCHEMA18_UPGRADE_SQL,
 };
 use crate::writer_core::deck_name::DeckRegistry;
-use crate::writer_core::model::{NoteIdentityMetadata, WriterGuidAssignment, WriterGuidPlan};
+use crate::writer_core::model::{WriterGuidAssignment, WriterGuidPlan};
 use crate::writer_core::staging::{
     load_staging_manifest, resolve_deck_registry, staging_notetype_ids, BuildArtifactTarget,
     MaterializedStaging,
@@ -58,10 +58,12 @@ struct MediaEntry {
     legacy_zip_filename: Option<u32>,
 }
 
-fn validate_guid_plan(
+type GuidAssignments<'a> = std::collections::BTreeMap<&'a str, &'a WriterGuidAssignment>;
+
+fn validate_guid_plan<'a>(
     normalized_ir: &NormalizedIr,
-    guid_plan: Option<&WriterGuidPlan>,
-) -> anyhow::Result<std::collections::BTreeMap<String, WriterGuidAssignment>> {
+    guid_plan: Option<&'a WriterGuidPlan>,
+) -> anyhow::Result<GuidAssignments<'a>> {
     let Some(plan) = guid_plan else {
         return Ok(Default::default());
     };
@@ -81,10 +83,10 @@ fn validate_guid_plan(
                 assignment.normalized_note_id
             );
         }
-        by_note.insert(assignment.normalized_note_id.clone(), assignment.clone());
+        by_note.insert(assignment.normalized_note_id.as_str(), assignment);
     }
 
-    let actual: std::collections::BTreeSet<_> = by_note.keys().map(String::as_str).collect();
+    let actual: std::collections::BTreeSet<_> = by_note.keys().copied().collect();
     if expected != actual {
         anyhow::bail!(
             "UPDATE.WRITER_GUID_PLAN_MISMATCH: plan ids {:?} did not match normalized note ids {:?}",
@@ -94,65 +96,6 @@ fn validate_guid_plan(
     }
 
     Ok(by_note)
-}
-
-fn note_identity_metadata_for_assignment(
-    assignment: Option<&WriterGuidAssignment>,
-    note: &NormalizedNote,
-) -> NoteIdentityMetadata {
-    let selected = assignment
-        .map(|a| a.selected_anki_guid.clone())
-        .unwrap_or_else(|| note.id.clone());
-    let source = assignment
-        .map(|a| a.source.clone())
-        .unwrap_or_else(|| "current_derivation".into());
-
-    NoteIdentityMetadata {
-        schema_version: "identity-note-v1".into(),
-        stable_id: assignment
-            .map(|a| a.stable_id.clone())
-            .unwrap_or_else(|| note.id.clone()),
-        recipe_id: assignment
-            .map(|a| a.recipe_id.clone())
-            .unwrap_or_else(|| "product.explicit-or-normalized.v1".into()),
-        canonical_payload_hash: assignment.and_then(|a| a.canonical_payload_hash.clone()),
-        current_guid_candidate: assignment
-            .map(|a| a.current_guid_candidate.clone())
-            .unwrap_or_else(|| note.id.clone()),
-        selected_anki_guid: selected,
-        guid_derivation_version: assignment
-            .map(|a| a.guid_derivation_version.clone())
-            .unwrap_or_else(|| "guid.raw-stable-id.v1".into()),
-        guid_source: source,
-        recovery_method: "current_resolution".into(),
-        provenance: assignment
-            .map(|a| a.provenance.clone())
-            .unwrap_or_else(|| "ExplicitStableId".into()),
-        used_override: assignment.map(|a| a.used_override).unwrap_or(false),
-    }
-}
-
-fn merge_identity_note_data(
-    existing: &str,
-    metadata: &NoteIdentityMetadata,
-) -> anyhow::Result<String> {
-    let mut value = if existing.trim().is_empty() {
-        serde_json::json!({})
-    } else {
-        serde_json::from_str(existing).map_err(|err| {
-            anyhow::anyhow!("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE: invalid notes.data JSON: {err}")
-        })?
-    };
-
-    let Some(object) = value.as_object_mut() else {
-        anyhow::bail!("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE: notes.data must be a JSON object");
-    };
-
-    object.insert(
-        "anki_forge_identity".into(),
-        serde_json::to_value(metadata).expect("identity metadata serializes"),
-    );
-    Ok(serde_json::to_string(&value).expect("identity note data serializes"))
 }
 
 pub fn emit_apkg(
@@ -191,7 +134,7 @@ pub(crate) fn emit_apkg_from_normalized(
 fn emit_apkg_with_plans(
     normalized_ir: &NormalizedIr,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
-    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    guid_assignments: &GuidAssignments<'_>,
     artifact_target: &BuildArtifactTarget,
 ) -> Result<ApkgMaterialization> {
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
@@ -210,13 +153,14 @@ fn emit_apkg_with_plans(
     let mut zip = ZipWriter::new(file);
 
     write_meta(&mut zip)?;
-    let latest_collection = create_latest_collection_bytes(
+    let latest_collection = create_latest_collection_file(
         &artifact_target.root_dir,
         normalized_ir,
         guid_assignments,
         notetype_ids,
     )?;
-    write_zstd_stored_entry(&mut zip, "collection.anki21b", &latest_collection)?;
+    write_zstd_collection_entry(&mut zip, latest_collection.path())?;
+    drop(latest_collection);
     let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
     write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
 
@@ -325,9 +269,16 @@ fn write_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Re
     Ok(())
 }
 
-fn write_zstd_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Result<()> {
-    let compressed = zstd::stream::encode_all(bytes, 0)?;
-    write_stored_entry(zip, name, &compressed)
+fn write_zstd_collection_entry(zip: &mut ZipWriter<File>, path: &Path) -> Result<()> {
+    let input = File::open(path).with_context(|| format!("read collection {}", path.display()))?;
+    zip.start_file(
+        "collection.anki21b",
+        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+    )?;
+    // encode_all used this same encoder with an unknown source size. Do not
+    // pledge the file length: that changes the frame header and compression.
+    zstd::stream::copy_encode(input, zip, 0)
+        .with_context(|| format!("compress collection {}", path.display()))
 }
 
 fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> Result<()> {
@@ -345,12 +296,12 @@ fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> 
     Ok(())
 }
 
-fn create_latest_collection_bytes(
+fn create_latest_collection_file(
     root_dir: &Path,
     normalized_ir: &NormalizedIr,
-    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    guid_assignments: &GuidAssignments<'_>,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
-) -> Result<Vec<u8>> {
+) -> Result<tempfile::NamedTempFile> {
     let path = root_dir.join(".collection.anki21b.sqlite.tmp");
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
@@ -391,10 +342,8 @@ fn create_latest_collection_bytes(
         )],
     )?;
     drop(conn);
-    let bytes = fs::read(compacted.path())
-        .with_context(|| format!("read collection {}", compacted.path().display()))?;
     let _ = fs::remove_file(&path);
-    Ok(bytes)
+    Ok(compacted)
 }
 
 fn create_legacy_collection_bytes(root_dir: &Path) -> Result<Vec<u8>> {
@@ -425,7 +374,7 @@ fn execute_schema16_marker(conn: &Connection) -> Result<()> {
 fn populate_latest_collection(
     conn: &Connection,
     normalized_ir: &NormalizedIr,
-    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    guid_assignments: &GuidAssignments<'_>,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
 ) -> Result<()> {
     let transaction = conn.unchecked_transaction()?;
@@ -437,7 +386,7 @@ fn populate_latest_collection(
 fn populate_latest_collection_rows(
     conn: &Connection,
     normalized_ir: &NormalizedIr,
-    guid_assignments: &std::collections::BTreeMap<String, WriterGuidAssignment>,
+    guid_assignments: &GuidAssignments<'_>,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
 ) -> Result<()> {
     let default_deck_config_id = 1_i64;
@@ -510,6 +459,12 @@ fn populate_latest_collection_rows(
         }
     }
 
+    let mut prepared_notetypes = std::collections::BTreeMap::new();
+    for notetype in &normalized_ir.notetypes {
+        prepared_notetypes
+            .entry(notetype.id.as_str())
+            .or_insert_with(|| PreparedNotetype::new(notetype));
+    }
     let mut insert_note = conn.prepare(
         "insert into notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data) values (?1, ?2, ?3, ?4, 0, ?5, ?6, ?7, ?8, 0, ?9)",
     )?;
@@ -524,16 +479,15 @@ fn populate_latest_collection_rows(
             .get(&note.notetype_id)
             .copied()
             .unwrap_or(1_i64);
-        let notetype = normalized_ir
-            .notetypes
-            .iter()
-            .find(|candidate| candidate.id == note.notetype_id)
+        let prepared = prepared_notetypes
+            .get(note.notetype_id.as_str())
             .expect("normalized note should reference a known notetype");
+        let notetype = prepared.notetype;
         let mut stripped_fields = StrippedNoteFields::new(note);
-        let storage = note_storage_values(note, notetype, &mut stripped_fields)?;
+        let storage = note_storage_values(note, prepared, &mut stripped_fields)?;
         let note_row = note_row_id;
         let guid = guid_assignments
-            .get(&note.id)
+            .get(note.id.as_str())
             .map(|assignment| assignment.selected_anki_guid.as_str())
             .unwrap_or(note.id.as_str());
         insert_note.execute(rusqlite::params![
@@ -545,10 +499,10 @@ fn populate_latest_collection_rows(
             storage.flds,
             storage.sfld,
             storage.csum,
-            merge_identity_note_data(
-                "{}",
-                &note_identity_metadata_for_assignment(guid_assignments.get(&note.id), note,),
-            )?,
+            super::note_data::fresh_identity_note_data(
+                guid_assignments.get(note.id.as_str()).copied(),
+                note,
+            ),
         ])?;
         for tag in &note.tags {
             normalized_tags.insert(tag.clone());
@@ -704,6 +658,27 @@ struct NoteStorageValues {
     mtime_secs: i64,
 }
 
+struct PreparedNotetype<'a> {
+    notetype: &'a NormalizedNotetype,
+    fields: Vec<&'a crate::authoring_core::NormalizedField>,
+    first_field: Option<&'a crate::authoring_core::NormalizedField>,
+    sort_field_index: usize,
+}
+
+impl<'a> PreparedNotetype<'a> {
+    fn new(notetype: &'a NormalizedNotetype) -> Self {
+        let fields = ordered_notetype_fields(notetype);
+        let first_field = fields.first().copied();
+        let sort_field_index = fields.iter().position(|field| field.sort).unwrap_or(0);
+        Self {
+            notetype,
+            fields,
+            first_field,
+            sort_field_index,
+        }
+    }
+}
+
 struct StrippedNoteFields<'a> {
     note: &'a NormalizedNote,
     values: std::collections::BTreeMap<String, String>,
@@ -731,14 +706,14 @@ impl<'a> StrippedNoteFields<'a> {
 
 fn note_storage_values(
     note: &NormalizedNote,
-    notetype: &NormalizedNotetype,
+    prepared: &PreparedNotetype<'_>,
     stripped_fields: &mut StrippedNoteFields<'_>,
 ) -> Result<NoteStorageValues> {
-    let fields = ordered_notetype_fields(notetype);
-    let values = ordered_field_values(note, &fields);
-    let sort_field_index = fields.iter().position(|field| field.sort).unwrap_or(0);
-    let first_field_checksum = fields
-        .first()
+    let fields = &prepared.fields;
+    let values = ordered_field_values(note, fields);
+    let sort_field_index = prepared.sort_field_index;
+    let first_field_checksum = prepared
+        .first_field
         .and_then(|field| stripped_fields.get(&field.name))
         .map(field_checksum)
         .unwrap_or_else(|| field_checksum(""));
@@ -762,13 +737,18 @@ fn note_storage_values(
     })
 }
 
-fn ordered_field_values(
-    note: &NormalizedNote,
+fn ordered_field_values<'a>(
+    note: &'a NormalizedNote,
     fields: &[&crate::authoring_core::NormalizedField],
-) -> Vec<String> {
+) -> Vec<&'a str> {
     fields
         .iter()
-        .map(|field| note.fields.get(&field.name).cloned().unwrap_or_default())
+        .map(|field| {
+            note.fields
+                .get(&field.name)
+                .map(String::as_str)
+                .unwrap_or("")
+        })
         .collect()
 }
 
@@ -794,6 +774,291 @@ mod tests {
     use super::*;
     use proptest::prelude::*;
 
+    fn assert_streamed_collection_matches_buffered_zip(path: &Path) {
+        use std::io::Read;
+
+        let bytes = fs::read(path).unwrap();
+        let compressed = zstd::stream::encode_all(bytes.as_slice(), 0).unwrap();
+        let root = tempfile::tempdir().unwrap();
+        let mut archives = Vec::new();
+        for streamed in [false, true] {
+            let output = root.path().join(format!("{streamed}.apkg"));
+            let mut zip = ZipWriter::new(File::create(&output).unwrap());
+            write_meta(&mut zip).unwrap();
+            if streamed {
+                write_zstd_collection_entry(&mut zip, path).unwrap();
+            } else {
+                write_stored_entry(&mut zip, "collection.anki21b", &compressed).unwrap();
+            }
+            write_stored_entry(&mut zip, "collection.anki2", b"legacy placeholder").unwrap();
+            write_stored_entry(&mut zip, "media", b"media map").unwrap();
+            zip.finish().unwrap();
+            archives.push(fs::read(output).unwrap());
+        }
+        assert!(
+            archives[0] == archives[1],
+            "buffered/streamed ZIP bytes differ for input length {}",
+            bytes.len()
+        );
+
+        let mut archive = zip::ZipArchive::new(std::io::Cursor::new(&archives[1])).unwrap();
+        let names = (0..archive.len())
+            .map(|index| archive.by_index(index).unwrap().name().to_owned())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            names,
+            ["meta", "collection.anki21b", "collection.anki2", "media"]
+        );
+        let mut entry = archive.by_name("collection.anki21b").unwrap();
+        assert_eq!(entry.compression(), CompressionMethod::Stored);
+        let mut actual = Vec::new();
+        entry.read_to_end(&mut actual).unwrap();
+        assert_eq!(
+            zstd::zstd_safe::get_frame_content_size(&actual).unwrap(),
+            zstd::zstd_safe::get_frame_content_size(&compressed).unwrap()
+        );
+        assert_eq!(zstd::stream::decode_all(actual.as_slice()).unwrap(), bytes);
+    }
+
+    #[test]
+    fn streamed_collection_preserves_buffered_zip_bytes_across_block_boundaries() {
+        let root = tempfile::tempdir().unwrap();
+        let source = root.path().join("collection.sqlite");
+        let mut state = 42_u32;
+        let mixed = (0..2 * 1024 * 1024 + 17)
+            .map(|index| {
+                state = state.wrapping_mul(1_664_525).wrapping_add(1_013_904_223);
+                if index % 4096 < 2048 {
+                    0
+                } else {
+                    (state >> 24) as u8
+                }
+            })
+            .collect::<Vec<_>>();
+        for length in [0, 1, 8191, 8192, 8193, 131071, 131072, 131073, mixed.len()] {
+            fs::write(&source, &mixed[..length]).unwrap();
+            assert_streamed_collection_matches_buffered_zip(&source);
+        }
+    }
+
+    #[test]
+    fn streamed_collection_keeps_compacted_sqlite_bytes_and_removes_its_tempfile() {
+        let root = tempfile::tempdir().unwrap();
+        let normalized = two_basic_notes();
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+        let collection =
+            create_latest_collection_file(root.path(), &normalized, &Default::default(), &ids)
+                .unwrap();
+        let path = collection.path().to_owned();
+        assert_streamed_collection_matches_buffered_zip(&path);
+        let conn = Connection::open(&path).unwrap();
+        assert_eq!(
+            conn.query_row("pragma integrity_check", [], |row| row.get::<_, String>(0))
+                .unwrap(),
+            "ok"
+        );
+        assert_eq!(
+            conn.query_row("pragma freelist_count", [], |row| row.get::<_, i64>(0))
+                .unwrap(),
+            0
+        );
+        assert_eq!(
+            conn.query_row("select count(*) from notes", [], |row| row.get::<_, i64>(0))
+                .unwrap(),
+            2
+        );
+        drop(conn);
+        assert!(!root.path().join(".collection.anki21b.sqlite.tmp").exists());
+        drop(collection);
+        assert!(!path.exists());
+    }
+
+    #[test]
+    fn failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction() {
+        let root = tempfile::tempdir().unwrap();
+        let target = BuildArtifactTarget::new(root.path(), "artifacts");
+        let output = root.path().join("package.apkg");
+        fs::write(&output, b"previous package").unwrap();
+        fs::create_dir(root.path().join(".collection.anki2.sqlite.tmp")).unwrap();
+        let normalized = two_basic_notes();
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+
+        let error = emit_apkg_from_normalized(&normalized, &ids, &target, None)
+            .err()
+            .expect("the legacy database path is a directory");
+
+        assert!(error
+            .to_string()
+            .contains("open legacy collection database"));
+        assert_eq!(fs::read(output).unwrap(), b"previous package");
+        let mut names = fs::read_dir(root.path())
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name().into_string().unwrap())
+            .collect::<Vec<_>>();
+        names.sort();
+        assert_eq!(
+            names,
+            [
+                ".collection.anki2.sqlite.tmp",
+                ".package.apkg.tmp",
+                "package.apkg"
+            ]
+        );
+    }
+
+    #[test]
+    fn streamed_collection_propagates_input_and_output_io_errors() {
+        let root = tempfile::tempdir().unwrap();
+        let output = root.path().join("package.apkg");
+        let mut zip = ZipWriter::new(File::create(&output).unwrap());
+        let missing = root.path().join("missing.sqlite");
+        let error = write_zstd_collection_entry(&mut zip, &missing).unwrap_err();
+        assert_eq!(
+            error.downcast_ref::<std::io::Error>().unwrap().kind(),
+            std::io::ErrorKind::NotFound
+        );
+        zip.finish().unwrap();
+
+        let mut read_only_zip = ZipWriter::new(File::open(&output).unwrap());
+        assert!(write_zstd_collection_entry(&mut read_only_zip, &output).is_err());
+    }
+
+    fn previous_note_storage_values(
+        note: &NormalizedNote,
+        notetype: &NormalizedNotetype,
+    ) -> NoteStorageValues {
+        let mut fields = notetype.fields.iter().enumerate().collect::<Vec<_>>();
+        fields.sort_by_key(|(index, field)| (field.ord.unwrap_or(*index as u32), *index));
+        let fields = fields
+            .into_iter()
+            .map(|(_, field)| field)
+            .collect::<Vec<_>>();
+        let values = fields
+            .iter()
+            .map(|field| note.fields.get(&field.name).cloned().unwrap_or_default())
+            .collect::<Vec<_>>();
+        let sort_index = fields.iter().position(|field| field.sort).unwrap_or(0);
+        let mut stripped = StrippedNoteFields::new(note);
+        let csum = fields
+            .first()
+            .and_then(|field| stripped.get(&field.name))
+            .map(field_checksum)
+            .unwrap_or_else(|| field_checksum(""));
+        let sfld = values
+            .get(sort_index)
+            .and_then(|_| {
+                fields
+                    .get(sort_index)
+                    .and_then(|field| stripped.get(&field.name))
+            })
+            .unwrap_or("")
+            .to_string();
+        NoteStorageValues {
+            flds: values.join("\u{1f}"),
+            sfld,
+            csum,
+            mtime_secs: note
+                .mtime_secs
+                .unwrap_or(super::super::note_revision::INITIAL_MTIME_SECS),
+        }
+    }
+
+    #[test]
+    fn storage_values_keep_field_order_sort_checksum_and_empty_values() {
+        let normalized = two_basic_notes();
+        let mut notetype = normalized.notetypes[0].clone();
+        let mut note = normalized.notes[0].clone();
+        for width in [0, 1, 2, 32] {
+            for sort_index in [None, Some(0), Some(1), Some(31)] {
+                notetype.fields = (0..width)
+                    .map(|index| crate::authoring_core::NormalizedField {
+                        name: format!("字段 {index}"),
+                        // Sparse and equal ordinals retain their input-position tie break.
+                        ord: (index % 3 != 0).then_some((width - index) / 2 + 7),
+                        config_id: None,
+                        tag: None,
+                        prevent_deletion: false,
+                        sort: sort_index == Some(index),
+                    })
+                    .collect();
+                note.fields = notetype
+                    .fields
+                    .iter()
+                    .enumerate()
+                    .filter(|(index, _)| index % 5 != 0)
+                    .map(|(index, field)| {
+                        let value = if index % 3 == 0 {
+                            String::new()
+                        } else {
+                            format!("<b>中文 &amp; é🦀</b>\"\n\\\u{1f}{index}")
+                        };
+                        (field.name.clone(), value)
+                    })
+                    .collect();
+                note.mtime_secs = (width % 2 == 0).then_some(123_456);
+                let expected = previous_note_storage_values(&note, &notetype);
+                let actual = note_storage_values(
+                    &note,
+                    &PreparedNotetype::new(&notetype),
+                    &mut StrippedNoteFields::new(&note),
+                )
+                .unwrap();
+                assert_eq!(actual.flds, expected.flds);
+                assert_eq!(actual.sfld, expected.sfld);
+                assert_eq!(actual.csum, expected.csum);
+                assert_eq!(actual.mtime_secs, expected.mtime_secs);
+            }
+        }
+    }
+
+    #[test]
+    fn guid_plan_validation_keeps_assignments_and_exact_mismatch_errors() {
+        let normalized = two_basic_notes();
+        let mut plan = WriterGuidPlan {
+            assignments: normalized
+                .notes
+                .iter()
+                .map(|note| WriterGuidAssignment {
+                    normalized_note_id: note.id.clone(),
+                    stable_id: format!("稳定:{}", note.id),
+                    selected_anki_guid: format!("selected:{}", note.id),
+                    current_guid_candidate: format!("current:{}", note.id),
+                    guid_derivation_version: "guid.raw-stable-id.v1".into(),
+                    recipe_id: "recipe".into(),
+                    canonical_payload_hash: Some("payload".into()),
+                    provenance: "ExplicitStableId".into(),
+                    used_override: true,
+                    source: "previous_apkg".into(),
+                })
+                .collect(),
+        };
+        let expected = plan
+            .assignments
+            .iter()
+            .map(|assignment| (assignment.normalized_note_id.clone(), assignment.clone()))
+            .collect::<std::collections::BTreeMap<_, _>>();
+        plan.assignments.reverse();
+        assert_eq!(
+            serde_json::to_value(validate_guid_plan(&normalized, Some(&plan)).unwrap()).unwrap(),
+            serde_json::to_value(expected).unwrap(),
+        );
+        assert!(validate_guid_plan(&normalized, None).unwrap().is_empty());
+        plan.assignments.push(plan.assignments[0].clone());
+        assert_eq!(
+            validate_guid_plan(&normalized, Some(&plan))
+                .unwrap_err()
+                .to_string(),
+            "UPDATE.WRITER_GUID_PLAN_MISMATCH: duplicate assignment for note-2",
+        );
+        plan.assignments.truncate(1);
+        assert_eq!(
+            validate_guid_plan(&normalized, Some(&plan))
+                .unwrap_err()
+                .to_string(),
+            r#"UPDATE.WRITER_GUID_PLAN_MISMATCH: plan ids {"note-2"} did not match normalized note ids {"note-1", "note-2"}"#,
+        );
+    }
+
     #[test]
     fn collection_population_rolls_back_after_a_note_and_card_were_written() {
         let root = tempfile::tempdir().unwrap();
@@ -818,7 +1083,7 @@ mod tests {
         let normalized = two_basic_notes();
         let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
 
-        // Exercise the same transaction boundary used by create_latest_collection_bytes.
+        // Exercise the same transaction boundary used by create_latest_collection_file.
         let error =
             populate_latest_collection(&conn, &normalized, &Default::default(), &ids).unwrap_err();
 

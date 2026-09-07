@@ -2,6 +2,10 @@ use anki_forge::prelude::*;
 use anyhow::{bail, ensure};
 use serde::Deserialize;
 
+#[cfg(feature = "mimalloc")]
+#[global_allocator]
+static ALLOCATOR: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 #[derive(Deserialize)]
 struct Workload {
     schema: String,
@@ -19,13 +23,21 @@ struct Record {
 fn main() -> anyhow::Result<()> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.as_slice() == ["--metadata"] {
+        let adapter_features: &[&str] = if cfg!(feature = "mimalloc") {
+            &["mimalloc"]
+        } else {
+            &[]
+        };
         println!(
             "{}",
             serde_json::json!({
                 "protocol": "basic-apkg-v1", "adapter": "anki-forge/rust",
                 "crate_version": anki_forge::facade_api_version(),
                 "bundle_version": anki_forge::embedded_contract_version(),
-                "features": "default", "process_scope": "single_process"
+                "features": "default", "adapter_features": adapter_features,
+                "allocator": if cfg!(feature = "mimalloc") { "mimalloc" } else { "system" },
+                "allocator_version": if cfg!(feature = "mimalloc") { Some("0.1.52") } else { None },
+                "process_scope": "single_process"
             })
         );
         return Ok(());

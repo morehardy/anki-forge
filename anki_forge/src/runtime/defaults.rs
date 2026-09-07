@@ -14,6 +14,10 @@ pub fn load_default_writer_stack() -> anyhow::Result<(ResolvedRuntime, WriterPol
     load_writer_stack(load_embedded_bundle()?)
 }
 
+pub(crate) fn load_embedded_writer_defaults() -> anyhow::Result<(WriterPolicy, BuildContext)> {
+    super::embedded::load_writer_defaults()
+}
+
 /// Loads the default writer stack from a source checkout containing `contracts/manifest.yaml`.
 pub fn load_workspace_writer_stack(
     start: impl AsRef<Path>,

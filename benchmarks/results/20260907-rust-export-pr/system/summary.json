@@ -1,0 +1,583 @@
+{
+  "schema": "basic-benchmark-summary-v1",
+  "run_id": "20260907-basic-rust-genanki-optimized-04",
+  "draft_reasons": [
+    "dirty checkout: exploratory measurements",
+    "upstream oracle checkout dirty/unavailable"
+  ],
+  "cells": [
+    {
+      "size": 200,
+      "adapter": "rust",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 46677500.0,
+        "q1": 44237750.0,
+        "q3": 48487750.0,
+        "min": 42892000,
+        "max": 50038000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 16465920.0,
+        "q1": 16449536.0,
+        "q3": 16515072.0,
+        "min": 16367616,
+        "max": 16547840
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 90022.0,
+        "q1": 90022.0,
+        "q3": 90022.0,
+        "min": 90022,
+        "max": 90022
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 3,
+        "canonical_entry": "collection.anki21b",
+        "nested_compression": "zstd",
+        "payloads": [
+          {
+            "name": "meta",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          },
+          {
+            "name": "collection.anki21b",
+            "zip_method": 0,
+            "stored_bytes": 36351,
+            "decoded_zip_bytes": 36351,
+            "role": "canonical"
+          },
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 53248,
+            "decoded_zip_bytes": 53248,
+            "role": "compatibility_placeholder"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 9,
+            "decoded_zip_bytes": 9,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "repository-inspector-modern-v1"
+    },
+    {
+      "size": 200,
+      "adapter": "genanki",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 118470500.0,
+        "q1": 117999500.0,
+        "q3": 119494000.0,
+        "min": 115517000,
+        "max": 120757000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 29425664.0,
+        "q1": 28753920.0,
+        "q3": 29638656.0,
+        "min": 28688384,
+        "max": 29671424
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 209114.0,
+        "q1": 209114.0,
+        "q3": 209114.0,
+        "min": 209114,
+        "max": 209114
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 1,
+        "canonical_entry": "collection.anki2",
+        "nested_compression": "none",
+        "payloads": [
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 208896,
+            "decoded_zip_bytes": 208896,
+            "role": "canonical"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "benchmark-legacy-schema11-v1"
+    },
+    {
+      "size": 500,
+      "adapter": "rust",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 59511500.0,
+        "q1": 58727500.0,
+        "q3": 61167750.0,
+        "min": 57805000,
+        "max": 67578000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 22298624.0,
+        "q1": 22282240.0,
+        "q3": 22495232.0,
+        "min": 22249472,
+        "max": 22609920
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 136323.0,
+        "q1": 136323.0,
+        "q3": 136323.0,
+        "min": 136323,
+        "max": 136323
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 3,
+        "canonical_entry": "collection.anki21b",
+        "nested_compression": "zstd",
+        "payloads": [
+          {
+            "name": "meta",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          },
+          {
+            "name": "collection.anki21b",
+            "zip_method": 0,
+            "stored_bytes": 82652,
+            "decoded_zip_bytes": 82652,
+            "role": "canonical"
+          },
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 53248,
+            "decoded_zip_bytes": 53248,
+            "role": "compatibility_placeholder"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 9,
+            "decoded_zip_bytes": 9,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "repository-inspector-modern-v1"
+    },
+    {
+      "size": 500,
+      "adapter": "genanki",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 124338000.0,
+        "q1": 122579250.0,
+        "q3": 125636250.0,
+        "min": 119401000,
+        "max": 127388000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 31129600.0,
+        "q1": 31031296.0,
+        "q3": 31457280.0,
+        "min": 30605312,
+        "max": 31473664
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 475354.0,
+        "q1": 475354.0,
+        "q3": 475354.0,
+        "min": 475354,
+        "max": 475354
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 1,
+        "canonical_entry": "collection.anki2",
+        "nested_compression": "none",
+        "payloads": [
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 475136,
+            "decoded_zip_bytes": 475136,
+            "role": "canonical"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "benchmark-legacy-schema11-v1"
+    },
+    {
+      "size": 1000,
+      "adapter": "rust",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 86460000.0,
+        "q1": 85288000.0,
+        "q3": 88472250.0,
+        "min": 84298000,
+        "max": 90990000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 31817728.0,
+        "q1": 31817728.0,
+        "q3": 31850496.0,
+        "min": 31571968,
+        "max": 32014336
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 209069.0,
+        "q1": 209069.0,
+        "q3": 209069.0,
+        "min": 209069,
+        "max": 209069
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 3,
+        "canonical_entry": "collection.anki21b",
+        "nested_compression": "zstd",
+        "payloads": [
+          {
+            "name": "meta",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          },
+          {
+            "name": "collection.anki21b",
+            "zip_method": 0,
+            "stored_bytes": 155398,
+            "decoded_zip_bytes": 155398,
+            "role": "canonical"
+          },
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 53248,
+            "decoded_zip_bytes": 53248,
+            "role": "compatibility_placeholder"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 9,
+            "decoded_zip_bytes": 9,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "repository-inspector-modern-v1"
+    },
+    {
+      "size": 1000,
+      "adapter": "genanki",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 134623000.0,
+        "q1": 133765000.0,
+        "q3": 135254500.0,
+        "min": 133611000,
+        "max": 136437000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 33832960.0,
+        "q1": 33751040.0,
+        "q3": 33964032.0,
+        "min": 33619968,
+        "max": 34258944
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 868570.0,
+        "q1": 868570.0,
+        "q3": 868570.0,
+        "min": 868570,
+        "max": 868570
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 1,
+        "canonical_entry": "collection.anki2",
+        "nested_compression": "none",
+        "payloads": [
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 868352,
+            "decoded_zip_bytes": 868352,
+            "role": "canonical"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "benchmark-legacy-schema11-v1"
+    },
+    {
+      "size": 10000,
+      "adapter": "rust",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 633059500.0,
+        "q1": 623667750.0,
+        "q3": 635009500.0,
+        "min": 619402000,
+        "max": 645371000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 154894336.0,
+        "q1": 154550272.0,
+        "q3": 156139520.0,
+        "min": 154058752,
+        "max": 157073408
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 1536376.0,
+        "q1": 1536376.0,
+        "q3": 1536376.0,
+        "min": 1536376,
+        "max": 1536376
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 3,
+        "canonical_entry": "collection.anki21b",
+        "nested_compression": "zstd",
+        "payloads": [
+          {
+            "name": "meta",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          },
+          {
+            "name": "collection.anki21b",
+            "zip_method": 0,
+            "stored_bytes": 1482705,
+            "decoded_zip_bytes": 1482705,
+            "role": "canonical"
+          },
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 53248,
+            "decoded_zip_bytes": 53248,
+            "role": "compatibility_placeholder"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 9,
+            "decoded_zip_bytes": 9,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "repository-inspector-modern-v1"
+    },
+    {
+      "size": 10000,
+      "adapter": "genanki",
+      "status": "verified",
+      "artifact_status": "passed",
+      "anki_status": "passed",
+      "time_ns": {
+        "n": 10,
+        "median": 334524500.0,
+        "q1": 332585250.0,
+        "q3": 335504500.0,
+        "min": 332135000,
+        "max": 349684000
+      },
+      "peak_rss_bytes": {
+        "n": 5,
+        "median": 72728576.0,
+        "q1": 72646656.0,
+        "q3": 72761344.0,
+        "min": 72466432,
+        "max": 73138176
+      },
+      "rss_status": "complete",
+      "apkg_bytes": {
+        "n": 10,
+        "median": 8196314.0,
+        "q1": 8196314.0,
+        "q3": 8196314.0,
+        "min": 8196314,
+        "max": 8196314
+      },
+      "timing_succeeded": 10,
+      "timing_scheduled": 10,
+      "timing_attempted": 10,
+      "memory_succeeded": 5,
+      "failures": [],
+      "package": {
+        "version": 1,
+        "canonical_entry": "collection.anki2",
+        "nested_compression": "none",
+        "payloads": [
+          {
+            "name": "collection.anki2",
+            "zip_method": 0,
+            "stored_bytes": 8196096,
+            "decoded_zip_bytes": 8196096,
+            "role": "canonical"
+          },
+          {
+            "name": "media",
+            "zip_method": 0,
+            "stored_bytes": 2,
+            "decoded_zip_bytes": 2,
+            "role": "metadata"
+          }
+        ],
+        "media_count": 0
+      },
+      "semantic_reader": "benchmark-legacy-schema11-v1"
+    }
+  ],
+  "comparisons": [
+    {
+      "size": 200,
+      "genanki_over_rust": 2.5380643779122702,
+      "genanki_minus_rust_ms": 71.793,
+      "rust_time_reduction": 0.6059989617668533,
+      "status": "draft"
+    },
+    {
+      "size": 500,
+      "genanki_over_rust": 2.089310469405073,
+      "genanki_minus_rust_ms": 64.8265,
+      "rust_time_reduction": 0.5213731924270939,
+      "status": "draft"
+    },
+    {
+      "size": 1000,
+      "genanki_over_rust": 1.5570552856812399,
+      "genanki_minus_rust_ms": 48.163,
+      "rust_time_reduction": 0.3577620466042207,
+      "status": "draft"
+    },
+    {
+      "size": 10000,
+      "genanki_over_rust": 0.5284250532532881,
+      "genanki_minus_rust_ms": -298.535,
+      "rust_time_reduction": -0.8924159515969682,
+      "status": "draft"
+    }
+  ],
+  "rust_configuration": {
+    "allocator": "system",
+    "allocator_version": null,
+    "adapter_features": []
+  },
+  "headline_eligible": false,
+  "headline_reason": "no predeclared matching full confirmation; this report emits descriptive values only"
+}

@@ -55,6 +55,150 @@ class WorkloadTests(unittest.TestCase):
                 self.assertNotEqual(left["adapter"], right["adapter"])
 
 
+class BuildIdentityTests(unittest.TestCase):
+    def test_prepare_bootstraps_without_third_party_python_packages(self):
+        # prepare is launched by system Python, before the suite's virtualenv
+        # is selected. Keep its real build recording path in this test.
+        source = r'''
+import hashlib, json, sys, tempfile
+from pathlib import Path
+from unittest.mock import patch
+sys.path.insert(0, sys.argv[1])
+import bench
+
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory).resolve()
+    suite = root / "benchmarks"
+    suite.mkdir()
+    adapter_binary = suite / "adapters/rust/target/release/anki-forge-benchmark"
+    inspector = root / "target/release/contract_tools"
+    oracle = root / "scripts/roundtrip_oracle/target/debug/benchmark_oracle"
+    collector = suite / ".tools/measure"
+    records = suite / ".tools/build-records.json"
+    adapter = {"id": "rust", "command": [str(adapter_binary)]}
+    payload = b"fake compiler output"
+
+    def external_command(args, **kwargs):
+        if args[0] == "cargo":
+            output = oracle if "--bin" in args else adapter_binary if "--manifest-path" in args else inspector
+        elif args[0] == "cc":
+            output = Path(args[args.index("-o") + 1])
+        else:
+            assert args[0] == "uv"
+            return
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_bytes(payload)
+
+    with patch.multiple(bench, REPO=root, SUITE=suite, BUILD_RECORDS=records,
+                        INSPECTOR=inspector, ORACLE=oracle, COLLECTOR=collector), \
+         patch.object(bench, "registry", return_value=[adapter]), \
+         patch.object(bench.subprocess, "run", side_effect=external_command), \
+         patch.object(bench.workload, "generate"):
+        bench.prepare("python3.11", True)
+        saved = json.loads(records.read_text())
+        assert set(saved) == {str(p) for p in (adapter_binary, inspector, oracle, collector)}
+        assert all(r["executable_sha256"] == hashlib.sha256(payload).hexdigest() for r in saved.values())
+        assert bench.build_provenance([adapter])[str(adapter_binary)]["status"] == "verified"
+'''
+        result = subprocess.run([sys.executable, "-I", "-S", "-c", source, str(bench.SUITE)],
+                                capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_allocator_metadata_must_match_the_adapter_feature_and_pinned_version(self):
+        system = {"features": "default", "allocator": "system", "allocator_version": None, "adapter_features": []}
+        mimalloc = {"features": "default", "allocator": "mimalloc", "allocator_version": "0.1.52", "adapter_features": ["mimalloc"]}
+        for metadata in (system, mimalloc):
+            self.assertEqual(bench.rust_adapter_configuration(metadata)["allocator"], metadata["allocator"])
+        for metadata in ({}, {**system, "adapter_features": ["mimalloc"]},
+                         {**mimalloc, "allocator_version": "0.1.51"},
+                         {**mimalloc, "adapter_features": ["mimalloc", "internal-tools"]},
+                         {**system, "features": "internal-tools"}):
+            with self.assertRaisesRegex(RuntimeError, "allocator/feature metadata"):
+                bench.rust_adapter_configuration(metadata)
+
+    def test_prepare_defaults_to_system_and_explicitly_selects_adapter_features(self):
+        for allocator in ("system", "mimalloc"):
+            with self.subTest(allocator=allocator), tempfile.TemporaryDirectory() as directory:
+                suite = Path(directory)
+                adapter = {"id": "rust", "command": [str(suite / "binary")]}
+                with patch.object(bench, "SUITE", suite), patch.object(bench, "registry", return_value=[adapter]), \
+                     patch.object(bench, "run_build") as builds, patch.object(bench.subprocess, "run"), \
+                     patch.object(bench.workload, "generate"):
+                    if allocator == "system":
+                        bench.prepare("python3.11", False)
+                    else:
+                        bench.prepare("python3.11", False, allocator)
+                argv = builds.call_args_list[0].args[0]
+                self.assertIn("--no-default-features", argv)
+                if allocator == "mimalloc":
+                    self.assertEqual(argv[-2:], ["--features", "mimalloc"])
+                else:
+                    self.assertNotIn("--features", argv)
+        with patch.object(sys, "argv", ["bench.py", "prepare", "--rust-allocator", "mimalloc"]), \
+             patch.object(bench, "prepare") as prepare:
+            self.assertEqual(bench.main(), 0)
+            prepare.assert_called_once_with("python3.11", False, "mimalloc")
+
+    def test_profile_rust_and_target_native_overrides_are_recorded_without_secrets(self):
+        expected = {"CARGO_PROFILE_RELEASE_LTO": "thin", "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "1",
+                    "RUSTFLAGS": "", "CARGO_ENCODED_RUSTFLAGS": "-C\x1ftarget-cpu=native",
+                    "CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER": "clang",
+                    "CC": "clang", "CFLAGS": "-O3 -march=native", "HOST_CFLAGS": "-O2",
+                    "CC_aarch64-apple-darwin": "target-clang", "CFLAGS_aarch64_apple_darwin": "-O1",
+                    "CXXFLAGS": "-g", "SDKROOT": "/sdk", "RUSTUP_TOOLCHAIN": "1.92.0"}
+        environ = {**expected, "API_TOKEN": "secret", "CARGO_REGISTRIES_PRIVATE_TOKEN": "secret",
+                   "AWS_SECRET_ACCESS_KEY": "secret", "UNRELATED": "ignored"}
+        self.assertEqual(bench.build_environment(environ), expected)
+        self.assertEqual(bench.build_environment({}), {})
+
+    def test_build_record_uses_the_build_environment_and_output_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary, records = root / "binary", root / "records.json"
+            args = ["cargo", "build", "--release"]
+            environ = {"PATH": "/toolchain", "CARGO_PROFILE_RELEASE_LTO": "thin", "CFLAGS": "-O3"}
+
+            def build(*call_args, **kwargs):
+                self.assertEqual(call_args, (args,))
+                self.assertEqual(kwargs["env"], environ)
+                binary.write_bytes(b"built-binary")
+
+            with patch.object(bench, "BUILD_RECORDS", records), patch.dict(os.environ, environ, clear=True), \
+                 patch.object(bench.subprocess, "run", side_effect=build):
+                bench.run_build(args, [binary])
+                os.environ["CARGO_PROFILE_RELEASE_LTO"] = "off"
+                provenance = bench.build_provenance([{"id": "rust", "command": [str(binary)]}])[str(binary)]
+            self.assertEqual(provenance["status"], "verified")
+            self.assertEqual(provenance["record"]["environment"], environ)
+            self.assertEqual(provenance["record"]["command"], args)
+            self.assertEqual(provenance["observed_sha256"], verify.sha256(binary))
+
+    def test_missing_or_stale_record_does_not_claim_a_verified_build(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            binary, records = root / "binary", root / "records.json"
+            binary.write_bytes(b"original")
+            adapters = [{"id": "rust", "command": [str(binary)]}]
+            with patch.object(bench, "BUILD_RECORDS", records):
+                self.assertEqual(bench.build_provenance(adapters)[str(binary)]["status"], "unrecorded")
+                bench.save(records, {str(binary): {"executable_sha256": verify.sha256(binary), "environment": {}}})
+                binary.write_bytes(b"rebuilt-with-unknown-flags")
+                self.assertEqual(bench.build_provenance(adapters)[str(binary)]["status"], "stale")
+                binary.unlink()
+                self.assertEqual(bench.build_provenance(adapters)[str(binary)]["status"], "stale")
+
+    def test_failed_build_cannot_replace_a_previous_build_record(self):
+        with tempfile.TemporaryDirectory() as directory:
+            records = Path(directory) / "records.json"
+            previous = {"old": {"executable_sha256": "old-hash"}}
+            bench.save(records, previous)
+            with patch.object(bench, "BUILD_RECORDS", records), \
+                 patch.object(bench.subprocess, "run", side_effect=subprocess.CalledProcessError(1, ["cargo"])):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    bench.run_build(["cargo", "build"], [Path(directory) / "missing-binary"])
+            self.assertEqual(json.loads(records.read_text()), previous)
+
+
 class CollectorTests(unittest.TestCase):
     def test_diagnostic_logs_are_open_before_adapter_launch(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -368,7 +512,7 @@ class EvidenceTests(unittest.TestCase):
                 def invoke(argv, **kwargs):
                     bench.save(Path(argv[3]), {"status": "passed", "notes": 200, "cards": 200})
                     return subprocess.CompletedProcess(argv, 0, stdout=b"", stderr=b"")
-                with patch.object(bench, "ORACLE", oracle), patch.object(verify, "sha256", side_effect=sha), \
+                with patch.object(bench, "ORACLE", oracle), patch.object(bench, "sha256", side_effect=sha), \
                      patch.object(subprocess, "run", side_effect=invoke):
                     evidence = bench.complete_oracle(run)
                     if failed_path == "oracle":
@@ -392,29 +536,49 @@ class EvidenceTests(unittest.TestCase):
         bundle = next((bench.REPO / "anki_forge/assets").rglob("anki-forge-contract-bundle-*.tar.gz")).name.removeprefix(
             "anki-forge-contract-bundle-").removesuffix(".tar.gz")
         reported_bundle = bundle
+        allocator = "system"
+        feature_commands = []
         def command(argv, **kwargs):
             if argv == ["rust-adapter", "--metadata"]:
-                return json.dumps({"crate_version": "0.2.3", "bundle_version": reported_bundle})
+                return json.dumps({"crate_version": "0.2.3", "bundle_version": reported_bundle,
+                                   "features": "default", "allocator": allocator,
+                                   "allocator_version": "0.1.52" if allocator == "mimalloc" else None,
+                                   "adapter_features": ["mimalloc"] if allocator == "mimalloc" else []})
             if argv == ["genanki-adapter", "--metadata"]:
                 return json.dumps({"genanki": "0.13.1", "architecture": bench.platform.machine()})
+            if argv[:2] == ["cargo", "tree"]:
+                feature_commands.append(argv)
             return ""
         identity = {"source_files": {}, "upstream_revision": "pinned", "upstream_dirty": ""}
         with patch.object(bench, "command", side_effect=command), \
              patch.object(bench, "identity_snapshot", return_value=identity), patch.object(bench, "host_state", return_value={}):
             m = bench.manifest(adapters, workload.generate(), "full", [], 1024)
+            allocator = "mimalloc"
+            mi_manifest = bench.manifest(adapters, m["fixture_evidence"], "full", [], 1024)
             reported_bundle = "stale-bundle"
             with self.assertRaisesRegex(RuntimeError, "bundle.*mismatch"):
                 bench.manifest(adapters, {}, "full", [], 1024)
-        with tempfile.TemporaryDirectory() as directory:
-            run = Path(directory)
-            m.update(run_id="version-test", identity_unchanged=True)
-            bench.save(run / "manifest.json", m)
-            for filename in ("verification.json", "anki.json"):
-                bench.save(run / filename, {})
-            (run / "attempts.jsonl").write_text("")
-            with patch.object(report, "plot"):
-                report.render(run)
-            self.assertIn("anki-forge 0.2.3", (run / "report.md").read_text())
+        self.assertEqual(feature_commands[0][-1], "--no-default-features")
+        self.assertEqual(feature_commands[1][-3:], ["--no-default-features", "--features", "mimalloc"])
+        legacy = copy.deepcopy(m)
+        legacy["adapter_metadata"]["rust"] = {"crate_version": "0.2.3", "bundle_version": bundle}
+        for captured, label in ((m, "system"), (mi_manifest, "mimalloc 0.1.52"), (legacy, "unrecorded")):
+            with self.subTest(allocator=label), tempfile.TemporaryDirectory() as directory:
+                run = Path(directory)
+                captured.update(run_id="version-test", identity_unchanged=True)
+                bench.save(run / "manifest.json", captured)
+                for filename in ("verification.json", "anki.json"):
+                    bench.save(run / filename, {})
+                (run / "attempts.jsonl").write_text("")
+                with patch.object(report, "plot") as plot:
+                    summary = report.render(run)
+                rendered = (run / "report.md").read_text()
+                self.assertIn("anki-forge 0.2.3", rendered)
+                self.assertIn(f"**Rust allocator: {label}.**", rendered.split("| Notes/cards")[0])
+                self.assertEqual(report.rust_allocator_label(plot.call_args.args[0]["rust_configuration"]), label)
+                if label.startswith("mimalloc"):
+                    self.assertIn("not the default system-allocator result", rendered)
+                self.assertEqual(summary["rust_configuration"], report.rust_configuration(captured))
         self.assertEqual(m["toolchain"]["crate_version"], "0.2.3")
         self.assertEqual(m["toolchain"]["bundle_version"], bundle)
 

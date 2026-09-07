@@ -19,12 +19,12 @@ struct Compatibility {
 }
 
 #[derive(Debug, Deserialize)]
-struct ManifestData {
-    bundle_version: String,
+pub(super) struct ManifestData {
+    pub(super) bundle_version: String,
     #[serde(rename = "component_versions")]
     _component_versions: BTreeMap<String, String>,
     compatibility: Compatibility,
-    assets: BTreeMap<String, String>,
+    pub(super) assets: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone)]
@@ -40,31 +40,13 @@ pub fn load_bundle_from_manifest(manifest_path: impl AsRef<Path>) -> anyhow::Res
         .with_context(|| format!("resolve manifest path: {}", manifest_path.display()))?;
     let raw = fs::read_to_string(&manifest_path)
         .with_context(|| format!("read manifest: {}", manifest_path.display()))?;
-    let manifest_yaml: serde_yaml::Value =
-        serde_yaml::from_str(&raw).context("manifest must be valid YAML")?;
-    let manifest_json = serde_json::to_value(manifest_yaml)
-        .context("manifest YAML must be convertible to JSON for validation")?;
+    let manifest_json = parse_manifest_value(&raw)?;
     let schema_path = manifest_path
         .parent()
         .context("runtime manifest must live under contracts/")?
         .join("schema/manifest.schema.json");
     let schema = manifest_schema(&schema_path)?;
-    let schema = JSONSchema::compile(schema).context("failed to compile manifest schema")?;
-    if let Err(errors) = schema.validate(&manifest_json) {
-        let details = errors
-            .map(|error| error.to_string())
-            .collect::<Vec<_>>()
-            .join("; ");
-        bail!("manifest self-validation failed: {}", details);
-    }
-
-    let manifest: ManifestData =
-        serde_yaml::from_str(&raw).context("manifest must deserialize into the manifest model")?;
-
-    ensure!(
-        manifest.compatibility.public_axis == "bundle_version",
-        "runtime manifest public_axis must be bundle_version"
-    );
+    let manifest = validate_manifest(&raw, &manifest_json, schema)?;
 
     let bundle_root = manifest_path
         .parent()
@@ -82,6 +64,40 @@ pub fn load_bundle_from_manifest(manifest_path: impl AsRef<Path>) -> anyhow::Res
         },
         assets: manifest.assets,
     })
+}
+
+pub(super) fn parse_manifest_value(raw: &str) -> anyhow::Result<JsonValue> {
+    let manifest_yaml: serde_yaml::Value =
+        serde_yaml::from_str(raw).context("manifest must be valid YAML")?;
+    serde_json::to_value(manifest_yaml)
+        .context("manifest YAML must be convertible to JSON for validation")
+}
+
+pub(super) fn validate_manifest(
+    raw: &str,
+    manifest_json: &JsonValue,
+    schema: &JsonValue,
+) -> anyhow::Result<ManifestData> {
+    let schema = JSONSchema::compile(schema)
+        .map_err(|error| anyhow::anyhow!(error.to_string()))
+        .context("failed to compile manifest schema")?;
+    if let Err(errors) = schema.validate(manifest_json) {
+        let details = errors
+            .map(|error| error.to_string())
+            .collect::<Vec<_>>()
+            .join("; ");
+        bail!("manifest self-validation failed: {}", details);
+    }
+
+    let manifest: ManifestData =
+        serde_yaml::from_str(raw).context("manifest must deserialize into the manifest model")?;
+
+    ensure!(
+        manifest.compatibility.public_axis == "bundle_version",
+        "runtime manifest public_axis must be bundle_version"
+    );
+
+    Ok(manifest)
 }
 
 pub fn resolve_asset_path(bundle: &RuntimeBundle, key: &str) -> anyhow::Result<PathBuf> {
@@ -141,15 +157,7 @@ fn resolve_contract_relative_path(
         )
     })?;
 
-    ensure!(
-        !relative.as_os_str().is_empty(),
-        "asset path must not be empty"
-    );
-    ensure!(
-        !relative.is_absolute(),
-        "asset path must be relative: {}",
-        relative.display()
-    );
+    validate_relative_asset_path(relative)?;
 
     let path = bundle_root.join(relative);
     let path = path
@@ -166,6 +174,19 @@ fn resolve_contract_relative_path(
         path.display()
     );
     Ok(path)
+}
+
+pub(super) fn validate_relative_asset_path(relative: &Path) -> anyhow::Result<()> {
+    ensure!(
+        !relative.as_os_str().is_empty(),
+        "asset path must not be empty"
+    );
+    ensure!(
+        !relative.is_absolute(),
+        "asset path must be relative: {}",
+        relative.display()
+    );
+    Ok(())
 }
 
 fn manifest_schema(schema_path: &Path) -> anyhow::Result<&'static JsonValue> {

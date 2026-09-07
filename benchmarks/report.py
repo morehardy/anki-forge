@@ -57,6 +57,19 @@ def cell_summary(records, verification, anki, size, adapter):
             "package": first_check.get("package"), "semantic_reader": first_check.get("semantic", {}).get("reader")}
 
 
+def rust_configuration(manifest):
+    captured = manifest.get("adapter_metadata", {}).get("rust", {})
+    return {key: captured.get(key) for key in ("allocator", "allocator_version", "adapter_features")}
+
+
+def rust_allocator_label(configuration):
+    if configuration.get("allocator") == "system":
+        return "system"
+    if configuration.get("allocator") == "mimalloc":
+        return "mimalloc " + str(configuration.get("allocator_version") or "(version unrecorded)")
+    return "unrecorded"
+
+
 def summarize(manifest, records, verification, anki):
     reasons = []
     if manifest.get("git_status"):
@@ -77,7 +90,8 @@ def summarize(manifest, records, verification, anki):
                       "rust_time_reduction": reduction,
                       "status": "draft" if reasons else "verified" if rust["status"] == genanki["status"] == "verified" else "unverified"})
     return {"schema": "basic-benchmark-summary-v1", "run_id": manifest["run_id"], "draft_reasons": reasons,
-            "cells": cells, "comparisons": pairs, "headline_eligible": False,
+            "cells": cells, "comparisons": pairs, "rust_configuration": rust_configuration(manifest),
+            "headline_eligible": False,
             "headline_reason": "no predeclared matching full confirmation; this report emits descriptive values only"}
 
 
@@ -99,6 +113,7 @@ def plot(summary, destination):
     matplotlib.rcParams.update({"svg.hashsalt": "basic-benchmark-v1", "svg.fonttype": "none", "font.size": 10})
     fig, ax = plt.subplots(figsize=(9, 4.8), layout="constrained")
     colors, markers = ("#175A9C", "#B45119"), ("o", "s")
+    allocator = rust_allocator_label(summary.get("rust_configuration", {}))
     for a, adapter in enumerate(ADAPTERS):
         for i, size in enumerate(SIZES):
             cell = next(c for c in summary["cells"] if c["size"] == size and c["adapter"] == adapter)
@@ -108,7 +123,7 @@ def plot(summary, destination):
                 median = s["median"] / 1e6
                 ax.errorbar(median, y, xerr=[[median - s["q1"] / 1e6], [s["q3"] / 1e6 - median]],
                             fmt=markers[a], color=colors[a], capsize=4, markersize=6,
-                            label=("anki-forge / Rust" if a == 0 else "genanki / Python") if i == 0 else None)
+                            label=(f"anki-forge / Rust [{allocator}]" if a == 0 else "genanki / Python") if i == 0 else None)
                 ax.annotate(f"{median:.3f} ms", (median, y), xytext=(7, -4 if a == 0 else 6), textcoords="offset points", fontsize=8)
             else:
                 ax.text(0, y, f"{adapter}: {cell['status']}", fontsize=8)
@@ -134,22 +149,30 @@ def render(run):
     verification = json.loads((run / "verification.json").read_text())
     anki = json.loads((run / "anki.json").read_text())
     provenance = {
-        "report_format": "basic-benchmark-report-v2",
+        "report_format": "basic-benchmark-report-v3",
         "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "captured_run_renderer_sha256": manifest["identity_before"]["source_files"].get("benchmarks/report.py"),
         "inputs_sha256": {name: hashlib.sha256((run / name).read_bytes()).hexdigest()
                           for name in ("manifest.json", "attempts.jsonl", "verification.json", "anki.json")},
-        "revision_note": "Presentation v2 moves the legend away from 10K and reserves label space. Measurement definitions and numeric aggregation are unchanged.",
+        "revision_note": "Presentation v3 identifies the captured Rust allocator in the report, summary and chart. Measurement definitions and numeric aggregation are unchanged.",
     }
     (run / "render-provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
     summary = summarize(manifest, records, verification, anki)
     (run / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     lines = ["# Basic export benchmark", "", f"Run `{manifest['run_id']}` · {manifest['created_utc']}", ""]
+    configuration = summary["rust_configuration"]
+    allocator = rust_allocator_label(configuration)
+    features = configuration["adapter_features"]
+    feature_label = (", ".join(features) or "none") if isinstance(features, list) else "unrecorded"
+    allocation_note = {"system": "Default Rust allocator configuration.",
+                       "mimalloc": "Optional host allocator configuration; not the default system-allocator result."}.get(
+                           configuration["allocator"], "This historical manifest did not record the Rust allocator.")
+    lines += [f"**Rust allocator: {allocator}.** Adapter features: `{feature_label}`. {allocation_note}", ""]
     if summary["draft_reasons"]:
         lines += ["**Exploratory draft.** " + "; ".join(summary["draft_reasons"]) + ". Not a release/README advantage claim.", ""]
     lines += [f"Host: {manifest['host']['cpu']}; {manifest['host']['system']}; {manifest['host']['machine']}. "
               f"CPython {manifest['runtime']['python_version']}, genanki 0.13.1; "
-              f"anki-forge {manifest['toolchain']['crate_version']}, Rust release/default features.", "",
+              f"anki-forge {manifest['toolchain']['crate_version']}, Rust release; public-crate features: default.", "",
               "Synthetic `basic-mixed-text-v1` (seed 20260906), one Basic card per note, no media. "
               "Each field is escaped inside its adapter. The time includes process startup, imports, JSON input parsing, "
               "default identity/checks, export and shutdown. Filesystem caches are warmed and uncontrolled; writes are closed without an fsync guarantee.", "",

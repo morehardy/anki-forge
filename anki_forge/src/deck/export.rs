@@ -85,13 +85,13 @@ impl Deck {
         &self,
         options: crate::build::BuildOptions,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
-        crate::product::Project::from(self.clone()).build(options)
+        crate::product::Project::from_deck(self).build(options)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
         with_temp_artifacts_dir("deck-bytes", |artifacts_dir| {
             let output = artifacts_dir.join("deck.apkg");
-            let report = crate::product::Project::from(self.clone())
+            let report = crate::product::Project::from_deck(self)
                 .write_apkg(&output)
                 .map_err(anyhow::Error::from)?;
             let artifact_path = report
@@ -113,7 +113,7 @@ impl Deck {
         &self,
         path: impl AsRef<Path>,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
-        crate::product::Project::from(self.clone()).write_apkg(path)
+        crate::product::Project::from_deck(self).write_apkg(path)
     }
 }
 
@@ -129,7 +129,7 @@ fn build_package(
         .map(|stable_id| format!("artifacts/{stable_id}"))
         .unwrap_or_else(|| "artifacts".into());
     let artifact_target = BuildArtifactTarget::new(artifacts_dir, stable_ref_prefix.clone());
-    let (_report, package_build_result) = crate::product::Project::from(package.root_deck.clone())
+    let (_report, package_build_result) = crate::product::Project::from_deck(&package.root_deck)
         .build_package_artifacts(artifacts_dir, stable_ref_prefix, inspect_limits.clone())?;
 
     let apkg_ref = package_build_result

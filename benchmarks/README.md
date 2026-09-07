@@ -13,7 +13,7 @@ benchmarks/.venv/bin/python benchmarks/bench.py smoke
 benchmarks/.venv/bin/python benchmarks/bench.py run
 ```
 
-`prepare` installs dependencies and builds the adapters/collector/inspector. It does not measure performance. `smoke` exports and checks 200 notes per implementation; it has no benchmark score. Full measurement runs sequentially and prints its output directory under `benchmarks/.work/runs/`. Use `--name <unique-name>` to name a run and `--budget-gib 8` to set its storage budget. Existing run names are refused. Do not compile, run tests, import Anki files or perform other heavy work during a full run.
+`prepare` installs dependencies and builds the adapters/collector/inspector. It does not measure performance. Its Rust allocator defaults to `system`; an optional configuration is described below. `smoke` exports and checks 200 notes per implementation; it has no benchmark score. Full measurement runs sequentially and prints its output directory under `benchmarks/.work/runs/`. Use `--name <unique-name>` to name a run and `--budget-gib 8` to set its storage budget. Existing run names are refused. Do not compile, run tests, import Anki files or perform other heavy work during a full run.
 
 For independent import/render evidence, the existing isolated upstream source checkout must be available at `docs/source/anki`, with `protoc` on PATH:
 
@@ -31,6 +31,44 @@ benchmarks/.venv/bin/python benchmarks/bench.py cleanup <run-directory>
 ```
 
 Reporting is offline and generates `report.md`, `timing.svg` and `summary.json`. It never edits the project README. Raw manifests, attempt records, verification results, phase events and Anki evidence are retained. `cleanup` removes only this run's verified outputs and private temporary files, preserving selected APKGs until their Anki evidence passes. Interrupted or failed attempts remain recorded. Copy a reviewed run's compact evidence/report files (excluding `artifacts/`) into `benchmarks/results/<run-id>/` to retain a reviewable snapshot.
+
+## Optional Rust allocator
+
+The public library does not install a global allocator. The private Rust benchmark adapter defaults to the system allocator and can explicitly enable **mimalloc 0.1.52**. This is a host-application configuration: reports, chart legends and summaries identify it separately from the default result. The adapter metadata records the allocator, its version and adapter features; the manifest captures the matching Cargo feature tree, executable hash, build command and build-environment overrides. The public crate keeps its default features in both configurations, without `internal-tools`.
+
+Run each configuration to completion before preparing the next, because `prepare` replaces the same adapter executable. With the upstream oracle requirements above satisfied, the complete commands are:
+
+```sh
+python3 benchmarks/bench.py prepare --python python3.11 --with-anki --rust-allocator system
+benchmarks/.venv/bin/python benchmarks/bench.py run --name basic-system
+
+python3 benchmarks/bench.py prepare --python python3.11 --with-anki --rust-allocator mimalloc
+benchmarks/.venv/bin/python benchmarks/bench.py run --name basic-mimalloc
+```
+
+Choose unused run names when repeating the comparison. Omitting `--with-anki` is supported, but leaves import/render evidence unverified unless an existing pinned oracle is available. Rebuild with `--rust-allocator system` to restore the default adapter.
+
+An application using anki-forge can make the same opt-in choice in its **binary crate**, without changing the library:
+
+```toml
+[features]
+default = []
+mimalloc = ["dep:mimalloc"]
+
+[dependencies]
+# Keep the application's existing anki_forge dependency.
+mimalloc = { version = "=0.1.52", optional = true, default-features = false }
+```
+
+```rust
+#[cfg(feature = "mimalloc")]
+#[global_allocator]
+static ALLOCATOR: mimalloc::MiMalloc = mimalloc::MiMalloc;
+```
+
+Enable it with `cargo build --release --features mimalloc`; a program can define only one global allocator. This replaces allocations routed through Rust's global allocator, including those in Rust dependencies. Native libraries that allocate directly through their own C allocators are not switched by this declaration. Python and Node host allocations are outside this choice, and their bindings are not measured here.
+
+The [optimization implementation report](results/20260907-rust-export-pr/README.md) publishes the final complete System and mimalloc runs, the last incremental same-allocator comparison, selection evidence and correctness records. It preserves the slower 10K result and the exploratory provenance. The 3.9% last-round time reduction is measured against the frozen preceding worktree, not the full PR's Git base. Use each allocator's own complete run when comparing with genanki.
 
 ## Data and API boundary
 
@@ -53,4 +91,4 @@ Reports show all four scales, absolute median/IQR, signed differences, ratios, s
 
 ## Isolation
 
-The Rust adapter is not a root-workspace member and is `publish = false`; it uses only default public-crate features. Fixtures, environments, temporary tools/APKGs and raw working runs are ignored. `results/` is also ignored by default: deliberately add only reviewed compact evidence when publishing a snapshot, excluding profiling scripts, source copies, build logs and generated databases. No benchmark or Anki dependencies enter the public Rust distribution. CI runs behavior checks and the real 200-note smoke, with no performance thresholds and no Anki dependency.
+The Rust adapter is not a root-workspace member and is `publish = false`; it uses only default public-crate features. Its optional mimalloc dependency stays in the private adapter workspace. Fixtures, environments, temporary tools/APKGs and raw working runs are ignored. `results/` is also ignored by default: deliberately add only reviewed compact evidence when publishing a snapshot, excluding profiling scripts, source copies, build logs and generated databases. No benchmark or Anki dependencies enter the public Rust distribution. CI runs behavior checks and the real 200-note smoke, with no performance thresholds and no Anki dependency.

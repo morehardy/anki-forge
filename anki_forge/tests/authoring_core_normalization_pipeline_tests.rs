@@ -622,6 +622,105 @@ fn unexpected_extra_field_on_stock_note_returns_invalid_result() {
 }
 
 #[test]
+fn mixed_note_fields_and_tags_survive_success_and_media_reference_failure() {
+    for missing_media in [false, true] {
+        let front = if missing_media {
+            "<img src=\"missing.png\">"
+        } else {
+            "中文 &amp; café\r\nfront"
+        };
+        let request = request_from_json(json!({
+            "input": {
+                "kind": "authoring-ir",
+                "schema_version": "0.1.0",
+                "metadata_document_id": "mixed-owned",
+                "notetypes": [
+                    {"id": "basic", "kind": "basic"},
+                    {"id": "cloze", "kind": "cloze"}
+                ],
+                "notes": [
+                    {"id": "b1", "notetype_id": "basic", "deck_name": "Deck::一",
+                     "fields": {"Front": front, "Back": "answer"}, "tags": ["z", "a", "z"]},
+                    {"id": "c1", "notetype_id": "cloze", "deck_name": "Deck::二",
+                     "fields": {"Text": "{{c1::word}}", "Back Extra": "extra"}, "tags": []},
+                    {"id": "b2", "notetype_id": "basic", "deck_name": "Deck::一",
+                     "fields": {"Front": "next", "Back": ""}, "tags": ["later"]}
+                ],
+                "media": []
+            }
+        }));
+        let expected_notes = serde_json::to_value(&request.input.notes).unwrap();
+        let result = normalize(request);
+        assert_eq!(
+            result.result_status,
+            if missing_media { "invalid" } else { "success" }
+        );
+        let ir = result
+            .normalized_ir
+            .expect("media errors retain the normalized notes");
+        for (actual, expected) in ir.notes.iter().zip(expected_notes.as_array().unwrap()) {
+            let actual = serde_json::to_value(actual).unwrap();
+            for key in ["id", "notetype_id", "deck_name", "fields", "tags"] {
+                assert_eq!(actual[key], expected[key], "changed note {key}");
+            }
+        }
+        assert_eq!(ir.notes.len(), 3);
+        let codes: Vec<_> = result
+            .diagnostics
+            .items
+            .iter()
+            .map(|item| item.code.as_str())
+            .collect();
+        assert_eq!(
+            codes,
+            if missing_media {
+                vec!["MEDIA.MISSING_REFERENCE"]
+            } else {
+                vec![]
+            }
+        );
+    }
+}
+
+#[test]
+fn first_invalid_note_wins_before_media_ingestion() {
+    for missing_notetype_first in [false, true] {
+        let mut notes = vec![
+            json!({"id": "wrong-fields", "notetype_id": "basic", "deck_name": "D",
+                "fields": {"Front": "question", "Extra": "unexpected"}, "tags": []}),
+            json!({"id": "wrong-type", "notetype_id": "missing", "deck_name": "D",
+                "fields": {}, "tags": []}),
+        ];
+        if missing_notetype_first {
+            notes.reverse();
+        }
+        let request = request_from_json(json!({
+            "input": {
+                "kind": "authoring-ir", "schema_version": "0.1.0", "metadata_document_id": "errors",
+                "notetypes": [{"id": "basic", "kind": "basic"}], "notes": notes,
+                "media": [{"id": "invalid-media", "desired_filename": "../bad", "source": {"kind": "inline_bytes", "data_base64": ""}}]
+            }
+        }));
+        let result = normalize_with_options(request, normalize_test_options("first-note-error"));
+        assert_eq!(result.result_status, "invalid");
+        assert!(result.normalized_ir.is_none());
+        assert_eq!(result.diagnostics.items.len(), 1);
+        let diagnostic = &result.diagnostics.items[0];
+        assert_eq!(
+            diagnostic.code,
+            if missing_notetype_first {
+                "PHASE3.UNKNOWN_NOTETYPE_ID"
+            } else {
+                "PHASE3.NOTE_FIELD_MISMATCH"
+            }
+        );
+        if !missing_notetype_first {
+            assert_eq!(diagnostic.summary, "note wrong-fields fields must exactly match resolved stock fields for notetype_id basic; expected {\"Back\", \"Front\"}, got {\"Extra\", \"Front\"}");
+        }
+    }
+}
+
+#[test]
 fn duplicate_notetype_ids_return_invalid_result() {
     let request = request_from_json(json!({
         "input": {

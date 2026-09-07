@@ -9,6 +9,7 @@ fn update_safety_project_build_compare_to_preserves_previous_guid() {
     let root = tempfile::tempdir().expect("tempdir");
     let previous = root.path().join("previous.apkg");
     let updated = root.path().join("updated.apkg");
+    let lockfile = root.path().join("identity.lock.json");
 
     let mut first = Project::new("Spanish").stable_id("spanish");
     first
@@ -25,7 +26,13 @@ fn update_safety_project_build_compare_to_preserves_previous_guid() {
         .add_note(Note::basic("hola", "hello updated").stable_id("es:hola"))
         .expect("add second note");
     let report = second
-        .build(BuildOptions::new().output(&updated).compare_to(&previous))
+        .build(
+            BuildOptions::new()
+                .output(&updated)
+                .compare_to(&previous)
+                .identity_lockfile(&lockfile)
+                .write_identity_lockfile(true),
+        )
         .expect("update-safe build");
 
     assert_eq!(report.update_safety.as_ref().unwrap().notes_preserved, 1);
@@ -34,6 +41,10 @@ fn update_safety_project_build_compare_to_preserves_previous_guid() {
     assert_eq!(baseline.status, "loaded");
     assert!(baseline.used_for_reconcile);
     assert_eq!(read_single_guid(&updated), "legacy-guid");
+    let saved = anki_forge::update_safety::lockfile::read_lockfile(&lockfile)
+        .expect("read published lockfile");
+    assert_eq!(saved.identity_index.notes.len(), 1);
+    assert_eq!(saved.identity_index.notes[0].anki_guid, "legacy-guid");
 }
 
 #[test]

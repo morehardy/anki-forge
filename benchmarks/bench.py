@@ -17,15 +17,18 @@ import sysconfig
 import time
 from pathlib import Path
 
+from hashing import sha256
 import workload
 
 SUITE = Path(__file__).resolve().parent
 REPO = SUITE.parent
 COLLECTOR = SUITE / ".tools/measure"
+BUILD_RECORDS = SUITE / ".tools/build-records.json"
 INSPECTOR = REPO / "target/release/contract_tools"
 ORACLE = REPO / "scripts/roundtrip_oracle/target/debug/benchmark_oracle"
 METRIC = "single_process_peak_rss_os_v1"
 SCHEDULE_SEED = 20260906
+MIMALLOC_VERSION = "0.1.52"
 
 
 def utc():
@@ -107,7 +110,6 @@ def source_paths():
 
 
 def file_identity(path):
-    from verify import sha256
     try:
         return sha256(path)
     except OSError as error:
@@ -121,8 +123,77 @@ def identity_error(path, expected):
     return "SHA-256 identity mismatch" if observed != expected else None
 
 
+def build_environment(environ=None):
+    """Record build overrides, excluding unrelated environment and credentials."""
+    environ = os.environ if environ is None else environ
+    exact = {"PATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS",
+             "CARGO_ENCODED_RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER",
+             "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_HOME", "RUSTUP_HOME",
+             "CARGO_TARGET_DIR", "CARGO_INCREMENTAL", "CARGO_BUILD_TARGET", "CARGO_BUILD_JOBS",
+             "CARGO_BUILD_RUSTFLAGS", "CARGO_BUILD_RUSTC", "CARGO_BUILD_RUSTC_WRAPPER",
+             "CARGO_BUILD_RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_INCREMENTAL",
+             "SDKROOT", "MACOSX_DEPLOYMENT_TARGET", "IPHONEOS_DEPLOYMENT_TARGET",
+             "CRATE_CC_NO_DEFAULTS", "CC_SHELL_ESCAPED_FLAGS", "CC_KNOWN_WRAPPER_CUSTOM"}
+    native = ("CC", "CXX", "AR", "RANLIB", "CFLAGS", "CXXFLAGS", "CPPFLAGS", "LDFLAGS")
+
+    def relevant(name):
+        return (name in exact or name.startswith("CARGO_PROFILE_RELEASE_")
+                or (name.startswith("CARGO_TARGET_") and name.endswith(("_RUSTFLAGS", "_LINKER", "_AR")))
+                or any(name in (base, f"HOST_{base}", f"TARGET_{base}") or name.startswith(base + "_")
+                       for base in native))
+
+    return {name: value for name, value in sorted(environ.items()) if relevant(name)}
+
+
+def run_build(args, outputs):
+    """Build and bind the exact inherited override environment to output hashes."""
+    environ = os.environ.copy()
+    started = utc()
+    subprocess.run(args, cwd=REPO, check=True, env=environ)
+    records = json.loads(BUILD_RECORDS.read_text()) if BUILD_RECORDS.is_file() else {}
+    for output in outputs:
+        output = Path(output).resolve()
+        records[str(output)] = {"command": list(args), "cwd": str(REPO),
+                                "started_utc": started, "finished_utc": utc(),
+                                "environment": build_environment(environ),
+                                "launcher": shutil.which(args[0], path=environ.get("PATH")),
+                                "executable_sha256": sha256(output)}
+    save(BUILD_RECORDS, records)
+
+
+def build_provenance(adapters):
+    records = json.loads(BUILD_RECORDS.read_text()) if BUILD_RECORDS.is_file() else {}
+    outputs = [COLLECTOR, INSPECTOR, ORACLE]
+    outputs += [Path(adapter["command"][0]) for adapter in adapters if adapter["id"] == "rust"]
+    result = {}
+    for output in outputs:
+        key = str(output.resolve())
+        record = records.get(key)
+        if record is None:
+            result[key] = {"status": "unrecorded"}
+        else:
+            observed = file_identity(output)
+            result[key] = {"status": "verified" if observed == record["executable_sha256"] else "stale",
+                           "record": record, "observed_sha256": observed}
+    return result
+
+
+def rust_feature_args(features):
+    return ["--no-default-features"] + (["--features", ",".join(features)] if features else [])
+
+
+def rust_adapter_configuration(metadata):
+    allocator = metadata.get("allocator")
+    features = metadata.get("adapter_features")
+    version = metadata.get("allocator_version")
+    valid = ((allocator == "system" and features == [] and version is None)
+             or (allocator == "mimalloc" and features == ["mimalloc"] and version == MIMALLOC_VERSION))
+    if metadata.get("features") != "default" or not valid:
+        raise RuntimeError("missing or inconsistent Rust allocator/feature metadata; run prepare to rebuild")
+    return {"allocator": allocator, "allocator_version": version, "adapter_features": features}
+
+
 def identity_snapshot(adapters):
-    from verify import sha256
     paths = source_paths()
     source = {str(p.relative_to(REPO)): sha256(p) if p.is_file() else "missing" for p in paths}
     executables = {str(p): file_identity(p) for p in
@@ -136,6 +207,7 @@ def identity_snapshot(adapters):
         dependencies[name] = {"version": dist.version, "files_sha256": hashlib.sha256(workload.serialize(files)).hexdigest()}
     fixtures = {str(size): sha256(SUITE / f"inputs/basic-{size}.json") for size in workload.SIZES}
     return {"source_files": source, "executables": executables, "dependencies": dependencies, "fixtures": fixtures,
+            "build_records_sha256": file_identity(BUILD_RECORDS),
             "upstream_revision": command(["git", "rev-parse", "HEAD"], cwd=REPO / "docs/source/anki", optional=True),
             "upstream_dirty": command(["git", "status", "--porcelain"], cwd=REPO / "docs/source/anki", optional=True),
             "upstream_patch": command(["git", "diff", "--binary", "HEAD"], cwd=REPO / "docs/source/anki", optional=True)}
@@ -153,7 +225,9 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
         raise RuntimeError("Rust adapter bundle version mismatch with source asset; run prepare to rebuild")
     if metadata["genanki"]["genanki"] != "0.13.1" or metadata["genanki"]["architecture"] != platform.machine():
         raise RuntimeError("wrong genanki version or cross-architecture comparator")
-    feature_tree = command(["cargo", "tree", "--locked", "--offline", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml"), "-e", "features"])
+    rust_configuration = rust_adapter_configuration(metadata["rust"])
+    feature_tree = command(["cargo", "tree", "--locked", "--offline", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml"), "-e", "features"]
+                           + rust_feature_args(rust_configuration["adapter_features"]))
     if 'anki_forge feature "internal-tools"' in feature_tree:
         raise RuntimeError("measured Rust adapter must not enable internal-tools")
     return {"schema": "basic-benchmark-run-v1", "spec_revision": 3, "created_utc": utc(), "mode": mode,
@@ -168,7 +242,10 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
                           "cc": command(["cc", "--version"]), "rust_profile": "release",
                           "rust_flags": os.environ.get("RUSTFLAGS", ""),
                           "cargo_encoded_rustflags": os.environ.get("CARGO_ENCODED_RUSTFLAGS", ""),
+                          "run_environment_overrides": build_environment(),
+                          "build_provenance": build_provenance(adapters),
                           "rust_features": "default; no internal-tools", "feature_tree": feature_tree,
+                          "rust_configuration": rust_configuration,
                           "crate_version": metadata["rust"]["crate_version"],
                           "bundle_version": metadata["rust"]["bundle_version"]},
             "runtime": {"python": sys.version, "python_version": platform.python_version(),
@@ -257,7 +334,6 @@ def verify_records(run, records):
 
 
 def complete_oracle(run):
-    from verify import sha256
     m = json.loads((run / "manifest.json").read_text())
     verification = json.loads((run / "verification.json").read_text())
     raw = [json.loads(line) for line in (run / "attempts.jsonl").read_text().splitlines()]
@@ -415,18 +491,24 @@ def execute(mode, name=None, budget_gib=8):
     return 0 if preflight_ok and all(r["status"] == "success" for r in records) and all(v["status"] == "passed" for v in verified.values()) else 1
 
 
-def prepare(python, with_anki):
+def prepare(python, with_anki, rust_allocator="system"):
+    if rust_allocator not in ("system", "mimalloc"):
+        raise ValueError("unsupported Rust allocator")
     setup = [] if (SUITE / ".venv/bin/python").is_file() else [["uv", "venv", str(SUITE / ".venv"), "--python", python]]
     for args in setup + [
-                 ["uv", "pip", "sync", str(SUITE / "requirements.lock"), "--python", str(SUITE / ".venv/bin/python"), "--require-hashes"],
-                 ["cargo", "build", "--release", "--locked", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml")],
-                 ["cargo", "build", "--release", "--locked", "-p", "contract_tools"]]:
+                 ["uv", "pip", "sync", str(SUITE / "requirements.lock"), "--python", str(SUITE / ".venv/bin/python"), "--require-hashes"]]:
         subprocess.run(args, cwd=REPO, check=True)
     (SUITE / ".tools").mkdir(exist_ok=True)
-    subprocess.run(["cc", "-O2", "-Wall", "-Wextra", "-Werror", "-pthread", str(SUITE / "native/measure.c"), "-o", str(COLLECTOR)], check=True)
+    rust_adapter = next(adapter for adapter in registry() if adapter["id"] == "rust")
+    features = ["mimalloc"] if rust_allocator == "mimalloc" else []
+    run_build(["cargo", "build", "--release", "--locked", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml")]
+              + rust_feature_args(features),
+              [rust_adapter["command"][0]])
+    run_build(["cargo", "build", "--release", "--locked", "-p", "contract_tools"], [INSPECTOR])
+    run_build(["cc", "-O2", "-Wall", "-Wextra", "-Werror", "-pthread", str(SUITE / "native/measure.c"), "-o", str(COLLECTOR)], [COLLECTOR])
     workload.generate()
     if with_anki:
-        subprocess.run(["cargo", "build", "--locked", "--manifest-path", str(REPO / "scripts/roundtrip_oracle/Cargo.toml"), "--bin", "benchmark_oracle"], check=True)
+        run_build(["cargo", "build", "--locked", "--manifest-path", str(REPO / "scripts/roundtrip_oracle/Cargo.toml"), "--bin", "benchmark_oracle"], [ORACLE])
 
 
 def main():
@@ -435,6 +517,7 @@ def main():
     prep = sub.add_parser("prepare")
     prep.add_argument("--python", default="python3.11")
     prep.add_argument("--with-anki", action="store_true")
+    prep.add_argument("--rust-allocator", choices=("system", "mimalloc"), default="system")
     for kind in ("smoke", "run"):
         p = sub.add_parser(kind)
         p.add_argument("--name")
@@ -443,7 +526,7 @@ def main():
         sub.add_parser(kind).add_argument("run_dir", type=Path)
     args = parser.parse_args()
     if args.command == "prepare":
-        prepare(args.python, args.with_anki)
+        prepare(args.python, args.with_anki, args.rust_allocator)
     elif args.command in ("smoke", "run"):
         return execute("full" if args.command == "run" else "smoke", args.name, args.budget_gib)
     elif args.command == "report":

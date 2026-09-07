@@ -7,6 +7,24 @@ use crate::deck::{Deck, DeckNote};
 
 impl From<Deck> for Project {
     fn from(deck: Deck) -> Self {
+        let mut project = Self::deck_import_context(&deck);
+        project.media = crate::product::MediaRegistry::from_deck_media(deck.media);
+        project.import_deck_notes(deck.notes);
+        project
+    }
+}
+
+impl Project {
+    pub(crate) fn from_deck(deck: &Deck) -> Self {
+        let mut project = Self::deck_import_context(deck);
+        project.media = crate::product::MediaRegistry::from_deck_media(deck.media.clone());
+        // The imported project needs note content, but not the Deck's duplicate
+        // identity/index caches. Clone one note at a time into the consuming path.
+        project.import_deck_notes(deck.notes.iter().cloned());
+        project
+    }
+
+    fn deck_import_context(deck: &Deck) -> Self {
         let mut project = Project::new(deck.name().to_string());
         project.stable_id = deck.stable_id().map(str::to_string);
         project.default_deck = Some(deck.name().to_string());
@@ -32,11 +50,15 @@ impl From<Deck> for Project {
                 help: Some("inspect deck notes before building".into()),
             }],
         };
-        project.media = crate::product::MediaRegistry::from_deck_media(deck.media);
-        for source in deck.notes {
+        project
+    }
+
+    fn import_deck_notes(&mut self, notes: impl IntoIterator<Item = DeckNote>) {
+        self.notes.reserve(self.imported_note_count);
+        for source in notes {
             let id = source.id().to_string();
             if let Some(snapshot) = source.resolved_identity() {
-                project.imported_identities.insert(
+                self.imported_identities.insert(
                     id.clone(),
                     crate::update_safety::model::ResolvedNoteIdentity {
                         stable_id: id.clone(),
@@ -66,23 +88,24 @@ impl From<Deck> for Project {
                     },
                 );
             }
-            let tags = match &source {
-                DeckNote::Basic(note) => note.tags.clone(),
-                DeckNote::Cloze(note) => note.tags.clone(),
-                DeckNote::ImageOcclusion(note) => note.tags.clone(),
-            };
-            let mut note = match source {
-                DeckNote::Basic(note) => Note::new(STOCK_BASIC_ID)
-                    .html("Front", note.front)
-                    .html("Back", note.back),
-                DeckNote::Cloze(note) => Note::new(STOCK_CLOZE_ID)
-                    .html("Text", note.text)
-                    .html("Back Extra", note.extra),
+            let (mut note, tags) = match source {
+                DeckNote::Basic(note) => (
+                    Note::new(STOCK_BASIC_ID)
+                        .html("Front", note.front)
+                        .html("Back", note.back),
+                    note.tags,
+                ),
+                DeckNote::Cloze(note) => (
+                    Note::new(STOCK_CLOZE_ID)
+                        .html("Text", note.text)
+                        .html("Back Extra", note.extra),
+                    note.tags,
+                ),
                 DeckNote::ImageOcclusion(note) => {
                     let occlusion =
                         crate::product::render_image_occlusion_cloze(note.mode, &note.rects)
                             .unwrap_or_else(|error| {
-                                project.import_diagnostics.push(Diagnostic {
+                                self.import_diagnostics.push(Diagnostic {
                                     code: DiagnosticCode::new("PROJECT.DECK_LOWER_FAILED"),
                                     severity: Severity::Error,
                                     domain: None,
@@ -93,26 +116,27 @@ impl From<Deck> for Project {
                                 });
                                 String::new()
                             });
-                    Note::new(STOCK_IMAGE_OCCLUSION_ID)
-                        .html("Occlusion", occlusion)
-                        .html("Image", format!("<img src=\"{}\">", note.image.name()))
-                        .html("Header", note.header)
-                        .html("Back Extra", note.back_extra)
-                        .html("Comments", note.comments)
+                    (
+                        Note::new(STOCK_IMAGE_OCCLUSION_ID)
+                            .html("Occlusion", occlusion)
+                            .html("Image", format!("<img src=\"{}\">", note.image.name()))
+                            .html("Header", note.header)
+                            .html("Back Extra", note.back_extra)
+                            .html("Comments", note.comments),
+                        note.tags,
+                    )
                 }
-            }
-            .stable_id(id);
+            };
+            note = note.stable_id(id);
             for tag in tags {
                 note = note.tag(tag);
             }
             if let Some(stable_id) = note.stable_id_ref().filter(|id| !id.trim().is_empty()) {
-                project
-                    .note_index_by_stable_id
+                self.note_index_by_stable_id
                     .entry(stable_id.to_string())
-                    .or_insert(project.notes.len());
+                    .or_insert(self.notes.len());
             }
-            project.notes.push(note);
+            self.notes.push(note);
         }
-        project
     }
 }

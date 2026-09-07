@@ -1,6 +1,7 @@
 use std::borrow::Borrow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
+use std::io::{BufWriter, Write};
 use std::path::{Component, Path, PathBuf};
 
 use crate::authoring_core::stock::resolve_stock_notetype;
@@ -8,9 +9,11 @@ use crate::authoring_core::{
     AuthoringNotetype, MediaReferenceResolution, NormalizedIr, NormalizedNotetype,
 };
 use anyhow::{Context, Result};
+use serde::ser::{SerializeMap, SerializeSeq};
 use serde::{Deserialize, Serialize};
 use sha1::Digest;
 
+#[cfg(test)]
 use crate::writer_core::canonical_json::to_canonical_json;
 use crate::writer_core::card_plan::{has_malformed_cloze, plan_cards};
 use crate::writer_core::deck_name::DeckRegistry;
@@ -88,6 +91,111 @@ struct StagingManifest<T> {
     #[serde(default)]
     notetype_model_ids: Option<BTreeMap<String, i64>>,
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+}
+
+// Keep the canonical wire shape while serializing one record at a time. The
+// previous Value tree and final String duplicated all note fields at once.
+struct CanonicalManifest<'a, T>(&'a StagingManifest<T>);
+
+impl<T: Borrow<NormalizedIr>> Serialize for CanonicalManifest<'_, T> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let manifest = self.0;
+        let mut map = serializer.serialize_map(Some(7))?;
+        map.serialize_entry("build_context_ref", &manifest.build_context_ref)?;
+        map.serialize_entry("kind", &manifest.kind)?;
+        map.serialize_entry(
+            "normalized_ir",
+            &CanonicalNormalized(manifest.normalized_ir.borrow()),
+        )?;
+        map.serialize_entry("notetype_model_ids", &manifest.notetype_model_ids)?;
+        map.serialize_entry(
+            "template_target_decks",
+            &CanonicalItems(&manifest.template_target_decks),
+        )?;
+        map.serialize_entry("tool_contract_version", &manifest.tool_contract_version)?;
+        map.serialize_entry("writer_policy_ref", &manifest.writer_policy_ref)?;
+        map.end()
+    }
+}
+
+struct CanonicalNormalized<'a>(&'a NormalizedIr);
+
+impl Serialize for CanonicalNormalized<'_> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let ir = self.0;
+        let mut map = serializer.serialize_map(Some(9))?;
+        map.serialize_entry("document_id", &ir.document_id)?;
+        map.serialize_entry("kind", &ir.kind)?;
+        map.serialize_entry("media_bindings", &CanonicalItems(&ir.media_bindings))?;
+        map.serialize_entry("media_objects", &CanonicalItems(&ir.media_objects))?;
+        map.serialize_entry("media_references", &CanonicalItems(&ir.media_references))?;
+        map.serialize_entry("notes", &CanonicalNotes(&ir.notes))?;
+        map.serialize_entry("notetypes", &CanonicalItems(&ir.notetypes))?;
+        map.serialize_entry("resolved_identity", &ir.resolved_identity)?;
+        map.serialize_entry("schema_version", &ir.schema_version)?;
+        map.end()
+    }
+}
+
+struct CanonicalItems<'a, T>(&'a [T]);
+
+impl<T: Serialize> Serialize for CanonicalItems<'_, T> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut sequence = serializer.serialize_seq(Some(self.0.len()))?;
+        for item in self.0 {
+            let mut value = serde_json::to_value(item).map_err(serde::ser::Error::custom)?;
+            value.sort_all_objects();
+            sequence.serialize_element(&value)?;
+        }
+        sequence.end()
+    }
+}
+
+struct CanonicalNotes<'a>(&'a [crate::authoring_core::NormalizedNote]);
+struct CanonicalNote<'a>(&'a crate::authoring_core::NormalizedNote);
+
+impl Serialize for CanonicalNotes<'_> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut sequence = serializer.serialize_seq(Some(self.0.len()))?;
+        for note in self.0 {
+            sequence.serialize_element(&CanonicalNote(note))?;
+        }
+        sequence.end()
+    }
+}
+
+impl Serialize for CanonicalNote<'_> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let note = self.0;
+        let mut map = serializer.serialize_map(Some(5 + usize::from(note.mtime_secs.is_some())))?;
+        map.serialize_entry("deck_name", &note.deck_name)?;
+        // Normalized fields are a BTreeMap<String, String>, already canonical.
+        map.serialize_entry("fields", &note.fields)?;
+        map.serialize_entry("id", &note.id)?;
+        if let Some(mtime) = note.mtime_secs {
+            map.serialize_entry("mtime_secs", &mtime)?;
+        }
+        map.serialize_entry("notetype_id", &note.notetype_id)?;
+        map.serialize_entry("tags", &note.tags)?;
+        map.end()
+    }
+}
+
+struct FingerprintingWriter<W> {
+    writer: W,
+    hash: sha1::Sha1,
+}
+
+impl<W: Write> Write for FingerprintingWriter<W> {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let written = self.writer.write(bytes)?;
+        self.hash.update(&bytes[..written]);
+        Ok(written)
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.writer.flush()
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -249,15 +357,24 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             }
         }
 
-        let manifest_json = to_canonical_json(&self.manifest)?;
         let manifest_path = target.staging_manifest_path();
-        fs::write(&manifest_path, manifest_json.as_bytes())
-            .with_context(|| format!("write staging manifest {}", manifest_path.display()))?;
+        let artifact_fingerprint = (|| -> Result<String> {
+            let file = fs::File::create(&manifest_path)?;
+            let mut writer = BufWriter::new(FingerprintingWriter {
+                writer: file,
+                hash: sha1::Sha1::new(),
+            });
+            serde_json::to_writer(&mut writer, &CanonicalManifest(&self.manifest))?;
+            writer.flush()?;
+            let writer = writer.into_inner().map_err(|error| error.into_error())?;
+            Ok(format!("artifact:{}", hex::encode(writer.hash.finalize())))
+        })()
+        .with_context(|| format!("write staging manifest {}", manifest_path.display()))?;
 
         Ok(MaterializedStaging {
             manifest_ref: target.staging_ref(),
             manifest_path,
-            artifact_fingerprint: fingerprint(&manifest_json),
+            artifact_fingerprint,
         })
     }
 }
@@ -895,6 +1012,7 @@ pub(crate) fn resolve_template_target_decks(
     resolved
 }
 
+#[cfg(test)]
 fn fingerprint(canonical_json: &str) -> String {
     let digest = sha1::Sha1::digest(canonical_json.as_bytes());
     format!("artifact:{}", hex::encode(digest))
@@ -920,4 +1038,59 @@ pub(crate) fn validated_media_output_path(media_dir: &Path, filename: &str) -> R
     );
 
     Ok(media_dir.join(filename))
+}
+
+#[cfg(test)]
+mod canonical_stream_tests {
+    use super::*;
+
+    #[test]
+    fn streamed_manifest_matches_the_previous_canonical_bytes_and_hash() {
+        let bundle = crate::runtime::load_embedded_bundle().unwrap();
+        let inputs = ["basic", "cloze", "image-occlusion"].map(|name| {
+            std::fs::read_to_string(
+                bundle
+                    .runtime
+                    .bundle_root
+                    .join(format!("fixtures/phase3/inputs/{name}-normalized-ir.json")),
+            )
+            .unwrap()
+        });
+        for input in inputs {
+            for mtime in [None, Some(1), Some(i64::MAX)] {
+                let mut ir: NormalizedIr = serde_json::from_str(&input).unwrap();
+                for note in &mut ir.notes {
+                    note.mtime_secs = mtime;
+                    note.fields.insert("z\"中".into(), "<&>\n\t\\".repeat(300));
+                    note.fields.insert("a".into(), String::new());
+                    note.tags = vec!["中".into(), "with space".into(), "".into()];
+                }
+                let manifest = StagingManifest {
+                    kind: "staging-package".into(),
+                    tool_contract_version: "phase3-v1".into(),
+                    writer_policy_ref: "policy".into(),
+                    build_context_ref: "context".into(),
+                    normalized_ir: ir,
+                    notetype_model_ids: Some(BTreeMap::from([("z".into(), 9), ("a".into(), 1)])),
+                    template_target_decks: vec![ResolvedTemplateTargetDeck {
+                        notetype_id: "note type".into(),
+                        template_name: "Reverse".into(),
+                        target_deck_name: "Parent::子".into(),
+                        resolved_target_deck_id: 3,
+                    }],
+                };
+                let expected = to_canonical_json(&manifest).unwrap();
+                let mut writer = FingerprintingWriter {
+                    writer: Vec::new(),
+                    hash: sha1::Sha1::new(),
+                };
+                serde_json::to_writer(&mut writer, &CanonicalManifest(&manifest)).unwrap();
+                assert_eq!(writer.writer, expected.as_bytes());
+                assert_eq!(
+                    format!("artifact:{}", hex::encode(writer.hash.finalize())),
+                    fingerprint(&expected)
+                );
+            }
+        }
+    }
 }

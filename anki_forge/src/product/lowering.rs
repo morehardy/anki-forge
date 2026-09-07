@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
@@ -13,10 +14,10 @@ use super::{
     helpers::{apply_helpers, HelperDeclaration},
     metadata::FieldMetadataDeclaration,
     model::{
-        CustomNoteType, ProductCustomNoteTypeV2, ProductFieldContentV2, ProductFieldV2,
-        ProductGenerationRuleV2, ProductIdentityV2, ProductMediaSourceV2, ProductNote,
-        ProductNoteType, ProductNoteTypeV2, ProductNoteV2, ProductStockNoteTypeV2,
-        ProductStockNoteV2, ProductTemplateV2,
+        CustomNoteType, ProductCustomNoteTypeV2, ProductCustomNoteV2, ProductDocumentV2Payload,
+        ProductFieldContentV2, ProductFieldV2, ProductGenerationRuleV2, ProductIdentityV2,
+        ProductMediaSourceV2, ProductNote, ProductNoteType, ProductNoteTypeV2, ProductNoteV2,
+        ProductStockNoteTypeV2, ProductStockNoteV2, ProductTemplateV2, UnknownProductObjectV2,
     },
     stock::is_supported_stock_notetype_id,
     ProductDocument,
@@ -69,7 +70,11 @@ pub struct LoweringPlan {
 
 pub fn lower_document(document: &ProductDocument) -> Result<LoweringPlan, ProductLoweringError> {
     if let Some(v2) = document.product_v2() {
-        return Ok(lower_product_v2_document(document, v2));
+        return Ok(lower_product_v2_document(
+            document.document_id(),
+            v2,
+            v2.notes.iter().map(NoteLoweringInput::from),
+        ));
     }
 
     lower_legacy_product_document(document)
@@ -582,15 +587,56 @@ fn lower_legacy_product_document(
     })
 }
 
-fn lower_product_v2_document(
-    document: &ProductDocument,
-    v2: &crate::product::model::ProductDocumentV2Payload,
+// Project creates this payload solely for lowering. Consume its notes so HTML
+// and note metadata can move into Authoring without changing document APIs.
+pub(crate) fn lower_owned_product_v2_document(
+    document_id: String,
+    mut payload: ProductDocumentV2Payload,
+) -> LoweringPlan {
+    let notes = std::mem::take(&mut payload.notes);
+    lower_product_v2_document(
+        &document_id,
+        &payload,
+        notes.into_iter().map(NoteLoweringInput::from),
+    )
+}
+
+enum NoteLoweringInput<'a> {
+    Stock(Cow<'a, ProductStockNoteV2>),
+    Custom(Cow<'a, ProductCustomNoteV2>),
+    Unknown(Cow<'a, UnknownProductObjectV2>),
+}
+
+impl<'a> From<&'a ProductNoteV2> for NoteLoweringInput<'a> {
+    fn from(note: &'a ProductNoteV2) -> Self {
+        match note {
+            ProductNoteV2::Stock(note) => Self::Stock(Cow::Borrowed(note)),
+            ProductNoteV2::Custom(note) => Self::Custom(Cow::Borrowed(note)),
+            ProductNoteV2::Unknown(note) => Self::Unknown(Cow::Borrowed(note)),
+        }
+    }
+}
+
+impl From<ProductNoteV2> for NoteLoweringInput<'_> {
+    fn from(note: ProductNoteV2) -> Self {
+        match note {
+            ProductNoteV2::Stock(note) => Self::Stock(Cow::Owned(note)),
+            ProductNoteV2::Custom(note) => Self::Custom(Cow::Owned(note)),
+            ProductNoteV2::Unknown(note) => Self::Unknown(Cow::Owned(note)),
+        }
+    }
+}
+
+fn lower_product_v2_document<'a>(
+    document_id: &str,
+    v2: &ProductDocumentV2Payload,
+    notes: impl IntoIterator<Item = NoteLoweringInput<'a>>,
 ) -> LoweringPlan {
     let mut plan = LoweringPlan {
         authoring_document: AuthoringDocument {
             kind: "authoring-ir".into(),
             schema_version: "0.1.0".into(),
-            metadata_document_id: document.document_id().to_string(),
+            metadata_document_id: document_id.to_string(),
             notetypes: Vec::new(),
             notes: Vec::new(),
             media: Vec::new(),
@@ -601,8 +647,8 @@ fn lower_product_v2_document(
         lowering_diagnostics: Vec::new(),
     };
 
-    let mut stock_declarations = BTreeMap::<String, ProductStockNoteTypeV2>::new();
-    let mut custom_declarations = BTreeMap::<String, ProductCustomNoteTypeV2>::new();
+    let mut stock_declarations = BTreeMap::<&str, &ProductStockNoteTypeV2>::new();
+    let mut custom_declarations = BTreeMap::<&str, &ProductCustomNoteTypeV2>::new();
     for (index, notetype) in v2.note_types.iter().enumerate() {
         match notetype {
             ProductNoteTypeV2::Stock(stock) => {
@@ -618,7 +664,7 @@ fn lower_product_v2_document(
                     );
                     continue;
                 }
-                stock_declarations.insert(stock.id.clone(), stock.clone());
+                stock_declarations.insert(&stock.id, stock);
                 validate_v2_stock_generation_rules(
                     &mut plan,
                     stock,
@@ -763,7 +809,7 @@ fn lower_product_v2_document(
                     custom.source_path.as_deref(),
                     index,
                 );
-                custom_declarations.insert(custom.id.clone(), custom.clone());
+                custom_declarations.insert(&custom.id, custom);
                 plan.mappings.push(LoweringMapping {
                     kind: "notetype",
                     source_kind: "product_v2.notetype",
@@ -838,10 +884,10 @@ fn lower_product_v2_document(
         }
     }
 
-    for (serialized_index, note) in v2.notes.iter().enumerate() {
+    for (serialized_index, note) in notes.into_iter().enumerate() {
         match note {
-            ProductNoteV2::Stock(stock) => {
-                let Some(declaration) = stock_declarations.get(&stock.note_type_id) else {
+            NoteLoweringInput::Stock(stock) => {
+                let Some(declaration) = stock_declarations.get(stock.note_type_id.as_str()) else {
                     push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.STOCK_NOTE_TYPE_MISSING",
@@ -861,8 +907,8 @@ fn lower_product_v2_document(
                     &media_export_by_id,
                 );
             }
-            ProductNoteV2::Custom(custom) => {
-                let Some(notetype) = custom_declarations.get(&custom.note_type_id).cloned() else {
+            NoteLoweringInput::Custom(custom) => {
+                let Some(notetype) = custom_declarations.get(custom.note_type_id.as_str()) else {
                     push_product_diagnostic_at(
                         &mut plan,
                         "PRODUCT.CUSTOM_NOTE_TYPE_MISSING",
@@ -877,17 +923,17 @@ fn lower_product_v2_document(
                 lower_product_v2_custom_note(
                     &mut plan,
                     custom,
-                    &notetype,
+                    notetype,
                     serialized_index,
                     &media_export_by_id,
                 );
             }
-            ProductNoteV2::Unknown(unknown) => {
+            NoteLoweringInput::Unknown(unknown) => {
                 push_product_diagnostic_at(
                     &mut plan,
                     "PRODUCT.UNSUPPORTED_KIND",
                     format!("unsupported product-v2 note kind '{}'", unknown.kind),
-                    unknown_source_path(unknown).as_deref(),
+                    unknown_source_path(&unknown).as_deref(),
                 );
             }
         }
@@ -1488,7 +1534,7 @@ fn validate_product_v2_generation_rule(
 
 fn lower_product_v2_stock_note(
     plan: &mut LoweringPlan,
-    stock: &ProductStockNoteV2,
+    mut stock: Cow<'_, ProductStockNoteV2>,
     declaration: &ProductStockNoteTypeV2,
     serialized_index: usize,
     media_export_by_id: &BTreeMap<String, String>,
@@ -1544,13 +1590,15 @@ fn lower_product_v2_stock_note(
     for (source_key, authoring_name) in field_map {
         let field_source =
             v2_note_field_source(stock.source_path.as_deref(), serialized_index, source_key);
-        let value = stock
-            .fields
-            .get(source_key)
-            .map(|content| {
+        let value = match &mut stock {
+            Cow::Borrowed(stock) => stock.fields.get(source_key).map(|content| {
                 render_v2_content(plan, content, media_export_by_id, Some(&field_source))
-            })
-            .unwrap_or_default();
+            }),
+            Cow::Owned(stock) => stock.fields.get_mut(source_key).map(|content| {
+                render_owned_v2_content(plan, content, media_export_by_id, Some(&field_source))
+            }),
+        }
+        .unwrap_or_default();
         fields.insert(authoring_name.to_string(), value);
         field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
     }
@@ -1608,27 +1656,36 @@ fn lower_product_v2_stock_note(
         stock.source_path.as_deref(),
         &field_source_keys,
     );
+    let product_id = stock
+        .stable_id
+        .clone()
+        .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]"));
+    let (notetype_id, deck_name, tags) = match stock {
+        Cow::Borrowed(stock) => (
+            stock.note_type_id.clone(),
+            stock.deck_name.clone(),
+            stock.tags.clone(),
+        ),
+        Cow::Owned(stock) => (stock.note_type_id, stock.deck_name, stock.tags),
+    };
     plan.authoring_document.notes.push(AuthoringNote {
         id: note_id.clone(),
-        notetype_id: stock.note_type_id.clone(),
-        deck_name: stock.deck_name.clone(),
+        notetype_id,
+        deck_name,
         fields,
-        tags: stock.tags.clone(),
+        tags,
     });
     plan.mappings.push(LoweringMapping {
         kind: "note",
         source_kind: "product_v2.note",
-        product_id: stock
-            .stable_id
-            .clone()
-            .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]")),
+        product_id,
         authoring_id: note_id,
     });
 }
 
 fn lower_product_v2_custom_note(
     plan: &mut LoweringPlan,
-    note: &crate::product::model::ProductCustomNoteV2,
+    mut note: Cow<'_, ProductCustomNoteV2>,
     notetype: &ProductCustomNoteTypeV2,
     serialized_index: usize,
     media_export_by_id: &BTreeMap<String, String>,
@@ -1636,11 +1693,12 @@ fn lower_product_v2_custom_note(
     let field_by_key = notetype
         .fields
         .iter()
-        .map(|field| (field.key.clone(), field))
+        .enumerate()
+        .map(|(index, field)| (field.key.as_str(), (index, field)))
         .collect::<BTreeMap<_, _>>();
     let mut invalid = false;
     for key in note.fields.keys() {
-        if !field_by_key.contains_key(key) {
+        if !field_by_key.contains_key(key.as_str()) {
             push_product_diagnostic_at(
                 plan,
                 "PRODUCT.FIELD_UNKNOWN",
@@ -1655,17 +1713,27 @@ fn lower_product_v2_custom_note(
     }
 
     let mut fields = BTreeMap::new();
-    for declaration in &notetype.fields {
-        let value = if let Some(content) = note.fields.get(&declaration.key) {
-            let field_source = v2_note_field_source(
-                note.source_path.as_deref(),
-                serialized_index,
-                &declaration.key,
-            );
-            render_v2_content(plan, content, media_export_by_id, Some(&field_source))
-        } else {
-            String::new()
-        };
+    for (index, declaration) in notetype.fields.iter().enumerate() {
+        let field_source = v2_note_field_source(
+            note.source_path.as_deref(),
+            serialized_index,
+            &declaration.key,
+        );
+        let value = match &mut note {
+            Cow::Borrowed(note) => note.fields.get(&declaration.key).map(|content| {
+                render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+            }),
+            Cow::Owned(note) => note.fields.get_mut(&declaration.key).map(|content| {
+                // Duplicate keys may be diagnosed later. Earlier declarations
+                // must still see the original value and emit the same diagnostics.
+                if field_by_key[declaration.key.as_str()].0 == index {
+                    render_owned_v2_content(plan, content, media_export_by_id, Some(&field_source))
+                } else {
+                    render_v2_content(plan, content, media_export_by_id, Some(&field_source))
+                }
+            }),
+        }
+        .unwrap_or_default();
         fields.insert(declaration.name.clone(), value);
     }
     let field_source_keys = notetype
@@ -1716,7 +1784,7 @@ fn lower_product_v2_custom_note(
             return;
         }
         for key in &identity_fields {
-            if !field_by_key.contains_key(key) {
+            if !field_by_key.contains_key(key.as_str()) {
                 push_product_diagnostic_at(
                     plan,
                     "PRODUCT.IDENTITY_FIELD_UNKNOWN",
@@ -1732,8 +1800,8 @@ fn lower_product_v2_custom_note(
         let selected_fields = identity_fields
             .into_iter()
             .map(|key| {
-                let field = field_by_key
-                    .get(&key)
+                let (_, field) = field_by_key
+                    .get(key.as_str())
                     .expect("identity field keys were validated before derivation");
                 let value = fields
                     .get(&field.name)
@@ -1759,20 +1827,29 @@ fn lower_product_v2_custom_note(
         note.source_path.as_deref(),
         &field_source_keys,
     );
+    let product_id = note
+        .stable_id
+        .clone()
+        .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]"));
+    let (notetype_id, deck_name, tags) = match note {
+        Cow::Borrowed(note) => (
+            note.note_type_id.clone(),
+            note.deck_name.clone(),
+            note.tags.clone(),
+        ),
+        Cow::Owned(note) => (note.note_type_id, note.deck_name, note.tags),
+    };
     plan.authoring_document.notes.push(AuthoringNote {
         id: note_id.clone(),
-        notetype_id: note.note_type_id.clone(),
-        deck_name: note.deck_name.clone(),
+        notetype_id,
+        deck_name,
         fields,
-        tags: note.tags.clone(),
+        tags,
     });
     plan.mappings.push(LoweringMapping {
         kind: "note",
         source_kind: "product_v2.note",
-        product_id: note
-            .stable_id
-            .clone()
-            .unwrap_or_else(|| format!("product_v2.notes[{serialized_index}]")),
+        product_id,
         authoring_id: note_id,
     });
 }
@@ -1787,6 +1864,19 @@ fn custom_identity_field_keys(notetype: &ProductCustomNoteTypeV2) -> Vec<String>
             .filter(|field| field.identity)
             .map(|field| field.key.clone())
             .collect(),
+    }
+}
+
+fn render_owned_v2_content(
+    plan: &mut LoweringPlan,
+    content: &mut ProductFieldContentV2,
+    media_export_by_id: &BTreeMap<String, String>,
+    source_path: Option<&str>,
+) -> String {
+    if let ProductFieldContentV2::Html { value } = content {
+        std::mem::take(value)
+    } else {
+        render_v2_content(plan, content, media_export_by_id, source_path)
     }
 }
 
@@ -1840,6 +1930,10 @@ fn render_v2_content(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "lowering_owned_tests.rs"]
+mod owned_tests;
 
 fn custom_required_field_is_missing_or_empty(
     content: Option<&ProductFieldContentV2>,

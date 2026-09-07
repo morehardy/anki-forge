@@ -5,6 +5,7 @@ mod compat_schema;
 mod deck_name;
 pub(crate) mod identity;
 mod inspect_limits;
+pub(crate) mod note_data;
 pub(crate) mod note_revision;
 
 pub mod apkg;
