@@ -15,6 +15,7 @@ pub(crate) struct ApkgReader<'a> {
     pub limits: &'a InspectLimits,
     zip_used: Cell<u64>,
     decoded_used: Cell<u64>,
+    decoder: zstd::zstd_safe::DCtx<'static>,
 }
 
 impl<'a> ApkgReader<'a> {
@@ -25,6 +26,7 @@ impl<'a> ApkgReader<'a> {
             limits,
             zip_used: Cell::new(0),
             decoded_used: Cell::new(0),
+            decoder: zstd::zstd_safe::DCtx::create(),
         })
     }
 
@@ -82,7 +84,12 @@ impl<'a> ApkgReader<'a> {
             total_limit: self.limits.max_decoded_total_bytes,
         };
         if compressed {
-            decode_frames(&mut reader, &mut output, self.limits.max_zstd_window_bytes)?;
+            decode_frames(
+                &mut reader,
+                &mut output,
+                self.limits.max_zstd_window_bytes,
+                &mut self.decoder,
+            )?;
         } else {
             output.copy_from(&mut reader)?;
         }
@@ -179,6 +186,7 @@ fn decode_frames(
     reader: &mut impl BufRead,
     output: &mut DecodedSink<'_, impl Write>,
     window_limit: u64,
+    context: &mut zstd::zstd_safe::DCtx<'static>,
 ) -> Result<()> {
     let mut saw_frame = false;
     while !reader.fill_buf()?.is_empty() {
@@ -219,7 +227,12 @@ fn decode_frames(
         };
         check("zstd_window_bytes", Some(output.name), window_limit, window)?;
         let replay = Cursor::new(&header[..header_size]).chain(&mut *reader);
-        let mut decoder = zstd::stream::read::Decoder::with_buffer(replay)?.single_frame();
+        // Keep allocated decoder workspace across entries, but start a fresh
+        // session for each frame. Exact header and decoder limits still apply.
+        context
+            .reset(zstd::zstd_safe::ResetDirective::SessionOnly)
+            .map_err(|code| io::Error::other(zstd::zstd_safe::get_error_name(code)))?;
+        let mut decoder = zstd::stream::read::Decoder::with_context(replay, context).single_frame();
         // The explicit header check handles exact, non-power-of-two limits;
         // the decoder setting is a second guard against oversized windows.
         let window_log = (64 - window_limit.max(1).saturating_sub(1).leading_zeros()).clamp(10, 31);

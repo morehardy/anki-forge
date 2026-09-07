@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 
-SIZES = (200, 500, 1000, 10000)
+SIZES = (100, 200, 500, 1000)
 ADAPTERS = ("rust", "genanki")
 METRIC = "single_process_peak_rss_os_v1"
 
@@ -127,7 +127,7 @@ def plot(summary, destination):
                 ax.annotate(f"{median:.3f} ms", (median, y), xytext=(7, -4 if a == 0 else 6), textcoords="offset points", fontsize=8)
             else:
                 ax.text(0, y, f"{adapter}: {cell['status']}", fontsize=8)
-    ax.set_yticks(range(4), ["Basic 200", "Basic 500", "Basic 1K", "Basic 10K"])
+    ax.set_yticks(range(4), ["Basic 100", "Basic 200", "Basic 500", "Basic 1K"])
     ax.invert_yaxis()
     upper = max((c["time_ns"]["q3"] / 1e6 for c in summary["cells"] if c["time_ns"]), default=1)
     ax.set_xlim(0, upper * 1.24)
@@ -199,7 +199,7 @@ def render(run):
             s = c[key]
             formatted.append("—" if not s else f"{s['median']/divisor:.2f} [{s['min']/divisor:.2f}, {s['max']/divisor:.2f}]")
         lines.append(f"| {c['size']:,} | {c['adapter']} | {formatted[0]} | {formatted[1]} | {c['rss_status']} |")
-    lines += ["", "The preselected showcase size is **10,000 notes / 10,000 cards**, retained regardless of the winner. "
+    lines += ["", "All four requested tiers (**100 / 200 / 500 / 1,000 notes**) are retained regardless of the winner. "
               "Rust writes modern `collection.anki21b` with nested zstd and a legacy compatibility placeholder; genanki writes "
               "legacy `collection.anki2` with ZIP_STORED. Stock CSS, metadata, IDs and default validation work differ. "
               "These are default-output comparisons; no package is converted or recompressed for scoring.", "",

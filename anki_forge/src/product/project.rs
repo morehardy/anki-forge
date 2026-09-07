@@ -9,7 +9,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use crate::authoring_core::{normalize_with_options, NormalizationRequest, NormalizeOptions};
+use crate::authoring_core::{NormalizationRequest, NormalizeOptions};
 use crate::writer_core::{artifact_path_from_ref, BuildArtifactTarget, BuildContext, WriterPolicy};
 use anyhow::Context;
 use base64::Engine as _;
@@ -2786,13 +2786,23 @@ impl ArtifactWorkspace {
         })
     }
 
-    fn create_candidate_dir(&self) -> std::io::Result<TempDir> {
+    fn create_candidate_dir(&self, options: &BuildOptions) -> std::io::Result<TempDir> {
         // Keep private APKG generation on the caller-selected filesystem.
         // TempDir reserves a fresh directory and removes it on every exit path.
-        std::fs::create_dir_all(&self.path)?;
+        let parent = if self.temp_dir.is_some() {
+            options
+                .output
+                .as_deref()
+                .and_then(Path::parent)
+                .filter(|path| !path.as_os_str().is_empty())
+                .unwrap_or(&self.path)
+        } else {
+            &self.path
+        };
+        std::fs::create_dir_all(parent)?;
         tempfile::Builder::new()
             .prefix("anki-forge-candidate-")
-            .tempdir_in(&self.path)
+            .tempdir_in(parent)
     }
 
     fn publish(&self, candidate: &Path, options: &BuildOptions) -> std::io::Result<ApkgArtifact> {
@@ -2801,7 +2811,7 @@ impl ArtifactWorkspace {
             replace_output_atomically(candidate, &package_path, false)?;
         }
         if let Some(output) = options.output.as_ref() {
-            replace_output_atomically(
+            crate::build::artifact::publish_owned_candidate(
                 candidate,
                 output,
                 options.output_replace_failure_for_test(),
@@ -2811,7 +2821,7 @@ impl ArtifactWorkspace {
             Ok(ApkgArtifact::persistent(package_path))
         } else {
             // Only the final APKG escapes the staging workspace.
-            ApkgArtifact::temporary_copy(candidate)
+            ApkgArtifact::temporary_from_candidate(candidate)
         }
     }
 }

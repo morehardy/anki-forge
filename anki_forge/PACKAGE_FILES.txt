@@ -7,6 +7,7 @@ LICENSE
 PACKAGE_FILES.txt
 README.md
 assets/contracts/anki-forge-contract-bundle-0.6.2.tar.gz
+assets/legacy-upgrade-schema11.sqlite
 build.rs
 examples/target_api_basic.rs
 examples/target_api_custom_notetype.rs
@@ -47,6 +48,7 @@ src/diff/mod.rs
 src/diff/summary.rs
 src/lib.rs
 src/prelude.rs
+src/prepared_media.rs
 src/product/assets.rs
 src/product/builders.rs
 src/product/comparison.rs
@@ -122,4 +124,5 @@ src/writer_core/note_data.rs
 src/writer_core/note_revision.rs
 src/writer_core/policy.rs
 src/writer_core/staging.rs
+src/writer_core/stream_zip.rs
 tests/packaged_contract_tests.rs

@@ -57,6 +57,19 @@ lockfile unchanged, even if writing was requested, and report
 rejected requested lockfiles are high risk and can be blocked with
 `.fail_on(RiskLevel::High)`.
 
+## Media exports
+
+Register each source with `deck.media().add(MediaSource::from_file(path))?`, or
+`project.media_mut().add_file(path)?.export_as(filename)?`. Registration validates
+the source immediately; export checks for subsequent content changes. No batch
+registration method, thread setup or performance option is needed. File-backed
+Deck registration reads larger blocks and reuses image header bytes for dimensions.
+
+Default temporary exports prepare media in parallel internally, stream through
+bounded encoding queues and retain final package inspection. Explicit artifact/CAS
+directories retain inspectable media files. These storage modes can produce different ZIP entry ordering and
+package hashes while preserving the same decoded content and Anki identities.
+
 ## Artifact ownership
 
 `Project::from(deck)` imports the Deck into editable Project state. You can then

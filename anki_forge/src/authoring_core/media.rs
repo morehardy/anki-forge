@@ -156,6 +156,15 @@ pub fn ingest_authoring_media(
     media: &[crate::authoring_core::model::AuthoringMedia],
     options: &NormalizeOptions,
 ) -> Result<MediaIngestResult, MediaIngestError> {
+    ingest_authoring_media_with_prepared(media, options, None)
+}
+
+pub(crate) fn ingest_authoring_media_with_prepared(
+    media: &[crate::authoring_core::model::AuthoringMedia],
+    options: &NormalizeOptions,
+    prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+) -> Result<MediaIngestResult, MediaIngestError> {
+    let mut prepared_results = prepared.map(|prepared| prepared.prepare_all(media, options));
     let mut diagnostics = Vec::new();
     let mut objects_by_id = BTreeMap::<String, MediaObject>::new();
     let mut bindings = Vec::<MediaBinding>::new();
@@ -163,7 +172,7 @@ pub fn ingest_authoring_media(
     let mut filename_to_object = BTreeMap::<String, String>::new();
     let mut total_unique_size = 0_u64;
 
-    for item in media {
+    for (index, item) in media.iter().enumerate() {
         if !seen_media_ids.insert(item.id.clone()) {
             diagnostics.push(error(
                 "MEDIA.DUPLICATE_MEDIA_ID",
@@ -182,35 +191,48 @@ pub fn ingest_authoring_media(
             continue;
         }
 
-        let prepared_source = match prepare_media_source(item, options) {
-            Ok(source) => source,
-            Err(mut err) => {
-                diagnostics.append(&mut err.diagnostics);
-                continue;
+        let ingested = if let Some(results) = prepared_results.as_mut() {
+            match results[index]
+                .take()
+                .expect("validated media has a preparation result")
+            {
+                Ok(ingested) => ingested,
+                Err(mut error) => {
+                    diagnostics.append(&mut error.diagnostics);
+                    continue;
+                }
             }
-        };
+        } else {
+            let prepared_source = match prepare_media_source(item, options) {
+                Ok(source) => source,
+                Err(mut err) => {
+                    diagnostics.append(&mut err.diagnostics);
+                    continue;
+                }
+            };
 
-        if let Some(limit) = options.media_policy.max_media_object_bytes {
-            let source_size = prepared_source.known_size_bytes();
-            if source_size > limit {
-                diagnostics.push(size_limit_exceeded(
-                    &item.id,
-                    source_size,
-                    limit,
-                    "max_media_object_bytes",
-                ));
-                continue;
+            if let Some(limit) = options.media_policy.max_media_object_bytes {
+                let source_size = prepared_source.known_size_bytes();
+                if source_size > limit {
+                    diagnostics.push(size_limit_exceeded(
+                        &item.id,
+                        source_size,
+                        limit,
+                        "max_media_object_bytes",
+                    ));
+                    continue;
+                }
             }
-        }
 
-        let ingested = match ingest_media_read_source_to_cas(
-            prepared_source.as_read_source(),
-            &options.media_store_dir,
-        ) {
-            Ok(ingested) => ingested,
-            Err(err) => {
-                diagnostics.push(media_io_error_to_diagnostic(err, &item.id));
-                continue;
+            match ingest_media_read_source_to_cas(
+                prepared_source.as_read_source(),
+                &options.media_store_dir,
+            ) {
+                Ok(ingested) => ingested,
+                Err(err) => {
+                    diagnostics.push(media_io_error_to_diagnostic(err, &item.id));
+                    continue;
+                }
             }
         };
 
@@ -321,7 +343,7 @@ pub fn ingest_authoring_media(
     })
 }
 
-enum PreparedMediaSource {
+pub(crate) enum PreparedMediaSource {
     Path { path: PathBuf, size_bytes: u64 },
     InlineBytes(Vec<u8>),
 }
@@ -334,7 +356,7 @@ impl PreparedMediaSource {
         }
     }
 
-    fn known_size_bytes(&self) -> u64 {
+    pub(crate) fn known_size_bytes(&self) -> u64 {
         match self {
             Self::Path { size_bytes, .. } => *size_bytes,
             Self::InlineBytes(bytes) => bytes.len() as u64,
@@ -342,7 +364,7 @@ impl PreparedMediaSource {
     }
 }
 
-fn prepare_media_source(
+pub(crate) fn prepare_media_source(
     item: &crate::authoring_core::model::AuthoringMedia,
     options: &NormalizeOptions,
 ) -> Result<PreparedMediaSource, MediaIngestError> {

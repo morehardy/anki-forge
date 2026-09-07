@@ -7,7 +7,7 @@ import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SIZES = (200, 500, 1000, 10000)
+SIZES = (100, 200, 500, 1000)
 SEED = 20260906
 PROFILE = "basic-mixed-text-v1"
 QFMT = "{{Front}}"
@@ -77,7 +77,7 @@ def corpus():
         "category": "english" if i % 20 < 10 else "mixed" if i % 20 < 18 else "escaping",
         "front": field_text(i, "front", "english" if i % 20 < 10 else "mixed" if i % 20 < 18 else "escaping"),
         "back": field_text(i, "back", "english" if i % 20 < 10 else "mixed" if i % 20 < 18 else "escaping"),
-    } for i in range(10000)]
+    } for i in range(1000)]
 
 
 def document(notes, count):

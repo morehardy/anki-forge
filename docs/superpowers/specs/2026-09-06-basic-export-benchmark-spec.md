@@ -1,3 +1,5 @@
+> 2026-09-07 更新：当前实现仅运行 100、200、500、1000 四档，新增五场景媒体矩阵，详见 [benchmark README](../../../benchmarks/README.md)。下文 10K 相关取样/宣传讨论属于原始评审记录，不再作为当前执行要求。
+
 # Spec: Reproducible Basic export benchmarks for anki-forge and genanki
 
 Date: 2026-09-06

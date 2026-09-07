@@ -1,6 +1,6 @@
-# Basic export benchmark
+# Export benchmarks
 
-An independent, unpublished suite in this repository. Phase one compares the native Rust public `Deck` API with genanki 0.13.1 on **200 / 500 / 1,000 / 10,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
+An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
 
 ## Run
 
@@ -31,6 +31,48 @@ benchmarks/.venv/bin/python benchmarks/bench.py cleanup <run-directory>
 ```
 
 Reporting is offline and generates `report.md`, `timing.svg` and `summary.json`. It never edits the project README. Raw manifests, attempt records, verification results, phase events and Anki evidence are retained. `cleanup` removes only this run's verified outputs and private temporary files, preserving selected APKGs until their Anki evidence passes. Interrupted or failed attempts remain recorded. Copy a reviewed run's compact evidence/report files (excluding `artifacts/`) into `benchmarks/results/<run-id>/` to retain a reviewable snapshot.
+
+## Text and media matrix
+
+The active media matrix uses the same four tiers in five scenes: text only,
+unique images, unique audio, mixed unique media and mixed shared media. Run:
+
+```sh
+python3 benchmarks/bench.py prepare --python python3.11 --with-anki
+benchmarks/.venv/bin/python benchmarks/media_bench.py --name media-system
+```
+
+The default generator creates frozen, portable v2 PNG/WAV fixtures (about 64 KiB
+per image and 32 KiB per audio file). Mixed cases contain 30% text-only notes,
+40% images and 30% audio; the shared case reuses 49 files. Asset generation and
+fixture verification occur before measurement. Both exporters read and process
+those files inside every fresh measured process. The Rust adapter uses the
+existing individual `deck.media().add(...)` loop. Parallel media preparation is
+internal to the default export; no batch registration API or special adapter
+flag is needed. Older reports using the withdrawn, unreleased `add_many` API
+describe a different registration path and are historical comparisons only.
+
+Historical v1 inputs have a different recipe. Reuse them without rewriting their
+identity via `--inputs PATH`, where PATH contains five `PROFILE/inputs/` folders
+and all four JSON inputs plus their relative media files. v2 results are a separate
+workload profile and must not be presented as the old v1 baseline.
+
+The media runner performs three warmups before each pass, ten timing repetitions
+and five separate RSS repetitions. It records original collection rows, exact
+media bytes/names/counts and field references for every output. Verification and
+cleanup follow each adjacent exporter pair outside the native timing boundary;
+this keeps storage bounded. One timed output per adapter/cell is imported and
+rendered by the pinned Anki backend. It checks every imported field and media
+file and representative text/image/audio renders, without GUI or audible playback.
+`--skip-oracle` explicitly creates exploratory evidence only. Failed attempts
+remain in logs and prevent a successful summary; inputs, sources and executable
+identities are rechecked after measurement. No cold-cache claim is made.
+
+The media report includes all 20 cells, median/IQR, separate RSS and artifact
+sizes. The proposed acceptance target is at least 30% less elapsed time in every
+cell and at most 64 MiB RSS for 1,000 unique images. These are measured acceptance
+criteria, not runtime guarantees. Historical 10K reports remain archived; active
+generation, scoring and charts use only the four requested tiers.
 
 ## Optional Rust allocator
 
@@ -72,9 +114,9 @@ The [optimization implementation report](results/20260907-rust-export-pr/README.
 
 ## Data and API boundary
 
-`workload.py` owns the synthetic phrase pools and deterministic SHA-256 selection recipe. `workload-golden.json` freezes the four byte digests. Smaller cases are ordered prefixes of 10K: 50% English, 40% Chinese/English, 10% literal HTML-sensitive text. Fronts contain unique fixture markers. Lengths are 40–100 / 120–300 code points for Front / Back, with real UTF-8 distributions and repetition diagnostics in the manifest. This is a named synthetic workload, not a representative sample of user decks.
+`workload.py` owns the synthetic phrase pools and deterministic SHA-256 selection recipe. `workload-golden.json` freezes the four byte digests. Smaller cases are ordered prefixes of 1,000: 50% English, 40% Chinese/English, 10% literal HTML-sensitive text. Fronts contain unique fixture markers. Lengths are 40–100 / 120–300 code points for Front / Back, with real UTF-8 distributions and repetition diagnostics in the manifest. This is a named synthetic workload, not a representative sample of user decks.
 
-Both libraries accept HTML field strings. Each adapter escapes the shared plain-text input **inside** its measured process, then calls normal public APIs with default GUID/identity and export behavior. Rust retains all default validation, report and copy costs. genanki reuses its stock Basic model. Future adapters can use the same `basic-apkg-v1` input/output protocol and registry; adding a process-tree adapter requires a new validated memory metric and a fresh common baseline.
+Both libraries accept HTML field strings. Each adapter escapes the shared plain-text input **inside** its measured process, then calls normal public APIs with default GUID/identity and export behavior. Rust retains default validation, inspection, reporting and publication costs. genanki reuses its stock Basic model. Future adapters can use the same `basic-apkg-v1` input/output protocol and registry; adding a process-tree adapter requires a new validated memory metric and a fresh common baseline.
 
 The outputs have matching learning content, not identical format or styling. Rust uses a modern zstd collection plus a legacy compatibility placeholder; genanki uses an uncompressed legacy collection. The reported size includes these default differences. No artifact is normalized or recompressed for scoring.
 
@@ -87,7 +129,7 @@ The outputs have matching learning content, not identical format or styling. Rus
 - First timed artifact per cell is imported by pinned upstream Anki into a fresh collection. Every field/card/deck association is checked, and fixed English/mixed/escaping examples are rendered. All other successful artifacts, including warmups, must pass full raw/semantic checks.
 - Timeout is 120 seconds for both implementations. The affected pass stops that cell; unaffected cells continue. User cancellation stops further launches. Storage is estimated with headroom and monitored without scanning/deleting artifacts during measurement. Missing, invalid, timed-out and unsupported evidence never becomes zero or a survivor-only median.
 
-Reports show all four scales, absolute median/IQR, signed differences, ratios, separate RSS and timed-artifact sizes. Ten samples are descriptive; no confidence intervals, significance claims, p95 or averaged cross-scale score are produced. Dirty or changed provenance stays an exploratory draft. A slower Rust result is valid evidence. This implementation emits no automatic promotional wording: a predeclared complete confirmation is required before any later 10K advantage headline can be considered.
+Reports show all four scales, absolute median/IQR, signed differences, ratios, separate RSS and timed-artifact sizes. Ten samples are descriptive; no confidence intervals, significance claims, p95 or averaged cross-scale score are produced. Dirty or changed provenance stays an exploratory draft. A slower Rust result is valid evidence. This implementation emits no automatic promotional wording: each current tier must be reported independently.
 
 ## Isolation
 

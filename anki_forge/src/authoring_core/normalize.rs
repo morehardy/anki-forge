@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::authoring_core::identity::{resolve_identity, DefaultNonceSource};
 use crate::authoring_core::media::{
-    ingest_authoring_media, sort_media_references, DiagnosticBehavior, MediaReference,
-    MediaReferenceResolution, NormalizeOptions,
+    sort_media_references, DiagnosticBehavior, MediaReference, MediaReferenceResolution,
+    NormalizeOptions,
 };
 use crate::authoring_core::media_refs::extract_media_reference_candidates;
 use crate::authoring_core::model::{
@@ -59,6 +59,14 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
 pub fn normalize_with_options(
     request: NormalizationRequest,
     options: NormalizeOptions,
+) -> NormalizationResult {
+    normalize_with_prepared_media(request, options, None)
+}
+
+pub(crate) fn normalize_with_prepared_media(
+    request: NormalizationRequest,
+    options: NormalizeOptions,
+    prepared: Option<&mut crate::prepared_media::PreparedMedia>,
 ) -> NormalizationResult {
     let risk_policy_ref = request
         .comparison_context
@@ -266,7 +274,11 @@ pub fn normalize_with_options(
         });
     }
 
-    let ingest = match ingest_authoring_media(&request.input.media, &options) {
+    let ingest = match crate::authoring_core::media::ingest_authoring_media_with_prepared(
+        &request.input.media,
+        &options,
+        prepared,
+    ) {
         Ok(ingest) => ingest,
         Err(error) => {
             let items = error

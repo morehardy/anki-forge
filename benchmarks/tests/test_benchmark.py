@@ -22,7 +22,7 @@ import verify
 class WorkloadTests(unittest.TestCase):
     def test_frozen_corpus_and_prefixes(self):
         evidence = workload.generate()
-        largest = json.loads((workload.ROOT / "inputs/basic-10000.json").read_text())
+        largest = json.loads((workload.ROOT / "inputs/basic-1000.json").read_text())
         for size in workload.SIZES:
             raw = (workload.ROOT / f"inputs/basic-{size}.json").read_bytes()
             doc = json.loads(raw)
@@ -414,14 +414,14 @@ class EvidenceTests(unittest.TestCase):
             missing = {**rows[0], "artifact": "missing.apkg"}
             valid = {**rows[1], "artifact": "valid.apkg"}
             subprocess.run([sys.executable, str(workload.ROOT / "adapters/genanki/export.py"),
-                            str(workload.ROOT / "inputs/basic-10000.json"), str(run / "valid.apkg")], check=True)
+                            str(workload.ROOT / "inputs/basic-1000.json"), str(run / "valid.apkg")], check=True)
             results = bench.verify_records(run, [missing, valid])
             self.assertEqual(results[missing["id"]]["status"], "verification_unavailable")
             self.assertNotIn("artifact_bytes", results[missing["id"]])
             self.assertEqual(results[valid["id"]]["status"], "passed")
             checks.update(results)
             bench.save(run / "verification.json", checks)
-            cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+            cell = report.cell_summary(rows, checks, anki, 1000, "rust")
             self.assertEqual(cell["status"], "unverified")
             self.assertIsNone(cell["apkg_bytes"])
 
@@ -601,7 +601,7 @@ class EvidenceTests(unittest.TestCase):
             self.assertFalse({root / name for name in excluded} & paths)
             self.assertIn(root / "deleted-tracked-file.rs", paths)
 
-    def records(self, size=10000, adapter="rust"):
+    def records(self, size=1000, adapter="rust"):
         records, verification, anki = [], {}, {}
         for role, count in (("timing", 10), ("memory", 5)):
             for i in range(count):
@@ -617,7 +617,7 @@ class EvidenceTests(unittest.TestCase):
     def test_hand_calculated_statistics_and_timing_only_sizes(self):
         self.assertEqual(report.stats([1, 2, 3, 4]), {"n": 4, "median": 2.5, "q1": 1.75, "q3": 3.25, "min": 1, "max": 4})
         rows, checks, anki = self.records()
-        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        cell = report.cell_summary(rows, checks, anki, 1000, "rust")
         self.assertEqual(cell["time_ns"]["median"], 5500000)
         self.assertEqual(cell["apkg_bytes"]["median"], 100)
         self.assertEqual(cell["peak_rss_bytes"]["n"], 5)
@@ -626,20 +626,20 @@ class EvidenceTests(unittest.TestCase):
     def test_failed_cell_does_not_hide_other_sizes_or_use_survivors(self):
         rows, checks, anki = self.records()
         rows[0]["status"] = "timeout"
-        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        cell = report.cell_summary(rows, checks, anki, 1000, "rust")
         self.assertIsNone(cell["time_ns"])
         self.assertEqual(cell["timing_succeeded"], 9)
         rows[0]["status"] = "success"
         checks[rows[1]["id"]]["status"] = "invalid_artifact"
-        self.assertIsNone(report.cell_summary(rows, checks, anki, 10000, "rust")["time_ns"])
+        self.assertIsNone(report.cell_summary(rows, checks, anki, 1000, "rust")["time_ns"])
 
     def test_unmatched_memory_and_missing_anki_are_distinct(self):
         rows, checks, anki = self.records()
         rows[-1]["memory"]["metric"] = "sampled_tree"
-        cell = report.cell_summary(rows, checks, anki, 10000, "rust")
+        cell = report.cell_summary(rows, checks, anki, 1000, "rust")
         self.assertEqual(cell["status"], "verified")
         self.assertIsNone(cell["peak_rss_bytes"])
-        cell = report.cell_summary(rows, checks, {}, 10000, "rust")
+        cell = report.cell_summary(rows, checks, {}, 1000, "rust")
         self.assertEqual(cell["status"], "unverified")
         self.assertIsNotNone(cell["time_ns"])
 

@@ -1,10 +1,13 @@
 use std::fs;
 use std::fs::File;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 use crate::authoring_core::stock::resolve_stock_notetype;
-use crate::authoring_core::{AuthoringNotetype, NormalizedIr, NormalizedNote, NormalizedNotetype};
+#[cfg(test)]
+use crate::authoring_core::AuthoringNotetype;
+use crate::authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype};
 use anyhow::{Context, Result};
 use prost::Message;
 use rusqlite::Connection;
@@ -111,14 +114,32 @@ pub fn emit_apkg(
         &notetype_ids,
         &guid_assignments,
         artifact_target,
+        None,
     )
 }
 
+#[cfg(test)]
 pub(crate) fn emit_apkg_from_normalized(
     normalized_ir: &NormalizedIr,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
     artifact_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
+) -> Result<ApkgMaterialization> {
+    emit_apkg_with_prepared_media(
+        normalized_ir,
+        notetype_ids,
+        artifact_target,
+        guid_plan,
+        None,
+    )
+}
+
+pub(crate) fn emit_apkg_with_prepared_media(
+    normalized_ir: &NormalizedIr,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+    artifact_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
+    prepared_media: Option<&crate::prepared_media::PreparedMedia>,
 ) -> Result<ApkgMaterialization> {
     let guid_assignments = validate_guid_plan(normalized_ir, guid_plan)?;
     let notetype_ids =
@@ -128,6 +149,7 @@ pub(crate) fn emit_apkg_from_normalized(
         &notetype_ids,
         &guid_assignments,
         artifact_target,
+        prepared_media,
     )
 }
 
@@ -136,6 +158,7 @@ fn emit_apkg_with_plans(
     notetype_ids: &std::collections::BTreeMap<String, i64>,
     guid_assignments: &GuidAssignments<'_>,
     artifact_target: &BuildArtifactTarget,
+    prepared_media: Option<&crate::prepared_media::PreparedMedia>,
 ) -> Result<ApkgMaterialization> {
     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
         format!(
@@ -148,25 +171,36 @@ fn emit_apkg_with_plans(
     let temp_path = artifact_target.root_dir.join(".package.apkg.tmp");
     let _ = fs::remove_file(&temp_path);
 
-    let file = File::create(&temp_path)
-        .with_context(|| format!("create package {}", temp_path.display()))?;
-    let mut zip = ZipWriter::new(file);
+    let streamed_fingerprint = if let Some(prepared) = prepared_media {
+        Some(write_sequential_package(
+            &temp_path,
+            normalized_ir,
+            notetype_ids,
+            guid_assignments,
+            artifact_target,
+            prepared,
+        )?)
+    } else {
+        let file = File::create(&temp_path)
+            .with_context(|| format!("create package {}", temp_path.display()))?;
+        let mut zip = ZipWriter::new(file);
 
-    write_meta(&mut zip)?;
-    let latest_collection = create_latest_collection_file(
-        &artifact_target.root_dir,
-        normalized_ir,
-        guid_assignments,
-        notetype_ids,
-    )?;
-    write_zstd_collection_entry(&mut zip, latest_collection.path())?;
-    drop(latest_collection);
-    let legacy_collection = create_legacy_collection_bytes(&artifact_target.root_dir)?;
-    write_stored_entry(&mut zip, "collection.anki2", &legacy_collection)?;
+        write_meta(&mut zip)?;
+        let latest_collection = create_latest_collection_file(
+            &artifact_target.root_dir,
+            normalized_ir,
+            guid_assignments,
+            notetype_ids,
+        )?;
+        write_zstd_collection_entry(&mut zip, latest_collection.path())?;
+        drop(latest_collection);
+        write_stored_entry(&mut zip, "collection.anki2", LEGACY_UPGRADE_COLLECTION)?;
 
-    write_media_payloads_and_map(&mut zip, normalized_ir, &artifact_target.media_store_dir)?;
+        write_media_payloads_and_map(&mut zip, normalized_ir, &artifact_target.media_store_dir)?;
 
-    zip.finish()?;
+        zip.finish()?;
+        None
+    };
     fs::rename(&temp_path, &apkg_path).with_context(|| {
         format!(
             "move package {} into {}",
@@ -175,14 +209,99 @@ fn emit_apkg_with_plans(
         )
     })?;
 
-    let package_bytes =
-        fs::read(&apkg_path).with_context(|| format!("read package {}", apkg_path.display()))?;
+    let package_fingerprint = match streamed_fingerprint {
+        Some(fingerprint) => fingerprint,
+        None => package_file_fingerprint(&apkg_path)?,
+    };
 
     Ok(ApkgMaterialization {
         apkg_ref: package_ref(artifact_target),
         apkg_path,
-        package_fingerprint: package_fingerprint(&package_bytes),
+        package_fingerprint,
     })
+}
+
+fn write_sequential_package(
+    temp_path: &Path,
+    normalized: &NormalizedIr,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+    guids: &GuidAssignments<'_>,
+    target: &BuildArtifactTarget,
+    prepared: &crate::prepared_media::PreparedMedia,
+) -> Result<String> {
+    let mut zip = prepared.take_archive(normalized)?;
+    let collection =
+        create_latest_collection_file(&target.root_dir, normalized, guids, notetype_ids)?;
+    let mut encoded = tempfile::NamedTempFile::new_in(&target.root_dir)?;
+    let (size, crc) = {
+        let output = std::io::BufWriter::with_capacity(64 * 1024, encoded.as_file_mut());
+        let mut measured = CrcWriter {
+            output,
+            size: 0,
+            crc: crc32fast::Hasher::new(),
+        };
+        zstd::stream::copy_encode(File::open(collection.path())?, &mut measured, 0)?;
+        measured.flush()?;
+        let CrcWriter { output, size, crc } = measured;
+        drop(output);
+        (size, crc.finalize())
+    };
+    drop(collection);
+    zip.entry("collection.anki21b", size, crc, |writer| {
+        std::io::copy(&mut File::open(encoded.path())?, writer)?;
+        Ok(())
+    })?;
+    drop(encoded);
+    zip.bytes("collection.anki2", LEGACY_UPGRADE_COLLECTION)?;
+    let objects = normalized
+        .media_objects
+        .iter()
+        .map(|object| (object.id.as_str(), object))
+        .collect::<std::collections::BTreeMap<_, _>>();
+    let mut entries = Vec::with_capacity(normalized.media_bindings.len());
+    for binding in &normalized.media_bindings {
+        let object = objects
+            .get(binding.object_id.as_str())
+            .context("missing normalized media object")?;
+        entries.push(MediaEntry {
+            name: binding.export_filename.clone(),
+            size: apkg_media_size(object.size_bytes, &object.id)?,
+            sha1: hex::decode(&object.sha1)?,
+            legacy_zip_filename: None,
+        });
+    }
+    zip.bytes(
+        "media",
+        &zstd::stream::encode_all(MediaEntries { entries }.encode_to_vec().as_slice(), 0)?,
+    )?;
+    let (archive, fingerprint) = zip.finish()?;
+    match archive.persist(temp_path) {
+        Ok(_) => {}
+        Err(error) if error.error.kind() == std::io::ErrorKind::CrossesDevices => {
+            // An explicit candidate location can be on another volume.
+            fs::copy(error.file.path(), temp_path)?;
+        }
+        Err(error) => return Err(error.error.into()),
+    }
+    Ok(fingerprint)
+}
+
+struct CrcWriter<W> {
+    output: W,
+    size: u64,
+    crc: crc32fast::Hasher,
+}
+
+impl<W: Write> Write for CrcWriter<W> {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let written = self.output.write(bytes)?;
+        self.size += written as u64;
+        self.crc.update(&bytes[..written]);
+        Ok(written)
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.output.flush()
+    }
 }
 
 fn write_meta(zip: &mut ZipWriter<File>) -> Result<()> {
@@ -207,9 +326,24 @@ fn package_ref(target: &BuildArtifactTarget) -> String {
     )
 }
 
+#[cfg(test)]
 fn package_fingerprint(bytes: &[u8]) -> String {
     let digest = Sha1::digest(bytes);
     format!("package:{}", hex::encode(digest))
+}
+
+fn package_file_fingerprint(path: &Path) -> Result<String> {
+    let mut file = File::open(path).with_context(|| format!("read package {}", path.display()))?;
+    let mut hash = Sha1::new();
+    let mut buffer = [0; 64 * 1024];
+    loop {
+        let count = file.read(&mut buffer)?;
+        if count == 0 {
+            break;
+        }
+        hash.update(&buffer[..count]);
+    }
+    Ok(format!("package:{}", hex::encode(hash.finalize())))
 }
 
 fn write_media_payloads_and_map(
@@ -346,6 +480,12 @@ fn create_latest_collection_file(
     Ok(compacted)
 }
 
+// The upgrade notice is independent of the exported notes. The regeneration
+// test below ties this resource to our schema and notice implementation.
+const LEGACY_UPGRADE_COLLECTION: &[u8] =
+    include_bytes!("../../assets/legacy-upgrade-schema11.sqlite");
+
+#[cfg(test)]
 fn create_legacy_collection_bytes(root_dir: &Path) -> Result<Vec<u8>> {
     let path = root_dir.join(".collection.anki2.sqlite.tmp");
     let _ = fs::remove_file(&path);
@@ -561,6 +701,7 @@ fn resolve_template_target_deck_id(
         .unwrap_or(default_id)
 }
 
+#[cfg(test)]
 fn populate_legacy_collection(conn: &Connection) -> Result<()> {
     let front_text = legacy_dummy_front_text();
     let fields = format!("{front_text}\u{1f}");
@@ -580,6 +721,7 @@ fn populate_legacy_collection(conn: &Connection) -> Result<()> {
     Ok(())
 }
 
+#[cfg(test)]
 fn legacy_basic_models_json() -> Result<String> {
     let basic = resolve_stock_notetype(&AuthoringNotetype {
         id: "legacy-basic".into(),
@@ -647,6 +789,7 @@ fn legacy_basic_models_json() -> Result<String> {
     serde_json::to_string(&models).context("serialize schema11 legacy models")
 }
 
+#[cfg(test)]
 fn legacy_dummy_front_text() -> &'static str {
     "This package requires a newer version of Anki."
 }
@@ -774,6 +917,28 @@ mod tests {
     use super::*;
     use proptest::prelude::*;
 
+    #[test]
+    fn embedded_upgrade_notice_matches_schema_generated_database() {
+        let root = tempfile::tempdir().unwrap();
+        assert_eq!(
+            create_legacy_collection_bytes(root.path()).unwrap(),
+            LEGACY_UPGRADE_COLLECTION
+        );
+    }
+
+    #[test]
+    fn streamed_package_fingerprint_matches_byte_fingerprint() {
+        let mut file = tempfile::NamedTempFile::new().unwrap();
+        let bytes = (0..200_000)
+            .map(|index| (index * 37) as u8)
+            .collect::<Vec<_>>();
+        file.write_all(&bytes).unwrap();
+        assert_eq!(
+            package_file_fingerprint(file.path()).unwrap(),
+            package_fingerprint(&bytes)
+        );
+    }
+
     fn assert_streamed_collection_matches_buffered_zip(path: &Path) {
         use std::io::Read;
 
@@ -879,31 +1044,40 @@ mod tests {
         let target = BuildArtifactTarget::new(root.path(), "artifacts");
         let output = root.path().join("package.apkg");
         fs::write(&output, b"previous package").unwrap();
-        fs::create_dir(root.path().join(".collection.anki2.sqlite.tmp")).unwrap();
-        let normalized = two_basic_notes();
+        let mut normalized = two_basic_notes();
+        normalized
+            .media_objects
+            .push(crate::authoring_core::MediaObject {
+                id: format!("blake3:{}", "0".repeat(64)),
+                object_ref: String::new(),
+                blake3: "0".repeat(64),
+                sha1: "0".repeat(40),
+                size_bytes: 8,
+                mime: "text/plain".into(),
+            });
+        normalized
+            .media_bindings
+            .push(crate::authoring_core::MediaBinding {
+                id: "missing".into(),
+                export_filename: "missing.txt".into(),
+                object_id: normalized.media_objects[0].id.clone(),
+            });
         let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
 
         let error = emit_apkg_from_normalized(&normalized, &ids, &target, None)
             .err()
-            .expect("the legacy database path is a directory");
+            .expect("missing CAS object after the collection was written");
 
         assert!(error
-            .to_string()
-            .contains("open legacy collection database"));
+            .downcast_ref::<crate::writer_core::media::MediaWriterError>()
+            .is_some());
         assert_eq!(fs::read(output).unwrap(), b"previous package");
         let mut names = fs::read_dir(root.path())
             .unwrap()
             .map(|entry| entry.unwrap().file_name().into_string().unwrap())
             .collect::<Vec<_>>();
         names.sort();
-        assert_eq!(
-            names,
-            [
-                ".collection.anki2.sqlite.tmp",
-                ".package.apkg.tmp",
-                "package.apkg"
-            ]
-        );
+        assert_eq!(names, [".package.apkg.tmp", "package.apkg"]);
     }
 
     #[test]

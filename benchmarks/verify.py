@@ -42,13 +42,16 @@ def zstd_decode(raw):
     return data
 
 
-def read_package(path):
+def read_package(path, expected=None):
+    from media_verify import check_media
+    expected_media = (expected or {}).get("media", [])
+    media_count = check_media(path, expected) if expected_media else 0
     require(path.stat().st_size <= MAX_BYTES, "archive exceeds verifier budget")
     with zipfile.ZipFile(path) as archive:
         info = archive.infolist()
         names = [entry.filename for entry in info]
         require(len(names) == len(set(names)), "duplicate archive entry")
-        require(len(info) <= 8 and sum(e.file_size for e in info) <= MAX_BYTES, "archive expansion budget")
+        require(len(info) <= media_count + 8 and sum(e.file_size for e in info) <= MAX_BYTES, "archive expansion budget")
         meta = archive.read("meta") if "meta" in names else None
         if meta is None or meta == b"\x08\x01":
             canonical, version = "collection.anki2", 1
@@ -62,14 +65,18 @@ def read_package(path):
         allowed = {canonical, "media", "meta"}
         if version > 1:
             allowed.add("collection.anki2")
+        if expected_media:
+            allowed.update(name for name in names if name.isdigit())
         require(set(names) <= allowed, "unexpected media or unaccounted archive payload")
         raw = archive.read(canonical)
         media = archive.read("media")
         if version == 3:
             raw, media = zstd_decode(raw), zstd_decode(media)
-            require(media == b"", "nonempty modern media protobuf")
+            if not expected_media:
+                require(media == b"", "nonempty modern media protobuf")
         else:
-            require(json.loads(media) == {}, "nonempty legacy media map")
+            if not expected_media:
+                require(json.loads(media) == {}, "nonempty legacy media map")
         require(raw.startswith(b"SQLite format 3\x00"), "canonical entry is not SQLite")
         return raw, {"version": version, "canonical_entry": canonical,
                      "nested_compression": "zstd" if version == 3 else "none",
@@ -77,7 +84,23 @@ def read_package(path):
                                    "stored_bytes": e.compress_size, "decoded_zip_bytes": e.file_size,
                                    "role": "canonical" if e.filename == canonical else
                                            "compatibility_placeholder" if e.filename == "collection.anki2" else "metadata"}
-                                  for e in info], "media_count": 0}
+                                  for e in info], "media_count": media_count}
+
+
+def decode_fields(parts, expected):
+    from media_verify import field_suffix
+    if not expected.get("media"):
+        return tuple(map(literal, parts))
+    prefix = parts[0].split('\n<img src=', 1)[0].split('\n[sound:', 1)[0]
+    front = literal(prefix)
+    note = next((note for note in expected["notes"] if note["front"] == front), None)
+    require(note is not None, "unknown fixture Front")
+    result = []
+    for field, raw in zip(("front", "back"), parts):
+        suffix = field_suffix(note, field, expected)
+        require(not suffix or raw.endswith(suffix), "media field references mismatch")
+        result.append(literal(raw[:-len(suffix)] if suffix else raw))
+    return tuple(result)
 
 
 def check_rows(db, expected):
@@ -125,7 +148,7 @@ def check_rows(db, expected):
         parts = fields.split("\x1f")
         require(len(parts) == 2, "not exactly two stored field segments")
         require(not tags.split(), "nonempty logical tags")
-        front, back = map(literal, parts)
+        front, back = decode_fields(parts, expected)
         require(front not in observed, "duplicate fixture Front")
         require(front in required and required[front] == back, "field content mismatch")
         observed[front] = back
@@ -178,12 +201,12 @@ def check_projection(path, inspector, expected, by_guid, used_mid):
         require(len(notes) == len(cards) == expected["note_count"], "projected counts")
         require({c["note_id"] for c in cards} == set(by_guid), "projected card associations")
         require(all(c["ord"] == 0 and c["deck_name"] == expected["deck_name"] for c in cards), "projected cards")
-        require(not o["media"], "projected media")
+        require(len(o["media"]) == len(expected.get("media", [])), "projected media count")
         for note in notes:
             require(note["notetype_id"] == mid and note["deck_name"] == expected["deck_name"], "projected association")
             require(not any(tag.strip() for tag in note["tags"]), "projected tags")
             require(set(note["fields"]) == {"Front", "Back"}, "projected fields")
-            require(tuple(literal(note["fields"][key]) for key in ("Front", "Back")) == by_guid[note["id"]], "projected content")
+            require(decode_fields([note["fields"][key] for key in ("Front", "Back")], expected) == by_guid[note["id"]], "projected content")
         return {"status": "passed", "reader": "repository-inspector-modern-v1",
                 "observation_model_version": report["observation_model_version"],
                 "stock_model_name": models[0]["name"], "css": models[0]["css"],
@@ -197,7 +220,7 @@ def verify_artifact(path, expected, inspector):
     try:
         result["artifact_sha256"] = sha256(path)
         result["artifact_bytes"] = path.stat().st_size
-        raw, package = read_package(path)
+        raw, package = read_package(path, expected)
         result["package"] = package
         with tempfile.TemporaryDirectory(prefix="verify-") as directory:
             database = Path(directory) / "original.sqlite"
