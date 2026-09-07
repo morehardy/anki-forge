@@ -21,6 +21,35 @@ def save(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
 
 
+def collect_attempt(case, row, command, env):
+    """Retain attempt identity before launch and failures before propagating them."""
+    row.update(status="running", started_utc=bench.utc())
+    save(case / "attempt.json", row)
+    try:
+        process = subprocess.run(command, capture_output=True, text=True, env=env, timeout=75)
+        (case / "collector.stdout.log").write_text(process.stdout)
+        (case / "collector.stderr.log").write_text(process.stderr)
+        measurement = json.loads(process.stdout)
+        row["measurement"] = measurement
+        if process.returncode or measurement.get("exit_code") != 0 or measurement.get("signal") or measurement.get("leftover_descendants"):
+            raise RuntimeError(f"export failed: {row['id']}; inspect retained logs")
+        row["status"] = "success"
+    except BaseException as error:
+        row.update(status="cancelled" if isinstance(error, KeyboardInterrupt) else "failed",
+                   error_type=type(error).__name__, error=str(error) or type(error).__name__)
+        if isinstance(error, subprocess.TimeoutExpired):
+            for name, output in [("stdout", error.stdout), ("stderr", error.stderr)]:
+                if output is not None:
+                    data = output.encode() if isinstance(output, str) else output
+                    (case / f"collector.{name}.log").write_bytes(data)
+        raise
+    finally:
+        row["finished_utc"] = bench.utc()
+        save(case / "attempt.json", row)
+        bench.append(case.parent / "attempts.jsonl", row)
+    return row
+
+
 def suite_inputs(directory):
     result = []
     for profile in sorted(directory.iterdir()):
@@ -132,16 +161,11 @@ def run(args):
                         output = case / "output.apkg"
                         env = os.environ.copy()
                         env.update(TMPDIR=str(case), TMP=str(case), TEMP=str(case), PYTHONHASHSEED=str(workload.SEED))
-                        process = subprocess.run([str(bench.COLLECTOR), "60", str(case / "stdout.log"), str(case / "stderr.log"),
-                                                  *adapter["command"], str(input_path), str(output)],
-                                                 capture_output=True, text=True, env=env, timeout=75)
-                        measurement = json.loads(process.stdout)
                         row = {"id": name, "role": role, "profile": profile, "size": size, "repeat": repeat,
-                               "adapter": adapter["id"], "measurement": measurement}
-                        with (destination / "attempts.jsonl").open("a") as stream:
-                            stream.write(json.dumps(row) + "\n")
-                        if process.returncode or measurement.get("exit_code") != 0 or measurement.get("signal") or measurement.get("leftover_descendants"):
-                            raise RuntimeError(f"export failed: {name}; inspect retained logs")
+                               "adapter": adapter["id"]}
+                        collect_attempt(case, row,
+                                        [str(bench.COLLECTOR), "60", str(case / "stdout.log"), str(case / "stderr.log"),
+                                         *adapter["command"], str(input_path), str(output)], env)
                         pending.append((row, case, output))
                     # Verify after both adjacent timed exporters have exited.
                     for row, case, output in pending:
@@ -172,7 +196,8 @@ def run(args):
             raise RuntimeError("inputs changed during measurement")
         manifest.update(completed_utc=bench.utc(), identity_unchanged=True, host_after=bench.host_state(), status="completed")
     except BaseException as error:
-        manifest.update(status="failed", error=str(error), completed_utc=bench.utc())
+        manifest.update(status="failed", error_type=type(error).__name__,
+                        error=str(error) or type(error).__name__, completed_utc=bench.utc())
         raise
     finally:
         save(destination / "manifest.json", manifest)
