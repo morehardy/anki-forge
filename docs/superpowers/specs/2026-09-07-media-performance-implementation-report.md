@@ -82,4 +82,4 @@ benchmarks/.venv/bin/python benchmarks/media_bench.py --name your-new-run
 
 默认运行会生成经 golden hash 校验的 v2 PNG/WAV 素材。v1 复现需保留原素材并使用 `--inputs`；证据归档只包含其 JSON 与内容指纹，没有重新生成或替换旧素材。命令、适用平台和 oracle 准备方法见 [benchmark README](../../../benchmarks/README.md)。
 
-本轮没有提交或推送。完整紧凑证据位于 [结果目录](../../../benchmarks/results/20260907-media-export-pr/README.md)。
+以上历史数据产生于提交前。完整紧凑证据位于 [结果目录](../../../benchmarks/results/20260907-media-export-pr/README.md)。

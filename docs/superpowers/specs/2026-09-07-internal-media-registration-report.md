@@ -54,4 +54,4 @@ Project 的 `media_mut().add_file(path)?.export_as(filename)?` 和 `add_bytes()`
 - 420 份当前 Rust 产物的完整 APKG SHA-256 均与历史批量版相同场景/档位一致，见 `compatibility.json`。本次注册调整没有改变产物字节；上一轮顺序 ZIP 改动与更早版本的差异仍按 ADR 0018 说明。
 - 完整基准期间源码、二进制、依赖、构建记录及输入身份前后一致。使用本机 macOS arm64、Rust 1.92、release/default features/system allocator、CPython 3.11/genanki 0.13.1。文件缓存未控制为冷缓存；没有宣称跨平台性能或 GUI/音频实际播放验证。
 
-本轮没有提交或推送。设计说明见 [ADR 0018](../../adr/0018-build-owned-media-streaming.md)。
+以上测量完成于提交前，记录保留当时的工作区与二进制身份。设计说明见 [ADR 0018](../../adr/0018-build-owned-media-streaming.md)。
