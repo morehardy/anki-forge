@@ -1,7 +1,6 @@
 use crate::authoring_core::NormalizedIr;
 use anyhow::Result;
 
-use crate::writer_core::apkg::emit_apkg_from_normalized;
 use crate::writer_core::model::{BuildContext, PackageBuildResult, WriterGuidPlan, WriterPolicy};
 use crate::writer_core::staging::{
     error_result, error_result_with_domain, invalid_result, success_result, BorrowedStagingPackage,
@@ -54,6 +53,29 @@ pub(crate) fn build_with_identity_plan(
     guid_plan: Option<&WriterGuidPlan>,
     notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
 ) -> Result<PackageBuildResult> {
+    build_with_prepared_media(
+        normalized_ir,
+        writer_policy,
+        build_context,
+        artifact_target,
+        apkg_target,
+        guid_plan,
+        notetype_ids,
+        None,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn build_with_prepared_media(
+    normalized_ir: &NormalizedIr,
+    writer_policy: &WriterPolicy,
+    build_context: &BuildContext,
+    artifact_target: &BuildArtifactTarget,
+    apkg_target: &BuildArtifactTarget,
+    guid_plan: Option<&WriterGuidPlan>,
+    notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
+    prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+) -> Result<PackageBuildResult> {
     if !build_context.materialize_staging {
         return Ok(error_result(
             writer_policy,
@@ -77,48 +99,50 @@ pub(crate) fn build_with_identity_plan(
     };
 
     let diagnostics = package.diagnostics().to_vec();
-    let materialized = match package.materialize(artifact_target) {
-        Ok(materialized) => materialized,
-        Err(err) => {
-            if let Some(media_err) =
-                err.downcast_ref::<crate::writer_core::media::MediaWriterError>()
-            {
-                return Ok(error_result_with_domain(
+    let materialized =
+        match package.materialize_with_prepared_media(artifact_target, prepared_media) {
+            Ok(materialized) => materialized,
+            Err(err) => {
+                if let Some(media_err) =
+                    err.downcast_ref::<crate::writer_core::media::MediaWriterError>()
+                {
+                    return Ok(error_result_with_domain(
+                        writer_policy,
+                        build_context,
+                        ErrorResultDetails {
+                            code: media_err.diagnostic_code().into(),
+                            summary: err.to_string(),
+                            domain: "media".into(),
+                            stage: "materialize_staging".into(),
+                            operation: "write_media".into(),
+                            path: media_err.diagnostic_path(),
+                        },
+                    ));
+                }
+                return Ok(error_result(
                     writer_policy,
                     build_context,
-                    ErrorResultDetails {
-                        code: media_err.diagnostic_code().into(),
-                        summary: err.to_string(),
-                        domain: "media".into(),
-                        stage: "materialize_staging".into(),
-                        operation: "write_media".into(),
-                        path: media_err.diagnostic_path(),
-                    },
+                    "PHASE3.STAGING_MATERIALIZATION_FAILED",
+                    err.to_string(),
+                    "materialize_staging",
+                    "write_manifest",
+                    Some(
+                        artifact_target
+                            .staging_manifest_path()
+                            .display()
+                            .to_string(),
+                    ),
                 ));
             }
-            return Ok(error_result(
-                writer_policy,
-                build_context,
-                "PHASE3.STAGING_MATERIALIZATION_FAILED",
-                err.to_string(),
-                "materialize_staging",
-                "write_manifest",
-                Some(
-                    artifact_target
-                        .staging_manifest_path()
-                        .display()
-                        .to_string(),
-                ),
-            ));
-        }
-    };
+        };
 
     let apkg = if build_context.emit_apkg {
-        match emit_apkg_from_normalized(
+        match crate::writer_core::apkg::emit_apkg_with_prepared_media(
             normalized_ir,
             package.notetype_ids(),
             apkg_target,
             guid_plan,
+            prepared_media,
         ) {
             Ok(apkg) => Some(apkg),
             Err(err) => {

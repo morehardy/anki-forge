@@ -10,6 +10,7 @@ impl BuildPipeline<'_> {
         let options = &self.options;
         let facts = &mut self.facts;
         let PreparedBuild {
+            prepared_media,
             artifact_workspace,
             baseline,
             mut normalized,
@@ -457,6 +458,7 @@ impl BuildPipeline<'_> {
         facts.update_safety = Some(update_safety_summary_val);
         Ok(ReconciledBuild {
             prepared: PreparedBuild {
+                prepared_media,
                 artifact_workspace,
                 baseline,
                 normalized,

@@ -324,6 +324,14 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
     }
 
     pub(crate) fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
+        self.materialize_with_prepared_media(target, None)
+    }
+
+    pub(crate) fn materialize_with_prepared_media(
+        &self,
+        target: &BuildArtifactTarget,
+        prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+    ) -> Result<MaterializedStaging> {
         let staging_dir = target.staging_dir();
         fs::create_dir_all(&staging_dir)
             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
@@ -349,11 +357,15 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
                         )
                     })?;
                 let media_path = validated_media_output_path(&media_dir, &binding.export_filename)?;
-                crate::writer_core::media::copy_verified_cas_object_to_path(
-                    &target.media_store_dir,
-                    object,
-                    &media_path,
-                )?;
+                if let Some(prepared) = prepared_media {
+                    prepared.verify(object)?;
+                } else {
+                    crate::writer_core::media::copy_verified_cas_object_to_path(
+                        &target.media_store_dir,
+                        object,
+                        &media_path,
+                    )?;
+                }
             }
         }
 

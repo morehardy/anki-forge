@@ -7,6 +7,7 @@ pub(crate) mod identity;
 mod inspect_limits;
 pub(crate) mod note_data;
 pub(crate) mod note_revision;
+pub(crate) mod stream_zip;
 
 pub mod apkg;
 pub mod build;
@@ -20,7 +21,6 @@ pub mod model;
 pub mod policy;
 pub mod staging;
 
-pub(crate) use build::build_with_identity_plan;
 pub use build::BuildArtifactTarget;
 pub use build::{build, build_with_guid_plan};
 pub use canonical_json::to_canonical_json;

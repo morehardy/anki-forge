@@ -19,6 +19,8 @@ struct Workload {
     deck_name: String,
     note_count: usize,
     notes: Vec<Record>,
+    #[serde(default)]
+    media: Vec<Media>,
 }
 #[derive(Deserialize)]
 struct Record {
@@ -26,6 +28,43 @@ struct Record {
     category: String,
     front: String,
     back: String,
+    #[serde(default)]
+    front_media: Vec<String>,
+    #[serde(default)]
+    back_media: Vec<String>,
+}
+#[derive(Deserialize)]
+struct Media {
+    id: String,
+    kind: String,
+    filename: String,
+    path: String,
+}
+
+fn suffix(refs: &[String], media: &BTreeMap<&str, &Media>) -> anyhow::Result<String> {
+    let mut result = String::new();
+    for id in refs {
+        let item = media.get(id.as_str()).context("unknown media reference")?;
+        // Frozen benchmark filenames are simple ASCII names.
+        ensure!(
+            item.filename
+                .bytes()
+                .all(|b| b.is_ascii_alphanumeric() || b"-_.".contains(&b)),
+            "unsafe fixture filename"
+        );
+        match item.kind.as_str() {
+            "image" => result.push_str(&format!("\n<img src=\"{}\">", item.filename)),
+            "audio" => result.push_str(&format!("\n[sound:{}]", item.filename)),
+            _ => anyhow::bail!("unknown media kind"),
+        }
+    }
+    Ok(result)
+}
+fn field(raw: &str, suffix: &str) -> anyhow::Result<String> {
+    literal(
+        raw.strip_suffix(suffix)
+            .context("media reference markup mismatch")?,
+    )
 }
 
 fn literal(raw: &str) -> anyhow::Result<String> {
@@ -82,6 +121,40 @@ fn main() -> anyhow::Result<()> {
                 .clone()
         })
         .collect();
+    let media_by_id: BTreeMap<_, _> = workload
+        .media
+        .iter()
+        .map(|item| (item.id.as_str(), item))
+        .collect();
+    ensure!(
+        media_by_id.len() == workload.media.len(),
+        "duplicate fixture media id"
+    );
+    let mut selected = selected;
+    for kind in ["image", "audio"] {
+        if let Some(note) = workload.notes.iter().find(|note| {
+            note.front_media.iter().chain(&note.back_media).any(|id| {
+                media_by_id
+                    .get(id.as_str())
+                    .is_some_and(|media| media.kind == kind)
+            })
+        }) {
+            selected.insert(note.id.clone());
+        }
+    }
+    let expected_fields = workload
+        .notes
+        .iter()
+        .map(|note| {
+            Ok((
+                note.front.as_str(),
+                (
+                    suffix(&note.front_media, &media_by_id)?,
+                    suffix(&note.back_media, &media_by_id)?,
+                ),
+            ))
+        })
+        .collect::<anyhow::Result<BTreeMap<_, _>>>()?;
     let mut renders = vec![];
     for cid in card_ids {
         let card = col
@@ -98,8 +171,20 @@ fn main() -> anyhow::Result<()> {
             note.fields().len() == 2 && note.tags.is_empty(),
             "fields/tags"
         );
-        let front = literal(&note.fields()[0])?;
-        let back = literal(&note.fields()[1])?;
+        let raw_front = &note.fields()[0];
+        let text_end = raw_front
+            .find("\n<img src=")
+            .or_else(|| raw_front.find("\n[sound:"))
+            .unwrap_or(raw_front.len());
+        let front = literal(&raw_front[..text_end])?;
+        let (front_suffix, back_suffix) = expected_fields
+            .get(front.as_str())
+            .context("unexpected front")?;
+        ensure!(
+            field(raw_front, front_suffix)? == front,
+            "front references mismatch"
+        );
+        let back = field(&note.fields()[1], back_suffix)?;
         let source = expected
             .get(front.as_str())
             .context("unexpected imported front")?;
@@ -134,40 +219,65 @@ fn main() -> anyhow::Result<()> {
         if selected.contains(&source.id) {
             let rendered = col.render_existing_card(cid, false, false)?;
             ensure!(!rendered.is_empty, "empty render");
-            let question = literal(&rendered.question())?;
+            let question = field(&rendered.question(), front_suffix)?;
             let answer_raw = rendered.answer().into_owned();
             let (answer_front, answer_back) = answer_raw
                 .split_once("\n\n<hr id=answer>\n\n")
                 .context("rendered answer separator")?;
             ensure!(
                 question == source.front
-                    && literal(answer_front)? == source.front
-                    && literal(answer_back)? == source.back,
+                    && field(answer_front, front_suffix)? == source.front
+                    && field(answer_back, back_suffix)? == source.back,
                 "rendered literal content mismatch"
             );
             representatives.insert(source.category.clone());
             renders.push(json!({"id": source.id, "category": source.category,
-                               "question": question, "answer_front": literal(answer_front)?,
-                               "answer_back": literal(answer_back)?}));
+                               "question": question, "answer_front": field(answer_front, front_suffix)?,
+                               "answer_back": field(answer_back, back_suffix)?}));
         }
     }
     ensure!(
-        models.len() == 1 && decks.len() == 1 && representatives.len() == 3,
+        models.len() == 1 && decks.len() == 1 && representatives.len() >= 3,
         "used models/decks/renders"
     );
     let media = collection_path.with_extension("media");
+    let mut imported_names = BTreeSet::new();
+    if media.exists() {
+        for entry in fs::read_dir(&media)? {
+            imported_names.insert(
+                entry?
+                    .file_name()
+                    .into_string()
+                    .map_err(|_| anyhow::anyhow!("non-UTF8 media name"))?,
+            );
+        }
+    }
     ensure!(
-        !media.exists() || fs::read_dir(media)?.next().is_none(),
-        "unexpected imported media"
+        imported_names
+            == workload
+                .media
+                .iter()
+                .map(|item| item.filename.clone())
+                .collect(),
+        "imported media filenames mismatch"
     );
+    let input_path = PathBuf::from(&args[0]);
+    let input_parent = input_path.parent().context("input parent")?;
+    for item in &workload.media {
+        ensure!(
+            fs::read(media.join(&item.filename))? == fs::read(input_parent.join(&item.path))?,
+            "imported media bytes mismatch: {}",
+            item.filename
+        );
+    }
     renders.sort_by_key(|r| r["id"].as_str().unwrap().to_owned());
     fs::write(
         PathBuf::from(&args[2]),
         serde_json::to_vec_pretty(&json!({
-            "status": "passed", "oracle": "upstream-anki-single-artifact-v1",
+            "status": "passed", "oracle": "upstream-anki-media-artifact-v2",
             "notes": note_ids.len(), "cards": observed.len(), "new_notes": imported.output.new.len(),
             "conflicting": 0, "used_models": models.len(), "populated_decks": decks.len(),
-            "all_fields_checked": true, "media_files": 0, "renders": renders,
+            "all_fields_checked": true, "media_files": workload.media.len(), "renders": renders,
         }))?,
     )?;
     Ok(())

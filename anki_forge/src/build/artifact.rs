@@ -41,15 +41,15 @@ impl ApkgArtifact {
         }
     }
 
-    pub(crate) fn temporary_copy(candidate: &Path) -> io::Result<Self> {
-        let mut file = tempfile::Builder::new()
+    pub(crate) fn temporary_from_candidate(candidate: &Path) -> io::Result<Self> {
+        let file = tempfile::Builder::new()
             .prefix("anki-forge-artifact-")
             .suffix(".apkg")
             .tempfile()?;
-        io::copy(&mut std::fs::File::open(candidate)?, &mut file)?;
-        file.as_file().sync_all()?;
+        let path = file.into_temp_path();
+        publish_owned_candidate(candidate, &path, false)?;
         Ok(Self {
-            storage: Arc::new(ArtifactStorage::Temporary(file.into_temp_path())),
+            storage: Arc::new(ArtifactStorage::Temporary(path)),
         })
     }
 
@@ -97,6 +97,34 @@ impl PartialEq for ApkgArtifact {
     }
 }
 impl Eq for ApkgArtifact {}
+
+/// The candidate is exclusively owned by this build, unlike `persist_to`'s
+/// source. Callers normally create it beside the destination so publication
+/// only syncs and renames. Cross-device fallback retains copy-before-replace.
+pub(crate) fn publish_owned_candidate(
+    candidate: &Path,
+    target: &Path,
+    force_failure_for_test: bool,
+) -> io::Result<()> {
+    if let Some(parent) = target.parent().filter(|path| !path.as_os_str().is_empty()) {
+        std::fs::create_dir_all(parent)?;
+    }
+    std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(candidate)?
+        .sync_all()?;
+    if force_failure_for_test {
+        return Err(io::Error::other("forced output replace failure"));
+    }
+    match std::fs::rename(candidate, target) {
+        Ok(()) => Ok(()),
+        Err(error) if error.kind() == io::ErrorKind::CrossesDevices => {
+            replace_output_atomically(candidate, target, false)
+        }
+        Err(error) => Err(error),
+    }
+}
 
 pub(crate) fn replace_output_atomically(
     temp_artifact: &Path,

@@ -2,7 +2,7 @@ use anyhow::Context;
 use base64::Engine as _;
 use sha1::{Digest, Sha1};
 use std::collections::BTreeMap;
-use std::io::Read;
+use std::io::{Read, Seek};
 use std::path::Path;
 
 use crate::deck::model::{
@@ -219,8 +219,7 @@ impl RegisteredMedia {
                     })?
                     .to_string();
                 validate_source_file(&path)?;
-                let sha1_hex = sha1_file_hex(&path)?;
-                let raster_image = raster_image_metadata_from_path(&name, &path);
+                let (sha1_hex, raster_image) = observe_file(&name, &path)?;
                 (
                     name,
                     RegisteredMediaSource::File { path },
@@ -403,7 +402,7 @@ fn ensure_not_symlink(path: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
+fn observe_file(name: &str, path: &Path) -> anyhow::Result<(String, Option<RasterImageMetadata>)> {
     let mut file = std::fs::File::open(path).map_err(|err| match err.kind() {
         std::io::ErrorKind::NotFound => MediaError::SourceMissing {
             path: path.to_path_buf(),
@@ -415,7 +414,9 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
         },
     })?;
     let mut hasher = Sha1::new();
-    let mut buffer = [0_u8; 8192];
+    let mut buffer = [0_u8; 64 * 1024];
+    let mut raster_image = None;
+    let mut first_chunk = true;
     loop {
         let read = file
             .read(&mut buffer)
@@ -426,9 +427,30 @@ fn sha1_file_hex(path: &Path) -> anyhow::Result<String> {
         if read == 0 {
             break;
         }
+        if first_chunk {
+            // Most image dimensions fit in the bytes already read for hashing.
+            raster_image = raster_image_metadata_from_bytes(name, &buffer[..read]);
+            first_chunk = false;
+        }
         hasher.update(&buffer[..read]);
     }
-    Ok(hex::encode(hasher.finalize()))
+    if raster_image.is_none()
+        && matches!(
+            crate::authoring_core::mime_from_filename(name),
+            Some("image/png" | "image/jpeg" | "image/gif" | "image/webp")
+        )
+        && file.rewind().is_ok()
+    {
+        // JPEG metadata can place dimensions beyond the first block. Keep the
+        // streaming parser fallback, using the same open source handle.
+        raster_image = imagesize::reader_size(std::io::BufReader::new(file))
+            .ok()
+            .map(|size| RasterImageMetadata {
+                width_px: size.width as u32,
+                height_px: size.height as u32,
+            });
+    }
+    Ok((hex::encode(hasher.finalize()), raster_image))
 }
 
 fn validate_media_filename(name: &str) -> anyhow::Result<()> {
@@ -473,6 +495,47 @@ mod tests {
     const HEART_PNG: &[u8] = include_bytes!(
         "../../../contracts/fixtures/phase3/manual-desktop-v1/S03_io_minimal/assets/occlusion-heart.png"
     );
+
+    #[test]
+    fn file_registration_matches_inline_fingerprints_and_dimensions() {
+        let root = tempfile::tempdir().unwrap();
+        let mut long_header_jpeg = vec![0xff, 0xd8];
+        // Two APP1 segments put the SOF dimensions beyond the first 64 KiB.
+        for _ in 0..2 {
+            long_header_jpeg.extend_from_slice(&[0xff, 0xe1, 0xff, 0xff]);
+            long_header_jpeg.extend(std::iter::repeat_n(0, 65533));
+        }
+        long_header_jpeg.extend_from_slice(&[
+            0xff, 0xc0, 0x00, 0x11, 0x08, 0x00, 0x56, 0x00, 0xe4, 0x03, 0x01, 0x11, 0x00, 0x02,
+            0x11, 0x00, 0x03, 0x11, 0x00, 0xff, 0xd9,
+        ]);
+        for (name, bytes, is_image) in [
+            ("heart.png", HEART_PNG.to_vec(), true),
+            ("long-header.jpg", long_header_jpeg, true),
+            ("broken.png", b"not an image".to_vec(), false),
+            ("large.bin", vec![42; 150_000], false),
+        ] {
+            let path = root.path().join(name);
+            std::fs::write(&path, &bytes).unwrap();
+            let file = RegisteredMedia::from_source(MediaSource::from_file(&path)).unwrap();
+            let inline =
+                RegisteredMedia::from_source(MediaSource::from_bytes(name, bytes)).unwrap();
+            assert_eq!(file.sha1_hex, inline.sha1_hex, "{name}");
+            assert_eq!(file.raster_image, inline.raster_image, "{name}");
+            if is_image {
+                assert_eq!(
+                    file.raster_image,
+                    Some(RasterImageMetadata {
+                        width_px: 228,
+                        height_px: 86,
+                    }),
+                    "{name}"
+                );
+            } else {
+                assert!(file.raster_image.is_none(), "{name}");
+            }
+        }
+    }
 
     #[test]
     fn same_sha_registration_repairs_missing_raster_metadata() {

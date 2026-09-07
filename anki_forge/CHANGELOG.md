@@ -8,6 +8,18 @@ new minor release.
 
 ### Fixed
 
+- Keep media optimization behind the existing registration/export interfaces.
+  Read Deck file media in larger blocks and reuse image header bytes for dimensions,
+  with a streaming fallback for long headers. Preserve immediate registration
+  errors, content fingerprints and build-time source-change checks.
+- Stream temporary media builds through bounded encoding queues into a private
+  ZIP candidate; combine build-time source validation, hashing and encoding.
+  Preserve explicit CAS/staging storage and final APKG inspection. Reuse the
+  inspection decoder workspace while resetting each frame and enforcing limits.
+- Compute the default package fingerprint while writing, reuse the fixed legacy
+  upgrade-message database, and sync/rename owned candidates on publication.
+  Use RustCrypto SHA-1 0.11 with runtime hardware detection and portable fallback.
+
 - Clean up only build-owned file-media input copies after normalization,
   including failed preparation, so repeated and incremental exports can reuse
   an artifact directory without deleting caller-owned sources or aliases.
@@ -78,6 +90,10 @@ new minor release.
   so APKG roundtrips do not report false browser-template changes.
 
 ### Compatibility
+
+- Default temporary media packages now place media entries before collection
+  entries. APKG hashes change while decoded entries and Anki identities remain
+  equal. Explicit persistent builds retain their existing ZIP order.
 
 - Breaking Rust interface change: replace `artifact.path` with `artifact.path()`.
   Keep the report/artifact handle alive or call `artifact.persist_to(path)`;

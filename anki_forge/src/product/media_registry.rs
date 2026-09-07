@@ -186,6 +186,16 @@ impl MediaRegistry {
 }
 
 impl ProductMedia {
+    pub(crate) fn registered_fingerprint(&self) -> crate::prepared_media::RegisteredFingerprint {
+        match &self.observed_fingerprint {
+            Some(fingerprint) => crate::prepared_media::RegisteredFingerprint::Blake3 {
+                digest: fingerprint.blake3_hex.clone(),
+                size: fingerprint.size_bytes,
+            },
+            None => crate::prepared_media::RegisteredFingerprint::Sha1(self.sha1_hex.clone()),
+        }
+    }
+
     pub(crate) fn verify_registered_source(&self) -> Result<u64, ProductMediaSourceDiagnostic> {
         match &self.source {
             ProductMediaSource::File { path } => {

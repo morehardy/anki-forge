@@ -70,6 +70,7 @@ impl BuildFacts {
 }
 
 struct PreparedBuild {
+    prepared_media: Option<crate::prepared_media::PreparedMedia>,
     artifact_workspace: ArtifactWorkspace,
     baseline: Option<crate::product::comparison::BaselineSnapshot>,
     normalized: crate::authoring_core::NormalizedIr,
@@ -195,6 +196,25 @@ impl BuildPipeline<'_> {
         })?;
         let artifacts_dir = artifact_workspace.path.clone();
         let normalize_options = options.normalize_options.clone().unwrap_or_default();
+        let direct_media = artifact_workspace.temp_dir.is_some()
+            && normalize_options.media_store_dir.is_none()
+            && normalize_options.base_dir.is_none()
+            && normalize_options.media_mode == ProjectMediaMode::PathBacked;
+        let mut prepared_media = if direct_media {
+            Some(
+                crate::prepared_media::PreparedMedia::new_in(&artifact_workspace.path).map_err(
+                    |error| {
+                        facts.failure(
+                            "PROJECT.PRODUCT_MEDIA_FAILED",
+                            error.to_string(),
+                            BuildFailureCause::Io,
+                        )
+                    },
+                )?,
+            )
+        } else {
+            None
+        };
         let media_input_dir = normalize_options
             .base_dir
             .clone()
@@ -207,8 +227,12 @@ impl BuildPipeline<'_> {
         let validation = input.validate();
         facts.diagnostics = validation.diagnostics;
 
-        let normalized_output =
-            input.normalize_with_dirs(&media_input_dir, &media_store_dir, normalize_options);
+        let normalized_output = input.normalize_with_prepared_media(
+            &media_input_dir,
+            &media_store_dir,
+            normalize_options,
+            prepared_media.as_mut(),
+        );
         let normalized_output = match normalized_output {
             Ok(output) => output,
             Err(error) => {
@@ -303,6 +327,7 @@ impl BuildPipeline<'_> {
             }
         };
         Ok(PreparedBuild {
+            prepared_media,
             artifact_workspace,
             baseline,
             normalized,
@@ -320,17 +345,16 @@ impl BuildPipeline<'_> {
         let facts = &mut self.facts;
         let prepared = &state.prepared;
         let stable_ref_prefix = self.artifact_ref_prefix.clone();
-        let candidate_dir =
-            prepared
-                .artifact_workspace
-                .create_candidate_dir()
-                .map_err(|error| {
-                    facts.failure(
-                        "PROJECT.ARTIFACTS_DIR_FAILED",
-                        error.to_string(),
-                        BuildFailureCause::Io,
-                    )
-                })?;
+        let candidate_dir = prepared
+            .artifact_workspace
+            .create_candidate_dir(&self.options)
+            .map_err(|error| {
+                facts.failure(
+                    "PROJECT.ARTIFACTS_DIR_FAILED",
+                    error.to_string(),
+                    BuildFailureCause::Io,
+                )
+            })?;
         let artifact_target = BuildArtifactTarget::new(
             prepared.artifact_workspace.path.clone(),
             stable_ref_prefix.clone(),
@@ -353,7 +377,7 @@ impl BuildPipeline<'_> {
         let writer_guid_plan = crate::writer_core::WriterGuidPlan {
             assignments: std::mem::take(&mut state.reconcile.assignments),
         };
-        let package_build_result = crate::writer_core::build_with_identity_plan(
+        let package_build_result = crate::writer_core::build::build_with_prepared_media(
             &prepared.normalized,
             &prepared.writer_policy,
             &prepared.build_context,
@@ -361,6 +385,7 @@ impl BuildPipeline<'_> {
             &apkg_target,
             Some(&writer_guid_plan),
             Some(&notetype_ids),
+            prepared.prepared_media.as_ref(),
         );
         state.reconcile.assignments = writer_guid_plan.assignments;
         let package_build_result = package_build_result.map_err(|err| {

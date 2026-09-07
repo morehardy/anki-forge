@@ -58,7 +58,17 @@ impl BuildInput<'_> {
         &self,
         base_dir: impl Into<PathBuf>,
         media_store_dir: impl Into<PathBuf>,
+        options: ProjectNormalizeOptions,
+    ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
+        self.normalize_with_prepared_media(base_dir, media_store_dir, options, None)
+    }
+
+    pub(super) fn normalize_with_prepared_media(
+        &self,
+        base_dir: impl Into<PathBuf>,
+        media_store_dir: impl Into<PathBuf>,
         mut options: ProjectNormalizeOptions,
+        mut prepared: Option<&mut crate::prepared_media::PreparedMedia>,
     ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
         let base_dir = base_dir.into();
         let media_store_dir = media_store_dir.into();
@@ -75,7 +85,26 @@ impl BuildInput<'_> {
         let _media_input_files = if let Self::Project(project) = self {
             let PreparedProductMedia { media, input_files } = match media_mode {
                 ProjectMediaMode::PathBacked => {
-                    product_media_to_path_backed_authoring_media(project.media.media(), &base_dir)
+                    if let Some(prepared) = prepared.as_deref_mut() {
+                        let media = project.media.media().map(|item| {
+                            let source = match &item.source {
+                                crate::product::media_registry::ProductMediaSource::File { path } => {
+                                    prepared.register_source(item.id.clone(), path.clone(), item.registered_fingerprint());
+                                    crate::authoring::AuthoringMediaSource::Path { path: item.export_filename.clone() }
+                                }
+                                crate::product::media_registry::ProductMediaSource::InlineBytes { data_base64, .. } => {
+                                    crate::authoring::AuthoringMediaSource::InlineBytes { data_base64: data_base64.clone() }
+                                }
+                            };
+                            crate::authoring::AuthoringMedia {
+                                id: item.id.clone(), desired_filename: item.export_filename.clone(),
+                                source, declared_mime: item.declared_mime.clone(),
+                            }
+                        }).collect();
+                        Ok(PreparedProductMedia { media, input_files: Vec::new() })
+                    } else {
+                        product_media_to_path_backed_authoring_media(project.media.media(), &base_dir)
+                    }
                 }
                 ProjectMediaMode::SelfContained => product_media_to_self_contained_authoring_media(
                     project.media.media(),
@@ -118,13 +147,14 @@ impl BuildInput<'_> {
             &lowering.authoring_document,
             &source_map,
         );
-        let result = normalize_with_options(
+        let result = crate::authoring_core::normalize::normalize_with_prepared_media(
             NormalizationRequest::new(lowering.authoring_document),
             NormalizeOptions {
                 base_dir,
                 media_store_dir,
                 media_policy: options.to_authoring_media_policy(),
             },
+            prepared,
         );
         let result_status = result.result_status;
         let mut normalization_diagnostics = result
