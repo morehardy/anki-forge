@@ -266,6 +266,78 @@ fn imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata() {
     }
 }
 
+#[test]
+fn borrowed_deck_exports_preserve_long_html_and_identity_evidence() {
+    let root = tempfile::tempdir().unwrap();
+    let mut deck = Deck::builder("长文本").stable_id("long-html").build();
+    deck.basic()
+        .note(
+            "<b>问题 &amp; 答案</b>",
+            "<p>中文 &amp; <em>answer</em></p>".repeat(4096),
+        )
+        .tags(["中文"])
+        .add()
+        .unwrap();
+    deck.cloze()
+        .note("{{c1::中文}} &amp; {{c2::answer}}")
+        .extra("<b>extra</b>".repeat(4096))
+        .add()
+        .unwrap();
+    let original = deck.clone();
+    let project = Project::from(deck.clone());
+    let deck_lock = root.path().join("deck.json");
+    let project_lock = root.path().join("project.json");
+    let deck_report = deck
+        .build(BuildOptions::new().first_update_safe_build(&deck_lock))
+        .unwrap();
+    let project_report = project
+        .build(BuildOptions::new().first_update_safe_build(&project_lock))
+        .unwrap();
+    assert_eq!(deck_report.counts, project_report.counts);
+    assert_eq!(deck_report.diagnostics, project_report.diagnostics);
+    assert_eq!(
+        std::fs::read(deck_lock).unwrap(),
+        std::fs::read(project_lock).unwrap()
+    );
+    let expected = std::fs::read(project_report.artifact.as_ref().unwrap().path()).unwrap();
+    assert_eq!(
+        std::fs::read(deck_report.artifact.as_ref().unwrap().path()).unwrap(),
+        expected
+    );
+    assert_eq!(deck.to_apkg_bytes().unwrap(), expected);
+    let mut written = Vec::new();
+    deck.write_to(&mut written).unwrap();
+    assert_eq!(written, expected);
+    assert_eq!(deck, original);
+    assert_eq!(
+        project.lower().unwrap().authoring_document.notes[0].fields["Back"],
+        "<p>中文 &amp; <em>answer</em></p>".repeat(4096)
+    );
+}
+
+#[test]
+fn borrowed_deck_can_repair_missing_media_after_failed_export() {
+    let mut deck = Deck::builder("Repair").stable_id("repair-text").build();
+    deck.basic()
+        .note("front", "<img src=\"repair.png\">")
+        .add()
+        .unwrap();
+    let original = deck.clone();
+    let deck_error = deck.build(BuildOptions::new()).unwrap_err();
+    let project_error = Project::from(deck.clone())
+        .build(BuildOptions::new())
+        .unwrap_err();
+    assert_eq!(
+        deck_error.report.diagnostics,
+        project_error.report.diagnostics
+    );
+    assert_eq!(deck, original);
+    deck.media()
+        .add(MediaSource::from_bytes("repair.png", PNG.to_vec()))
+        .unwrap();
+    assert_eq!(deck.build(BuildOptions::new()).unwrap().counts.media, 1);
+}
+
 fn unique_artifacts_dir(label: &str) -> PathBuf {
     let mut dir = std::env::temp_dir();
     dir.push(format!(

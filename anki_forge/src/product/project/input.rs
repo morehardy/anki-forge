@@ -1,16 +1,49 @@
 //! The two build inputs share execution, never mutable authoring state.
 use super::*;
 
-#[derive(Clone, Copy)]
 pub(super) enum BuildInput<'a> {
     Project(&'a Project),
+    OwnedProject(Box<Project>),
     Document(&'a ProductDocument),
 }
 
+pub(super) type ResolvedNoteIdentities =
+    BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity>;
+
 impl BuildInput<'_> {
+    pub(super) fn normalize_for_build(
+        self,
+        base_dir: &Path,
+        media_store_dir: &Path,
+        options: ProjectNormalizeOptions,
+        prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+    ) -> Result<(ProjectNormalizeOutput, ResolvedNoteIdentities), ProjectNormalizeError> {
+        let input = match self {
+            Self::OwnedProject(project) => {
+                let (lowering, media, identities) = project.into_build_lowering();
+                let normalized = Self::normalize_lowering(
+                    lowering,
+                    Some(&media),
+                    base_dir,
+                    media_store_dir,
+                    options,
+                    prepared,
+                )?;
+                return Ok((normalized, identities));
+            }
+            input => input,
+        };
+        let normalized =
+            input.normalize_with_prepared_media(base_dir, media_store_dir, options, prepared)?;
+        let identities = input.resolved_note_identities();
+        // Later stages need identity evidence, never the editable note content.
+        Ok((normalized, identities))
+    }
+
     pub(super) fn stable_id(&self) -> Option<&str> {
         match self {
             Self::Project(project) => project.stable_id.as_deref(),
+            Self::OwnedProject(project) => project.stable_id.as_deref(),
             Self::Document(document) => Some(document.document_id()),
         }
     }
@@ -18,6 +51,7 @@ impl BuildInput<'_> {
     pub(super) fn validate(&self) -> ValidationReport {
         match self {
             Self::Project(project) => project.validate(),
+            Self::OwnedProject(project) => project.validate(),
             Self::Document(_) => ValidationReport {
                 diagnostics: Vec::new(),
             },
@@ -29,6 +63,7 @@ impl BuildInput<'_> {
     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
         match self {
             Self::Project(project) => project.resolved_note_identities(),
+            Self::OwnedProject(project) => project.resolved_note_identities(),
             Self::Document(document) => document
                 .product_v2()
                 .map(product_v2_resolved_note_identities)
@@ -37,13 +72,15 @@ impl BuildInput<'_> {
     }
 
     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
+        let lower_project = |project: &Project| {
+            let mut plan = project.lower_product_document();
+            project.apply_note_source_paths(&mut plan);
+            project.apply_notetype_source_paths(&mut plan);
+            Ok(plan)
+        };
         let result = match self {
-            Self::Project(project) => {
-                let mut plan = project.lower_product_document();
-                project.apply_note_source_paths(&mut plan);
-                project.apply_notetype_source_paths(&mut plan);
-                Ok(plan)
-            }
+            Self::Project(project) => lower_project(project),
+            Self::OwnedProject(project) => lower_project(project),
             Self::Document(document) => document.lower(),
         };
         result.map_err(|error| ProjectNormalizeError {
@@ -67,6 +104,30 @@ impl BuildInput<'_> {
         &self,
         base_dir: impl Into<PathBuf>,
         media_store_dir: impl Into<PathBuf>,
+        options: ProjectNormalizeOptions,
+        prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+    ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
+        let lowering = self.lower_with_project_error()?;
+        let media = match self {
+            Self::Project(project) => Some(&project.media),
+            Self::OwnedProject(project) => Some(&project.media),
+            Self::Document(_) => None,
+        };
+        Self::normalize_lowering(
+            lowering,
+            media,
+            base_dir,
+            media_store_dir,
+            options,
+            prepared,
+        )
+    }
+
+    fn normalize_lowering(
+        mut lowering: LoweringPlan,
+        media: Option<&crate::product::MediaRegistry>,
+        base_dir: impl Into<PathBuf>,
+        media_store_dir: impl Into<PathBuf>,
         mut options: ProjectNormalizeOptions,
         mut prepared: Option<&mut crate::prepared_media::PreparedMedia>,
     ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
@@ -74,7 +135,6 @@ impl BuildInput<'_> {
         let media_store_dir = media_store_dir.into();
         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
-        let mut lowering = self.lower_with_project_error()?;
         let product_diagnostics =
             map_product_diagnostics(std::mem::take(&mut lowering.product_diagnostics));
         let lowering_diagnostics =
@@ -82,11 +142,11 @@ impl BuildInput<'_> {
         let media_mode = options.media_mode;
         // Keep our input copies alive through ingestion, including error paths.
         // Caller-owned source paths and aliases never enter this ownership set.
-        let _media_input_files = if let Self::Project(project) = self {
+        let _media_input_files = if let Some(registry) = media {
             let PreparedProductMedia { media, input_files } = match media_mode {
                 ProjectMediaMode::PathBacked => {
                     if let Some(prepared) = prepared.as_deref_mut() {
-                        let media = project.media.media().map(|item| {
+                        let media = registry.media().map(|item| {
                             let source = match &item.source {
                                 crate::product::media_registry::ProductMediaSource::File { path } => {
                                     prepared.register_source(item.id.clone(), path.clone(), item.registered_fingerprint());
@@ -103,11 +163,11 @@ impl BuildInput<'_> {
                         }).collect();
                         Ok(PreparedProductMedia { media, input_files: Vec::new() })
                     } else {
-                        product_media_to_path_backed_authoring_media(project.media.media(), &base_dir)
+                        product_media_to_path_backed_authoring_media(registry.media(), &base_dir)
                     }
                 }
                 ProjectMediaMode::SelfContained => product_media_to_self_contained_authoring_media(
-                    project.media.media(),
+                    registry.media(),
                 )
                 .map(|media| PreparedProductMedia {
                     media,
@@ -121,7 +181,7 @@ impl BuildInput<'_> {
                 media_source_modes: BTreeMap::new(),
             })?;
             lowering.authoring_document.media.extend(media);
-            record_project_media_source_paths(&mut lowering, project.media.media());
+            record_project_media_source_paths(&mut lowering, registry.media());
             input_files
         } else {
             Vec::new()

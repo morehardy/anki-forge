@@ -102,8 +102,8 @@ struct AcceptedCandidate {
     path: PathBuf,
 }
 
-struct BuildPipeline<'a> {
-    input: BuildInput<'a>,
+struct BuildPipeline {
+    project_stable_id: Option<String>,
     options: BuildOptions,
     started: Instant,
     facts: BuildFacts,
@@ -132,14 +132,14 @@ pub(super) fn execute(
             .unwrap_or_else(|| "artifacts".into())
     });
     let mut pipeline = BuildPipeline {
-        input,
+        project_stable_id: input.stable_id().map(str::to_owned),
         options,
         started: Instant::now(),
         facts: BuildFacts::default(),
         artifact_ref_prefix,
         writer_result: None,
     };
-    let outcome = pipeline.run(writer_stack);
+    let outcome = pipeline.run(input, writer_stack);
     let writer_result = pipeline.writer_result.take();
     let report = pipeline.finish(outcome)?;
     Ok((
@@ -148,13 +148,14 @@ pub(super) fn execute(
     ))
 }
 
-impl BuildPipeline<'_> {
+impl BuildPipeline {
     fn run(
         &mut self,
+        input: BuildInput<'_>,
         writer_stack: Option<(WriterPolicy, BuildContext)>,
     ) -> Result<(), BuildFailureCause> {
-        let prepared = self.prepare(writer_stack)?;
-        let reconciled = self.reconcile(prepared)?;
+        let (prepared, identities) = self.prepare(input, writer_stack)?;
+        let reconciled = self.reconcile(prepared, identities)?;
         let candidate = self.generate(reconciled)?;
         let accepted = self.inspect(candidate)?;
         self.publish(accepted)
@@ -162,9 +163,9 @@ impl BuildPipeline<'_> {
 
     fn prepare(
         &mut self,
+        input: BuildInput<'_>,
         writer_stack: Option<(WriterPolicy, BuildContext)>,
-    ) -> Result<PreparedBuild, BuildFailureCause> {
-        let input = self.input;
+    ) -> Result<(PreparedBuild, super::input::ResolvedNoteIdentities), BuildFailureCause> {
         let options = &self.options;
         let facts = &mut self.facts;
         if let Err(diagnostic) = BuildPathPlan::new(options).validate() {
@@ -227,13 +228,13 @@ impl BuildPipeline<'_> {
         let validation = input.validate();
         facts.diagnostics = validation.diagnostics;
 
-        let normalized_output = input.normalize_with_prepared_media(
+        let normalized_output = input.normalize_for_build(
             &media_input_dir,
             &media_store_dir,
             normalize_options,
             prepared_media.as_mut(),
         );
-        let normalized_output = match normalized_output {
+        let (normalized_output, identities) = match normalized_output {
             Ok(output) => output,
             Err(error) => {
                 let ProjectNormalizeError {
@@ -326,16 +327,19 @@ impl BuildPipeline<'_> {
                 (writer_policy, build_context)
             }
         };
-        Ok(PreparedBuild {
-            prepared_media,
-            artifact_workspace,
-            baseline,
-            normalized,
-            media_source_modes,
-            media_store_dir,
-            writer_policy,
-            build_context,
-        })
+        Ok((
+            PreparedBuild {
+                prepared_media,
+                artifact_workspace,
+                baseline,
+                normalized,
+                media_source_modes,
+                media_store_dir,
+                writer_policy,
+                build_context,
+            },
+            identities,
+        ))
     }
 
     fn generate(
@@ -551,7 +555,6 @@ impl BuildPipeline<'_> {
     }
 
     fn publish(&mut self, candidate: AcceptedCandidate) -> Result<(), BuildFailureCause> {
-        let input = self.input;
         let options = &self.options;
         let facts = &mut self.facts;
         let state = &candidate.state;
@@ -596,9 +599,9 @@ impl BuildPipeline<'_> {
                 );
                 let lockfile = crate::update_safety::model::IdentityLockfile {
                     schema_version: "identity-lockfile-v1".into(),
-                    project_stable_id: input
-                        .stable_id()
-                        .map(str::to_string)
+                    project_stable_id: self
+                        .project_stable_id
+                        .clone()
                         .expect("lockfile project identity was validated"),
                     writer_policy_ref: writer_policy_ref.clone(),
                     identity_index: selected_index,
