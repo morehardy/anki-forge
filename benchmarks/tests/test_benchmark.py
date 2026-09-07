@@ -56,6 +56,54 @@ class WorkloadTests(unittest.TestCase):
 
 
 class BuildIdentityTests(unittest.TestCase):
+    def test_prepare_bootstraps_without_third_party_python_packages(self):
+        # prepare is launched by system Python, before the suite's virtualenv
+        # is selected. Keep its real build recording path in this test.
+        source = r'''
+import hashlib, json, sys, tempfile
+from pathlib import Path
+from unittest.mock import patch
+sys.path.insert(0, sys.argv[1])
+import bench
+
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory).resolve()
+    suite = root / "benchmarks"
+    suite.mkdir()
+    adapter_binary = suite / "adapters/rust/target/release/anki-forge-benchmark"
+    inspector = root / "target/release/contract_tools"
+    oracle = root / "scripts/roundtrip_oracle/target/debug/benchmark_oracle"
+    collector = suite / ".tools/measure"
+    records = suite / ".tools/build-records.json"
+    adapter = {"id": "rust", "command": [str(adapter_binary)]}
+    payload = b"fake compiler output"
+
+    def external_command(args, **kwargs):
+        if args[0] == "cargo":
+            output = oracle if "--bin" in args else adapter_binary if "--manifest-path" in args else inspector
+        elif args[0] == "cc":
+            output = Path(args[args.index("-o") + 1])
+        else:
+            assert args[0] == "uv"
+            return
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_bytes(payload)
+
+    with patch.multiple(bench, REPO=root, SUITE=suite, BUILD_RECORDS=records,
+                        INSPECTOR=inspector, ORACLE=oracle, COLLECTOR=collector), \
+         patch.object(bench, "registry", return_value=[adapter]), \
+         patch.object(bench.subprocess, "run", side_effect=external_command), \
+         patch.object(bench.workload, "generate"):
+        bench.prepare("python3.11", True)
+        saved = json.loads(records.read_text())
+        assert set(saved) == {str(p) for p in (adapter_binary, inspector, oracle, collector)}
+        assert all(r["executable_sha256"] == hashlib.sha256(payload).hexdigest() for r in saved.values())
+        assert bench.build_provenance([adapter])[str(adapter_binary)]["status"] == "verified"
+'''
+        result = subprocess.run([sys.executable, "-I", "-S", "-c", source, str(bench.SUITE)],
+                                capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_allocator_metadata_must_match_the_adapter_feature_and_pinned_version(self):
         system = {"features": "default", "allocator": "system", "allocator_version": None, "adapter_features": []}
         mimalloc = {"features": "default", "allocator": "mimalloc", "allocator_version": "0.1.52", "adapter_features": ["mimalloc"]}
@@ -464,7 +512,7 @@ class EvidenceTests(unittest.TestCase):
                 def invoke(argv, **kwargs):
                     bench.save(Path(argv[3]), {"status": "passed", "notes": 200, "cards": 200})
                     return subprocess.CompletedProcess(argv, 0, stdout=b"", stderr=b"")
-                with patch.object(bench, "ORACLE", oracle), patch.object(verify, "sha256", side_effect=sha), \
+                with patch.object(bench, "ORACLE", oracle), patch.object(bench, "sha256", side_effect=sha), \
                      patch.object(subprocess, "run", side_effect=invoke):
                     evidence = bench.complete_oracle(run)
                     if failed_path == "oracle":

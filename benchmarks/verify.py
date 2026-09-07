@@ -10,6 +10,7 @@ import zipfile
 from pathlib import Path
 
 import zstandard
+from hashing import sha256
 from workload import QFMT, AFMT, serialize
 
 MAX_BYTES = 128 * 1024 * 1024
@@ -26,14 +27,6 @@ class UnsupportedVerifier(ValueError):
 def require(condition, message):
     if not condition:
         raise InvalidArtifact(message)
-
-
-def sha256(path):
-    h = hashlib.sha256()
-    with open(path, "rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def literal(raw):

@@ -17,6 +17,7 @@ import sysconfig
 import time
 from pathlib import Path
 
+from hashing import sha256
 import workload
 
 SUITE = Path(__file__).resolve().parent
@@ -109,7 +110,6 @@ def source_paths():
 
 
 def file_identity(path):
-    from verify import sha256
     try:
         return sha256(path)
     except OSError as error:
@@ -151,7 +151,6 @@ def run_build(args, outputs):
     started = utc()
     subprocess.run(args, cwd=REPO, check=True, env=environ)
     records = json.loads(BUILD_RECORDS.read_text()) if BUILD_RECORDS.is_file() else {}
-    from verify import sha256
     for output in outputs:
         output = Path(output).resolve()
         records[str(output)] = {"command": list(args), "cwd": str(REPO),
@@ -195,7 +194,6 @@ def rust_adapter_configuration(metadata):
 
 
 def identity_snapshot(adapters):
-    from verify import sha256
     paths = source_paths()
     source = {str(p.relative_to(REPO)): sha256(p) if p.is_file() else "missing" for p in paths}
     executables = {str(p): file_identity(p) for p in
@@ -336,7 +334,6 @@ def verify_records(run, records):
 
 
 def complete_oracle(run):
-    from verify import sha256
     m = json.loads((run / "manifest.json").read_text())
     verification = json.loads((run / "verification.json").read_text())
     raw = [json.loads(line) for line in (run / "attempts.jsonl").read_text().splitlines()]
