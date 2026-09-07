@@ -819,10 +819,7 @@ impl Project {
     /// path-backed until normalization unless `BuildOptions::self_contained()`
     /// is selected explicitly.
     pub fn lower(&self) -> anyhow::Result<LoweringPlan> {
-        let mut plan = self
-            .to_product_document()
-            .lower()
-            .map_err(anyhow::Error::from)?;
+        let mut plan = self.lower_product_document();
         self.apply_note_source_paths(&mut plan);
         self.apply_notetype_source_paths(&mut plan);
         plan.authoring_document
@@ -997,7 +994,12 @@ impl Project {
         }
     }
 
-    fn to_product_document(&self) -> ProductDocument {
+    fn lower_product_document(&self) -> LoweringPlan {
+        let (document_id, payload) = self.to_product_v3_payload();
+        crate::product::lowering::lower_owned_product_v2_document(document_id, payload)
+    }
+
+    fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
         let default_deck = self
             .default_deck
@@ -1119,13 +1121,16 @@ impl Project {
                 .deck_name()
                 .unwrap_or(default_deck.as_str())
                 .to_string();
-            let fields = note.rendered_fields();
+            let mut fields = note.rendered_fields();
             if note.note_type_id() == STOCK_BASIC_ID {
                 notes.push(product_v3_stock_note(
                     note,
                     note_id,
                     deck_name,
-                    [("front", fields.get("Front")), ("back", fields.get("Back"))],
+                    [
+                        ("front", fields.remove("Front")),
+                        ("back", fields.remove("Back")),
+                    ],
                     index,
                 ));
             } else if note.note_type_id() == STOCK_CLOZE_ID {
@@ -1134,8 +1139,8 @@ impl Project {
                     note_id,
                     deck_name,
                     [
-                        ("text", fields.get("Text")),
-                        ("back_extra", fields.get("Back Extra")),
+                        ("text", fields.remove("Text")),
+                        ("back_extra", fields.remove("Back Extra")),
                     ],
                     index,
                 ));
@@ -1145,11 +1150,11 @@ impl Project {
                     note_id,
                     deck_name,
                     [
-                        ("occlusion", fields.get("Occlusion")),
-                        ("image", fields.get("Image")),
-                        ("header", fields.get("Header")),
-                        ("back_extra", fields.get("Back Extra")),
-                        ("comments", fields.get("Comments")),
+                        ("occlusion", fields.remove("Occlusion")),
+                        ("image", fields.remove("Image")),
+                        ("header", fields.remove("Header")),
+                        ("back_extra", fields.remove("Back Extra")),
+                        ("comments", fields.remove("Comments")),
                     ],
                     index,
                 ));
@@ -1175,7 +1180,16 @@ impl Project {
                 ));
             }
         }
-        ProductDocument::from_product_v3_parts(document_id, Some(default_deck), note_types, notes)
+        (
+            document_id,
+            crate::product::model::ProductDocumentV2Payload {
+                version: 3,
+                note_types,
+                notes,
+                media: Vec::new(),
+                transport_diagnostics: Vec::new(),
+            },
+        )
     }
 
     fn note_stable_id_counts(&self) -> BTreeMap<&str, usize> {
@@ -1402,7 +1416,7 @@ fn product_v3_stock_note<const N: usize>(
     note: &crate::product::Note,
     stable_id: String,
     deck_name: String,
-    fields: [(&'static str, Option<&String>); N],
+    fields: [(&'static str, Option<String>); N],
     index: usize,
 ) -> crate::product::model::ProductNoteV2 {
     crate::product::model::ProductNoteV2::Stock(crate::product::model::ProductStockNoteV2 {
@@ -1415,7 +1429,7 @@ fn product_v3_stock_note<const N: usize>(
                 (
                     key.to_string(),
                     crate::product::model::ProductFieldContentV2::Html {
-                        value: value.cloned().unwrap_or_default(),
+                        value: value.unwrap_or_default(),
                     },
                 )
             })
@@ -3283,6 +3297,87 @@ fn deduplicate_diagnostics(diagnostics: &mut Vec<Diagnostic>) {
 mod tests {
     use super::*;
     use crate::product::{Field, Template};
+
+    fn assert_project_lowering_matches_document_reference(project: &Project) -> LoweringPlan {
+        let (document_id, payload) = project.to_product_v3_payload();
+        let document = ProductDocument::from_product_v3_parts(
+            document_id,
+            project.default_deck.clone(),
+            payload.note_types,
+            payload.notes,
+        );
+        // The public document still exposes its legacy view. Only the private
+        // Project export path avoids constructing this redundant representation.
+        assert_eq!(document.notes().len(), project.notes.len());
+        let mut expected = document.lower().unwrap();
+        project.apply_note_source_paths(&mut expected);
+        project.apply_notetype_source_paths(&mut expected);
+        let actual = project.lower().unwrap();
+        assert_eq!(
+            serde_json::to_vec(&actual.authoring_document).unwrap(),
+            serde_json::to_vec(&expected.authoring_document).unwrap()
+        );
+        assert_eq!(actual.mappings, expected.mappings);
+        assert_eq!(actual.source_map, expected.source_map);
+        assert_eq!(actual.product_diagnostics, expected.product_diagnostics);
+        assert_eq!(actual.lowering_diagnostics, expected.lowering_diagnostics);
+        actual
+    }
+
+    #[test]
+    fn project_owned_lowering_preserves_canonical_fields_and_source_paths() {
+        let mut project = Project::new("默认牌组").stable_id("owned-project");
+        project.note_types.push(
+            NoteType::custom("custom")
+                .field(Field::new("Prompt").key("prompt").required().identity())
+                .field(Field::new("Answer").key("answer").sort())
+                .field(Field::new("Optional").key("optional"))
+                .template(Template::new("Card").front("{{Prompt}}").back("{{Answer}}")),
+        );
+        project.notes.extend([
+            Note::basic("AT&T", "<b>escaped</b>"),
+            Note::cloze("{{c1::中文}}"),
+            Note::new("custom")
+                .stable_id("custom:1")
+                .html("Prompt", "<b>原始 HTML</b>".repeat(1024))
+                .text("Answer", "<&>")
+                .tag("汉字")
+                .deck("子牌组"),
+        ]);
+        let original = project.clone();
+        let plan = assert_project_lowering_matches_document_reference(&project);
+        assert_eq!(project.notes, original.notes);
+        assert!(plan.product_diagnostics.is_empty());
+        assert_eq!(plan.authoring_document.notes[2].fields["Optional"], "");
+        assert_eq!(
+            plan.source_map
+                .source_for_authoring_path("authoring.notes[\"custom:1\"].fields[\"Prompt\"]"),
+            Some("project.notes[\"custom:1\"].fields[\"Prompt\"]")
+        );
+    }
+
+    #[test]
+    fn project_owned_lowering_preserves_invalid_partial_plan_and_diagnostics() {
+        let mut project = Project::new("invalid-project");
+        let notetype = NoteType::custom("custom")
+            .field(Field::new("Prompt").key("prompt").required())
+            .template(Template::new("Card").front("{{Prompt}}").back("{{Prompt}}"));
+        project.note_types.extend([notetype.clone(), notetype]);
+        project.notes.extend([
+            Note::basic("one", "two").stable_id("duplicate"),
+            Note::basic("three", "four").stable_id("duplicate"),
+            Note::new("custom").stable_id("empty").html("Prompt", ""),
+            Note::new("custom")
+                .stable_id("unknown")
+                .html("Unexpected", "x"),
+            Note::new("undeclared")
+                .stable_id("undeclared")
+                .html("Prompt", "x"),
+        ]);
+        let plan = assert_project_lowering_matches_document_reference(&project);
+        assert!(!plan.product_diagnostics.is_empty());
+        assert_eq!(plan.authoring_document.notes.len(), 2);
+    }
 
     fn diagnostic(code: &str, severity: Severity) -> Diagnostic {
         Diagnostic {

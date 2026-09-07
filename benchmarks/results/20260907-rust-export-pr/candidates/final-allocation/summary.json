@@ -1,0 +1,826 @@
+{
+  "200/before-allocation": {
+    "samples": 3,
+    "median_ms": 44.898,
+    "min_ms": 43.531,
+    "max_ms": 45.368,
+    "stages_ms": {
+      "adapter.parse": 0.2475,
+      "adapter.construct": 1.207916,
+      "normalize.lowering": 1.612291,
+      "normalize.core": 0.285958,
+      "normalize.total": 2.043541,
+      "runtime.manifest": 1.460125,
+      "runtime.extract_validate": 3.147791,
+      "runtime.defaults": 3.160042,
+      "pipeline.prepare": 5.548583,
+      "pipeline.reconcile": 0.889042,
+      "staging.serialize_write_hash": 0.645583,
+      "sqlite.schema": 2.26675,
+      "rows.card_insert": 0.268499,
+      "rows.note_insert": 0.458919,
+      "rows.identity_json": 0.4825,
+      "rows.fields": 0.244826,
+      "sqlite.populate_rows": 2.307083,
+      "sqlite.populate_commit": 3.601584,
+      "sqlite.compact_read": 2.684792,
+      "sqlite.total": 8.80225,
+      "apkg.zstd": 0.709083,
+      "sqlite.legacy": 8.131417,
+      "apkg.total": 18.331875,
+      "pipeline.generate": 19.640125,
+      "inspect.sqlite": 1.241791,
+      "inspect.facts": 2.20375,
+      "inspect.summary": 2.22275,
+      "pipeline.inspect": 2.249417,
+      "pipeline.publish": 8.438875,
+      "pipeline.total": 38.613083,
+      "adapter.total": 40.672208
+    },
+    "allocation": {
+      "adapter.parse": {
+        "live": 106975,
+        "peak": 213571,
+        "calls": 424,
+        "bytes": 226631
+      },
+      "adapter.construct": {
+        "live": 413083,
+        "peak": 428182,
+        "calls": 8287,
+        "bytes": 1346969
+      },
+      "normalize.lowering": {
+        "live": 1363196,
+        "peak": 1907582,
+        "calls": 30405,
+        "bytes": 3973372
+      },
+      "normalize.core": {
+        "live": 1363632,
+        "peak": 1907582,
+        "calls": 32134,
+        "bytes": 4272211
+      },
+      "normalize.total": {
+        "live": 1067968,
+        "peak": 1907582,
+        "calls": 32134,
+        "bytes": 4272211
+      },
+      "runtime.manifest": {
+        "live": 2223669,
+        "peak": 2393741,
+        "calls": 55307,
+        "bytes": 6822811
+      },
+      "runtime.extract_validate": {
+        "live": 1849773,
+        "peak": 2393741,
+        "calls": 55626,
+        "bytes": 6972538
+      },
+      "runtime.defaults": {
+        "live": 1849888,
+        "peak": 2393741,
+        "calls": 55637,
+        "bytes": 6972653
+      },
+      "pipeline.prepare": {
+        "live": 1849366,
+        "peak": 2393741,
+        "calls": 55637,
+        "bytes": 6972653
+      },
+      "pipeline.reconcile": {
+        "live": 2457711,
+        "peak": 2556359,
+        "calls": 65775,
+        "bytes": 8339893
+      },
+      "staging.serialize_write_hash": {
+        "live": 2460404,
+        "peak": 2556359,
+        "calls": 68465,
+        "bytes": 8459945
+      },
+      "sqlite.schema": {
+        "live": 2472213,
+        "peak": 2556359,
+        "calls": 68603,
+        "bytes": 8498747
+      },
+      "sqlite.populate_rows": {
+        "live": 2472213,
+        "peak": 2556359,
+        "calls": 79742,
+        "bytes": 9757854
+      },
+      "sqlite.populate_commit": {
+        "live": 2472213,
+        "peak": 2556359,
+        "calls": 79742,
+        "bytes": 9757854
+      },
+      "sqlite.compact_read": {
+        "live": 2947309,
+        "peak": 2947522,
+        "calls": 79748,
+        "bytes": 10233883
+      },
+      "sqlite.total": {
+        "live": 2946905,
+        "peak": 2947522,
+        "calls": 79748,
+        "bytes": 10233883
+      },
+      "apkg.zstd": {
+        "live": 2946999,
+        "peak": 3041105,
+        "calls": 79756,
+        "bytes": 10358911
+      },
+      "sqlite.legacy": {
+        "live": 3000247,
+        "peak": 3041105,
+        "calls": 79870,
+        "bytes": 10423542
+      },
+      "apkg.total": {
+        "live": 2470643,
+        "peak": 3089493,
+        "calls": 79890,
+        "bytes": 10548344
+      },
+      "pipeline.generate": {
+        "live": 2458631,
+        "peak": 3089493,
+        "calls": 79917,
+        "bytes": 10550368
+      },
+      "inspect.sqlite": {
+        "live": 2467197,
+        "peak": 3089493,
+        "calls": 81573,
+        "bytes": 11175503
+      },
+      "inspect.facts": {
+        "live": 2464592,
+        "peak": 3089493,
+        "calls": 81575,
+        "bytes": 11175559
+      },
+      "inspect.summary": {
+        "live": 2458639,
+        "peak": 3089493,
+        "calls": 81575,
+        "bytes": 11175559
+      },
+      "pipeline.inspect": {
+        "live": 2458643,
+        "peak": 3089493,
+        "calls": 81578,
+        "bytes": 11175575
+      },
+      "pipeline.publish": {
+        "live": 2458841,
+        "peak": 3089493,
+        "calls": 81591,
+        "bytes": 11177190
+      },
+      "pipeline.total": {
+        "live": 1593063,
+        "peak": 3089493,
+        "calls": 81594,
+        "bytes": 11177334
+      },
+      "adapter.total": {
+        "live": 783151,
+        "peak": 3089493,
+        "calls": 81594,
+        "bytes": 11177334
+      }
+    },
+    "rss_samples": 0,
+    "rss_median_mib": null,
+    "package_bytes": 90022
+  },
+  "200/final-allocation": {
+    "samples": 3,
+    "median_ms": 42.43,
+    "min_ms": 41.657,
+    "max_ms": 43.975,
+    "stages_ms": {
+      "adapter.parse": 0.251584,
+      "adapter.construct": 1.170709,
+      "normalize.lowering": 1.381041,
+      "normalize.core": 0.302625,
+      "normalize.total": 1.778083,
+      "runtime.manifest": 1.464375,
+      "runtime.extract_validate": 3.125292,
+      "runtime.defaults": 3.163292,
+      "pipeline.prepare": 5.433209,
+      "pipeline.reconcile": 0.820666,
+      "staging.serialize_write_hash": 0.661667,
+      "sqlite.schema": 2.144625,
+      "rows.card_insert": 0.269123,
+      "rows.note_insert": 0.427421,
+      "rows.identity_json": 0.162127,
+      "rows.fields": 0.247098,
+      "sqlite.populate_rows": 1.982084,
+      "sqlite.populate_commit": 3.31975,
+      "sqlite.compact_read": 2.604625,
+      "sqlite.total": 8.560708,
+      "apkg.zstd": 0.791125,
+      "sqlite.legacy": 8.51275,
+      "apkg.total": 18.677584,
+      "pipeline.generate": 19.939,
+      "inspect.sqlite": 1.164208,
+      "inspect.facts": 2.017584,
+      "inspect.summary": 2.027875,
+      "pipeline.inspect": 2.045583,
+      "pipeline.publish": 7.24925,
+      "pipeline.total": 36.188125,
+      "adapter.total": 38.335333
+    },
+    "allocation": {
+      "adapter.parse": {
+        "live": 106974,
+        "peak": 213570,
+        "calls": 424,
+        "bytes": 226629
+      },
+      "adapter.construct": {
+        "live": 413082,
+        "peak": 428181,
+        "calls": 8287,
+        "bytes": 1346967
+      },
+      "normalize.lowering": {
+        "live": 1363183,
+        "peak": 1405171,
+        "calls": 28588,
+        "bytes": 3647487
+      },
+      "normalize.core": {
+        "live": 1363619,
+        "peak": 1508148,
+        "calls": 30317,
+        "bytes": 3946325
+      },
+      "normalize.total": {
+        "live": 1067957,
+        "peak": 1508148,
+        "calls": 30317,
+        "bytes": 3946325
+      },
+      "runtime.manifest": {
+        "live": 2223660,
+        "peak": 2393732,
+        "calls": 53490,
+        "bytes": 6496925
+      },
+      "runtime.extract_validate": {
+        "live": 1849764,
+        "peak": 2393732,
+        "calls": 53809,
+        "bytes": 6646652
+      },
+      "runtime.defaults": {
+        "live": 1849879,
+        "peak": 2393732,
+        "calls": 53820,
+        "bytes": 6646767
+      },
+      "pipeline.prepare": {
+        "live": 1849360,
+        "peak": 2393732,
+        "calls": 53820,
+        "bytes": 6646767
+      },
+      "pipeline.reconcile": {
+        "live": 2326105,
+        "peak": 2511689,
+        "calls": 62157,
+        "bytes": 7882407
+      },
+      "staging.serialize_write_hash": {
+        "live": 2328789,
+        "peak": 2511689,
+        "calls": 64847,
+        "bytes": 8002436
+      },
+      "sqlite.schema": {
+        "live": 2340594,
+        "peak": 2511689,
+        "calls": 64985,
+        "bytes": 8041228
+      },
+      "sqlite.populate_rows": {
+        "live": 2340594,
+        "peak": 2511689,
+        "calls": 69327,
+        "bytes": 8852769
+      },
+      "sqlite.populate_commit": {
+        "live": 2340594,
+        "peak": 2511689,
+        "calls": 69327,
+        "bytes": 8852769
+      },
+      "sqlite.compact_read": {
+        "live": 2340766,
+        "peak": 2511689,
+        "calls": 69332,
+        "bytes": 8853658
+      },
+      "sqlite.total": {
+        "live": 2340364,
+        "peak": 2511689,
+        "calls": 69332,
+        "bytes": 8853658
+      },
+      "apkg.zstd": {
+        "live": 2340458,
+        "peak": 2511689,
+        "calls": 69338,
+        "bytes": 8886538
+      },
+      "sqlite.legacy": {
+        "live": 2393494,
+        "peak": 2511689,
+        "calls": 69452,
+        "bytes": 8951165
+      },
+      "apkg.total": {
+        "live": 2339028,
+        "peak": 2511689,
+        "calls": 69472,
+        "bytes": 9075967
+      },
+      "pipeline.generate": {
+        "live": 2327022,
+        "peak": 2511689,
+        "calls": 69499,
+        "bytes": 9077988
+      },
+      "inspect.sqlite": {
+        "live": 2335585,
+        "peak": 2511689,
+        "calls": 71155,
+        "bytes": 9703114
+      },
+      "inspect.facts": {
+        "live": 2332983,
+        "peak": 2511689,
+        "calls": 71157,
+        "bytes": 9703170
+      },
+      "inspect.summary": {
+        "live": 2327030,
+        "peak": 2511689,
+        "calls": 71157,
+        "bytes": 9703170
+      },
+      "pipeline.inspect": {
+        "live": 2327034,
+        "peak": 2511689,
+        "calls": 71160,
+        "bytes": 9703186
+      },
+      "pipeline.publish": {
+        "live": 2327231,
+        "peak": 2511689,
+        "calls": 71173,
+        "bytes": 9704793
+      },
+      "pipeline.total": {
+        "live": 1593061,
+        "peak": 2511689,
+        "calls": 71176,
+        "bytes": 9704937
+      },
+      "adapter.total": {
+        "live": 783150,
+        "peak": 2511689,
+        "calls": 71176,
+        "bytes": 9704937
+      }
+    },
+    "rss_samples": 0,
+    "rss_median_mib": null,
+    "package_bytes": 90022
+  },
+  "10000/before-allocation": {
+    "samples": 3,
+    "median_ms": 660.364,
+    "min_ms": 659.735,
+    "max_ms": 664.546,
+    "stages_ms": {
+      "adapter.parse": 8.040333,
+      "adapter.construct": 58.133083,
+      "normalize.lowering": 94.4835,
+      "normalize.core": 13.157667,
+      "normalize.total": 111.594958,
+      "runtime.manifest": 1.520917,
+      "runtime.extract_validate": 3.258125,
+      "runtime.defaults": 3.276125,
+      "pipeline.prepare": 125.244959,
+      "pipeline.reconcile": 53.915875,
+      "staging.serialize_write_hash": 21.775917,
+      "sqlite.schema": 2.334375,
+      "rows.card_insert": 18.135629,
+      "rows.note_insert": 62.10556,
+      "rows.identity_json": 26.607719,
+      "rows.fields": 12.280462,
+      "sqlite.populate_rows": 143.004792,
+      "sqlite.populate_commit": 151.269166,
+      "sqlite.compact_read": 56.670375,
+      "sqlite.total": 210.405375,
+      "apkg.zstd": 27.714459,
+      "sqlite.legacy": 9.926209,
+      "apkg.total": 251.596083,
+      "pipeline.generate": 286.798333,
+      "inspect.sqlite": 40.104334,
+      "inspect.facts": 57.20275,
+      "inspect.summary": 57.214416,
+      "pipeline.inspect": 57.243375,
+      "pipeline.publish": 20.624708,
+      "pipeline.total": 556.425916,
+      "adapter.total": 654.374416
+    },
+    "allocation": {
+      "adapter.parse": {
+        "live": 5348310,
+        "peak": 10507155,
+        "calls": 20030,
+        "bytes": 11294359
+      },
+      "adapter.construct": {
+        "live": 21588116,
+        "peak": 22377647,
+        "calls": 412896,
+        "bytes": 69076931
+      },
+      "normalize.lowering": {
+        "live": 69433595,
+        "peak": 97178669,
+        "calls": 1509711,
+        "bytes": 202916828
+      },
+      "normalize.core": {
+        "live": 68831471,
+        "peak": 97178669,
+        "calls": 1589846,
+        "bytes": 218996413
+      },
+      "normalize.total": {
+        "live": 54068915,
+        "peak": 97178669,
+        "calls": 1589846,
+        "bytes": 218996413
+      },
+      "runtime.manifest": {
+        "live": 55224612,
+        "peak": 97178669,
+        "calls": 1653199,
+        "bytes": 225576368
+      },
+      "runtime.extract_validate": {
+        "live": 54850716,
+        "peak": 97178669,
+        "calls": 1653518,
+        "bytes": 225726095
+      },
+      "runtime.defaults": {
+        "live": 54850831,
+        "peak": 97178669,
+        "calls": 1653529,
+        "bytes": 225726210
+      },
+      "pipeline.prepare": {
+        "live": 54850303,
+        "peak": 97178669,
+        "calls": 1653529,
+        "bytes": 225726210
+      },
+      "pipeline.reconcile": {
+        "live": 87716160,
+        "peak": 97178669,
+        "calls": 2156960,
+        "bytes": 298668569
+      },
+      "staging.serialize_write_hash": {
+        "live": 87718871,
+        "peak": 97178669,
+        "calls": 2277250,
+        "bytes": 302934067
+      },
+      "sqlite.schema": {
+        "live": 88210296,
+        "peak": 97178669,
+        "calls": 2282438,
+        "bytes": 304778353
+      },
+      "sqlite.populate_rows": {
+        "live": 88210296,
+        "peak": 97178669,
+        "calls": 2834537,
+        "bytes": 367025337
+      },
+      "sqlite.populate_commit": {
+        "live": 88210296,
+        "peak": 97178669,
+        "calls": 2834537,
+        "bytes": 367025337
+      },
+      "sqlite.compact_read": {
+        "live": 105884496,
+        "peak": 105884711,
+        "calls": 2834543,
+        "bytes": 384700478
+      },
+      "sqlite.total": {
+        "live": 105884088,
+        "peak": 105884711,
+        "calls": 2834543,
+        "bytes": 384700478
+      },
+      "apkg.zstd": {
+        "live": 105884182,
+        "peak": 108014008,
+        "calls": 2834556,
+        "bytes": 388894894
+      },
+      "sqlite.legacy": {
+        "live": 105937430,
+        "peak": 108014008,
+        "calls": 2834670,
+        "bytes": 388959533
+      },
+      "apkg.total": {
+        "live": 88208718,
+        "peak": 108014008,
+        "calls": 2834690,
+        "bytes": 390530689
+      },
+      "pipeline.generate": {
+        "live": 87717086,
+        "peak": 108014008,
+        "calls": 2834717,
+        "bytes": 390532719
+      },
+      "inspect.sqlite": {
+        "live": 87725658,
+        "peak": 108014008,
+        "calls": 2906606,
+        "bytes": 405798739
+      },
+      "inspect.facts": {
+        "live": 87723047,
+        "peak": 108014008,
+        "calls": 2906608,
+        "bytes": 405798795
+      },
+      "inspect.summary": {
+        "live": 87717094,
+        "peak": 108014008,
+        "calls": 2906608,
+        "bytes": 405798795
+      },
+      "pipeline.inspect": {
+        "live": 87717098,
+        "peak": 108014008,
+        "calls": 2906611,
+        "bytes": 405798811
+      },
+      "pipeline.publish": {
+        "live": 87717298,
+        "peak": 108014008,
+        "calls": 2906624,
+        "bytes": 405800442
+      },
+      "pipeline.total": {
+        "live": 42373045,
+        "peak": 108014008,
+        "calls": 2906627,
+        "bytes": 405800586
+      },
+      "adapter.total": {
+        "live": 783155,
+        "peak": 108014008,
+        "calls": 2906627,
+        "bytes": 405800586
+      }
+    },
+    "rss_samples": 0,
+    "rss_median_mib": null,
+    "package_bytes": 1536376
+  },
+  "10000/final-allocation": {
+    "samples": 3,
+    "median_ms": 618.88,
+    "min_ms": 609.89,
+    "max_ms": 632.141,
+    "stages_ms": {
+      "adapter.parse": 8.083375,
+      "adapter.construct": 57.639833,
+      "normalize.lowering": 84.27425,
+      "normalize.core": 12.584125,
+      "normalize.total": 102.375209,
+      "runtime.manifest": 1.49975,
+      "runtime.extract_validate": 3.264166,
+      "runtime.defaults": 3.280708,
+      "pipeline.prepare": 116.175666,
+      "pipeline.reconcile": 50.272709,
+      "staging.serialize_write_hash": 21.712375,
+      "sqlite.schema": 2.382084,
+      "rows.card_insert": 18.004388,
+      "rows.note_insert": 60.361283,
+      "rows.identity_json": 9.242311,
+      "rows.fields": 12.270991,
+      "sqlite.populate_rows": 122.061333,
+      "sqlite.populate_commit": 129.655875,
+      "sqlite.compact_read": 51.183375,
+      "sqlite.total": 183.630042,
+      "apkg.zstd": 32.66975,
+      "sqlite.legacy": 10.364458,
+      "apkg.total": 230.143625,
+      "pipeline.generate": 265.997417,
+      "inspect.sqlite": 39.643166,
+      "inspect.facts": 56.286375,
+      "inspect.summary": 56.297833,
+      "pipeline.inspect": 56.32475,
+      "pipeline.publish": 16.856,
+      "pipeline.total": 518.7445,
+      "adapter.total": 613.122958
+    },
+    "allocation": {
+      "adapter.parse": {
+        "live": 5348309,
+        "peak": 10507154,
+        "calls": 20030,
+        "bytes": 11294357
+      },
+      "adapter.construct": {
+        "live": 21588115,
+        "peak": 22377646,
+        "calls": 412896,
+        "bytes": 69076929
+      },
+      "normalize.lowering": {
+        "live": 69433582,
+        "peak": 71602516,
+        "calls": 1419688,
+        "bytes": 185391753
+      },
+      "normalize.core": {
+        "live": 68831458,
+        "peak": 76753661,
+        "calls": 1499823,
+        "bytes": 201471337
+      },
+      "normalize.total": {
+        "live": 54068904,
+        "peak": 76753661,
+        "calls": 1499823,
+        "bytes": 201471337
+      },
+      "runtime.manifest": {
+        "live": 55224603,
+        "peak": 76753661,
+        "calls": 1563176,
+        "bytes": 208051292
+      },
+      "runtime.extract_validate": {
+        "live": 54850707,
+        "peak": 76753661,
+        "calls": 1563495,
+        "bytes": 208201019
+      },
+      "runtime.defaults": {
+        "live": 54850822,
+        "peak": 76753661,
+        "calls": 1563506,
+        "bytes": 208201134
+      },
+      "pipeline.prepare": {
+        "live": 54850297,
+        "peak": 76753661,
+        "calls": 1563506,
+        "bytes": 208201134
+      },
+      "pipeline.reconcile": {
+        "live": 81136154,
+        "peak": 90331178,
+        "calls": 1976936,
+        "bytes": 274563493
+      },
+      "staging.serialize_write_hash": {
+        "live": 81138856,
+        "peak": 90331178,
+        "calls": 2097226,
+        "bytes": 278828968
+      },
+      "sqlite.schema": {
+        "live": 81630277,
+        "peak": 90331178,
+        "calls": 2102414,
+        "bytes": 280673244
+      },
+      "sqlite.populate_rows": {
+        "live": 81630277,
+        "peak": 90331178,
+        "calls": 2314516,
+        "bytes": 320510862
+      },
+      "sqlite.populate_commit": {
+        "live": 81630277,
+        "peak": 90331178,
+        "calls": 2314516,
+        "bytes": 320510862
+      },
+      "sqlite.compact_read": {
+        "live": 81630451,
+        "peak": 90331178,
+        "calls": 2314521,
+        "bytes": 320511759
+      },
+      "sqlite.total": {
+        "live": 81630045,
+        "peak": 90331178,
+        "calls": 2314521,
+        "bytes": 320511759
+      },
+      "apkg.zstd": {
+        "live": 81630139,
+        "peak": 90331178,
+        "calls": 2314527,
+        "bytes": 320544639
+      },
+      "sqlite.legacy": {
+        "live": 81683173,
+        "peak": 90331178,
+        "calls": 2314641,
+        "bytes": 320609274
+      },
+      "apkg.total": {
+        "live": 81628703,
+        "peak": 90331178,
+        "calls": 2314661,
+        "bytes": 322180430
+      },
+      "pipeline.generate": {
+        "live": 81137077,
+        "peak": 90331178,
+        "calls": 2314688,
+        "bytes": 322182457
+      },
+      "inspect.sqlite": {
+        "live": 81145646,
+        "peak": 90331178,
+        "calls": 2386577,
+        "bytes": 337448468
+      },
+      "inspect.facts": {
+        "live": 81143038,
+        "peak": 90331178,
+        "calls": 2386579,
+        "bytes": 337448524
+      },
+      "inspect.summary": {
+        "live": 81137085,
+        "peak": 90331178,
+        "calls": 2386579,
+        "bytes": 337448524
+      },
+      "pipeline.inspect": {
+        "live": 81137089,
+        "peak": 90331178,
+        "calls": 2386582,
+        "bytes": 337448540
+      },
+      "pipeline.publish": {
+        "live": 81137288,
+        "peak": 90331178,
+        "calls": 2386595,
+        "bytes": 337450163
+      },
+      "pipeline.total": {
+        "live": 42373043,
+        "peak": 90331178,
+        "calls": 2386598,
+        "bytes": 337450307
+      },
+      "adapter.total": {
+        "live": 783154,
+        "peak": 90331178,
+        "calls": 2386598,
+        "bytes": 337450307
+      }
+    },
+    "rss_samples": 0,
+    "rss_median_mib": null,
+    "package_bytes": 1536376
+  }
+}

@@ -38,6 +38,7 @@ fn deck_lowers_notes_in_original_mixed_order() {
         .add()
         .expect("add io");
 
+    let original = deck.clone();
     let product = deck
         .clone()
         .into_product_document()
@@ -56,6 +57,11 @@ fn deck_lowers_notes_in_original_mixed_order() {
     assert_eq!(lowered.notes[2].id, "io-1");
     assert_eq!(lowered.notes[1].tags, vec!["demo"]);
     assert_eq!(lowered.media.len(), 1);
+    assert_eq!(
+        serde_json::to_value(deck.lower_authoring().expect("lower the same deck again")).unwrap(),
+        serde_json::to_value(&lowered).unwrap()
+    );
+    assert_eq!(deck, original, "borrowed lowering must not change the deck");
 }
 
 #[test]

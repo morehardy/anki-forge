@@ -103,338 +103,327 @@ impl BuildPipeline<'_> {
         let disabled_update_safety =
             matches!(update_mode, crate::update_safety::EffectiveMode::Disabled);
 
-        let (reconcile, writer_guid_plan, update_safety_summary_val, lockfile_index) =
-            if disabled_update_safety {
-                let mut baseline_sources = Vec::new();
-                if let Some(path) = options.compare_to.as_ref() {
-                    facts.diagnostics.push(Diagnostic {
+        let (reconcile, update_safety_summary_val, lockfile_index) = if disabled_update_safety {
+            let mut baseline_sources = Vec::new();
+            if let Some(path) = options.compare_to.as_ref() {
+                facts.diagnostics.push(Diagnostic {
                     code: DiagnosticCode::new("UPDATE.BASELINE_IGNORED_DISABLED"),
                     severity: Severity::Info,
                     domain: None,
                     stage: None,
                     message: "compare_to baseline ignored because update safety is disabled".into(),
                     source: Some(SourcePath::new(path.display().to_string())),
-                    help: Some("remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline".into()),
+                    help: Some(
+                        "remove update_safety(UpdateSafetyMode::Disabled) to analyze the baseline"
+                            .into(),
+                    ),
                 });
-                    baseline_sources.push(
-                        crate::update_safety::report::ignored_previous_apkg_source(path),
-                    );
-                }
-                if let Some(path) = options.identity_lockfile.as_ref() {
-                    baseline_sources
-                        .push(crate::update_safety::report::ignored_lockfile_source(path));
-                }
-                let reconcile = crate::update_safety::reconcile::current_only_reconcile(
-                    &current_identity.index,
-                )
-                .map_err(|_err| {
-                    facts.status = BuildStatus::Invalid;
-                    BuildFailureCause::Diagnostics
-                })?;
-                let writer_guid_plan = crate::writer_core::WriterGuidPlan {
-                    assignments: reconcile.assignments.clone(),
-                };
-                let summary = crate::update_safety::report::summary_from_disabled_mode(
-                    &current_identity.index,
-                    baseline_sources,
-                    facts
-                        .diagnostics
-                        .iter()
-                        .filter(|item| item.severity == Severity::Error)
-                        .map(|item| item.code.to_string())
-                        .collect(),
-                );
-                (reconcile, writer_guid_plan, summary, None)
-            } else {
-                let mut baseline_sources = Vec::new();
-                let update_error_severity = update_safety_blocking_severity(update_mode);
-                let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
-                    if path.exists() {
-                        match crate::update_safety::lockfile::read_lockfile(path) {
-                            Ok(lockfile) => {
-                                baseline_sources.push(
-                                    crate::update_safety::report::loaded_lockfile_source(
-                                        path,
-                                        lockfile.identity_index.limitations.clone(),
-                                    ),
-                                );
-                                push_project_stable_id_mismatch_if_needed(
-                                    &mut facts.diagnostics,
-                                    input.stable_id(),
-                                    Some(lockfile.project_stable_id.as_str()),
-                                    path.display().to_string(),
-                                    update_error_severity,
-                                );
-                                Some(lockfile)
-                            }
-                            Err(err) => {
-                                facts.diagnostics.push(Diagnostic {
-                                    code: DiagnosticCode::new(
-                                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
-                                    ),
-                                    severity: update_error_severity,
-                                    domain: None,
-                                    stage: None,
-                                    message: err.to_string(),
-                                    source: Some(SourcePath::new(path.display().to_string())),
-                                    help: Some("fix or regenerate the identity lockfile".into()),
-                                });
-                                baseline_sources.push(
-                                    crate::update_safety::report::unreadable_lockfile_source(
-                                        path,
-                                        "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
-                                    ),
-                                );
-                                None
-                            }
+                baseline_sources.push(crate::update_safety::report::ignored_previous_apkg_source(
+                    path,
+                ));
+            }
+            if let Some(path) = options.identity_lockfile.as_ref() {
+                baseline_sources.push(crate::update_safety::report::ignored_lockfile_source(path));
+            }
+            let reconcile =
+                crate::update_safety::reconcile::current_only_reconcile(&current_identity.index)
+                    .map_err(|_err| {
+                        facts.status = BuildStatus::Invalid;
+                        BuildFailureCause::Diagnostics
+                    })?;
+            let summary = crate::update_safety::report::summary_from_disabled_mode(
+                &current_identity.index,
+                baseline_sources,
+                facts
+                    .diagnostics
+                    .iter()
+                    .filter(|item| item.severity == Severity::Error)
+                    .map(|item| item.code.to_string())
+                    .collect(),
+            );
+            (reconcile, summary, None)
+        } else {
+            let mut baseline_sources = Vec::new();
+            let update_error_severity = update_safety_blocking_severity(update_mode);
+            let lockfile = if let Some(path) = options.identity_lockfile.as_ref() {
+                if path.exists() {
+                    match crate::update_safety::lockfile::read_lockfile(path) {
+                        Ok(lockfile) => {
+                            baseline_sources.push(
+                                crate::update_safety::report::loaded_lockfile_source(
+                                    path,
+                                    lockfile.identity_index.limitations.clone(),
+                                ),
+                            );
+                            push_project_stable_id_mismatch_if_needed(
+                                &mut facts.diagnostics,
+                                input.stable_id(),
+                                Some(lockfile.project_stable_id.as_str()),
+                                path.display().to_string(),
+                                update_error_severity,
+                            );
+                            Some(lockfile)
                         }
-                    } else if options.write_identity_lockfile {
-                        None
-                    } else {
-                        facts.diagnostics.push(Diagnostic {
+                        Err(err) => {
+                            facts.diagnostics.push(Diagnostic {
+                                code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
+                                severity: update_error_severity,
+                                domain: None,
+                                stage: None,
+                                message: err.to_string(),
+                                source: Some(SourcePath::new(path.display().to_string())),
+                                help: Some("fix or regenerate the identity lockfile".into()),
+                            });
+                            baseline_sources.push(
+                                crate::update_safety::report::unreadable_lockfile_source(
+                                    path,
+                                    "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                                ),
+                            );
+                            None
+                        }
+                    }
+                } else if options.write_identity_lockfile {
+                    None
+                } else {
+                    facts.diagnostics.push(Diagnostic {
                         code: DiagnosticCode::new("UPDATE.BASELINE_LOCKFILE_UNREADABLE"),
                         severity: update_error_severity,
                         domain: None,
                         stage: None,
                         message: format!("identity lockfile {} does not exist", path.display()),
                         source: Some(SourcePath::new(path.display().to_string())),
-                        help: Some("run with write_identity_lockfile(true) to create the first lockfile".into()),
+                        help: Some(
+                            "run with write_identity_lockfile(true) to create the first lockfile"
+                                .into(),
+                        ),
                     });
+                    baseline_sources.push(
+                        crate::update_safety::report::unreadable_lockfile_source(
+                            path,
+                            "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                        ),
+                    );
+                    None
+                }
+            } else {
+                None
+            };
+            let lf_index = lockfile
+                .as_ref()
+                .map(|lockfile| lockfile.identity_index.clone());
+
+            let previous_index = if let Some(path) = options.compare_to.as_ref() {
+                match baseline
+                    .as_ref()
+                    .expect("requested baseline was captured")
+                    .identity_index(Some(&current_identity.index), lf_index.as_ref())
+                {
+                    Ok(index) => {
                         baseline_sources.push(
-                            crate::update_safety::report::unreadable_lockfile_source(
+                            crate::update_safety::report::loaded_previous_apkg_source(
                                 path,
-                                "UPDATE.BASELINE_LOCKFILE_UNREADABLE",
+                                index.limitations.clone(),
+                            ),
+                        );
+                        push_project_stable_id_mismatch_if_needed(
+                            &mut facts.diagnostics,
+                            input.stable_id(),
+                            index.project_stable_id.as_deref(),
+                            path.display().to_string(),
+                            update_error_severity,
+                        );
+                        Some(index)
+                    }
+                    Err(err) => {
+                        facts.diagnostics.push(Diagnostic {
+                            code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
+                            severity: update_error_severity,
+                            domain: None,
+                            stage: None,
+                            message: err.to_string(),
+                            source: Some(SourcePath::new(path.display().to_string())),
+                            help: Some("verify the previous APKG path and package contents".into()),
+                        });
+                        crate::product::comparison::push_resource_diagnostic(
+                            &mut facts.diagnostics,
+                            &err,
+                            path,
+                            update_error_severity,
+                        );
+                        baseline_sources.push(
+                            crate::update_safety::report::unreadable_previous_apkg_source(
+                                path,
+                                "UPDATE.BASELINE_APKG_UNREADABLE",
                             ),
                         );
                         None
                     }
-                } else {
-                    None
-                };
-                let lf_index = lockfile
-                    .as_ref()
-                    .map(|lockfile| lockfile.identity_index.clone());
-
-                let previous_index = if let Some(path) = options.compare_to.as_ref() {
-                    match baseline
-                        .as_ref()
-                        .expect("requested baseline was captured")
-                        .identity_index(Some(&current_identity.index), lf_index.as_ref())
-                    {
-                        Ok(index) => {
-                            baseline_sources.push(
-                                crate::update_safety::report::loaded_previous_apkg_source(
-                                    path,
-                                    index.limitations.clone(),
-                                ),
-                            );
-                            push_project_stable_id_mismatch_if_needed(
-                                &mut facts.diagnostics,
-                                input.stable_id(),
-                                index.project_stable_id.as_deref(),
-                                path.display().to_string(),
-                                update_error_severity,
-                            );
-                            Some(index)
-                        }
-                        Err(err) => {
-                            facts.diagnostics.push(Diagnostic {
-                                code: DiagnosticCode::new("UPDATE.BASELINE_APKG_UNREADABLE"),
-                                severity: update_error_severity,
-                                domain: None,
-                                stage: None,
-                                message: err.to_string(),
-                                source: Some(SourcePath::new(path.display().to_string())),
-                                help: Some(
-                                    "verify the previous APKG path and package contents".into(),
-                                ),
-                            });
-                            crate::product::comparison::push_resource_diagnostic(
-                                &mut facts.diagnostics,
-                                &err,
-                                path,
-                                update_error_severity,
-                            );
-                            baseline_sources.push(
-                                crate::update_safety::report::unreadable_previous_apkg_source(
-                                    path,
-                                    "UPDATE.BASELINE_APKG_UNREADABLE",
-                                ),
-                            );
-                            None
-                        }
-                    }
-                } else {
-                    None
-                };
-
-                if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
-                    && options.compare_to.is_some()
-                    && previous_index.is_none()
-                {
-                    if let Some(path) = options.compare_to.as_ref() {
-                        facts.diagnostics.push(Diagnostic {
-                            code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
-                            severity: Severity::Error,
-                            domain: None,
-                            stage: None,
-                            message: format!(
-                                "APKG could not be inspected for comparison: {}",
-                                path.display()
-                            ),
-                            source: Some(SourcePath::new(path.display().to_string())),
-                            help: Some("verify the previous APKG path and package contents".into()),
-                        });
-                    }
-                    let update_safety_summary =
-                        crate::update_safety::report::summary_from_reconcile(
-                            update_mode,
-                            &crate::update_safety::reconcile::current_only_reconcile(
-                                &current_identity.index,
-                            )
-                            .map_err(|_err| {
-                                facts.status = BuildStatus::Invalid;
-                                BuildFailureCause::Diagnostics
-                            })?,
-                            &facts.diagnostics,
-                            baseline_sources.clone(),
-                            false,
-                        );
-                    let risk =
-                        baseline_unavailable_risk(&facts.diagnostics, Some(&update_safety_summary));
-                    let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
-                    let status = BuildStatus::highest([
-                        BuildStatus::Invalid,
-                        policy_status(&policy),
-                        diagnostics_status(&facts.diagnostics),
-                    ]);
-                    facts.update_safety = Some(update_safety_summary);
-                    facts.comparison = ComparisonStatus::Unavailable;
-                    facts.risk = Some(risk);
-                    facts.policy = policy;
-                    facts.status = status;
-                    return Err(BuildFailureCause::Diagnostics);
                 }
+            } else {
+                None
+            };
 
-                let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
-                    &current_identity.index,
-                    previous_index.as_ref(),
-                    lf_index.as_ref(),
-                )
-                .map_err(|err| {
+            if matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                && options.compare_to.is_some()
+                && previous_index.is_none()
+            {
+                if let Some(path) = options.compare_to.as_ref() {
                     facts.diagnostics.push(Diagnostic {
-                        code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
+                        code: DiagnosticCode::new("COMPARE.BASELINE_UNAVAILABLE"),
                         severity: Severity::Error,
                         domain: None,
                         stage: None,
-                        message: err.to_string(),
-                        source: Some(SourcePath::new("update_safety.reconcile")),
-                        help: Some(
-                            "choose unique stable ids or remove conflicting lockfile entries"
-                                .into(),
+                        message: format!(
+                            "APKG could not be inspected for comparison: {}",
+                            path.display()
                         ),
+                        source: Some(SourcePath::new(path.display().to_string())),
+                        help: Some("verify the previous APKG path and package contents".into()),
                     });
-                    facts.status = BuildStatus::Invalid;
-                    BuildFailureCause::Diagnostics
-                })?;
-                facts.diagnostics.extend(reconcile.diagnostics.clone());
-                let mut model_diagnostics =
-                    crate::update_safety::notetype_ids::reconcile_notetype_ids(
-                        &mut current_identity.index,
-                        previous_index.as_ref(),
-                        lf_index.as_ref(),
-                    );
-                let model_id_collision = model_diagnostics.iter().any(|diagnostic| {
-                    diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_COLLISION"
+                }
+                let update_safety_summary = crate::update_safety::report::summary_from_reconcile(
+                    update_mode,
+                    &crate::update_safety::reconcile::current_only_reconcile(
+                        &current_identity.index,
+                    )
+                    .map_err(|_err| {
+                        facts.status = BuildStatus::Invalid;
+                        BuildFailureCause::Diagnostics
+                    })?,
+                    &facts.diagnostics,
+                    baseline_sources.clone(),
+                    false,
+                );
+                let risk =
+                    baseline_unavailable_risk(&facts.diagnostics, Some(&update_safety_summary));
+                let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
+                let status = BuildStatus::highest([
+                    BuildStatus::Invalid,
+                    policy_status(&policy),
+                    diagnostics_status(&facts.diagnostics),
+                ]);
+                facts.update_safety = Some(update_safety_summary);
+                facts.comparison = ComparisonStatus::Unavailable;
+                facts.risk = Some(risk);
+                facts.policy = policy;
+                facts.status = status;
+                return Err(BuildFailureCause::Diagnostics);
+            }
+
+            let reconcile = crate::update_safety::reconcile::reconcile_guid_plan(
+                &current_identity.index,
+                previous_index.as_ref(),
+                lf_index.as_ref(),
+            )
+            .map_err(|err| {
+                facts.diagnostics.push(Diagnostic {
+                    code: DiagnosticCode::new("UPDATE.GUID_DUPLICATE_AT_RECONCILE"),
+                    severity: Severity::Error,
+                    domain: None,
+                    stage: None,
+                    message: err.to_string(),
+                    source: Some(SourcePath::new("update_safety.reconcile")),
+                    help: Some(
+                        "choose unique stable ids or remove conflicting lockfile entries".into(),
+                    ),
                 });
+                facts.status = BuildStatus::Invalid;
+                BuildFailureCause::Diagnostics
+            })?;
+            facts.diagnostics.extend(reconcile.diagnostics.clone());
+            let mut model_diagnostics = crate::update_safety::notetype_ids::reconcile_notetype_ids(
+                &mut current_identity.index,
+                previous_index.as_ref(),
+                lf_index.as_ref(),
+            );
+            let model_id_collision = model_diagnostics
+                .iter()
+                .any(|diagnostic| diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_COLLISION");
+            if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
+                for diagnostic in &mut model_diagnostics {
+                    if diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_MISSING" {
+                        diagnostic.severity = Severity::Warning;
+                    }
+                }
+            }
+            facts.diagnostics.extend(model_diagnostics);
+            let mut revision_diagnostics = crate::update_safety::note_revisions::reconcile(
+                &mut current_identity.index,
+                &mut normalized,
+                previous_index.as_ref(),
+                lf_index.as_ref(),
+            );
+            let revision_overflow = revision_diagnostics
+                .iter()
+                .any(|diagnostic| diagnostic.code.as_str() == "UPDATE.NOTE_MTIME_OVERFLOW");
+            if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
+                for diagnostic in &mut revision_diagnostics {
+                    if diagnostic.code.as_str() == "UPDATE.NOTE_REVISION_MISSING" {
+                        diagnostic.severity = Severity::Warning;
+                    }
+                }
+            }
+            facts.diagnostics.extend(revision_diagnostics);
+            let lockfile_index = crate::update_safety::notetype_ids::combined_baseline(
+                previous_index.as_ref(),
+                lf_index.as_ref(),
+            );
+            if let Some(baseline_for_merge) = lockfile_index.as_ref() {
+                let mut merge_diagnostics =
+                    crate::update_safety::merge_safety::compare_notetype_merge_safety(
+                        &current_identity.index,
+                        baseline_for_merge,
+                    );
                 if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
-                    for diagnostic in &mut model_diagnostics {
-                        if diagnostic.code.as_str() == "UPDATE.NOTETYPE_MODEL_ID_MISSING" {
-                            diagnostic.severity = Severity::Warning;
-                        }
-                    }
+                    downgrade_update_errors_to_warnings(&mut merge_diagnostics);
                 }
-                facts.diagnostics.extend(model_diagnostics);
-                let mut revision_diagnostics = crate::update_safety::note_revisions::reconcile(
-                    &mut current_identity.index,
-                    &mut normalized,
-                    previous_index.as_ref(),
-                    lf_index.as_ref(),
-                );
-                let revision_overflow = revision_diagnostics
-                    .iter()
-                    .any(|diagnostic| diagnostic.code.as_str() == "UPDATE.NOTE_MTIME_OVERFLOW");
-                if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
-                    for diagnostic in &mut revision_diagnostics {
-                        if diagnostic.code.as_str() == "UPDATE.NOTE_REVISION_MISSING" {
-                            diagnostic.severity = Severity::Warning;
-                        }
-                    }
-                }
-                facts.diagnostics.extend(revision_diagnostics);
-                let lockfile_index = crate::update_safety::notetype_ids::combined_baseline(
-                    previous_index.as_ref(),
-                    lf_index.as_ref(),
-                );
-                if let Some(baseline_for_merge) = lockfile_index.as_ref() {
-                    let mut merge_diagnostics =
-                        crate::update_safety::merge_safety::compare_notetype_merge_safety(
-                            &current_identity.index,
-                            baseline_for_merge,
-                        );
-                    if matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly) {
-                        downgrade_update_errors_to_warnings(&mut merge_diagnostics);
-                    }
-                    facts.diagnostics.extend(merge_diagnostics);
-                }
-                if model_id_collision
-                    || revision_overflow
-                    || (matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
-                        && facts
-                            .diagnostics
-                            .iter()
-                            .any(|diagnostic| diagnostic.severity == Severity::Error))
-                {
-                    let update_safety_summary =
-                        crate::update_safety::report::summary_from_reconcile(
-                            update_mode,
-                            &reconcile,
-                            &facts.diagnostics,
-                            baseline_sources.clone(),
-                            false,
-                        );
-                    let risk = crate::risk::classify_import_risk(crate::risk::rules::RiskInput {
-                        diagnostics: &facts.diagnostics,
-                        comparison: ComparisonStatus::NotRequested,
-                        diff: None,
-                        current_inspect: None,
-                        previous_inspect: None,
-                        update_safety: Some(&update_safety_summary),
-                    });
-                    let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
-                    let status = BuildStatus::highest([
-                        BuildStatus::Invalid,
-                        policy_status(&policy),
-                        diagnostics_status(&facts.diagnostics),
-                    ]);
-                    facts.update_safety = Some(update_safety_summary);
-                    facts.risk = Some(risk);
-                    facts.policy = policy;
-                    facts.status = status;
-                    return Err(BuildFailureCause::Diagnostics);
-                }
-                let writer_guid_plan = crate::writer_core::WriterGuidPlan {
-                    assignments: reconcile.assignments.clone(),
-                };
-                let summary = crate::update_safety::report::summary_from_reconcile(
+                facts.diagnostics.extend(merge_diagnostics);
+            }
+            if model_id_collision
+                || revision_overflow
+                || (matches!(update_mode, crate::update_safety::EffectiveMode::Strict)
+                    && facts
+                        .diagnostics
+                        .iter()
+                        .any(|diagnostic| diagnostic.severity == Severity::Error))
+            {
+                let update_safety_summary = crate::update_safety::report::summary_from_reconcile(
                     update_mode,
                     &reconcile,
                     &facts.diagnostics,
-                    baseline_sources,
+                    baseline_sources.clone(),
                     false,
                 );
-                (reconcile, writer_guid_plan, summary, lockfile_index)
-            };
+                let risk = crate::risk::classify_import_risk(crate::risk::rules::RiskInput {
+                    diagnostics: &facts.diagnostics,
+                    comparison: ComparisonStatus::NotRequested,
+                    diff: None,
+                    current_inspect: None,
+                    previous_inspect: None,
+                    update_safety: Some(&update_safety_summary),
+                });
+                let policy = crate::risk::policy_from_risk_report(options.fail_on, Some(&risk));
+                let status = BuildStatus::highest([
+                    BuildStatus::Invalid,
+                    policy_status(&policy),
+                    diagnostics_status(&facts.diagnostics),
+                ]);
+                facts.update_safety = Some(update_safety_summary);
+                facts.risk = Some(risk);
+                facts.policy = policy;
+                facts.status = status;
+                return Err(BuildFailureCause::Diagnostics);
+            }
+            let summary = crate::update_safety::report::summary_from_reconcile(
+                update_mode,
+                &reconcile,
+                &facts.diagnostics,
+                baseline_sources,
+                false,
+            );
+            (reconcile, summary, lockfile_index)
+        };
 
         let lockfile_evidence_unverified =
             matches!(update_mode, crate::update_safety::EffectiveMode::ReportOnly)
@@ -478,7 +467,6 @@ impl BuildPipeline<'_> {
             },
             identity_index: current_identity.index,
             reconcile,
-            writer_guid_plan,
             update_mode,
             write_identity_lockfile,
             lockfile_index,

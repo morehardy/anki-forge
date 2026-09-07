@@ -1,0 +1,115 @@
+{
+  "quality": {
+    "args": [
+      "bash",
+      "scripts/check_rust_crate_quality.sh"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 139.60230158299964,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "quality-75dccde91c83.log"
+  },
+  "governance": {
+    "args": [
+      "bash",
+      "scripts/check_contract_governance.sh"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 2.4863308329950087,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "governance-75dccde91c83.log"
+  },
+  "capabilities": {
+    "args": [
+      "bash",
+      "scripts/run_rust_user_capabilities.sh"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 21.20041966601275,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "capabilities-75dccde91c83.log"
+  },
+  "anki-roundtrip": {
+    "args": [
+      "bash",
+      "scripts/run_roundtrip_oracle.sh"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 15.419763041994884,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "anki-roundtrip-75dccde91c83.log"
+  },
+  "benchmark-tests": {
+    "args": [
+      "benchmarks/.venv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "benchmarks/tests",
+      "-v"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 4.249627000011969,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "benchmark-tests-75dccde91c83.log"
+  },
+  "adapter-clippy": {
+    "args": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "benchmarks/adapters/rust/Cargo.toml",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--offline",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 5.398638792001293,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "adapter-clippy-75dccde91c83.log"
+  },
+  "package": {
+    "args": [
+      "bash",
+      "scripts/check_rust_crate_package.sh"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 52.35885608299577,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "package-75dccde91c83.log"
+  },
+  "preserve-order": {
+    "args": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/preserve-order-75dccde91c83/Cargo.toml",
+      "-p",
+      "anki_forge",
+      "--all-features",
+      "--lib",
+      "--features",
+      "serde_json/preserve_order",
+      "--offline"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 18.275885333001497,
+    "source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "source_after_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8",
+    "log": "preserve-order-75dccde91c83.log",
+    "isolated_source": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/preserve-order-75dccde91c83",
+    "lock_diff": "preserve-order-lock.diff"
+  }
+}

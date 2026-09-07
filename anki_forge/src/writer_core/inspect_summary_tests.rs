@@ -43,6 +43,10 @@ fn replace_entry(path: &Path, name: &str, bytes: Option<Vec<u8>>) {
 }
 
 fn mutate_collection(path: &Path, sql: &str) {
+    mutate_collection_with(path, |conn| conn.execute_batch(sql).unwrap());
+}
+
+fn mutate_collection_with(path: &Path, mutate: impl FnOnce(&Connection)) {
     let encoded = entries(path)
         .into_iter()
         .find(|(name, _)| name == "collection.anki21b")
@@ -56,7 +60,7 @@ fn mutate_collection(path: &Path, sql: &str) {
     )
     .unwrap();
     let conn = Connection::open(&collection).unwrap();
-    conn.execute_batch(sql).unwrap();
+    mutate(&conn);
     drop(conn);
     let bytes = fs::read(collection).unwrap();
     replace_entry(
@@ -212,6 +216,167 @@ fn summary_keeps_archive_sqlite_and_protobuf_errors() {
     assert_same_error(&path, &InspectLimits::default());
     fs::write(&path, b"not a ZIP").unwrap();
     assert_same_error(&path, &InspectLimits::default());
+}
+
+#[test]
+fn summary_decodes_unused_sqlite_columns_and_keeps_error_precedence() {
+    let root = tempfile::tempdir().unwrap();
+    let original = root.path().join("original.apkg");
+    package(&original);
+    let path = root.path().join("invalid-column.apkg");
+    for sql in [
+        "UPDATE notes SET guid = X'80';",
+        "UPDATE notes SET mid = 'not an integer';",
+        "UPDATE notes SET mod = X'80';",
+        "UPDATE notes SET tags = X'80';",
+        "UPDATE notes SET flds = X'80';",
+        "UPDATE notes SET data = X'80';",
+        "UPDATE notes SET tags = CAST(X'80' AS TEXT);",
+        "UPDATE notes SET flds = CAST(X'80' AS TEXT);",
+        "UPDATE notes SET data = CAST(X'80' AS TEXT);",
+        "UPDATE cards SET ord = X'80';",
+        "UPDATE decks SET name = X'80' WHERE id = (SELECT min(id) FROM decks);",
+        "UPDATE fields SET config = X'80';",
+        "UPDATE templates SET config = X'80';",
+        // A bad field column must still be decoded before rejecting mid.
+        "UPDATE notes SET mid = 999, flds = X'80';",
+        // Card decoding precedes note decoding in both projections.
+        "UPDATE cards SET ord = X'80'; UPDATE notes SET data = X'80';",
+        "CREATE TABLE untyped_notes AS SELECT * FROM notes;
+         DROP TABLE notes;
+         ALTER TABLE untyped_notes RENAME TO notes;
+         UPDATE notes SET data = NULL;",
+    ] {
+        fs::copy(&original, &path).unwrap();
+        mutate_collection(&path, sql);
+        assert!(matches!(
+            assert_same_error(&path, &InspectLimits::default()),
+            InspectError::Read(_)
+        ));
+    }
+}
+
+#[test]
+fn summary_preserves_tolerated_note_content_and_identity_json() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("tolerated-content.apkg");
+    package(&path);
+    for data in [
+        "not JSON",
+        "null",
+        "[]",
+        r#"{"anki_forge_identity":null}"#,
+        r#"{"anki_forge_identity":{"unknown":[1,2]}}"#,
+    ] {
+        mutate_collection(
+            &path,
+            &format!("UPDATE notes SET flds = '', tags = ' repeated  repeated ', data = '{data}';"),
+        );
+        let summary = assert_summary_matches_full(&path, &InspectLimits::default());
+        assert_eq!((summary.notes, summary.cards), (2, 2));
+        assert_eq!(summary.observation_status, "complete");
+    }
+}
+
+#[test]
+fn summary_keeps_signed_ordinals_orphan_cards_and_missing_decks() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("unusual-cards.apkg");
+    package(&path);
+    mutate_collection(
+        &path,
+        "INSERT INTO cards SELECT id+100, nid, did, -1, mod, usn, type, queue,
+             due, ivl, factor, reps, lapses, left, odue, odid, flags, data
+             FROM cards WHERE id = (SELECT min(id) FROM cards);
+         INSERT INTO cards SELECT id+200, 999, did, ord, mod, usn, type, queue,
+             due, ivl, factor, reps, lapses, left, odue, odid, flags, data
+             FROM cards WHERE id = (SELECT min(id) FROM cards);
+         UPDATE cards SET did = 999;",
+    );
+    let summary = assert_summary_matches_full(&path, &InspectLimits::default());
+    assert_eq!((summary.notes, summary.cards), (2, 3));
+}
+
+#[test]
+fn summary_keeps_duplicate_notetype_metadata_ids_and_names() {
+    let root = tempfile::tempdir().unwrap();
+    let original = root.path().join("original-models.apkg");
+    let path = root.path().join("duplicate-models.apkg");
+    let mut project = Project::new("Duplicate models").stable_id("duplicate-models");
+    project
+        .add_note(Note::basic("front", "back").stable_id("basic"))
+        .unwrap();
+    project
+        .add_note(Note::cloze("{{c1::one}} and {{c3::three}}").stable_id("cloze"))
+        .unwrap();
+    project
+        .write_apkg(&original)
+        .unwrap()
+        .ensure_success()
+        .unwrap();
+
+    for (duplicate_id, duplicate_name) in [(true, false), (false, true), (true, true)] {
+        fs::copy(&original, &path).unwrap();
+        mutate_collection_with(&path, |conn| {
+            if duplicate_name {
+                // Inspection also reads external SQLite files without the
+                // writer's uniqueness constraint; names do not identify notes.
+                conn.execute_batch(
+                    "DROP INDEX idx_notetypes_name;
+                     UPDATE notetypes SET name = 'Same model name';",
+                )
+                .unwrap();
+            }
+            if duplicate_id {
+                let mut statement = conn.prepare("SELECT id, config FROM notetypes").unwrap();
+                let configs = statement
+                    .query_map([], |row| {
+                        Ok((row.get::<_, i64>(0)?, row.get::<_, Vec<u8>>(1)?))
+                    })
+                    .unwrap()
+                    .collect::<rusqlite::Result<Vec<_>>>()
+                    .unwrap();
+                for (id, bytes) in configs {
+                    let mut config = decode_notetype_config(&bytes).unwrap();
+                    let mut metadata = decode_notetype_metadata(&config.other).unwrap().unwrap();
+                    metadata.anki_forge_notetype_id = "shared-metadata-id".into();
+                    config.other = serde_json::to_vec(&metadata).unwrap();
+                    conn.execute(
+                        "UPDATE notetypes SET config = ?1 WHERE id = ?2",
+                        rusqlite::params![config.encode_to_vec(), id],
+                    )
+                    .unwrap();
+                }
+            }
+        });
+        let summary = assert_summary_matches_full(&path, &InspectLimits::default());
+        assert_eq!((summary.notes, summary.cards, summary.notetypes), (2, 3, 2));
+        assert_eq!((summary.fields, summary.templates), (4, 2));
+    }
+}
+
+#[cfg(target_pointer_width = "64")]
+#[test]
+fn summary_distinguishes_negative_and_u32_max_ordinals_before_deduplication() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("wide-ordinals.apkg");
+    package(&path);
+    mutate_collection(
+        &path,
+        "INSERT INTO cards SELECT id+100, nid, did, -1, mod, usn, type, queue,
+             due, ivl, factor, reps, lapses, left, odue, odid, flags, data
+             FROM cards WHERE id = (SELECT min(id) FROM cards);
+         INSERT INTO cards SELECT id+200, nid, did, 4294967295, mod, usn, type, queue,
+             due, ivl, factor, reps, lapses, left, odue, odid, flags, data
+             FROM cards WHERE id = (SELECT min(id) FROM cards);
+         INSERT INTO cards SELECT id+300, nid, did, ord, mod, usn, type, queue,
+             due, ivl, factor, reps, lapses, left, odue, odid, flags, data
+             FROM cards WHERE ord IN (-1, 4294967295);",
+    );
+    // Each unusual ordinal occurs twice for one note. On 64-bit platforms,
+    // -1 converts to usize::MAX, not u32::MAX, so both remain distinct cards.
+    let summary = assert_summary_matches_full(&path, &InspectLimits::default());
+    assert_eq!((summary.notes, summary.cards), (2, 4));
 }
 
 #[test]

@@ -1,0 +1,445 @@
+{
+  "schema": "benchmark-evidence-publication-v1",
+  "copies": {
+    "system/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/manifest.json",
+      "source_sha256": "358d4a5f84bcbe8a2b3f6dd827a278f748cc1af0c577c6ccbeda7312ffafcef6",
+      "published_sha256": "358d4a5f84bcbe8a2b3f6dd827a278f748cc1af0c577c6ccbeda7312ffafcef6",
+      "transformation": "none"
+    },
+    "system/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/attempts.jsonl",
+      "source_sha256": "15702d9ac3bf39f620222cb0ebf2fb6434b625b21d0727a2d4d151f291b1467e",
+      "published_sha256": "15702d9ac3bf39f620222cb0ebf2fb6434b625b21d0727a2d4d151f291b1467e",
+      "transformation": "none"
+    },
+    "system/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/verification.json",
+      "source_sha256": "050a66caa4b22adee265fc466a29b2de314a20a8145f54d8df238a4d28479d81",
+      "published_sha256": "050a66caa4b22adee265fc466a29b2de314a20a8145f54d8df238a4d28479d81",
+      "transformation": "none"
+    },
+    "system/anki.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/anki.json",
+      "source_sha256": "ea5bbe9e7c0b342116b2a6da3cc52bff772312dc6fffc62142e225ccea54d0b5",
+      "published_sha256": "ea5bbe9e7c0b342116b2a6da3cc52bff772312dc6fffc62142e225ccea54d0b5",
+      "transformation": "none"
+    },
+    "system/events.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/events.jsonl",
+      "source_sha256": "a2868832359a8c7f528b040466112d3a7ec91f2c062b2bdcc7823460416eb4cb",
+      "published_sha256": "a2868832359a8c7f528b040466112d3a7ec91f2c062b2bdcc7823460416eb4cb",
+      "transformation": "none"
+    },
+    "system/retention.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/retention.json",
+      "source_sha256": "780e089bf3c9de3a0baff35b7021e6306e7e60d76300faf47467449ec3ce08b0",
+      "published_sha256": "780e089bf3c9de3a0baff35b7021e6306e7e60d76300faf47467449ec3ce08b0",
+      "transformation": "none"
+    },
+    "system/render-provenance.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/render-provenance.json",
+      "source_sha256": "ec894ef331f846a7fdfa70e9d3e23bfa4612a2281ab3c3ef4c74fb2c4cfa24e3",
+      "published_sha256": "ec894ef331f846a7fdfa70e9d3e23bfa4612a2281ab3c3ef4c74fb2c4cfa24e3",
+      "transformation": "none"
+    },
+    "system/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/summary.json",
+      "source_sha256": "213662c088a280ca531bf0fc1b0d96b65008a86703225611d8f56cd55355aa39",
+      "published_sha256": "213662c088a280ca531bf0fc1b0d96b65008a86703225611d8f56cd55355aa39",
+      "transformation": "none"
+    },
+    "system/report.md": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/report.md",
+      "source_sha256": "13909223fe022e086850933da4a24db76b9495404fc13ba372532819b0deb05a",
+      "published_sha256": "13909223fe022e086850933da4a24db76b9495404fc13ba372532819b0deb05a",
+      "transformation": "none"
+    },
+    "system/timing.svg": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/timing.svg",
+      "source_sha256": "bb890140f4e469ec71f280e76530a0de88d3760b2fb93321fe96ce41e4d7ed45",
+      "published_sha256": "9d6edc0a32bb5c6d8924591068f0da555f70a27aa163a5358e90003c045d9244",
+      "transformation": "trim line-ending whitespace in generated SVG"
+    },
+    "system/oracle-evidence/timing-1000-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-1000-genanki-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-1000-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-1000-rust-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-10000-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-10000-genanki-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-10000-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-10000-rust-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-200-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-200-genanki-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-200-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-200-rust-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-500-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-500-genanki-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "system/oracle-evidence/timing-500-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/oracle-evidence/timing-500-rust-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "mimalloc/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/manifest.json",
+      "source_sha256": "e68ad605bb3c68182dc14b15d4c6af8eddf6619ad4dcd59117ee98d27478d4a4",
+      "published_sha256": "e68ad605bb3c68182dc14b15d4c6af8eddf6619ad4dcd59117ee98d27478d4a4",
+      "transformation": "none"
+    },
+    "mimalloc/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/attempts.jsonl",
+      "source_sha256": "a3e2f9ee720c5a0253088dbec78c9e95a94dee8c5b2983e96b876521efb10c66",
+      "published_sha256": "a3e2f9ee720c5a0253088dbec78c9e95a94dee8c5b2983e96b876521efb10c66",
+      "transformation": "none"
+    },
+    "mimalloc/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/verification.json",
+      "source_sha256": "cfd412de80ff2f22795d38eb5b659b9080504b2cefe099606abec1c7500e9dec",
+      "published_sha256": "cfd412de80ff2f22795d38eb5b659b9080504b2cefe099606abec1c7500e9dec",
+      "transformation": "none"
+    },
+    "mimalloc/anki.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/anki.json",
+      "source_sha256": "abe758ab4733d59cd2ad8d31c304887cd8475ab48fc81646cef2d229fbc7ca67",
+      "published_sha256": "abe758ab4733d59cd2ad8d31c304887cd8475ab48fc81646cef2d229fbc7ca67",
+      "transformation": "none"
+    },
+    "mimalloc/events.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/events.jsonl",
+      "source_sha256": "07d0b315ff1afb9607a28d10e579b66e119f70fb5e4bd28339bc8f54f5a522a4",
+      "published_sha256": "07d0b315ff1afb9607a28d10e579b66e119f70fb5e4bd28339bc8f54f5a522a4",
+      "transformation": "none"
+    },
+    "mimalloc/retention.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/retention.json",
+      "source_sha256": "780e089bf3c9de3a0baff35b7021e6306e7e60d76300faf47467449ec3ce08b0",
+      "published_sha256": "780e089bf3c9de3a0baff35b7021e6306e7e60d76300faf47467449ec3ce08b0",
+      "transformation": "none"
+    },
+    "mimalloc/render-provenance.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/render-provenance.json",
+      "source_sha256": "e11cf1904bf2ea8ed9999d94c6ecc3c2726c3341d6fa3e456bc72c25d57fb032",
+      "published_sha256": "e11cf1904bf2ea8ed9999d94c6ecc3c2726c3341d6fa3e456bc72c25d57fb032",
+      "transformation": "none"
+    },
+    "mimalloc/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/summary.json",
+      "source_sha256": "2af21f3e6901ea7a6da7c26d6ff41fcb62ee92822260cdd72b4c396e8c26eec6",
+      "published_sha256": "2af21f3e6901ea7a6da7c26d6ff41fcb62ee92822260cdd72b4c396e8c26eec6",
+      "transformation": "none"
+    },
+    "mimalloc/report.md": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/report.md",
+      "source_sha256": "70580c73091fae15c1309539ddd63d69e490ed23c2d5f54b76f4de2c68266d4b",
+      "published_sha256": "70580c73091fae15c1309539ddd63d69e490ed23c2d5f54b76f4de2c68266d4b",
+      "transformation": "none"
+    },
+    "mimalloc/timing.svg": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/timing.svg",
+      "source_sha256": "439335a6bbe234afa0a0f052bdd79892220468c48451393487b5f35b9410bc1e",
+      "published_sha256": "34fff64f02ce72b0d7a44c2ddb285a0c36dad845a43e97c64914dd5f3872c018",
+      "transformation": "trim line-ending whitespace in generated SVG"
+    },
+    "mimalloc/oracle-evidence/timing-1000-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-1000-genanki-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-1000-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-1000-rust-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-10000-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-10000-genanki-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-10000-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-10000-rust-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-200-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-200-genanki-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-200-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-200-rust-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-500-genanki-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-500-genanki-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "mimalloc/oracle-evidence/timing-500-rust-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04-mimalloc/oracle-evidence/timing-500-rust-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "paired/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/attempts.jsonl",
+      "source_sha256": "76f9ee3c67f85a94d712b8d66eaccc8d214d40cddb65678e389f069061ccf09f",
+      "published_sha256": "76f9ee3c67f85a94d712b8d66eaccc8d214d40cddb65678e389f069061ccf09f",
+      "transformation": "none"
+    },
+    "paired/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/manifest.json",
+      "source_sha256": "183a9569374e9b405e137c5f2884ec2aaf466453f6e010496d332e381e88fb09",
+      "published_sha256": "183a9569374e9b405e137c5f2884ec2aaf466453f6e010496d332e381e88fb09",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-1000-after-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-1000-after-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-1000-before-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-1000-before-01.json",
+      "source_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "published_sha256": "b2e104c387cfad67da5e185333b19b02d1b264bf4b002ba65a896bbbad79df4c",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-10000-after-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-10000-after-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-10000-before-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-10000-before-01.json",
+      "source_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "published_sha256": "358775475afc9facd4ec1b605a0314090c5b2201a14a7034a685fa01daf2d433",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-200-after-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-200-after-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-200-before-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-200-before-01.json",
+      "source_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "published_sha256": "51f25f14306edb4c6877b185ff78a0c20bb945bacd5bd19752d3783db63609de",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-500-after-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-500-after-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "paired/oracle/timing-500-before-01.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle/timing-500-before-01.json",
+      "source_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "published_sha256": "9b3eccaa3baf5880668928c6ee07e9151768f480eb138ea8ccbdd8661903c510",
+      "transformation": "none"
+    },
+    "paired/oracle.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/oracle.json",
+      "source_sha256": "d26bdedce07891fb7141947a7b0ade3318299add77b93af62662edb274fdc45c",
+      "published_sha256": "d26bdedce07891fb7141947a7b0ade3318299add77b93af62662edb274fdc45c",
+      "transformation": "none"
+    },
+    "paired/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/summary.json",
+      "source_sha256": "32dc57af6365aed612455860ee82e46fcae7a5ecd743cd91429cb8b10fb804bb",
+      "published_sha256": "32dc57af6365aed612455860ee82e46fcae7a5ecd743cd91429cb8b10fb804bb",
+      "transformation": "none"
+    },
+    "paired/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/paired/verification.json",
+      "source_sha256": "c45158847e1138107fbe33725d4012206f8f55c49abadb66f3f58f4bdf1fb781",
+      "published_sha256": "c45158847e1138107fbe33725d4012206f8f55c49abadb66f3f58f4bdf1fb781",
+      "transformation": "none"
+    },
+    "candidates/code-selection/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/code-selection/attempts.jsonl",
+      "source_sha256": "6cfe0069c63c9481f5372ae8ab16f47590f469a20dabf220e83acd2cb88ccced",
+      "published_sha256": "6cfe0069c63c9481f5372ae8ab16f47590f469a20dabf220e83acd2cb88ccced",
+      "transformation": "none"
+    },
+    "candidates/code-selection/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/code-selection/manifest.json",
+      "source_sha256": "00253ec2c630e5f994edcdecc72ae129d604ed8eb783ba56628ac19546dbddb0",
+      "published_sha256": "00253ec2c630e5f994edcdecc72ae129d604ed8eb783ba56628ac19546dbddb0",
+      "transformation": "none"
+    },
+    "candidates/code-selection/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/code-selection/summary.json",
+      "source_sha256": "1f185d6a16453c0570370fc42bcf7c15a3b2adece7ac3d7e55114b5ed5588679",
+      "published_sha256": "1f185d6a16453c0570370fc42bcf7c15a3b2adece7ac3d7e55114b5ed5588679",
+      "transformation": "none"
+    },
+    "candidates/code-selection/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/code-selection/verification.json",
+      "source_sha256": "86092fb1044f8f22650be8378b56a13857d852a9fbc6b1b7e0cddc90615e4d02",
+      "published_sha256": "86092fb1044f8f22650be8378b56a13857d852a9fbc6b1b7e0cddc90615e4d02",
+      "transformation": "none"
+    },
+    "candidates/buffer-selection/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/buffer-selection/attempts.jsonl",
+      "source_sha256": "b1f7b6da2463272b21a71ed7995244e4fd1f4fc6808c3fb3e5547fb9d50f5e56",
+      "published_sha256": "b1f7b6da2463272b21a71ed7995244e4fd1f4fc6808c3fb3e5547fb9d50f5e56",
+      "transformation": "none"
+    },
+    "candidates/buffer-selection/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/buffer-selection/manifest.json",
+      "source_sha256": "90d4ab27090a4ace4d40e7e590824adcb3483e689ce313eade7ffe1b4b94907d",
+      "published_sha256": "90d4ab27090a4ace4d40e7e590824adcb3483e689ce313eade7ffe1b4b94907d",
+      "transformation": "none"
+    },
+    "candidates/buffer-selection/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/buffer-selection/summary.json",
+      "source_sha256": "4827558108c8b841c7ef88da0e00f46abfc167e91c3ab2adb40eb16cbffe338f",
+      "published_sha256": "4827558108c8b841c7ef88da0e00f46abfc167e91c3ab2adb40eb16cbffe338f",
+      "transformation": "none"
+    },
+    "candidates/buffer-selection/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/buffer-selection/verification.json",
+      "source_sha256": "a8ce962e5dddc977e3f1dc70d3c85fe993520e2896628db977daff24b6a07c90",
+      "published_sha256": "a8ce962e5dddc977e3f1dc70d3c85fe993520e2896628db977daff24b6a07c90",
+      "transformation": "none"
+    },
+    "candidates/final-profile/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-profile/attempts.jsonl",
+      "source_sha256": "3e1fceaa565cd6b43af8964dcf17a4e1c31e2a430d8f6c0385efd7e35a14c5d9",
+      "published_sha256": "3e1fceaa565cd6b43af8964dcf17a4e1c31e2a430d8f6c0385efd7e35a14c5d9",
+      "transformation": "none"
+    },
+    "candidates/final-profile/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-profile/manifest.json",
+      "source_sha256": "508d59ae38f36efc43cddf7cdf1ffebf55d107a0b86c7f24e0a7f0f657896337",
+      "published_sha256": "508d59ae38f36efc43cddf7cdf1ffebf55d107a0b86c7f24e0a7f0f657896337",
+      "transformation": "none"
+    },
+    "candidates/final-profile/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-profile/summary.json",
+      "source_sha256": "750cf6ecf29e347d5336063eeca3fa18b473045c66b286a3b45009b8b984308f",
+      "published_sha256": "750cf6ecf29e347d5336063eeca3fa18b473045c66b286a3b45009b8b984308f",
+      "transformation": "none"
+    },
+    "candidates/final-profile/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-profile/verification.json",
+      "source_sha256": "1b21367c585abf79f3f270dc5dee9593b01fe285a2f77fd6325fe3c54a319fef",
+      "published_sha256": "1b21367c585abf79f3f270dc5dee9593b01fe285a2f77fd6325fe3c54a319fef",
+      "transformation": "none"
+    },
+    "candidates/final-allocation/attempts.jsonl": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-allocation/attempts.jsonl",
+      "source_sha256": "06af9a26ad45ba5e559fb5204369d5f489ebf27772345320dea25141eab233bd",
+      "published_sha256": "06af9a26ad45ba5e559fb5204369d5f489ebf27772345320dea25141eab233bd",
+      "transformation": "none"
+    },
+    "candidates/final-allocation/manifest.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-allocation/manifest.json",
+      "source_sha256": "2d5de9ca2c9931a8ba5cdfdb0d60cfc30027c6c859ea1440553770e4f88c4b4d",
+      "published_sha256": "2d5de9ca2c9931a8ba5cdfdb0d60cfc30027c6c859ea1440553770e4f88c4b4d",
+      "transformation": "none"
+    },
+    "candidates/final-allocation/summary.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-allocation/summary.json",
+      "source_sha256": "e8ab952584f42c80a6519bc5fc1e4bf626e67c9d4bad5019403e00b38746bf9c",
+      "published_sha256": "e8ab952584f42c80a6519bc5fc1e4bf626e67c9d4bad5019403e00b38746bf9c",
+      "transformation": "none"
+    },
+    "candidates/final-allocation/verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidates/final-allocation/verification.json",
+      "source_sha256": "e3281c14c962c489d9691276508f20b2e9fdda2cacf767bacd10c617f534410b",
+      "published_sha256": "e3281c14c962c489d9691276508f20b2e9fdda2cacf767bacd10c617f534410b",
+      "transformation": "none"
+    },
+    "before.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/before.json",
+      "source_sha256": "abaafd580a9937db7a1aa5391c2548ade480b47dfef488f4d416fcf43ccdb1d5",
+      "published_sha256": "abaafd580a9937db7a1aa5391c2548ade480b47dfef488f4d416fcf43ccdb1d5",
+      "transformation": "none"
+    },
+    "selected-build.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/selected-build.json",
+      "source_sha256": "4db35bdcb0cca40505a9a020b849b0a430efa563e3844418ade712c8b2310438",
+      "published_sha256": "4db35bdcb0cca40505a9a020b849b0a430efa563e3844418ade712c8b2310438",
+      "transformation": "none"
+    },
+    "selection-decisions.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/selection-decisions.json",
+      "source_sha256": "ca9900def3e26375388ec9c126e68d70413e46fe8adda4ebe80828a97297abdc",
+      "published_sha256": "ca9900def3e26375388ec9c126e68d70413e46fe8adda4ebe80828a97297abdc",
+      "transformation": "none"
+    },
+    "candidate-byte-equivalence.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/candidate-byte-equivalence.json",
+      "source_sha256": "cac4695df838a2460a6ef9f4e0a01c69372b427872f4a6ead6626bae2347bae7",
+      "published_sha256": "cac4695df838a2460a6ef9f4e0a01c69372b427872f4a6ead6626bae2347bae7",
+      "transformation": "none"
+    },
+    "buffer-byte-equivalence.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/buffer-byte-equivalence.json",
+      "source_sha256": "09bc61194f462ca9ae4350a6615b62a96735854879257d82e476f678b57db1a3",
+      "published_sha256": "09bc61194f462ca9ae4350a6615b62a96735854879257d82e476f678b57db1a3",
+      "transformation": "none"
+    },
+    "implementation-verification.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/implementation-verification.json",
+      "source_sha256": "ca21ab5ff98b7bd3439f43a4a4662b7a61afd48cb34b027e0928c373841f8f63",
+      "published_sha256": "ca21ab5ff98b7bd3439f43a4a4662b7a61afd48cb34b027e0928c373841f8f63",
+      "transformation": "none"
+    },
+    "implementation-diagnostics.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/implementation-diagnostics.json",
+      "source_sha256": "aa49e5e38d7c52d2089c7b51344fd7fac74edc0a98aa269c67f829bc2a97da1c",
+      "published_sha256": "aa49e5e38d7c52d2089c7b51344fd7fac74edc0a98aa269c67f829bc2a97da1c",
+      "transformation": "none"
+    },
+    "validation-results.json": {
+      "source": "benchmarks/results/20260907-basic-rust-genanki-optimized-04/validation/results.json",
+      "source_sha256": "7b6afab972cbebf42733b386ab145b5a15e41e808f12a546704403fef650537b",
+      "published_sha256": "7b6afab972cbebf42733b386ab145b5a15e41e808f12a546704403fef650537b",
+      "transformation": "none"
+    }
+  },
+  "omitted": "Generated databases/APKGs, binaries, temporary scripts, source snapshots and build logs remain local.",
+  "runtime_source_digest": "75dccde91c8358ba450568f054cd50ccfdfe5be22db55e495a6da412733578a8"
+}

@@ -1,0 +1,69 @@
+{
+  "config": {
+    "name": "final-allocation",
+    "adapters": [
+      {
+        "id": "before-allocation",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/before-allocation"
+        ]
+      },
+      {
+        "id": "final-allocation",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/final-allocation"
+        ]
+      }
+    ],
+    "sizes": [
+      200,
+      10000
+    ],
+    "warmups": 1,
+    "samples": 3,
+    "memory_samples": 0
+  },
+  "started": "2026-09-06T23:53:26.643643+00:00",
+  "identity_before": {
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd",
+    "/Users/hp/Desktop/2026/anki-forge/target/release/contract_tools": "846bcfe795f070198f9983856cd05e5c54d7b8f7de66aa93d91462018c769c11",
+    "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/target/debug/benchmark_oracle": "dad13c1cdc12d7d4d044a2b3bef78a7ebf74f88fcceec0b9361c90bfd767c326",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/before-allocation": "598cfcdda4d19a4adf58f513f088b9ffade6a51137242ffba1c9729064e8235d",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/final-allocation": "558698c77bb64fa0968d62469583ed4908d7302800bb409925762bd6c5c09609",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-200.json": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-10000.json": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980"
+  },
+  "host_before": {
+    "load": [
+      3.26513671875,
+      6.7236328125,
+      11.06982421875
+    ],
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t18%; discharging; 0:31 remaining present: true",
+    "power_settings": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n disksleep            10",
+    "thermal": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc",
+    "utc": "2026-09-06T23:53:26.731589+00:00"
+  },
+  "measurement_finished": "2026-09-06T23:53:33.309740+00:00",
+  "identity_after": {
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd",
+    "/Users/hp/Desktop/2026/anki-forge/target/release/contract_tools": "846bcfe795f070198f9983856cd05e5c54d7b8f7de66aa93d91462018c769c11",
+    "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/target/debug/benchmark_oracle": "dad13c1cdc12d7d4d044a2b3bef78a7ebf74f88fcceec0b9361c90bfd767c326",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/before-allocation": "598cfcdda4d19a4adf58f513f088b9ffade6a51137242ffba1c9729064e8235d",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/final-allocation": "558698c77bb64fa0968d62469583ed4908d7302800bb409925762bd6c5c09609",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-200.json": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-10000.json": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980"
+  },
+  "host_after": {
+    "load": [
+      3.16357421875,
+      6.64501953125,
+      11.0166015625
+    ],
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t18%; discharging; 0:31 remaining present: true",
+    "power_settings": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n disksleep            10",
+    "thermal": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc",
+    "utc": "2026-09-06T23:53:33.393053+00:00"
+  },
+  "identity_unchanged": true
+}

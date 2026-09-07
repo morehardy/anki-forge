@@ -38,11 +38,12 @@ impl BuildInput<'_> {
 
     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
         let result = match self {
-            Self::Project(project) => project.to_product_document().lower().map(|mut plan| {
+            Self::Project(project) => {
+                let mut plan = project.lower_product_document();
                 project.apply_note_source_paths(&mut plan);
                 project.apply_notetype_source_paths(&mut plan);
-                plan
-            }),
+                Ok(plan)
+            }
             Self::Document(document) => document.lower(),
         };
         result.map_err(|error| ProjectNormalizeError {
@@ -125,7 +126,7 @@ impl BuildInput<'_> {
                 media_policy: options.to_authoring_media_policy(),
             },
         );
-        let result_status = result.result_status.clone();
+        let result_status = result.result_status;
         let mut normalization_diagnostics = result
             .diagnostics
             .items

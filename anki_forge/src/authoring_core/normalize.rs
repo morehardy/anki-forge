@@ -193,17 +193,24 @@ pub fn normalize_with_options(
         }
     };
 
-    let normalized_notetype_by_id: BTreeMap<
-        &str,
-        &crate::authoring_core::model::NormalizedNotetype,
-    > = normalized_notetypes
+    let expected_fields_by_notetype: BTreeMap<&str, BTreeSet<&str>> = normalized_notetypes
         .iter()
-        .map(|notetype| (notetype.id.as_str(), notetype))
+        .map(|notetype| {
+            (
+                notetype.id.as_str(),
+                notetype
+                    .fields
+                    .iter()
+                    .map(|field| field.name.as_str())
+                    .collect(),
+            )
+        })
         .collect();
 
     let mut normalized_notes = Vec::with_capacity(request.input.notes.len());
-    for note in &request.input.notes {
-        let Some(notetype) = normalized_notetype_by_id.get(note.notetype_id.as_str()) else {
+    for note in request.input.notes {
+        let Some(expected_fields) = expected_fields_by_notetype.get(note.notetype_id.as_str())
+        else {
             return invalid_result(
                 policy_refs,
                 request.comparison_context,
@@ -221,13 +228,14 @@ pub fn normalize_with_options(
             );
         };
 
-        let expected_fields: BTreeSet<&str> = notetype
-            .fields
+        // Both collections are ordered. Only allocate the diagnostic's field set
+        // for an invalid note; the expected set is shared by its whole notetype.
+        if !expected_fields
             .iter()
-            .map(|field| field.name.as_str())
-            .collect();
-        let actual_fields: BTreeSet<&str> = note.fields.keys().map(String::as_str).collect();
-        if actual_fields != expected_fields {
+            .copied()
+            .eq(note.fields.keys().map(String::as_str))
+        {
+            let actual_fields: BTreeSet<&str> = note.fields.keys().map(String::as_str).collect();
             return invalid_result(
                 policy_refs,
                 request.comparison_context,
@@ -249,11 +257,11 @@ pub fn normalize_with_options(
         }
 
         normalized_notes.push(NormalizedNote {
-            id: note.id.clone(),
-            notetype_id: note.notetype_id.clone(),
-            deck_name: note.deck_name.clone(),
-            fields: note.fields.clone(),
-            tags: note.tags.clone(),
+            id: note.id,
+            notetype_id: note.notetype_id,
+            deck_name: note.deck_name,
+            fields: note.fields,
+            tags: note.tags,
             mtime_secs: None,
         });
     }
@@ -279,8 +287,7 @@ pub fn normalize_with_options(
     diagnostics.extend(
         ingest
             .diagnostics
-            .iter()
-            .cloned()
+            .into_iter()
             .map(media_ingest_diagnostic_to_item),
     );
 
@@ -297,7 +304,7 @@ pub fn normalize_with_options(
         kind: "normalized-ir".into(),
         schema_version: request.input.schema_version,
         document_id: metadata_document_id,
-        resolved_identity: resolved_identity.clone(),
+        resolved_identity,
         notetypes: normalized_notetypes,
         notes: normalized_notes,
         media_objects: ingest.objects,
@@ -324,7 +331,7 @@ pub fn normalize_with_options(
         result_status: "success".into(),
         tool_contract_version: crate::authoring_core::tool_contract_version().into(),
         policy_refs,
-        comparison_context: request.comparison_context.clone(),
+        comparison_context: request.comparison_context,
         diagnostics: NormalizationDiagnostics {
             kind: "normalization-diagnostics".into(),
             status: "valid".into(),

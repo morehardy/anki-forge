@@ -1,0 +1,90 @@
+{
+  "config": {
+    "name": "buffer-selection",
+    "adapters": [
+      {
+        "id": "unbuffered",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/combined"
+        ]
+      },
+      {
+        "id": "buffer-128k",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/buffer"
+        ],
+        "env": {
+          "ROUND4_BUFFER": "131072"
+        }
+      },
+      {
+        "id": "buffer-1m",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/buffer"
+        ],
+        "env": {
+          "ROUND4_BUFFER": "1048576"
+        }
+      },
+      {
+        "id": "whole-buffer",
+        "command": [
+          "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/no-stream"
+        ]
+      }
+    ],
+    "sizes": [
+      200,
+      10000
+    ],
+    "warmups": 2,
+    "samples": 6,
+    "memory_warmups": 1,
+    "memory_samples": 3
+  },
+  "started": "2026-09-06T23:36:45.411266+00:00",
+  "identity_before": {
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd",
+    "/Users/hp/Desktop/2026/anki-forge/target/release/contract_tools": "08f22ed1277f928300fb4ae2c8417041b5d9c6488747201e284b98444f6c65a5",
+    "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/target/debug/benchmark_oracle": "51ff04faf229e75955aa26f9d5e3e6b1c20cdfb8caf86b9741ab899b2e96a7f8",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/combined": "0453bb58a7adb8215c522496647a16719887c46995dc98131f612c6dfdc23f4b",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/buffer": "a86ece76df848d6baec610a856ea1a8566b952b63269337a079e9fa810da4d4a",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/no-stream": "899eb13ffd1db1533f9bbcb2cc2738a75b643606d343a97c0bef6a1f18b770ad",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-200.json": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-10000.json": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980"
+  },
+  "host_before": {
+    "load": [
+      6.1728515625,
+      14.02294921875,
+      11.6884765625
+    ],
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t29%; discharging; 0:55 remaining present: true",
+    "power_settings": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n disksleep            10",
+    "thermal": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc",
+    "utc": "2026-09-06T23:36:45.521938+00:00"
+  },
+  "measurement_finished": "2026-09-06T23:37:20.104593+00:00",
+  "identity_after": {
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd",
+    "/Users/hp/Desktop/2026/anki-forge/target/release/contract_tools": "08f22ed1277f928300fb4ae2c8417041b5d9c6488747201e284b98444f6c65a5",
+    "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/target/debug/benchmark_oracle": "51ff04faf229e75955aa26f9d5e3e6b1c20cdfb8caf86b9741ab899b2e96a7f8",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/combined": "0453bb58a7adb8215c522496647a16719887c46995dc98131f612c6dfdc23f4b",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/buffer": "a86ece76df848d6baec610a856ea1a8566b952b63269337a079e9fa810da4d4a",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/optimization-round4-20260907/binaries/no-stream": "899eb13ffd1db1533f9bbcb2cc2738a75b643606d343a97c0bef6a1f18b770ad",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-200.json": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+    "/Users/hp/Desktop/2026/anki-forge/benchmarks/inputs/basic-10000.json": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980"
+  },
+  "host_after": {
+    "load": [
+      5.1904296875,
+      12.912109375,
+      11.376953125
+    ],
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t28%; discharging; 0:50 remaining present: true",
+    "power_settings": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n disksleep            10",
+    "thermal": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc",
+    "utc": "2026-09-06T23:37:20.201581+00:00"
+  },
+  "identity_unchanged": true
+}

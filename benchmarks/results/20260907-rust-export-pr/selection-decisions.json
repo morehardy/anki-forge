@@ -1,0 +1,129 @@
+{
+  "adopted": [
+    "owned canonical v3 lowering without unused legacy views",
+    "move GUID assignments into writer plan and restore before result handling",
+    "borrowed fresh identity JSON with both serde_json ordering modes preserved",
+    "direct collection streaming with existing compression frame settings"
+  ],
+  "isolated_system_10k": {
+    "before-system": {
+      "time_reduction_pct": 0.0,
+      "rss_reduction_pct": 0.0
+    },
+    "lowering": {
+      "time_reduction_pct": 3.3217220564128236,
+      "rss_reduction_pct": 5.638111888111885
+    },
+    "stream": {
+      "time_reduction_pct": -3.993155669963633,
+      "rss_reduction_pct": 10.533216783216782
+    },
+    "identity-move": {
+      "time_reduction_pct": 1.3333444180845921,
+      "rss_reduction_pct": 1.4685314685314643
+    },
+    "note-data": {
+      "time_reduction_pct": 3.9949695383478367,
+      "rss_reduction_pct": 1.870629370629373
+    },
+    "combined": {
+      "time_reduction_pct": 6.488509521675356,
+      "rss_reduction_pct": 16.66958041958042
+    }
+  },
+  "buffer_selection": {
+    "200/unbuffered": {
+      "samples": 6,
+      "median_ms": 42.4285,
+      "min_ms": 40.473,
+      "max_ms": 43.949,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 15.640625,
+      "package_bytes": 90022.0
+    },
+    "200/buffer-128k": {
+      "samples": 6,
+      "median_ms": 41.138999999999996,
+      "min_ms": 40.154,
+      "max_ms": 43.589,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 15.765625,
+      "package_bytes": 90022.0
+    },
+    "200/buffer-1m": {
+      "samples": 6,
+      "median_ms": 41.8495,
+      "min_ms": 40.036,
+      "max_ms": 44.522,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 16.09375,
+      "package_bytes": 90022.0
+    },
+    "200/whole-buffer": {
+      "samples": 6,
+      "median_ms": 41.795500000000004,
+      "min_ms": 39.773,
+      "max_ms": 44.35,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 16.0625,
+      "package_bytes": 90022.0
+    },
+    "10000/unbuffered": {
+      "samples": 6,
+      "median_ms": 624.2675,
+      "min_ms": 610.216,
+      "max_ms": 630.877,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 145.5625,
+      "package_bytes": 1536376.0
+    },
+    "10000/buffer-128k": {
+      "samples": 6,
+      "median_ms": 623.376,
+      "min_ms": 609.337,
+      "max_ms": 701.612,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 146.625,
+      "package_bytes": 1536376.0
+    },
+    "10000/buffer-1m": {
+      "samples": 6,
+      "median_ms": 625.2345,
+      "min_ms": 610.097,
+      "max_ms": 634.063,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 145.28125,
+      "package_bytes": 1536376.0
+    },
+    "10000/whole-buffer": {
+      "samples": 6,
+      "median_ms": 632.808,
+      "min_ms": 611.112,
+      "max_ms": 668.563,
+      "stages_ms": {},
+      "allocation": {},
+      "rss_samples": 3,
+      "rss_median_mib": 165.46875,
+      "package_bytes": 1536376.0
+    }
+  },
+  "buffer_decision": "Keep direct streaming. A 128 KiB input buffer changed 10K median by only 0.14%; 1 MiB was not faster. Extra buffering showed no material benefit in this exploratory comparison. Combined direct-streaming also used less RSS than the whole-collection buffer.",
+  "limits": [
+    "single-host exploratory candidate results; six timings and three RSS samples",
+    "single-item effects are not additive; final same-allocator paired comparison is the endpoint evidence"
+  ]
+}

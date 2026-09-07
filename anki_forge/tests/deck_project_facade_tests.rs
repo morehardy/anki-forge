@@ -23,12 +23,25 @@ fn deck_build_matches_project_from_deck_for_stock_notes() {
         .add()
         .expect("add cloze");
 
+    let original = deck.clone();
     let deck_report = deck
         .build(BuildOptions::new().output(root.join("deck.apkg")))
         .expect("deck build");
     let project_report = Project::from(deck.clone())
         .build(BuildOptions::new().output(root.join("project.apkg")))
         .expect("project build");
+    let repeated_report = deck
+        .write_apkg(root.join("repeated.apkg"))
+        .expect("repeat borrowed export");
+    assert_eq!(
+        deck, original,
+        "export must retain the complete editable deck"
+    );
+    assert_eq!(deck_report.counts, repeated_report.counts);
+    assert_eq!(
+        deck_report.diagnostic_codes(),
+        repeated_report.diagnostic_codes()
+    );
 
     assert_eq!(deck_report.counts, project_report.counts);
     assert_eq!(

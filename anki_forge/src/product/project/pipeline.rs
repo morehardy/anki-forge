@@ -83,7 +83,6 @@ struct ReconciledBuild {
     prepared: PreparedBuild,
     identity_index: crate::update_safety::model::IdentityIndex,
     reconcile: crate::update_safety::reconcile::ReconcileOutput,
-    writer_guid_plan: crate::writer_core::WriterGuidPlan,
     update_mode: crate::update_safety::EffectiveMode,
     write_identity_lockfile: bool,
     lockfile_index: Option<crate::update_safety::model::IdentityIndex>,
@@ -292,8 +291,8 @@ impl BuildPipeline<'_> {
         let (writer_policy, build_context) = match writer_stack {
             Some((writer_policy, build_context)) => (writer_policy, build_context),
             None => {
-                let (_runtime, writer_policy, build_context) =
-                    crate::runtime::load_default_writer_stack().map_err(|err| {
+                let (writer_policy, build_context) =
+                    crate::runtime::defaults::load_embedded_writer_defaults().map_err(|err| {
                         facts.failure(
                             "PROJECT.RUNTIME_DEFAULTS_FAILED",
                             err.to_string(),
@@ -314,7 +313,10 @@ impl BuildPipeline<'_> {
         })
     }
 
-    fn generate(&mut self, state: ReconciledBuild) -> Result<CandidateBuild, BuildFailureCause> {
+    fn generate(
+        &mut self,
+        mut state: ReconciledBuild,
+    ) -> Result<CandidateBuild, BuildFailureCause> {
         let facts = &mut self.facts;
         let prepared = &state.prepared;
         let stable_ref_prefix = self.artifact_ref_prefix.clone();
@@ -346,16 +348,22 @@ impl BuildPipeline<'_> {
                     .map(|id| (notetype.note_type_id.clone(), id))
             })
             .collect::<BTreeMap<_, _>>();
+        // Lend the assignments to the writer without retaining a second deep
+        // copy. Restore them before handling errors or publishing a lockfile.
+        let writer_guid_plan = crate::writer_core::WriterGuidPlan {
+            assignments: std::mem::take(&mut state.reconcile.assignments),
+        };
         let package_build_result = crate::writer_core::build_with_identity_plan(
             &prepared.normalized,
             &prepared.writer_policy,
             &prepared.build_context,
             &artifact_target,
             &apkg_target,
-            Some(&state.writer_guid_plan),
+            Some(&writer_guid_plan),
             Some(&notetype_ids),
-        )
-        .map_err(|err| {
+        );
+        state.reconcile.assignments = writer_guid_plan.assignments;
+        let package_build_result = package_build_result.map_err(|err| {
             facts.failure(
                 "PROJECT.WRITER_FAILED",
                 err.to_string(),
