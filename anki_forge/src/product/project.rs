@@ -848,14 +848,18 @@ impl Project {
         pipeline::build(BuildInput::Project(self), options, None)
     }
 
+    pub(crate) fn into_build(self, options: BuildOptions) -> Result<BuildReport, BuildError> {
+        pipeline::build(BuildInput::OwnedProject(Box::new(self)), options, None)
+    }
+
     pub(crate) fn build_package_artifacts(
-        &self,
+        self,
         artifacts_dir: &Path,
         artifact_ref_prefix: String,
         inspect_limits: crate::writer_core::InspectLimits,
     ) -> Result<(BuildReport, crate::writer_core::PackageBuildResult), BuildError> {
         pipeline::execute(
-            BuildInput::Project(self),
+            BuildInput::OwnedProject(Box::new(self)),
             BuildOptions::new()
                 .artifacts_dir(artifacts_dir)
                 .inspect_limits(inspect_limits),
@@ -1000,11 +1004,83 @@ impl Project {
     }
 
     fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
+        let (document_id, mut payload) = self.product_v3_payload_header();
+        let default_deck = self.default_deck.as_deref().unwrap_or(&self.name);
+        let stable_id_counts = self.note_stable_id_counts();
+        payload.notes = self
+            .notes
+            .iter()
+            .enumerate()
+            .map(|(index, note)| {
+                let identity = resolve_product_note_identity(self, note, index, &stable_id_counts);
+                product_v3_note(
+                    &self.note_types,
+                    note,
+                    identity.stable_id,
+                    default_deck,
+                    note.rendered_fields(),
+                    index,
+                )
+            })
+            .collect();
+        (document_id, payload)
+    }
+
+    fn into_build_lowering(
+        mut self,
+    ) -> (
+        LoweringPlan,
+        crate::product::MediaRegistry,
+        input::ResolvedNoteIdentities,
+    ) {
+        let (document_id, mut payload) = self.product_v3_payload_header();
+        // Resolve once while all original values are still present. The same
+        // identities drive payload IDs, diagnostic locations and reconciliation.
+        let identities = {
+            let counts = self.note_stable_id_counts();
+            self.notes
+                .iter()
+                .enumerate()
+                .map(|(index, note)| resolve_product_note_identity(&self, note, index, &counts))
+                .collect::<Vec<_>>()
+        };
+        let default_deck = self.default_deck.as_deref().unwrap_or(&self.name);
+        payload.notes = self
+            .notes
+            .iter_mut()
+            .zip(&identities)
+            .enumerate()
+            .map(|(index, (note, identity))| {
+                let fields = note.take_rendered_fields();
+                product_v3_note(
+                    &self.note_types,
+                    note,
+                    identity.stable_id.clone(),
+                    default_deck,
+                    fields,
+                    index,
+                )
+            })
+            .collect();
+        let mut plan =
+            crate::product::lowering::lower_owned_product_v2_document(document_id, payload);
+        self.apply_note_source_paths_with_ids(
+            &mut plan,
+            identities.iter().map(|identity| identity.stable_id.clone()),
+            &self.note_stable_id_counts(),
+        );
+        self.apply_notetype_source_paths(&mut plan);
+        let identities = identities
+            .into_iter()
+            .map(|identity| (identity.stable_id.clone(), identity))
+            .collect();
+        (plan, self.media, identities)
+    }
+
+    fn product_v3_payload_header(
+        &self,
+    ) -> (String, crate::product::model::ProductDocumentV2Payload) {
         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
-        let default_deck = self
-            .default_deck
-            .clone()
-            .unwrap_or_else(|| self.name.clone());
         let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
         let mut note_type_id_counts = BTreeMap::<&str, usize>::new();
         for stock_id in &implicit_stock_notetype_ids {
@@ -1112,80 +1188,12 @@ impl Project {
                 }),
         );
 
-        let stable_id_counts = self.note_stable_id_counts();
-        let mut notes = Vec::with_capacity(self.notes.len());
-        for (index, note) in self.notes.iter().enumerate() {
-            let note_id =
-                resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
-            let deck_name = note
-                .deck_name()
-                .unwrap_or(default_deck.as_str())
-                .to_string();
-            let mut fields = note.rendered_fields();
-            if note.note_type_id() == STOCK_BASIC_ID {
-                notes.push(product_v3_stock_note(
-                    note,
-                    note_id,
-                    deck_name,
-                    [
-                        ("front", fields.remove("Front")),
-                        ("back", fields.remove("Back")),
-                    ],
-                    index,
-                ));
-            } else if note.note_type_id() == STOCK_CLOZE_ID {
-                notes.push(product_v3_stock_note(
-                    note,
-                    note_id,
-                    deck_name,
-                    [
-                        ("text", fields.remove("Text")),
-                        ("back_extra", fields.remove("Back Extra")),
-                    ],
-                    index,
-                ));
-            } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
-                notes.push(product_v3_stock_note(
-                    note,
-                    note_id,
-                    deck_name,
-                    [
-                        ("occlusion", fields.remove("Occlusion")),
-                        ("image", fields.remove("Image")),
-                        ("header", fields.remove("Header")),
-                        ("back_extra", fields.remove("Back Extra")),
-                        ("comments", fields.remove("Comments")),
-                    ],
-                    index,
-                ));
-            } else {
-                let fields = custom_note_fields_for_product_v3(self, note, fields)
-                    .into_iter()
-                    .map(|(key, value)| {
-                        (
-                            key,
-                            crate::product::model::ProductFieldContentV2::Html { value },
-                        )
-                    })
-                    .collect();
-                notes.push(crate::product::model::ProductNoteV2::Custom(
-                    crate::product::model::ProductCustomNoteV2 {
-                        note_type_id: note.note_type_id().to_string(),
-                        stable_id: Some(note_id),
-                        deck_name,
-                        fields,
-                        tags: note.tags().to_vec(),
-                        source_path: Some(format!("project.notes[{index}]")),
-                    },
-                ));
-            }
-        }
         (
             document_id,
             crate::product::model::ProductDocumentV2Payload {
                 version: 3,
                 note_types,
-                notes,
+                notes: Vec::new(),
                 media: Vec::new(),
                 transport_diagnostics: Vec::new(),
             },
@@ -1236,12 +1244,22 @@ impl Project {
 
     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
         let stable_id_counts = self.note_stable_id_counts();
+        let identities = self.notes.iter().enumerate().map(|(index, note)| {
+            resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id
+        });
+        self.apply_note_source_paths_with_ids(plan, identities, &stable_id_counts);
+    }
+
+    fn apply_note_source_paths_with_ids(
+        &self,
+        plan: &mut LoweringPlan,
+        identities: impl Iterator<Item = String>,
+        stable_id_counts: &BTreeMap<&str, usize>,
+    ) {
         let mut project_indexes_by_authoring_id = BTreeMap::<String, Vec<usize>>::new();
-        for (project_index, product_note) in self.notes.iter().enumerate() {
-            let identity =
-                resolve_product_note_identity(self, product_note, project_index, &stable_id_counts);
+        for (project_index, identity) in identities.enumerate() {
             project_indexes_by_authoring_id
-                .entry(identity.stable_id)
+                .entry(identity)
                 .or_default()
                 .push(project_index);
         }
@@ -1412,6 +1430,72 @@ fn product_v3_generation_rule(
     }
 }
 
+fn product_v3_note(
+    note_types: &[NoteType],
+    note: &Note,
+    note_id: String,
+    default_deck: &str,
+    mut fields: BTreeMap<String, String>,
+    index: usize,
+) -> crate::product::model::ProductNoteV2 {
+    let deck_name = note.deck_name().unwrap_or(default_deck).to_string();
+    if note.note_type_id() == STOCK_BASIC_ID {
+        product_v3_stock_note(
+            note,
+            note_id,
+            deck_name,
+            [
+                ("front", fields.remove("Front")),
+                ("back", fields.remove("Back")),
+            ],
+            index,
+        )
+    } else if note.note_type_id() == STOCK_CLOZE_ID {
+        product_v3_stock_note(
+            note,
+            note_id,
+            deck_name,
+            [
+                ("text", fields.remove("Text")),
+                ("back_extra", fields.remove("Back Extra")),
+            ],
+            index,
+        )
+    } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
+        product_v3_stock_note(
+            note,
+            note_id,
+            deck_name,
+            [
+                ("occlusion", fields.remove("Occlusion")),
+                ("image", fields.remove("Image")),
+                ("header", fields.remove("Header")),
+                ("back_extra", fields.remove("Back Extra")),
+                ("comments", fields.remove("Comments")),
+            ],
+            index,
+        )
+    } else {
+        let fields = custom_note_fields_for_product_v3(note_types, note, fields)
+            .into_iter()
+            .map(|(key, value)| {
+                (
+                    key,
+                    crate::product::model::ProductFieldContentV2::Html { value },
+                )
+            })
+            .collect();
+        crate::product::model::ProductNoteV2::Custom(crate::product::model::ProductCustomNoteV2 {
+            note_type_id: note.note_type_id().to_string(),
+            stable_id: Some(note_id),
+            deck_name,
+            fields,
+            tags: note.tags().to_vec(),
+            source_path: Some(format!("project.notes[{index}]")),
+        })
+    }
+}
+
 fn product_v3_stock_note<const N: usize>(
     note: &crate::product::Note,
     stable_id: String,
@@ -1440,12 +1524,11 @@ fn product_v3_stock_note<const N: usize>(
 }
 
 fn custom_note_fields_for_product_v3(
-    project: &Project,
+    note_types: &[NoteType],
     note: &crate::product::Note,
     rendered: BTreeMap<String, String>,
 ) -> BTreeMap<String, String> {
-    let Some(note_type) = project
-        .note_types
+    let Some(note_type) = note_types
         .iter()
         .find(|note_type| note_type.id() == note.note_type_id())
     else {
@@ -3331,7 +3414,42 @@ mod tests {
         assert_eq!(actual.source_map, expected.source_map);
         assert_eq!(actual.product_diagnostics, expected.product_diagnostics);
         assert_eq!(actual.lowering_diagnostics, expected.lowering_diagnostics);
+        let (consumed, _, identities) = project.clone().into_build_lowering();
+        assert_eq!(identities, project.resolved_note_identities());
+        assert_eq!(
+            serde_json::to_vec(&consumed.authoring_document).unwrap(),
+            serde_json::to_vec(&actual.authoring_document).unwrap()
+        );
+        assert_eq!(consumed.mappings, actual.mappings);
+        assert_eq!(consumed.source_map, actual.source_map);
+        assert_eq!(consumed.product_diagnostics, actual.product_diagnostics);
+        assert_eq!(consumed.lowering_diagnostics, actual.lowering_diagnostics);
         actual
+    }
+
+    #[test]
+    fn consuming_project_lowering_moves_long_html_storage() {
+        let answer = "<p>中文 &amp; answer</p>".repeat(4096);
+        let storage = answer.as_ptr();
+        let mut project = Project::new("owned-fields");
+        project
+            .add_note(
+                Note::new(STOCK_BASIC_ID)
+                    .html("Front", "question")
+                    .html("Back", answer),
+            )
+            .unwrap();
+        let identities = project.resolved_note_identities();
+        let (plan, _, consumed_identities) = project.into_build_lowering();
+        assert_eq!(consumed_identities, identities);
+        assert_eq!(
+            plan.authoring_document.notes[0].fields["Back"].as_ptr(),
+            storage
+        );
+        assert_eq!(
+            plan.authoring_document.notes[0].fields["Back"],
+            "<p>中文 &amp; answer</p>".repeat(4096)
+        );
     }
 
     #[test]
@@ -3459,7 +3577,7 @@ mod tests {
             )
             .expect("add later note");
 
-        let plan = project.lower().expect("lower project");
+        let plan = assert_project_lowering_matches_document_reference(&project);
 
         assert!(plan
             .product_diagnostics
@@ -3526,7 +3644,7 @@ mod tests {
             )
             .expect("add later note");
 
-        let plan = project.lower().expect("lower project");
+        let plan = assert_project_lowering_matches_document_reference(&project);
         let authoring_note = plan
             .authoring_document
             .notes
@@ -3783,7 +3901,7 @@ mod tests {
                 ),
         );
 
-        let plan = project.lower().expect("lower project");
+        let plan = assert_project_lowering_matches_document_reference(&project);
 
         assert_eq!(
             plan.source_map.source_for_authoring_path(

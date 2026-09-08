@@ -1,0 +1,17 @@
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -130,7 +130,13 @@
+                                 payload.size,
+                                 crc,
+                                 |writer| {
+-                                    io::copy(&mut payload.data, writer)?;
++                                    // [DEBUG-scale-opt] Private rolled-file read experiment.
++                                    if payload.data.is_rolled() {
++                                        let mut reader = std::io::BufReader::with_capacity(BUFFER_BYTES, &mut payload.data);
++                                        io::copy(&mut reader, writer)?;
++                                    } else {
++                                        io::copy(&mut payload.data, writer)?;
++                                    }
+                                     Ok(())
+                                 },
+                             )

@@ -1,0 +1,75 @@
+{
+  "args": {
+    "name": "scratch-sweep",
+    "variants": [
+      "current",
+      "scratch-sync-off",
+      "scratch-journal-memory"
+    ],
+    "cases": [
+      "text-100",
+      "text-1000",
+      "text-10000",
+      "long-back-1000",
+      "image-1000"
+    ],
+    "env": [],
+    "warmups": 2,
+    "repeats": 7
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "image-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+      "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 64152000,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "text-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/100.json",
+      "input_sha256": "9dd725a5bf56f66e0fdcf6efb904bd822827087f47c1686fbc878a3ff3daa6f1",
+      "notes": 100,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 48103
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376
+    }
+  ],
+  "binaries": {
+    "current": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+    "scratch-sync-off": "5d1c10dee9b3f5256592da7defb329a16e715b79df31cd7a8aea89f397c44542",
+    "scratch-journal-memory": "ed9fb98abe868f32017e1fa5b497e567d568f83dd0d992da827e4f52091a13db"
+  },
+  "utc": "2026-09-07T13:04:27.494252+00:00",
+  "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t64%; discharging; 4:43 remaining present: true\n",
+  "seed": 20260907
+}

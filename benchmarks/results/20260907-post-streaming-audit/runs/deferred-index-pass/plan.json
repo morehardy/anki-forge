@@ -1,0 +1,54 @@
+{
+  "args": {
+    "name": "deferred-index-pass",
+    "variants": [
+      "current",
+      "scratch-defer-indexes"
+    ],
+    "cases": [
+      "text-1000",
+      "text-10000",
+      "long-back-1000"
+    ],
+    "distinct_containers": true,
+    "env": [],
+    "warmups": 2,
+    "repeats": 7
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376
+    }
+  ],
+  "binaries": {
+    "current": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+    "scratch-defer-indexes": "8bb94dadc0092971b7a014ec6f73da388d6bebe32970135d3d94c4719088cf73"
+  },
+  "utc": "2026-09-07T13:08:04.715569+00:00",
+  "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t63%; discharging; 4:03 remaining present: true\n",
+  "seed": 20260907
+}

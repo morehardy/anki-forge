@@ -1,0 +1,8 @@
+{
+  "status": "invalid; never measured",
+  "variants": [
+    "current-memory-invalid-copy-timestamps",
+    "pool-memory-invalid-copy-timestamps"
+  ],
+  "reason": "copy2 preserved older source mtimes; Cargo reused the previous crate. Both diagnostic binaries had the same hash despite different source. Builder now touches private sources before compilation; corrected builds required."
+}

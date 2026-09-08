@@ -1,0 +1,639 @@
+[
+  {
+    "case": "text-1000",
+    "variants": {
+      "current": {
+        "median_ms": 71.228,
+        "median_rss_mib": 30.53125,
+        "stages_ms": {},
+        "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+      },
+      "coarse": {
+        "median_ms": 75.153,
+        "median_rss_mib": 30.34375,
+        "stages_ms": {
+          "adapter.parse": 0.884958,
+          "adapter.registration": 0.000875,
+          "adapter.notes": 5.747917,
+          "project.validate": 0.13775,
+          "project.payload": 1.17825,
+          "project.lower_product": 4.709958,
+          "normalize.lowering": 7.2465,
+          "media.prepare": 0.000208,
+          "normalize.media_refs": 1.129792,
+          "normalize.core": 1.227042,
+          "normalize.total": 8.796417,
+          "runtime.defaults": 3.265375,
+          "pipeline.prepare": 13.221125,
+          "project.resolved_identities": 0.5835,
+          "pipeline.reconcile": 3.956917,
+          "writer.validate": 0.250667,
+          "writer.staging": 2.036625,
+          "sqlite.schema": 2.323291,
+          "sqlite.populate": 11.764625,
+          "sqlite.compact": 6.039125,
+          "sqlite.total": 20.353875,
+          "apkg.collection_zstd": 2.653583,
+          "apkg.total": 24.327041,
+          "pipeline.generate": 27.870875,
+          "inspect.media": 0.012166,
+          "inspect.sqlite": 3.910958,
+          "inspect.facts": 6.021792,
+          "pipeline.inspect": 6.041417,
+          "pipeline.publish": 5.952458,
+          "pipeline.total": 61.589667,
+          "adapter.total": 70.772834
+        },
+        "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+      }
+    }
+  },
+  {
+    "case": "image-1000",
+    "variants": {
+      "current": {
+        "median_ms": 244.497,
+        "median_rss_mib": 40.84375,
+        "stages_ms": {},
+        "artifact_sha256": "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932"
+      },
+      "coarse": {
+        "median_ms": 244.691,
+        "median_rss_mib": 40.078125,
+        "stages_ms": {
+          "adapter.parse": 1.378334,
+          "adapter.registration": 77.214375,
+          "adapter.notes": 6.594791,
+          "project.validate": 0.136292,
+          "project.payload": 1.16775,
+          "project.lower_product": 4.46925,
+          "normalize.lowering": 7.009167,
+          "media.prepare": 51.648166,
+          "normalize.media_refs": 2.985208,
+          "normalize.core": 56.441791,
+          "normalize.total": 65.331625,
+          "runtime.defaults": 3.044792,
+          "pipeline.prepare": 70.433792,
+          "project.resolved_identities": 0.6815,
+          "pipeline.reconcile": 4.360666,
+          "writer.validate": 1.286334,
+          "writer.staging": 6.030833,
+          "sqlite.schema": 2.209917,
+          "sqlite.populate": 12.450875,
+          "sqlite.compact": 6.054959,
+          "sqlite.total": 20.942292,
+          "apkg.collection_zstd": 2.816,
+          "apkg.total": 26.370208,
+          "pipeline.generate": 34.807958,
+          "inspect.media": 22.295417,
+          "inspect.sqlite": 4.054166,
+          "inspect.facts": 30.419,
+          "pipeline.inspect": 31.081083,
+          "pipeline.publish": 8.245084,
+          "pipeline.total": 151.173542,
+          "adapter.total": 240.257375
+        },
+        "artifact_sha256": "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932"
+      }
+    }
+  },
+  {
+    "case": "audio-1000",
+    "variants": {
+      "current": {
+        "median_ms": 203.929,
+        "median_rss_mib": 40.796875,
+        "stages_ms": {},
+        "artifact_sha256": "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494"
+      },
+      "coarse": {
+        "median_ms": 206.66,
+        "median_rss_mib": 40.15625,
+        "stages_ms": {
+          "adapter.parse": 1.367,
+          "adapter.registration": 55.202291,
+          "adapter.notes": 6.060416,
+          "project.validate": 0.137458,
+          "project.payload": 1.166708,
+          "project.lower_product": 4.578459,
+          "normalize.lowering": 6.862959,
+          "media.prepare": 35.193125,
+          "normalize.media_refs": 3.700834,
+          "normalize.core": 40.619584,
+          "normalize.total": 49.51,
+          "runtime.defaults": 3.196167,
+          "pipeline.prepare": 54.45475,
+          "project.resolved_identities": 0.637208,
+          "pipeline.reconcile": 4.223375,
+          "writer.validate": 1.255292,
+          "writer.staging": 6.046542,
+          "sqlite.schema": 2.138208,
+          "sqlite.populate": 11.757208,
+          "sqlite.compact": 5.787958,
+          "sqlite.total": 20.163959,
+          "apkg.collection_zstd": 2.598333,
+          "apkg.total": 25.491125,
+          "pipeline.generate": 33.995792,
+          "inspect.media": 24.054125,
+          "inspect.sqlite": 3.934666,
+          "inspect.facts": 31.977125,
+          "pipeline.inspect": 32.610333,
+          "pipeline.publish": 8.682625,
+          "pipeline.total": 135.917125,
+          "adapter.total": 201.984
+        },
+        "artifact_sha256": "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494"
+      }
+    }
+  },
+  {
+    "case": "mixed-1000",
+    "variants": {
+      "current": {
+        "median_ms": 183.079,
+        "median_rss_mib": 39.625,
+        "stages_ms": {},
+        "artifact_sha256": "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d"
+      },
+      "coarse": {
+        "median_ms": 181.273,
+        "median_rss_mib": 39.0625,
+        "stages_ms": {
+          "adapter.parse": 1.288708,
+          "adapter.registration": 47.487625,
+          "adapter.notes": 6.221541,
+          "project.validate": 0.146667,
+          "project.payload": 1.204167,
+          "project.lower_product": 4.599792,
+          "normalize.lowering": 6.876125,
+          "media.prepare": 32.960709,
+          "normalize.media_refs": 2.717167,
+          "normalize.core": 36.849083,
+          "normalize.total": 45.054625,
+          "runtime.defaults": 3.037917,
+          "pipeline.prepare": 49.862083,
+          "project.resolved_identities": 0.611459,
+          "pipeline.reconcile": 4.216125,
+          "writer.validate": 0.942542,
+          "writer.staging": 4.660458,
+          "sqlite.schema": 2.303334,
+          "sqlite.populate": 11.701459,
+          "sqlite.compact": 6.077291,
+          "sqlite.total": 20.32225,
+          "apkg.collection_zstd": 2.671584,
+          "apkg.total": 24.928833,
+          "pipeline.generate": 31.98,
+          "inspect.media": 16.495792,
+          "inspect.sqlite": 3.885834,
+          "inspect.facts": 23.881542,
+          "pipeline.inspect": 24.333792,
+          "pipeline.publish": 6.9715,
+          "pipeline.total": 119.539833,
+          "adapter.total": 176.930625
+        },
+        "artifact_sha256": "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d"
+      }
+    }
+  },
+  {
+    "case": "shared-1000",
+    "variants": {
+      "current": {
+        "median_ms": 83.474,
+        "median_rss_mib": 35.5625,
+        "stages_ms": {},
+        "artifact_sha256": "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3"
+      },
+      "coarse": {
+        "median_ms": 84.278,
+        "median_rss_mib": 35.375,
+        "stages_ms": {
+          "adapter.parse": 1.060041,
+          "adapter.registration": 3.265084,
+          "adapter.notes": 6.297666,
+          "project.validate": 0.139792,
+          "project.payload": 1.143625,
+          "project.lower_product": 4.622083,
+          "normalize.lowering": 6.90125,
+          "media.prepare": 2.49775,
+          "normalize.media_refs": 2.700083,
+          "normalize.core": 5.44125,
+          "normalize.total": 12.759875,
+          "runtime.defaults": 3.051458,
+          "pipeline.prepare": 17.249167,
+          "project.resolved_identities": 0.564292,
+          "pipeline.reconcile": 4.058542,
+          "writer.validate": 0.358,
+          "writer.staging": 3.038542,
+          "sqlite.schema": 2.34625,
+          "sqlite.populate": 11.764417,
+          "sqlite.compact": 6.126542,
+          "sqlite.total": 20.5525,
+          "apkg.collection_zstd": 2.622417,
+          "apkg.total": 24.889125,
+          "pipeline.generate": 29.24575,
+          "inspect.media": 1.571834,
+          "inspect.sqlite": 3.895083,
+          "inspect.facts": 7.61125,
+          "pipeline.inspect": 7.70175,
+          "pipeline.publish": 5.786833,
+          "pipeline.total": 66.1585,
+          "adapter.total": 79.491084
+        },
+        "artifact_sha256": "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3"
+      }
+    }
+  },
+  {
+    "case": "text-100",
+    "variants": {
+      "current": {
+        "median_ms": 28.924,
+        "median_rss_mib": 14.125,
+        "stages_ms": {},
+        "artifact_sha256": "fa4e385b1b3dc0ff5bc347bd3d95e3fdc5e41fb45772331d46de89b7490219f1"
+      },
+      "coarse": {
+        "median_ms": 27.663,
+        "median_rss_mib": 14.109375,
+        "stages_ms": {
+          "adapter.parse": 0.172167,
+          "adapter.registration": 0.000708,
+          "adapter.notes": 0.70825,
+          "project.validate": 0.016167,
+          "project.payload": 0.128833,
+          "project.lower_product": 0.509458,
+          "normalize.lowering": 0.703667,
+          "media.prepare": 0.00025,
+          "normalize.media_refs": 0.147417,
+          "normalize.core": 0.1825,
+          "normalize.total": 0.924458,
+          "runtime.defaults": 3.178416,
+          "pipeline.prepare": 4.534417,
+          "project.resolved_identities": 0.059666,
+          "pipeline.reconcile": 0.425042,
+          "writer.validate": 0.033125,
+          "writer.staging": 0.4885,
+          "sqlite.schema": 2.1715,
+          "sqlite.populate": 2.019792,
+          "sqlite.compact": 1.996417,
+          "sqlite.total": 6.616167,
+          "apkg.collection_zstd": 0.526125,
+          "apkg.total": 7.881208,
+          "pipeline.generate": 8.680667,
+          "inspect.media": 0.012917,
+          "inspect.sqlite": 0.811125,
+          "inspect.facts": 1.53925,
+          "pipeline.inspect": 1.551667,
+          "pipeline.publish": 5.750917,
+          "pipeline.total": 22.223542,
+          "adapter.total": 23.401334
+        },
+        "artifact_sha256": "fa4e385b1b3dc0ff5bc347bd3d95e3fdc5e41fb45772331d46de89b7490219f1"
+      }
+    }
+  },
+  {
+    "case": "text-10000",
+    "variants": {
+      "current": {
+        "median_ms": 582.181,
+        "median_rss_mib": 147.296875,
+        "stages_ms": {},
+        "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a"
+      },
+      "coarse": {
+        "median_ms": 583.641,
+        "median_rss_mib": 145.953125,
+        "stages_ms": {
+          "adapter.parse": 8.194625,
+          "adapter.registration": 0.00075,
+          "adapter.notes": 58.325583,
+          "project.validate": 1.81375,
+          "project.payload": 14.757334,
+          "project.lower_product": 51.950542,
+          "normalize.lowering": 82.743917,
+          "media.prepare": 0.000291,
+          "normalize.media_refs": 11.245041,
+          "normalize.core": 12.782084,
+          "normalize.total": 100.663709,
+          "runtime.defaults": 3.192625,
+          "pipeline.prepare": 114.180833,
+          "project.resolved_identities": 8.582417,
+          "pipeline.reconcile": 49.042167,
+          "writer.validate": 3.245542,
+          "writer.staging": 16.67325,
+          "sqlite.schema": 2.388875,
+          "sqlite.populate": 125.410042,
+          "sqlite.compact": 50.300875,
+          "sqlite.total": 178.769292,
+          "apkg.collection_zstd": 31.509375,
+          "apkg.total": 214.23325,
+          "pipeline.generate": 244.769625,
+          "inspect.media": 0.011041,
+          "inspect.sqlite": 38.994625,
+          "inspect.facts": 52.830792,
+          "pipeline.inspect": 52.855458,
+          "pipeline.publish": 9.163541,
+          "pipeline.total": 481.6495,
+          "adapter.total": 577.5565
+        },
+        "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a"
+      }
+    }
+  },
+  {
+    "case": "long-back-1000",
+    "variants": {
+      "current": {
+        "median_ms": 167.452,
+        "median_rss_mib": 61.609375,
+        "stages_ms": {},
+        "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4"
+      },
+      "coarse": {
+        "median_ms": 170.274,
+        "median_rss_mib": 60.9375,
+        "stages_ms": {
+          "adapter.parse": 8.306125,
+          "adapter.registration": 0.000834,
+          "adapter.notes": 14.578958,
+          "project.validate": 0.138708,
+          "project.payload": 2.370709,
+          "project.lower_product": 5.727958,
+          "normalize.lowering": 8.14925,
+          "media.prepare": 0.000209,
+          "normalize.media_refs": 3.264042,
+          "normalize.core": 3.3595,
+          "normalize.total": 11.858583,
+          "runtime.defaults": 3.180875,
+          "pipeline.prepare": 16.462625,
+          "project.resolved_identities": 0.61675,
+          "pipeline.reconcile": 12.743916,
+          "writer.validate": 0.297208,
+          "writer.staging": 17.424708,
+          "sqlite.schema": 2.164667,
+          "sqlite.populate": 27.994708,
+          "sqlite.compact": 22.909166,
+          "sqlite.total": 54.647167,
+          "apkg.collection_zstd": 6.469625,
+          "apkg.total": 62.829333,
+          "pipeline.generate": 81.731875,
+          "inspect.media": 0.010041,
+          "inspect.sqlite": 12.392875,
+          "inspect.facts": 17.908958,
+          "pipeline.inspect": 17.928875,
+          "pipeline.publish": 7.124333,
+          "pipeline.total": 138.072167,
+          "adapter.total": 165.335208
+        },
+        "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4"
+      }
+    }
+  },
+  {
+    "case": "boundary-65536",
+    "variants": {
+      "current": {
+        "median_ms": 246.688,
+        "median_rss_mib": 41.140625,
+        "stages_ms": {},
+        "artifact_sha256": "47f9001ab18f5d7f3b1eb05aeaf228add70873aa752be3ad6fd38e57b48654a2"
+      },
+      "coarse": {
+        "median_ms": 251.452,
+        "median_rss_mib": 40.5625,
+        "stages_ms": {
+          "adapter.parse": 1.383208,
+          "adapter.registration": 78.488708,
+          "adapter.notes": 6.58825,
+          "project.validate": 0.137375,
+          "project.payload": 1.179292,
+          "project.lower_product": 4.607167,
+          "normalize.lowering": 6.761959,
+          "media.prepare": 52.1,
+          "normalize.media_refs": 2.9425,
+          "normalize.core": 56.855875,
+          "normalize.total": 65.481083,
+          "runtime.defaults": 3.052666,
+          "pipeline.prepare": 70.677792,
+          "project.resolved_identities": 0.656125,
+          "pipeline.reconcile": 4.236583,
+          "writer.validate": 1.291167,
+          "writer.staging": 5.983416,
+          "sqlite.schema": 2.265375,
+          "sqlite.populate": 12.329917,
+          "sqlite.compact": 6.489208,
+          "sqlite.total": 21.561334,
+          "apkg.collection_zstd": 2.727083,
+          "apkg.total": 27.706709,
+          "pipeline.generate": 35.991041,
+          "inspect.media": 23.112791,
+          "inspect.sqlite": 3.901459,
+          "inspect.facts": 31.268625,
+          "pipeline.inspect": 31.902417,
+          "pipeline.publish": 8.623292,
+          "pipeline.total": 153.399166,
+          "adapter.total": 246.763708
+        },
+        "artifact_sha256": "47f9001ab18f5d7f3b1eb05aeaf228add70873aa752be3ad6fd38e57b48654a2"
+      }
+    }
+  },
+  {
+    "case": "boundary-65537",
+    "variants": {
+      "current": {
+        "median_ms": 251.254,
+        "median_rss_mib": 41.40625,
+        "stages_ms": {},
+        "artifact_sha256": "d595feca90746e630436258127141708fa83349cc1464fb6579bf21a4bb58663"
+      },
+      "coarse": {
+        "median_ms": 248.303,
+        "median_rss_mib": 40.53125,
+        "stages_ms": {
+          "adapter.parse": 1.399084,
+          "adapter.registration": 78.230917,
+          "adapter.notes": 6.671625,
+          "project.validate": 0.133459,
+          "project.payload": 1.160334,
+          "project.lower_product": 4.672917,
+          "normalize.lowering": 7.030291,
+          "media.prepare": 52.055084,
+          "normalize.media_refs": 2.961,
+          "normalize.core": 56.738958,
+          "normalize.total": 65.503417,
+          "runtime.defaults": 3.041709,
+          "pipeline.prepare": 70.634458,
+          "project.resolved_identities": 0.668291,
+          "pipeline.reconcile": 4.429875,
+          "writer.validate": 1.290333,
+          "writer.staging": 6.099833,
+          "sqlite.schema": 2.210291,
+          "sqlite.populate": 12.428625,
+          "sqlite.compact": 5.989541,
+          "sqlite.total": 20.990625,
+          "apkg.collection_zstd": 2.780708,
+          "apkg.total": 26.666875,
+          "pipeline.generate": 35.296708,
+          "inspect.media": 23.184,
+          "inspect.sqlite": 3.968959,
+          "inspect.facts": 31.073792,
+          "pipeline.inspect": 31.716167,
+          "pipeline.publish": 8.456125,
+          "pipeline.total": 152.648792,
+          "adapter.total": 243.755708
+        },
+        "artifact_sha256": "d595feca90746e630436258127141708fa83349cc1464fb6579bf21a4bb58663"
+      }
+    }
+  },
+  {
+    "case": "image-256x256k",
+    "variants": {
+      "current": {
+        "median_ms": 162.912,
+        "median_rss_mib": 31.578125,
+        "stages_ms": {},
+        "artifact_sha256": "2888cfc954a52b32994271a6388493a213c9556650b41aa95a5c8d50bf87ddad"
+      },
+      "coarse": {
+        "median_ms": 162.967,
+        "median_rss_mib": 31.0,
+        "stages_ms": {
+          "adapter.parse": 0.46375,
+          "adapter.registration": 55.038375,
+          "adapter.notes": 1.814083,
+          "project.validate": 0.0335,
+          "project.payload": 0.295083,
+          "project.lower_product": 1.177875,
+          "normalize.lowering": 1.672958,
+          "media.prepare": 45.634959,
+          "normalize.media_refs": 0.802167,
+          "normalize.core": 46.903875,
+          "normalize.total": 49.11275,
+          "runtime.defaults": 3.043084,
+          "pipeline.prepare": 52.963792,
+          "project.resolved_identities": 0.136833,
+          "pipeline.reconcile": 1.013792,
+          "writer.validate": 0.303958,
+          "writer.staging": 1.741,
+          "sqlite.schema": 2.168416,
+          "sqlite.populate": 3.786209,
+          "sqlite.compact": 2.704541,
+          "sqlite.total": 8.804041,
+          "apkg.collection_zstd": 0.784834,
+          "apkg.total": 10.655833,
+          "pipeline.generate": 13.161709,
+          "inspect.media": 18.429875,
+          "inspect.sqlite": 1.459375,
+          "inspect.facts": 21.574792,
+          "pipeline.inspect": 21.732333,
+          "pipeline.publish": 10.280625,
+          "pipeline.total": 100.22375,
+          "adapter.total": 158.561542
+        },
+        "artifact_sha256": "2888cfc954a52b32994271a6388493a213c9556650b41aa95a5c8d50bf87ddad"
+      }
+    }
+  },
+  {
+    "case": "image-64x1m",
+    "variants": {
+      "current": {
+        "median_ms": 176.338,
+        "median_rss_mib": 25.875,
+        "stages_ms": {},
+        "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34"
+      },
+      "coarse": {
+        "median_ms": 185.397,
+        "median_rss_mib": 25.828125,
+        "stages_ms": {
+          "adapter.parse": 0.197,
+          "adapter.registration": 47.65375,
+          "adapter.notes": 0.562458,
+          "project.validate": 0.012292,
+          "project.payload": 0.087958,
+          "project.lower_product": 0.334792,
+          "normalize.lowering": 0.462208,
+          "media.prepare": 76.487917,
+          "normalize.media_refs": 0.25625,
+          "normalize.core": 76.945875,
+          "normalize.total": 77.53975,
+          "runtime.defaults": 3.109458,
+          "pipeline.prepare": 81.060416,
+          "project.resolved_identities": 0.035333,
+          "pipeline.reconcile": 0.281417,
+          "writer.validate": 0.080917,
+          "writer.staging": 0.733417,
+          "sqlite.schema": 2.139791,
+          "sqlite.populate": 1.614916,
+          "sqlite.compact": 1.81875,
+          "sqlite.total": 5.834292,
+          "apkg.collection_zstd": 0.384083,
+          "apkg.total": 7.019834,
+          "pipeline.generate": 8.111583,
+          "inspect.media": 26.441959,
+          "inspect.sqlite": 0.845625,
+          "inspect.facts": 28.1885,
+          "pipeline.inspect": 28.2335,
+          "pipeline.publish": 11.887083,
+          "pipeline.total": 131.596417,
+          "adapter.total": 180.289625
+        },
+        "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34"
+      }
+    }
+  },
+  {
+    "case": "image-skewed-128",
+    "variants": {
+      "current": {
+        "median_ms": 134.936,
+        "median_rss_mib": 26.609375,
+        "stages_ms": {},
+        "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3"
+      },
+      "coarse": {
+        "median_ms": 135.436,
+        "median_rss_mib": 26.671875,
+        "stages_ms": {
+          "adapter.parse": 0.268625,
+          "adapter.registration": 31.495875,
+          "adapter.notes": 1.006417,
+          "project.validate": 0.018625,
+          "project.payload": 0.15125,
+          "project.lower_product": 0.600875,
+          "normalize.lowering": 0.855417,
+          "media.prepare": 43.695625,
+          "normalize.media_refs": 0.446208,
+          "normalize.core": 44.396334,
+          "normalize.total": 45.57825,
+          "runtime.defaults": 3.069917,
+          "pipeline.prepare": 49.167542,
+          "project.resolved_identities": 0.071833,
+          "pipeline.reconcile": 0.512334,
+          "writer.validate": 0.15125,
+          "writer.staging": 1.076417,
+          "sqlite.schema": 2.117291,
+          "sqlite.populate": 2.424666,
+          "sqlite.compact": 2.271625,
+          "sqlite.total": 7.032791,
+          "apkg.collection_zstd": 0.468667,
+          "apkg.total": 9.143292,
+          "pipeline.generate": 10.722792,
+          "inspect.media": 22.736083,
+          "inspect.sqlite": 1.042167,
+          "inspect.facts": 25.350834,
+          "pipeline.inspect": 25.439792,
+          "pipeline.publish": 9.282458,
+          "pipeline.total": 96.715875,
+          "adapter.total": 130.357167
+        },
+        "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3"
+      }
+    }
+  }
+]

@@ -7,6 +7,7 @@ pub(crate) mod identity;
 mod inspect_limits;
 pub(crate) mod note_data;
 pub(crate) mod note_revision;
+mod pipelined_sha1;
 pub(crate) mod stream_zip;
 
 pub mod apkg;

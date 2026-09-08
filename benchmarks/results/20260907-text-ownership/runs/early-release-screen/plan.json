@@ -1,0 +1,76 @@
+{
+  "args": {
+    "name": "early-release-screen",
+    "variants": [
+      "current",
+      "early-release"
+    ],
+    "cases": [
+      "text-1000",
+      "text-10000",
+      "long-back-quarter-1000",
+      "long-back-1000",
+      "long-back-quadruple-1000"
+    ],
+    "distinct_containers": false,
+    "env": [],
+    "warmups": 2,
+    "repeats": 7
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376
+    },
+    {
+      "name": "long-back-quarter-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+      "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 1811460,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+    },
+    {
+      "name": "long-back-quadruple-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+      "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 27409788,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+    }
+  ],
+  "binaries": {
+    "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+    "early-release": "156bc6067d8a1e9ff572fb0a9b0b3b2f8c978702d4c2bbf7e79f2cddf1c946f6"
+  },
+  "utc": "2026-09-07T14:41:04.021988+00:00",
+  "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t33%; discharging; 2:26 remaining present: true\n",
+  "seed": 20260907
+}

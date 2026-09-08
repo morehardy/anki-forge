@@ -1,0 +1,25 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+error[E0603]: enum import `AuthoringMediaSource` is private
+   --> anki_forge/src/prepared_media.rs:407:43
+    |
+407 |         use crate::authoring_core::model::AuthoringMediaSource;
+    |                                           ^^^^^^^^^^^^^^^^^^^^ private enum import
+    |
+note: the enum import `AuthoringMediaSource` is defined here...
+   --> anki_forge/src/authoring_core/model.rs:2:5
+    |
+  2 |     AuthoringMediaSource, MediaBinding, MediaObject, MediaReference,
+    |     ^^^^^^^^^^^^^^^^^^^^
+note: ...and refers to the enum `AuthoringMediaSource` which is defined here
+   --> anki_forge/src/authoring_core/media.rs:13:1
+    |
+ 13 | pub enum AuthoringMediaSource {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ you could import this directly
+help: import `AuthoringMediaSource` through the re-export
+    |
+407 -         use crate::authoring_core::model::AuthoringMediaSource;
+407 +         use authoring_core::media::AuthoringMediaSource;
+    |
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `anki_forge` (lib test) due to 1 previous error

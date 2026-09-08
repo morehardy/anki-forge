@@ -4,3 +4,14 @@ contracts/** -text
 
 # Runtime artifacts from different OS runners must carry identical npm notices.
 bindings/node/**/THIRD_PARTY_NOTICES.md text eol=lf
+
+# Benchmark archives are sealed by SHA256SUMS; preserve their original bytes on
+# every platform and collapse generated evidence in code review by default.
+benchmarks/results/** -text linguist-generated=true
+# Renderer output, captured logs and replayable patches contain intentional
+# whitespace. Keep ordinary source and benchmark documentation checks enabled.
+benchmarks/results/**/*.svg -whitespace
+benchmarks/results/**/*.log -whitespace
+benchmarks/results/**/*.patch -whitespace
+# This already-sealed diagnostic transcript also includes a captured blank line.
+benchmarks/results/20260907-inspection-parallel-hash/implementation.md -whitespace

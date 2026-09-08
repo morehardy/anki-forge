@@ -2,11 +2,11 @@
 //! first write, so the package fingerprint covers final bytes without rereads.
 use std::io::{self, BufWriter, Write};
 
-use sha1::{Digest, Sha1};
+use super::pipelined_sha1::PipelinedSha1;
 
 pub(crate) struct StreamZip<W: Write> {
     output: BufWriter<W>,
-    hash: Sha1,
+    hash: PipelinedSha1,
     position: u64,
     central: Vec<Vec<u8>>,
 }
@@ -15,7 +15,7 @@ impl<W: Write> StreamZip<W> {
     pub(crate) fn new(output: W) -> Self {
         Self {
             output: BufWriter::with_capacity(128 * 1024, output),
-            hash: Sha1::new(),
+            hash: PipelinedSha1::new(),
             position: 0,
             central: Vec::new(),
         }
@@ -154,7 +154,7 @@ impl<W: Write> StreamZip<W> {
         u16le(&mut end, 0);
         self.write_all(&end)?;
         self.output.flush()?;
-        let fingerprint = format!("package:{}", hex::encode(self.hash.finalize()));
+        let fingerprint = format!("package:{}", self.hash.finish()?);
         Ok((
             self.output
                 .into_inner()
@@ -167,7 +167,7 @@ impl<W: Write> StreamZip<W> {
 impl<W: Write> Write for StreamZip<W> {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
         let written = self.output.write(bytes)?;
-        self.hash.update(&bytes[..written]);
+        self.hash.update(&bytes[..written])?;
         self.position = self
             .position
             .checked_add(written as u64)
@@ -192,7 +192,90 @@ fn u64le(output: &mut Vec<u8>, value: u64) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use sha1::{Digest, Sha1};
     use std::io::{Cursor, Read};
+
+    struct ShortWriter {
+        bytes: Vec<u8>,
+        fail_after: Option<usize>,
+    }
+
+    impl Write for ShortWriter {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            let remaining = self.fail_after.unwrap_or(usize::MAX) - self.bytes.len();
+            if remaining == 0 {
+                return Err(io::Error::other("injected write failure"));
+            }
+            let count = bytes.len().min(4093).min(remaining);
+            self.bytes.extend_from_slice(&bytes[..count]);
+            Ok(count)
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn large_zip_keeps_exact_bytes_and_fingerprint_with_short_writes() {
+        let payload: Vec<_> = (0..2 * 1024 * 1024 + 17).map(|i| (i * 37) as u8).collect();
+        let entries = [
+            ("large", payload.as_slice()),
+            ("empty", &[]),
+            ("tail", b"tail".as_slice()),
+        ];
+        let mut stream = StreamZip::new(ShortWriter {
+            bytes: Vec::new(),
+            fail_after: None,
+        });
+        let mut reference = zip::ZipWriter::new(Cursor::new(Vec::new()));
+        for (name, bytes) in entries {
+            stream
+                .entry(name, bytes.len() as u64, crc32fast::hash(bytes), |writer| {
+                    for chunk in bytes.chunks(65537) {
+                        writer.write_all(chunk)?;
+                    }
+                    Ok(())
+                })
+                .unwrap();
+            reference
+                .start_file(
+                    name,
+                    zip::write::SimpleFileOptions::default()
+                        .compression_method(zip::CompressionMethod::Stored),
+                )
+                .unwrap();
+            reference.write_all(bytes).unwrap();
+        }
+        let (written, fingerprint) = stream.finish().unwrap();
+        assert_eq!(written.bytes, reference.finish().unwrap().into_inner());
+        assert_eq!(
+            fingerprint,
+            format!("package:{}", hex::encode(Sha1::digest(&written.bytes)))
+        );
+    }
+
+    #[test]
+    fn large_zip_propagates_midstream_output_errors() {
+        let bytes = vec![41; 2 * 1024 * 1024];
+        let mut stream = StreamZip::new(ShortWriter {
+            bytes: Vec::new(),
+            fail_after: Some(1024 * 1024 + 7),
+        });
+        let error = stream
+            .entry(
+                "large",
+                bytes.len() as u64,
+                crc32fast::hash(&bytes),
+                |writer| {
+                    writer.write_all(&bytes)?;
+                    Ok(())
+                },
+            )
+            .unwrap_err();
+        assert!(error.to_string().contains("injected write failure"));
+        drop(stream);
+    }
 
     #[test]
     fn final_bytes_match_the_existing_zip_writer_and_fingerprint() {

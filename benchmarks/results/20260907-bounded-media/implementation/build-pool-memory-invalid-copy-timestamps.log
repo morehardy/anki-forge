@@ -1,0 +1,10 @@
+warning: use of deprecated associated function `tempfile::TempPath::from_path`: use TempPath::try_from_path
+    --> /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/bounded-media-20260907/profile-source/anki_forge/src/product/project.rs:2211:58
+     |
+2211 |                     input_files.push(tempfile::TempPath::from_path(owned_path));
+     |                                                          ^^^^^^^^^
+     |
+     = note: `#[warn(deprecated)]` on by default
+
+warning: `anki_forge` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.10s

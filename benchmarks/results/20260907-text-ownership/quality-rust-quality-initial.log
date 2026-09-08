@@ -1,0 +1,199 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.15s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-91d68e3e2c83214d)
+
+running 126 tests
+test authoring_core::template_parser::tests::reports_mismatched_section_names ... ok
+test authoring_core::template_parser::tests::parses_filters_and_balanced_sections ... ok
+test authoring_core::template_semantics::tests::unconditional_visible_content_survives_inverted_sections ... ok
+test authoring_core::template_semantics::tests::static_front_is_always_generated ... ok
+test authoring_core::template_semantics::tests::runtime_metadata_special_fields_are_not_inferred_as_always_nonempty ... ok
+test authoring_core::template_semantics::tests::direct_fields_form_an_any_requirement ... ok
+test authoring_core::template_semantics::tests::disjunction_of_conjunctions_is_unrepresentable ... ok
+test authoring_core::template_semantics::tests::media_attribute_depends_on_its_field ... ok
+test authoring_core::template_semantics::tests::positive_section_forms_an_all_requirement ... ok
+test authoring_core::template_semantics::tests::declared_fields_take_precedence_over_runtime_metadata_names ... ok
+test authoring_core::template_semantics::tests::script_style_and_whitespace_entities_are_not_visible_static_content ... ok
+test authoring_core::template_semantics::tests::inverted_only_visibility_is_not_always ... ok
+test prepared_media::payload::tests::empty_and_zero_budget_payloads_still_preserve_the_stream ... ok
+test prepared_media::tests::one_large_encoded_payload_uses_available_build_memory ... ok
+test deck::media::tests::media_source_dir_metadata_rejects_non_directory ... ok
+test prepared_media::payload::tests::idle_budget_is_shared_and_exhaustion_spills_without_losing_bytes ... ok
+test product::content::tests::escape_html_escapes_text_once_in_source_order ... ok
+test product::content::tests::consuming_nested_content_preserves_rendering ... ok
+test prepared_media::payload::tests::concurrent_payloads_share_the_bound_and_return_buffers ... ok
+test deck::media::tests::same_sha_registration_repairs_missing_raster_metadata ... ok
+test prepared_media::tests::encoded_payload_spills_before_unbounded_growth_and_preserves_bytes ... ok
+test deck::media::tests::file_registration_matches_inline_fingerprints_and_dimensions ... ok
+test product::model::tests::non_string_product_version_records_transport_diagnostic ... ok
+test product::model::tests::unknown_field_content_kind_deserializes_into_v2_payload ... ok
+test product::lowering::owned_tests::owned_lowering_moves_html_allocations_into_authoring_fields ... ok
+test product::model::tests::unknown_media_source_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unknown_generation_rule_kind_deserializes_into_v2_payload ... ok
+test product::model::tests::unsupported_string_product_version_records_transport_diagnostic ... ok
+test product::project::counts::tests::card_count_prefers_zero_card_inspect_result_over_fallback ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_custom_cloze_and_transport_diagnostics ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_duplicate_field_keys_names_and_notetype_resolution ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_diagnostic_order_and_partial_notes ... ok
+test product::project::tests::build_maps_missing_media_reference_to_index_source_for_blank_and_duplicate_stable_ids ... ok
+test product::project::tests::duplicate_diagnostics_with_the_same_source_are_collapsed ... ok
+test prepared_media::payload::tests::short_output_errors_and_panics_release_all_leases ... ok
+test product::project::tests::build_rejects_stock_collision_before_scanning_custom_template_media ... ok
+test product::project::tests::build_reports_duplicate_notetype_template_and_css_media_sources_by_index ... ok
+test product::project::tests::lower_rejects_custom_notetype_stock_collision_before_authoring ... ok
+test product::project::tests::normalization_failure_diagnostics_include_lowering_diagnostics ... ok
+test product::project::tests::product_diagnostic_help_covers_actionable_media_storage_codes ... ok
+test product::project::tests::product_helper_wiring_lowering_diagnostics_map_to_errors ... ok
+test product::project::tests::product_v2_normalize_preserves_required_field_source_path ... ok
+test product::project::tests::product_v2_normalize_preserves_unknown_media_source_path ... ok
+test product::project::tests::consuming_project_lowering_moves_long_html_storage ... ok
+test product::project::tests::lower_maps_duplicate_custom_notetype_sources_to_project_indices_when_stock_is_implicit ... ok
+test product::project::tests::lower_keeps_later_note_source_after_required_note_is_skipped ... ok
+test product::project::tests::lower_keeps_index_source_when_colliding_identity_note_is_skipped ... ok
+test product::project::tests::validate_still_reports_blank_stable_id_for_internal_invalid_state ... ok
+test product::project::tests::validate_still_reports_duplicate_stable_ids_for_internal_invalid_state ... ok
+test product::project::tests::writer_result_status_maps_to_typed_build_status ... ok
+test product::project::tests::validate_still_reports_implicit_stock_collision_for_internal_invalid_state ... ok
+test product::template_engine::tests::rejects_empty_render_and_section_fields ... ok
+test product::template_engine::tests::reports_unknown_fields_and_mismatched_sections ... ok
+test product::template_engine::tests::validates_fields_filters_and_balanced_sections ... ok
+test product::template_engine::tests::validates_multi_word_field_names_as_complete_names ... ok
+test product::project::tests::project_owned_lowering_preserves_invalid_partial_plan_and_diagnostics ... ok
+test product::project::tests::project_owned_lowering_preserves_canonical_fields_and_source_paths ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_duplicate_and_conflicting_entries ... ok
+test runtime::embedded::tests::embedded_file_inventory_rejects_links_and_gzip_corruption ... ok
+test runtime::schema::tests::load_schema_reuses_compiled_schema_for_the_same_path ... ok
+test writer_core::apkg::tests::apkg_media_size_accepts_uint32_max ... ok
+test writer_core::apkg::tests::apkg_media_size_rejects_values_above_uint32_range ... ok
+test product::project::atomic_output_tests::product_build_preserves_existing_target_when_replace_fails ... ok
+test runtime::embedded::tests::in_memory_defaults_preserve_relative_path_resolution_inside_contracts ... ok
+test product::comparison::snapshot_tests::unreadable_baseline_stays_unavailable_after_a_file_appears ... ok
+test writer_core::apkg::tests::field_checksum_uses_stripped_first_field_text_for_html_boundaries ... ok
+test writer_core::apkg::tests::guid_plan_validation_keeps_assignments_and_exact_mismatch_errors ... ok
+test writer_core::apkg::tests::media_entry_legacy_zip_filename_uses_upstream_tag_255_uint32 ... ok
+test runtime::embedded::tests::in_memory_defaults_match_complete_path_runtime ... ok
+test writer_core::apkg::tests::storage_values_keep_field_order_sort_checksum_and_empty_values ... ok
+test writer_core::apkg::tests::embedded_upgrade_notice_matches_schema_generated_database ... ok
+ZipWriter drop failed: Io(Os { code: 9, kind: Uncategorized, message: "Bad file descriptor" })test writer_core::apkg::tests::streamed_collection_propagates_input_and_output_io_errors ... ok
+test writer_core::apkg::tests::failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_handles_anki_boundary_vectors ... ok
+test writer_core::apkg::tests::streamed_package_fingerprint_matches_byte_fingerprint ... ok
+test writer_core::apkg::tests::streamed_collection_keeps_compacted_sqlite_bytes_and_removes_its_tempfile ... ok
+test writer_core::apkg::tests::typed_writer_rejects_invalid_model_and_guid_plans_before_replacing_output ... ok
+test product::comparison::snapshot_tests::captured_baseline_survives_replacement_for_identity_and_diff ... ok
+test writer_core::build::tests::apkg_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::build::tests::apkg_non_media_errors_are_returned_as_build_diagnostics ... ok
+test writer_core::card_plan::tests::anki_default_renders_nonempty_special_fields ... ok
+test writer_core::card_plan::tests::anki_default_uses_rendered_front_emptiness ... ok
+test writer_core::card_plan::tests::cloze_card_ords_are_distinct_sorted_and_zero_based ... ok
+test writer_core::card_plan::tests::malformed_and_zero_cloze_markers_are_reported ... ok
+test writer_core::apkg::tests::collection_population_rolls_back_after_a_note_and_card_were_written ... ok
+test writer_core::card_plan::tests::missing_cloze_ordinal_is_malformed_by_itself ... ok
+test writer_core::card_plan::tests::unclosed_and_nested_cloze_markers_are_reported ... ok
+test writer_core::card_plan::tests::unrelated_mustache_text_starting_with_c_is_not_cloze ... ok
+test writer_core::deck_name::tests::human_names_use_native_separator_and_component_normalization ... ok
+test writer_core::deck_name::tests::registry_adds_each_parent_and_resolves_requested_leaf ... ok
+test writer_core::deck_name::tests::registry_keeps_parent_spellings_and_ids_independent_of_request_order ... ok
+test runtime::embedded::tests::in_memory_defaults_reject_invalid_policy_and_context ... ok
+test writer_core::inspect::summary_tests::interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest ... ok
+test product::lowering::owned_tests::owned_lowering_preserves_stock_custom_content_and_document_views ... ok
+test writer_core::inspect::summary_tests::serial_media_hash_does_not_allocate_payload_buffers ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_never_panics ... ok
+test writer_core::apkg::tests::strip_html_preserving_media_filenames_preserves_generated_media_attrs ... ok
+test writer_core::apkg::tests::streamed_collection_preserves_buffered_zip_bytes_across_block_boundaries ... ok
+test writer_core::inspect::summary_tests::media_hash_streams_bounded_blocks_and_resets_between_files ... ok
+test writer_core::inspect::summary_tests::summary_counts_mixed_notetypes_and_sparse_cloze_cards ... ok
+test writer_core::inspect::summary_tests::summary_distinguishes_negative_and_u32_max_ordinals_before_deduplication ... ok
+test writer_core::inspect::summary_tests::summary_enforces_identical_resource_limits_and_media_boundaries ... ok
+test writer_core::inspect::summary_tests::summary_counts_actual_cards_with_sparse_ordinals_and_prefix_guids ... ok
+test writer_core::inspect::summary_tests::summary_keeps_archive_sqlite_and_protobuf_errors ... ok
+test writer_core::inspect::tests::apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_does_not_strip_prefix_collisions ... ok
+test writer_core::inspect::tests::artifact_path_from_ref_rejects_path_traversal ... ok
+test writer_core::inspect::summary_tests::summary_keeps_signed_ordinals_orphan_cards_and_missing_decks ... ok
+test writer_core::inspect::summary_tests::summary_keeps_missing_and_malformed_media_degradation ... ok
+test writer_core::inspect::summary_tests::summary_preserves_existing_duplicate_guid_and_ordinal_observations ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_fallback_and_assignment_variants ... ok
+test writer_core::note_revision::tests::note_revision_keeps_canonical_hashes_for_empty_wide_and_escaped_fields ... ok
+test writer_core::stream_zip::tests::final_bytes_match_the_existing_zip_writer_and_fingerprint ... ok
+test writer_core::inspect::summary_tests::failed_current_summary_never_publishes_even_when_inspect_is_hidden ... ok
+test writer_core::staging::canonical_stream_tests::streamed_manifest_matches_the_previous_canonical_bytes_and_hash ... ok
+test writer_core::stream_zip::tests::wrong_length_and_destination_errors_abort_writing ... ok
+test writer_core::inspect::summary_tests::summary_keeps_duplicate_notetype_metadata_ids_and_names ... ok
+test writer_core::stream_zip::tests::large_zip_propagates_midstream_output_errors ... ok
+test writer_core::note_data::tests::fresh_data_matches_existing_bytes_for_arbitrary_strings ... ok
+test writer_core::note_revision::tests::note_revision_matches_previous_canonical_serialization ... ok
+test writer_core::stream_zip::tests::large_zip_keeps_exact_bytes_and_fingerprint_with_short_writes ... ok
+test writer_core::inspect::summary_tests::summary_preserves_tolerated_note_content_and_identity_json ... ok
+test writer_core::inspect::summary_tests::summary_decodes_unused_sqlite_columns_and_keeps_error_precedence ... ok
+test runtime::embedded::tests::in_memory_defaults_validate_the_whole_manifest_and_asset_inventory ... ok
+test writer_core::stream_zip::tests::zip64_entry_count_is_readable_by_independent_zip_reader ... ok
+test prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures ... ok
+
+test result: ok. 126 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+     Running tests/custom_notetype_api_tests.rs (target/debug/deps/custom_notetype_api_tests-88422efe61f1c863)
+
+running 4 tests
+test custom_notetype_builder_records_keys_and_identity_recipe ... ok
+test project_rejects_template_field_references_missing_from_notetype ... ok
+test project_validate_preserves_unknown_filter_as_a_warning ... ok
+test project_build_reports_each_template_warning_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/deck_project_facade_tests.rs (target/debug/deps/deck_project_facade_tests-557715dfbcd031de)
+
+running 9 tests
+test imported_deck_keeps_legacy_stock_declarations_and_honors_project_metadata ... ok
+test project_from_deck_preserves_existing_image_occlusion_support ... ok
+test imported_deck_media_and_new_project_media_share_one_registry ... ok
+test project_from_deck_can_append_project_notes ... ok
+test borrowed_deck_can_repair_missing_media_after_failed_export ... ok
+test imported_deck_identity_provenance_survives_project_edits ... ok
+test imported_deck_keeps_duplicate_id_locations_after_clone ... ok
+test deck_build_matches_project_from_deck_for_stock_notes ... ok
+test borrowed_deck_exports_preserve_long_html_and_identity_evidence ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests/packaged_contract_tests.rs (target/debug/deps/packaged_contract_tests-02a0f8a69839c34b)
+
+running 1 test
+test packaged_crate_runs_the_supported_facade_with_embedded_contracts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/stable_facade_boundary_tests.rs (target/debug/deps/stable_facade_boundary_tests-be22ad7d694e27ec)
+
+running 3 tests
+test default_features_hide_project_normalization_ir ... ok
+test default_features_compile_the_documented_facade ... ok
+test default_features_hide_repository_internal_modules ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.61s
+
+    Checking anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+error: large size difference between variants
+ --> anki_forge/src/product/project/input.rs:5:1
+  |
+5 | / pub(super) enum BuildInput<'a> {
+6 | |     Project(Cow<'a, Project>),
+  | |     ------------------------- the largest variant contains at least 248 bytes
+7 | |     Document(&'a ProductDocument),
+  | |     ----------------------------- the second-largest variant contains at least 8 bytes
+8 | | }
+  | |_^ the entire enum is at least 248 bytes
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#large_enum_variant
+  = note: `-D clippy::large-enum-variant` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(clippy::large_enum_variant)]`
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+  |
+6 -     Project(Cow<'a, Project>),
+6 +     Project(Box<Cow<'a, Project>>),
+  |
+
+error: could not compile `anki_forge` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `anki_forge` (lib test) due to 1 previous error

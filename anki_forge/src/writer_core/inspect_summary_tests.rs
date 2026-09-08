@@ -4,6 +4,71 @@ use std::io::Read;
 use crate::product::{Note, Project};
 use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
 
+#[test]
+fn media_hash_streams_bounded_blocks_and_resets_between_files() {
+    let (sender, jobs) = std::sync::mpsc::sync_channel(1);
+    let (done, receiver) = std::sync::mpsc::sync_channel(1);
+    std::thread::scope(|scope| {
+        let worker = scope.spawn(move || hash_media_chunks(jobs, done));
+        for size in [
+            0,
+            31,
+            HASH_BUFFER_BYTES - 1,
+            HASH_BUFFER_BYTES,
+            HASH_BUFFER_BYTES + 1,
+            6 * HASH_BUFFER_BYTES + 13,
+            0,
+        ] {
+            let bytes: Vec<u8> = (0..size).map(|i| (i * 31) as u8).collect();
+            let mut sink = MediaHash::new(Some(&sender));
+            // Exercise short writes as well as blocks spanning many decoder reads.
+            for chunk in bytes.chunks(777) {
+                sink.write_all(chunk).unwrap();
+                assert!(sink.pending.capacity() <= HASH_BUFFER_BYTES);
+            }
+            assert_eq!(sink.finish().unwrap(), None);
+            assert_eq!(
+                receiver.recv().unwrap(),
+                hex::encode(sha1::Sha1::digest(&bytes))
+            );
+        }
+        drop(sender);
+        worker.join().unwrap();
+    });
+}
+
+#[test]
+fn serial_media_hash_does_not_allocate_payload_buffers() {
+    let bytes = vec![29; 3 * HASH_BUFFER_BYTES + 7];
+    let mut sink = MediaHash::new(None);
+    for chunk in bytes.chunks(8191) {
+        sink.write_all(chunk).unwrap();
+        assert_eq!(sink.pending.capacity(), 0);
+    }
+    assert_eq!(
+        sink.finish().unwrap(),
+        Some(hex::encode(sha1::Sha1::digest(&bytes)))
+    );
+}
+
+#[test]
+fn interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest() {
+    let (sender, jobs) = std::sync::mpsc::sync_channel(1);
+    let (done, receiver) = std::sync::mpsc::sync_channel(1);
+    std::thread::scope(|scope| {
+        let worker = scope.spawn(move || hash_media_chunks(jobs, done));
+        let mut sink = MediaHash::new(Some(&sender));
+        sink.write_all(&vec![7; 4 * HASH_BUFFER_BYTES + 1]).unwrap();
+        drop(sink);
+        drop(sender);
+        worker.join().unwrap();
+        assert_eq!(
+            receiver.try_recv(),
+            Err(std::sync::mpsc::TryRecvError::Disconnected)
+        );
+    });
+}
+
 fn package(path: &Path) {
     let mut project = Project::new("Summary").stable_id("summary");
     for id in ["note", "note-prefix"] {

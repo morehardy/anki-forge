@@ -173,6 +173,79 @@ fn multiple_media_entries_share_both_cumulative_budgets() {
 }
 
 #[test]
+fn many_media_keep_exact_hashes_across_small_and_streamed_payloads() {
+    use sha1::{Digest, Sha1};
+    let root = tempfile::tempdir().unwrap();
+    let sizes = [
+        0, 31, 65_535, 65_536, 65_537, 131_073, 262_143, 262_144, 262_145, 1_048_576,
+    ];
+    let payloads: Vec<Vec<u8>> = (0..30)
+        .map(|entry| {
+            (0..sizes[entry % sizes.len()])
+                .map(|i| (i * 31 + entry * 17) as u8)
+                .collect()
+        })
+        .collect();
+    for (version, method, nested) in [
+        (1, CompressionMethod::Deflated, false),
+        (2, CompressionMethod::Stored, false),
+        (3, CompressionMethod::Stored, true),
+        (3, CompressionMethod::Deflated, true),
+    ] {
+        let path = root.path().join(format!("many-{version}-{method:?}.apkg"));
+        write_archive(&path, version, &payloads, method, nested);
+        let report = inspect_apkg(&path).unwrap();
+        assert_eq!(report.observations.media.len(), payloads.len());
+        for (index, bytes) in payloads.iter().enumerate() {
+            assert_eq!(report.observations.media[index]["size"], bytes.len());
+            assert_eq!(
+                report.observations.media[index]["sha1"],
+                hex::encode(Sha1::digest(bytes))
+            );
+        }
+    }
+}
+
+#[test]
+fn many_media_keep_cumulative_limits_and_recover_after_late_failure() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("many-limits.apkg");
+    let sizes = [31, 65_537, 262_145, 1_048_577];
+    let payloads: Vec<_> = (0..20)
+        .map(|index| vec![5; sizes[index % sizes.len()]])
+        .collect();
+    let map_size = write_archive(&path, 1, &payloads, CompressionMethod::Stored, false);
+    let total = 2 + map_size as u64 + payloads.iter().map(|bytes| bytes.len() as u64).sum::<u64>();
+    let mut limits = InspectLimits::default();
+    limits.max_decoded_total_bytes = total - 1;
+    assert_limit(&path, &limits, "decoded_total_bytes");
+    limits.max_decoded_total_bytes = total;
+    limits.max_zip_total_bytes = total - 1;
+    assert_limit(&path, &limits, "zip_total_bytes");
+    limits.max_zip_total_bytes = total;
+    assert_eq!(
+        inspect_apkg_with_limits(&path, &limits)
+            .unwrap()
+            .observations
+            .media
+            .len(),
+        20
+    );
+
+    let mut frames: Vec<_> = payloads
+        .iter()
+        .map(|bytes| zstd::stream::encode_all(bytes.as_slice(), 0).unwrap())
+        .collect();
+    frames[19].pop();
+    write_archive(&path, 3, &frames, CompressionMethod::Stored, false);
+    let report = inspect_apkg(&path).unwrap();
+    assert_ne!(report.observation_status, "complete");
+    assert!(report.observations.media.is_empty());
+    write_archive(&path, 3, &payloads, CompressionMethod::Stored, true);
+    assert_eq!(inspect_apkg(&path).unwrap().observations.media.len(), 20);
+}
+
+#[test]
 fn concatenated_frames_share_budget_and_high_window_is_typed() {
     let root = tempfile::tempdir().unwrap();
     let path = root.path().join("frames.apkg");

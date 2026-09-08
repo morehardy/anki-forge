@@ -1,10 +1,11 @@
-//! Build-owned media prepared through bounded worker queues. Small encoded
-//! payloads go straight into the candidate ZIP; oversized ones spill to disk.
-use std::collections::{BTreeMap, BTreeSet};
+//! Build-owned media prepared through bounded worker queues. Encoded payloads
+//! share a fixed memory budget and spill to disk when it is exhausted.
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::fs::File;
-use std::io::{self, Read, Seek, SeekFrom, Write};
+use std::io::{self, Read, Write};
 use std::path::{Path, PathBuf};
-use std::sync::Mutex;
+use std::sync::mpsc::{sync_channel, SyncSender};
+use std::sync::{Arc, Mutex};
 
 use anyhow::{Context, Result};
 use sha1::{Digest, Sha1};
@@ -17,12 +18,11 @@ use crate::authoring_core::media_io::{sniff_mime, IngestedMediaBytes};
 use crate::authoring_core::model::AuthoringMedia;
 use crate::writer_core::stream_zip::StreamZip;
 
+mod payload;
+use payload::{EncodedPayload, PayloadPool};
+
 const BUFFER_BYTES: usize = 64 * 1024;
 const MAX_WORKERS: usize = 4;
-// Each worker can hold one queued result plus one being prepared. The consumer
-// holds one more. SpooledTempFile rolls before writes cross this length; Vec
-// capacity and codec contexts add bounded overhead beyond the payload limit.
-const PER_PAYLOAD_MEMORY: usize = 512 * 1024;
 
 type CandidateArchive = StreamZip<tempfile::NamedTempFile>;
 
@@ -34,12 +34,6 @@ pub(crate) enum RegisteredFingerprint {
 struct RegisteredSource {
     path: PathBuf,
     fingerprint: RegisteredFingerprint,
-}
-
-struct EncodedPayload {
-    data: tempfile::SpooledTempFile,
-    size: u64,
-    crc: crc32fast::Hasher,
 }
 
 pub(crate) struct PreparedMedia {
@@ -98,6 +92,7 @@ impl PreparedMedia {
         if jobs.is_empty() {
             return ingested;
         }
+        let pool = PayloadPool::new();
         let workers = if jobs.len() < 16 {
             1
         } else {
@@ -118,19 +113,15 @@ impl PreparedMedia {
             |index: usize,
              result: Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError>| {
                 let item = &items[index];
-                ingested[index] = Some(result.and_then(|(metadata, mut payload)| {
+                ingested[index] = Some(result.and_then(|(metadata, payload)| {
                     if names.insert(item.desired_filename.clone()) {
-                        payload.data.seek(SeekFrom::Start(0)).map_err(|error| {
-                            diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error.to_string())
-                        })?;
-                        let crc = payload.crc.finalize();
                         archive
                             .entry(
                                 &export_order.len().to_string(),
-                                payload.size,
-                                crc,
+                                payload.size(),
+                                payload.checksum(),
                                 |writer| {
-                                    io::copy(&mut payload.data, writer)?;
+                                    payload.write_to(writer)?;
                                     Ok(())
                                 },
                             )
@@ -149,25 +140,38 @@ impl PreparedMedia {
         if workers == 1 {
             let mut context = zstd::zstd_safe::CCtx::create();
             for &(index, item) in &jobs {
-                accept(index, self.prepare_one(item, options, &mut context));
+                accept(index, self.prepare_one(item, options, &mut context, &pool));
             }
         } else {
             std::thread::scope(|scope| {
-                let mut receivers = Vec::new();
+                // Bound all submitted, unfinished and completed payloads together.
+                // Per-job reply channels preserve order and disconnect if a worker
+                // stops; no reply sender remains in a different waiting worker.
+                type Preparation = Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError>;
+                let window = workers * 2 + 1;
+                let (sender, receiver) = sync_channel::<(usize, SyncSender<Preparation>)>(window);
+                let receiver = Arc::new(Mutex::new(receiver));
                 let mut handles = Vec::new();
-                for worker in 0..workers {
-                    let (sender, receiver) = std::sync::mpsc::sync_channel(1);
-                    receivers.push(receiver);
+                for _ in 0..workers {
+                    let receiver = Arc::clone(&receiver);
                     let jobs = &jobs;
                     let prepared = &*self;
+                    let pool = &pool;
                     handles.push(
                         std::thread::Builder::new()
                             .name("anki-forge-media".into())
                             .spawn_scoped(scope, move || {
                                 let mut context = zstd::zstd_safe::CCtx::create();
-                                for &(_, item) in jobs.iter().skip(worker).step_by(workers) {
-                                    if sender
-                                        .send(prepared.prepare_one(item, options, &mut context))
+                                loop {
+                                    let job = receiver.lock().expect("media job queue lock").recv();
+                                    let Ok((position, reply)) = job else { break };
+                                    if reply
+                                        .send(prepared.prepare_one(
+                                            jobs[position].1,
+                                            options,
+                                            &mut context,
+                                            pool,
+                                        ))
                                         .is_err()
                                     {
                                         break;
@@ -176,15 +180,37 @@ impl PreparedMedia {
                             }),
                     );
                 }
-                for (job_index, &(index, item)) in jobs.iter().enumerate() {
-                    let result = receivers[job_index % workers].recv().unwrap_or_else(|_| {
-                        Err(diagnostic(
-                            item,
-                            "MEDIA.CAS_WRITE_FAILED",
-                            "media preparation worker could not complete".into(),
-                        ))
-                    });
-                    accept(index, result);
+                drop(receiver);
+                let stopped = |item| {
+                    diagnostic(
+                        item,
+                        "MEDIA.CAS_WRITE_FAILED",
+                        "media preparation worker could not complete".into(),
+                    )
+                };
+                if handles.iter().any(Result::is_err) {
+                    drop(sender);
+                    for &(index, item) in &jobs {
+                        accept(index, Err(stopped(item)));
+                    }
+                } else {
+                    let mut pending = VecDeque::with_capacity(window);
+                    let mut next = 0;
+                    for _ in 0..jobs.len() {
+                        while next < jobs.len() && pending.len() < window {
+                            let (reply, receiver) = sync_channel(1);
+                            // Failed submission drops the reply sender, which is
+                            // reported through the same ordered receive below.
+                            let _ = sender.send((next, reply));
+                            pending.push_back((next, receiver));
+                            next += 1;
+                        }
+                        let (position, receiver) = pending.pop_front().expect("pending media job");
+                        let (index, item) = jobs[position];
+                        let result = receiver.recv().unwrap_or_else(|_| Err(stopped(item)));
+                        accept(index, result);
+                    }
+                    drop(sender);
                 }
                 for handle in handles.into_iter().flatten() {
                     let _ = handle.join();
@@ -201,6 +227,7 @@ impl PreparedMedia {
         item: &AuthoringMedia,
         options: &NormalizeOptions,
         context: &mut zstd::zstd_safe::CCtx<'static>,
+        pool: &PayloadPool,
     ) -> Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError> {
         let source = if let Some(registered) = self.registered.get(&item.id) {
             let metadata = std::fs::metadata(&registered.path)
@@ -238,11 +265,7 @@ impl PreparedMedia {
             }
             PreparedMediaSource::InlineBytes(bytes) => Box::new(io::Cursor::new(bytes)),
         };
-        let sink = EncodedPayload {
-            data: tempfile::spooled_tempfile(PER_PAYLOAD_MEMORY),
-            size: 0,
-            crc: crc32fast::Hasher::new(),
-        };
+        let sink = pool.payload();
         let encode_error =
             |error: io::Error| diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error.to_string());
         let mut encoder = zstd::stream::Encoder::with_context(sink, context);
@@ -359,18 +382,6 @@ impl PreparedMedia {
     }
 }
 
-impl Write for EncodedPayload {
-    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-        let written = self.data.write(bytes)?;
-        self.size += written as u64;
-        self.crc.update(&bytes[..written]);
-        Ok(written)
-    }
-    fn flush(&mut self) -> io::Result<()> {
-        self.data.flush()
-    }
-}
-
 fn diagnostic(item: &AuthoringMedia, code: &str, summary: String) -> MediaIngestError {
     MediaIngestError {
         diagnostics: vec![MediaIngestDiagnostic {
@@ -401,25 +412,153 @@ fn source_error(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Seek;
+
     #[test]
-    fn encoded_payload_spills_before_unbounded_growth_and_preserves_bytes() {
-        let mut payload = EncodedPayload {
-            data: tempfile::spooled_tempfile(PER_PAYLOAD_MEMORY),
-            size: 0,
-            crc: crc32fast::Hasher::new(),
-        };
+    fn one_large_encoded_payload_uses_available_build_memory() {
+        let pool = PayloadPool::new();
+        let mut payload = pool.payload();
         let block = [93; BUFFER_BYTES];
-        for _ in 0..PER_PAYLOAD_MEMORY / BUFFER_BYTES {
+        for _ in 0..16 {
             payload.write_all(&block).unwrap();
         }
-        assert!(!payload.data.is_rolled());
+        assert!(
+            !payload.is_spilled(),
+            "a 1 MiB payload should use otherwise idle build memory"
+        );
+    }
+
+    #[test]
+    fn preparation_preserves_order_and_recovers_after_mixed_source_failures() {
+        use crate::authoring_core::media::AuthoringMediaSource;
+        let root = tempfile::tempdir().unwrap();
+        let options = NormalizeOptions {
+            base_dir: root.path().into(),
+            media_store_dir: root.path().join("unused-cas"),
+            media_policy: crate::authoring_core::media::MediaPolicy::default_strict(),
+        };
+        let mut payloads = Vec::new();
+        let mut items = Vec::new();
+        let mut state = 0x1234_5678_u32;
+        for index in 0..40 {
+            let size = if index % 4 == 0 {
+                1024 * 1024 + 17
+            } else {
+                index * 37
+            };
+            let bytes = (0..size)
+                .map(|_| {
+                    state ^= state << 13;
+                    state ^= state >> 17;
+                    state ^= state << 5;
+                    state as u8
+                })
+                .collect::<Vec<_>>();
+            let filename = format!("{index:03}.bin");
+            let path = root.path().join(&filename);
+            std::fs::write(&path, &bytes).unwrap();
+            items.push(AuthoringMedia {
+                id: format!("media-{index}"),
+                desired_filename: filename.clone(),
+                source: AuthoringMediaSource::Path { path: filename },
+                declared_mime: None,
+            });
+            payloads.push(bytes);
+        }
+        let mut failed = PreparedMedia::new_in(root.path()).unwrap();
+        failed.register_source(
+            items[20].id.clone(),
+            root.path().join("020.bin"),
+            RegisteredFingerprint::Sha1("changed".into()),
+        );
+        std::fs::remove_file(root.path().join("008.bin")).unwrap();
+        let results = failed.prepare_all(&items, &options);
+        for (index, result) in results.iter().enumerate() {
+            let result = result.as_ref().unwrap();
+            if index == 8 || index == 20 {
+                let code = if index == 8 {
+                    "MEDIA.SOURCE_MISSING"
+                } else {
+                    "MEDIA.SOURCE_CHANGED"
+                };
+                assert_eq!(result.as_ref().unwrap_err().diagnostics[0].code, code);
+            } else {
+                assert_eq!(
+                    result.as_ref().unwrap().sha1,
+                    hex::encode(Sha1::digest(&payloads[index]))
+                );
+            }
+        }
+        assert_eq!(
+            failed.export_order,
+            items
+                .iter()
+                .enumerate()
+                .filter(|(i, _)| *i != 8 && *i != 20)
+                .map(|(_, item)| item.desired_filename.clone())
+                .collect::<Vec<_>>()
+        );
+        drop(failed);
+        // A subsequent build must succeed after both errors, with the same
+        // canonical order even when the caller supplies the reverse order.
+        std::fs::write(root.path().join("008.bin"), &payloads[8]).unwrap();
+        let mut archives = Vec::new();
+        for reverse in [false, true] {
+            let mut selected = items.clone();
+            if reverse {
+                selected.reverse();
+            }
+            let mut prepared = PreparedMedia::new_in(root.path()).unwrap();
+            let results = prepared.prepare_all(&selected, &options);
+            assert!(results
+                .iter()
+                .all(|result| result.as_ref().unwrap().is_ok()));
+            assert_eq!(
+                prepared.export_order,
+                items
+                    .iter()
+                    .map(|item| item.desired_filename.clone())
+                    .collect::<Vec<_>>()
+            );
+            let archive = prepared.archive.get_mut().unwrap().take().unwrap();
+            let (mut file, fingerprint) = archive.finish().unwrap();
+            file.rewind().unwrap();
+            let mut bytes = Vec::new();
+            file.read_to_end(&mut bytes).unwrap();
+            assert_eq!(
+                fingerprint,
+                format!("package:{}", hex::encode(Sha1::digest(&bytes)))
+            );
+            let mut zip = zip::ZipArchive::new(io::Cursor::new(&bytes)).unwrap();
+            for (index, expected) in payloads.iter().enumerate() {
+                let entry = zip.by_name(&index.to_string()).unwrap();
+                assert_eq!(zstd::stream::decode_all(entry).unwrap(), *expected);
+            }
+            archives.push(bytes);
+        }
+        assert_eq!(archives[0], archives[1]);
+        assert_eq!(std::fs::read_dir(root.path()).unwrap().count(), items.len());
+    }
+
+    #[test]
+    fn encoded_payload_spills_before_unbounded_growth_and_preserves_bytes() {
+        let pool = PayloadPool::new();
+        let mut payload = pool.payload();
+        let block = [93; BUFFER_BYTES];
+        for _ in 0..payload::MEMORY_BYTES / BUFFER_BYTES {
+            payload.write_all(&block).unwrap();
+        }
+        assert!(!payload.is_spilled());
         payload.write_all(&block).unwrap();
-        assert!(payload.data.is_rolled());
-        assert_eq!(payload.size, (PER_PAYLOAD_MEMORY + BUFFER_BYTES) as u64);
-        payload.data.rewind().unwrap();
+        assert!(payload.is_spilled());
+        assert_eq!(
+            payload.size(),
+            (payload::MEMORY_BYTES + BUFFER_BYTES) as u64
+        );
+        let checksum = payload.checksum();
         let mut actual = Vec::new();
-        payload.data.read_to_end(&mut actual).unwrap();
-        assert_eq!(actual, vec![93; PER_PAYLOAD_MEMORY + BUFFER_BYTES]);
-        assert_eq!(payload.crc.finalize(), crc32fast::hash(&actual));
+        payload.write_to(&mut actual).unwrap();
+        assert_eq!(actual, vec![93; payload::MEMORY_BYTES + BUFFER_BYTES]);
+        assert_eq!(checksum, crc32fast::hash(&actual));
     }
 }

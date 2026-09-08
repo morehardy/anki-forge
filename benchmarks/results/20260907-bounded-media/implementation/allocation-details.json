@@ -1,0 +1,738 @@
+[
+  {
+    "run": "long-back-quadruple-1000-pool-memory-2",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208608,
+      "current_rss_bytes": 68763648,
+      "label": "before_export",
+      "live_rust_bytes": 32332323,
+      "peak_rust_bytes": 55051368
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401732,
+      "current_rss_bytes": 161267712,
+      "label": "after_export",
+      "live_rust_bytes": 33114702,
+      "peak_rust_bytes": 94400154
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193124
+  },
+  {
+    "run": "long-back-1000-current-memory--1",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601242,
+      "current_rss_bytes": 28704768,
+      "label": "before_export",
+      "live_rust_bytes": 9315560,
+      "peak_rust_bytes": 14041847
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102139104,
+      "current_rss_bytes": 69664768,
+      "label": "after_export",
+      "live_rust_bytes": 10097939,
+      "peak_rust_bytes": 29767703
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537862
+  },
+  {
+    "run": "image-64x1m-current-memory-2",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554392,
+      "current_rss_bytes": 4194304,
+      "label": "before_export",
+      "live_rust_bytes": 197554,
+      "peak_rust_bytes": 205669
+    },
+    "after": {
+      "allocation_calls": 51435,
+      "begin": false,
+      "cumulative_rust_bytes": 213150441,
+      "current_rss_bytes": 26558464,
+      "label": "after_export",
+      "live_rust_bytes": 979981,
+      "peak_rust_bytes": 3573174
+    },
+    "export_allocation_calls": 47441,
+    "export_cumulative_rust_bytes": 212596049
+  },
+  {
+    "run": "text-10000-pool-memory--1",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004202,
+      "current_rss_bytes": 34177024,
+      "label": "before_export",
+      "live_rust_bytes": 22049421,
+      "peak_rust_bytes": 23624430
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282303,
+      "current_rss_bytes": 144818176,
+      "label": "after_export",
+      "live_rust_bytes": 22831800,
+      "peak_rust_bytes": 90923818
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278101
+  },
+  {
+    "run": "long-back-quadruple-1000-pool-memory--1",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208609,
+      "current_rss_bytes": 68747264,
+      "label": "before_export",
+      "live_rust_bytes": 32332324,
+      "peak_rust_bytes": 55051369
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401813,
+      "current_rss_bytes": 161316864,
+      "label": "after_export",
+      "live_rust_bytes": 33114703,
+      "peak_rust_bytes": 94400161
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193204
+  },
+  {
+    "run": "image-64x1m-pool-memory-2",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554386,
+      "current_rss_bytes": 4227072,
+      "label": "before_export",
+      "live_rust_bytes": 197551,
+      "peak_rust_bytes": 205666
+    },
+    "after": {
+      "allocation_calls": 51238,
+      "begin": false,
+      "cumulative_rust_bytes": 152915070,
+      "current_rss_bytes": 28082176,
+      "label": "after_export",
+      "live_rust_bytes": 979978,
+      "peak_rust_bytes": 6485437
+    },
+    "export_allocation_calls": 47244,
+    "export_cumulative_rust_bytes": 152360684
+  },
+  {
+    "run": "image-64x1m-current-memory--1",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554393,
+      "current_rss_bytes": 4308992,
+      "label": "before_export",
+      "live_rust_bytes": 197555,
+      "peak_rust_bytes": 205670
+    },
+    "after": {
+      "allocation_calls": 51435,
+      "begin": false,
+      "cumulative_rust_bytes": 213150973,
+      "current_rss_bytes": 26394624,
+      "label": "after_export",
+      "live_rust_bytes": 979982,
+      "peak_rust_bytes": 3835714
+    },
+    "export_allocation_calls": 47441,
+    "export_cumulative_rust_bytes": 212596580
+  },
+  {
+    "run": "text-10000-pool-memory-2",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004201,
+      "current_rss_bytes": 36978688,
+      "label": "before_export",
+      "live_rust_bytes": 22049420,
+      "peak_rust_bytes": 23624429
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282222,
+      "current_rss_bytes": 148160512,
+      "label": "after_export",
+      "live_rust_bytes": 22831799,
+      "peak_rust_bytes": 90923811
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278021
+  },
+  {
+    "run": "long-back-1000-pool-memory-1",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601235,
+      "current_rss_bytes": 22249472,
+      "label": "before_export",
+      "live_rust_bytes": 9315556,
+      "peak_rust_bytes": 14041843
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102138777,
+      "current_rss_bytes": 63356928,
+      "label": "after_export",
+      "live_rust_bytes": 10097935,
+      "peak_rust_bytes": 29767675
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537542
+  },
+  {
+    "run": "text-10000-current-memory--1",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004208,
+      "current_rss_bytes": 36995072,
+      "label": "before_export",
+      "live_rust_bytes": 22049424,
+      "peak_rust_bytes": 23624433
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282549,
+      "current_rss_bytes": 147750912,
+      "label": "after_export",
+      "live_rust_bytes": 22831803,
+      "peak_rust_bytes": 90923839
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278341
+  },
+  {
+    "run": "long-back-1000-pool-memory-0",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601235,
+      "current_rss_bytes": 28819456,
+      "label": "before_export",
+      "live_rust_bytes": 9315556,
+      "peak_rust_bytes": 14041843
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102138777,
+      "current_rss_bytes": 69844992,
+      "label": "after_export",
+      "live_rust_bytes": 10097935,
+      "peak_rust_bytes": 29767675
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537542
+  },
+  {
+    "run": "long-back-quadruple-1000-current-memory--1",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208615,
+      "current_rss_bytes": 76955648,
+      "label": "before_export",
+      "live_rust_bytes": 32332327,
+      "peak_rust_bytes": 55051372
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314402059,
+      "current_rss_bytes": 169590784,
+      "label": "after_export",
+      "live_rust_bytes": 33114706,
+      "peak_rust_bytes": 94400182
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193444
+  },
+  {
+    "run": "text-10000-current-memory-0",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004207,
+      "current_rss_bytes": 38600704,
+      "label": "before_export",
+      "live_rust_bytes": 22049423,
+      "peak_rust_bytes": 23624432
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282468,
+      "current_rss_bytes": 150962176,
+      "label": "after_export",
+      "live_rust_bytes": 22831802,
+      "peak_rust_bytes": 90923832
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278261
+  },
+  {
+    "run": "long-back-quadruple-1000-current-memory-1",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208614,
+      "current_rss_bytes": 76955648,
+      "label": "before_export",
+      "live_rust_bytes": 32332326,
+      "peak_rust_bytes": 55051371
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401978,
+      "current_rss_bytes": 169590784,
+      "label": "after_export",
+      "live_rust_bytes": 33114705,
+      "peak_rust_bytes": 94400175
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193364
+  },
+  {
+    "run": "long-back-1000-current-memory-1",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601241,
+      "current_rss_bytes": 28721152,
+      "label": "before_export",
+      "live_rust_bytes": 9315559,
+      "peak_rust_bytes": 14041846
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102139023,
+      "current_rss_bytes": 69681152,
+      "label": "after_export",
+      "live_rust_bytes": 10097938,
+      "peak_rust_bytes": 29767696
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537782
+  },
+  {
+    "run": "long-back-quadruple-1000-current-memory-0",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208614,
+      "current_rss_bytes": 86360064,
+      "label": "before_export",
+      "live_rust_bytes": 32332326,
+      "peak_rust_bytes": 55051371
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401978,
+      "current_rss_bytes": 179126272,
+      "label": "after_export",
+      "live_rust_bytes": 33114705,
+      "peak_rust_bytes": 94400175
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193364
+  },
+  {
+    "run": "text-10000-current-memory-1",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004207,
+      "current_rss_bytes": 37011456,
+      "label": "before_export",
+      "live_rust_bytes": 22049423,
+      "peak_rust_bytes": 23624432
+    },
+    "after": {
+      "allocation_calls": 2384517,
+      "begin": false,
+      "cumulative_rust_bytes": 338282676,
+      "current_rss_bytes": 148193280,
+      "label": "after_export",
+      "live_rust_bytes": 22831850,
+      "peak_rust_bytes": 90923832
+    },
+    "export_allocation_calls": 1973622,
+    "export_cumulative_rust_bytes": 268278469
+  },
+  {
+    "run": "long-back-1000-current-memory-0",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601241,
+      "current_rss_bytes": 28606464,
+      "label": "before_export",
+      "live_rust_bytes": 9315559,
+      "peak_rust_bytes": 14041846
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102139023,
+      "current_rss_bytes": 69795840,
+      "label": "after_export",
+      "live_rust_bytes": 10097938,
+      "peak_rust_bytes": 29767696
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537782
+  },
+  {
+    "run": "image-64x1m-current-memory-0",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554392,
+      "current_rss_bytes": 4194304,
+      "label": "before_export",
+      "live_rust_bytes": 197554,
+      "peak_rust_bytes": 205669
+    },
+    "after": {
+      "allocation_calls": 51435,
+      "begin": false,
+      "cumulative_rust_bytes": 213150441,
+      "current_rss_bytes": 27049984,
+      "label": "after_export",
+      "live_rust_bytes": 979981,
+      "peak_rust_bytes": 3833884
+    },
+    "export_allocation_calls": 47441,
+    "export_cumulative_rust_bytes": 212596049
+  },
+  {
+    "run": "long-back-quadruple-1000-pool-memory-1",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208608,
+      "current_rss_bytes": 77414400,
+      "label": "before_export",
+      "live_rust_bytes": 32332323,
+      "peak_rust_bytes": 55051368
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401732,
+      "current_rss_bytes": 161415168,
+      "label": "after_export",
+      "live_rust_bytes": 33114702,
+      "peak_rust_bytes": 94400154
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193124
+  },
+  {
+    "run": "image-64x1m-current-memory-1",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554392,
+      "current_rss_bytes": 4292608,
+      "label": "before_export",
+      "live_rust_bytes": 197554,
+      "peak_rust_bytes": 205669
+    },
+    "after": {
+      "allocation_calls": 51435,
+      "begin": false,
+      "cumulative_rust_bytes": 213150441,
+      "current_rss_bytes": 26394624,
+      "label": "after_export",
+      "live_rust_bytes": 979981,
+      "peak_rust_bytes": 3833676
+    },
+    "export_allocation_calls": 47441,
+    "export_cumulative_rust_bytes": 212596049
+  },
+  {
+    "run": "long-back-quadruple-1000-pool-memory-0",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208608,
+      "current_rss_bytes": 77070336,
+      "label": "before_export",
+      "live_rust_bytes": 32332323,
+      "peak_rust_bytes": 55051368
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401732,
+      "current_rss_bytes": 169443328,
+      "label": "after_export",
+      "live_rust_bytes": 33114702,
+      "peak_rust_bytes": 94400154
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193124
+  },
+  {
+    "run": "image-64x1m-pool-memory-1",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554386,
+      "current_rss_bytes": 4325376,
+      "label": "before_export",
+      "live_rust_bytes": 197551,
+      "peak_rust_bytes": 205666
+    },
+    "after": {
+      "allocation_calls": 51258,
+      "begin": false,
+      "cumulative_rust_bytes": 152916134,
+      "current_rss_bytes": 28147712,
+      "label": "after_export",
+      "live_rust_bytes": 979978,
+      "peak_rust_bytes": 6485268
+    },
+    "export_allocation_calls": 47264,
+    "export_cumulative_rust_bytes": 152361748
+  },
+  {
+    "run": "text-10000-pool-memory-0",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004201,
+      "current_rss_bytes": 34209792,
+      "label": "before_export",
+      "live_rust_bytes": 22049420,
+      "peak_rust_bytes": 23624429
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282222,
+      "current_rss_bytes": 144506880,
+      "label": "after_export",
+      "live_rust_bytes": 22831799,
+      "peak_rust_bytes": 90923811
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278021
+  },
+  {
+    "run": "image-64x1m-pool-memory-0",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554386,
+      "current_rss_bytes": 4259840,
+      "label": "before_export",
+      "live_rust_bytes": 197551,
+      "peak_rust_bytes": 205666
+    },
+    "after": {
+      "allocation_calls": 51270,
+      "begin": false,
+      "cumulative_rust_bytes": 152917242,
+      "current_rss_bytes": 28082176,
+      "label": "after_export",
+      "live_rust_bytes": 979978,
+      "peak_rust_bytes": 6485693
+    },
+    "export_allocation_calls": 47276,
+    "export_cumulative_rust_bytes": 152362856
+  },
+  {
+    "run": "long-back-1000-pool-memory--1",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601236,
+      "current_rss_bytes": 22249472,
+      "label": "before_export",
+      "live_rust_bytes": 9315557,
+      "peak_rust_bytes": 14041844
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102138858,
+      "current_rss_bytes": 63160320,
+      "label": "after_export",
+      "live_rust_bytes": 10097936,
+      "peak_rust_bytes": 29767682
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537622
+  },
+  {
+    "run": "text-10000-pool-memory-1",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004201,
+      "current_rss_bytes": 34127872,
+      "label": "before_export",
+      "live_rust_bytes": 22049420,
+      "peak_rust_bytes": 23624429
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282222,
+      "current_rss_bytes": 143360000,
+      "label": "after_export",
+      "live_rust_bytes": 22831799,
+      "peak_rust_bytes": 90923811
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278021
+  },
+  {
+    "run": "long-back-1000-pool-memory-2",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601235,
+      "current_rss_bytes": 28753920,
+      "label": "before_export",
+      "live_rust_bytes": 9315556,
+      "peak_rust_bytes": 14041843
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102138777,
+      "current_rss_bytes": 69369856,
+      "label": "after_export",
+      "live_rust_bytes": 10097935,
+      "peak_rust_bytes": 29767675
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537542
+  },
+  {
+    "run": "image-64x1m-pool-memory--1",
+    "before": {
+      "allocation_calls": 3994,
+      "begin": true,
+      "cumulative_rust_bytes": 554387,
+      "current_rss_bytes": 4308992,
+      "label": "before_export",
+      "live_rust_bytes": 197552,
+      "peak_rust_bytes": 205667
+    },
+    "after": {
+      "allocation_calls": 51269,
+      "begin": false,
+      "cumulative_rust_bytes": 152918768,
+      "current_rss_bytes": 28016640,
+      "label": "after_export",
+      "live_rust_bytes": 979979,
+      "peak_rust_bytes": 6485835
+    },
+    "export_allocation_calls": 47275,
+    "export_cumulative_rust_bytes": 152364381
+  },
+  {
+    "run": "long-back-1000-current-memory-2",
+    "before": {
+      "allocation_calls": 41104,
+      "begin": true,
+      "cumulative_rust_bytes": 27601241,
+      "current_rss_bytes": 28704768,
+      "label": "before_export",
+      "live_rust_bytes": 9315559,
+      "peak_rust_bytes": 14041846
+    },
+    "after": {
+      "allocation_calls": 259954,
+      "begin": false,
+      "cumulative_rust_bytes": 102139023,
+      "current_rss_bytes": 69664768,
+      "label": "after_export",
+      "live_rust_bytes": 10097938,
+      "peak_rust_bytes": 29767696
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 74537782
+  },
+  {
+    "run": "long-back-quadruple-1000-current-memory-2",
+    "before": {
+      "allocation_calls": 41106,
+      "begin": true,
+      "cumulative_rust_bytes": 94208614,
+      "current_rss_bytes": 76890112,
+      "label": "before_export",
+      "live_rust_bytes": 32332326,
+      "peak_rust_bytes": 55051371
+    },
+    "after": {
+      "allocation_calls": 259956,
+      "begin": false,
+      "cumulative_rust_bytes": 314401978,
+      "current_rss_bytes": 169885696,
+      "label": "after_export",
+      "live_rust_bytes": 33114705,
+      "peak_rust_bytes": 94400175
+    },
+    "export_allocation_calls": 218850,
+    "export_cumulative_rust_bytes": 220193364
+  },
+  {
+    "run": "text-10000-current-memory-2",
+    "before": {
+      "allocation_calls": 410895,
+      "begin": true,
+      "cumulative_rust_bytes": 70004207,
+      "current_rss_bytes": 37093376,
+      "label": "before_export",
+      "live_rust_bytes": 22049423,
+      "peak_rust_bytes": 23624432
+    },
+    "after": {
+      "allocation_calls": 2384514,
+      "begin": false,
+      "cumulative_rust_bytes": 338282468,
+      "current_rss_bytes": 148307968,
+      "label": "after_export",
+      "live_rust_bytes": 22831802,
+      "peak_rust_bytes": 90923832
+    },
+    "export_allocation_calls": 1973619,
+    "export_cumulative_rust_bytes": 268278261
+  }
+]

@@ -1,0 +1,183 @@
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1035,24 +1035,16 @@
+     };
+     std::thread::scope(|scope| -> Result<Vec<ResolvedMedia>> {
+         let mut slots = Vec::new();
+-        // Archive reads and every budget remain on this thread. Only complete
+-        // small payloads are hashed concurrently, with one pending job per slot.
++        // Archive reads and every budget remain on this thread. A worker keeps
++        // one file's ordered hash state while bounded blocks arrive.
+         if workers > 1 {
+             for _ in 0..workers {
+-                let (sender, jobs) = std::sync::mpsc::sync_channel::<Vec<u8>>(1);
++                let (sender, jobs) = std::sync::mpsc::sync_channel::<MediaHashChunk>(1);
+                 let (done, receiver) = std::sync::mpsc::sync_channel::<String>(1);
+                 let spawned = std::thread::Builder::new()
+                     .name("anki-forge-inspect".into())
+                     .spawn_scoped(scope, move || {
+-                        while let Ok(bytes) = jobs.recv() {
+-                            let digest = hex::encode(sha1::Sha1::digest(&bytes));
+-                            // Release this allocation before making the slot
+-                            // available for another payload.
+-                            drop(bytes);
+-                            if done.send(digest).is_err() {
+-                                break;
+-                            }
+-                        }
++                        hash_media_chunks(jobs, done);
+                     });
+                 // Parallel hashing is optional when the host cannot create more
+                 // threads. Already-created workers and the serial path still work.
+@@ -1064,10 +1056,15 @@
+         }
+         let mut resolved: Vec<ResolvedMedia> = Vec::with_capacity(entries.len());
+         for (index, name) in entries {
+-            let mut hash = MediaHash {
+-                hash: sha1::Sha1::new(),
+-                pending: (!slots.is_empty()).then(|| Vec::with_capacity(HASH_BUFFER_BYTES)),
+-            };
++            let slot = (!slots.is_empty()).then(|| resolved.len() % slots.len());
++            if let Some(slot) = slot {
++                let (_, receiver, pending) = &mut slots[slot];
++                if let Some(previous) = pending.take() {
++                    resolved[previous].sha1_hex =
++                        receiver.recv().context("media hash worker stopped")?;
++                }
++            }
++            let mut hash = MediaHash::new(slot.map(|slot| &slots[slot].0));
+             let size = archive
+                 .copy(
+                     &index.to_string(),
+@@ -1077,19 +1074,10 @@
+                     &mut hash,
+                 )?
+                 .with_context(|| format!("missing media payload {index}"))?;
+-            let sha1_hex = if let Some(bytes) = hash.pending {
+-                let slot = resolved.len() % slots.len();
+-                let (sender, receiver, pending) = &mut slots[slot];
+-                if let Some(previous) = pending.take() {
+-                    resolved[previous].sha1_hex =
+-                        receiver.recv().context("media hash worker stopped")?;
+-                }
+-                sender.send(bytes).context("media hash worker stopped")?;
+-                *pending = Some(resolved.len());
+-                String::new()
+-            } else {
+-                hex::encode(hash.hash.finalize())
+-            };
++            let sha1_hex = hash.finish()?.unwrap_or_default();
++            if let Some(slot) = slot {
++                slots[slot].2 = Some(resolved.len());
++            }
+             resolved.push(ResolvedMedia {
+                 filename: name,
+                 size: usize::try_from(size).context("media size exceeds address space")?,
+@@ -1160,31 +1148,88 @@
+     Ok(())
+ }
+ 
+-const HASH_BUFFER_BYTES: usize = 64 * 1024;
++const HASH_BUFFER_BYTES: usize = 256 * 1024;
+ const MAX_HASH_WORKERS: usize = 4;
+ const MIN_PARALLEL_HASH_ENTRIES: usize = 16;
+ 
+-// At most four pending payloads plus the one being accumulated: 320 KiB beyond
+-// the existing archive/decoder buffers. Completing a job releases its payload.
+-// A larger decoded entry immediately switches to the original streaming hash.
+-struct MediaHash {
++struct MediaHashChunk {
++    bytes: Vec<u8>,
++    last: bool,
++}
++
++fn hash_media_chunks(
++    jobs: std::sync::mpsc::Receiver<MediaHashChunk>,
++    done: std::sync::mpsc::SyncSender<String>,
++) {
++    let mut hash = sha1::Sha1::new();
++    while let Ok(chunk) = jobs.recv() {
++        hash.update(&chunk.bytes);
++        drop(chunk.bytes);
++        if chunk.last {
++            let digest = hex::encode(std::mem::replace(&mut hash, sha1::Sha1::new()).finalize());
++            if done.send(digest).is_err() {
++                break;
++            }
++        }
++    }
++}
++
++// Up to four workers each own one block and queue one more; the reader holds
++// one block. Decoded payload buffers total at most 9 * 256 KiB = 2.25 MiB.
++// Single-worker fallback hashes directly, without allocating a block.
++struct MediaHash<'a> {
+     hash: sha1::Sha1,
+-    pending: Option<Vec<u8>>,
+-}
+-
+-impl Write for MediaHash {
++    sender: Option<&'a std::sync::mpsc::SyncSender<MediaHashChunk>>,
++    pending: Vec<u8>,
++}
++
++impl<'a> MediaHash<'a> {
++    fn new(sender: Option<&'a std::sync::mpsc::SyncSender<MediaHashChunk>>) -> Self {
++        Self {
++            hash: sha1::Sha1::new(),
++            sender,
++            pending: sender.map_or_else(Vec::new, |_| Vec::with_capacity(HASH_BUFFER_BYTES)),
++        }
++    }
++
++    fn send_block(&mut self, last: bool) -> std::io::Result<()> {
++        let bytes = std::mem::take(&mut self.pending);
++        self.sender
++            .expect("parallel hash sender")
++            .send(MediaHashChunk { bytes, last })
++            .map_err(|_| std::io::Error::other("media hash worker stopped"))?;
++        // Allocate only after send returns. A blocked send already holds the
++        // reader's one block and must not allocate another in-flight buffer.
++        if !last {
++            self.pending = Vec::with_capacity(HASH_BUFFER_BYTES);
++        }
++        Ok(())
++    }
++
++    fn finish(mut self) -> std::io::Result<Option<String>> {
++        if self.sender.is_some() {
++            self.send_block(true)?;
++            Ok(None)
++        } else {
++            Ok(Some(hex::encode(self.hash.finalize())))
++        }
++    }
++}
++
++impl Write for MediaHash<'_> {
+     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+-        if let Some(pending) = self
+-            .pending
+-            .as_mut()
+-            .filter(|pending| pending.len() + bytes.len() <= HASH_BUFFER_BYTES)
+-        {
+-            pending.extend_from_slice(bytes);
+-        } else {
+-            if let Some(pending) = self.pending.take() {
+-                self.hash.update(&pending);
+-            }
++        if self.sender.is_none() {
+             self.hash.update(bytes);
++            return Ok(bytes.len());
++        }
++        let mut remaining = bytes;
++        while !remaining.is_empty() {
++            if self.pending.len() == HASH_BUFFER_BYTES {
++                self.send_block(false)?;
++            }
++            let count = remaining.len().min(HASH_BUFFER_BYTES - self.pending.len());
++            self.pending.extend_from_slice(&remaining[..count]);
++            remaining = &remaining[count..];
+         }
+         Ok(bytes.len())
+     }

@@ -1,0 +1,257 @@
+[
+  {
+    "profile": "basic-mixed-text-v1",
+    "size": 1000,
+    "variants": {
+      "before": {
+        "median_ms": 53.678,
+        "median_rss_mib": 30.4375,
+        "median_stages_ms": {},
+        "artifact_hashes": [
+          "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+        ]
+      },
+      "profile-detail": {
+        "median_ms": 54.749,
+        "median_rss_mib": 30.421875,
+        "median_stages_ms": {
+          "adapter.parse": 0.710125,
+          "adapter.registration": 0.000875,
+          "adapter.notes": 4.234833,
+          "normalize.lowering": 5.173125,
+          "media.prepare": 0.00025,
+          "normalize.core": 0.891375,
+          "normalize.total": 6.239459,
+          "pipeline.prepare": 9.662833,
+          "pipeline.reconcile": 2.970459,
+          "sqlite.schema": 1.701584,
+          "sqlite.populate": 8.714,
+          "sqlite.compact": 4.453209,
+          "sqlite.total": 14.910916,
+          "apkg.collection_zstd": 2.138417,
+          "apkg.total": 18.610417,
+          "pipeline.generate": 21.052333,
+          "inspect.media": 0.011292,
+          "inspect.sqlite": 3.047875,
+          "inspect.facts": 4.561542,
+          "pipeline.inspect": 4.581375,
+          "pipeline.publish": 5.502667,
+          "pipeline.total": 44.775708,
+          "inspection.decode_read": 0.581957,
+          "adapter.total": 51.610667
+        },
+        "artifact_hashes": [
+          "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492"
+        ]
+      }
+    }
+  },
+  {
+    "profile": "basic-image-unique-v2",
+    "size": 1000,
+    "variants": {
+      "before": {
+        "median_ms": 227.426,
+        "median_rss_mib": 40.046875,
+        "median_stages_ms": {},
+        "artifact_hashes": [
+          "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932"
+        ]
+      },
+      "profile-detail": {
+        "median_ms": 222.708,
+        "median_rss_mib": 39.859375,
+        "median_stages_ms": {
+          "adapter.parse": 1.113417,
+          "adapter.registration": 58.187916,
+          "adapter.notes": 5.05925,
+          "normalize.lowering": 5.036458,
+          "media.prepare": 51.398167,
+          "normalize.core": 55.047666,
+          "normalize.total": 61.380625,
+          "pipeline.prepare": 65.250208,
+          "pipeline.reconcile": 3.039834,
+          "sqlite.schema": 1.581917,
+          "sqlite.populate": 8.919542,
+          "sqlite.compact": 4.40775,
+          "sqlite.total": 15.091666,
+          "apkg.collection_zstd": 2.112791,
+          "apkg.total": 19.29525,
+          "pipeline.generate": 25.4895,
+          "inspect.media": 41.43875,
+          "inspect.sqlite": 3.069125,
+          "inspect.facts": 47.596416,
+          "pipeline.inspect": 48.088667,
+          "pipeline.publish": 8.155708,
+          "pipeline.total": 152.349958,
+          "inspection.decode_read": 3.397136,
+          "inspection.hash": 28.397524,
+          "registration.hash": 28.406705,
+          "registration.open": 19.145704,
+          "registration.raster": 0.213394,
+          "registration.read": 5.495218,
+          "adapter.total": 219.1305
+        },
+        "artifact_hashes": [
+          "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932"
+        ]
+      }
+    }
+  },
+  {
+    "profile": "basic-audio-unique-v2",
+    "size": 1000,
+    "variants": {
+      "before": {
+        "median_ms": 171.847,
+        "median_rss_mib": 39.96875,
+        "median_stages_ms": {},
+        "artifact_hashes": [
+          "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494"
+        ]
+      },
+      "profile-detail": {
+        "median_ms": 171.082,
+        "median_rss_mib": 39.8125,
+        "median_stages_ms": {
+          "adapter.parse": 1.081125,
+          "adapter.registration": 41.798291,
+          "adapter.notes": 4.541583,
+          "normalize.lowering": 5.006708,
+          "media.prepare": 29.215875,
+          "normalize.core": 33.431708,
+          "normalize.total": 40.328042,
+          "pipeline.prepare": 44.012916,
+          "pipeline.reconcile": 3.047334,
+          "sqlite.schema": 1.671625,
+          "sqlite.populate": 8.671792,
+          "sqlite.compact": 4.436708,
+          "sqlite.total": 14.998667,
+          "apkg.collection_zstd": 2.021583,
+          "apkg.total": 19.498208,
+          "pipeline.generate": 25.874792,
+          "inspect.media": 29.423792,
+          "inspect.sqlite": 3.066375,
+          "inspect.facts": 35.731125,
+          "pipeline.inspect": 36.246083,
+          "pipeline.publish": 6.257417,
+          "pipeline.total": 117.630875,
+          "inspection.decode_read": 8.492176,
+          "inspection.hash": 14.161749,
+          "registration.hash": 14.243468,
+          "registration.open": 19.014816,
+          "registration.raster": 0.195387,
+          "registration.read": 3.326842,
+          "adapter.total": 167.487959
+        },
+        "artifact_hashes": [
+          "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494"
+        ]
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-unique-v2",
+    "size": 1000,
+    "variants": {
+      "before": {
+        "median_ms": 157.879,
+        "median_rss_mib": 38.46875,
+        "median_stages_ms": {},
+        "artifact_hashes": [
+          "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d"
+        ]
+      },
+      "profile-detail": {
+        "median_ms": 159.866,
+        "median_rss_mib": 38.3125,
+        "median_stages_ms": {
+          "adapter.parse": 0.99175,
+          "adapter.registration": 36.426125,
+          "adapter.notes": 4.929084,
+          "normalize.lowering": 4.984,
+          "media.prepare": 29.1305,
+          "normalize.core": 32.121875,
+          "normalize.total": 38.16875,
+          "pipeline.prepare": 42.000292,
+          "pipeline.reconcile": 3.063625,
+          "sqlite.schema": 1.60925,
+          "sqlite.populate": 8.632291,
+          "sqlite.compact": 4.575708,
+          "sqlite.total": 15.023708,
+          "apkg.collection_zstd": 2.037459,
+          "apkg.total": 18.424833,
+          "pipeline.generate": 23.620583,
+          "inspect.media": 25.672833,
+          "inspect.sqlite": 3.085209,
+          "inspect.facts": 32.52925,
+          "pipeline.inspect": 32.878417,
+          "pipeline.publish": 7.523375,
+          "pipeline.total": 110.776542,
+          "inspection.decode_read": 4.133257,
+          "inspection.hash": 15.559836,
+          "registration.hash": 15.773377,
+          "registration.open": 13.577161,
+          "registration.raster": 0.161467,
+          "registration.read": 3.242772,
+          "adapter.total": 156.090917
+        },
+        "artifact_hashes": [
+          "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d"
+        ]
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-shared-v2",
+    "size": 1000,
+    "variants": {
+      "before": {
+        "median_ms": 64.307,
+        "median_rss_mib": 35.0625,
+        "median_stages_ms": {},
+        "artifact_hashes": [
+          "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3"
+        ]
+      },
+      "profile-detail": {
+        "median_ms": 66.035,
+        "median_rss_mib": 35.0625,
+        "median_stages_ms": {
+          "adapter.parse": 0.819792,
+          "adapter.registration": 2.618709,
+          "adapter.notes": 4.729334,
+          "normalize.lowering": 5.081833,
+          "media.prepare": 2.289083,
+          "normalize.core": 4.653458,
+          "normalize.total": 9.918792,
+          "pipeline.prepare": 13.483959,
+          "pipeline.reconcile": 3.128375,
+          "sqlite.schema": 1.639292,
+          "sqlite.populate": 8.790417,
+          "sqlite.compact": 4.261625,
+          "sqlite.total": 14.866083,
+          "apkg.collection_zstd": 2.061959,
+          "apkg.total": 17.843334,
+          "pipeline.generate": 21.443167,
+          "inspect.media": 1.940208,
+          "inspect.sqlite": 3.00775,
+          "inspect.facts": 6.66625,
+          "pipeline.inspect": 6.728125,
+          "pipeline.publish": 6.240125,
+          "pipeline.total": 52.601375,
+          "inspection.decode_read": 1.022078,
+          "inspection.hash": 1.087042,
+          "registration.hash": 1.101754,
+          "registration.open": 0.974083,
+          "registration.raster": 0.016708,
+          "registration.read": 0.222214,
+          "adapter.total": 62.545708
+        },
+        "artifact_hashes": [
+          "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3"
+        ]
+      }
+    }
+  }
+]

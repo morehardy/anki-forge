@@ -85,15 +85,13 @@ impl Deck {
         &self,
         options: crate::build::BuildOptions,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
-        crate::product::Project::from_deck(self).build(options)
+        crate::product::Project::from_deck(self).into_build(options)
     }
 
     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
         with_temp_artifacts_dir("deck-bytes", |artifacts_dir| {
             let output = artifacts_dir.join("deck.apkg");
-            let report = crate::product::Project::from_deck(self)
-                .write_apkg(&output)
-                .map_err(anyhow::Error::from)?;
+            let report = self.write_apkg(&output).map_err(anyhow::Error::from)?;
             let artifact_path = report
                 .artifact
                 .as_ref()
@@ -113,7 +111,7 @@ impl Deck {
         &self,
         path: impl AsRef<Path>,
     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
-        crate::product::Project::from_deck(self).write_apkg(path)
+        self.build(crate::build::BuildOptions::new().output(path.as_ref()))
     }
 }
 

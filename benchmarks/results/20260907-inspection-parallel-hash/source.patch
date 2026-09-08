@@ -1,0 +1,406 @@
+diff --git a/README.md b/README.md
+index 501cbb2..d5d7222 100644
+--- a/README.md
++++ b/README.md
+@@ -60,6 +60,56 @@ cargo run -q -p anki_forge --example target_api_basic
+ 
+ This writes `spanish.apkg` in the current directory.
+ 
++### 2.1 Export benchmarks
++
++The native Rust `Deck` API is compared with genanki **0.13.1 / CPython 3.11.0**
++on five synthetic Basic workloads at **100, 200, 500 and 1,000 notes**.
++Three complete sessions provide **30 timings and 15 separate peak-RSS samples
++per implementation/cell**, excluding warmups. Time includes process startup,
++input parsing, media registration and default export checks.
++
++![Export time saved versus genanki, with both absolute median times for every workload and size](benchmarks/results/20260907-readme-comparison/time-heatmap.svg)
++
++At 1,000 notes, text-only export uses **42.5% less time**, while unique images
++are **approximately tied**: 221.7 ms versus 222.7 ms. The three image sessions
++range from −0.05% to +1.34% time saved. Memory also depends on the workload:
++
++| Workload, 1,000 notes | Peak RSS MiB, Rust / genanki | APKG MiB, Rust / genanki |
++| --- | ---: | ---: |
++| Text only | 30.45 / 31.89 | 0.20 / 0.83 |
++| Unique images | 39.77 / 35.50 | 61.50 / 62.17 |
++| Unique audio | 39.88 / 35.56 | 30.72 / 31.51 |
++| Mixed, unique media | 38.36 / 34.47 | 33.87 / 34.57 |
++| Mixed, shared media | 35.23 / 32.53 | 2.56 / 3.22 |
++
++Values are pooled medians; RSS is the median of independent process peaks.
++Measured on **Apple M1 Pro, 32 GiB, macOS ARM64**, with Rust **1.92.0 release,
++default features and system allocator**, at revision `ab7d261` on 2026-09-07.
++PNG/WAV fixtures are frozen; mixed workloads contain 30% text, 40% images and
++30% audio, with 49 distinct files in the shared case. File cache is uncontrolled.
++These local measurements cover the native Rust API; Node/Python bindings are
++outside this comparison. Default APKG formats differ: Rust uses modern zstd
++collections, while genanki uses legacy stored collections.
++
++All **2,520 exports** passed content/media checks, and **120 packages** passed
++Anki import/content/render checks. The pinned Anki checker includes a recorded
++`tokio/io-util` build-feature patch. See the [full report and raw evidence](benchmarks/results/20260907-readme-comparison/report.md)
++for every cell's absolute values, IQR, session variation and reproduction steps.
++
++<details>
++<summary>Time scaling, memory and package size across all workloads</summary>
++
++Points show pooled median times; whiskers show Q1–Q3 sample spread, not confidence
++intervals. Faint dots retain the three individual session medians.
++
++![Export time scaling across five workloads, using identical linear axes](benchmarks/results/20260907-readme-comparison/time-scaling.svg)
++
++Positive resource savings mean Rust uses less; negative values mean it uses more.
++
++![Peak RSS and APKG size savings across every workload and size](benchmarks/results/20260907-readme-comparison/resources.svg)
++
++</details>
++
+ ## 3. Project For Long-Term Decks
+ 
+ ```rust
+diff --git a/anki_forge/src/writer_core/inspect.rs b/anki_forge/src/writer_core/inspect.rs
+index 66f2c87..9d5aa5f 100644
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1026,28 +1026,86 @@ fn read_media_entries(
+             .map(|(index, entry)| (index, entry.name))
+             .collect()
+     };
+-    let mut resolved = Vec::new();
+-    for (index, name) in entries {
+-        let mut hash = MediaHash(sha1::Sha1::new());
+-        let size = archive
+-            .copy(
+-                &index.to_string(),
+-                version.zstd_compressed(),
+-                "media_bytes",
+-                archive.limits.max_media_bytes,
+-                &mut hash,
+-            )?
+-            .with_context(|| format!("missing media payload {index}"))?;
+-        resolved.push(ResolvedMedia {
+-            filename: name,
+-            size: usize::try_from(size).context("media size exceeds address space")?,
+-            sha1_hex: hex::encode(hash.0.finalize()),
+-            binding_id: None,
+-            object_id: None,
+-            object_ref: None,
+-        });
+-    }
+-    Ok(resolved)
++    let workers = if entries.len() >= MIN_PARALLEL_HASH_ENTRIES {
++        std::thread::available_parallelism()
++            .map_or(1, usize::from)
++            .min(MAX_HASH_WORKERS)
++    } else {
++        1
++    };
++    std::thread::scope(|scope| -> Result<Vec<ResolvedMedia>> {
++        let mut slots = Vec::new();
++        // Archive reads and every budget remain on this thread. Only complete
++        // small payloads are hashed concurrently, with one pending job per slot.
++        if workers > 1 {
++            for _ in 0..workers {
++                let (sender, jobs) = std::sync::mpsc::sync_channel::<Vec<u8>>(1);
++                let (done, receiver) = std::sync::mpsc::sync_channel::<String>(1);
++                let spawned = std::thread::Builder::new()
++                    .name("anki-forge-inspect".into())
++                    .spawn_scoped(scope, move || {
++                        while let Ok(bytes) = jobs.recv() {
++                            let digest = hex::encode(sha1::Sha1::digest(&bytes));
++                            // Release this allocation before making the slot
++                            // available for another payload.
++                            drop(bytes);
++                            if done.send(digest).is_err() {
++                                break;
++                            }
++                        }
++                    });
++                // Parallel hashing is optional when the host cannot create more
++                // threads. Already-created workers and the serial path still work.
++                if spawned.is_err() {
++                    break;
++                }
++                slots.push((sender, receiver, None::<usize>));
++            }
++        }
++        let mut resolved: Vec<ResolvedMedia> = Vec::with_capacity(entries.len());
++        for (index, name) in entries {
++            let mut hash = MediaHash {
++                hash: sha1::Sha1::new(),
++                pending: (!slots.is_empty()).then(|| Vec::with_capacity(HASH_BUFFER_BYTES)),
++            };
++            let size = archive
++                .copy(
++                    &index.to_string(),
++                    version.zstd_compressed(),
++                    "media_bytes",
++                    archive.limits.max_media_bytes,
++                    &mut hash,
++                )?
++                .with_context(|| format!("missing media payload {index}"))?;
++            let sha1_hex = if let Some(bytes) = hash.pending {
++                let slot = resolved.len() % slots.len();
++                let (sender, receiver, pending) = &mut slots[slot];
++                if let Some(previous) = pending.take() {
++                    resolved[previous].sha1_hex =
++                        receiver.recv().context("media hash worker stopped")?;
++                }
++                sender.send(bytes).context("media hash worker stopped")?;
++                *pending = Some(resolved.len());
++                String::new()
++            } else {
++                hex::encode(hash.hash.finalize())
++            };
++            resolved.push(ResolvedMedia {
++                filename: name,
++                size: usize::try_from(size).context("media size exceeds address space")?,
++                sha1_hex,
++                binding_id: None,
++                object_id: None,
++                object_ref: None,
++            });
++        }
++        for (_, receiver, pending) in &mut slots {
++            if let Some(index) = pending.take() {
++                resolved[index].sha1_hex = receiver.recv().context("media hash worker stopped")?;
++            }
++        }
++        Ok(resolved)
++    })
+ }
+ 
+ // Count entries without allocating their strings/messages. In particular, an
+@@ -1102,11 +1160,32 @@ fn check_media_map_count(bytes: &[u8], version: PackageVersion, limit: u64) -> R
+     Ok(())
+ }
+ 
+-struct MediaHash(sha1::Sha1);
++const HASH_BUFFER_BYTES: usize = 64 * 1024;
++const MAX_HASH_WORKERS: usize = 4;
++const MIN_PARALLEL_HASH_ENTRIES: usize = 16;
++
++// At most four pending payloads plus the one being accumulated: 320 KiB beyond
++// the existing archive/decoder buffers. Completing a job releases its payload.
++// A larger decoded entry immediately switches to the original streaming hash.
++struct MediaHash {
++    hash: sha1::Sha1,
++    pending: Option<Vec<u8>>,
++}
+ 
+ impl Write for MediaHash {
+     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+-        self.0.update(bytes);
++        if let Some(pending) = self
++            .pending
++            .as_mut()
++            .filter(|pending| pending.len() + bytes.len() <= HASH_BUFFER_BYTES)
++        {
++            pending.extend_from_slice(bytes);
++        } else {
++            if let Some(pending) = self.pending.take() {
++                self.hash.update(&pending);
++            }
++            self.hash.update(bytes);
++        }
+         Ok(bytes.len())
+     }
+     fn flush(&mut self) -> std::io::Result<()> {
+diff --git a/anki_forge/src/writer_core/inspect_summary_tests.rs b/anki_forge/src/writer_core/inspect_summary_tests.rs
+index 8b7deb4..0ae9916 100644
+--- a/anki_forge/src/writer_core/inspect_summary_tests.rs
++++ b/anki_forge/src/writer_core/inspect_summary_tests.rs
+@@ -4,6 +4,28 @@ use std::io::Read;
+ use crate::product::{Note, Project};
+ use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
+ 
++#[test]
++fn deferred_media_hash_has_a_fixed_buffer_and_streams_after_its_boundary() {
++    let mut sink = MediaHash {
++        hash: sha1::Sha1::new(),
++        pending: Some(Vec::with_capacity(HASH_BUFFER_BYTES)),
++    };
++    let bytes: Vec<u8> = (0..HASH_BUFFER_BYTES).map(|i| (i * 31) as u8).collect();
++    // Short writes must not let Vec's geometric growth exceed the bound.
++    for chunk in bytes.chunks(777) {
++        sink.write_all(chunk).unwrap();
++        let pending = sink.pending.as_ref().unwrap();
++        assert!(pending.capacity() <= HASH_BUFFER_BYTES);
++    }
++    assert_eq!(sink.pending.as_deref(), Some(bytes.as_slice()));
++    sink.write_all(b"tail").unwrap();
++    assert!(sink.pending.is_none());
++    let mut expected = sha1::Sha1::new();
++    expected.update(&bytes);
++    expected.update(b"tail");
++    assert_eq!(sink.hash.finalize(), expected.finalize());
++}
++
+ fn package(path: &Path) {
+     let mut project = Project::new("Summary").stable_id("summary");
+     for id in ["note", "note-prefix"] {
+diff --git a/anki_forge/tests/apkg_inspect_limits_tests.rs b/anki_forge/tests/apkg_inspect_limits_tests.rs
+index d95106e..91cfb69 100644
+--- a/anki_forge/tests/apkg_inspect_limits_tests.rs
++++ b/anki_forge/tests/apkg_inspect_limits_tests.rs
+@@ -172,6 +172,74 @@ fn multiple_media_entries_share_both_cumulative_budgets() {
+     assert_limit(&path, &limits, "zip_total_bytes");
+ }
+ 
++#[test]
++fn many_media_keep_exact_hashes_across_small_and_streamed_payloads() {
++    use sha1::{Digest, Sha1};
++    let root = tempfile::tempdir().unwrap();
++    let sizes = [0, 31, 65_535, 65_536, 65_537, 131_073];
++    let payloads: Vec<Vec<u8>> = (0..30)
++        .map(|entry| {
++            (0..sizes[entry % sizes.len()])
++                .map(|i| (i * 31 + entry * 17) as u8)
++                .collect()
++        })
++        .collect();
++    for (version, method, nested) in [
++        (1, CompressionMethod::Deflated, false),
++        (2, CompressionMethod::Stored, false),
++        (3, CompressionMethod::Stored, true),
++        (3, CompressionMethod::Deflated, true),
++    ] {
++        let path = root.path().join(format!("many-{version}-{method:?}.apkg"));
++        write_archive(&path, version, &payloads, method, nested);
++        let report = inspect_apkg(&path).unwrap();
++        assert_eq!(report.observations.media.len(), payloads.len());
++        for (index, bytes) in payloads.iter().enumerate() {
++            assert_eq!(report.observations.media[index]["size"], bytes.len());
++            assert_eq!(
++                report.observations.media[index]["sha1"],
++                hex::encode(Sha1::digest(bytes))
++            );
++        }
++    }
++}
++
++#[test]
++fn many_media_keep_cumulative_limits_and_recover_after_late_failure() {
++    let root = tempfile::tempdir().unwrap();
++    let path = root.path().join("many-limits.apkg");
++    let payloads = vec![vec![5; 32_000]; 20];
++    let map_size = write_archive(&path, 1, &payloads, CompressionMethod::Stored, false);
++    let total = 2 + map_size as u64 + 20 * 32_000;
++    let mut limits = InspectLimits::default();
++    limits.max_decoded_total_bytes = total - 1;
++    assert_limit(&path, &limits, "decoded_total_bytes");
++    limits.max_decoded_total_bytes = total;
++    limits.max_zip_total_bytes = total - 1;
++    assert_limit(&path, &limits, "zip_total_bytes");
++    limits.max_zip_total_bytes = total;
++    assert_eq!(
++        inspect_apkg_with_limits(&path, &limits)
++            .unwrap()
++            .observations
++            .media
++            .len(),
++        20
++    );
++
++    let mut frames: Vec<_> = payloads
++        .iter()
++        .map(|bytes| zstd::stream::encode_all(bytes.as_slice(), 0).unwrap())
++        .collect();
++    frames[19].pop();
++    write_archive(&path, 3, &frames, CompressionMethod::Stored, false);
++    let report = inspect_apkg(&path).unwrap();
++    assert_ne!(report.observation_status, "complete");
++    assert!(report.observations.media.is_empty());
++    write_archive(&path, 3, &payloads, CompressionMethod::Stored, true);
++    assert_eq!(inspect_apkg(&path).unwrap().observations.media.len(), 20);
++}
++
+ #[test]
+ fn concatenated_frames_share_budget_and_high_window_is_typed() {
+     let root = tempfile::tempdir().unwrap();
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index 1f44a97..e5dae69 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -2,6 +2,8 @@
+ .tools/
+ .work/
+ inputs/
+-results/
++results/*
++!results/20260907-readme-comparison/
++!results/20260907-inspection-parallel-hash/
+ adapters/rust/target/
+ __pycache__/
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index ed28acc..c030fa9 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -2,6 +2,47 @@
+ 
+ An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
+ 
++## README comparison: three complete sessions
++
++The [current README evidence](results/20260907-readme-comparison/report.md) uses
++three sequential full media matrices at clean package revision `ab7d261`.
++Every exporter/cell has 30 fresh-process timings and 15 separate RSS samples,
++plus three warmups before each phase in each session. All 2,520 exports passed
++artifact checks and 120 selected packages passed Anki import/content/render
++checks. The Anki checker retains a recorded `tokio/io-util` build-feature patch.
++
++The aggregate pools equally sized sessions and also retains each session's
++medians and same-session time savings. Quartiles use linear interpolation at
++`(n - 1) × p`; original per-session media reports retain their exclusive
++quartile convention. No old implementation, best run or cross-cell average is
++mixed into these results. Three sessions give a local descriptive comparison;
++they do not establish performance across machines or workloads. A predeclared
++5-percentage-point spread diagnostic is reported without triggering extra runs.
++
++The main chart is a 5×4 heatmap with time savings and both absolute medians.
++Supplementary plots show time scaling with IQR and the three session medians,
++plus separate signed memory/package-size savings. Numeric tables and all
++original checks remain in the linked report. Regenerate the charts offline:
++
++```sh
++benchmarks/.venv/bin/python benchmarks/media_report.py benchmarks/results/20260907-readme-comparison
++```
++
++After the preparation and smoke commands below, reproduce the three-session
++schedule from a clean checkout by copying its archived runner to a new work
++directory. The runner records the plan before measurement, generates one shared
++frozen fixture set, and stops if any session fails:
++
++```sh
++mkdir -p benchmarks/.work/readme-reproduction
++cp benchmarks/results/20260907-readme-comparison/run_three.py benchmarks/.work/readme-reproduction/run_three.py
++benchmarks/.venv/bin/python benchmarks/.work/readme-reproduction/run_three.py
++```
++
++Use `prepare --with-anki --rust-allocator system` for this reproduction.
++The archived snapshot is explicitly allowed by `.gitignore`; other working
++results remain ignored.
++
+ ## Run
+ 
+ Requirements: the repository's Rust 1.92.0 toolchain, `uv`, a native CPython 3.11 interpreter, a C compiler with pthreads, and a local filesystem with sufficient free space. The initial local profile is **CPython 3.11.0 ARM64**; the exact patch is captured in every manifest. Another patch is a separate runtime profile, not a silently interchangeable baseline. Linux x86_64 and macOS ARM64 are supported. Python dependencies, including reporting tools, are hash locked; the private Rust adapter has its own Cargo.lock and workspace.
+diff --git a/docs/adr/0018-build-owned-media-streaming.md b/docs/adr/0018-build-owned-media-streaming.md
+index 0c14aa1..d81eb50 100644
+--- a/docs/adr/0018-build-owned-media-streaming.md
++++ b/docs/adr/0018-build-owned-media-streaming.md
+@@ -35,6 +35,14 @@ selection and portable fallback; no platform FFI or global allocator is added.
+ 
+ Inspection reuses decoder workspace with a fresh session per frame; exact
+ window checks and cumulative ZIP/decoded budgets remain in force.
++For at least 16 media entries, inspection may hash complete decoded payloads of
++at most 64 KiB on up to four scoped workers. Archive reading, CRC/format checks
++and all resource counters stay on the inspecting thread. Each worker has only
++one pending payload, and releases its bytes before acknowledging completion;
++including the current payload, extra buffered data is bounded by 320 KiB.
++Larger entries switch to streaming hashing, and unavailable worker threads leave
++the serial path usable. Hash results are collected in the original media order,
++and all workers finish before inspection returns, including on read failures.
+ Inspection and policy acceptance remain mandatory before publication. The owned
+ candidate is synced and renamed, with copy-before-replace on cross-device moves.
+ `persist_to` keeps its copy semantics because its source may have other owners.

@@ -1,0 +1,60 @@
+{
+  "schema": "readme-media-comparison-plan-v1",
+  "created_utc": "2026-09-07T13:56:55.646120+00:00",
+  "source_commit": "ab7d261238619e99da9a6b8e5ffff8d952e6153b",
+  "git_status": "M README.md\n M anki_forge/PACKAGE_FILES.txt\n M anki_forge/src/prepared_media.rs\n M anki_forge/src/writer_core/inspect.rs\n M anki_forge/src/writer_core/inspect_summary_tests.rs\n M anki_forge/src/writer_core/mod.rs\n M anki_forge/src/writer_core/stream_zip.rs\n M anki_forge/tests/apkg_inspect_limits_tests.rs\n M benchmarks/.gitignore\n M benchmarks/README.md\n M docs/adr/0018-build-owned-media-streaming.md\n?? anki_forge/src/prepared_media/\n?? anki_forge/src/writer_core/pipelined_sha1.rs\n?? benchmarks/media_report.py\n?? benchmarks/results/20260907-inspection-parallel-hash/\n?? benchmarks/results/20260907-post-streaming-audit/\n?? benchmarks/results/20260907-readme-comparison/\n?? benchmarks/results/20260907-remaining-opportunities/\n?? benchmarks/results/20260907-streaming-followup/\n?? benchmarks/tests/test_media_report.py",
+  "rounds": [
+    "20260907T135655Z-bounded-media-r1",
+    "20260907T135655Z-bounded-media-r2",
+    "20260907T135655Z-bounded-media-r3"
+  ],
+  "round_count": 3,
+  "sizes": [
+    100,
+    200,
+    500,
+    1000
+  ],
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "timing_per_round": 10,
+  "rss_per_round": 5,
+  "warmups_per_phase_per_round": 3,
+  "schedule_seed": 20260907,
+  "schedule_policy": "Repeat the unchanged balanced, interleaved schedule in three sequential sessions.",
+  "aggregate": "Pool all 30 timing and 15 separate RSS samples per exporter/cell; median and linear inclusive Q1/Q3. Keep all three per-session medians and same-session ratios.",
+  "chart_time_saved": "100 * (1 - pooled Rust median / pooled genanki median)",
+  "stability": "Report max-minus-min of all three same-session time-saved percentages per cell; flag spread above 5 percentage points. Diagnostic only; no significance claim.",
+  "failure_policy": "Retain every attempt; stop on a failed full round. No best-run selection or automatic extra rounds.",
+  "environment": {
+    "cpu": "Apple M1 Pro",
+    "memory_bytes": "34359738368",
+    "logical_cpus": "10",
+    "filesystem": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   392Gi    42Gi    91%    6.5M  436M    1%   /System/Volumes/Data"
+  },
+  "host_before": {
+    "load": [
+      6.34130859375,
+      14.73388671875,
+      14.744140625
+    ],
+    "power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t46%; discharging; 2:08 remaining present: true",
+    "power_settings": "Battery Power:\n Sleep On Power Button 1\n lowpowermode         1\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 0\n networkoversleep     0\n sleep                1\n lessbright           1\n tcpkeepalive         1\n disksleep            10\nAC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n disksleep            10",
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "utc": "2026-09-07T13:56:55.749298+00:00"
+  },
+  "oracle_patch": "diff --git a/Cargo.toml b/Cargo.toml\nindex 2566a48f1..38ef681ef 100644\n--- a/Cargo.toml\n+++ b/Cargo.toml\n@@ -130,7 +130,7 @@ syn = { version = \"2.0.103\", features = [\"parsing\", \"printing\"] }\n tar = \"0.4.44\"\n tempfile = \"3.20.0\"\n termcolor = \"1.4.1\"\n-tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\"] }\n+tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\", \"io-util\"] }\n tokio-util = { version = \"0.7.15\", features = [\"io\"] }\n tower-http = { version = \"0.6.6\", features = [\"trace\"] }\n tracing = { version = \"0.1.41\", features = [\"max_level_trace\", \"release_max_level_debug\"] }",
+  "oracle_revision": "2d44d4d6bc486803f9236033ad840df203c87036",
+  "source_snapshot": {
+    "source-snapshot.json": "7e5201285eb428e0de2c11351bc711c05f1df71318b254e6a16de5b8413bc14a",
+    "source.patch": "37de0ff9533f3d6937956e0e56ad6bb6c07155219e62bf7e615d69e0af4fd0b1"
+  },
+  "expected_power_source": "Now drawing from 'Battery Power'",
+  "power_label": "Battery power",
+  "power_policy": "Record native power immediately before and after every export, outside timing; stop on any source change."
+}

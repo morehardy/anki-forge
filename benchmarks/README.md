@@ -2,6 +2,76 @@
 
 An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
 
+## Text ownership: latest paired comparison
+
+The [text ownership report](results/20260907-text-ownership/README.md) compares
+the preceding shared-buffer build with consuming the temporary Project during
+Deck export. All 29 frozen cases have seven interleaved timings and five separate
+RSS samples per version, plus two warmups before each phase. The final 928 exports
+have byte-identical APKGs; 58 selected artifacts passed independent checks and
+all 29 scenes passed pinned Anki import/content/render checks. This run used
+native AC power throughout. A separate interrupted run changed power source;
+its entire performance sample is excluded and its original attempts retained.
+
+The largest long-field case reduced median RSS from 155.39 to 124.20 MiB, and
+the allocation probe reduced peak live Rust allocations from 90.03 to 62.00 MiB.
+Time changes are modest and mixed. The report retains all attempts, source content,
+exact hashes, stage/allocation probes, source replay and the complete quality gates.
+
+## Archived Rust/genanki comparison: three complete sessions
+
+The [preceding README evidence](results/20260907-bounded-media/report.md)
+uses three sequential full media matrices at revision `ab7d261` plus a frozen
+uncommitted source patch. Exact source/binary identities were recorded before
+measurement and stayed unchanged. Every exporter/cell has 30 fresh-process
+timings and 15 separate RSS samples, plus three warmups before each phase in
+each session. All 2,520 exports passed artifact checks and 120 selected packages
+passed Anki import/content/render checks. Native battery-power readings were
+checked before and after every export. The Anki checker retains a recorded
+`tokio/io-util` build-feature patch.
+
+The [shared-buffer implementation report](results/20260907-bounded-media/implementation.md)
+compares 29 cases with the preceding version, including large media, long fields
+and 10,000 notes. It records the fixed 4.5 MiB encoded-buffer budget, time/RSS
+tradeoffs, rejected identity-borrowing candidate, failure tests and source evidence.
+The [preceding implementation and three sessions](results/20260907-streaming-followup/implementation.md),
+[post-streaming bottleneck audit](results/20260907-post-streaming-audit/README.md)
+and [earlier clean baseline](results/20260907-readme-comparison/report.md) remain unchanged.
+
+The aggregate pools equally sized sessions and also retains each session's
+medians and same-session time savings. Quartiles use linear interpolation at
+`(n - 1) × p`; original per-session media reports retain their exclusive
+quartile convention. No old implementation, best run or cross-cell average is
+mixed into these results. Three sessions give a local descriptive comparison;
+they do not establish performance across machines or workloads. A predeclared
+5-percentage-point spread diagnostic is reported without triggering extra runs.
+
+The main chart is a 5×4 heatmap with time savings and both absolute medians.
+Supplementary plots show time scaling with IQR and the three session medians,
+plus separate signed memory/package-size savings. The implementation chart pairs large-file time and RSS before/after the buffer change. Numeric tables and all
+original checks remain in the linked report. Regenerate the charts offline:
+
+```sh
+benchmarks/.venv/bin/python benchmarks/media_report.py benchmarks/results/20260907-bounded-media
+```
+
+After the preparation and smoke commands below, reproduce the same three-session
+schedule on macOS from a clean checkout by copying the current runner and power
+guard to a new work directory. The runner records the plan before measurement, generates one shared
+frozen fixture set, and stops if any session fails:
+
+```sh
+mkdir -p benchmarks/.work/readme-reproduction/confirmation
+cp benchmarks/results/20260907-bounded-media/{run_three.py,guarded_media_bench.py} benchmarks/.work/readme-reproduction/confirmation/
+benchmarks/.venv/bin/python benchmarks/.work/readme-reproduction/confirmation/run_three.py
+```
+
+Use `prepare --with-anki --rust-allocator system` for this reproduction.
+The reviewed evidence snapshots are explicitly allowed by `.gitignore`; other working
+results remain ignored. A dirty measurement requires a predeclared, hash-pinned
+`source-snapshot.json` and `source.patch`; the reporter rejects changed source
+identities and never labels such measurements as a clean commit.
+
 ## Run
 
 Requirements: the repository's Rust 1.92.0 toolchain, `uv`, a native CPython 3.11 interpreter, a C compiler with pthreads, and a local filesystem with sufficient free space. The initial local profile is **CPython 3.11.0 ARM64**; the exact patch is captured in every manifest. Another patch is a separate runtime profile, not a silently interchangeable baseline. Linux x86_64 and macOS ARM64 are supported. Python dependencies, including reporting tools, are hash locked; the private Rust adapter has its own Cargo.lock and workspace.

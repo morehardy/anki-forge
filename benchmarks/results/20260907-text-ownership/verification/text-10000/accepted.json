@@ -1,0 +1,58 @@
+{
+  "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a",
+  "artifact_bytes": 1536376,
+  "package": {
+    "version": 3,
+    "canonical_entry": "collection.anki21b",
+    "nested_compression": "zstd",
+    "payloads": [
+      {
+        "name": "meta",
+        "zip_method": 0,
+        "stored_bytes": 2,
+        "decoded_zip_bytes": 2,
+        "role": "metadata"
+      },
+      {
+        "name": "collection.anki21b",
+        "zip_method": 0,
+        "stored_bytes": 1482705,
+        "decoded_zip_bytes": 1482705,
+        "role": "canonical"
+      },
+      {
+        "name": "collection.anki2",
+        "zip_method": 0,
+        "stored_bytes": 53248,
+        "decoded_zip_bytes": 53248,
+        "role": "compatibility_placeholder"
+      },
+      {
+        "name": "media",
+        "zip_method": 0,
+        "stored_bytes": 9,
+        "decoded_zip_bytes": 9,
+        "role": "metadata"
+      }
+    ],
+    "media_count": 0
+  },
+  "physical": {
+    "status": "passed",
+    "notes": 10000,
+    "cards": 10000,
+    "schema": 18,
+    "used_note_types": 1,
+    "populated_decks": 1,
+    "logical_sha256": "0263470870de944ae9c03583c0fade4f6b88a3becc57fc351834dbe93cc97c69"
+  },
+  "semantic": {
+    "status": "passed",
+    "reader": "repository-inspector-modern-v1",
+    "observation_model_version": "phase3-inspect-v2",
+    "stock_model_name": "Basic",
+    "css": "",
+    "inspection_sha256": "a28298bf590dea46c9a041e05b9d3d6027eded055c292a78d552713997d89f3c"
+  },
+  "status": "passed"
+}

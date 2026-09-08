@@ -1,0 +1,10 @@
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -440,6 +440,7 @@
+     let _ = fs::remove_file(&path);
+     let conn = Connection::open(&path)
+         .with_context(|| format!("open collection database {}", path.display()))?;
++    conn.pragma_update(None, "synchronous", "OFF")?;
+     {
+         let transaction = conn.unchecked_transaction()?;
+         execute_source_schema(&transaction, SCHEMA11_SQL)?;

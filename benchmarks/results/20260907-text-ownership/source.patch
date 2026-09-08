@@ -1,0 +1,904 @@
+--- a/anki_forge/tests/deck_project_facade_tests.rs
++++ b/anki_forge/tests/deck_project_facade_tests.rs
+@@ -266,6 +266,78 @@
+     }
+ }
+ 
++#[test]
++fn borrowed_deck_exports_preserve_long_html_and_identity_evidence() {
++    let root = tempfile::tempdir().unwrap();
++    let mut deck = Deck::builder("长文本").stable_id("long-html").build();
++    deck.basic()
++        .note(
++            "<b>问题 &amp; 答案</b>",
++            "<p>中文 &amp; <em>answer</em></p>".repeat(4096),
++        )
++        .tags(["中文"])
++        .add()
++        .unwrap();
++    deck.cloze()
++        .note("{{c1::中文}} &amp; {{c2::answer}}")
++        .extra("<b>extra</b>".repeat(4096))
++        .add()
++        .unwrap();
++    let original = deck.clone();
++    let project = Project::from(deck.clone());
++    let deck_lock = root.path().join("deck.json");
++    let project_lock = root.path().join("project.json");
++    let deck_report = deck
++        .build(BuildOptions::new().first_update_safe_build(&deck_lock))
++        .unwrap();
++    let project_report = project
++        .build(BuildOptions::new().first_update_safe_build(&project_lock))
++        .unwrap();
++    assert_eq!(deck_report.counts, project_report.counts);
++    assert_eq!(deck_report.diagnostics, project_report.diagnostics);
++    assert_eq!(
++        std::fs::read(deck_lock).unwrap(),
++        std::fs::read(project_lock).unwrap()
++    );
++    let expected = std::fs::read(project_report.artifact.as_ref().unwrap().path()).unwrap();
++    assert_eq!(
++        std::fs::read(deck_report.artifact.as_ref().unwrap().path()).unwrap(),
++        expected
++    );
++    assert_eq!(deck.to_apkg_bytes().unwrap(), expected);
++    let mut written = Vec::new();
++    deck.write_to(&mut written).unwrap();
++    assert_eq!(written, expected);
++    assert_eq!(deck, original);
++    assert_eq!(
++        project.lower().unwrap().authoring_document.notes[0].fields["Back"],
++        "<p>中文 &amp; <em>answer</em></p>".repeat(4096)
++    );
++}
++
++#[test]
++fn borrowed_deck_can_repair_missing_media_after_failed_export() {
++    let mut deck = Deck::builder("Repair").stable_id("repair-text").build();
++    deck.basic()
++        .note("front", "<img src=\"repair.png\">")
++        .add()
++        .unwrap();
++    let original = deck.clone();
++    let deck_error = deck.build(BuildOptions::new()).unwrap_err();
++    let project_error = Project::from(deck.clone())
++        .build(BuildOptions::new())
++        .unwrap_err();
++    assert_eq!(
++        deck_error.report.diagnostics,
++        project_error.report.diagnostics
++    );
++    assert_eq!(deck, original);
++    deck.media()
++        .add(MediaSource::from_bytes("repair.png", PNG.to_vec()))
++        .unwrap();
++    assert_eq!(deck.build(BuildOptions::new()).unwrap().counts.media, 1);
++}
++
+ fn unique_artifacts_dir(label: &str) -> PathBuf {
+     let mut dir = std::env::temp_dir();
+     dir.push(format!(
+--- a/anki_forge/src/product/note.rs
++++ b/anki_forge/src/product/note.rs
+@@ -165,6 +165,18 @@
+             .map(|(field, content)| (field.clone(), content.render()))
+             .collect()
+     }
++
++    // Only a consumed Project uses this. Keep field names for diagnostic source
++    // mapping; callers must resolve content-derived identities before draining.
++    pub(crate) fn take_rendered_fields(&mut self) -> BTreeMap<String, String> {
++        self.fields
++            .iter_mut()
++            .map(|(field, content)| {
++                let content = std::mem::replace(content, Content::Html(String::new()));
++                (field.clone(), content.into_rendered())
++            })
++            .collect()
++    }
+ }
+ 
+ #[derive(Debug, Clone, PartialEq, Eq)]
+--- a/anki_forge/src/product/project.rs
++++ b/anki_forge/src/product/project.rs
+@@ -848,14 +848,18 @@
+         pipeline::build(BuildInput::Project(self), options, None)
+     }
+ 
++    pub(crate) fn into_build(self, options: BuildOptions) -> Result<BuildReport, BuildError> {
++        pipeline::build(BuildInput::OwnedProject(Box::new(self)), options, None)
++    }
++
+     pub(crate) fn build_package_artifacts(
+-        &self,
++        self,
+         artifacts_dir: &Path,
+         artifact_ref_prefix: String,
+         inspect_limits: crate::writer_core::InspectLimits,
+     ) -> Result<(BuildReport, crate::writer_core::PackageBuildResult), BuildError> {
+         pipeline::execute(
+-            BuildInput::Project(self),
++            BuildInput::OwnedProject(Box::new(self)),
+             BuildOptions::new()
+                 .artifacts_dir(artifacts_dir)
+                 .inspect_limits(inspect_limits),
+@@ -1000,11 +1004,83 @@
+     }
+ 
+     fn to_product_v3_payload(&self) -> (String, crate::product::model::ProductDocumentV2Payload) {
++        let (document_id, mut payload) = self.product_v3_payload_header();
++        let default_deck = self.default_deck.as_deref().unwrap_or(&self.name);
++        let stable_id_counts = self.note_stable_id_counts();
++        payload.notes = self
++            .notes
++            .iter()
++            .enumerate()
++            .map(|(index, note)| {
++                let identity = resolve_product_note_identity(self, note, index, &stable_id_counts);
++                product_v3_note(
++                    &self.note_types,
++                    note,
++                    identity.stable_id,
++                    default_deck,
++                    note.rendered_fields(),
++                    index,
++                )
++            })
++            .collect();
++        (document_id, payload)
++    }
++
++    fn into_build_lowering(
++        mut self,
++    ) -> (
++        LoweringPlan,
++        crate::product::MediaRegistry,
++        input::ResolvedNoteIdentities,
++    ) {
++        let (document_id, mut payload) = self.product_v3_payload_header();
++        // Resolve once while all original values are still present. The same
++        // identities drive payload IDs, diagnostic locations and reconciliation.
++        let identities = {
++            let counts = self.note_stable_id_counts();
++            self.notes
++                .iter()
++                .enumerate()
++                .map(|(index, note)| resolve_product_note_identity(&self, note, index, &counts))
++                .collect::<Vec<_>>()
++        };
++        let default_deck = self.default_deck.as_deref().unwrap_or(&self.name);
++        payload.notes = self
++            .notes
++            .iter_mut()
++            .zip(&identities)
++            .enumerate()
++            .map(|(index, (note, identity))| {
++                let fields = note.take_rendered_fields();
++                product_v3_note(
++                    &self.note_types,
++                    note,
++                    identity.stable_id.clone(),
++                    default_deck,
++                    fields,
++                    index,
++                )
++            })
++            .collect();
++        let mut plan =
++            crate::product::lowering::lower_owned_product_v2_document(document_id, payload);
++        self.apply_note_source_paths_with_ids(
++            &mut plan,
++            identities.iter().map(|identity| identity.stable_id.clone()),
++            &self.note_stable_id_counts(),
++        );
++        self.apply_notetype_source_paths(&mut plan);
++        let identities = identities
++            .into_iter()
++            .map(|identity| (identity.stable_id.clone(), identity))
++            .collect();
++        (plan, self.media, identities)
++    }
++
++    fn product_v3_payload_header(
++        &self,
++    ) -> (String, crate::product::model::ProductDocumentV2Payload) {
+         let document_id = self.stable_id.clone().unwrap_or_else(|| self.name.clone());
+-        let default_deck = self
+-            .default_deck
+-            .clone()
+-            .unwrap_or_else(|| self.name.clone());
+         let implicit_stock_notetype_ids = self.implicit_stock_notetype_ids();
+         let mut note_type_id_counts = BTreeMap::<&str, usize>::new();
+         for stock_id in &implicit_stock_notetype_ids {
+@@ -1112,80 +1188,12 @@
+                 }),
+         );
+ 
+-        let stable_id_counts = self.note_stable_id_counts();
+-        let mut notes = Vec::with_capacity(self.notes.len());
+-        for (index, note) in self.notes.iter().enumerate() {
+-            let note_id =
+-                resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id;
+-            let deck_name = note
+-                .deck_name()
+-                .unwrap_or(default_deck.as_str())
+-                .to_string();
+-            let mut fields = note.rendered_fields();
+-            if note.note_type_id() == STOCK_BASIC_ID {
+-                notes.push(product_v3_stock_note(
+-                    note,
+-                    note_id,
+-                    deck_name,
+-                    [
+-                        ("front", fields.remove("Front")),
+-                        ("back", fields.remove("Back")),
+-                    ],
+-                    index,
+-                ));
+-            } else if note.note_type_id() == STOCK_CLOZE_ID {
+-                notes.push(product_v3_stock_note(
+-                    note,
+-                    note_id,
+-                    deck_name,
+-                    [
+-                        ("text", fields.remove("Text")),
+-                        ("back_extra", fields.remove("Back Extra")),
+-                    ],
+-                    index,
+-                ));
+-            } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
+-                notes.push(product_v3_stock_note(
+-                    note,
+-                    note_id,
+-                    deck_name,
+-                    [
+-                        ("occlusion", fields.remove("Occlusion")),
+-                        ("image", fields.remove("Image")),
+-                        ("header", fields.remove("Header")),
+-                        ("back_extra", fields.remove("Back Extra")),
+-                        ("comments", fields.remove("Comments")),
+-                    ],
+-                    index,
+-                ));
+-            } else {
+-                let fields = custom_note_fields_for_product_v3(self, note, fields)
+-                    .into_iter()
+-                    .map(|(key, value)| {
+-                        (
+-                            key,
+-                            crate::product::model::ProductFieldContentV2::Html { value },
+-                        )
+-                    })
+-                    .collect();
+-                notes.push(crate::product::model::ProductNoteV2::Custom(
+-                    crate::product::model::ProductCustomNoteV2 {
+-                        note_type_id: note.note_type_id().to_string(),
+-                        stable_id: Some(note_id),
+-                        deck_name,
+-                        fields,
+-                        tags: note.tags().to_vec(),
+-                        source_path: Some(format!("project.notes[{index}]")),
+-                    },
+-                ));
+-            }
+-        }
+         (
+             document_id,
+             crate::product::model::ProductDocumentV2Payload {
+                 version: 3,
+                 note_types,
+-                notes,
++                notes: Vec::new(),
+                 media: Vec::new(),
+                 transport_diagnostics: Vec::new(),
+             },
+@@ -1236,12 +1244,22 @@
+ 
+     fn apply_note_source_paths(&self, plan: &mut LoweringPlan) {
+         let stable_id_counts = self.note_stable_id_counts();
++        let identities = self.notes.iter().enumerate().map(|(index, note)| {
++            resolve_product_note_identity(self, note, index, &stable_id_counts).stable_id
++        });
++        self.apply_note_source_paths_with_ids(plan, identities, &stable_id_counts);
++    }
++
++    fn apply_note_source_paths_with_ids(
++        &self,
++        plan: &mut LoweringPlan,
++        identities: impl Iterator<Item = String>,
++        stable_id_counts: &BTreeMap<&str, usize>,
++    ) {
+         let mut project_indexes_by_authoring_id = BTreeMap::<String, Vec<usize>>::new();
+-        for (project_index, product_note) in self.notes.iter().enumerate() {
+-            let identity =
+-                resolve_product_note_identity(self, product_note, project_index, &stable_id_counts);
++        for (project_index, identity) in identities.enumerate() {
+             project_indexes_by_authoring_id
+-                .entry(identity.stable_id)
++                .entry(identity)
+                 .or_default()
+                 .push(project_index);
+         }
+@@ -1412,6 +1430,72 @@
+     }
+ }
+ 
++fn product_v3_note(
++    note_types: &[NoteType],
++    note: &Note,
++    note_id: String,
++    default_deck: &str,
++    mut fields: BTreeMap<String, String>,
++    index: usize,
++) -> crate::product::model::ProductNoteV2 {
++    let deck_name = note.deck_name().unwrap_or(default_deck).to_string();
++    if note.note_type_id() == STOCK_BASIC_ID {
++        product_v3_stock_note(
++            note,
++            note_id,
++            deck_name,
++            [
++                ("front", fields.remove("Front")),
++                ("back", fields.remove("Back")),
++            ],
++            index,
++        )
++    } else if note.note_type_id() == STOCK_CLOZE_ID {
++        product_v3_stock_note(
++            note,
++            note_id,
++            deck_name,
++            [
++                ("text", fields.remove("Text")),
++                ("back_extra", fields.remove("Back Extra")),
++            ],
++            index,
++        )
++    } else if note.note_type_id() == STOCK_IMAGE_OCCLUSION_ID {
++        product_v3_stock_note(
++            note,
++            note_id,
++            deck_name,
++            [
++                ("occlusion", fields.remove("Occlusion")),
++                ("image", fields.remove("Image")),
++                ("header", fields.remove("Header")),
++                ("back_extra", fields.remove("Back Extra")),
++                ("comments", fields.remove("Comments")),
++            ],
++            index,
++        )
++    } else {
++        let fields = custom_note_fields_for_product_v3(note_types, note, fields)
++            .into_iter()
++            .map(|(key, value)| {
++                (
++                    key,
++                    crate::product::model::ProductFieldContentV2::Html { value },
++                )
++            })
++            .collect();
++        crate::product::model::ProductNoteV2::Custom(crate::product::model::ProductCustomNoteV2 {
++            note_type_id: note.note_type_id().to_string(),
++            stable_id: Some(note_id),
++            deck_name,
++            fields,
++            tags: note.tags().to_vec(),
++            source_path: Some(format!("project.notes[{index}]")),
++        })
++    }
++}
++
+ fn product_v3_stock_note<const N: usize>(
+     note: &crate::product::Note,
+     stable_id: String,
+@@ -1440,12 +1524,11 @@
+ }
+ 
+ fn custom_note_fields_for_product_v3(
+-    project: &Project,
++    note_types: &[NoteType],
+     note: &crate::product::Note,
+     rendered: BTreeMap<String, String>,
+ ) -> BTreeMap<String, String> {
+-    let Some(note_type) = project
+-        .note_types
++    let Some(note_type) = note_types
+         .iter()
+         .find(|note_type| note_type.id() == note.note_type_id())
+     else {
+@@ -3331,7 +3414,42 @@
+         assert_eq!(actual.source_map, expected.source_map);
+         assert_eq!(actual.product_diagnostics, expected.product_diagnostics);
+         assert_eq!(actual.lowering_diagnostics, expected.lowering_diagnostics);
++        let (consumed, _, identities) = project.clone().into_build_lowering();
++        assert_eq!(identities, project.resolved_note_identities());
++        assert_eq!(
++            serde_json::to_vec(&consumed.authoring_document).unwrap(),
++            serde_json::to_vec(&actual.authoring_document).unwrap()
++        );
++        assert_eq!(consumed.mappings, actual.mappings);
++        assert_eq!(consumed.source_map, actual.source_map);
++        assert_eq!(consumed.product_diagnostics, actual.product_diagnostics);
++        assert_eq!(consumed.lowering_diagnostics, actual.lowering_diagnostics);
+         actual
++    }
++
++    #[test]
++    fn consuming_project_lowering_moves_long_html_storage() {
++        let answer = "<p>中文 &amp; answer</p>".repeat(4096);
++        let storage = answer.as_ptr();
++        let mut project = Project::new("owned-fields");
++        project
++            .add_note(
++                Note::new(STOCK_BASIC_ID)
++                    .html("Front", "question")
++                    .html("Back", answer),
++            )
++            .unwrap();
++        let identities = project.resolved_note_identities();
++        let (plan, _, consumed_identities) = project.into_build_lowering();
++        assert_eq!(consumed_identities, identities);
++        assert_eq!(
++            plan.authoring_document.notes[0].fields["Back"].as_ptr(),
++            storage
++        );
++        assert_eq!(
++            plan.authoring_document.notes[0].fields["Back"],
++            "<p>中文 &amp; answer</p>".repeat(4096)
++        );
+     }
+ 
+     #[test]
+@@ -3459,7 +3577,7 @@
+             )
+             .expect("add later note");
+ 
+-        let plan = project.lower().expect("lower project");
++        let plan = assert_project_lowering_matches_document_reference(&project);
+ 
+         assert!(plan
+             .product_diagnostics
+@@ -3526,7 +3644,7 @@
+             )
+             .expect("add later note");
+ 
+-        let plan = project.lower().expect("lower project");
++        let plan = assert_project_lowering_matches_document_reference(&project);
+         let authoring_note = plan
+             .authoring_document
+             .notes
+@@ -3783,7 +3901,7 @@
+                 ),
+         );
+ 
+-        let plan = project.lower().expect("lower project");
++        let plan = assert_project_lowering_matches_document_reference(&project);
+ 
+         assert_eq!(
+             plan.source_map.source_for_authoring_path(
+--- a/anki_forge/src/product/content.rs
++++ b/anki_forge/src/product/content.rs
+@@ -23,6 +23,15 @@
+             Self::Html(value) => value.clone(),
+             Self::Media(media) => media.filename().to_string(),
+             Self::Composite(items) => items.iter().map(Self::render).collect::<String>(),
++        }
++    }
++
++    pub(crate) fn into_rendered(self) -> String {
++        match self {
++            Self::Text(value) => escape_html(&value),
++            Self::Html(value) => value,
++            Self::Media(media) => media.filename().to_string(),
++            Self::Composite(items) => items.into_iter().map(Self::into_rendered).collect(),
+         }
+     }
+ }
+@@ -53,4 +62,20 @@
+             "AT&amp;T &lt;b&gt;&quot;phone&quot;&lt;/b&gt; &#39;ok&#39;"
+         );
+     }
++
++    #[test]
++    fn consuming_nested_content_preserves_rendering() {
++        let mut media = crate::product::MediaRegistry::default();
++        let image = media
++            .add_bytes("image", b"image".to_vec())
++            .unwrap()
++            .export_as("image.bin")
++            .unwrap();
++        let content = Content::Composite(vec![
++            Content::html("<b>原始 &amp; HTML</b>"),
++            Content::text("<&>\"' 中文"),
++            Content::Composite(vec![Content::Media(image), Content::text("&amp;")]),
++        ]);
++        assert_eq!(content.clone().into_rendered(), content.render());
++    }
+ }
+--- a/anki_forge/src/deck/export.rs
++++ b/anki_forge/src/deck/export.rs
+@@ -85,15 +85,13 @@
+         &self,
+         options: crate::build::BuildOptions,
+     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
+-        crate::product::Project::from_deck(self).build(options)
++        crate::product::Project::from_deck(self).into_build(options)
+     }
+ 
+     pub fn to_apkg_bytes(&self) -> anyhow::Result<Vec<u8>> {
+         with_temp_artifacts_dir("deck-bytes", |artifacts_dir| {
+             let output = artifacts_dir.join("deck.apkg");
+-            let report = crate::product::Project::from_deck(self)
+-                .write_apkg(&output)
+-                .map_err(anyhow::Error::from)?;
++            let report = self.write_apkg(&output).map_err(anyhow::Error::from)?;
+             let artifact_path = report
+                 .artifact
+                 .as_ref()
+@@ -113,7 +111,7 @@
+         &self,
+         path: impl AsRef<Path>,
+     ) -> Result<crate::build::BuildReport, crate::build::BuildError> {
+-        crate::product::Project::from_deck(self).write_apkg(path)
++        self.build(crate::build::BuildOptions::new().output(path.as_ref()))
+     }
+ }
+ 
+--- a/anki_forge/src/product/project/input.rs
++++ b/anki_forge/src/product/project/input.rs
+@@ -1,16 +1,49 @@
+ //! The two build inputs share execution, never mutable authoring state.
+ use super::*;
+ 
+-#[derive(Clone, Copy)]
+ pub(super) enum BuildInput<'a> {
+     Project(&'a Project),
++    OwnedProject(Box<Project>),
+     Document(&'a ProductDocument),
+ }
+ 
++pub(super) type ResolvedNoteIdentities =
++    BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity>;
++
+ impl BuildInput<'_> {
++    pub(super) fn normalize_for_build(
++        self,
++        base_dir: &Path,
++        media_store_dir: &Path,
++        options: ProjectNormalizeOptions,
++        prepared: Option<&mut crate::prepared_media::PreparedMedia>,
++    ) -> Result<(ProjectNormalizeOutput, ResolvedNoteIdentities), ProjectNormalizeError> {
++        let input = match self {
++            Self::OwnedProject(project) => {
++                let (lowering, media, identities) = project.into_build_lowering();
++                let normalized = Self::normalize_lowering(
++                    lowering,
++                    Some(&media),
++                    base_dir,
++                    media_store_dir,
++                    options,
++                    prepared,
++                )?;
++                return Ok((normalized, identities));
++            }
++            input => input,
++        };
++        let normalized =
++            input.normalize_with_prepared_media(base_dir, media_store_dir, options, prepared)?;
++        let identities = input.resolved_note_identities();
++        // Later stages need identity evidence, never the editable note content.
++        Ok((normalized, identities))
++    }
++
+     pub(super) fn stable_id(&self) -> Option<&str> {
+         match self {
+             Self::Project(project) => project.stable_id.as_deref(),
++            Self::OwnedProject(project) => project.stable_id.as_deref(),
+             Self::Document(document) => Some(document.document_id()),
+         }
+     }
+@@ -18,6 +51,7 @@
+     pub(super) fn validate(&self) -> ValidationReport {
+         match self {
+             Self::Project(project) => project.validate(),
++            Self::OwnedProject(project) => project.validate(),
+             Self::Document(_) => ValidationReport {
+                 diagnostics: Vec::new(),
+             },
+@@ -29,6 +63,7 @@
+     ) -> BTreeMap<String, crate::update_safety::model::ResolvedNoteIdentity> {
+         match self {
+             Self::Project(project) => project.resolved_note_identities(),
++            Self::OwnedProject(project) => project.resolved_note_identities(),
+             Self::Document(document) => document
+                 .product_v2()
+                 .map(product_v2_resolved_note_identities)
+@@ -37,13 +72,15 @@
+     }
+ 
+     fn lower_with_project_error(&self) -> Result<LoweringPlan, ProjectNormalizeError> {
++        let lower_project = |project: &Project| {
++            let mut plan = project.lower_product_document();
++            project.apply_note_source_paths(&mut plan);
++            project.apply_notetype_source_paths(&mut plan);
++            Ok(plan)
++        };
+         let result = match self {
+-            Self::Project(project) => {
+-                let mut plan = project.lower_product_document();
+-                project.apply_note_source_paths(&mut plan);
+-                project.apply_notetype_source_paths(&mut plan);
+-                Ok(plan)
+-            }
++            Self::Project(project) => lower_project(project),
++            Self::OwnedProject(project) => lower_project(project),
+             Self::Document(document) => document.lower(),
+         };
+         result.map_err(|error| ProjectNormalizeError {
+@@ -65,6 +102,30 @@
+ 
+     pub(super) fn normalize_with_prepared_media(
+         &self,
++        base_dir: impl Into<PathBuf>,
++        media_store_dir: impl Into<PathBuf>,
++        options: ProjectNormalizeOptions,
++        prepared: Option<&mut crate::prepared_media::PreparedMedia>,
++    ) -> Result<ProjectNormalizeOutput, ProjectNormalizeError> {
++        let lowering = self.lower_with_project_error()?;
++        let media = match self {
++            Self::Project(project) => Some(&project.media),
++            Self::OwnedProject(project) => Some(&project.media),
++            Self::Document(_) => None,
++        };
++        Self::normalize_lowering(
++            lowering,
++            media,
++            base_dir,
++            media_store_dir,
++            options,
++            prepared,
++        )
++    }
++
++    fn normalize_lowering(
++        mut lowering: LoweringPlan,
++        media: Option<&crate::product::MediaRegistry>,
+         base_dir: impl Into<PathBuf>,
+         media_store_dir: impl Into<PathBuf>,
+         mut options: ProjectNormalizeOptions,
+@@ -74,7 +135,6 @@
+         let media_store_dir = media_store_dir.into();
+         options.base_dir = options.base_dir.or(Some(base_dir.clone()));
+         options.media_store_dir = options.media_store_dir.or(Some(media_store_dir.clone()));
+-        let mut lowering = self.lower_with_project_error()?;
+         let product_diagnostics =
+             map_product_diagnostics(std::mem::take(&mut lowering.product_diagnostics));
+         let lowering_diagnostics =
+@@ -82,11 +142,11 @@
+         let media_mode = options.media_mode;
+         // Keep our input copies alive through ingestion, including error paths.
+         // Caller-owned source paths and aliases never enter this ownership set.
+-        let _media_input_files = if let Self::Project(project) = self {
++        let _media_input_files = if let Some(registry) = media {
+             let PreparedProductMedia { media, input_files } = match media_mode {
+                 ProjectMediaMode::PathBacked => {
+                     if let Some(prepared) = prepared.as_deref_mut() {
+-                        let media = project.media.media().map(|item| {
++                        let media = registry.media().map(|item| {
+                             let source = match &item.source {
+                                 crate::product::media_registry::ProductMediaSource::File { path } => {
+                                     prepared.register_source(item.id.clone(), path.clone(), item.registered_fingerprint());
+@@ -103,11 +163,11 @@
+                         }).collect();
+                         Ok(PreparedProductMedia { media, input_files: Vec::new() })
+                     } else {
+-                        product_media_to_path_backed_authoring_media(project.media.media(), &base_dir)
++                        product_media_to_path_backed_authoring_media(registry.media(), &base_dir)
+                     }
+                 }
+                 ProjectMediaMode::SelfContained => product_media_to_self_contained_authoring_media(
+-                    project.media.media(),
++                    registry.media(),
+                 )
+                 .map(|media| PreparedProductMedia {
+                     media,
+@@ -121,7 +181,7 @@
+                 media_source_modes: BTreeMap::new(),
+             })?;
+             lowering.authoring_document.media.extend(media);
+-            record_project_media_source_paths(&mut lowering, project.media.media());
++            record_project_media_source_paths(&mut lowering, registry.media());
+             input_files
+         } else {
+             Vec::new()
+--- a/anki_forge/src/product/project/pipeline.rs
++++ b/anki_forge/src/product/project/pipeline.rs
+@@ -102,8 +102,8 @@
+     path: PathBuf,
+ }
+ 
+-struct BuildPipeline<'a> {
+-    input: BuildInput<'a>,
++struct BuildPipeline {
++    project_stable_id: Option<String>,
+     options: BuildOptions,
+     started: Instant,
+     facts: BuildFacts,
+@@ -132,14 +132,14 @@
+             .unwrap_or_else(|| "artifacts".into())
+     });
+     let mut pipeline = BuildPipeline {
+-        input,
++        project_stable_id: input.stable_id().map(str::to_owned),
+         options,
+         started: Instant::now(),
+         facts: BuildFacts::default(),
+         artifact_ref_prefix,
+         writer_result: None,
+     };
+-    let outcome = pipeline.run(writer_stack);
++    let outcome = pipeline.run(input, writer_stack);
+     let writer_result = pipeline.writer_result.take();
+     let report = pipeline.finish(outcome)?;
+     Ok((
+@@ -148,13 +148,14 @@
+     ))
+ }
+ 
+-impl BuildPipeline<'_> {
++impl BuildPipeline {
+     fn run(
+         &mut self,
++        input: BuildInput<'_>,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+     ) -> Result<(), BuildFailureCause> {
+-        let prepared = self.prepare(writer_stack)?;
+-        let reconciled = self.reconcile(prepared)?;
++        let (prepared, identities) = self.prepare(input, writer_stack)?;
++        let reconciled = self.reconcile(prepared, identities)?;
+         let candidate = self.generate(reconciled)?;
+         let accepted = self.inspect(candidate)?;
+         self.publish(accepted)
+@@ -162,9 +163,9 @@
+ 
+     fn prepare(
+         &mut self,
++        input: BuildInput<'_>,
+         writer_stack: Option<(WriterPolicy, BuildContext)>,
+-    ) -> Result<PreparedBuild, BuildFailureCause> {
+-        let input = self.input;
++    ) -> Result<(PreparedBuild, super::input::ResolvedNoteIdentities), BuildFailureCause> {
+         let options = &self.options;
+         let facts = &mut self.facts;
+         if let Err(diagnostic) = BuildPathPlan::new(options).validate() {
+@@ -227,13 +228,13 @@
+         let validation = input.validate();
+         facts.diagnostics = validation.diagnostics;
+ 
+-        let normalized_output = input.normalize_with_prepared_media(
++        let normalized_output = input.normalize_for_build(
+             &media_input_dir,
+             &media_store_dir,
+             normalize_options,
+             prepared_media.as_mut(),
+         );
+-        let normalized_output = match normalized_output {
++        let (normalized_output, identities) = match normalized_output {
+             Ok(output) => output,
+             Err(error) => {
+                 let ProjectNormalizeError {
+@@ -326,16 +327,19 @@
+                 (writer_policy, build_context)
+             }
+         };
+-        Ok(PreparedBuild {
+-            prepared_media,
+-            artifact_workspace,
+-            baseline,
+-            normalized,
+-            media_source_modes,
+-            media_store_dir,
+-            writer_policy,
+-            build_context,
+-        })
++        Ok((
++            PreparedBuild {
++                prepared_media,
++                artifact_workspace,
++                baseline,
++                normalized,
++                media_source_modes,
++                media_store_dir,
++                writer_policy,
++                build_context,
++            },
++            identities,
++        ))
+     }
+ 
+     fn generate(
+@@ -551,7 +555,6 @@
+     }
+ 
+     fn publish(&mut self, candidate: AcceptedCandidate) -> Result<(), BuildFailureCause> {
+-        let input = self.input;
+         let options = &self.options;
+         let facts = &mut self.facts;
+         let state = &candidate.state;
+@@ -596,9 +599,9 @@
+                 );
+                 let lockfile = crate::update_safety::model::IdentityLockfile {
+                     schema_version: "identity-lockfile-v1".into(),
+-                    project_stable_id: input
+-                        .stable_id()
+-                        .map(str::to_string)
++                    project_stable_id: self
++                        .project_stable_id
++                        .clone()
+                         .expect("lockfile project identity was validated"),
+                     writer_policy_ref: writer_policy_ref.clone(),
+                     identity_index: selected_index,
+--- a/anki_forge/src/product/project/pipeline/reconcile.rs
++++ b/anki_forge/src/product/project/pipeline/reconcile.rs
+@@ -1,12 +1,13 @@
+ //! Reconcile identity evidence before any candidate is generated.
+ use super::*;
+ 
+-impl BuildPipeline<'_> {
++impl BuildPipeline {
+     pub(super) fn reconcile(
+         &mut self,
+         prepared: PreparedBuild,
++        resolved_note_identities: super::super::input::ResolvedNoteIdentities,
+     ) -> Result<ReconciledBuild, BuildFailureCause> {
+-        let input = self.input;
++        let project_stable_id = self.project_stable_id.as_deref();
+         let options = &self.options;
+         let facts = &mut self.facts;
+         let PreparedBuild {
+@@ -19,7 +20,6 @@
+             writer_policy,
+             build_context,
+         } = prepared;
+-        let resolved_note_identities = input.resolved_note_identities();
+ 
+         let update_mode = match crate::update_safety::effective_mode(options) {
+             Ok(mode) => mode,
+@@ -51,7 +51,7 @@
+                 true
+             };
+ 
+-        if input.stable_id().is_none() && project_stable_id_required {
++        if project_stable_id.is_none() && project_stable_id_required {
+             let condition =
+                 if options.identity_lockfile.is_some() || options.write_identity_lockfile {
+                     crate::update_safety::EvidenceCondition::LockfileRequired
+@@ -78,7 +78,7 @@
+ 
+         let mut current_identity = crate::update_safety::current::build_current_identity_index(
+             crate::update_safety::current::CurrentIdentityInput {
+-                project_stable_id: input.stable_id(),
++                project_stable_id,
+                 normalized: &normalized,
+                 writer_policy: &writer_policy,
+                 mode: update_mode,
+@@ -158,7 +158,7 @@
+                             );
+                             push_project_stable_id_mismatch_if_needed(
+                                 &mut facts.diagnostics,
+-                                input.stable_id(),
++                                project_stable_id,
+                                 Some(lockfile.project_stable_id.as_str()),
+                                 path.display().to_string(),
+                                 update_error_severity,
+@@ -229,7 +229,7 @@
+                         );
+                         push_project_stable_id_mismatch_if_needed(
+                             &mut facts.diagnostics,
+-                            input.stable_id(),
++                            project_stable_id,
+                             index.project_stable_id.as_deref(),
+                             path.display().to_string(),
+                             update_error_severity,

@@ -1,0 +1,12 @@
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1160,7 +1160,8 @@
+     Ok(())
+ }
+ 
+-const HASH_BUFFER_BYTES: usize = 64 * 1024;
++// [DEBUG-scale-opt] Private threshold experiment, up to 1.25 MiB buffered.
++const HASH_BUFFER_BYTES: usize = 256 * 1024;
+ const MAX_HASH_WORKERS: usize = 4;
+ const MIN_PARALLEL_HASH_ENTRIES: usize = 16;
+ 

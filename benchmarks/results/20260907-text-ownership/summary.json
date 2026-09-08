@@ -1,0 +1,3089 @@
+{
+  "method": {
+    "timing_repeats": 7,
+    "rss_repeats": 5,
+    "warmups_per_phase": 2,
+    "power_source": "AC Power",
+    "timing_scope": "Fresh process startup, JSON parsing, Deck construction/registration, default export and verification inside the library.",
+    "comparison": "Previous shared-buffer implementation versus consuming temporary Project text; system allocator, Rust release/default features.",
+    "time_change_convention": "Positive means slower; negative means faster.",
+    "rss_scope": "Median of independent native process peaks; Rust allocator probe reported separately."
+  },
+  "cases": [
+    {
+      "name": "text-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+      "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 60.12,
+            "q1": 59.595,
+            "q3": 60.707499999999996,
+            "minimum": 59.274,
+            "maximum": 61.181
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 30.59375,
+            "q1": 30.546875,
+            "q3": 30.734375,
+            "minimum": 30.453125,
+            "maximum": 30.828125
+          },
+          "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492",
+          "artifact_bytes": 209069
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 59.817,
+            "q1": 59.234,
+            "q3": 60.3305,
+            "minimum": 57.436,
+            "maximum": 60.789
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 29.53125,
+            "q1": 29.453125,
+            "q3": 29.609375,
+            "minimum": 29.453125,
+            "maximum": 29.875
+          },
+          "artifact_sha256": "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492",
+          "artifact_bytes": 209069
+        }
+      },
+      "time_change_pct": -0.5039920159680578,
+      "rss_change_pct": -3.4729315628192037,
+      "rss_change_mib": -1.0625
+    },
+    {
+      "name": "image-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+      "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 64152000,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 203.99,
+            "q1": 202.49099999999999,
+            "q3": 209.526,
+            "minimum": 199.253,
+            "maximum": 225.498
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 40.53125,
+            "q1": 40.171875,
+            "q3": 40.796875,
+            "minimum": 40.15625,
+            "maximum": 41.046875
+          },
+          "artifact_sha256": "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932",
+          "artifact_bytes": 64483665
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 206.605,
+            "q1": 204.6295,
+            "q3": 209.822,
+            "minimum": 203.019,
+            "maximum": 233.37
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 39.578125,
+            "q1": 39.1875,
+            "q3": 39.734375,
+            "minimum": 39.0625,
+            "maximum": 40.40625
+          },
+          "artifact_sha256": "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932",
+          "artifact_bytes": 64483665
+        }
+      },
+      "time_change_pct": 1.2819255845874622,
+      "rss_change_pct": -2.351580570547418,
+      "rss_change_mib": -0.953125
+    },
+    {
+      "name": "audio-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/1000.json",
+      "input_sha256": "854a08b1df9e64c6fedb74838c36a25d50d7392adc47767d04144c3add65f3e5",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 32044000,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 174.573,
+            "q1": 169.0885,
+            "q3": 177.546,
+            "minimum": 166.877,
+            "maximum": 214.079
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 40.109375,
+            "q1": 39.953125,
+            "q3": 40.421875,
+            "minimum": 39.625,
+            "maximum": 40.5625
+          },
+          "artifact_sha256": "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494",
+          "artifact_bytes": 32207523
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 172.238,
+            "q1": 169.924,
+            "q3": 175.56900000000002,
+            "minimum": 168.332,
+            "maximum": 181.725
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 39.046875,
+            "q1": 38.96875,
+            "q3": 39.171875,
+            "minimum": 38.8125,
+            "maximum": 39.484375
+          },
+          "artifact_sha256": "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494",
+          "artifact_bytes": 32207523
+        }
+      },
+      "time_change_pct": -1.3375493346622913,
+      "rss_change_pct": -2.6490066225165587,
+      "rss_change_mib": -1.0625
+    },
+    {
+      "name": "mixed-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/1000.json",
+      "input_sha256": "c53945aadb16798273789c5556ab8fbdbf1a3d86b56447fe9b5072642f6c0b23",
+      "notes": 1000,
+      "media": 700,
+      "media_bytes": 35274000,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 152.531,
+            "q1": 151.9095,
+            "q3": 153.5965,
+            "minimum": 150.243,
+            "maximum": 156.162
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 39.0,
+            "q1": 38.8125,
+            "q3": 39.265625,
+            "minimum": 38.703125,
+            "maximum": 39.359375
+          },
+          "artifact_sha256": "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d",
+          "artifact_bytes": 35516988
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 150.874,
+            "q1": 149.9385,
+            "q3": 156.76999999999998,
+            "minimum": 148.731,
+            "maximum": 164.409
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 37.90625,
+            "q1": 37.78125,
+            "q3": 38.015625,
+            "minimum": 37.59375,
+            "maximum": 38.28125
+          },
+          "artifact_sha256": "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d",
+          "artifact_bytes": 35516988
+        }
+      },
+      "time_change_pct": -1.0863365479804155,
+      "rss_change_pct": -2.8044871794871806,
+      "rss_change_mib": -1.09375
+    },
+    {
+      "name": "shared-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/1000.json",
+      "input_sha256": "b804510fea577d1bec628c8f89ce4f91a41ad8799c196285db1178e0aa5e965c",
+      "notes": 1000,
+      "media": 49,
+      "media_bytes": 2469180,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 70.443,
+            "q1": 70.407,
+            "q3": 71.23949999999999,
+            "minimum": 70.115,
+            "maximum": 71.644
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 35.3125,
+            "q1": 35.25,
+            "q3": 35.34375,
+            "minimum": 35.0,
+            "maximum": 35.625
+          },
+          "artifact_sha256": "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3",
+          "artifact_bytes": 2681133
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 69.196,
+            "q1": 68.743,
+            "q3": 70.8535,
+            "minimum": 67.858,
+            "maximum": 72.452
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 34.5625,
+            "q1": 34.5,
+            "q3": 34.734375,
+            "minimum": 34.4375,
+            "maximum": 35.109375
+          },
+          "artifact_sha256": "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3",
+          "artifact_bytes": 2681133
+        }
+      },
+      "time_change_pct": -1.770225572448647,
+      "rss_change_pct": -2.12389380530974,
+      "rss_change_mib": -0.75
+    },
+    {
+      "name": "text-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/100.json",
+      "input_sha256": "9dd725a5bf56f66e0fdcf6efb904bd822827087f47c1686fbc878a3ff3daa6f1",
+      "notes": 100,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 48103,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 23.158,
+            "q1": 22.579,
+            "q3": 26.515,
+            "minimum": 22.002,
+            "maximum": 31.052
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 14.203125,
+            "q1": 14.09375,
+            "q3": 14.21875,
+            "minimum": 14.078125,
+            "maximum": 14.296875
+          },
+          "artifact_sha256": "fa4e385b1b3dc0ff5bc347bd3d95e3fdc5e41fb45772331d46de89b7490219f1",
+          "artifact_bytes": 74384
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 23.103,
+            "q1": 22.849,
+            "q3": 24.234499999999997,
+            "minimum": 21.434,
+            "maximum": 27.025
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 14.140625,
+            "q1": 14.140625,
+            "q3": 14.1875,
+            "minimum": 14.046875,
+            "maximum": 14.25
+          },
+          "artifact_sha256": "fa4e385b1b3dc0ff5bc347bd3d95e3fdc5e41fb45772331d46de89b7490219f1",
+          "artifact_bytes": 74384
+        }
+      },
+      "time_change_pct": -0.23749892045945575,
+      "rss_change_pct": -0.44004400440044167,
+      "rss_change_mib": -0.0625
+    },
+    {
+      "name": "text-10000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+      "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+      "notes": 10000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 4560946,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 490.495,
+            "q1": 487.177,
+            "q3": 495.75300000000004,
+            "minimum": 477.419,
+            "maximum": 515.577
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 146.09375,
+            "q1": 144.640625,
+            "q3": 146.75,
+            "minimum": 143.328125,
+            "maximum": 150.671875
+          },
+          "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a",
+          "artifact_bytes": 1536376
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 477.831,
+            "q1": 472.3975,
+            "q3": 480.50149999999996,
+            "minimum": 470.475,
+            "maximum": 494.009
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 140.53125,
+            "q1": 138.75,
+            "q3": 141.953125,
+            "minimum": 137.828125,
+            "maximum": 141.953125
+          },
+          "artifact_sha256": "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a",
+          "artifact_bytes": 1536376
+        }
+      },
+      "time_change_pct": -2.5818815686194485,
+      "rss_change_pct": -3.807486631016044,
+      "rss_change_mib": -5.5625
+    },
+    {
+      "name": "long-back-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+      "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 6932376,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 144.411,
+            "q1": 142.8285,
+            "q3": 145.6905,
+            "minimum": 140.133,
+            "maximum": 153.703
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 60.921875,
+            "q1": 60.640625,
+            "q3": 67.453125,
+            "minimum": 60.625,
+            "maximum": 67.65625
+          },
+          "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4",
+          "artifact_bytes": 272379
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 146.286,
+            "q1": 140.27550000000002,
+            "q3": 147.933,
+            "minimum": 139.047,
+            "maximum": 149.625
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 53.625,
+            "q1": 53.234375,
+            "q3": 59.515625,
+            "minimum": 52.609375,
+            "maximum": 59.796875
+          },
+          "artifact_sha256": "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4",
+          "artifact_bytes": 272379
+        }
+      },
+      "time_change_pct": 1.2983775474167514,
+      "rss_change_pct": -11.977430110284693,
+      "rss_change_mib": -7.296875
+    },
+    {
+      "name": "boundary-65536",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65536/input.json",
+      "input_sha256": "ac4438b695d71f27ea3c2ba66999e04cdb29b1c5ad75eedfda1f565904e5acca",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 65536000,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 207.794,
+            "q1": 205.7005,
+            "q3": 213.4355,
+            "minimum": 200.363,
+            "maximum": 221.676
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 40.765625,
+            "q1": 40.59375,
+            "q3": 40.78125,
+            "minimum": 40.25,
+            "maximum": 41.1875
+          },
+          "artifact_sha256": "47f9001ab18f5d7f3b1eb05aeaf228add70873aa752be3ad6fd38e57b48654a2",
+          "artifact_bytes": 65867729
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 204.759,
+            "q1": 204.7365,
+            "q3": 207.8425,
+            "minimum": 203.916,
+            "maximum": 222.973
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 39.890625,
+            "q1": 39.65625,
+            "q3": 40.171875,
+            "minimum": 39.4375,
+            "maximum": 40.375
+          },
+          "artifact_sha256": "47f9001ab18f5d7f3b1eb05aeaf228add70873aa752be3ad6fd38e57b48654a2",
+          "artifact_bytes": 65867729
+        }
+      },
+      "time_change_pct": -1.4605811524875723,
+      "rss_change_pct": -2.146416251437333,
+      "rss_change_mib": -0.875
+    },
+    {
+      "name": "boundary-65537",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65537/input.json",
+      "input_sha256": "eb9ddb434c5dfe4a2cceaa9ab913defbf284f3787e099ab2443a92ba86292d3a",
+      "notes": 1000,
+      "media": 1000,
+      "media_bytes": 65537000,
+      "field_utf8_bytes": 455532,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 208.234,
+            "q1": 206.03300000000002,
+            "q3": 213.88400000000001,
+            "minimum": 203.444,
+            "maximum": 216.121
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 40.46875,
+            "q1": 40.390625,
+            "q3": 40.90625,
+            "minimum": 40.109375,
+            "maximum": 40.921875
+          },
+          "artifact_sha256": "d595feca90746e630436258127141708fa83349cc1464fb6579bf21a4bb58663",
+          "artifact_bytes": 65868741
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 207.282,
+            "q1": 206.53300000000002,
+            "q3": 208.3745,
+            "minimum": 205.651,
+            "maximum": 210.795
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 39.828125,
+            "q1": 39.78125,
+            "q3": 39.875,
+            "minimum": 39.59375,
+            "maximum": 39.984375
+          },
+          "artifact_sha256": "d595feca90746e630436258127141708fa83349cc1464fb6579bf21a4bb58663",
+          "artifact_bytes": 65868741
+        }
+      },
+      "time_change_pct": -0.45717798246204255,
+      "rss_change_pct": -1.5830115830115843,
+      "rss_change_mib": -0.640625
+    },
+    {
+      "name": "image-256x256k",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-256x256k/input.json",
+      "input_sha256": "40afab2500dfb391d8f07bd28a0fc44965d1aedadb085d0422dbd3bd36e0234b",
+      "notes": 256,
+      "media": 256,
+      "media_bytes": 67108864,
+      "field_utf8_bytes": 118200,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 139.152,
+            "q1": 137.7905,
+            "q3": 140.26850000000002,
+            "minimum": 135.962,
+            "maximum": 153.407
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.078125,
+            "q1": 27.0625,
+            "q3": 27.921875,
+            "minimum": 26.875,
+            "maximum": 28.0
+          },
+          "artifact_sha256": "2888cfc954a52b32994271a6388493a213c9556650b41aa95a5c8d50bf87ddad",
+          "artifact_bytes": 67240364
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 136.834,
+            "q1": 136.02499999999998,
+            "q3": 138.582,
+            "minimum": 135.525,
+            "maximum": 150.689
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 26.828125,
+            "q1": 26.8125,
+            "q3": 26.984375,
+            "minimum": 26.65625,
+            "maximum": 27.453125
+          },
+          "artifact_sha256": "2888cfc954a52b32994271a6388493a213c9556650b41aa95a5c8d50bf87ddad",
+          "artifact_bytes": 67240364
+        }
+      },
+      "time_change_pct": -1.66580430033344,
+      "rss_change_pct": -0.9232544720138458,
+      "rss_change_mib": -0.25
+    },
+    {
+      "name": "image-64x1m",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-64x1m/input.json",
+      "input_sha256": "27506b178976f5b80946884fe1e312c6cfd022a68f3c6dab682a4abb285e52a9",
+      "notes": 64,
+      "media": 64,
+      "media_bytes": 67108864,
+      "field_utf8_bytes": 30290,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 143.541,
+            "q1": 140.4225,
+            "q3": 151.23649999999998,
+            "minimum": 139.723,
+            "maximum": 200.995
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.578125,
+            "q1": 27.46875,
+            "q3": 27.65625,
+            "minimum": 27.359375,
+            "maximum": 28.171875
+          },
+          "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34",
+          "artifact_bytes": 67186841
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 142.339,
+            "q1": 140.093,
+            "q3": 143.6365,
+            "minimum": 137.882,
+            "maximum": 161.394
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.5,
+            "q1": 27.046875,
+            "q3": 27.609375,
+            "minimum": 26.984375,
+            "maximum": 28.046875
+          },
+          "artifact_sha256": "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34",
+          "artifact_bytes": 67186841
+        }
+      },
+      "time_change_pct": -0.837391407333099,
+      "rss_change_pct": -0.283286118980175,
+      "rss_change_mib": -0.078125
+    },
+    {
+      "name": "image-skewed-128",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-skewed-128/input.json",
+      "input_sha256": "bb3dd0f74fe56cb37e37c9a0f53942b3c276fe9d6ab869183d8d5dca07df2e7b",
+      "notes": 128,
+      "media": 128,
+      "media_bytes": 39713024,
+      "field_utf8_bytes": 59157,
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 101.927,
+            "q1": 100.035,
+            "q3": 102.167,
+            "minimum": 98.334,
+            "maximum": 105.875
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.875,
+            "q1": 27.765625,
+            "q3": 27.875,
+            "minimum": 27.5625,
+            "maximum": 28.71875
+          },
+          "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3",
+          "artifact_bytes": 39807987
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 101.312,
+            "q1": 100.8005,
+            "q3": 102.83349999999999,
+            "minimum": 100.592,
+            "maximum": 103.95
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.53125,
+            "q1": 27.34375,
+            "q3": 27.734375,
+            "minimum": 27.171875,
+            "maximum": 27.96875
+          },
+          "artifact_sha256": "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3",
+          "artifact_bytes": 39807987
+        }
+      },
+      "time_change_pct": -0.6033730022467099,
+      "rss_change_pct": -1.2331838565022402,
+      "rss_change_mib": -0.34375
+    },
+    {
+      "name": "text-200",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/200.json",
+      "input_sha256": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+      "notes": 200,
+      "media_files": 0,
+      "media_bytes": 0,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 27.601,
+            "q1": 26.78,
+            "q3": 27.748,
+            "minimum": 26.308,
+            "maximum": 28.069
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 16.078125,
+            "q1": 16.046875,
+            "q3": 16.09375,
+            "minimum": 15.90625,
+            "maximum": 16.140625
+          },
+          "artifact_sha256": "2eed679066b7226d1cb73c40053feb94fc45c6220eef39593679d45c648025ae",
+          "artifact_bytes": 90022
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 26.282,
+            "q1": 26.162,
+            "q3": 26.776,
+            "minimum": 25.857,
+            "maximum": 26.959
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 15.765625,
+            "q1": 15.71875,
+            "q3": 15.78125,
+            "minimum": 15.65625,
+            "maximum": 15.84375
+          },
+          "artifact_sha256": "2eed679066b7226d1cb73c40053feb94fc45c6220eef39593679d45c648025ae",
+          "artifact_bytes": 90022
+        }
+      },
+      "time_change_pct": -4.778812361870943,
+      "rss_change_pct": -1.9436345966958202,
+      "rss_change_mib": -0.3125
+    },
+    {
+      "name": "text-500",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/500.json",
+      "input_sha256": "d7dc21236993cb09a9f099d2b2b3517bd21d6c97a92e44e0c1f630a6f896d27d",
+      "notes": 500,
+      "media_files": 0,
+      "media_bytes": 0,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 39.679,
+            "q1": 39.191,
+            "q3": 40.1995,
+            "minimum": 38.875,
+            "maximum": 41.979
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 21.65625,
+            "q1": 21.5625,
+            "q3": 21.671875,
+            "minimum": 21.546875,
+            "maximum": 21.6875
+          },
+          "artifact_sha256": "68743ec9d22a23734320f71177a25eba3ead4de58c6ad49c7b60c34ea6eefc9c",
+          "artifact_bytes": 136323
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 39.467,
+            "q1": 38.953,
+            "q3": 41.373000000000005,
+            "minimum": 37.34,
+            "maximum": 44.609
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 20.90625,
+            "q1": 20.890625,
+            "q3": 21.09375,
+            "minimum": 20.78125,
+            "maximum": 21.125
+          },
+          "artifact_sha256": "68743ec9d22a23734320f71177a25eba3ead4de58c6ad49c7b60c34ea6eefc9c",
+          "artifact_bytes": 136323
+        }
+      },
+      "time_change_pct": -0.5342876584591427,
+      "rss_change_pct": -3.463203463203468,
+      "rss_change_mib": -0.75
+    },
+    {
+      "name": "image-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/100.json",
+      "input_sha256": "02f560f300fde6559f6f569b708e2225683d7d14b03c08a9e134e860e01a489a",
+      "notes": 100,
+      "media_files": 100,
+      "media_bytes": 6415200,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 40.172,
+            "q1": 39.044,
+            "q3": 41.182,
+            "minimum": 36.987,
+            "maximum": 50.201
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.96875,
+            "q1": 19.71875,
+            "q3": 20.03125,
+            "minimum": 19.671875,
+            "maximum": 20.234375
+          },
+          "artifact_sha256": "2765661cc0f78f6dc5dfa927dd12cb0ea6f72cfd9d93a00fa0679c8debc3776a",
+          "artifact_bytes": 6501698
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 39.091,
+            "q1": 38.704,
+            "q3": 39.679,
+            "minimum": 38.197,
+            "maximum": 41.288
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.84375,
+            "q1": 19.796875,
+            "q3": 20.046875,
+            "minimum": 19.546875,
+            "maximum": 20.09375
+          },
+          "artifact_sha256": "2765661cc0f78f6dc5dfa927dd12cb0ea6f72cfd9d93a00fa0679c8debc3776a",
+          "artifact_bytes": 6501698
+        }
+      },
+      "time_change_pct": -2.6909290052772983,
+      "rss_change_pct": -0.6259780907668211,
+      "rss_change_mib": -0.125
+    },
+    {
+      "name": "image-200",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/200.json",
+      "input_sha256": "90f6a39c36f44071982bb14e1ee4d7cc376f65407887d016c5005c365029b3c4",
+      "notes": 200,
+      "media_files": 200,
+      "media_bytes": 12830400,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 57.433,
+            "q1": 56.9255,
+            "q3": 57.765,
+            "minimum": 55.968,
+            "maximum": 58.68
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 22.421875,
+            "q1": 22.28125,
+            "q3": 22.609375,
+            "minimum": 22.265625,
+            "maximum": 22.859375
+          },
+          "artifact_sha256": "c092618982258d40bf985889696e889bdaa71ed9269e3996de66b7fae58a4c5b",
+          "artifact_bytes": 12944890
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 57.071,
+            "q1": 56.079499999999996,
+            "q3": 57.3845,
+            "minimum": 55.33,
+            "maximum": 60.209
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 22.25,
+            "q1": 22.140625,
+            "q3": 22.4375,
+            "minimum": 21.84375,
+            "maximum": 22.828125
+          },
+          "artifact_sha256": "c092618982258d40bf985889696e889bdaa71ed9269e3996de66b7fae58a4c5b",
+          "artifact_bytes": 12944890
+        }
+      },
+      "time_change_pct": -0.6302996535093142,
+      "rss_change_pct": -0.7665505226480795,
+      "rss_change_mib": -0.171875
+    },
+    {
+      "name": "image-500",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/500.json",
+      "input_sha256": "02a423640903b04df6c731f6104a882feede9e2c20fa4811a84d2718d641ec20",
+      "notes": 500,
+      "media_files": 500,
+      "media_bytes": 32076000,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 112.158,
+            "q1": 111.39150000000001,
+            "q3": 113.982,
+            "minimum": 110.766,
+            "maximum": 128.712
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 29.140625,
+            "q1": 29.125,
+            "q3": 29.234375,
+            "minimum": 29.015625,
+            "maximum": 29.3125
+          },
+          "artifact_sha256": "d3644e8583365288198173218c96c677a58060c23a1bd15c4f4949427b8166dd",
+          "artifact_bytes": 32273629
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 113.283,
+            "q1": 112.2205,
+            "q3": 114.644,
+            "minimum": 110.335,
+            "maximum": 123.709
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 28.46875,
+            "q1": 28.453125,
+            "q3": 28.625,
+            "minimum": 28.421875,
+            "maximum": 28.640625
+          },
+          "artifact_sha256": "d3644e8583365288198173218c96c677a58060c23a1bd15c4f4949427b8166dd",
+          "artifact_bytes": 32273629
+        }
+      },
+      "time_change_pct": 1.0030492697801208,
+      "rss_change_pct": -2.3056300268096463,
+      "rss_change_mib": -0.671875
+    },
+    {
+      "name": "audio-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/100.json",
+      "input_sha256": "c88c9b1d345aea5c0d32f54324f626763e506b4c6eb80e668fb8cbf72302a4d6",
+      "notes": 100,
+      "media_files": 100,
+      "media_bytes": 3204400,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 36.162,
+            "q1": 35.0555,
+            "q3": 37.391000000000005,
+            "minimum": 34.276,
+            "maximum": 42.494
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 18.84375,
+            "q1": 18.765625,
+            "q3": 18.875,
+            "minimum": 18.484375,
+            "maximum": 18.984375
+          },
+          "artifact_sha256": "dfb8d97c8a7a5cb565500afb0bdc5297121fd53152e09fef731b41c78ac12a39",
+          "artifact_bytes": 3261414
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 35.615,
+            "q1": 35.1205,
+            "q3": 37.418499999999995,
+            "minimum": 34.051,
+            "maximum": 39.32
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 18.703125,
+            "q1": 18.578125,
+            "q3": 18.734375,
+            "minimum": 18.40625,
+            "maximum": 19.09375
+          },
+          "artifact_sha256": "dfb8d97c8a7a5cb565500afb0bdc5297121fd53152e09fef731b41c78ac12a39",
+          "artifact_bytes": 3261414
+        }
+      },
+      "time_change_pct": -1.5126375753553356,
+      "rss_change_pct": -0.7462686567164201,
+      "rss_change_mib": -0.140625
+    },
+    {
+      "name": "audio-200",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/200.json",
+      "input_sha256": "aebd64c4a7821a5576ce84428005f255c6ecdeae02dced8508e29b81688976ef",
+      "notes": 200,
+      "media_files": 200,
+      "media_bytes": 6408800,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 51.211,
+            "q1": 50.3035,
+            "q3": 52.0175,
+            "minimum": 49.933,
+            "maximum": 52.826
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 21.5625,
+            "q1": 21.1875,
+            "q3": 21.640625,
+            "minimum": 20.921875,
+            "maximum": 21.671875
+          },
+          "artifact_sha256": "2981c1385ebd88d6a085491e2a276baf854141979423d5b49d6832f560494cae",
+          "artifact_bytes": 6483733
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 50.368,
+            "q1": 49.748000000000005,
+            "q3": 51.8305,
+            "minimum": 48.567,
+            "maximum": 52.842
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 21.34375,
+            "q1": 21.125,
+            "q3": 21.46875,
+            "minimum": 21.125,
+            "maximum": 21.640625
+          },
+          "artifact_sha256": "2981c1385ebd88d6a085491e2a276baf854141979423d5b49d6832f560494cae",
+          "artifact_bytes": 6483733
+        }
+      },
+      "time_change_pct": -1.646130714104388,
+      "rss_change_pct": -1.0144927536231862,
+      "rss_change_mib": -0.21875
+    },
+    {
+      "name": "audio-500",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/500.json",
+      "input_sha256": "28a8ebbd61f2a16eeeb0d68d7013954587f23515ec6657f60c71532a82631c52",
+      "notes": 500,
+      "media_files": 500,
+      "media_bytes": 16022000,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 96.42,
+            "q1": 95.339,
+            "q3": 99.0415,
+            "minimum": 94.65,
+            "maximum": 102.485
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 28.53125,
+            "q1": 28.4375,
+            "q3": 28.640625,
+            "minimum": 28.40625,
+            "maximum": 28.953125
+          },
+          "artifact_sha256": "e5b1e7d0f824ef48cf76ceb0f90a37d019bf81eae62f298bb9154343e8771912",
+          "artifact_bytes": 16133066
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 96.558,
+            "q1": 95.47,
+            "q3": 98.89150000000001,
+            "minimum": 94.78,
+            "maximum": 101.899
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.8125,
+            "q1": 27.78125,
+            "q3": 27.90625,
+            "minimum": 27.71875,
+            "maximum": 27.984375
+          },
+          "artifact_sha256": "e5b1e7d0f824ef48cf76ceb0f90a37d019bf81eae62f298bb9154343e8771912",
+          "artifact_bytes": 16133066
+        }
+      },
+      "time_change_pct": 0.1431238332296303,
+      "rss_change_pct": -2.5191675794085433,
+      "rss_change_mib": -0.71875
+    },
+    {
+      "name": "mixed-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/100.json",
+      "input_sha256": "d7940eea477d3e9178b4a5d03c59affeec857d5e68bea37edce3d7c78981af5b",
+      "notes": 100,
+      "media_files": 70,
+      "media_bytes": 3527400,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 33.764,
+            "q1": 33.139,
+            "q3": 34.593,
+            "minimum": 32.154,
+            "maximum": 34.733
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.453125,
+            "q1": 19.28125,
+            "q3": 19.59375,
+            "minimum": 19.171875,
+            "maximum": 19.78125
+          },
+          "artifact_sha256": "c7f8eb8f0e44216a56dab818fa48ce72cb280dbe091a6c73c26cd2545442039b",
+          "artifact_bytes": 3602592
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 34.015,
+            "q1": 33.2535,
+            "q3": 34.835499999999996,
+            "minimum": 32.699,
+            "maximum": 35.153
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.375,
+            "q1": 19.109375,
+            "q3": 19.390625,
+            "minimum": 19.109375,
+            "maximum": 19.40625
+          },
+          "artifact_sha256": "c7f8eb8f0e44216a56dab818fa48ce72cb280dbe091a6c73c26cd2545442039b",
+          "artifact_bytes": 3602592
+        }
+      },
+      "time_change_pct": 0.7433953323065845,
+      "rss_change_pct": -0.40160642570281624,
+      "rss_change_mib": -0.078125
+    },
+    {
+      "name": "mixed-200",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/200.json",
+      "input_sha256": "24ec395a80ff4e683713e9353115704828f554c328c0b240d985a4de34ffe812",
+      "notes": 200,
+      "media_files": 140,
+      "media_bytes": 7054800,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 45.653,
+            "q1": 45.171499999999995,
+            "q3": 46.037000000000006,
+            "minimum": 44.852,
+            "maximum": 47.184
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 21.859375,
+            "q1": 21.78125,
+            "q3": 21.921875,
+            "minimum": 21.703125,
+            "maximum": 22.15625
+          },
+          "artifact_sha256": "9f0479b76b0c7804c3cc95f02f266a6342ecb0e5af5ddce88c642b8501475c23",
+          "artifact_bytes": 7151206
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 46.479,
+            "q1": 45.903000000000006,
+            "q3": 47.591,
+            "minimum": 44.568,
+            "maximum": 53.04
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 21.515625,
+            "q1": 21.4375,
+            "q3": 21.546875,
+            "minimum": 21.40625,
+            "maximum": 21.734375
+          },
+          "artifact_sha256": "9f0479b76b0c7804c3cc95f02f266a6342ecb0e5af5ddce88c642b8501475c23",
+          "artifact_bytes": 7151206
+        }
+      },
+      "time_change_pct": 1.8093005936083095,
+      "rss_change_pct": -1.5725518227305169,
+      "rss_change_mib": -0.34375
+    },
+    {
+      "name": "mixed-500",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/500.json",
+      "input_sha256": "147cbe151c9273742692f24ba6706e53fef0669440c16230ba88f69ed378458c",
+      "notes": 500,
+      "media_files": 350,
+      "media_bytes": 17637000,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 87.586,
+            "q1": 85.6965,
+            "q3": 88.0645,
+            "minimum": 84.452,
+            "maximum": 97.18
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 28.453125,
+            "q1": 28.28125,
+            "q3": 28.546875,
+            "minimum": 28.25,
+            "maximum": 28.5625
+          },
+          "artifact_sha256": "892768c8826d1654427b418ef83c2d7807cdab824732f6baabdd712111194836",
+          "artifact_bytes": 17790807
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 88.232,
+            "q1": 87.1965,
+            "q3": 89.00999999999999,
+            "minimum": 84.913,
+            "maximum": 90.283
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 27.828125,
+            "q1": 27.8125,
+            "q3": 28.140625,
+            "minimum": 27.765625,
+            "maximum": 28.359375
+          },
+          "artifact_sha256": "892768c8826d1654427b418ef83c2d7807cdab824732f6baabdd712111194836",
+          "artifact_bytes": 17790807
+        }
+      },
+      "time_change_pct": 0.7375607973877152,
+      "rss_change_pct": -2.196595277320157,
+      "rss_change_mib": -0.625
+    },
+    {
+      "name": "shared-100",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/100.json",
+      "input_sha256": "f7cc8ec3ee6abf857315b04ac50da48f92aeede8b06b90a2b5819cedef612ad0",
+      "notes": 100,
+      "media_files": 49,
+      "media_bytes": 2469180,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 30.816,
+            "q1": 30.5935,
+            "q3": 32.25,
+            "minimum": 30.338,
+            "maximum": 39.706
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.21875,
+            "q1": 19.109375,
+            "q3": 19.578125,
+            "minimum": 19.03125,
+            "maximum": 19.578125
+          },
+          "artifact_sha256": "605cc0aae6fc999b1fdaa413f9599cffdda74df4a09e0876536cea6e112dda19",
+          "artifact_bytes": 2542000
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 31.334,
+            "q1": 30.674500000000002,
+            "q3": 34.2255,
+            "minimum": 30.139,
+            "maximum": 98.326
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 19.078125,
+            "q1": 19.015625,
+            "q3": 19.171875,
+            "minimum": 18.859375,
+            "maximum": 19.796875
+          },
+          "artifact_sha256": "605cc0aae6fc999b1fdaa413f9599cffdda74df4a09e0876536cea6e112dda19",
+          "artifact_bytes": 2542000
+        }
+      },
+      "time_change_pct": 1.680944963655251,
+      "rss_change_pct": -0.7317073170731714,
+      "rss_change_mib": -0.140625
+    },
+    {
+      "name": "shared-200",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/200.json",
+      "input_sha256": "0b19e6f960c2fdb69e8ae714917d68004940ca7862b917694bdbd98f55408463",
+      "notes": 200,
+      "media_files": 49,
+      "media_bytes": 2469180,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 34.484,
+            "q1": 33.8975,
+            "q3": 35.052499999999995,
+            "minimum": 32.574,
+            "maximum": 35.326
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 20.984375,
+            "q1": 20.953125,
+            "q3": 21.34375,
+            "minimum": 20.921875,
+            "maximum": 21.546875
+          },
+          "artifact_sha256": "604058380828dcef615f9cac84b3ecc691411b4d490e48e72a26bed888a5c22c",
+          "artifact_bytes": 2558105
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 35.369,
+            "q1": 35.304500000000004,
+            "q3": 35.801500000000004,
+            "minimum": 34.935,
+            "maximum": 36.652
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 20.796875,
+            "q1": 20.328125,
+            "q3": 20.828125,
+            "minimum": 20.25,
+            "maximum": 21.015625
+          },
+          "artifact_sha256": "604058380828dcef615f9cac84b3ecc691411b4d490e48e72a26bed888a5c22c",
+          "artifact_bytes": 2558105
+        }
+      },
+      "time_change_pct": 2.566407609326049,
+      "rss_change_pct": -0.8935219657483229,
+      "rss_change_mib": -0.1875
+    },
+    {
+      "name": "shared-500",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/500.json",
+      "input_sha256": "7d038afbee98ead6b8edd750905808c7ab93c5c045b723d0a0d304ddc0f1bd9b",
+      "notes": 500,
+      "media_files": 49,
+      "media_bytes": 2469180,
+      "description": "Original README matrix, frozen v2 media recipe.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 47.401,
+            "q1": 46.7795,
+            "q3": 48.369,
+            "minimum": 45.324,
+            "maximum": 54.677
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 26.53125,
+            "q1": 26.515625,
+            "q3": 26.796875,
+            "minimum": 26.390625,
+            "maximum": 26.84375
+          },
+          "artifact_sha256": "56b340e44e308fb96f709006103212da9c74e381ced302c90a8fb10182d68b81",
+          "artifact_bytes": 2606073
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 48.493,
+            "q1": 47.7445,
+            "q3": 49.177499999999995,
+            "minimum": 46.994,
+            "maximum": 53.46
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 25.859375,
+            "q1": 25.75,
+            "q3": 25.96875,
+            "minimum": 25.515625,
+            "maximum": 26.0625
+          },
+          "artifact_sha256": "56b340e44e308fb96f709006103212da9c74e381ced302c90a8fb10182d68b81",
+          "artifact_bytes": 2606073
+        }
+      },
+      "time_change_pct": 2.3037488660576644,
+      "rss_change_pct": -2.532391048292104,
+      "rss_change_mib": -0.671875
+    },
+    {
+      "name": "long-back-quarter-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+      "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 1811460,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 81.627,
+            "q1": 78.9505,
+            "q3": 81.961,
+            "minimum": 77.846,
+            "maximum": 82.338
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 38.9375,
+            "q1": 37.9375,
+            "q3": 39.5,
+            "minimum": 37.71875,
+            "maximum": 39.734375
+          },
+          "artifact_sha256": "c57c04b260529127a2672adbf54ec9f1dd1f73b3fa4a1e33db6d8a8bb86c8508",
+          "artifact_bytes": 236825
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 81.047,
+            "q1": 78.9075,
+            "q3": 85.62899999999999,
+            "minimum": 76.62,
+            "maximum": 111.424
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 35.828125,
+            "q1": 35.796875,
+            "q3": 35.890625,
+            "minimum": 35.0625,
+            "maximum": 36.828125
+          },
+          "artifact_sha256": "c57c04b260529127a2672adbf54ec9f1dd1f73b3fa4a1e33db6d8a8bb86c8508",
+          "artifact_bytes": 236825
+        }
+      },
+      "time_change_pct": -0.7105492055324847,
+      "rss_change_pct": -7.985553772070631,
+      "rss_change_mib": -3.109375
+    },
+    {
+      "name": "long-back-quadruple-1000",
+      "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+      "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+      "notes": 1000,
+      "media": 0,
+      "media_bytes": 0,
+      "field_utf8_bytes": 27409788,
+      "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture.",
+      "variants": {
+        "current": {
+          "time_ms": {
+            "n": 7,
+            "median": 359.213,
+            "q1": 354.653,
+            "q3": 363.7095,
+            "minimum": 351.584,
+            "maximum": 395.388
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 155.390625,
+            "q1": 155.234375,
+            "q3": 155.53125,
+            "minimum": 155.21875,
+            "maximum": 162.875
+          },
+          "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6",
+          "artifact_bytes": 384758
+        },
+        "accepted": {
+          "time_ms": {
+            "n": 7,
+            "median": 348.278,
+            "q1": 345.88,
+            "q3": 363.947,
+            "minimum": 344.565,
+            "maximum": 386.436
+          },
+          "rss_mib": {
+            "n": 5,
+            "median": 124.203125,
+            "q1": 123.34375,
+            "q3": 128.421875,
+            "minimum": 122.984375,
+            "maximum": 136.609375
+          },
+          "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6",
+          "artifact_bytes": 384758
+        }
+      },
+      "time_change_pct": -3.044154860765058,
+      "rss_change_pct": -20.070387129210655,
+      "rss_change_mib": -31.1875
+    }
+  ],
+  "allocations": [
+    {
+      "case": "text-1000",
+      "variants": {
+        "current-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 8.891785621643066,
+            "q1": 8.891785621643066,
+            "q3": 8.891785621643066,
+            "minimum": 8.891785621643066,
+            "maximum": 8.891785621643066
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 26.93736171722412,
+            "q1": 26.93736171722412,
+            "q3": 26.93736171722412,
+            "minimum": 26.93736171722412,
+            "maximum": 26.93736171722412
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 218819,
+            "q1": 218819.0,
+            "q3": 218819.0,
+            "minimum": 218819,
+            "maximum": 218819
+          }
+        },
+        "accepted-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 6.980978012084961,
+            "q1": 6.980978012084961,
+            "q3": 6.980978012084961,
+            "minimum": 6.980978012084961,
+            "maximum": 6.980978012084961
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 26.236553192138672,
+            "q1": 26.236553192138672,
+            "q3": 26.236553192138672,
+            "minimum": 26.236553192138672,
+            "maximum": 26.236553192138672
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 208685,
+            "q1": 208685.0,
+            "q3": 208685.0,
+            "minimum": 208685,
+            "maximum": 208685
+          }
+        }
+      }
+    },
+    {
+      "case": "text-10000",
+      "variants": {
+        "current-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 86.71173000335693,
+            "q1": 86.71173000335693,
+            "q3": 86.71173000335693,
+            "minimum": 86.71173000335693,
+            "maximum": 86.71173000335693
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 255.85016345977783,
+            "q1": 255.85016345977783,
+            "q3": 255.85016345977783,
+            "minimum": 255.85016345977783,
+            "maximum": 255.85016345977783
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 1973619,
+            "q1": 1973619.0,
+            "q3": 1973619.0,
+            "minimum": 1973619,
+            "maximum": 1973619
+          }
+        },
+        "accepted-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 68.33827114105225,
+            "q1": 68.33827114105225,
+            "q3": 68.33827114105225,
+            "minimum": 68.33827114105225,
+            "maximum": 68.33827114105225
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 248.83983993530273,
+            "q1": 248.83983993530273,
+            "q3": 248.83983993530273,
+            "minimum": 248.83983993530273,
+            "maximum": 248.83983993530273
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 1872288,
+            "q1": 1872288.0,
+            "q3": 1872288.0,
+            "minimum": 1872288,
+            "maximum": 1872288
+          }
+        }
+      }
+    },
+    {
+      "case": "long-back-1000",
+      "variants": {
+        "current-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 28.388693809509277,
+            "q1": 28.388693809509277,
+            "q3": 28.388693809509277,
+            "minimum": 28.388693809509277,
+            "maximum": 28.388693809509277
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 71.0848445892334,
+            "q1": 71.0848445892334,
+            "q3": 71.0848445892334,
+            "minimum": 71.0848445892334,
+            "maximum": 71.0848445892334
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 218850,
+            "q1": 218850.0,
+            "q3": 218850.0,
+            "minimum": 218850,
+            "maximum": 218850
+          }
+        },
+        "accepted-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 20.20091438293457,
+            "q1": 20.20091438293457,
+            "q3": 20.20091438293457,
+            "minimum": 20.20091438293457,
+            "maximum": 20.20091438293457
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 64.10706424713135,
+            "q1": 64.10706424713135,
+            "q3": 64.10706424713135,
+            "minimum": 64.10706424713135,
+            "maximum": 64.10706424713135
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 208716,
+            "q1": 208716.0,
+            "q3": 208716.0,
+            "minimum": 208716,
+            "maximum": 208716
+          }
+        }
+      }
+    },
+    {
+      "case": "long-back-quarter-1000",
+      "variants": {
+        "current-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 12.975685119628906,
+            "q1": 12.975685119628906,
+            "q3": 12.975685119628906,
+            "minimum": 12.975685119628906,
+            "maximum": 12.975685119628906
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 36.10544300079346,
+            "q1": 36.10544300079346,
+            "q3": 36.10544300079346,
+            "minimum": 36.10544300079346,
+            "maximum": 36.10544300079346
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 218835,
+            "q1": 218835.0,
+            "q3": 218835.0,
+            "minimum": 218835,
+            "maximum": 218835
+          }
+        },
+        "accepted-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 9.749137878417969,
+            "q1": 9.749137878417969,
+            "q3": 9.749137878417969,
+            "minimum": 9.749137878417969,
+            "maximum": 9.749137878417969
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 34.088894844055176,
+            "q1": 34.088894844055176,
+            "q3": 34.088894844055176,
+            "minimum": 34.088894844055176,
+            "maximum": 34.088894844055176
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 208701,
+            "q1": 208701.0,
+            "q3": 208701.0,
+            "minimum": 208701,
+            "maximum": 208701
+          }
+        }
+      }
+    },
+    {
+      "case": "long-back-quadruple-1000",
+      "variants": {
+        "current-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 90.02702903747559,
+            "q1": 90.02702903747559,
+            "q3": 90.02702903747559,
+            "minimum": 90.02702903747559,
+            "maximum": 90.02702903747559
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 209.9928321838379,
+            "q1": 209.9928321838379,
+            "q3": 209.9928321838379,
+            "minimum": 209.9928321838379,
+            "maximum": 209.9928321838379
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 218850,
+            "q1": 218850.0,
+            "q3": 218850.0,
+            "minimum": 218850,
+            "maximum": 218850
+          }
+        },
+        "accepted-memory": {
+          "peak_live_mib": {
+            "n": 3,
+            "median": 61.995360374450684,
+            "q1": 61.995360374450684,
+            "q3": 61.995360374450684,
+            "minimum": 61.995360374450684,
+            "maximum": 61.995360374450684
+          },
+          "export_allocated_mib": {
+            "n": 3,
+            "median": 183.17116260528564,
+            "q1": 183.17116260528564,
+            "q3": 183.17116260528564,
+            "minimum": 183.17116260528564,
+            "maximum": 183.17116260528564
+          },
+          "export_allocation_calls": {
+            "n": 3,
+            "median": 208716,
+            "q1": 208716.0,
+            "q3": 208716.0,
+            "minimum": 208716,
+            "maximum": 208716
+          }
+        }
+      }
+    }
+  ],
+  "stages": [
+    {
+      "case": "text-10000",
+      "variants": {
+        "current-stages": {
+          "normalization_and_identity_ms": {
+            "n": 5,
+            "median": 91.070166,
+            "q1": 90.572582,
+            "q3": 91.145375,
+            "minimum": 89.30925,
+            "maximum": 91.809084
+          },
+          "individual_stages_ms": {
+            "normalize.lowering": {
+              "n": 5,
+              "median": 68.398542,
+              "q1": 68.023083,
+              "q3": 68.88375,
+              "minimum": 67.641709,
+              "maximum": 69.292125
+            },
+            "normalize.core": {
+              "n": 5,
+              "median": 11.478916,
+              "q1": 10.078875,
+              "q3": 11.608459,
+              "minimum": 9.620667,
+              "maximum": 11.739291
+            },
+            "normalize.total": {
+              "n": 5,
+              "median": 84.008042,
+              "q1": 83.247291,
+              "q3": 84.112291,
+              "minimum": 82.037292,
+              "maximum": 84.621959
+            },
+            "pipeline.prepare": {
+              "n": 5,
+              "median": 95.222875,
+              "q1": 94.034,
+              "q3": 95.269625,
+              "minimum": 92.763792,
+              "maximum": 95.900458
+            },
+            "identity.after_normalize": {
+              "n": 5,
+              "median": 7.187125,
+              "q1": 7.137333,
+              "q3": 7.271958,
+              "minimum": 6.957875,
+              "maximum": 7.325291
+            },
+            "pipeline.reconcile": {
+              "n": 5,
+              "median": 41.269667,
+              "q1": 41.037334,
+              "q3": 41.406125,
+              "minimum": 40.377291,
+              "maximum": 41.794292
+            }
+          }
+        },
+        "accepted-stages": {
+          "normalization_and_identity_ms": {
+            "n": 5,
+            "median": 84.5545,
+            "q1": 83.177166,
+            "q3": 84.788459,
+            "minimum": 82.998583,
+            "maximum": 85.164042
+          },
+          "individual_stages_ms": {
+            "normalize.lowering": {
+              "n": 5,
+              "median": 65.73225,
+              "q1": 64.988333,
+              "q3": 66.273083,
+              "minimum": 64.898375,
+              "maximum": 66.501292
+            },
+            "normalize.core": {
+              "n": 5,
+              "median": 11.069417,
+              "q1": 10.938042,
+              "q3": 11.218959,
+              "minimum": 10.894083,
+              "maximum": 11.3825
+            },
+            "normalize.with_identity": {
+              "n": 5,
+              "median": 84.5545,
+              "q1": 83.177166,
+              "q3": 84.788459,
+              "minimum": 82.998583,
+              "maximum": 85.164042
+            },
+            "pipeline.prepare": {
+              "n": 5,
+              "median": 95.639833,
+              "q1": 94.372208,
+              "q3": 95.85075,
+              "minimum": 94.086292,
+              "maximum": 96.3195
+            },
+            "pipeline.reconcile": {
+              "n": 5,
+              "median": 33.14475,
+              "q1": 32.962875,
+              "q3": 33.302334,
+              "minimum": 32.573625,
+              "maximum": 33.565709
+            }
+          }
+        }
+      }
+    },
+    {
+      "case": "long-back-quadruple-1000",
+      "variants": {
+        "current-stages": {
+          "normalization_and_identity_ms": {
+            "n": 5,
+            "median": 18.378666,
+            "q1": 18.189874,
+            "q3": 18.390126,
+            "minimum": 17.967666,
+            "maximum": 18.443709
+          },
+          "individual_stages_ms": {
+            "normalize.lowering": {
+              "n": 5,
+              "median": 9.254417,
+              "q1": 9.092792,
+              "q3": 9.258458,
+              "minimum": 9.023417,
+              "maximum": 9.48575
+            },
+            "normalize.core": {
+              "n": 5,
+              "median": 8.173334,
+              "q1": 8.172417,
+              "q3": 8.34925,
+              "minimum": 8.005792,
+              "maximum": 8.503583
+            },
+            "normalize.total": {
+              "n": 5,
+              "median": 17.893333,
+              "q1": 17.627416,
+              "q3": 17.908959,
+              "minimum": 17.488833,
+              "maximum": 17.952834
+            },
+            "pipeline.prepare": {
+              "n": 5,
+              "median": 21.434125,
+              "q1": 21.220375,
+              "q3": 21.467958,
+              "minimum": 21.045541,
+              "maximum": 21.551291
+            },
+            "identity.after_normalize": {
+              "n": 5,
+              "median": 0.485333,
+              "q1": 0.481167,
+              "q3": 0.490875,
+              "minimum": 0.478833,
+              "maximum": 0.562458
+            },
+            "pipeline.reconcile": {
+              "n": 5,
+              "median": 29.688041,
+              "q1": 29.676125,
+              "q3": 29.723917,
+              "minimum": 29.610834,
+              "maximum": 30.223417
+            }
+          }
+        },
+        "accepted-stages": {
+          "normalization_and_identity_ms": {
+            "n": 5,
+            "median": 13.847709,
+            "q1": 13.672208,
+            "q3": 13.9275,
+            "minimum": 13.5285,
+            "maximum": 14.178791
+          },
+          "individual_stages_ms": {
+            "normalize.lowering": {
+              "n": 5,
+              "median": 5.265833,
+              "q1": 5.19775,
+              "q3": 5.2865,
+              "minimum": 4.917875,
+              "maximum": 5.371083
+            },
+            "normalize.core": {
+              "n": 5,
+              "median": 8.09475,
+              "q1": 8.049541,
+              "q3": 8.144334,
+              "minimum": 7.988833,
+              "maximum": 8.219833
+            },
+            "normalize.with_identity": {
+              "n": 5,
+              "median": 13.847709,
+              "q1": 13.672208,
+              "q3": 13.9275,
+              "minimum": 13.5285,
+              "maximum": 14.178791
+            },
+            "pipeline.prepare": {
+              "n": 5,
+              "median": 17.53425,
+              "q1": 17.223792,
+              "q3": 17.786709,
+              "minimum": 16.964125,
+              "maximum": 17.951583
+            },
+            "pipeline.reconcile": {
+              "n": 5,
+              "median": 29.0605,
+              "q1": 28.93375,
+              "q3": 29.13425,
+              "minimum": 28.894625,
+              "maximum": 29.344958
+            }
+          }
+        }
+      }
+    }
+  ],
+  "quality": {
+    "workspace_all_features": {
+      "suites": 78,
+      "passed": 1015,
+      "failed": 0,
+      "ignored": 25
+    },
+    "benchmark_python_tests_passed": 43,
+    "gates": [
+      "default facade",
+      "workspace all features",
+      "Clippy -D warnings",
+      "fmt",
+      "doctests",
+      "rustdoc -D warnings",
+      "embedded contract bundle",
+      "crate payload",
+      "release metadata",
+      "dependency policy",
+      "git diff --check"
+    ]
+  },
+  "runs": {
+    "allocation-check": {
+      "attempts": 40,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "allocation-check",
+          "variants": [
+            "current-memory",
+            "accepted-memory"
+          ],
+          "cases": [
+            "text-1000",
+            "text-10000",
+            "long-back-quarter-1000",
+            "long-back-1000",
+            "long-back-quadruple-1000"
+          ],
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 1,
+          "repeats": 3
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "long-back-quarter-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+            "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 1811460,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current-memory": "15a5e7bd554bb01c788f9c315834c0db93e0bbef7eb2d9c645cd6ab2511aed71",
+          "accepted-memory": "5a264e470ffe44f1b2bafccd97f7a34ead22e2349790d99ead9714c793b8ad55"
+        },
+        "utc": "2026-09-07T14:57:58.418251+00:00",
+        "initial_power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t36%; charging; 3:17 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "baseline-reproduction": {
+      "attempts": 32,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "baseline-reproduction",
+          "variants": [
+            "current",
+            "current-memory"
+          ],
+          "cases": [
+            "text-1000",
+            "text-10000",
+            "long-back-1000",
+            "long-back-quadruple-1000"
+          ],
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 1,
+          "repeats": 3
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+          "current-memory": "15a5e7bd554bb01c788f9c315834c0db93e0bbef7eb2d9c645cd6ab2511aed71"
+        },
+        "utc": "2026-09-07T14:37:03.906530+00:00",
+        "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t36%; discharging; 3:26 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "before-after-rss": {
+      "attempts": 406,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "before-after-rss",
+          "variants": [
+            "current",
+            "accepted"
+          ],
+          "cases": null,
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 2,
+          "repeats": 5
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "image-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+            "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 64152000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "audio-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/1000.json",
+            "input_sha256": "854a08b1df9e64c6fedb74838c36a25d50d7392adc47767d04144c3add65f3e5",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 32044000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "mixed-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/1000.json",
+            "input_sha256": "c53945aadb16798273789c5556ab8fbdbf1a3d86b56447fe9b5072642f6c0b23",
+            "notes": 1000,
+            "media": 700,
+            "media_bytes": 35274000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "shared-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/1000.json",
+            "input_sha256": "b804510fea577d1bec628c8f89ce4f91a41ad8799c196285db1178e0aa5e965c",
+            "notes": 1000,
+            "media": 49,
+            "media_bytes": 2469180,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/100.json",
+            "input_sha256": "9dd725a5bf56f66e0fdcf6efb904bd822827087f47c1686fbc878a3ff3daa6f1",
+            "notes": 100,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 48103
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "boundary-65536",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65536/input.json",
+            "input_sha256": "ac4438b695d71f27ea3c2ba66999e04cdb29b1c5ad75eedfda1f565904e5acca",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 65536000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "boundary-65537",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65537/input.json",
+            "input_sha256": "eb9ddb434c5dfe4a2cceaa9ab913defbf284f3787e099ab2443a92ba86292d3a",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 65537000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "image-256x256k",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-256x256k/input.json",
+            "input_sha256": "40afab2500dfb391d8f07bd28a0fc44965d1aedadb085d0422dbd3bd36e0234b",
+            "notes": 256,
+            "media": 256,
+            "media_bytes": 67108864,
+            "field_utf8_bytes": 118200
+          },
+          {
+            "name": "image-64x1m",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-64x1m/input.json",
+            "input_sha256": "27506b178976f5b80946884fe1e312c6cfd022a68f3c6dab682a4abb285e52a9",
+            "notes": 64,
+            "media": 64,
+            "media_bytes": 67108864,
+            "field_utf8_bytes": 30290
+          },
+          {
+            "name": "image-skewed-128",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-skewed-128/input.json",
+            "input_sha256": "bb3dd0f74fe56cb37e37c9a0f53942b3c276fe9d6ab869183d8d5dca07df2e7b",
+            "notes": 128,
+            "media": 128,
+            "media_bytes": 39713024,
+            "field_utf8_bytes": 59157
+          },
+          {
+            "name": "text-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/200.json",
+            "input_sha256": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+            "notes": 200,
+            "media_files": 0,
+            "media_bytes": 0,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "text-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/500.json",
+            "input_sha256": "d7dc21236993cb09a9f099d2b2b3517bd21d6c97a92e44e0c1f630a6f896d27d",
+            "notes": 500,
+            "media_files": 0,
+            "media_bytes": 0,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/100.json",
+            "input_sha256": "02f560f300fde6559f6f569b708e2225683d7d14b03c08a9e134e860e01a489a",
+            "notes": 100,
+            "media_files": 100,
+            "media_bytes": 6415200,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/200.json",
+            "input_sha256": "90f6a39c36f44071982bb14e1ee4d7cc376f65407887d016c5005c365029b3c4",
+            "notes": 200,
+            "media_files": 200,
+            "media_bytes": 12830400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/500.json",
+            "input_sha256": "02a423640903b04df6c731f6104a882feede9e2c20fa4811a84d2718d641ec20",
+            "notes": 500,
+            "media_files": 500,
+            "media_bytes": 32076000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/100.json",
+            "input_sha256": "c88c9b1d345aea5c0d32f54324f626763e506b4c6eb80e668fb8cbf72302a4d6",
+            "notes": 100,
+            "media_files": 100,
+            "media_bytes": 3204400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/200.json",
+            "input_sha256": "aebd64c4a7821a5576ce84428005f255c6ecdeae02dced8508e29b81688976ef",
+            "notes": 200,
+            "media_files": 200,
+            "media_bytes": 6408800,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/500.json",
+            "input_sha256": "28a8ebbd61f2a16eeeb0d68d7013954587f23515ec6657f60c71532a82631c52",
+            "notes": 500,
+            "media_files": 500,
+            "media_bytes": 16022000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/100.json",
+            "input_sha256": "d7940eea477d3e9178b4a5d03c59affeec857d5e68bea37edce3d7c78981af5b",
+            "notes": 100,
+            "media_files": 70,
+            "media_bytes": 3527400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/200.json",
+            "input_sha256": "24ec395a80ff4e683713e9353115704828f554c328c0b240d985a4de34ffe812",
+            "notes": 200,
+            "media_files": 140,
+            "media_bytes": 7054800,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/500.json",
+            "input_sha256": "147cbe151c9273742692f24ba6706e53fef0669440c16230ba88f69ed378458c",
+            "notes": 500,
+            "media_files": 350,
+            "media_bytes": 17637000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/100.json",
+            "input_sha256": "f7cc8ec3ee6abf857315b04ac50da48f92aeede8b06b90a2b5819cedef612ad0",
+            "notes": 100,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/200.json",
+            "input_sha256": "0b19e6f960c2fdb69e8ae714917d68004940ca7862b917694bdbd98f55408463",
+            "notes": 200,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/500.json",
+            "input_sha256": "7d038afbee98ead6b8edd750905808c7ab93c5c045b723d0a0d304ddc0f1bd9b",
+            "notes": 500,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "long-back-quarter-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+            "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 1811460,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+          "accepted": "4a3b8857ee9c1477f63990cb511fb221c71f18c32753bdd41f367d03c38ba4af"
+        },
+        "utc": "2026-09-07T14:54:11.371303+00:00",
+        "initial_power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t34%; charging; 3:47 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "before-after-timing": {
+      "attempts": 522,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "before-after-timing",
+          "variants": [
+            "current",
+            "accepted"
+          ],
+          "cases": null,
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 2,
+          "repeats": 7
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "image-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+            "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 64152000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "audio-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/1000.json",
+            "input_sha256": "854a08b1df9e64c6fedb74838c36a25d50d7392adc47767d04144c3add65f3e5",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 32044000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "mixed-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/1000.json",
+            "input_sha256": "c53945aadb16798273789c5556ab8fbdbf1a3d86b56447fe9b5072642f6c0b23",
+            "notes": 1000,
+            "media": 700,
+            "media_bytes": 35274000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "shared-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/1000.json",
+            "input_sha256": "b804510fea577d1bec628c8f89ce4f91a41ad8799c196285db1178e0aa5e965c",
+            "notes": 1000,
+            "media": 49,
+            "media_bytes": 2469180,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/100.json",
+            "input_sha256": "9dd725a5bf56f66e0fdcf6efb904bd822827087f47c1686fbc878a3ff3daa6f1",
+            "notes": 100,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 48103
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "boundary-65536",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65536/input.json",
+            "input_sha256": "ac4438b695d71f27ea3c2ba66999e04cdb29b1c5ad75eedfda1f565904e5acca",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 65536000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "boundary-65537",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/boundary-65537/input.json",
+            "input_sha256": "eb9ddb434c5dfe4a2cceaa9ab913defbf284f3787e099ab2443a92ba86292d3a",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 65537000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "image-256x256k",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-256x256k/input.json",
+            "input_sha256": "40afab2500dfb391d8f07bd28a0fc44965d1aedadb085d0422dbd3bd36e0234b",
+            "notes": 256,
+            "media": 256,
+            "media_bytes": 67108864,
+            "field_utf8_bytes": 118200
+          },
+          {
+            "name": "image-64x1m",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-64x1m/input.json",
+            "input_sha256": "27506b178976f5b80946884fe1e312c6cfd022a68f3c6dab682a4abb285e52a9",
+            "notes": 64,
+            "media": 64,
+            "media_bytes": 67108864,
+            "field_utf8_bytes": 30290
+          },
+          {
+            "name": "image-skewed-128",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/image-skewed-128/input.json",
+            "input_sha256": "bb3dd0f74fe56cb37e37c9a0f53942b3c276fe9d6ab869183d8d5dca07df2e7b",
+            "notes": 128,
+            "media": 128,
+            "media_bytes": 39713024,
+            "field_utf8_bytes": 59157
+          },
+          {
+            "name": "text-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/200.json",
+            "input_sha256": "204b9e94804d82e7366265504eceabeba8f56621c895627e4b95b041af38ab83",
+            "notes": 200,
+            "media_files": 0,
+            "media_bytes": 0,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "text-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/500.json",
+            "input_sha256": "d7dc21236993cb09a9f099d2b2b3517bd21d6c97a92e44e0c1f630a6f896d27d",
+            "notes": 500,
+            "media_files": 0,
+            "media_bytes": 0,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/100.json",
+            "input_sha256": "02f560f300fde6559f6f569b708e2225683d7d14b03c08a9e134e860e01a489a",
+            "notes": 100,
+            "media_files": 100,
+            "media_bytes": 6415200,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/200.json",
+            "input_sha256": "90f6a39c36f44071982bb14e1ee4d7cc376f65407887d016c5005c365029b3c4",
+            "notes": 200,
+            "media_files": 200,
+            "media_bytes": 12830400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "image-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/500.json",
+            "input_sha256": "02a423640903b04df6c731f6104a882feede9e2c20fa4811a84d2718d641ec20",
+            "notes": 500,
+            "media_files": 500,
+            "media_bytes": 32076000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/100.json",
+            "input_sha256": "c88c9b1d345aea5c0d32f54324f626763e506b4c6eb80e668fb8cbf72302a4d6",
+            "notes": 100,
+            "media_files": 100,
+            "media_bytes": 3204400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/200.json",
+            "input_sha256": "aebd64c4a7821a5576ce84428005f255c6ecdeae02dced8508e29b81688976ef",
+            "notes": 200,
+            "media_files": 200,
+            "media_bytes": 6408800,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "audio-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-audio-unique-v2/inputs/500.json",
+            "input_sha256": "28a8ebbd61f2a16eeeb0d68d7013954587f23515ec6657f60c71532a82631c52",
+            "notes": 500,
+            "media_files": 500,
+            "media_bytes": 16022000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/100.json",
+            "input_sha256": "d7940eea477d3e9178b4a5d03c59affeec857d5e68bea37edce3d7c78981af5b",
+            "notes": 100,
+            "media_files": 70,
+            "media_bytes": 3527400,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/200.json",
+            "input_sha256": "24ec395a80ff4e683713e9353115704828f554c328c0b240d985a4de34ffe812",
+            "notes": 200,
+            "media_files": 140,
+            "media_bytes": 7054800,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "mixed-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-unique-v2/inputs/500.json",
+            "input_sha256": "147cbe151c9273742692f24ba6706e53fef0669440c16230ba88f69ed378458c",
+            "notes": 500,
+            "media_files": 350,
+            "media_bytes": 17637000,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-100",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/100.json",
+            "input_sha256": "f7cc8ec3ee6abf857315b04ac50da48f92aeede8b06b90a2b5819cedef612ad0",
+            "notes": 100,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-200",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/200.json",
+            "input_sha256": "0b19e6f960c2fdb69e8ae714917d68004940ca7862b917694bdbd98f55408463",
+            "notes": 200,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "shared-500",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/500.json",
+            "input_sha256": "7d038afbee98ead6b8edd750905808c7ab93c5c045b723d0a0d304ddc0f1bd9b",
+            "notes": 500,
+            "media_files": 49,
+            "media_bytes": 2469180,
+            "description": "Original README matrix, frozen v2 media recipe."
+          },
+          {
+            "name": "long-back-quarter-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+            "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 1811460,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+          "accepted": "4a3b8857ee9c1477f63990cb511fb221c71f18c32753bdd41f367d03c38ba4af"
+        },
+        "utc": "2026-09-07T14:52:44.266005+00:00",
+        "initial_power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t34%; charging; 3:37 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "early-release-screen": {
+      "attempts": 90,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "early-release-screen",
+          "variants": [
+            "current",
+            "early-release"
+          ],
+          "cases": [
+            "text-1000",
+            "text-10000",
+            "long-back-quarter-1000",
+            "long-back-1000",
+            "long-back-quadruple-1000"
+          ],
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 2,
+          "repeats": 7
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "long-back-quarter-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+            "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 1811460,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+          "early-release": "156bc6067d8a1e9ff572fb0a9b0b3b2f8c978702d4c2bbf7e79f2cddf1c946f6"
+        },
+        "utc": "2026-09-07T14:41:04.021988+00:00",
+        "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t33%; discharging; 2:26 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "move-fields-screen": {
+      "attempts": 57,
+      "excluded_from_performance": true,
+      "plan": {
+        "args": {
+          "name": "move-fields-screen",
+          "variants": [
+            "current",
+            "early-release",
+            "move-fields"
+          ],
+          "cases": [
+            "text-1000",
+            "text-10000",
+            "long-back-quarter-1000",
+            "long-back-1000",
+            "long-back-quadruple-1000",
+            "image-1000",
+            "shared-1000"
+          ],
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 2,
+          "repeats": 7
+        },
+        "cases": [
+          {
+            "name": "text-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-text-v1/inputs/1000.json",
+            "input_sha256": "d1b81d7d3af0b9303d4a42b2ec6e261f3d45aa3c7028f9bd9dc7f84e3b95bb3a",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "image-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-image-unique-v2/inputs/1000.json",
+            "input_sha256": "2277dbc7b03a2f899f60d1522ac1318689c77a65aa468c08cb4521d4d1bf9271",
+            "notes": 1000,
+            "media": 1000,
+            "media_bytes": 64152000,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "shared-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/readme-comparison/fixtures/basic-mixed-shared-v2/inputs/1000.json",
+            "input_sha256": "b804510fea577d1bec628c8f89ce4f91a41ad8799c196285db1178e0aa5e965c",
+            "notes": 1000,
+            "media": 49,
+            "media_bytes": 2469180,
+            "field_utf8_bytes": 455532
+          },
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/long-back-1000/input.json",
+            "input_sha256": "27045759409b0f41f79e242740d198797fc9ea1550ccd5d5db9670d0fdd7dcc6",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 6932376
+          },
+          {
+            "name": "long-back-quarter-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quarter-1000/input.json",
+            "input_sha256": "4fcc165462c4383224ee564e60d64e46a0cabb80f17d47018c53103d18564599",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 1811460,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current": "4abdcea28de9157d255ef80969be573631a4b38a1ce4483d2075a45877b5a75e",
+          "early-release": "156bc6067d8a1e9ff572fb0a9b0b3b2f8c978702d4c2bbf7e79f2cddf1c946f6",
+          "move-fields": "44ca121e42edf8158c467a9ba71533d59889641877a18e472a0fcceb74b0c010"
+        },
+        "utc": "2026-09-07T14:45:00.211992+00:00",
+        "initial_power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=24445027)\t32%; discharging; 1:55 remaining present: true\n",
+        "seed": 20260907
+      }
+    },
+    "stage-check": {
+      "attempts": 28,
+      "excluded_from_performance": false,
+      "plan": {
+        "args": {
+          "name": "stage-check",
+          "variants": [
+            "current-stages",
+            "accepted-stages"
+          ],
+          "cases": [
+            "text-10000",
+            "long-back-quadruple-1000"
+          ],
+          "distinct_containers": false,
+          "env": [],
+          "warmups": 2,
+          "repeats": 5
+        },
+        "cases": [
+          {
+            "name": "text-10000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/remaining-opportunities-20260907/fixtures/text-10000/input.json",
+            "input_sha256": "721be7070d0a3d5194b2b4bb29baa7af2b745f9600c3a84ebab04d534c7e2980",
+            "notes": 10000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 4560946
+          },
+          {
+            "name": "long-back-quadruple-1000",
+            "path": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/post-streaming-audit-20260907/fixtures/long-back-quadruple-1000/input.json",
+            "input_sha256": "dcb6e0b09698475a4861c1c0c265da120e28dd4e511c5697cf36cbf0a71c4944",
+            "notes": 1000,
+            "media": 0,
+            "media_bytes": 0,
+            "field_utf8_bytes": 27409788,
+            "description": "Fixed 1000 notes and Front fields; Back is quarter/quadruple of the earlier long-field fixture."
+          }
+        ],
+        "binaries": {
+          "current-stages": "741df4f1bb4edd7213814d040a7a55d83f9a5d47fd9dde120807b61436aaa911",
+          "accepted-stages": "46d6a60480eea5fed71e77e7c9b85c114389b925ea4fe9e57f52934889ba1856"
+        },
+        "utc": "2026-09-07T14:58:09.676239+00:00",
+        "initial_power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t36%; charging; 3:17 remaining present: true\n",
+        "seed": 20260907
+      }
+    }
+  }
+}

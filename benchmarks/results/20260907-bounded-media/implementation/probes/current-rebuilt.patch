@@ -1,0 +1,322 @@
+--- a/anki_forge/PACKAGE_FILES.txt
++++ b/anki_forge/PACKAGE_FILES.txt
+@@ -48,6 +48,7 @@
+ src/diff/summary.rs
+ src/lib.rs
+ src/prelude.rs
++src/prepared_media/payload.rs
+ src/prepared_media.rs
+ src/product/assets.rs
+ src/product/builders.rs
+--- /dev/null
++++ b/anki_forge/src/prepared_media/payload.rs
+@@ -0,0 +1,309 @@
++//! Encoded media share fixed buffers; exhaustion spills without waiting.
++use std::fs::File;
++use std::io::{self, Seek, Write};
++use std::sync::{Arc, Mutex};
++
++const BLOCK_BYTES: usize = 64 * 1024;
++pub(super) const MEMORY_BYTES: usize = 9 * 512 * 1024;
++
++#[derive(Clone)]
++pub(super) struct PayloadPool(Arc<Mutex<PoolState>>);
++
++struct PoolState {
++    free: Vec<Box<[u8]>>,
++    allocated: usize,
++    limit: usize,
++}
++
++impl PayloadPool {
++    pub(super) fn new() -> Self {
++        Self::with_blocks(MEMORY_BYTES / BLOCK_BYTES)
++    }
++
++    fn with_blocks(limit: usize) -> Self {
++        Self(Arc::new(Mutex::new(PoolState {
++            free: Vec::new(),
++            allocated: 0,
++            limit,
++        })))
++    }
++
++    pub(super) fn payload(&self) -> EncodedPayload {
++        EncodedPayload {
++            pool: self.clone(),
++            storage: Storage::Memory(Vec::new()),
++            size: 0,
++            crc: crc32fast::Hasher::new(),
++        }
++    }
++
++    fn take(&self) -> Option<Block> {
++        let mut state = self.0.lock().expect("media buffer pool lock");
++        let bytes = if let Some(bytes) = state.free.pop() {
++            bytes
++        } else if state.allocated < state.limit {
++            state.allocated += 1;
++            // Fixed-size boxes have no spare Vec capacity or geometric growth.
++            vec![0; BLOCK_BYTES].into_boxed_slice()
++        } else {
++            return None;
++        };
++        Some(Block {
++            bytes: Some(bytes),
++            used: 0,
++            pool: self.clone(),
++        })
++    }
++}
++
++struct Block {
++    bytes: Option<Box<[u8]>>,
++    used: usize,
++    pool: PayloadPool,
++}
++
++impl Block {
++    fn append(&mut self, bytes: &[u8]) -> usize {
++        let count = bytes.len().min(BLOCK_BYTES - self.used);
++        self.bytes.as_mut().expect("leased media block")[self.used..self.used + count]
++            .copy_from_slice(&bytes[..count]);
++        self.used += count;
++        count
++    }
++
++    fn bytes(&self) -> &[u8] {
++        &self.bytes.as_ref().expect("leased media block")[..self.used]
++    }
++}
++
++impl Drop for Block {
++    fn drop(&mut self) {
++        self.pool
++            .0
++            .lock()
++            .expect("media buffer pool lock")
++            .free
++            .push(self.bytes.take().expect("leased media block"));
++    }
++}
++
++enum Storage {
++    Memory(Vec<Block>),
++    File(File),
++}
++
++pub(super) struct EncodedPayload {
++    pool: PayloadPool,
++    storage: Storage,
++    size: u64,
++    crc: crc32fast::Hasher,
++}
++
++impl EncodedPayload {
++    pub(super) fn size(&self) -> u64 {
++        self.size
++    }
++
++    pub(super) fn checksum(&self) -> u32 {
++        self.crc.clone().finalize()
++    }
++
++    fn spill(&mut self) -> io::Result<()> {
++        let mut file = tempfile::tempfile()?;
++        if let Storage::Memory(blocks) = &self.storage {
++            for block in blocks {
++                file.write_all(block.bytes())?;
++            }
++        }
++        // Release the leases only after a successful transfer. On failure the
++        // original bytes and checksum still agree, and the private file drops.
++        self.storage = Storage::File(file);
++        Ok(())
++    }
++
++    pub(super) fn write_to(self, writer: &mut impl Write) -> io::Result<()> {
++        match self.storage {
++            Storage::Memory(blocks) => {
++                for block in blocks {
++                    writer.write_all(block.bytes())?;
++                    // Return each block before writing the next. Errors and
++                    // unwinding also release every unconsumed block.
++                    drop(block);
++                }
++            }
++            Storage::File(mut file) => {
++                file.rewind()?;
++                io::copy(&mut file, writer)?;
++            }
++        }
++        Ok(())
++    }
++
++    #[cfg(test)]
++    pub(super) fn is_spilled(&self) -> bool {
++        matches!(self.storage, Storage::File(_))
++    }
++}
++
++impl Write for EncodedPayload {
++    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
++        if bytes.is_empty() {
++            return Ok(0);
++        }
++        if let Storage::Memory(blocks) = &mut self.storage {
++            if blocks.last().is_none_or(|block| block.used == BLOCK_BYTES) {
++                match self.pool.take() {
++                    Some(block) => blocks.push(block),
++                    None => self.spill()?,
++                }
++            }
++        }
++        let written = match &mut self.storage {
++            Storage::Memory(blocks) => blocks.last_mut().expect("writable block").append(bytes),
++            Storage::File(file) => file.write(bytes)?,
++        };
++        self.size += written as u64;
++        self.crc.update(&bytes[..written]);
++        Ok(written)
++    }
++
++    fn flush(&mut self) -> io::Result<()> {
++        match &mut self.storage {
++            Storage::Memory(_) => Ok(()),
++            Storage::File(file) => file.flush(),
++        }
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    fn assert_returned(pool: &PayloadPool) {
++        let state = pool.0.lock().unwrap();
++        assert!(state.allocated <= state.limit);
++        assert_eq!(state.free.len(), state.allocated);
++        assert!(state.free.iter().all(|bytes| bytes.len() == BLOCK_BYTES));
++    }
++
++    #[test]
++    fn idle_budget_is_shared_and_exhaustion_spills_without_losing_bytes() {
++        let pool = PayloadPool::with_blocks(3);
++        let mut held = pool.payload();
++        held.write_all(&[1; BLOCK_BYTES]).unwrap();
++        let expected = vec![7; BLOCK_BYTES * 2 + 1];
++        let mut other = pool.payload();
++        other.write_all(&expected[..BLOCK_BYTES * 2]).unwrap();
++        assert!(!other.is_spilled());
++        other.write_all(&expected[BLOCK_BYTES * 2..]).unwrap();
++        assert!(other.is_spilled());
++        assert_eq!(other.size(), expected.len() as u64);
++        assert_eq!(other.checksum(), crc32fast::hash(&expected));
++        let mut actual = Vec::new();
++        other.write_to(&mut actual).unwrap();
++        assert_eq!(actual, expected);
++        drop(held);
++        assert_returned(&pool);
++        let mut reused = pool.payload();
++        reused.write_all(&[3; BLOCK_BYTES * 3]).unwrap();
++        assert!(!reused.is_spilled());
++        drop(reused);
++        assert_returned(&pool);
++    }
++
++    #[test]
++    fn empty_and_zero_budget_payloads_still_preserve_the_stream() {
++        let pool = PayloadPool::with_blocks(0);
++        let mut empty = pool.payload();
++        empty.write_all(&[]).unwrap();
++        empty.flush().unwrap();
++        assert_eq!(empty.size(), 0);
++        assert!(!empty.is_spilled());
++        empty.write_to(&mut Vec::new()).unwrap();
++        let mut payload = pool.payload();
++        payload.write_all(b"file only").unwrap();
++        assert!(payload.is_spilled());
++        let mut actual = Vec::new();
++        payload.write_to(&mut actual).unwrap();
++        assert_eq!(actual, b"file only");
++        assert_returned(&pool);
++    }
++
++    #[test]
++    fn concurrent_payloads_share_the_bound_and_return_buffers() {
++        let pool = PayloadPool::with_blocks(4);
++        std::thread::scope(|scope| {
++            let (sender, receiver) = std::sync::mpsc::sync_channel(8);
++            for index in 0..8 {
++                let pool = pool.clone();
++                let sender = sender.clone();
++                scope.spawn(move || {
++                    let expected = vec![index; BLOCK_BYTES * 2 + 17];
++                    let mut payload = pool.payload();
++                    payload.write_all(&expected).unwrap();
++                    sender.send((payload, expected)).unwrap();
++                });
++            }
++            drop(sender);
++            let mut prepared = Vec::new();
++            for _ in 0..8 {
++                prepared.push(
++                    receiver
++                        .recv_timeout(std::time::Duration::from_secs(5))
++                        .unwrap(),
++                );
++            }
++            assert!(pool.0.lock().unwrap().allocated <= 4);
++            for (payload, expected) in prepared {
++                assert_eq!(payload.checksum(), crc32fast::hash(&expected));
++                let mut actual = Vec::new();
++                payload.write_to(&mut actual).unwrap();
++                assert_eq!(actual, expected);
++            }
++        });
++        assert_returned(&pool);
++    }
++
++    struct ShortWriter {
++        remaining: usize,
++        panic: bool,
++    }
++
++    impl Write for ShortWriter {
++        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
++            if self.remaining == 0 {
++                assert!(!self.panic, "injected output panic");
++                return Err(io::Error::other("injected output failure"));
++            }
++            let count = bytes.len().min(self.remaining).min(17);
++            self.remaining -= count;
++            Ok(count)
++        }
++        fn flush(&mut self) -> io::Result<()> {
++            Ok(())
++        }
++    }
++
++    #[test]
++    fn short_output_errors_and_panics_release_all_leases() {
++        for limit in [1, 4] {
++            for panic in [false, true] {
++                let pool = PayloadPool::with_blocks(limit);
++                let mut payload = pool.payload();
++                payload.write_all(&[9; BLOCK_BYTES * 3]).unwrap();
++                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++                    payload.write_to(&mut ShortWriter {
++                        remaining: BLOCK_BYTES + 5,
++                        panic,
++                    })
++                }));
++                if panic {
++                    assert!(result.is_err());
++                } else {
++                    assert!(result.unwrap().is_err());
++                }
++                assert_returned(&pool);
++            }
++        }
++    }
++}

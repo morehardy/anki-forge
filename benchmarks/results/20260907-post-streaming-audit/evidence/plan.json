@@ -1,0 +1,28 @@
+{
+  "purpose": "Read-only audit of remaining bottlenecks after the accepted three streaming optimizations",
+  "hypotheses": [
+    "Synchronous registration dominates conventional media after the prior pipeline gains",
+    "Text scaling is dominated by SQLite and repeated per-note conversion",
+    "Long-field peak memory is caused by overlapping owned field representations",
+    "Remaining media pipeline time includes material channel/copy/allocator overhead"
+  ],
+  "cases": 13,
+  "coarse_protocol": {
+    "warmups": 2,
+    "samples": 5,
+    "variants": [
+      "current",
+      "coarse"
+    ],
+    "interleaved": true,
+    "fixed_seed": 20260907
+  },
+  "output_gate": "Exact package bytes equal across variants and to the previously independently verified accepted reference",
+  "production_sha256": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+  "source_baseline": "before-source-sha256.json",
+  "limitations": [
+    "Diagnostic probes perturb timings; absolute phase sums may overlap and medians need not add up.",
+    "Native power source is checked before and after every attempt.",
+    "No performance claims for custom note types, persistent artifacts, or real high-resolution image distributions."
+  ]
+}

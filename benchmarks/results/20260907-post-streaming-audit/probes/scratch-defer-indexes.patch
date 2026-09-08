@@ -1,0 +1,33 @@
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -502,6 +502,7 @@
+ 
+ fn execute_source_schema(conn: &Connection, sql: &str) -> Result<()> {
+     let sql = sql.replace("COLLATE unicase", "");
++    let sql = AUDIT_DEFERRED_INDEXES.iter().fold(sql, |sql, index| sql.replace(index, ""));
+     conn.execute_batch(&sql)?;
+     Ok(())
+ }
+@@ -519,6 +520,7 @@
+ ) -> Result<()> {
+     let transaction = conn.unchecked_transaction()?;
+     populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?;
++    for index in AUDIT_DEFERRED_INDEXES { transaction.execute_batch(index)?; }
+     transaction.commit()?;
+     Ok(())
+ }
+@@ -1510,3 +1512,14 @@
+         }
+     }
+ }
++
++// Private diagnostic candidate only.
++const AUDIT_DEFERRED_INDEXES: &[&str] = &[
++    "CREATE INDEX ix_notes_usn ON notes (usn);",
++    "CREATE INDEX ix_cards_usn ON cards (usn);",
++    "CREATE INDEX ix_cards_nid ON cards (nid);",
++    "CREATE INDEX ix_cards_sched ON cards (did, queue, due);",
++    "CREATE INDEX ix_notes_csum ON notes (csum);",
++    "CREATE INDEX idx_notes_mid ON notes (mid);",
++    "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0;",
++];

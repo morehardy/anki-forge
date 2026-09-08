@@ -1,0 +1,22 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.52s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-dc12bcf7e3602d5d)
+
+running 1 test
+test prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures ... FAILED
+
+failures:
+
+---- prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures stdout ----
+
+thread 'prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures' (3993961) panicked at anki_forge/src/prepared_media.rs:445:44:
+called `Result::unwrap()` on an `Err` value: MediaIngestError { diagnostics: [MediaIngestDiagnostic { level: "error", code: "MEDIA.UNSAFE_SOURCE_PATH", summary: "source.path must be relative and stay below base_dir: /var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/.tmpKpHyJT/000.bin", path: Some("/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/.tmpKpHyJT/000.bin") }] }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    prepared_media::tests::preparation_preserves_order_and_recovers_after_mixed_source_failures
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 118 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `-p anki_forge --lib`

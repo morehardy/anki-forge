@@ -1,0 +1,30 @@
+{
+  "old_archives_unchanged": {
+    "20260907-readme-comparison": 33,
+    "20260907-inspection-parallel-hash": 72,
+    "20260907-remaining-opportunities": 35
+  },
+  "frozen_source_patch_replayed_files": 14,
+  "local_markdown_links_checked": 39,
+  "formal_raw_evidence_hashes": "passed",
+  "diff_whitespace": "passed",
+  "runtime_tests": {
+    "rust_workspace_tests_including_doctests": 1006,
+    "rust_suites_including_doctests": 78,
+    "python_benchmark_tests": 43,
+    "status": "all required checks passed",
+    "initial_failure": "PACKAGE_FILES.txt ordering for the new module; corrected without runtime changes. Embedded bundle, payload and remaining release checks then passed.",
+    "checks": [
+      "fmt",
+      "default public facade",
+      "clippy all targets all features -D warnings",
+      "workspace all features",
+      "doctests",
+      "rustdoc -D warnings",
+      "embedded contract bundle",
+      "crate payload",
+      "release metadata",
+      "dependency policy"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "reason": "Positive timing result warrants separate native RSS samples before describing the memory tradeoff. Timing claims remain tied to the original larger-spool-pass; these runs are not pooled into the timing estimate.",
+  "cases": [
+    "image-1000",
+    "image-64x1m",
+    "image-skewed-128"
+  ],
+  "variants": [
+    "current",
+    "larger-spool"
+  ],
+  "warmups": 2,
+  "rss_samples": 5,
+  "discard_samples": false
+}

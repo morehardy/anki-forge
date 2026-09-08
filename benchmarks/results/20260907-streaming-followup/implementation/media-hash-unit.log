@@ -1,0 +1,365 @@
+   Compiling anki_forge v0.1.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.11s
+     Running unittests src/lib.rs (target/debug/deps/anki_forge-dc12bcf7e3602d5d)
+
+running 3 tests
+test writer_core::inspect::summary_tests::serial_media_hash_does_not_allocate_payload_buffers ... ok
+test writer_core::inspect::summary_tests::interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest ... ok
+test writer_core::inspect::summary_tests::media_hash_streams_bounded_blocks_and_resets_between_files ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 113 filtered out; finished in 0.14s
+
+     Running tests/apkg_inspect_limits_tests.rs (target/debug/deps/apkg_inspect_limits_tests-f05e0cd844c5e461)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+     Running tests/artifact_lifecycle_tests.rs (target/debug/deps/artifact_lifecycle_tests-477c7d58cf808ad1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_media_ingest_tests.rs (target/debug/deps/authoring_core_media_ingest_tests-c1890e2d90968a39)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_media_io_tests.rs (target/debug/deps/authoring_core_media_io_tests-a9dc3e83995dec98)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_media_refs_tests.rs (target/debug/deps/authoring_core_media_refs_tests-5ce2fde540f028dc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_normalization_pipeline_tests.rs (target/debug/deps/authoring_core_normalization_pipeline_tests-4cf3f36c2a7fb1c8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_risk_tests.rs (target/debug/deps/authoring_core_risk_tests-ef36a56eedb71496)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/authoring_core_selector_tests.rs (target/debug/deps/authoring_core_selector_tests-3b6b0e4657764774)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/baseline_publication_tests.rs (target/debug/deps/baseline_publication_tests-bd3d4c3b9efbb69e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 31 filtered out; finished in 0.00s
+
+     Running tests/build_report_tests.rs (target/debug/deps/build_report_tests-996b58f82728cab9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+     Running tests/custom_merge_id_snapshot_tests.rs (target/debug/deps/custom_merge_id_snapshot_tests-d5af99846a7318d5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/custom_notetype_api_tests.rs (target/debug/deps/custom_notetype_api_tests-4644d51bdbf8c6eb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/custom_template_entry_parity_tests.rs (target/debug/deps/custom_template_entry_parity_tests-658b3bf282f7b21b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/deck_export_tests.rs (target/debug/deps/deck_export_tests-19150394fd996564)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.00s
+
+     Running tests/deck_identity_contract_tests.rs (target/debug/deps/deck_identity_contract_tests-1a2c533538223cff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 39 filtered out; finished in 0.00s
+
+     Running tests/deck_identity_roundtrip_tests.rs (target/debug/deps/deck_identity_roundtrip_tests-b9886e0d865fd14d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.00s
+
+     Running tests/deck_lowering_tests.rs (target/debug/deps/deck_lowering_tests-d1276a8c1976b21a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/deck_model_tests.rs (target/debug/deps/deck_model_tests-ae164987f7bc36da)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+     Running tests/deck_project_facade_tests.rs (target/debug/deps/deck_project_facade_tests-607f7266bed880d7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/deck_validation_tests.rs (target/debug/deps/deck_validation_tests-e9208bee4bcc6f60)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+     Running tests/error_code_tests.rs (target/debug/deps/error_code_tests-0397b94f089a75a0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+     Running tests/media_export_optimization_tests.rs (target/debug/deps/media_export_optimization_tests-a68f968217b7243d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/packaged_contract_tests.rs (target/debug/deps/packaged_contract_tests-704e6ccdf211de3a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/phase4_comparison_tests.rs (target/debug/deps/phase4_comparison_tests-4a12c0f9155b83a2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/phase4_diff_risk_model_tests.rs (target/debug/deps/phase4_diff_risk_model_tests-ac1836180c1d9a70)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/phase4_product_build_tests.rs (target/debug/deps/phase4_product_build_tests-9aa2972286d61c34)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/phase4_risk_rules_tests.rs (target/debug/deps/phase4_risk_rules_tests-41cc8be68fff613f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/product_bundler_tests.rs (target/debug/deps/product_bundler_tests-89180a131f7e2b7b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/product_helper_tests.rs (target/debug/deps/product_helper_tests-4eedced70546a01d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/product_lowering_tests.rs (target/debug/deps/product_lowering_tests-7700b021034504ac)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 49 filtered out; finished in 0.00s
+
+     Running tests/product_model_tests.rs (target/debug/deps/product_model_tests-58eab957d920d660)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/product_pipeline_tests.rs (target/debug/deps/product_pipeline_tests-138e7a2a58c7ec57)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/product_portability_tests.rs (target/debug/deps/product_portability_tests-7e545949cd3ada3e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/product_v3_tests.rs (target/debug/deps/product_v3_tests-51db5d83c7c57454)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/project_api_tests.rs (target/debug/deps/project_api_tests-7f91dcb27dc0567c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 56 filtered out; finished in 0.00s
+
+     Running tests/project_media_api_tests.rs (target/debug/deps/project_media_api_tests-e3a151058da6c4e0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 38 filtered out; finished in 0.00s
+
+     Running tests/public_api_boundary_tests.rs (target/debug/deps/public_api_boundary_tests-d100c715c8dd72a5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/runtime_facade_tests.rs (target/debug/deps/runtime_facade_tests-09b2ecfe4a4e62b7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/rust_user_api_smoke_tests.rs (target/debug/deps/rust_user_api_smoke_tests-ef342562ad732f38)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+     Running tests/rust_user_capability_matrix.rs (target/debug/deps/rust_user_capability_matrix-5fac9c89bc4121fd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.00s
+
+     Running tests/stable_facade_boundary_tests.rs (target/debug/deps/stable_facade_boundary_tests-dd66413cb7fd06dd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/template_bundle_tests.rs (target/debug/deps/template_bundle_tests-db29913e6b76ab6a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/typed_core_tests.rs (target/debug/deps/typed_core_tests-67598dd6b207e95e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/update_safety_baseline_tests.rs (target/debug/deps/update_safety_baseline_tests-c61bf539ea6389b1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/update_safety_blind_spots_tests.rs (target/debug/deps/update_safety_blind_spots_tests-ea31da724d6d9192)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/update_safety_build_tests.rs (target/debug/deps/update_safety_build_tests-a94db769e132872d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/update_safety_current_index_tests.rs (target/debug/deps/update_safety_current_index_tests-7457510f359cb667)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+     Running tests/update_safety_lockfile_build_tests.rs (target/debug/deps/update_safety_lockfile_build_tests-163852e4dd4f46ca)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/update_safety_lockfile_tests.rs (target/debug/deps/update_safety_lockfile_tests-2db5d7e78479b027)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/update_safety_matrix_tests.rs (target/debug/deps/update_safety_matrix_tests-e366c442638b5039)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/update_safety_merge_safety_tests.rs (target/debug/deps/update_safety_merge_safety_tests-a467b879849eebc6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/update_safety_model_tests.rs (target/debug/deps/update_safety_model_tests-e6a669df52816607)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/update_safety_note_revision_tests.rs (target/debug/deps/update_safety_note_revision_tests-3775258ebeaafca6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s
+
+     Running tests/update_safety_reconcile_tests.rs (target/debug/deps/update_safety_reconcile_tests-37c700b27d979370)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/update_safety_report_tests.rs (target/debug/deps/update_safety_report_tests-d35d7d210553eb42)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/writer_core_build_tests.rs (target/debug/deps/writer_core_build_tests-757eb2572c0b57e6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 58 filtered out; finished in 0.00s
+
+     Running tests/writer_core_diff_tests.rs (target/debug/deps/writer_core_diff_tests-40566ccf19f9a843)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/writer_core_inspect_tests.rs (target/debug/deps/writer_core_inspect_tests-2819b587b7f572f9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.00s
+
+     Running tests/writer_optimization_tests.rs (target/debug/deps/writer_optimization_tests-7e2949578ec9333d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+

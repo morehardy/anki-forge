@@ -1,12 +1,13 @@
 //! Reconcile identity evidence before any candidate is generated.
 use super::*;
 
-impl BuildPipeline<'_> {
+impl BuildPipeline {
     pub(super) fn reconcile(
         &mut self,
         prepared: PreparedBuild,
+        resolved_note_identities: super::super::input::ResolvedNoteIdentities,
     ) -> Result<ReconciledBuild, BuildFailureCause> {
-        let input = self.input;
+        let project_stable_id = self.project_stable_id.as_deref();
         let options = &self.options;
         let facts = &mut self.facts;
         let PreparedBuild {
@@ -19,7 +20,6 @@ impl BuildPipeline<'_> {
             writer_policy,
             build_context,
         } = prepared;
-        let resolved_note_identities = input.resolved_note_identities();
 
         let update_mode = match crate::update_safety::effective_mode(options) {
             Ok(mode) => mode,
@@ -51,7 +51,7 @@ impl BuildPipeline<'_> {
                 true
             };
 
-        if input.stable_id().is_none() && project_stable_id_required {
+        if project_stable_id.is_none() && project_stable_id_required {
             let condition =
                 if options.identity_lockfile.is_some() || options.write_identity_lockfile {
                     crate::update_safety::EvidenceCondition::LockfileRequired
@@ -78,7 +78,7 @@ impl BuildPipeline<'_> {
 
         let mut current_identity = crate::update_safety::current::build_current_identity_index(
             crate::update_safety::current::CurrentIdentityInput {
-                project_stable_id: input.stable_id(),
+                project_stable_id,
                 normalized: &normalized,
                 writer_policy: &writer_policy,
                 mode: update_mode,
@@ -158,7 +158,7 @@ impl BuildPipeline<'_> {
                             );
                             push_project_stable_id_mismatch_if_needed(
                                 &mut facts.diagnostics,
-                                input.stable_id(),
+                                project_stable_id,
                                 Some(lockfile.project_stable_id.as_str()),
                                 path.display().to_string(),
                                 update_error_severity,
@@ -229,7 +229,7 @@ impl BuildPipeline<'_> {
                         );
                         push_project_stable_id_mismatch_if_needed(
                             &mut facts.diagnostics,
-                            input.stable_id(),
+                            project_stable_id,
                             index.project_stable_id.as_deref(),
                             path.display().to_string(),
                             update_error_severity,

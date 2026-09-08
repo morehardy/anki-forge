@@ -1,0 +1,1534 @@
+diff --git a/README.md b/README.md
+index 501cbb2..ce546eb 100644
+--- a/README.md
++++ b/README.md
+@@ -60,6 +60,61 @@ cargo run -q -p anki_forge --example target_api_basic
+ 
+ This writes `spanish.apkg` in the current directory.
+ 
++### 2.1 Export benchmarks
++
++The native Rust `Deck` API is compared with genanki **0.13.1 / CPython 3.11.0**
++on five synthetic Basic workloads at **100, 200, 500 and 1,000 notes**.
++Three complete sessions provide **30 timings and 15 separate peak-RSS samples
++per implementation/cell**, excluding warmups. Time includes process startup,
++input parsing, media registration and default export checks.
++
++![Export time saved versus genanki, with both absolute median times for every workload and size](benchmarks/results/20260907-inspection-parallel-hash/time-heatmap.svg)
++
++At 1,000 notes, text-only export uses **44.2% less time** and unique images use
++**13.3% less time**: 210.6 ms versus 242.9 ms. The three image sessions range
++from 13.14% to 13.34% time saved. Memory also depends on the workload:
++
++| Workload, 1,000 notes | Peak RSS MiB, Rust / genanki | APKG MiB, Rust / genanki |
++| --- | ---: | ---: |
++| Text only | 30.66 / 32.30 | 0.20 / 0.83 |
++| Unique images | 40.28 / 35.84 | 61.50 / 62.17 |
++| Unique audio | 40.38 / 36.14 | 30.72 / 31.51 |
++| Mixed, unique media | 38.92 / 34.86 | 33.87 / 34.57 |
++| Mixed, shared media | 35.20 / 32.98 | 2.56 / 3.22 |
++
++Values are pooled medians; RSS is the median of independent process peaks.
++Measured on **Apple M1 Pro, 32 GiB, macOS ARM64**, with Rust **1.92.0 release,
++default features and system allocator**, on 2026-09-07. The measured code is
++revision `ab7d261` plus a [frozen uncommitted patch](benchmarks/results/20260907-inspection-parallel-hash/source.patch);
++source and binary hashes remained unchanged across all three sessions.
++PNG/WAV fixtures are frozen; mixed workloads contain 30% text, 40% images and
++30% audio, with 49 distinct files in the shared case. File cache is uncontrolled.
++These local measurements cover the native Rust API; Node/Python bindings are
++outside this comparison. Default APKG formats differ: Rust uses modern zstd
++collections, while genanki uses legacy stored collections.
++
++All **2,520 exports** passed content/media checks, and **120 packages** passed
++Anki import/content/render checks. The pinned Anki checker includes a recorded
++`tokio/io-util` build-feature patch. See the [full report and raw evidence](benchmarks/results/20260907-inspection-parallel-hash/report.md)
++for every cell's absolute values, IQR, session variation and reproduction steps.
++The [implementation report](benchmarks/results/20260907-inspection-parallel-hash/implementation.md)
++separately measures the latest optimization against the previous version and
++retains the earlier three-session baseline.
++
++<details>
++<summary>Time scaling, memory and package size across all workloads</summary>
++
++Points show pooled median times; whiskers show Q1–Q3 sample spread, not confidence
++intervals. Faint dots retain the three individual session medians.
++
++![Export time scaling across five workloads, using identical linear axes](benchmarks/results/20260907-inspection-parallel-hash/time-scaling.svg)
++
++Positive resource savings mean Rust uses less; negative values mean it uses more.
++
++![Peak RSS and APKG size savings across every workload and size](benchmarks/results/20260907-inspection-parallel-hash/resources.svg)
++
++</details>
++
+ ## 3. Project For Long-Term Decks
+ 
+ ```rust
+diff --git a/anki_forge/PACKAGE_FILES.txt b/anki_forge/PACKAGE_FILES.txt
+index f410ef9..e2b5637 100644
+--- a/anki_forge/PACKAGE_FILES.txt
++++ b/anki_forge/PACKAGE_FILES.txt
+@@ -122,6 +122,7 @@ src/writer_core/mod.rs
+ src/writer_core/model.rs
+ src/writer_core/note_data.rs
+ src/writer_core/note_revision.rs
++src/writer_core/pipelined_sha1.rs
+ src/writer_core/policy.rs
+ src/writer_core/staging.rs
+ src/writer_core/stream_zip.rs
+diff --git a/anki_forge/src/prepared_media.rs b/anki_forge/src/prepared_media.rs
+index 4b2ede4..fc4db52 100644
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -1,10 +1,11 @@
+ //! Build-owned media prepared through bounded worker queues. Small encoded
+ //! payloads go straight into the candidate ZIP; oversized ones spill to disk.
+-use std::collections::{BTreeMap, BTreeSet};
++use std::collections::{BTreeMap, BTreeSet, VecDeque};
+ use std::fs::File;
+ use std::io::{self, Read, Seek, SeekFrom, Write};
+ use std::path::{Path, PathBuf};
+-use std::sync::Mutex;
++use std::sync::mpsc::{sync_channel, SyncSender};
++use std::sync::{Arc, Mutex};
+ 
+ use anyhow::{Context, Result};
+ use sha1::{Digest, Sha1};
+@@ -19,8 +20,8 @@ use crate::writer_core::stream_zip::StreamZip;
+ 
+ const BUFFER_BYTES: usize = 64 * 1024;
+ const MAX_WORKERS: usize = 4;
+-// Each worker can hold one queued result plus one being prepared. The consumer
+-// holds one more. SpooledTempFile rolls before writes cross this length; Vec
++// The work window holds at most two payloads per worker plus one for
++// the consumer. SpooledTempFile rolls before writes cross this length; Vec
+ // capacity and codec contexts add bounded overhead beyond the payload limit.
+ const PER_PAYLOAD_MEMORY: usize = 512 * 1024;
+ 
+@@ -153,11 +154,16 @@ impl PreparedMedia {
+             }
+         } else {
+             std::thread::scope(|scope| {
+-                let mut receivers = Vec::new();
++                // Bound all submitted, unfinished and completed payloads together.
++                // Per-job reply channels preserve order and disconnect if a worker
++                // stops; no reply sender remains in a different waiting worker.
++                type Preparation = Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError>;
++                let window = workers * 2 + 1;
++                let (sender, receiver) = sync_channel::<(usize, SyncSender<Preparation>)>(window);
++                let receiver = Arc::new(Mutex::new(receiver));
+                 let mut handles = Vec::new();
+-                for worker in 0..workers {
+-                    let (sender, receiver) = std::sync::mpsc::sync_channel(1);
+-                    receivers.push(receiver);
++                for _ in 0..workers {
++                    let receiver = Arc::clone(&receiver);
+                     let jobs = &jobs;
+                     let prepared = &*self;
+                     handles.push(
+@@ -165,9 +171,15 @@ impl PreparedMedia {
+                             .name("anki-forge-media".into())
+                             .spawn_scoped(scope, move || {
+                                 let mut context = zstd::zstd_safe::CCtx::create();
+-                                for &(_, item) in jobs.iter().skip(worker).step_by(workers) {
+-                                    if sender
+-                                        .send(prepared.prepare_one(item, options, &mut context))
++                                loop {
++                                    let job = receiver.lock().expect("media job queue lock").recv();
++                                    let Ok((position, reply)) = job else { break };
++                                    if reply
++                                        .send(prepared.prepare_one(
++                                            jobs[position].1,
++                                            options,
++                                            &mut context,
++                                        ))
+                                         .is_err()
+                                     {
+                                         break;
+@@ -176,15 +188,37 @@ impl PreparedMedia {
+                             }),
+                     );
+                 }
+-                for (job_index, &(index, item)) in jobs.iter().enumerate() {
+-                    let result = receivers[job_index % workers].recv().unwrap_or_else(|_| {
+-                        Err(diagnostic(
+-                            item,
+-                            "MEDIA.CAS_WRITE_FAILED",
+-                            "media preparation worker could not complete".into(),
+-                        ))
+-                    });
+-                    accept(index, result);
++                drop(receiver);
++                let stopped = |item| {
++                    diagnostic(
++                        item,
++                        "MEDIA.CAS_WRITE_FAILED",
++                        "media preparation worker could not complete".into(),
++                    )
++                };
++                if handles.iter().any(Result::is_err) {
++                    drop(sender);
++                    for &(index, item) in &jobs {
++                        accept(index, Err(stopped(item)));
++                    }
++                } else {
++                    let mut pending = VecDeque::with_capacity(window);
++                    let mut next = 0;
++                    for _ in 0..jobs.len() {
++                        while next < jobs.len() && pending.len() < window {
++                            let (reply, receiver) = sync_channel(1);
++                            // Failed submission drops the reply sender, which is
++                            // reported through the same ordered receive below.
++                            let _ = sender.send((next, reply));
++                            pending.push_back((next, receiver));
++                            next += 1;
++                        }
++                        let (position, receiver) = pending.pop_front().expect("pending media job");
++                        let (index, item) = jobs[position];
++                        let result = receiver.recv().unwrap_or_else(|_| Err(stopped(item)));
++                        accept(index, result);
++                    }
++                    drop(sender);
+                 }
+                 for handle in handles.into_iter().flatten() {
+                     let _ = handle.join();
+@@ -401,6 +435,119 @@ fn source_error(
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++
++    #[test]
++    fn preparation_preserves_order_and_recovers_after_mixed_source_failures() {
++        use crate::authoring_core::media::AuthoringMediaSource;
++        let root = tempfile::tempdir().unwrap();
++        let options = NormalizeOptions {
++            base_dir: root.path().into(),
++            media_store_dir: root.path().join("unused-cas"),
++            media_policy: crate::authoring_core::media::MediaPolicy::default_strict(),
++        };
++        let mut payloads = Vec::new();
++        let mut items = Vec::new();
++        let mut state = 0x1234_5678_u32;
++        for index in 0..40 {
++            let size = if index % 4 == 0 {
++                PER_PAYLOAD_MEMORY * 2 + 17
++            } else {
++                index * 37
++            };
++            let bytes = (0..size)
++                .map(|_| {
++                    state ^= state << 13;
++                    state ^= state >> 17;
++                    state ^= state << 5;
++                    state as u8
++                })
++                .collect::<Vec<_>>();
++            let filename = format!("{index:03}.bin");
++            let path = root.path().join(&filename);
++            std::fs::write(&path, &bytes).unwrap();
++            items.push(AuthoringMedia {
++                id: format!("media-{index}"),
++                desired_filename: filename.clone(),
++                source: AuthoringMediaSource::Path { path: filename },
++                declared_mime: None,
++            });
++            payloads.push(bytes);
++        }
++        let mut failed = PreparedMedia::new_in(root.path()).unwrap();
++        failed.register_source(
++            items[20].id.clone(),
++            root.path().join("020.bin"),
++            RegisteredFingerprint::Sha1("changed".into()),
++        );
++        std::fs::remove_file(root.path().join("008.bin")).unwrap();
++        let results = failed.prepare_all(&items, &options);
++        for (index, result) in results.iter().enumerate() {
++            let result = result.as_ref().unwrap();
++            if index == 8 || index == 20 {
++                let code = if index == 8 {
++                    "MEDIA.SOURCE_MISSING"
++                } else {
++                    "MEDIA.SOURCE_CHANGED"
++                };
++                assert_eq!(result.as_ref().unwrap_err().diagnostics[0].code, code);
++            } else {
++                assert_eq!(
++                    result.as_ref().unwrap().sha1,
++                    hex::encode(Sha1::digest(&payloads[index]))
++                );
++            }
++        }
++        assert_eq!(
++            failed.export_order,
++            items
++                .iter()
++                .enumerate()
++                .filter(|(i, _)| *i != 8 && *i != 20)
++                .map(|(_, item)| item.desired_filename.clone())
++                .collect::<Vec<_>>()
++        );
++        drop(failed);
++        // A subsequent build must succeed after both errors, with the same
++        // canonical order even when the caller supplies the reverse order.
++        std::fs::write(root.path().join("008.bin"), &payloads[8]).unwrap();
++        let mut archives = Vec::new();
++        for reverse in [false, true] {
++            let mut selected = items.clone();
++            if reverse {
++                selected.reverse();
++            }
++            let mut prepared = PreparedMedia::new_in(root.path()).unwrap();
++            let results = prepared.prepare_all(&selected, &options);
++            assert!(results
++                .iter()
++                .all(|result| result.as_ref().unwrap().is_ok()));
++            assert_eq!(
++                prepared.export_order,
++                items
++                    .iter()
++                    .map(|item| item.desired_filename.clone())
++                    .collect::<Vec<_>>()
++            );
++            let archive = prepared.archive.get_mut().unwrap().take().unwrap();
++            let (mut file, fingerprint) = archive.finish().unwrap();
++            file.rewind().unwrap();
++            let mut bytes = Vec::new();
++            file.read_to_end(&mut bytes).unwrap();
++            assert_eq!(
++                fingerprint,
++                format!("package:{}", hex::encode(Sha1::digest(&bytes)))
++            );
++            let mut zip = zip::ZipArchive::new(io::Cursor::new(&bytes)).unwrap();
++            for (index, expected) in payloads.iter().enumerate() {
++                let entry = zip.by_name(&index.to_string()).unwrap();
++                assert_eq!(zstd::stream::decode_all(entry).unwrap(), *expected);
++            }
++            archives.push(bytes);
++        }
++        assert_eq!(archives[0], archives[1]);
++        assert_eq!(std::fs::read_dir(root.path()).unwrap().count(), items.len());
++    }
++
+     #[test]
+     fn encoded_payload_spills_before_unbounded_growth_and_preserves_bytes() {
+         let mut payload = EncodedPayload {
+diff --git a/anki_forge/src/writer_core/inspect.rs b/anki_forge/src/writer_core/inspect.rs
+index 66f2c87..dbb692a 100644
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1026,28 +1026,74 @@ fn read_media_entries(
+             .map(|(index, entry)| (index, entry.name))
+             .collect()
+     };
+-    let mut resolved = Vec::new();
+-    for (index, name) in entries {
+-        let mut hash = MediaHash(sha1::Sha1::new());
+-        let size = archive
+-            .copy(
+-                &index.to_string(),
+-                version.zstd_compressed(),
+-                "media_bytes",
+-                archive.limits.max_media_bytes,
+-                &mut hash,
+-            )?
+-            .with_context(|| format!("missing media payload {index}"))?;
+-        resolved.push(ResolvedMedia {
+-            filename: name,
+-            size: usize::try_from(size).context("media size exceeds address space")?,
+-            sha1_hex: hex::encode(hash.0.finalize()),
+-            binding_id: None,
+-            object_id: None,
+-            object_ref: None,
+-        });
+-    }
+-    Ok(resolved)
++    let workers = if entries.len() >= MIN_PARALLEL_HASH_ENTRIES {
++        std::thread::available_parallelism()
++            .map_or(1, usize::from)
++            .min(MAX_HASH_WORKERS)
++    } else {
++        1
++    };
++    std::thread::scope(|scope| -> Result<Vec<ResolvedMedia>> {
++        let mut slots = Vec::new();
++        // Archive reads and every budget remain on this thread. A worker keeps
++        // one file's ordered hash state while bounded blocks arrive.
++        if workers > 1 {
++            for _ in 0..workers {
++                let (sender, jobs) = std::sync::mpsc::sync_channel::<MediaHashChunk>(1);
++                let (done, receiver) = std::sync::mpsc::sync_channel::<String>(1);
++                let spawned = std::thread::Builder::new()
++                    .name("anki-forge-inspect".into())
++                    .spawn_scoped(scope, move || {
++                        hash_media_chunks(jobs, done);
++                    });
++                // Parallel hashing is optional when the host cannot create more
++                // threads. Already-created workers and the serial path still work.
++                if spawned.is_err() {
++                    break;
++                }
++                slots.push((sender, receiver, None::<usize>));
++            }
++        }
++        let mut resolved: Vec<ResolvedMedia> = Vec::with_capacity(entries.len());
++        for (index, name) in entries {
++            let slot = (!slots.is_empty()).then(|| resolved.len() % slots.len());
++            if let Some(slot) = slot {
++                let (_, receiver, pending) = &mut slots[slot];
++                if let Some(previous) = pending.take() {
++                    resolved[previous].sha1_hex =
++                        receiver.recv().context("media hash worker stopped")?;
++                }
++            }
++            let mut hash = MediaHash::new(slot.map(|slot| &slots[slot].0));
++            let size = archive
++                .copy(
++                    &index.to_string(),
++                    version.zstd_compressed(),
++                    "media_bytes",
++                    archive.limits.max_media_bytes,
++                    &mut hash,
++                )?
++                .with_context(|| format!("missing media payload {index}"))?;
++            let sha1_hex = hash.finish()?.unwrap_or_default();
++            if let Some(slot) = slot {
++                slots[slot].2 = Some(resolved.len());
++            }
++            resolved.push(ResolvedMedia {
++                filename: name,
++                size: usize::try_from(size).context("media size exceeds address space")?,
++                sha1_hex,
++                binding_id: None,
++                object_id: None,
++                object_ref: None,
++            });
++        }
++        for (_, receiver, pending) in &mut slots {
++            if let Some(index) = pending.take() {
++                resolved[index].sha1_hex = receiver.recv().context("media hash worker stopped")?;
++            }
++        }
++        Ok(resolved)
++    })
+ }
+ 
+ // Count entries without allocating their strings/messages. In particular, an
+@@ -1102,11 +1148,89 @@ fn check_media_map_count(bytes: &[u8], version: PackageVersion, limit: u64) -> R
+     Ok(())
+ }
+ 
+-struct MediaHash(sha1::Sha1);
++const HASH_BUFFER_BYTES: usize = 256 * 1024;
++const MAX_HASH_WORKERS: usize = 4;
++const MIN_PARALLEL_HASH_ENTRIES: usize = 16;
++
++struct MediaHashChunk {
++    bytes: Vec<u8>,
++    last: bool,
++}
++
++fn hash_media_chunks(
++    jobs: std::sync::mpsc::Receiver<MediaHashChunk>,
++    done: std::sync::mpsc::SyncSender<String>,
++) {
++    let mut hash = sha1::Sha1::new();
++    while let Ok(chunk) = jobs.recv() {
++        hash.update(&chunk.bytes);
++        drop(chunk.bytes);
++        if chunk.last {
++            let digest = hex::encode(std::mem::replace(&mut hash, sha1::Sha1::new()).finalize());
++            if done.send(digest).is_err() {
++                break;
++            }
++        }
++    }
++}
++
++// Up to four workers each own one block and queue one more; the reader holds
++// one block. Decoded payload buffers total at most 9 * 256 KiB = 2.25 MiB.
++// Serial fallback hashes directly, without allocating a block.
++struct MediaHash<'a> {
++    hash: sha1::Sha1,
++    sender: Option<&'a std::sync::mpsc::SyncSender<MediaHashChunk>>,
++    pending: Vec<u8>,
++}
++
++impl<'a> MediaHash<'a> {
++    fn new(sender: Option<&'a std::sync::mpsc::SyncSender<MediaHashChunk>>) -> Self {
++        Self {
++            hash: sha1::Sha1::new(),
++            sender,
++            pending: sender.map_or_else(Vec::new, |_| Vec::with_capacity(HASH_BUFFER_BYTES)),
++        }
++    }
++
++    fn send_block(&mut self, last: bool) -> std::io::Result<()> {
++        let bytes = std::mem::take(&mut self.pending);
++        self.sender
++            .expect("parallel hash sender")
++            .send(MediaHashChunk { bytes, last })
++            .map_err(|_| std::io::Error::other("media hash worker stopped"))?;
++        // Allocate only after send returns. A blocked send already holds the
++        // reader's one block and must not allocate another in-flight buffer.
++        if !last {
++            self.pending = Vec::with_capacity(HASH_BUFFER_BYTES);
++        }
++        Ok(())
++    }
+ 
+-impl Write for MediaHash {
++    fn finish(mut self) -> std::io::Result<Option<String>> {
++        if self.sender.is_some() {
++            self.send_block(true)?;
++            Ok(None)
++        } else {
++            Ok(Some(hex::encode(self.hash.finalize())))
++        }
++    }
++}
++
++impl Write for MediaHash<'_> {
+     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+-        self.0.update(bytes);
++        if self.sender.is_none() {
++            self.hash.update(bytes);
++            return Ok(bytes.len());
++        }
++        let mut remaining = bytes;
++        while !remaining.is_empty() {
++            if self.pending.len() == HASH_BUFFER_BYTES {
++                self.send_block(false)?;
++            }
++            let count = remaining.len().min(HASH_BUFFER_BYTES - self.pending.len());
++            self.pending.extend_from_slice(&remaining[..count]);
++            remaining = &remaining[count..];
++        }
+         Ok(bytes.len())
+     }
+     fn flush(&mut self) -> std::io::Result<()> {
+diff --git a/anki_forge/src/writer_core/inspect_summary_tests.rs b/anki_forge/src/writer_core/inspect_summary_tests.rs
+index 8b7deb4..0411a00 100644
+--- a/anki_forge/src/writer_core/inspect_summary_tests.rs
++++ b/anki_forge/src/writer_core/inspect_summary_tests.rs
+@@ -4,6 +4,71 @@ use std::io::Read;
+ use crate::product::{Note, Project};
+ use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
+ 
++#[test]
++fn media_hash_streams_bounded_blocks_and_resets_between_files() {
++    let (sender, jobs) = std::sync::mpsc::sync_channel(1);
++    let (done, receiver) = std::sync::mpsc::sync_channel(1);
++    std::thread::scope(|scope| {
++        let worker = scope.spawn(move || hash_media_chunks(jobs, done));
++        for size in [
++            0,
++            31,
++            HASH_BUFFER_BYTES - 1,
++            HASH_BUFFER_BYTES,
++            HASH_BUFFER_BYTES + 1,
++            6 * HASH_BUFFER_BYTES + 13,
++            0,
++        ] {
++            let bytes: Vec<u8> = (0..size).map(|i| (i * 31) as u8).collect();
++            let mut sink = MediaHash::new(Some(&sender));
++            // Exercise short writes as well as blocks spanning many decoder reads.
++            for chunk in bytes.chunks(777) {
++                sink.write_all(chunk).unwrap();
++                assert!(sink.pending.capacity() <= HASH_BUFFER_BYTES);
++            }
++            assert_eq!(sink.finish().unwrap(), None);
++            assert_eq!(
++                receiver.recv().unwrap(),
++                hex::encode(sha1::Sha1::digest(&bytes))
++            );
++        }
++        drop(sender);
++        worker.join().unwrap();
++    });
++}
++
++#[test]
++fn serial_media_hash_does_not_allocate_payload_buffers() {
++    let bytes = vec![29; 3 * HASH_BUFFER_BYTES + 7];
++    let mut sink = MediaHash::new(None);
++    for chunk in bytes.chunks(8191) {
++        sink.write_all(chunk).unwrap();
++        assert_eq!(sink.pending.capacity(), 0);
++    }
++    assert_eq!(
++        sink.finish().unwrap(),
++        Some(hex::encode(sha1::Sha1::digest(&bytes)))
++    );
++}
++
++#[test]
++fn interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest() {
++    let (sender, jobs) = std::sync::mpsc::sync_channel(1);
++    let (done, receiver) = std::sync::mpsc::sync_channel(1);
++    std::thread::scope(|scope| {
++        let worker = scope.spawn(move || hash_media_chunks(jobs, done));
++        let mut sink = MediaHash::new(Some(&sender));
++        sink.write_all(&vec![7; 4 * HASH_BUFFER_BYTES + 1]).unwrap();
++        drop(sink);
++        drop(sender);
++        worker.join().unwrap();
++        assert_eq!(
++            receiver.try_recv(),
++            Err(std::sync::mpsc::TryRecvError::Disconnected)
++        );
++    });
++}
++
+ fn package(path: &Path) {
+     let mut project = Project::new("Summary").stable_id("summary");
+     for id in ["note", "note-prefix"] {
+diff --git a/anki_forge/src/writer_core/mod.rs b/anki_forge/src/writer_core/mod.rs
+index 77f4f64..6177dd8 100644
+--- a/anki_forge/src/writer_core/mod.rs
++++ b/anki_forge/src/writer_core/mod.rs
+@@ -7,6 +7,7 @@ pub(crate) mod identity;
+ mod inspect_limits;
+ pub(crate) mod note_data;
+ pub(crate) mod note_revision;
++mod pipelined_sha1;
+ pub(crate) mod stream_zip;
+ 
+ pub mod apkg;
+diff --git a/anki_forge/src/writer_core/stream_zip.rs b/anki_forge/src/writer_core/stream_zip.rs
+index 2571f04..a610194 100644
+--- a/anki_forge/src/writer_core/stream_zip.rs
++++ b/anki_forge/src/writer_core/stream_zip.rs
+@@ -2,11 +2,11 @@
+ //! first write, so the package fingerprint covers final bytes without rereads.
+ use std::io::{self, BufWriter, Write};
+ 
+-use sha1::{Digest, Sha1};
++use super::pipelined_sha1::PipelinedSha1;
+ 
+ pub(crate) struct StreamZip<W: Write> {
+     output: BufWriter<W>,
+-    hash: Sha1,
++    hash: PipelinedSha1,
+     position: u64,
+     central: Vec<Vec<u8>>,
+ }
+@@ -15,7 +15,7 @@ impl<W: Write> StreamZip<W> {
+     pub(crate) fn new(output: W) -> Self {
+         Self {
+             output: BufWriter::with_capacity(128 * 1024, output),
+-            hash: Sha1::new(),
++            hash: PipelinedSha1::new(),
+             position: 0,
+             central: Vec::new(),
+         }
+@@ -154,7 +154,7 @@ impl<W: Write> StreamZip<W> {
+         u16le(&mut end, 0);
+         self.write_all(&end)?;
+         self.output.flush()?;
+-        let fingerprint = format!("package:{}", hex::encode(self.hash.finalize()));
++        let fingerprint = format!("package:{}", self.hash.finish()?);
+         Ok((
+             self.output
+                 .into_inner()
+@@ -167,7 +167,7 @@ impl<W: Write> StreamZip<W> {
+ impl<W: Write> Write for StreamZip<W> {
+     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+         let written = self.output.write(bytes)?;
+-        self.hash.update(&bytes[..written]);
++        self.hash.update(&bytes[..written])?;
+         self.position = self
+             .position
+             .checked_add(written as u64)
+@@ -192,8 +192,91 @@ fn u64le(output: &mut Vec<u8>, value: u64) {
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++    use sha1::{Digest, Sha1};
+     use std::io::{Cursor, Read};
+ 
++    struct ShortWriter {
++        bytes: Vec<u8>,
++        fail_after: Option<usize>,
++    }
++
++    impl Write for ShortWriter {
++        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
++            let remaining = self.fail_after.unwrap_or(usize::MAX) - self.bytes.len();
++            if remaining == 0 {
++                return Err(io::Error::other("injected write failure"));
++            }
++            let count = bytes.len().min(4093).min(remaining);
++            self.bytes.extend_from_slice(&bytes[..count]);
++            Ok(count)
++        }
++
++        fn flush(&mut self) -> io::Result<()> {
++            Ok(())
++        }
++    }
++
++    #[test]
++    fn large_zip_keeps_exact_bytes_and_fingerprint_with_short_writes() {
++        let payload: Vec<_> = (0..2 * 1024 * 1024 + 17).map(|i| (i * 37) as u8).collect();
++        let entries = [
++            ("large", payload.as_slice()),
++            ("empty", &[]),
++            ("tail", b"tail".as_slice()),
++        ];
++        let mut stream = StreamZip::new(ShortWriter {
++            bytes: Vec::new(),
++            fail_after: None,
++        });
++        let mut reference = zip::ZipWriter::new(Cursor::new(Vec::new()));
++        for (name, bytes) in entries {
++            stream
++                .entry(name, bytes.len() as u64, crc32fast::hash(bytes), |writer| {
++                    for chunk in bytes.chunks(65537) {
++                        writer.write_all(chunk)?;
++                    }
++                    Ok(())
++                })
++                .unwrap();
++            reference
++                .start_file(
++                    name,
++                    zip::write::SimpleFileOptions::default()
++                        .compression_method(zip::CompressionMethod::Stored),
++                )
++                .unwrap();
++            reference.write_all(bytes).unwrap();
++        }
++        let (written, fingerprint) = stream.finish().unwrap();
++        assert_eq!(written.bytes, reference.finish().unwrap().into_inner());
++        assert_eq!(
++            fingerprint,
++            format!("package:{}", hex::encode(Sha1::digest(&written.bytes)))
++        );
++    }
++
++    #[test]
++    fn large_zip_propagates_midstream_output_errors() {
++        let bytes = vec![41; 2 * 1024 * 1024];
++        let mut stream = StreamZip::new(ShortWriter {
++            bytes: Vec::new(),
++            fail_after: Some(1024 * 1024 + 7),
++        });
++        let error = stream
++            .entry(
++                "large",
++                bytes.len() as u64,
++                crc32fast::hash(&bytes),
++                |writer| {
++                    writer.write_all(&bytes)?;
++                    Ok(())
++                },
++            )
++            .unwrap_err();
++        assert!(error.to_string().contains("injected write failure"));
++        drop(stream);
++    }
++
+     #[test]
+     fn final_bytes_match_the_existing_zip_writer_and_fingerprint() {
+         let entries = [("meta", b"abc".as_slice()), ("0", b"media"), ("media", b"")];
+diff --git a/anki_forge/tests/apkg_inspect_limits_tests.rs b/anki_forge/tests/apkg_inspect_limits_tests.rs
+index d95106e..ebdee0e 100644
+--- a/anki_forge/tests/apkg_inspect_limits_tests.rs
++++ b/anki_forge/tests/apkg_inspect_limits_tests.rs
+@@ -172,6 +172,79 @@ fn multiple_media_entries_share_both_cumulative_budgets() {
+     assert_limit(&path, &limits, "zip_total_bytes");
+ }
+ 
++#[test]
++fn many_media_keep_exact_hashes_across_small_and_streamed_payloads() {
++    use sha1::{Digest, Sha1};
++    let root = tempfile::tempdir().unwrap();
++    let sizes = [
++        0, 31, 65_535, 65_536, 65_537, 131_073, 262_143, 262_144, 262_145, 1_048_576,
++    ];
++    let payloads: Vec<Vec<u8>> = (0..30)
++        .map(|entry| {
++            (0..sizes[entry % sizes.len()])
++                .map(|i| (i * 31 + entry * 17) as u8)
++                .collect()
++        })
++        .collect();
++    for (version, method, nested) in [
++        (1, CompressionMethod::Deflated, false),
++        (2, CompressionMethod::Stored, false),
++        (3, CompressionMethod::Stored, true),
++        (3, CompressionMethod::Deflated, true),
++    ] {
++        let path = root.path().join(format!("many-{version}-{method:?}.apkg"));
++        write_archive(&path, version, &payloads, method, nested);
++        let report = inspect_apkg(&path).unwrap();
++        assert_eq!(report.observations.media.len(), payloads.len());
++        for (index, bytes) in payloads.iter().enumerate() {
++            assert_eq!(report.observations.media[index]["size"], bytes.len());
++            assert_eq!(
++                report.observations.media[index]["sha1"],
++                hex::encode(Sha1::digest(bytes))
++            );
++        }
++    }
++}
++
++#[test]
++fn many_media_keep_cumulative_limits_and_recover_after_late_failure() {
++    let root = tempfile::tempdir().unwrap();
++    let path = root.path().join("many-limits.apkg");
++    let sizes = [31, 65_537, 262_145, 1_048_577];
++    let payloads: Vec<_> = (0..20)
++        .map(|index| vec![5; sizes[index % sizes.len()]])
++        .collect();
++    let map_size = write_archive(&path, 1, &payloads, CompressionMethod::Stored, false);
++    let total = 2 + map_size as u64 + payloads.iter().map(|bytes| bytes.len() as u64).sum::<u64>();
++    let mut limits = InspectLimits::default();
++    limits.max_decoded_total_bytes = total - 1;
++    assert_limit(&path, &limits, "decoded_total_bytes");
++    limits.max_decoded_total_bytes = total;
++    limits.max_zip_total_bytes = total - 1;
++    assert_limit(&path, &limits, "zip_total_bytes");
++    limits.max_zip_total_bytes = total;
++    assert_eq!(
++        inspect_apkg_with_limits(&path, &limits)
++            .unwrap()
++            .observations
++            .media
++            .len(),
++        20
++    );
++
++    let mut frames: Vec<_> = payloads
++        .iter()
++        .map(|bytes| zstd::stream::encode_all(bytes.as_slice(), 0).unwrap())
++        .collect();
++    frames[19].pop();
++    write_archive(&path, 3, &frames, CompressionMethod::Stored, false);
++    let report = inspect_apkg(&path).unwrap();
++    assert_ne!(report.observation_status, "complete");
++    assert!(report.observations.media.is_empty());
++    write_archive(&path, 3, &payloads, CompressionMethod::Stored, true);
++    assert_eq!(inspect_apkg(&path).unwrap().observations.media.len(), 20);
++}
++
+ #[test]
+ fn concatenated_frames_share_budget_and_high_window_is_typed() {
+     let root = tempfile::tempdir().unwrap();
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index 1f44a97..e6324a7 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -2,6 +2,10 @@
+ .tools/
+ .work/
+ inputs/
+-results/
++results/*
++!results/20260907-readme-comparison/
++!results/20260907-inspection-parallel-hash/
++!results/20260907-remaining-opportunities/
++!results/20260907-streaming-followup/
+ adapters/rust/target/
+ __pycache__/
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index ed28acc..0aedcfd 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -2,6 +2,53 @@
+ 
+ An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
+ 
++## README comparison: three complete sessions
++
++The [current README evidence](results/20260907-inspection-parallel-hash/report.md)
++uses three sequential full media matrices at revision `ab7d261` plus a frozen
++uncommitted source patch. Exact source/binary identities were recorded before
++measurement and stayed unchanged. The [earlier clean-revision baseline](results/20260907-readme-comparison/report.md)
++and [separate before/after implementation measurements](results/20260907-inspection-parallel-hash/implementation.md)
++remain available.
++Every exporter/cell has 30 fresh-process timings and 15 separate RSS samples,
++plus three warmups before each phase in each session. All 2,520 exports passed
++artifact checks and 120 selected packages passed Anki import/content/render
++checks. The Anki checker retains a recorded `tokio/io-util` build-feature patch.
++
++The aggregate pools equally sized sessions and also retains each session's
++medians and same-session time savings. Quartiles use linear interpolation at
++`(n - 1) × p`; original per-session media reports retain their exclusive
++quartile convention. No old implementation, best run or cross-cell average is
++mixed into these results. Three sessions give a local descriptive comparison;
++they do not establish performance across machines or workloads. A predeclared
++5-percentage-point spread diagnostic is reported without triggering extra runs.
++
++The main chart is a 5×4 heatmap with time savings and both absolute medians.
++Supplementary plots show time scaling with IQR and the three session medians,
++plus separate signed memory/package-size savings. Numeric tables and all
++original checks remain in the linked report. Regenerate the charts offline:
++
++```sh
++benchmarks/.venv/bin/python benchmarks/media_report.py benchmarks/results/20260907-inspection-parallel-hash
++```
++
++After the preparation and smoke commands below, reproduce the same three-session
++schedule from a clean checkout by copying the earlier clean-checkout runner to a new work
++directory. The runner records the plan before measurement, generates one shared
++frozen fixture set, and stops if any session fails:
++
++```sh
++mkdir -p benchmarks/.work/readme-reproduction
++cp benchmarks/results/20260907-readme-comparison/run_three.py benchmarks/.work/readme-reproduction/run_three.py
++benchmarks/.venv/bin/python benchmarks/.work/readme-reproduction/run_three.py
++```
++
++Use `prepare --with-anki --rust-allocator system` for this reproduction.
++Both archived snapshots are explicitly allowed by `.gitignore`; other working
++results remain ignored. A dirty measurement requires a predeclared, hash-pinned
++`source-snapshot.json` and `source.patch`; the reporter rejects changed source
++identities and never labels such measurements as a clean commit.
++
+ ## Run
+ 
+ Requirements: the repository's Rust 1.92.0 toolchain, `uv`, a native CPython 3.11 interpreter, a C compiler with pthreads, and a local filesystem with sufficient free space. The initial local profile is **CPython 3.11.0 ARM64**; the exact patch is captured in every manifest. Another patch is a separate runtime profile, not a silently interchangeable baseline. Linux x86_64 and macOS ARM64 are supported. Python dependencies, including reporting tools, are hash locked; the private Rust adapter has its own Cargo.lock and workspace.
+diff --git a/docs/adr/0018-build-owned-media-streaming.md b/docs/adr/0018-build-owned-media-streaming.md
+index 0c14aa1..9958f73 100644
+--- a/docs/adr/0018-build-owned-media-streaming.md
++++ b/docs/adr/0018-build-owned-media-streaming.md
+@@ -7,9 +7,13 @@ Status: implemented and locally validated (2026-09-07)
+ Default temporary Project/Deck builds own a private media archive. Registration
+ still validates the source immediately. During each build, one streamed source
+ read checks the registered fingerprint, computes SHA-1/BLAKE3 and MIME evidence,
+-and encodes zstd. Four workers at most feed deterministic, capacity-one queues.
+-Each encoded payload keeps at most 512 KiB of data before spilling to a private
+-file. The consumer writes final ZIP media entries immediately; codec contexts,
++and encodes zstd. Up to four workers claim tasks from a shared queue inside a
++fixed window of twice the worker count plus one. Each job owns a capacity-one
++reply channel; the consumer accepts results in canonical order. This balances
++mixed file sizes while limiting all active and queued payloads together to nine
++at four workers. Each encoded payload keeps at most 512 KiB of data before
++spilling to a private file, for at most 4.5 MiB of encoded payload data in flight.
++The consumer writes final ZIP media entries immediately; codec contexts,
+ allocator capacity and the input model have separate memory overhead. This is a
+ bound on in-flight encoded payloads, not a total RSS limit or an inline-input
+ allocation limit. Thread failure becomes a build diagnostic.
+@@ -28,6 +32,13 @@ Persistent builds retain their existing order. Container hashes can consequently
+ differ across these storage modes; decoded entries, Anki identities and content
+ remain equal. Repeated builds in the same mode are deterministic.
+ 
++For packages reaching 256 KiB, an optional hashing thread consumes final bytes
++in order while writing continues. One active block, one queued block and one
++caller block bound additional payload buffers to 768 KiB. Smaller packages and
++thread-creation failures use serial hashing. Completion joins the worker before
++returning the fingerprint; dropping a failed writer also closes and joins it.
++The final output flush, sync and publication requirements are unchanged.
++
+ The fixed schema11 upgrade-message collection is packaged as a generated asset;
+ a test regenerates and compares its exact bytes. Actual note databases are still
+ built per export. SHA-1 remains SHA-1, with RustCrypto 0.11's runtime hardware
+@@ -35,6 +46,15 @@ selection and portable fallback; no platform FFI or global allocator is added.
+ 
+ Inspection reuses decoder workspace with a fresh session per frame; exact
+ window checks and cumulative ZIP/decoded budgets remain in force.
++For at least 16 media entries, inspection may hash decoded payloads in ordered
++256 KiB blocks on up to four scoped workers, including files larger than a block.
++Archive reading, CRC/format checks
++and all resource counters stay on the inspecting thread. Each worker has only
++one queued block and one active block, and releases bytes before acknowledging
++completion. Including the reader's current block, extra decoded payload buffers
++are bounded by 2.25 MiB. Unavailable workers leave the serial path usable without
++a payload buffer. Hash results are collected in the original media order,
++and all workers finish before inspection returns, including on read failures.
+ Inspection and policy acceptance remain mandatory before publication. The owned
+ candidate is synced and renamed, with copy-before-replace on cross-device moves.
+ `persist_to` keeps its copy semantics because its source may have other owners.
+@@ -63,6 +83,10 @@ source/binary identities, exact media and raw collection verification, and pinne
+ upstream Anki import/render evidence. Successful-path equality alone does not
+ replace source-change, ownership, overflow/spill, failure and concurrency tests.
+ 
++The [streaming follow-up report](../../benchmarks/results/20260907-streaming-followup/implementation.md)
++records chunked inspection, pipelined package hashing and bounded dynamic media
++preparation, including the rejected SQLite-cache and identity-reuse experiments.
++
+ See the [current interface and benchmark report](../superpowers/specs/2026-09-07-internal-media-registration-report.md)
+ for individual-registration results and limits. The [earlier implementation report](../superpowers/specs/2026-09-07-media-performance-implementation-report.md)
+ retains the historical batch-registration evidence.
+diff --git a/anki_forge/src/writer_core/pipelined_sha1.rs b/anki_forge/src/writer_core/pipelined_sha1.rs
+new file mode 100644
+index 0000000..02f6ced
+--- /dev/null
++++ b/anki_forge/src/writer_core/pipelined_sha1.rs
+@@ -0,0 +1,122 @@
++//! Ordered package hashing that overlaps large writes, with bounded buffers.
++use std::io;
++use std::sync::mpsc::{sync_channel, SyncSender};
++use std::thread::{Builder, JoinHandle};
++
++use sha1::{Digest, Sha1};
++
++const BLOCK_BYTES: usize = 256 * 1024;
++
++pub(crate) struct PipelinedSha1 {
++    serial: Sha1,
++    worker: Option<HashWorker>,
++    bytes: usize,
++    attempted_worker: bool,
++}
++
++impl PipelinedSha1 {
++    pub(crate) fn new() -> Self {
++        Self {
++            serial: Sha1::new(),
++            worker: None,
++            bytes: 0,
++            attempted_worker: false,
++        }
++    }
++
++    pub(crate) fn update(&mut self, bytes: &[u8]) -> io::Result<()> {
++        self.bytes = self.bytes.saturating_add(bytes.len());
++        if !self.attempted_worker && self.bytes >= BLOCK_BYTES {
++            self.attempted_worker = true;
++            // Keep the serial state usable if thread creation fails.
++            self.worker = HashWorker::new(self.serial.clone()).ok();
++        }
++        if let Some(worker) = self.worker.as_mut() {
++            worker.update(bytes)
++        } else {
++            self.serial.update(bytes);
++            Ok(())
++        }
++    }
++
++    pub(crate) fn finish(self) -> io::Result<String> {
++        let hash = match self.worker {
++            Some(worker) => worker.finish()?,
++            None => self.serial,
++        };
++        Ok(hex::encode(hash.finalize()))
++    }
++}
++
++// One active block, one queued block, and one caller buffer: at most 768 KiB.
++// Drop closes the queue and joins even when the output writer fails.
++struct HashWorker {
++    sender: Option<SyncSender<Vec<u8>>>,
++    result: Option<JoinHandle<Sha1>>,
++    pending: Vec<u8>,
++}
++
++impl HashWorker {
++    fn new(mut hash: Sha1) -> io::Result<Self> {
++        let (sender, receiver) = sync_channel::<Vec<u8>>(1);
++        let result = Builder::new()
++            .name("anki-forge-package-hash".into())
++            .spawn(move || {
++                while let Ok(bytes) = receiver.recv() {
++                    hash.update(&bytes);
++                }
++                hash
++            })?;
++        Ok(Self {
++            sender: Some(sender),
++            result: Some(result),
++            pending: Vec::new(),
++        })
++    }
++
++    fn update(&mut self, mut bytes: &[u8]) -> io::Result<()> {
++        while !bytes.is_empty() {
++            if self.pending.len() == BLOCK_BYTES {
++                self.send_pending()?;
++            }
++            if self.pending.capacity() == 0 {
++                self.pending = Vec::with_capacity(BLOCK_BYTES);
++            }
++            let count = bytes.len().min(BLOCK_BYTES - self.pending.len());
++            self.pending.extend_from_slice(&bytes[..count]);
++            bytes = &bytes[count..];
++        }
++        Ok(())
++    }
++
++    fn send_pending(&mut self) -> io::Result<()> {
++        if !self.pending.is_empty() {
++            let bytes = std::mem::take(&mut self.pending);
++            self.sender
++                .as_ref()
++                .expect("active hash sender")
++                .send(bytes)
++                .map_err(|_| io::Error::other("package hash worker stopped"))?;
++        }
++        Ok(())
++    }
++
++    fn finish(mut self) -> io::Result<Sha1> {
++        self.send_pending()?;
++        drop(self.sender.take());
++        self.result
++            .take()
++            .expect("active hash worker")
++            .join()
++            .map_err(|_| io::Error::other("package hash worker stopped"))
++    }
++}
++
++impl Drop for HashWorker {
++    fn drop(&mut self) {
++        drop(self.sender.take());
++        if let Some(result) = self.result.take() {
++            let _ = result.join();
++        }
++    }
++}
+diff --git a/benchmarks/media_report.py b/benchmarks/media_report.py
+new file mode 100644
+index 0000000..d029605
+--- /dev/null
++++ b/benchmarks/media_report.py
+@@ -0,0 +1,325 @@
++"""Offline three-session media report; reads compact evidence, never runs exporters."""
++import argparse
++from collections import Counter
++import hashlib
++import json
++import os
++from pathlib import Path
++import tarfile
++
++from report import stats
++
++SIZES = (100, 200, 500, 1000)
++PROFILES = (
++    ('basic-mixed-text-v1', 'Text only'),
++    ('basic-image-unique-v2', 'Unique images'),
++    ('basic-audio-unique-v2', 'Unique audio'),
++    ('basic-mixed-unique-v2', 'Mixed, unique media'),
++    ('basic-mixed-shared-v2', 'Mixed, shared media'),
++)
++ADAPTERS = ('rust', 'genanki')
++ROLES = {'timing_warmup': 3, 'timing': 10, 'rss_warmup': 3, 'rss': 5}
++
++
++def read_json(path):
++    return json.loads(path.read_text())
++
++
++def require(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def validate_source(root, plan, manifest):
++    require(manifest['source_commit'] == plan['source_commit'], 'package source revision changed')
++    frozen = plan.get('source_snapshot')
++    if frozen is None:
++        require(not manifest['git_status'] and not plan.get('git_status'),
++                'package source must match the clean predeclared revision')
++        return
++    for name in ('source-snapshot.json', 'source.patch'):
++        require(hashlib.sha256((root/name).read_bytes()).hexdigest() == frozen[name],
++                f'frozen source changed: {name}')
++    snapshot = read_json(root/'source-snapshot.json')
++    require(snapshot['source_commit'] == plan['source_commit']
++            and snapshot['git_status'] == manifest['git_status'] == plan['git_status']
++            and snapshot['source_files'] == manifest['identity_before']['source_files'],
++            'package source must match the predeclared worktree snapshot')
++
++
++def validate_power(records, attempts, expected):
++    require(Counter(r['id'] for r in records) == Counter(r['id'] for r in attempts),
++            'missing or duplicate per-export power records')
++    require(all(r.get(side, '').splitlines()[:1] == [expected]
++                for r in records for side in ('before', 'after')),
++            'native power source changed during measurement')
++
++
++def aggregate(rounds):
++    """Equal-size sessions: pool samples, retain every same-session comparison."""
++    require(len(rounds) == 3, 'expected exactly three predeclared sessions')
++    expected = Counter({(p, n, a, role): count for p, _ in PROFILES for n in SIZES
++                        for a in ADAPTERS for role, count in ROLES.items()})
++    for rows in rounds:
++        require(Counter((r['profile'], r['size'], r['adapter'], r['role']) for r in rows) == expected,
++                'incomplete or duplicate session cells')
++        require(len({r['id'] for r in rows}) == len(rows), 'duplicate attempt IDs')
++        require(all(r['status'] == 'success' and r['measurement']['exit_code'] == 0
++                    and not r['measurement']['signal'] and not r['measurement']['leftover_descendants']
++                    for r in rows), 'failed attempt: no survivor-only statistics')
++    cells = []
++    for profile, label in PROFILES:
++        for size in SIZES:
++            cell = {'profile': profile, 'label': label, 'size': size, 'rounds': []}
++            selections = [[r for r in rows if (r['profile'], r['size']) == (profile, size)]
++                          for rows in rounds]
++            for adapter in ADAPTERS:
++                rows = [r for selection in selections for r in selection if r['adapter'] == adapter]
++                cell[adapter] = {
++                    'time_ms': stats([r['measurement']['elapsed_ns']/1e6 for r in rows if r['role'] == 'timing']),
++                    'rss_mib': stats([r['measurement']['peak_rss_bytes']/2**20 for r in rows if r['role'] == 'rss']),
++                    'apkg_bytes': stats([r['artifact_bytes'] for r in rows if r['role'] == 'timing']),
++                }
++            for index, selection in enumerate(selections, 1):
++                medians = {a: stats([r['measurement']['elapsed_ns']/1e6 for r in selection
++                                    if r['adapter'] == a and r['role'] == 'timing'])['median'] for a in ADAPTERS}
++                cell['rounds'].append({'round': index, **medians, 'time_saved_pct': 100*(1-medians['rust']/medians['genanki'])})
++            rust, genanki = cell['rust'], cell['genanki']
++            cell['time_saved_pct'] = 100*(1-rust['time_ms']['median']/genanki['time_ms']['median'])
++            cell['genanki_over_rust'] = genanki['time_ms']['median']/rust['time_ms']['median']
++            cell['time_saved_ms'] = genanki['time_ms']['median']-rust['time_ms']['median']
++            for metric in ('rss_mib', 'apkg_bytes'):
++                cell[metric+'_saved_pct'] = 100*(1-rust[metric]['median']/genanki[metric]['median'])
++            reductions = [r['time_saved_pct'] for r in cell['rounds']]
++            cell['round_time_saved_range_pct'] = [min(reductions), max(reductions)]
++            cell['round_spread_pp'] = max(reductions)-min(reductions)
++            cell['variable_across_rounds'] = cell['round_spread_pp'] > 5
++            cells.append(cell)
++    return cells
++
++
++def load_evidence(root):
++    for name, digest in read_json(root/'evidence-sha256.json').items():
++        require(hashlib.sha256((root/name).read_bytes()).hexdigest() == digest, f'evidence changed: {name}')
++    plan = read_json(root/'plan.json')
++    require(read_json(root/'experiment.json')['status'] == 'completed', 'experiment incomplete')
++    require(plan['round_count'] == 3 and len(set(plan['rounds'])) == 3, 'wrong predeclared sessions')
++    manifests, rounds = [], []
++    for index, name in enumerate(plan['rounds'], 1):
++        folder = root/f'round-{index}'
++        manifest = read_json(folder/'manifest.json')
++        require(manifest['status'] == 'completed' and manifest['identity_unchanged']
++                and manifest['oracle_required'], f'incomplete or unverified round {index}')
++        validate_source(root, plan, manifest)
++        require(list(manifest['sizes']) == list(SIZES) and manifest['timing_repeats'] == 10
++                and manifest['rss_repeats'] == 5, 'wrong measurement schedule')
++        require(manifest['rust_configuration']['allocator'] == 'system'
++                and manifest['adapter_metadata']['rust']['media_registration'] == 'individual',
++                'this comparison requires the default allocator and individual media API')
++        rows = [json.loads(line) for line in (folder/'verified.jsonl').read_text().splitlines()]
++        attempts = [json.loads(line) for line in (folder/'attempts.jsonl').read_text().splitlines()]
++        if plan.get('expected_power_source'):
++            power = [json.loads(line) for line in (folder/'power.jsonl').read_text().splitlines()]
++            validate_power(power, attempts, plan['expected_power_source'])
++        require(len(attempts) == len(rows) and len({r['id'] for r in attempts}) == len(rows), 'unverified attempts')
++        by_id = {r['id']: r for r in attempts}
++        with tarfile.open(folder/'verification.tar.gz') as archive:
++            for row in rows:
++                original = by_id[row['id']]
++                require(original['status'] == 'success' and original['measurement'] == row['measurement'], 'attempt mismatch')
++                check = json.loads(archive.extractfile(row['id']+'/verification.json').read())
++                require(check['status'] == 'passed' and check['artifact_sha256'] == row['artifact_sha256']
++                        and check['artifact_bytes'] == row['artifact_bytes'], 'artifact evidence mismatch')
++                if row['role'] == 'timing' and row['repeat'] == 0:
++                    raw = archive.extractfile(row['id']+'/anki.json').read()
++                    require(hashlib.sha256(raw).hexdigest() == row['oracle_sha256']
++                            and json.loads(raw)['status'] == 'passed', 'Anki evidence mismatch')
++        if manifests:
++            require(manifests[-1]['completed_utc'] < manifest['created_utc'], 'duplicate or overlapping sessions')
++            for key in ('source_commit', 'identity_before', 'adapter_metadata', 'rust_configuration', 'rust_feature_tree',
++                        'rustc', 'platform', 'machine', 'inputs', 'workloads', 'seed', 'fixture_protocol'):
++                require(manifest[key] == manifests[0][key], f'sessions differ: {key}')
++        manifests.append(manifest)
++        rounds.append(rows)
++    return plan, manifests, aggregate(rounds)
++
++
++def plots(root, cells, plan, manifest):
++    os.environ.setdefault('MPLCONFIGDIR', str(Path(__file__).resolve().parent/'.work/matplotlib'))
++    import matplotlib
++    matplotlib.use('Agg')
++    import matplotlib.pyplot as plt
++    from matplotlib.colors import LinearSegmentedColormap, Normalize, TwoSlopeNorm
++    import numpy as np
++    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10, 'svg.fonttype': 'none',
++                         'svg.hashsalt': 'readme-media-three-sessions-v1', 'text.color': '#172b35',
++                         'figure.facecolor': 'white', 'axes.facecolor': 'white'})
++    metadata = manifest['adapter_metadata']
++    common = (f"Native Rust, {manifest['rust_configuration']['allocator']} allocator · "
++              f"genanki {metadata['genanki']['genanki']} / CPython {metadata['genanki']['python']} · "
++              f"{plan['environment']['cpu']} · {manifest['machine']}")
++    if plan.get('power_label'):
++        common += f" · {plan['power_label']}"
++    lookup = {(c['profile'], c['size']): c for c in cells}
++    saved_cmap = LinearSegmentedColormap.from_list('saved', ['#f3f7f7', '#a6d7ce', '#126959'])
++    signed_cmap = LinearSegmentedColormap.from_list('signed', ['#b66339', '#fafafa', '#126959'])
++
++    def save(fig, name, description):
++        fig.savefig(root/f'{name}.svg', metadata={'Date': None, 'Title': name.replace('-', ' '),
++                    'Description': description+' '+common+'. Full numeric and per-session tables: report.md.'})
++        # PNGs are local QA previews; the README embeds resolution-independent SVG.
++        preview = Path(__file__).resolve().parent/'.work/readme-chart-preview'
++        preview.mkdir(parents=True, exist_ok=True)
++        fig.savefig(preview/f'{name}.png', dpi=160)
++        plt.close(fig)
++
++    def heatmap(ax, metric, cmap, norm, row_labels=True, times=False):
++        values = np.array([[lookup[p,n][metric] for n in SIZES] for p, _ in PROFILES])
++        im = ax.imshow(values, cmap=cmap, norm=norm, aspect='auto')
++        ax.set_xticks(range(4), ['100', '200', '500', '1,000'])
++        ax.xaxis.tick_top()
++        ax.set_yticks(range(5), [label for _, label in PROFILES] if row_labels else ['']*5)
++        ax.tick_params(axis='both', which='both', length=0, pad=10)
++        ax.set_xticks(np.arange(-.5,4,1), minor=True)
++        ax.set_yticks(np.arange(-.5,5,1), minor=True)
++        ax.grid(which='minor', color='white', linewidth=4)
++        ax.spines[:].set_visible(False)
++        for i, (profile, _) in enumerate(PROFILES):
++            for j, size in enumerate(SIZES):
++                value = values[i,j]
++                r,g,b,_ = im.cmap(im.norm(value))
++                ink = 'white' if .2126*r+.7152*g+.0722*b < .52 else '#172b35'
++                ax.text(j, i-.11 if times else i, f'{value:.1f}%' if times else f'{value:+.1f}%',
++                        ha='center', va='center', fontsize=16 if times else 12, weight='bold', color=ink)
++                if times:
++                    c = lookup[profile,size]
++                    ax.text(j, i+.23, f"{c['rust']['time_ms']['median']:.1f} / {c['genanki']['time_ms']['median']:.1f} ms",
++                            ha='center', va='center', fontsize=9.4, color=ink)
++        return im
++
++    fig = plt.figure(figsize=(10.8,5.7))
++    fig.text(.025,.952,'Export time saved vs genanki',fontsize=21,weight='bold')
++    fig.text(.025,.905,'3 complete sessions · 30 fresh-process timings per cell/exporter · columns: notes',color='#536b76')
++    # A signed scale is retained if a future complete comparison has slower Rust cells.
++    has_negative = any(c['time_saved_pct'] < 0 for c in cells)
++    im = heatmap(fig.add_axes([.22,.22,.70,.60]), 'time_saved_pct',
++                 signed_cmap if has_negative else saved_cmap,
++                 TwoSlopeNorm(vmin=-100,vcenter=0,vmax=100) if has_negative else Normalize(0,100), times=True)
++    cb = fig.colorbar(im,cax=fig.add_axes([.94,.22,.014,.60]))
++    cb.outline.set_visible(False)
++    fig.text(.22,.16,'Cell: time saved (%) · pooled median anki-forge / genanki (ms)',fontsize=10)
++    fig.text(.025,.103,'Saved = 100 × (1 − Rust median / genanki median). Startup, parsing and default export checks are included.',fontsize=9)
++    fig.text(.025,.067,common,fontsize=9,color='#536b76')
++    fig.text(.025,.031,'Synthetic Basic workloads; file cache uncontrolled. Full report retains sample spread and every session separately.',fontsize=9,color='#536b76')
++    save(fig,'time-heatmap','Time saved and absolute medians for all twenty workload/size cells. No cross-cell average.')
++
++    fig, axes = plt.subplots(2,3,figsize=(11.6,7),sharex=True,sharey=True)
++    fig.subplots_adjust(left=.075,right=.97,top=.79,bottom=.17,hspace=.40,wspace=.18)
++    fig.text(.035,.95,'How export time grows with deck size',fontsize=21,weight='bold')
++    fig.text(.035,.908,'30 timings per point · whiskers: pooled Q1–Q3 · faint dots: the 3 session medians',color='#536b76')
++    upper = max([c[a]['time_ms']['q3'] for c in cells for a in ADAPTERS]
++                + [r[a] for c in cells for r in c['rounds'] for a in ADAPTERS])
++    for ax, (profile,label) in zip(axes.flat,PROFILES):
++        for adapter,color,marker in [('rust','#087e8b','o'),('genanki','#c16b26','s')]:
++            selected = [lookup[profile,n] for n in SIZES]
++            ss = [c[adapter]['time_ms'] for c in selected]
++            ax.errorbar(SIZES,[s['median'] for s in ss],
++                        yerr=[[s['median']-s['q1'] for s in ss],[s['q3']-s['median'] for s in ss]],
++                        color=color,marker=marker,markersize=5,linewidth=1.3,capsize=3,
++                        label='anki-forge / Rust [system]' if adapter == 'rust' else 'genanki / Python')
++            for c in selected:
++                ax.scatter([c['size']]*3,[r[adapter] for r in c['rounds']],s=12,color=color,alpha=.4,zorder=2)
++        ax.set_title(label,loc='left',fontsize=11,weight='bold',pad=10)
++        ax.set_xlim(0,1050)
++        ax.set_ylim(0,upper*1.14)
++        ax.set_xticks(SIZES,['100','200','500','1K'])
++        ax.tick_params(labelsize=8,labelbottom=True)
++        ax.set_xlabel('Notes',fontsize=9)
++        ax.grid(axis='y',color='#e1e9ed')
++        ax.spines[['top','right']].set_visible(False)
++    axes[0,0].set_ylabel('Elapsed time (ms)')
++    axes[1,0].set_ylabel('Elapsed time (ms)')
++    axes[1,2].set_axis_off()
++    axes[1,2].text(0,.9,'Three sessions, all retained',fontsize=11,weight='bold',transform=axes[1,2].transAxes)
++    axes[1,2].text(0,.73,'Each session: 3 warmups + 10 timings\nRSS: 3 warmups + 5 separate samples\n\nSame linear axes in every panel\nLines connect measured sizes only\nIQR is spread, not confidence',va='top',fontsize=10,linespacing=1.55,transform=axes[1,2].transAxes)
++    fig.legend(*axes[0,0].get_legend_handles_labels(),loc='upper left',bbox_to_anchor=(.03,.883),frameon=False,ncol=2)
++    fig.text(.035,.083,common,fontsize=9,color='#536b76')
++    fig.text(.035,.046,'Startup and parsing included. Quartiles use linear interpolation at (n − 1) × p; no statistical significance claim.',fontsize=9,color='#536b76')
++    save(fig,'time-scaling','Identical linear axes, pooled median/Q1/Q3 and three same-session medians. Connecting lines are visual guides.')
++
++    fig = plt.figure(figsize=(12.8,5.7))
++    fig.text(.025,.95,'Memory and package size',fontsize=21,weight='bold')
++    fig.text(.025,.904,'Signed savings vs genanki · negative values mean Rust uses more · columns: notes',color='#536b76')
++    for bounds,metric,title,detail,labels in [
++        ([.18,.22,.34,.50],'rss_mib_saved_pct','Peak RSS saved (%)','Median of 15 separate process peaks',True),
++        ([.58,.22,.34,.50],'apkg_bytes_saved_pct','APKG bytes saved (%)','Median of 30 timed output sizes',False)]:
++        fig.text(bounds[0],.837,title,fontsize=13,weight='bold')
++        fig.text(bounds[0],.799,detail,fontsize=9,color='#536b76')
++        im = heatmap(fig.add_axes(bounds),metric,signed_cmap,TwoSlopeNorm(vmin=-100,vcenter=0,vmax=100),labels)
++    cb = fig.colorbar(im,cax=fig.add_axes([.944,.22,.012,.50]),ticks=[-100,-50,0,50,100])
++    cb.outline.set_visible(False)
++    fig.text(.18,.16,'Saved = 100 × (1 − Rust / genanki). RSS compares process high-water marks, not allocation totals.',fontsize=9)
++    fig.text(.025,.103,'Default output formats differ: Rust uses modern zstd; genanki uses legacy stored collections. Learning content is equivalent.',fontsize=9)
++    fig.text(.025,.065,common,fontsize=9,color='#536b76')
++    fig.text(.025,.029,'Full report includes both absolute values, RSS ranges and APKG bytes at every size.',fontsize=9,color='#536b76')
++    save(fig,'resources','Signed savings in median process peak RSS and default APKG bytes. Negative cells remain visible.')
++
++
++def render(root):
++    plan, manifests, cells = load_evidence(root)
++    summary = {'schema':'media-three-session-summary-v1','source_commit':plan['source_commit'],
++               'rounds':plan['rounds'],'quartiles':'linear interpolation at (n - 1) * p',
++               'aggregation':plan['aggregate'],'verified_exports':2520,'anki_import_checks':120,
++               'oracle_patch':plan['oracle_patch'],'cells':cells,
++               'source_snapshot':plan.get('source_snapshot'),
++               'renderer_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
++    (root/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
++    source_description = (f"Measured package: base revision `{plan['source_commit']}` plus the frozen uncommitted [source patch](source.patch). The exact [source hashes](source-snapshot.json) and patch hashes were recorded before measurement and remained unchanged across all three sessions."
++                          if plan.get('source_snapshot') else
++                          f"Measured package revision: `{plan['source_commit']}` (clean for all three sessions).")
++    lines = ['# Three-session export comparison','', source_description,'',
++        'Five synthetic Basic scenes × 100/200/500/1,000 notes. Each cell/exporter has 30 timing samples and 15 separate RSS samples; each session has 3 warmups before each pass. All 2,520 exports passed original SQLite/template/media checks; 120 first-timed packages passed pinned Anki import/content/render checks.', '',
++        f"Host: {plan['environment']['cpu']}; {int(plan['environment']['memory_bytes'])/2**30:g} GiB RAM; {plan['environment']['logical_cpus']} logical CPUs; {manifests[0]['platform']}. Rust 1.92.0 release/default features/system allocator; genanki 0.13.1 on native CPython 3.11.0.", '',
++        'Time covers fresh-process launch through exit, including imports, input parsing, media registration and default export checks. Media setup, output verification and Anki imports are outside each timed exporter. One exporter runs at a time, with adjacent interleaved controls; the same balanced seed/schedule is repeated in three sequential sessions. No controlled cold-cache or CPU-work claim is made.', '',
++        'PNG images are 64,152 bytes; WAV audio files are 32,044 bytes. Mixed scenes use 30% text, 40% images and 30% audio; shared media uses 49 distinct files. These fixtures do not measure Cloze, Image Occlusion, video, large individual media, bindings, long-lived processes or other hosts.', '',
++        'Anki verification uses the pinned upstream revision with the recorded local `tokio/io-util` build-feature patch in [plan.json](plan.json). This is local descriptive evidence with a patched oracle build, not an unmodified-upstream or cross-platform release benchmark. The patch and executable hashes are preserved; the measured package source and binaries did not change. No GUI or audible playback is exercised.', '',
++        *([f"Power: {plan['power_label']}. Native readings were recorded before and after all 2,520 exports and checked against the predeclared source; see each session's `power.jsonl`. Absolute times are not compared against earlier sessions with different power conditions.", ''] if plan.get('expected_power_source') else []),
++        '## Timing','',
++        'Values pool all equally sized sessions. Q1/Q3 use linear interpolation at `(n - 1) × p`; the original per-session runner reports retain its exclusive convention. IQR describes sample spread, not confidence. Savings = `100 × (1 - Rust median / genanki median)`. No cross-scene/size average, best-run selection or p95 is used.', '',
++        '| Scene | Notes | Rust ms [Q1, Q3] | genanki ms [Q1, Q3] | Time saved | genanki / Rust | ms saved |',
++        '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
++    def timing(s):
++        return f"{s['median']:.2f} [{s['q1']:.2f}, {s['q3']:.2f}]"
++    for c in cells:
++        lines.append(f"| {c['label']} | {c['size']} | {timing(c['rust']['time_ms'])} | {timing(c['genanki']['time_ms'])} | {c['time_saved_pct']:.1f}% | {c['genanki_over_rust']:.2f}× | {c['time_saved_ms']:.2f} |")
++    lines += ['', '![Time saved for every scene and size](time-heatmap.svg)', '',
++              '![Absolute time scaling with sample spread](time-scaling.svg)', '',
++              '## Across-session variation', '',
++              'Each entry below is Rust/genanki median milliseconds, followed by the same-session time saving. The predeclared diagnostic flags a range exceeding 5 percentage points. All three sessions stay in the aggregate regardless of the flag; it is not a significance test.', '',
++              '| Scene | Notes | Session 1 | Session 2 | Session 3 | Saving spread (pp) |',
++              '| --- | ---: | ---: | ---: | ---: | ---: |']
++    for c in cells:
++        entries = ' | '.join(f"{r['rust']:.2f}/{r['genanki']:.2f} ({r['time_saved_pct']:.1f}%)" for r in c['rounds'])
++        lines.append(f"| {c['label']} | {c['size']} | {entries} | {c['round_spread_pp']:.2f}{' *' if c['variable_across_rounds'] else ''} |")
++    lines += ['', '## Memory and output size', '',
++              'RSS is the median [minimum, maximum] of 15 independent process high-water marks. APKG size uses only the 30 timed outputs. Rust writes a modern zstd collection plus a legacy compatibility placeholder; genanki writes a legacy stored collection. Size savings include those default format/compression choices. Matching learning content does not imply byte-identical packages or styles.', '',
++              '| Scene | Notes | Rust RSS MiB [min, max] | genanki RSS MiB [min, max] | Rust APKG KiB | genanki APKG KiB |',
++              '| --- | ---: | ---: | ---: | ---: | ---: |']
++    def rss(s):
++        return f"{s['median']:.2f} [{s['min']:.2f}, {s['max']:.2f}]"
++    for c in cells:
++        lines.append(f"| {c['label']} | {c['size']} | {rss(c['rust']['rss_mib'])} | {rss(c['genanki']['rss_mib'])} | {c['rust']['apkg_bytes']['median']/1024:.2f} | {c['genanki']['apkg_bytes']['median']/1024:.2f} |")
++    lines += ['', '![Memory and package size savings](resources.svg)', '', '## Reproduce', '',
++              'See the [suite instructions](../../README.md) for locked preparation and measurement. [plan.json](plan.json) was saved before fixture generation or measurement. Original manifests, attempts, verified samples and compressed check records live in `round-1/`, `round-2/`, `round-3/`. Source paths inside these immutable records describe the measurement host; fixtures regenerate from the frozen repository recipe. APKG/media files and executables are excluded from this compact snapshot.', '',
++              'Regenerate this report offline from the archived evidence:', '', '```sh',
++              f'benchmarks/.venv/bin/python benchmarks/media_report.py benchmarks/results/{root.name}', '```', '',
++              '[summary.json](summary.json) contains all statistics; [evidence-sha256.json](evidence-sha256.json) pins the original evidence bytes. The renderer rejects changed evidence, differing experiment identities, incomplete cells, failed attempts or missing Anki checks before calculating scores.', '']
++    (root/'report.md').write_text('\n'.join(lines))
++    plots(root,cells,plan,manifests[0])
++    print(root/'report.md')
++
++
++if __name__ == '__main__':
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('directory',type=Path)
++    render(parser.parse_args().directory.resolve())
+diff --git a/benchmarks/tests/test_media_report.py b/benchmarks/tests/test_media_report.py
+new file mode 100644
+index 0000000..bc00f19
+--- /dev/null
++++ b/benchmarks/tests/test_media_report.py
+@@ -0,0 +1,116 @@
++import copy
++import hashlib
++import json
++from pathlib import Path
++import tempfile
++import unittest
++
++import media_report
++
++
++def sessions():
++    result = []
++    for session in (1, 2, 3):
++        rows = []
++        for profile, _ in media_report.PROFILES:
++            for size in media_report.SIZES:
++                for adapter in media_report.ADAPTERS:
++                    for role, repeats in media_report.ROLES.items():
++                        for repeat in range(repeats):
++                            measured_ms = session * (10 if adapter == 'rust' else 20)
++                            rows.append({
++                                'id': f'{profile}-{size}-{adapter}-{role}-{repeat}',
++                                'profile': profile, 'size': size, 'adapter': adapter,
++                                'role': role, 'status': 'success',
++                                'artifact_bytes': 1000 if adapter == 'rust' else 2000,
++                                'measurement': {'elapsed_ns': (10000 if 'warmup' in role else measured_ms)*10**6,
++                                                'peak_rss_bytes': (20 if adapter == 'rust' else 10)*2**20,
++                                                'exit_code': 0, 'signal': 0, 'leftover_descendants': False},
++                            })
++        result.append(rows)
++    return result
++
++
++class MediaReportTests(unittest.TestCase):
++    def test_power_checks_cover_every_attempt_and_reject_source_changes(self):
++        expected = "Now drawing from 'Battery Power'"
++        attempts = [{'id': 'first'}, {'id': 'second'}]
++        records = [{'id': row['id'], 'before': expected + '\n75%', 'after': expected + '\n74%'} for row in attempts]
++        media_report.validate_power(records, attempts, expected)
++        for changed in (records[:1], records + records[:1],
++                        [records[0], {**records[1], 'after': "Now drawing from 'AC Power'"}],
++                        [records[0], {'id': 'second', 'before': expected}]):
++            with self.subTest(records=changed), self.assertRaises(ValueError):
++                media_report.validate_power(changed, attempts, expected)
++
++    def test_dirty_sources_require_an_exact_predeclared_snapshot(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            plan = {'source_commit': 'base', 'git_status': ' M runtime.rs'}
++            manifest = {**plan, 'identity_before': {'source_files': {'runtime.rs': 'digest'}}}
++            with self.assertRaisesRegex(ValueError, 'clean predeclared'):
++                media_report.validate_source(root, plan, manifest)
++            snapshot = {**plan, **manifest['identity_before']}
++            (root/'source-snapshot.json').write_text(json.dumps(snapshot))
++            (root/'source.patch').write_text('the exact patch')
++            plan['source_snapshot'] = {name: hashlib.sha256((root/name).read_bytes()).hexdigest()
++                                       for name in ('source-snapshot.json', 'source.patch')}
++            media_report.validate_source(root, plan, manifest)
++            changed = copy.deepcopy(manifest)
++            changed['identity_before']['source_files']['runtime.rs'] = 'changed'
++            with self.assertRaisesRegex(ValueError, 'worktree snapshot'):
++                media_report.validate_source(root, plan, changed)
++            (root/'source.patch').write_text('changed patch')
++            with self.assertRaisesRegex(ValueError, 'frozen source changed'):
++                media_report.validate_source(root, plan, manifest)
++
++    def test_pools_equal_sessions_and_excludes_warmups(self):
++        cells = media_report.aggregate(sessions())
++        self.assertEqual(len(cells), 20)
++        cell = cells[0]
++        self.assertEqual(cell['rust']['time_ms']['n'], 30)
++        self.assertEqual(cell['rust']['rss_mib']['n'], 15)
++        self.assertEqual(cell['rust']['time_ms']['median'], 20)
++        self.assertEqual(cell['genanki']['time_ms']['median'], 40)
++        self.assertEqual(cell['time_saved_pct'], 50)
++        self.assertEqual(cell['round_time_saved_range_pct'], [50, 50])
++        self.assertEqual(cell['rss_mib_saved_pct'], -100)
++        self.assertEqual(cell['apkg_bytes_saved_pct'], 50)
++
++    def test_slower_rust_and_session_variation_remain_visible(self):
++        rows = sessions()
++        for row in rows[2]:
++            if row['adapter'] == 'rust' and row['role'] == 'timing':
++                row['measurement']['elapsed_ns'] *= 3
++        cell = media_report.aggregate(rows)[0]
++        self.assertEqual(cell['rounds'][2]['time_saved_pct'], -50)
++        self.assertEqual(cell['round_spread_pp'], 100)
++        self.assertTrue(cell['variable_across_rounds'])
++
++    def test_incomplete_failed_or_duplicate_attempts_reject_entire_aggregate(self):
++        original = sessions()
++        for kind in ('missing', 'failed', 'duplicate'):
++            rows = copy.deepcopy(original)
++            if kind == 'missing':
++                rows[0].pop()
++            elif kind == 'failed':
++                rows[0][-1]['status'] = 'failed'
++            else:
++                rows[0][-1] = rows[0][-2]
++            with self.subTest(kind=kind), self.assertRaises(ValueError):
++                media_report.aggregate(rows)
++        with self.assertRaises(ValueError):
++            media_report.aggregate(original[:2])
++
++    def test_changed_archived_evidence_is_rejected_before_reporting(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            original = b'original plan'
++            (root/'plan.json').write_bytes(b'changed plan')
++            (root/'evidence-sha256.json').write_text(json.dumps({'plan.json': hashlib.sha256(original).hexdigest()}))
++            with self.assertRaisesRegex(ValueError, 'evidence changed: plan.json'):
++                media_report.load_evidence(root)
++
++
++if __name__ == '__main__':
++    unittest.main()

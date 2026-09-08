@@ -1,0 +1,1781 @@
+{
+  "schema": "media-three-session-summary-v1",
+  "source_commit": "ab7d261238619e99da9a6b8e5ffff8d952e6153b",
+  "rounds": [
+    "20260907T135655Z-bounded-media-r1",
+    "20260907T135655Z-bounded-media-r2",
+    "20260907T135655Z-bounded-media-r3"
+  ],
+  "quartiles": "linear interpolation at (n - 1) * p",
+  "aggregation": "Pool all 30 timing and 15 separate RSS samples per exporter/cell; median and linear inclusive Q1/Q3. Keep all three per-session medians and same-session ratios.",
+  "verified_exports": 2520,
+  "anki_import_checks": 120,
+  "oracle_patch": "diff --git a/Cargo.toml b/Cargo.toml\nindex 2566a48f1..38ef681ef 100644\n--- a/Cargo.toml\n+++ b/Cargo.toml\n@@ -130,7 +130,7 @@ syn = { version = \"2.0.103\", features = [\"parsing\", \"printing\"] }\n tar = \"0.4.44\"\n tempfile = \"3.20.0\"\n termcolor = \"1.4.1\"\n-tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\"] }\n+tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\", \"io-util\"] }\n tokio-util = { version = \"0.7.15\", features = [\"io\"] }\n tower-http = { version = \"0.6.6\", features = [\"trace\"] }\n tracing = { version = \"0.1.41\", features = [\"max_level_trace\", \"release_max_level_debug\"] }",
+  "cells": [
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "Text only",
+      "size": 100,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 27.476999999999997,
+          "genanki": 103.8655,
+          "time_saved_pct": 73.54559502433435
+        },
+        {
+          "round": 2,
+          "rust": 27.64,
+          "genanki": 103.1905,
+          "time_saved_pct": 73.21458855224076
+        },
+        {
+          "round": 3,
+          "rust": 27.817500000000003,
+          "genanki": 103.405,
+          "time_saved_pct": 73.09849620424545
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 27.624499999999998,
+          "q1": 26.3745,
+          "q3": 28.518250000000002,
+          "min": 24.588,
+          "max": 33.502
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 14.0625,
+          "q1": 14.0390625,
+          "q3": 14.078125,
+          "min": 14.0,
+          "max": 14.171875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 74384.0,
+          "q1": 74384.0,
+          "q3": 74384.0,
+          "min": 74384,
+          "max": 74384
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 103.535,
+          "q1": 102.51474999999999,
+          "q3": 104.22025,
+          "min": 101.441,
+          "max": 108.26
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 26.578125,
+          "q1": 26.46875,
+          "q3": 26.9921875,
+          "min": 26.4375,
+          "max": 27.53125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 135386.0,
+          "q1": 135386.0,
+          "q3": 135386.0,
+          "min": 135386,
+          "max": 135386
+        }
+      },
+      "time_saved_pct": 73.31868450282512,
+      "genanki_over_rust": 3.7479411392061395,
+      "time_saved_ms": 75.9105,
+      "rss_mib_saved_pct": 47.089947089947096,
+      "apkg_bytes_saved_pct": 45.057834635782136,
+      "round_time_saved_range_pct": [
+        73.09849620424545,
+        73.54559502433435
+      ],
+      "round_spread_pp": 0.4470988200888968,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "Text only",
+      "size": 200,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 31.560499999999998,
+          "genanki": 104.82,
+          "time_saved_pct": 69.89076512116009
+        },
+        {
+          "round": 2,
+          "rust": 31.053,
+          "genanki": 105.0135,
+          "time_saved_pct": 70.42951620505934
+        },
+        {
+          "round": 3,
+          "rust": 32.8865,
+          "genanki": 105.95400000000001,
+          "time_saved_pct": 68.96153047548937
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 31.6015,
+          "q1": 30.8135,
+          "q3": 33.1395,
+          "min": 29.258,
+          "max": 36.818
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 15.84375,
+          "q1": 15.8359375,
+          "q3": 15.890625,
+          "min": 15.796875,
+          "max": 16.0625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 90022.0,
+          "q1": 90022.0,
+          "q3": 90022.0,
+          "min": 90022,
+          "max": 90022
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 105.229,
+          "q1": 104.54925,
+          "q3": 107.02375,
+          "min": 103.565,
+          "max": 109.911
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 27.359375,
+          "q1": 27.109375,
+          "q3": 27.703125,
+          "min": 26.9375,
+          "max": 28.28125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 209114.0,
+          "q1": 209114.0,
+          "q3": 209114.0,
+          "min": 209114,
+          "max": 209114
+        }
+      },
+      "time_saved_pct": 69.96882988529778,
+      "genanki_over_rust": 3.3298735819502236,
+      "time_saved_ms": 73.6275,
+      "rss_mib_saved_pct": 42.090234151913194,
+      "apkg_bytes_saved_pct": 56.950754134108664,
+      "round_time_saved_range_pct": [
+        68.96153047548937,
+        70.42951620505934
+      ],
+      "round_spread_pp": 1.4679857295699748,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "Text only",
+      "size": 500,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 45.3,
+          "genanki": 111.9855,
+          "time_saved_pct": 59.548334382576314
+        },
+        {
+          "round": 2,
+          "rust": 44.7685,
+          "genanki": 114.6585,
+          "time_saved_pct": 60.95492266164305
+        },
+        {
+          "round": 3,
+          "rust": 45.730500000000006,
+          "genanki": 114.23949999999999,
+          "time_saved_pct": 59.9696252171972
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 45.1125,
+          "q1": 44.388000000000005,
+          "q3": 47.479749999999996,
+          "min": 42.434,
+          "max": 53.746
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 21.265625,
+          "q1": 21.25,
+          "q3": 21.3828125,
+          "min": 21.1875,
+          "max": 21.453125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 136323.0,
+          "q1": 136323.0,
+          "q3": 136323.0,
+          "min": 136323,
+          "max": 136323
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 113.899,
+          "q1": 111.22775,
+          "q3": 115.874,
+          "min": 109.309,
+          "max": 122.218
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 28.96875,
+          "q1": 28.75,
+          "q3": 29.1640625,
+          "min": 28.546875,
+          "max": 29.46875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 475354.0,
+          "q1": 475354.0,
+          "q3": 475354.0,
+          "min": 475354,
+          "max": 475354
+        }
+      },
+      "time_saved_pct": 60.39254075979596,
+      "genanki_over_rust": 2.5247769465225827,
+      "time_saved_ms": 68.7865,
+      "rss_mib_saved_pct": 26.59115426105717,
+      "apkg_bytes_saved_pct": 71.32179386309991,
+      "round_time_saved_range_pct": [
+        59.548334382576314,
+        60.95492266164305
+      ],
+      "round_spread_pp": 1.4065882790667388,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "Text only",
+      "size": 1000,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 67.124,
+          "genanki": 120.212,
+          "time_saved_pct": 44.161980501114705
+        },
+        {
+          "round": 2,
+          "rust": 69.111,
+          "genanki": 121.7075,
+          "time_saved_pct": 43.215496169093925
+        },
+        {
+          "round": 3,
+          "rust": 68.631,
+          "genanki": 122.40299999999999,
+          "time_saved_pct": 43.93029582608269
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 68.3235,
+          "q1": 67.119,
+          "q3": 70.088,
+          "min": 65.625,
+          "max": 82.713
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 30.1875,
+          "q1": 30.140625,
+          "q3": 30.2265625,
+          "min": 30.015625,
+          "max": 30.265625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 209069.0,
+          "q1": 209069.0,
+          "q3": 209069.0,
+          "min": 209069,
+          "max": 209069
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 121.36699999999999,
+          "q1": 119.90875,
+          "q3": 123.32875,
+          "min": 119.358,
+          "max": 156.233
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 31.46875,
+          "q1": 31.3671875,
+          "q3": 31.6171875,
+          "min": 31.09375,
+          "max": 32.1875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 868570.0,
+          "q1": 868570.0,
+          "q3": 868570.0,
+          "min": 868570,
+          "max": 868570
+        }
+      },
+      "time_saved_pct": 43.70504338082015,
+      "genanki_over_rust": 1.7763580612819894,
+      "time_saved_ms": 53.043499999999995,
+      "rss_mib_saved_pct": 4.071499503475673,
+      "apkg_bytes_saved_pct": 75.92951633144133,
+      "round_time_saved_range_pct": [
+        43.215496169093925,
+        44.161980501114705
+      ],
+      "round_spread_pp": 0.9464843320207805,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "Unique images",
+      "size": 100,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 45.0215,
+          "genanki": 118.29849999999999,
+          "time_saved_pct": 61.94245911824747
+        },
+        {
+          "round": 2,
+          "rust": 44.716499999999996,
+          "genanki": 119.1675,
+          "time_saved_pct": 62.47592674177105
+        },
+        {
+          "round": 3,
+          "rust": 45.725,
+          "genanki": 124.138,
+          "time_saved_pct": 63.16599268555962
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 45.215500000000006,
+          "q1": 44.06575,
+          "q3": 46.3605,
+          "min": 42.002,
+          "max": 56.01
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 19.78125,
+          "q1": 19.5546875,
+          "q3": 19.890625,
+          "min": 19.453125,
+          "max": 20.046875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 6501698.0,
+          "q1": 6501698.0,
+          "q3": 6501698.0,
+          "min": 6501698,
+          "max": 6501698
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 119.41,
+          "q1": 118.28725,
+          "q3": 124.154,
+          "min": 117.022,
+          "max": 153.625
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 26.890625,
+          "q1": 26.6875,
+          "q3": 27.1953125,
+          "min": 26.421875,
+          "max": 28.1875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 6565050.0,
+          "q1": 6565050.0,
+          "q3": 6565050.0,
+          "min": 6565050,
+          "max": 6565050
+        }
+      },
+      "time_saved_pct": 62.134243363202415,
+      "genanki_over_rust": 2.640908538001349,
+      "time_saved_ms": 74.19449999999999,
+      "rss_mib_saved_pct": 26.438117373619985,
+      "apkg_bytes_saved_pct": 0.9649888424307473,
+      "round_time_saved_range_pct": [
+        61.94245911824747,
+        63.16599268555962
+      ],
+      "round_spread_pp": 1.2235335673121526,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "Unique images",
+      "size": 200,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 67.1845,
+          "genanki": 136.471,
+          "time_saved_pct": 50.77012698668582
+        },
+        {
+          "round": 2,
+          "rust": 67.431,
+          "genanki": 137.6335,
+          "time_saved_pct": 51.00684063109635
+        },
+        {
+          "round": 3,
+          "rust": 66.7255,
+          "genanki": 140.074,
+          "time_saved_pct": 52.36410754315577
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 67.15899999999999,
+          "q1": 65.88,
+          "q3": 68.20075,
+          "min": 64.512,
+          "max": 74.567
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 22.171875,
+          "q1": 22.078125,
+          "q3": 22.40625,
+          "min": 21.953125,
+          "max": 22.4375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 12944890.0,
+          "q1": 12944890.0,
+          "q3": 12944890.0,
+          "min": 12944890,
+          "max": 12944890
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 138.531,
+          "q1": 136.42975,
+          "q3": 140.04899999999998,
+          "min": 133.953,
+          "max": 146.916
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 27.984375,
+          "q1": 27.78125,
+          "q3": 28.1640625,
+          "min": 27.40625,
+          "max": 28.59375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 13068774.0,
+          "q1": 13068774.0,
+          "q3": 13068774.0,
+          "min": 13068774,
+          "max": 13068774
+        }
+      },
+      "time_saved_pct": 51.52059827764184,
+      "genanki_over_rust": 2.0627317262019984,
+      "time_saved_ms": 71.37200000000001,
+      "rss_mib_saved_pct": 20.77051926298158,
+      "apkg_bytes_saved_pct": 0.9479389573956998,
+      "round_time_saved_range_pct": [
+        50.77012698668582,
+        52.36410754315577
+      ],
+      "round_spread_pp": 1.5939805564699512,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "Unique images",
+      "size": 500,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 128.5195,
+          "genanki": 188.10399999999998,
+          "time_saved_pct": 31.6763598860205
+        },
+        {
+          "round": 2,
+          "rust": 127.23949999999999,
+          "genanki": 187.9735,
+          "time_saved_pct": 32.309873466206675
+        },
+        {
+          "round": 3,
+          "rust": 129.14499999999998,
+          "genanki": 189.115,
+          "time_saved_pct": 31.71086376014596
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 128.26,
+          "q1": 126.80275,
+          "q3": 131.3525,
+          "min": 124.018,
+          "max": 154.899
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 28.9375,
+          "q1": 28.8125,
+          "q3": 29.0625,
+          "min": 28.53125,
+          "max": 29.171875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 32273629.0,
+          "q1": 32273629.0,
+          "q3": 32273629.0,
+          "min": 32273629,
+          "max": 32273629
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 188.48649999999998,
+          "q1": 187.23625,
+          "q3": 190.20325000000003,
+          "min": 184.605,
+          "max": 199.211
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 30.5625,
+          "q1": 30.3984375,
+          "q3": 30.640625,
+          "min": 30.171875,
+          "max": 31.375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 32633194.0,
+          "q1": 32633194.0,
+          "q3": 32633194.0,
+          "min": 32633194,
+          "max": 32633194
+        }
+      },
+      "time_saved_pct": 31.952686266655693,
+      "genanki_over_rust": 1.4695657258693278,
+      "time_saved_ms": 60.22649999999999,
+      "rss_mib_saved_pct": 5.316973415132919,
+      "apkg_bytes_saved_pct": 1.1018382080528188,
+      "round_time_saved_range_pct": [
+        31.6763598860205,
+        32.309873466206675
+      ],
+      "round_spread_pp": 0.6335135801861753,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "Unique images",
+      "size": 1000,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 229.907,
+          "genanki": 276.1495,
+          "time_saved_pct": 16.745458528804136
+        },
+        {
+          "round": 2,
+          "rust": 235.1515,
+          "genanki": 276.6405,
+          "time_saved_pct": 14.997442529203052
+        },
+        {
+          "round": 3,
+          "rust": 231.697,
+          "genanki": 274.949,
+          "time_saved_pct": 15.73091737013046
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 232.0275,
+          "q1": 229.67825,
+          "q3": 235.40800000000002,
+          "min": 220.764,
+          "max": 314.478
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 40.109375,
+          "q1": 39.9140625,
+          "q3": 40.2890625,
+          "min": 39.75,
+          "max": 40.53125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 64483665.0,
+          "q1": 64483665.0,
+          "q3": 64483665.0,
+          "min": 64483665,
+          "max": 64483665
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 275.5835,
+          "q1": 273.761,
+          "q3": 278.123,
+          "min": 269.977,
+          "max": 295.922
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 34.734375,
+          "q1": 34.5390625,
+          "q3": 35.03125,
+          "min": 34.421875,
+          "max": 35.296875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 65192774.0,
+          "q1": 65192774.0,
+          "q3": 65192774.0,
+          "min": 65192774,
+          "max": 65192774
+        }
+      },
+      "time_saved_pct": 15.805010096758332,
+      "genanki_over_rust": 1.1877191281205892,
+      "time_saved_ms": 43.55600000000001,
+      "rss_mib_saved_pct": -15.474583895636517,
+      "apkg_bytes_saved_pct": 1.087711039876904,
+      "round_time_saved_range_pct": [
+        14.997442529203052,
+        16.745458528804136
+      ],
+      "round_spread_pp": 1.7480159996010833,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "Unique audio",
+      "size": 100,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 41.774,
+          "genanki": 114.6655,
+          "time_saved_pct": 63.56881538038904
+        },
+        {
+          "round": 2,
+          "rust": 43.710499999999996,
+          "genanki": 115.243,
+          "time_saved_pct": 62.07101515927215
+        },
+        {
+          "round": 3,
+          "rust": 42.83,
+          "genanki": 115.492,
+          "time_saved_pct": 62.91518027222664
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 43.079,
+          "q1": 41.255,
+          "q3": 45.18575,
+          "min": 38.944,
+          "max": 53.512
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 18.546875,
+          "q1": 18.4765625,
+          "q3": 18.703125,
+          "min": 18.28125,
+          "max": 18.953125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 3261414.0,
+          "q1": 3261414.0,
+          "q3": 3261414.0,
+          "min": 3261414,
+          "max": 3261414
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 115.275,
+          "q1": 114.02375,
+          "q3": 117.18799999999999,
+          "min": 112.327,
+          "max": 142.935
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 27.234375,
+          "q1": 26.734375,
+          "q3": 27.5078125,
+          "min": 26.5625,
+          "max": 27.71875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 3354250.0,
+          "q1": 3354250.0,
+          "q3": 3354250.0,
+          "min": 3354250,
+          "max": 3354250
+        }
+      },
+      "time_saved_pct": 62.62936456300152,
+      "genanki_over_rust": 2.6758977692146986,
+      "time_saved_ms": 72.196,
+      "rss_mib_saved_pct": 31.89902467010901,
+      "apkg_bytes_saved_pct": 2.7677126034135746,
+      "round_time_saved_range_pct": [
+        62.07101515927215,
+        63.56881538038904
+      ],
+      "round_spread_pp": 1.49780022111689,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "Unique audio",
+      "size": 200,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 57.858999999999995,
+          "genanki": 128.0265,
+          "time_saved_pct": 54.80701261067045
+        },
+        {
+          "round": 2,
+          "rust": 60.4225,
+          "genanki": 128.1,
+          "time_saved_pct": 52.831772053083526
+        },
+        {
+          "round": 3,
+          "rust": 59.9775,
+          "genanki": 130.188,
+          "time_saved_pct": 53.93008572218637
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 59.427499999999995,
+          "q1": 57.64325,
+          "q3": 61.5,
+          "min": 55.067,
+          "max": 75.701
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 21.15625,
+          "q1": 20.96875,
+          "q3": 21.234375,
+          "min": 20.609375,
+          "max": 21.4375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 6483733.0,
+          "q1": 6483733.0,
+          "q3": 6483733.0,
+          "min": 6483733,
+          "max": 6483733
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 128.446,
+          "q1": 127.67075,
+          "q3": 130.46574999999999,
+          "min": 126.708,
+          "max": 134.513
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 27.75,
+          "q1": 27.640625,
+          "q3": 28.4609375,
+          "min": 27.578125,
+          "max": 29.03125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 6643078.0,
+          "q1": 6643078.0,
+          "q3": 6643078.0,
+          "min": 6643078,
+          "max": 6643078
+        }
+      },
+      "time_saved_pct": 53.733475546143914,
+      "genanki_over_rust": 2.1613899289049683,
+      "time_saved_ms": 69.0185,
+      "rss_mib_saved_pct": 23.761261261261257,
+      "apkg_bytes_saved_pct": 2.398662186414191,
+      "round_time_saved_range_pct": [
+        52.831772053083526,
+        54.80701261067045
+      ],
+      "round_spread_pp": 1.9752405575869219,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "Unique audio",
+      "size": 500,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 108.161,
+          "genanki": 168.1005,
+          "time_saved_pct": 35.656943316646895
+        },
+        {
+          "round": 2,
+          "rust": 109.844,
+          "genanki": 167.774,
+          "time_saved_pct": 34.52859203452263
+        },
+        {
+          "round": 3,
+          "rust": 111.0695,
+          "genanki": 166.951,
+          "time_saved_pct": 33.471797114123305
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 110.2065,
+          "q1": 107.95675,
+          "q3": 112.00175,
+          "min": 103.217,
+          "max": 129.882
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 28.21875,
+          "q1": 28.109375,
+          "q3": 28.3359375,
+          "min": 27.78125,
+          "max": 28.734375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 16133066.0,
+          "q1": 16133066.0,
+          "q3": 16133066.0,
+          "min": 16133066,
+          "max": 16133066
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 167.80599999999998,
+          "q1": 165.95850000000002,
+          "q3": 170.6445,
+          "min": 164.455,
+          "max": 194.355
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 30.59375,
+          "q1": 30.4296875,
+          "q3": 30.859375,
+          "min": 30.296875,
+          "max": 31.5
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 16562810.0,
+          "q1": 16562810.0,
+          "q3": 16562810.0,
+          "min": 16562810,
+          "max": 16562810
+        }
+      },
+      "time_saved_pct": 34.32505393132544,
+      "genanki_over_rust": 1.5226506603512495,
+      "time_saved_ms": 57.59949999999998,
+      "rss_mib_saved_pct": 7.763023493360577,
+      "apkg_bytes_saved_pct": 2.5946321910352177,
+      "round_time_saved_range_pct": [
+        33.471797114123305,
+        35.656943316646895
+      ],
+      "round_spread_pp": 2.1851462025235904,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "Unique audio",
+      "size": 1000,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 194.3905,
+          "genanki": 231.6345,
+          "time_saved_pct": 16.07877928374227
+        },
+        {
+          "round": 2,
+          "rust": 195.837,
+          "genanki": 231.95,
+          "time_saved_pct": 15.569303729251994
+        },
+        {
+          "round": 3,
+          "rust": 198.1615,
+          "genanki": 232.25150000000002,
+          "time_saved_pct": 14.678053747769138
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 195.642,
+          "q1": 192.9315,
+          "q3": 202.16675,
+          "min": 188.75,
+          "max": 213.443
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 39.75,
+          "q1": 39.6171875,
+          "q3": 39.8828125,
+          "min": 39.296875,
+          "max": 40.375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 32207523.0,
+          "q1": 32207523.0,
+          "q3": 32207523.0,
+          "min": 32207523,
+          "max": 32207523
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 231.93,
+          "q1": 230.42749999999998,
+          "q3": 234.00074999999998,
+          "min": 228.263,
+          "max": 239.088
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 35.125,
+          "q1": 34.96875,
+          "q3": 35.203125,
+          "min": 34.71875,
+          "max": 35.71875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 33043814.0,
+          "q1": 33043814.0,
+          "q3": 33043814.0,
+          "min": 33043814,
+          "max": 33043814
+        }
+      },
+      "time_saved_pct": 15.646100116414441,
+      "genanki_over_rust": 1.1854816450455423,
+      "time_saved_ms": 36.28800000000001,
+      "rss_mib_saved_pct": -13.167259786476858,
+      "apkg_bytes_saved_pct": 2.530854943076488,
+      "round_time_saved_range_pct": [
+        14.678053747769138,
+        16.07877928374227
+      ],
+      "round_spread_pp": 1.4007255359731339,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "Mixed, unique media",
+      "size": 100,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 39.146,
+          "genanki": 113.8005,
+          "time_saved_pct": 65.60120561860448
+        },
+        {
+          "round": 2,
+          "rust": 40.294,
+          "genanki": 113.154,
+          "time_saved_pct": 64.39012319493787
+        },
+        {
+          "round": 3,
+          "rust": 40.7645,
+          "genanki": 112.963,
+          "time_saved_pct": 63.913405274293346
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 40.076,
+          "q1": 38.871249999999996,
+          "q3": 41.43175,
+          "min": 37.142,
+          "max": 47.971
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 19.46875,
+          "q1": 19.1640625,
+          "q3": 19.640625,
+          "min": 18.8125,
+          "max": 19.734375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 3602592.0,
+          "q1": 3602592.0,
+          "q3": 3602592.0,
+          "min": 3602592,
+          "max": 3602592
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 113.23599999999999,
+          "q1": 112.51025,
+          "q3": 114.83125,
+          "min": 111.945,
+          "max": 121.57
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 26.796875,
+          "q1": 26.75,
+          "q3": 27.171875,
+          "min": 26.59375,
+          "max": 28.109375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 3674130.0,
+          "q1": 3674130.0,
+          "q3": 3674130.0,
+          "min": 3674130,
+          "max": 3674130
+        }
+      },
+      "time_saved_pct": 64.6084284149917,
+      "genanki_over_rust": 2.825531490168679,
+      "time_saved_ms": 73.16,
+      "rss_mib_saved_pct": 27.3469387755102,
+      "apkg_bytes_saved_pct": 1.9470731846722877,
+      "round_time_saved_range_pct": [
+        63.913405274293346,
+        65.60120561860448
+      ],
+      "round_spread_pp": 1.6878003443111353,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "Mixed, unique media",
+      "size": 200,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 54.696,
+          "genanki": 125.05699999999999,
+          "time_saved_pct": 56.26314400633311
+        },
+        {
+          "round": 2,
+          "rust": 53.793499999999995,
+          "genanki": 126.10749999999999,
+          "time_saved_pct": 57.3431397815356
+        },
+        {
+          "round": 3,
+          "rust": 54.2595,
+          "genanki": 126.495,
+          "time_saved_pct": 57.10541918652912
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 54.323,
+          "q1": 52.83025,
+          "q3": 55.44475,
+          "min": 50.219,
+          "max": 74.104
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 21.515625,
+          "q1": 21.3125,
+          "q3": 21.7578125,
+          "min": 21.140625,
+          "max": 21.890625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 7151206.0,
+          "q1": 7151206.0,
+          "q3": 7151206.0,
+          "min": 7151206,
+          "max": 7151206
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 125.77799999999999,
+          "q1": 124.34224999999999,
+          "q3": 127.0685,
+          "min": 123.268,
+          "max": 133.49
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 28.046875,
+          "q1": 27.7265625,
+          "q3": 28.1875,
+          "min": 27.328125,
+          "max": 28.703125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 7282658.0,
+          "q1": 7282658.0,
+          "q3": 7282658.0,
+          "min": 7282658,
+          "max": 7282658
+        }
+      },
+      "time_saved_pct": 56.81041199573852,
+      "genanki_over_rust": 2.315372862323509,
+      "time_saved_ms": 71.45499999999998,
+      "rss_mib_saved_pct": 23.28690807799443,
+      "apkg_bytes_saved_pct": 1.805000317191885,
+      "round_time_saved_range_pct": [
+        56.26314400633311,
+        57.3431397815356
+      ],
+      "round_spread_pp": 1.079995775202491,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "Mixed, unique media",
+      "size": 500,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 97.9125,
+          "genanki": 158.1935,
+          "time_saved_pct": 38.105864020961675
+        },
+        {
+          "round": 2,
+          "rust": 99.3695,
+          "genanki": 159.336,
+          "time_saved_pct": 37.635248782447164
+        },
+        {
+          "round": 3,
+          "rust": 98.70949999999999,
+          "genanki": 162.348,
+          "time_saved_pct": 39.19881981915393
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 98.7475,
+          "q1": 96.46375,
+          "q3": 100.5945,
+          "min": 93.424,
+          "max": 105.727
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 28.34375,
+          "q1": 28.09375,
+          "q3": 28.390625,
+          "min": 27.71875,
+          "max": 28.765625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 17790807.0,
+          "q1": 17790807.0,
+          "q3": 17790807.0,
+          "min": 17790807,
+          "max": 17790807
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 159.336,
+          "q1": 158.21775000000002,
+          "q3": 163.09900000000002,
+          "min": 156.346,
+          "max": 198.104
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 29.8125,
+          "q1": 29.6953125,
+          "q3": 30.375,
+          "min": 29.546875,
+          "max": 30.953125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 18161760.0,
+          "q1": 18161760.0,
+          "q3": 18161760.0,
+          "min": 18161760,
+          "max": 18161760
+        }
+      },
+      "time_saved_pct": 38.0256188180951,
+      "genanki_over_rust": 1.613569963796552,
+      "time_saved_ms": 60.58850000000001,
+      "rss_mib_saved_pct": 4.926624737945495,
+      "apkg_bytes_saved_pct": 2.042494780241566,
+      "round_time_saved_range_pct": [
+        37.635248782447164,
+        39.19881981915393
+      ],
+      "round_spread_pp": 1.5635710367067688,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "Mixed, unique media",
+      "size": 1000,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 171.598,
+          "genanki": 215.7165,
+          "time_saved_pct": 20.452074829695455
+        },
+        {
+          "round": 2,
+          "rust": 173.039,
+          "genanki": 217.6715,
+          "time_saved_pct": 20.504521721952585
+        },
+        {
+          "round": 3,
+          "rust": 173.48,
+          "genanki": 216.8435,
+          "time_saved_pct": 19.997601957171884
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 172.2935,
+          "q1": 170.59025,
+          "q3": 175.34325,
+          "min": 168.029,
+          "max": 183.582
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 38.515625,
+          "q1": 38.453125,
+          "q3": 38.5859375,
+          "min": 38.3125,
+          "max": 38.96875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 35516988.0,
+          "q1": 35516988.0,
+          "q3": 35516988.0,
+          "min": 35516988,
+          "max": 35516988
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 216.8435,
+          "q1": 215.24075,
+          "q3": 217.958,
+          "min": 212.871,
+          "max": 241.858
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 33.859375,
+          "q1": 33.6328125,
+          "q3": 34.0078125,
+          "min": 33.5625,
+          "max": 34.8125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 36249906.0,
+          "q1": 36249906.0,
+          "q3": 36249906.0,
+          "min": 36249906,
+          "max": 36249906
+        }
+      },
+      "time_saved_pct": 20.544770767857933,
+      "genanki_over_rust": 1.2585704045712693,
+      "time_saved_ms": 44.55000000000001,
+      "rss_mib_saved_pct": -13.751730502999537,
+      "apkg_bytes_saved_pct": 2.0218480014817186,
+      "round_time_saved_range_pct": [
+        19.997601957171884,
+        20.504521721952585
+      ],
+      "round_spread_pp": 0.5069197647807009,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "Mixed, shared media",
+      "size": 100,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 36.1175,
+          "genanki": 111.86949999999999,
+          "time_saved_pct": 67.71461390280639
+        },
+        {
+          "round": 2,
+          "rust": 37.4835,
+          "genanki": 111.7355,
+          "time_saved_pct": 66.45336531362011
+        },
+        {
+          "round": 3,
+          "rust": 37.953500000000005,
+          "genanki": 111.6605,
+          "time_saved_pct": 66.00991398032427
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 37.16,
+          "q1": 35.70675,
+          "q3": 38.752250000000004,
+          "min": 33.536,
+          "max": 42.614
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 19.15625,
+          "q1": 19.0625,
+          "q3": 19.3046875,
+          "min": 18.640625,
+          "max": 19.53125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2542000.0,
+          "q1": 2542000.0,
+          "q3": 2542000.0,
+          "min": 2542000,
+          "max": 2542000
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 111.6605,
+          "q1": 110.109,
+          "q3": 114.14775,
+          "min": 108.667,
+          "max": 152.544
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 26.984375,
+          "q1": 26.7421875,
+          "q3": 27.2265625,
+          "min": 26.53125,
+          "max": 27.953125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2613726.0,
+          "q1": 2613726.0,
+          "q3": 2613726.0,
+          "min": 2613726,
+          "max": 2613726
+        }
+      },
+      "time_saved_pct": 66.72055023934158,
+      "genanki_over_rust": 3.004857373519914,
+      "time_saved_ms": 74.5005,
+      "rss_mib_saved_pct": 29.009843659525192,
+      "apkg_bytes_saved_pct": 2.7442050161340603,
+      "round_time_saved_range_pct": [
+        66.00991398032427,
+        67.71461390280639
+      ],
+      "round_spread_pp": 1.7046999224821207,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "Mixed, shared media",
+      "size": 200,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 40.483999999999995,
+          "genanki": 111.7535,
+          "time_saved_pct": 63.77384153516446
+        },
+        {
+          "round": 2,
+          "rust": 42.445499999999996,
+          "genanki": 113.005,
+          "time_saved_pct": 62.439272598557594
+        },
+        {
+          "round": 3,
+          "rust": 39.9495,
+          "genanki": 112.4295,
+          "time_saved_pct": 64.46706602804424
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 40.492999999999995,
+          "q1": 39.79775,
+          "q3": 42.295,
+          "min": 38.103,
+          "max": 51.971
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 21.0625,
+          "q1": 20.9375,
+          "q3": 21.2578125,
+          "min": 20.515625,
+          "max": 21.546875
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2558105.0,
+          "q1": 2558105.0,
+          "q3": 2558105.0,
+          "min": 2558105,
+          "max": 2558105
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 112.24600000000001,
+          "q1": 111.43225000000001,
+          "q3": 113.38825,
+          "min": 109.843,
+          "max": 116.016
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 27.75,
+          "q1": 27.375,
+          "q3": 28.078125,
+          "min": 27.15625,
+          "max": 28.390625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2687454.0,
+          "q1": 2687454.0,
+          "q3": 2687454.0,
+          "min": 2687454,
+          "max": 2687454
+        }
+      },
+      "time_saved_pct": 63.924772374962146,
+      "genanki_over_rust": 2.7719852814066637,
+      "time_saved_ms": 71.75300000000001,
+      "rss_mib_saved_pct": 24.099099099099096,
+      "apkg_bytes_saved_pct": 4.813068428334033,
+      "round_time_saved_range_pct": [
+        62.439272598557594,
+        64.46706602804424
+      ],
+      "round_spread_pp": 2.0277934294866498,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "Mixed, shared media",
+      "size": 500,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 57.3905,
+          "genanki": 118.484,
+          "time_saved_pct": 51.562658249215076
+        },
+        {
+          "round": 2,
+          "rust": 57.459500000000006,
+          "genanki": 119.4115,
+          "time_saved_pct": 51.88110022903991
+        },
+        {
+          "round": 3,
+          "rust": 57.1365,
+          "genanki": 118.8835,
+          "time_saved_pct": 51.939083220127266
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 57.274,
+          "q1": 56.53875,
+          "q3": 58.7675,
+          "min": 52.649,
+          "max": 66.46
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 26.34375,
+          "q1": 26.265625,
+          "q3": 26.4765625,
+          "min": 26.109375,
+          "max": 26.59375
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2606073.0,
+          "q1": 2606073.0,
+          "q3": 2606073.0,
+          "min": 2606073,
+          "max": 2606073
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 118.6265,
+          "q1": 117.56400000000001,
+          "q3": 121.43799999999999,
+          "min": 116.633,
+          "max": 125.031
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 29.203125,
+          "q1": 28.9921875,
+          "q3": 29.34375,
+          "min": 28.46875,
+          "max": 30.3125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2961886.0,
+          "q1": 2961886.0,
+          "q3": 2961886.0,
+          "min": 2961886,
+          "max": 2961886
+        }
+      },
+      "time_saved_pct": 51.719050970904476,
+      "genanki_over_rust": 2.071210322310298,
+      "time_saved_ms": 61.35249999999999,
+      "rss_mib_saved_pct": 9.791332263242381,
+      "apkg_bytes_saved_pct": 12.013055195237088,
+      "round_time_saved_range_pct": [
+        51.562658249215076,
+        51.939083220127266
+      ],
+      "round_spread_pp": 0.37642497091218985,
+      "variable_across_rounds": false
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "Mixed, shared media",
+      "size": 1000,
+      "rounds": [
+        {
+          "round": 1,
+          "rust": 81.50999999999999,
+          "genanki": 128.9955,
+          "time_saved_pct": 36.81174924706676
+        },
+        {
+          "round": 2,
+          "rust": 80.10849999999999,
+          "genanki": 128.70850000000002,
+          "time_saved_pct": 37.7597439174569
+        },
+        {
+          "round": 3,
+          "rust": 82.07499999999999,
+          "genanki": 132.4305,
+          "time_saved_pct": 38.024095657722356
+        }
+      ],
+      "rust": {
+        "time_ms": {
+          "n": 30,
+          "median": 81.50999999999999,
+          "q1": 79.865,
+          "q3": 83.311,
+          "min": 77.276,
+          "max": 89.621
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 35.390625,
+          "q1": 35.171875,
+          "q3": 35.6171875,
+          "min": 34.765625,
+          "max": 36.125
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 2681133.0,
+          "q1": 2681133.0,
+          "q3": 2681133.0,
+          "min": 2681133,
+          "max": 2681133
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 30,
+          "median": 129.50650000000002,
+          "q1": 127.95425,
+          "q3": 131.22799999999998,
+          "min": 124.98,
+          "max": 137.906
+        },
+        "rss_mib": {
+          "n": 15,
+          "median": 32.203125,
+          "q1": 31.9453125,
+          "q3": 32.65625,
+          "min": 31.65625,
+          "max": 32.765625
+        },
+        "apkg_bytes": {
+          "n": 30,
+          "median": 3375582.0,
+          "q1": 3375582.0,
+          "q3": 3375582.0,
+          "min": 3375582,
+          "max": 3375582
+        }
+      },
+      "time_saved_pct": 37.06107415457913,
+      "genanki_over_rust": 1.5888418598944918,
+      "time_saved_ms": 47.996500000000026,
+      "rss_mib_saved_pct": -9.89810771470161,
+      "apkg_bytes_saved_pct": 20.572719015565312,
+      "round_time_saved_range_pct": [
+        36.81174924706676,
+        38.024095657722356
+      ],
+      "round_spread_pp": 1.2123464106555986,
+      "variable_across_rounds": false
+    }
+  ],
+  "source_snapshot": {
+    "source-snapshot.json": "7e5201285eb428e0de2c11351bc711c05f1df71318b254e6a16de5b8413bc14a",
+    "source.patch": "37de0ff9533f3d6937956e0e56ad6bb6c07155219e62bf7e615d69e0af4fd0b1"
+  },
+  "renderer_sha256": "c08c79d76af4c46515e5dcc0b9629c6f21c19e57243b543caf1eb21ef846517f"
+}

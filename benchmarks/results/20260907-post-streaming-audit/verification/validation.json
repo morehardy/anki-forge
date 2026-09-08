@@ -1,0 +1,6795 @@
+{
+  "status": "audit_complete_with_rejected_index_candidate",
+  "production_changes": false,
+  "attempt_bindings": {
+    "coarse-pass": {
+      "exports": 182,
+      "unique_artifacts": 13,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "fine-pass": {
+      "exports": 126,
+      "unique_artifacts": 9,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "memory-reproduce": {
+      "exports": 56,
+      "unique_artifacts": 4,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "memory-trace": {
+      "exports": 32,
+      "unique_artifacts": 4,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "scratch-sweep": {
+      "exports": 135,
+      "unique_artifacts": 5,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "deferred-index-pass": {
+      "exports": 54,
+      "unique_artifacts": 6,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "failed: sqlite_stat1 changed"
+    },
+    "larger-spool-pass": {
+      "exports": 54,
+      "unique_artifacts": 3,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    },
+    "larger-spool-rss": {
+      "exports": 42,
+      "unique_artifacts": 3,
+      "all_content_and_anki_bindings_verified": true,
+      "strict_candidate_equivalence": "passed: identical bytes"
+    }
+  },
+  "artifacts": {
+    "895300302718e09e7c7f69aab97eca7bc923ca98dbbd7740163356336ad6f3a3": {
+      "case": "image-skewed-128",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "fa4e385b1b3dc0ff5bc347bd3d95e3fdc5e41fb45772331d46de89b7490219f1": {
+      "case": "text-100",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "a4c10c22397c02de63e05c02a8a1860dc2f8116e0d99bc6012830fb46d52ab0d": {
+      "case": "mixed-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "2888cfc954a52b32994271a6388493a213c9556650b41aa95a5c8d50bf87ddad": {
+      "case": "image-256x256k",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "1dce6709f61cd1f1631415ec1c90d357ed9fadbc535aa3afa25b9f2daa2e81a3": {
+      "case": "shared-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "c52ebb04726a1149f68faea53a4db83a5ffb78e5d6bd890abbd04c2e3eb2b7c4": {
+      "case": "long-back-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "fdf892667fe44c625fc743b9a0139eaafc01fe0b997c50887be721839d08ca34": {
+      "case": "image-64x1m",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "47f9001ab18f5d7f3b1eb05aeaf228add70873aa752be3ad6fd38e57b48654a2": {
+      "case": "boundary-65536",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "f77efd93d77747d2bd1a8ee8863f6c26990cf10d5f2e0a9038edf664e4ca427a": {
+      "case": "text-10000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "e8fa40870230f8b56e58424dcbecf77f34eb7c654530c31dcb629c29b7ae7932": {
+      "case": "image-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "e92f09d2cd85d6afb2e12ab177a74e822ef74c30db0e0bb2ad95d290cd6c8494": {
+      "case": "audio-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "4fd08fa88a16464543ee207231f04a2fd08449877ddf7133e69323b4de31b492": {
+      "case": "text-1000",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "d595feca90746e630436258127141708fa83349cc1464fb6579bf21a4bb58663": {
+      "case": "boundary-65537",
+      "evidence": "benchmarks/results/20260907-streaming-followup/implementation/verification/verification.json",
+      "status": "passed",
+      "validation": "byte-identical to prior independently verified and Anki-imported artifact"
+    },
+    "c57c04b260529127a2672adbf54ec9f1dd1f73b3fa4a1e33db6d8a8bb86c8508": {
+      "case": "long-back-quarter-1000",
+      "artifact": {
+        "artifact_sha256": "c57c04b260529127a2672adbf54ec9f1dd1f73b3fa4a1e33db6d8a8bb86c8508",
+        "artifact_bytes": 236825,
+        "package": {
+          "version": 3,
+          "canonical_entry": "collection.anki21b",
+          "nested_compression": "zstd",
+          "payloads": [
+            {
+              "name": "meta",
+              "zip_method": 0,
+              "stored_bytes": 2,
+              "decoded_zip_bytes": 2,
+              "role": "metadata"
+            },
+            {
+              "name": "collection.anki21b",
+              "zip_method": 0,
+              "stored_bytes": 183154,
+              "decoded_zip_bytes": 183154,
+              "role": "canonical"
+            },
+            {
+              "name": "collection.anki2",
+              "zip_method": 0,
+              "stored_bytes": 53248,
+              "decoded_zip_bytes": 53248,
+              "role": "compatibility_placeholder"
+            },
+            {
+              "name": "media",
+              "zip_method": 0,
+              "stored_bytes": 9,
+              "decoded_zip_bytes": 9,
+              "role": "metadata"
+            }
+          ],
+          "media_count": 0
+        },
+        "physical": {
+          "status": "passed",
+          "notes": 1000,
+          "cards": 1000,
+          "schema": 18,
+          "used_note_types": 1,
+          "populated_decks": 1,
+          "logical_sha256": "285a6c911a3535d7e10bab34a070b5a683778fe75089e0d8d9385b4343de5e26"
+        },
+        "semantic": {
+          "status": "passed",
+          "reader": "repository-inspector-modern-v1",
+          "observation_model_version": "phase3-inspect-v2",
+          "stock_model_name": "Basic",
+          "css": "",
+          "inspection_sha256": "9d39be2e374376d052077e3c910228e8cb1d01b4e4cd7cadaa8e4f76c480ed9e"
+        },
+        "status": "passed"
+      },
+      "anki": "passed",
+      "reused_completed_check": true,
+      "anki_sha256": "c44c640f81038ba95a6a37a0c632336e1737e7e02e6f09a42a36918fe690838f"
+    },
+    "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6": {
+      "case": "long-back-quadruple-1000",
+      "artifact": {
+        "artifact_sha256": "88cff8e23f2c33f4eb36796858aa96afae8aeca56d5accadc62305feb51cfba6",
+        "artifact_bytes": 384758,
+        "package": {
+          "version": 3,
+          "canonical_entry": "collection.anki21b",
+          "nested_compression": "zstd",
+          "payloads": [
+            {
+              "name": "meta",
+              "zip_method": 0,
+              "stored_bytes": 2,
+              "decoded_zip_bytes": 2,
+              "role": "metadata"
+            },
+            {
+              "name": "collection.anki21b",
+              "zip_method": 0,
+              "stored_bytes": 331087,
+              "decoded_zip_bytes": 331087,
+              "role": "canonical"
+            },
+            {
+              "name": "collection.anki2",
+              "zip_method": 0,
+              "stored_bytes": 53248,
+              "decoded_zip_bytes": 53248,
+              "role": "compatibility_placeholder"
+            },
+            {
+              "name": "media",
+              "zip_method": 0,
+              "stored_bytes": 9,
+              "decoded_zip_bytes": 9,
+              "role": "metadata"
+            }
+          ],
+          "media_count": 0
+        },
+        "physical": {
+          "status": "passed",
+          "notes": 1000,
+          "cards": 1000,
+          "schema": 18,
+          "used_note_types": 1,
+          "populated_decks": 1,
+          "logical_sha256": "a7c2a33f23d28b1da9cb90ea23e4c8d7dfb8ae425b12c0202834e0a8da7432f4"
+        },
+        "semantic": {
+          "status": "passed",
+          "reader": "repository-inspector-modern-v1",
+          "observation_model_version": "phase3-inspect-v2",
+          "stock_model_name": "Basic",
+          "css": "",
+          "inspection_sha256": "00ca3f87719baf0a7e1272694d5060be9d04d986b89a150cd3155aad98d4b889"
+        },
+        "status": "passed"
+      },
+      "anki": "passed",
+      "reused_completed_check": true,
+      "anki_sha256": "eb8e2f8a64ba60b1ff9aad729931b1538d2dff7bf45dea7fac7011872f5a1fd7"
+    },
+    "9982eb66989ab3e6253ccb9ac31d537611179f4b0541d754eca7d325c2103df7": {
+      "case": "text-10000",
+      "artifact": {
+        "artifact_sha256": "9982eb66989ab3e6253ccb9ac31d537611179f4b0541d754eca7d325c2103df7",
+        "artifact_bytes": 1536315,
+        "package": {
+          "version": 3,
+          "canonical_entry": "collection.anki21b",
+          "nested_compression": "zstd",
+          "payloads": [
+            {
+              "name": "meta",
+              "zip_method": 0,
+              "stored_bytes": 2,
+              "decoded_zip_bytes": 2,
+              "role": "metadata"
+            },
+            {
+              "name": "collection.anki21b",
+              "zip_method": 0,
+              "stored_bytes": 1482644,
+              "decoded_zip_bytes": 1482644,
+              "role": "canonical"
+            },
+            {
+              "name": "collection.anki2",
+              "zip_method": 0,
+              "stored_bytes": 53248,
+              "decoded_zip_bytes": 53248,
+              "role": "compatibility_placeholder"
+            },
+            {
+              "name": "media",
+              "zip_method": 0,
+              "stored_bytes": 9,
+              "decoded_zip_bytes": 9,
+              "role": "metadata"
+            }
+          ],
+          "media_count": 0
+        },
+        "physical": {
+          "status": "passed",
+          "notes": 10000,
+          "cards": 10000,
+          "schema": 18,
+          "used_note_types": 1,
+          "populated_decks": 1,
+          "logical_sha256": "0263470870de944ae9c03583c0fade4f6b88a3becc57fc351834dbe93cc97c69"
+        },
+        "semantic": {
+          "status": "passed",
+          "reader": "repository-inspector-modern-v1",
+          "observation_model_version": "phase3-inspect-v2",
+          "stock_model_name": "Basic",
+          "css": "",
+          "inspection_sha256": "55a67559b125f8621e592780740232315f7943d41843380bdf436e0033c7506d"
+        },
+        "status": "passed"
+      },
+      "anki": "passed",
+      "reused_completed_check": true,
+      "anki_sha256": "51b749c6918f8588c413d88e50b00a5e314ffceabdcb5a11e94797c191752ba2"
+    },
+    "f5da28c7ca25dc249002cdd87e5a9ae2c70d3af06f0b02084cac310fc3f6a9d7": {
+      "case": "text-1000",
+      "artifact": {
+        "artifact_sha256": "f5da28c7ca25dc249002cdd87e5a9ae2c70d3af06f0b02084cac310fc3f6a9d7",
+        "artifact_bytes": 209014,
+        "package": {
+          "version": 3,
+          "canonical_entry": "collection.anki21b",
+          "nested_compression": "zstd",
+          "payloads": [
+            {
+              "name": "meta",
+              "zip_method": 0,
+              "stored_bytes": 2,
+              "decoded_zip_bytes": 2,
+              "role": "metadata"
+            },
+            {
+              "name": "collection.anki21b",
+              "zip_method": 0,
+              "stored_bytes": 155343,
+              "decoded_zip_bytes": 155343,
+              "role": "canonical"
+            },
+            {
+              "name": "collection.anki2",
+              "zip_method": 0,
+              "stored_bytes": 53248,
+              "decoded_zip_bytes": 53248,
+              "role": "compatibility_placeholder"
+            },
+            {
+              "name": "media",
+              "zip_method": 0,
+              "stored_bytes": 9,
+              "decoded_zip_bytes": 9,
+              "role": "metadata"
+            }
+          ],
+          "media_count": 0
+        },
+        "physical": {
+          "status": "passed",
+          "notes": 1000,
+          "cards": 1000,
+          "schema": 18,
+          "used_note_types": 1,
+          "populated_decks": 1,
+          "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8"
+        },
+        "semantic": {
+          "status": "passed",
+          "reader": "repository-inspector-modern-v1",
+          "observation_model_version": "phase3-inspect-v2",
+          "stock_model_name": "Basic",
+          "css": "",
+          "inspection_sha256": "e16e824c93e6c07116a4a58d13977171bdcdfa37eb7c87f9e7b76a5644f22014"
+        },
+        "status": "passed"
+      },
+      "anki": "passed",
+      "reused_completed_check": true,
+      "anki_sha256": "14e4bc561eb191f4ebf4ce5f9c83cc781bb38a6fdaf8dc03e466047d7991f47e"
+    },
+    "fe9cfa213552f71c38b48cea73b9e7d0df392c5749168753ac980ef0f5315332": {
+      "case": "long-back-1000",
+      "artifact": {
+        "artifact_sha256": "fe9cfa213552f71c38b48cea73b9e7d0df392c5749168753ac980ef0f5315332",
+        "artifact_bytes": 272320,
+        "package": {
+          "version": 3,
+          "canonical_entry": "collection.anki21b",
+          "nested_compression": "zstd",
+          "payloads": [
+            {
+              "name": "meta",
+              "zip_method": 0,
+              "stored_bytes": 2,
+              "decoded_zip_bytes": 2,
+              "role": "metadata"
+            },
+            {
+              "name": "collection.anki21b",
+              "zip_method": 0,
+              "stored_bytes": 218649,
+              "decoded_zip_bytes": 218649,
+              "role": "canonical"
+            },
+            {
+              "name": "collection.anki2",
+              "zip_method": 0,
+              "stored_bytes": 53248,
+              "decoded_zip_bytes": 53248,
+              "role": "compatibility_placeholder"
+            },
+            {
+              "name": "media",
+              "zip_method": 0,
+              "stored_bytes": 9,
+              "decoded_zip_bytes": 9,
+              "role": "metadata"
+            }
+          ],
+          "media_count": 0
+        },
+        "physical": {
+          "status": "passed",
+          "notes": 1000,
+          "cards": 1000,
+          "schema": 18,
+          "used_note_types": 1,
+          "populated_decks": 1,
+          "logical_sha256": "da9d7ea47b55b9127b229dab5042bd6d87acd65fcd7ec90901577b7d8b4043f1"
+        },
+        "semantic": {
+          "status": "passed",
+          "reader": "repository-inspector-modern-v1",
+          "observation_model_version": "phase3-inspect-v2",
+          "stock_model_name": "Basic",
+          "css": "",
+          "inspection_sha256": "1d7f0ace73a61ecd1d603710e81b543e124fe63aab3ff294136a1bde976ff2ac"
+        },
+        "status": "passed"
+      },
+      "anki": "passed",
+      "reused_completed_check": true,
+      "anki_sha256": "38109735e6758c3e8fd106d4a1f95cfaee5e32a87a80bf7ae3f8b82cb609e1a6"
+    }
+  },
+  "new_independent_artifact_and_anki_checks": 5,
+  "source_files_unchanged": 198,
+  "main_adapter_restored_sha256": "369dcb358f4d34d4cf40bff8814c46c32ab684cd673c54b5357419af609b43f5",
+  "deferred_index_equivalence": {
+    "text-1000": {
+      "full_table_equivalence": "failed",
+      "schema_equal": true,
+      "other_zip_entries_equal": true,
+      "differing_tables": [
+        "sqlite_stat1"
+      ],
+      "evidence": {
+        "current": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "77db9a0ca48e4b16508099fd82da6bcf13029ae1f186ec3c97eb1ca950d180f7"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "8dc0d8977180c74b6ae7cdc6a4d9a51b88fa1d57aa5ec1489eb8895b15714f08"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "61ac97c200d0c75d18024d36adf3f12c91b6f3549025252d47461d42e41d8558"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        },
+        "scratch-defer-indexes": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "77db9a0ca48e4b16508099fd82da6bcf13029ae1f186ec3c97eb1ca950d180f7"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "8dc0d8977180c74b6ae7cdc6a4d9a51b88fa1d57aa5ec1489eb8895b15714f08"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "d1236ee9dc36a3e4b404be2d32e82eafddf55b1b26338fb203894072c4ff6fac"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        }
+      }
+    },
+    "text-10000": {
+      "full_table_equivalence": "failed",
+      "schema_equal": true,
+      "other_zip_entries_equal": true,
+      "differing_tables": [
+        "sqlite_stat1"
+      ],
+      "evidence": {
+        "current": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 10000,
+              "row_sha256": "b10847e0ae0ef892f5c27c54676476ffab20bacc50dcd31db29d61aee0475b3d"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 10000,
+              "row_sha256": "829220d97ea78eb5e7f4224d513653e1e9fe797965c600aba2fc4783f10f8c79"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "61ac97c200d0c75d18024d36adf3f12c91b6f3549025252d47461d42e41d8558"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        },
+        "scratch-defer-indexes": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 10000,
+              "row_sha256": "b10847e0ae0ef892f5c27c54676476ffab20bacc50dcd31db29d61aee0475b3d"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 10000,
+              "row_sha256": "829220d97ea78eb5e7f4224d513653e1e9fe797965c600aba2fc4783f10f8c79"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "d1236ee9dc36a3e4b404be2d32e82eafddf55b1b26338fb203894072c4ff6fac"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        }
+      }
+    },
+    "long-back-1000": {
+      "full_table_equivalence": "failed",
+      "schema_equal": true,
+      "other_zip_entries_equal": true,
+      "differing_tables": [
+        "sqlite_stat1"
+      ],
+      "evidence": {
+        "current": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "77db9a0ca48e4b16508099fd82da6bcf13029ae1f186ec3c97eb1ca950d180f7"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "ffab47e3cadb07fb945fabbd9d6f46dff1b775aad7b5fd80e60041f72cec749f"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "61ac97c200d0c75d18024d36adf3f12c91b6f3549025252d47461d42e41d8558"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        },
+        "scratch-defer-indexes": {
+          "schema": [
+            [
+              "index",
+              "idx_cards_odid",
+              "cards",
+              "CREATE INDEX idx_cards_odid ON cards (odid) WHERE odid != 0"
+            ],
+            [
+              "index",
+              "idx_decks_name",
+              "decks",
+              "CREATE UNIQUE INDEX idx_decks_name ON decks (name)"
+            ],
+            [
+              "index",
+              "idx_fields_name_ntid",
+              "fields",
+              "CREATE UNIQUE INDEX idx_fields_name_ntid ON fields (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_graves_pending",
+              "graves",
+              "CREATE INDEX idx_graves_pending ON graves (usn)"
+            ],
+            [
+              "index",
+              "idx_notes_mid",
+              "notes",
+              "CREATE INDEX idx_notes_mid ON notes (mid)"
+            ],
+            [
+              "index",
+              "idx_notetypes_name",
+              "notetypes",
+              "CREATE UNIQUE INDEX idx_notetypes_name ON notetypes (name)"
+            ],
+            [
+              "index",
+              "idx_notetypes_usn",
+              "notetypes",
+              "CREATE INDEX idx_notetypes_usn ON notetypes (usn)"
+            ],
+            [
+              "index",
+              "idx_templates_name_ntid",
+              "templates",
+              "CREATE UNIQUE INDEX idx_templates_name_ntid ON templates (name, ntid)"
+            ],
+            [
+              "index",
+              "idx_templates_usn",
+              "templates",
+              "CREATE INDEX idx_templates_usn ON templates (usn)"
+            ],
+            [
+              "index",
+              "ix_cards_nid",
+              "cards",
+              "CREATE INDEX ix_cards_nid ON cards (nid)"
+            ],
+            [
+              "index",
+              "ix_cards_sched",
+              "cards",
+              "CREATE INDEX ix_cards_sched ON cards (did, queue, due)"
+            ],
+            [
+              "index",
+              "ix_cards_usn",
+              "cards",
+              "CREATE INDEX ix_cards_usn ON cards (usn)"
+            ],
+            [
+              "index",
+              "ix_notes_csum",
+              "notes",
+              "CREATE INDEX ix_notes_csum ON notes (csum)"
+            ],
+            [
+              "index",
+              "ix_notes_usn",
+              "notes",
+              "CREATE INDEX ix_notes_usn ON notes (usn)"
+            ],
+            [
+              "index",
+              "ix_revlog_cid",
+              "revlog",
+              "CREATE INDEX ix_revlog_cid ON revlog (cid)"
+            ],
+            [
+              "index",
+              "ix_revlog_usn",
+              "revlog",
+              "CREATE INDEX ix_revlog_usn ON revlog (usn)"
+            ],
+            [
+              "table",
+              "cards",
+              "cards",
+              "CREATE TABLE cards (\n  id integer PRIMARY KEY, nid integer NOT NULL, did integer NOT NULL,\n  ord integer NOT NULL, mod integer NOT NULL, usn integer NOT NULL,\n  type integer NOT NULL, queue integer NOT NULL, due integer NOT NULL,\n  ivl integer NOT NULL, factor integer NOT NULL, reps integer NOT NULL,\n  lapses integer NOT NULL, left integer NOT NULL, odue integer NOT NULL,\n  odid integer NOT NULL, flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "col",
+              "col",
+              "CREATE TABLE col (\n  id integer PRIMARY KEY, crt integer NOT NULL, mod integer NOT NULL,\n  scm integer NOT NULL, ver integer NOT NULL, dty integer NOT NULL,\n  usn integer NOT NULL, ls integer NOT NULL, conf text NOT NULL,\n  models text NOT NULL, decks text NOT NULL, dconf text NOT NULL,\n  tags text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "config",
+              "config",
+              "CREATE TABLE config (\n  key text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  mtime_secs integer NOT NULL, val blob NOT NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "deck_config",
+              "deck_config",
+              "CREATE TABLE deck_config (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "decks",
+              "decks",
+              "CREATE TABLE decks (\n  id integer PRIMARY KEY NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL,\n  common blob NOT NULL, kind blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "fields",
+              "fields",
+              "CREATE TABLE fields (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  config blob NOT NULL, PRIMARY KEY (ntid, ord)\n) without rowid"
+            ],
+            [
+              "table",
+              "graves",
+              "graves",
+              "CREATE TABLE graves (\n  oid integer NOT NULL, type integer NOT NULL, usn integer NOT NULL,\n  PRIMARY KEY (oid, type)\n) without rowid"
+            ],
+            [
+              "table",
+              "notes",
+              "notes",
+              "CREATE TABLE notes (\n  id integer PRIMARY KEY, guid text NOT NULL, mid integer NOT NULL,\n  mod integer NOT NULL, usn integer NOT NULL, tags text NOT NULL,\n  flds text NOT NULL, sfld integer NOT NULL, csum integer NOT NULL,\n  flags integer NOT NULL, data text NOT NULL\n)"
+            ],
+            [
+              "table",
+              "notetypes",
+              "notetypes",
+              "CREATE TABLE notetypes (\n  id integer NOT NULL PRIMARY KEY, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL\n)"
+            ],
+            [
+              "table",
+              "revlog",
+              "revlog",
+              "CREATE TABLE revlog (\n  id integer PRIMARY KEY, cid integer NOT NULL, usn integer NOT NULL,\n  ease integer NOT NULL, ivl integer NOT NULL, lastIvl integer NOT NULL,\n  factor integer NOT NULL, time integer NOT NULL, type integer NOT NULL\n)"
+            ],
+            [
+              "table",
+              "sqlite_stat1",
+              "sqlite_stat1",
+              "CREATE TABLE sqlite_stat1(tbl,idx,stat)"
+            ],
+            [
+              "table",
+              "sqlite_stat4",
+              "sqlite_stat4",
+              "CREATE TABLE sqlite_stat4(tbl,idx,neq,nlt,ndlt,sample)"
+            ],
+            [
+              "table",
+              "tags",
+              "tags",
+              "CREATE TABLE tags (\n  tag text NOT NULL PRIMARY KEY, usn integer NOT NULL,\n  collapsed boolean NOT NULL, config blob NULL\n) without rowid"
+            ],
+            [
+              "table",
+              "templates",
+              "templates",
+              "CREATE TABLE templates (\n  ntid integer NOT NULL, ord integer NOT NULL, name text NOT NULL,\n  mtime_secs integer NOT NULL, usn integer NOT NULL, config blob NOT NULL,\n  PRIMARY KEY (ntid, ord)\n) without rowid"
+            ]
+          ],
+          "tables": {
+            "cards": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "nid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "did",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "queue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "due",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "reps",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "lapses",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  13,
+                  "left",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  14,
+                  "odue",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  15,
+                  "odid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  16,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  17,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "77db9a0ca48e4b16508099fd82da6bcf13029ae1f186ec3c97eb1ca950d180f7"
+            },
+            "col": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "crt",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "scm",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ver",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "dty",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "ls",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "conf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "models",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "decks",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  11,
+                  "dconf",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  12,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "cad855a84f541ab6a7cd81ebeb61cf33f1c8d4a254915367b0f29ee527d15b34"
+            },
+            "config": {
+              "columns": [
+                [
+                  0,
+                  "key",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "val",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "deck_config": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "3e66aae4659b981e39feaa81c68003520d7283fb4227b77dd390c5e11047bd7c"
+            },
+            "decks": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "common",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "kind",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 2,
+              "row_sha256": "cec2f9e0499c6717da99022a8989a4b255920aa6ec33b700a869470dc684d18d"
+            },
+            "fields": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 9,
+              "row_sha256": "59245011a9814b45435033ff36e932767858f7a702862a4ea506dba95b606b71"
+            },
+            "graves": {
+              "columns": [
+                [
+                  0,
+                  "oid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "notes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "guid",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mod",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "tags",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "flds",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "sfld",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "csum",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  9,
+                  "flags",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  10,
+                  "data",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1000,
+              "row_sha256": "ffab47e3cadb07fb945fabbd9d6f46dff1b775aad7b5fd80e60041f72cec749f"
+            },
+            "notetypes": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "7472539cf1cf4a6eea567e5f3995f9846b04a48d0808b3d685a2ecf65c97c80c"
+            },
+            "revlog": {
+              "columns": [
+                [
+                  0,
+                  "id",
+                  "INTEGER",
+                  0,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "cid",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "ease",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ivl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "lastIvl",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  6,
+                  "factor",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  7,
+                  "time",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  8,
+                  "type",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "sqlite_stat1": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "stat",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 1,
+              "row_sha256": "d1236ee9dc36a3e4b404be2d32e82eafddf55b1b26338fb203894072c4ff6fac"
+            },
+            "sqlite_stat4": {
+              "columns": [
+                [
+                  0,
+                  "tbl",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  1,
+                  "idx",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "neq",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "nlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "ndlt",
+                  "",
+                  0,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "sample",
+                  "",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "tags": {
+              "columns": [
+                [
+                  0,
+                  "tag",
+                  "TEXT",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  2,
+                  "collapsed",
+                  "boolean",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "config",
+                  "BLOB",
+                  0,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 0,
+              "row_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "templates": {
+              "columns": [
+                [
+                  0,
+                  "ntid",
+                  "INTEGER",
+                  1,
+                  null,
+                  1
+                ],
+                [
+                  1,
+                  "ord",
+                  "INTEGER",
+                  1,
+                  null,
+                  2
+                ],
+                [
+                  2,
+                  "name",
+                  "TEXT",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  3,
+                  "mtime_secs",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  4,
+                  "usn",
+                  "INTEGER",
+                  1,
+                  null,
+                  0
+                ],
+                [
+                  5,
+                  "config",
+                  "BLOB",
+                  1,
+                  null,
+                  0
+                ]
+              ],
+              "rows": 3,
+              "row_sha256": "117f00eae37150ee86593b3c9e324d986b95fbe32c3e580c4368d7ed71dc492a"
+            }
+          },
+          "non_collection_zip_entries": {
+            "meta": "2d88972e9536ba54deed37db380728b3c58eab9bca1d173ae523098b0774cdf5",
+            "collection.anki2": "43ec221579531490d737a7646986475947c2a28ee33e35876d1f796bd386f2db",
+            "media": "6fb8543883dafcc2ed0934866b8b3f775231f5b0933add08bf502e9e84944cbd"
+          }
+        }
+      }
+    }
+  }
+}

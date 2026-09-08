@@ -1,0 +1,21 @@
+{
+  "purpose": "Test whether disk spilling dominates the large-media consumer; experiment only",
+  "variable": "Per-payload encoded spool limit 512 KiB -> 2 MiB",
+  "constant_work_window": "At most 9 active/pending payloads at 4 workers; unchanged",
+  "tradeoff": "Worst-case encoded in-flight data bound becomes 18 MiB, from 4.5 MiB; not a total RSS bound",
+  "protocol": {
+    "cases": [
+      "image-1000",
+      "image-64x1m",
+      "image-skewed-128"
+    ],
+    "warmups": 2,
+    "samples": 7,
+    "interleaved_variants": [
+      "current",
+      "larger-spool"
+    ]
+  },
+  "output_gate": "All final bytes match accepted references exactly",
+  "production_adoption": false
+}
