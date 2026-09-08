@@ -1,0 +1,17 @@
+baseline_version: 0.6.2
+bundle_version: 0.6.3
+compatibility_class: fixture_only_non_semantic
+summary: Refresh three APKG byte fingerprints after selecting 8 KiB SQLite pages for modern
+  collection export. Full schema and table comparisons, unchanged staging and inspection reports,
+  and Anki imports verify identical logical content and identities; only the physical collection
+  layout and package bytes change.
+changes:
+- path: fixtures/phase3/expected/basic.build.json
+  before: blake3:ad9d558208ed713e16ae03effcff10b4b52d268f0e1ef983ddd1e51da7e3abea
+  after: blake3:835d95fd78de91c2f9922a02aaef46e82e3a854102116ed03c4d49347bac1a1b
+- path: fixtures/phase3/expected/cloze.build.json
+  before: blake3:8c0c04653746ef8ecd167d006eafde0696073a6f9a23391328b8691e2cf203f0
+  after: blake3:8c905f50a3f393faf83aaffae7998ea13b96256f7ddc68924cf3b616dfaeb0b2
+- path: fixtures/phase3/expected/image-occlusion.build.json
+  before: blake3:09a52919ce40b89ad2ce2b42616611db09cb1994857908a604ca23825605f2e3
+  after: blake3:f74bdf6bd900f9837566409fa25ec665be892867973aa1d42fa339427943a622

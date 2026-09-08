@@ -164,7 +164,9 @@ pub(crate) fn ingest_authoring_media_with_prepared(
     options: &NormalizeOptions,
     prepared: Option<&mut crate::prepared_media::PreparedMedia>,
 ) -> Result<MediaIngestResult, MediaIngestError> {
-    let mut prepared_results = prepared.map(|prepared| prepared.prepare_all(media, options));
+    let mut prepared_results = prepared
+        .map(|prepared| prepared.prepare_all(media, options))
+        .or_else(|| (media.len() >= 16).then(|| prepare_persistent_media(media, options)));
     let mut diagnostics = Vec::new();
     let mut objects_by_id = BTreeMap::<String, MediaObject>::new();
     let mut bindings = Vec::<MediaBinding>::new();
@@ -203,34 +205,10 @@ pub(crate) fn ingest_authoring_media_with_prepared(
                 }
             }
         } else {
-            let prepared_source = match prepare_media_source(item, options) {
-                Ok(source) => source,
-                Err(mut err) => {
-                    diagnostics.append(&mut err.diagnostics);
-                    continue;
-                }
-            };
-
-            if let Some(limit) = options.media_policy.max_media_object_bytes {
-                let source_size = prepared_source.known_size_bytes();
-                if source_size > limit {
-                    diagnostics.push(size_limit_exceeded(
-                        &item.id,
-                        source_size,
-                        limit,
-                        "max_media_object_bytes",
-                    ));
-                    continue;
-                }
-            }
-
-            match ingest_media_read_source_to_cas(
-                prepared_source.as_read_source(),
-                &options.media_store_dir,
-            ) {
+            match ingest_persistent_item(item, options) {
                 Ok(ingested) => ingested,
-                Err(err) => {
-                    diagnostics.push(media_io_error_to_diagnostic(err, &item.id));
+                Err(mut error) => {
+                    diagnostics.append(&mut error.diagnostics);
                     continue;
                 }
             }
@@ -362,6 +340,60 @@ impl PreparedMediaSource {
             Self::InlineBytes(bytes) => bytes.len() as u64,
         }
     }
+}
+
+fn ingest_persistent_item(
+    item: &crate::authoring_core::model::AuthoringMedia,
+    options: &NormalizeOptions,
+) -> Result<crate::authoring_core::media_io::IngestedMediaBytes, MediaIngestError> {
+    let source = prepare_media_source(item, options)?;
+    if let Some(limit) = options.media_policy.max_media_object_bytes {
+        let size = source.known_size_bytes();
+        if size > limit {
+            return Err(MediaIngestError {
+                diagnostics: vec![size_limit_exceeded(
+                    &item.id,
+                    size,
+                    limit,
+                    "max_media_object_bytes",
+                )],
+            });
+        }
+    }
+    ingest_media_read_source_to_cas(source.as_read_source(), &options.media_store_dir).map_err(
+        |error| MediaIngestError {
+            diagnostics: vec![media_io_error_to_diagnostic(error, &item.id)],
+        },
+    )
+}
+
+fn prepare_persistent_media(
+    media: &[crate::authoring_core::model::AuthoringMedia],
+    options: &NormalizeOptions,
+) -> Vec<Option<Result<crate::authoring_core::media_io::IngestedMediaBytes, MediaIngestError>>> {
+    let mut seen = BTreeSet::new();
+    let jobs = media
+        .iter()
+        .enumerate()
+        .filter(|(_, item)| {
+            seen.insert(item.id.as_str())
+                && validate_authoring_media_filename(&item.desired_filename).is_ok()
+        })
+        .collect::<Vec<_>>();
+    let mut results = (0..media.len()).map(|_| None).collect::<Vec<_>>();
+    let completed = crate::parallel_io::ordered(jobs.len(), |position| {
+        ingest_persistent_item(jobs[position].1, options)
+    });
+    for ((index, item), result) in jobs.into_iter().zip(completed) {
+        results[index] = Some(result.unwrap_or_else(|()| {
+            Err(one_error(
+                "MEDIA.CAS_WRITE_FAILED",
+                "media ingestion worker failed",
+                Some(item.id.clone()),
+            ))
+        }));
+    }
+    results
 }
 
 pub(crate) fn prepare_media_source(

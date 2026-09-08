@@ -350,6 +350,62 @@ fn staging_materializes_media_from_cas_not_inline_payload() {
 }
 
 #[test]
+fn concurrent_staging_publishes_in_order_and_discards_later_candidates_on_failure() {
+    let root = tempfile::tempdir().unwrap();
+    let media_store = root.path().join("store");
+    let mut normalized =
+        sample_basic_normalized_ir_with_cas_media(&media_store, "unused.txt", b"good");
+    normalized.media_bindings.clear();
+    for index in 0..32 {
+        normalized
+            .media_bindings
+            .push(anki_forge::authoring::MediaBinding {
+                id: format!("media:{index:02}"),
+                export_filename: format!("file-{index:02}.txt"),
+                object_id: normalized.media_objects[0].id.clone(),
+            });
+    }
+    let target = BuildArtifactTarget::new(root.path().to_owned(), "artifacts/staging-order")
+        .with_media_store_dir(media_store);
+    let media_dir = root.path().join("staging/media");
+    fs::create_dir_all(media_dir.join("file-05.txt")).unwrap();
+    let failed = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+    assert_eq!(failed.result_status, "error");
+    let names = fs::read_dir(&media_dir)
+        .unwrap()
+        .map(|entry| entry.unwrap().file_name().to_string_lossy().into_owned())
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        names,
+        (0..=5)
+            .map(|index| format!("file-{index:02}.txt"))
+            .collect()
+    );
+    fs::remove_dir(media_dir.join("file-05.txt")).unwrap();
+    let retried = build(
+        &normalized,
+        &sample_writer_policy(),
+        &sample_build_context(false),
+        &target,
+    )
+    .unwrap();
+    assert_eq!(retried.result_status, "success");
+    assert_eq!(fs::read_dir(&media_dir).unwrap().count(), 32);
+    for index in 0..32 {
+        assert_eq!(
+            fs::read(media_dir.join(format!("file-{index:02}.txt"))).unwrap(),
+            b"good"
+        );
+    }
+}
+
+#[test]
 fn writer_reports_missing_cas_object_without_semantic_media_diagnostics() {
     let root = unique_artifact_root("missing-cas");
     let media_store = root.join("media-store");

@@ -8,6 +8,22 @@ new minor release.
 
 ### Fixed
 
+- Consume decoded inspection facts when assembling observations, transferring
+  note fields, tags and identity evidence to reduce comparison peak memory.
+- Use 8 KiB pages for generated modern collection databases to reduce SQLite
+  population and compaction work while preserving logical schema and rows.
+  Bundle 0.6.3 refreshes only the three affected physical APKG golden hashes.
+- Reuse a build-local zstd workspace across retained media entries, preserving
+  independent frame bytes, per-file integrity checks and durable publication.
+- Bound repeated HTML lookahead on malformed tags and raw-text elements while
+  preserving existing sort-field, checksum, entity and media-filename semantics.
+- Copy validated Deck/Package exports to writers with a fixed buffer instead of
+  an additional whole-package allocation; preserve partial-write and error behavior.
+- Borrow comparison observations and stream their canonical fingerprint without
+  duplicating JSON trees or dropping comparison evidence.
+- Overlap persistent CAS/staging I/O on at most four scoped workers. Keep per-file
+  sync and integrity checks, ordered staging publication and failure cleanup.
+
 - Keep media optimization behind the existing registration/export interfaces.
   Read Deck file media in larger blocks and reuse image header bytes for dimensions,
   with a streaming fallback for long headers. Preserve immediate registration

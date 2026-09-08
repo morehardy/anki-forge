@@ -352,6 +352,7 @@ fn write_media_payloads_and_map(
     media_store_dir: &Path,
 ) -> Result<()> {
     let mut entries = Vec::new();
+    let mut context = zstd::zstd_safe::CCtx::create();
     let objects_by_id = normalized_ir
         .media_objects
         .iter()
@@ -369,7 +370,7 @@ fn write_media_payloads_and_map(
             })?;
         let source =
             crate::writer_core::media::verify_cas_object_streaming(media_store_dir, object)?;
-        write_zstd_file_entry(zip, &index.to_string(), &source)?;
+        write_zstd_file_entry(zip, &index.to_string(), &source, &mut context)?;
         let size = apkg_media_size(object.size_bytes, &object.id)?;
         entries.push(MediaEntry {
             name: binding.export_filename.clone(),
@@ -415,15 +416,21 @@ fn write_zstd_collection_entry(zip: &mut ZipWriter<File>, path: &Path) -> Result
         .with_context(|| format!("compress collection {}", path.display()))
 }
 
-fn write_zstd_file_entry(zip: &mut ZipWriter<File>, name: &str, path: &Path) -> Result<()> {
+fn write_zstd_file_entry(
+    zip: &mut ZipWriter<File>,
+    name: &str,
+    path: &Path,
+    context: &mut zstd::zstd_safe::CCtx<'static>,
+) -> Result<()> {
     zip.start_file(
         name,
         FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
     )?;
     let mut input =
         File::open(path).with_context(|| format!("open media object {}", path.display()))?;
-    let mut encoder =
-        zstd::stream::Encoder::new(zip, 0).context("create zstd encoder for media payload")?;
+    // Each successful finish closes an independent frame; only workspace is
+    // reused, with the same default parameters and unknown source size.
+    let mut encoder = zstd::stream::Encoder::with_context(zip, context);
     std::io::copy(&mut input, &mut encoder)
         .with_context(|| format!("stream-compress media object {}", path.display()))?;
     encoder.finish().context("finish zstd media payload")?;
@@ -440,6 +447,9 @@ fn create_latest_collection_file(
     let _ = fs::remove_file(&path);
     let conn = Connection::open(&path)
         .with_context(|| format!("open collection database {}", path.display()))?;
+    // Reduce B-tree and overflow-page work during population and compaction.
+    // The page size changes physical layout, while schema and row values stay fixed.
+    conn.pragma_update(None, "page_size", 8192)?;
     {
         let transaction = conn.unchecked_transaction()?;
         execute_source_schema(&transaction, SCHEMA11_SQL)?;
@@ -916,6 +926,48 @@ pub(crate) fn strip_html_preserving_media_filenames(input: &str) -> String {
 mod tests {
     use super::*;
     use proptest::prelude::*;
+
+    #[test]
+    fn retained_media_reuses_context_without_changing_independent_frames() {
+        let root = tempfile::tempdir().unwrap();
+        let mut context = zstd::zstd_safe::CCtx::create();
+        let mut reused = ZipWriter::new(File::create(root.path().join("reused.zip")).unwrap());
+        let mut fresh = ZipWriter::new(File::create(root.path().join("fresh.zip")).unwrap());
+        for (index, size) in [0, 1, 8191, 8192, 8193, 65536, 131073, 524289, 0, 65536]
+            .into_iter()
+            .enumerate()
+        {
+            let bytes: Vec<u8> = (0..size)
+                .map(|n| {
+                    if index % 2 == 0 {
+                        b'x'
+                    } else {
+                        ((n * 37 + n / 257) % 256) as u8
+                    }
+                })
+                .collect();
+            let path = root.path().join("source");
+            fs::write(&path, &bytes).unwrap();
+            let name = index.to_string();
+            fresh
+                .start_file(
+                    &name,
+                    FileOptions::<'static, ()>::default()
+                        .compression_method(CompressionMethod::Stored),
+                )
+                .unwrap();
+            let mut encoder = zstd::stream::Encoder::new(&mut fresh, 0).unwrap();
+            std::io::copy(&mut File::open(&path).unwrap(), &mut encoder).unwrap();
+            encoder.finish().unwrap();
+            write_zstd_file_entry(&mut reused, &name, &path, &mut context).unwrap();
+        }
+        fresh.finish().unwrap();
+        reused.finish().unwrap();
+        assert_eq!(
+            fs::read(root.path().join("reused.zip")).unwrap(),
+            fs::read(root.path().join("fresh.zip")).unwrap()
+        );
+    }
 
     #[test]
     fn embedded_upgrade_notice_matches_schema_generated_database() {

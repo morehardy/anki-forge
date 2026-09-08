@@ -14,6 +14,57 @@ use std::fs;
 use std::path::PathBuf;
 
 #[test]
+fn concurrent_ingestion_keeps_deduplication_limits_and_diagnostic_order() {
+    let root = tempfile::tempdir().unwrap();
+    fs::write(root.path().join("source.txt"), b"same content").unwrap();
+    let options = NormalizeOptions {
+        base_dir: root.path().to_owned(),
+        media_store_dir: root.path().join("store"),
+        media_policy: MediaPolicy::default_strict(),
+    };
+    let mut media = (0..32)
+        .map(|i| AuthoringMedia {
+            id: format!("media:{i:02}"),
+            desired_filename: format!("file-{i:02}.txt"),
+            source: AuthoringMediaSource::Path {
+                path: "source.txt".into(),
+            },
+            declared_mime: Some("text/plain".into()),
+        })
+        .collect::<Vec<_>>();
+    let initial = ingest_authoring_media(&media, &options).unwrap();
+    assert_eq!(initial.objects.len(), 1);
+    assert_eq!(initial.bindings.len(), 32);
+    let repeated = ingest_authoring_media(&media, &options).unwrap();
+    assert_eq!(initial.objects, repeated.objects);
+    assert_eq!(initial.bindings, repeated.bindings);
+    media[3].source = AuthoringMediaSource::Path {
+        path: "missing-a.txt".into(),
+    };
+    media[21].source = AuthoringMediaSource::Path {
+        path: "missing-b.txt".into(),
+    };
+    let diagnostics = ingest_authoring_media(&media, &options)
+        .unwrap_err()
+        .diagnostics;
+    let errors = diagnostics
+        .iter()
+        .filter(|item| item.level == "error")
+        .collect::<Vec<_>>();
+    assert_eq!(errors.len(), 2);
+    assert!(errors[0].summary.contains("missing-a.txt"));
+    assert!(errors[1].summary.contains("missing-b.txt"));
+    let mut limited = options.clone();
+    limited.media_store_dir = root.path().join("limited-store");
+    limited.media_policy.max_media_object_bytes = Some(1);
+    assert!(ingest_authoring_media(&media, &limited).is_err());
+    assert!(
+        !limited.media_store_dir.exists(),
+        "oversized sources must not reach CAS writes"
+    );
+}
+
+#[test]
 fn authoring_media_path_source_serializes_without_payload() {
     let media = AuthoringMedia {
         id: "media:heart".into(),
