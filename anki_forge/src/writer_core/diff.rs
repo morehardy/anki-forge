@@ -3,8 +3,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use anyhow::Result;
 use serde_json::Value;
 
+use crate::writer_core::canonical_json::FilteredValue;
 use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
-use crate::writer_core::to_canonical_json;
 
 pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
     let mut uncompared_domains = BTreeSet::new();
@@ -38,11 +38,11 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
         let left_entries = domain_entries(left_values);
         let right_entries = domain_entries(right_values);
         let mut selectors = BTreeSet::new();
-        selectors.extend(left_entries.keys().cloned());
-        selectors.extend(right_entries.keys().cloned());
+        selectors.extend(left_entries.keys().copied());
+        selectors.extend(right_entries.keys().copied());
 
         for selector in selectors {
-            if should_skip_selector(domain, &selector, left, right) {
+            if should_skip_selector(domain, selector, left, right) {
                 continue;
             }
             match (left_entries.get(&selector), right_entries.get(&selector)) {
@@ -50,17 +50,17 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
                     if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
                         changes.push(change_for_modified(
                             domain,
-                            &selector,
+                            selector,
                             left_entry,
                             right_entry,
                         )?);
                     }
                 }
                 (Some(left_entry), None) => {
-                    changes.push(change_for_removed(domain, &selector, left_entry)?);
+                    changes.push(change_for_removed(domain, selector, left_entry)?);
                 }
                 (None, Some(right_entry)) => {
-                    changes.push(change_for_added(domain, &selector, right_entry)?);
+                    changes.push(change_for_added(domain, selector, right_entry)?);
                 }
                 (None, None) => {}
             }
@@ -122,22 +122,33 @@ fn compare_status(left: &InspectReport, right: &InspectReport) -> String {
     }
 }
 
-fn domain_entries(values: &[Value]) -> BTreeMap<String, Value> {
+fn domain_entries(values: &[Value]) -> BTreeMap<&str, &Value> {
     let mut entries = BTreeMap::new();
     for value in values {
         let Some(selector) = value.get("selector").and_then(Value::as_str) else {
             continue;
         };
-        entries.insert(selector.to_string(), value.clone());
+        entries.insert(selector, value);
     }
     entries
 }
 
 fn entry_payload(domain: &str, value: &Value) -> Result<String> {
-    let payload = strip_non_semantic_fields(domain, value);
-    to_canonical_json(&payload)
+    let excluded: &'static [&'static str] = if domain == "media" {
+        &[
+            "selector",
+            "evidence_refs",
+            "binding_id",
+            "object_id",
+            "object_ref",
+        ]
+    } else {
+        &["selector", "evidence_refs"]
+    };
+    Ok(serde_json::to_string(&FilteredValue { value, excluded })?)
 }
 
+#[cfg(test)]
 fn strip_non_semantic_fields(domain: &str, value: &Value) -> Value {
     match value {
         Value::Object(map) => {
@@ -247,4 +258,45 @@ fn merge_evidence_refs(left: &Value, right: &Value) -> Vec<String> {
     refs.extend(evidence_refs(left));
     refs.extend(evidence_refs(right));
     refs.into_iter().collect()
+}
+
+#[cfg(test)]
+mod ownership_tests {
+    use super::*;
+
+    #[test]
+    fn comparison_indexes_borrow_observations_and_keep_last_duplicate_selector() {
+        let values = vec![
+            serde_json::json!({"selector":"row", "content":"old"}),
+            serde_json::json!({"no_selector":"ignored"}),
+            serde_json::json!({"selector":"row", "content":"current"}),
+        ];
+        let entries = domain_entries(&values);
+        assert_eq!(entries.len(), 1);
+        let indexed: &Value = entries["row"];
+        assert!(
+            std::ptr::eq(indexed, &values[2]),
+            "comparison must not copy the observation tree"
+        );
+    }
+
+    #[test]
+    fn borrowed_payload_preserves_recursive_domain_filters_and_numeric_encoding() {
+        let value = serde_json::json!({
+            "selector":"row", "evidence_refs":["removed"], "object_id":"media only",
+            "nested":[{"binding_id":"media only", "object_ref":"media only", "selector":"removed", "evidence_refs":[], "data":[1,1.0,-0.0,0.0,"尾"]}],
+        });
+        for domain in ["media", "metadata", "fields"] {
+            let expected =
+                crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, &value))
+                    .unwrap();
+            assert_eq!(entry_payload(domain, &value).unwrap(), expected);
+        }
+        // JSON numbers with different encodings remain distinct, even when
+        // IEEE equality would consider them equal.
+        assert_ne!(
+            entry_payload("fields", &serde_json::json!(-0.0)).unwrap(),
+            entry_payload("fields", &serde_json::json!(0.0)).unwrap()
+        );
+    }
 }

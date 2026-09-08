@@ -118,9 +118,54 @@ pub fn copy_verified_cas_object_to_path(
     object: &crate::authoring_core::MediaObject,
     output_path: &Path,
 ) -> Result<(), MediaWriterError> {
+    prepare_verified_cas_copy(media_store_dir, object, output_path)?.publish()
+}
+
+/// A synced and verified private copy. Publication stays on the ordered caller;
+/// dropping an unaccepted result also cleans up after another job's failure.
+pub(crate) struct PreparedMediaCopy {
+    source: PathBuf,
+    output_path: PathBuf,
+    temp_path: Option<PathBuf>,
+}
+
+impl PreparedMediaCopy {
+    pub(crate) fn publish(mut self) -> Result<(), MediaWriterError> {
+        let temp_path = self.temp_path.as_ref().expect("unpublished media copy");
+        fs::rename(temp_path, &self.output_path).map_err(|error| {
+            copy_failed_with_cleanup(
+                &self.source,
+                &self.output_path,
+                temp_path,
+                error.to_string(),
+            )
+        })?;
+        self.temp_path.take();
+        Ok(())
+    }
+}
+
+impl Drop for PreparedMediaCopy {
+    fn drop(&mut self) {
+        if let Some(path) = &self.temp_path {
+            let _ = fs::remove_file(path);
+        }
+    }
+}
+
+pub(crate) fn prepare_verified_cas_copy(
+    media_store_dir: &Path,
+    object: &crate::authoring_core::MediaObject,
+    output_path: &Path,
+) -> Result<PreparedMediaCopy, MediaWriterError> {
     let source = cas_object_path(media_store_dir, object)?;
     let mut input = File::open(&source).map_err(|err| classify_open_error(&source, err))?;
     let (temp_path, mut output) = create_temp_output_file(&source, output_path)?;
+    let candidate = PreparedMediaCopy {
+        source: source.clone(),
+        output_path: output_path.to_owned(),
+        temp_path: Some(temp_path.clone()),
+    };
 
     let mut blake3_hasher = blake3::Hasher::new();
     let mut sha1_hasher = Sha1::new();
@@ -173,15 +218,7 @@ pub fn copy_verified_cas_object_to_path(
         ));
     }
     drop(output);
-    if let Err(err) = fs::rename(&temp_path, output_path) {
-        return Err(copy_failed_with_cleanup(
-            &source,
-            output_path,
-            &temp_path,
-            err.to_string(),
-        ));
-    }
-    Ok(())
+    Ok(candidate)
 }
 
 fn create_temp_output_file(

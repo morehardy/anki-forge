@@ -1,0 +1,53 @@
+{
+  "base_commit": "c665271b0af9ec7badd2be57b516bf58afac15cd",
+  "bundles": [
+    {
+      "archive": "20260908-main-audit.tar.gz",
+      "sha256": "8760ed22e6d328ff810f27cda69d4ff4c855ddb2bf729dbaf39e000c4ab873fd",
+      "bytes": 1598753,
+      "verified_files": 221,
+      "source_directory": "benchmarks/results/20260908-main-audit",
+      "original_reports": {
+        "2026-09-08-main-performance-audit.md": "a3c5fcfece0fe1deeeba63546284438ab4cf0665baca464f61f54f3edddb117d",
+        "2026-09-08-performance-optimization-research.md": "216f82d3f877294ba2e55e7d8aa12ec88c1cf3cd90954e85816e210ce5606fbb",
+        "2026-09-08-performance-source-audit.md": "5ee51dd2fb538e9a0005c67a0531d116cf131575b10b3949ae168c6934deba4c"
+      }
+    },
+    {
+      "archive": "20260908-main-optimization.tar.gz",
+      "sha256": "7975d0227d99b9611f66cd14f33d48cd6617d20c9039dba3d9aaf6806da9aa38",
+      "bytes": 848734,
+      "verified_files": 434,
+      "source_directory": "benchmarks/results/20260908-main-optimization",
+      "original_reports": {
+        "2026-09-08-performance-optimization-implementation.md": "c550691c078da50efb03ee161ab4bbd5b8c3f24b34b5bfe66132b9b291845327"
+      }
+    },
+    {
+      "archive": "20260908-post-optimization-audit.tar.gz",
+      "sha256": "7ea244a796499b731ed8f8deabaec81914f497d2797185ce2fc3be1d3a2c6d3f",
+      "bytes": 859085,
+      "verified_files": 279,
+      "source_directory": "benchmarks/results/20260908-post-optimization-audit",
+      "original_reports": {
+        "2026-09-08-post-optimization-bottleneck-audit.md": "3a0e503ede6c07536a3be531a05c39930d6832ec31b0eac87eba1615566e2d19"
+      }
+    },
+    {
+      "archive": "20260908-round2-optimization.tar.gz",
+      "sha256": "964c1b8904c76a8ce20f4e3f09522d85356988e463c7e83f1971a8696329d1ea",
+      "bytes": 6075354,
+      "verified_files": 188,
+      "source_directory": "benchmarks/results/20260908-round2-optimization",
+      "original_reports": {
+        "2026-09-08-round2-optimization-genanki.md": "904f6bb4ce2d5ac7173280b9a6063ba9245bb32c517da1d81790cbb6418cf70c"
+      }
+    }
+  ],
+  "verified_snapshot_files": 1852,
+  "packaging_only_differences_from_measured_snapshot": [
+    "benchmarks/.gitignore"
+  ],
+  "all_other_measured_source_files_identical": true,
+  "all_archive_members_identical_to_original_files": true
+}

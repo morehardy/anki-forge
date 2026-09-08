@@ -14,6 +14,7 @@ mod deck;
 #[allow(missing_docs)]
 mod writer_core;
 
+mod parallel_io;
 mod prepared_media;
 
 #[cfg(feature = "internal-tools")]

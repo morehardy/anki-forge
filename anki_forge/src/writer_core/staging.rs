@@ -347,24 +347,47 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
                 .iter()
                 .map(|object| (object.id.as_str(), object))
                 .collect::<BTreeMap<_, _>>();
-            for binding in &normalized.media_bindings {
-                let object = objects_by_id
-                    .get(binding.object_id.as_str())
-                    .with_context(|| {
-                        format!(
-                            "binding {} references missing object {}",
-                            binding.id, binding.object_id
-                        )
-                    })?;
-                let media_path = validated_media_output_path(&media_dir, &binding.export_filename)?;
-                if let Some(prepared) = prepared_media {
-                    prepared.verify(object)?;
-                } else {
-                    crate::writer_core::media::copy_verified_cas_object_to_path(
-                        &target.media_store_dir,
-                        object,
-                        &media_path,
-                    )?;
+            // Keep pending copies bounded as well as active workers. Each copy
+            // retains its sync and integrity checks; publish in binding order.
+            for bindings in normalized.media_bindings.chunks(16) {
+                let prepare = |index: usize| -> Result<_> {
+                    let binding = &bindings[index];
+                    let object =
+                        objects_by_id
+                            .get(binding.object_id.as_str())
+                            .with_context(|| {
+                                format!(
+                                    "binding {} references missing object {}",
+                                    binding.id, binding.object_id
+                                )
+                            })?;
+                    let media_path =
+                        validated_media_output_path(&media_dir, &binding.export_filename)?;
+                    if let Some(prepared) = prepared_media {
+                        prepared.verify(object)?;
+                        Ok(None)
+                    } else {
+                        Ok(Some(crate::writer_core::media::prepare_verified_cas_copy(
+                            &target.media_store_dir,
+                            object,
+                            &media_path,
+                        )?))
+                    }
+                };
+                if prepared_media.is_some() || bindings.len() < 16 {
+                    for index in 0..bindings.len() {
+                        if let Some(copy) = prepare(index)? {
+                            copy.publish()?;
+                        }
+                    }
+                    continue;
+                }
+                let copies = crate::parallel_io::ordered(bindings.len(), prepare);
+                for copy in copies {
+                    let copy = copy.map_err(|()| anyhow::anyhow!("media copy worker failed"))??;
+                    if let Some(copy) = copy {
+                        copy.publish()?;
+                    }
                 }
             }
         }

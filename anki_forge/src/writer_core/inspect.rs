@@ -12,7 +12,8 @@ use crate::authoring_core::{
 use anyhow::{ensure, Context, Result};
 use prost::Message;
 use rusqlite::Connection;
-use serde::Deserialize;
+use serde::ser::{SerializeMap, SerializeSeq};
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha1::Digest;
 
@@ -20,7 +21,9 @@ use crate::writer_core::anki_proto::{
     decode_field_config, decode_notetype_config, decode_notetype_metadata, decode_template_config,
     CardRequirement, CardRequirementKind, NotetypeKind, OriginalStockKind,
 };
+#[cfg(test)]
 use crate::writer_core::canonical_json::to_canonical_json;
+use crate::writer_core::canonical_json::FilteredValue;
 use crate::writer_core::card_plan::plan_cards;
 use crate::writer_core::deck_name::native_deck_name_to_human;
 use crate::writer_core::model::{InspectObservations, InspectReport, PackageBuildResult};
@@ -202,16 +205,17 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
     let (media, mut limitations) = resolve_staging_media(&manifest.normalized_ir, &media_root)?;
     let note_identity_metadata =
         build_note_identity_metadata_from_normalized_ir(&manifest.normalized_ir);
-    let observations = build_observations(
+    let notetype_model_ids = crate::writer_core::staging::staging_notetype_ids(
         &manifest.normalized_ir,
+        manifest.notetype_model_ids,
+    )?;
+    let observations = build_observations(
+        manifest.normalized_ir,
         &media,
         &manifest.template_target_decks,
         None,
-        &note_identity_metadata,
-        &crate::writer_core::staging::staging_notetype_ids(
-            &manifest.normalized_ir,
-            manifest.notetype_model_ids,
-        )?,
+        note_identity_metadata,
+        &notetype_model_ids,
     );
     limitations.observation_status = derive_status(limitations.missing_domains.is_empty(), true);
 
@@ -238,11 +242,11 @@ pub fn inspect_apkg_with_limits(
 fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectReport> {
     let facts = read_apkg_facts(path, limits, ReadProjection::Observations)?;
     let observations = build_observations(
-        &facts.normalized_ir,
+        facts.normalized_ir,
         &facts.media,
         &facts.template_target_decks,
         Some(&facts.actual_card_decks),
-        &facts.note_identity_metadata,
+        facts.note_identity_metadata,
         &facts.notetype_model_ids,
     );
 
@@ -420,24 +424,77 @@ fn fingerprint_report(
     observations: &InspectObservations,
     source_bytes: &[u8],
 ) -> String {
-    let payload = json!({
-        "observation_status": observation_status,
-        "missing_domains": missing_domains,
-        "degradation_reasons": degradation_reasons,
-        "observations": strip_evidence_refs(observations),
-        "source_bytes": if source_bytes.is_empty() {
-            Value::Null
-        } else {
-            json!(hex::encode(sha1::Sha1::digest(source_bytes)))
+    // Field order is canonical JSON order. Serialize borrowed observations
+    // directly into the digest instead of allocating several whole JSON trees.
+    #[derive(Serialize)]
+    struct Payload<'a> {
+        degradation_reasons: &'a [String],
+        missing_domains: &'a [String],
+        observation_status: &'a str,
+        observations: FingerprintObservations<'a>,
+        source_bytes: Option<String>,
+    }
+    let payload = Payload {
+        degradation_reasons,
+        missing_domains,
+        observation_status,
+        observations: FingerprintObservations(observations),
+        source_bytes: (!source_bytes.is_empty())
+            .then(|| hex::encode(sha1::Sha1::digest(source_bytes))),
+    };
+    struct DigestWriter(sha1::Sha1);
+    impl Write for DigestWriter {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            self.0.update(bytes);
+            Ok(bytes.len())
         }
-    });
-    let canonical = to_canonical_json(&payload).expect("canonical inspection payload");
-    format!(
-        "artifact:{}",
-        hex::encode(sha1::Sha1::digest(canonical.as_bytes()))
-    )
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+    let mut writer = std::io::BufWriter::with_capacity(64 * 1024, DigestWriter(sha1::Sha1::new()));
+    serde_json::to_writer(&mut writer, &payload).expect("canonical inspection payload");
+    let writer = writer
+        .into_inner()
+        .map_err(|error| error.into_error())
+        .expect("flush inspection digest");
+    format!("artifact:{}", hex::encode(writer.0.finalize()))
 }
 
+struct FingerprintObservations<'a>(&'a InspectObservations);
+
+impl Serialize for FingerprintObservations<'_> {
+    fn serialize<S: serde::Serializer>(
+        &self,
+        serializer: S,
+    ) -> std::result::Result<S::Ok, S::Error> {
+        struct Values<'a>(&'a [Value]);
+        impl Serialize for Values<'_> {
+            fn serialize<S: serde::Serializer>(
+                &self,
+                serializer: S,
+            ) -> std::result::Result<S::Ok, S::Error> {
+                let mut output = serializer.serialize_seq(Some(self.0.len()))?;
+                for value in self.0 {
+                    output.serialize_element(&FilteredValue {
+                        value,
+                        excluded: &["evidence_refs"],
+                    })?;
+                }
+                output.end()
+            }
+        }
+        let mut domains = self.0.domains();
+        domains.sort_unstable_by_key(|&(name, _)| name);
+        let mut output = serializer.serialize_map(Some(domains.len()))?;
+        for (name, values) in domains {
+            output.serialize_entry(name, &Values(values))?;
+        }
+        output.end()
+    }
+}
+
+#[cfg(test)]
 fn strip_evidence_refs(observations: &InspectObservations) -> Value {
     Value::Object(
         observations
@@ -453,6 +510,7 @@ fn strip_evidence_refs(observations: &InspectObservations) -> Value {
     )
 }
 
+#[cfg(test)]
 fn strip_value(value: &Value) -> Value {
     match value {
         Value::Object(map) => {
@@ -470,14 +528,14 @@ fn strip_value(value: &Value) -> Value {
 }
 
 fn observed_notes(
-    normalized_ir: &NormalizedIr,
-) -> impl Iterator<Item = (&NormalizedNote, &NormalizedNotetype)> {
-    let notetypes_by_id: BTreeMap<_, _> = normalized_ir
-        .notetypes
+    notes: Vec<NormalizedNote>,
+    notetypes: &[NormalizedNotetype],
+) -> impl Iterator<Item = (NormalizedNote, &NormalizedNotetype)> {
+    let notetypes_by_id: BTreeMap<_, _> = notetypes
         .iter()
         .map(|notetype| (notetype.id.as_str(), notetype))
         .collect();
-    normalized_ir.notes.iter().filter_map(move |note| {
+    notes.into_iter().filter_map(move |note| {
         notetypes_by_id
             .get(note.notetype_id.as_str())
             .map(|notetype| (note, *notetype))
@@ -492,16 +550,16 @@ fn actual_cards_for_note<'a>(
 }
 
 fn build_observations(
-    normalized_ir: &NormalizedIr,
+    normalized_ir: NormalizedIr,
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
     actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
-    note_identity_metadata: &[Value],
+    note_identity_metadata: Vec<Value>,
     notetype_model_ids: &BTreeMap<String, i64>,
 ) -> InspectObservations {
     let staging_decks = actual_card_decks
         .is_none()
-        .then(|| resolve_deck_registry(normalized_ir));
+        .then(|| resolve_deck_registry(&normalized_ir));
     let observed_deck_name = |name: &str| {
         staging_decks
             .as_ref()
@@ -645,20 +703,9 @@ fn build_observations(
         }));
     }
 
-    for (note, notetype) in observed_notes(normalized_ir) {
+    for (note, notetype) in observed_notes(normalized_ir.notes, &normalized_ir.notetypes) {
         let note_id = note.id.as_str();
         let notetype_id = note.notetype_id.as_str();
-        note_entries.push(json!({
-            "selector": format!("note[id='{}']", note_id),
-            "id": note_id,
-            "notetype_id": notetype_id,
-            "deck_name": observed_deck_name(&note.deck_name),
-            "tags": &note.tags,
-            "fields": &note.fields,
-            "revision": super::note_revision::NoteRevision::from_note(note),
-            "evidence_refs": [format!("note:{}", note_id)],
-        }));
-
         if let Some(actual_card_decks) = actual_card_decks {
             for ((actual_note_id, actual_ord), deck_name) in
                 actual_cards_for_note(actual_card_decks, note_id)
@@ -677,7 +724,7 @@ fn build_observations(
                 }));
             }
         } else {
-            for planned_card in plan_cards(note, notetype) {
+            for planned_card in plan_cards(&note, notetype) {
                 let template = &notetype.templates[planned_card.template_index];
                 let template_name = template.name.as_str();
                 let card_ord = planned_card.card_ord;
@@ -695,6 +742,27 @@ fn build_observations(
                 }));
             }
         }
+
+        let mut entry = json!({
+            "selector": format!("note[id='{}']", note_id),
+            "id": note_id,
+            "notetype_id": notetype_id,
+            "deck_name": observed_deck_name(&note.deck_name),
+            "tags": null,
+            "fields": null,
+            "revision": super::note_revision::NoteRevision::from_note(&note),
+            "evidence_refs": [format!("note:{}", note_id)],
+        });
+        // Inspection owns these decoded facts. Move payload strings and evidence
+        // into the report instead of retaining two complete copies at its peak.
+        entry["fields"] = Value::Object(
+            note.fields
+                .into_iter()
+                .map(|(name, text)| (name, Value::String(text)))
+                .collect(),
+        );
+        entry["tags"] = Value::Array(note.tags.into_iter().map(Value::String).collect());
+        note_entries.push(entry);
     }
 
     for media_ref in &normalized_ir.media_references {
@@ -742,7 +810,7 @@ fn build_observations(
         "media_count": media.len(),
         "evidence_refs": ["counts"],
     })];
-    metadata_entries.extend(note_identity_metadata.iter().cloned());
+    metadata_entries.extend(note_identity_metadata);
 
     InspectObservations {
         notetypes: notetype_entries,
@@ -1725,8 +1793,54 @@ mod tests {
     use super::*;
 
     #[test]
-    fn apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty() {
-        let normalized_ir = NormalizedIr {
+    fn streamed_fingerprint_matches_the_original_canonical_projection() {
+        let value = json!({
+            "selector": "row", "evidence_refs": ["discarded"],
+            "content": "尾 \\ \"\n", "values": [1, 1.0, -0.0, 0.0],
+            "nested": {"z": true, "evidence_refs": [], "a": [{"evidence_refs": ["also discarded"], "object_id": "kept"}]},
+        });
+        let mut domains = serde_json::Map::new();
+        for name in [
+            "notetypes",
+            "templates",
+            "fields",
+            "media",
+            "field_metadata",
+            "browser_templates",
+            "template_target_decks",
+            "metadata",
+            "references",
+        ] {
+            domains.insert(name.into(), json!([value]));
+        }
+        let observations: InspectObservations =
+            serde_json::from_value(Value::Object(domains)).unwrap();
+        for source_bytes in [b"".as_slice(), b"raw source".as_slice()] {
+            for status in ["complete", "partial"] {
+                let missing = vec!["missing domain".into()];
+                let reasons = vec!["reason".into()];
+                let payload = json!({
+                    "observation_status": status,
+                    "missing_domains": missing,
+                    "degradation_reasons": reasons,
+                    "observations": strip_evidence_refs(&observations),
+                    "source_bytes": if source_bytes.is_empty() { Value::Null } else { json!(hex::encode(sha1::Sha1::digest(source_bytes))) },
+                });
+                let canonical = to_canonical_json(&payload).unwrap();
+                let expected = format!(
+                    "artifact:{}",
+                    hex::encode(sha1::Sha1::digest(canonical.as_bytes()))
+                );
+                assert_eq!(
+                    fingerprint_report(status, &missing, &reasons, &observations, source_bytes),
+                    expected
+                );
+            }
+        }
+    }
+
+    fn actual_card_fixture() -> NormalizedIr {
+        NormalizedIr {
             kind: "normalized-ir".into(),
             schema_version: "phase2-v1".into(),
             document_id: "inspect-actual-cards".into(),
@@ -1772,15 +1886,20 @@ mod tests {
             media_objects: Vec::new(),
             media_bindings: Vec::new(),
             media_references: Vec::new(),
-        };
+        }
+    }
+
+    #[test]
+    fn apkg_observations_enumerate_actual_cards_even_when_the_current_plan_is_empty() {
+        let normalized_ir = actual_card_fixture();
         let actual_cards = BTreeMap::from([(("note-1".into(), 0), "Deck".into())]);
 
         let observations = build_observations(
-            &normalized_ir,
+            normalized_ir,
             &[],
             &[],
             Some(&actual_cards),
-            &[],
+            Vec::new(),
             &BTreeMap::new(),
         );
 
@@ -1789,6 +1908,38 @@ mod tests {
             .iter()
             .any(|value| value["selector"] == "card[note_id='note-1'][ord=0]"));
         assert_eq!(observations.metadata[0]["card_count"], 1);
+    }
+
+    #[test]
+    fn observations_transfer_large_fields_tags_and_identity_evidence() {
+        let mut normalized_ir = actual_card_fixture();
+        let field = "<b>长字段 &amp; 🦀</b>".repeat(8192);
+        let tag = "标签".repeat(1024);
+        let evidence = "identity evidence".repeat(8192);
+        let field_ptr = field.as_ptr();
+        let tag_ptr = tag.as_ptr();
+        let evidence_ptr = evidence.as_ptr();
+        normalized_ir.notes[0].fields.insert("Front".into(), field);
+        normalized_ir.notes[0].tags.push(tag);
+        let identity_metadata = vec![Value::String(evidence)];
+        let observations = build_observations(
+            normalized_ir,
+            &[],
+            &[],
+            Some(&BTreeMap::new()),
+            identity_metadata,
+            &BTreeMap::new(),
+        );
+        let note = &observations.references[0];
+        assert_eq!(
+            note["fields"]["Front"].as_str().unwrap().as_ptr(),
+            field_ptr
+        );
+        assert_eq!(note["tags"][0].as_str().unwrap().as_ptr(), tag_ptr);
+        assert_eq!(
+            observations.metadata[1].as_str().unwrap().as_ptr(),
+            evidence_ptr
+        );
     }
 
     #[test]
