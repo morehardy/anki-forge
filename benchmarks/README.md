@@ -2,7 +2,24 @@
 
 An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
 
-## Text ownership: latest paired comparison
+## Latest Rust/genanki comparison: 2026-09-21
+
+The [current report](results/20260921-readme-genanki/report.md) measures the
+current working-tree Rust code against freshly measured genanki 0.13.1 across
+all 20 text/media cells. This is one complete session on M1 Pro / 32 GiB /
+macOS 27.0 / AC power, with 10 timings and 5 separate peak-RSS samples per
+implementation/cell, plus three warmups before each phase.
+
+All 840 exports passed artifact checks and all 40 selected packages passed
+Anki import/content/render checks. The [source snapshot](results/20260921-readme-genanki/source-snapshot.json)
+and [patch](results/20260921-readme-genanki/source.patch) identify the uncommitted
+code; source, binaries, dependencies, and inputs stayed unchanged during the run.
+The report retains desktop load, IQRs, higher media RSS, and default-format
+differences. It makes no cross-machine or long-lived-process performance claim.
+See the [evidence index](results/20260921-readme-genanki/README.md) for raw records,
+checksums, and reproduction instructions.
+
+## Archived text ownership comparison
 
 The [text ownership report](results/20260907-text-ownership/README.md) compares
 the preceding shared-buffer build with consuming the temporary Project during

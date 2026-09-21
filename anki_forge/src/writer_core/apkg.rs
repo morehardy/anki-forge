@@ -443,25 +443,13 @@ fn create_latest_collection_file(
     guid_assignments: &GuidAssignments<'_>,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
 ) -> Result<tempfile::NamedTempFile> {
-    let path = root_dir.join(".collection.anki21b.sqlite.tmp");
-    let _ = fs::remove_file(&path);
-    let conn = Connection::open(&path)
-        .with_context(|| format!("open collection database {}", path.display()))?;
-    // Reduce B-tree and overflow-page work during population and compaction.
-    // The page size changes physical layout, while schema and row values stay fixed.
-    conn.pragma_update(None, "page_size", 8192)?;
-    {
-        let transaction = conn.unchecked_transaction()?;
-        execute_source_schema(&transaction, SCHEMA11_SQL)?;
-        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
-        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
-        execute_schema16_marker(&transaction)?;
-        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
-        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
-        transaction.commit()?;
-    }
-    populate_latest_collection(&conn, normalized_ir, guid_assignments, notetype_ids)?;
-
+    let source = create_collection_source(
+        root_dir,
+        normalized_ir,
+        guid_assignments,
+        notetype_ids,
+        COLLECTION_MEMORY_MAX_PAGES,
+    )?;
     // Keep compaction without rewriting and journaling the source database.
     // An empty, uniquely reserved file also cleans up on any error path.
     let compacted =
@@ -479,15 +467,100 @@ fn create_latest_collection_file(
         .to_str()
         .context("compacted collection path is not UTF-8")?
         .as_bytes();
-    conn.execute(
+    source.connection.execute(
         "VACUUM INTO ?1",
         [rusqlite::types::ToSqlOutput::Borrowed(
             rusqlite::types::ValueRef::Text(compacted_path),
         )],
     )?;
-    drop(conn);
-    let _ = fs::remove_file(&path);
     Ok(compacted)
+}
+
+const COLLECTION_PAGE_SIZE: usize = 8192;
+// Bound the in-memory source to 64 MiB of database pages. SQLite bookkeeping,
+// journals, compaction and the input model have separate memory costs.
+const COLLECTION_MEMORY_MAX_PAGES: usize = 64 * 1024 * 1024 / COLLECTION_PAGE_SIZE;
+
+struct CollectionSource {
+    // Close SQLite before removing its backing file, including on Windows and
+    // when compaction fails. Fields are dropped in declaration order.
+    connection: Connection,
+    _file: Option<tempfile::NamedTempFile>,
+}
+
+fn create_collection_source(
+    root_dir: &Path,
+    normalized_ir: &NormalizedIr,
+    guid_assignments: &GuidAssignments<'_>,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+    max_memory_pages: usize,
+) -> Result<CollectionSource> {
+    let max_memory_bytes = max_memory_pages.saturating_mul(COLLECTION_PAGE_SIZE);
+    // Include room for ordinary identity metadata, cards and indexes so large
+    // short-note exports do not first fill memory and then rebuild on disk.
+    // Wide models and unusual identities can exceed this estimate;
+    // max_page_count, rather than the estimate, enforces the page limit.
+    let estimated_bytes = normalized_ir.notes.iter().fold(0_usize, |total, note| {
+        note.fields
+            .values()
+            .fold(total.saturating_add(2048), |total, field| {
+                total.saturating_add(field.len())
+            })
+    });
+    if max_memory_pages > 0 && estimated_bytes <= max_memory_bytes {
+        let connection = Connection::open_in_memory().context("open memory collection database")?;
+        connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
+        connection.pragma_update(None, "max_page_count", max_memory_pages)?;
+        match initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids) {
+            Ok(()) => {
+                return Ok(CollectionSource {
+                    connection,
+                    _file: None,
+                });
+            }
+            Err(error)
+                if matches!(
+                    error.downcast_ref::<rusqlite::Error>(),
+                    Some(rusqlite::Error::SqliteFailure(code, _))
+                        if code.code == rusqlite::ErrorCode::DiskFull
+                ) =>
+            {
+                // SQLITE_FULL on this private memory database means the page
+                // limit was reached. Release it before rebuilding on disk.
+            }
+            Err(error) => return Err(error),
+        }
+    }
+
+    let file =
+        tempfile::NamedTempFile::new_in(root_dir).context("create source collection file")?;
+    let connection = Connection::open(file.path())
+        .with_context(|| format!("open collection database {}", file.path().display()))?;
+    connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
+    initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids)?;
+    Ok(CollectionSource {
+        connection,
+        _file: Some(file),
+    })
+}
+
+fn initialize_collection(
+    conn: &Connection,
+    normalized_ir: &NormalizedIr,
+    guid_assignments: &GuidAssignments<'_>,
+    notetype_ids: &std::collections::BTreeMap<String, i64>,
+) -> Result<()> {
+    {
+        let transaction = conn.unchecked_transaction()?;
+        execute_source_schema(&transaction, SCHEMA11_SQL)?;
+        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
+        execute_schema16_marker(&transaction)?;
+        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
+        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
+        transaction.commit()?;
+    }
+    populate_latest_collection(conn, normalized_ir, guid_assignments, notetype_ids)
 }
 
 // The upgrade notice is independent of the exported notes. The regeneration
@@ -1088,6 +1161,117 @@ mod tests {
         assert!(!root.path().join(".collection.anki21b.sqlite.tmp").exists());
         drop(collection);
         assert!(!path.exists());
+    }
+
+    #[test]
+    fn collection_memory_limit_falls_back_to_identical_compacted_file_bytes() {
+        let root = tempfile::tempdir().unwrap();
+        let mut normalized = two_basic_notes();
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+        let memory = create_collection_source(
+            root.path(),
+            &normalized,
+            &Default::default(),
+            &ids,
+            COLLECTION_MEMORY_MAX_PAGES,
+        )
+        .unwrap();
+        assert!(memory._file.is_none());
+        let base_pages: usize = memory
+            .connection
+            .query_row("pragma page_count", [], |row| row.get(0))
+            .unwrap();
+        let page_limit: usize = memory
+            .connection
+            .query_row("pragma max_page_count", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(page_limit, COLLECTION_MEMORY_MAX_PAGES);
+        drop(memory);
+
+        let note = normalized.notes[0].clone();
+        normalized.notes = (0..32)
+            .map(|index| {
+                let mut note = note.clone();
+                // Unusually large identities exercise the hard limit even
+                // though the ordinary per-note estimate permits memory.
+                note.id = format!("note-{index}-{}", "identity".repeat(1024));
+                note
+            })
+            .collect();
+        let max_pages = base_pages + 1;
+        let field_bytes: usize = normalized
+            .notes
+            .iter()
+            .flat_map(|note| note.fields.values())
+            .map(String::len)
+            .sum();
+        assert!(field_bytes + normalized.notes.len() * 2048 < max_pages * COLLECTION_PAGE_SIZE);
+
+        let mut compacted_bytes = Vec::new();
+        for (index, limit) in [COLLECTION_MEMORY_MAX_PAGES, max_pages, 0]
+            .into_iter()
+            .enumerate()
+        {
+            let source = create_collection_source(
+                root.path(),
+                &normalized,
+                &Default::default(),
+                &ids,
+                limit,
+            )
+            .unwrap();
+            assert_eq!(source._file.is_some(), index != 0);
+            let path = root.path().join(format!("compacted-{index}.sqlite"));
+            source
+                .connection
+                .execute("VACUUM INTO ?1", [path.to_str().unwrap()])
+                .unwrap();
+            compacted_bytes.push(fs::read(&path).unwrap());
+            let source_path = source._file.as_ref().map(|file| file.path().to_owned());
+            drop(source);
+            if let Some(path) = source_path {
+                assert!(!path.exists());
+            }
+        }
+        assert_eq!(compacted_bytes[0], compacted_bytes[1]);
+        assert_eq!(compacted_bytes[0], compacted_bytes[2]);
+    }
+
+    #[test]
+    fn oversized_collection_uses_disk_and_cleans_up_after_population_failure() {
+        let root = tempfile::tempdir().unwrap();
+        let mut normalized = two_basic_notes();
+        normalized.notes[0]
+            .fields
+            .insert("Back".into(), "large field".repeat(COLLECTION_PAGE_SIZE));
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+        let source =
+            create_collection_source(root.path(), &normalized, &Default::default(), &ids, 1)
+                .unwrap();
+        assert!(source._file.is_some());
+        drop(source);
+        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
+
+        // Both storage paths propagate non-capacity errors and clean private
+        // files. In particular, a memory error must not trigger a disk retry.
+        normalized.notetypes.push(normalized.notetypes[0].clone());
+        for limit in [COLLECTION_MEMORY_MAX_PAGES, 0] {
+            let error = create_collection_source(
+                root.path(),
+                &normalized,
+                &Default::default(),
+                &ids,
+                limit,
+            )
+            .err()
+            .expect("duplicate notetype rows violate the primary key");
+            assert!(matches!(
+                error.downcast_ref::<rusqlite::Error>(),
+                Some(rusqlite::Error::SqliteFailure(code, _))
+                    if code.code == rusqlite::ErrorCode::ConstraintViolation
+            ));
+            assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
+        }
     }
 
     #[test]

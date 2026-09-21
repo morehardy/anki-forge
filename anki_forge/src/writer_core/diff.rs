@@ -3,7 +3,6 @@ use std::collections::{BTreeMap, BTreeSet};
 use anyhow::Result;
 use serde_json::Value;
 
-use crate::writer_core::canonical_json::FilteredValue;
 use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
 
 pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
@@ -35,19 +34,39 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
             continue;
         }
 
-        let left_entries = domain_entries(left_values);
-        let right_entries = domain_entries(right_values);
-        let mut selectors = BTreeSet::new();
-        selectors.extend(left_entries.keys().copied());
-        selectors.extend(right_entries.keys().copied());
-
-        for selector in selectors {
+        let mut left_entries = domain_entries(left_values).into_iter();
+        let mut right_entries = domain_entries(right_values).into_iter();
+        let mut left_next = left_entries.next();
+        let mut right_next = right_entries.next();
+        // Merge the sorted indexes directly, retaining last-duplicate-wins
+        // semantics without another selector set or repeated tree lookups.
+        loop {
+            let (selector, left_entry, right_entry) = match (left_next, right_next) {
+                (Some((selector, value)), right)
+                    if right.is_none_or(|(other, _)| selector < other) =>
+                {
+                    left_next = left_entries.next();
+                    (selector, Some(value), None)
+                }
+                (left, Some((selector, value)))
+                    if left.is_none_or(|(other, _)| selector < other) =>
+                {
+                    right_next = right_entries.next();
+                    (selector, None, Some(value))
+                }
+                (Some((selector, left)), Some((_, right))) => {
+                    left_next = left_entries.next();
+                    right_next = right_entries.next();
+                    (selector, Some(left), Some(right))
+                }
+                _ => break,
+            };
             if should_skip_selector(domain, selector, left, right) {
                 continue;
             }
-            match (left_entries.get(&selector), right_entries.get(&selector)) {
+            match (left_entry, right_entry) {
                 (Some(left_entry), Some(right_entry)) => {
-                    if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
+                    if !entry_payloads_equal(domain, left_entry, right_entry) {
                         changes.push(change_for_modified(
                             domain,
                             selector,
@@ -133,7 +152,7 @@ fn domain_entries(values: &[Value]) -> BTreeMap<&str, &Value> {
     entries
 }
 
-fn entry_payload(domain: &str, value: &Value) -> Result<String> {
+fn entry_payloads_equal(domain: &str, left: &Value, right: &Value) -> bool {
     let excluded: &'static [&'static str] = if domain == "media" {
         &[
             "selector",
@@ -145,7 +164,34 @@ fn entry_payload(domain: &str, value: &Value) -> Result<String> {
     } else {
         &["selector", "evidence_refs"]
     };
-    Ok(serde_json::to_string(&FilteredValue { value, excluded })?)
+    filtered_values_equal(left, right, excluded)
+}
+
+fn filtered_values_equal(left: &Value, right: &Value, excluded: &[&str]) -> bool {
+    match (left, right) {
+        (Value::Object(left), Value::Object(right)) => {
+            let semantic_entries = |key: &&String| !excluded.contains(&key.as_str());
+            left.keys().filter(semantic_entries).count()
+                == right.keys().filter(semantic_entries).count()
+                && left.iter().all(|(key, value)| {
+                    excluded.contains(&key.as_str())
+                        || right
+                            .get(key)
+                            .is_some_and(|other| filtered_values_equal(value, other, excluded))
+                })
+        }
+        (Value::Array(left), Value::Array(right)) => {
+            left.len() == right.len()
+                && left
+                    .iter()
+                    .zip(right)
+                    .all(|(left, right)| filtered_values_equal(left, right, excluded))
+        }
+        // Preserve canonical JSON's numeric representation, including 1 vs
+        // 1.0 and signed zero. Value/Number equality alone loses signed zero.
+        (Value::Number(left), Value::Number(right)) => left.to_string() == right.to_string(),
+        _ => left == right,
+    }
 }
 
 #[cfg(test)]
@@ -281,22 +327,38 @@ mod ownership_tests {
     }
 
     #[test]
-    fn borrowed_payload_preserves_recursive_domain_filters_and_numeric_encoding() {
-        let value = serde_json::json!({
-            "selector":"row", "evidence_refs":["removed"], "object_id":"media only",
-            "nested":[{"binding_id":"media only", "object_ref":"media only", "selector":"removed", "evidence_refs":[], "data":[1,1.0,-0.0,0.0,"尾"]}],
-        });
-        for domain in ["media", "metadata", "fields"] {
-            let expected =
-                crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, &value))
-                    .unwrap();
-            assert_eq!(entry_payload(domain, &value).unwrap(), expected);
+    fn structural_comparison_matches_canonical_payloads() {
+        let mut values: Vec<Value> = serde_json::from_str(
+            r#"[null,false,true,0,1,-1,1.0,-0.0,0.0,18446744073709551615,
+                -9223372036854775808,1e-200,1e200,"","尾 \\ \"\n",[],[1,2],[2,1],{},
+                {"selector":"ignored","evidence_refs":["ignored"]},
+                {"object_id":"media only","binding_id":1,"object_ref":null},
+                {"a":null},{"a":1,"b":2},{"b":2,"a":1}]"#,
+        )
+        .unwrap();
+        for value in values.clone() {
+            values.push(serde_json::json!({
+                "selector":"row", "evidence_refs":["removed"],
+                "nested":[{"binding_id":"media only", "object_ref":"media only", "data":value}],
+            }));
         }
-        // JSON numbers with different encodings remain distinct, even when
-        // IEEE equality would consider them equal.
-        assert_ne!(
-            entry_payload("fields", &serde_json::json!(-0.0)).unwrap(),
-            entry_payload("fields", &serde_json::json!(0.0)).unwrap()
-        );
+        for domain in ["media", "metadata", "fields"] {
+            let canonical: Vec<_> = values
+                .iter()
+                .map(|value| {
+                    crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, value))
+                        .unwrap()
+                })
+                .collect();
+            for (i, left) in values.iter().enumerate() {
+                for (j, right) in values.iter().enumerate() {
+                    assert_eq!(
+                        entry_payloads_equal(domain, left, right),
+                        canonical[i] == canonical[j],
+                        "{domain}: {left} vs {right}"
+                    );
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,112 @@
+{
+  "created_utc": "2026-09-21T08:18:13.723788+00:00",
+  "name": "20260921-readme-genanki",
+  "source_commit": "e2d69b8025fd6dcf817ccbe56208bd7022c5671c",
+  "git_status": "M README.md\n M anki_forge/CHANGELOG.md\n M anki_forge/src/writer_core/apkg.rs\n M anki_forge/src/writer_core/diff.rs\n M anki_forge/src/writer_core/inspect.rs\n M anki_forge/tests/writer_core_diff_tests.rs\n M anki_forge/tests/writer_optimization_tests.rs\n M benchmarks/.gitignore\n M bindings/python/README.md\n?? benchmarks/results/20260908-round3-performance/\n?? benchmarks/results/20260909-round3-genanki/\n?? docs/adr/0020-bounded-memory-collection-source.md\n?? docs/development.md\n?? docs/rust-guide.md\n?? docs/superpowers/specs/2026-09-08-round3-build-performance.md\n?? docs/superpowers/specs/2026-09-08-round3-performance-opportunities.md\n?? docs/superpowers/specs/2026-09-09-round3-genanki-comparison.md",
+  "exploratory_dirty_source": true,
+  "runner_sha256": "c779c4f8a99e5d117faf8b52d9229f1f30f84772dac771957b596a0ffa843e82",
+  "source_snapshot_sha256": "83a26c8145c81ef43a0c1c0ee0cf42389843762d381bf0c06a5b1964d222eb0e",
+  "source_patch_sha256": "08eb8031769a52b94324c693258257dbf538e778db8ae1802070aa8abe59ab7a",
+  "source_and_inputs_sha256": "29397dd0711e4da6a38cd201934ac2268187beee410cf697f0526e5c5b00b304",
+  "media_inputs_sha256": "92262e2b790d201af8c38faf7a2c05f27a07562b9cf30d80f5ee5972dadb5462",
+  "python": "3.11.0 (v3.11.0:deaf509e8f, Oct 24 2022, 14:43:23) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "python_executable": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+  "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=38273123)\t100%; charged; 0:00 remaining present: true",
+  "matrix": [
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 1000
+    }
+  ],
+  "timing_repeats": 10,
+  "rss_repeats": 5,
+  "warmups_before_each_phase": 3,
+  "expected_attempts": 840,
+  "expected_anki_imports": 40,
+  "schedule_seed": 20260907,
+  "headline_metric": "median elapsed time from native process spawn to exit; includes startup, parsing, export and shutdown",
+  "rss_metric": "single_process_peak_rss_os_v1, 5 independent invocations",
+  "report_quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "verification_schedule": "after both adjacent exporters exit, outside timing, following current media_bench.py",
+  "no_selective_retries": true,
+  "cold_cache_controlled": false,
+  "purpose": "Refresh README performance evidence from the current working-tree source; no performance pass threshold.",
+  "oracle_reuse_check_sha256": "2c3c3a4a4f906280c3cbe426780b26aa0c82e934a1163b84d99c2c9adb95f280",
+  "host_hardware_sha256": "c403a7d933057f7e9b92b03df149b0eccde03d20b3cef1df73a0fa9f55ffe36d"
+}

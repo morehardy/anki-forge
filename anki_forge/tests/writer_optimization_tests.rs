@@ -232,7 +232,7 @@ fn materialized_writer_preserves_legacy_ids_and_rejects_invalid_identity_plans()
 }
 
 #[test]
-fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
+fn build_sql_failure_cleans_its_source_and_preserves_the_existing_package() {
     let root = tempfile::tempdir().unwrap();
     let target = BuildArtifactTarget::new(root.path(), "artifacts");
     let output = root.path().join("package.apkg");
@@ -254,15 +254,24 @@ fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
                 .summary
                 .contains("UNIQUE constraint failed: notetypes.name")
     }));
-    assert_eq!(fs::read(output).unwrap(), b"previous package");
-    let conn =
-        rusqlite::Connection::open(root.path().join(".collection.anki21b.sqlite.tmp")).unwrap();
-    for table in ["notetypes", "decks", "deck_config"] {
-        let count: i64 = conn
-            .query_row(&format!("select count(*) from {table}"), [], |row| {
-                row.get(0)
-            })
-            .unwrap();
-        assert_eq!(count, 0, "partial writes remain in {table}");
-    }
+    assert_eq!(fs::read(&output).unwrap(), b"previous package");
+    // The source database is private and is now released even on failure.
+    // Transaction rollback itself is covered at the live-connection seam.
+    let mut files = fs::read_dir(root.path())
+        .unwrap()
+        .map(|entry| entry.unwrap())
+        .filter(|entry| entry.file_type().unwrap().is_file())
+        .map(|entry| entry.file_name())
+        .collect::<Vec<_>>();
+    files.sort();
+    assert_eq!(files, [".package.apkg.tmp", "package.apkg"]);
+
+    normalized.notetypes.pop();
+    let retried = build(&normalized, &policy, &context, &target).unwrap();
+    assert_eq!(
+        retried.result_status, "success",
+        "{:?}",
+        retried.diagnostics
+    );
+    assert!(inspect_apkg(output).is_ok());
 }

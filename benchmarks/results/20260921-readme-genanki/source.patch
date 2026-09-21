@@ -1,0 +1,1408 @@
+diff --git a/README.md b/README.md
+index 1de8253..fcf698c 100644
+--- a/README.md
++++ b/README.md
+@@ -1,42 +1,33 @@
+ # anki-forge
+ 
+-`anki-forge` is a Rust-first toolkit for building Anki `.apkg` artifacts, with
+-advanced contract tooling and Node/Python bindings for lower-level workflows.
++Build Anki flashcards in code and export them as `.apkg` files. anki-forge is a
++Rust-first library for generating decks from your own data, with Node.js and
++Python APIs for integrating deck generation into other applications.
+ 
+-Most users should start with the typed Rust API:
++- **Author cards:** Basic, Cloze, and custom note types with HTML/CSS templates.
++- **Package media:** images, audio, and video alongside your notes.
++- **Maintain decks:** stable identities, baseline comparisons, and identity
++  lockfiles for rebuilding distributed decks.
++- **Check exports:** validation, structured diagnostics, and build reports with
++  note, card, and media counts.
+ 
+-- `Deck` for the shortest path from notes to an APKG
+-- `Project` for long-term decks that need stable IDs, custom note types, media,
+-  validation, and build reports
++[Quick start](#quick-start) · [Rust guide](docs/rust-guide.md) ·
++[Node SDK](bindings/node/README.md) · [Python guide](bindings/python/README.md)
+ 
+-For downstream Rust applications, add the production crate directly:
++## Quick start
+ 
+-```bash
+-cargo add anki_forge
+-```
+-
+-The crates.io Rust Distribution is self-contained. It embeds the default
+-contract bundle and does not require this repository at runtime. Release
+-requirements and recovery procedures are documented in
+-`docs/rust-crate-release-readiness.md` and `docs/rust-release-runbook.md`.
+-
+-## 1. Requirements
++Use Rust **1.92.0** for this checkout. Run the Basic example from source:
+ 
+-- Rust `1.92.0` (see `rust-toolchain.toml`)
+-- `cargo`
+-- `jq` for advanced contract-tool examples
+-- Optional: Node.js `18+` for Node binding examples/tests
+-- Optional: Python `3.11+` for Python binding examples/tests
+-- Optional: `protoc` + local `docs/source/anki` for the roundtrip oracle only
+-
+-Suggested one-time setup from the repository root:
+-
+-```bash
+-rustup toolchain install 1.92.0
+-rustup override set 1.92.0
++```sh
++git clone https://github.com/morehardy/anki-forge.git
++cd anki-forge
++cargo run -q -p anki_forge --example target_api_basic
+ ```
+ 
+-## 2. Quick Start: Deck First
++This creates `spanish.apkg` in the current directory. Import it into Anki Desktop
++to get a Spanish deck containing one card: **hola → hello**.
++
++The [complete example](anki_forge/examples/target_api_basic.rs) is:
+ 
+ ```rust
+ use anki_forge::prelude::*;
+@@ -52,98 +43,38 @@ fn main() -> anyhow::Result<()> {
+ }
+ ```
+ 
+-Run the same flow locally:
++To use this checkout in your own Rust application, add a path dependency and
++the `anyhow` dependency used by the example. Adjust the path to your checkout:
+ 
+-```bash
+-cargo run -q -p anki_forge --example target_api_basic
++```sh
++cargo add anki_forge --path ../anki-forge/anki_forge
++cargo add anyhow
+ ```
+ 
+-This writes `spanish.apkg` in the current directory.
+-
+-### 2.1 Export benchmarks
+-
+-The native Rust `Deck` API is compared with genanki **0.13.1 / CPython 3.11.0**
+-on five synthetic Basic workloads at **100, 200, 500 and 1,000 notes**.
+-Three complete sessions provide **30 timings and 15 separate peak-RSS samples
+-per implementation/cell**, excluding warmups. Time includes process startup,
+-input parsing, media registration and default export checks.
+-
+-This frozen three-session comparison predates the text ownership optimization
+-measured separately below.
+-
+-![Export time saved versus genanki, with both absolute median times for every workload and size](benchmarks/results/20260907-bounded-media/time-heatmap.svg)
+-
+-At 1,000 notes, text-only export uses **43.7% less time** and unique images use
+-**15.8% less time**: 232.0 ms versus 275.6 ms. The three image sessions range
+-from 15.00% to 16.75% time saved. Memory also depends on the workload:
+-
+-| Workload, 1,000 notes | Peak RSS MiB, Rust / genanki | APKG MiB, Rust / genanki |
+-| --- | ---: | ---: |
+-| Text only | 30.19 / 31.47 | 0.20 / 0.83 |
+-| Unique images | 40.11 / 34.73 | 61.50 / 62.17 |
+-| Unique audio | 39.75 / 35.12 | 30.72 / 31.51 |
+-| Mixed, unique media | 38.52 / 33.86 | 33.87 / 34.57 |
+-| Mixed, shared media | 35.39 / 32.20 | 2.56 / 3.22 |
+-
+-Values are pooled medians; RSS is the median of independent process peaks.
+-Measured on **Apple M1 Pro, 32 GiB, macOS ARM64, battery power**, with Rust
+-**1.92.0 release, default features and system allocator**, on 2026-09-07.
+-The measured code is revision `ab7d261` plus a [frozen uncommitted patch](benchmarks/results/20260907-bounded-media/source.patch);
+-source and binary hashes remained unchanged across all three sessions. Native
+-power readings were checked before and after every export. PNG/WAV fixtures are
+-frozen; mixed workloads contain 30% text, 40% images and 30% audio, with 49 distinct
+-files in the shared case. File cache is uncontrolled. These local measurements
+-cover the native Rust API; Node/Python bindings are outside this comparison.
+-Default APKG formats differ: Rust uses modern zstd collections, while genanki
+-uses legacy stored collections.
+-
+-All **2,520 exports** passed content/media checks, and **120 packages** passed
+-Anki import/content/render checks. The pinned Anki checker includes a recorded
+-`tokio/io-util` build-feature patch. See the [full report and raw evidence](benchmarks/results/20260907-bounded-media/report.md)
+-for every cell's absolute values, IQR, session variation and reproduction steps.
+-
+-The [implementation report](benchmarks/results/20260907-bounded-media/implementation.md) separately compares
+-the shared media buffer pool with the preceding version across **29 cases**.
+-In that paired test, 64 × 1 MiB images used **6.0% less time** with
+-**1.2 MiB more RSS**; mixed file sizes used **9.5% less time**
+-with **1.6 MiB more RSS**. These synthetic large-file results describe
+-the buffering change; the standard Rust/genanki matrix above uses smaller files.
+-The [preceding three-session evidence](benchmarks/results/20260907-streaming-followup/report.md) remains available.
+-
+-The subsequent [text ownership optimization](benchmarks/results/20260907-text-ownership/README.md)
+-moves strings out of the temporary Project during Deck export. In a new paired
+-29-case comparison on **AC power**, peak RSS for 1,000 long-field notes fell from
+-**60.9 to 53.6 MiB (12.0%)**; with four times the long-field content it fell from
+-**155.4 to 124.2 MiB (20.1%)**. At 10,000 text notes, elapsed time fell from
+-490.5 to 477.8 ms (2.6%). Time changes were small and mixed across other cases;
+-the main gain is memory. All 928 exports were byte-identical between versions,
+-and all 29 scenes passed Anki import/content/render checks. This comparison uses
+-two Rust versions; its percentages are not added to the earlier genanki results.
+-
+-<details>
+-<summary>Time scaling, resources and implementation comparisons</summary>
+-
+-Points show pooled median times; whiskers show Q1–Q3 sample spread, not confidence
+-intervals. Faint dots retain the three individual session medians.
++The Rust library embeds its default contract resources; normal deck generation
++needs no separate contract files or Anki installation.
+ 
+-![Export time scaling across five workloads, using identical linear axes](benchmarks/results/20260907-bounded-media/time-scaling.svg)
++## Choose an API
+ 
+-Positive resource savings mean Rust uses less; negative values mean it uses more.
++| Interface | Use it for | Requirements and entry point |
++| --- | --- | --- |
++| Rust `Deck` | A short path from notes to one APKG | Rust 1.92+; [quick start](#quick-start) |
++| Rust `Project` | Custom note types, media, validation, and repeated updates | Rust 1.92+; [authoring guide](docs/rust-guide.md) |
++| Node.js / TypeScript | Native Rust `Deck` and `Project` APIs in Node applications | Node 22.13+; [SDK setup and status](bindings/node/README.md) |
++| Python | `Project`, `Note`, custom note types, and media through the Rust runtime | Python 3.11+; [source setup](bindings/python/README.md#from-a-source-checkout) |
+ 
+-![Peak RSS and APKG size savings across every workload and size](benchmarks/results/20260907-bounded-media/resources.svg)
++**Release status:** this checkout declares Rust `0.1.0`, Node `0.2.0`, and
++Python `0.1.0`. The [Rust release audit](docs/rust-crate-release-readiness.md)
++records outstanding publication gates, and the Node SDK documents a local
++candidate with npm publication and platform verification pending. The setup
++instructions here use source builds. For a published Rust release, the registry
++dependency is `anki_forge`; follow the release documentation before relying on
++registry availability.
+ 
+-The separate before/after comparison uses 7 interleaved timings and 5 independent
+-RSS samples per version/case, with unchanged inputs and byte-identical APKGs.
++## Build a project you can maintain
+ 
+-![Large-media export time and RSS before and after shared buffers](benchmarks/results/20260907-bounded-media/bounded-media.svg)
+-
+-The later text ownership comparison also separates peak RSS from elapsed time:
+-
+-![Text export memory and time before and after consuming temporary Project fields](benchmarks/results/20260907-text-ownership/text-ownership.svg)
+-
+-</details>
+-
+-## 3. Project For Long-Term Decks
++Use `Project` when you need explicit project identity, custom note types, or
++validation before export:
+ 
+ ```rust
+ use anki_forge::prelude::*;
+@@ -159,389 +90,73 @@ fn main() -> anyhow::Result<()> {
+ }
+ ```
+ 
+-`Project::add_note(...)` and `Project::add_notetype(...)` fail fast for errors
+-that are knowable at add time, such as blank or duplicate explicit stable ids,
+-unknown note type ids, and unknown field keys. Call
+-`project.validate().ensure_success()?` when you want a full Project diagnostic
+-checkpoint before building; build still performs normalization, media, writer,
+-comparison, and update-safety checks.
+-
+-`BuildReport` includes an owned artifact handle, note/card/media counts, diagnostics,
+-warning count, inspect summary, and duration. Diagnostics expose stable codes
+-and structured metadata (`severity`, `domain`, `stage`, `path`,
+-`suggested_fix`) so callers do not need to match human-facing strings.
+-`inspect.observation_status` is writer-layer reporting metadata passed through
+-from the inspection step.
+-
+-`Project::from(deck)` produces an editable Project, including the Deck's media
+-and identity evidence. With no `output` or `artifacts_dir`, the returned APKG is
+-temporary: retain its report/handle while using `artifact.path()`, or call
+-`artifact.persist_to(path)` for a permanent copy. The final handle's drop removes
+-temporary output. Explicit destinations are caller-owned and survive drop.
+-
+-```rust
+-use anki_forge::prelude::*;
+-
+-fn add_note(deck: &mut Deck) -> anyhow::Result<()> {
+-    if let Err(err) = deck.basic().note("hola", "hello").stable_id("   ").add() {
+-        match err.code() {
+-            ErrorCode::StableIdBlank => eprintln!("choose a non-empty stable_id"),
+-            ErrorCode::StableIdDuplicate => eprintln!("choose a unique stable_id"),
+-            other => eprintln!("anki-forge error: {}", other.as_str()),
+-        }
+-        return Err(err);
+-    }
+-    Ok(())
+-}
+-```
+-
+-Custom note types, stable field/template keys, and project media are shown in:
+-
+-```bash
+-cargo run -q -p anki_forge --example target_api_custom_notetype
+-cargo run -q -p anki_forge --example target_api_media
+-```
+-
+-`Note::cloze(...)` intentionally stores the cloze `Text` field as explicit HTML
+-so Anki receives raw `{{cN::...}}` markers. Do not assume cloze text is escaped
+-like `Note::basic(...)` text.
+-
+-HTML escaping happens before the writer layer. `ProductFieldContentV2::Text`
+-escapes text once, `ProductFieldContentV2::Html` passes trusted HTML through,
+-and media field content emits Anki-compatible `[sound:...]` or `<img src="...">`
+-markup. Stock `basic`, `cloze`, and custom notes that reach `writer_core` are
+-already HTML-ready; the writer only strips HTML to derive Anki `sfld` and `csum`.
+-
+-### 3.1 Media Troubleshooting
+-
+-Media export names must be helper-safe bare filenames such as `taberu.mp3`.
+-Avoid path components, absolute paths, URL escapes, and unsafe characters.
+-Register files with `project.media_mut().add_file(...).export_as("taberu.mp3")`;
+-inline examples can use `project.media_mut().add_bytes(...).export_as(...)`.
+-`write_apkg()` stages file-backed media by path by default, so large images,
+-audio, and video do not need to fit the inline-media limit. Use
+-`BuildOptions::self_contained()` only when you explicitly want a self-contained
+-inline authoring payload; large file-backed media should stay on the default
+-path-backed build path.
+-
+-Common media diagnostics:
+-
+-- Filename collision: the same export filename is bound to different bytes.
+-  Choose a unique `export_as(...)` name and update local note, template, or CSS
+-  references to match.
+-- Missing media reference: Product content refers to a local filename that is
+-  not registered. Register it or change the local filename in the HTML/CSS.
+-- CSS missing reference: CSS scanning is conservative. A local
+-  `url("icon.svg")` should be registered, changed to an external URL, or removed
+-  if the CSS rule is unused.
+-- CSS import reference: a local import such as `url("theme.css")` must be
+-  registered as packaged media, changed to an external URL, or removed if unused.
+-- Unused media binding: a registered file is not referenced by any note,
+-  template, or CSS. Remove the registration or add the intended local reference;
+-  this is a warning under the strict default.
+-- Unsafe media reference: packaged media references must be bare local
+-  filenames. Remove path components, absolute paths, escapes, or unsafe
+-  characters.
+-- MIME mismatch: the export filename or declared MIME does not match the
+-  observed source bytes. Change the export filename/declared MIME, or replace
+-  the source file.
+-- Inline too large: an explicitly self-contained build tried to inline media
+-  beyond the configured inline limit. Remove `self_contained()` and use the
+-  default path-backed build path for large assets.
+-
+-`anki-forge` does not automatically rewrite filenames, HTML, or CSS because
+-those edits can change deck behavior and hide the authoring intent. Keep the
+-registered `export_as(...)` filename and local references in sync yourself.
+-`BuildReport::pretty_report()` is a human-facing summary. For stable
+-machine-readable output, use `BuildOptions::report_json(...)` or
+-`report.to_report_json()`; structured report JSON includes media mode details.
+-Automatic `report_json` requires `output` or `artifacts_dir`; JSON cannot keep a
+-temporary APKG alive. See [artifact ownership](anki_forge/README.md#artifact-ownership).
+-
+-### 3.2 Update-Safe Builds
+-
+-For long-lived decks, commit an identity lockfile next to your source.
+-
+-First build:
+-
+-```rust
+-use anki_forge::prelude::*;
+-
+-let mut project = Project::new("Japanese Core")
+-    .stable_id("jp-core")
+-    .default_deck("Japanese::Core");
+-project.add_note(Note::basic("食べる", "to eat").stable_id("jp:taberu"))?;
+-project
+-    .build(
+-        BuildOptions::new()
+-            .output("dist/jp-core.apkg")
+-            .first_update_safe_build("anki-forge.lock.json"),
+-    )?
+-    .ensure_success()?;
+-```
+-
+-Next build:
+-
+-```rust
+-project
+-    .build(
+-        BuildOptions::new()
+-            .output("dist/jp-core.apkg")
+-            .update_safe("anki-forge.lock.json"),
+-    )?
+-    .ensure_success()?;
+-```
+-
+-`update_safe(lockfile)` reads lockfile evidence but does not rewrite the file.
+-Use `write_identity_lockfile(true)` on release builds when you want new notes
+-and absent entries recorded for future updates.
+-
+-When using `compare_to(previous_apkg)`, keep the baseline separate from the
+-output, `artifacts_dir/package.apkg`, report JSON, and any writable identity
+-lockfile. Builds reject existing same-file aliases (including relative paths,
+-symlinks, and hard links) with `PROJECT.PATH_COLLISION` before writing. This
+-includes the actual `staging/manifest.json` destination, whose links may point
+-outside the artifact directory. Baselines, outputs, retained packages, and
+-identity lockfiles (including read-only ones) must stay outside the writable
+-`staging/` tree and its media directory, including directory aliases. Staging
+-materialization must not overwrite these files before a risk rejection.
+-
+-New destinations are rechecked after creation and before lockfile/report writes,
+-so filesystem-specific case folding cannot turn an APKG into JSON. A collision
+-detected after publication returns an error but keeps the valid published APKG.
+-
+-The baseline is inspected once before building; GUID reconciliation and diff
+-use that same snapshot. The candidate APKG is compared and checked against
+-`fail_on(...)` before publishing the APKG or updating the identity lockfile.
+-On a blocked build, existing outputs and lockfiles remain unchanged, and the
+-report retains diff/risk evidence with `artifact: null`. A separate report JSON
+-can still be written; intermediate staging/media files may remain in an explicit
+-artifact directory. Successful publication uses atomic replacement per file,
+-not a transaction spanning the APKG, lockfile, and report.
+-Output-only builds copy directly from the private candidate to the requested
+-output; no extra package copy is made in the disposable artifact workspace.
+-Private candidates live inside the artifact workspace, so an explicit
+-`artifacts_dir(...)` also selects their filesystem; they are removed after the
+-build. Lockfiles use an exclusively reserved temporary file beside the target,
+-so temporary names cannot overwrite existing baselines or outputs.
+-
+-## 4. Advanced: Contract Tools And Runtime
+-
+-The lower-level contract flow is:
+-
+-`Authoring IR -> normalize -> build -> inspect -> diff`
+-
+-### 4.1 PR Verification
+-
+-Before a PR, sync the base branch and run the same full verification entry point
+-used by GitHub Actions:
+-
+-```bash
+-git fetch origin main
+-make verify-ci
+-```
+-
+-For faster local development:
+-
+-```bash
+-make verify-fast
+-```
+-
+-`make verify-ci` mirrors `.github/workflows/contract-ci.yml`; a PR is ready only
+-after both local `make verify-ci` and the remote `contract-ci / verify` pass.
+-
+-### 4.2 Contract Validation And Packaging
+-
+-```bash
+-cargo run -q -p contract_tools -- verify --manifest "$(pwd)/contracts/manifest.yaml"
+-cargo run -q -p contract_tools -- summary --manifest "$(pwd)/contracts/manifest.yaml"
+-cargo run -q -p contract_tools -- package --manifest "$(pwd)/contracts/manifest.yaml" --out-dir "$(pwd)/dist"
+-```
+-
+-- `verify`: validates contracts and executable gates
+-- `summary`: prints bundle version and component summaries
+-- `package`: writes versioned artifacts into `dist/`
+-
+-### 4.3 Normalize -> Build -> Inspect -> Diff
+-
+-```bash
+-mkdir -p tmp/readme-basic
+-
+-cargo run -q -p contract_tools -- normalize \
+-  --manifest "$(pwd)/contracts/manifest.yaml" \
+-  --input "$(pwd)/contracts/fixtures/phase3/inputs/basic-authoring-ir.json" \
+-  --output contract-json > "$(pwd)/tmp/readme-basic/normalize.result.json"
+-
+-jq -e '.normalized_ir' "$(pwd)/tmp/readme-basic/normalize.result.json" > "$(pwd)/tmp/readme-basic/normalized-ir.json"
+-
+-cargo run -q -p contract_tools -- build \
+-  --manifest "$(pwd)/contracts/manifest.yaml" \
+-  --input "$(pwd)/tmp/readme-basic/normalized-ir.json" \
+-  --writer-policy default \
+-  --build-context default \
+-  --artifacts-dir "$(pwd)/tmp/readme-basic/artifacts" \
+-  --output contract-json > "$(pwd)/tmp/readme-basic/build.result.json"
+-
+-cargo run -q -p contract_tools -- inspect \
+-  --staging "$(pwd)/tmp/readme-basic/artifacts/staging/manifest.json" \
+-  --output contract-json > "$(pwd)/tmp/readme-basic/staging.inspect.json"
+-
+-cargo run -q -p contract_tools -- inspect \
+-  --apkg "$(pwd)/tmp/readme-basic/artifacts/package.apkg" \
+-  --output contract-json > "$(pwd)/tmp/readme-basic/apkg.inspect.json"
+-
+-cargo run -q -p contract_tools -- diff \
+-  --left "$(pwd)/tmp/readme-basic/staging.inspect.json" \
+-  --right "$(pwd)/tmp/readme-basic/apkg.inspect.json" \
+-  --output contract-json > "$(pwd)/tmp/readme-basic/diff.result.json"
+-```
+-
+-Main outputs:
+-
+-- `tmp/readme-basic/artifacts/package.apkg`
+-- `tmp/readme-basic/staging.inspect.json`
+-- `tmp/readme-basic/apkg.inspect.json`
+-- `tmp/readme-basic/diff.result.json`
+-
+-### 4.4 Rust Examples
+-
+-```bash
+-cargo run -q -p anki_forge --example target_api_basic
+-cargo run -q -p anki_forge --example target_api_custom_notetype
+-cargo run -q -p anki_forge --example target_api_media
+-cargo run -q -p anki_forge --example deck_basic_flow
+-cargo run -q -p anki_forge --example product_basic_flow
+-cargo run -q -p anki_forge --example minimal_flow
+-```
+-
+-- `target_api_basic`: shortest `Deck` API path; writes `spanish.apkg`
+-- `target_api_custom_notetype`: `Project` with custom note type; writes `jp-core.apkg`
+-- `target_api_media`: `Project` media helpers, template/CSS references, and
+-  pretty media report; writes `spanish-media.apkg`
+-- `deck_basic_flow`: broader Rust Deck API scenario
+-- `product_basic_flow`: lower-level product authoring example
+-- `minimal_flow`: file-driven runtime example
+-
+-### 4.5 Stable Note Identity
+-
+-New Basic, Cloze, and Image Occlusion notes use AFID (`afid:v1:*`) as stable
+-note IDs by default instead of legacy `generated:*` IDs. AFID comes from the
+-normalized identity payload: Basic defaults to the front field, Cloze uses the
+-cloze structure and text skeleton, and Image Occlusion uses image content,
+-dimensions, mode, and sorted mask geometry.
+-
+-Explicit `stable_id` still wins and is saved as an explicit identity snapshot.
+-If callers explicitly pass a `generated:*` prefix, it is kept as an ordinary
+-explicit stable ID. The `afid:v1:*` namespace is reserved and cannot be passed
+-as an explicit stable ID.
++Stable IDs preserve note identity. For updates to an already distributed deck,
++also use a previous APKG with `compare_to(...)` or a maintained identity lockfile
++with `update_safe(...)`. A plain `write_apkg()` export does not guarantee that
++Anki will apply later content edits. See
++[updating distributed decks](docs/rust-guide.md#updating-distributed-decks)
++for the first-build and subsequent-build workflow.
++
++| Next step | Guide or runnable example |
++| --- | --- |
++| Custom fields and card templates | [Custom note type example](anki_forge/examples/target_api_custom_notetype.rs) |
++| Images, audio, and template media | [Media example](anki_forge/examples/target_api_media.rs) · [troubleshooting](docs/rust-guide.md#media-troubleshooting) |
++| Reusable templates, CSS, and assets | [Template bundles](docs/template-bundles.md) |
++| Build reports, temporary files, and persistence | [Artifact ownership](anki_forge/README.md#artifact-ownership) |
++| Moving from genanki to the Python API | [Migration guide](docs/python/genanki-migration.md) |
++
++## Compatibility and limitations
++
++- The Rust API is pre-1.0. The supported interface is available through
++  `anki_forge::prelude`; the `internal-tools` feature is reserved for repository
++  tooling. See the [crate guide](anki_forge/README.md#supported-01-interface).
++- Image Occlusion supports the `hide-all-guess-one` export path. The
++  `hide-one-guess-one` renderer has a known core limitation that rejects its
++  grouped cloze markup; see the [recorded limitation](bindings/node/README.md#deck-and-image-occlusion).
++- Basic text is escaped as text. Cloze text preserves HTML and raw
++  `{{cN::...}}` markers; pass trusted HTML when using that path.
++- Anki's import settings and newer local edits affect how deck updates are
++  applied. Keep the previous distributed APKG or identity lockfile as update
++  evidence.
++
++## Performance evidence
++
++The benchmark suite compares the native Rust `Deck` API with genanki across
++text, image, audio, and mixed-media workloads. It records export time, peak
++memory, package size, and content/import checks. Node and Python bindings are
++outside that comparison.
+ 
+-Basic notes can choose identity fields through the typed API:
+-
+-```rust
+-use anki_forge::{BasicIdentityField, BasicIdentityOverride, BasicIdentitySelection, BasicNote, Deck};
+-
+-let mut deck = Deck::builder("Spanish")
+-    .basic_identity(BasicIdentitySelection::new([BasicIdentityField::Back])?)
+-    .build();
+-deck.add(BasicNote::new("hola", "hello"))?;
+-
+-let override_cfg = BasicIdentityOverride::new(
+-    [BasicIdentityField::Front, BasicIdentityField::Back],
+-    "sense-disambiguation",
+-)?;
+-deck.basic()
+-    .note("banco", "bank / bench")
+-    .identity_override(override_cfg)
+-    .add()?;
+-```
+-
+-`validate_report()` preserves legacy stable ID diagnostics for blank IDs,
+-missing/generated legacy IDs, unknown media, empty Image Occlusion masks, and
+-duplicate IDs. It also returns a `NoteLevelIdentityOverrideUsed` warning when a
+-note uses note-level identity override. AFID duplicate payloads, hash
+-collisions, and stable ID duplicates are blocking add-time or load-time rebuild
+-errors.
+-
+-Serialization preserves resolved identity snapshots (`stable_id`, `recipe_id`,
+-`provenance`, `canonical_payload`, and `used_override`). Deserialization rebuilds
+-runtime indexes and validates that snapshots still match note IDs, payload
+-hashes, payload duplicates, and collisions.
+-
+-### 4.6 Node Bindings
+-
+-The 0.2 SDK provides typed `Project`, `Deck`, `Note`, custom note types, media,
+-validation, comparison, and APKG export through an embedded Rust Node-API addon.
+-The npm packages are prepared locally; publication and the full platform matrix
+-are still pending. See [Node SDK](bindings/node/README.md) for the release status.
+-
+-```bash
+-npm --prefix bindings/node run setup
+-npm --prefix bindings/node run build
+-npm --prefix bindings/node run example:minimal
+-npm --prefix bindings/node test
+-npm --prefix bindings/node run test:installed
+-```
+-
+-### 4.7 Python Bindings
+-
+-```bash
+-PYTHONPATH=bindings/python/src python3.11 bindings/python/examples/minimal_flow.py
+-PYTHONPATH=bindings/python/src python3.11 -m unittest discover -s bindings/python/tests -p "test_*.py"
+-```
+-
+-The target Product API shape sketches are documented in
+-`bindings/python/examples/target_api_custom.py` and
+-`bindings/python/examples/target_api_media.py`.
+-
+-## 5. Manual Anki Desktop Scenarios
+-
+-Generate every manual verification APKG:
+-
+-```bash
+-./scripts/run_manual_desktop_scenarios.sh
+-```
+-
+-Generate one scenario:
+-
+-```bash
+-./scripts/run_manual_desktop_scenarios.sh S05_basic_audio
+-```
+-
+-Output paths:
+-
+-- `tmp/manual-desktop-v1/<scenario>/package.apkg`
+-- `tmp/manual-desktop-v1/<scenario>/apkg.inspect.json`
++<details>
++<summary>Archived comparison: 100–1,000 notes, measured on 2026-09-07</summary>
+ 
+-## 6. Roundtrip Oracle
++In this frozen three-session run on an Apple M1 Pro, 1,000 text-only notes took
++43.7% less time than genanki; 1,000 notes with unique images took 232.0 ms versus
++275.6 ms (15.8% less time). The image workload used more peak memory:
++40.11 MiB versus 34.73 MiB. Results describe this machine and these synthetic
++workloads, and predate subsequent Rust optimizations. Default APKG formats
++also differ between the libraries.
+ 
+-Use this optional flow only when validating roundtrip behavior against a local
+-Anki upstream checkout.
++![Archived export timings across five workloads and four note counts](benchmarks/results/20260907-bounded-media/time-heatmap.svg)
+ 
+-Requirements:
++See the [full report and raw evidence](benchmarks/results/20260907-bounded-media/report.md)
++for versions, source hashes, measurement conditions, and verification results.
+ 
+-- `docs/source/anki/rslib/Cargo.toml` exists
+-- `protoc` is available on `PATH`
++</details>
+ 
+-Run:
++For reproduction and separate optimization reports, use the
++[benchmark guide](benchmarks/README.md).
+ 
+-```bash
+-./scripts/run_roundtrip_oracle.sh
+-```
++## Contributing
+ 
+-## 7. FAQ
++See the [development guide](docs/development.md) for prerequisites, verification
++commands, contract tools, and manual Anki checks. It also links the architecture
++decisions and release procedures.
+ 
+-- Error: `failed to discover contracts/manifest.yaml from workspace path`
+-  - Confirm the current directory is inside this repository, or pass an explicit
+-    `cwd` from bindings.
+-- Error: `missing vendored upstream Anki crate ... docs/source/anki/rslib`
+-  - The roundtrip oracle is missing local Anki source. Normal flows are not
+-    affected.
+-- Error: `protoc is required on PATH`
+-  - Install `protoc` and retry. This is required only for the roundtrip oracle.
++Report bugs and request features through
++[GitHub issues](https://github.com/morehardy/anki-forge/issues). For security
++reports, follow the [security policy](SECURITY.md).
+ 
+-## 8. Related Docs
++## License
+ 
+-- [Node SDK implementation plan (draft)](docs/plans/2026-09-06-node-sdk-implementation-plan.md)
+-- `bindings/node/README.md`
+-- `bindings/python/README.md`
+-- `contracts/fixtures/phase3/manual-desktop-v1/README.md`
++Project-owned code is licensed under [MIT](LICENSE). Mirrored and other
++third-party source retains its own license.
+diff --git a/anki_forge/CHANGELOG.md b/anki_forge/CHANGELOG.md
+index a8909b8..022d592 100644
+--- a/anki_forge/CHANGELOG.md
++++ b/anki_forge/CHANGELOG.md
+@@ -8,6 +8,13 @@ new minor release.
+ 
+ ### Fixed
+ 
++- Compare filtered observation trees directly and merge sorted selector indexes,
++  preserving numeric JSON representations, duplicate handling and diff evidence.
++- Borrow SQLite note text during inspection and move parsed identity metadata,
++  preserving column validation and full observation semantics.
++- Build small collection sources in memory, limiting source database pages to
++  64 MiB and falling back to a private file on capacity exhaustion. Compaction,
++  final package bytes, inspection and durable publication remain unchanged.
+ - Consume decoded inspection facts when assembling observations, transferring
+   note fields, tags and identity evidence to reduce comparison peak memory.
+ - Use 8 KiB pages for generated modern collection databases to reduce SQLite
+diff --git a/anki_forge/src/writer_core/apkg.rs b/anki_forge/src/writer_core/apkg.rs
+index 9e7ff91..a7a34ea 100644
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -443,25 +443,13 @@ fn create_latest_collection_file(
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<tempfile::NamedTempFile> {
+-    let path = root_dir.join(".collection.anki21b.sqlite.tmp");
+-    let _ = fs::remove_file(&path);
+-    let conn = Connection::open(&path)
+-        .with_context(|| format!("open collection database {}", path.display()))?;
+-    // Reduce B-tree and overflow-page work during population and compaction.
+-    // The page size changes physical layout, while schema and row values stay fixed.
+-    conn.pragma_update(None, "page_size", 8192)?;
+-    {
+-        let transaction = conn.unchecked_transaction()?;
+-        execute_source_schema(&transaction, SCHEMA11_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
+-        execute_schema16_marker(&transaction)?;
+-        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
+-        transaction.commit()?;
+-    }
+-    populate_latest_collection(&conn, normalized_ir, guid_assignments, notetype_ids)?;
+-
++    let source = create_collection_source(
++        root_dir,
++        normalized_ir,
++        guid_assignments,
++        notetype_ids,
++        COLLECTION_MEMORY_MAX_PAGES,
++    )?;
+     // Keep compaction without rewriting and journaling the source database.
+     // An empty, uniquely reserved file also cleans up on any error path.
+     let compacted =
+@@ -479,17 +467,102 @@ fn create_latest_collection_file(
+         .to_str()
+         .context("compacted collection path is not UTF-8")?
+         .as_bytes();
+-    conn.execute(
++    source.connection.execute(
+         "VACUUM INTO ?1",
+         [rusqlite::types::ToSqlOutput::Borrowed(
+             rusqlite::types::ValueRef::Text(compacted_path),
+         )],
+     )?;
+-    drop(conn);
+-    let _ = fs::remove_file(&path);
+     Ok(compacted)
+ }
+ 
++const COLLECTION_PAGE_SIZE: usize = 8192;
++// Bound the in-memory source to 64 MiB of database pages. SQLite bookkeeping,
++// journals, compaction and the input model have separate memory costs.
++const COLLECTION_MEMORY_MAX_PAGES: usize = 64 * 1024 * 1024 / COLLECTION_PAGE_SIZE;
++
++struct CollectionSource {
++    // Close SQLite before removing its backing file, including on Windows and
++    // when compaction fails. Fields are dropped in declaration order.
++    connection: Connection,
++    _file: Option<tempfile::NamedTempFile>,
++}
++
++fn create_collection_source(
++    root_dir: &Path,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    max_memory_pages: usize,
++) -> Result<CollectionSource> {
++    let max_memory_bytes = max_memory_pages.saturating_mul(COLLECTION_PAGE_SIZE);
++    // Include room for ordinary identity metadata, cards and indexes so large
++    // short-note exports do not first fill memory and then rebuild on disk.
++    // Wide models and unusual identities can exceed this estimate;
++    // max_page_count, rather than the estimate, enforces the page limit.
++    let estimated_bytes = normalized_ir.notes.iter().fold(0_usize, |total, note| {
++        note.fields
++            .values()
++            .fold(total.saturating_add(2048), |total, field| {
++                total.saturating_add(field.len())
++            })
++    });
++    if max_memory_pages > 0 && estimated_bytes <= max_memory_bytes {
++        let connection = Connection::open_in_memory().context("open memory collection database")?;
++        connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
++        connection.pragma_update(None, "max_page_count", max_memory_pages)?;
++        match initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids) {
++            Ok(()) => {
++                return Ok(CollectionSource {
++                    connection,
++                    _file: None,
++                });
++            }
++            Err(error)
++                if matches!(
++                    error.downcast_ref::<rusqlite::Error>(),
++                    Some(rusqlite::Error::SqliteFailure(code, _))
++                        if code.code == rusqlite::ErrorCode::DiskFull
++                ) =>
++            {
++                // SQLITE_FULL on this private memory database means the page
++                // limit was reached. Release it before rebuilding on disk.
++            }
++            Err(error) => return Err(error),
++        }
++    }
++
++    let file =
++        tempfile::NamedTempFile::new_in(root_dir).context("create source collection file")?;
++    let connection = Connection::open(file.path())
++        .with_context(|| format!("open collection database {}", file.path().display()))?;
++    connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
++    initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids)?;
++    Ok(CollectionSource {
++        connection,
++        _file: Some(file),
++    })
++}
++
++fn initialize_collection(
++    conn: &Connection,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++) -> Result<()> {
++    {
++        let transaction = conn.unchecked_transaction()?;
++        execute_source_schema(&transaction, SCHEMA11_SQL)?;
++        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
++        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
++        execute_schema16_marker(&transaction)?;
++        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
++        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
++        transaction.commit()?;
++    }
++    populate_latest_collection(conn, normalized_ir, guid_assignments, notetype_ids)
++}
++
+ // The upgrade notice is independent of the exported notes. The regeneration
+ // test below ties this resource to our schema and notice implementation.
+ const LEGACY_UPGRADE_COLLECTION: &[u8] =
+@@ -1090,6 +1163,117 @@ mod tests {
+         assert!(!path.exists());
+     }
+ 
++    #[test]
++    fn collection_memory_limit_falls_back_to_identical_compacted_file_bytes() {
++        let root = tempfile::tempdir().unwrap();
++        let mut normalized = two_basic_notes();
++        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
++        let memory = create_collection_source(
++            root.path(),
++            &normalized,
++            &Default::default(),
++            &ids,
++            COLLECTION_MEMORY_MAX_PAGES,
++        )
++        .unwrap();
++        assert!(memory._file.is_none());
++        let base_pages: usize = memory
++            .connection
++            .query_row("pragma page_count", [], |row| row.get(0))
++            .unwrap();
++        let page_limit: usize = memory
++            .connection
++            .query_row("pragma max_page_count", [], |row| row.get(0))
++            .unwrap();
++        assert_eq!(page_limit, COLLECTION_MEMORY_MAX_PAGES);
++        drop(memory);
++
++        let note = normalized.notes[0].clone();
++        normalized.notes = (0..32)
++            .map(|index| {
++                let mut note = note.clone();
++                // Unusually large identities exercise the hard limit even
++                // though the ordinary per-note estimate permits memory.
++                note.id = format!("note-{index}-{}", "identity".repeat(1024));
++                note
++            })
++            .collect();
++        let max_pages = base_pages + 1;
++        let field_bytes: usize = normalized
++            .notes
++            .iter()
++            .flat_map(|note| note.fields.values())
++            .map(String::len)
++            .sum();
++        assert!(field_bytes + normalized.notes.len() * 2048 < max_pages * COLLECTION_PAGE_SIZE);
++
++        let mut compacted_bytes = Vec::new();
++        for (index, limit) in [COLLECTION_MEMORY_MAX_PAGES, max_pages, 0]
++            .into_iter()
++            .enumerate()
++        {
++            let source = create_collection_source(
++                root.path(),
++                &normalized,
++                &Default::default(),
++                &ids,
++                limit,
++            )
++            .unwrap();
++            assert_eq!(source._file.is_some(), index != 0);
++            let path = root.path().join(format!("compacted-{index}.sqlite"));
++            source
++                .connection
++                .execute("VACUUM INTO ?1", [path.to_str().unwrap()])
++                .unwrap();
++            compacted_bytes.push(fs::read(&path).unwrap());
++            let source_path = source._file.as_ref().map(|file| file.path().to_owned());
++            drop(source);
++            if let Some(path) = source_path {
++                assert!(!path.exists());
++            }
++        }
++        assert_eq!(compacted_bytes[0], compacted_bytes[1]);
++        assert_eq!(compacted_bytes[0], compacted_bytes[2]);
++    }
++
++    #[test]
++    fn oversized_collection_uses_disk_and_cleans_up_after_population_failure() {
++        let root = tempfile::tempdir().unwrap();
++        let mut normalized = two_basic_notes();
++        normalized.notes[0]
++            .fields
++            .insert("Back".into(), "large field".repeat(COLLECTION_PAGE_SIZE));
++        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
++        let source =
++            create_collection_source(root.path(), &normalized, &Default::default(), &ids, 1)
++                .unwrap();
++        assert!(source._file.is_some());
++        drop(source);
++        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
++
++        // Both storage paths propagate non-capacity errors and clean private
++        // files. In particular, a memory error must not trigger a disk retry.
++        normalized.notetypes.push(normalized.notetypes[0].clone());
++        for limit in [COLLECTION_MEMORY_MAX_PAGES, 0] {
++            let error = create_collection_source(
++                root.path(),
++                &normalized,
++                &Default::default(),
++                &ids,
++                limit,
++            )
++            .err()
++            .expect("duplicate notetype rows violate the primary key");
++            assert!(matches!(
++                error.downcast_ref::<rusqlite::Error>(),
++                Some(rusqlite::Error::SqliteFailure(code, _))
++                    if code.code == rusqlite::ErrorCode::ConstraintViolation
++            ));
++            assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
++        }
++    }
++
+     #[test]
+     fn failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction() {
+         let root = tempfile::tempdir().unwrap();
+diff --git a/anki_forge/src/writer_core/diff.rs b/anki_forge/src/writer_core/diff.rs
+index 4b626d8..0042ee3 100644
+--- a/anki_forge/src/writer_core/diff.rs
++++ b/anki_forge/src/writer_core/diff.rs
+@@ -3,7 +3,6 @@ use std::collections::{BTreeMap, BTreeSet};
+ use anyhow::Result;
+ use serde_json::Value;
+ 
+-use crate::writer_core::canonical_json::FilteredValue;
+ use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
+ 
+ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
+@@ -35,19 +34,39 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
+             continue;
+         }
+ 
+-        let left_entries = domain_entries(left_values);
+-        let right_entries = domain_entries(right_values);
+-        let mut selectors = BTreeSet::new();
+-        selectors.extend(left_entries.keys().copied());
+-        selectors.extend(right_entries.keys().copied());
+-
+-        for selector in selectors {
++        let mut left_entries = domain_entries(left_values).into_iter();
++        let mut right_entries = domain_entries(right_values).into_iter();
++        let mut left_next = left_entries.next();
++        let mut right_next = right_entries.next();
++        // Merge the sorted indexes directly, retaining last-duplicate-wins
++        // semantics without another selector set or repeated tree lookups.
++        loop {
++            let (selector, left_entry, right_entry) = match (left_next, right_next) {
++                (Some((selector, value)), right)
++                    if right.is_none_or(|(other, _)| selector < other) =>
++                {
++                    left_next = left_entries.next();
++                    (selector, Some(value), None)
++                }
++                (left, Some((selector, value)))
++                    if left.is_none_or(|(other, _)| selector < other) =>
++                {
++                    right_next = right_entries.next();
++                    (selector, None, Some(value))
++                }
++                (Some((selector, left)), Some((_, right))) => {
++                    left_next = left_entries.next();
++                    right_next = right_entries.next();
++                    (selector, Some(left), Some(right))
++                }
++                _ => break,
++            };
+             if should_skip_selector(domain, selector, left, right) {
+                 continue;
+             }
+-            match (left_entries.get(&selector), right_entries.get(&selector)) {
++            match (left_entry, right_entry) {
+                 (Some(left_entry), Some(right_entry)) => {
+-                    if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
++                    if !entry_payloads_equal(domain, left_entry, right_entry) {
+                         changes.push(change_for_modified(
+                             domain,
+                             selector,
+@@ -133,7 +152,7 @@ fn domain_entries(values: &[Value]) -> BTreeMap<&str, &Value> {
+     entries
+ }
+ 
+-fn entry_payload(domain: &str, value: &Value) -> Result<String> {
++fn entry_payloads_equal(domain: &str, left: &Value, right: &Value) -> bool {
+     let excluded: &'static [&'static str] = if domain == "media" {
+         &[
+             "selector",
+@@ -145,7 +164,34 @@ fn entry_payload(domain: &str, value: &Value) -> Result<String> {
+     } else {
+         &["selector", "evidence_refs"]
+     };
+-    Ok(serde_json::to_string(&FilteredValue { value, excluded })?)
++    filtered_values_equal(left, right, excluded)
++}
++
++fn filtered_values_equal(left: &Value, right: &Value, excluded: &[&str]) -> bool {
++    match (left, right) {
++        (Value::Object(left), Value::Object(right)) => {
++            let semantic_entries = |key: &&String| !excluded.contains(&key.as_str());
++            left.keys().filter(semantic_entries).count()
++                == right.keys().filter(semantic_entries).count()
++                && left.iter().all(|(key, value)| {
++                    excluded.contains(&key.as_str())
++                        || right
++                            .get(key)
++                            .is_some_and(|other| filtered_values_equal(value, other, excluded))
++                })
++        }
++        (Value::Array(left), Value::Array(right)) => {
++            left.len() == right.len()
++                && left
++                    .iter()
++                    .zip(right)
++                    .all(|(left, right)| filtered_values_equal(left, right, excluded))
++        }
++        // Preserve canonical JSON's numeric representation, including 1 vs
++        // 1.0 and signed zero. Value/Number equality alone loses signed zero.
++        (Value::Number(left), Value::Number(right)) => left.to_string() == right.to_string(),
++        _ => left == right,
++    }
+ }
+ 
+ #[cfg(test)]
+@@ -281,22 +327,38 @@ mod ownership_tests {
+     }
+ 
+     #[test]
+-    fn borrowed_payload_preserves_recursive_domain_filters_and_numeric_encoding() {
+-        let value = serde_json::json!({
+-            "selector":"row", "evidence_refs":["removed"], "object_id":"media only",
+-            "nested":[{"binding_id":"media only", "object_ref":"media only", "selector":"removed", "evidence_refs":[], "data":[1,1.0,-0.0,0.0,"尾"]}],
+-        });
++    fn structural_comparison_matches_canonical_payloads() {
++        let mut values: Vec<Value> = serde_json::from_str(
++            r#"[null,false,true,0,1,-1,1.0,-0.0,0.0,18446744073709551615,
++                -9223372036854775808,1e-200,1e200,"","尾 \\ \"\n",[],[1,2],[2,1],{},
++                {"selector":"ignored","evidence_refs":["ignored"]},
++                {"object_id":"media only","binding_id":1,"object_ref":null},
++                {"a":null},{"a":1,"b":2},{"b":2,"a":1}]"#,
++        )
++        .unwrap();
++        for value in values.clone() {
++            values.push(serde_json::json!({
++                "selector":"row", "evidence_refs":["removed"],
++                "nested":[{"binding_id":"media only", "object_ref":"media only", "data":value}],
++            }));
++        }
+         for domain in ["media", "metadata", "fields"] {
+-            let expected =
+-                crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, &value))
+-                    .unwrap();
+-            assert_eq!(entry_payload(domain, &value).unwrap(), expected);
++            let canonical: Vec<_> = values
++                .iter()
++                .map(|value| {
++                    crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, value))
++                        .unwrap()
++                })
++                .collect();
++            for (i, left) in values.iter().enumerate() {
++                for (j, right) in values.iter().enumerate() {
++                    assert_eq!(
++                        entry_payloads_equal(domain, left, right),
++                        canonical[i] == canonical[j],
++                        "{domain}: {left} vs {right}"
++                    );
++                }
++            }
+         }
+-        // JSON numbers with different encodings remain distinct, even when
+-        // IEEE equality would consider them equal.
+-        assert_ne!(
+-            entry_payload("fields", &serde_json::json!(-0.0)).unwrap(),
+-            entry_payload("fields", &serde_json::json!(0.0)).unwrap()
+-        );
+     }
+ }
+diff --git a/anki_forge/src/writer_core/inspect.rs b/anki_forge/src/writer_core/inspect.rs
+index 90beb4e..2f0b561 100644
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1606,12 +1606,15 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+         let mut rows = note_rows.query([])?;
+         while let Some(row) = rows.next()? {
+             let id: i64 = row.get(0)?;
+-            let guid: String = row.get(1)?;
++            let guid = row_text(row, 1)?;
+             let mid: i64 = row.get(2)?;
+             let mtime_secs: i64 = row.get(3)?;
+-            let tags: String = row.get(4)?;
+-            let flds: String = row.get(5)?;
+-            let data: String = row.get(6)?;
++            // Validate the same columns in the same order for both projections.
++            // Borrow until the next row instead of copying text Summary discards
++            // or copying the joined fields before splitting them for Observations.
++            let tags = row_text(row, 4)?;
++            let flds = row_text(row, 5)?;
++            let data = row_text(row, 6)?;
+             let notetype = notetypes_by_row_id
+                 .get(&mid)
+                 .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
+@@ -1620,7 +1623,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 // for observed_notes(). Repeated GUIDs each observe the same
+                 // set of actual ordinals, matching full inspection.
+                 summary_counts.notes += 1;
+-                summary_counts.cards += summary_card_ordinals.get(&guid).map_or(0, BTreeSet::len);
++                summary_counts.cards += summary_card_ordinals.get(guid).map_or(0, BTreeSet::len);
+                 continue;
+             }
+             // Empty storage is one empty field, not an absent field list.
+@@ -1631,7 +1634,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 fields.insert(field.name.clone(), value.to_string());
+             }
+             let note = NormalizedNote {
+-                id: guid.clone(),
++                id: guid.to_owned(),
+                 notetype_id: notetype.id.clone(),
+                 deck_name: note_decks_by_row_id
+                     .get(&id)
+@@ -1645,9 +1648,9 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 },
+                 mtime_secs: Some(mtime_secs),
+             };
+-            let identity_metadata = serde_json::from_str::<Value>(&data)
++            let identity_metadata = serde_json::from_str::<Value>(data)
+                 .ok()
+-                .and_then(|value| value.get("anki_forge_identity").cloned())
++                .and_then(|mut value| value.as_object_mut()?.remove("anki_forge_identity"))
+                 .map(|mut observed| {
+                     if let Some(object) = observed.as_object_mut() {
+                         object.insert(
+@@ -1679,6 +1682,23 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+     })
+ }
+ 
++fn row_text<'a>(row: &'a rusqlite::Row<'_>, index: usize) -> rusqlite::Result<&'a str> {
++    match row.get_ref(index)? {
++        rusqlite::types::ValueRef::Text(bytes) => std::str::from_utf8(bytes).map_err(|error| {
++            rusqlite::Error::FromSqlConversionFailure(
++                index,
++                rusqlite::types::Type::Text,
++                Box::new(error),
++            )
++        }),
++        value => Err(rusqlite::Error::InvalidColumnType(
++            index,
++            row.as_ref().column_name(index)?.into(),
++            value.data_type(),
++        )),
++    }
++}
++
+ fn normalized_notetype_kind(config: &crate::writer_core::anki_proto::NotetypeConfig) -> String {
+     match OriginalStockKind::try_from(config.original_stock_kind).ok() {
+         Some(OriginalStockKind::Basic) => "normal".into(),
+@@ -1792,6 +1812,37 @@ mod summary_tests;
+ mod tests {
+     use super::*;
+ 
++    #[test]
++    fn borrowed_row_text_preserves_owned_text_validation() {
++        let conn = Connection::open_in_memory().unwrap();
++        let mut statement = conn
++            .prepare("select ?1 as payload, cast(x'80' as text) as invalid_utf8")
++            .unwrap();
++        for value in [
++            rusqlite::types::Value::Null,
++            rusqlite::types::Value::Integer(1),
++            rusqlite::types::Value::Real(1.5),
++            rusqlite::types::Value::Blob(b"valid UTF-8 in a blob".to_vec()),
++            rusqlite::types::Value::Text(String::new()),
++            rusqlite::types::Value::Text("a\u{1f}\u{1f}尾\0".repeat(8192)),
++        ] {
++            let mut rows = statement.query([value]).unwrap();
++            let row = rows.next().unwrap().unwrap();
++            for index in 0..=2 {
++                let owned = row.get::<_, String>(index);
++                let borrowed = row_text(row, index);
++                match (owned, borrowed) {
++                    (Ok(owned), Ok(borrowed)) => assert_eq!(owned, borrowed),
++                    (Err(owned), Err(borrowed)) => {
++                        assert_eq!(format!("{owned:?}"), format!("{borrowed:?}"));
++                        assert_eq!(owned.to_string(), borrowed.to_string());
++                    }
++                    other => panic!("text validation differs: {other:?}"),
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn streamed_fingerprint_matches_the_original_canonical_projection() {
+         let value = json!({
+diff --git a/anki_forge/tests/writer_core_diff_tests.rs b/anki_forge/tests/writer_core_diff_tests.rs
+index 7d335e0..fbe7f61 100644
+--- a/anki_forge/tests/writer_core_diff_tests.rs
++++ b/anki_forge/tests/writer_core_diff_tests.rs
+@@ -300,6 +300,81 @@ fn diff_reports_only_strip_media_provenance_from_media_domain() {
+     assert_eq!(diff.changes[0].selector, "note[id='note-1']");
+ }
+ 
++#[test]
++fn diff_merges_selectors_in_order_and_keeps_the_last_duplicate() {
++    let mut left = sample_inspect_report("Basic");
++    let mut right = left.clone();
++    left.observations.fields = vec![
++        json!({"selector":"z", "value":"removed tail"}),
++        json!({"selector":"c", "value":"superseded duplicate"}),
++        json!({"selector":12, "value":"ignored"}),
++        json!({"selector":"a", "value":"removed head"}),
++        json!({"selector":"e", "value":"before", "evidence_refs":["z", "shared"]}),
++        json!({"selector":"c", "value":"unchanged", "evidence_refs":["left"]}),
++    ];
++    right.observations.fields = vec![
++        json!({"selector":"f", "value":"added tail"}),
++        json!({"value":"ignored"}),
++        json!({"selector":"c", "value":"unchanged", "evidence_refs":["right"]}),
++        json!({"selector":"b", "value":"superseded duplicate"}),
++        json!({"selector":"e", "value":"after", "evidence_refs":["a", "shared"]}),
++        json!({"selector":"b", "value":"added head", "evidence_refs":["last"]}),
++    ];
++    for (before, after, added, removed) in [
++        (&left, &right, "added", "removed"),
++        (&right, &left, "removed", "added"),
++    ] {
++        let diff = diff_reports(before, after).unwrap();
++        let changes: Vec<_> = diff
++            .changes
++            .iter()
++            .map(|change| (change.selector.as_str(), change.category.as_str()))
++            .collect();
++        assert_eq!(
++            changes,
++            [
++                ("a", removed),
++                ("b", added),
++                ("e", "modified"),
++                ("f", added),
++                ("z", removed)
++            ]
++        );
++        assert_eq!(diff.changes[1].evidence_refs, ["last"]);
++        assert_eq!(diff.changes[2].evidence_refs, ["a", "shared", "z"]);
++    }
++
++    left.observations.fields.clear();
++    let diff = diff_reports(&left, &right).unwrap();
++    assert_eq!(diff.changes.len(), 4);
++    assert!(diff.changes.iter().all(|change| change.category == "added"));
++    right.observations.fields.clear();
++    assert!(diff_reports(&left, &right).unwrap().changes.is_empty());
++}
++
++#[test]
++fn diff_skips_apkg_media_references_on_either_side_without_skipping_later_entries() {
++    let mut left = sample_inspect_report("Basic");
++    let mut right = left.clone();
++    left.source_kind = "apkg".into();
++    left.observations.references = vec![
++        json!({"selector":"media-ref[a]", "value":"removed"}),
++        json!({"selector":"media-ref[b]", "value":"before"}),
++        json!({"selector":"note[z]", "value":"before"}),
++    ];
++    right.observations.references = vec![
++        json!({"selector":"media-ref[b]", "value":"after"}),
++        json!({"selector":"media-ref[c]", "value":"added"}),
++        json!({"selector":"note[z]", "value":"after"}),
++    ];
++    for (before, after) in [(&left, &right), (&right, &left)] {
++        let diff = diff_reports(before, after).unwrap();
++        assert_eq!(diff.changes.len(), 1);
++        assert_eq!(diff.changes[0].selector, "note[z]");
++        assert_eq!(diff.changes[0].category, "modified");
++    }
++}
++
+ #[test]
+ fn diff_covers_field_metadata_browser_templates_and_target_decks() {
+     let left = sample_inspect_report("Basic");
+diff --git a/anki_forge/tests/writer_optimization_tests.rs b/anki_forge/tests/writer_optimization_tests.rs
+index ad50640..1a11e57 100644
+--- a/anki_forge/tests/writer_optimization_tests.rs
++++ b/anki_forge/tests/writer_optimization_tests.rs
+@@ -232,7 +232,7 @@ fn materialized_writer_preserves_legacy_ids_and_rejects_invalid_identity_plans()
+ }
+ 
+ #[test]
+-fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
++fn build_sql_failure_cleans_its_source_and_preserves_the_existing_package() {
+     let root = tempfile::tempdir().unwrap();
+     let target = BuildArtifactTarget::new(root.path(), "artifacts");
+     let output = root.path().join("package.apkg");
+@@ -254,15 +254,24 @@ fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
+                 .summary
+                 .contains("UNIQUE constraint failed: notetypes.name")
+     }));
+-    assert_eq!(fs::read(output).unwrap(), b"previous package");
+-    let conn =
+-        rusqlite::Connection::open(root.path().join(".collection.anki21b.sqlite.tmp")).unwrap();
+-    for table in ["notetypes", "decks", "deck_config"] {
+-        let count: i64 = conn
+-            .query_row(&format!("select count(*) from {table}"), [], |row| {
+-                row.get(0)
+-            })
+-            .unwrap();
+-        assert_eq!(count, 0, "partial writes remain in {table}");
+-    }
++    assert_eq!(fs::read(&output).unwrap(), b"previous package");
++    // The source database is private and is now released even on failure.
++    // Transaction rollback itself is covered at the live-connection seam.
++    let mut files = fs::read_dir(root.path())
++        .unwrap()
++        .map(|entry| entry.unwrap())
++        .filter(|entry| entry.file_type().unwrap().is_file())
++        .map(|entry| entry.file_name())
++        .collect::<Vec<_>>();
++    files.sort();
++    assert_eq!(files, [".package.apkg.tmp", "package.apkg"]);
++
++    normalized.notetypes.pop();
++    let retried = build(&normalized, &policy, &context, &target).unwrap();
++    assert_eq!(
++        retried.result_status, "success",
++        "{:?}",
++        retried.diagnostics
++    );
++    assert!(inspect_apkg(output).is_ok());
+ }
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index e8d1c3a..4ff0352 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -11,5 +11,7 @@ results/*
+ !results/20260907-bounded-media/
+ !results/20260907-text-ownership/
+ !results/20260908-performance-pr/
++!results/20260908-round3-performance/
++!results/20260909-round3-genanki/
+ adapters/rust/target/
+ __pycache__/
+diff --git a/bindings/python/README.md b/bindings/python/README.md
+index 7d8fa54..5bb5e0b 100644
+--- a/bindings/python/README.md
++++ b/bindings/python/README.md
+@@ -1,5 +1,59 @@
+ # anki-forge Python
+ 
+-Use the public `anki_forge` package for deck authoring. See `../../docs/python/quick-start.md`, `../../docs/python/genanki-migration.md`, and `../../docs/python/diagnostics.md`.
++Use the public `anki_forge` package to build Anki `.apkg` files with `Project`,
++`Note`, custom note types, and media. Python 3.11+ is required. Exports run
++through the Rust `contract_tools` runtime.
+ 
+-`anki_forge_python` remains the low-level runtime package for earlier integration code. New user-facing examples should import `anki_forge`.
++## From a source checkout
++
++From the repository root, build the runtime with Rust 1.92.0:
++
++```sh
++cargo build -p contract_tools --release
++```
++
++Save the following as `example.py` in the repository root:
++
++```python
++from anki_forge import Note, Project
++
++project = Project("Spanish", stable_id="spanish", default_deck="Spanish")
++project.add_note(Note.basic("hola", "hello", stable_id="es:hola"))
++report = project.write_apkg("spanish.apkg")
++report.ensure_success()
++```
++
++Run it with the source package on the import path:
++
++```sh
++PYTHONPATH=bindings/python/src python3 example.py
++```
++
++This writes `spanish.apkg` for import into Anki Desktop. The source setup finds
++`contracts/manifest.yaml` and the built runtime from the checkout. Run it from
++the repository root, or configure `RuntimeOverride` explicitly.
++
++## Runtime packaging
++
++A wheel with a staged runtime includes its executable and contract files;
++consumers of that wheel do not need Rust or this checkout. Maintainers stage
++those resources after building the release executable:
++
++```sh
++python3 bindings/python/scripts/stage_runtime.py
++```
++
++This prepares files for packaging; it does not build or publish a wheel. The
++[wheel CI job](../../.github/workflows/contract-ci.yml) contains the complete
++platform-specific packaging and installed-consumer checks.
++
++## Guides
++
++- [Quick start, custom note types, and media](../../docs/python/quick-start.md)
++- [Migration from genanki](../../docs/python/genanki-migration.md)
++- [Diagnostics and build errors](../../docs/python/diagnostics.md)
++- [Development and verification](../../docs/development.md#node-and-python-development)
++
++`anki_forge_python` remains the legacy low-level runtime for earlier integration
++code in this repository; it is excluded from the public wheel. New applications
++should import `anki_forge`.
