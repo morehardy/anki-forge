@@ -1606,12 +1606,15 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
         let mut rows = note_rows.query([])?;
         while let Some(row) = rows.next()? {
             let id: i64 = row.get(0)?;
-            let guid: String = row.get(1)?;
+            let guid = row_text(row, 1)?;
             let mid: i64 = row.get(2)?;
             let mtime_secs: i64 = row.get(3)?;
-            let tags: String = row.get(4)?;
-            let flds: String = row.get(5)?;
-            let data: String = row.get(6)?;
+            // Validate the same columns in the same order for both projections.
+            // Borrow until the next row instead of copying text Summary discards
+            // or copying the joined fields before splitting them for Observations.
+            let tags = row_text(row, 4)?;
+            let flds = row_text(row, 5)?;
+            let data = row_text(row, 6)?;
             let notetype = notetypes_by_row_id
                 .get(&mid)
                 .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
@@ -1620,7 +1623,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
                 // for observed_notes(). Repeated GUIDs each observe the same
                 // set of actual ordinals, matching full inspection.
                 summary_counts.notes += 1;
-                summary_counts.cards += summary_card_ordinals.get(&guid).map_or(0, BTreeSet::len);
+                summary_counts.cards += summary_card_ordinals.get(guid).map_or(0, BTreeSet::len);
                 continue;
             }
             // Empty storage is one empty field, not an absent field list.
@@ -1631,7 +1634,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
                 fields.insert(field.name.clone(), value.to_string());
             }
             let note = NormalizedNote {
-                id: guid.clone(),
+                id: guid.to_owned(),
                 notetype_id: notetype.id.clone(),
                 deck_name: note_decks_by_row_id
                     .get(&id)
@@ -1645,9 +1648,9 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
                 },
                 mtime_secs: Some(mtime_secs),
             };
-            let identity_metadata = serde_json::from_str::<Value>(&data)
+            let identity_metadata = serde_json::from_str::<Value>(data)
                 .ok()
-                .and_then(|value| value.get("anki_forge_identity").cloned())
+                .and_then(|mut value| value.as_object_mut()?.remove("anki_forge_identity"))
                 .map(|mut observed| {
                     if let Some(object) = observed.as_object_mut() {
                         object.insert(
@@ -1677,6 +1680,23 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
             summary_counts,
         })
     })
+}
+
+fn row_text<'a>(row: &'a rusqlite::Row<'_>, index: usize) -> rusqlite::Result<&'a str> {
+    match row.get_ref(index)? {
+        rusqlite::types::ValueRef::Text(bytes) => std::str::from_utf8(bytes).map_err(|error| {
+            rusqlite::Error::FromSqlConversionFailure(
+                index,
+                rusqlite::types::Type::Text,
+                Box::new(error),
+            )
+        }),
+        value => Err(rusqlite::Error::InvalidColumnType(
+            index,
+            row.as_ref().column_name(index)?.into(),
+            value.data_type(),
+        )),
+    }
 }
 
 fn normalized_notetype_kind(config: &crate::writer_core::anki_proto::NotetypeConfig) -> String {
@@ -1791,6 +1811,37 @@ mod summary_tests;
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn borrowed_row_text_preserves_owned_text_validation() {
+        let conn = Connection::open_in_memory().unwrap();
+        let mut statement = conn
+            .prepare("select ?1 as payload, cast(x'80' as text) as invalid_utf8")
+            .unwrap();
+        for value in [
+            rusqlite::types::Value::Null,
+            rusqlite::types::Value::Integer(1),
+            rusqlite::types::Value::Real(1.5),
+            rusqlite::types::Value::Blob(b"valid UTF-8 in a blob".to_vec()),
+            rusqlite::types::Value::Text(String::new()),
+            rusqlite::types::Value::Text("a\u{1f}\u{1f}尾\0".repeat(8192)),
+        ] {
+            let mut rows = statement.query([value]).unwrap();
+            let row = rows.next().unwrap().unwrap();
+            for index in 0..=2 {
+                let owned = row.get::<_, String>(index);
+                let borrowed = row_text(row, index);
+                match (owned, borrowed) {
+                    (Ok(owned), Ok(borrowed)) => assert_eq!(owned, borrowed),
+                    (Err(owned), Err(borrowed)) => {
+                        assert_eq!(format!("{owned:?}"), format!("{borrowed:?}"));
+                        assert_eq!(owned.to_string(), borrowed.to_string());
+                    }
+                    other => panic!("text validation differs: {other:?}"),
+                }
+            }
+        }
+    }
 
     #[test]
     fn streamed_fingerprint_matches_the_original_canonical_projection() {

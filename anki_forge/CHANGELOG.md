@@ -10,6 +10,8 @@ new minor release.
 
 - Compare filtered observation trees directly and merge sorted selector indexes,
   preserving numeric JSON representations, duplicate handling and diff evidence.
+- Borrow SQLite note text during inspection and move parsed identity metadata,
+  preserving column validation and full observation semantics.
 - Consume decoded inspection facts when assembling observations, transferring
   note fields, tags and identity evidence to reduce comparison peak memory.
 - Use 8 KiB pages for generated modern collection databases to reduce SQLite
