@@ -8,6 +8,8 @@ new minor release.
 
 ### Fixed
 
+- Compare filtered observation trees directly and merge sorted selector indexes,
+  preserving numeric JSON representations, duplicate handling and diff evidence.
 - Consume decoded inspection facts when assembling observations, transferring
   note fields, tags and identity evidence to reduce comparison peak memory.
 - Use 8 KiB pages for generated modern collection databases to reduce SQLite

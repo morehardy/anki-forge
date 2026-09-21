@@ -301,6 +301,81 @@ fn diff_reports_only_strip_media_provenance_from_media_domain() {
 }
 
 #[test]
+fn diff_merges_selectors_in_order_and_keeps_the_last_duplicate() {
+    let mut left = sample_inspect_report("Basic");
+    let mut right = left.clone();
+    left.observations.fields = vec![
+        json!({"selector":"z", "value":"removed tail"}),
+        json!({"selector":"c", "value":"superseded duplicate"}),
+        json!({"selector":12, "value":"ignored"}),
+        json!({"selector":"a", "value":"removed head"}),
+        json!({"selector":"e", "value":"before", "evidence_refs":["z", "shared"]}),
+        json!({"selector":"c", "value":"unchanged", "evidence_refs":["left"]}),
+    ];
+    right.observations.fields = vec![
+        json!({"selector":"f", "value":"added tail"}),
+        json!({"value":"ignored"}),
+        json!({"selector":"c", "value":"unchanged", "evidence_refs":["right"]}),
+        json!({"selector":"b", "value":"superseded duplicate"}),
+        json!({"selector":"e", "value":"after", "evidence_refs":["a", "shared"]}),
+        json!({"selector":"b", "value":"added head", "evidence_refs":["last"]}),
+    ];
+    for (before, after, added, removed) in [
+        (&left, &right, "added", "removed"),
+        (&right, &left, "removed", "added"),
+    ] {
+        let diff = diff_reports(before, after).unwrap();
+        let changes: Vec<_> = diff
+            .changes
+            .iter()
+            .map(|change| (change.selector.as_str(), change.category.as_str()))
+            .collect();
+        assert_eq!(
+            changes,
+            [
+                ("a", removed),
+                ("b", added),
+                ("e", "modified"),
+                ("f", added),
+                ("z", removed)
+            ]
+        );
+        assert_eq!(diff.changes[1].evidence_refs, ["last"]);
+        assert_eq!(diff.changes[2].evidence_refs, ["a", "shared", "z"]);
+    }
+
+    left.observations.fields.clear();
+    let diff = diff_reports(&left, &right).unwrap();
+    assert_eq!(diff.changes.len(), 4);
+    assert!(diff.changes.iter().all(|change| change.category == "added"));
+    right.observations.fields.clear();
+    assert!(diff_reports(&left, &right).unwrap().changes.is_empty());
+}
+
+#[test]
+fn diff_skips_apkg_media_references_on_either_side_without_skipping_later_entries() {
+    let mut left = sample_inspect_report("Basic");
+    let mut right = left.clone();
+    left.source_kind = "apkg".into();
+    left.observations.references = vec![
+        json!({"selector":"media-ref[a]", "value":"removed"}),
+        json!({"selector":"media-ref[b]", "value":"before"}),
+        json!({"selector":"note[z]", "value":"before"}),
+    ];
+    right.observations.references = vec![
+        json!({"selector":"media-ref[b]", "value":"after"}),
+        json!({"selector":"media-ref[c]", "value":"added"}),
+        json!({"selector":"note[z]", "value":"after"}),
+    ];
+    for (before, after) in [(&left, &right), (&right, &left)] {
+        let diff = diff_reports(before, after).unwrap();
+        assert_eq!(diff.changes.len(), 1);
+        assert_eq!(diff.changes[0].selector, "note[z]");
+        assert_eq!(diff.changes[0].category, "modified");
+    }
+}
+
+#[test]
 fn diff_covers_field_metadata_browser_templates_and_target_decks() {
     let left = sample_inspect_report("Basic");
     let mut right = left.clone();
