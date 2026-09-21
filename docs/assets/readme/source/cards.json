@@ -1,0 +1,38 @@
+{
+  "package_sha256": "b3585f03bd636d8b4583ea5be492b691237026dee58c302d59d3de9ac4fc44c8",
+  "renderer": "Anki rslib via scripts/roundtrip_oracle/src/bin/readme_render.rs",
+  "cards": [
+    {
+      "answer": "hola\n\n<hr id=answer>\n\nhello",
+      "css": "",
+      "fields": [
+        "hola",
+        "hello"
+      ],
+      "notetype": "Basic+",
+      "question": "hola"
+    },
+    {
+      "answer": "A sound's pitch depends on its <span class=\"cloze\" data-ordinal=\"1\">frequency</span>.<br>\nMore cycles per second, higher pitch.",
+      "css": ".cloze {\n    font-weight: bold;\n    color: blue;\n}\n.nightMode .cloze {\n    color: lightblue;\n}\n",
+      "fields": [
+        "A sound's pitch depends on its {{c1::frequency}}.",
+        "More cycles per second, higher pitch."
+      ],
+      "notetype": "Cloze+",
+      "question": "A sound's pitch depends on its <span class=\"cloze\" data-cloze=\"frequency\" data-ordinal=\"1\">[...]</span>."
+    },
+    {
+      "answer": "<div class='eyebrow'>EAR TRAINING</div><div class='prompt'>Name this pitch.</div><div class='wave'><img src=\"waveform.svg\"></div>[sound:concert-a.wav]<hr id='answer'><div class='meaning'>A4 · 440 Hz</div>",
+      "css": ".card { font-family: Arial, sans-serif; text-align: center; background: #f7f1e7; color: #372c25; margin: 0; padding: 24px 18px; }.eyebrow { font-size: 11px; letter-spacing: 2px; color: #875d46; }.prompt { font-size: 23px; margin: 16px 0 0; }.wave img { width: 100%; max-width: 320px; height: 80px; margin: 10px 0; }audio { width: 100%; max-width: 290px; height: 34px; }#answer { border: 0; border-top: 1px solid #d8c9b9; margin: 20px 0 15px; }.meaning { font-size: 20px; }.card.nightMode { background: #2b241f; color: #f5e8d7; }.nightMode .eyebrow { color: #ddb08d; }",
+      "fields": [
+        "Name this pitch.",
+        "A4 · 440 Hz",
+        "<img src=\"waveform.svg\">",
+        "[sound:concert-a.wav]"
+      ],
+      "notetype": "Ear Training",
+      "question": "<div class='eyebrow'>EAR TRAINING</div><div class='prompt'>Name this pitch.</div><div class='wave'><img src=\"waveform.svg\"></div>[sound:concert-a.wav]"
+    }
+  ]
+}
