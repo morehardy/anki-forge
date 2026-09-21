@@ -1,0 +1,69 @@
+{
+  "os": {
+    "exit_code": 0,
+    "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t27.0\nBuildVersion:\t\t26A5421a\n",
+    "stderr": ""
+  },
+  "hardware": {
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "sysctl: sysctl fmt -1 1024 1: Operation not permitted\n"
+  },
+  "power": {
+    "exit_code": 0,
+    "stdout": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t100%; charged; 0:00 remaining present: true\n",
+    "stderr": ""
+  },
+  "thermal": {
+    "exit_code": 0,
+    "stdout": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc\n",
+    "stderr": ""
+  },
+  "rustc": {
+    "exit_code": 0,
+    "stdout": "rustc 1.92.0 (ded5c06cf 2025-12-08)\nbinary: rustc\ncommit-hash: ded5c06cf21d2b93bffd5d884aa6e96934ee4234\ncommit-date: 2025-12-08\nhost: aarch64-apple-darwin\nrelease: 1.92.0\nLLVM version: 21.1.3\n",
+    "stderr": ""
+  },
+  "binaries": {
+    "baseline": {
+      "adapter": "anki-forge/rust",
+      "adapter_features": [],
+      "allocator": "system",
+      "allocator_version": null,
+      "bundle_version": "0.6.3",
+      "crate_version": "0.1.0",
+      "features": "default",
+      "media_registration": "individual",
+      "process_scope": "single_process",
+      "protocol": "basic-apkg-v1",
+      "protocols": [
+        "basic-apkg-v1",
+        "basic-media-apkg-v1"
+      ]
+    },
+    "optimized": {
+      "adapter": "anki-forge/rust",
+      "adapter_features": [],
+      "allocator": "system",
+      "allocator_version": null,
+      "bundle_version": "0.6.3",
+      "crate_version": "0.1.0",
+      "features": "default",
+      "media_registration": "individual",
+      "process_scope": "single_process",
+      "protocol": "basic-apkg-v1",
+      "protocols": [
+        "basic-apkg-v1",
+        "basic-media-apkg-v1"
+      ]
+    }
+  },
+  "power_sources": {
+    "default-matrix": "Now drawing from 'AC Power'",
+    "compare-matrix": "Now drawing from 'AC Power'",
+    "persistent-matrix": "Now drawing from 'AC Power'",
+    "stress-screen-v2": "Now drawing from 'AC Power'",
+    "default-recheck": "Now drawing from 'AC Power'",
+    "persistent-recheck": "Now drawing from 'AC Power'"
+  }
+}

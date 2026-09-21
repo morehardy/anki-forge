@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "workspace_tests": {
+    "passed": 1036,
+    "failed": 0,
+    "ignored": 25
+  },
+  "user_capabilities": {
+    "passed": 23,
+    "failed": 0
+  },
+  "python": {
+    "passed": 107,
+    "subtests_passed": 5
+  },
+  "logs": [
+    "verify-ci-v2.log",
+    "verify-ci-resume.log"
+  ],
+  "additional_logs": [
+    "test-diff-json-features.log",
+    "embedded-bundle.log",
+    "crate-payload-v2.log",
+    "rustdoc.log"
+  ],
+  "notes": [
+    "Node installed smoke needed local socket permission; resumed the exact remaining gates.",
+    "crate payload check used ANKI_FORGE_ALLOW_DIRTY_PACKAGE=1."
+  ]
+}
