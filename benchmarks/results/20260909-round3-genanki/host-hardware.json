@@ -1,0 +1,15 @@
+{
+  "cpu": "Apple M1 Pro",
+  "physical_cores": 10,
+  "logical_cores": 10,
+  "ram_bytes": 34359738368,
+  "system": "macOS 27.0",
+  "system_build": "26A5421a",
+  "architecture": "arm64",
+  "filesystem": "/dev/disk3s5, /System/Volumes/Data",
+  "available_disk_before_prepare": "43 GiB",
+  "hardware_command": "/usr/sbin/sysctl -n machdep.cpu.brand_string hw.memsize hw.physicalcpu hw.logicalcpu",
+  "system_command": "/usr/bin/sw_vers",
+  "filesystem_command": "/bin/df -h /Users/hp/Desktop/2026/anki-forge",
+  "observation_note": "Read-only host queries ran outside the sandbox because sysctl is denied inside it; exporter measurements run in the same Codex exec sandbox for both implementations. No CPU affinity, CPU cap or memory cap is applied."
+}

@@ -1,0 +1,95 @@
+{
+  "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure": {
+    "status": "verified",
+    "record": {
+      "command": [
+        "cc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "/Users/hp/Desktop/2026/anki-forge/benchmarks/native/measure.c",
+        "-o",
+        "/Users/hp/Desktop/2026/anki-forge/benchmarks/.tools/measure"
+      ],
+      "cwd": "/Users/hp/Desktop/2026/anki-forge",
+      "started_utc": "2026-09-21T08:16:05.799873+00:00",
+      "finished_utc": "2026-09-21T08:16:05.907289+00:00",
+      "environment": {
+        "PATH": "/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/hp/.codex/tmp/arg0/codex-arg0hLpLKi:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Users/hp/.local/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/Users/hp/.cargo/bin:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin"
+      },
+      "launcher": "/usr/bin/cc",
+      "executable_sha256": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd"
+    },
+    "observed_sha256": "90b2c91557a2b5a06f0c9a80c2185b005924edf999ab5a8dd730b7db0e293bfd"
+  },
+  "/Users/hp/Desktop/2026/anki-forge/target/release/contract_tools": {
+    "status": "verified",
+    "record": {
+      "command": [
+        "cargo",
+        "build",
+        "--release",
+        "--locked",
+        "-p",
+        "contract_tools"
+      ],
+      "cwd": "/Users/hp/Desktop/2026/anki-forge",
+      "started_utc": "2026-09-21T08:15:11.361730+00:00",
+      "finished_utc": "2026-09-21T08:16:05.788106+00:00",
+      "environment": {
+        "PATH": "/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/hp/.codex/tmp/arg0/codex-arg0hLpLKi:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Users/hp/.local/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/Users/hp/.cargo/bin:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin"
+      },
+      "launcher": "/Users/hp/.cargo/bin/cargo",
+      "executable_sha256": "207b9957b994e050522bef1c2c038bafde0de9f416712c105f3cf1961c39c86b"
+    },
+    "observed_sha256": "207b9957b994e050522bef1c2c038bafde0de9f416712c105f3cf1961c39c86b"
+  },
+  "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/target/debug/benchmark_oracle": {
+    "status": "verified",
+    "record": {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--manifest-path",
+        "/Users/hp/Desktop/2026/anki-forge/scripts/roundtrip_oracle/Cargo.toml",
+        "--bin",
+        "benchmark_oracle"
+      ],
+      "cwd": "/Users/hp/Desktop/2026/anki-forge",
+      "started_utc": "2026-09-07T07:58:39.822935+00:00",
+      "finished_utc": "2026-09-07T07:59:30.482740+00:00",
+      "environment": {
+        "PATH": "/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/hp/.codex/tmp/arg0/codex-arg0qY1zqh:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Users/hp/.local/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/Users/hp/.cargo/bin:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin"
+      },
+      "launcher": "/Users/hp/.cargo/bin/cargo",
+      "executable_sha256": "827d7471b15b7db596e490004a2826a6dd1f9f17507e0762ee6c5921280014e0"
+    },
+    "observed_sha256": "827d7471b15b7db596e490004a2826a6dd1f9f17507e0762ee6c5921280014e0"
+  },
+  "/Users/hp/Desktop/2026/anki-forge/benchmarks/adapters/rust/target/release/anki-forge-benchmark": {
+    "status": "verified",
+    "record": {
+      "command": [
+        "cargo",
+        "build",
+        "--release",
+        "--locked",
+        "--manifest-path",
+        "/Users/hp/Desktop/2026/anki-forge/benchmarks/adapters/rust/Cargo.toml",
+        "--no-default-features"
+      ],
+      "cwd": "/Users/hp/Desktop/2026/anki-forge",
+      "started_utc": "2026-09-21T08:15:10.926284+00:00",
+      "finished_utc": "2026-09-21T08:15:11.352923+00:00",
+      "environment": {
+        "PATH": "/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/hp/.codex/tmp/arg0/codex-arg0hLpLKi:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/opt/homebrew/opt/python@3.14/libexec/bin:/Users/hp/.antigravity/antigravity/bin:/Users/hp/.local/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin:/Users/hp/.nvm/versions/node/v24.19.0/bin:/Users/hp/.cargo/bin:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin:/Users/hp/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Users/hp/.orbstack/bin:/Users/hp/Library/Android/sdk/tools:/Users/hp/Library/Android/sdk/tools/bin:/Users/hp/Library/Android/sdk/platform-tools:/Users/hp/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/hp/go/bin"
+      },
+      "launcher": "/Users/hp/.cargo/bin/cargo",
+      "executable_sha256": "5c1181ddbe8c111a54df86c02b49e0620fa5efced38a632e1afdac2eda86c159"
+    },
+    "observed_sha256": "5c1181ddbe8c111a54df86c02b49e0620fa5efced38a632e1afdac2eda86c159"
+  }
+}

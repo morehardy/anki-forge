@@ -1,0 +1,113 @@
+{
+  "created_utc": "2026-09-09T02:57:59.210751+00:00",
+  "name": "20260909-round3-genanki",
+  "source_commit": "e2d69b8025fd6dcf817ccbe56208bd7022c5671c",
+  "git_status": "M anki_forge/CHANGELOG.md\n M anki_forge/src/writer_core/apkg.rs\n M anki_forge/src/writer_core/diff.rs\n M anki_forge/src/writer_core/inspect.rs\n M anki_forge/tests/writer_core_diff_tests.rs\n M anki_forge/tests/writer_optimization_tests.rs\n M benchmarks/.gitignore\n?? benchmarks/results/20260908-round3-performance/\n?? docs/adr/0020-bounded-memory-collection-source.md\n?? docs/superpowers/specs/2026-09-08-round3-build-performance.md\n?? docs/superpowers/specs/2026-09-08-round3-performance-opportunities.md",
+  "exploratory_dirty_source": true,
+  "runner_sha256": "9214159f8c8bde134a5c2818015c127174e18a1c0ddec9db751bef0d524112f1",
+  "source_snapshot_sha256": "574ef82b8d568c1d644cecb25a5e557eb8c0c86fedd7a45ec1b5bb36c3b8c4c9",
+  "source_patch_sha256": "dbd5d6d85937913bfed1ada41dc7f9f524e7576715607ae9bd2c73c98040a38d",
+  "source_and_inputs_sha256": "145f4b92b9c69f19aa71fa6b7a7bc44edb76291c030c760db79dd676662f7fff",
+  "media_inputs_sha256": "92262e2b790d201af8c38faf7a2c05f27a07562b9cf30d80f5ee5972dadb5462",
+  "python": "3.11.0 (v3.11.0:deaf509e8f, Oct 24 2022, 14:43:23) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "python_executable": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+  "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=24445027)\t90%; discharging; 3:24 remaining present: true",
+  "matrix": [
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 1000
+    }
+  ],
+  "timing_repeats": 10,
+  "rss_repeats": 5,
+  "warmups_before_each_phase": 3,
+  "expected_attempts": 840,
+  "expected_anki_imports": 40,
+  "schedule_seed": 20260907,
+  "headline_metric": "median elapsed time from native process spawn to exit; includes startup, parsing, export and shutdown",
+  "rss_metric": "single_process_peak_rss_os_v1, 5 independent invocations",
+  "report_quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "verification_schedule": "after both adjacent exporters exit, outside timing, following current media_bench.py",
+  "targets": {
+    "each_cell_time_reduction": 0.3,
+    "unique_image_1000_rss_mib": 64
+  },
+  "no_selective_retries": true,
+  "cold_cache_controlled": false
+}

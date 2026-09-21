@@ -1,0 +1,12 @@
+{
+  "cpu": "Apple M1 Pro",
+  "physical_cores": 10,
+  "logical_cores": 10,
+  "ram_bytes": 34359738368,
+  "system": "macOS 27.0",
+  "system_build": "26A428",
+  "architecture": "arm64",
+  "hardware_query": "/usr/sbin/sysctl -n machdep.cpu.brand_string hw.memsize hw.physicalcpu hw.logicalcpu",
+  "system_query": "/usr/bin/sw_vers",
+  "observation_note": "Hardware query used read-only sandbox escalation; both exporters use the same default exec sandbox. No CPU or memory caps are imposed. Host load and power are recorded in the run manifest."
+}

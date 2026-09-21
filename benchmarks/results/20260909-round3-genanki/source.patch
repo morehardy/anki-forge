@@ -1,0 +1,701 @@
+diff --git a/anki_forge/CHANGELOG.md b/anki_forge/CHANGELOG.md
+index a8909b8..022d592 100644
+--- a/anki_forge/CHANGELOG.md
++++ b/anki_forge/CHANGELOG.md
+@@ -8,6 +8,13 @@ new minor release.
+ 
+ ### Fixed
+ 
++- Compare filtered observation trees directly and merge sorted selector indexes,
++  preserving numeric JSON representations, duplicate handling and diff evidence.
++- Borrow SQLite note text during inspection and move parsed identity metadata,
++  preserving column validation and full observation semantics.
++- Build small collection sources in memory, limiting source database pages to
++  64 MiB and falling back to a private file on capacity exhaustion. Compaction,
++  final package bytes, inspection and durable publication remain unchanged.
+ - Consume decoded inspection facts when assembling observations, transferring
+   note fields, tags and identity evidence to reduce comparison peak memory.
+ - Use 8 KiB pages for generated modern collection databases to reduce SQLite
+diff --git a/anki_forge/src/writer_core/apkg.rs b/anki_forge/src/writer_core/apkg.rs
+index 9e7ff91..a7a34ea 100644
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -443,25 +443,13 @@ fn create_latest_collection_file(
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<tempfile::NamedTempFile> {
+-    let path = root_dir.join(".collection.anki21b.sqlite.tmp");
+-    let _ = fs::remove_file(&path);
+-    let conn = Connection::open(&path)
+-        .with_context(|| format!("open collection database {}", path.display()))?;
+-    // Reduce B-tree and overflow-page work during population and compaction.
+-    // The page size changes physical layout, while schema and row values stay fixed.
+-    conn.pragma_update(None, "page_size", 8192)?;
+-    {
+-        let transaction = conn.unchecked_transaction()?;
+-        execute_source_schema(&transaction, SCHEMA11_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
+-        execute_schema16_marker(&transaction)?;
+-        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
+-        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
+-        transaction.commit()?;
+-    }
+-    populate_latest_collection(&conn, normalized_ir, guid_assignments, notetype_ids)?;
+-
++    let source = create_collection_source(
++        root_dir,
++        normalized_ir,
++        guid_assignments,
++        notetype_ids,
++        COLLECTION_MEMORY_MAX_PAGES,
++    )?;
+     // Keep compaction without rewriting and journaling the source database.
+     // An empty, uniquely reserved file also cleans up on any error path.
+     let compacted =
+@@ -479,17 +467,102 @@ fn create_latest_collection_file(
+         .to_str()
+         .context("compacted collection path is not UTF-8")?
+         .as_bytes();
+-    conn.execute(
++    source.connection.execute(
+         "VACUUM INTO ?1",
+         [rusqlite::types::ToSqlOutput::Borrowed(
+             rusqlite::types::ValueRef::Text(compacted_path),
+         )],
+     )?;
+-    drop(conn);
+-    let _ = fs::remove_file(&path);
+     Ok(compacted)
+ }
+ 
++const COLLECTION_PAGE_SIZE: usize = 8192;
++// Bound the in-memory source to 64 MiB of database pages. SQLite bookkeeping,
++// journals, compaction and the input model have separate memory costs.
++const COLLECTION_MEMORY_MAX_PAGES: usize = 64 * 1024 * 1024 / COLLECTION_PAGE_SIZE;
++
++struct CollectionSource {
++    // Close SQLite before removing its backing file, including on Windows and
++    // when compaction fails. Fields are dropped in declaration order.
++    connection: Connection,
++    _file: Option<tempfile::NamedTempFile>,
++}
++
++fn create_collection_source(
++    root_dir: &Path,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    max_memory_pages: usize,
++) -> Result<CollectionSource> {
++    let max_memory_bytes = max_memory_pages.saturating_mul(COLLECTION_PAGE_SIZE);
++    // Include room for ordinary identity metadata, cards and indexes so large
++    // short-note exports do not first fill memory and then rebuild on disk.
++    // Wide models and unusual identities can exceed this estimate;
++    // max_page_count, rather than the estimate, enforces the page limit.
++    let estimated_bytes = normalized_ir.notes.iter().fold(0_usize, |total, note| {
++        note.fields
++            .values()
++            .fold(total.saturating_add(2048), |total, field| {
++                total.saturating_add(field.len())
++            })
++    });
++    if max_memory_pages > 0 && estimated_bytes <= max_memory_bytes {
++        let connection = Connection::open_in_memory().context("open memory collection database")?;
++        connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
++        connection.pragma_update(None, "max_page_count", max_memory_pages)?;
++        match initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids) {
++            Ok(()) => {
++                return Ok(CollectionSource {
++                    connection,
++                    _file: None,
++                });
++            }
++            Err(error)
++                if matches!(
++                    error.downcast_ref::<rusqlite::Error>(),
++                    Some(rusqlite::Error::SqliteFailure(code, _))
++                        if code.code == rusqlite::ErrorCode::DiskFull
++                ) =>
++            {
++                // SQLITE_FULL on this private memory database means the page
++                // limit was reached. Release it before rebuilding on disk.
++            }
++            Err(error) => return Err(error),
++        }
++    }
++
++    let file =
++        tempfile::NamedTempFile::new_in(root_dir).context("create source collection file")?;
++    let connection = Connection::open(file.path())
++        .with_context(|| format!("open collection database {}", file.path().display()))?;
++    connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
++    initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids)?;
++    Ok(CollectionSource {
++        connection,
++        _file: Some(file),
++    })
++}
++
++fn initialize_collection(
++    conn: &Connection,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++) -> Result<()> {
++    {
++        let transaction = conn.unchecked_transaction()?;
++        execute_source_schema(&transaction, SCHEMA11_SQL)?;
++        execute_source_schema(&transaction, SCHEMA14_UPGRADE_SQL)?;
++        execute_source_schema(&transaction, SCHEMA15_UPGRADE_SQL)?;
++        execute_schema16_marker(&transaction)?;
++        execute_source_schema(&transaction, SCHEMA17_UPGRADE_SQL)?;
++        execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
++        transaction.commit()?;
++    }
++    populate_latest_collection(conn, normalized_ir, guid_assignments, notetype_ids)
++}
++
+ // The upgrade notice is independent of the exported notes. The regeneration
+ // test below ties this resource to our schema and notice implementation.
+ const LEGACY_UPGRADE_COLLECTION: &[u8] =
+@@ -1090,6 +1163,117 @@ mod tests {
+         assert!(!path.exists());
+     }
+ 
++    #[test]
++    fn collection_memory_limit_falls_back_to_identical_compacted_file_bytes() {
++        let root = tempfile::tempdir().unwrap();
++        let mut normalized = two_basic_notes();
++        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
++        let memory = create_collection_source(
++            root.path(),
++            &normalized,
++            &Default::default(),
++            &ids,
++            COLLECTION_MEMORY_MAX_PAGES,
++        )
++        .unwrap();
++        assert!(memory._file.is_none());
++        let base_pages: usize = memory
++            .connection
++            .query_row("pragma page_count", [], |row| row.get(0))
++            .unwrap();
++        let page_limit: usize = memory
++            .connection
++            .query_row("pragma max_page_count", [], |row| row.get(0))
++            .unwrap();
++        assert_eq!(page_limit, COLLECTION_MEMORY_MAX_PAGES);
++        drop(memory);
++
++        let note = normalized.notes[0].clone();
++        normalized.notes = (0..32)
++            .map(|index| {
++                let mut note = note.clone();
++                // Unusually large identities exercise the hard limit even
++                // though the ordinary per-note estimate permits memory.
++                note.id = format!("note-{index}-{}", "identity".repeat(1024));
++                note
++            })
++            .collect();
++        let max_pages = base_pages + 1;
++        let field_bytes: usize = normalized
++            .notes
++            .iter()
++            .flat_map(|note| note.fields.values())
++            .map(String::len)
++            .sum();
++        assert!(field_bytes + normalized.notes.len() * 2048 < max_pages * COLLECTION_PAGE_SIZE);
++
++        let mut compacted_bytes = Vec::new();
++        for (index, limit) in [COLLECTION_MEMORY_MAX_PAGES, max_pages, 0]
++            .into_iter()
++            .enumerate()
++        {
++            let source = create_collection_source(
++                root.path(),
++                &normalized,
++                &Default::default(),
++                &ids,
++                limit,
++            )
++            .unwrap();
++            assert_eq!(source._file.is_some(), index != 0);
++            let path = root.path().join(format!("compacted-{index}.sqlite"));
++            source
++                .connection
++                .execute("VACUUM INTO ?1", [path.to_str().unwrap()])
++                .unwrap();
++            compacted_bytes.push(fs::read(&path).unwrap());
++            let source_path = source._file.as_ref().map(|file| file.path().to_owned());
++            drop(source);
++            if let Some(path) = source_path {
++                assert!(!path.exists());
++            }
++        }
++        assert_eq!(compacted_bytes[0], compacted_bytes[1]);
++        assert_eq!(compacted_bytes[0], compacted_bytes[2]);
++    }
++
++    #[test]
++    fn oversized_collection_uses_disk_and_cleans_up_after_population_failure() {
++        let root = tempfile::tempdir().unwrap();
++        let mut normalized = two_basic_notes();
++        normalized.notes[0]
++            .fields
++            .insert("Back".into(), "large field".repeat(COLLECTION_PAGE_SIZE));
++        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
++        let source =
++            create_collection_source(root.path(), &normalized, &Default::default(), &ids, 1)
++                .unwrap();
++        assert!(source._file.is_some());
++        drop(source);
++        assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
++
++        // Both storage paths propagate non-capacity errors and clean private
++        // files. In particular, a memory error must not trigger a disk retry.
++        normalized.notetypes.push(normalized.notetypes[0].clone());
++        for limit in [COLLECTION_MEMORY_MAX_PAGES, 0] {
++            let error = create_collection_source(
++                root.path(),
++                &normalized,
++                &Default::default(),
++                &ids,
++                limit,
++            )
++            .err()
++            .expect("duplicate notetype rows violate the primary key");
++            assert!(matches!(
++                error.downcast_ref::<rusqlite::Error>(),
++                Some(rusqlite::Error::SqliteFailure(code, _))
++                    if code.code == rusqlite::ErrorCode::ConstraintViolation
++            ));
++            assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
++        }
++    }
++
+     #[test]
+     fn failure_after_streaming_collection_keeps_previous_package_and_cleans_compaction() {
+         let root = tempfile::tempdir().unwrap();
+diff --git a/anki_forge/src/writer_core/diff.rs b/anki_forge/src/writer_core/diff.rs
+index 4b626d8..0042ee3 100644
+--- a/anki_forge/src/writer_core/diff.rs
++++ b/anki_forge/src/writer_core/diff.rs
+@@ -3,7 +3,6 @@ use std::collections::{BTreeMap, BTreeSet};
+ use anyhow::Result;
+ use serde_json::Value;
+ 
+-use crate::writer_core::canonical_json::FilteredValue;
+ use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
+ 
+ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
+@@ -35,19 +34,39 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
+             continue;
+         }
+ 
+-        let left_entries = domain_entries(left_values);
+-        let right_entries = domain_entries(right_values);
+-        let mut selectors = BTreeSet::new();
+-        selectors.extend(left_entries.keys().copied());
+-        selectors.extend(right_entries.keys().copied());
+-
+-        for selector in selectors {
++        let mut left_entries = domain_entries(left_values).into_iter();
++        let mut right_entries = domain_entries(right_values).into_iter();
++        let mut left_next = left_entries.next();
++        let mut right_next = right_entries.next();
++        // Merge the sorted indexes directly, retaining last-duplicate-wins
++        // semantics without another selector set or repeated tree lookups.
++        loop {
++            let (selector, left_entry, right_entry) = match (left_next, right_next) {
++                (Some((selector, value)), right)
++                    if right.is_none_or(|(other, _)| selector < other) =>
++                {
++                    left_next = left_entries.next();
++                    (selector, Some(value), None)
++                }
++                (left, Some((selector, value)))
++                    if left.is_none_or(|(other, _)| selector < other) =>
++                {
++                    right_next = right_entries.next();
++                    (selector, None, Some(value))
++                }
++                (Some((selector, left)), Some((_, right))) => {
++                    left_next = left_entries.next();
++                    right_next = right_entries.next();
++                    (selector, Some(left), Some(right))
++                }
++                _ => break,
++            };
+             if should_skip_selector(domain, selector, left, right) {
+                 continue;
+             }
+-            match (left_entries.get(&selector), right_entries.get(&selector)) {
++            match (left_entry, right_entry) {
+                 (Some(left_entry), Some(right_entry)) => {
+-                    if entry_payload(domain, left_entry)? != entry_payload(domain, right_entry)? {
++                    if !entry_payloads_equal(domain, left_entry, right_entry) {
+                         changes.push(change_for_modified(
+                             domain,
+                             selector,
+@@ -133,7 +152,7 @@ fn domain_entries(values: &[Value]) -> BTreeMap<&str, &Value> {
+     entries
+ }
+ 
+-fn entry_payload(domain: &str, value: &Value) -> Result<String> {
++fn entry_payloads_equal(domain: &str, left: &Value, right: &Value) -> bool {
+     let excluded: &'static [&'static str] = if domain == "media" {
+         &[
+             "selector",
+@@ -145,7 +164,34 @@ fn entry_payload(domain: &str, value: &Value) -> Result<String> {
+     } else {
+         &["selector", "evidence_refs"]
+     };
+-    Ok(serde_json::to_string(&FilteredValue { value, excluded })?)
++    filtered_values_equal(left, right, excluded)
++}
++
++fn filtered_values_equal(left: &Value, right: &Value, excluded: &[&str]) -> bool {
++    match (left, right) {
++        (Value::Object(left), Value::Object(right)) => {
++            let semantic_entries = |key: &&String| !excluded.contains(&key.as_str());
++            left.keys().filter(semantic_entries).count()
++                == right.keys().filter(semantic_entries).count()
++                && left.iter().all(|(key, value)| {
++                    excluded.contains(&key.as_str())
++                        || right
++                            .get(key)
++                            .is_some_and(|other| filtered_values_equal(value, other, excluded))
++                })
++        }
++        (Value::Array(left), Value::Array(right)) => {
++            left.len() == right.len()
++                && left
++                    .iter()
++                    .zip(right)
++                    .all(|(left, right)| filtered_values_equal(left, right, excluded))
++        }
++        // Preserve canonical JSON's numeric representation, including 1 vs
++        // 1.0 and signed zero. Value/Number equality alone loses signed zero.
++        (Value::Number(left), Value::Number(right)) => left.to_string() == right.to_string(),
++        _ => left == right,
++    }
+ }
+ 
+ #[cfg(test)]
+@@ -281,22 +327,38 @@ mod ownership_tests {
+     }
+ 
+     #[test]
+-    fn borrowed_payload_preserves_recursive_domain_filters_and_numeric_encoding() {
+-        let value = serde_json::json!({
+-            "selector":"row", "evidence_refs":["removed"], "object_id":"media only",
+-            "nested":[{"binding_id":"media only", "object_ref":"media only", "selector":"removed", "evidence_refs":[], "data":[1,1.0,-0.0,0.0,"尾"]}],
+-        });
++    fn structural_comparison_matches_canonical_payloads() {
++        let mut values: Vec<Value> = serde_json::from_str(
++            r#"[null,false,true,0,1,-1,1.0,-0.0,0.0,18446744073709551615,
++                -9223372036854775808,1e-200,1e200,"","尾 \\ \"\n",[],[1,2],[2,1],{},
++                {"selector":"ignored","evidence_refs":["ignored"]},
++                {"object_id":"media only","binding_id":1,"object_ref":null},
++                {"a":null},{"a":1,"b":2},{"b":2,"a":1}]"#,
++        )
++        .unwrap();
++        for value in values.clone() {
++            values.push(serde_json::json!({
++                "selector":"row", "evidence_refs":["removed"],
++                "nested":[{"binding_id":"media only", "object_ref":"media only", "data":value}],
++            }));
++        }
+         for domain in ["media", "metadata", "fields"] {
+-            let expected =
+-                crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, &value))
+-                    .unwrap();
+-            assert_eq!(entry_payload(domain, &value).unwrap(), expected);
++            let canonical: Vec<_> = values
++                .iter()
++                .map(|value| {
++                    crate::writer_core::to_canonical_json(&strip_non_semantic_fields(domain, value))
++                        .unwrap()
++                })
++                .collect();
++            for (i, left) in values.iter().enumerate() {
++                for (j, right) in values.iter().enumerate() {
++                    assert_eq!(
++                        entry_payloads_equal(domain, left, right),
++                        canonical[i] == canonical[j],
++                        "{domain}: {left} vs {right}"
++                    );
++                }
++            }
+         }
+-        // JSON numbers with different encodings remain distinct, even when
+-        // IEEE equality would consider them equal.
+-        assert_ne!(
+-            entry_payload("fields", &serde_json::json!(-0.0)).unwrap(),
+-            entry_payload("fields", &serde_json::json!(0.0)).unwrap()
+-        );
+     }
+ }
+diff --git a/anki_forge/src/writer_core/inspect.rs b/anki_forge/src/writer_core/inspect.rs
+index 90beb4e..2f0b561 100644
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -1606,12 +1606,15 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+         let mut rows = note_rows.query([])?;
+         while let Some(row) = rows.next()? {
+             let id: i64 = row.get(0)?;
+-            let guid: String = row.get(1)?;
++            let guid = row_text(row, 1)?;
+             let mid: i64 = row.get(2)?;
+             let mtime_secs: i64 = row.get(3)?;
+-            let tags: String = row.get(4)?;
+-            let flds: String = row.get(5)?;
+-            let data: String = row.get(6)?;
++            // Validate the same columns in the same order for both projections.
++            // Borrow until the next row instead of copying text Summary discards
++            // or copying the joined fields before splitting them for Observations.
++            let tags = row_text(row, 4)?;
++            let flds = row_text(row, 5)?;
++            let data = row_text(row, 6)?;
+             let notetype = notetypes_by_row_id
+                 .get(&mid)
+                 .ok_or(rusqlite::Error::QueryReturnedNoRows)?;
+@@ -1620,7 +1623,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 // for observed_notes(). Repeated GUIDs each observe the same
+                 // set of actual ordinals, matching full inspection.
+                 summary_counts.notes += 1;
+-                summary_counts.cards += summary_card_ordinals.get(&guid).map_or(0, BTreeSet::len);
++                summary_counts.cards += summary_card_ordinals.get(guid).map_or(0, BTreeSet::len);
+                 continue;
+             }
+             // Empty storage is one empty field, not an absent field list.
+@@ -1631,7 +1634,7 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 fields.insert(field.name.clone(), value.to_string());
+             }
+             let note = NormalizedNote {
+-                id: guid.clone(),
++                id: guid.to_owned(),
+                 notetype_id: notetype.id.clone(),
+                 deck_name: note_decks_by_row_id
+                     .get(&id)
+@@ -1645,9 +1648,9 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+                 },
+                 mtime_secs: Some(mtime_secs),
+             };
+-            let identity_metadata = serde_json::from_str::<Value>(&data)
++            let identity_metadata = serde_json::from_str::<Value>(data)
+                 .ok()
+-                .and_then(|value| value.get("anki_forge_identity").cloned())
++                .and_then(|mut value| value.as_object_mut()?.remove("anki_forge_identity"))
+                 .map(|mut observed| {
+                     if let Some(object) = observed.as_object_mut() {
+                         object.insert(
+@@ -1679,6 +1682,23 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
+     })
+ }
+ 
++fn row_text<'a>(row: &'a rusqlite::Row<'_>, index: usize) -> rusqlite::Result<&'a str> {
++    match row.get_ref(index)? {
++        rusqlite::types::ValueRef::Text(bytes) => std::str::from_utf8(bytes).map_err(|error| {
++            rusqlite::Error::FromSqlConversionFailure(
++                index,
++                rusqlite::types::Type::Text,
++                Box::new(error),
++            )
++        }),
++        value => Err(rusqlite::Error::InvalidColumnType(
++            index,
++            row.as_ref().column_name(index)?.into(),
++            value.data_type(),
++        )),
++    }
++}
++
+ fn normalized_notetype_kind(config: &crate::writer_core::anki_proto::NotetypeConfig) -> String {
+     match OriginalStockKind::try_from(config.original_stock_kind).ok() {
+         Some(OriginalStockKind::Basic) => "normal".into(),
+@@ -1792,6 +1812,37 @@ mod summary_tests;
+ mod tests {
+     use super::*;
+ 
++    #[test]
++    fn borrowed_row_text_preserves_owned_text_validation() {
++        let conn = Connection::open_in_memory().unwrap();
++        let mut statement = conn
++            .prepare("select ?1 as payload, cast(x'80' as text) as invalid_utf8")
++            .unwrap();
++        for value in [
++            rusqlite::types::Value::Null,
++            rusqlite::types::Value::Integer(1),
++            rusqlite::types::Value::Real(1.5),
++            rusqlite::types::Value::Blob(b"valid UTF-8 in a blob".to_vec()),
++            rusqlite::types::Value::Text(String::new()),
++            rusqlite::types::Value::Text("a\u{1f}\u{1f}尾\0".repeat(8192)),
++        ] {
++            let mut rows = statement.query([value]).unwrap();
++            let row = rows.next().unwrap().unwrap();
++            for index in 0..=2 {
++                let owned = row.get::<_, String>(index);
++                let borrowed = row_text(row, index);
++                match (owned, borrowed) {
++                    (Ok(owned), Ok(borrowed)) => assert_eq!(owned, borrowed),
++                    (Err(owned), Err(borrowed)) => {
++                        assert_eq!(format!("{owned:?}"), format!("{borrowed:?}"));
++                        assert_eq!(owned.to_string(), borrowed.to_string());
++                    }
++                    other => panic!("text validation differs: {other:?}"),
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn streamed_fingerprint_matches_the_original_canonical_projection() {
+         let value = json!({
+diff --git a/anki_forge/tests/writer_core_diff_tests.rs b/anki_forge/tests/writer_core_diff_tests.rs
+index 7d335e0..fbe7f61 100644
+--- a/anki_forge/tests/writer_core_diff_tests.rs
++++ b/anki_forge/tests/writer_core_diff_tests.rs
+@@ -300,6 +300,81 @@ fn diff_reports_only_strip_media_provenance_from_media_domain() {
+     assert_eq!(diff.changes[0].selector, "note[id='note-1']");
+ }
+ 
++#[test]
++fn diff_merges_selectors_in_order_and_keeps_the_last_duplicate() {
++    let mut left = sample_inspect_report("Basic");
++    let mut right = left.clone();
++    left.observations.fields = vec![
++        json!({"selector":"z", "value":"removed tail"}),
++        json!({"selector":"c", "value":"superseded duplicate"}),
++        json!({"selector":12, "value":"ignored"}),
++        json!({"selector":"a", "value":"removed head"}),
++        json!({"selector":"e", "value":"before", "evidence_refs":["z", "shared"]}),
++        json!({"selector":"c", "value":"unchanged", "evidence_refs":["left"]}),
++    ];
++    right.observations.fields = vec![
++        json!({"selector":"f", "value":"added tail"}),
++        json!({"value":"ignored"}),
++        json!({"selector":"c", "value":"unchanged", "evidence_refs":["right"]}),
++        json!({"selector":"b", "value":"superseded duplicate"}),
++        json!({"selector":"e", "value":"after", "evidence_refs":["a", "shared"]}),
++        json!({"selector":"b", "value":"added head", "evidence_refs":["last"]}),
++    ];
++    for (before, after, added, removed) in [
++        (&left, &right, "added", "removed"),
++        (&right, &left, "removed", "added"),
++    ] {
++        let diff = diff_reports(before, after).unwrap();
++        let changes: Vec<_> = diff
++            .changes
++            .iter()
++            .map(|change| (change.selector.as_str(), change.category.as_str()))
++            .collect();
++        assert_eq!(
++            changes,
++            [
++                ("a", removed),
++                ("b", added),
++                ("e", "modified"),
++                ("f", added),
++                ("z", removed)
++            ]
++        );
++        assert_eq!(diff.changes[1].evidence_refs, ["last"]);
++        assert_eq!(diff.changes[2].evidence_refs, ["a", "shared", "z"]);
++    }
++
++    left.observations.fields.clear();
++    let diff = diff_reports(&left, &right).unwrap();
++    assert_eq!(diff.changes.len(), 4);
++    assert!(diff.changes.iter().all(|change| change.category == "added"));
++    right.observations.fields.clear();
++    assert!(diff_reports(&left, &right).unwrap().changes.is_empty());
++}
++
++#[test]
++fn diff_skips_apkg_media_references_on_either_side_without_skipping_later_entries() {
++    let mut left = sample_inspect_report("Basic");
++    let mut right = left.clone();
++    left.source_kind = "apkg".into();
++    left.observations.references = vec![
++        json!({"selector":"media-ref[a]", "value":"removed"}),
++        json!({"selector":"media-ref[b]", "value":"before"}),
++        json!({"selector":"note[z]", "value":"before"}),
++    ];
++    right.observations.references = vec![
++        json!({"selector":"media-ref[b]", "value":"after"}),
++        json!({"selector":"media-ref[c]", "value":"added"}),
++        json!({"selector":"note[z]", "value":"after"}),
++    ];
++    for (before, after) in [(&left, &right), (&right, &left)] {
++        let diff = diff_reports(before, after).unwrap();
++        assert_eq!(diff.changes.len(), 1);
++        assert_eq!(diff.changes[0].selector, "note[z]");
++        assert_eq!(diff.changes[0].category, "modified");
++    }
++}
++
+ #[test]
+ fn diff_covers_field_metadata_browser_templates_and_target_decks() {
+     let left = sample_inspect_report("Basic");
+diff --git a/anki_forge/tests/writer_optimization_tests.rs b/anki_forge/tests/writer_optimization_tests.rs
+index ad50640..1a11e57 100644
+--- a/anki_forge/tests/writer_optimization_tests.rs
++++ b/anki_forge/tests/writer_optimization_tests.rs
+@@ -232,7 +232,7 @@ fn materialized_writer_preserves_legacy_ids_and_rejects_invalid_identity_plans()
+ }
+ 
+ #[test]
+-fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
++fn build_sql_failure_cleans_its_source_and_preserves_the_existing_package() {
+     let root = tempfile::tempdir().unwrap();
+     let target = BuildArtifactTarget::new(root.path(), "artifacts");
+     let output = root.path().join("package.apkg");
+@@ -254,15 +254,24 @@ fn build_rolls_back_sql_failure_and_does_not_replace_an_existing_package() {
+                 .summary
+                 .contains("UNIQUE constraint failed: notetypes.name")
+     }));
+-    assert_eq!(fs::read(output).unwrap(), b"previous package");
+-    let conn =
+-        rusqlite::Connection::open(root.path().join(".collection.anki21b.sqlite.tmp")).unwrap();
+-    for table in ["notetypes", "decks", "deck_config"] {
+-        let count: i64 = conn
+-            .query_row(&format!("select count(*) from {table}"), [], |row| {
+-                row.get(0)
+-            })
+-            .unwrap();
+-        assert_eq!(count, 0, "partial writes remain in {table}");
+-    }
++    assert_eq!(fs::read(&output).unwrap(), b"previous package");
++    // The source database is private and is now released even on failure.
++    // Transaction rollback itself is covered at the live-connection seam.
++    let mut files = fs::read_dir(root.path())
++        .unwrap()
++        .map(|entry| entry.unwrap())
++        .filter(|entry| entry.file_type().unwrap().is_file())
++        .map(|entry| entry.file_name())
++        .collect::<Vec<_>>();
++    files.sort();
++    assert_eq!(files, [".package.apkg.tmp", "package.apkg"]);
++
++    normalized.notetypes.pop();
++    let retried = build(&normalized, &policy, &context, &target).unwrap();
++    assert_eq!(
++        retried.result_status, "success",
++        "{:?}",
++        retried.diagnostics
++    );
++    assert!(inspect_apkg(output).is_ok());
+ }
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index e8d1c3a..ede922f 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -11,5 +11,6 @@ results/*
+ !results/20260907-bounded-media/
+ !results/20260907-text-ownership/
+ !results/20260908-performance-pr/
++!results/20260908-round3-performance/
+ adapters/rust/target/
+ __pycache__/
