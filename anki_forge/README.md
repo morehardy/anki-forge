@@ -1,5 +1,8 @@
 # anki_forge
 
+[Website](https://ankiforge.dev/) · [Rust documentation](https://ankiforge.dev/docs/rust-guide/) ·
+[GitHub](https://github.com/morehardy/anki-forge) · [Issues](https://github.com/morehardy/anki-forge/issues)
+
 `anki_forge` is a typed Rust library for building Anki decks. The crate ships
 its default contract resources, so normal use does not require a source
 checkout, a particular working directory, or a separate runtime installation.

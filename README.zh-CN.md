@@ -2,6 +2,9 @@
 
 [English](README.md) · 简体中文
 
+[官网](https://ankiforge.dev/) · [使用文档](https://ankiforge.dev/docs/) ·
+[GitHub](https://github.com/morehardy/anki-forge) · [问题反馈](https://github.com/morehardy/anki-forge/issues)
+
 **把你的数据，变成 Anki 牌组。**
 
 用 Rust、Node.js 或 Python 制作基础问答、填空和自定义卡片。

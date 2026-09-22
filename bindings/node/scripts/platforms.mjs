@@ -30,6 +30,8 @@ export async function preparePlatforms() {
           version: main.version,
           description: `Native runtime for ${main.name} (${item.target})`,
           license: main.license,
+          homepage: main.homepage,
+          bugs: main.bugs,
           repository: main.repository,
           engines: main.engines,
           os: [item.os],
@@ -44,7 +46,7 @@ export async function preparePlatforms() {
     );
     await fs.writeFile(
       path.join(directory, 'README.md'),
-      `# ${main.name}-${item.suffix}\n\nPlatform runtime installed automatically by \`${main.name}\`.\n`,
+      `# ${main.name}-${item.suffix}\n\nPlatform runtime installed automatically by \`${main.name}\`.\n\n[Website](${main.homepage}) · [Node / TypeScript documentation](https://ankiforge.dev/docs/node-quickstart/) · [Issues](${main.bugs.url})\n`,
     );
     await fs.copyFile(path.join(repo, 'LICENSE'), path.join(directory, 'LICENSE'));
     await fs.copyFile(

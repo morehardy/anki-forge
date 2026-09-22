@@ -1,5 +1,8 @@
 # anki-forge Node SDK
 
+[Website](https://ankiforge.dev/) · [Node / TypeScript documentation](https://ankiforge.dev/docs/node-quickstart/) ·
+[GitHub](https://github.com/morehardy/anki-forge) · [Issues](https://github.com/morehardy/anki-forge/issues)
+
 The 0.2 candidate exposes the Rust product API through TypeScript and Node-API.
 It owns real Rust `Project` and `Deck` objects. APKG generation, validation,
 identity, media fingerprints, templates and update safety run in Rust.

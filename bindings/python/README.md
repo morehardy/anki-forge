@@ -1,5 +1,8 @@
 # anki-forge Python 0.2
 
+[Website](https://ankiforge.dev/) · [Python documentation](https://ankiforge.dev/docs/python-quickstart/) ·
+[GitHub](https://github.com/morehardy/anki-forge) · [Issues](https://github.com/morehardy/anki-forge/issues)
+
 The Python SDK owns Rust Project, Deck, media and Artifact objects through a
 private native extension. Validation, identity derivation, template loading,
 media verification, comparison and APKG writing run in the same core as Rust.

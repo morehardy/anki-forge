@@ -7,6 +7,12 @@ requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 
+[project.urls]
+Homepage = "https://ankiforge.dev/"
+Documentation = "https://ankiforge.dev/docs/python-quickstart/"
+Repository = "https://github.com/morehardy/anki-forge"
+Issues = "https://github.com/morehardy/anki-forge/issues"
+
 [build-system]
 requires = ["maturin==1.15.0"]
 build-backend = "anki_forge_build"

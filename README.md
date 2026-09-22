@@ -2,6 +2,9 @@
 
 English · [简体中文](README.zh-CN.md)
 
+[Website](https://ankiforge.dev/) · [Documentation](https://ankiforge.dev/docs/) ·
+[GitHub](https://github.com/morehardy/anki-forge) · [Issues](https://github.com/morehardy/anki-forge/issues)
+
 **Turn your data into Anki decks.**
 
 Create Basic, Cloze, and custom cards with Rust, Node.js, or Python. Bundle
