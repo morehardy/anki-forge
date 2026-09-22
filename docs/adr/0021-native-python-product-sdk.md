@@ -1,6 +1,6 @@
 # ADR 0021: Own Rust product objects behind the Python SDK
 
-Status: accepted for implementation; native trial and release gates are open.
+Status: accepted for implementation; native trial passed, final release gates remain open.
 
 Python 0.1 passes a ProductDocument to a bundled CLI. Its stateless transport
 cannot retain Project registration evidence, incremental validation, or temporary

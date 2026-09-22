@@ -6,7 +6,7 @@ import json
 from typing import ParamSpec, TypeVar
 
 from . import _native
-from .diagnostics import AuthoringError, MediaError, ProjectAddError
+from .diagnostics import AuthoringError, MediaError, ProductNoteError, ProjectAddError
 from .report import _diagnostics
 
 P = ParamSpec("P")
@@ -20,5 +20,5 @@ def invoke(operation: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
         payload = json.loads(str(error))
         details = payload.get("details") or {}
         diagnostic = _diagnostics([details["diagnostic"]])[0] if "diagnostic" in details else None
-        cls = {"add": ProjectAddError, "media": MediaError}.get(payload["kind"], AuthoringError)
+        cls = {"add": ProjectAddError, "media": MediaError, "note": ProductNoteError}.get(payload["kind"], AuthoringError)
         raise cls(payload["code"], payload["message"], diagnostic=diagnostic, details=details) from error

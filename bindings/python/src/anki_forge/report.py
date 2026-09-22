@@ -27,6 +27,21 @@ RISK_LEVELS = {"info", "low", "medium", "high", "critical"}
 
 
 @dataclass(frozen=True)
+class ValidationReport:
+    """Diagnostics from core validation, without normalization or APKG writing."""
+
+    diagnostics: tuple[Diagnostic, ...]
+
+    @property
+    def has_errors(self) -> bool:
+        return any(diagnostic.severity == "error" for diagnostic in self.diagnostics)
+
+    def ensure_success(self) -> None:
+        if self.has_errors:
+            raise DiagnosticsError("anki-forge validation failed", report=self)
+
+
+@dataclass(frozen=True)
 class BuildReport:
     status: str
     comparison: str

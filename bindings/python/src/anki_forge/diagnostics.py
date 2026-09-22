@@ -28,6 +28,10 @@ class ProjectAddError(AuthoringError):
     """The core rejected an addition without changing the Project."""
 
 
+class ProductNoteError(AuthoringError):
+    """The core rejected a Product note builder."""
+
+
 class MediaError(AuthoringError):
     """The core rejected a media registration."""
 

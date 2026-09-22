@@ -166,6 +166,12 @@ impl Note {
             .collect()
     }
 
+    /// Read typed authoring values without lowering or reading media.
+    #[cfg(feature = "internal-tools")]
+    pub fn fields_ref(&self) -> &BTreeMap<String, Content> {
+        &self.fields
+    }
+
     // Only a consumed Project uses this. Keep field names for diagnostic source
     // mapping; callers must resolve content-derived identities before draining.
     pub(crate) fn take_rendered_fields(&mut self) -> BTreeMap<String, String> {

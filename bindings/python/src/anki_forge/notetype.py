@@ -3,9 +3,13 @@ from __future__ import annotations
 import re
 import string
 from dataclasses import dataclass, field
-from typing import Iterable
+from typing import Iterable, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .identity import IdentityRecipe
 
 from .diagnostics import ValidationError
+from . import _native
 
 _ASCII_CONTROL = "".join(chr(value) for value in range(32)) + chr(127)
 _ASCII_WHITESPACE = "".join(chr(value) for value in range(128) if chr(value) in string.whitespace)
@@ -138,10 +142,15 @@ class Field:
     identity: bool = False
     sort: bool = False
     required: bool = False
+    optional: bool = False
+    key_auto_derived: bool = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        name = _validate_non_empty(self.name, "field name")
-        key = _validate_id(self.key, "field key") if self.key is not None else _slug(name)
+        if self.required and self.optional:
+            raise ValidationError("field cannot be both required and optional")
+        name = _validate_source(self.name, "field name")
+        key = _validate_id(self.key, "field key") if self.key is not None else _native.default_field_key(name)
+        object.__setattr__(self, "key_auto_derived", self.key is None)
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "key", key)
 
@@ -158,8 +167,8 @@ class Template:
     target_deck: str | None = None
 
     def __post_init__(self) -> None:
-        name = _validate_non_empty(self.name, "template name")
-        key = _validate_id(self.key, "template key") if self.key is not None else _slug(name)
+        name = _validate_source(self.name, "template name")
+        key = _validate_id(self.key, "template key") if self.key is not None else _native.default_template_key(name)
         front = _validate_source(self.front, "template front")
         back = _validate_source(self.back, "template back")
         browser_front = _validate_optional_source(self.browser_front, "browser front")
@@ -188,6 +197,7 @@ class NoteType:
     custom_value: bool = True
     kind_value: str = "normal"
     cloze_field: str | None = None
+    identity_value: IdentityRecipe | None = None
 
     def __setattr__(self, name: str, value: object) -> None:
         if name == "id" and "id" in self.__dict__:
@@ -248,61 +258,24 @@ class NoteType:
             self.css_value = css
         return self
 
+    def identity(self, recipe: IdentityRecipe) -> NoteType:
+        from .identity import IdentityRecipe
+
+        if not isinstance(recipe, IdentityRecipe):
+            raise ValidationError("note type identity must be an IdentityRecipe")
+        self.identity_value = recipe
+        return self
+
     def field(self, field: Field) -> NoteType:
-        if any(existing.key == field.key for existing in self.fields):
-            raise ValidationError(f"duplicate field key: {field.key}")
-        if any(existing.name == field.name for existing in self.fields):
-            raise ValidationError(f"duplicate field name: {field.name}")
-        if field.sort and any(existing.sort for existing in self.fields):
-            raise ValidationError("only one sort field is allowed")
         self.fields.append(field)
         return self
 
     def template(self, template: Template) -> NoteType:
-        if any(existing.key == template.key for existing in self.templates):
-            raise ValidationError(f"duplicate template key: {template.key}")
-        field_keys = {field.key for field in self.fields}
-        for field_key in _generation_rule_field_keys(template.generate_when):
-            if field_key not in field_keys:
-                raise ValidationError(f"template generation rule references unknown field key: {field_key}")
         self.templates.append(template)
         return self
 
     def validate(self) -> NoteType:
-        seen_field_keys: set[str] = set()
-        seen_field_names: set[str] = set()
-        sort_count = 0
-        for current_field in self.fields:
-            field_key = current_field.key
-            if field_key is None:
-                raise ValidationError("field key must not be None after validation")
-            if field_key in seen_field_keys:
-                raise ValidationError(f"duplicate field key: {field_key}")
-            if current_field.name in seen_field_names:
-                raise ValidationError(f"duplicate field name: {current_field.name}")
-            seen_field_keys.add(field_key)
-            seen_field_names.add(current_field.name)
-            if current_field.sort:
-                sort_count += 1
-        if sort_count > 1:
-            raise ValidationError("only one sort field is allowed")
-        if self.kind_value == "cloze":
-            if self.cloze_field not in seen_field_keys:
-                raise ValidationError(
-                    f"cloze field key is not declared on the note type: {self.cloze_field}"
-                )
-            if len(self.templates) != 1:
-                raise ValidationError("custom Cloze note type requires exactly one template")
+        from .native_project import Project
 
-        seen_template_keys: set[str] = set()
-        for current_template in self.templates:
-            template_key = current_template.key
-            if template_key is None:
-                raise ValidationError("template key must not be None after validation")
-            if template_key in seen_template_keys:
-                raise ValidationError(f"duplicate template key: {template_key}")
-            seen_template_keys.add(template_key)
-            for field_key in _generation_rule_field_keys(current_template.generate_when):
-                if field_key not in seen_field_keys:
-                    raise ValidationError(f"template generation rule references unknown field key: {field_key}")
+        Project("NoteType validation").add_notetype(self)
         return self
