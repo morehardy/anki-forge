@@ -306,4 +306,3 @@ def test_report_accepts_forward_compatible_summary_fields():
         "unique_bytes": 0,
         "entries": [],
     }
-

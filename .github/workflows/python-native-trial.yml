@@ -5,13 +5,6 @@ on:
   workflow_call:
   push:
     branches: [codex/python-sdk-parity]
-  pull_request:
-    paths:
-      - bindings/python/**
-      - anki_forge/**
-      - Cargo.toml
-      - Cargo.lock
-      - .github/workflows/python-native-trial.yml
 
 permissions:
   contents: read
