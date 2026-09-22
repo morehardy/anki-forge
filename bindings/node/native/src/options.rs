@@ -6,25 +6,52 @@ use anki_forge::prelude::InspectLimits;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
+/// Safe JSON numbers and exact decimal strings are the only binding representations.
+struct InspectBudget(u64);
+impl<'de> Deserialize<'de> for InspectBudget {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum Input {
+            Number(u64),
+            Decimal(String),
+        }
+        match Input::deserialize(deserializer)? {
+            Input::Number(value) if value <= 9_007_199_254_740_991 => Ok(Self(value)),
+            Input::Decimal(value)
+                if !value.is_empty() && value.bytes().all(|byte| byte.is_ascii_digit()) =>
+            {
+                value
+                    .parse::<u64>()
+                    .map(Self)
+                    .map_err(serde::de::Error::custom)
+            }
+            _ => Err(serde::de::Error::custom(
+                "expected a safe unsigned integer or u64 decimal string",
+            )),
+        }
+    }
+}
+
 #[derive(Default, Deserialize)]
 #[serde(default, rename_all = "camelCase", deny_unknown_fields)]
 pub struct InspectInput {
-    max_archive_bytes: Option<u64>,
-    max_entries: Option<u64>,
-    max_central_directory_bytes: Option<u64>,
-    max_zip_entry_bytes: Option<u64>,
-    max_zip_total_bytes: Option<u64>,
-    max_meta_bytes: Option<u64>,
-    max_media_map_bytes: Option<u64>,
-    max_collection_bytes: Option<u64>,
-    max_media_bytes: Option<u64>,
-    max_decoded_total_bytes: Option<u64>,
-    max_zstd_window_bytes: Option<u64>,
+    max_archive_bytes: Option<InspectBudget>,
+    max_entries: Option<InspectBudget>,
+    max_central_directory_bytes: Option<InspectBudget>,
+    max_zip_entry_bytes: Option<InspectBudget>,
+    max_zip_total_bytes: Option<InspectBudget>,
+    max_meta_bytes: Option<InspectBudget>,
+    max_media_map_bytes: Option<InspectBudget>,
+    max_collection_bytes: Option<InspectBudget>,
+    max_media_bytes: Option<InspectBudget>,
+    max_decoded_total_bytes: Option<InspectBudget>,
+    max_zstd_window_bytes: Option<InspectBudget>,
 }
 impl InspectInput {
     pub fn limits(self) -> InspectLimits {
         let mut limits = InspectLimits::default();
-        macro_rules! apply { ($($field:ident),*) => { $(if let Some(value) = self.$field { limits.$field = value; })* }; }
+        macro_rules! apply { ($($field:ident),*) => { $(if let Some(value) = self.$field { limits.$field = value.0; })* }; }
         apply!(
             max_archive_bytes,
             max_entries,

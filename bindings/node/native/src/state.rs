@@ -10,11 +10,12 @@ use std::sync::{Arc, Mutex};
 
 use crate::reports;
 
+#[derive(Clone)]
 pub struct ProjectContext {
     pub project: Project,
     pub deck: Option<anki_forge::deck::Deck>,
     pub media: BTreeMap<String, anki_forge::product::MediaRef>,
-    staged_media: Vec<tempfile::TempDir>,
+    staged_media: Vec<Arc<tempfile::TempDir>>,
 }
 enum State {
     Ready(Box<ProjectContext>),
@@ -33,6 +34,10 @@ fn failed() -> Error {
 }
 
 impl SharedProject {
+    fn from_context(context: ProjectContext) -> Self {
+        Self(Arc::new(Mutex::new(State::Ready(Box::new(context)))))
+    }
+
     pub fn new(project: Project) -> Self {
         Self(Arc::new(Mutex::new(State::Ready(Box::new(
             ProjectContext {
@@ -113,8 +118,8 @@ impl Drop for ProjectLease {
 }
 
 enum Operation {
+    DescribeDeck,
     Validate,
-    Build(Box<BuildOptions>),
     MediaFile(PathBuf, String),
     MediaBytes(String, String, Vec<u8>, bool),
     TemplateBundle(PathBuf),
@@ -128,16 +133,16 @@ pub struct ProjectTask {
 }
 
 impl ProjectTask {
+    pub fn describe_deck(lease: ProjectLease) -> Self {
+        Self {
+            lease,
+            operation: Operation::DescribeDeck,
+        }
+    }
     pub fn validate(lease: ProjectLease) -> Self {
         Self {
             lease,
             operation: Operation::Validate,
-        }
-    }
-    pub fn build(lease: ProjectLease, options: BuildOptions) -> Self {
-        Self {
-            lease,
-            operation: Operation::Build(Box::new(options)),
         }
     }
     pub fn media_file(lease: ProjectLease, path: PathBuf, export_as: String) -> Self {
@@ -183,29 +188,27 @@ impl ProjectTask {
 
     fn run(&mut self) -> String {
         let context = self.lease.project.as_mut().expect("task owns a project");
-        if matches!(
-            &self.operation,
-            Operation::Validate | Operation::Build(_) | Operation::Diff(_, _)
-        ) {
-            if let Some(deck) = &context.deck {
-                context.project = Project::from(deck.clone());
-            }
-        }
-        let project = &mut context.project;
+        // Validation keeps the existing Project-level checks; diff has no Deck API.
+        // Both snapshots last only for this operation instead of residing in the context.
+        let mut snapshot = if matches!(&self.operation, Operation::Validate | Operation::Diff(_, _))
+        {
+            context
+                .deck
+                .as_ref()
+                .map(|deck| Project::from(deck.clone()))
+        } else {
+            None
+        };
+        let project = snapshot.as_mut().unwrap_or(&mut context.project);
         match &mut self.operation {
+            Operation::DescribeDeck => reports::success(crate::snapshots::deck(
+                context.deck.as_ref().expect("deck context"),
+            )),
             Operation::Validate => {
                 let report = project.validate();
                 reports::success(json!({"diagnostics": report.diagnostics.iter()
                     .map(anki_forge::build::json_report::DiagnosticJson::from).collect::<Vec<_>>()}))
             }
-            Operation::Build(options) => match project.build((**options).clone()) {
-                Ok(report) => reports::success(reports::build_report(&report)),
-                Err(error) => {
-                    let mut details = reports::build_report(&error.report);
-                    details["cause"] = json!(format!("{:?}", error.cause));
-                    reports::failure("build", error.code().as_str(), &error.to_string(), details)
-                }
-            },
             Operation::MediaFile(path, export_as) => match project
                 .media_mut()
                 .add_file(path)
@@ -239,7 +242,7 @@ impl ProjectTask {
                     };
                     let media = pending.export_as(export_as.clone())?;
                     if let Some(directory) = staged {
-                        context.staged_media.push(directory);
+                        context.staged_media.push(Arc::new(directory));
                     }
                     Ok(media)
                 })();
@@ -287,6 +290,47 @@ impl ProjectTask {
     }
 }
 
+pub struct BuildTask {
+    lease: ProjectLease,
+    options: BuildOptions,
+}
+
+impl BuildTask {
+    pub fn new(lease: ProjectLease, options: BuildOptions) -> Self {
+        Self { lease, options }
+    }
+}
+
+impl Task for BuildTask {
+    type Output = crate::artifact::BuildOutcome;
+    type JsValue = crate::artifact::NativeBuildResult;
+
+    fn compute(&mut self) -> Result<Self::Output> {
+        let result = catch_unwind(AssertUnwindSafe(|| {
+            let context = self.lease.project.as_mut().expect("task owns a project");
+            let result = match &context.deck {
+                Some(deck) => deck.build(self.options.clone()),
+                None => context.project.build(self.options.clone()),
+            };
+            crate::artifact::BuildOutcome::from_result(result)
+        }));
+        result.map_err(|_| {
+            self.lease.failed = true;
+            failed()
+        })
+    }
+
+    fn resolve(&mut self, _env: Env, output: Self::Output) -> Result<Self::JsValue> {
+        self.lease.restore();
+        Ok(output.into_native())
+    }
+
+    fn reject(&mut self, _env: Env, error: Error) -> Result<Self::JsValue> {
+        self.lease.restore();
+        Err(error)
+    }
+}
+
 #[napi(object)]
 pub struct NativeBytesResult {
     pub result: String,
@@ -306,11 +350,11 @@ impl BytesTask {
         let output = directory.path().join("deck.apkg");
         let options = BuildOptions::new().output(&output);
         let context = self.lease.project.as_ref().expect("task owns project");
-        let project = context
-            .deck
-            .as_ref()
-            .map(|deck| Project::from(deck.clone()));
-        match project.as_ref().unwrap_or(&context.project).build(options) {
+        let result = match &context.deck {
+            Some(deck) => deck.build(options),
+            None => context.project.build(options),
+        };
+        match result {
             Ok(report) => {
                 report.ensure_success()?;
                 Ok((
@@ -378,6 +422,68 @@ impl Task for ProjectTask {
 
     fn reject(&mut self, _env: Env, error: Error) -> Result<Self::JsValue> {
         self.lease.restore();
+        Err(error)
+    }
+}
+
+/// Copies core authoring state while its source lease is reserved.
+/// Staged media is immutable and keeps shared ownership across independent copies.
+pub struct ProjectCopyTask {
+    lease: ProjectLease,
+    from_deck: bool,
+}
+impl ProjectCopyTask {
+    pub fn new(lease: ProjectLease, from_deck: bool) -> Self {
+        Self { lease, from_deck }
+    }
+}
+impl Task for ProjectCopyTask {
+    type Output = SharedProject;
+    type JsValue = crate::NativeProject;
+    fn compute(&mut self) -> Result<Self::Output> {
+        catch_unwind(AssertUnwindSafe(|| {
+            let context = self.lease.project.as_ref().expect("task owns a deck");
+            if self.from_deck {
+                SharedProject::new(Project::from(
+                    context.deck.as_ref().expect("deck context").clone(),
+                ))
+            } else {
+                SharedProject::from_context(context.as_ref().clone())
+            }
+        }))
+        .map_err(|_| {
+            self.lease.failed = true;
+            failed()
+        })
+    }
+    fn resolve(&mut self, _env: Env, shared: Self::Output) -> Result<Self::JsValue> {
+        self.lease.restore();
+        Ok(crate::NativeProject { shared })
+    }
+    fn reject(&mut self, _env: Env, error: Error) -> Result<Self::JsValue> {
+        self.lease.restore();
+        Err(error)
+    }
+}
+
+pub struct DeckCopyTask(ProjectCopyTask);
+impl DeckCopyTask {
+    pub fn new(lease: ProjectLease) -> Self {
+        Self(ProjectCopyTask::new(lease, false))
+    }
+}
+impl Task for DeckCopyTask {
+    type Output = SharedProject;
+    type JsValue = crate::deck::NativeDeck;
+    fn compute(&mut self) -> Result<Self::Output> {
+        self.0.compute()
+    }
+    fn resolve(&mut self, _env: Env, shared: Self::Output) -> Result<Self::JsValue> {
+        self.0.lease.restore();
+        Ok(crate::deck::NativeDeck::from_shared(shared))
+    }
+    fn reject(&mut self, _env: Env, error: Error) -> Result<Self::JsValue> {
+        self.0.lease.restore();
         Err(error)
     }
 }

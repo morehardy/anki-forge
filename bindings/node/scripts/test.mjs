@@ -1,10 +1,31 @@
 import path from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { root, targets } from "./platforms.mjs";
 const platform = targets.find(
   (item) => item.os === process.platform && item.cpu === process.arch,
 );
 if (!platform) throw new Error("Unsupported test platform");
+// Keep the evidence index connected to real files that this runner discovers.
+const matrix = JSON.parse(
+  readFileSync(path.join(root, "test/capability-matrix.json"), "utf8"),
+);
+const ids = new Set();
+for (const capability of matrix.capabilities) {
+  if (ids.has(capability.id))
+    throw new Error(`Duplicate capability ${capability.id}`);
+  ids.add(capability.id);
+  for (const evidence of capability.tests) {
+    if (
+      !evidence.file.endsWith(".test.mjs") ||
+      path.basename(evidence.file) !== evidence.file
+    )
+      throw new Error(`Invalid test file for ${capability.id}`);
+    const source = readFileSync(path.join(root, "test", evidence.file), "utf8");
+    if (!source.includes(evidence.name))
+      throw new Error(`Missing ${capability.id} test: ${evidence.name}`);
+  }
+}
 const parity = process.argv.includes("--parity");
 const evidenceArg = process.argv.indexOf("--evidence");
 if (evidenceArg >= 0 && (!parity || !process.argv[evidenceArg + 1]))
@@ -44,7 +65,14 @@ const result = spawnSync(
   [
     "--expose-gc",
     "--test",
-    parity ? "test/parity.test.mjs" : "test/product.test.mjs",
+    ...(parity
+      ? ["test/parity.test.mjs"]
+      : readdirSync(path.join(root, "test"))
+          .filter(
+            (name) => name.endsWith(".test.mjs") && name !== "parity.test.mjs",
+          )
+          .sort()
+          .map((name) => `test/${name}`)),
   ],
   {
     cwd: root,

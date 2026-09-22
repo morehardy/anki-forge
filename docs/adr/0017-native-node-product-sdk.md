@@ -19,8 +19,11 @@ exclusive ownership before returning its promise, performs work on a worker,
 and returns ownership before settling the promise. A domain failure preserves
 the object for reuse. An unwinding Rust panic retires that object. The adapter
 does not promise cancellation or rollback through a JavaScript timeout. Deck
-builds take a Rust snapshot in the worker using `Project::from(Deck)` while
-preserving the owned Deck and its identity indexes for future additions.
+builds call Rust `Deck.build()` directly in the worker. Deck validation retains
+the existing Project-level checks, and diff (which has no Rust Deck counterpart)
+uses a temporary Project snapshot. Neither operation stores that copy in the
+owned context. `Project.fromDeck` explicitly creates an independently editable
+snapshot; it preserves the source Deck and its identity indexes.
 
 Tasks run on napi-rs's built-in blocking runtime and settle through `JsDeferred`.
 The 3.12.2 `AsyncTask` completion callback can panic when a Worker is terminated
@@ -66,3 +69,8 @@ API/behavior parity evidence, package ownership, and a registry rehearsal. A
 working macOS arm64 package alone does not close those gates. The current Rust
 writer rejection of grouped image-occlusion cloze markup is recorded separately
 in the implementation plan; the binding preserves that diagnostic.
+
+Artifact ownership, clone resources, readonly observations and protocol 2 are
+specified in [ADR 0022](0022-node-artifact-and-state-snapshots.md). The Node parity
+resource probe records a controlled comparison; the dispatch change is not a
+promise of a universal speedup.

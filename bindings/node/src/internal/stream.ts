@@ -1,6 +1,6 @@
 import { Writable } from 'node:stream';
 
-/** Write one completed archive, await its callback and drain, and keep the stream open. */
+/** Write one chunk, await its callback and drain, and keep the stream open. */
 export function writeBuffer(stream: Writable, bytes: Buffer): Promise<void> {
   return new Promise((resolve, reject) => {
     let completed = false,

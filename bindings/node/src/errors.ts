@@ -18,7 +18,9 @@ export class BindingProtocolError extends Error {
 export class ProjectBusyError extends Error {
   readonly code = 'BINDING.PROJECT_BUSY';
   constructor() {
-    super('This project has an operation in progress. Await it before using the project again.');
+    super(
+      'This project has an operation in progress. Await it before using the project again.',
+    );
     this.name = 'ProjectBusyError';
   }
 }
@@ -107,7 +109,35 @@ export class ValidationError extends Error {
   }
 }
 
+export class ArtifactClosedError extends Error {
+  readonly code = 'BINDING.ARTIFACT_CLOSED';
+  constructor() {
+    super('This artifact handle has been closed. Retain a clone before closing it.');
+    this.name = 'ArtifactClosedError';
+  }
+}
+export class ArtifactError extends Error {
+  constructor(
+    message: string,
+    cause: unknown,
+    readonly code: 'BINDING.ARTIFACT_IO' | 'BINDING.ARTIFACT_FAILED' = 'BINDING.ARTIFACT_IO',
+  ) {
+    super(message, { cause });
+    this.name = 'ArtifactError';
+  }
+}
+
 export function nativeError(error: unknown): never {
+  if (error instanceof Error && error.message === 'BINDING.ARTIFACT_FAILED')
+    throw new ArtifactError(
+      'Native artifact operation failed',
+      error,
+      'BINDING.ARTIFACT_FAILED',
+    );
+  if (error instanceof Error && error.message === 'BINDING.ARTIFACT_CLOSED')
+    throw new ArtifactClosedError();
+  if (error instanceof Error && error.message.startsWith('BINDING.ARTIFACT_IO: '))
+    throw new ArtifactError(error.message.slice('BINDING.ARTIFACT_IO: '.length), error);
   if (error instanceof Error && error.message === 'BINDING.PROJECT_BUSY')
     throw new ProjectBusyError();
   if (error instanceof Error && error.message === 'BINDING.PROJECT_FAILED')

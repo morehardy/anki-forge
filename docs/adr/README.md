@@ -8,3 +8,5 @@ This directory records contract decisions that need a durable paper trail.
   walkthroughs.
 - Add or update an ADR before merging changes that affect contract meaning,
   compatibility, or bundle governance.
+
+- [0022: Node artifact ownership and state snapshots](0022-node-artifact-and-state-snapshots.md)

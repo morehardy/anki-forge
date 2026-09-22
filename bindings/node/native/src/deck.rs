@@ -45,6 +45,13 @@ struct IoOptions {
 pub struct NativeDeck {
     inner: NativeProject,
 }
+impl NativeDeck {
+    pub(crate) fn from_shared(shared: SharedProject) -> Self {
+        Self {
+            inner: NativeProject { shared },
+        }
+    }
+}
 #[napi]
 impl NativeDeck {
     #[napi(constructor)]
@@ -64,6 +71,18 @@ impl NativeDeck {
             inner: NativeProject {
                 shared: SharedProject::new_deck(builder.build()),
             },
+        })
+    }
+    #[napi]
+    pub fn get_media(&self, filename: String) -> Result<Option<String>> {
+        self.inner.shared.with_ready(|context| {
+            context
+                .deck
+                .as_mut()
+                .expect("deck context")
+                .media()
+                .get(&filename)
+                .map(|media| media.name().to_owned())
         })
     }
     #[napi]
@@ -162,6 +181,27 @@ impl NativeDeck {
                 self.inner.shared.reserve()?,
                 MediaSource::from_bytes(name, bytes.to_vec()),
             ),
+        )
+    }
+    #[napi]
+    pub fn describe<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            ProjectTask::describe_deck(self.inner.shared.reserve()?),
+        )
+    }
+    #[napi]
+    pub fn clone_state<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            crate::state::DeckCopyTask::new(self.inner.shared.reserve()?),
+        )
+    }
+    #[napi]
+    pub fn to_project<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            crate::state::ProjectCopyTask::new(self.inner.shared.reserve()?, true),
         )
     }
     #[napi]

@@ -155,7 +155,7 @@ pub struct FieldInput {
     optional: Option<bool>,
 }
 impl FieldInput {
-    fn into_field(self) -> Field {
+    pub(crate) fn into_field(self) -> Field {
         let mut field = Field::new(self.name);
         if let Some(key) = self.key {
             field = field.key(key);
@@ -208,7 +208,7 @@ pub struct TemplateInput {
     generate_when: Option<RuleInput>,
 }
 impl TemplateInput {
-    fn into_template(self) -> Template {
+    pub(crate) fn into_template(self) -> Template {
         let mut template = Template::new(self.name).front(self.front).back(self.back);
         if let Some(key) = self.key {
             template = template.key(key);

@@ -1,7 +1,8 @@
+import type { DeckSnapshot } from './snapshots';
 import path from 'node:path';
 import { Buildable } from './buildable';
-import { native, type NativeBuildable } from './internal/native';
-import { options, string, strings } from './internal/validation';
+import { native, type NativeBuildable, type NativeDeck } from './internal/native';
+import { options, string, strings, deepFreeze } from './internal/validation';
 import { outcome } from './internal/outcome';
 import { nativeError } from './errors';
 import type { IoMode, Rect } from './types';
@@ -51,9 +52,18 @@ function noteOptions(config: DeckNoteOptions, extraKeys: string[]): void {
   if (config.stableId !== undefined) string(config.stableId, 'stableId');
   if (config.tags !== undefined) strings(config.tags, 'tags');
 }
+const backends = new WeakMap<Deck, NativeDeck>();
+const adoptions = new WeakMap<DeckOptions, NativeDeck>();
+/** @internal Read a genuine Deck backend without exposing it on the public instance. */
+export function deckBackend(deck: Deck): NativeDeck {
+  const backend = backends.get(deck);
+  if (!backend) throw new TypeError('Expected a Deck');
+  return backend;
+}
 export class Deck extends Buildable {
   readonly baseDir: string;
   readonly media: {
+    get: (filename: string) => DeckMediaRef | undefined;
     addFile: (filename: string) => Promise<DeckMediaRef>;
     addBytes: (name: string, bytes: Uint8Array) => Promise<DeckMediaRef>;
   };
@@ -71,20 +81,32 @@ export class Deck extends Buildable {
     this.baseDir = path.resolve(baseDir);
     if (config.basicIdentity !== undefined) identityFields(config.basicIdentity);
     try {
-      this.#deck = new (native().NativeDeck)(
-        name,
-        JSON.stringify({ stableId: config.stableId, basicIdentity: config.basicIdentity }),
-      );
+      this.#deck =
+        adoptions.get(config) ??
+        new (native().NativeDeck)(
+          name,
+          JSON.stringify({ stableId: config.stableId, basicIdentity: config.basicIdentity }),
+        );
     } catch (error) {
       if (error instanceof Error && error.message.startsWith('{')) outcome(error.message);
       throw error;
     }
+    backends.set(this, this.#deck);
     const reference = (input: string) => {
       const result = outcome(input);
       string(result.filename, 'native media filename');
       return new DeckMediaRef(token, result.filename);
     };
     this.media = Object.freeze({
+      get: (filename: string) => {
+        string(filename, 'filename');
+        try {
+          const name = this.#deck.getMedia(filename);
+          return name == null ? undefined : new DeckMediaRef(token, name);
+        } catch (error) {
+          nativeError(error);
+        }
+      },
       addFile: async (filename: string) => {
         string(filename, 'filename');
         try {
@@ -95,7 +117,8 @@ export class Deck extends Buildable {
       },
       addBytes: async (name: string, bytes: Uint8Array) => {
         string(name, 'name');
-        if (!(bytes instanceof Uint8Array)) throw new TypeError('Expected Buffer or Uint8Array');
+        if (!(bytes instanceof Uint8Array))
+          throw new TypeError('Expected Buffer or Uint8Array');
         try {
           return reference(await this.#deck.addMediaBytes(name, Buffer.from(bytes)));
         } catch (error) {
@@ -105,6 +128,25 @@ export class Deck extends Buildable {
     });
     Object.freeze(this);
   }
+  async describe(): Promise<DeckSnapshot> {
+    try {
+      return deepFreeze(outcome(await this.#deck.describe())) as unknown as DeckSnapshot;
+    } catch (error) {
+      nativeError(error);
+    }
+  }
+
+  async clone(): Promise<Deck> {
+    try {
+      const backend = await this.#deck.cloneState();
+      const config: DeckOptions = { baseDir: this.baseDir };
+      adoptions.set(config, backend);
+      return new Deck(this.name, config);
+    } catch (error) {
+      nativeError(error);
+    }
+  }
+
   basic(front: string, back: string, config: DeckBasicOptions = {}): void {
     string(front, 'front');
     string(back, 'back');
@@ -137,7 +179,11 @@ export class Deck extends Buildable {
     for (const rect of config.rects) {
       options(rect, ['x', 'y', 'width', 'height'], 'rect');
       for (const key of ['x', 'y', 'width', 'height'])
-        if (!Number.isInteger(rect[key]) || Number(rect[key]) < 0 || Number(rect[key]) > 0xffffffff)
+        if (
+          !Number.isInteger(rect[key]) ||
+          Number(rect[key]) < 0 ||
+          Number(rect[key]) > 0xffffffff
+        )
           throw new TypeError(`rect.${key} must be a uint32`);
     }
     if (
