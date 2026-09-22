@@ -15,7 +15,7 @@ OBSERVER = Path(os.environ.get("ANKI_FORGE_PYTHON_OBSERVER", str(
 
 def observe(operation, path, *inputs):
     assert OBSERVER.is_file(), "build the python_parity Rust example before running parity tests"
-    value = json.loads(subprocess.check_output([str(OBSERVER), operation, str(path), *map(str, inputs)], text=True))
+    value = json.loads(subprocess.check_output([str(OBSERVER), operation, str(path), *map(str, inputs)], encoding="utf-8"))
     # The only ignored evidence is the observer's input filename, checked first.
     for note in value["identity"]["notes"]:
         assert note["source_path"] == str(path)
@@ -30,6 +30,30 @@ def test_basic_matches_independent_rust_identity_and_observations(tmp_path):
     ).build()
     report.ensure_success()
     assert observe("inspect", report.artifact.path) == expected
+
+
+@pytest.mark.parametrize("scenario,field_name,template_name,key", [
+    ("unicode", "中文", "卡片", None),
+    ("spaces", " Prompt ", "Card\nOne", None),
+    ("punctuation", "C++  Prompt", "Card\tOne", None),
+    ("explicit_whitespace", "Prompt", "Card", " key\t "),
+    ("explicit_empty", "中文", "Card", ""),
+])
+def test_exact_names_and_default_keys_match_independent_rust(tmp_path, scenario, field_name, template_name, key):
+    field = Field(field_name, key=key, identity=True)
+    note_type = (NoteType.custom("names", name="  Names  ").field(field)
+        .template(Template(template_name, front="Question", back="Answer", target_deck=" Names:: Cards ",
+            generate_when=GenerationRule.all([field.key]))))
+    project = Project("Names", stable_id="native-names").add_notetype(note_type)
+    project.add_note(Note("names").text(field_name, "内容").identity([field.key]))
+    snapshot = project.notetypes["names"]
+    assert snapshot.name == "  Names  "
+    assert snapshot.fields[0] == field
+    assert snapshot.templates[0].name == template_name
+    assert snapshot.identity_value.field_keys == (field.key,)
+    report = project.build()
+    report.ensure_success()
+    assert observe("inspect", report.artifact.path) == observe("names", tmp_path / "rust.apkg", scenario)
 
 
 def test_custom_templates_and_field_identity_match_rust(tmp_path):

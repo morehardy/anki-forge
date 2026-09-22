@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 import string
 from dataclasses import dataclass, field
 from typing import Iterable, TYPE_CHECKING
@@ -13,7 +12,6 @@ from . import _native
 
 _ASCII_CONTROL = "".join(chr(value) for value in range(32)) + chr(127)
 _ASCII_WHITESPACE = "".join(chr(value) for value in range(128) if chr(value) in string.whitespace)
-_SLUG_PATTERN = re.compile(r"[^a-z0-9]+")
 
 
 def _has_control(value: str) -> bool:
@@ -40,7 +38,7 @@ def _validate_optional_non_empty(value: str | None, label: str) -> str | None:
 
 
 def _validate_source(value: str, label: str) -> str:
-    """Preserve source text; semantic template validation belongs to Rust."""
+    """Preserve authoring strings; their semantic validation belongs to Rust."""
     if not isinstance(value, str):
         raise ValidationError(f"{label} must be a string")
     return value
@@ -61,26 +59,6 @@ def _validate_tag(value: str) -> str:
     return normalized
 
 
-def _slug(value: str) -> str:
-    normalized = _validate_non_empty(value, "name").lower()
-    slug = _SLUG_PATTERN.sub("_", normalized).strip("_")
-    if not slug:
-        raise ValidationError("name cannot be converted to an ASCII key; pass an explicit ASCII key")
-    return slug
-
-
-def _generation_rule_field_keys(rule: GenerationRule | None) -> tuple[str, ...]:
-    if rule is None or rule.kind == "anki_default":
-        return ()
-    if rule.kind in {"all", "any"}:
-        return rule.fields
-    if rule.kind == "cloze":
-        if rule.field is None:
-            raise ValidationError("cloze generation rule requires a field")
-        return (rule.field,)
-    raise ValidationError(f"unknown generation rule kind: {rule.kind}")
-
-
 @dataclass(frozen=True)
 class GenerationRule:
     kind: str
@@ -92,8 +70,8 @@ class GenerationRule:
         if kind not in {"anki_default", "all", "any", "cloze"}:
             raise ValidationError(f"unknown generation rule kind: {kind}")
 
-        fields = tuple(_validate_id(field_key, "field key") for field_key in self.fields)
-        field = _validate_id(self.field, "field") if self.field is not None else None
+        fields = tuple(_validate_source(field_key, "field key") for field_key in self.fields)
+        field = _validate_optional_source(self.field, "field")
 
         if kind in {"all", "any"}:
             if not fields:
@@ -118,21 +96,15 @@ class GenerationRule:
 
     @classmethod
     def all(cls, field_keys: Iterable[str]) -> GenerationRule:
-        fields = tuple(_validate_id(field_key, "field key") for field_key in field_keys)
-        if not fields:
-            raise ValidationError("all generation rule requires at least one field key")
-        return cls(kind="all", fields=fields)
+        return cls(kind="all", fields=tuple(field_keys))
 
     @classmethod
     def any(cls, field_keys: Iterable[str]) -> GenerationRule:
-        fields = tuple(_validate_id(field_key, "field key") for field_key in field_keys)
-        if not fields:
-            raise ValidationError("any generation rule requires at least one field key")
-        return cls(kind="any", fields=fields)
+        return cls(kind="any", fields=tuple(field_keys))
 
     @classmethod
     def cloze(cls, field: str) -> GenerationRule:
-        return cls(kind="cloze", field=_validate_id(field, "field"))
+        return cls(kind="cloze", field=field)
 
 
 @dataclass(frozen=True)
@@ -149,7 +121,7 @@ class Field:
         if self.required and self.optional:
             raise ValidationError("field cannot be both required and optional")
         name = _validate_source(self.name, "field name")
-        key = _validate_id(self.key, "field key") if self.key is not None else _native.default_field_key(name)
+        key = _validate_source(self.key, "field key") if self.key is not None else _native.default_field_key(name)
         object.__setattr__(self, "key_auto_derived", self.key is None)
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "key", key)
@@ -168,12 +140,12 @@ class Template:
 
     def __post_init__(self) -> None:
         name = _validate_source(self.name, "template name")
-        key = _validate_id(self.key, "template key") if self.key is not None else _native.default_template_key(name)
+        key = _validate_source(self.key, "template key") if self.key is not None else _native.default_template_key(name)
         front = _validate_source(self.front, "template front")
         back = _validate_source(self.back, "template back")
         browser_front = _validate_optional_source(self.browser_front, "browser front")
         browser_back = _validate_optional_source(self.browser_back, "browser back")
-        target_deck = _validate_optional_non_empty(self.target_deck, "target deck")
+        target_deck = _validate_optional_source(self.target_deck, "target deck")
         generate_when = self.generate_when or GenerationRule.anki_default()
         if not isinstance(generate_when, GenerationRule):
             raise ValidationError("template generate_when must be a GenerationRule")
@@ -212,14 +184,14 @@ class NoteType:
     def __post_init__(self) -> None:
         note_type_id = _validate_id(self.id, "note type id")
         object.__setattr__(self, "id", note_type_id)
-        object.__setattr__(self, "name", _validate_optional_non_empty(self.name, "note type name") or note_type_id)
+        object.__setattr__(self, "name", _validate_source(self.name, "note type name") if self.name is not None else note_type_id)
         if self.kind_value not in {"normal", "cloze"}:
             raise ValidationError("note type kind must be normal or cloze")
         if self.kind_value == "cloze":
             object.__setattr__(
                 self,
                 "cloze_field",
-                _validate_id(self.cloze_field, "cloze field")
+                _validate_source(self.cloze_field, "cloze field")
                 if self.cloze_field is not None
                 else None,
             )

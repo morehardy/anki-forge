@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import json
-from typing import Iterable
+from typing import Any, Iterable, Mapping
 
 from . import _native
 from ._bridge import invoke
@@ -11,13 +11,14 @@ from .content import Content
 from .content import Content as FieldContent
 from .media import MediaRef
 from .identity import IdentityRecipe
-from .notetype import _validate_id, _validate_optional_non_empty, _validate_tag
+from .notetype import _validate_id, _validate_optional_non_empty, _validate_source, _validate_tag
 
-_STOCK_FIELD_KEYS = {
-    "basic": {"front", "back"},
-    "cloze": {"text", "back_extra"},
-    "image_occlusion": {"occlusion", "image", "header", "back_extra", "comments"},
+_STOCK_NAMES = {
+    "basic": {"front": "Front", "back": "Back"},
+    "cloze": {"text": "Text", "back_extra": "Back Extra"},
+    "image_occlusion": {"occlusion": "Occlusion", "image": "Image", "header": "Header", "back_extra": "Back Extra", "comments": "Comments"},
 }
+_STOCK_KEYS = {kind: {name: key for key, name in names.items()} for kind, names in _STOCK_NAMES.items()}
 
 
 @dataclass
@@ -33,6 +34,19 @@ class Note:
         self.note_type_id = _validate_id(self.note_type_id, "note type id")
         self.stable_id = _validate_optional_non_empty(self.stable_id, "stable id")
         self.deck_name = _validate_optional_non_empty(self.deck_name, "deck name")
+        values, self.fields = self.fields, {}
+        for key, content in values.items():
+            self.field(key, content)
+
+    @classmethod
+    def _from_native(cls, value: Mapping[str, Any]) -> Note:
+        note = cls(value["note_type_id"], stable_id=value["stable_id"], deck_name=value["deck_name"])
+        for key, content in value["fields"].items():
+            note.field(key, FieldContent(**content))
+        note.tag_values = value["tags"]
+        if value["identity"] is not None:
+            note.identity(value["identity"])
+        return note
 
     @classmethod
     def basic(
@@ -74,7 +88,12 @@ class Note:
     def field(self, key: str, content: Content) -> Note:
         if not isinstance(content, Content):
             raise ValidationError("field content must be Content")
-        self.fields[_validate_id(key, "field key")] = content
+        key = _validate_source(key, "field key")
+        key = _STOCK_KEYS.get(self.note_type_id, {}).get(key, key)
+        name = _STOCK_NAMES.get(self.note_type_id, {}).get(key)
+        if name is not None:
+            self.fields.pop(name, None)
+        self.fields[key] = content
         return self
 
     def html(self, key: str, value: str) -> Note:
@@ -111,13 +130,11 @@ class Note:
         self, key: str, kind: str, value: str | None, *,
         reference: MediaRef | None = None,
     ) -> Note:
-        field_key = _validate_id(key, "field key")
-        self.fields[field_key] = FieldContent(
+        return self.field(key, FieldContent(
             kind=kind, value=value, reference=reference,
             media_id=reference.media_id if reference is not None else None,
             export_as=reference.export_as if reference is not None else None,
-        )
-        return self
+        ))
 
 
 class ImageOcclusionNoteBuilder:
@@ -180,7 +197,4 @@ class ImageOcclusionNoteBuilder:
             "comments": self._comments, "tags": self._tags,
         }
         value = json.loads(invoke(_native.build_image_occlusion, json.dumps(payload, ensure_ascii=False), self._image._handle))
-        note = Note(value["note_type_id"], stable_id=value["stable_id"], deck_name=value["deck_name"])
-        note.fields = {key: FieldContent(**content) for key, content in value["fields"].items()}
-        note.tag_values = value["tags"]
-        return note
+        return Note._from_native(value)

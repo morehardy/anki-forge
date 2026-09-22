@@ -139,3 +139,75 @@ def test_image_occlusion_builder_uses_core_validation_and_can_be_retried(tmp_pat
     for rect in [(False, 0, 10, 10), (0, 0, 2**32, 10)]:
         with pytest.raises(ValidationError):
             builder.rect(*rect)
+
+
+@pytest.mark.parametrize("name", ["Card\nOne", "Card\tOne", " 卡片 "])
+def test_core_template_keys_survive_detached_observation(name):
+    template = Template(name, front="{{Prompt}}", back="{{Prompt}}")
+    project = Project("Names").add_notetype(NoteType.custom("names")
+        .field(Field("Prompt", identity=True)).template(template))
+    project.add_note(Note("names").text("prompt", "value"))
+    project.build().ensure_success()
+    observed = project.notetypes["names"].templates[0]
+    assert observed.name == name
+    assert observed.key == template.key
+
+
+@pytest.mark.parametrize("name", [" Prompt ", "Prompt\nLine", "Prompt\tLine", "中文"])
+def test_exact_field_names_and_implicit_keys_survive_authoring_and_readback(name):
+    from anki_forge import Content, GenerationRule
+
+    field = Field(name, identity=True)
+    note_type = (NoteType.custom("names").field(field)
+        .template(Template("Card", front="Question", back="Answer")))
+    project = Project("Names").add_notetype(note_type)
+    project.add_note(Note("names").text(name, "text"))
+    project.add_note(Note("names").field(name, Content.html("<b>typed</b>")))
+    project.add_note(Note("names").html(name, "<b>html</b>"))
+    project.build().ensure_success()
+    observed = project.notetypes["names"]
+    assert observed.fields[0] == field
+    assert observed.identity_value.field_keys == (field.key,)
+    assert GenerationRule.all([field.key]).fields == (field.key,)
+    assert project.notes[0].fields[name].value == "text"
+    # A detached observation is reusable as authoring input, including empty
+    # Unicode-derived keys that the core accepts.
+    clone = Project("Clone").add_notetype(observed)
+    clone.add_note(Note("names").text(field.key, "copy").identity([field.key]))
+    clone.build().ensure_success()
+
+
+@pytest.mark.parametrize("setter", ["text", "html", "field"])
+def test_stock_aliases_preserve_the_latest_edit(setter):
+    from anki_forge import Content
+
+    note = Note.basic("original", "back")
+    def set_value(key, value):
+        getattr(note, setter)(key, Content.text(value) if setter == "field" else value)
+    set_value("Front", "second")
+    set_value("front", "final")
+    project = Project("Aliases").add_note(note)
+    assert project.notes[0].fields["front"].value == "final"
+    set_value("Front", "later")
+    assert Project("Aliases").add_note(note).notes[0].fields["front"].value == "later"
+    assert project.notes[0].fields["front"].value == "final"
+
+
+def test_setter_replaces_an_alias_inserted_through_the_public_fields_dict():
+    from anki_forge import Content
+
+    note = Note.basic("original", "back")
+    note.fields["Front"] = Content.text("second")
+    note.text("front", "final")
+    assert Project("Aliases").add_note(note).notes[0].fields["front"].value == "final"
+
+
+def test_ambiguous_stock_aliases_in_public_fields_dict_are_rejected_atomically():
+    from anki_forge import Content, ValidationError
+
+    note = Note.basic("original", "back")
+    note.fields["Front"] = Content.text("ambiguous")
+    project = Project("Aliases")
+    with pytest.raises(ValidationError, match="aliases.*Front"):
+        project.add_note(note)
+    assert project.notes == ()

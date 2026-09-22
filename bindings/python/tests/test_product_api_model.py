@@ -39,7 +39,9 @@ def test_generation_rules_validate_empty_inputs():
     with pytest.raises(ValidationError):
         GenerationRule.all([])
     with pytest.raises(ValidationError):
-        GenerationRule.any([""])
+        GenerationRule.any([])
+    # The Rust field constructor may derive an empty key from a Unicode name.
+    assert GenerationRule.any([""]).fields == ("",)
 
 
 def test_generation_rules_validate_direct_construction():
@@ -145,13 +147,13 @@ def test_note_image_occlusion_builder_renders_fields(project_media_ref):
 
     assert note.note_type_id == "image_occlusion"
     assert note.stable_id == "io:1"
-    assert note.fields["Occlusion"].kind == "html"
-    assert note.fields["Occlusion"].value == (
+    assert note.fields["occlusion"].kind == "html"
+    assert note.fields["occlusion"].value == (
         "{{c1,2::image-occlusion:rect:left=0:top=0:width=10:height=10}}<br>"
         "{{c1,2::image-occlusion:rect:left=20:top=0:width=10:height=10}}<br>"
     )
-    assert note.fields["Image"].kind == "html"
-    assert note.fields["Image"].value == '<img src="heart.png">'
+    assert note.fields["image"].kind == "html"
+    assert note.fields["image"].value == '<img src="heart.png">'
     assert note.tag_values == ["io"]
 
 
@@ -169,10 +171,10 @@ def test_image_occlusion_renderer_matches_rust_expected_strings(project_media_re
         .build()
     )
 
-    assert hide_all.fields["Occlusion"].value == (
+    assert hide_all.fields["occlusion"].value == (
         "{{c1::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
     )
-    assert hide_one.fields["Occlusion"].value == (
+    assert hide_one.fields["occlusion"].value == (
         "{{c1,2::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
     )
 

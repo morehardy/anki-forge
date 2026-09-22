@@ -18,7 +18,7 @@ def test_artifacts_directory_and_report_use_captured_base_dir(tmp_path, monkeypa
     assert report.counts == {"notes": 1, "cards": 1, "media": 0}
     artifact_path = report.artifact.path
     assert artifact_path.is_relative_to(root / "artifacts")
-    saved = json.loads((root / "report.json").read_text())
+    saved = json.loads((root / "report.json").read_text(encoding="utf-8"))
     assert saved["metrics"] == report.metrics
     assert saved["policy"] == report.policy
     assert saved["artifact"]["path"] == str(artifact_path)

@@ -26,6 +26,39 @@ fn basic(path: &Path) -> anyhow::Result<Value> {
     inspect(path)
 }
 
+fn names(path: &Path, scenario: &str) -> anyhow::Result<Value> {
+    let (field_name, template_name, explicit_key) = match scenario {
+        "unicode" => ("中文", "卡片", None),
+        "spaces" => (" Prompt ", "Card\nOne", None),
+        "punctuation" => ("C++  Prompt", "Card\tOne", None),
+        "explicit_whitespace" => ("Prompt", "Card", Some(" key\t ")),
+        "explicit_empty" => ("中文", "Card", Some("")),
+        _ => anyhow::bail!("unknown names scenario"),
+    };
+    let mut field = Field::new(field_name).identity();
+    if let Some(key) = explicit_key {
+        field = field.key(key);
+    }
+    let key = field.key_ref().as_str().to_string();
+    let mut project = Project::new("Names").stable_id("native-names");
+    project.add_notetype(
+        NoteType::custom("names")
+            .name("  Names  ")
+            .field(field)
+            .identity(IdentityRecipe::fields([&key]))
+            .template(
+                Template::new(template_name)
+                    .front("Question")
+                    .back("Answer")
+                    .target_deck(" Names:: Cards ")
+                    .generate_when(GenerationRule::all([&key])),
+            ),
+    )?;
+    project.add_note(Note::new("names").text(field_name, "内容").identity([&key]))?;
+    project.write_apkg(path)?.ensure_success()?;
+    inspect(path)
+}
+
 fn custom(path: &Path) -> anyhow::Result<Value> {
     let mut project = Project::new("Native")
         .stable_id("native-custom")
@@ -191,22 +224,37 @@ fn large(path: &Path, media_path: &Path) -> anyhow::Result<Value> {
     inspect(path)
 }
 
-fn bundle(path: &Path, bundle: &Path) -> anyhow::Result<Value> {
+fn bundle(path: &Path, bundle: &Path, cloze: bool) -> anyhow::Result<Value> {
     let mut project = Project::new("Bundle")
         .stable_id("native-bundle")
         .default_deck("Bundle");
+    let (note_type, template, note) = if cloze {
+        (
+            NoteType::custom_cloze("bundle-card", "prompt"),
+            Template::new("Card")
+                .front("{{cloze:Prompt}}")
+                .back("{{cloze:Prompt}}<hr>{{Extra}}<img src=\"icon.svg\">"),
+            Note::new("bundle-card").html("prompt", "{{c1::一}} and {{c2::two}}"),
+        )
+    } else {
+        (
+            NoteType::custom("bundle-card"),
+            Template::new("Card")
+                .front(" \r\n<section>{{Prompt}}</section>\n")
+                .back("{{Prompt}}<hr>{{Extra}}<img src=\"icon.svg\">")
+                .generate_when(GenerationRule::all(["prompt"])),
+            Note::new("bundle-card").text("prompt", "中 & prompt"),
+        )
+    };
     project.add_notetype(
-        NoteType::custom("bundle-card").name("Bundle Card")
+        note_type.name("Bundle Card")
             .field(Field::new("Prompt").key("prompt").identity().required())
             .field(Field::new("Extra").key("extra").optional())
             .identity(IdentityRecipe::fields(["prompt"]))
             .css("\n@font-face { font-family: Bundle; src: url(font.woff2); }\n.card { background-image: url(icon.svg); }\n")
-            .template(Template::new("Card").key("card")
-                .front(" \r\n<section>{{Prompt}}</section>\n")
-                .back("{{Prompt}}<hr>{{Extra}}<img src=\"icon.svg\">")
+            .template(template.key("card")
                 .browser_front("{{Prompt}}")
-                .target_deck("Bundle::Cards")
-                .generate_when(GenerationRule::all(["prompt"]))),
+                .target_deck("Bundle::Cards")),
     )?;
     for name in ["icon.svg", "font.woff2"] {
         project
@@ -214,11 +262,7 @@ fn bundle(path: &Path, bundle: &Path) -> anyhow::Result<Value> {
             .add_file(bundle.join("assets").join(name))?
             .export_as(name)?;
     }
-    project.add_note(
-        Note::new("bundle-card")
-            .text("prompt", "中 & prompt")
-            .text("extra", "Extra"),
-    )?;
+    project.add_note(note.text("extra", "Extra"))?;
     project.write_apkg(path)?.ensure_success()?;
     inspect(path)
 }
@@ -345,16 +389,22 @@ fn main() -> anyhow::Result<()> {
     );
     let value = match args[1].as_str() {
         "basic" => basic(Path::new(&args[2]))?,
+        "names" => names(
+            Path::new(&args[2]),
+            args.get(3)
+                .ok_or_else(|| anyhow::anyhow!("names scenario required"))?,
+        )?,
         "custom" => custom(Path::new(&args[2]))?,
         "identity" => identity(Path::new(&args[2]))?,
         "cloze_io" => cloze_io(Path::new(&args[2]))?,
         "media" => media(Path::new(&args[2]))?,
-        "bundle" => bundle(
+        "bundle" | "bundle_cloze" => bundle(
             Path::new(&args[2]),
             Path::new(
                 args.get(3)
                     .ok_or_else(|| anyhow::anyhow!("bundle path required"))?,
             ),
+            args[1] == "bundle_cloze",
         )?,
         "large" => large(
             Path::new(&args[2]),

@@ -31,7 +31,7 @@ def test_diff_returns_complete_report_without_publication_or_lock_changes(tmp_pa
     assert report.diff["summary_counts"]["modified"] > 0
     assert report.risk is not None
     assert report.metrics["duration_ms"] >= 0
-    expected = json.loads(subprocess.check_output([str(OBSERVER), "diff", str(baseline)], text=True))
+    expected = json.loads(subprocess.check_output([str(OBSERVER), "diff", str(baseline)], encoding="utf-8"))
     actual = report.raw
     # Only wall-clock duration differs between the independent Rust/Python runs.
     assert expected["metrics"]["duration_ms"] >= 0

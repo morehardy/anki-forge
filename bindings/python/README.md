@@ -8,7 +8,7 @@ Consumers need a matching wheel, not Cargo, a CLI executable or this checkout.
 This branch prepares 0.2; it does not publish a PyPI release. The supported
 validation matrix is ordinary CPython **3.11 and 3.12**, Linux x86_64,
 Windows x86_64, macOS x86_64 and macOS ARM64. See the
-[coverage and evidence index](COVERAGE.md) for completed and pending gates.
+[coverage and evidence index](COVERAGE.md) for scope and verification results.
 Free-threaded Python, subinterpreters and other Python versions are not claimed.
 
 ## From a source checkout

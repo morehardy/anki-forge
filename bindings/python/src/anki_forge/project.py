@@ -1,35 +1,29 @@
 from __future__ import annotations
 
-from dataclasses import asdict, replace
+from dataclasses import asdict
 import json
 from os import PathLike
 from pathlib import Path
 from types import MappingProxyType
-from typing import Mapping, Protocol
+from typing import Mapping
 
 from . import _native
 from ._buildable import _Buildable
 from .deck import Deck
-from .artifact import ApkgArtifact
+from .diagnostics import ValidationError
 from ._bridge import invoke
 from .media import MediaRegistry
-from .note import FieldContent, Note
+from .note import Note, _STOCK_NAMES
 from .identity import IdentityRecipe
 from .notetype import Field, GenerationRule, NoteType, Template, _validate_non_empty, _validate_optional_non_empty
-from .report import BuildReport, ProjectDiffReport, ValidationReport, _diagnostics
-from .options import BuildOptions, InspectLimits, PathInput, RiskLevelValue, UpdateSafetyValue, absolute_path
-
-_STOCK_NAMES = {
-    "basic": {"front": "Front", "back": "Back"},
-    "cloze": {"text": "Text", "back_extra": "Back Extra"},
-    "image_occlusion": {"occlusion": "Occlusion", "image": "Image", "header": "Header", "back_extra": "Back Extra", "comments": "Comments"},
-}
+from .report import ProjectDiffReport, ValidationReport, _diagnostics
+from .options import InspectLimits, PathInput, absolute_path
 
 
 class Project(_Buildable):
-    _handle: _native.NativeProject
-
     """A Rust Project; additions validate and snapshot authoring inputs."""
+
+    _handle: _native.NativeProject
 
     def __init__(
         self, name: str, stable_id: str | None = None, default_deck: str | None = None,
@@ -75,16 +69,7 @@ class Project(_Buildable):
     @property
     def notes(self) -> tuple[Note, ...]:
         values = json.loads(invoke(self._handle.notes))
-        notes = []
-        for value in values:
-            names = {name: key for key, name in _STOCK_NAMES.get(value["note_type_id"], {}).items()}
-            note = Note(value["note_type_id"], stable_id=value["stable_id"], deck_name=value["deck_name"])
-            note.fields = {names.get(key, key): FieldContent(**content) for key, content in value["fields"].items()}
-            note.tag_values = value["tags"]
-            if value["identity"] is not None:
-                note.identity(value["identity"])
-            notes.append(note)
-        return tuple(notes)
+        return tuple(Note._from_native(value) for value in values)
 
     @property
     def notetypes(self) -> Mapping[str, NoteType]:
@@ -136,13 +121,19 @@ class Project(_Buildable):
 
     def add_note(self, note: Note) -> Project:
         names = _STOCK_NAMES.get(note.note_type_id, {})
+        fields = {}
+        for key, content in note.fields.items():
+            name = names.get(key, key)
+            if name in fields:
+                raise ValidationError(f"field aliases refer to the same stock field: {name!r}")
+            fields[name] = {"kind": content.kind, "value": content.export_as if content.reference is not None else content.value}
         payload = {
             "note_type_id": note.note_type_id,
             "stable_id": note.stable_id,
             "deck_name": note.deck_name,
             "tags": list(note.tag_values),
             "identity": list(note.identity_value.field_keys) if note.identity_value is not None else None,
-            "fields": {names.get(key, key): {"kind": content.kind, "value": content.export_as if content.reference is not None else content.value} for key, content in note.fields.items()},
+            "fields": fields,
         }
         references = [content.reference._handle for content in note.fields.values() if content.reference is not None]
         invoke(self._handle.add_note, json.dumps(payload, ensure_ascii=False), references)

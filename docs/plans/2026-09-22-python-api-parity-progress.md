@@ -129,3 +129,14 @@ RISK.BASELINE_UNAVAILABLE。Python 不额外要求 compare_to。
 - fork 回归先暴露子进程 close 会误删父进程 Artifact；增加 PID 检查与子进程析构保护后，close/GC 均不会删除父进程临时文件。Project/Deck fork 前置拒绝同样通过。
 - 完整 Python 首轮：162 通过，1 个新字段改名测试断言失败。核查发现核心把身份字段显示名称纳入推导；Python 与独立 Rust 全观察本来一致。测试改为分别验证重排/改名/显式 ID，三个聚焦用例通过，并把迁移影响写入指南，没有修改 Rust 身份算法。
 - 本机 release wheel 已在独立 venv/仓库外中文路径，通过版本、Basic、媒体证据、Artifact、完整 native_workflow 示例及正负类型消费者。完整平台矩阵、sdist 重建、最终审查仍在运行；不能据此标记整体完成。
+
+## 最终审查修复与再次验证
+
+- [双轴审查记录](2026-09-22-python-api-parity-review.md)：Standards 和 Spec 的问题已修复，复查均为 0 项未解决。
+- 保留字段/模板的精确 Unicode、空白和核心派生空 key；stock alias 在 setter 时统一，公开字典的歧义输入在添加前拒绝。新增失败回归后修复；快照和 IO 共用 Note 解码。
+- 新增独立 Rust `names` 和 `bundle_cloze` 完整产物对照；补齐模板包 UTF-8、manifest、三种大小上限、越界路径/symlink、重复类型。
+- 历史样本重新从完整 `51a44ad` 源码、Cargo.lock 与 contracts 构建；APKG 与 lockfile 字节均未变化，provenance 增加固定 contracts commit 和两个 SHA256。
+- 本地最终 Python 全套 **192 项通过、5 个子测试通过**；mypy **16 文件通过**；native crate 全 targets Clippy 零警告。
+- Rust 工作区 **1,036 项通过、25 项按原配置忽略**（79 个测试套件）。此后 Rust 修改仅为独立测试 producer，已重新编译、Clippy 和实际调用验证。
+- 候选 `37f3593` 的四平台运行暴露 Windows 测试边界问题：UTF-8 JSON 被按系统默认编码读取、等价 canonical 路径直接比字符串。已指定 UTF-8、通过 samefile 验证来源路径，保留 Unicode 用例。
+- 修复候选还需重新完成四平台 Python 3.11/3.12 安装；新增 Linux 独立 sdist 离线重建 CI 门禁。最终 run 和状态将在结果完成后记录。

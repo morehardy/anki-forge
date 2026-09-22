@@ -8,7 +8,7 @@ This is an implementation/verification index, not a package publication notice.
 | --- | --- | --- |
 | PY-01 | Project.validate, no build or media reread | test_native_authoring |
 | PY-02 | Structured atomic add errors | test_native_authoring, test_product_validation_parity |
-| PY-03 | Core bundle loader, source byte offsets, atomic assets | test_native_bundle; independent Rust `bundle` producer |
+| PY-03 | Normal/Cloze bundle loader, source byte offsets, atomic assets and path/input limits | test_native_bundle; independent Rust `bundle` / `bundle_cloze` producers |
 | PY-04 | Field fallback/type recipe/note override/explicit stable ID | test_native_parity; independent `identity` producer; actual 0.1 fixtures |
 | PY-05 | Exact template/CSS whitespace and Unicode | test_product_e2e, test_native_bundle; Rust producer |
 | PY-06 | Registration-time fingerprints verified again at build | test_native_project, test_native_media, test_native_deck |
@@ -21,7 +21,7 @@ This is an implementation/verification index, not a package publication notice.
 | PY-13 | Complete lossless reports, unknown fields and large integers | test_report, test_native_diff, test_native_artifacts |
 | PY-14 | Risk thresholds delegated to core, including lock-only inputs | test_product_e2e, test_native_build_options |
 | PY-15 | Add snapshots, immutable settings, detached observations | test_native_authoring, test_product_validation_parity; MIGRATION.md |
-| PY-16 | Core default keys and stock aliases | test_native_authoring/parity/migration |
+| PY-16 | Core default keys, exact Unicode/whitespace keys and stock aliases | test_native_authoring/parity/migration; independent Rust `names` producer |
 | PY-17 | Actual Rust Deck, inferred IO, identity override, Project conversion | test_native_deck; independent `deck` and `deck_project` producers |
 | PY-18 | optional declaration/readback, required conflict | test_native_authoring; no extra card-generation promise |
 | PY-19 | Aliases, staging overlap, permission failure and atomic publication | test_native_build_options/artifacts, test_product_e2e |
@@ -40,9 +40,16 @@ comparison normalizes only wall-clock duration.
 Scenarios: Basic, custom multi-template, type/note/explicit identity precedence,
 stock/custom Cloze, Project IO, Deck inferred IO, Deck conversion plus custom
 notes, cross-project media, large file-object output, template bundle assets,
-field reorder, derived identity-field rename and explicit-ID field rename.
+field reorder, derived identity-field rename, explicit-ID field rename, and five
+Unicode/whitespace/punctuation/default/explicit-key cases. Bundle tests cover
+Normal/Cloze, malformed manifests, invalid UTF-8, manifest/template/asset limits,
+traversal, escaping symlinks, duplicate types and atomic asset conflicts.
 
 `tests/fixtures/python01` was produced by actual Python 0.1 at `51a44ad`.
+Its regeneration script exports the complete historical commit and builds that
+Rust core with its pinned contracts and lockfile. Provenance records all three
+source commits and both artifact hashes; the corrected regeneration reproduced
+the existing APKG/lockfile bytes exactly.
 Migration checks unchanged/answer/tag/repeated/reverted updates and a lockfile
 without revision evidence. Two serialized migration differences are explicit:
 GUID source becomes previous_apkg and inferred template generation requirements
@@ -84,6 +91,8 @@ from runtime discovery, runs the complete example and positive/negative mypy
 consumers, then optionally the public suite with independent Rust observations.
 The CI workflow builds four real platform wheels and installs each on ordinary
 CPython 3.11 and 3.12. Linux uses manylinux2014; Apple Silicon uses macOS 11+.
+An additional Linux job rebuilds the source package offline outside the checkout
+and installs the resulting wheel before running the example and typing checks.
 The actual wheel filename/metadata records the Intel macOS deployment target.
 Windows lacks fork/POSIX permission-bit tests; those skips are named explicitly.
 

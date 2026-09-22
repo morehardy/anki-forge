@@ -1,8 +1,9 @@
 # Moving from Python 0.1 to 0.2
 
-This guide accompanies the in-progress native SDK. The full API, update migration
-and final package gates must pass before publication. The implementation record
-is [here](../../docs/plans/2026-09-22-python-api-parity-progress.md).
+This guide accompanies the native SDK. Capability, update migration and package
+validation evidence is recorded in the
+[implementation log](../../docs/plans/2026-09-22-python-api-parity-progress.md).
+Implementation and verification do not publish a package or release tag.
 
 Python 0.2 owns Rust Project, MediaRef and Artifact objects in a private native
 extension. Identity, validation, media registration and writing use the Rust
@@ -61,10 +62,17 @@ An explicit `NoteType.identity(IdentityRecipe.fields([...]))` takes precedence;
 `note.identity([...])` supplies the per-note override. An explicit stable ID uses
 the core's identity precedence. Python does not compute identity hashes.
 
-Custom note fields accept declared keys or display names. Stock convenience
-keys such as `front` and `back_extra` remain accepted, as do exact Rust field
-names such as `Front` and `Back Extra`. Template and CSS source whitespace is
-preserved.
+Custom note fields accept exact declared keys or display names, including
+Unicode and whitespace. These references are not trimmed; semantic validation
+and default-key derivation use Rust. Stock convenience keys such as `front` and
+`back_extra` remain accepted, as do exact Rust field names such as `Front` and
+`Back Extra`. Template and CSS source whitespace is preserved.
+
+Setters canonicalize stock aliases so the latest edit is retained. If direct
+edits to the public `fields` dictionary introduce both aliases for one stock
+field, `add_note` rejects that ambiguous input; a setter can resolve it. Detached
+stock observations and the IO builder consistently expose Python's lower-case
+keys such as `front`, `back_extra` and `occlusion`.
 
 `Field(optional=True)` preserves the core declaration and readback. Setting both
 `required=True` and `optional=True` is rejected. Optional does not introduce a new

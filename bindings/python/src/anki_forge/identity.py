@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from .notetype import _validate_id
+from .notetype import _validate_source
 
 
 @dataclass(frozen=True)
@@ -14,4 +14,4 @@ class IdentityRecipe:
 
     @classmethod
     def fields(cls, keys: Iterable[str]) -> IdentityRecipe:
-        return cls(tuple(_validate_id(key, "identity field key") for key in keys))
+        return cls(tuple(_validate_source(key, "identity field key") for key in keys))
