@@ -1,0 +1,84 @@
+{
+  "node": "v24.19.0",
+  "platform": "darwin/arm64",
+  "metadata": {
+    "bindingProtocolVersion": 2,
+    "bindingVersion": "0.2.0",
+    "contractVersion": "0.6.3",
+    "coreVersion": "0.1.0",
+    "nodeApiVersion": 8,
+    "target": "aarch64-apple-darwin"
+  },
+  "mode": "deck",
+  "samples": [
+    {
+      "phase": "loaded",
+      "rss": 61292544,
+      "heapTotal": 7897088,
+      "heapUsed": 4669576,
+      "external": 2008776,
+      "arrayBuffers": 143611,
+      "allocationCalls": 282,
+      "liveRustBytes": 42903,
+      "peakRustBytes": 43548
+    },
+    {
+      "phase": "authored",
+      "rss": 82083840,
+      "heapTotal": 7897088,
+      "heapUsed": 4746824,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 22876,
+      "liveRustBytes": 10535481,
+      "peakRustBytes": 10552362
+    },
+    {
+      "phase": "build-1-closed",
+      "rss": 144228352,
+      "heapTotal": 6848512,
+      "heapUsed": 4832048,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 237990,
+      "liveRustBytes": 22219229,
+      "peakRustBytes": 34384148
+    },
+    {
+      "phase": "build-2-closed",
+      "rss": 148062208,
+      "heapTotal": 6848512,
+      "heapUsed": 4832600,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 430389,
+      "liveRustBytes": 22219229,
+      "peakRustBytes": 34647396
+    },
+    {
+      "phase": "build-3-closed",
+      "rss": 150585344,
+      "heapTotal": 6848512,
+      "heapUsed": 4844752,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 622803,
+      "liveRustBytes": 22219229,
+      "peakRustBytes": 34647396
+    },
+    {
+      "phase": "deck-collected",
+      "rss": 150585344,
+      "heapTotal": 6848512,
+      "heapUsed": 4840064,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 622812,
+      "liveRustBytes": 827066,
+      "peakRustBytes": 34647396
+    }
+  ],
+  "comparison": "persistent-project-control",
+  "instrumentedStateSha256": "92929a87816b79af3325f036366221a372ae52ede150b0946b9e0e02008f546b",
+  "counterSource": "benchmarks/results/20260907-post-streaming-audit/probes/memory.patch"
+}

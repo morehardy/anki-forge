@@ -8,7 +8,27 @@ import {
   ProjectDiffError,
   DeckError,
 } from '../errors';
-import { BuildReport, ProjectDiffReport, diagnostics } from '../report';
+import { BuildReport, ProjectDiffReport, diagnostics, attachArtifact } from '../report';
+import { artifactFromNative } from '../artifact';
+import type { NativeBuildResult } from './native';
+
+export function buildOutcome(result: NativeBuildResult, baseDir: string): BuildReport {
+  const artifact = result.artifact ? artifactFromNative(result.artifact, baseDir) : null;
+  try {
+    const value = outcome(result.result);
+    const report = new BuildReport(value.report, String(value.pretty));
+    if (artifact) attachArtifact(report, artifact);
+    return report;
+  } catch (error) {
+    if (error instanceof BuildError) {
+      if (artifact) attachArtifact(error.report, artifact);
+    } else if (artifact) {
+      // Invalid projections do not transfer ownership to a caller.
+      void artifact.close().catch(() => {});
+    }
+    throw error;
+  }
+}
 
 export function outcome(input: string): Record<string, unknown> {
   let envelope;
@@ -23,7 +43,8 @@ export function outcome(input: string): Record<string, unknown> {
   const error = envelope.error;
   if (typeof error?.code !== 'string' || typeof error.message !== 'string')
     throw new BindingProtocolError('Invalid native error');
-  if (error.kind === 'add') throw new ProjectAddError(diagnostics([error.details?.diagnostic])[0]);
+  if (error.kind === 'add')
+    throw new ProjectAddError(diagnostics([error.details?.diagnostic])[0]);
   if (error.kind === 'build')
     throw new BuildError(
       error.message,

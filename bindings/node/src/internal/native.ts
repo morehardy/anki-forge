@@ -8,25 +8,47 @@ export interface NativeMediaRef {
   renderSound(): string;
 }
 
+export interface NativeApkgArtifact {
+  readonly path: string;
+  cloneHandle(): NativeApkgArtifact;
+  persistTo(path: string): Promise<NativeApkgArtifact>;
+  close(): Promise<void>;
+}
+export interface NativeBuildResult {
+  result: string;
+  artifact?: NativeApkgArtifact;
+}
 export interface NativeBuildable {
   validate(): Promise<string>;
-  build(input: string): Promise<string>;
+  build(input: string): Promise<NativeBuildResult>;
   apkgBytes(): Promise<{ result: string; data: Buffer }>;
   diffAgainstApkg(path: string, limits: string): Promise<string>;
 }
-interface NativeProject extends NativeBuildable {
+export interface NativeProject extends NativeBuildable {
+  cloneState(): Promise<NativeProject>;
   addNote(input: string, references: NativeMediaRef[]): string;
   mediaRef(filename: string): NativeMediaRef;
   addNoteType(input: string): string;
   addMediaFile(path: string, exportAs: string): Promise<string>;
-  addMediaBytes(label: string, exportAs: string, bytes: Buffer, spool: boolean): Promise<string>;
+  addMediaBytes(
+    label: string,
+    exportAs: string,
+    bytes: Buffer,
+    spool: boolean,
+  ): Promise<string>;
   importTemplateBundle(path: string): Promise<string>;
   apkgBytes(): Promise<{ result: string; data: Buffer }>;
   diffAgainstApkg(path: string, limits: string): Promise<string>;
   validate(): Promise<string>;
-  build(input: string): Promise<string>;
+  build(input: string): Promise<NativeBuildResult>;
 }
 interface NativeModule {
+  describeNote(input: string, references: NativeMediaRef[]): string;
+  describeField(input: string): string;
+  describeTemplate(input: string): string;
+  describeNoteType(input: string): string;
+  describeIdentity(fields: string[]): string;
+  describeGenerationRule(input: string): string;
   bindingMetadata(): string;
   renderContent(text: string, html: boolean): string;
   validateTemplate(source: string, fields: string[]): string;
@@ -34,7 +56,11 @@ interface NativeModule {
   NativeProject: new (name: string, options: string) => NativeProject;
   NativeDeck: new (name: string, options: string) => NativeDeck;
 }
-interface NativeDeck extends NativeBuildable {
+export interface NativeDeck extends NativeBuildable {
+  describe(): Promise<string>;
+  cloneState(): Promise<NativeDeck>;
+  toProject(): Promise<NativeProject>;
+  getMedia(filename: string): string | null;
   addBasic(front: string, back: string, input: string): string;
   addCloze(text: string, input: string): string;
   addImageOcclusion(filename: string, input: string): string;
@@ -76,7 +102,13 @@ export function native(): NativeModule {
       throw new Error('Invalid native module exports');
     const metadata: BindingMetadata = JSON.parse(binding.bindingMetadata());
     if (metadata.bindingVersion !== VERSION)
-      throw new Error(`Native version ${metadata.bindingVersion} does not match SDK ${VERSION}`);
+      throw new Error(
+        `Native version ${metadata.bindingVersion} does not match SDK ${VERSION}`,
+      );
+    if (metadata.bindingProtocolVersion !== 2)
+      throw new Error(
+        `Native protocol ${metadata.bindingProtocolVersion ?? 'missing'} does not match SDK protocol 2`,
+      );
     loaded = binding;
     return binding;
   } catch (cause) {

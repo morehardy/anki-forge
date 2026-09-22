@@ -1,3 +1,10 @@
+import type {
+  FieldSnapshot,
+  TemplateSnapshot,
+  NoteTypeSnapshot,
+  IdentityRecipeSnapshot,
+  GenerationRuleSnapshot,
+} from './snapshots';
 import { deepFreeze, options, string, strings } from './internal/validation';
 import { native } from './internal/native';
 import { outcome } from './internal/outcome';
@@ -23,6 +30,11 @@ export interface FieldOptions {
   optional?: boolean;
 }
 export class Field {
+  describe(): FieldSnapshot {
+    return deepFreeze(
+      outcome(native().describeField(JSON.stringify(definition(this, Field)))),
+    ) as unknown as FieldSnapshot;
+  }
   #brand = undefined;
   constructor(name: string, config: FieldOptions = {}) {
     string(name, 'field name');
@@ -37,6 +49,12 @@ export class Field {
   }
 }
 export class IdentityRecipe {
+  describe(): IdentityRecipeSnapshot {
+    const fields = definition(this, IdentityRecipe).fields as string[];
+    return deepFreeze(
+      outcome(native().describeIdentity(fields)),
+    ) as unknown as IdentityRecipeSnapshot;
+  }
   #brand = undefined;
   private constructor(fields: readonly string[]) {
     save(this, { fields: [...fields] });
@@ -47,6 +65,13 @@ export class IdentityRecipe {
   }
 }
 export class GenerationRule {
+  describe(): GenerationRuleSnapshot {
+    return deepFreeze(
+      outcome(
+        native().describeGenerationRule(JSON.stringify(definition(this, GenerationRule))),
+      ),
+    ) as unknown as GenerationRuleSnapshot;
+  }
   #brand = undefined;
   private constructor(data: Definition) {
     save(this, data);
@@ -77,6 +102,11 @@ export interface TemplateOptions {
   generateWhen?: GenerationRule;
 }
 export class Template {
+  describe(): TemplateSnapshot {
+    return deepFreeze(
+      outcome(native().describeTemplate(JSON.stringify(definition(this, Template)))),
+    ) as unknown as TemplateSnapshot;
+  }
   #brand = undefined;
   constructor(name: string, config: TemplateOptions) {
     string(name, 'template name');
@@ -107,6 +137,11 @@ export interface NoteTypeOptions {
   identity?: IdentityRecipe;
 }
 export class NoteType {
+  describe(): NoteTypeSnapshot {
+    return deepFreeze(
+      outcome(native().describeNoteType(JSON.stringify(definition(this, NoteType)))),
+    ) as unknown as NoteTypeSnapshot;
+  }
   #brand = undefined;
   private constructor(id: string, config: NoteTypeOptions, clozeField?: string) {
     string(id, 'note type id');
@@ -140,5 +175,7 @@ export function noteTypeDefinition(noteType: NoteType): string {
 export function validateTemplate(source: string, fields: readonly string[]): ValidationReport {
   string(source, 'source');
   strings(fields, 'fields');
-  return new ValidationReport(outcome(native().validateTemplate(source, [...fields])).diagnostics);
+  return new ValidationReport(
+    outcome(native().validateTemplate(source, [...fields])).diagnostics,
+  );
 }

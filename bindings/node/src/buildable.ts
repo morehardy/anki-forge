@@ -1,13 +1,15 @@
 import path from 'node:path';
+import { createReadStream } from 'node:fs';
 import { Writable } from 'node:stream';
 import type { BuildOptions, InspectLimits } from './types';
 import type { NativeBuildable } from './internal/native';
 import { writeBuffer } from './internal/stream';
-import { checkInspectLimits } from './options';
+import { encodeInspectLimits } from './options';
 import { options, string } from './internal/validation';
 import { BuildReport, ValidationReport, ProjectDiffReport } from './report';
-import { nativeError } from './errors';
-import { outcome } from './internal/outcome';
+import { nativeError, BindingProtocolError } from './errors';
+import type { ApkgArtifact } from './artifact';
+import { outcome, buildOutcome } from './internal/outcome';
 
 const buildKeys = [
   'output',
@@ -47,9 +49,9 @@ export abstract class Buildable {
     }
   }
 
-  async build(config: BuildOptions): Promise<BuildReport> {
+  async build(config: BuildOptions = {}): Promise<BuildReport> {
     options(config, buildKeys, 'build');
-    string(config.output, 'output');
+    if (config.output !== undefined) string(config.output, 'output');
     const resolved: Record<string, unknown> = { ...config };
     for (const key of pathKeys)
       if (resolved[key] !== undefined) {
@@ -69,7 +71,8 @@ export abstract class Buildable {
       !['strict', 'report-only', 'disabled'].includes(config.updateSafety)
     )
       throw new TypeError('Invalid updateSafety');
-    if (config.inspectLimits !== undefined) checkInspectLimits(config.inspectLimits);
+    if (config.inspectLimits !== undefined)
+      resolved.inspectLimits = encodeInspectLimits(config.inspectLimits);
     if (
       config.mediaMode !== undefined &&
       !['path-backed', 'self-contained'].includes(config.mediaMode)
@@ -95,14 +98,17 @@ export abstract class Buildable {
           throw new TypeError(`Invalid mediaPolicy.${key}`);
     }
     try {
-      const result = outcome(await this.nativeProject().build(JSON.stringify(resolved)));
-      return new BuildReport(result.report, String(result.pretty));
+      return buildOutcome(
+        await this.nativeProject().build(JSON.stringify(resolved)),
+        this.baseDir,
+      );
     } catch (error) {
       nativeError(error);
     }
   }
 
   writeApkg(output: string, config: Omit<BuildOptions, 'output'> = {}): Promise<BuildReport> {
+    string(output, 'output');
     options(
       config,
       buildKeys.filter((key) => key !== 'output'),
@@ -131,13 +137,46 @@ export abstract class Buildable {
     const closed = () => failed(new Error('Writable closed while generating the archive'));
     stream.on('error', failed);
     stream.once('close', closed);
+    let artifact: ApkgArtifact | null = null;
+    let source: ReturnType<typeof createReadStream> | undefined;
+    let operationFailed = false;
     try {
-      const bytes = await this.toApkgBuffer();
+      const report = await this.build();
+      report.ensureSuccess();
+      artifact = report.artifactHandle;
+      if (!artifact) throw new BindingProtocolError('Native build did not retain its artifact');
       if (failure) throw failure;
       if (stream.destroyed || stream.writableEnded)
         throw new Error('Writable closed while generating the archive');
-      await writeBuffer(stream, bytes);
+      source = createReadStream(artifact.path, { highWaterMark: 64 * 1024 });
+      for await (const chunk of source) {
+        if (failure) throw failure;
+        await writeBuffer(stream, chunk);
+      }
+      if (failure) throw failure;
+    } catch (error) {
+      operationFailed = true;
+      throw error;
     } finally {
+      if (source) {
+        // Wait for descriptor closure before releasing a temporary file on Windows.
+        const closed = source.closed
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => source!.once('close', resolve));
+        source.destroy();
+        await closed;
+      }
+      if (artifact) {
+        try {
+          await artifact.close();
+        } catch (error) {
+          if (!operationFailed) {
+            stream.off('error', failed);
+            stream.off('close', closed);
+            throw error;
+          }
+        }
+      }
       stream.off('error', failed);
       stream.off('close', closed);
     }
@@ -149,13 +188,13 @@ export abstract class Buildable {
   ): Promise<ProjectDiffReport> {
     string(filename, 'filename');
     options(config, ['inspectLimits'], 'diff');
-    if (config.inspectLimits !== undefined) checkInspectLimits(config.inspectLimits);
+    const limits = encodeInspectLimits(config.inspectLimits ?? {});
     try {
       return new ProjectDiffReport(
         outcome(
           await this.nativeProject().diffAgainstApkg(
             path.resolve(this.baseDir, filename),
-            JSON.stringify(config.inspectLimits ?? {}),
+            JSON.stringify(limits),
           ),
         ),
       );

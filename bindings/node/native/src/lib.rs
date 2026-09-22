@@ -1,8 +1,10 @@
+mod artifact;
 mod authoring;
 mod deck;
 mod json_numbers;
 mod options;
 mod reports;
+mod snapshots;
 mod state;
 mod tasks;
 
@@ -16,6 +18,11 @@ use std::path::PathBuf;
 
 use authoring::{NoteInput, NoteTypeInput};
 use state::{ProjectTask, SharedProject};
+
+pub use snapshots::{
+    describe_field, describe_generation_rule, describe_identity, describe_note, describe_note_type,
+    describe_template,
+};
 
 fn parse<T: serde::de::DeserializeOwned>(input: &str) -> Result<T> {
     serde_json::from_str(input).map_err(|error| Error::new(Status::InvalidArg, error.to_string()))
@@ -31,7 +38,7 @@ struct ProjectInput {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BuildInput {
-    output: PathBuf,
+    output: Option<PathBuf>,
     artifacts_dir: Option<PathBuf>,
     inspect: Option<bool>,
     compare_to: Option<PathBuf>,
@@ -65,9 +72,10 @@ impl BuildInput {
                 _ => return Err(Error::new(Status::InvalidArg, "unknown mediaMode")),
             };
         }
-        let mut options = BuildOptions::new()
-            .output(self.output)
-            .normalize_options(normalize);
+        let mut options = BuildOptions::new().normalize_options(normalize);
+        if let Some(output) = self.output {
+            options = options.output(output);
+        }
         if let Some(limits) = self.inspect_limits {
             options = options.inspect_limits(limits.limits());
         }
@@ -115,6 +123,7 @@ pub fn binding_metadata() -> String {
         "contractVersion": anki_forge::embedded_contract_version(),
         "target": env!("ANKI_FORGE_NODE_TARGET"),
         "nodeApiVersion": 8,
+        "bindingProtocolVersion": 2,
     })
     .to_string()
 }
@@ -142,6 +151,14 @@ impl NativeMediaRef {
 
 #[napi]
 impl NativeProject {
+    #[napi]
+    pub fn clone_state<'env>(&self, env: &'env Env) -> Result<Object<'env>> {
+        crate::tasks::spawn(
+            env,
+            crate::state::ProjectCopyTask::new(self.shared.reserve()?, false),
+        )
+    }
+
     #[napi(constructor)]
     pub fn new(name: String, options_json: String) -> Result<Self> {
         let options: ProjectInput = parse(&options_json)?;
@@ -262,7 +279,7 @@ impl NativeProject {
     #[napi]
     pub fn build<'env>(&self, env: &'env Env, options_json: String) -> Result<Object<'env>> {
         let options = parse::<BuildInput>(&options_json)?.options()?;
-        tasks::spawn(env, ProjectTask::build(self.shared.reserve()?, options))
+        tasks::spawn(env, state::BuildTask::new(self.shared.reserve()?, options))
     }
 
     #[napi]

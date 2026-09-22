@@ -2,7 +2,9 @@ import type { NoteOptions, ClozeOptions, ImageOcclusionOptions } from './types';
 import { options, string, deepFreeze, strings } from './internal/validation';
 import { Content, contentDefinition } from './content';
 import { MediaRef, mediaFilename, mediaHandle } from './media';
-import type { NativeMediaRef } from './internal/native';
+import { native, type NativeMediaRef } from './internal/native';
+import { outcome } from './internal/outcome';
+import type { NoteSnapshot } from './snapshots';
 
 type Source =
   | { kind: 'basic'; front: string; back: string }
@@ -41,6 +43,12 @@ function noteOptions(input: NoteOptions | ClozeOptions, cloze = false): ClozeOpt
 }
 
 export class Note {
+  describe(): NoteSnapshot {
+    const { input, references } = noteDefinition(this);
+    return deepFreeze(
+      outcome(native().describeNote(input, references)),
+    ) as unknown as NoteSnapshot;
+  }
   private constructor(definition: Definition) {
     definitions.set(this, deepFreeze(definition));
     Object.freeze(this);
@@ -64,7 +72,11 @@ export class Note {
   }
   static custom(id: string, config: NoteOptions = {}): Note {
     string(id, 'noteTypeId');
-    return new Note({ source: { kind: 'custom', id }, options: noteOptions(config), fields: {} });
+    return new Note({
+      source: { kind: 'custom', id },
+      options: noteOptions(config),
+      fields: {},
+    });
   }
   static imageOcclusion(image: MediaRef, config: ImageOcclusionOptions): Note {
     mediaFilename(image);
@@ -88,7 +100,11 @@ export class Note {
     for (const rect of rects) {
       options(rect, ['x', 'y', 'width', 'height'], 'rect');
       for (const key of ['x', 'y', 'width', 'height'])
-        if (!Number.isInteger(rect[key]) || Number(rect[key]) < 0 || Number(rect[key]) > 0xffffffff)
+        if (
+          !Number.isInteger(rect[key]) ||
+          Number(rect[key]) < 0 ||
+          Number(rect[key]) > 0xffffffff
+        )
           throw new TypeError(`rect.${key} must be a uint32`);
     }
     if (!['hide-all-guess-one', 'hide-one-guess-one'].includes(String(mode)))

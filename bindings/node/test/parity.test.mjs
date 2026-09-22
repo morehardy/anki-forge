@@ -179,6 +179,66 @@ async function project(caseName, baseDir) {
       });
       return deck;
     }
+    case "deck-mixed":
+    case "deck-import": {
+      const deck = await project("deck", baseDir);
+      deck.basic("<b>inferred</b>", "<i>answer</i>", { tags: ["inferred"] });
+      deck.basic("override", "source-key", {
+        identityOverride: { fields: ["back"], reasonCode: "external-key" },
+      });
+      const png = Buffer.from([
+        137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0,
+        1, 0, 0, 0, 1, 8, 6, 0, 0, 0, 31, 21, 196, 137, 0, 0, 0, 12, 73, 68, 65,
+        84, 120, 156, 99, 248, 15, 4, 0, 9, 251, 3, 253, 167, 102, 129, 94, 0,
+        0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
+      ]);
+      await deck.media.addBytes("pixel.png", png);
+      deck.imageOcclusion(deck.media.get("pixel.png"), {
+        rects: [{ x: 0, y: 0, width: 1, height: 1 }],
+        header: "Pixel",
+        backExtra: "Hint",
+        comments: "Details",
+        tags: ["io"],
+      });
+      if (caseName === "deck-mixed") return deck;
+      const before = await deck.describe();
+      const imported = await Project.fromDeck(deck);
+      await imported.importTemplateBundle(
+        fileURLToPath(
+          new URL(
+            "../../../contracts/fixtures/template-bundle/custom-normal",
+            import.meta.url,
+          ),
+        ),
+      );
+      imported.addNote(
+        Note.custom("language-card", { stableId: "bundle" })
+          .text("prompt", "Question")
+          .text("extra", "Answer"),
+      );
+      imported.addNoteType(
+        NoteType.custom("extra", {
+          identity: IdentityRecipe.fields(["prompt"]),
+          fields: [new Field("Prompt", { key: "prompt", identity: true })],
+          templates: [
+            new Template("Card", {
+              front: "{{Prompt}}",
+              back: "{{FrontSide}}",
+            }),
+          ],
+        }),
+      );
+      imported.addNote(Note.custom("extra").text("prompt", "Custom"));
+      const image = await imported.media.addBytes("diagram.svg", svg);
+      imported.addNote(
+        Note.basic("media", "answer", { stableId: "more-media" }).image(
+          "Front",
+          image,
+        ),
+      );
+      assert.deepEqual(await deck.describe(), before);
+      return imported;
+    }
     case "bundle":
       await p.importTemplateBundle(
         fileURLToPath(
@@ -251,6 +311,8 @@ test("independent Rust and Node product constructors preserve full APKG observat
     "media",
     "io",
     "deck",
+    "deck-mixed",
+    "deck-import",
     "bundle",
     "revision-0",
     "revision-1",
@@ -555,4 +617,30 @@ test("independent native instances run concurrently and input limits reject unsa
     );
   }
   await assert.rejects(fs.access(path.join(baseDir, "invalid.apkg")));
+});
+
+test("Deck validation preserves native Rust warning order, severity and mapped source", async (t) => {
+  const root = await directory(t);
+  const deck = await project("deck", root);
+  deck.basic("override", "answer", {
+    identityOverride: { fields: ["back"], reasonCode: "source-key" },
+  });
+  const native = observe("deck-validation", root);
+  const report = await deck.validate();
+  assert.deepEqual(
+    report.diagnostics.map(({ code, message, severity, path }) => ({
+      code,
+      message,
+      severity,
+      path,
+    })),
+    native,
+  );
+  const before = await deck.describe();
+  for (let i = 0; i < 2; i++) {
+    const built = await deck.build();
+    built.ensureSuccess();
+    await built.artifactHandle.close();
+  }
+  assert.deepEqual(await deck.describe(), before);
 });

@@ -108,8 +108,8 @@ deck.imageOcclusion(image, {
 Deck retains its own Rust identity rules, inferred identity and rectangle bounds
 validation. Basic identity can select `front`/`back`; per-note `identityOverride`
 takes `{ fields, reasonCode }`. `DeckMediaRef` is distinct from Project `MediaRef`.
-Deck media supports `addFile(path)` and `addBytes(name, bytes)` using Rust Deck
-semantics; file exports use the source basename. Project media additionally
+Deck media supports `addFile(path)`, `addBytes(name, bytes)` and synchronous
+`get(filename)` using Rust Deck semantics; file exports use the source basename. Project media additionally
 supports renamed exports and large Buffer spooling.
 
 Project image occlusion uses `Note.imageOcclusion(projectMedia, { stableId, rects,
@@ -127,7 +127,7 @@ Project media methods are asynchronous: `addFile(path, { exportAs })`,
 `addBuffer(sourceLabel, bytes, { exportAs })`. `bytes` accepts Buffer or Uint8Array
 and is snapshotted before asynchronous work starts. `addBytes` preserves Rust's
 64 KiB limit; `addBuffer` stores larger data in private temporary files owned by
-the native project until it is released. No data is written into node_modules.
+the native project and its clones until their last owner is released. No data is written into node_modules.
 
 Registered files retain their original fingerprints. Changing a source before
 build produces `MEDIA.SOURCE_CHANGED`. Duplicate names and invalid filenames use
@@ -141,7 +141,7 @@ even after `process.chdir()`. Temporary staging is kept in the build workspace.
 
 ## Build, compare and output
 
-`build({ output, ...options })` and `writeApkg(output, options)` return a full,
+`build(options?)` and `writeApkg(output, options)` return a full,
 deeply frozen BuildReport. `BuildError` retains `code`, `failureCause` and `report`.
 Diagnostics preserve code, severity, domain, stage, path, byte span, message and
 suggested fix. Report properties include counts, media entries, metrics, current
@@ -159,7 +159,11 @@ early. No generic CLI flags are exposed on this interface.
 | `compareTo`, `failOn` | Baseline APKG and risk threshold |
 | `identityLockfile`, `writeIdentityLockfile`, `updateSafety` | Core update safety and publication protection |
 
-`defaultInspectLimits()` reads all defaults from Rust. `firstUpdateSafeBuild(path)`
+All 11 `InspectLimits` fields accept non-negative safe `number` values or exact
+`bigint` values through `18446744073709551615n`. Unsafe numbers, negative values,
+fractions and overflow are rejected before work starts. The same rules apply to
+build and diff; small budgets still fail inspection. `defaultInspectLimits()`
+reads safe-number defaults from Rust. `firstUpdateSafeBuild(path)`
 returns strict options that write the initial lockfile. `updateSafe(path)` returns
 strict options that read the lockfile; explicitly set `writeIdentityLockfile:
 true` when publishing an updated lockfile. A stable project ID is required for
@@ -172,9 +176,80 @@ files using Rust's path, alias and atomic publication checks.
 
 `toApkgBuffer()` returns a complete Buffer using first-build defaults, with private
 temporary output cleaned up after reading. It accepts no publication options.
-`writeTo(writable)` writes a complete Buffer, awaits the callback and backpressure,
-propagates stream errors, and leaves the stream open. APKG generation is not
-incrementally streamed.
+`writeTo(writable)` completes the build first, then reads the owned temporary APKG
+in chunks of at most 64 KiB. It awaits write callbacks and backpressure, propagates
+stream errors, releases the source and temporary file, and leaves the target open.
+This bounds SDK transfer buffers; it does not bound Rust build memory or storage
+inside the caller's Writable. APKG generation is not incrementally streamed.
+
+### Artifact ownership
+
+`build()` creates a temporary APKG. `build({ output: 'file.apkg' })` publishes a
+persistent file; `build({ artifactsDir: 'retained' })` retains `package.apkg` in
+that directory. JSON reporting requires a persistent destination as in Rust.
+
+`report.artifact` and `report.raw.artifact` remain `{ path }` snapshots. The new
+`report.artifactHandle` owns the real Rust artifact. Its `clone()` creates a
+separate owner, `persistTo(path)` atomically copies it to a persistent destination,
+and `await close()` releases that owner. Closing the last temporary owner removes
+the file; closing persistent owners leaves their files. `close()` is idempotent;
+other operations on a closed owner raise `ArtifactClosedError`. I/O failures raise
+`ArtifactError` without destroying the source. Keep a clone for independent use.
+
+```js
+import { Project, Note } from 'anki-forge-node';
+const project = new Project('Deferred output');
+project.addNote(Note.basic('one', '1'));
+const report = await project.build();
+try {
+  report.ensureSuccess();
+  const saved = await report.artifactHandle.persistTo('chosen-later.apkg');
+  await saved.close(); // The persistent file remains.
+} finally {
+  await report.artifactHandle?.close();
+}
+const retained = await project.build({ artifactsDir: 'retained-artifacts' });
+await retained.artifactHandle.close(); // Retained package.apkg remains.
+```
+
+Late `BuildError.report` values also retain an artifact when Rust has already
+produced one. Inspect, clone or persist that handle before closing it. Retaining a
+report keeps its owner alive; retaining only a path or JSON does not. A manual
+`new BuildReport(raw, pretty)` has `artifactHandle === null`. Garbage collection
+is a fallback; explicit close provides predictable cleanup. Paths passed to
+persistTo resolve against the source Project/Deck's captured baseDir. In-flight
+persistence owns its own snapshot, so closing the original does not interrupt it.
+
+### Conversion, clones and readonly descriptions
+
+```js
+import { Deck, Project, Note, Field } from 'anki-forge-node';
+const deck = new Deck('Variants', { stableId: 'variants' });
+deck.basic('<b>HTML front</b>', 'answer');
+const project = await Project.fromDeck(deck);
+const variant = await project.clone();
+variant.addNote(Note.cloze('{{c1::extra}}', { stableId: 'extra' }));
+console.log((await deck.describe()).notes.length); // 1; the Deck remains usable.
+console.log(new Field('Prompt').describe().key); // Canonical Rust key.
+const report = await variant.build({ inspectLimits: { maxArchiveBytes: 9007199254740993n } });
+await report.artifactHandle.close();
+```
+
+`Project.fromDeck(deck)` copies the current Rust state into an editable Project,
+including identities, raw Deck HTML, tags, registered media and their original
+fingerprints. It inherits baseDir and accepts no metadata overrides. `clone()` on
+Project or Deck creates independent mutable state; immutable spooled media shares
+resource ownership. Source and result may be edited and built independently.
+These operations copy O(n) state in a worker and reserve the source immediately.
+
+Field, Template, NoteType, IdentityRecipe, GenerationRule and Note expose
+synchronous `describe()`; Deck exposes asynchronous `describe()`. These return
+typed, deeply frozen snapshots of Rust values. Note observations include actual
+stock field names and rendered content; Deck observations include resolved
+identities. They neither add a note nor validate an incomplete NoteType against a
+Project. Descriptions do not expose a mutable normalization IR. Deck.validate()
+retains the existing Project-level checks and mapped `project.deck` diagnostics;
+Deck.build() calls Rust Deck.build() directly.
 
 Await each asynchronous operation before using the same Project or Deck again.
 A conflicting operation throws/rejects `ProjectBusyError`. Domain failures restore
@@ -223,3 +298,10 @@ the current matrix. See [release procedure](RELEASING.md) for open release gates
 The [coverage index](COVERAGE.md) maps C01–C18 to tests and records remaining
 verification. `npm run prepare:desktop` retains SDK-generated APKGs, hashes and
 Rust/Node comparison evidence with a pending Anki Desktop checklist.
+
+The main and native packages must have matching versions and binding protocol 2.
+The loader rejects an older native protocol even if a development candidate kept
+its package version. Rebuild all platform packages together before release.
+Rust `Project.lower()` remains callable in source but is outside this SDK's
+Supported Consumer Interface; the legacy CLI API does not lower a live Project.
+See [the parity implementation record](../../docs/plans/2026-09-22-node-api-parity-progress.md).

@@ -17,3 +17,13 @@ normal consumers need.
   tests; the packaged-consumer test must use only the supported facade.
 - Enabling `internal-tools` from a downstream application is unsupported and
   may break in any release.
+
+## Source-visible lowering
+
+`Project.lower()` is currently a public method and can be called without the
+`internal-tools` feature. Its returned authoring/normalization plan is outside
+the Supported Consumer Interface compatibility promise above. Source visibility
+alone does not expand that promise. The Node and Python product facades do not
+need to expose this IR to claim product-interface parity. This clarification
+neither removes the method nor introduces a feature gate; a future advanced
+interface would need a separately versioned DTO and compatibility decision.

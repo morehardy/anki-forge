@@ -1,0 +1,84 @@
+{
+  "node": "v24.19.0",
+  "platform": "darwin/arm64",
+  "metadata": {
+    "bindingProtocolVersion": 2,
+    "bindingVersion": "0.2.0",
+    "contractVersion": "0.6.3",
+    "coreVersion": "0.1.0",
+    "nodeApiVersion": 8,
+    "target": "aarch64-apple-darwin"
+  },
+  "mode": "deck",
+  "samples": [
+    {
+      "phase": "loaded",
+      "rss": 61128704,
+      "heapTotal": 7897088,
+      "heapUsed": 4669424,
+      "external": 2008776,
+      "arrayBuffers": 143611,
+      "allocationCalls": 283,
+      "liveRustBytes": 42903,
+      "peakRustBytes": 43548
+    },
+    {
+      "phase": "authored",
+      "rss": 81887232,
+      "heapTotal": 7897088,
+      "heapUsed": 4746672,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 22877,
+      "liveRustBytes": 10535481,
+      "peakRustBytes": 10552362
+    },
+    {
+      "phase": "build-1-closed",
+      "rss": 134971392,
+      "heapTotal": 6848512,
+      "heapUsed": 5015616,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 225788,
+      "liveRustBytes": 11318988,
+      "peakRustBytes": 24392266
+    },
+    {
+      "phase": "build-2-closed",
+      "rss": 136921088,
+      "heapTotal": 6848512,
+      "heapUsed": 4832448,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 405990,
+      "liveRustBytes": 11318988,
+      "peakRustBytes": 25175661
+    },
+    {
+      "phase": "build-3-closed",
+      "rss": 138821632,
+      "heapTotal": 6848512,
+      "heapUsed": 4844600,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 586204,
+      "liveRustBytes": 11318988,
+      "peakRustBytes": 25175661
+    },
+    {
+      "phase": "deck-collected",
+      "rss": 138821632,
+      "heapTotal": 6848512,
+      "heapUsed": 4839912,
+      "external": 2008816,
+      "arrayBuffers": 143611,
+      "allocationCalls": 586213,
+      "liveRustBytes": 827066,
+      "peakRustBytes": 25175661
+    }
+  ],
+  "comparison": "direct-deck",
+  "instrumentedStateSha256": "21473aa9c485bc358fa5b962979ba8d74bbcacccd0e97abb27daa10e4e387344",
+  "counterSource": "benchmarks/results/20260907-post-streaming-audit/probes/memory.patch"
+}

@@ -1,0 +1,427 @@
+{
+  "scope": "Rust Supported Consumer Interface; public normalization IR is excluded (ADR 0012).",
+  "capabilities": [
+    {
+      "id": "C01",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "Deck retains native identity selection, addition errors, Cloze and build state"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "Deck image occlusion enforces dimensions and bounds through its own Rust API"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "Basic and Cloze produce an inspected APKG through Rust"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "Basic and Cloze produce an inspected APKG through Rust"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom fields, templates, identity, content and generation use Rust authoring"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "custom Cloze and semantic template diagnostics preserve byte offsets"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom fields, templates, identity, content and generation use Rust authoring"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom fields, templates, identity, content and generation use Rust authoring"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom fields, templates, identity, content and generation use Rust authoring"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "custom Cloze and semantic template diagnostics preserve byte offsets"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "Deck retains native identity selection, addition errors, Cloze and build state"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom fields, templates, identity, content and generation use Rust authoring"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "media references follow filename semantics across projects and missing sources are diagnosed by Rust"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "media paths capture baseDir, preserve registration fingerprints and remain atomic"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "media references follow filename semantics across projects and missing sources are diagnosed by Rust"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "bytes are snapshotted and large buffers retain private files through repeated builds"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "Project image occlusion validates rectangles and emits cards"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "Deck image occlusion enforces dimensions and bounds through its own Rust API"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "template bundle import is atomic and retains source locations"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C13",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "add errors are synchronous and leave the project unchanged"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C14",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "custom Cloze and semantic template diagnostics preserve byte offsets"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C15",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "buffer and Writable outputs support backpressure, keep streams open and propagate write errors"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C16",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "risk-blocked candidates preserve published APKG and identity lockfile"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "inspection limits, media policy, report JSON and comparison have observable core behavior"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C17",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "inspection limits, media policy, report JSON and comparison have observable core behavior"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "C18",
+      "tests": [
+        {
+          "file": "product.test.mjs",
+          "name": "runtime checks reject unknown options before entering Rust"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "inspection limits, media policy, report JSON and comparison have observable core behavior"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "every inspection budget reaches the Rust inspector and rejects an over-budget artifact"
+        },
+        {
+          "file": "product.test.mjs",
+          "name": "media policy preserves Rust octet-stream fallback and declared MIME mismatch severity"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        }
+      ]
+    },
+    {
+      "id": "N01",
+      "tests": [
+        {
+          "file": "artifact.test.mjs",
+          "name": "published reports own independently clonable artifacts without changing JSON snapshots"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "temporary builds stay readable until their last owner closes"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "an artifact cannot be constructed from an arbitrary path or forged handle"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "artifacts-only builds remain persistent and temporary persistence failures preserve the source"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "late build failures retain temporary artifacts in their error reports"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "JSON reporting without a persistent destination keeps the core failure and no artifact owner"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "artifact persistence captures baseDir across chdir and rejects symbolic aliases"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "reports outlive collected projects, GC releases temporary artifacts and worker teardown releases owners"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "Worker termination before build and persist promises settle releases task-owned temporary artifacts"
+        },
+        {
+          "file": "artifact.test.mjs",
+          "name": "writeApkg still requires a filename when build output is optional"
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "tests": [
+        {
+          "file": "conversion.test.mjs",
+          "name": "Deck snapshots become independently editable Projects while retaining the original Deck"
+        },
+        {
+          "file": "conversion.test.mjs",
+          "name": "Deck media lookup and conversion retain registration fingerprints without reading the source again"
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "tests": [
+        {
+          "file": "stream.test.mjs",
+          "name": "Writable export transfers bounded chunks with backpressure and leaves the target open"
+        },
+        {
+          "file": "stream.test.mjs",
+          "name": "Writable failures at generation and transfer release temporary files and listeners"
+        }
+      ]
+    },
+    {
+      "id": "N04",
+      "tests": [
+        {
+          "file": "snapshot.test.mjs",
+          "name": "value descriptions expose canonical Rust keys, flags, identity and template definitions as frozen snapshots"
+        },
+        {
+          "file": "snapshot.test.mjs",
+          "name": "Note descriptions render stock, HTML and media content in Rust without adding the note to a Project"
+        },
+        {
+          "file": "snapshot.test.mjs",
+          "name": "Deck descriptions expose canonical identities and detached notes while reserving a consistent snapshot"
+        }
+      ]
+    },
+    {
+      "id": "N05",
+      "tests": [
+        {
+          "file": "conversion.test.mjs",
+          "name": "Deck snapshots become independently editable Projects while retaining the original Deck"
+        },
+        {
+          "file": "conversion.test.mjs",
+          "name": "Deck media lookup and conversion retain registration fingerprints without reading the source again"
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "tests": [
+        {
+          "file": "clone.test.mjs",
+          "name": "Project and Deck clones preserve identity and can mutate and build independently"
+        },
+        {
+          "file": "clone.test.mjs",
+          "name": "cloned large Buffer media survives collection of its original Project and cleans up after the last owner"
+        }
+      ]
+    },
+    {
+      "id": "N07",
+      "tests": [
+        {
+          "file": "limits.test.mjs",
+          "name": "all inspection budgets accept exact u64 bigint inputs for build and diff"
+        }
+      ]
+    },
+    {
+      "id": "N08",
+      "tests": [
+        {
+          "file": "parity.test.mjs",
+          "name": "independent Rust and Node product constructors preserve full APKG observations and reports"
+        },
+        {
+          "file": "parity.test.mjs",
+          "name": "Deck validation preserves native Rust warning order, severity and mapped source"
+        }
+      ],
+      "resourceEvidence": "../../../docs/plans/2026-09-22-node-api-parity-resources.md"
+    }
+  ],
+  "separateGates": {
+    "S01": "public lower() exists, outside the product compatibility promise",
+    "R01": "shared hide-one writer failure; separate core repair",
+    "V02": "exact Node 22.13.0 and rolling 22/24/26 jobs configured; remote results pending",
+    "V03": "Anki Desktop manual checks pending",
+    "V04": "registry ownership and release rehearsal pending"
+  }
+}

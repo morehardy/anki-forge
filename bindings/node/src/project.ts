@@ -1,13 +1,16 @@
 import path from 'node:path';
 import type { ProjectOptions } from './types';
 import { Buildable } from './buildable';
-import { native, type NativeBuildable } from './internal/native';
+import { native, type NativeBuildable, type NativeProject } from './internal/native';
 import { options, string } from './internal/validation';
 import { Note, noteDefinition } from './note';
 import { nativeError } from './errors';
 import { outcome } from './internal/outcome';
 import { NoteType, noteTypeDefinition } from './notetype';
 import { MediaRegistry } from './media';
+import { Deck, deckBackend } from './deck';
+
+const adoptions = new WeakMap<ProjectOptions, NativeProject>();
 
 export class Project extends Buildable {
   readonly baseDir: string;
@@ -25,12 +28,36 @@ export class Project extends Buildable {
     string(baseDir, 'baseDir');
     this.name = name;
     this.baseDir = path.resolve(baseDir);
-    this.#project = new (native().NativeProject)(
-      name,
-      JSON.stringify({ stableId: config.stableId, defaultDeck: config.defaultDeck }),
-    );
+    this.#project =
+      adoptions.get(config) ??
+      new (native().NativeProject)(
+        name,
+        JSON.stringify({ stableId: config.stableId, defaultDeck: config.defaultDeck }),
+      );
     this.media = new MediaRegistry(this.#project, this.baseDir);
     Object.freeze(this);
+  }
+
+  static async fromDeck(deck: Deck): Promise<Project> {
+    try {
+      const backend = await deckBackend(deck).toProject();
+      const config: ProjectOptions = { baseDir: deck.baseDir };
+      adoptions.set(config, backend);
+      return new Project(deck.name, config);
+    } catch (error) {
+      nativeError(error);
+    }
+  }
+
+  async clone(): Promise<Project> {
+    try {
+      const backend = await this.#project.cloneState();
+      const config: ProjectOptions = { baseDir: this.baseDir };
+      adoptions.set(config, backend);
+      return new Project(this.name, config);
+    } catch (error) {
+      nativeError(error);
+    }
   }
 
   addNote(note: Note): void {

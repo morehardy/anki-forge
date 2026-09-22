@@ -53,7 +53,7 @@ export interface ImageOcclusionOptions extends ClozeOptions {
 }
 
 export interface BuildOptions {
-  output: string;
+  output?: string;
   artifactsDir?: string;
   inspect?: boolean;
   compareTo?: string;
@@ -69,18 +69,19 @@ export interface BuildOptions {
   mediaPolicy?: MediaPolicy;
 }
 
+export type InspectBudget = number | bigint;
 export interface InspectLimits {
-  maxArchiveBytes?: number;
-  maxEntries?: number;
-  maxCentralDirectoryBytes?: number;
-  maxZipEntryBytes?: number;
-  maxZipTotalBytes?: number;
-  maxMetaBytes?: number;
-  maxMediaMapBytes?: number;
-  maxCollectionBytes?: number;
-  maxMediaBytes?: number;
-  maxDecodedTotalBytes?: number;
-  maxZstdWindowBytes?: number;
+  maxArchiveBytes?: InspectBudget;
+  maxEntries?: InspectBudget;
+  maxCentralDirectoryBytes?: InspectBudget;
+  maxZipEntryBytes?: InspectBudget;
+  maxZipTotalBytes?: InspectBudget;
+  maxMetaBytes?: InspectBudget;
+  maxMediaMapBytes?: InspectBudget;
+  maxCollectionBytes?: InspectBudget;
+  maxMediaBytes?: InspectBudget;
+  maxDecodedTotalBytes?: InspectBudget;
+  maxZstdWindowBytes?: InspectBudget;
 }
 export interface MediaPolicy {
   unusedBinding?: 'ignore' | 'info' | 'warning' | 'error';
@@ -138,7 +139,12 @@ export interface UpdateSafetySummary {
   readonly lockfile_written: boolean;
 }
 export interface EvidenceRef {
-  readonly kind: 'diagnostic' | 'diff_change' | 'inspect_observation' | 'update_safety' | 'oracle';
+  readonly kind:
+    | 'diagnostic'
+    | 'diff_change'
+    | 'inspect_observation'
+    | 'update_safety'
+    | 'oracle';
   readonly ref_id: string;
 }
 export interface BuildDiffSummary {
@@ -204,6 +210,7 @@ export interface CoreDiffReport {
 
 export interface BindingMetadata {
   readonly bindingVersion: string;
+  readonly bindingProtocolVersion: number;
   readonly coreVersion: string;
   readonly contractVersion: string;
   readonly target: string;

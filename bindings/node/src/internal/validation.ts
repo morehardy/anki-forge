@@ -5,11 +5,11 @@ export function strings(value: unknown, label: string): asserts value is readonl
   if (!Array.isArray(value) || value.some((item) => typeof item !== 'string'))
     throw new TypeError(`${label} must be an array of strings`);
 }
-export function options(
-  value: unknown,
+export function options<T>(
+  value: T,
   keys: readonly string[],
   label: string,
-): asserts value is Record<string, unknown> {
+): asserts value is T & Record<string, unknown> {
   if (value === null || typeof value !== 'object' || Array.isArray(value))
     throw new TypeError(`${label} must be an object`);
   for (const key of Object.keys(value))

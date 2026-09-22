@@ -15,14 +15,37 @@ export const inspectKeys = [
   'maxDecodedTotalBytes',
   'maxZstdWindowBytes',
 ];
-export function checkInspectLimits(limits: InspectLimits): void {
+/** @internal Preserve exact integers across JSON without a global BigInt serializer. */
+export function encodeInspectLimits(limits: InspectLimits): Record<string, number | string> {
   options(limits, inspectKeys, 'inspectLimits');
-  for (const value of Object.values(limits))
-    if (value !== undefined && (!Number.isSafeInteger(value) || Number(value) < 0))
-      throw new TypeError('Inspect limits must be non-negative safe integers');
+  const encoded: Record<string, number | string> = {};
+  for (const [key, value] of Object.entries(limits)) {
+    if (value === undefined) continue;
+    if (typeof value === 'bigint') {
+      if (value < 0n || value > 18446744073709551615n)
+        throw new TypeError('Inspect limits must fit an unsigned 64-bit integer');
+      encoded[key] = value.toString();
+    } else {
+      if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0)
+        throw new TypeError('Inspect limits must be non-negative safe integers or u64 bigints');
+      encoded[key] = value;
+    }
+  }
+  return encoded;
 }
-export function defaultInspectLimits(): Readonly<Required<InspectLimits>> {
-  return Object.freeze(JSON.parse(native().defaultInspectLimits()));
+export function defaultInspectLimits(): Readonly<Record<keyof InspectLimits, number>> {
+  const limits: Record<keyof InspectLimits, number> = JSON.parse(
+    native().defaultInspectLimits(),
+  );
+  if (
+    inspectKeys.some(
+      (key) =>
+        !Number.isSafeInteger(limits[key as keyof InspectLimits]) ||
+        limits[key as keyof InspectLimits] < 0,
+    )
+  )
+    throw new Error('Native default inspection budgets exceed the safe number range');
+  return Object.freeze(limits);
 }
 export function firstUpdateSafeBuild(
   identityLockfile: string,

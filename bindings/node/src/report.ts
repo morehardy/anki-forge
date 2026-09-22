@@ -84,6 +84,16 @@ export class ValidationReport {
   }
 }
 
+const artifacts = new WeakMap<BuildReport, import('./artifact').ApkgArtifact>();
+
+/** @internal Ownership is attached separately from the immutable JSON projection. */
+export function attachArtifact(
+  report: BuildReport,
+  artifact: import('./artifact').ApkgArtifact,
+): void {
+  artifacts.set(report, artifact);
+}
+
 export class BuildReport {
   readonly raw: CoreBuildReport;
   constructor(
@@ -115,6 +125,9 @@ export class BuildReport {
   }
   get artifact() {
     return this.raw.artifact;
+  }
+  get artifactHandle(): import('./artifact').ApkgArtifact | null {
+    return artifacts.get(this) ?? null;
   }
   get counts() {
     return this.raw.counts;

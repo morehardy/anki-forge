@@ -1,4 +1,6 @@
 export { Project } from './project';
+export { ApkgArtifact } from './artifact';
+export { ArtifactClosedError, ArtifactError } from './errors';
 export { Deck, DeckMediaRef } from './deck';
 export type {
   DeckOptions,
@@ -37,3 +39,5 @@ export {
 } from './errors';
 export { bindingMetadata } from './internal/native';
 export type * from './types';
+
+export type * from './snapshots';
