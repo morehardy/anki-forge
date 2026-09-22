@@ -1,13 +1,15 @@
 # ADR 0021: Own Rust product objects behind the Python SDK
 
-Status: accepted for implementation; native trial passed, final release gates remain open.
+Status: accepted and implemented. Trial and final implementation gates passed at
+`5f6ac7d`; see the [verification record](../plans/2026-09-22-python-api-parity-progress.md).
+No package or release tag has been published.
 
 Python 0.1 passes a ProductDocument to a bundled CLI. Its stateless transport
 cannot retain Project registration evidence, incremental validation, or temporary
 Artifact ownership. The Python parity plan now requires these consumer behaviors,
 including the real Deck facade and conversion to an editable Project.
 
-Python 0.2 will use a private PyO3 extension that owns actual Rust objects. The
+Python 0.2 uses a private PyO3 extension that owns actual Rust objects. The
 Python facade keeps familiar constructors and mutable authoring inputs; adding
 an input takes a snapshot and calls the Rust facade. Rust owns identity, template
 validation, media evidence, build, comparison, risk and publication. Existing
@@ -33,7 +35,8 @@ unsafe-code prohibition; generated extension FFI has a separate lint boundary.
 
 If native distribution fails the trial, reconsider the documented stateful CLI
 alternative before expanding the implementation. Four platform installations,
-old-artifact migration, typing and the capability matrix remain release gates.
+old-artifact migration, typing and the capability matrix are release gates and
+passed for this implementation. Future release candidates must retain them.
 This implementation does not authorize publishing a package or release tag.
 
 Scope and acceptance criteria:

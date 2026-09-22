@@ -96,9 +96,12 @@ and installs the resulting wheel before running the example and typing checks.
 The actual wheel filename/metadata records the Intel macOS deployment target.
 Windows lacks fork/POSIX permission-bit tests; those skips are named explicitly.
 
-T2 four-platform trial passed at `8a44a94` in
-[run 35687448346](https://github.com/morehardy/anki-forge/actions/runs/35687448346).
-**That run is not final API evidence.** Final candidate package, review and CI
-results are recorded in the [implementation log](../../docs/plans/2026-09-22-python-api-parity-progress.md).
+Final implementation `5f6ac7d` passed all four wheel jobs (each on Python 3.11 and
+3.12) and the independent source-distribution job in
+[run 35696859514](https://github.com/morehardy/anki-forge/actions/runs/35696859514).
+The local suite passed 192 tests and 5 subtests; mypy passed for all 16 public
+source files, native Clippy passed, and both review axes have no unresolved
+findings. Details and the earlier trial history are recorded in the
+[implementation log](../../docs/plans/2026-09-22-python-api-parity-progress.md).
 No support claim is made for free-threaded interpreters, subinterpreters,
 Python 3.13/3.14, cancellation or multi-file transactional rollback.

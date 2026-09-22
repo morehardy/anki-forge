@@ -1,7 +1,7 @@
 # Python API 能力对齐实施方案
 
 - 日期：2026-09-21
-- 状态：实施提案；本次只整理与规划，没有修改运行时或发布包。
+- 状态：已采纳并实施。正文保留原提案与验收标准；当前完成状态和分发门禁见 [执行记录](2026-09-22-python-api-parity-progress.md)，架构决策见 [ADR 0021](../adr/0021-native-python-product-sdk.md)。未发布包。
 - 源码基准：`2edb8cc60e928b0d9cc161a2fcdc01234b722983`
 - 配套事实清单：[Python API 差距审计](2026-09-21-python-api-gap-audit.md)。本文的 PY-xx 编号与该清单一致。
 - 目标：让 Python 覆盖 Rust **Supported Consumer Interface** 的用户能力，并保持媒体、身份、校验、诊断和发布行为一致。
@@ -21,7 +21,7 @@
 
 ### 2.1 已具备的能力要保留
 
-Python 已有 Project、Basic/Cloze、custom Normal/Cloze、图片遮挡 builder、文本/HTML/图片/声音、模板浏览器内容与目标牌组、生成规则、文件/字节媒体、比较构建、身份锁文件和更新安全模式。它们需要补行为与测试，不应全部重写或列成“尚未实现”。[公开导出](../../bindings/python/src/anki_forge/__init__.py)、[笔记](../../bindings/python/src/anki_forge/note.py)、[笔记类型](../../bindings/python/src/anki_forge/notetype.py)、[构建参数](../../bindings/python/src/anki_forge/project.py#L132)
+Python 已有 Project、Basic/Cloze、custom Normal/Cloze、图片遮挡 builder、文本/HTML/图片/声音、模板浏览器内容与目标牌组、生成规则、文件/字节媒体、比较构建、身份锁文件和更新安全模式。它们需要补行为与测试，不应全部重写或列成“尚未实现”。[公开导出](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/__init__.py)、[笔记](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/note.py)、[笔记类型](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/notetype.py)、[构建参数](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/project.py#L132)
 
 ### 2.2 必需与扩展分开验收
 
@@ -35,13 +35,13 @@ Python 已有 Project、Basic/Cloze、custom Normal/Cloze、图片遮挡 builder
 | `lower()`、normalize、Writer、独立 APKG inspector、底层 lockfile 修改 | 不因源码可达就纳入公开兼容面；按 ADR 0012 排除内部工具接口 |
 | pandas/CSV、AnkiConnect、浏览器/WASM、自动发布 | 不属于本次 API 对齐目标 |
 
-接口边界来自 [prelude](../../anki_forge/src/prelude.rs#L1)、[ADR 0012](../adr/0012-narrow-rust-0.1-interface.md)、[Rust 用户文档](../../anki_forge/README.md#supported-01-interface)，不是 Node 的所有导出或所有 Rust `pub` 符号的并集。
+接口边界来自 [prelude](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/prelude.rs#L1)、[ADR 0012](../adr/0012-narrow-rust-0.1-interface.md)、[Rust 用户文档](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/README.md#supported-01-interface)，不是 Node 的所有导出或所有 Rust `pub` 符号的并集。
 
 Rust 的部分高级配置存在自己的导出边界问题：RiskLevel、ProjectNormalizeOptions 和媒体策略枚举未重导出到 prelude。BuildOptions 的 inspect、inspect_limits、artifacts_dir、self_contained 等明确属于可用对照；Python 的额外命名配置若需这些类型，应列为 SDK 扩展，或另行修正并承诺 Rust facade 的导出。不能假定打开 internal-tools 后能命名的每个枚举都已经是受支持的 Rust 用户能力。
 
 ### 2.3 已有核心限制
 
-`hide_one_guess_one` 目前生成的分组 cloze 标记会被核心构建管线以 `PRODUCT.CLOZE_MARKER_MALFORMED` 拒绝；Python 不应另写 renderer 绕过。绑定应保留同样的结构化失败，核心修复后再使三语言共同转为成功场景。它是跨语言共有的核心问题，不是 Python 缺一个方法。[核心诊断](../../anki_forge/src/writer_core/staging.rs#L777)、[现有回归](../../bindings/node/test/product.test.mjs#L331)
+`hide_one_guess_one` 目前生成的分组 cloze 标记会被核心构建管线以 `PRODUCT.CLOZE_MARKER_MALFORMED` 拒绝；Python 不应另写 renderer 绕过。绑定应保留同样的结构化失败，核心修复后再使三语言共同转为成功场景。它是跨语言共有的核心问题，不是 Python 缺一个方法。[核心诊断](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/writer_core/staging.rs#L777)、[现有回归](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/node/test/product.test.mjs#L331)
 
 ## 3. 为什么只扩充 CLI 参数不够
 
@@ -62,7 +62,7 @@ Rust 的部分高级配置存在自己的导出边界问题：RiskLevel、Projec
 - 当前 ProductDocument 字段不能表达所有内存状态，例如每笔记 identity override、Field 的独立 optional 标志，以及 Artifact 的所有权。
 - 旧设计文档里的 `Project::from_product_document(...)` 流程不能当作当前源码事实。
 
-依据：[CLI 构建入口](../../contract_tools/src/product_build_cmd.rs#L27)、[Document/Project 分叉](../../anki_forge/src/product/project/input.rs#L5)、[ProductDocument 数据模型](../../anki_forge/src/product/model.rs#L136)。
+依据：[CLI 构建入口](../../contract_tools/src/product_build_cmd.rs#L27)、[Document/Project 分叉](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project/input.rs#L5)、[ProductDocument 数据模型](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/model.rs#L136)。
 
 因此以下做法不算完成：
 
@@ -101,7 +101,7 @@ bindings/python/native/     新增，名称和布局在技术试验后固定
 
 Maturin 支持 Python 源码与 Rust 扩展混合布局，适合保留 Python 友好入口；具体 PyO3/Maturin 版本在技术试验中验证并锁定，不在本计划凭空指定版本。[Maturin 混合项目](https://www.maturin.rs/project_layout.html)
 
-优先通过现有 Rust facade 调用。适配器确需使用内部的报告转换或模板辅助接口时，按同仓库私有适配器管理；不得把这些 Rust 类型直接扩大为 Python 稳定 API。不要为了 Python 绑定随意扩大 Rust prelude。现有 Node adapter 可作为设计参考，不能直接复制其所有接口限制。[Node adapter](../../bindings/node/native/Cargo.toml)、[Node 对象状态](../../bindings/node/native/src/state.rs#L13)
+优先通过现有 Rust facade 调用。适配器确需使用内部的报告转换或模板辅助接口时，按同仓库私有适配器管理；不得把这些 Rust 类型直接扩大为 Python 稳定 API。不要为了 Python 绑定随意扩大 Rust prelude。现有 Node adapter 可作为设计参考，不能直接复制其所有接口限制。[Node adapter](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/node/native/Cargo.toml)、[Node 对象状态](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/node/native/src/state.rs#L13)
 
 ### 4.2 如果保持 CLI，必须另补的工作
 
@@ -124,11 +124,11 @@ Maturin 支持 Python 源码与 Rust 扩展混合布局，适合保留 Python �
 - 保留 `Note.basic/cloze/image_occlusion`、`Note(type_id)`、`NoteType.custom/custom_cloze` 及现有 snake_case 写法。
 - 新增 `Content.text/html`、`note.field(key, content)`、`MediaRef.image/sound`；现有 text/html/image/sound 方法继续可用。不把相同输出的快捷方法当作缺失的制卡类型。
 - 新增 `IdentityRecipe.fields(keys)`、NoteType 显式 identity 和每笔记 `note.identity(keys)`；推导算法、规范化、字段顺序、空值和冲突处理都调用 Rust。
-- 保留现有 `Field(identity=True)` 的类型级默认规则：没有显式 NoteType recipe 时，按字段声明顺序收集已标记的 key，并在适配时设置 Rust `NoteType.identity(IdentityRecipe::fields(...))`。显式类型 recipe 优先于这套回退；Field 的标记仍独立保留。每笔记 override 与显式 stable_id 的优先级沿用核心。只复制 Rust `Field.identity()` 标记不够，真实 Project.add_note 不会自动从这些标记生成 recipe。[现有 Python 映射](../../bindings/python/src/anki_forge/product_json.py#L234)、[核心身份前置条件](../../anki_forge/src/product/project.rs#L792)、[核心规则解析](../../anki_forge/src/product/project.rs#L1889)
+- 保留现有 `Field(identity=True)` 的类型级默认规则：没有显式 NoteType recipe 时，按字段声明顺序收集已标记的 key，并在适配时设置 Rust `NoteType.identity(IdentityRecipe::fields(...))`。显式类型 recipe 优先于这套回退；Field 的标记仍独立保留。每笔记 override 与显式 stable_id 的优先级沿用核心。只复制 Rust `Field.identity()` 标记不够，真实 Project.add_note 不会自动从这些标记生成 recipe。[现有 Python 映射](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/product_json.py#L234)、[核心身份前置条件](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project.rs#L792)、[核心规则解析](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project.rs#L1889)
 - 保留 Python 现有 stock 字段 key 写法，适配时只对 stock 类型映射到 Rust 字段名称；自定义字段不得套用这张映射表。自动 key、非 ASCII 名称、前后空白由专门对等用例决定，不复制第二套推导算法。
 - `Field(optional=True)` 作为声明补齐，与 required 的冲突规则须文档化；不引入 Rust 当前不存在的生成语义。
 
-对应 PY-04、PY-05、PY-16、PY-18；依据：[Rust Note](../../anki_forge/src/product/note.rs#L54)、[Rust Field/NoteType](../../anki_forge/src/product/notetype.rs#L17)。
+对应 PY-04、PY-05、PY-16、PY-18；依据：[Rust Note](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/note.rs#L54)、[Rust Field/NoteType](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/notetype.rs#L17)。
 
 ### 5.2 Project 与校验
 
@@ -147,7 +147,7 @@ comparison = project.diff_against_apkg("previous.apkg", inspect_limits=limits)
 - diff 可以产生内部临时候选，但不发布用户 APKG，不写/推进身份锁文件，失败仍保留完整比较报告。
 - 独立模板校验可在后续提供 `validate_template(source, field_names)`，只封装现有 Rust 语义。
 
-对应 PY-01、PY-02、PY-03、PY-12；依据：[Project 操作](../../anki_forge/src/product/project.rs#L119)、[独立比较](../../anki_forge/src/product/project.rs#L875)。
+对应 PY-01、PY-02、PY-03、PY-12；依据：[Project 操作](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project.rs#L119)、[独立比较](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project.rs#L875)。
 
 ### 5.3 构建配置
 
@@ -173,7 +173,7 @@ inspect=False 不等于关闭核心最终检查；Python 文档和测试必须�
 
 base_dir 是 Python 路径便利选项，构造时固定；相对媒体、模板、输出、基线、报告与锁文件按同一基准解析。它不是目前 Rust 所有路径调用都具有的额外保证；新默认行为的迁移见第 6 节。
 
-对应 PY-09、PY-14、PY-19；依据：[Rust BuildOptions](../../anki_forge/src/build/options.rs#L60)、[InspectLimits](../../anki_forge/src/writer_core/inspect_limits.rs)。
+对应 PY-09、PY-14、PY-19；依据：[Rust BuildOptions](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/build/options.rs#L60)、[InspectLimits](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/writer_core/inspect_limits.rs)。
 
 ### 5.4 媒体：先保证正确引用，再补便利方法
 
@@ -183,7 +183,7 @@ base_dir 是 Python 路径便利选项，构造时固定；相对媒体、模板
 - 不把 MediaRef 解释成“来源项目所有权”或“内容永远相同”的保证；同 filename 在目标 registry 中的解析按核心规则执行。
 - 不在 Python 重新实现 MIME、图片尺寸、矩形边界或 identity 算法。
 
-对应 PY-06、PY-07、PY-08；依据：[Rust 媒体注册与指纹](../../anki_forge/src/product/media_registry.rs#L13)。
+对应 PY-06、PY-07、PY-08；依据：[Rust 媒体注册与指纹](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/media_registry.rs#L13)。
 
 ### 5.5 Artifact、bytes 与文件对象
 
@@ -205,7 +205,7 @@ project.write_to(binary_file)
 
 ApkgArtifact 可兼容 `artifact["path"]` 读取，但 path-only JSON 的生命周期不升级为拥有型句柄。独立 close、共享引用及报告 close 的规则必须先由生命周期测试固定。
 
-对应 PY-10、PY-11；依据：[Rust Artifact](../../anki_forge/src/build/artifact.rs#L14)、[生命周期测试](../../anki_forge/tests/artifact_lifecycle_tests.rs)。
+对应 PY-10、PY-11；依据：[Rust Artifact](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/build/artifact.rs#L14)、[生命周期测试](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/tests/artifact_lifecycle_tests.rs)。
 
 ### 5.6 报告与错误
 
@@ -216,7 +216,7 @@ ApkgArtifact 可兼容 `artifact["path"]` 读取，但 path-only JSON 的生命�
 - 新的 ProjectAddError、MediaError、TemplateBundleError 可以继承现有 ValidationError；BuildError 继承 DiagnosticsError。稳定 code、failure_cause、path、span 与 report 来自核心。
 - 初始化/加载失败、协议错误与领域诊断分开；不能将完整核心错误压缩成没有 code 的 ValueError 文本。
 
-对应 PY-02、PY-13、PY-20；依据：[Python 报告现状](../../bindings/python/src/anki_forge/report.py#L28)、[当前回序列化](../../bindings/python/src/anki_forge/project.py#L313)、[Rust 错误](../../anki_forge/src/build/report.rs#L109)。
+对应 PY-02、PY-13、PY-20；依据：[Python 报告现状](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/report.py#L28)、[当前回序列化](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/src/anki_forge/project.py#L313)、[Rust 错误](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/build/report.rs#L109)。
 
 ### 5.7 Deck 与迁移 Project
 
@@ -226,13 +226,13 @@ ApkgArtifact 可兼容 `artifact["path"]` 读取，但 path-only JSON 的生命�
 
 `Project.from_deck(deck)` 建议通过核心 Deck 快照再执行 Rust 转换，保留原 Python Deck 可用；测试必须证明媒体、原笔记 GUID/身份来源与追加自定义笔记均与 Rust 对照一致。迁移应保留诊断来源，不把导入后的项目降为不可编辑快照。
 
-对应 PY-17；依据：[核心转换](../../anki_forge/src/product/project/deck_import.rs#L8)、[现有转换回归](../../anki_forge/tests/deck_project_facade_tests.rs)。
+对应 PY-17；依据：[核心转换](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/src/product/project/deck_import.rs#L8)、[现有转换回归](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/tests/deck_project_facade_tests.rs)。
 
 ## 6. 兼容性与并发必须先定下来
 
 ### 6.1 不能悄悄改变的现有行为
 
-当前 Python 会保存 Note/NoteType 的可变引用；加入项目后再修改输入，会影响以后序列化，现有测试依赖这一点。[测试证据](../../bindings/python/tests/test_product_validation_parity.py#L33)
+当前 Python 会保存 Note/NoteType 的可变引用；加入项目后再修改输入，会影响以后序列化，现有测试依赖这一点。[测试证据](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/tests/test_product_validation_parity.py#L33)
 
 这一项对应 PY-15，属于有意的版本迁移，不能作为普通 bug fix 无声改变。PY-16 的自动 key 推导变化也有身份风险：旧 Python 与 Rust 对连续空格和标点的处理不同，升级说明应要求已有牌组固定原 field/template key，而不是重新生成一套 key。
 
@@ -311,7 +311,7 @@ T3 必须单独覆盖 `Field(identity=True)` 的兼容映射及其与显式类�
 
 ## 8. 验收矩阵：定义什么叫完成
 
-独立 Rust producer 使用公开 Deck/Project 构造相同场景；Python 单独创建输入。观察器可以复用仓库 inspector 和 baseline reader，但不能把 Python 生成的 JSON 反喂 Rust 当独立 producer。[已有独立对等模式](../../bindings/node/COVERAGE.md)、[Node Rust producer](../../bindings/node/native/examples/sdk_parity.rs)
+独立 Rust producer 使用公开 Deck/Project 构造相同场景；Python 单独创建输入。观察器可以复用仓库 inspector 和 baseline reader，但不能把 Python 生成的 JSON 反喂 Rust 当独立 producer。[已有独立对等模式](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/node/COVERAGE.md)、[Node Rust producer](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/node/native/examples/sdk_parity.rs)
 
 | 组 | 至少覆盖的用例 | 必须断言 |
 | --- | --- | --- |
@@ -327,11 +327,11 @@ T3 必须单独覆盖 `Field(identity=True)` 的兼容映射及其与显式类�
 
 完整报告比较只允许明确列举的差异，例如耗时、临时根目录和适配器自身版本信息。不能统一删除 diagnostics、policy、身份字段或数值尾数来让比较通过；最终 ZIP 顺序/压缩造成的字节差异不等于语义失败，但须解释比较边界。
 
-已有可复用测试：[Artifact](../../anki_forge/tests/artifact_lifecycle_tests.rs)、[Deck→Project](../../anki_forge/tests/deck_project_facade_tests.rs)、[模板入口对等](../../anki_forge/tests/custom_template_entry_parity_tests.rs)、[Python E2E](../../bindings/python/tests/test_product_e2e.py)。测试数量只是执行记录，能力矩阵每一行的独立证据才是覆盖依据。
+已有可复用测试：[Artifact](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/tests/artifact_lifecycle_tests.rs)、[Deck→Project](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/tests/deck_project_facade_tests.rs)、[模板入口对等](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/anki_forge/tests/custom_template_entry_parity_tests.rs)、[Python E2E](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/bindings/python/tests/test_product_e2e.py)。测试数量只是执行记录，能力矩阵每一行的独立证据才是覆盖依据。
 
 ## 9. 打包、类型与发布
 
-现有 Python wheel CI 已包含 Linux x86_64、Windows x86_64、macOS x86_64/ARM64，以及 Python 3.11/3.12 组合；这是已有配置，不能描述为“还没有跨平台 wheel 支持”，也不能仅凭配置宣称远端验证已经通过。[当前矩阵](../../.github/workflows/contract-ci.yml#L28)
+现有 Python wheel CI 已包含 Linux x86_64、Windows x86_64、macOS x86_64/ARM64，以及 Python 3.11/3.12 组合；这是已有配置，不能描述为“还没有跨平台 wheel 支持”，也不能仅凭配置宣称远端验证已经通过。[当前矩阵](https://github.com/morehardy/anki-forge/blob/2edb8cc60e928b0d9cc161a2fcdc01234b722983/.github/workflows/contract-ci.yml#L28)
 
 原生路线的发布要求：
 

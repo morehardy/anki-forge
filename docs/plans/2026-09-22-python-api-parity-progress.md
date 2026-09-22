@@ -9,21 +9,23 @@
 
 | 任务 | 状态 | 证据 |
 | --- | --- | --- |
-| T0 范围与迁移 ADR | 已记录，后续门禁待验证 | ADR 0021 |
-| T1b 媒体引用 | 已修复，待最终审查 | 先复现序号碰撞；product_json 13 项通过 |
-| T1a 模板/CSS | 已修复，待最终审查 | LF/CRLF/Tab 原文及实际导出；E2E/模型 29 项通过 |
-| T1c 报告与风险参数 | 已修复，待最终审查 | 报告 39 项、E2E/校验 27 项；mypy 9 文件通过 |
-| T2 原生纵向试验 | 试验通过，最终版本仍需重新跑分发门禁 | 四平台 wheel 在 Python 3.11/3.12 真实安装成功；本机 release wheel、sdist 与性能采样完成 |
-| T3 作者、校验与身份 | 主要接口及 0.1 更新链路已实现，待最终矩阵/审查 | 自定义/多模板/Cloze/IO、类型及单笔记身份、核心校验、输入快照、默认 key、optional、Content |
-| T4 媒体注册证据 | 注册与引用链路已实现，待最终矩阵与审查 | 空/超限、bytes 快照、文件错误路径、首次注册证据、源文件变化、跨项目完整产物对照 |
-| T5 构建配置与安全更新 | 配置与迁移链路已实现；旧 CLI 文件清理待集成 | 11 预算、报告、媒体策略、更新模式、真实 0.1 更新、路径保护 |
-| T6 Artifact 与输出 | 主要链路已实现，待最终类型/分发/审查 | 原生 clone/persist、报告/异常持有、context/close、bytes、有界 short-write 复制 |
-| T7a 模板包导入 | 已实现，待最终审查 | 独立 Rust 包对照、Unicode 字节偏移、资源中途失败回滚 |
-| T7b 独立比较 | 已实现，待最终审查 | 完整 Rust 报告对照、预算、无发布/锁文件副作用 |
-| T8 Deck 与转换 | 已实现，待最终审查 | 真实 Deck、自动身份 IO、边界检查、快照转换与追加 custom 独立对照 |
-| T9 对等、打包、类型与文档 | 集成完成；最终 CI/源码包/审查运行中 | 单一公开实现、版本检查、py.typed、consumer 类型检查、并发/fork、文档/许可证 |
+| T0 范围与迁移 ADR | 已完成 | ADR 0021、0.2 迁移说明与明确兼容边界 |
+| T1b 媒体引用 | 已完成 | 注册引用经 Rust 核心保存；跨项目完整产物对照 |
+| T1a 模板/CSS | 已完成 | LF/CRLF/Tab/Unicode 原文、精确名称和实际导出 |
+| T1c 报告与风险参数 | 已完成 | 完整报告、未知字段/大整数、核心风险参数组合 |
+| T2 原生纵向试验 | 已完成 | 四平台 wheel 在 Python 3.11/3.12 真实安装；独立 sdist 与性能采样 |
+| T3 作者、校验与身份 | 已完成 | 自定义/多模板/Cloze/IO、三级身份、核心校验、输入快照、默认 key、optional、Content |
+| T4 媒体注册证据 | 已完成 | 空/超限、bytes 快照、错误路径、首次注册证据、源文件变化与跨项目媒体 |
+| T5 构建配置与安全更新 | 已完成 | 11 预算、报告、媒体策略、更新模式、固定 0.1 产物升级与路径保护 |
+| T6 Artifact 与输出 | 已完成 | 原生 clone/persist、报告/异常持有、context/close、bytes、有界 short-write 复制 |
+| T7a 模板包导入 | 已完成 | Normal/Cloze Rust 对照、UTF-8 位置、大小/路径限制、原子回滚 |
+| T7b 独立比较 | 已完成 | 完整 Rust 报告对照、预算、无发布/锁文件副作用 |
+| T8 Deck 与转换 | 已完成 | 真实 Deck、自动身份 IO、边界检查、快照转换与追加 custom 独立对照 |
+| T9 对等、打包、类型与文档 | 已完成 | 单一公开实现、版本/类型、并发/fork；192 项 Python 测试与五个最终分发任务均通过 |
 
 已有的 Node 计划和 website 工作不在本次修改范围。
+
+上表表示当前状态；下方保留阶段记录，其中的“待完成”描述对应当时检查点。
 
 T1 风险组合补充：有效 lockfile + fail_on high 的核心结果为 success/passed；
 不可读 lockfile + report_only + fail_on high 为 blocked，policy 中保留
@@ -140,3 +142,33 @@ RISK.BASELINE_UNAVAILABLE。Python 不额外要求 compare_to。
 - Rust 工作区 **1,036 项通过、25 项按原配置忽略**（79 个测试套件）。此后 Rust 修改仅为独立测试 producer，已重新编译、Clippy 和实际调用验证。
 - 候选 `37f3593` 的四平台运行暴露 Windows 测试边界问题：UTF-8 JSON 被按系统默认编码读取、等价 canonical 路径直接比字符串。已指定 UTF-8、通过 samefile 验证来源路径，保留 Unicode 用例。
 - 修复候选还需重新完成四平台 Python 3.11/3.12 安装；新增 Linux 独立 sdist 离线重建 CI 门禁。最终 run 和状态将在结果完成后记录。
+
+## 最终验收完成
+
+实施提交：`5f6ac7d2157c29392db29fdba26e74e7e71cac6c`。
+[最终 CI：35696859514](https://github.com/morehardy/anki-forge/actions/runs/35696859514) 的五个任务全部成功。
+
+| 分发验证 | 结果 |
+| --- | --- |
+| Linux x86_64 manylinux2014 wheel，Python 3.11 / 3.12 | 通过 |
+| Windows x86_64 wheel，Python 3.11 / 3.12 | 通过 |
+| macOS x86_64 wheel，Python 3.11 / 3.12 | 通过 |
+| macOS ARM64 wheel，Python 3.11 / 3.12 | 通过 |
+| Linux 独立 sdist，在仓库外离线重建并安装 wheel | 通过 |
+
+每个 wheel 在干净 venv、仓库外中文/空格目录运行 public API 套件、独立 Rust
+APKG 对照、完整 native_workflow 示例和正负 mypy 消费者。Windows 不执行
+fork 与 POSIX 权限位用例；其他平台执行这些保护回归。sdist 同样运行已安装
+wheel 的 smoke、完整示例及类型检查。本机最终 release wheel 与 sdist 重建
+也分别通过相同的安装 smoke/示例/类型检查。
+
+本地完整验证：Python **192 项 + 5 个子测试通过**；mypy **16 文件通过**；
+native 全 targets Clippy 零警告；Rust 工作区 **1,036 通过、25 忽略**。
+Standards 与 Spec 复查均 **0 项未解决**。T0–T9 / PY-01–PY-20 的实施与验收已完成。
+
+最终能力边界和共有核心限制以 [COVERAGE](../../bindings/python/COVERAGE.md)
+及 [MIGRATION](../../bindings/python/MIGRATION.md) 为准：分组图片遮挡仍受核心
+限制；已有牌组升级应固定旧 key，重命名身份字段应检查 GUID 变化。
+后续提交仅更新本次文档与验收证据，未改变此 CI 所验证的 SDK 运行时代码。
+所有实现已提交当前本地分支；只向专用 `codex/python-sdk-parity` 分支推送
+验收候选，没有更新远端 main、发布 PyPI 包或创建 release tag。
