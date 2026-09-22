@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .report import BuildReport, ProjectDiffReport
 
 
 class AnkiForgeError(Exception):
@@ -14,7 +17,7 @@ class ValidationError(AnkiForgeError, ValueError):
 
 class AuthoringError(ValidationError):
     def __init__(self, code: str, message: str, *, diagnostic: Diagnostic | None = None, details: dict[str, Any] | None = None) -> None:
-        super().__init__(f"{code}: {message}")
+        super().__init__(message if message.startswith(code) else f"{code}: {message}")
         self.code = code
         self.message = message
         self.diagnostic = diagnostic
@@ -28,8 +31,25 @@ class ProjectAddError(AuthoringError):
     """The core rejected an addition without changing the Project."""
 
 
+class ProductNoteError(AuthoringError):
+    """The core rejected a Product note builder."""
+
+
 class MediaError(AuthoringError):
     """The core rejected a media registration."""
+
+
+class DeckError(AuthoringError):
+    """The Rust Deck rejected a stock-note or identity operation."""
+
+
+class TemplateBundleError(AuthoringError):
+    """A failed, atomic template bundle import; offsets are UTF-8 bytes."""
+
+    @property
+    def byte_offset(self) -> int | None:
+        value = self.details.get("byte_offset")
+        return value if isinstance(value, int) else None
 
 
 class RuntimeNotFoundError(AnkiForgeError):
@@ -81,6 +101,27 @@ class DiagnosticsError(AnkiForgeError):
         self.exit_status = exit_status
         self.stdout = stdout
         self.stderr = stderr
+
+
+class BuildError(DiagnosticsError):
+    """A failed build, retaining its complete report and any recoverable artifact."""
+
+    def __init__(self, report: BuildReport) -> None:
+        super().__init__("anki-forge build failed", report=report)
+        self.failure_cause = report.failure_cause
+        self.code = report.failure_code or next(
+            (diagnostic.code for diagnostic in report.diagnostics if diagnostic.severity == "error"),
+            "PROJECT.BUILD_DIAGNOSTICS",
+        )
+
+
+class ProjectDiffError(DiagnosticsError):
+    """A failed comparison, retaining diagnostics and partial evidence."""
+
+    def __init__(self, report: ProjectDiffReport) -> None:
+        super().__init__("anki-forge comparison failed", report=report)
+        self.failure_cause = report.failure_cause
+        self.code = next((d.code for d in report.diagnostics if d.severity == "error"), "PROJECT.DIFF_FAILED")
 
 
 @dataclass(frozen=True)

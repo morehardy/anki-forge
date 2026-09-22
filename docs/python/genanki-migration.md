@@ -20,4 +20,6 @@ Use `NoteType.custom(id)`, `Field(name)`, and `Template(name, front="{{Expressio
 
 ## Media
 
-`project.media.add_file(path, export_as="sound.mp3")` registers a file path but does not check that the file exists or is readable. Missing or unreadable files are reported by Rust build diagnostics. `add_bytes(source_label="diagram.png", data=data, export_as="diagram.png")` is the immediate in-memory option when you already have bytes.
+`project.media.add_file(path, export_as="sound.mp3")` reads and fingerprints the file immediately. Missing or unreadable files raise `MediaError` during registration; build verifies the source again. `add_bytes(source_label="diagram.png", data=data, export_as="diagram.png")` is the immediate in-memory option when you already have bytes.
+
+Project `add_bytes` accepts non-empty payloads up to 64 KiB. Keep source files available until build completes. Inputs are snapshotted at addition; use a new Project with the same stable IDs to produce updates. See [Python 0.1 to 0.2 migration](../../bindings/python/MIGRATION.md) for existing anki-forge projects.

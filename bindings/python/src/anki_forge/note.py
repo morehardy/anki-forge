@@ -1,26 +1,24 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Iterable
+import json
+from typing import Any, Iterable, Mapping
 
+from . import _native
+from ._bridge import invoke
 from .diagnostics import ValidationError
-from .native_media import MediaRef
-from .notetype import _validate_id, _validate_optional_non_empty, _validate_tag
+from .content import Content
+from .content import Content as FieldContent
+from .media import MediaRef
+from .identity import IdentityRecipe
+from .notetype import _validate_id, _validate_optional_non_empty, _validate_source, _validate_tag
 
-_STOCK_FIELD_KEYS = {
-    "basic": {"front", "back"},
-    "cloze": {"text", "back_extra"},
-    "image_occlusion": {"occlusion", "image", "header", "back_extra", "comments"},
+_STOCK_NAMES = {
+    "basic": {"front": "Front", "back": "Back"},
+    "cloze": {"text": "Text", "back_extra": "Back Extra"},
+    "image_occlusion": {"occlusion": "Occlusion", "image": "Image", "header": "Header", "back_extra": "Back Extra", "comments": "Comments"},
 }
-
-
-@dataclass(frozen=True)
-class FieldContent:
-    kind: str
-    value: str | None = None
-    media_id: str | None = None
-    export_as: str | None = None
-    reference: MediaRef | None = None
+_STOCK_KEYS = {kind: {name: key for key, name in names.items()} for kind, names in _STOCK_NAMES.items()}
 
 
 @dataclass
@@ -30,11 +28,25 @@ class Note:
     deck_name: str | None = None
     fields: dict[str, FieldContent] = field(default_factory=dict)
     tag_values: list[str] = field(default_factory=list)
+    identity_value: IdentityRecipe | None = None
 
     def __post_init__(self) -> None:
         self.note_type_id = _validate_id(self.note_type_id, "note type id")
         self.stable_id = _validate_optional_non_empty(self.stable_id, "stable id")
         self.deck_name = _validate_optional_non_empty(self.deck_name, "deck name")
+        values, self.fields = self.fields, {}
+        for key, content in values.items():
+            self.field(key, content)
+
+    @classmethod
+    def _from_native(cls, value: Mapping[str, Any]) -> Note:
+        note = cls(value["note_type_id"], stable_id=value["stable_id"], deck_name=value["deck_name"])
+        for key, content in value["fields"].items():
+            note.field(key, FieldContent(**content))
+        note.tag_values = value["tags"]
+        if value["identity"] is not None:
+            note.identity(value["identity"])
+        return note
 
     @classmethod
     def basic(
@@ -73,6 +85,17 @@ class Note:
             raise ValidationError("text field value must be a string")
         return self._set_field(key, "text", value)
 
+    def field(self, key: str, content: Content) -> Note:
+        if not isinstance(content, Content):
+            raise ValidationError("field content must be Content")
+        key = _validate_source(key, "field key")
+        key = _STOCK_KEYS.get(self.note_type_id, {}).get(key, key)
+        name = _STOCK_NAMES.get(self.note_type_id, {}).get(key)
+        if name is not None:
+            self.fields.pop(name, None)
+        self.fields[key] = content
+        return self
+
     def html(self, key: str, value: str) -> Note:
         if not isinstance(value, str):
             raise ValidationError("html field value must be a string")
@@ -99,20 +122,19 @@ class Note:
         self.deck_name = _validate_optional_non_empty(deck_name, "deck name")
         return self
 
+    def identity(self, keys: Iterable[str]) -> Note:
+        self.identity_value = IdentityRecipe.fields(keys)
+        return self
+
     def _set_field(
         self, key: str, kind: str, value: str | None, *,
         reference: MediaRef | None = None,
     ) -> Note:
-        field_key = _validate_id(key, "field key")
-        allowed_keys = _STOCK_FIELD_KEYS.get(self.note_type_id)
-        if allowed_keys is not None and field_key not in allowed_keys:
-            raise ValidationError(f"unknown field key for {self.note_type_id}: {field_key}")
-        self.fields[field_key] = FieldContent(
+        return self.field(key, FieldContent(
             kind=kind, value=value, reference=reference,
             media_id=reference.media_id if reference is not None else None,
             export_as=reference.export_as if reference is not None else None,
-        )
-        return self
+        ))
 
 
 class ImageOcclusionNoteBuilder:
@@ -135,10 +157,8 @@ class ImageOcclusionNoteBuilder:
 
     def rect(self, x: int, y: int, width: int, height: int) -> ImageOcclusionNoteBuilder:
         values = (x, y, width, height)
-        if not all(isinstance(value, int) for value in values):
-            raise ValidationError("image occlusion rect values must be integers")
-        if x < 0 or y < 0:
-            raise ValidationError("image occlusion rect coordinates must be non-negative")
+        if not all(type(value) is int and 0 <= value <= 2**32 - 1 for value in values):
+            raise ValidationError("image occlusion rect values must be u32 integers")
         self._rects.append(values)
         return self
 
@@ -171,30 +191,10 @@ class ImageOcclusionNoteBuilder:
         return self
 
     def build(self) -> Note:
-        if self._stable_id is None:
-            raise ValidationError("image occlusion stable id is required")
-        if not self._rects:
-            raise ValidationError("image occlusion note requires at least one rect")
-        seen: set[tuple[int, int, int, int]] = set()
-        for rect in self._rects:
-            _x, _y, width, height = rect
-            if width <= 0 or height <= 0:
-                raise ValidationError("image occlusion rect width and height must be positive")
-            if rect in seen:
-                raise ValidationError("duplicate image occlusion rect")
-            seen.add(rect)
-        prefix = "c1" if self._mode == "hide_all_guess_one" else "c1,2"
-        occlusion = "".join(
-            f"{{{{{prefix}::image-occlusion:rect:left={x}:top={y}:width={width}:height={height}}}}}<br>"
-            for x, y, width, height in self._rects
-        )
-        note = (
-            Note("image_occlusion", stable_id=self._stable_id, deck_name=self._deck_name)
-            .html("occlusion", occlusion)
-            .image("image", self._image)
-            .text("header", self._header)
-            .text("back_extra", self._back_extra)
-            .text("comments", self._comments)
-        )
-        note.tags(self._tags)
-        return note
+        payload = {
+            "stable_id": self._stable_id, "deck_name": self._deck_name, "mode": self._mode,
+            "rects": self._rects, "header": self._header, "back_extra": self._back_extra,
+            "comments": self._comments, "tags": self._tags,
+        }
+        value = json.loads(invoke(_native.build_image_occlusion, json.dumps(payload, ensure_ascii=False), self._image._handle))
+        return Note._from_native(value)

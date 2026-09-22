@@ -1,117 +1,66 @@
 from __future__ import annotations
 
-import hashlib
-import re
-from dataclasses import dataclass
-from pathlib import Path, PurePath
-from typing import Sequence
+from os import PathLike
+from pathlib import Path
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from .content import Content
+
+from . import _native
+from ._bridge import invoke
 from .diagnostics import ValidationError
-from .notetype import _ASCII_CONTROL, _validate_non_empty
-
-_SAFE_EXPORT_NAME_PATTERN = re.compile(r"^[A-Za-z0-9._-]+$")
 
 
-@dataclass(frozen=True)
 class MediaRef:
-    media_id: str
-    export_as: str
+    """An opaque Rust reference identified by its export filename."""
 
-    def __post_init__(self) -> None:
-        object.__setattr__(self, "media_id", _validate_non_empty(self.media_id, "media id"))
-        object.__setattr__(self, "export_as", _validate_export_as(self.export_as))
+    def __init__(self, handle: _native.NativeMediaRef) -> None:
+        if not isinstance(handle, _native.NativeMediaRef):
+            raise TypeError("MediaRef requires a registered media handle")
+        self._handle = handle
 
+    @property
+    def export_as(self) -> str:
+        return self._handle.filename
 
-@dataclass(frozen=True)
-class MediaItem:
-    ref: MediaRef
-    source_kind: str
-    source_label: str
-    data: bytes | None
-    path: Path | None
-    length: int | None
-    sha256: str | None
+    @property
+    def media_id(self) -> str:
+        return f"media:{self.export_as}"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, MediaRef) and self.export_as == other.export_as
+
+    def __hash__(self) -> int:
+        return hash(self.export_as)
+
+    def image(self) -> Content:
+        from .content import Content
+
+        return Content("image", media_id=self.media_id, export_as=self.export_as, reference=self)
+
+    def sound(self) -> Content:
+        from .content import Content
+
+        return Content("sound", media_id=self.media_id, export_as=self.export_as, reference=self)
 
 
 class MediaRegistry:
-    def __init__(self) -> None:
-        self._items: list[MediaItem] = []
-        self._items_by_export: dict[str, MediaItem] = {}
-        self._items_by_path_export: dict[tuple[Path, str], MediaItem] = {}
-        self._next_id = 1
+    def __init__(self, *, _project: _native.NativeProject | None = None, base_dir: str | PathLike[str] | None = None) -> None:
+        self._handle = _project if _project is not None else _native.NativeProject("Media")
+        self._base_dir = Path(base_dir or Path.cwd()).expanduser().absolute()
 
-    @property
-    def items(self) -> Sequence[MediaItem]:
-        return tuple(self._items)
+    @staticmethod
+    def inline_limit_bytes() -> int:
+        return _native.inline_media_limit_bytes()
 
     def add_bytes(self, *, source_label: str, data: bytes | bytearray, export_as: str) -> MediaRef:
-        label = _validate_non_empty(source_label, "source label")
-        payload = bytes(data)
-        export_name = _validate_export_as(export_as)
-        digest = hashlib.sha256(payload).hexdigest()
-        existing = self._items_by_export.get(export_name)
-        if existing is not None:
-            if existing.length == len(payload) and existing.sha256 == digest:
-                return existing.ref
-            raise ValidationError(f"media export name already exists with different content: {export_name}")
-        ref = self._new_ref(export_name)
-        item = MediaItem(
-            ref=ref,
-            source_kind="bytes",
-            source_label=label,
-            data=payload,
-            path=None,
-            length=len(payload),
-            sha256=digest,
-        )
-        self._items.append(item)
-        self._items_by_export[export_name] = item
-        return ref
+        if not isinstance(data, (bytes, bytearray)):
+            raise ValidationError("media data must be bytes or bytearray")
+        return MediaRef(invoke(self._handle.add_media_bytes, source_label, bytes(data), export_as))
 
-    def add_file(self, path: str | Path, *, export_as: str | None = None) -> MediaRef:
-        media_path = Path(path).expanduser().resolve()
-        export_name = _validate_export_as(export_as or media_path.name)
-        key = (media_path, export_name)
-        existing_for_path = self._items_by_path_export.get(key)
-        if existing_for_path is not None:
-            return existing_for_path.ref
-        existing = self._items_by_export.get(export_name)
-        if existing is not None:
-            raise ValidationError(f"media export name already exists: {export_name}")
-        ref = self._new_ref(export_name)
-        item = MediaItem(
-            ref=ref,
-            source_kind="file",
-            source_label=str(media_path),
-            data=None,
-            path=media_path,
-            length=None,
-            sha256=None,
-        )
-        self._items.append(item)
-        self._items_by_export[export_name] = item
-        self._items_by_path_export[key] = item
-        return ref
-
-    def _new_ref(self, export_as: str) -> MediaRef:
-        ref = MediaRef(f"media:{self._next_id:06d}", export_as)
-        self._next_id += 1
-        return ref
-
-
-def _validate_export_as(value: str) -> str:
-    export_as = _validate_non_empty(value, "export name")
-    if any(char in _ASCII_CONTROL for char in export_as):
-        raise ValidationError("export name must not contain ASCII control characters")
-    if "%" in export_as:
-        raise ValidationError("export name must not contain percent signs")
-    if export_as in {".", ".."}:
-        raise ValidationError("export name must be a filename")
-    if "/" in export_as or "\\" in export_as:
-        raise ValidationError("export name must be a bare filename")
-    path = PurePath(export_as)
-    if path.is_absolute() or any(part == ".." for part in path.parts) or len(path.parts) != 1:
-        raise ValidationError("export name must be a bare filename")
-    if _SAFE_EXPORT_NAME_PATTERN.fullmatch(export_as) is None:
-        raise ValidationError("export name may only contain ASCII letters, digits, '.', '_', and '-'")
-    return export_as
+    def add_file(self, path: str | PathLike[str], *, export_as: str | None = None) -> MediaRef:
+        source = Path(path).expanduser()
+        if not source.is_absolute():
+            source = self._base_dir / source
+        return MediaRef(invoke(self._handle.add_media_file, source, export_as if export_as is not None else source.name))

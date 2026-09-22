@@ -54,6 +54,19 @@ enum NotetypeDuplicateFirst<'a> {
     Project { index: usize, name: Option<&'a str> },
 }
 
+/// Borrowed authoring observations for repository language adapters.
+///
+/// This view neither lowers the project nor reads registered media. It belongs
+/// to the internal tools interface, not the supported Rust consumer interface.
+#[cfg(feature = "internal-tools")]
+pub struct ProjectAuthoringView<'a> {
+    pub name: &'a str,
+    pub stable_id: Option<&'a str>,
+    pub default_deck: Option<&'a str>,
+    pub note_types: &'a [NoteType],
+    pub notes: &'a [Note],
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProjectAddError {
     diagnostic: Box<Diagnostic>,
@@ -90,6 +103,17 @@ impl ErrorCodeExt for ProjectAddError {
 }
 
 impl Project {
+    #[cfg(feature = "internal-tools")]
+    pub fn authoring_view(&self) -> ProjectAuthoringView<'_> {
+        ProjectAuthoringView {
+            name: &self.name,
+            stable_id: self.stable_id.as_deref(),
+            default_deck: self.default_deck.as_deref(),
+            note_types: &self.note_types,
+            notes: &self.notes,
+        }
+    }
+
     pub fn new(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),

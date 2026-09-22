@@ -133,17 +133,25 @@ See the [Node SDK development commands](../bindings/node/README.md#develop-and-v
 for building the native addon and testing installed packages.
 
 The [Python setup guide](../bindings/python/README.md#from-a-source-checkout)
-uses the public `anki_forge` package. The older `anki_forge_python` runtime
-remains available for repository integrations:
+uses a PyO3/Maturin extension and a Python 3.11/3.12 venv. Rust 1.92.0 is the
+baseline. After activating the venv:
 
 ```sh
+python -m pip install maturin==1.15.0 pytest==9.1.1 mypy==2.3.1
+maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
+cargo build -p anki_forge_python_native --example python_parity --locked
 cargo build -p contract_tools --release
-PYTHONPATH=bindings/python/src python3 bindings/python/examples/minimal_flow.py
-PYTHONPATH=bindings/python/src python3 -m pytest bindings/python/tests -q --ignore=bindings/python/tests/test_import_isolation.py
+python -m pytest bindings/python/tests -q --ignore=bindings/python/tests/test_import_isolation.py
+python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
+python bindings/python/examples/native_workflow.py target/python-example
 ```
 
-The excluded import-isolation test is exercised against a staged, installed
-wheel in [the Python wheel CI job](../.github/workflows/contract-ci.yml).
+`contract_tools` is needed only for the dev-only legacy CLI tests; public Python
+builds call the native core. Build a wheel before import-isolation tests. The
+[installed matrix](../.github/workflows/python-native-trial.yml) builds real abi3
+wheels, then executes the public suite, independent Rust parity and typing on
+Python 3.11/3.12 outside the checkout. The older `anki_forge_python` package is
+excluded from public wheels.
 
 ## Manual Anki Desktop validation
 
@@ -173,7 +181,7 @@ on `PATH`:
 | Failure | Action |
 | --- | --- |
 | Cannot discover `contracts/manifest.yaml` | Run repository tools from this checkout, or configure an explicit runtime in the legacy binding. The normal Rust API embeds its contracts. |
-| Python runtime not found | Build `contract_tools` and run from the checkout, or install a wheel with a staged runtime. See [Python setup](../bindings/python/README.md#from-a-source-checkout). |
+| Python native extension unavailable | Install a matching native wheel or run `maturin develop` in a venv. See [Python setup](../bindings/python/README.md#from-a-source-checkout). |
 | Missing upstream Anki crate | Provide the local Anki source checkout for the roundtrip oracle. |
 | `protoc is required on PATH` | Install `protoc` before running the roundtrip oracle. |
 

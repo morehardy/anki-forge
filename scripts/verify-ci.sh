@@ -86,9 +86,15 @@ run npm --prefix bindings/node run test:installed
 run npm --prefix bindings/node run example:minimal
 run npm --prefix bindings/node run check:package
 run cargo build -p contract_tools --release
-run env "PYTHONPATH=$python_path" python3 -m pytest bindings/python/tests -q \
+run python3 -m venv target/python-ci-venv
+run target/python-ci-venv/bin/python -m pip install pytest==9.1.1 mypy==2.3.1 maturin==1.15.0
+run env "VIRTUAL_ENV=$repo_root/target/python-ci-venv" target/python-ci-venv/bin/maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
+run cargo build -p anki_forge_python_native --example python_parity --locked
+run target/python-ci-venv/bin/python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
+run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python -m pytest bindings/python/tests -q \
   --ignore=bindings/python/tests/test_import_isolation.py
-run env "PYTHONPATH=$python_path" python3 bindings/python/examples/minimal_flow.py
+run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python bindings/python/examples/minimal_flow.py
+run target/python-ci-venv/bin/python bindings/python/examples/native_workflow.py target/python-ci-example
 run cargo run -p contract_tools -- verify --manifest "$manifest_path"
 run cargo run -p contract_tools -- summary --manifest "$manifest_path"
 run cargo run -p contract_tools -- package --manifest "$manifest_path" --out-dir "$dist_dir"

@@ -27,6 +27,9 @@ exceptions = [
     # napi-sys loads the Node-API symbols through libloading. Its ISC copyright
     # and permission notice ships with the Node SDK and every platform package.
     { name = "libloading", version = "=0.9.0", allow = ["ISC"] },
+    # PyO3's target detection build dependency uses Apache-2.0 with the LLVM
+    # exception. Both texts are included in the Python SDK's third-party notices.
+    { name = "target-lexicon", version = "=0.13.5", allow = ["Apache-2.0 WITH LLVM-exception"] },
 ]
 
 [bans]

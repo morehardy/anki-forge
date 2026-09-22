@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from copy import deepcopy
-from dataclasses import dataclass, field
-from typing import Any, Mapping
+from copy import copy, deepcopy
+from dataclasses import dataclass, field, replace
+from types import TracebackType
+from typing import Any, Generic, Mapping, TypeVar
 
-from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError, SourceSpan
+from .diagnostics import BuildError, Diagnostic, DiagnosticsError, ProjectDiffError, ProtocolError, SourceSpan
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
 BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
@@ -27,10 +28,28 @@ RISK_LEVELS = {"info", "low", "medium", "high", "critical"}
 
 
 @dataclass(frozen=True)
-class BuildReport:
+class ValidationReport:
+    """Diagnostics from core validation, without normalization or APKG writing."""
+
+    diagnostics: tuple[Diagnostic, ...]
+
+    @property
+    def has_errors(self) -> bool:
+        return any(diagnostic.severity == "error" for diagnostic in self.diagnostics)
+
+    def ensure_success(self) -> None:
+        if self.has_errors:
+            raise DiagnosticsError("anki-forge validation failed", report=self)
+
+
+ArtifactT = TypeVar("ArtifactT", bound=Mapping[str, Any], covariant=True)
+
+
+@dataclass(frozen=True)
+class BuildReport(Generic[ArtifactT]):
     status: str
     comparison: str
-    artifact: Mapping[str, Any] | None
+    artifact: ArtifactT | None
     counts: Mapping[str, int]
     media: Mapping[str, Any]
     diagnostics: tuple[Diagnostic, ...]
@@ -45,10 +64,12 @@ class BuildReport:
     })
     tool_version: str = "anki-forge-python"
     schema_version: str = BUILD_REPORT_SCHEMA_VERSION
+    failure_cause: str | None = None
+    failure_code: str | None = None
     _raw: dict[str, Any] | None = field(default=None, repr=False, compare=False)
 
     @classmethod
-    def from_json(cls, payload: object) -> BuildReport:
+    def from_json(cls, payload: object) -> BuildReport[Mapping[str, Any]]:
         if not isinstance(payload, dict):
             raise ProtocolError("build report must be a JSON object")
         payload = deepcopy(payload)
@@ -72,7 +93,7 @@ class BuildReport:
         _metrics(payload.get("metrics"))
         _policy(payload.get("policy"))
 
-        return cls(
+        return BuildReport(
             status=status,
             comparison=comparison,
             artifact=artifact,
@@ -88,6 +109,8 @@ class BuildReport:
             policy=deepcopy(payload["policy"]),
             tool_version=_required_non_empty_string(payload, "tool_version"),
             schema_version=payload["schema_version"],
+            failure_cause=_nullable_string(payload, "failure_cause") if "failure_cause" in payload else None,
+            failure_code=_nullable_string(payload, "failure_code") if "failure_code" in payload else None,
             _raw=deepcopy(payload),
         )
 
@@ -99,14 +122,71 @@ class BuildReport:
     def to_json(self) -> dict[str, Any]:
         if self._raw is not None:
             return deepcopy(self._raw)
-        from .project import _report_to_json
-
         return _report_to_json(self)
 
     def ensure_success(self) -> None:
         has_error = any(diagnostic.severity in {"error", "critical"} for diagnostic in self.diagnostics)
         if self.status != "success" or self.artifact is None or has_error:
-            raise DiagnosticsError("anki-forge build failed", report=self)
+            raise BuildError(self)
+
+    def close(self) -> None:
+        """Release this report's reference; independently held artifacts stay alive."""
+        object.__setattr__(self, "artifact", None)
+
+    def __copy__(self) -> BuildReport[ArtifactT]:
+        return replace(self, artifact=copy(self.artifact) if self.artifact is not None else None)
+
+    def __enter__(self) -> BuildReport[ArtifactT]:
+        return self
+
+    def __exit__(self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: TracebackType | None) -> None:
+        self.close()
+
+
+@dataclass(frozen=True)
+class ProjectDiffReport:
+    status: str
+    comparison: str
+    diagnostics: tuple[Diagnostic, ...]
+    current_inspect: Mapping[str, Any] | None
+    previous_inspect: Mapping[str, Any] | None
+    update_safety: Mapping[str, Any] | None
+    diff: Mapping[str, Any] | None
+    risk: Mapping[str, Any] | None
+    metrics: Mapping[str, Any]
+    failure_cause: str | None
+    _raw: dict[str, Any] = field(repr=False, compare=False)
+
+    @classmethod
+    def from_json(cls, payload: object) -> ProjectDiffReport:
+        if not isinstance(payload, dict):
+            raise ProtocolError("comparison report must be a JSON object")
+        payload = deepcopy(payload)
+        status = _required_non_empty_string(payload, "status")
+        comparison = _required_non_empty_string(payload, "comparison")
+        if status not in ALLOWED_STATUSES or comparison not in ALLOWED_COMPARISONS:
+            raise ProtocolError("comparison report has unsupported status/comparison")
+        _metrics(payload.get("metrics"))
+        return cls(
+            status=status, comparison=comparison, diagnostics=_diagnostics(payload.get("diagnostics")),
+            current_inspect=_optional_object(payload, "current_inspect"),
+            previous_inspect=_optional_object(payload, "previous_inspect"),
+            update_safety=_optional_object(payload, "update_safety"), diff=_optional_object(payload, "diff"),
+            risk=_optional_object(payload, "risk"), metrics=deepcopy(payload["metrics"]),
+            failure_cause=_nullable_string(payload, "failure_cause") if "failure_cause" in payload else None,
+            _raw=deepcopy(payload),
+        )
+
+    @property
+    def raw(self) -> dict[str, Any]:
+        return self.to_json()
+
+    def to_json(self) -> dict[str, Any]:
+        return deepcopy(self._raw)
+
+    def ensure_success(self) -> None:
+        if self.status != "success" or any(d.severity == "error" for d in self.diagnostics):
+            raise ProjectDiffError(self)
 
 
 def _required_non_empty_string(payload: dict[str, Any], key: str) -> str:
@@ -269,3 +349,93 @@ def _optional_object(payload: dict[str, Any], key: str) -> Mapping[str, Any] | N
     if not isinstance(value, dict):
         raise ProtocolError(f"build report {key} must be an object")
     return value
+
+
+DIAGNOSTIC_DOMAIN_BY_PREFIX = {
+    "AFID": "identity",
+    "COMPARE": "comparison",
+    "DECK": "deck",
+    "MEDIA": "media",
+    "NOTETYPE": "notetype",
+    "TEMPLATE": "notetype",
+    "PRODUCT": "product",
+    "PROJECT": "project",
+    "RISK": "risk",
+    "UPDATE": "update_safety",
+}
+DIAGNOSTIC_STAGE_BY_PREFIX = {
+    "AFID": "validate",
+    "COMPARE": "compare",
+    "DECK": "validate",
+    "MEDIA": "normalize",
+    "NOTETYPE": "validate",
+    "TEMPLATE": "validate",
+    "PRODUCT": "validate",
+    "PROJECT": "build",
+    "RISK": "risk",
+    "UPDATE": "update_safety",
+}
+
+def _diagnostic_prefix(code: str) -> str | None:
+    prefix, separator, _ = code.partition(".")
+    if not separator:
+        return None
+    return prefix
+
+
+def _inferred_diagnostic_domain(code: str) -> str:
+    prefix = _diagnostic_prefix(code)
+    if prefix is None:
+        return "unknown"
+    return DIAGNOSTIC_DOMAIN_BY_PREFIX.get(prefix, "unknown")
+
+
+def _inferred_diagnostic_stage(code: str) -> str:
+    prefix = _diagnostic_prefix(code)
+    if prefix is None:
+        return "unknown"
+    return DIAGNOSTIC_STAGE_BY_PREFIX.get(prefix, "unknown")
+
+
+def _report_to_json(report: BuildReport) -> dict[str, object]:
+    if report._raw is not None:
+        return report.to_json()
+    return {
+        "kind": "anki-forge-build-report",
+        "schema_version": report.schema_version,
+        "tool_version": report.tool_version,
+        "status": report.status,
+        "comparison": report.comparison,
+        "artifact": dict(report.artifact) if report.artifact is not None else None,
+        "counts": dict(report.counts),
+        "media": dict(report.media),
+        "diagnostics": [
+            {
+                "code": diagnostic.code,
+                "severity": diagnostic.severity,
+                "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
+                "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
+                "path": diagnostic.path,
+                "span": (
+                    {
+                        "byte_start": diagnostic.span.byte_start,
+                        "byte_end": diagnostic.span.byte_end,
+                    }
+                    if diagnostic.span is not None
+                    else None
+                ),
+                "message": diagnostic.message,
+                "suggested_fix": diagnostic.suggested_fix,
+            }
+            for diagnostic in report.diagnostics
+        ],
+        "metrics": dict(report.metrics),
+        "policy": dict(report.policy),
+        "inspect": report.inspect,
+        "previous_inspect": report.previous_inspect,
+        "update_safety": report.update_safety,
+        "diff": report.diff,
+        "risk": report.risk,
+        "failure_cause": report.failure_cause,
+        "failure_code": report.failure_code,
+    }

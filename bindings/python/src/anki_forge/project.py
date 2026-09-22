@@ -1,351 +1,155 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 import json
-import os
-import shutil
-import tempfile
-from dataclasses import dataclass, field
+from os import PathLike
 from pathlib import Path
 from types import MappingProxyType
-from typing import Mapping, Sequence
+from typing import Mapping
 
-from .diagnostics import RuntimeInvocationError, ValidationError
+from . import _native
+from ._buildable import _Buildable
+from .deck import Deck
+from .diagnostics import ValidationError
+from ._bridge import invoke
 from .media import MediaRegistry
-from .note import Note
-from .notetype import NoteType, _validate_non_empty, _validate_optional_non_empty
-from .report import BuildReport
-from .runtime import RuntimeOverride, resolve_runtime, run_product_build
-
-STOCK_NOTE_TYPE_IDS = {"basic", "cloze", "image_occlusion"}
-STOCK_FIELD_KEYS = {
-    "basic": {"front", "back"},
-    "cloze": {"text", "back_extra"},
-    "image_occlusion": {"occlusion", "image", "header", "back_extra", "comments"},
-}
-ALLOWED_FAIL_ON = {"info", "low", "medium", "high", "critical"}
-DIAGNOSTIC_DOMAIN_BY_PREFIX = {
-    "AFID": "identity",
-    "COMPARE": "comparison",
-    "DECK": "deck",
-    "MEDIA": "media",
-    "NOTETYPE": "notetype",
-    "TEMPLATE": "notetype",
-    "PRODUCT": "product",
-    "PROJECT": "project",
-    "RISK": "risk",
-    "UPDATE": "update_safety",
-}
-DIAGNOSTIC_STAGE_BY_PREFIX = {
-    "AFID": "validate",
-    "COMPARE": "compare",
-    "DECK": "validate",
-    "MEDIA": "normalize",
-    "NOTETYPE": "validate",
-    "TEMPLATE": "validate",
-    "PRODUCT": "validate",
-    "PROJECT": "build",
-    "RISK": "risk",
-    "UPDATE": "update_safety",
-}
+from .note import Note, _STOCK_NAMES
+from .identity import IdentityRecipe
+from .notetype import Field, GenerationRule, NoteType, Template, _validate_non_empty, _validate_optional_non_empty
+from .report import ProjectDiffReport, ValidationReport, _diagnostics
+from .options import InspectLimits, PathInput, absolute_path
 
 
-@dataclass
-class Project:
-    name: str
-    stable_id: str | None = None
-    default_deck: str | None = None
-    media: MediaRegistry = field(default_factory=MediaRegistry)
-    _note_types: dict[str, NoteType] = field(default_factory=dict)
-    _note_type_order: list[str] = field(default_factory=list)
-    _notes: list[Note] = field(default_factory=list)
+class Project(_Buildable):
+    """A Rust Project; additions validate and snapshot authoring inputs."""
 
-    def __post_init__(self) -> None:
-        self.name = _validate_non_empty(self.name, "project name")
-        self.stable_id = _validate_optional_non_empty(self.stable_id, "stable id")
-        self.default_deck = _validate_optional_non_empty(self.default_deck, "default deck")
+    _handle: _native.NativeProject
+
+    def __init__(
+        self, name: str, stable_id: str | None = None, default_deck: str | None = None,
+        *, base_dir: str | PathLike[str] | None = None,
+    ) -> None:
+        self._name = _validate_non_empty(name, "project name")
+        self._stable_id = _validate_optional_non_empty(stable_id, "stable id")
+        self._default_deck = _validate_optional_non_empty(default_deck, "default deck")
+        self._base_dir = Path(base_dir or Path.cwd()).expanduser().absolute()
+        self._handle = _native.NativeProject(self.name, self.stable_id, self.default_deck)
+        self._media = MediaRegistry(_project=self._handle, base_dir=self.base_dir)
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def stable_id(self) -> str | None:
+        return self._stable_id
+
+    @property
+    def default_deck(self) -> str | None:
+        return self._default_deck
+
+    @property
+    def base_dir(self) -> Path:
+        return self._base_dir
+
+    @property
+    def media(self) -> MediaRegistry:
+        return self._media
+
+    @classmethod
+    def from_deck(cls, deck: Deck) -> Project:
+        """Convert a native Deck snapshot while retaining the original Deck."""
+        project = cls.__new__(cls)
+        project._name, project._stable_id = deck.name, deck.stable_id
+        project._default_deck, project._base_dir = deck.name, deck.base_dir
+        project._handle = invoke(deck._handle.to_project)
+        project._media = MediaRegistry(_project=project._handle, base_dir=project.base_dir)
+        return project
+
+    @property
+    def notes(self) -> tuple[Note, ...]:
+        values = json.loads(invoke(self._handle.notes))
+        return tuple(Note._from_native(value) for value in values)
 
     @property
     def notetypes(self) -> Mapping[str, NoteType]:
-        return MappingProxyType(self._note_types)
+        values = json.loads(invoke(self._handle.notetypes))
+        types = {}
+        for value in values:
+            fields = []
+            for field_value in value.pop("fields"):
+                if field_value.pop("key_auto_derived"):
+                    field_value["key"] = None
+                fields.append(Field(**field_value))
+            templates = []
+            for template_value in value.pop("templates"):
+                rule = template_value["generate_when"]
+                if "fields" in rule:
+                    rule["fields"] = tuple(rule["fields"])
+                template_value["generate_when"] = GenerationRule(**rule)
+                templates.append(Template(**template_value))
+            identity = value.pop("identity")
+            note_type = NoteType(**value, fields=fields, templates=templates)
+            if identity is not None:
+                note_type.identity(IdentityRecipe.fields(identity))
+            types[note_type.id] = note_type
+        return MappingProxyType(types)
 
     @property
-    def notetype_order(self) -> Sequence[str]:
-        return tuple(self._note_type_order)
-
-    @property
-    def notes(self) -> Sequence[Note]:
-        return tuple(self._notes)
+    def notetype_order(self) -> tuple[str, ...]:
+        return tuple(self.notetypes)
 
     def add_notetype(self, note_type: NoteType) -> Project:
-        note_type.validate()
-        if note_type.id in STOCK_NOTE_TYPE_IDS:
-            raise ValidationError(f"custom note type id is reserved: {note_type.id}")
-        if note_type.id in self._note_types:
-            raise ValidationError(f"duplicate note type id: {note_type.id}")
-        self._note_types[note_type.id] = note_type
-        self._note_type_order.append(note_type.id)
+        templates = []
+        for template in note_type.templates:
+            value = asdict(template)
+            rule = template.generate_when
+            value["generate_when"] = {"kind": rule.kind if rule is not None else "anki_default"}
+            if rule is not None and rule.kind in {"all", "any"}:
+                value["generate_when"]["fields"] = list(rule.fields)
+            elif rule is not None and rule.kind == "cloze":
+                value["generate_when"]["field"] = rule.field
+            templates.append(value)
+        payload = {
+            "id": note_type.id, "name": note_type.name, "cloze_field": note_type.cloze_field,
+            "fields": [asdict(field) for field in note_type.fields],
+            "templates": templates, "css": note_type.css_value,
+            "identity": list(note_type.identity_value.field_keys) if note_type.identity_value is not None else None,
+        }
+        invoke(self._handle.add_notetype, json.dumps(payload, ensure_ascii=False))
         return self
 
     def add_note(self, note: Note) -> Project:
-        if note.note_type_id not in STOCK_NOTE_TYPE_IDS and note.note_type_id not in self._note_types:
-            raise ValidationError(f"unknown note type id: {note.note_type_id}")
-        if note.note_type_id in self._note_types:
-            self._validate_custom_note_field_keys(note, self._note_types[note.note_type_id])
-        self._notes.append(note)
+        names = _STOCK_NAMES.get(note.note_type_id, {})
+        fields = {}
+        for key, content in note.fields.items():
+            name = names.get(key, key)
+            if name in fields:
+                raise ValidationError(f"field aliases refer to the same stock field: {name!r}")
+            fields[name] = {"kind": content.kind, "value": content.export_as if content.reference is not None else content.value}
+        payload = {
+            "note_type_id": note.note_type_id,
+            "stable_id": note.stable_id,
+            "deck_name": note.deck_name,
+            "tags": list(note.tag_values),
+            "identity": list(note.identity_value.field_keys) if note.identity_value is not None else None,
+            "fields": fields,
+        }
+        references = [content.reference._handle for content in note.fields.values() if content.reference is not None]
+        invoke(self._handle.add_note, json.dumps(payload, ensure_ascii=False), references)
         return self
 
-    def to_product_document(self) -> dict[str, object]:
-        from .product_json import (
-            basic_stock_notetype_json,
-            cloze_stock_notetype_json,
-            custom_notetype_json,
-            image_occlusion_stock_notetype_json,
-            media_to_json,
-            note_to_json,
-        )
+    def validate(self) -> ValidationReport:
+        return ValidationReport(_diagnostics(json.loads(invoke(self._handle.validate))))
 
-        self._validate_notes_for_serialization()
-        note_types: list[dict[str, object]] = []
-        for note_type_id in self._stock_note_types():
-            if note_type_id == "basic":
-                note_types.append(basic_stock_notetype_json())
-            elif note_type_id == "cloze":
-                note_types.append(cloze_stock_notetype_json())
-            elif note_type_id == "image_occlusion":
-                note_types.append(image_occlusion_stock_notetype_json())
-        note_types.extend(custom_notetype_json(self._note_types[note_type_id]) for note_type_id in self._note_type_order)
+    def import_template_bundle(self, path: PathInput) -> Project:
+        """Import a core template bundle atomically, relative to base_dir."""
+        invoke(self._handle.import_template_bundle, absolute_path(path, self.base_dir))
+        return self
 
-        product_version = (
-            "product-v3"
-            if any(note_type.kind_value == "cloze" for note_type in self._note_types.values())
-            else "product-v2"
-        )
-        media_ids = {item.ref.export_as: item.ref.media_id for item in self.media.items}
-        return {
-            "product_document_version": product_version,
-            "document_id": self.stable_id or self.name,
-            "default_deck_name": self.default_deck,
-            "note_types": note_types,
-            "notes": [note_to_json(note, index, self._resolve_deck(note), media_ids) for index, note in enumerate(self._notes)],
-            "media": [media_to_json(item) for item in self.media.items],
-        }
-
-    def write_apkg(
-        self,
-        path: str | os.PathLike[str],
-        *,
-        compare_to: str | os.PathLike[str] | None = None,
-        fail_on: str | None = None,
-        report_json: str | os.PathLike[str] | None = None,
-        identity_lockfile: str | os.PathLike[str] | None = None,
-        write_identity_lockfile: bool = False,
-        update_safety: str | None = None,
-        runtime: RuntimeOverride | None = None,
-    ) -> BuildReport:
-        target_path = Path(path).resolve()
-        compare_path = Path(compare_to).resolve() if compare_to is not None else None
-        report_path = Path(report_json).resolve() if report_json is not None else None
-        identity_lockfile_path = Path(identity_lockfile).resolve() if identity_lockfile is not None else None
-        _validate_write_paths(
-            target_path,
-            compare_path,
-            report_path,
-            fail_on,
-            identity_lockfile_path,
-            write_identity_lockfile,
-            update_safety,
-            self.stable_id,
-        )
-        resolved_runtime = resolve_runtime(runtime)
-
-        try:
-            with tempfile.TemporaryDirectory(prefix="anki-forge-product-") as temp_dir:
-                product_input = Path(temp_dir) / "project.product-v2.json"
-                product_document = self._runtime_product_document(product_input.parent)
-                product_input.write_text(
-                    json.dumps(product_document, ensure_ascii=False),
-                    encoding="utf-8",
-                )
-                report = run_product_build(
-                    runtime=resolved_runtime,
-                    product_input=product_input,
-                    apkg_out=target_path,
-                    compare_to=compare_path,
-                    fail_on=fail_on,
-                    report_json=report_path,
-                    identity_lockfile=identity_lockfile_path,
-                    write_identity_lockfile=write_identity_lockfile,
-                    update_safety=update_safety,
-                )
-        except OSError as error:
-            raise RuntimeInvocationError(str(error), kind="setup_failed") from error
-
-        return report
-
-    def _runtime_product_document(self, runtime_dir: Path) -> dict[str, object]:
-        product_document = self.to_product_document()
-        media_entries = product_document.get("media")
-        if not isinstance(media_entries, list):
-            return product_document
-
-        for item, entry in zip(self.media.items, media_entries, strict=True):
-            if item.source_kind != "file" or item.path is None or not isinstance(entry, dict):
-                continue
-            source = entry.get("source")
-            if not isinstance(source, dict):
-                continue
-            source["path"] = item.ref.export_as
-            if item.path.is_file():
-                shutil.copy2(item.path, runtime_dir / item.ref.export_as)
-        return product_document
-
-    def _stock_note_types(self) -> list[str]:
-        used = {note.note_type_id for note in self._notes}
-        return [note_type_id for note_type_id in ("basic", "cloze", "image_occlusion") if note_type_id in used]
-
-    def _resolve_deck(self, note: Note) -> str:
-        return note.deck_name or self.default_deck or self.name
-
-    def _validate_notes_for_serialization(self) -> None:
-        for note_type_id in self._note_type_order:
-            self._note_types[note_type_id].validate()
-
-        media_filenames = {item.ref.export_as for item in self.media.items}
-        seen_stable_ids: set[str] = set()
-        for note in self._notes:
-            if note.note_type_id not in STOCK_NOTE_TYPE_IDS and note.note_type_id not in self._note_types:
-                raise ValidationError(f"unknown note type id: {note.note_type_id}")
-
-            if note.stable_id is not None:
-                if note.stable_id in seen_stable_ids:
-                    raise ValidationError(f"duplicate note stable_id: {note.stable_id}")
-                seen_stable_ids.add(note.stable_id)
-
-            if note.note_type_id in self._note_types:
-                note_type = self._note_types[note.note_type_id]
-                self._validate_custom_note_field_keys(note, note_type)
-                has_identity_fields = any(field.identity for field in note_type.fields)
-                if note.stable_id is None and not has_identity_fields:
-                    raise ValidationError(f"custom note type {note_type.id} needs identity fields or stable_id")
-            else:
-                self._validate_stock_note_field_keys(note)
-
-            self._validate_note_media_references(note, media_filenames)
-
-    def _validate_stock_note_field_keys(self, note: Note) -> None:
-        allowed = STOCK_FIELD_KEYS[note.note_type_id]
-        for field_key in note.fields:
-            if field_key not in allowed:
-                raise ValidationError(f"unknown field key for {note.note_type_id}: {field_key}")
-
-    def _validate_note_media_references(self, note: Note, media_filenames: set[str]) -> None:
-        for content in note.fields.values():
-            if content.kind in {"sound", "image"} and content.export_as not in media_filenames:
-                raise ValidationError(f"unknown media filename: {content.export_as}")
-
-    def _validate_custom_note_field_keys(self, note: Note, note_type: NoteType) -> None:
-        allowed = {field.key for field in note_type.fields}
-        for field_key in note.fields:
-            if field_key not in allowed:
-                raise ValidationError(f"unknown field key for {note_type.id}: {field_key}")
-
-
-def _validate_write_paths(
-    target: Path,
-    compare_to: Path | None,
-    report_json: Path | None,
-    fail_on: str | None,
-    identity_lockfile: Path | None,
-    write_identity_lockfile: bool,
-    update_safety: str | None,
-    project_stable_id: str | None,
-) -> None:
-    if fail_on is not None and fail_on not in ALLOWED_FAIL_ON:
-        raise ValidationError(f"unknown fail_on level: {fail_on}")
-    if update_safety is not None and update_safety not in {"strict", "report_only", "report-only", "disabled"}:
-        raise ValidationError(f"unknown update_safety mode: {update_safety}")
-    if write_identity_lockfile and identity_lockfile is None:
-        raise ValidationError("write_identity_lockfile requires identity_lockfile")
-    explicit_strict_requires_stable_id = update_safety == "strict"
-    baseline_strict_requires_stable_id = update_safety is None and (
-        identity_lockfile is not None or compare_to is not None
-    )
-    if (
-        write_identity_lockfile
-        or explicit_strict_requires_stable_id
-        or baseline_strict_requires_stable_id
-    ) and project_stable_id is None:
-        raise ValidationError("update-safe builds require Project.stable_id")
-    if compare_to is not None and target == compare_to:
-        raise ValidationError("apkg output path must differ from compare_to")
-    if report_json is not None and target == report_json:
-        raise ValidationError("apkg output path must differ from report_json")
-    if compare_to is not None and report_json is not None and compare_to == report_json:
-        raise ValidationError("compare_to path must differ from report_json")
-    if identity_lockfile is not None and target == identity_lockfile:
-        raise ValidationError("apkg output path must differ from identity_lockfile")
-    if report_json is not None and identity_lockfile is not None and report_json == identity_lockfile:
-        raise ValidationError("report_json path must differ from identity_lockfile")
-
-
-def _diagnostic_prefix(code: str) -> str | None:
-    prefix, separator, _ = code.partition(".")
-    if not separator:
-        return None
-    return prefix
-
-
-def _inferred_diagnostic_domain(code: str) -> str:
-    prefix = _diagnostic_prefix(code)
-    if prefix is None:
-        return "unknown"
-    return DIAGNOSTIC_DOMAIN_BY_PREFIX.get(prefix, "unknown")
-
-
-def _inferred_diagnostic_stage(code: str) -> str:
-    prefix = _diagnostic_prefix(code)
-    if prefix is None:
-        return "unknown"
-    return DIAGNOSTIC_STAGE_BY_PREFIX.get(prefix, "unknown")
-
-
-def _report_to_json(report: BuildReport) -> dict[str, object]:
-    if report._raw is not None:
-        return report.to_json()
-    return {
-        "kind": "anki-forge-build-report",
-        "schema_version": report.schema_version,
-        "tool_version": report.tool_version,
-        "status": report.status,
-        "comparison": report.comparison,
-        "artifact": report.artifact,
-        "counts": dict(report.counts),
-        "media": dict(report.media),
-        "diagnostics": [
-            {
-                "code": diagnostic.code,
-                "severity": diagnostic.severity,
-                "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
-                "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
-                "path": diagnostic.path,
-                "span": (
-                    {
-                        "byte_start": diagnostic.span.byte_start,
-                        "byte_end": diagnostic.span.byte_end,
-                    }
-                    if diagnostic.span is not None
-                    else None
-                ),
-                "message": diagnostic.message,
-                "suggested_fix": diagnostic.suggested_fix,
-            }
-            for diagnostic in report.diagnostics
-        ],
-        "metrics": dict(report.metrics),
-        "policy": dict(report.policy),
-        "inspect": report.inspect,
-        "previous_inspect": report.previous_inspect,
-        "update_safety": report.update_safety,
-        "diff": report.diff,
-        "risk": report.risk,
-    }
+    def diff_against_apkg(self, path: PathInput, *, inspect_limits: InspectLimits | None = None) -> ProjectDiffReport:
+        """Compare using a temporary candidate, without publishing an APKG or lockfile."""
+        limits = asdict(inspect_limits) if inspect_limits is not None else {}
+        return ProjectDiffReport.from_json(json.loads(invoke(
+            self._handle.diff_against_apkg, absolute_path(path, self.base_dir), json.dumps(limits),
+        )))
