@@ -246,7 +246,12 @@ test("reports outlive collected projects, GC releases temporary artifacts and wo
 test("Worker termination before build and persist promises settle releases task-owned temporary artifacts", async (t) => {
   const { execFile } = await import("node:child_process");
   const { promisify } = await import("node:util");
-  const root = await directory(t);
+  // Windows paths already contain backslashes. Exercise their transport on Unix too.
+  const root = path.join(
+    await directory(t),
+    process.platform === "win32" ? "worker path" : "worker\\path",
+  );
+  await fs.mkdir(root);
   const entry = new URL("../dist/index.mjs", import.meta.url).href;
   const script = `
     import fs from 'node:fs/promises';
@@ -280,19 +285,19 @@ test("Worker termination before build and persist promises settle releases task-
     await until(async () => (await fs.readdir(os.tmpdir())).length === 0);
     const destination=path.join(os.tmpdir(),'persistent.apkg');
     const persisting = new Worker(\`
-      const {parentPort}=require('node:worker_threads');
+      const {parentPort,workerData}=require('node:worker_threads');
       (async()=>{
         const {Project,Note}=await import(${JSON.stringify(entry)});
         const fs=require('node:fs/promises'), crypto=require('node:crypto');
         const p=new Project('Pending copy'); p.addNote(Note.basic('front','answer'));
         const report=await p.build();
         const hash=crypto.createHash('sha256').update(await fs.readFile(report.artifact.path)).digest('hex');
-        report.artifactHandle.persistTo(${JSON.stringify(path.join(root, "persistent.apkg"))});
+        report.artifactHandle.persistTo(workerData.destination);
         parentPort.postMessage({source:report.artifact.path,hash});
         // Keep the native result queued even if copying finishes before termination.
         Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0);
       })();
-    \`, {eval:true,execArgv:[]});
+    \`, {eval:true,execArgv:[],workerData:{destination}});
     const {source,hash}=await queued(persisting);
     await persisting.terminate();
     await until(async () => {
