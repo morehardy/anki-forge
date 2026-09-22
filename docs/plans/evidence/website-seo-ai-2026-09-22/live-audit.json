@@ -1,0 +1,851 @@
+{
+  "summary": {
+    "checked_at": "2026-09-22T13:11:34.955461+00:00",
+    "base_url": "https://ankiforge.dev/",
+    "sitemap_url_count": 29,
+    "docs_url_count": 24,
+    "blog_article_count": 2,
+    "status_counts": {
+      "200": 29
+    },
+    "schema_pages": 0,
+    "hreflang_pages": 0,
+    "lastmod_count": 0,
+    "issues": [],
+    "duplicate_titles": [],
+    "duplicate_descriptions": [],
+    "local_routes_missing_from_live_sitemap": []
+  },
+  "endpoints": [
+    {
+      "url": "https://ankiforge.dev/robots.txt",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/robots.txt",
+      "bytes": 73,
+      "content_type": "text/plain; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/sitemap-index.xml",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/sitemap-index.xml",
+      "bytes": 184,
+      "content_type": "application/xml",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/sitemap-0.xml",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/sitemap-0.xml",
+      "bytes": 2088,
+      "content_type": "application/xml",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/llms.txt",
+      "status": 404,
+      "final_url": "https://ankiforge.dev/llms.txt",
+      "bytes": 7445,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/docs/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/",
+      "bytes": 33992,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/docs/languages/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/languages/",
+      "bytes": 33786,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/docs/python-quickstart/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/python-quickstart/",
+      "bytes": 73350,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/rss.xml",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/rss.xml",
+      "bytes": 1000,
+      "content_type": "application/xml",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://ankiforge.dev/seo-probe-nonexistent-20260922/",
+      "status": 404,
+      "final_url": "https://ankiforge.dev/seo-probe-nonexistent-20260922/",
+      "bytes": 7445,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "http://ankiforge.dev/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/",
+      "bytes": 39964,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://www.ankiforge.dev/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/",
+      "bytes": 39964,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    },
+    {
+      "url": "https://morehardy.github.io/anki-forge/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/",
+      "bytes": 39964,
+      "content_type": "text/html; charset=utf-8",
+      "x_robots_tag": null
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://ankiforge.dev/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/",
+      "bytes": 39964,
+      "title": [
+        "Anki Forge | Build Anki decks from code"
+      ],
+      "h1": [
+        "Anki decks,built from code."
+      ],
+      "canonical": [
+        "https://ankiforge.dev/"
+      ],
+      "description": "Generate and validate Anki decks with Rust. Keep note identities stable as your content evolves.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3623,
+      "main_text_excerpt": "Anki decks, built from code. Turn knowledge into Anki decks with Rust. Write your notes, add media, and keep identities stable as content changes. Get started View on GitHub Basic Cloze Media Rust source → card preview basic.rs Full source ↗ let (front, back) = ( \"hola\" , \"hello\" ); let mut deck = Deck :: new ( \"Spanish\" ); deck . basic () . note (front, back) . stable_id ( \"es:hola\" ) . add () ? ; let report = deck . write_apkg (output . join ( \"spanish.apkg\" )) ? ; report . ensure_success () ? ; Output spanish.ap",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/blog/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/blog/",
+      "bytes": 9125,
+      "title": [
+        "Blog | Anki Forge"
+      ],
+      "h1": [
+        "Notes on making notes."
+      ],
+      "canonical": [
+        "https://ankiforge.dev/blog/"
+      ],
+      "description": "Practical guides to generating Anki decks, designing card templates, and keeping note identities stable with Anki Forge.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 429,
+      "main_text_excerpt": "Notes on making notes. Practical guides and engineering decisions behind Anki Forge. Follow with RSS ↗ Engineering September 22, 2026 A note’s identity should outlive its wording How stable IDs and a build baseline work together when you update a generated Anki deck. Read article Tutorial September 22, 2026 Build your first Anki deck with Rust From a short Rust program to a Spanish flashcard you can open in Anki. Read article",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/blog/stable-ids-and-deck-updates/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/blog/stable-ids-and-deck-updates/",
+      "bytes": 13276,
+      "title": [
+        "A note’s identity should outlive its wording | Anki Forge"
+      ],
+      "h1": [
+        "A note’s identity should outlive its wording"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/blog/stable-ids-and-deck-updates/"
+      ],
+      "description": "How stable IDs and a build baseline work together when you update a generated Anki deck.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2820,
+      "main_text_excerpt": "← All articles A note’s identity should outlive its wording How stable IDs and a build baseline work together when you update a generated Anki deck. Engineering September 22, 2026 A generated deck is rarely finished after its first export. Definitions improve, examples become clearer, and mistakes get corrected. The next build needs to know which notes are the same notes with better content. Consider this small edit: Field First version Next version Front hola hola Back hello hello; hi Stable ID es:hola es:hola The",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/blog/your-first-anki-deck/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/blog/your-first-anki-deck/",
+      "bytes": 14828,
+      "title": [
+        "Build your first Anki deck with Rust | Anki Forge"
+      ],
+      "h1": [
+        "Build your first Anki deck with Rust"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/blog/your-first-anki-deck/"
+      ],
+      "description": "From a short Rust program to a Spanish flashcard you can open in Anki.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2573,
+      "main_text_excerpt": "← All articles Build your first Anki deck with Rust From a short Rust program to a Spanish flashcard you can open in Anki. Tutorial September 22, 2026 When your notes already live in a script, a dataset, or a collection of files, generating an Anki deck can make the authoring process easier to repeat. Your source stays reviewable in Git, and each export becomes a step you can run again. Start with one word: hola . We want a card that shows the Spanish greeting on the front and its English meaning on the back. A com",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/",
+      "bytes": 33992,
+      "title": [
+        "Build Anki decks from code | Anki Forge"
+      ],
+      "h1": [
+        "Build Anki decks from code"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/"
+      ],
+      "description": "Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 1911,
+      "main_text_excerpt": "Build Anki decks from code Anki Forge turns notes, templates and media into Anki .apkg files. Use it when your learning content lives in code or structured data and you want to rebuild and distribute decks repeatedly. Start with your language Section titled “Start with your language” These guides follow the current source checkout. The languages have separate packaging and verification status; choose your entry point . Language First result Continue Rust Run the first-deck example Add to your application Node / Typ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/api/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/api/",
+      "bytes": 45846,
+      "title": [
+        "Public API overview | Anki Forge"
+      ],
+      "h1": [
+        "Public API overview"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/api/"
+      ],
+      "description": "Rust compatibility boundaries, artifact ownership and supported behavior.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 7469,
+      "main_text_excerpt": "Public API overview anki_forge is a typed Rust library for building Anki decks. The crate ships its default contract resources, so normal use does not require a source checkout, a particular working directory, or a separate runtime installation. use anki_forge :: prelude ::* ; fn main () -> anyhow :: Result<()> { let mut deck = Deck :: new ( \" Spanish \" ); deck . basic () . note ( \" hola \" , \" hello \" ) . stable_id ( \" es:hola \" ) . add () ? ; deck . write_apkg ( \" spanish.apkg \" ) ?. ensure_success () ? ; Ok(()) }",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/build-guarantees/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/build-guarantees/",
+      "bytes": 34306,
+      "title": [
+        "Build and output guarantees | Anki Forge"
+      ],
+      "h1": [
+        "Build and output guarantees"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/build-guarantees/"
+      ],
+      "description": "Understand temporary artifacts, path protection and candidate publication.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3418,
+      "main_text_excerpt": "Build and output guarantees Use this reference when retaining artifacts or publishing updates. For a first export use the installation guide ; for a release sequence use update and distribute a deck . Temporary and persistent artifacts Section titled “Temporary and persistent artifacts” A build without an explicit output or artifact directory returns a temporary ApkgArtifact . Keep its report or an owning artifact handle alive while using the path. Copying the path does not retain the file. Use persist_to(path) , w",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/cards/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/cards/",
+      "bytes": 43088,
+      "title": [
+        "Basic and Cloze cards | Anki Forge"
+      ],
+      "h1": [
+        "Basic and Cloze cards"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/cards/"
+      ],
+      "description": "Build two notes and three cards with a complete verified Rust example.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2247,
+      "main_text_excerpt": "Basic and Cloze cards Build a package with two notes and three cards: one Spanish word pair and two Cloze questions about a city and country. Start with a source checkout and the Rust prerequisites . Run the example Section titled “Run the example” From the repository root: Terminal window cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples Open target/docs-examples/cards.apkg in Anki. The Basic card asks hola ; the Cloze cards separately hide Madrid and Spain . The example also writes ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/compatibility/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/compatibility/",
+      "bytes": 34090,
+      "title": [
+        "Compatibility and releases | Anki Forge"
+      ],
+      "h1": [
+        "Compatibility and releases"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/compatibility/"
+      ],
+      "description": "Separate source versions, verified platforms and package publication.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2634,
+      "main_text_excerpt": "Compatibility and releases These guides describe this source checkout. Package versions, supported APIs, platform verification and public registry availability are separate facts. Use the linked release evidence before choosing a published dependency. Language status Section titled “Language status” Interface Source version Environment Distribution evidence Rust 0.1.0 Rust 1.92+ Release audit ; use the source setup until publication is confirmed Node / TypeScript 0.2.0 Node 22.13+; candidate macOS arm64/x64, Linux ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/concepts/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/concepts/",
+      "bytes": 37240,
+      "title": [
+        "Core concepts | Anki Forge"
+      ],
+      "h1": [
+        "Core concepts"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/concepts/"
+      ],
+      "description": "Notes, cards, Deck and Project, stable keys, HTML and update identity.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3470,
+      "main_text_excerpt": "Core concepts Anki Forge builds .apkg packages from notes, note types, templates and media. A package can contain multiple decks. Anki imports the package and manages study scheduling. Notes and cards Section titled “Notes and cards” Term Meaning Example Note One item of learning content, stored in fields A vocabulary entry with “hola” and “hello” Note type Declares fields and templates for a kind of note Basic, Cloze, or your custom vocabulary type Field A named value on a note Expression, Meaning, Audio Template ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/custom-notetypes/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/custom-notetypes/",
+      "bytes": 50219,
+      "title": [
+        "Custom note types | Anki Forge"
+      ],
+      "h1": [
+        "Custom note types"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/custom-notetypes/"
+      ],
+      "description": "Declare fields, card templates and generation rules for your own content.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3071,
+      "main_text_excerpt": "Custom note types Define your own fields and card layout. This example builds one Japanese vocabulary note and one recognition card, with stable field and template keys. Run the complete example Section titled “Run the complete example” From the repository root with Rust installed : Terminal window cargo run --locked -p anki_forge --example target_api_custom_notetype The output is jp-core.apkg in the current directory. Import it into Anki and open Japanese::Core to see 食べる → to eat . use anki_forge :: prelude ::* ;",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/genanki-migration/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/genanki-migration/",
+      "bytes": 35263,
+      "title": [
+        "Move from genanki | Anki Forge"
+      ],
+      "h1": [
+        "Move from genanki"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/genanki-migration/"
+      ],
+      "description": "Understand content, template and media behavior when moving to Anki Forge.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 1818,
+      "main_text_excerpt": "Move from genanki anki-forge’s Python API is concept-oriented for genanki users. It does not clone genanki classes or model ids. Build a Project , add stock or custom notes, then call write_apkg() . Basic Notes Section titled “Basic Notes” Note.basic(front=\"<b>hi</b>\", back=\"plain\") treats both fields as safe text and escapes the tags. Use explicit HTML fields when you want markup: Note ( \" basic \" ). html ( \" front \" , \" <b>hi</b> \" ). text ( \" back \" , \" plain \" ) Cloze Notes Section titled “Cloze Notes” Note.clo",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/image-occlusion/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/image-occlusion/",
+      "bytes": 42267,
+      "title": [
+        "Image Occlusion | Anki Forge"
+      ],
+      "h1": [
+        "Image Occlusion"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/image-occlusion/"
+      ],
+      "description": "Create rectangle-based image questions with the supported hide-all mode.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2360,
+      "main_text_excerpt": "Image Occlusion Create a question by covering a rectangular part of an image. The supported example uses hide-all-guess-one : all selected regions are hidden, and each card asks for one region. Run the example Section titled “Run the example” From the repository root with Rust installed : Terminal window cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples Open target/docs-examples/diagram.apkg in Anki. The example uses the repository’s 228 × 86 PNG fixture, covers one rectangle and chec",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/installation/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/installation/",
+      "bytes": 40332,
+      "title": [
+        "Add to your application | Anki Forge"
+      ],
+      "h1": [
+        "Add to your application"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/installation/"
+      ],
+      "description": "Create your own Rust application and export its first Anki package.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2224,
+      "main_text_excerpt": "Add to your application Create a Rust application that writes spanish.apkg . These instructions use the current source checkout; they do not assume a package has been published. For other languages, use the Node quickstart or Python quickstart . Requirements Section titled “Requirements” Use Git and Rust 1.92 or later. Anki is only needed to import and study the result; the library can generate packages without an Anki installation. Create your application Section titled “Create your application” Run these commands",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/languages/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/languages/",
+      "bytes": 33786,
+      "title": [
+        "Choose your language | Anki Forge"
+      ],
+      "h1": [
+        "Choose your language"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/languages/"
+      ],
+      "description": "Compare Rust, Node and Python source versions, installation paths and verified platform scope.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 1948,
+      "main_text_excerpt": "Choose your language All three interfaces build through the Rust core. Choose the language of your application. Their packages and verification scopes develop independently. These versions are read from this checkout’s package metadata; they do not imply that a release is available in a public registry. Language Source version Environment Start here Rust 0.1.0 Rust 1.92+ Add to your application Node / TypeScript 0.2.0 Node 22.13+ Source setup and first deck Python 0.2.0 Verified on CPython 3.11/3.12 Native installa",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/media/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/media/",
+      "bytes": 46406,
+      "title": [
+        "Images and audio | Anki Forge"
+      ],
+      "h1": [
+        "Images and audio"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/media/"
+      ],
+      "description": "Generate and package a real waveform image and a one-second audio tone.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3075,
+      "main_text_excerpt": "Images and audio This guide builds a card with a waveform image and a real one-second A4 tone. The example generates its own SVG and WAV, so no media download is required. Generate and inspect the result Section titled “Generate and inspect the result” From the repository root with Rust installed : Terminal window cargo run --locked -p anki_forge --example website_showcase -- target/media-example Open target/media-example/ear-training.apkg in Anki. It contains one note, one card and two media files. The front shows",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/node-api/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/node-api/",
+      "bytes": 40527,
+      "title": [
+        "Node and TypeScript API | Anki Forge"
+      ],
+      "h1": [
+        "Node and TypeScript API"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/node-api/"
+      ],
+      "description": "Public methods, async behavior, build options and reports.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 4834,
+      "main_text_excerpt": "Node and TypeScript API This reference covers the public product entry point in anki-forge-node . Begin with the Node quickstart . Full TypeScript signatures ship with the package and are defined in the public source and option types . Project and notes Section titled “Project and notes” API Return / behavior Defaults and requirements new Project(name, { stableId, defaultDeck, baseDir }) Owns a Rust Project Options are optional; baseDir captures the current directory project.addNote(note) void ; validates and adds ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/node-quickstart/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/node-quickstart/",
+      "bytes": 45810,
+      "title": [
+        "Node quickstart | Anki Forge"
+      ],
+      "h1": [
+        "Node quickstart"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/node-quickstart/"
+      ],
+      "description": "Build the native Node SDK and export two notes and three cards.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3216,
+      "main_text_excerpt": "Node quickstart Build one Basic note and one Cloze note using the native Node SDK. The result contains two notes and three cards. This is a source-checkout workflow for the 0.2 candidate; see release status . Build and run from source Section titled “Build and run from source” Use Node 22.13 or later and Rust 1.92. From the repository root: Terminal window cd bindings/node npm run setup npm run build npm run example:minimal The example prints the APKG’s absolute path in a temporary directory. Open that file with An",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/python-api/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/python-api/",
+      "bytes": 42632,
+      "title": [
+        "Python API | Anki Forge"
+      ],
+      "h1": [
+        "Python API"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/python-api/"
+      ],
+      "description": "Project, media, build options, reports and temporary artifact ownership.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 5475,
+      "main_text_excerpt": "Python API This reference describes the native Python 0.2 product API. Start with the Python quickstart . The package includes py.typed ; public signatures are in the package source . Project and notes Section titled “Project and notes” API Return / behavior Defaults and requirements Project(name, stable_id=None, default_deck=None, *, base_dir=None) A Rust-backed Project base_dir captures the current directory; settings are read-only project.add_note(note) The Project for chaining Validates and snapshots the input ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/python-diagnostics/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/python-diagnostics/",
+      "bytes": 38432,
+      "title": [
+        "Python diagnostics | Anki Forge"
+      ],
+      "h1": [
+        "Python diagnostics"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/python-diagnostics/"
+      ],
+      "description": "Understand native authoring errors, build reports and update evidence.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3297,
+      "main_text_excerpt": "Python diagnostics Project.add_note/add_notetype validate in Rust and raise ProjectAddError synchronously, without partially changing the project. Media registration raises MediaError ; template import raises TemplateBundleError ; Deck additions raise DeckError . These are ValidationError subclasses with stable core code and message . Project add errors include a full diagnostic , path and optional UTF-8 byte span . Bundle errors retain the file path and byte_offset . validate() returns a ValidationReport without b",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/python-migration/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/python-migration/",
+      "bytes": 57199,
+      "title": [
+        "Python 0.1 to 0.2 | Anki Forge"
+      ],
+      "h1": [
+        "Python 0.1 to 0.2"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/python-migration/"
+      ],
+      "description": "Migrate existing decks to the native SDK while retaining identity evidence.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 12247,
+      "main_text_excerpt": "Python 0.1 to 0.2 This guide accompanies the native SDK. Capability, update migration and package validation evidence is recorded in the implementation log . Implementation and verification do not publish a package or release tag. Python 0.2 owns Rust Project, MediaRef and Artifact objects in a private native extension. Identity, validation, media registration and writing use the Rust implementation. Python 0.1 remains the compatibility line for the bundled CLI, RuntimeOverride , ProductDocument export and modifica",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/python-quickstart/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/python-quickstart/",
+      "bytes": 73350,
+      "title": [
+        "Python quickstart | Anki Forge"
+      ],
+      "h1": [
+        "Python quickstart"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/python-quickstart/"
+      ],
+      "description": "Install the native Python SDK and build real text, image and audio examples.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 5798,
+      "main_text_excerpt": "Python quickstart Create one Spanish flashcard using the native Python 0.2 SDK. This guide uses the source checkout; the verification record is not a claim that the candidate has been published to PyPI. Install from source Section titled “Install from source” You need Git, Rust 1.92 and ordinary CPython 3.11 or 3.12. From the repository root: Terminal window python3 -m venv .venv . .venv/bin/activate python -m pip install maturin== 1.15.0 maturin develop --manifest-path bindings/python/native/Cargo.toml --locked py",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/quickstart/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/quickstart/",
+      "bytes": 39483,
+      "title": [
+        "Your first Anki deck | Anki Forge"
+      ],
+      "h1": [
+        "Your first Anki deck"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/quickstart/"
+      ],
+      "description": "Build a Spanish flashcard from the Anki Forge source checkout, export an APKG file, and open it in Anki.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 2038,
+      "main_text_excerpt": "Your first Anki deck This guide runs the repository’s minimal Rust example. You need Git, Rust 1.92 or later, and Anki to review the result. Run the example Section titled “Run the example” Terminal window git clone https://github.com/morehardy/anki-forge.git cd anki-forge cargo run -q -p anki_forge --example target_api_basic The first run compiles the project and its dependencies. It writes spanish.apkg in the repository root. The following source is taken directly from anki_forge/examples/target_api_basic.rs : us",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/rust-api/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/rust-api/",
+      "bytes": 46071,
+      "title": [
+        "Rust API guide | Anki Forge"
+      ],
+      "h1": [
+        "Rust API guide"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/rust-api/"
+      ],
+      "description": "Find public authoring methods, build defaults, reports and diagnostic behavior.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 6976,
+      "main_text_excerpt": "Rust API guide Use anki_forge::prelude::* for the supported consumer interface. This guide covers authoring, build options and results. The API overview records compatibility and ownership guarantees. For compiler-generated signatures and all public methods in this checkout, run: Terminal window cargo doc --locked -p anki_forge --no-deps --open Use default features. internal-tools exposes repository internals outside the consumer compatibility promise. Registry-hosted documentation must match an actually published ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/rust-guide/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/rust-guide/",
+      "bytes": 52382,
+      "title": [
+        "Rust authoring guide | Anki Forge"
+      ],
+      "h1": [
+        "Rust authoring guide"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/rust-guide/"
+      ],
+      "description": "Projects, validation, media and updates through the supported Rust API.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 5290,
+      "main_text_excerpt": "Rust authoring guide Start with your own Rust application or review the core concepts before this workflow. This guide covers editable projects, validation, media, and repeatable updates through the supported Rust API. The snippets use anyhow for error propagation; add it to your application with cargo add anyhow . Projects and diagnostics Media troubleshooting Updating distributed decks Stable note identity Projects and diagnostics Section titled “Projects and diagnostics” use anki_forge :: prelude ::* ; fn main (",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/templates/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/templates/",
+      "bytes": 56834,
+      "title": [
+        "Template bundles | Anki Forge"
+      ],
+      "h1": [
+        "Template bundles"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/templates/"
+      ],
+      "description": "Import complete reusable Cloze and normal templates, CSS and media.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 4273,
+      "main_text_excerpt": "Template bundles Keep field declarations, HTML, CSS and assets together in a reusable directory. The loader uses the same validation and card planning as inline custom note types. Try a complete bundle Section titled “Try a complete bundle” From the repository root with Rust 1.92 or later: Terminal window cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples Open target/docs-examples/template.apkg in Anki. The example imports the complete custom Cloze bundle , then exports one note and tw",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/troubleshooting/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/troubleshooting/",
+      "bytes": 38508,
+      "title": [
+        "Troubleshooting | Anki Forge"
+      ],
+      "h1": [
+        "Troubleshooting"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/troubleshooting/"
+      ],
+      "description": "Resolve installation, media, template, identity and output errors.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 4272,
+      "main_text_excerpt": "Troubleshooting Start with the failed operation and its diagnostic code. Fix the cause, repeat the same small example, and inspect the new report before adding more content. Installation Section titled “Installation” Symptom Check Action Rust rejects the compiler version rustc --version Use Rust 1.92 or later Cargo cannot find the local dependency Path in your application’s Cargo.toml Point it at the checkout’s anki_forge directory Python reports BINDING.EXTENSION_UNAVAILABLE Interpreter/platform and installed pack",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/docs/updates/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/docs/updates/",
+      "bytes": 62475,
+      "title": [
+        "Update and distribute | Anki Forge"
+      ],
+      "h1": [
+        "Update and distribute"
+      ],
+      "canonical": [
+        "https://ankiforge.dev/docs/updates/"
+      ],
+      "description": "Build two releases using APKG baselines or maintained identity lockfiles.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 4616,
+      "main_text_excerpt": "Update and distribute Correct a note from hello to hello; hi while keeping its stable ID es:hola . The key ingredients are stable project/note identities and evidence from the last distributed APKG or an identity lockfile. Run a two-version example Section titled “Run a two-version example” From the repository root: Terminal window cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples The program writes spanish-v1.apkg and spanish-v2.apkg in target/docs-examples . It checks that the secon",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    },
+    {
+      "url": "https://ankiforge.dev/examples/",
+      "status": 200,
+      "final_url": "https://ankiforge.dev/examples/",
+      "bytes": 36354,
+      "title": [
+        "Card examples | Anki Forge"
+      ],
+      "h1": [
+        "A little code.Something to remember."
+      ],
+      "canonical": [
+        "https://ankiforge.dev/examples/"
+      ],
+      "description": "Explore Basic, Cloze, and media cards built with Anki Forge. Read their Rust source and download the generated Anki decks.",
+      "lang": "en",
+      "robots": null,
+      "x_robots_tag": null,
+      "jsonld_count": 0,
+      "hreflang_count": 0,
+      "main_text_chars": 3247,
+      "main_text_excerpt": "A little code. Something to remember. Explore the source, flip the cards, and open the generated decks in Anki. These web previews use the same fields as the downloads. Read the complete source Basic A Spanish greeting with a question, an answer, and an explicit stable ID. Start here for simple front-and-back cards. basic.rs Rust excerpt let (front, back) = ( \"hola\" , \"hello\" ); let mut deck = Deck :: new ( \"Spanish\" ); deck . basic () . note (front, back) . stable_id ( \"es:hola\" ) . add () ? ; let report = deck . ",
+      "images_missing_alt": 0,
+      "has_search_verification_meta": false
+    }
+  ],
+  "audit_scope": {
+    "fetch": "Public HTTP requests with WebsiteAudit User-Agent; not a verified search-engine crawler.",
+    "indexing": "No authenticated Google Search Console or Bing Webmaster Tools data. site: query returned no results but is not proof of no index.",
+    "local_check": "Node v24.19.0 ran website/scripts/check-site.mjs against existing website/dist: 30 pages passed; no fresh build performed.",
+    "performance": "No Lighthouse or field Core Web Vitals audit performed.",
+    "source_state": "Existing modified and untracked website/documentation work was inspected without changing application source."
+  }
+}
