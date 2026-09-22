@@ -3,13 +3,16 @@ title: Choose your language
 description: Compare Rust, Node and Python source versions, installation paths and verified platform scope.
 ---
 
-import { sitePath } from '../../../lib/site';
+import { repository, sitePath } from '../../../lib/site';
 import versions from '../../../generated/versions.json';
 
 All three interfaces build through the Rust core. Choose the language of your
 application. Their packages and verification scopes develop independently.
 These versions are read from this checkout's package metadata; they do not imply
 that a release is available in a public registry.
+
+Anki Forge's language packages share the same <a href={repository}>GitHub repository</a>.
+The package names and source directories are linked below.
 
 <table>
   <thead><tr><th>Language</th><th>Source version</th><th>Environment</th><th>Start here</th></tr></thead>
@@ -22,6 +25,8 @@ that a release is available in a public registry.
 
 ## Rust
 
+Package: <a href={`${repository}/tree/main/anki_forge`}><code>anki_forge</code></a>.
+
 Use the core authoring API directly for Deck, Project, custom note types, media,
 validation and update baselines. The source setup uses a local path dependency;
 default contract resources are bundled with the crate.
@@ -31,12 +36,17 @@ and compiler-generated documentation instructions.
 
 ## Node and TypeScript
 
+Package: <a href={`${repository}/tree/main/bindings/node`}><code>anki-forge-node</code></a>.
+
 The native SDK owns Rust objects and provides asynchronous media/build operations,
 ESM/CommonJS entry points and TypeScript declarations. Await operations on each
 Project or Deck. The quickstart builds the host binary and can package it for a
 separate local application.
 
 ## Python
+
+Package: <a href={`${repository}/tree/main/bindings/python`}><code>anki-forge</code></a>;
+import it as <code>anki_forge</code>.
 
 Python 0.2 uses a native extension built with Maturin. Source consumers must build
 the extension; a matching installed wheel does not need Cargo or contract tools.
