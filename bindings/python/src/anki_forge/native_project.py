@@ -5,7 +5,7 @@ import json
 from os import PathLike
 from pathlib import Path
 from types import MappingProxyType
-from typing import Mapping
+from typing import Mapping, Protocol
 
 from . import _native
 from .artifact import ApkgArtifact
@@ -15,12 +15,17 @@ from .note import FieldContent, Note
 from .identity import IdentityRecipe
 from .notetype import Field, GenerationRule, NoteType, Template, _validate_non_empty, _validate_optional_non_empty
 from .report import BuildReport, ValidationReport, _diagnostics
+from .options import BuildOptions, PathInput, RiskLevelValue, UpdateSafetyValue
 
 _STOCK_NAMES = {
     "basic": {"front": "Front", "back": "Back"},
     "cloze": {"text": "Text", "back_extra": "Back Extra"},
     "image_occlusion": {"occlusion": "Occlusion", "image": "Image", "header": "Header", "back_extra": "Back Extra", "comments": "Comments"},
 }
+
+
+class _BinaryWriter(Protocol):
+    def write(self, data: bytes, /) -> int | None: ...
 
 
 class Project:
@@ -133,19 +138,58 @@ class Project:
         invoke(self._handle.add_note, json.dumps(payload, ensure_ascii=False), references)
         return self
 
-    def build(self) -> BuildReport:
-        return self._build(None)
+    def build(self, options: BuildOptions | None = None) -> BuildReport:
+        payload, artifact = invoke(self._handle.build, json.dumps((options or BuildOptions())._payload(self.base_dir)))
+        report = BuildReport.from_json(json.loads(payload))
+        return replace(report, artifact=ApkgArtifact(artifact, base_dir=self.base_dir) if artifact is not None else None)
 
     def validate(self) -> ValidationReport:
         return ValidationReport(_diagnostics(json.loads(invoke(self._handle.validate))))
 
-    def write_apkg(self, path: str | PathLike[str]) -> BuildReport:
-        target = Path(path).expanduser()
-        if not target.is_absolute():
-            target = self.base_dir / target
-        return self._build(target)
+    def to_apkg_bytes(self, options: BuildOptions | None = None) -> bytes:
+        report = self.build(options)
+        report.ensure_success()
+        artifact = report.artifact
+        assert isinstance(artifact, ApkgArtifact)
+        try:
+            return artifact.path.read_bytes()
+        finally:
+            artifact.close()
+            report.close()
 
-    def _build(self, output: Path | None) -> BuildReport:
-        payload, artifact = self._handle.build(output)
-        report = BuildReport.from_json(json.loads(payload))
-        return replace(report, artifact=ApkgArtifact(artifact) if artifact is not None else None)
+    def write_to(self, destination: _BinaryWriter, options: BuildOptions | None = None) -> int:
+        """Build an APKG, then copy it in chunks of at most 64 KiB; keep the sink open."""
+        report = self.build(options)
+        report.ensure_success()
+        artifact = report.artifact
+        assert isinstance(artifact, ApkgArtifact)
+        total = 0
+        try:
+            with artifact.path.open("rb") as source:
+                while chunk := source.read(64 * 1024):
+                    offset = 0
+                    while offset < len(chunk):
+                        written = destination.write(chunk[offset:])
+                        if written is None or written == 0:
+                            raise BlockingIOError("binary writer made no progress")
+                        if type(written) is not int or written < 0 or written > len(chunk) - offset:
+                            raise OSError("binary writer returned an invalid byte count")
+                        offset += written
+                    total += len(chunk)
+            return total
+        finally:
+            artifact.close()
+            report.close()
+
+    def write_apkg(
+        self, path: PathInput, *, options: BuildOptions | None = None,
+        compare_to: PathInput | None = None, fail_on: RiskLevelValue | None = None,
+        report_json: PathInput | None = None, identity_lockfile: PathInput | None = None,
+        write_identity_lockfile: bool | None = None, update_safety: UpdateSafetyValue | None = None,
+    ) -> BuildReport:
+        selected = (options or BuildOptions())._with_overrides(
+            self.base_dir, output=path, compare_to=compare_to, fail_on=fail_on,
+            report_json=report_json, identity_lockfile=identity_lockfile,
+            write_identity_lockfile=write_identity_lockfile, update_safety=update_safety,
+        )
+        return self.build(selected)

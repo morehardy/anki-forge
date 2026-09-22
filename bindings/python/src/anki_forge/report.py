@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from copy import deepcopy
-from dataclasses import dataclass, field
+from copy import copy, deepcopy
+from dataclasses import dataclass, field, replace
+from types import TracebackType
 from typing import Any, Mapping
 
-from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError, SourceSpan
+from .diagnostics import BuildError, Diagnostic, DiagnosticsError, ProtocolError, SourceSpan
 
 BUILD_REPORT_KIND = "anki-forge-build-report"
 BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
@@ -60,6 +61,8 @@ class BuildReport:
     })
     tool_version: str = "anki-forge-python"
     schema_version: str = BUILD_REPORT_SCHEMA_VERSION
+    failure_cause: str | None = None
+    failure_code: str | None = None
     _raw: dict[str, Any] | None = field(default=None, repr=False, compare=False)
 
     @classmethod
@@ -103,6 +106,8 @@ class BuildReport:
             policy=deepcopy(payload["policy"]),
             tool_version=_required_non_empty_string(payload, "tool_version"),
             schema_version=payload["schema_version"],
+            failure_cause=payload.get("failure_cause"),
+            failure_code=payload.get("failure_code"),
             _raw=deepcopy(payload),
         )
 
@@ -121,7 +126,20 @@ class BuildReport:
     def ensure_success(self) -> None:
         has_error = any(diagnostic.severity in {"error", "critical"} for diagnostic in self.diagnostics)
         if self.status != "success" or self.artifact is None or has_error:
-            raise DiagnosticsError("anki-forge build failed", report=self)
+            raise BuildError(self)
+
+    def close(self) -> None:
+        """Release this report's reference; independently held artifacts stay alive."""
+        object.__setattr__(self, "artifact", None)
+
+    def __copy__(self) -> BuildReport:
+        return replace(self, artifact=copy(self.artifact) if self.artifact is not None else None)
+
+    def __enter__(self) -> BuildReport:
+        return self
+
+    def __exit__(self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: TracebackType | None) -> None:
+        self.close()
 
 
 def _required_non_empty_string(payload: dict[str, Any], key: str) -> str:

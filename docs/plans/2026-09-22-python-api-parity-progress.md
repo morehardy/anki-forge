@@ -14,10 +14,10 @@
 | T1a 模板/CSS | 已修复，待最终审查 | LF/CRLF/Tab 原文及实际导出；E2E/模型 29 项通过 |
 | T1c 报告与风险参数 | 已修复，待最终审查 | 报告 39 项、E2E/校验 27 项；mypy 9 文件通过 |
 | T2 原生纵向试验 | 试验通过，最终版本仍需重新跑分发门禁 | 四平台 wheel 在 Python 3.11/3.12 真实安装成功；本机 release wheel、sdist 与性能采样完成 |
-| T3 作者、校验与身份 | 主要接口已实现，0.1 安全更新验收待 T5 | 自定义/多模板/Cloze/IO、类型及单笔记身份、核心校验、输入快照、默认 key、optional、Content |
+| T3 作者、校验与身份 | 主要接口及 0.1 更新链路已实现，待最终矩阵/审查 | 自定义/多模板/Cloze/IO、类型及单笔记身份、核心校验、输入快照、默认 key、optional、Content |
 | T4 媒体注册证据 | 注册与引用链路已实现，待最终矩阵与审查 | 空/超限、bytes 快照、文件错误路径、首次注册证据、源文件变化、跨项目完整产物对照 |
-| T5 构建配置与安全更新 | 待实施 | |
-| T6 Artifact 与输出 | 待实施 | |
+| T5 构建配置与安全更新 | 配置与迁移链路已实现；旧 CLI 文件清理待集成 | 11 预算、报告、媒体策略、更新模式、真实 0.1 更新、路径保护 |
+| T6 Artifact 与输出 | 主要链路已实现，待最终类型/分发/审查 | 原生 clone/persist、报告/异常持有、context/close、bytes、有界 short-write 复制 |
 | T7a 模板包导入 | 待实施 | |
 | T7b 独立比较 | 待实施 | |
 | T8 Deck 与转换 | 待实施 | |
@@ -83,5 +83,30 @@ RISK.BASELINE_UNAVAILABLE。Python 不额外要求 compare_to。
 - 独立 Rust producer 对照覆盖 Basic、自定义双模板、三层身份优先级、stock/custom Cloze、图片遮挡和跨项目媒体；比较完整 inspector 观察与身份/revision，仍仅归一化已核实的 APKG 来源路径。
 - `add_bytes` 使用真实 Rust 注册；空内容、65,537 字节被拒绝，65,536 字节可用，bytearray 在解释器边界快照。同名同内容去重保留首次注册的文件/inline 来源证据。
 - 文件注册错误保留核心 code 与源路径；同名不同内容报 `MEDIA.DUPLICATE_FILENAME_CONFLICT`。跨项目引用先因目标缺 filename 失败，注册目标同名内容后恢复且与 Rust 产物相同。
-- 迁移说明开始记录于 [Python 0.2 迁移](../../bindings/python/MIGRATION.md)。0.1 真实 APKG/lockfile 的安全更新测试仍依赖 T5，尚不能据此关闭完整迁移验收。
+- 迁移说明开始记录于 [Python 0.2 迁移](../../bindings/python/MIGRATION.md)。T3 检查点时尚缺真实 APKG/lockfile 安全更新验证，后续 T5 的结果记录于下节。
 - 本轮聚焦验证：Python 原生作者/媒体/项目/独立对照共 19 项通过，mypy 16 文件通过，native crate 全 target clippy 零警告；默认 Rust facade 的 custom_notetype_api_tests 4 项通过。
+- 开启 internal-tools 的 product_v3_tests 另有 10 项通过；此前未开启该 feature 的运行收集 0 项，不算该项证据。
+
+作者/媒体检查点提交：`70c3aef`。未更新远端 main。
+
+## T5 构建配置与真实升级
+
+- 冻结的 `BuildOptions` 接入 output/artifacts_dir/report_json/inspect、全部 11 个 InspectLimits、基线/风险/锁文件/更新模式、自包含和媒体策略。默认预算直接读取 Rust，Python int 保留 u64 精度，并拒绝 bool/浮点/负数/溢出。
+- 每个预算单独设为 0，断言相应核心资源诊断，验证 `inspect=False` 不跳过最终检查且旧输出不被覆盖。额外验证基线预算对 strict/report_only/report-only/disabled 的核心区别。
+- `write_apkg` 恢复旧关键字入口，也接受 BuildOptions；重复且冲突的参数在发布前拒绝。路径基于构造时 base_dir，并保留 symlink 语义供核心检查。
+- 原生 BuildReport 暴露 failure_cause/failure_code；`ensure_success()` 抛 BuildError（继承 DiagnosticsError），保留原 report，不把有效失败报告变成无上下文异常。
+- 实际 0.1 APKG/lockfile 的 unchanged、答案修改、标签修改、重复构建、回退更新通过 GUID/model/template ID 与 revision 对照。旧锁文件缺 revision 时 strict 阻断且不改旧输出；提供原 APKG 后可恢复证据并更新锁文件。
+- 对 unchanged 升级，GUID 来源由 current_derivation 改为 previous_apkg；Rust Project 会为两个自定义模板补写 inferred all generation requirement，旧 ProductDocument 产物未记录它。测试逐项断言这些差异，其余完整观察保持比较，不删除差异字段来通过测试。
+- 既有 Python E2E 的风险阻断、两种 lockfile-only 风险场景和 hardlink 保护 4 项已在原生接口通过。新用例验证 symlink、报告同路径、staging 内基线的拒绝行为。
+- 仍需 T6–T9：产物扩展、输出、bundle/diff、Deck、公开模块清理、全矩阵/打包文档/最终 code-review。此检查点仍不可发布。
+
+## T6 产物与文件对象
+
+- `copy.copy/deepcopy(ApkgArtifact)` 克隆真实 Rust Arc；`persist_to` 先取得独立 core owner，再释放解释器执行原子复制。关闭原 handle 不会提前删除复制操作正在读取的源文件。
+- 普通 Python 赋值仍共享同一 handle，显式 close 会影响其别名。复制报告则复制 Artifact handle；`report.close()` 只释放报告自己的引用，独立持有的 Artifact 继续可用。
+- 临时自路径/hardlink alias、目录目标等持久化失败保留原件；成功持久化和显式输出不随 close 删除。JSON 路径快照不延长临时文件寿命。
+- 晚期锁文件写失败的 BuildError 保留完整 report 和可恢复 Artifact；`report_json` 没有持久化输出时遵守核心拒绝规则。
+- `to_apkg_bytes` 返回完整 bytes；`write_to` 先完成 APKG 再以 64 KiB 有界复制。处理短写、零进展、None、非法 count 和调用者异常，不关闭调用者流。
+- 512 KiB 非压缩友好媒体的 short-write sink 输出，与独立 Rust 文件生产者完整观察一致。sink 回调可继续修改同一 Project，证明复制阶段未持有项目操作锁。
+- 在独立临时目录断言 bytes/流复制成功与失败后无临时残留；异常保留 traceback 时也显式清理复制用 Artifact。
+- T3–T6 聚焦原生验证共 57 项通过；mypy 17 文件通过；native 全 target clippy 零警告。全仓库测试和最终平台包验证尚未运行。

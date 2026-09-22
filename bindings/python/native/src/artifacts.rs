@@ -17,8 +17,35 @@ impl From<ApkgArtifact> for NativeArtifact {
     }
 }
 
+impl NativeArtifact {
+    fn snapshot(&self) -> PyResult<ApkgArtifact> {
+        self.inner
+            .lock()
+            .map_err(|_| PyRuntimeError::new_err("BINDING.ARTIFACT_FAILED"))?
+            .as_ref()
+            .cloned()
+            .ok_or_else(|| PyRuntimeError::new_err("BINDING.ARTIFACT_CLOSED"))
+    }
+}
+
 #[pymethods]
 impl NativeArtifact {
+    fn clone_handle(&self) -> PyResult<Self> {
+        self.snapshot().map(Self::from)
+    }
+
+    fn persist_to(&self, py: Python<'_>, path: PathBuf) -> PyResult<Self> {
+        // Retain a distinct core owner before releasing the interpreter, so
+        // another thread can close this handle without removing the source.
+        let artifact = self.snapshot()?;
+        py.detach(|| {
+            artifact
+                .persist_to(path)
+                .map(Self::from)
+                .map_err(PyErr::from)
+        })
+    }
+
     fn path(&self) -> PyResult<PathBuf> {
         let guard = self
             .inner

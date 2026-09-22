@@ -3,6 +3,7 @@ from __future__ import annotations
 from .diagnostics import (
     Diagnostic,
     DiagnosticsError,
+    BuildError,
     ProtocolError,
     RuntimeInvocationError,
     RuntimeNotFoundError,
@@ -19,11 +20,13 @@ from .native_project import Project
 from .artifact import ApkgArtifact
 from .identity import IdentityRecipe
 from .content import Content
+from .options import BuildOptions, DiagnosticBehavior, InspectLimits, MediaMode, MediaPolicy, RiskLevel, UpdateSafetyMode
 from .report import BuildReport, ValidationReport
 
 __all__ = [
     "Diagnostic",
     "DiagnosticsError",
+    "BuildError",
     "ProtocolError",
     "RuntimeInvocationError",
     "RuntimeNotFoundError",
@@ -45,4 +48,11 @@ __all__ = [
     "ApkgArtifact",
     "IdentityRecipe",
     "Content",
+    "BuildOptions",
+    "InspectLimits",
+    "RiskLevel",
+    "UpdateSafetyMode",
+    "MediaMode",
+    "MediaPolicy",
+    "DiagnosticBehavior",
 ]

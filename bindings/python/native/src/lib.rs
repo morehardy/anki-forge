@@ -2,10 +2,11 @@ mod artifacts;
 mod authoring;
 mod media;
 mod observations;
+mod options;
 mod state;
 
 use anki_forge::build::{json_report::DiagnosticJson, BuildReportJson};
-use anki_forge::prelude::{BuildOptions, Field, Project, Template};
+use anki_forge::prelude::{Field, Project, Template};
 use artifacts::NativeArtifact;
 use media::NativeMediaRef;
 use pyo3::exceptions::{PyException, PyValueError};
@@ -150,27 +151,39 @@ impl NativeProject {
         })
     }
 
-    #[pyo3(signature = (output=None))]
-    fn build(
-        &self,
-        py: Python<'_>,
-        output: Option<PathBuf>,
-    ) -> PyResult<(String, Option<NativeArtifact>)> {
+    fn build(&self, py: Python<'_>, options: &str) -> PyResult<(String, Option<NativeArtifact>)> {
+        let options = serde_json::from_str::<options::BuildInput>(options)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?
+            .options();
         self.state.run(py, |project| {
-            let mut options = BuildOptions::new();
-            if let Some(path) = output {
-                options = options.output(path);
-            }
-            let (report, cause) = match project.build(options) {
-                Ok(report) => (report, None),
-                Err(error) => (*error.report, Some(format!("{:?}", error.cause))),
+            let (report, cause, code) = match project.build(options) {
+                Ok(report) => (report, None, None),
+                Err(error) => {
+                    let code = error.code().as_str().to_string();
+                    use anki_forge::build::BuildFailureCause;
+                    let cause = match error.cause {
+                        BuildFailureCause::MissingArtifact => "missing_artifact",
+                        BuildFailureCause::Diagnostics => "diagnostics",
+                        BuildFailureCause::PolicyBlocked => "policy_blocked",
+                        BuildFailureCause::Invalid => "invalid",
+                        BuildFailureCause::Io => "io",
+                        BuildFailureCause::Internal => "internal",
+                    };
+                    (*error.report, Some(cause), Some(code))
+                }
             };
             let mut json = serde_json::to_value(BuildReportJson::from_report(&report))
                 .map_err(|error| PyValueError::new_err(error.to_string()))?;
             json["failure_cause"] = json!(cause);
+            json["failure_code"] = json!(code);
             Ok((json.to_string(), report.artifact.map(NativeArtifact::from)))
         })
     }
+}
+
+#[pyfunction]
+fn default_inspect_limits() -> String {
+    options::default_limits().to_string()
 }
 
 #[pyfunction]
@@ -232,5 +245,6 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(render_content, module)?)?;
     module.add_function(wrap_pyfunction!(build_image_occlusion, module)?)?;
     module.add_function(wrap_pyfunction!(inline_media_limit_bytes, module)?)?;
+    module.add_function(wrap_pyfunction!(default_inspect_limits, module)?)?;
     Ok(())
 }

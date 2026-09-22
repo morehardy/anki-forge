@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .report import BuildReport
 
 
 class AnkiForgeError(Exception):
@@ -85,6 +88,18 @@ class DiagnosticsError(AnkiForgeError):
         self.exit_status = exit_status
         self.stdout = stdout
         self.stderr = stderr
+
+
+class BuildError(DiagnosticsError):
+    """A failed build, retaining its complete report and any recoverable artifact."""
+
+    def __init__(self, report: BuildReport) -> None:
+        super().__init__("anki-forge build failed", report=report)
+        self.failure_cause = report.failure_cause
+        self.code = report.failure_code or next(
+            (diagnostic.code for diagnostic in report.diagnostics if diagnostic.severity == "error"),
+            "PROJECT.BUILD_DIAGNOSTICS",
+        )
 
 
 @dataclass(frozen=True)

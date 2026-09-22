@@ -12,9 +12,9 @@ OBSERVER = Path(os.environ.get("ANKI_FORGE_PYTHON_OBSERVER", str(
 )))
 
 
-def observe(operation, path):
+def observe(operation, path, *inputs):
     assert OBSERVER.is_file(), "build the python_parity Rust example before running parity tests"
-    value = json.loads(subprocess.check_output([str(OBSERVER), operation, str(path)], text=True))
+    value = json.loads(subprocess.check_output([str(OBSERVER), operation, str(path), *map(str, inputs)], text=True))
     # The only ignored evidence is the observer's input filename, checked first.
     for note in value["identity"]["notes"]:
         assert note["source_path"] == str(path)

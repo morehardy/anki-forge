@@ -175,15 +175,40 @@ fn media(path: &Path) -> anyhow::Result<Value> {
     inspect(path)
 }
 
+fn large(path: &Path, media_path: &Path) -> anyhow::Result<Value> {
+    let mut project = Project::new("Large").stable_id("native-large");
+    let media = project
+        .media_mut()
+        .add_file(media_path)?
+        .export_as("large.bin")?;
+    project.add_note(
+        Note::basic("Question", "Answer")
+            .stable_id("one")
+            .sound("Back", media),
+    )?;
+    project.write_apkg(path)?.ensure_success()?;
+    inspect(path)
+}
+
 fn main() -> anyhow::Result<()> {
     let args: Vec<_> = std::env::args().collect();
-    anyhow::ensure!(args.len() == 3, "usage: python_parity basic|inspect PATH");
+    anyhow::ensure!(
+        args.len() >= 3,
+        "usage: python_parity SCENARIO PATH [MEDIA]"
+    );
     let value = match args[1].as_str() {
         "basic" => basic(Path::new(&args[2]))?,
         "custom" => custom(Path::new(&args[2]))?,
         "identity" => identity(Path::new(&args[2]))?,
         "cloze_io" => cloze_io(Path::new(&args[2]))?,
         "media" => media(Path::new(&args[2]))?,
+        "large" => large(
+            Path::new(&args[2]),
+            Path::new(
+                args.get(3)
+                    .ok_or_else(|| anyhow::anyhow!("media path required"))?,
+            ),
+        )?,
         "inspect" => inspect(Path::new(&args[2]))?,
         _ => anyhow::bail!("unknown operation"),
     };
