@@ -1,39 +1,60 @@
-# Diagnostics
+# Python diagnostics
 
-`Project.write_apkg()` returns a `BuildReport`. Call `report.ensure_success()` when you want invalid, blocked, error, missing-artifact, or error-diagnostic reports to raise `DiagnosticsError`.
+`Project.add_note/add_notetype` validate in Rust and raise `ProjectAddError`
+synchronously, without partially changing the project. Media registration raises
+`MediaError`; template import raises `TemplateBundleError`; Deck additions raise
+`DeckError`. These are `ValidationError` subclasses with stable core `code` and
+`message`. Project add errors include a full `diagnostic`, `path` and optional
+UTF-8 byte `span`. Bundle errors retain the file `path` and `byte_offset`.
 
-## Source Paths
+`validate()` returns a `ValidationReport` without building an APKG or re-reading
+media. Normalization, media verification and writing can still fail afterward.
 
-`source_path` values such as `project.notes[3]` are diagnostic addresses, not public Python object access. Note indexes are zero-based: `project.notes[3]` means the fourth note in the exact serialization that produced the report. Index paths may decay after project mutation or note reordering, so use explicit note `stable_id` values for long-lived traceability.
+`build()` / `write_apkg()` return valid core failure reports. Call
+`report.ensure_success()` to raise `BuildError` (a `DiagnosticsError` subclass),
+which retains the complete `report`, `diagnostics`, `code` and `failure_cause`.
+A late persistence failure can retain a recoverable Artifact. `diff_against_apkg`
+uses the same report-first convention with `ProjectDiffReport` and
+`ProjectDiffError`. Raw reports preserve metrics, policy, versions, extensions
+and Python integer precision; JSON deserialization never owns a temporary file.
 
-`project.note_types["basic"]` and `project.note_types["cloze"]` may refer to Python-generated stock declarations, even though users never passed those note types to `Project.add_notetype(note_type)`.
+## Diagnostic paths
 
-## Required Fields And Media
+Paths such as `project.notes[3]` are addresses in the core authoring snapshot,
+not public Python attribute expressions. Indexes are zero-based. Stock type paths
+can refer to declarations introduced by Rust. Use stable IDs for long-lived
+traceability and inspect both `path` and `span` for template errors.
 
-Python validates field keys and identity availability, but Rust owns required-field completeness and media diagnostics. A required media field with a valid media id can fail as a media-source diagnostic if its file source is missing or unreadable; do not filter only for required-field codes when deciding whether a media-heavy build is safe.
+## Media and comparison
 
-## Comparison
+File registration reads and fingerprints the source immediately. Later deletion
+or modification fails during build with core media diagnostics. Handle all error
+diagnostics rather than only required-field codes.
 
-`fail_on=None` disables the risk threshold. It does not ignore missing or unreadable `compare_to` baselines; those still produce invalid reports with comparison diagnostics. `compare_to` without `fail_on` still computes diff and risk when the baseline is readable.
+`compare_to` computes package differences and risk. `fail_on` applies the selected
+risk threshold and can also be used with lockfile-only evidence. The core decides
+baseline validity and publication; Python does not require an APKG baseline for
+every risk threshold. `InspectLimits` bounds both candidate and baseline reading.
+`inspect=False` suppresses the summary, not the final package checks.
 
-## Update-Safe Builds
-
-`Project.write_apkg()` accepts `identity_lockfile`,
-`write_identity_lockfile`, and `update_safety`.
+## Update-safe builds
 
 ```python
+from anki_forge import BuildOptions, Note, Project
+
 project = Project("Japanese Core", stable_id="jp-core")
 project.add_note(Note.basic("食べる", "to eat", stable_id="jp:taberu"))
-project.write_apkg(
-    "dist/jp-core.apkg",
-    identity_lockfile="anki-forge.lock.json",
-    write_identity_lockfile=True,
-    update_safety="strict",
-).ensure_success()
+project.build(BuildOptions(output="jp-core.apkg")
+    .first_update_safe_build("anki-forge.lock.json")).ensure_success()
 ```
 
-Strict update-safe Python builds, default baseline-driven update-safe builds,
-and any build that writes an identity lockfile require `Project.stable_id`.
-`update_safety="disabled"` ignores baseline inputs; `update_safety="report_only"`
-keeps update-safety diagnostics visible as warnings without blocking writer
-execution.
+Strict builds require the stable project identity and sufficient baseline
+identity/revision evidence. `report_only` / `report-only` downgrades update-safety
+failures to warnings; `disabled` disables identity preservation checks. Package
+comparison and its inspection limits still operate when requested. Keep original
+APKGs to recover missing revision evidence from legacy 0.1 lockfiles.
+
+Import failures are separate from domain errors: reinstall a compatible wheel
+for `BINDING.EXTENSION_UNAVAILABLE` or mixed files for `BINDING.VERSION_MISMATCH`.
+`versions()` shows the three version axes. Busy/forked/retired native objects
+raise RuntimeError with a `BINDING.*` code, rather than a fabricated core report.

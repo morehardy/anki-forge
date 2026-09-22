@@ -36,26 +36,18 @@ def test_installed_public_wheel_does_not_expose_low_level_wrapper(clean_venv: Cl
     )
 
 
-def test_installed_wheel_runtime_contracts_match_manifest_assets(clean_venv: CleanVenv):
+def test_installed_wheel_embeds_native_core_without_runtime_files(clean_venv: CleanVenv):
     clean_venv.pip_install_wheel()
     clean_venv.run_python(
         """
 from pathlib import Path
-import os
-import subprocess
-import json
 import anki_forge
 
-runtime_root = Path(anki_forge.__file__).resolve().parent / "_runtime"
-manifest = runtime_root / "contracts" / "manifest.yaml"
-executable = runtime_root / "bin" / ("contract_tools.exe" if os.name == "nt" else "contract_tools")
-assert manifest.is_file(), manifest
-assert executable.is_file(), executable
-expected = {f"contracts/{relative}" for relative in json.loads(subprocess.check_output([str(executable), "package-runtime-assets", "--manifest", str(manifest)], text=True, encoding="utf-8"))}
-actual = {path.relative_to(runtime_root).as_posix() for path in (runtime_root / "contracts").rglob("*") if path.is_file()}
-missing = expected - actual
-unexpected = {path for path in actual if path.startswith("contracts/")} - expected
-assert not missing, sorted(missing)
-assert not unexpected, sorted(unexpected)
+root = Path(anki_forge.__file__).resolve().parent
+assert not (root / "_runtime").exists()
+assert not (root / "runtime.py").exists()
+assert (root / "py.typed").is_file()
+assert anki_forge.versions().binding_version == "0.2.0"
+anki_forge.Project("Installed").add_note(anki_forge.Note.basic("Front", "Back")).build().ensure_success()
 """
     )

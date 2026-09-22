@@ -9,7 +9,7 @@ from ._bridge import invoke
 from .diagnostics import ValidationError
 
 if TYPE_CHECKING:
-    from .native_media import MediaRef
+    from .media import MediaRef
 
 
 @dataclass(frozen=True)

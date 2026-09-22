@@ -88,9 +88,18 @@ pub fn add_error(error: ProjectAddError) -> PyErr {
 
 #[derive(Deserialize)]
 #[serde(rename_all = "snake_case")]
-enum IoModeInput {
+pub enum IoModeInput {
     HideAllGuessOne,
     HideOneGuessOne,
+}
+
+impl From<IoModeInput> for anki_forge::prelude::IoMode {
+    fn from(value: IoModeInput) -> Self {
+        match value {
+            IoModeInput::HideAllGuessOne => Self::HideAllGuessOne,
+            IoModeInput::HideOneGuessOne => Self::HideOneGuessOne,
+        }
+    }
 }
 
 #[derive(Deserialize)]
@@ -108,12 +117,8 @@ pub struct ImageOcclusionInput {
 
 impl ImageOcclusionInput {
     pub fn into_note(self, image: MediaRef) -> PyResult<Note> {
-        let mode = match self.mode {
-            IoModeInput::HideAllGuessOne => anki_forge::prelude::IoMode::HideAllGuessOne,
-            IoModeInput::HideOneGuessOne => anki_forge::prelude::IoMode::HideOneGuessOne,
-        };
         let mut builder = Note::image_occlusion(image)
-            .mode(mode)
+            .mode(self.mode.into())
             .header(self.header)
             .back_extra(self.back_extra)
             .comments(self.comments)

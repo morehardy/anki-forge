@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import pytest
 
 from anki_forge import Field, GenerationRule, Note, NoteType, Project, Template
 
@@ -109,3 +110,28 @@ def test_cross_project_media_uses_destination_filename_and_payload(tmp_path):
     report = destination.build()
     report.ensure_success()
     assert observe("inspect", report.artifact.path) == expected
+
+
+@pytest.mark.parametrize("mode", ["rename", "explicit", "reorder"])
+def test_field_rename_and_reorder_follow_core_identity_rules(tmp_path, mode):
+    def make_project(changed):
+        prompt = Field("Renamed Prompt" if changed and mode != "reorder" else "Prompt", key="prompt", identity=True, sort=True)
+        answer = Field("Answer", key="answer")
+        name = prompt.name
+        note_type = NoteType.custom("evolution", name="Evolution")
+        for field in ([answer, prompt] if changed else [prompt, answer]):
+            note_type.field(field)
+        note_type.template(Template("Card", key="card", front="{{" + name + "}}", back="{{Answer}}"))
+        return Project("Evolution", stable_id="native-evolution").add_notetype(note_type).add_note(
+            Note("evolution", stable_id="existing" if mode == "explicit" else None).text("prompt", "Question").text("answer", "Answer")
+        )
+
+    before = make_project(False).write_apkg(tmp_path / "before.apkg")
+    before.ensure_success()
+    after = make_project(True).write_apkg(tmp_path / "after.apkg", compare_to=tmp_path / "before.apkg")
+    after.ensure_success()
+    actual = observe("inspect", after.artifact.path)
+    assert actual == observe("evolution_" + mode, tmp_path / "rust-after.apkg")
+    baseline = observe("inspect", before.artifact.path)
+    same_guids = [n["anki_guid"] for n in actual["identity"]["notes"]] == [n["anki_guid"] for n in baseline["identity"]["notes"]]
+    assert same_guids is (mode != "rename"), "core-derived identity includes the selected field display name"

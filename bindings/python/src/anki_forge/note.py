@@ -9,7 +9,7 @@ from ._bridge import invoke
 from .diagnostics import ValidationError
 from .content import Content
 from .content import Content as FieldContent
-from .native_media import MediaRef
+from .media import MediaRef
 from .identity import IdentityRecipe
 from .notetype import _validate_id, _validate_optional_non_empty, _validate_tag
 

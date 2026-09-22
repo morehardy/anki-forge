@@ -1,33 +1,34 @@
-use anki_forge::prelude::Project;
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::Mutex;
 
-enum State {
-    Ready(Box<Project>),
+enum State<T> {
+    Ready(Box<T>),
     Busy,
     Failed,
 }
 
-pub struct ProjectState {
-    state: Mutex<State>,
+pub struct ObjectState<T> {
+    state: Mutex<State<T>>,
+    kind: &'static str,
     pid: u32,
 }
 
-impl ProjectState {
-    pub fn new(project: Project) -> Self {
+impl<T: Send> ObjectState<T> {
+    pub fn new(project: T, kind: &'static str) -> Self {
         Self {
             state: Mutex::new(State::Ready(Box::new(project))),
             pid: std::process::id(),
+            kind,
         }
     }
 
-    pub fn run<T: Send>(
+    pub fn run<R: Send>(
         &self,
         py: Python<'_>,
-        operation: impl FnOnce(&mut Project) -> PyResult<T> + Send,
-    ) -> PyResult<T> {
+        operation: impl FnOnce(&mut T) -> PyResult<R> + Send,
+    ) -> PyResult<R> {
         // Never acquire a potentially inherited mutex in a forked child.
         if self.pid != std::process::id() {
             return Err(PyRuntimeError::new_err("BINDING.FORKED_OBJECT"));
@@ -35,10 +36,20 @@ impl ProjectState {
         let mut state = self
             .state
             .try_lock()
-            .map_err(|_| PyRuntimeError::new_err("BINDING.PROJECT_BUSY"))?;
+            .map_err(|_| PyRuntimeError::new_err(format!("BINDING.{}_BUSY", self.kind)))?;
         match &*state {
-            State::Busy => return Err(PyRuntimeError::new_err("BINDING.PROJECT_BUSY")),
-            State::Failed => return Err(PyRuntimeError::new_err("BINDING.PROJECT_FAILED")),
+            State::Busy => {
+                return Err(PyRuntimeError::new_err(format!(
+                    "BINDING.{}_BUSY",
+                    self.kind
+                )))
+            }
+            State::Failed => {
+                return Err(PyRuntimeError::new_err(format!(
+                    "BINDING.{}_FAILED",
+                    self.kind
+                )))
+            }
             State::Ready(_) => {}
         }
         let State::Ready(mut project) = std::mem::replace(&mut *state, State::Busy) else {
@@ -50,7 +61,7 @@ impl ProjectState {
             let mut state = self
                 .state
                 .lock()
-                .map_err(|_| PyRuntimeError::new_err("BINDING.PROJECT_FAILED"))?;
+                .map_err(|_| PyRuntimeError::new_err(format!("BINDING.{}_FAILED", self.kind)))?;
             match result {
                 Ok(value) => {
                     *state = State::Ready(project);
@@ -58,7 +69,10 @@ impl ProjectState {
                 }
                 Err(_) => {
                     *state = State::Failed;
-                    Err(PyRuntimeError::new_err("BINDING.PROJECT_FAILED"))
+                    Err(PyRuntimeError::new_err(format!(
+                        "BINDING.{}_FAILED",
+                        self.kind
+                    )))
                 }
             }
         })

@@ -104,6 +104,14 @@ def absolute_path(path: PathInput, base_dir: Path) -> Path:
 class BuildOptions:
     """Immutable build configuration. None keeps the corresponding Rust default."""
 
+    def first_update_safe_build(self, lockfile: PathInput) -> BuildOptions:
+        """Return strict options that also publish initial identity evidence."""
+        return replace(self, identity_lockfile=lockfile, write_identity_lockfile=True, update_safety=UpdateSafetyMode.STRICT)
+
+    def update_safe(self, lockfile: PathInput) -> BuildOptions:
+        """Return strict options using an existing identity lockfile."""
+        return replace(self, identity_lockfile=lockfile, update_safety=UpdateSafetyMode.STRICT)
+
     output: PathInput | None = None
     artifacts_dir: PathInput | None = None
     report_json: PathInput | None = None

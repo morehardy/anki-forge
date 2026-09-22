@@ -10,21 +10,22 @@ def project_media_ref():
 
 
 def test_notetype_custom_templates_and_duplicate_validation():
+    from copy import deepcopy
     nt = NoteType.custom("jp")
     assert nt.css(None).css_value is None
     nt.field(Field("Expression", key="expr", identity=True, sort=True, required=True))
     nt.field(Field("Meaning", key="meaning"))
-    nt.template(Template("Recognition", front="{{Expression}}", back="{{Meaning}}", generate_when=GenerationRule.all(["expr"])))
-    with pytest.raises(ValidationError):
-        nt.field(Field("Duplicate", key="expr"))
-    with pytest.raises(ValidationError):
-        nt.field(Field("Expression", key="expr_2"))
-    with pytest.raises(ValidationError):
-        nt.field(Field("Other Sort", key="sort2", sort=True))
-    with pytest.raises(ValidationError):
-        nt.template(Template("Recognition", front="x", back="y"))
-    with pytest.raises(ValidationError):
-        nt.template(Template("Broken", front="x", back="y", generate_when=GenerationRule.all(["missing"])))
+    nt.template(Template("Recognition", key="recognition", front="{{Expression}}", back="{{Meaning}}", generate_when=GenerationRule.all(["expr"])))
+    nt.validate()
+    for mutate in (
+        lambda value: value.field(Field("Duplicate", key="expr")),
+        lambda value: value.field(Field("Expression", key="expr_2")),
+        lambda value: value.field(Field("Other Sort", key="sort2", sort=True)),
+        lambda value: value.template(Template("Recognition", key="recognition", front="x", back="y")),
+        lambda value: value.template(Template("Broken", front="x", back="y", generate_when=GenerationRule.all(["missing"]))),
+    ):
+        with pytest.raises(ValidationError):
+            mutate(deepcopy(nt)).validate()
 
 
 def test_template_rejects_invalid_generate_when_type():
@@ -77,25 +78,21 @@ def test_note_tags_mutator_validates_and_deduplicates():
         note.tags(["ok", "bad tag"])
 
 
-def test_stock_notes_reject_unknown_field_keys():
-    ref = MediaRef("media:000001", "x.png")
-    with pytest.raises(ValidationError):
-        Note("basic").text("missing", "value")
-    with pytest.raises(ValidationError):
-        Note("basic").sound("text", ref)
-    with pytest.raises(ValidationError):
-        Note("cloze").html("front", "value")
-    with pytest.raises(ValidationError):
-        Note("cloze").image("back", ref)
+def test_stock_notes_reject_unknown_field_keys_at_addition():
+    project = Project("Keys")
+    ref = project.media.add_bytes(source_label="image", data=b"image", export_as="x.png")
+    for note in [Note("basic").text("missing", "value"), Note("basic").sound("text", ref), Note("cloze").html("front", "value"), Note("cloze").image("back", ref)]:
+        with pytest.raises(ValidationError):
+            project.add_note(note)
 
 
 def test_note_media_content_and_cloze_defaults_validate_shape():
-    ref = MediaRef("media:000001", "x.png")
+    ref = Project("Media").media.add_bytes(source_label="image", data=b"image", export_as="x.png")
     note = Note("custom").sound("audio", ref).image("picture", ref)
-    assert ref.media_id == "media:000001"
-    assert note.fields["audio"].media_id == "media:000001"
+    assert ref.media_id == "media:x.png"
+    assert note.fields["audio"].media_id == "media:x.png"
     assert note.fields["audio"].value is None
-    assert note.fields["picture"].media_id == "media:000001"
+    assert note.fields["picture"].media_id == "media:x.png"
     cloze = Note.cloze("<b>{{c1::text}}</b>")
     assert cloze.fields["text"].kind == "html"
     assert cloze.fields["text"].value == "<b>{{c1::text}}</b>"
@@ -108,7 +105,7 @@ def test_note_media_content_and_cloze_defaults_validate_shape():
 
 
 def test_note_image_occlusion_builder_rejects_missing_stable_id(project_media_ref):
-    with pytest.raises(ValidationError, match="stable id"):
+    with pytest.raises(ValidationError, match="DECK.MISSING_STABLE_ID"):
         Note.image_occlusion(project_media_ref).rect(0, 0, 10, 10).build()
 
 
@@ -118,13 +115,13 @@ def test_note_image_occlusion_builder_rejects_blank_stable_id(project_media_ref)
 
 
 def test_note_image_occlusion_builder_rejects_bad_rects(project_media_ref):
-    with pytest.raises(ValidationError, match="at least one rect"):
+    with pytest.raises(ValidationError, match="DECK.EMPTY_IO_MASKS"):
         Note.image_occlusion(project_media_ref, stable_id="io:empty").build()
-    with pytest.raises(ValidationError, match="positive"):
+    with pytest.raises(ValidationError, match="AFID.IO_RECT_EMPTY"):
         Note.image_occlusion(project_media_ref, stable_id="io:zero").rect(0, 0, 0, 10).build()
-    with pytest.raises(ValidationError, match="non-negative"):
+    with pytest.raises(ValidationError, match="u32"):
         Note.image_occlusion(project_media_ref, stable_id="io:negative").rect(-1, 0, 10, 10)
-    with pytest.raises(ValidationError, match="duplicate"):
+    with pytest.raises(ValidationError, match="AFID.IO_RECT_DUPLICATE"):
         (
             Note.image_occlusion(project_media_ref, stable_id="io:duplicate")
             .rect(0, 0, 10, 10)
@@ -148,13 +145,13 @@ def test_note_image_occlusion_builder_renders_fields(project_media_ref):
 
     assert note.note_type_id == "image_occlusion"
     assert note.stable_id == "io:1"
-    assert note.fields["occlusion"].kind == "html"
-    assert note.fields["occlusion"].value == (
+    assert note.fields["Occlusion"].kind == "html"
+    assert note.fields["Occlusion"].value == (
         "{{c1,2::image-occlusion:rect:left=0:top=0:width=10:height=10}}<br>"
         "{{c1,2::image-occlusion:rect:left=20:top=0:width=10:height=10}}<br>"
     )
-    assert note.fields["image"].kind == "image"
-    assert note.fields["image"].media_id == project_media_ref.media_id
+    assert note.fields["Image"].kind == "html"
+    assert note.fields["Image"].value == '<img src="heart.png">'
     assert note.tag_values == ["io"]
 
 
@@ -172,10 +169,10 @@ def test_image_occlusion_renderer_matches_rust_expected_strings(project_media_re
         .build()
     )
 
-    assert hide_all.fields["occlusion"].value == (
+    assert hide_all.fields["Occlusion"].value == (
         "{{c1::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
     )
-    assert hide_one.fields["occlusion"].value == (
+    assert hide_one.fields["Occlusion"].value == (
         "{{c1,2::image-occlusion:rect:left=10:top=20:width=30:height=40}}<br>"
     )
 
@@ -184,8 +181,6 @@ def test_media_registry_validates_export_names_and_duplicates(tmp_path):
     registry = Project("Deck").media
     payload = b"abc"
     ref = registry.add_bytes(source_label="hello.wav", data=payload, export_as="hello.wav")
-    assert registry.items[0].data == payload
-    assert registry.items[0].source_kind == "bytes"
     assert registry.add_bytes(source_label="again.wav", data=bytearray(b"abc"), export_as="hello.wav") == ref
     with pytest.raises(ValidationError):
         registry.add_bytes(source_label="bad", data=b"different", export_as="hello.wav")
@@ -200,10 +195,6 @@ def test_media_registry_validates_export_names_and_duplicates(tmp_path):
     file_ref = registry.add_file(media_file, export_as="sound.wav")
     assert file_ref.export_as == "sound.wav"
     assert registry.add_file(media_file, export_as="sound.wav") == file_ref
-    file_item = next(item for item in registry.items if item.ref == file_ref)
-    assert file_item.source_kind == "file"
-    assert file_item.data is None
-    assert isinstance(registry.items, tuple)
 
 
 def test_project_validates_ids_and_custom_note_registration():
@@ -212,17 +203,17 @@ def test_project_validates_ids_and_custom_note_registration():
     project = Project("Deck")
     with pytest.raises(ValidationError):
         project.add_note(Note("custom").text("front", "x"))
-    project.add_notetype(NoteType.custom("custom").field(Field("Front", key="front", identity=True)))
+    project.add_notetype(NoteType.custom("custom").field(Field("Front", key="front", identity=True)).template(Template("Card", front="{{Front}}", back="{{FrontSide}}")))
     with pytest.raises(ValidationError):
         project.add_note(Note("custom").text("missing", "x"))
     project.add_note(Note("custom").text("front", "x"))
 
 
 def test_project_accepts_hyphenated_custom_ids_and_validates_mutated_notetypes():
-    nt = NoteType.custom("media-card", css=".card {}").field(Field("Front", key="front"))
+    nt = NoteType.custom("media-card", css=".card {}").field(Field("Front", key="front", identity=True)).template(Template("Card", front="{{Front}}", back="{{FrontSide}}"))
     assert nt.css_value == ".card {}"
     project = Project("Deck").add_notetype(nt)
-    assert project._note_type_order == ["media-card"]
+    assert project.notetype_order == ("media-card",)
     project.add_note(Note("media-card").text("front", "x"))
     nt.fields.append(Field("Other Front", key="front"))
     with pytest.raises(ValidationError):
@@ -248,6 +239,6 @@ def test_project_notetypes_is_read_only_but_add_notetype_still_mutates():
     with pytest.raises(TypeError):
         project.notetypes["custom"] = NoteType.custom("custom").field(Field("Front", key="front"))
     assert project.notetypes == {}
-    project.add_notetype(NoteType.custom("custom").field(Field("Front", key="front")))
+    project.add_notetype(NoteType.custom("custom").field(Field("Front", key="front")).template(Template("Card", front="{{Front}}", back="{{FrontSide}}")))
     assert "custom" in project.notetypes
-    assert project._note_type_order == ["custom"]
+    assert project.notetype_order == ("custom",)

@@ -2,6 +2,7 @@ name: python-native-trial
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches: [codex/python-sdk-parity]
   pull_request:
@@ -53,6 +54,12 @@ jobs:
         with:
           python-version: "3.11"
           architecture: ${{ matrix.architecture }}
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+      - name: Build independent Rust producer
+        run: cargo build -p anki_forge_python_native --example python_parity --locked
+      - run: python -m pip install mypy==2.3.1
       - uses: PyO3/maturin-action@v1
         with:
           command: build
@@ -63,13 +70,14 @@ jobs:
           manylinux: ${{ matrix.manylinux }}
           args: --release --locked --out ../../target/python-native-wheels --interpreter ${{ matrix.interpreter }}
       - name: Install and exercise wheel on Python 3.11
-        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel)], check=True)"
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); observer = Path('target/debug/examples') / ('python_parity.exe' if sys.platform == 'win32' else 'python_parity'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel), '--observer', str(observer)], check=True)"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           architecture: ${{ matrix.architecture }}
+      - run: python -m pip install mypy==2.3.1
       - name: Install and exercise the same abi3 wheel on Python 3.12
-        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel)], check=True)"
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); observer = Path('target/debug/examples') / ('python_parity.exe' if sys.platform == 'win32' else 'python_parity'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel), '--observer', str(observer)], check=True)"
       - uses: actions/upload-artifact@v4
         with:
           name: python-native-${{ matrix.target }}

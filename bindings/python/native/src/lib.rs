@@ -1,18 +1,20 @@
 mod artifacts;
 mod authoring;
+mod deck;
 mod media;
 mod observations;
 mod options;
+mod reports;
 mod state;
 
-use anki_forge::build::{json_report::DiagnosticJson, BuildReportJson};
+use anki_forge::build::json_report::DiagnosticJson;
 use anki_forge::prelude::{Field, Project, Template};
 use artifacts::NativeArtifact;
 use media::NativeMediaRef;
 use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
 use serde_json::{json, Value};
-use state::ProjectState;
+use state::ObjectState;
 use std::path::PathBuf;
 
 pyo3::create_exception!(_native, OperationError, PyException);
@@ -28,7 +30,7 @@ pub fn domain_error(kind: &str, code: &str, message: &str, details: Value) -> Py
 
 #[pyclass(frozen, module = "anki_forge._native")]
 struct NativeProject {
-    state: ProjectState,
+    state: ObjectState<Project>,
 }
 
 #[pymethods]
@@ -44,7 +46,7 @@ impl NativeProject {
             project = project.default_deck(deck);
         }
         Self {
-            state: ProjectState::new(project),
+            state: ObjectState::new(project, "PROJECT"),
         }
     }
 
@@ -68,6 +70,20 @@ impl NativeProject {
                 .map(DiagnosticJson::from)
                 .collect();
             Ok(json!(diagnostics).to_string())
+        })
+    }
+
+    fn import_template_bundle(&self, py: Python<'_>, path: PathBuf) -> PyResult<()> {
+        self.state.run(py, |project| {
+            project.import_template_bundle(path).map_err(|error| {
+                domain_error(
+                    "bundle",
+                    error.code(),
+                    &error.to_string(),
+                    json!({"path": error.path(), "byte_offset": error.byte_offset()}),
+                )
+            })?;
+            Ok(())
         })
     }
 
@@ -155,28 +171,16 @@ impl NativeProject {
         let options = serde_json::from_str::<options::BuildInput>(options)
             .map_err(|error| PyValueError::new_err(error.to_string()))?
             .options();
+        self.state
+            .run(py, |project| reports::build(project.build(options)))
+    }
+
+    fn diff_against_apkg(&self, py: Python<'_>, path: PathBuf, limits: &str) -> PyResult<String> {
+        let limits = serde_json::from_str::<options::InspectInput>(limits)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?
+            .limits();
         self.state.run(py, |project| {
-            let (report, cause, code) = match project.build(options) {
-                Ok(report) => (report, None, None),
-                Err(error) => {
-                    let code = error.code().as_str().to_string();
-                    use anki_forge::build::BuildFailureCause;
-                    let cause = match error.cause {
-                        BuildFailureCause::MissingArtifact => "missing_artifact",
-                        BuildFailureCause::Diagnostics => "diagnostics",
-                        BuildFailureCause::PolicyBlocked => "policy_blocked",
-                        BuildFailureCause::Invalid => "invalid",
-                        BuildFailureCause::Io => "io",
-                        BuildFailureCause::Internal => "internal",
-                    };
-                    (*error.report, Some(cause), Some(code))
-                }
-            };
-            let mut json = serde_json::to_value(BuildReportJson::from_report(&report))
-                .map_err(|error| PyValueError::new_err(error.to_string()))?;
-            json["failure_cause"] = json!(cause);
-            json["failure_code"] = json!(code);
-            Ok((json.to_string(), report.artifact.map(NativeArtifact::from)))
+            reports::diff(project.diff_against_apkg_with_limits(path, limits))
         })
     }
 }
@@ -236,6 +240,8 @@ fn binding_metadata() -> String {
 #[pymodule(gil_used = true)]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<NativeProject>()?;
+    module.add_class::<deck::NativeDeck>()?;
+    module.add_class::<deck::NativeDeckMediaRef>()?;
     module.add_class::<NativeArtifact>()?;
     module.add_class::<NativeMediaRef>()?;
     module.add("OperationError", module.py().get_type::<OperationError>())?;

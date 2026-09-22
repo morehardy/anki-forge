@@ -18,10 +18,10 @@
 | T4 媒体注册证据 | 注册与引用链路已实现，待最终矩阵与审查 | 空/超限、bytes 快照、文件错误路径、首次注册证据、源文件变化、跨项目完整产物对照 |
 | T5 构建配置与安全更新 | 配置与迁移链路已实现；旧 CLI 文件清理待集成 | 11 预算、报告、媒体策略、更新模式、真实 0.1 更新、路径保护 |
 | T6 Artifact 与输出 | 主要链路已实现，待最终类型/分发/审查 | 原生 clone/persist、报告/异常持有、context/close、bytes、有界 short-write 复制 |
-| T7a 模板包导入 | 待实施 | |
-| T7b 独立比较 | 待实施 | |
-| T8 Deck 与转换 | 待实施 | |
-| T9 对等、打包、类型与文档 | 待实施 | |
+| T7a 模板包导入 | 已实现，待最终审查 | 独立 Rust 包对照、Unicode 字节偏移、资源中途失败回滚 |
+| T7b 独立比较 | 已实现，待最终审查 | 完整 Rust 报告对照、预算、无发布/锁文件副作用 |
+| T8 Deck 与转换 | 已实现，待最终审查 | 真实 Deck、自动身份 IO、边界检查、快照转换与追加 custom 独立对照 |
+| T9 对等、打包、类型与文档 | 集成完成；最终 CI/源码包/审查运行中 | 单一公开实现、版本检查、py.typed、consumer 类型检查、并发/fork、文档/许可证 |
 
 已有的 Node 计划和 website 工作不在本次修改范围。
 
@@ -110,3 +110,22 @@ RISK.BASELINE_UNAVAILABLE。Python 不额外要求 compare_to。
 - 512 KiB 非压缩友好媒体的 short-write sink 输出，与独立 Rust 文件生产者完整观察一致。sink 回调可继续修改同一 Project，证明复制阶段未持有项目操作锁。
 - 在独立临时目录断言 bytes/流复制成功与失败后无临时残留；异常保留 traceback 时也显式清理复制用 Artifact。
 - T3–T6 聚焦原生验证共 57 项通过；mypy 17 文件通过；native 全 target clippy 零警告。全仓库测试和最终平台包验证尚未运行。
+
+
+## T7/T8 模板、比较和 Deck
+
+- 模板导入调用 Rust loader；CSS/字体/图片及模板原文与独立手工 Rust Project 产物一致。错误保留 UTF-8 byte_offset；未知字段修复后可重试；第二个 asset 冲突不会留下第一个 asset 或 note type。
+- diff 返回完整 ProjectDiffReport / ProjectDiffError，保留 failure_cause、未知扩展与大整数。独立 Rust 报告只归一化 duration_ms。比较前后用户目录、原 APKG、lockfile 和候选临时目录保持不变。
+- Deck 持有真实 Rust Deck，支持 Basic identity selection/override、Cloze、自动身份 IO、Rust 图片尺寸/矩形检查。Project.from_deck 克隆核心快照后转换，原 Deck 可继续使用，Project 可追加自定义类型，媒体指纹和身份/revision 与 Rust 一致。
+- Project/Deck 共用构建输出适配层和独占状态租约，保持不同作者语义。共享核心的 grouped IO 限制仍明确失败。
+
+## T9 集成与候选验证（进行中）
+
+- 公开 project/media 模块已统一为原生实现，删除默认包的旧 CLI/runtime/ProductDocument 序列化层与 staging 脚本。dev-only anki_forge_python 保留；迁移指南明确 old MediaItem 观察视图与手工序号引用的版本归属。
+- 完整报告解析回归保留在 test_report，旧作者/更新安全测试迁移为真正的 Rust 调用；不再通过 mock subprocess 构造成功报告。单独保留 raw/structured 旧 CLI 消费侧回归。
+- 泛型 BuildReport 区分拥有型 ApkgArtifact 与 JSON 路径 Mapping；外部已安装 wheel 的正向 mypy 用例通过，负向用例准确报告 6 个类型错误（包括 JSON 路径无 persist_to）。
+- 公开 versions()、导入时 extension/version 错配错误、py.typed/native stub、MIT 与依赖 notices 已加入。依赖 notices 从锁图和实际 license 文件生成，缺失的两个文本取自对应发布源码的固定 commit。
+- 两个 5,000-note 并发用例证明 Rust 释放 GIL、同对象忙时拒绝修改、独立 Project 可继续工作；领域错误后对象恢复可用。
+- fork 回归先暴露子进程 close 会误删父进程 Artifact；增加 PID 检查与子进程析构保护后，close/GC 均不会删除父进程临时文件。Project/Deck fork 前置拒绝同样通过。
+- 完整 Python 首轮：162 通过，1 个新字段改名测试断言失败。核查发现核心把身份字段显示名称纳入推导；Python 与独立 Rust 全观察本来一致。测试改为分别验证重排/改名/显式 ID，三个聚焦用例通过，并把迁移影响写入指南，没有修改 Rust 身份算法。
+- 本机 release wheel 已在独立 venv/仓库外中文路径，通过版本、Basic、媒体证据、Artifact、完整 native_workflow 示例及正负类型消费者。完整平台矩阵、sdist 重建、最终审查仍在运行；不能据此标记整体完成。

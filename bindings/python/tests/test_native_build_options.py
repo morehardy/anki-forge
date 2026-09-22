@@ -145,3 +145,23 @@ def test_inspect_budget_also_applies_to_baseline_and_respects_update_mode(tmp_pa
         assert output.read_bytes() == b"previous output"
     else:
         report.ensure_success()
+
+
+def test_read_only_output_directory_keeps_previous_publication(tmp_path):
+    import os
+    if os.name == "nt":
+        pytest.skip("POSIX permission bits do not make a Windows directory read-only")
+    directory = tmp_path / "read-only"
+    directory.mkdir()
+    target = directory / "deck.apkg"
+    target.write_bytes(b"previous publication")
+    directory.chmod(0o555)
+    try:
+        if os.access(directory, os.W_OK):
+            pytest.skip("current account bypasses POSIX directory permissions")
+        report = Project("Permissions").add_note(Note.basic("Front", "Back")).write_apkg(target)
+        assert report.status != "success"
+        assert report.diagnostics
+        assert target.read_bytes() == b"previous publication"
+    finally:
+        directory.chmod(0o755)

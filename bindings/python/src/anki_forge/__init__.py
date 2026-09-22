@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ._loader import Versions, __version__, versions
 from .diagnostics import (
     Diagnostic,
     DiagnosticsError,
@@ -12,18 +13,25 @@ from .diagnostics import (
     ProjectAddError,
     ProductNoteError,
     MediaError,
+    TemplateBundleError,
+    ProjectDiffError,
+    DeckError,
 )
-from .native_media import MediaRef, MediaRegistry
+from .media import MediaRef, MediaRegistry
 from .note import Note
 from .notetype import Field, GenerationRule, NoteType, Template
-from .native_project import Project
+from .project import Project
+from .deck import Deck, BasicIdentityOverride, DeckMediaRef, DeckMediaRegistry
 from .artifact import ApkgArtifact
 from .identity import IdentityRecipe
 from .content import Content
 from .options import BuildOptions, DiagnosticBehavior, InspectLimits, MediaMode, MediaPolicy, RiskLevel, UpdateSafetyMode
-from .report import BuildReport, ValidationReport
+from .report import BuildReport, ProjectDiffReport, ValidationReport
 
 __all__ = [
+    "__version__",
+    "versions",
+    "Versions",
     "Diagnostic",
     "DiagnosticsError",
     "BuildError",
@@ -35,6 +43,14 @@ __all__ = [
     "ProjectAddError",
     "ProductNoteError",
     "MediaError",
+    "TemplateBundleError",
+    "ProjectDiffError",
+    "ProjectDiffReport",
+    "Deck",
+    "DeckError",
+    "BasicIdentityOverride",
+    "DeckMediaRef",
+    "DeckMediaRegistry",
     "MediaRef",
     "MediaRegistry",
     "Note",

@@ -275,7 +275,7 @@ class NoteType:
         return self
 
     def validate(self) -> NoteType:
-        from .native_project import Project
+        from .project import Project
 
         Project("NoteType validation").add_notetype(self)
         return self

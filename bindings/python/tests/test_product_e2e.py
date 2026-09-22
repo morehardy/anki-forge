@@ -9,30 +9,6 @@ from anki_forge import DiagnosticsError, Field, Note, NoteType, Project, Templat
 from anki_forge.report import BuildReport
 
 
-def find_repo_root() -> Path:
-    for parent in Path(__file__).resolve().parents:
-        if (parent / "contracts" / "manifest.yaml").is_file():
-            return parent
-    raise RuntimeError("contracts/manifest.yaml not found from test file parents")
-
-
-def release_contract_tools_exists() -> bool:
-    try:
-        root = find_repo_root()
-    except RuntimeError:
-        return False
-    executable = "contract_tools.exe" if os.name == "nt" else "contract_tools"
-    return (root / "target" / "release" / executable).is_file()
-
-
-@pytest.fixture(autouse=True)
-def require_release_contract_tools_binary():
-    if not release_contract_tools_exists():
-        pytest.fail(
-            "release contract_tools binary missing; run `cargo build -p contract_tools --release` before product E2E tests"
-        )
-
-
 def minimal_wav_bytes() -> bytes:
     return base64.b64decode("UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=")
 
@@ -49,13 +25,10 @@ def test_multiline_templates_and_css_preserve_source_and_build(tmp_path, newline
     )
     project = Project("Source").add_notetype(note_type).add_note(Note("source").text("front", "hello"))
 
-    document = project.to_product_document()
-    exported_type = document["note_types"][0]
-    assert exported_type["css"] == css
-    assert exported_type["templates"][0]["front"] == front
-    assert exported_type["templates"][0]["back"] == back
-    assert exported_type["templates"][0]["browser_front"] == front
-    assert exported_type["templates"][0]["browser_back"] == back
+    exported_type = project.notetypes["source"]
+    assert exported_type.css_value == css
+    template = exported_type.templates[0]
+    assert (template.front, template.back, template.browser_front, template.browser_back) == (front, back, front, back)
     project.write_apkg(tmp_path / "source.apkg").ensure_success()
 
 
@@ -188,20 +161,12 @@ def test_python_custom_media_project_writes_apkg(tmp_path):
 
 
 def test_missing_media_file_returns_structured_diagnostics(tmp_path):
-    missing = tmp_path / "missing.wav"
+    from anki_forge import MediaError
     project = Project("Deck")
-    ref = project.media.add_file(missing, export_as="missing.wav")
-    nt = (
-        NoteType.custom("audio")
-        .field(Field("Audio", key="audio", required=True))
-        .template(Template("Card", front="{{Audio}}", back="{{Audio}}"))
-    )
-    project.add_notetype(nt)
-    project.add_note(Note("audio", stable_id="audio:missing").sound("audio", ref))
-    report = project.write_apkg(tmp_path / "missing-media.apkg")
-    with pytest.raises(DiagnosticsError):
-        report.ensure_success()
-    assert any(diagnostic.code == "MEDIA.SOURCE_MISSING" for diagnostic in report.diagnostics)
+    with pytest.raises(MediaError) as caught:
+        project.media.add_file(tmp_path / "missing.wav")
+    assert caught.value.code == "MEDIA.SOURCE_MISSING"
+    assert caught.value.path == str(tmp_path / "missing.wav")
 
 
 def test_cloze_note_without_cloze_marker_returns_structured_diagnostics(tmp_path):

@@ -7,24 +7,52 @@ use std::sync::Mutex;
 #[pyclass(frozen, module = "anki_forge._native")]
 pub struct NativeArtifact {
     inner: Mutex<Option<ApkgArtifact>>,
+    pid: u32,
 }
 
 impl From<ApkgArtifact> for NativeArtifact {
     fn from(artifact: ApkgArtifact) -> Self {
         Self {
             inner: Mutex::new(Some(artifact)),
+            pid: std::process::id(),
         }
     }
 }
 
 impl NativeArtifact {
+    fn check_process(&self) -> PyResult<()> {
+        if self.pid != std::process::id() {
+            return Err(PyRuntimeError::new_err("BINDING.FORKED_OBJECT"));
+        }
+        Ok(())
+    }
+
     fn snapshot(&self) -> PyResult<ApkgArtifact> {
+        self.check_process()?;
         self.inner
             .lock()
             .map_err(|_| PyRuntimeError::new_err("BINDING.ARTIFACT_FAILED"))?
             .as_ref()
             .cloned()
             .ok_or_else(|| PyRuntimeError::new_err("BINDING.ARTIFACT_CLOSED"))
+    }
+}
+
+impl Drop for NativeArtifact {
+    fn drop(&mut self) {
+        if self.pid != std::process::id() {
+            // Fork duplicates Arc counts without sharing ownership accounting.
+            // Do not run the copied TempDir destructor in the child. get_mut
+            // needs no lock, including if a parent thread held it during fork.
+            if let Some(artifact) = self
+                .inner
+                .get_mut()
+                .unwrap_or_else(|error| error.into_inner())
+                .take()
+            {
+                std::mem::forget(artifact);
+            }
+        }
     }
 }
 
@@ -47,6 +75,7 @@ impl NativeArtifact {
     }
 
     fn path(&self) -> PyResult<PathBuf> {
+        self.check_process()?;
         let guard = self
             .inner
             .lock()
@@ -58,6 +87,7 @@ impl NativeArtifact {
     }
 
     fn close(&self) -> PyResult<()> {
+        self.check_process()?;
         self.inner
             .lock()
             .map_err(|_| PyRuntimeError::new_err("BINDING.ARTIFACT_FAILED"))?
