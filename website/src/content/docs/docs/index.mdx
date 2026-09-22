@@ -1,0 +1,51 @@
+---
+title: Build Anki decks from code
+description: Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.
+---
+
+import { sitePath, repository } from '../../../lib/site';
+
+Anki Forge turns notes, templates and media into Anki `.apkg` files. Use it when
+your learning content lives in code or structured data and you want to rebuild
+and distribute decks repeatedly.
+
+## Start with your language
+
+These guides follow the current source checkout. The languages have separate
+packaging and verification status; <a href={sitePath('/docs/languages/')}>choose your entry point</a>.
+
+| Language | First result | Continue |
+| --- | --- | --- |
+| Rust | <a href={sitePath('/docs/quickstart/')}>Run the first-deck example</a> | <a href={sitePath('/docs/installation/')}>Add to your application</a> |
+| Node / TypeScript | <a href={sitePath('/docs/node-quickstart/')}>Build and run the native SDK</a> | <a href={sitePath('/docs/node-api/')}>API and async behavior</a> |
+| Python | <a href={sitePath('/docs/python-quickstart/')}>Install and export a deck</a> | <a href={sitePath('/docs/python-api/')}>API and output ownership</a> |
+
+Prefer to see the result first? <a href={sitePath('/examples/')}>Explore the card examples</a>
+and download their generated packages.
+
+## Understand the pieces
+
+A note holds fields; a note type and its templates turn those fields into cards.
+Decks group the resulting cards in Anki. The <a href={sitePath('/docs/concepts/')}>core concepts</a>
+explain these relationships, Deck versus Project, and stable identity.
+
+## Build your next feature
+
+- <a href={sitePath('/docs/cards/')}>Basic and Cloze</a>: create question/answer and fill-in-the-blank cards.
+- <a href={sitePath('/docs/media/')}>Images and audio</a>: register real assets and attach them to cards.
+- <a href={sitePath('/docs/custom-notetypes/')}>Custom note types</a> and <a href={sitePath('/docs/templates/')}>template bundles</a>: define fields, layouts and CSS.
+- <a href={sitePath('/docs/image-occlusion/')}>Image Occlusion</a>: create questions from regions of an image.
+- <a href={sitePath('/docs/updates/')}>Update and distribute</a>: carry identity and revision evidence between releases.
+
+The task guides use runnable Rust examples. Node and Python API pages explain
+their corresponding interfaces and any differences.
+
+## Find answers and contribute
+
+Use <a href={sitePath('/docs/troubleshooting/')}>troubleshooting</a> when an operation
+fails, and <a href={sitePath('/docs/compatibility/')}>compatibility and releases</a>
+before depending on a candidate package or promising client behavior.
+
+Anki Forge is licensed under <a href={`${repository}/blob/main/LICENSE`}>MIT</a>.
+Report reproducible issues on <a href={`${repository}/issues`}>GitHub</a>, or read
+the <a href={`${repository}/blob/main/docs/development.md`}>contributor guide</a>.

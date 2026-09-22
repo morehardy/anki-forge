@@ -1,0 +1,6 @@
+---
+import { Code } from 'astro:components';
+interface Props { code: string; lang?: 'rust' | 'bash' | 'json' | 'text' }
+const { code, lang = 'rust' } = Astro.props;
+---
+<div class="code-block"><Code code={code} lang={lang} themes={{ light: 'github-light', dark: 'github-dark' }} wrap={true} tabindex="0" aria-label={`${lang === 'bash' ? 'Shell' : lang} code`} /></div>

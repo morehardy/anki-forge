@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+import { repository, sitePath } from '../lib/site';
+const links = [
+  { label: 'Guide', path: '/docs/' },
+  { label: 'Examples', path: '/examples/' },
+  { label: 'Blog', path: '/blog/' },
+];
+---
+<header class="site-header container">
+  <a class="wordmark" href={sitePath('/')} aria-label="ankiforge home"><Icon name="cards" />ankiforge</a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    {links.map(link => <a href={sitePath(link.path)} aria-current={Astro.url.pathname.startsWith(sitePath(link.path)) ? 'page' : undefined}>{link.label}</a>)}
+    <a href={repository}>GitHub <Icon name="arrowUpRight" /></a>
+  </nav>
+  <div class="header-tools">
+    <label class="theme-label"><span class="sr-only">Color theme</span><select data-theme-picker aria-label="Color theme"><option value="auto">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    <details class="mobile-menu">
+      <summary>Menu</summary>
+      <nav aria-label="Mobile navigation">
+        {links.map(link => <a href={sitePath(link.path)}>{link.label}</a>)}
+        <a href={repository}>GitHub <Icon name="arrowUpRight" /></a>
+      </nav>
+    </details>
+  </div>
+</header>

@@ -1,0 +1,9 @@
+---
+import { updateExample } from '../lib/examples';
+import Icon from './Icon.astro';
+---
+<div class="identity-example" data-update-demo data-before={updateExample.before} data-after={updateExample.after}>
+  <div class="identity-label"><span>Stable note ID</span><code>{updateExample.stableId}</code></div>
+  <div class="identity-fields"><div><span>Front</span><p>{updateExample.front}</p></div><div><span>Back</span><p data-update-value>{updateExample.before}</p></div></div>
+  <div class="identity-controls"><p data-update-status aria-live="polite">Try a content change.</p><button type="button" class="text-button" data-update><span>Update the answer</span><Icon name="arrowRight" /></button></div>
+</div>

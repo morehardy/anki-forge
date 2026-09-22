@@ -184,15 +184,17 @@ for lockfile maintenance, risk thresholds, and build reports.
 | --- | --- | --- |
 | **Rust** | `Deck` for simple exports; `Project` for custom authoring and updates | Rust 1.92+ · [guide](docs/rust-guide.md) |
 | **Node.js / TypeScript** | Native Rust `Deck` and `Project` objects | Node 22.13+ · [SDK setup and status](bindings/node/README.md) |
-| **Python** | `Project`, `Note`, custom note types, and media through the Rust runtime | Python 3.11+ · [source setup](bindings/python/README.md#from-a-source-checkout) |
+| **Python** | `Project`, `Note`, custom note types, and media through the Rust runtime | CPython 3.11/3.12 · [source setup](bindings/python/README.md#from-a-source-checkout) |
 
 Moving from genanki? See the [Python migration guide](docs/python/genanki-migration.md).
 
 **Release status:** the checkout declares Rust `0.1.0`, Node `0.2.0`, and Python
-`0.1.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
+`0.2.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
 outstanding publication gates; npm publication and full platform verification
-for the Node candidate are pending. Follow the linked source instructions and
-release documentation before relying on registry availability.
+for the Node candidate are pending. Python 0.2 has recorded wheel/source verification
+([scope](bindings/python/COVERAGE.md)); this is not a PyPI publication notice.
+Follow the linked source instructions and release documentation before relying
+on registry availability.
 
 ## Compatibility and limitations
 
@@ -201,8 +203,8 @@ release documentation before relying on registry availability.
 - Image Occlusion currently supports `hide-all-guess-one`. The
   `hide-one-guess-one` renderer has a grouped-cloze limitation; see the
   [recorded behavior](bindings/node/README.md#deck-and-image-occlusion).
-- Basic text is escaped. Cloze text preserves HTML and raw `{{cN::...}}` markers;
-  use trusted HTML on that path.
+- Project Basic/text setters escape text. Cloze and Deck convenience inputs preserve
+  HTML; see [content semantics](docs/concepts.md#text-and-html).
 - Build reports and temporary artifacts have explicit ownership and persistence
   rules. See [artifact ownership](anki_forge/README.md#artifact-ownership).
 

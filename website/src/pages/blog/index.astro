@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { sitePath } from '../../lib/site';
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<SiteLayout title="Blog" description="Practical guides to generating Anki decks, designing card templates, and keeping note identities stable with Anki Forge.">
+  <div class="container">
+    <header class="page-intro"><h1>Notes on making notes.</h1><p>Practical guides and engineering decisions behind Anki Forge.</p><a class="text-link" href={sitePath('/rss.xml')}>Follow with RSS ↗</a></header>
+    <div class="post-grid blog-list">{posts.map(post => <PostCard post={post} />)}</div>
+  </div>
+</SiteLayout>

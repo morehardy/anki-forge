@@ -1,0 +1,54 @@
+---
+title: A note’s identity should outlive its wording
+description: How stable IDs and a build baseline work together when you update a generated Anki deck.
+date: 2026-09-22
+category: Engineering
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import { updateExample } from '../../lib/examples';
+import { sitePath } from '../../lib/site';
+
+A generated deck is rarely finished after its first export. Definitions improve, examples become clearer, and mistakes get corrected. The next build needs to know which notes are the same notes with better content.
+
+Consider this small edit:
+
+| Field | First version | Next version |
+| --- | --- | --- |
+| Front | hola | hola |
+| Back | hello | hello; hi |
+| Stable ID | es:hola | es:hola |
+
+The meaning has expanded. The logical note is still the same.
+
+## Separate identity from content
+
+An explicit stable ID gives a note a durable key. Keep that ID when you edit the note, and choose a new ID when you create a different logical note.
+
+Identity also has a project context. Keep the project’s stable ID consistent across releases of the same deck. A note ID on its own is only one part of a repeatable update workflow.
+
+## Give the next build a baseline
+
+A previous package tells Anki Forge what was exported before. Use it when building the revised project:
+
+<CodeBlock code={updateExample.source} />
+
+In this excerpt, `project` contains the revised note, `previous` points to version 1, and `next` is a separate path for version 2. The <a href={sitePath('/generated/website_showcase.rs')}>full example</a> includes both project definitions and verifies that one note identity is preserved.
+
+Keep the input package and output package at different paths. Overwriting the baseline removes evidence you need to understand and verify the release.
+
+## An identity lockfile is another baseline
+
+For a first release, `first_update_safe_build(...)` establishes an identity lockfile. Later builds can read it with `update_safe(...)`.
+
+Reading a lockfile does not automatically advance it. For a release that should record new notes and deletions as the next baseline, explicitly request `write_identity_lockfile(true)`. Store the resulting lockfile alongside your release history.
+
+The <a href={sitePath('/docs/updates/')}>authoring guide</a> contains the complete sequence and describes the guarantees and limits.
+
+## Inspect the build and the import
+
+Check the build report and its update-safety diagnostics before distributing a package. If the build cannot reconcile a note’s identity, investigate the source and baseline instead of treating an output file as proof that the update is correct.
+
+Anki then applies its own import behavior. Import settings, existing note content, local edits, and the Anki version can influence the result. Stable identity helps match the note; it does not override those choices or promise that every import preserves every aspect of local state.
+
+The <a href={sitePath('/examples/#updates')}>two-version example</a> provides both packages so you can try a small, inspectable update before designing your own release process.

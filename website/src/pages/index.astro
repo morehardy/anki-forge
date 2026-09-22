@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ExampleWorkbench from '../components/ExampleWorkbench.astro';
+import UpdateDemo from '../components/UpdateDemo.astro';
+import InstallCommand from '../components/InstallCommand.astro';
+import PostCard from '../components/PostCard.astro';
+import Icon from '../components/Icon.astro';
+import { repository, sitePath } from '../lib/site';
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+---
+<SiteLayout>
+  <div class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Anki decks,<br /><span>built from code.</span></h1>
+      <div class="hero-copy">
+        <p>Turn knowledge into Anki decks with Rust. Write your notes, add media, and keep identities stable as content changes.</p>
+        <div class="hero-actions"><a class="button" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a><a class="text-link" href={repository}>View on GitHub <Icon name="arrowUpRight" /></a></div>
+      </div>
+    </section>
+    <ExampleWorkbench />
+    <p class="demo-caption">Real code. Downloadable decks. A simplified preview of the cards inside.</p>
+
+    <section class="section identity-section" aria-labelledby="identity-heading" data-reveal>
+      <div class="section-copy">
+        <h2 id="identity-heading">Let your notes evolve.<br />Keep their identity.</h2>
+        <p>Correct a definition or add an example. Stable IDs and a previous build help Anki Forge match existing notes when you export again.</p>
+        <a class="text-link" href={sitePath('/docs/rust-guide/#updating-distributed-decks')}>Understand deck updates <Icon name="arrowRight" /></a>
+      </div>
+      <UpdateDemo />
+    </section>
+
+    <section class="features" aria-label="More ways to build" data-reveal>
+      <div class="feature"><Icon name="scan" /><div><h3>Catch problems before export.</h3><p>Inspect diagnostics for missing fields, media, and template problems. Make validation part of your build.</p><a class="text-link" href={sitePath('/docs/rust-guide/#projects-and-diagnostics')}>Explore validation <Icon name="arrowRight" /></a></div></div>
+      <div class="feature"><Icon name="palette" /><div><h3>Your cards. Your templates.</h3><p>Start with Basic and Cloze, or define your own note types. Keep HTML, CSS, and media in reusable template bundles.</p><a class="text-link" href={sitePath('/docs/templates/')}>Explore templates <Icon name="arrowRight" /></a></div></div>
+    </section>
+
+    <section class="section start-section" aria-labelledby="start-heading" data-reveal>
+      <div class="section-copy"><h2 id="start-heading">Your first deck<br />starts here.</h2><p>Run the smallest example from the source checkout, then open <code>spanish.apkg</code> in Anki. Requires Rust 1.92 or later.</p><a class="text-link" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a></div>
+      <InstallCommand />
+    </section>
+
+    <section class="blog-section" aria-labelledby="blog-heading" data-reveal>
+      <h2 id="blog-heading">From the project</h2>
+      <div class="post-grid">{posts.map(post => <PostCard post={post} />)}</div>
+    </section>
+  </div>
+</SiteLayout>

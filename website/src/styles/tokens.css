@@ -1,0 +1,28 @@
+/* One palette shared by the public site and Starlight documentation. */
+:root {
+  --af-bg: #f8faf9;
+  --af-paper: #fdfefd;
+  --af-soft: #edf3f1;
+  --af-ink: #142d29;
+  --af-muted: #536b65;
+  --af-line: #d9e4df;
+  --af-accent: #116e60;
+  --af-on-accent: #fdfefd;
+  --af-wash: #e0f0e9;
+  --af-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --af-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --af-radius: 12px;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --af-bg: #121b1a;
+  --af-paper: #1b2826;
+  --af-soft: #20312e;
+  --af-ink: #e4eeeb;
+  --af-muted: #a3b9b1;
+  --af-line: #354943;
+  --af-accent: #91d5c1;
+  --af-on-accent: #103c31;
+  --af-wash: #29493d;
+  color-scheme: dark;
+}

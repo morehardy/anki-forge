@@ -1,0 +1,28 @@
+@import './tokens.css';
+@import './code.css';
+
+:root {
+  --sl-font: var(--af-font);
+  --sl-font-mono: var(--af-mono);
+  --sl-color-accent-low: #153e34;
+  --sl-color-accent: #62b9a1;
+  --sl-color-accent-high: #bee8d8;
+  --sl-color-bg: var(--af-bg);
+  --sl-color-bg-nav: var(--af-bg);
+  --sl-color-bg-sidebar: var(--af-bg);
+  --sl-color-text: var(--af-ink);
+  --sl-color-hairline-light: var(--af-line);
+  --sl-color-hairline: var(--af-line);
+  --sl-content-width: 49rem;
+  --sl-sidebar-width: 18rem;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e0f0e9;
+  --sl-color-accent: #116e60;
+  --sl-color-accent-high: #164d41;
+}
+.site-title { letter-spacing: -0.04em; }
+.sl-markdown-content h1, .sl-markdown-content h2, .sl-markdown-content h3 { letter-spacing: -0.025em; }
+.sl-markdown-content a { text-underline-offset: 3px; }
+.sl-markdown-content .code-block { margin-block: 1.5rem; border: 1px solid var(--af-line); border-radius: 8px; overflow: clip; background: var(--af-paper); }
+:focus-visible { outline-offset: 4px; }

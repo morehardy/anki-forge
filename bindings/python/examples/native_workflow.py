@@ -3,10 +3,26 @@ from __future__ import annotations
 
 import base64
 import io
+import math
+import struct
+import wave
 from pathlib import Path
 import sys
 
 from anki_forge import BuildOptions, Deck, Field, Note, NoteType, Project, Template, versions
+
+
+def tone_wav() -> bytes:
+    stream = io.BytesIO()
+    with wave.open(stream, "wb") as audio:
+        audio.setnchannels(1)
+        audio.setsampwidth(2)
+        audio.setframerate(8000)
+        audio.writeframes(b"".join(
+            struct.pack("<h", int(4000 * math.sin(2 * math.pi * 440 * i / 8000)))
+            for i in range(8000)
+        ))
+    return stream.getvalue()
 
 
 def main(root: Path) -> None:
@@ -16,7 +32,7 @@ def main(root: Path) -> None:
         .field(Field("Prompt", key="prompt", identity=True))
         .field(Field("Answer", key="answer"))
         .template(Template("Forward", key="forward", front="{{Prompt}}", back="{{FrontSide}}<hr>{{Answer}}")))
-    sound = project.media.add_bytes(source_label="hello", data=b"RIFF example audio", export_as="hello.wav")
+    sound = project.media.add_bytes(source_label="hello", data=tone_wav(), export_as="hello.wav")
     project.add_note(Note("word").text("prompt", "hola").text("answer", "hello"))
     project.add_note(Note.basic("Audio", "", stable_id="audio").sound("back", sound))
     project.validate().ensure_success()

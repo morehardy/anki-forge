@@ -170,11 +170,12 @@ cargo run -q -p anki_forge --example readme_update
 | --- | --- | --- |
 | **Rust** | 用 `Deck` 快速导出；用 `Project` 自定义内容并管理更新 | Rust 1.92+ · [使用指南](docs/rust-guide.md) |
 | **Node.js / TypeScript** | 原生 Rust `Deck` 和 `Project` 对象 | Node 22.13+ · [SDK 安装与状态](bindings/node/README.md) |
-| **Python** | 通过 Rust 运行时使用 `Project`、`Note`、自定义笔记类型和媒体 | Python 3.11+ · [源码安装](bindings/python/README.md#from-a-source-checkout) |
+| **Python** | 通过 Rust 运行时使用 `Project`、`Note`、自定义笔记类型和媒体 | CPython 3.11/3.12 · [源码安装](bindings/python/README.md#from-a-source-checkout) |
 
 从 genanki 迁移？请参考 [Python 迁移指南](docs/python/genanki-migration.md)。
 
-**发布状态：** 当前源码声明的版本为 Rust `0.1.0`、Node `0.2.0` 和 Python `0.1.0`。
+**发布状态：** 当前源码声明的版本为 Rust `0.1.0`、Node `0.2.0` 和 Python `0.2.0`。
+Python 0.2 已记录 wheel 与源码包验证，见[验证范围](bindings/python/COVERAGE.md)；这不代表已发布到 PyPI。
 [Rust 发布审计](docs/rust-crate-release-readiness.md) 记录了尚未完成的发布条件；
 Node 候选版本的 npm 发布和完整平台验证也仍待完成。
 在依赖软件包仓库中的可用版本之前，请先查看上述源码安装说明和发布文档。
@@ -185,8 +186,8 @@ Node 候选版本的 npm 发布和完整平台验证也仍待完成。
   `internal-tools` 仅供仓库内部工具使用。详见[受支持的接口](anki_forge/README.md#supported-01-interface)。
 - 图片遮挡目前支持 `hide-all-guess-one`。`hide-one-guess-one` 渲染器存在分组填空限制，
   详见[行为记录](bindings/node/README.md#deck-and-image-occlusion)。
-- Basic 文本会进行转义。Cloze 文本保留 HTML 和原始 `{{cN::...}}` 标记，
-  因此请只在该路径中使用可信的 HTML。
+- Project 的 Basic/text 接口会转义文本；Cloze 和 Deck 便捷接口保留 HTML。
+  详见[内容语义](docs/concepts.md#text-and-html)。
 - 构建报告和临时产物有明确的归属与保留规则，详见[产物归属](anki_forge/README.md#artifact-ownership)。
 
 ## 参与贡献

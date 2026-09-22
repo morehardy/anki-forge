@@ -1,0 +1,25 @@
+---
+import { examples } from '../lib/examples';
+import { sitePath } from '../lib/site';
+import CodeBlock from './CodeBlock.astro';
+import CardPreview from './CardPreview.astro';
+interface Props { id?: string }
+const { id = 'examples' } = Astro.props;
+---
+<section class="example-workbench" id={id} data-workbench aria-label="Code and card examples">
+  <div class="workbench-bar">
+    <div class="example-tabs" role="tablist" aria-label="Card type">
+      {examples.map((example, index) => <button type="button" role="tab" id={`${id}-tab-${example.id}`} aria-controls={`${id}-panel-${example.id}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-tab={example.id}>{example.label}</button>)}
+    </div>
+    <span class="workbench-hint">Rust source → card preview</span>
+  </div>
+  {examples.map((example, index) => <div class="example-panel" role="tabpanel" id={`${id}-panel-${example.id}`} aria-labelledby={`${id}-tab-${example.id}`} data-example={example.id} hidden={index !== 0}>
+    <div class="example-source">
+      <div class="source-label"><span>{example.id}.rs</span><a href={sitePath('/generated/website_showcase.rs')}>Full source ↗</a></div>
+      <CodeBlock code={example.source} />
+      <div class="source-output"><span>Output</span><a href={sitePath(`/generated/${example.file}`)} download>{example.file} ↓</a></div>
+    </div>
+    <CardPreview example={example} prefix={`${id}-${example.id}`} />
+  </div>)}
+  <noscript><p class="no-script-note">This is the Basic example. <a href={sitePath('/examples/')}>View all card examples</a> and download their decks.</p></noscript>
+</section>

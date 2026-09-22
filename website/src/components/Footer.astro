@@ -1,0 +1,7 @@
+---
+import { repository, sitePath } from '../lib/site';
+---
+<footer class="site-footer container">
+  <p>Anki Forge. Open source, built with Rust.</p>
+  <nav aria-label="Footer"><a href={sitePath('/rss.xml')}>RSS</a><a href={`${repository}/blob/main/LICENSE`}>MIT license</a><a href={repository}>GitHub ↗</a></nav>
+</footer>

@@ -1,0 +1,7 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { sitePath } from '../lib/site';
+---
+<SiteLayout title="Page not found" description="This page could not be found. Return to Anki Forge or browse the authoring guide." noindex>
+  <div class="container"><section class="page-intro"><h1>This page is missing.</h1><p>The link may have changed. You can return home or find what you need in the guide.</p><div class="hero-actions"><a class="button" href={sitePath('/')}>Back home</a><a class="text-link" href={sitePath('/docs/')}>Browse the guide →</a></div></section></div>
+</SiteLayout>

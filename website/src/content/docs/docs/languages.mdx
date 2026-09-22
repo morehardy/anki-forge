@@ -1,0 +1,53 @@
+---
+title: Choose your language
+description: Compare Rust, Node and Python source versions, installation paths and verified platform scope.
+---
+
+import { sitePath } from '../../../lib/site';
+import versions from '../../../generated/versions.json';
+
+All three interfaces build through the Rust core. Choose the language of your
+application. Their packages and verification scopes develop independently.
+These versions are read from this checkout's package metadata; they do not imply
+that a release is available in a public registry.
+
+<table>
+  <thead><tr><th>Language</th><th>Source version</th><th>Environment</th><th>Start here</th></tr></thead>
+  <tbody>
+    <tr><td>Rust</td><td>{versions.rust}</td><td>Rust 1.92+</td><td><a href={sitePath('/docs/installation/')}>Add to your application</a></td></tr>
+    <tr><td>Node / TypeScript</td><td>{versions.node}</td><td>Node 22.13+</td><td><a href={sitePath('/docs/node-quickstart/')}>Source setup and first deck</a></td></tr>
+    <tr><td>Python</td><td>{versions.python}</td><td>Verified on CPython 3.11/3.12</td><td><a href={sitePath('/docs/python-quickstart/')}>Native installation and first deck</a></td></tr>
+  </tbody>
+</table>
+
+## Rust
+
+Use the core authoring API directly for Deck, Project, custom note types, media,
+validation and update baselines. The source setup uses a local path dependency;
+default contract resources are bundled with the crate.
+
+Read the <a href={sitePath('/docs/rust-api/')}>Rust API guide</a> for common methods
+and compiler-generated documentation instructions.
+
+## Node and TypeScript
+
+The native SDK owns Rust objects and provides asynchronous media/build operations,
+ESM/CommonJS entry points and TypeScript declarations. Await operations on each
+Project or Deck. The quickstart builds the host binary and can package it for a
+separate local application.
+
+## Python
+
+Python 0.2 uses a native extension built with Maturin. Source consumers must build
+the extension; a matching installed wheel does not need Cargo or contract tools.
+The repository records wheel checks for four platforms on CPython 3.11 and 3.12.
+
+Existing users should read <a href={sitePath('/docs/python-migration/')}>Python 0.1 to 0.2</a>.
+For genanki users, the <a href={sitePath('/docs/genanki-migration/')}>migration guide</a>
+explains fields, templates, HTML and media differences.
+
+## Verify the release you intend to use
+
+The <a href={sitePath('/docs/compatibility/')}>compatibility and release status</a>
+page separates platform evidence, known limitations and publication. Check it
+before adopting a registry dependency or committing to a platform.

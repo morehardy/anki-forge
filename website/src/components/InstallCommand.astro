@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+---
+<div class="install-command" data-copy-block>
+  <div class="source-label"><span>Run from the source checkout</span><button type="button" class="text-button copy-button" data-copy><Icon name="copy" /><span>Copy</span></button></div>
+  <pre><code data-copy-content>git clone https://github.com/morehardy/anki-forge.git
+cd anki-forge
+cargo run -q -p anki_forge --example target_api_basic</code></pre>
+  <div class="install-command-footer"><p>Git + Rust 1.92 or later</p><p data-copy-status role="status"></p></div>
+</div>

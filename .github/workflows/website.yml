@@ -1,0 +1,123 @@
+name: Website
+
+on:
+  pull_request:
+    paths:
+      - 'website/**'
+      - 'anki_forge/**'
+      - 'contract_tools/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'docs/**'
+      - 'bindings/**'
+      - 'README.md'
+      - 'README.zh-CN.md'
+      - '.github/workflows/website.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - 'anki_forge/**'
+      - 'contract_tools/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'docs/**'
+      - 'bindings/**'
+      - 'README.md'
+      - 'README.zh-CN.md'
+      - '.github/workflows/website.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SITE_URL: ${{ vars.SITE_URL || 'https://morehardy.github.io' }}
+  SITE_BASE: ${{ vars.SITE_BASE || '/anki-forge' }}
+  SITE_CUSTOM_DOMAIN: ${{ vars.SITE_CUSTOM_DOMAIN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.92.0'
+      - uses: Swatinem/rust-cache@v2
+      - run: npm ci
+      - run: npm test
+      - run: npm run check:examples
+      - run: npm run check
+      - run: npm run build
+      - run: npm run check:site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/dist
+
+  python-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.92.0'
+      - uses: Swatinem/rust-cache@v2
+      - name: Follow the native source installation and run documented programs
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install maturin==1.15.0
+          maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
+          python bindings/python/examples/docs_basic.py target/docs-python/basic
+          python bindings/python/examples/docs_media.py target/docs-python/media
+          python bindings/python/examples/native_workflow.py target/docs-python/workflow
+
+  node-examples:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bindings/node
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.92.0'
+      - uses: Swatinem/rust-cache@v2
+      - run: npm run setup
+      - run: npm run build
+      - run: npm run example:minimal
+      - run: npm run test:installed
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [build, python-examples, node-examples]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

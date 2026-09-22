@@ -133,25 +133,20 @@ See the [Node SDK development commands](../bindings/node/README.md#develop-and-v
 for building the native addon and testing installed packages.
 
 The [Python setup guide](../bindings/python/README.md#from-a-source-checkout)
-uses a PyO3/Maturin extension and a Python 3.11/3.12 venv. Rust 1.92.0 is the
-baseline. After activating the venv:
+builds the native extension with Maturin. Use a CPython 3.11/3.12 virtual
+environment; PYTHONPATH alone does not build the extension.
 
 ```sh
-python -m pip install maturin==1.15.0 pytest==9.1.1 mypy==2.3.1
 maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
 cargo build -p anki_forge_python_native --example python_parity --locked
-cargo build -p contract_tools --release
-python -m pytest bindings/python/tests -q --ignore=bindings/python/tests/test_import_isolation.py
+python -m pytest bindings/python/tests -q
 python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
-python bindings/python/examples/native_workflow.py target/python-example
 ```
 
-`contract_tools` is needed only for the dev-only legacy CLI tests; public Python
-builds call the native core. Build a wheel before import-isolation tests. The
-[installed matrix](../.github/workflows/python-native-trial.yml) builds real abi3
-wheels, then executes the public suite, independent Rust parity and typing on
-Python 3.11/3.12 outside the checkout. The older `anki_forge_python` package is
-excluded from public wheels.
+The dev-only `anki_forge_python` CLI wrapper remains separate from the public
+wheel. See [Python coverage](../bindings/python/COVERAGE.md) for installed-wheel,
+source-distribution and platform verification. User guide editing and executable
+snippets are documented in [documentation maintenance](documentation.md).
 
 ## Manual Anki Desktop validation
 

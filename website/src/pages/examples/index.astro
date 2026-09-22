@@ -1,0 +1,34 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import CardPreview from '../../components/CardPreview.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import UpdateDemo from '../../components/UpdateDemo.astro';
+import Icon from '../../components/Icon.astro';
+import { examples, updateExample } from '../../lib/examples';
+import { sitePath } from '../../lib/site';
+const descriptions: Record<string, string> = {
+  basic: 'A Spanish greeting with a question, an answer, and an explicit stable ID. Start here for simple front-and-back cards.',
+  cloze: 'Hide a word in context with Anki’s cloze syntax. This note has one deletion, so it generates one card.',
+  media: 'An image and a playable tone, packaged with the note. This excerpt uses an ear-training note type defined in the full source.',
+};
+---
+<SiteLayout title="Card examples" description="Explore Basic, Cloze, and media cards built with Anki Forge. Read their Rust source and download the generated Anki decks.">
+  <div class="container">
+    <header class="page-intro"><h1>A little code.<br />Something to remember.</h1><p>Explore the source, flip the cards, and open the generated decks in Anki. These web previews use the same fields as the downloads.</p><a class="text-link" href={sitePath('/generated/website_showcase.rs')}>Read the complete source <Icon name="arrowUpRight" /></a></header>
+    <div class="example-list">
+      {examples.map(example => <section class="example-detail" id={example.id} aria-labelledby={`${example.id}-heading`}>
+        <h2 id={`${example.id}-heading`}>{example.label}</h2>
+        <p>{descriptions[example.id]}</p>
+        <div class="example-panel"><div class="example-source"><div class="source-label"><span>{example.id}.rs</span><span>Rust excerpt</span></div><CodeBlock code={example.source} /></div><CardPreview example={example} prefix={`gallery-${example.id}`} /></div>
+        <div class="example-downloads"><a class="text-link" href={sitePath(`/generated/${example.file}`)} download>Download {example.file} <Icon name="arrowRight" /></a><span>{example.counts.notes} note · {example.counts.cards} card · {example.counts.media} media files</span></div>
+      </section>)}
+      <section class="example-detail" id="updates" aria-labelledby="updates-heading">
+        <h2 id="updates-heading">One note, two versions.</h2>
+        <p>The second build changes the answer from “hello” to “hello; hi”. It compares against the first package and checks that the note identity is preserved.</p>
+        <div class="identity-section"><CodeBlock code={updateExample.source} /><UpdateDemo /></div>
+        <div class="example-downloads"><a href={sitePath(`/generated/${updateExample.previous}`)} download>Download version 1</a><a href={sitePath(`/generated/${updateExample.next}`)} download>Download version 2</a><a href={sitePath('/docs/rust-guide/#updating-distributed-decks')}>Read the update workflow</a></div>
+        <p class="example-footnote">Anki’s import settings and local edits affect how updates are applied. The previews show content and identity; card styling and review behavior come from Anki.</p>
+      </section>
+    </div>
+  </div>
+</SiteLayout>

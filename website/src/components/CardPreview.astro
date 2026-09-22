@@ -1,0 +1,29 @@
+---
+import type { CardExample } from '../lib/examples';
+import { sitePath } from '../lib/site';
+import Icon from './Icon.astro';
+interface Props { example: CardExample; prefix: string }
+const { example, prefix } = Astro.props;
+const cloze = example.front.match(/^(.*?)\{\{c1::(.*?)\}\}(.*)$/);
+---
+<div class="card-preview" data-card-preview>
+  <div class="preview-label"><span>{example.deck}</span><Icon name="cards" /></div>
+  <div class="flashcard" data-flashcard>
+    <div class="flashcard-inner">
+      <div class="flashcard-face" data-side="front">
+        {example.id === 'basic' && <><span class="card-caption">Spanish → English</span><p class="card-word">{example.front}</p><span class="card-caption">What does this mean?</span></>}
+        {example.id === 'cloze' && cloze && <><span class="card-caption">Complete the sentence</span><p class="card-sentence">{cloze[1]}<span class="cloze">[…]</span>{cloze[3]}</p></>}
+        {example.id === 'media' && <><span class="card-caption">Ear training</span><p class="card-prompt">{example.front}</p><img class="waveform" src={sitePath(`/generated/${example.image}`)} width="320" height="104" alt="Illustrative waveform of a synthesized tone" /></>}
+      </div>
+      <div class="flashcard-face flashcard-back" data-side="back" aria-hidden="true">
+        {example.id === 'basic' && <><span class="card-caption">{example.front}</span><p class="card-answer">{example.back}</p><span class="card-caption">A greeting in Spanish.</span></>}
+        {example.id === 'cloze' && cloze && <><span class="card-caption">Complete the sentence</span><p class="card-sentence">{cloze[1]}<span class="cloze">{cloze[2]}</span>{cloze[3]}</p><span class="card-caption">{example.back}</span></>}
+        {example.id === 'media' && <><span class="card-caption">A synthesized sine tone</span><p class="card-answer">{example.back}</p><span class="card-caption">One second of concert A.</span></>}
+      </div>
+    </div>
+  </div>
+  {example.id === 'media' && <audio controls preload="none" src={sitePath(`/generated/${example.audio}`)} aria-label="Play the example pitch">Your browser does not support audio. <a href={sitePath(`/generated/${example.audio}`)}>Download the tone.</a></audio>}
+  <button class="text-button flip-button" type="button" data-flip aria-pressed="false" aria-describedby={`${prefix}-card-status`}><Icon name="arrowsClockwise" /><span>Show answer</span></button>
+  <p class="sr-only" id={`${prefix}-card-status`} data-card-status aria-live="polite">Question shown.</p>
+  <noscript><p class="no-script-note">Answer: {cloze ? cloze[2] : example.back}</p></noscript>
+</div>
