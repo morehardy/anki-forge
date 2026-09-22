@@ -4,27 +4,16 @@ English · [简体中文](README.zh-CN.md)
 
 **Turn your data into Anki decks.**
 
-Create rich flashcards with Rust, Node.js, or Python. Package your media,
-export `.apkg` files, and rebuild with explicit update checks.
+Create Basic, Cloze, and custom cards with Rust, Node.js, or Python. Bundle
+images, audio, and video into a single `.apkg` file, ready to import into Anki.
 
-[Quick start](#quick-start) · [Card examples](#more-than-a-text-card) ·
-[Benchmarks](#performance-you-can-inspect) · [Choose your language](#choose-your-language)
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/code-to-card-dark-mobile.png">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/code-to-card-light-mobile.png">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/code-to-card-dark.png">
-  <img src="docs/assets/readme/code-to-card-light.png" alt="A few lines of Rust create spanish.apkg: a Basic card with hola on the front and hello on the back." width="1000">
-</picture>
-
-**1,000 text notes in 53.9 ms** — versus 115.5 ms with genanki, or **53.3% less
-export time** in the recorded Rust benchmark. Apple M1 Pro · 2026-09-21 source
-snapshot · median of 10 runs · [measurement scope and evidence](#performance-you-can-inspect).
+[Performance](#performance-you-can-inspect) · [Quick start](#quick-start) ·
+[Card examples](#more-than-a-text-card) · [Choose your language](#choose-your-language)
 
 ## Why anki-forge?
 
 - **Make the cards your content needs.** Basic, Cloze, custom HTML/CSS templates,
-  images, audio, and video. [See the cards ↓](#more-than-a-text-card)
+  images, audio, and video. [See examples ↓](#more-than-a-text-card)
 - **Spend less time exporting.** A Rust core handles deck generation and media
   packaging. Normal exports need no Anki installation.
   [See five measured workloads ↓](#performance-you-can-inspect)
@@ -32,10 +21,54 @@ snapshot · median of 10 runs · [measurement scope and evidence](#performance-y
   identity and update risks, and inspect structured build reports.
   [See the update workflow ↓](#build-once-keep-improving)
 
+## Performance you can inspect
+
+**1,000 text notes in 53.9 ms**, versus 115.5 ms with genanki — **53.3% less
+export time**. Across all five 1,000-note workloads, the measured Rust exports
+took **34.7–53.3% less time**. The chart compares the native Rust `Deck` API with
+genanki; Node and Python bindings were not benchmarked.
+
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
+  <img src="docs/assets/readme/export-times-light.svg" alt="Median export time in milliseconds, Rust / genanki: text 53.9 / 115.5; images 238.6 / 365.5; audio 175.5 / 298.8; mixed unique media 160.1 / 279.5; mixed shared media 69.1 / 124.0. Each workload has 1,000 notes." width="1000">
+</picture>
+
+Median export times from **10 runs per implementation and workload**, measured
+in one session on an **Apple M1 Pro** on **2026-09-21**. Timings include process
+startup through exit.
+The default APKG formats differ, and results describe the
+[recorded source snapshot](benchmarks/results/20260921-readme-genanki/source-snapshot.json),
+not a published release or a cross-platform guarantee.
+
+**Verification in this benchmark:** all 840 exports passed content checks, and
+all 40 Anki import, content, and representative-render checks passed.
+
+<details>
+<summary>Method, memory tradeoffs, and full results</summary>
+
+The complete matrix covers five workloads at 100, 200, 500, and 1,000 notes.
+Both implementations were measured in the same session, with alternating order,
+10 timing samples and 5 separate peak-RSS samples per cell. Desktop background
+load and filesystem cache were uncontrolled.
+
+Memory use varies by workload. At 1,000 unique images, Rust used **40.25 MiB**
+peak RSS versus **35.77 MiB** for genanki. Package-size differences include the
+libraries' different default formats and compression. GUI interaction and
+audible playback were not part of the benchmark checks.
+
+Read the [full report](benchmarks/results/20260921-readme-genanki/report.md),
+[raw timings](benchmarks/results/20260921-readme-genanki/comparison.csv), and
+[reproduction instructions](benchmarks/results/20260921-readme-genanki/README.md).
+The README chart is generated from that archived CSV; it introduces no new measurements.
+
+</details>
+
 ## Quick start
 
-The [complete Basic example](anki_forge/examples/target_api_basic.rs) creates
-`spanish.apkg`, ready to import into Anki Desktop:
+The [complete Basic example](anki_forge/examples/target_api_basic.rs) turns one
+word pair — **hola → hello** — into `spanish.apkg`, ready to import into Anki Desktop:
 
 ```rust
 use anki_forge::prelude::*;
@@ -84,21 +117,14 @@ validation, and repeated updates. Continue with the [Rust authoring guide](docs/
 
 ## More than a text card
 
-Vocabulary, fill-in-the-blank prompts, or a listening exercise with its own
-visual style — keep your content, templates, and media together.
+Keep your content, templates, and media together. A single deck can combine:
 
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/card-showcase-dark-mobile.png">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/card-showcase-light-mobile.png">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/card-showcase-dark.png">
-  <img src="docs/assets/readme/card-showcase-light.png" alt="Three exported cards: Basic vocabulary hola / hello; a Cloze question hiding frequency; and a custom ear-training card with a waveform image, a playable tone, and the answer A4, 440 Hz." width="1000">
-</picture>
+- **Basic:** show **hola**, then reveal **hello**.
+- **Cloze:** show “A sound's pitch depends on its […]”, then reveal **frequency**.
+- **Custom + media:** play a one-second tone alongside a waveform image, then
+  reveal **A4 · 440 Hz**. Define the card's layout and style with HTML/CSS.
 
-Card HTML rendered by Anki from the generated APKG, displayed with neutral
-preview styling. The ear-training design is bundled example CSS; the surrounding
-labels are documentation. [Rendering and reproduction](docs/assets/readme/README.md).
-
-Build these exact cards with the self-contained
+Build all three cards with the self-contained
 [showcase example](anki_forge/examples/readme_showcase.rs):
 
 ```sh
@@ -107,7 +133,8 @@ cargo run -q -p anki_forge --example readme_showcase
 
 It writes `readme-showcase.apkg`: three cards plus a generated waveform and a
 one-second audio tone. No media downloads are required. You can also
-[download the generated sample deck](docs/assets/readme/showcase.apkg?raw=true).
+[download the generated sample deck](docs/assets/readme/showcase.apkg?raw=true)
+or read the [sample verification and reproduction guide](docs/assets/readme/README.md).
 
 | Build something richer | Start here |
 | --- | --- |
@@ -150,48 +177,6 @@ still govern the import.
 For long-lived projects, use `first_update_safe_build(...)` / `update_safe(...)`
 with an identity lockfile. See the [complete update workflow](docs/rust-guide.md#updating-distributed-decks)
 for lockfile maintenance, risk thresholds, and build reports.
-
-## Performance you can inspect
-
-**At 1,000 notes, the measured Rust exports took 34.7–53.3% less time across all
-five workloads.** The chart compares the native Rust `Deck` API with genanki;
-Node and Python bindings were not benchmarked.
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
-  <img src="docs/assets/readme/export-times-light.svg" alt="Median export time in milliseconds, Rust / genanki: text 53.9 / 115.5; images 238.6 / 365.5; audio 175.5 / 298.8; mixed unique media 160.1 / 279.5; mixed shared media 69.1 / 124.0. Each workload has 1,000 notes." width="1000">
-</picture>
-
-One session on an **Apple M1 Pro**, measured **2026-09-21**, with **10 timings per
-implementation and workload**. Timings include process startup through exit.
-The default APKG formats differ, and results describe the
-[recorded source snapshot](benchmarks/results/20260921-readme-genanki/source-snapshot.json),
-not a published release or a cross-platform guarantee.
-
-**Verification in this benchmark:** all 840 exports passed content checks, and
-all 40 Anki import, content, and representative-render checks passed.
-
-<details>
-<summary>Method, memory tradeoffs, and full results</summary>
-
-The complete matrix covers five workloads at 100, 200, 500, and 1,000 notes.
-Both implementations were measured in the same session, with alternating order,
-10 timing samples and 5 separate peak-RSS samples per cell. Desktop background
-load and filesystem cache were uncontrolled.
-
-Memory use varies by workload. At 1,000 unique images, Rust used **40.25 MiB**
-peak RSS versus **35.77 MiB** for genanki. Package-size differences include the
-libraries' different default formats and compression. GUI interaction and
-audible playback were not part of the benchmark checks.
-
-Read the [full report](benchmarks/results/20260921-readme-genanki/report.md),
-[raw timings](benchmarks/results/20260921-readme-genanki/comparison.csv), and
-[reproduction instructions](benchmarks/results/20260921-readme-genanki/README.md).
-The README chart is generated from that archived CSV; it introduces no new measurements.
-
-</details>
 
 ## Choose your language
 

@@ -4,36 +4,64 @@
 
 **把你的数据，变成 Anki 牌组。**
 
-用 Rust、Node.js 或 Python 制作内容丰富的记忆卡片。打包媒体资源、导出 `.apkg` 文件，
-并在每次重新构建时检查更新风险。
+用 Rust、Node.js 或 Python 制作基础问答、填空和自定义卡片。
+将图片、音频和视频一起打包为一个 `.apkg` 文件，即可导入 Anki。
 
-[快速开始](#快速开始) · [卡片示例](#丰富的卡片形式) ·
-[性能对比](#可核验的性能表现) · [选择开发语言](#选择你的开发语言)
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/code-to-card-dark-mobile.png">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/code-to-card-light-mobile.png">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/code-to-card-dark.png">
-  <img src="docs/assets/readme/code-to-card-light.png" alt="几行 Rust 代码即可生成 spanish.apkg：一张正面为 hola、背面为 hello 的 Basic 卡片。" width="1000">
-</picture>
-
-**1,000 条文本笔记，53.9 ms 完成导出**——在已记录的 Rust 基准测试中，genanki 耗时
-115.5 ms，anki-forge 的**导出耗时减少了 53.3%**。Apple M1 Pro · 2026-09-21 源码快照 ·
-10 次运行的中位数 · [测试范围与原始记录](#可核验的性能表现)。
+[性能对比](#可核验的性能表现) · [快速开始](#快速开始) ·
+[卡片示例](#丰富的卡片形式) · [选择开发语言](#选择你的开发语言)
 
 ## 为什么选择 anki-forge？
 
 - **让卡片适合你的内容。** 支持基础问答（Basic）、填空（Cloze）、自定义 HTML/CSS 模板，
-  以及图片、音频和视频。[查看卡片效果 ↓](#丰富的卡片形式)
+  以及图片、音频和视频。[查看卡片示例 ↓](#丰富的卡片形式)
 - **缩短导出等待。** Rust 核心负责牌组生成和媒体打包，常规导出无需安装 Anki。
   [查看五种场景的实测结果 ↓](#可核验的性能表现)
 - **发布之后，持续完善。** 与上一版牌组对比，检查笔记身份与更新风险，
   并查看结构化构建报告。[了解更新流程 ↓](#持续改进已发布的牌组)
 
+## 可核验的性能表现
+
+**1,000 条文本笔记，53.9 ms 完成导出**，genanki 耗时 115.5 ms，**导出耗时减少了 53.3%**。
+在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki **少 34.7–53.3%**。
+下图对比原生 Rust `Deck` API 与 genanki；Node 和 Python 绑定未参与这次性能测试。
+
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
+  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 53.9 / 115.5；图片 238.6 / 365.5；音频 175.5 / 298.8；混合独立媒体 160.1 / 279.5；混合共享媒体 69.1 / 124.0。每种场景均为 1,000 条笔记。" width="1000">
+</picture>
+
+测试于 **2026-09-21** 在一台 **Apple M1 Pro** 上的同一轮测试中完成，
+耗时取**每种实现、每种场景各 10 次运行的中位数**，计时包含进程启动到退出的完整过程。
+两种实现默认使用的 APKG 格式不同，结果对应[已记录的源码快照](benchmarks/results/20260921-readme-genanki/source-snapshot.json)，
+不代表已发布版本，也不保证在其他平台上有相同表现。
+
+**本次基准测试的验证结果：** 全部 840 次导出均通过内容检查，
+全部 40 项 Anki 导入、内容与代表性卡片渲染检查均通过。
+
+<details>
+<summary>测试方法、内存取舍与完整结果</summary>
+
+完整测试矩阵覆盖五种场景，以及 100、200、500、1,000 条笔记四种规模。
+两种实现于同一轮测试中交替执行，每个测试组合采集 10 次耗时样本，
+并另外采集 5 次峰值驻留内存（RSS）样本。测试未控制桌面后台负载和文件系统缓存。
+
+内存占用随场景而变化。在 1,000 张独立图片的场景中，Rust 的峰值 RSS 为 **40.25 MiB**，
+genanki 为 **35.77 MiB**。导出包大小的差异也包含两个库默认格式和压缩方式的影响。
+本次基准检查不包含图形界面交互和实际音频播放。
+
+查看[完整报告](benchmarks/results/20260921-readme-genanki/report.md)、
+[原始耗时数据](benchmarks/results/20260921-readme-genanki/comparison.csv)
+与[复现说明](benchmarks/results/20260921-readme-genanki/README.md)。
+README 中的图表由这份已归档的 CSV 生成，没有引入新的测量数据。
+
+</details>
+
 ## 快速开始
 
-[完整的 Basic 示例](anki_forge/examples/target_api_basic.rs) 会生成 `spanish.apkg`，
-可直接导入 Anki 桌面版：
+[完整的 Basic 示例](anki_forge/examples/target_api_basic.rs) 将一组词汇 **hola → hello**
+生成为 `spanish.apkg`，可直接导入 Anki 桌面版：
 
 ```rust
 use anki_forge::prelude::*;
@@ -81,27 +109,22 @@ cargo add anyhow
 
 ## 丰富的卡片形式
 
-词汇问答、填空题，或带有专属视觉风格的听音练习——将内容、模板和媒体放在一起管理。
+将内容、模板和媒体放在一起管理。同一份牌组可以组合使用：
 
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/card-showcase-dark-mobile.png">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/card-showcase-light-mobile.png">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/card-showcase-dark.png">
-  <img src="docs/assets/readme/card-showcase-light.png" alt="三张导出的卡片：Basic 词汇卡 hola / hello；隐藏 frequency 的 Cloze 填空卡；以及包含波形图、可播放音频和答案 A4、440 Hz 的自定义听音练习卡。" width="1000">
-</picture>
+- **基础问答（Basic）：** 正面显示 **hola**，翻面查看答案 **hello**。
+- **填空（Cloze）：** 题面显示“A sound's pitch depends on its […]”，揭示被隐藏的 **frequency**。
+- **自定义卡片 + 媒体：** 展示波形图并播放一秒钟的音频，再揭示答案 **A4 · 440 Hz**。
+  卡片布局和样式由你通过 HTML/CSS 定义。
 
-卡片 HTML 由 Anki 从生成的 APKG 中渲染，外层采用简洁的预览样式。
-听音练习的设计来自示例自带的 CSS；卡片周围的标注属于文档说明。
-详见[渲染与复现说明](docs/assets/readme/README.md)。
-
-运行自包含的[卡片展示示例](anki_forge/examples/readme_showcase.rs)，即可生成上图中的卡片：
+运行自包含的[卡片展示示例](anki_forge/examples/readme_showcase.rs)，即可生成这三张卡片：
 
 ```sh
 cargo run -q -p anki_forge --example readme_showcase
 ```
 
 示例会生成 `readme-showcase.apkg`，包含三张卡片，以及现场生成的波形图和一秒钟的音频，
-无需下载媒体文件。也可以直接[下载已生成的示例牌组](docs/assets/readme/showcase.apkg?raw=true)。
+无需下载媒体文件。也可以直接[下载已生成的示例牌组](docs/assets/readme/showcase.apkg?raw=true)，
+或查看[示例验证与复现说明](docs/assets/readme/README.md)。
 
 | 想制作更丰富的卡片 | 从这里开始 |
 | --- | --- |
@@ -140,44 +163,6 @@ cargo run -q -p anki_forge --example readme_update
 
 对于长期维护的项目，请配合身份锁文件使用 `first_update_safe_build(...)` / `update_safe(...)`。
 锁文件维护、风险阈值和构建报告的说明见[完整更新流程](docs/rust-guide.md#updating-distributed-decks)。
-
-## 可核验的性能表现
-
-**在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki 少 34.7–53.3%。**
-下图对比原生 Rust `Deck` API 与 genanki；Node 和 Python 绑定未参与这次性能测试。
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
-  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 53.9 / 115.5；图片 238.6 / 365.5；音频 175.5 / 298.8；混合独立媒体 160.1 / 279.5；混合共享媒体 69.1 / 124.0。每种场景均为 1,000 条笔记。" width="1000">
-</picture>
-
-测试于 **2026-09-21** 在一台 **Apple M1 Pro** 上的同一轮测试中完成，
-**每种实现、每种场景各计时 10 次**，计时包含进程启动到退出的完整过程。
-两种实现默认使用的 APKG 格式不同，结果对应[已记录的源码快照](benchmarks/results/20260921-readme-genanki/source-snapshot.json)，
-不代表已发布版本，也不保证在其他平台上有相同表现。
-
-**本次基准测试的验证结果：** 全部 840 次导出均通过内容检查，
-全部 40 项 Anki 导入、内容与代表性卡片渲染检查均通过。
-
-<details>
-<summary>测试方法、内存取舍与完整结果</summary>
-
-完整测试矩阵覆盖五种场景，以及 100、200、500、1,000 条笔记四种规模。
-两种实现于同一轮测试中交替执行，每个测试组合采集 10 次耗时样本，
-并另外采集 5 次峰值驻留内存（RSS）样本。测试未控制桌面后台负载和文件系统缓存。
-
-内存占用随场景而变化。在 1,000 张独立图片的场景中，Rust 的峰值 RSS 为 **40.25 MiB**，
-genanki 为 **35.77 MiB**。导出包大小的差异也包含两个库默认格式和压缩方式的影响。
-本次基准检查不包含图形界面交互和实际音频播放。
-
-查看[完整报告](benchmarks/results/20260921-readme-genanki/report.md)、
-[原始耗时数据](benchmarks/results/20260921-readme-genanki/comparison.csv)
-与[复现说明](benchmarks/results/20260921-readme-genanki/README.md)。
-README 中的图表由这份已归档的 CSV 生成，没有引入新的测量数据。
-
-</details>
 
 ## 选择你的开发语言
 
