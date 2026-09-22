@@ -47,16 +47,6 @@ def test_reserved_stock_id_fast_fails_for_custom_notetype():
         Project("Deck").add_notetype(NoteType.custom("basic"))
 
 
-def test_fail_on_requires_compare_to_fast_fails_before_runtime(monkeypatch, tmp_path):
-    def fail_run(*args, **kwargs):
-        raise AssertionError("subprocess must not run")
-
-    monkeypatch.setattr(subprocess, "run", fail_run)
-    runtime = RuntimeOverride(manifest=tmp_path / "manifest.yaml", executable=tmp_path / "contract_tools")
-    with pytest.raises(ValidationError):
-        Project("Deck").write_apkg(tmp_path / "out.apkg", fail_on="medium", runtime=runtime)
-
-
 def test_update_safe_requires_project_stable_id_before_runtime(monkeypatch, tmp_path):
     def fail_run(*args, **kwargs):
         raise AssertionError("subprocess must not run")

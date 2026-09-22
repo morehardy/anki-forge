@@ -1,28 +1,22 @@
 [project]
 name = "anki-forge"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python Product API for anki-forge"
 readme = "README.md"
 requires-python = ">=3.11"
 
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin==1.15.0"]
+build-backend = "anki_forge_build"
+backend-path = ["."]
 
-[tool.setuptools]
-package-dir = {"" = "src"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["anki_forge", "anki_forge.*"]
-exclude = ["anki_forge_python", "anki_forge_python.*"]
-
-[tool.setuptools.package-data]
-anki_forge = [
-  "_runtime/bin/*",
-  "_runtime/contracts/*",
-  "_runtime/contracts/**/*",
-]
+[tool.maturin]
+manifest-path = "native/Cargo.toml"
+python-source = "src"
+module-name = "anki_forge._native"
+python-packages = ["anki_forge"]
+exclude = ["src/anki_forge/_runtime/**", "src/anki_forge_python/**"]
+include = [{ path = "anki_forge_build.py", format = "sdist" }]
 
 [tool.mypy]
 python_version = "3.11"

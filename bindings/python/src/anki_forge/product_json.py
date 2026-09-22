@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import copy
 import json
+from typing import Mapping
 
 from .diagnostics import ValidationError
 from .media import MediaItem
@@ -245,19 +246,19 @@ def custom_notetype_json(note_type: NoteType) -> dict[str, object]:
     return result
 
 
-def field_content_to_json(content: FieldContent) -> dict[str, object]:
+def field_content_to_json(content: FieldContent, media_ids: Mapping[str, str]) -> dict[str, object]:
     if content.kind in {"text", "html"}:
         if content.value is None:
             raise ValidationError(f"{content.kind} field content requires a value")
         return {"kind": content.kind, "value": content.value}
     if content.kind in {"sound", "image"}:
-        if content.media_id is None:
-            raise ValidationError(f"{content.kind} field content requires a media id")
-        return {"kind": content.kind, "media_id": content.media_id}
+        if content.export_as is None or content.export_as not in media_ids:
+            raise ValidationError(f"unknown media filename: {content.export_as}")
+        return {"kind": content.kind, "media_id": media_ids[content.export_as]}
     raise ValidationError(f"unsupported field content kind: {content.kind}")
 
 
-def note_to_json(note: Note, index: int, deck_name: str) -> dict[str, object]:
+def note_to_json(note: Note, index: int, deck_name: str, media_ids: Mapping[str, str]) -> dict[str, object]:
     result: dict[str, object] = {
         "kind": "stock" if note.note_type_id in {"basic", "cloze", "image_occlusion"} else "custom",
         "note_type_id": note.note_type_id,
@@ -265,7 +266,7 @@ def note_to_json(note: Note, index: int, deck_name: str) -> dict[str, object]:
     if note.stable_id is not None:
         result["stable_id"] = note.stable_id
     result["deck_name"] = deck_name
-    result["fields"] = {key: field_content_to_json(content) for key, content in note.fields.items()}
+    result["fields"] = {key: field_content_to_json(content, media_ids) for key, content in note.fields.items()}
     result["tags"] = list(note.tag_values)
     if note.stable_id is not None:
         result["source_path"] = f"project.notes[{_path_key(note.stable_id)}]"

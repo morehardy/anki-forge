@@ -8,11 +8,14 @@ from .diagnostics import (
     RuntimeNotFoundError,
     SourceSpan,
     ValidationError,
+    ProjectAddError,
+    MediaError,
 )
-from .media import MediaRef, MediaRegistry
+from .native_media import MediaRef, MediaRegistry
 from .note import Note
 from .notetype import Field, GenerationRule, NoteType, Template
-from .project import Project
+from .native_project import Project
+from .artifact import ApkgArtifact
 from .report import BuildReport
 
 __all__ = [
@@ -23,6 +26,8 @@ __all__ = [
     "RuntimeNotFoundError",
     "SourceSpan",
     "ValidationError",
+    "ProjectAddError",
+    "MediaError",
     "MediaRef",
     "MediaRegistry",
     "Note",
@@ -32,4 +37,5 @@ __all__ = [
     "Template",
     "Project",
     "BuildReport",
+    "ApkgArtifact",
 ]

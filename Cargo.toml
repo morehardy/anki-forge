@@ -1,5 +1,5 @@
 [workspace]
-members = ["contract_tools", "anki_forge", "bindings/node/native"]
+members = ["contract_tools", "anki_forge", "bindings/node/native", "bindings/python/native"]
 resolver = "2"
 
 [workspace.package]
@@ -8,3 +8,9 @@ rust-version = "1.92"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
+
+# Rust's debuginfo stripping can misalign Mach-O string tables on macOS 27.
+# Keep the native Python image loadable on the supported Rust 1.92 baseline.
+# https://github.com/rust-lang/rust/issues/157750
+[profile.release.package.anki_forge_python_native]
+strip = "none"

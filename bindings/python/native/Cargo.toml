@@ -1,0 +1,24 @@
+[package]
+name = "anki_forge_python_native"
+version = "0.2.0"
+edition.workspace = true
+rust-version.workspace = true
+license = "MIT"
+publish = false
+
+[lib]
+name = "_native"
+crate-type = ["cdylib"]
+test = false
+doctest = false
+
+[dependencies]
+anki_forge = { path = "../../../anki_forge", version = "0.1.0", features = ["internal-tools"] }
+anyhow = "1"
+pyo3 = { version = "=0.29.2", features = ["abi3-py311"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[lints.rust]
+# PyO3 generates the FFI boundary; handwritten unsafe remains forbidden here.
+unsafe_code = "deny"

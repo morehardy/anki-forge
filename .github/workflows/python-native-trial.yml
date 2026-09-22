@@ -1,0 +1,77 @@
+name: python-native-trial
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/python-sdk-parity]
+  pull_request:
+    paths:
+      - bindings/python/**
+      - anki_forge/**
+      - Cargo.toml
+      - Cargo.lock
+      - .github/workflows/python-native-trial.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-native-trial-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wheel:
+    name: native wheel (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            architecture: x64
+            interpreter: /opt/python/cp311-cp311/bin/python
+            manylinux: "2014"
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            architecture: x64
+            interpreter: python
+            manylinux: ""
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+            architecture: x64
+            interpreter: python
+            manylinux: ""
+          - os: macos-14
+            target: aarch64-apple-darwin
+            architecture: arm64
+            interpreter: python
+            manylinux: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          architecture: ${{ matrix.architecture }}
+      - uses: PyO3/maturin-action@v1
+        with:
+          command: build
+          maturin-version: "1.15.0"
+          rust-toolchain: "1.92.0"
+          working-directory: bindings/python
+          target: ${{ matrix.target }}
+          manylinux: ${{ matrix.manylinux }}
+          args: --release --locked --out ../../target/python-native-wheels --interpreter ${{ matrix.interpreter }}
+      - name: Install and exercise wheel on Python 3.11
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel)], check=True)"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: ${{ matrix.architecture }}
+      - name: Install and exercise the same abi3 wheel on Python 3.12
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel)], check=True)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-native-${{ matrix.target }}
+          path: target/python-native-wheels/*.whl
+          retention-days: 14

@@ -72,6 +72,26 @@ def diagnostic_payload(
     }
 
 
+def test_report_preserves_metrics_policy_and_unknown_fields_losslessly():
+    payload = build_report_payload(
+        status="blocked", artifact=None,
+        metrics={"duration_ms": 173, "future_count": 2**60 + 1},
+        policy={"status": "blocked", "threshold": "high", "highest_risk": "critical", "blocking_findings": ["risk:1"]},
+        future={"nested": ["kept"]},
+    )
+    expected = deepcopy(payload)
+    report = BuildReport.from_json(payload)
+    payload["future"]["nested"].append("changed input")
+
+    assert report.metrics == expected["metrics"]
+    assert report.policy == expected["policy"]
+    assert report.tool_version == "test"
+    assert report.schema_version == "phase4-build-report-v2"
+    assert report.raw == expected
+    assert report.to_json() == expected
+    assert _report_to_json(report) == expected
+
+
 def test_report_success_warning_does_not_raise():
     report = BuildReport.from_json(build_report_payload(
         diagnostics=[diagnostic_payload(code="W", severity="warning", message="warn")],

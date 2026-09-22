@@ -12,6 +12,26 @@ class ValidationError(AnkiForgeError, ValueError):
     """Raised when public API input fails validation."""
 
 
+class AuthoringError(ValidationError):
+    def __init__(self, code: str, message: str, *, diagnostic: Diagnostic | None = None, details: dict[str, Any] | None = None) -> None:
+        super().__init__(f"{code}: {message}")
+        self.code = code
+        self.message = message
+        self.diagnostic = diagnostic
+        self.diagnostics = (diagnostic,) if diagnostic is not None else ()
+        self.details = details or {}
+        self.path = diagnostic.path if diagnostic is not None else self.details.get("path")
+        self.span = diagnostic.span if diagnostic is not None else None
+
+
+class ProjectAddError(AuthoringError):
+    """The core rejected an addition without changing the Project."""
+
+
+class MediaError(AuthoringError):
+    """The core rejected a media registration."""
+
+
 class RuntimeNotFoundError(AnkiForgeError):
     """Raised when the anki-forge runtime cannot be found."""
 

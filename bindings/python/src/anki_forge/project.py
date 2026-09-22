@@ -120,12 +120,13 @@ class Project:
             if any(note_type.kind_value == "cloze" for note_type in self._note_types.values())
             else "product-v2"
         )
+        media_ids = {item.ref.export_as: item.ref.media_id for item in self.media.items}
         return {
             "product_document_version": product_version,
             "document_id": self.stable_id or self.name,
             "default_deck_name": self.default_deck,
             "note_types": note_types,
-            "notes": [note_to_json(note, index, self._resolve_deck(note)) for index, note in enumerate(self._notes)],
+            "notes": [note_to_json(note, index, self._resolve_deck(note), media_ids) for index, note in enumerate(self._notes)],
             "media": [media_to_json(item) for item in self.media.items],
         }
 
@@ -209,7 +210,7 @@ class Project:
         for note_type_id in self._note_type_order:
             self._note_types[note_type_id].validate()
 
-        media_ids = {item.ref.media_id for item in self.media.items}
+        media_filenames = {item.ref.export_as for item in self.media.items}
         seen_stable_ids: set[str] = set()
         for note in self._notes:
             if note.note_type_id not in STOCK_NOTE_TYPE_IDS and note.note_type_id not in self._note_types:
@@ -229,7 +230,7 @@ class Project:
             else:
                 self._validate_stock_note_field_keys(note)
 
-            self._validate_note_media_references(note, media_ids)
+            self._validate_note_media_references(note, media_filenames)
 
     def _validate_stock_note_field_keys(self, note: Note) -> None:
         allowed = STOCK_FIELD_KEYS[note.note_type_id]
@@ -237,10 +238,10 @@ class Project:
             if field_key not in allowed:
                 raise ValidationError(f"unknown field key for {note.note_type_id}: {field_key}")
 
-    def _validate_note_media_references(self, note: Note, media_ids: set[str]) -> None:
+    def _validate_note_media_references(self, note: Note, media_filenames: set[str]) -> None:
         for content in note.fields.values():
-            if content.kind in {"sound", "image"} and content.media_id not in media_ids:
-                raise ValidationError(f"unknown media id: {content.media_id}")
+            if content.kind in {"sound", "image"} and content.export_as not in media_filenames:
+                raise ValidationError(f"unknown media filename: {content.export_as}")
 
     def _validate_custom_note_field_keys(self, note: Note, note_type: NoteType) -> None:
         allowed = {field.key for field in note_type.fields}
@@ -261,8 +262,6 @@ def _validate_write_paths(
 ) -> None:
     if fail_on is not None and fail_on not in ALLOWED_FAIL_ON:
         raise ValidationError(f"unknown fail_on level: {fail_on}")
-    if fail_on is not None and compare_to is None:
-        raise ValidationError("fail_on requires compare_to")
     if update_safety is not None and update_safety not in {"strict", "report_only", "report-only", "disabled"}:
         raise ValidationError(f"unknown update_safety mode: {update_safety}")
     if write_identity_lockfile and identity_lockfile is None:
@@ -311,10 +310,12 @@ def _inferred_diagnostic_stage(code: str) -> str:
 
 
 def _report_to_json(report: BuildReport) -> dict[str, object]:
+    if report._raw is not None:
+        return report.to_json()
     return {
         "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v2",
-        "tool_version": "anki-forge-python",
+        "schema_version": report.schema_version,
+        "tool_version": report.tool_version,
         "status": report.status,
         "comparison": report.comparison,
         "artifact": report.artifact,
@@ -340,13 +341,8 @@ def _report_to_json(report: BuildReport) -> dict[str, object]:
             }
             for diagnostic in report.diagnostics
         ],
-        "metrics": {"duration_ms": 0},
-        "policy": {
-            "status": "not_evaluated",
-            "threshold": None,
-            "highest_risk": None,
-            "blocking_findings": [],
-        },
+        "metrics": dict(report.metrics),
+        "policy": dict(report.policy),
         "inspect": report.inspect,
         "previous_inspect": report.previous_inspect,
         "update_safety": report.update_safety,

@@ -37,6 +37,28 @@ def minimal_wav_bytes() -> bytes:
     return base64.b64decode("UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=")
 
 
+@pytest.mark.parametrize("newline", ["\n", "\r\n", "\t"])
+def test_multiline_templates_and_css_preserve_source_and_build(tmp_path, newline):
+    front = f" {newline}<section>{{{{Front}}}}</section>{newline} "
+    back = f"{newline}{{{{FrontSide}}}}{newline} "
+    css = f"{newline}.card {{{newline}  color: navy;{newline}}}{newline}"
+    note_type = (
+        NoteType.custom("source", css=css)
+        .field(Field("Front", identity=True))
+        .template(Template("Card", front=front, back=back, browser_front=front, browser_back=back))
+    )
+    project = Project("Source").add_notetype(note_type).add_note(Note("source").text("front", "hello"))
+
+    document = project.to_product_document()
+    exported_type = document["note_types"][0]
+    assert exported_type["css"] == css
+    assert exported_type["templates"][0]["front"] == front
+    assert exported_type["templates"][0]["back"] == back
+    assert exported_type["templates"][0]["browser_front"] == front
+    assert exported_type["templates"][0]["browser_back"] == back
+    project.write_apkg(tmp_path / "source.apkg").ensure_success()
+
+
 def test_python_basic_project_writes_apkg(tmp_path):
     project = Project("Deck")
     project.add_note(Note.basic("Front", "Back"))
@@ -101,6 +123,31 @@ def test_python_policy_block_preserves_output_and_lockfile(tmp_path):
     persisted = json.loads(report_path.read_text(encoding="utf-8"))
     assert persisted["status"] == "blocked"
     assert persisted["artifact"] is None
+
+
+@pytest.mark.parametrize("unreadable", [False, True])
+def test_lockfile_only_risk_threshold_is_decided_by_core(tmp_path, unreadable):
+    lockfile = tmp_path / "identity.json"
+    project = Project("Deck", stable_id="lock-only").add_note(Note.basic("Front", "Back", stable_id="note-1"))
+    project.write_apkg(tmp_path / "first.apkg", identity_lockfile=lockfile, write_identity_lockfile=True).ensure_success()
+    if unreadable:
+        lockfile.write_text("broken", encoding="utf-8")
+    original = lockfile.read_bytes()
+    output = tmp_path / "next.apkg"
+    output.write_bytes(b"previous publication")
+
+    report = project.write_apkg(output, identity_lockfile=lockfile, fail_on="high", update_safety="report_only")
+
+    assert report.status == ("blocked" if unreadable else "success")
+    assert report.policy["status"] == ("blocked" if unreadable else "passed")
+    assert report.policy["threshold"] == "high"
+    if unreadable:
+        assert "RISK.BASELINE_UNAVAILABLE" in report.policy["blocking_findings"]
+        assert output.read_bytes() == b"previous publication"
+    else:
+        report.ensure_success()
+        assert output.read_bytes() != b"previous publication"
+    assert lockfile.read_bytes() == original
 
 
 def test_python_image_occlusion_runtime_build(tmp_path):

@@ -35,6 +35,17 @@ def _validate_optional_non_empty(value: str | None, label: str) -> str | None:
     return _validate_non_empty(value, label)
 
 
+def _validate_source(value: str, label: str) -> str:
+    """Preserve source text; semantic template validation belongs to Rust."""
+    if not isinstance(value, str):
+        raise ValidationError(f"{label} must be a string")
+    return value
+
+
+def _validate_optional_source(value: str | None, label: str) -> str | None:
+    return None if value is None else _validate_source(value, label)
+
+
 def _validate_id(value: str, label: str = "id") -> str:
     return _validate_non_empty(value, label)
 
@@ -149,10 +160,10 @@ class Template:
     def __post_init__(self) -> None:
         name = _validate_non_empty(self.name, "template name")
         key = _validate_id(self.key, "template key") if self.key is not None else _slug(name)
-        front = _validate_non_empty(self.front, "template front")
-        back = _validate_non_empty(self.back, "template back")
-        browser_front = _validate_optional_non_empty(self.browser_front, "browser front")
-        browser_back = _validate_optional_non_empty(self.browser_back, "browser back")
+        front = _validate_source(self.front, "template front")
+        back = _validate_source(self.back, "template back")
+        browser_front = _validate_optional_source(self.browser_front, "browser front")
+        browser_back = _validate_optional_source(self.browser_back, "browser back")
         target_deck = _validate_optional_non_empty(self.target_deck, "target deck")
         generate_when = self.generate_when or GenerationRule.anki_default()
         if not isinstance(generate_when, GenerationRule):
@@ -205,7 +216,7 @@ class NoteType:
         elif self.cloze_field is not None:
             raise ValidationError("normal note type must not set cloze_field")
         if self.css_value is not None:
-            _reject_ascii_control(self.css_value, "css")
+            _validate_source(self.css_value, "css")
 
     @classmethod
     def custom(cls, note_type_id: str, name: str | None = None, css: str | None = None) -> NoteType:
@@ -233,7 +244,7 @@ class NoteType:
         if css is None:
             self.css_value = None
         else:
-            _reject_ascii_control(css, "css")
+            _validate_source(css, "css")
             self.css_value = css
         return self
 

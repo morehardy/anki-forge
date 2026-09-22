@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from copy import deepcopy
+from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 from .diagnostics import Diagnostic, DiagnosticsError, ProtocolError, SourceSpan
@@ -38,11 +39,19 @@ class BuildReport:
     update_safety: Mapping[str, Any] | None = None
     diff: Mapping[str, Any] | None = None
     risk: Mapping[str, Any] | None = None
+    metrics: Mapping[str, Any] = field(default_factory=lambda: {"duration_ms": 0})
+    policy: Mapping[str, Any] = field(default_factory=lambda: {
+        "status": "not_evaluated", "threshold": None, "highest_risk": None, "blocking_findings": [],
+    })
+    tool_version: str = "anki-forge-python"
+    schema_version: str = BUILD_REPORT_SCHEMA_VERSION
+    _raw: dict[str, Any] | None = field(default=None, repr=False, compare=False)
 
     @classmethod
     def from_json(cls, payload: object) -> BuildReport:
         if not isinstance(payload, dict):
             raise ProtocolError("build report must be a JSON object")
+        payload = deepcopy(payload)
         if payload.get("kind") != BUILD_REPORT_KIND:
             raise ProtocolError("build report has unexpected kind")
         if payload.get("schema_version") != BUILD_REPORT_SCHEMA_VERSION:
@@ -75,7 +84,24 @@ class BuildReport:
             update_safety=_optional_object(payload, "update_safety"),
             diff=_optional_object(payload, "diff"),
             risk=_optional_object(payload, "risk"),
+            metrics=deepcopy(payload["metrics"]),
+            policy=deepcopy(payload["policy"]),
+            tool_version=_required_non_empty_string(payload, "tool_version"),
+            schema_version=payload["schema_version"],
+            _raw=deepcopy(payload),
         )
+
+    @property
+    def raw(self) -> dict[str, Any]:
+        """Return an independent copy of the complete report, including extensions."""
+        return self.to_json()
+
+    def to_json(self) -> dict[str, Any]:
+        if self._raw is not None:
+            return deepcopy(self._raw)
+        from .project import _report_to_json
+
+        return _report_to_json(self)
 
     def ensure_success(self) -> None:
         has_error = any(diagnostic.severity in {"error", "critical"} for diagnostic in self.diagnostics)

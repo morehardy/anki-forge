@@ -146,6 +146,20 @@ def test_duplicate_stable_ids_fast_fail_before_serialization():
         project.to_product_document()
 
 
+def test_media_reference_uses_destination_filename_instead_of_local_sequence():
+    source = Project("Source")
+    reference = source.media.add_bytes(source_label="a", data=b"a", export_as="a.wav")
+    destination = Project("Destination")
+    destination.media.add_bytes(source_label="b", data=b"b", export_as="b.wav")
+    expected = destination.media.add_bytes(source_label="a", data=b"a", export_as="a.wav")
+    destination.add_note(Note.basic("audio", "answer").sound("front", reference))
+
+    document = destination.to_product_document()
+
+    assert document["notes"][0]["fields"]["front"] == {"kind": "sound", "media_id": expected.media_id}
+    assert reference.media_id != expected.media_id
+
+
 def test_custom_media_project_serializes_typed_content():
     project = Project("Media", stable_id="custom-media-demo", default_deck="Media")
     ref = project.media.add_bytes(source_label="hello.wav", data=INLINE_WAV_BYTES, export_as="hello.wav")
