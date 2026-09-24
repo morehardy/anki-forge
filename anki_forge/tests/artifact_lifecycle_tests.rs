@@ -1,111 +1,95 @@
-use anki_forge::prelude::*;
+use ankiforge::build::json::{BuildResultSnapshot, PublicationStage};
+use ankiforge::{BuildOptions, Note, Project};
 
 fn project() -> Project {
-    let mut project = Project::new("Artifact lifetime").stable_id("artifact-lifetime");
-    project
-        .add_note(Note::basic("front", "back").stable_id("note-1"))
-        .unwrap();
+    let mut project = Project::new("artifact-lifetime").unwrap();
+    project.add("note-1", Note::basic("front", "back")).unwrap();
     project
 }
 
 #[test]
-fn temporary_artifact_is_removed_only_after_the_last_owner_drops() {
-    let report = project().build(BuildOptions::new()).unwrap();
-    let report_clone = report.clone();
-    let artifact = report.artifact.as_ref().unwrap().clone();
-    let path = artifact.path().to_path_buf();
-    drop(report);
+fn temporary_artifact_is_removed_only_after_the_last_handle_drops() {
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let cloned = output.clone();
+    let artifact = output.artifact().clone();
+    let path = artifact.path().to_owned();
+    drop(output);
     assert!(path.is_file());
     drop(artifact);
-    assert!(path.is_file(), "a cloned report also owns the artifact");
-    drop(report_clone);
-    assert!(
-        !path.exists(),
-        "the final owner must clean up temporary output"
-    );
+    assert!(path.is_file());
+    drop(cloned);
+    assert!(!path.exists());
 }
 
 #[test]
-fn explicit_destinations_and_persisted_copies_survive_report_drop() {
+fn persistent_destinations_and_copies_survive_output_drop() {
     let root = tempfile::tempdir().unwrap();
-    let report = project().build(BuildOptions::new()).unwrap();
-    let temporary = report.artifact.as_ref().unwrap().path().to_path_buf();
-    let saved = report
-        .artifact
-        .as_ref()
-        .unwrap()
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let temporary = output.artifact().path().to_owned();
+    let saved = output
+        .artifact()
         .persist_to(root.path().join("saved.apkg"))
         .unwrap();
     assert_eq!(
         std::fs::read(&temporary).unwrap(),
         std::fs::read(saved.path()).unwrap()
     );
-    drop(report);
+    drop(output);
     assert!(!temporary.exists());
     drop(saved);
     assert!(root.path().join("saved.apkg").is_file());
-    for (artifacts, output) in [(true, false), (false, true), (true, true)] {
-        let mut options = BuildOptions::new();
-        if artifacts {
-            options = options.artifacts_dir(root.path().join("artifacts"));
-        }
-        if output {
-            options = options.output(root.path().join("explicit.apkg"));
-        }
-        let report = project().build(options).unwrap();
-        let path = report.artifact.as_ref().unwrap().path().to_path_buf();
-        drop(report);
-        assert!(path.is_file());
-        if artifacts {
-            assert!(root.path().join("artifacts/package.apkg").is_file());
-        }
-    }
-}
-
-#[test]
-fn automatic_json_report_requires_a_persistent_artifact_destination() {
-    let root = tempfile::tempdir().unwrap();
-    let path = root.path().join("report.json");
-    let error = project()
-        .build(BuildOptions::new().report_json(&path))
-        .expect_err("JSON cannot own a temporary APKG lifetime");
-    assert!(error.report.artifact.is_none());
-    assert!(error
-        .report
-        .diagnostic_codes()
-        .contains(&"PROJECT.REPORT_JSON_WRITE_FAILED".into()));
-    let json: serde_json::Value = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
-    assert!(json["artifact"].is_null());
-}
-
-#[test]
-fn published_temporary_artifact_is_owned_by_late_failure_reports() {
-    let root = tempfile::tempdir().unwrap();
-    let error = project()
-        .build(
-            BuildOptions::new()
-                .identity_lockfile(root.path())
-                .write_identity_lockfile(true)
-                .update_safety(UpdateSafetyMode::Disabled),
-        )
-        .unwrap_err();
-    assert!(error
-        .report
-        .diagnostic_codes()
-        .contains(&"UPDATE.LOCKFILE_WRITE_FAILED".into()));
-    let path = error.report.artifact.as_ref().unwrap().path().to_path_buf();
-    let cloned_error = error.clone();
-    drop(error);
+    let output = project()
+        .build(BuildOptions::to(root.path().join("explicit.apkg")))
+        .unwrap();
+    let path = output.artifact().path().to_owned();
+    drop(output);
     assert!(path.is_file());
-    drop(cloned_error);
+}
+
+#[test]
+fn reports_and_serialized_snapshots_do_not_retain_temporary_files() {
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let path = output.artifact().path().to_owned();
+    let report = output.report().clone();
+    let snapshot = output.snapshot();
+    let serialized = serde_json::to_value(&snapshot).unwrap();
+    drop(output);
     assert!(!path.exists());
+    assert_eq!(report.counts().notes, 1);
+    assert_eq!(serialized["result"]["status"], "success");
+    assert!(matches!(
+        snapshot.result,
+        BuildResultSnapshot::Success {
+            temporary: true,
+            ..
+        }
+    ));
+}
+
+#[test]
+fn failed_publication_preserves_existing_destination_and_complete_observations() {
+    let root = tempfile::tempdir().unwrap();
+    let destination = root.path().join("existing-directory");
+    std::fs::create_dir(&destination).unwrap();
+    std::fs::write(destination.join("owned"), b"keep").unwrap();
+    let error = project().build(BuildOptions::to(&destination)).unwrap_err();
+    assert_eq!(error.report().counts().notes, 1);
+    assert_eq!(
+        error.publications()[0].stage,
+        PublicationStage::NotPublished
+    );
+    assert_eq!(std::fs::read(destination.join("owned")).unwrap(), b"keep");
+    assert!(matches!(
+        error.snapshot().result,
+        BuildResultSnapshot::Failure { .. }
+    ));
 }
 
 #[test]
 fn failed_persistence_keeps_temporary_artifact_usable() {
     let root = tempfile::tempdir().unwrap();
-    let report = project().build(BuildOptions::new()).unwrap();
-    let artifact = report.artifact.as_ref().unwrap();
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let artifact = output.artifact();
     let bytes = std::fs::read(artifact.path()).unwrap();
     assert!(artifact.persist_to(root.path()).is_err());
     assert!(artifact.persist_to(artifact.path()).is_err());

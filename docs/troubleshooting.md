@@ -1,66 +1,72 @@
 # Troubleshooting
 
-Start with the failed operation and its diagnostic code. Fix the cause, repeat
-the same small example, and inspect the new report before adding more content.
+Use the structured `kind` and `code` from the failing operation, plus its source
+chain and observations. Display text is for humans and may change. A failed
+operation and a completed comparison whose policy blocks publication are
+different results.
 
 ## Installation
 
-| Symptom | Check | Action |
-| --- | --- | --- |
-| Rust rejects the compiler version | `rustc --version` | Use Rust 1.92 or later |
-| Cargo cannot find the local dependency | Path in your application's `Cargo.toml` | Point it at the checkout's `anki_forge` directory |
-| Python reports `BINDING.EXTENSION_UNAVAILABLE` | Interpreter/platform and installed package | Install a matching wheel or build with Maturin; `PYTHONPATH` alone is insufficient |
-| Python reports `BINDING.VERSION_MISMATCH` | Mixed Python and native files | Reinstall a matching package in a clean environment |
-| Node cannot load its native package | Node version and platform package | Follow the source setup, then run its installed-package check |
-| A public package installation cannot find the candidate | Actual published versions | Use the documented source setup; declared versions do not prove publication |
+| Symptom | Check |
+| --- | --- |
+| Rust build rejects the toolchain | Use Rust 1.92+ and the checkout's locked dependencies |
+| Node cannot load its native package | Enable optional dependencies and install the matching OS/CPU binary |
+| Node rejects a same-version native module | Rebuild it; protocol 3 is required by the new facade |
+| Local package install tries an unavailable registry version | Install the actual facade and host-native tarballs together |
+| Python cannot load its extension | Check interpreter/architecture against the declared wheel matrix |
 
-See [Rust installation](installation.md), [Node installation](node/quick-start.md),
-[Python installation](python/quick-start.md), and [release status](compatibility.md).
+Public registry availability is separate from a source version. See
+[release status](compatibility.md), [Node setup](node/quick-start.md) and
+[Python setup](python/quick-start.md).
 
-## Authoring and validation
+## Models and notes
 
-Duplicate or blank IDs, unknown note types and field keys can fail when a note
-is added. In Rust, match the typed `ErrorCode` through `ErrorCodeExt`; in Node
-and Python, inspect the structured error's code. Avoid matching message text.
+| Symptom | Correction |
+| --- | --- |
+| Invalid or empty key | Supply an explicit stable key; display names are separate |
+| `NOTE.KEY_DUPLICATE` | Give each logical source record one unique key |
+| `NOTE.FIELD_UNKNOWN` | Assign the field's key, not its display name |
+| `NOTE.FIELD_REQUIRED` | Fill fields declared `required()` before adding |
+| `NOTE.MODEL_CONFLICT` | Reuse the same completed model for one model key |
+| Template reference error | Use declared keys in templates; inspect the original source byte range |
+| HTML appears literally | Use `Content::html` only for intentional markup |
+| Missing Cloze cards | Supply `{{c1::answer}}` syntax with supported numbers 1–500 |
 
-A validation checkpoint checks authoring structure. Media availability,
-normalization, writer checks and update safety still run during a build.
-A successful `validate()` alone is not proof that an APKG can be exported.
+An add failure is atomic. Correct the note/model and retry; no partial model or
+media registration needs to be undone. Model builders must finish with `.build()`
+before they can create custom notes.
 
 ## Media and templates
 
-| Symptom or code | Likely cause | Fix |
-| --- | --- | --- |
-| Missing media | A field/template/CSS references an unregistered local filename | Register that exact export filename or remove the reference |
-| `MEDIA.SOURCE_CHANGED` | A registered file changed before export | Keep inputs unchanged; rebuild the project from the intended current files |
-| Filename collision | Different content shares an export name | Assign distinct filenames and update references |
-| `MEDIA.UNUSED_BINDING` | Registered media is not referenced | Remove it or reference it from a note, template or CSS |
-| Inline size failure | A Project byte payload exceeds the inline limit | Register a file and use the normal path-backed build |
-| Template field not found | HTML uses a key instead of a display name, or a misspelling | Match declared display names in HTML; use keys in rules and authoring |
-| No card generated | Generation rule lacks the fields it needs | Supply those fields or choose an appropriate explicit rule |
-| `PRODUCT.CLOZE_MARKER_MALFORMED` | Invalid Cloze markup, including the known hide-one IO limitation | Check markers and use hide-all-guess-one for current IO exports |
+| Symptom | Correction |
+| --- | --- |
+| File import fails | Check the source at `Media::file` time; later source deletion is supported |
+| MIME/content mismatch | Pass the actual MIME type to the bytes constructor |
+| Export-name conflict | Choose unique portable names; case and Unicode normalization variants conflict |
+| Missing raw HTML/CSS/script resource | Declare it with model `asset` or project `add_asset` |
+| Media import exceeds a limit | Explicitly raise `MediaLimits.max_bytes` before importing |
+| Build inspection exceeds a limit | Adjust the relevant `InspectLimits` counter for this operation |
+| Bundle load fails | Use bundle-v2, explicit keys, key-based templates and paths within the bundle |
+| IO rectangle fails | Check decoded display dimensions, finite coordinates and unique mask keys |
 
-For image/audio playback problems, first check the registered filename, then the
-actual file and codec in the target Anki client. Package validation is not a media decoder.
+Text defaults are uniform across all note kinds. Media nodes collect dependencies;
+manually writing a filename does not import its bytes. A valid package still
+requires client playback checks for the codec/font you intend to use.
 
 ## Updates and outputs
 
-| Symptom or code | Fix |
-| --- | --- |
-| Imported content does not change | Keep stable IDs, build against the previous APKG or maintained lockfile, and check Anki import settings/local edits |
-| Missing revision evidence | Recover the last distributed APKG; do not invent or discard identity evidence |
-| `PROJECT.PATH_COLLISION` | Separate baselines, outputs, lockfiles, report JSON and writable staging directories |
-| `INSPECT.RESOURCE_LIMIT_EXCEEDED` | Inspect the input and report; raise only the relevant budget for a trusted large package |
-| Temporary artifact disappears | Retain the owning report/handle or persist the artifact before releasing it |
-| Report JSON requires an output | Set `output` or `artifacts_dir`; JSON cannot keep a temporary APKG alive |
+Use an original distribution APKG containing complete identity evidence as the
+baseline. Anki re-exported packages do not retain that evidence. A namespace
+mismatch or corrupt evidence cannot be accepted by an update policy.
 
-Read [updates](updates.md), [output ownership](build-guarantees.md), and
-[Python diagnostics](python/diagnostics.md) for complete behavior.
+A completed comparison can have `allows_publication == false`. Inspect original
+findings and evidence before selecting an explicit risk-category allowance.
+Do not blanket-allow every result. The same policy must be passed to the actual
+update build if you want the same decision. A policy on a create-only request
+is an error.
 
-## Report a reproducible issue
-
-Include the language/package version, OS, smallest input and code that fails,
-diagnostic code/report, and whether the failure occurs at registration,
-validation, build or Anki import. For import problems include the Anki version.
-Use a small shareable dataset and attach the previous/current package only when
-needed to demonstrate the update behavior.
+If a temporary path disappeared, retain its output/artifact owner until all
+readers finish. Reports and JSON snapshots are not owners. For persistence
+failures, inspect the error's publication stage and durability: an error can be
+returned after a destination was already published. See
+[output guarantees](build-guarantees.md).

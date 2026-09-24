@@ -94,7 +94,7 @@ or code relying on `anyhow::Error` at the method boundary may need updating.
 The recommended long-term Project flow is:
 
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::prelude::*;
 
 fn main() -> anyhow::Result<()> {
     let mut project = Project::new("Spanish A1")

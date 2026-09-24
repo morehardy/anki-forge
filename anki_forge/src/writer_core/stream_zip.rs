@@ -12,6 +12,7 @@ pub(crate) struct StreamZip<W: Write> {
 }
 
 impl<W: Write> StreamZip<W> {
+    #[cfg(test)]
     pub(crate) fn new(output: W) -> Self {
         Self {
             output: BufWriter::with_capacity(128 * 1024, output),

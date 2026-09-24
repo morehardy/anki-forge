@@ -1,0 +1,69 @@
+baseline_version: 0.6.3
+bundle_version: 1.0.0
+compatibility_class: behavior_changing_incompatible
+summary: Replace native authoring, template bundles and update outcomes with explicit stable keys, owned media and verified package identity evidence.
+migration_notes: Use the root Project/Note/NoteType/Media API, template-bundle-v2 and ankiforge-project-v1. Provide namespace and note keys explicitly, mark HTML explicitly, and build updates from original packages carrying ankiforge-identity-v1. Old Deck/prelude/identity recipes/lockfiles and legacy native product input are removed; no compatibility adapter is provided. The contract major version is independent of the Rust crate version.
+changes:
+- path: errors/error-registry.yaml
+  before: blake3:7fca0cb851ca157078b80aa22123f75b22c6296b5e2c82ddcd21e3d212b115f7
+  after: blake3:ef0a4c13c6e076176d6689e42e5d9b25809b4f61b1522fc4609a678221261508
+- path: fixtures/template-bundle/custom-cloze/anki-template.yaml
+  before: blake3:e435959fe163fa29a626ff1ed88fe7a3f4c82d72e539875d3aed18a6aa1646cc
+  after: blake3:f0ff403979d2f80d77b54d7ba4796d5dbd3458744907450a956ff4aa56858b01
+- path: fixtures/template-bundle/custom-cloze/back.html
+  before: blake3:20d491c22b69cf63ec9dc501ac31a88ddc7303f5821ffad3a6e4049eab2841df
+  after: blake3:d4c11c2cd0c96ed5a903569b224b6004f7f864c6742618e955d373fe30aa2107
+- path: fixtures/template-bundle/custom-cloze/browser-front.html
+  before: blake3:cc0d8a17510f762e2c0da49118dbaaadaea37e29a1006d4e8049a9c861c87c54
+  after: blake3:8a7aee6858d4130c43d81cb25de193e171f60f85ac252d9d23a1a49938e2721e
+- path: fixtures/template-bundle/custom-cloze/front.html
+  before: blake3:77a4b7fd6ff6faa0244e77354b5dbe003570e4c6ab2c6b30cbf9adb5493cc527
+  after: blake3:c4e065ebed280db1f2d52f247c1fa35647690cd15c30bc357f6803895af6287a
+- path: fixtures/template-bundle/custom-normal/anki-template.yaml
+  before: blake3:6c258d18c441284d32221f6eefccfd2a62fd5464968bb74ffe2698f8229306ca
+  after: blake3:14c13c8510a829f8b79481690362802572028b4d6c003cd441b54948bf854894
+- path: fixtures/template-bundle/custom-normal/back.html
+  before: blake3:551781219027f4afa27485aa93bb1745687961357088ea90c7ff287186d68ebd
+  after: blake3:b86c8a9d718a7b9ad711cce6585c7a261f12fa7b0634ad06b3de8a80e03c5045
+- path: fixtures/template-bundle/custom-normal/browser-back.html
+  before: blake3:1e081069f18cad357e06de4c09c4242a007f845f58e6bf85e2576641adaee078
+  after: blake3:984ff97436699e6adc217160d969732171864066c71368a48e133e716e80d2cc
+- path: fixtures/template-bundle/custom-normal/browser-front.html
+  before: blake3:d2be8949b8d407b0623f073bb988fff152196d65b3dd875bba0e1b993203caed
+  after: blake3:f999fa48bcdf471e55dcc31e437f02c2fd9604b970a17f11f4e4b1c6ac08cf23
+- path: fixtures/template-bundle/custom-normal/front.html
+  before: blake3:d2be8949b8d407b0623f073bb988fff152196d65b3dd875bba0e1b993203caed
+  after: blake3:f999fa48bcdf471e55dcc31e437f02c2fd9604b970a17f11f4e4b1c6ac08cf23
+- path: manifest.yaml
+  before: blake3:717e3899d3cc05d460926b2ce994ff311fab75141b039a6dfc2314bcb16c0943
+  after: blake3:5db62152fc6fef5f2ab2f11743a71a18f39f4c568b3bf271b81d43726b65e531
+- path: schema/build-report.schema.json
+  before: blake3:7a18b870a8c762b16a6d325fe4ac13f40a2ad309a7f103c1959a88e60742dee0
+  after: blake3:d833e47b1cfd4190ab2aa3977bf4fa0a74978b236f62f0b760481dfa56ed6092
+- path: schema/comparison-report.schema.json
+  before: null
+  after: blake3:d8a83726afe1eb2a1bb0e313337b7c85de184db502aa112a9a68c05c802199a6
+- path: schema/identity-evidence.schema.json
+  before: null
+  after: blake3:c03aa16b00a54eb7191064c848360722160b090a82588c35f1bb55d8590838f0
+- path: schema/manifest.schema.json
+  before: blake3:223e9ca30b986d8add1de2ba9a56690c55685a633188e4524b9ddc8898864775
+  after: blake3:dd6eac50ff97d6ed1abd522dbafc384e801b2de6b79089974b34a7806597cad3
+- path: schema/project-input.schema.json
+  before: null
+  after: blake3:24be9473ad49432b577fff212fb32bdd269eb27cb82fccaef7a717a7bf46c8e7
+- path: schema/template-bundle.schema.json
+  before: blake3:5368f496ae2829b48dcfda86ce063e99503f07b2c3596deb57c2b067267f0dfd
+  after: blake3:6cf57076ecf309366ff9468ed8932a47131742e0dc10eccf592b03f2683b7d6a
+- path: semantics/identity-update-safety.md
+  before: blake3:0ca24acf240d4dcfa1d5c8a55b03c6fef49b6c88360e48dbcad4fbf25c68b02d
+  after: blake3:d1e4c4809c76cee54d467f98a7754798cc977e379f1a7b1c6a8531593c001f3b
+- path: semantics/note-stable-id.md
+  before: blake3:6d784bf7b2c3e5eeb7d127b45e52481b22cf18605155c04a5adb4aad04378e4b
+  after: blake3:51d659fc1f8303b430a3af59bc386a7c3bca01636ee3c67d9f5be37ccb299431
+- path: semantics/rust-authoring.md
+  before: null
+  after: blake3:698d4de35866b481e7eab0b6624b492922f1cce7003eae2cb9247ab470f995a9
+- path: semantics/templates.md
+  before: blake3:417e89cd68d789282195a71850d9212e06716917cf098c1f0071942035e88246
+  after: blake3:38fcc7a352a3221ead39bc613031b38a06467423a72f63386e92d67fc8ef285c

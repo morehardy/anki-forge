@@ -1,79 +1,34 @@
 import path from "node:path";
-import { readdirSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { root, targets } from "./platforms.mjs";
 const platform = targets.find(
-  (item) => item.os === process.platform && item.cpu === process.arch,
+  (p) => p.os === process.platform && p.cpu === process.arch,
 );
 if (!platform) throw new Error("Unsupported test platform");
-// Keep the evidence index connected to real files that this runner discovers.
-const matrix = JSON.parse(
-  readFileSync(path.join(root, "test/capability-matrix.json"), "utf8"),
+const build = spawnSync(
+  "cargo",
+  [
+    "build",
+    "--offline",
+    "--locked",
+    "-p",
+    "anki_forge_node_native",
+    "--example",
+    "sdk_parity",
+    "--message-format=json",
+  ],
+  { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] },
 );
-const ids = new Set();
-for (const capability of matrix.capabilities) {
-  if (ids.has(capability.id))
-    throw new Error(`Duplicate capability ${capability.id}`);
-  ids.add(capability.id);
-  for (const evidence of capability.tests) {
-    if (
-      !evidence.file.endsWith(".test.mjs") ||
-      path.basename(evidence.file) !== evidence.file
-    )
-      throw new Error(`Invalid test file for ${capability.id}`);
-    const source = readFileSync(path.join(root, "test", evidence.file), "utf8");
-    if (!source.includes(evidence.name))
-      throw new Error(`Missing ${capability.id} test: ${evidence.name}`);
-  }
-}
-const parity = process.argv.includes("--parity");
-const evidenceArg = process.argv.indexOf("--evidence");
-if (evidenceArg >= 0 && (!parity || !process.argv[evidenceArg + 1]))
-  throw new Error("--evidence requires --parity and an output directory");
-let observer;
-if (parity) {
-  const built = spawnSync(
-    "cargo",
-    [
-      "build",
-      "-p",
-      "anki_forge_node_native",
-      "--example",
-      "sdk_parity",
-      "--locked",
-      "--message-format=json",
-    ],
-    {
-      cwd: root,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "inherit"],
-    },
-  );
-  if (built.error) throw built.error;
-  if (built.status !== 0) process.exit(built.status ?? 1);
-  observer = built.stdout
-    .trim()
-    .split("\n")
-    .map((line) => JSON.parse(line))
-    .find(
-      (item) => item.target?.name === "sdk_parity" && item.executable,
-    )?.executable;
-  if (!observer) throw new Error("Rust parity observer was not built");
-}
+if (build.status !== 0) process.exit(build.status ?? 1);
+const observer = build.stdout
+  .trim()
+  .split("\n")
+  .map((l) => JSON.parse(l))
+  .find((x) => x.target?.name === "sdk_parity" && x.executable)?.executable;
+if (!observer) throw new Error("Missing semantic observer");
 const result = spawnSync(
   process.execPath,
-  [
-    "--expose-gc",
-    "--test",
-    ...(parity
-      ? ["test/parity.test.mjs"]
-      : readdirSync(path.join(root, "test"))
-          .filter(
-            (name) => name.endsWith(".test.mjs") && name !== "parity.test.mjs",
-          )
-          .sort()
-          .map((name) => `test/${name}`)),
-  ],
+  ["--expose-gc", "--test", "test/public-api.test.mjs"],
   {
     cwd: root,
     stdio: "inherit",
@@ -85,17 +40,8 @@ const result = spawnSync(
         platform.suffix,
         "anki-forge.node",
       ),
-      ...(observer ? { ANKI_FORGE_TEST_OBSERVER: observer } : {}),
-      ...(evidenceArg >= 0
-        ? {
-            ANKI_FORGE_NODE_EVIDENCE_DIR: path.resolve(
-              root,
-              process.argv[evidenceArg + 1],
-            ),
-          }
-        : {}),
+      ANKI_FORGE_TEST_OBSERVER: observer,
     },
   },
 );
-if (result.error) throw result.error;
 process.exitCode = result.status ?? 1;

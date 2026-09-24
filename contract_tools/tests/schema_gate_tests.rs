@@ -84,11 +84,10 @@ fn template_bundle_schema_rejects_blank_identifiers() {
     let schema =
         load_schema(resolve_asset_path(&manifest, "template_bundle_schema").unwrap()).unwrap();
     let valid = json!({
-        "format_version": "template-bundle-v1",
+        "format_version": "template-bundle-v2",
         "note_type": {
-            "id": "language-card",
+            "key": "language-card",
             "name": "Language Card",
-            "kind": "normal",
             "fields": [{"key": "prompt", "name": "Prompt"}],
             "templates": [{
                 "key": "card",
@@ -103,7 +102,7 @@ fn template_bundle_schema_rejects_blank_identifiers() {
     assert!(validate_value(&schema, &valid).is_ok());
 
     for pointer in [
-        "/note_type/id",
+        "/note_type/key",
         "/note_type/name",
         "/note_type/fields/0/key",
         "/note_type/fields/0/name",
@@ -121,10 +120,9 @@ fn template_bundle_schema_rejects_blank_identifiers() {
     }
 
     let blank_cloze_field = json!({
-        "format_version": "template-bundle-v1",
+        "format_version": "template-bundle-v2",
         "note_type": {
-            "id": "language-cloze",
-            "kind": "cloze",
+            "key": "language-cloze",
             "cloze_field": " \t\n ",
             "fields": [{"key": "text", "name": "Text"}],
             "templates": [{
@@ -142,9 +140,9 @@ fn template_bundle_schema_rejects_blank_identifiers() {
 
     let mut padded_identifier = valid;
     *padded_identifier
-        .pointer_mut("/note_type/id")
+        .pointer_mut("/note_type/key")
         .expect("note type id") = json!(" language-card ");
-    assert!(validate_value(&schema, &padded_identifier).is_ok());
+    assert!(validate_value(&schema, &padded_identifier).is_err());
 }
 
 #[test]
@@ -921,7 +919,7 @@ fn writer_ready_normalized_ir_value() -> Value {
 }
 
 #[test]
-fn phase4_build_report_schema_is_registered_in_manifest() {
+fn native_build_report_schema_is_registered_in_manifest() {
     let manifest =
         contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
             .expect("repo manifest should load");
@@ -936,7 +934,7 @@ fn phase4_build_report_schema_is_registered_in_manifest() {
 }
 
 #[test]
-fn phase4_build_report_schema_is_valid_json_schema() {
+fn native_build_report_schema_is_valid_json_schema() {
     let manifest =
         contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
             .expect("repo manifest should load");
@@ -949,40 +947,55 @@ fn phase4_build_report_schema_is_valid_json_schema() {
 }
 
 #[test]
-fn phase4_build_report_schema_accepts_v1_media_without_entries() {
-    let manifest =
-        contract_tools::manifest::load_manifest(contract_tools::contract_manifest_path())
-            .expect("repo manifest should load");
-    let schema_path =
-        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
-            .expect("build_report_schema should resolve");
-    let schema = load_schema(schema_path).expect("load build report schema");
-    let value = json!({
-        "kind": "anki-forge-build-report",
-        "schema_version": "phase4-build-report-v1",
-        "tool_version": "test",
-        "status": "success",
-        "comparison": "not_requested",
-        "artifact": { "path": "deck.apkg" },
-        "counts": { "notes": 1, "cards": 1, "media": 0 },
-        "media": {
-            "objects": 0,
-            "bindings": 0,
-            "references": 0,
-            "missing_references": 0,
-            "unsafe_references": 0,
-            "unused_bindings": 0,
-            "unique_bytes": 0
-        },
-        "diagnostics": [],
-        "metrics": { "duration_ms": 1 },
-        "policy": {
-            "status": "not_evaluated",
-            "threshold": null,
-            "highest_risk": null,
-            "blocking_findings": []
-        }
-    });
+fn native_build_and_comparison_schemas_accept_real_outcomes() {
+    use ankiforge::{update::CompareOptions, BuildOptions, Note, Project};
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let build_schema =
+        load_schema(resolve_asset_path(&manifest, "build_report_schema").unwrap()).unwrap();
+    let comparison_schema =
+        load_schema(resolve_asset_path(&manifest, "comparison_report_schema").unwrap()).unwrap();
+    let mut project = Project::new("schema-test").unwrap();
+    project.add("one", Note::basic("Front", "Back")).unwrap();
+    project.add("two", Note::basic("Other", "Back")).unwrap();
+    let success = project.build(BuildOptions::temporary()).unwrap();
+    let snapshot = serde_json::to_value(success.snapshot()).unwrap();
+    assert!(validate_value(&build_schema, &snapshot).is_ok());
+    let mut invalid = snapshot.clone();
+    invalid["result"]
+        .as_object_mut()
+        .unwrap()
+        .remove("artifact");
+    assert!(validate_value(&build_schema, &invalid).is_err());
+    invalid = snapshot;
+    invalid["schema_version"] = json!("phase4-build-report-v1");
+    assert!(validate_value(&build_schema, &invalid).is_err());
 
-    assert!(validate_value(&schema, &value).is_ok());
+    let mut removed = Project::new("schema-test").unwrap();
+    removed.add("one", Note::basic("Front", "Back")).unwrap();
+    let comparison = removed
+        .compare(CompareOptions::against(success.artifact().path()))
+        .unwrap();
+    assert!(!comparison.policy().allows_publication());
+    assert!(validate_value(
+        &comparison_schema,
+        &serde_json::to_value(comparison.snapshot()).unwrap()
+    )
+    .is_ok());
+    let blocked = removed
+        .build(BuildOptions::temporary().update_from(success.artifact().path()))
+        .unwrap_err();
+    assert!(validate_value(
+        &build_schema,
+        &serde_json::to_value(blocked.snapshot()).unwrap()
+    )
+    .is_ok());
+    let missing = tempfile::tempdir().unwrap().path().join("missing.apkg");
+    let failure = project
+        .build(BuildOptions::temporary().update_from(missing))
+        .unwrap_err();
+    assert!(validate_value(
+        &build_schema,
+        &serde_json::to_value(failure.snapshot()).unwrap()
+    )
+    .is_ok());
 }

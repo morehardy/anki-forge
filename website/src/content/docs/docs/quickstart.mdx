@@ -14,7 +14,7 @@ This guide runs the repositoryâ€™s minimal Rust example. You need Git, Rust 1.92
 ```bash
 git clone https://github.com/morehardy/anki-forge.git
 cd anki-forge
-cargo run -q -p anki_forge --example target_api_basic
+cargo run -q -p ankiforge --example target_api_basic
 ```
 
 The first run compiles the project and its dependencies. It writes `spanish.apkg` in the repository root. The following source is taken directly from `anki_forge/examples/target_api_basic.rs`:
@@ -29,14 +29,14 @@ You can also <a href={sitePath('/generated/spanish.apkg')}>download the websiteâ
 
 ## Read the code
 
-`Deck::new("Spanish")` creates a deck. The Basic builder adds a note with front and back fields. `stable_id("es:hola")` gives the note a name that can survive edits to its content.
+`Project::new("spanish")` creates a publication namespace; `default_deck("Spanish")` selects its display deck. `Note::basic` creates front and back fields, and `project.add("hola", note)` assigns a stable note key independent of wording.
 
-`write_apkg(...)` returns a build report. Call `ensure_success()` to fail the program if the report contains errors. For a fuller diagnostic flow, read <a href={sitePath('/docs/rust-guide/#projects-and-diagnostics')}>Projects and diagnostics</a>.
+`project.build(BuildOptions::to(...))` returns a successful output with an artifact or a typed error. The `?` operator propagates failures. See <a href={sitePath('/docs/build-guarantees/')}>build and output guarantees</a> for reports and ownership.
 
 ## Make it yours
 
-To use the library outside this checkout, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>. The <a href={sitePath('/docs/concepts/')}>core concepts</a> explain notes, cards and the choice between Deck and Project.
+To use the library outside this checkout, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>. The <a href={sitePath('/docs/concepts/')}>core concepts</a> explain projects, notes, cards and owned resources.
 
 Add another note with a different stable ID, change the deck name, or try a <a href={sitePath('/examples/#cloze')}>Cloze example</a>. For custom fields and media, use the project API and <a href={sitePath('/docs/templates/')}>template bundles</a>.
 
-Before updating a deck that you have already distributed, keep a copy of the previous package. The <a href={sitePath('/docs/updates/')}>update guide</a> explains comparison builds and identity lockfiles.
+Before updating a deck that you have already distributed, keep a copy of the previous package. The <a href={sitePath('/docs/updates/')}>update guide</a> explains comparisons and updates from the original distributed APKG.

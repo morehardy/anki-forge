@@ -1,4 +1,4 @@
-use anki_forge::authoring::NormalizedIr;
+use ankiforge::tools::NormalizedIr;
 use contract_tools::{
     compat_oracle::{run_compat_oracle_gates, validate_supported_package},
     contract_manifest_path,
@@ -199,7 +199,7 @@ fn copied_bundled_manifest_path(label: &str) -> PathBuf {
 fn build_phase3_fixture_apkg(
     normalized_fixture: &str,
     label: &str,
-) -> (TempDir, PathBuf, anki_forge::writer::InspectReport) {
+) -> (TempDir, PathBuf, ankiforge::tools::InspectReport) {
     let manifest = load_manifest(contract_manifest_path()).expect("load bundled manifest");
     let normalized_path =
         resolve_contract_relative_path(&manifest.contracts_root, normalized_fixture)
@@ -215,14 +215,14 @@ fn build_phase3_fixture_apkg(
         .parent()
         .expect("normalized fixture has parent")
         .join(".anki-forge-media");
-    let target = anki_forge::writer::BuildArtifactTarget::new(
+    let target = ankiforge::tools::BuildArtifactTarget::new(
         artifact_root.path().to_path_buf(),
         format!("artifacts/compat-oracle-tests/{label}"),
     )
     .with_media_store_dir(media_store_dir);
 
     let build_result =
-        anki_forge::writer::build(&normalized_ir, &writer_policy, &build_context, &target)
+        ankiforge::tools::build_contract(&normalized_ir, &writer_policy, &build_context, &target)
             .expect("build fixture package");
     let apkg_ref = build_result
         .apkg_ref
@@ -230,8 +230,7 @@ fn build_phase3_fixture_apkg(
         .expect("build should produce apkg_ref")
         .to_string();
     let apkg_path = artifact_path_from_ref(&target, &apkg_ref);
-    let inspect_report =
-        anki_forge::writer::inspect_apkg(&apkg_path).expect("inspect built package");
+    let inspect_report = ankiforge::tools::inspect_apkg(&apkg_path).expect("inspect built package");
 
     (artifact_root, apkg_path, inspect_report)
 }
@@ -272,7 +271,7 @@ fn rewrite_media_map_with_legacy_zip_filename(source: &Path, target: &Path) {
 }
 
 fn artifact_path_from_ref(
-    target: &anki_forge::writer::BuildArtifactTarget,
+    target: &ankiforge::tools::BuildArtifactTarget,
     reference: &str,
 ) -> PathBuf {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');

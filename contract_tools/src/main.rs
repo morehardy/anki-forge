@@ -68,25 +68,35 @@ enum Command {
     },
     ProductBuild {
         #[arg(long)]
-        manifest: String,
-        #[arg(long)]
-        product_input: String,
+        project: String,
         #[arg(long)]
         base_dir: Option<String>,
         #[arg(long)]
         apkg_out: String,
         #[arg(long)]
-        compare_to: Option<String>,
+        update_from: Option<String>,
         #[arg(long)]
         fail_on: Option<String>,
         #[arg(long)]
+        allow: Vec<String>,
+        #[arg(long)]
         report_json: Option<String>,
+        #[arg(long, default_value = "contract-json")]
+        output: String,
+    },
+    ProductCompare {
         #[arg(long)]
-        identity_lockfile: Option<String>,
+        project: String,
         #[arg(long)]
-        write_identity_lockfile: bool,
+        base_dir: Option<String>,
         #[arg(long)]
-        update_safety: Option<String>,
+        baseline: String,
+        #[arg(long)]
+        fail_on: Option<String>,
+        #[arg(long)]
+        allow: Vec<String>,
+        #[arg(long)]
+        report_json: Option<String>,
         #[arg(long, default_value = "contract-json")]
         output: String,
     },
@@ -190,44 +200,48 @@ fn main() -> anyhow::Result<()> {
             );
         }
         Command::ProductBuild {
-            manifest,
-            product_input,
+            project,
             base_dir,
             apkg_out,
-            compare_to,
+            update_from,
             fail_on,
+            allow,
             report_json,
-            identity_lockfile,
-            write_identity_lockfile,
-            update_safety,
             output,
         } => {
-            match contract_tools::product_build_cmd::run(
+            print_product_result(contract_tools::product_build_cmd::run(
                 contract_tools::product_build_cmd::ProductBuildRequest {
-                    manifest: &manifest,
-                    product_input: &product_input,
+                    project: &project,
                     base_dir: base_dir.as_deref(),
                     apkg_out: &apkg_out,
-                    compare_to: compare_to.as_deref(),
+                    update_from: update_from.as_deref(),
                     fail_on: fail_on.as_deref(),
+                    allow: &allow,
                     report_json: report_json.as_deref(),
-                    identity_lockfile: identity_lockfile.as_deref(),
-                    write_identity_lockfile,
-                    update_safety: update_safety.as_deref(),
                     output: &output,
                 },
-            )? {
-                contract_tools::product_build_cmd::ProductBuildOutcome::Success(body) => {
-                    print!("{body}");
-                }
-                contract_tools::product_build_cmd::ProductBuildOutcome::ReportFailure {
-                    json,
-                    exit_code,
-                } => {
-                    print!("{json}");
-                    std::process::exit(exit_code);
-                }
-            }
+            )?);
+        }
+        Command::ProductCompare {
+            project,
+            base_dir,
+            baseline,
+            fail_on,
+            allow,
+            report_json,
+            output,
+        } => {
+            print_product_result(contract_tools::product_build_cmd::compare(
+                contract_tools::product_build_cmd::ProductCompareRequest {
+                    project: &project,
+                    base_dir: base_dir.as_deref(),
+                    baseline: &baseline,
+                    fail_on: fail_on.as_deref(),
+                    allow: &allow,
+                    report_json: report_json.as_deref(),
+                    output: &output,
+                },
+            )?);
         }
         Command::Inspect {
             staging,
@@ -249,4 +263,22 @@ fn main() -> anyhow::Result<()> {
     }
 
     Ok(())
+}
+
+fn print_product_result(result: contract_tools::product_build_cmd::ProductBuildOutcome) {
+    use contract_tools::product_build_cmd::ProductBuildOutcome;
+    match result {
+        ProductBuildOutcome::Success(body) => println!("{body}"),
+        ProductBuildOutcome::ReportFailure {
+            json,
+            exit_code,
+            followup_error,
+        } => {
+            println!("{json}");
+            if let Some(error) = followup_error {
+                eprintln!("{error}");
+            }
+            std::process::exit(exit_code);
+        }
+    }
 }

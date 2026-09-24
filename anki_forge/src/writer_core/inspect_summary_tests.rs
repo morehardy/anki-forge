@@ -1,7 +1,7 @@
 use super::*;
 use std::io::Read;
 
-use crate::product::{Note, Project};
+use crate::{BuildOptions, Note, Project};
 use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
 
 #[test]
@@ -70,13 +70,17 @@ fn interrupted_media_hash_stream_finishes_without_reporting_a_partial_digest() {
 }
 
 fn package(path: &Path) {
-    let mut project = Project::new("Summary").stable_id("summary");
+    let mut project = Project::new("summary").unwrap().default_deck("Summary");
     for id in ["note", "note-prefix"] {
-        project
-            .add_note(Note::basic(id, "answer & 中文").stable_id(id))
-            .unwrap();
+        project.add(id, Note::basic(id, "answer & 中文")).unwrap();
     }
-    project.write_apkg(path).unwrap().ensure_success().unwrap();
+    project.build(BuildOptions::to(path)).unwrap();
+    // Reader tests deliberately use external GUIDs with a shared prefix; native
+    // namespace-derived GUIDs are verified by the build/update consumer tests.
+    mutate_collection(
+        path,
+        "UPDATE notes SET guid = substr(flds, 1, instr(flds, char(31)) - 1);",
+    );
 }
 
 fn entries(path: &Path) -> Vec<(String, Vec<u8>)> {
@@ -203,14 +207,12 @@ fn summary_counts_actual_cards_with_sparse_ordinals_and_prefix_guids() {
 fn summary_counts_mixed_notetypes_and_sparse_cloze_cards() {
     let root = tempfile::tempdir().unwrap();
     let path = root.path().join("cloze.apkg");
-    let mut project = Project::new("Mixed summary").stable_id("mixed-summary");
+    let mut project = Project::new("mixed-summary").unwrap();
+    project.add("basic", Note::basic("front", "back")).unwrap();
     project
-        .add_note(Note::basic("front", "back").stable_id("basic"))
+        .add("cloze", Note::cloze("{{c1::one}} and {{c3::three}}"))
         .unwrap();
-    project
-        .add_note(Note::cloze("{{c1::one}} and {{c3::three}}").stable_id("cloze"))
-        .unwrap();
-    project.write_apkg(&path).unwrap().ensure_success().unwrap();
+    project.build(BuildOptions::to(&path)).unwrap();
     let summary = assert_summary_matches_full(&path, &InspectLimits::default());
     assert_eq!((summary.notes, summary.cards, summary.notetypes), (2, 3, 2));
 }
@@ -367,18 +369,12 @@ fn summary_keeps_duplicate_notetype_metadata_ids_and_names() {
     let root = tempfile::tempdir().unwrap();
     let original = root.path().join("original-models.apkg");
     let path = root.path().join("duplicate-models.apkg");
-    let mut project = Project::new("Duplicate models").stable_id("duplicate-models");
+    let mut project = Project::new("duplicate-models").unwrap();
+    project.add("basic", Note::basic("front", "back")).unwrap();
     project
-        .add_note(Note::basic("front", "back").stable_id("basic"))
+        .add("cloze", Note::cloze("{{c1::one}} and {{c3::three}}"))
         .unwrap();
-    project
-        .add_note(Note::cloze("{{c1::one}} and {{c3::three}}").stable_id("cloze"))
-        .unwrap();
-    project
-        .write_apkg(&original)
-        .unwrap()
-        .ensure_success()
-        .unwrap();
+    project.build(BuildOptions::to(&original)).unwrap();
 
     for (duplicate_id, duplicate_name) in [(true, false), (false, true), (true, true)] {
         fs::copy(&original, &path).unwrap();
@@ -504,50 +500,20 @@ fn summary_enforces_identical_resource_limits_and_media_boundaries() {
 }
 
 #[test]
-fn failed_current_summary_never_publishes_even_when_inspect_is_hidden() {
-    use crate::build::{BuildOptions, UpdateSafetyMode};
-    use crate::diagnostics::Severity;
-
+fn failed_current_summary_never_publishes() {
     let root = tempfile::tempdir().unwrap();
     let output = root.path().join("existing.apkg");
-    let mut project = Project::new("Summary limits").stable_id("summary-limits");
-    project
-        .add_note(Note::basic("front", "back").stable_id("note"))
-        .unwrap();
-    for mode in [
-        UpdateSafetyMode::Disabled,
-        UpdateSafetyMode::ReportOnly,
-        UpdateSafetyMode::Strict,
-    ] {
-        for inspect in [false, true] {
-            fs::write(&output, b"previous artifact").unwrap();
-            let error = project
-                .build(
-                    BuildOptions::new()
-                        .output(&output)
-                        .inspect(inspect)
-                        .update_safety(mode)
-                        .inspect_limits(InspectLimits {
-                            max_collection_bytes: 0,
-                            ..InspectLimits::default()
-                        }),
-                )
-                .expect_err("a failed current read must block publication");
-            assert!(error.report.artifact.is_none());
-            assert!(error.report.diagnostics.iter().any(|diagnostic| {
-                diagnostic.code.as_str() == "INSPECT.RESOURCE_LIMIT_EXCEEDED"
-                    && diagnostic.severity == Severity::Error
-            }));
-            let comparison_severity = if mode == UpdateSafetyMode::Strict {
-                Severity::Error
-            } else {
-                Severity::Warning
-            };
-            assert!(error.report.diagnostics.iter().any(|diagnostic| {
-                diagnostic.code.as_str() == "COMPARE.CURRENT_UNAVAILABLE"
-                    && diagnostic.severity == comparison_severity
-            }));
-            assert_eq!(fs::read(&output).unwrap(), b"previous artifact");
-        }
-    }
+    let mut project = Project::new("summary-limits").unwrap();
+    project.add("note", Note::basic("front", "back")).unwrap();
+    fs::write(&output, b"previous artifact").unwrap();
+    let error = project
+        .build(BuildOptions::to(&output).inspect_limits(InspectLimits {
+            max_collection_bytes: 0,
+            ..InspectLimits::default()
+        }))
+        .expect_err("a failed current read must block publication");
+    assert_eq!(error.kind(), crate::build::BuildErrorKind::ResourceLimit);
+    assert_eq!(error.code(), "INSPECT.RESOURCE_LIMIT_EXCEEDED");
+    assert!(error.publications().is_empty());
+    assert_eq!(fs::read(&output).unwrap(), b"previous artifact");
 }

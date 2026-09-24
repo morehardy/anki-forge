@@ -113,6 +113,7 @@ impl fmt::Display for MediaWriterError {
 
 impl std::error::Error for MediaWriterError {}
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub fn copy_verified_cas_object_to_path(
     media_store_dir: &Path,
     object: &crate::authoring_core::MediaObject,

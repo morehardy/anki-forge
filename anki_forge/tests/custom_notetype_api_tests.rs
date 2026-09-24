@@ -1,142 +1,159 @@
-use anki_forge::prelude::*;
+use ankiforge::{
+    diagnostics::Severity,
+    schema::{GenerationRule, TemplateSide},
+};
+use ankiforge::{BuildOptions, Field, NoteType, Project, Template};
 
 #[test]
-fn custom_notetype_builder_records_keys_and_identity_recipe() {
-    let vocab = NoteType::custom("jp-vocab")
+fn validated_model_retains_keys_labels_and_template_options() {
+    let vocab = NoteType::builder("jp-vocab")
         .name("Japanese Vocabulary")
-        .field(Field::new("Expression").key("expr").identity().sort())
-        .field(Field::new("Meaning").key("meaning").required())
-        .field(Field::new("Audio").key("audio").optional())
+        .field(Field::new("expr").name("Expression").sort())
+        .field(Field::new("meaning").name("Meaning").required())
+        .field(Field::new("audio").name("Audio"))
         .template(
-            Template::new("Recognition")
-                .key("recognition")
-                .front("{{Expression}}")
-                .back("{{FrontSide}}<hr id=\"answer\">{{Meaning}}")
-                .browser_front("{{Expression}}")
-                .browser_back("{{Meaning}}")
+            Template::new("recognition")
+                .name("Recognition")
+                .front("{{expr}}")
+                .back("{{FrontSide}}<hr>{{meaning}}")
+                .browser_front("{{expr}}")
+                .browser_back("{{meaning}}")
                 .target_deck("Japanese::Recognition")
                 .generate_when(GenerationRule::all(["expr"])),
         )
-        .identity(IdentityRecipe::fields(["expr"]));
-
-    assert_eq!(vocab.id(), "jp-vocab");
-    assert_eq!(vocab.name_ref(), Some("Japanese Vocabulary"));
-    assert_eq!(vocab.fields()[0].key_ref().as_str(), "expr");
-    assert!(vocab.fields()[0].is_identity());
+        .build()
+        .unwrap();
+    assert_eq!(vocab.key(), "jp-vocab");
+    assert_eq!(vocab.display_name(), "Japanese Vocabulary");
+    assert_eq!(vocab.fields()[0].key().as_str(), "expr");
     assert!(vocab.fields()[0].is_sort());
     assert!(vocab.fields()[1].is_required());
-    assert!(vocab.fields()[2].is_optional());
-    assert_eq!(vocab.templates()[0].key_ref().as_str(), "recognition");
+    assert!(!vocab.fields()[2].is_required());
+    assert_eq!(vocab.templates()[0].key().as_str(), "recognition");
     assert_eq!(
-        vocab.templates()[0]
-            .browser_front_source()
-            .map(|source| source.as_str()),
-        Some("{{Expression}}")
+        vocab.templates()[0].browser_front_source(),
+        Some("{{expr}}")
     );
     assert_eq!(
         vocab.templates()[0].target_deck_name(),
         Some("Japanese::Recognition")
     );
-    assert_eq!(
-        vocab.identity_ref().expect("identity").field_keys(),
-        vec![FieldKey::new("expr")]
-    );
 }
 
 #[test]
-fn project_rejects_template_field_references_missing_from_notetype() {
-    let note_type = NoteType::custom("jp-vocab")
-        .field(Field::new("Expression").key("expr").identity().sort())
-        .template(
-            Template::new("Recognition")
-                .key("recognition")
-                .front("{{TypoField}}")
-                .back("{{Expression}}"),
-        )
-        .identity(IdentityRecipe::fields(["expr"]));
-    let mut project = Project::new("Japanese");
-
-    let error = project
-        .add_notetype(note_type)
-        .expect_err("unknown template field should be rejected");
-
-    assert_eq!(
-        error.diagnostic().code.as_str(),
-        "TEMPLATE.RENDER_FIELD_UNKNOWN"
-    );
-    assert!(error.diagnostic().message.contains("TypoField"));
-    assert_eq!(
-        error
-            .diagnostic()
-            .source
-            .as_ref()
-            .map(|source| source.as_str()),
-        Some("project.note_types[0].templates[\"Recognition\"].front")
-    );
+fn completing_a_model_rejects_unknown_template_keys_at_the_original_location() {
+    let error = NoteType::builder("vocab")
+        .field(Field::new("expr").name("Expression"))
+        .template(Template::new("recognition").front("{{TypoField}}"))
+        .build()
+        .unwrap_err();
+    assert_eq!(error.code(), "TEMPLATE.RENDER_FIELD_UNKNOWN");
+    let location = error.location().unwrap();
+    assert_eq!(location.template.as_str(), "recognition");
+    assert_eq!(location.side, TemplateSide::Front);
+    assert_eq!(location.byte_range, 2..11);
 }
 
-#[test]
-fn project_validate_preserves_unknown_filter_as_a_warning() {
-    let note_type = NoteType::custom("portable-template")
-        .field(Field::new("Front").key("front").identity())
+fn warning_project() -> Project {
+    let model = NoteType::builder("portable")
+        .field(Field::new("front"))
         .template(
-            Template::new("Card")
-                .key("card")
-                .front("{{addon_filter:Front}}")
-                .back("{{Front}}"),
+            Template::new("card")
+                .front("{{addon_filter:front}}")
+                .back("{{front}}"),
         )
-        .identity(IdentityRecipe::fields(["front"]));
-    let mut project = Project::new("Portable");
+        .build()
+        .unwrap();
+    let mut project = Project::new("portable").unwrap();
     project
-        .add_notetype(note_type)
-        .expect("unknown filters are portability warnings");
+        .add("hello", model.note().field("front", "hello"))
+        .unwrap();
+    project
+}
 
-    let report = project.validate();
-    let diagnostic = report
-        .diagnostics
+#[test]
+fn unknown_addon_filters_are_nonfatal_portability_warnings() {
+    let output = warning_project().build(BuildOptions::temporary()).unwrap();
+    let diagnostic = output
+        .report()
+        .diagnostics()
         .iter()
-        .find(|diagnostic| diagnostic.code.as_str() == "TEMPLATE.FILTER_UNKNOWN")
-        .expect("unknown filter warning");
-
+        .find(|d| d.code == "TEMPLATE.FILTER_UNKNOWN")
+        .unwrap();
     assert_eq!(diagnostic.severity, Severity::Warning);
-    assert_eq!(
-        diagnostic.source.as_ref().map(|source| source.as_str()),
-        Some("project.note_types[\"portable-template\"].templates[\"Card\"].front")
-    );
+    assert!(output.artifact().path().is_file());
+    assert!(matches!(
+        output.snapshot().result,
+        ankiforge::build::json::BuildResultSnapshot::Success { .. }
+    ));
 }
 
 #[test]
-fn project_build_reports_each_template_warning_once() {
-    let note_type = NoteType::custom("portable-template")
-        .field(Field::new("Front").key("front").identity())
-        .template(
-            Template::new("Card")
-                .key("card")
-                .front("{{addon_filter:Front}}")
-                .back("{{Front}}"),
-        )
-        .identity(IdentityRecipe::fields(["front"]));
-    let mut project = Project::new("Portable").default_deck("Portable");
-    project.add_notetype(note_type).expect("add note type");
-    project
-        .add_note(
-            Note::new("portable-template")
-                .stable_id("portable:1")
-                .text("front", "hello"),
-        )
-        .expect("add note");
-    let output = tempfile::tempdir().expect("output");
-
-    let report = project
-        .write_apkg(output.path().join("portable.apkg"))
-        .expect("warning-only build succeeds");
-
+fn build_reports_each_template_warning_once() {
+    let output = warning_project().build(BuildOptions::temporary()).unwrap();
     assert_eq!(
-        report
-            .diagnostics
+        output
+            .report()
+            .diagnostics()
             .iter()
-            .filter(|diagnostic| diagnostic.code.as_str() == "TEMPLATE.FILTER_UNKNOWN")
+            .filter(|d| d.code == "TEMPLATE.FILTER_UNKNOWN")
             .count(),
         1
     );
+}
+
+#[test]
+fn model_and_template_keys_do_not_inherit_field_expression_restrictions() {
+    let model = NoteType::builder("course:vocab")
+        .field(Field::new("front"))
+        .template(Template::new("card:recognition").front("{{front}}"))
+        .build()
+        .unwrap();
+    assert_eq!(model.key(), "course:vocab");
+    assert_eq!(model.templates()[0].key().as_str(), "card:recognition");
+    let mut project = Project::new("course").unwrap();
+    project
+        .add("word", model.note().field("front", "hello"))
+        .unwrap();
+    assert_eq!(
+        project
+            .build(BuildOptions::temporary())
+            .unwrap()
+            .report()
+            .counts()
+            .cards,
+        1
+    );
+}
+
+#[test]
+fn empty_filter_segments_are_syntax_errors_at_the_authored_expression() {
+    for source in [
+        "前缀 {{text::front}}",
+        "前缀 {{:front}}",
+        "前缀 {{text: :front}}",
+    ] {
+        let error = NoteType::builder("filters")
+            .field(Field::new("front"))
+            .template(Template::new("card").front(source))
+            .build()
+            .unwrap_err();
+        assert_eq!(error.code(), "TEMPLATE.SYNTAX_INVALID");
+        assert_eq!(error.location().unwrap().byte_range, 7..source.len());
+    }
+}
+
+#[test]
+fn generation_rules_reject_duplicate_keys_when_completing_the_model() {
+    for rule in [
+        GenerationRule::all(["front", "front"]),
+        GenerationRule::any(["front", "front"]),
+    ] {
+        let error = NoteType::builder("duplicates")
+            .field(Field::new("front"))
+            .template(Template::new("card").front("{{front}}").generate_when(rule))
+            .build()
+            .unwrap_err();
+        assert_eq!(error.code(), "SCHEMA.GENERATION_INVALID");
+    }
 }

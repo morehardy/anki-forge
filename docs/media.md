@@ -1,76 +1,95 @@
 # Images and audio
 
-This guide builds a card with a waveform image and a real one-second A4 tone.
-The example generates its own SVG and WAV, so no media download is required.
+A `Media` value owns an immutable snapshot. Import files with `Media::file` or
+native bytes with an explicit MIME type via `Media::bytes`. After successful
+import, modifying or deleting the source file cannot change the asset. Clones
+share storage and can be used across projects.
 
-## Generate and inspect the result
+## Execute the media workflow
 
-From the repository root with [Rust installed](installation.md#requirements):
+From the repository root:
 
 ```sh
-cargo run --locked -p anki_forge --example website_showcase -- target/media-example
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
+cargo run --locked -p ankiforge --example target_api_media
 ```
 
-Open `target/media-example/ear-training.apkg` in Anki. It contains one note,
-one card and two media files. The front shows a waveform and an audio control;
-the answer is **A4, 440 Hz**. The program also writes `waveform.svg` and
-`concert-a.wav` to that directory for inspection.
+The workflow uses repository PNG/WAV fixtures and writes `media.apkg` with one
+note, one card and three assets. The second example generates its own tiny image
+and audio, includes CSS-linked and explicit media, and writes `spanish-media.apkg`.
 
-## Register media and attach it to a note
-
-This excerpt comes from the [complete example](../anki_forge/examples/website_showcase.rs).
-The preceding code generates the two files and declares the `ear-training`
-note type with `prompt`, `answer`, `picture` and `audio` fields.
-
-<!-- source: anki_forge/examples/website_showcase.rs#website:media -->
+<!-- source: anki_forge/examples/docs_workflow.rs#media -->
 ```rust
-let (prompt, answer) = ("Name this pitch.", "A4, 440 Hz");
-let picture = project
-    .media_mut()
-    .add_file(output.join("waveform.svg"))?
-    .export_as("waveform.svg")?;
-let audio = project
-    .media_mut()
-    .add_file(output.join("concert-a.wav"))?
-    .export_as("concert-a.wav")?;
-project.add_note(
-    Note::new("ear-training")
-        .stable_id("sound:a4")
-        .text("prompt", prompt)
-        .text("answer", answer)
-        .image("picture", picture)
-        .sound("audio", audio),
-)?;
-let report = project.write_apkg(output.join("ear-training.apkg"))?;
-report.ensure_success()?;
+fn media(output: &Path, image: &Path, sound: &Path) -> anyhow::Result<()> {
+    let image = Media::file(image)?.with_export_name("cell.png")?;
+    let sound = Media::file(sound)?;
+    let mut project = Project::new("docs-media")?;
+    project.add("cell", Note::basic(image.image(), sound.sound()))?;
+    let css = Media::bytes(b".card { color: navy; }".to_vec(), "text/css")?
+        .with_export_name("course.css")?;
+    project.add_asset(css)?;
+    let built = project.build(BuildOptions::to(output.join("media.apkg")))?;
+    verify(&built, 1, 1, 3)?;
+    Ok(())
+}
 ```
 <!-- /source -->
 
-Registration returns a `MediaRef`. `.image(...)` and `.sound(...)` create the
-Anki field markup that refers to its export filename. Include those fields in
-your template, or the media will not appear on the card.
+## Compose content and explicit assets
 
-## Use your own files
+This complete program uses `fixtures/pixel.png`, `fixtures/silence.wav`, and
+`fixtures/labels.woff`. In your application, pass your own source paths. The
+fixture font is the repository's redistributable test font.
 
-Replace the two source paths with existing files. `export_as(...)` selects the
-name inside the APKG; it must be a bare filename, such as `pronunciation.wav`,
-not a directory path. Keep files available and unchanged until the build finishes.
-Registration fingerprints sources and building checks for later changes.
+```rust
+use ankiforge::{BuildOptions, Content, Field, Media, NoteType, Project, Template};
 
-For small in-memory assets, Project offers `add_bytes(label, bytes)?.export_as(name)?`.
-The Project inline limit is 64 KiB. Use files for larger assets. Normal builds
-use path-backed media; explicitly self-contained payloads have inline limits.
+fn main() -> anyhow::Result<()> {
+    let image = Media::file("fixtures/pixel.png")?.with_export_name("badge.png")?;
+    let sound = Media::file("fixtures/silence.wav")?;
+    let font = Media::file("fixtures/labels.woff")?.with_export_name("labels.woff")?;
+    let model = NoteType::builder("media-card")
+        .field(Field::new("front"))
+        .field(Field::new("back"))
+        .template(Template::new("card")
+            .front(r#"{{front}}<img src="badge.png">"#)
+            .back("{{FrontSide}}<hr>{{back}}"))
+        .css("@font-face { font-family: labels; src: url('labels.woff'); } .card { font-family: labels; }")
+        .asset(font)
+        .asset(image.clone())
+        .build()?;
+    let mut project = Project::new("media-guide")?;
+    project.add("cell", model.note()
+        .field("front", Content::sequence([Content::text("Cell "), image.image()]))
+        .field("back", sound.sound()))?;
+    let output = project.build(BuildOptions::to("media-guide.apkg"))?;
+    assert_eq!(output.report().counts().media, 3);
+    Ok(())
+}
+```
 
-Templates and CSS can reference registered filenames directly, for example
-`<img src="logo.png">` or `url("logo.png")`. Keep these names in sync yourself;
-the library does not rewrite your HTML, CSS or media filenames automatically.
+Typed `image()` and `sound()` values retain dependencies until export. Manual
+HTML/CSS/script references need `builder.asset(media)` or `project.add_asset(media)`;
+the library does not infer file contents from arbitrary strings. An explicit
+asset is included even without a statically detectable reference.
 
-## Diagnose media problems
+## Names, MIME and budgets
 
-A successful package export does not prove a particular Anki client can play a
-codec. Verify playback on your intended client. For missing files, changed
-sources, collisions or unused bindings, use the
-[media troubleshooting table](troubleshooting.md#media-and-templates).
+Default export names are content-derived and independent of the source path.
+Use `with_export_name` before creating references when a fixed filename is
+needed. Renaming a clone does not rename earlier clones or content nodes.
 
-Next, place shared media in a [template bundle](template-bundles.md), or create
-[Image Occlusion cards](image-occlusion.md).
+Names cannot contain paths, controls or nonportable reserved names. Conflict
+checks use Unicode NFC plus case folding: case-only or normalization-only
+variants also conflict. Exactly identical name/content pairs are idempotent;
+different contents under one name fail without partial registration.
+
+MIME syntax and identifiable content must agree. Native bytes have no 64 KiB
+inline restriction. The default import budget is 256 MiB per asset;
+`file_with_limits` and `bytes_with_limits` accept `MediaLimits { max_bytes }`
+before reading. Large snapshots may spill to temporary storage, cleaned up when
+the last owner disappears. Snapshot ownership does not promise an atomic
+filesystem view of a source being modified concurrently during import.
+
+A valid media package does not prove codec playback on every Anki client. Test
+images, sound and fonts on your target clients. See [troubleshooting](troubleshooting.md#media-and-templates).

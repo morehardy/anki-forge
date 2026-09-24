@@ -1,0 +1,95 @@
+{
+  "date": "2026-09-24",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "implementation_commit": "399bc19ca816f44d441e1139dc0acb196bf79fc0",
+  "consumer_isolation_commit": "289ccfcce5c7bea6febece8d2bc9e177a6585b50",
+  "production_source_tree": "f9cd910eda239be261b606e07f32438c053bb052",
+  "checks": [
+    {
+      "name": "quality",
+      "command": "bash scripts/check_rust_crate_quality.sh",
+      "exit_code": 0,
+      "log_sha256": "d4929ebb7946017a4073b1ab947cf4de5bbd5bd5aa3931ffac5e5cc657b501a4",
+      "local_log": "/private/tmp/native-quality-clean-final.log"
+    },
+    {
+      "name": "ci",
+      "command": "CONTRACT_BASE_REF=115ed2761dd6bad66fb6cf4fb72919a49a0313d4 bash scripts/verify-ci.sh --ci",
+      "exit_code": 0,
+      "log_sha256": "20400fff5b022a1208eb1c2a1e58d280b9ffc2734af0f58b55321543ae33c74a",
+      "local_log": "/private/tmp/native-verify-ci-final.log"
+    },
+    {
+      "name": "public_surface",
+      "command": "cargo rustc --offline --locked -p ankiforge --lib --no-default-features -- -D unnameable_types; RUSTDOCFLAGS=\"-D warnings\" cargo doc --offline --locked -p ankiforge --no-default-features --no-deps",
+      "exit_code": 0,
+      "log_sha256": "495511d852ab51dfe017fcf3e76f06ccbcaf12273e242554e3da2500ebd31e3a",
+      "local_log": "/private/tmp/native-public-clean-final.log"
+    },
+    {
+      "name": "package_msrv",
+      "command": "bash scripts/check_rust_crate_package.sh",
+      "exit_code": 0,
+      "log_sha256": "f3b2029307ff2cc58774d700f43b9e8390740941bc5e7c2ee409955a2a6b9243",
+      "local_log": "/private/tmp/native-package-192-final.log"
+    },
+    {
+      "name": "package_newer",
+      "command": "RUSTUP_TOOLCHAIN=1.98.1 bash scripts/check_rust_crate_package.sh",
+      "exit_code": 0,
+      "log_sha256": "b8f62374041c8b287eb7b0981768e20afdd887618fddffe9617fbd2e02cb0eb4",
+      "local_log": "/private/tmp/native-package-198-final.log"
+    },
+    {
+      "name": "consumer_parallel_default",
+      "command": "cargo test --offline --locked -p ankiforge --test public_surface_contract_tests",
+      "exit_code": 0,
+      "log_sha256": "9f2e7af85f514cf48d4a17c52a87b09e9a28ed14aaeb68f4965c2924c4990fcd",
+      "local_log": "/private/tmp/native-consumer-race-regression.log"
+    },
+    {
+      "name": "consumer_parallel_tools",
+      "command": "cargo test --offline --locked -p ankiforge --features internal-tools --test public_surface_contract_tests",
+      "exit_code": 0,
+      "log_sha256": "92ed14ab5396802716d26ece82bc16c05f69a637712119986a1d02f4e66c929d",
+      "local_log": "/private/tmp/native-consumer-race-parallel.log"
+    },
+    {
+      "name": "website_parallel_a",
+      "command": "npm --prefix website run check:examples",
+      "exit_code": 0,
+      "log_sha256": "a1d0b657c5cffc907427eaaffcd0084b85ce021f545b8195914b6759a60dd1ea",
+      "local_log": "/private/tmp/native-website-parallel-a.log"
+    },
+    {
+      "name": "website_parallel_b",
+      "command": "npm --prefix website run check:examples",
+      "exit_code": 0,
+      "log_sha256": "c6772a10f7f2e3aac0b9b803061615ea0bb0b542b141fe3e6abbda80c9fa81b8",
+      "local_log": "/private/tmp/native-website-parallel-b.log"
+    },
+    {
+      "name": "media_lifecycle",
+      "command": "cargo test --offline --locked -p ankiforge --test media_snapshot_lifecycle_tests",
+      "exit_code": 0,
+      "log_sha256": "a61a2103549879187554d07e6f68cf103222654a25036bb7412ab76db886a725",
+      "local_log": "/private/tmp/native-media-probe-unique-final.log"
+    },
+    {
+      "name": "media_harness_clippy",
+      "command": "cargo clippy --offline --locked -p ankiforge --test media_snapshot_lifecycle_tests -- -D warnings",
+      "exit_code": 0,
+      "log_sha256": "892ec87e25d6a0e685fa940592364321746fe63b5e17eac3541c59c5e8be50ef",
+      "local_log": "/private/tmp/native-media-probe-clippy-final.log"
+    },
+    {
+      "name": "media_measurement_smoke",
+      "command": "python3 scripts/measure_native_media_snapshot.py --sizes-mib 8 --bytes-size-mib 8 --repeats 2 --output /private/tmp/native-media-probe-unique-final.json",
+      "exit_code": 0,
+      "log_sha256": "7f322a832a785881206d1f453474d3a2d91404da47b074506e4f7dd3ab2e136b",
+      "local_log": "/private/tmp/native-media-measurement-unique-final.log"
+    }
+  ],
+  "scope": "Local macOS ARM64 only. Subsequent changes are repository-only verification harness isolation and documentation; production sources are unchanged. Rust 1.98.1 is an explicitly installed compiler, not a claim about the current stable channel."
+}

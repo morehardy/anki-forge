@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "platform": "macOS ARM64 / CPython 3.11",
+  "tests_passed": 47,
+  "type_checks": "positive and seven expected negative diagnostics passed",
+  "network": "wheel build offline; install no-index/no-deps; dependencies and tools cached",
+  "commands": [
+    {
+      "name": "01-sdist",
+      "argv": [
+        "$RUN/build-env/bin/python",
+        "-c",
+        "import anki_forge_build; print(anki_forge_build.build_sdist('$RUN/sdist'))"
+      ],
+      "cwd": "$REPO/bindings/python",
+      "log": "$RUN/logs/01-sdist.log",
+      "exit_code": 0,
+      "log_sha256": "b3157f9810955b35521cda0c6c837fe4aab11639a3fc24869c9d3e6b7b789278"
+    },
+    {
+      "name": "02-wheel",
+      "argv": [
+        "$RUN/build-env/bin/maturin",
+        "build",
+        "--manifest-path",
+        "bindings/python/native/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--out",
+        "$RUN/wheels"
+      ],
+      "cwd": "$RUN/unpacked/anki_forge-0.2.0",
+      "log": "$RUN/logs/02-wheel.log",
+      "exit_code": 0,
+      "log_sha256": "9477d39208d2bc5974903ad8193e36d7bff2c59dcbad6cf342b5ae393ed7090c"
+    },
+    {
+      "name": "03-installed-smoke-types",
+      "argv": [
+        "$RUN/build-env/bin/python",
+        "$REPO/bindings/python/scripts/check_native_wheel.py",
+        "$RUN/wheels/anki_forge-0.2.0-cp311-abi3-macosx_11_0_arm64.whl"
+      ],
+      "cwd": "$RUN",
+      "log": "$RUN/logs/03-installed-smoke-types.log",
+      "exit_code": 0,
+      "log_sha256": "25c0737f4efc40440c4c518960118c4654c622cee8a02ab882e264c2aa6facdb"
+    },
+    {
+      "name": "04-observer",
+      "argv": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "bindings/python/native/Cargo.toml",
+        "--example",
+        "python_parity",
+        "--locked",
+        "--offline"
+      ],
+      "cwd": "$RUN/unpacked/anki_forge-0.2.0",
+      "log": "$RUN/logs/04-observer.log",
+      "exit_code": 0,
+      "log_sha256": "37c20ee2641e6a2724bc468b56907e317500b9c2cfb3f70f366df9f35213215e"
+    },
+    {
+      "name": "05-consumer-install",
+      "argv": [
+        "$RUN/consumer-env/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "$RUN/wheels/anki_forge-0.2.0-cp311-abi3-macosx_11_0_arm64.whl"
+      ],
+      "cwd": "$RUN",
+      "log": "$RUN/logs/05-consumer-install.log",
+      "exit_code": 0,
+      "log_sha256": "d9bf751eec7dc774a272383e3b3e35774d0846c43d50e7c2f8523ac812483818"
+    },
+    {
+      "name": "06-installed-public-and-fork",
+      "argv": [
+        "$RUN/consumer-env/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "tests",
+        "-q"
+      ],
+      "cwd": "$RUN/consumer-work",
+      "log": "$RUN/logs/06-installed-public-and-fork.log",
+      "exit_code": 0,
+      "log_sha256": "31c6c4efcc07e7761d2f6434a9f95c27e169d4cc24cce50127d8e0043ea76a35"
+    }
+  ]
+}

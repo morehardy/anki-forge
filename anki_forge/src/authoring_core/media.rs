@@ -1,11 +1,13 @@
+#[cfg(all(test, feature = "internal-tools"))]
+use super::media_io::object_store_path;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Component, Path, PathBuf};
 
 use crate::authoring_core::media_io::{
-    decode_inline_bytes, ingest_media_read_source_to_cas, object_store_path,
-    CasExistingIntegrityReason, MediaIoError, MediaReadSource, MediaSniffConfidence, SniffedMime,
+    decode_inline_bytes, ingest_media_read_source_to_cas, CasExistingIntegrityReason, MediaIoError,
+    MediaReadSource, MediaSniffConfidence, SniffedMime,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -84,6 +86,7 @@ pub struct MediaReference {
 }
 
 impl MediaReference {
+    #[cfg(feature = "internal-tools")]
     pub fn resolution_status(&self) -> &'static str {
         match self.resolution {
             MediaReferenceResolution::Resolved { .. } => "resolved",
@@ -133,9 +136,10 @@ pub struct MediaIngestDiagnostic {
     pub path: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct MediaIngestError {
     pub diagnostics: Vec<MediaIngestDiagnostic>,
+    pub(crate) io_cause: Option<std::io::Error>,
 }
 
 #[derive(Debug, Clone)]
@@ -143,15 +147,18 @@ pub struct MediaIngestResult {
     pub objects: Vec<MediaObject>,
     pub bindings: Vec<MediaBinding>,
     pub diagnostics: Vec<MediaIngestDiagnostic>,
+    #[cfg(all(test, feature = "internal-tools"))]
     pub media_store_dir: PathBuf,
 }
 
 impl MediaIngestResult {
+    #[cfg(all(test, feature = "internal-tools"))]
     pub fn object_path(&self, object: &MediaObject) -> Option<PathBuf> {
         object_store_path(&self.media_store_dir, &object.blake3).ok()
     }
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub fn ingest_authoring_media(
     media: &[crate::authoring_core::model::AuthoringMedia],
     options: &NormalizeOptions,
@@ -168,6 +175,7 @@ pub(crate) fn ingest_authoring_media_with_prepared(
         .map(|prepared| prepared.prepare_all(media, options))
         .or_else(|| (media.len() >= 16).then(|| prepare_persistent_media(media, options)));
     let mut diagnostics = Vec::new();
+    let mut io_cause = None;
     let mut objects_by_id = BTreeMap::<String, MediaObject>::new();
     let mut bindings = Vec::<MediaBinding>::new();
     let mut seen_media_ids = BTreeSet::<String>::new();
@@ -200,6 +208,9 @@ pub(crate) fn ingest_authoring_media_with_prepared(
             {
                 Ok(ingested) => ingested,
                 Err(mut error) => {
+                    if io_cause.is_none() {
+                        io_cause = error.io_cause.take();
+                    }
                     diagnostics.append(&mut error.diagnostics);
                     continue;
                 }
@@ -208,6 +219,9 @@ pub(crate) fn ingest_authoring_media_with_prepared(
             match ingest_persistent_item(item, options) {
                 Ok(ingested) => ingested,
                 Err(mut error) => {
+                    if io_cause.is_none() {
+                        io_cause = error.io_cause.take();
+                    }
                     diagnostics.append(&mut error.diagnostics);
                     continue;
                 }
@@ -307,7 +321,10 @@ pub(crate) fn ingest_authoring_media_with_prepared(
     }
 
     if diagnostics.iter().any(|item| item.level == "error") {
-        return Err(MediaIngestError { diagnostics });
+        return Err(MediaIngestError {
+            diagnostics,
+            io_cause,
+        });
     }
 
     let mut objects = objects_by_id.into_values().collect::<Vec<_>>();
@@ -317,6 +334,7 @@ pub(crate) fn ingest_authoring_media_with_prepared(
         objects,
         bindings,
         diagnostics,
+        #[cfg(all(test, feature = "internal-tools"))]
         media_store_dir: options.media_store_dir.clone(),
     })
 }
@@ -357,12 +375,14 @@ fn ingest_persistent_item(
                     limit,
                     "max_media_object_bytes",
                 )],
+                io_cause: None,
             });
         }
     }
     ingest_media_read_source_to_cas(source.as_read_source(), &options.media_store_dir).map_err(
         |error| MediaIngestError {
-            diagnostics: vec![media_io_error_to_diagnostic(error, &item.id)],
+            diagnostics: vec![media_io_error_to_diagnostic(&error, &item.id)],
+            io_cause: error.into_io_cause(),
         },
     )
 }
@@ -407,7 +427,8 @@ pub(crate) fn prepare_media_source(
             decode_inline_bytes(data_base64, options.media_policy.inline_bytes_max)
                 .map(PreparedMediaSource::InlineBytes)
                 .map_err(|err| MediaIngestError {
-                    diagnostics: vec![media_io_error_to_diagnostic(err, &item.id)],
+                    diagnostics: vec![media_io_error_to_diagnostic(&err, &item.id)],
+                    io_cause: err.into_io_cause(),
                 })
         }
     }
@@ -438,6 +459,7 @@ fn resolve_path_source(
                 ),
                 Some(options.base_dir.display().to_string()),
             )],
+            io_cause: Some(err),
         })?;
     let candidate = options.base_dir.join(raw_path);
     let canonical = candidate.canonicalize().map_err(|err| MediaIngestError {
@@ -446,6 +468,7 @@ fn resolve_path_source(
             format!("read source.path {path}: {err}"),
             Some(path.into()),
         )],
+        io_cause: Some(err),
     })?;
 
     if !canonical.starts_with(&base) {
@@ -462,6 +485,7 @@ fn resolve_path_source(
             format!("stat source.path {path}: {err}"),
             Some(path.into()),
         )],
+        io_cause: Some(err),
     })?;
     if !metadata.is_file() {
         return Err(one_error(
@@ -498,8 +522,7 @@ pub fn validate_authoring_media_filename(name: &str) -> Result<(), MediaFilename
 }
 
 fn is_helper_safe_filename(name: &str) -> bool {
-    name.bytes()
-        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
+    crate::media::validate_name(name).is_ok()
 }
 
 fn has_parent_component(path: &Path) -> bool {
@@ -600,16 +623,22 @@ fn is_ogg_or_opus_mime(mime: &str) -> bool {
     mime.eq_ignore_ascii_case("audio/ogg") || mime.eq_ignore_ascii_case("audio/opus")
 }
 
-fn media_io_error_to_diagnostic(err: MediaIoError, media_id: &str) -> MediaIngestDiagnostic {
+fn media_io_error_to_diagnostic(err: &MediaIoError, media_id: &str) -> MediaIngestDiagnostic {
     let code = err.diagnostic_code();
     let summary = match err {
-        MediaIoError::SourceOpen { path, message } => {
+        MediaIoError::SourceOpen {
+            path,
+            cause: message,
+        } => {
             format!(
                 "open media source for {media_id} at {}: {message}",
                 path.display()
             )
         }
-        MediaIoError::SourceRead { path, message } => match path {
+        MediaIoError::SourceRead {
+            path,
+            cause: message,
+        } => match path {
             Some(path) => format!(
                 "read media source for {media_id} at {}: {message}",
                 path.display()
@@ -622,13 +651,16 @@ fn media_io_error_to_diagnostic(err: MediaIoError, media_id: &str) -> MediaInges
         MediaIoError::InlineBytesTooLarge { size, limit } => {
             format!("inline bytes for {media_id} decode to {size} bytes, above inline_bytes_max {limit}")
         }
-        MediaIoError::CasWrite { path, message } => {
+        MediaIoError::CasWrite {
+            path,
+            cause: message,
+        } => {
             format!(
                 "write CAS object for {media_id} at {}: {message}",
                 path.display()
             )
         }
-        MediaIoError::CasFinalize { path, message } => format!(
+        MediaIoError::CasFinalize { path, message, .. } => format!(
             "finalize CAS object for {media_id} at {}: {message}",
             path.display()
         ),
@@ -642,12 +674,12 @@ fn media_io_error_to_diagnostic(err: MediaIoError, media_id: &str) -> MediaInges
     error(code, summary, Some(media_id.into()))
 }
 
-fn cas_existing_integrity_summary(reason: CasExistingIntegrityReason) -> String {
+fn cas_existing_integrity_summary(reason: &CasExistingIntegrityReason) -> String {
     match reason {
-        CasExistingIntegrityReason::OpenFailed { message } => {
+        CasExistingIntegrityReason::OpenFailed { cause: message } => {
             format!("could not open existing object: {message}")
         }
-        CasExistingIntegrityReason::ReadFailed { message } => {
+        CasExistingIntegrityReason::ReadFailed { cause: message } => {
             format!("could not read existing object: {message}")
         }
         CasExistingIntegrityReason::Mismatch {
@@ -696,6 +728,7 @@ fn one_error(
 ) -> MediaIngestError {
     MediaIngestError {
         diagnostics: vec![error(code, summary, path)],
+        io_cause: None,
     }
 }
 

@@ -19,9 +19,9 @@ This is the repository’s minimal Rust example:
 
 <CodeBlock code={quickstartSource} />
 
-`Deck::new("Spanish")` creates the deck. `.basic().note("hola", "hello")` creates a note using the built-in Basic type. `.add()` adds it to the deck, and `write_apkg(...)` writes the package.
+`Project::new("spanish")` creates the namespace. `Note::basic("hola", "hello")` creates a Basic note, `project.add("hola", note)` assigns its stable key, and `build(BuildOptions::to(...))` writes the package.
 
-The final `ensure_success()` checks the build report. It lets a script or build job exit with an error when the export reports a problem.
+`build` returns `BuildOutput` only after success. The `?` operator propagates a typed failure so scripts can exit with an error.
 
 ## Run it from source
 
@@ -33,14 +33,14 @@ The <a href={sitePath('/examples/#basic')}>Basic example on this site</a> also h
 
 ## Give the note an identity
 
-The string `es:hola` is an explicit stable ID. It describes which note this is, independently of how you phrase the answer. You could later expand “hello” to “hello; hi” and keep the same ID.
+The string `hola` is an explicit stable note key within the `spanish` namespace. It describes which note this is, independently of how you phrase the answer. You could later expand “hello” to “hello; hi” and keep the same ID.
 
 Use a distinct ID for each logical note. If your source already has a durable key, such as a vocabulary entry ID, that is a useful starting point. Avoid deriving identity solely from text that you expect to edit.
 
-Updating a distributed deck also needs release history. Keep the previous package or an identity lockfile and follow the <a href={sitePath('/docs/updates/')}>documented update workflow</a>.
+Updating a distributed deck also needs release history. Keep the original previous package and follow the <a href={sitePath('/docs/updates/')}>documented update workflow</a>.
 
 ## Grow from one note
 
-For another greeting, call the Basic builder again with a new front, back, and ID. For a missing word in a sentence, use a <a href={sitePath('/examples/#cloze')}>Cloze note</a>. For richer cards, define your fields and templates with the project API and package images or audio with the notes.
+For another greeting, create another Basic note and add it with a new key. For a missing word in a sentence, use a <a href={sitePath('/examples/#cloze')}>Cloze note</a>. For richer cards, define your fields and templates with the project API and package images or audio with the notes.
 
 The <a href={sitePath('/docs/rust-guide/')}>Rust authoring guide</a> takes the next step through diagnostics, media, and repeatable builds. The <a href={`${repository}/tree/main/anki_forge/examples`}>repository examples</a> provide runnable programs to build on.

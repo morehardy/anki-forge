@@ -53,21 +53,21 @@ check pass.
 The supported API examples run with default features:
 
 ```sh
-cargo run -q -p anki_forge --example target_api_basic
-cargo run -q -p anki_forge --example target_api_custom_notetype
-cargo run -q -p anki_forge --example target_api_media
+cargo run -q -p ankiforge --example target_api_basic
+cargo run -q -p ankiforge --example target_api_custom_notetype
+cargo run -q -p ankiforge --example target_api_media
 ```
 
 They write `spanish.apkg`, `jp-core.apkg`, and `spanish-media.apkg`, respectively.
 Repository-only examples require the `internal-tools` feature:
 
 ```sh
-cargo run -q -p anki_forge --features internal-tools --example deck_basic_flow
-cargo run -q -p anki_forge --features internal-tools --example product_basic_flow
-cargo run -q -p anki_forge --features internal-tools --example minimal_flow
+cargo run -q -p ankiforge --features internal-tools --example minimal_flow
 ```
 
-`internal-tools` exposes unsupported implementation interfaces for contract and
+`product_basic_flow` also uses the default public API.
+
+`internal-tools` exposes curated unsupported tools operations for contract and
 conformance work. Downstream applications should use the default public API.
 
 ## Contract validation and packaging
@@ -143,8 +143,7 @@ python -m pytest bindings/python/tests -q
 python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
 ```
 
-The dev-only `anki_forge_python` CLI wrapper remains separate from the public
-wheel. See [Python coverage](../bindings/python/COVERAGE.md) for installed-wheel,
+The native SDK calls the same Rust public API. See [Python coverage](../bindings/python/COVERAGE.md) for installed-wheel,
 source-distribution and platform verification. User guide editing and executable
 snippets are documented in [documentation maintenance](documentation.md).
 
@@ -175,7 +174,7 @@ on `PATH`:
 
 | Failure | Action |
 | --- | --- |
-| Cannot discover `contracts/manifest.yaml` | Run repository tools from this checkout, or configure an explicit runtime in the legacy binding. The normal Rust API embeds its contracts. |
+| Cannot discover `contracts/manifest.yaml` | Run repository tools from this checkout, with an explicit manifest. The normal Rust API embeds its contracts. |
 | Python native extension unavailable | Install a matching native wheel or run `maturin develop` in a venv. See [Python setup](../bindings/python/README.md#from-a-source-checkout). |
 | Missing upstream Anki crate | Provide the local Anki source checkout for the roundtrip oracle. |
 | `protoc is required on PATH` | Install `protoc` before running the roundtrip oracle. |

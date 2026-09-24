@@ -30,11 +30,11 @@ jobs:
       - if: steps.baseline.outputs.required == 'true'
         uses: obi1kenobi/cargo-semver-checks-action@v2
         with:
-          package: anki_forge
+          package: ankiforge
       - if: steps.baseline.outputs.required == 'false'
         run: echo "No crates.io SemVer baseline exists for initial release 0.1.0."
       - name: Build crate archive
-        run: cargo package -p anki_forge --locked
+        run: cargo package -p ankiforge --locked
       - name: Generate CycloneDX SBOM
         run: |
           cargo install cargo-cyclonedx --version 0.5.9 --locked
@@ -42,7 +42,7 @@ jobs:
       - name: Stage release candidate inputs
         run: |
           mkdir release-inputs
-          cp target/package/anki_forge-*.crate release-inputs/
+          cp target/package/ankiforge-*.crate release-inputs/
           cp anki_forge/bom.json release-inputs/
       - uses: actions/upload-artifact@v4
         with:
@@ -82,7 +82,7 @@ jobs:
         env:
           ANKI_FORGE_TIER1_VERIFIED: "1"
         run: |
-          crate_path="$(find release-inputs -name 'anki_forge-*.crate' -print -quit)"
+          crate_path="$(find release-inputs -name 'ankiforge-*.crate' -print -quit)"
           bash scripts/create_rust_release_evidence.sh \
             "$GITHUB_REF_NAME" "$crate_path" release-inputs/bom.json release-evidence
       - uses: actions/upload-artifact@v4
@@ -109,7 +109,7 @@ jobs:
       - id: crates_io_auth
         uses: rust-lang/crates-io-auth-action@v1
       - name: Publish immutable crates.io version
-        run: cargo +1.92.0 publish -p anki_forge --locked
+        run: cargo +1.92.0 publish -p ankiforge --locked
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.crates_io_auth.outputs.token }}
 
@@ -130,36 +130,29 @@ jobs:
           version="${GITHUB_REF_NAME#anki-forge-v}"
           expected_checksum="$(awk '{ print $1 }' release-evidence/SHA256SUMS)"
           curl --fail --location --retry 12 --retry-delay 10 --retry-all-errors \
-            "https://crates.io/api/v1/crates/anki_forge/$version/download" \
+            "https://crates.io/api/v1/crates/ankiforge/$version/download" \
             --output published.crate
           actual_checksum="$(sha256sum published.crate | awk '{ print $1 }')"
           test "$actual_checksum" = "$expected_checksum"
           consumer="$(mktemp -d)"
           cargo +1.92.0 init --bin --name anki_forge_release_verify "$consumer"
-          cargo +1.92.0 add --manifest-path "$consumer/Cargo.toml" "anki_forge@=$version"
+          cargo +1.92.0 add --manifest-path "$consumer/Cargo.toml" "ankiforge@=$version"
           cat > "$consumer/src/main.rs" <<'RS'
-          use anki_forge::prelude::*;
+          use ankiforge::{BuildOptions, Note, Project};
 
-          fn main() {
-              assert!(!anki_forge::embedded_contract_version().is_empty());
-              let apkg = std::env::temp_dir().join("anki-forge-release-verify.apkg");
-              let mut deck = Deck::new("Release Verify");
-              deck.basic()
-                  .note("front", "back")
-                  .stable_id("release:verify")
-                  .add()
-                  .expect("add release verification note");
-              deck.write_apkg(&apkg)
-                  .expect("build through embedded contracts")
-                  .ensure_success()
-                  .expect("successful published build");
-              assert!(apkg.is_file());
-              std::fs::remove_file(apkg).expect("remove release verification artifact");
+          fn main() -> Result<(), Box<dyn std::error::Error>> {
+              assert!(!ankiforge::embedded_contract_version().is_empty());
+              let mut project = Project::new("release.verify")?;
+              project.add("first", Note::basic("front", "back"))?;
+              let output = project.build(BuildOptions::new())?;
+              assert!(output.artifact().path().is_file());
+              assert_eq!(output.report().counts().notes, 1);
+              Ok(())
           }
           RS
           cargo +1.92.0 run --manifest-path "$consumer/Cargo.toml" --locked
           curl --fail --location --retry 12 --retry-delay 10 --retry-all-errors \
-            "https://docs.rs/anki_forge/$version/anki_forge/"
+            "https://docs.rs/ankiforge/$version/ankiforge/"
 
   evidence-release:
     needs: [evidence, post-publish-verify]

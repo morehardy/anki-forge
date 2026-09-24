@@ -1,5 +1,7 @@
 # ADR 0018: Stream build-owned media into private candidates
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 Status: implemented and locally validated (2026-09-07)
 
 ## Decision

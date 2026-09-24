@@ -115,6 +115,9 @@ pub(crate) struct ProductStockNoteTypeV2 {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub(crate) struct ProductCustomNoteTypeV2 {
+    // Only trusted, already validated native stock models set this marker.
+    #[serde(skip)]
+    pub(crate) stock_kind: Option<String>,
     pub(crate) id: String,
     pub(crate) name: Option<String>,
     #[serde(default)]
@@ -337,26 +340,20 @@ impl From<ProductDocumentV3> for ProductDocument {
 }
 
 impl ProductDocument {
-    // Retain the former Project conversion as a test reference for the internal
-    // owned payload path; public ProductDocument deserialization is unchanged.
-    #[cfg(test)]
-    pub(crate) fn from_product_v3_parts(
+    pub(crate) fn from_authored_payload(
         document_id: String,
         default_deck_name: Option<String>,
-        note_types: Vec<ProductNoteTypeV2>,
-        notes: Vec<ProductNoteV2>,
+        payload: ProductDocumentV2Payload,
     ) -> Self {
-        let mut document = ProductDocument::new(document_id);
+        let mut document = Self::new(document_id);
         document.default_deck_name = default_deck_name;
-        document.note_types = note_types.iter().filter_map(convert_note_type_v2).collect();
-        document.notes = notes.iter().filter_map(convert_note_v2).collect();
-        document.product_v2 = Some(ProductDocumentV2Payload {
-            version: 3,
-            note_types,
-            notes,
-            media: Vec::new(),
-            transport_diagnostics: Vec::new(),
-        });
+        document.note_types = payload
+            .note_types
+            .iter()
+            .filter_map(convert_note_type_v2)
+            .collect();
+        document.notes = payload.notes.iter().filter_map(convert_note_v2).collect();
+        document.product_v2 = Some(payload);
         document
     }
 }
@@ -883,6 +880,7 @@ impl ProductDocument {
         document
     }
 
+    #[cfg(all(test, feature = "internal-tools"))]
     pub fn with_basic(mut self, id: impl Into<String>) -> Self {
         self.note_types.push(ProductNoteType::Basic(BasicNoteType {
             id: id.into(),

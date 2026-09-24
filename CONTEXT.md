@@ -5,7 +5,7 @@ This context defines the production distribution boundary for the Rust API.
 ## Language
 
 **Rust Distribution**:
-The versioned `anki_forge` library crate published through crates.io for downstream Rust projects to depend on. Its production-readiness scope excludes generated APKG files and internal verification tools.
+The versioned `ankiforge` library crate published through crates.io for downstream Rust projects to depend on. Its production-readiness scope excludes generated APKG files and internal verification tools.
 _Avoid_: Rust production package, generated package
 
 **Authoritative Release Channel**:
@@ -13,7 +13,7 @@ crates.io is the canonical source for production releases of the Rust Distributi
 _Avoid_: GitHub release, source checkout
 
 **Public Crate**:
-`anki_forge` is the sole crate published as the Rust Distribution. Authoring and writing cores are internal boundaries, not independently versioned products.
+`ankiforge` is the sole crate published as the Rust Distribution. Authoring and writing cores are internal boundaries, not independently versioned products.
 _Avoid_: Public core crates, multi-crate release
 
 **Supported Consumer Interface**:
@@ -37,7 +37,7 @@ The compatibility version of the contract resources embedded in a Rust Distribut
 _Avoid_: Crate version, release version
 
 **Initial Public Release**:
-The production-quality `anki_forge` 0.1.0 release on crates.io. It satisfies release and runtime quality gates while retaining pre-1.0 freedom to revise the public API through minor-version changes.
+The production-quality `ankiforge` 0.1.0 release on crates.io. It satisfies release and runtime quality gates while retaining pre-1.0 freedom to revise the public API through minor-version changes.
 _Avoid_: Stable 1.0, beta-quality package
 
 **Tier 1 Platform**:

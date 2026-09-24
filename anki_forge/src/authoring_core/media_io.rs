@@ -36,11 +36,11 @@ pub enum MediaReadSource<'a> {
 pub enum MediaIoError {
     SourceOpen {
         path: PathBuf,
-        message: String,
+        cause: io::Error,
     },
     SourceRead {
         path: Option<PathBuf>,
-        message: String,
+        cause: io::Error,
     },
     InlineBase64Decode {
         message: String,
@@ -51,11 +51,12 @@ pub enum MediaIoError {
     },
     CasWrite {
         path: PathBuf,
-        message: String,
+        cause: io::Error,
     },
     CasFinalize {
         path: PathBuf,
         message: String,
+        cause: Option<io::Error>,
     },
     CasExistingIntegrity {
         path: PathBuf,
@@ -63,13 +64,13 @@ pub enum MediaIoError {
     },
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug)]
 pub enum CasExistingIntegrityReason {
     OpenFailed {
-        message: String,
+        cause: io::Error,
     },
     ReadFailed {
-        message: String,
+        cause: io::Error,
     },
     Mismatch {
         expected_blake3: String,
@@ -80,6 +81,22 @@ pub enum CasExistingIntegrityReason {
 }
 
 impl MediaIoError {
+    pub(crate) fn into_io_cause(self) -> Option<io::Error> {
+        match self {
+            Self::SourceOpen { cause, .. }
+            | Self::SourceRead { cause, .. }
+            | Self::CasWrite { cause, .. } => Some(cause),
+            Self::CasFinalize { cause, .. } => cause,
+            Self::CasExistingIntegrity {
+                reason:
+                    CasExistingIntegrityReason::OpenFailed { cause }
+                    | CasExistingIntegrityReason::ReadFailed { cause },
+                ..
+            } => Some(cause),
+            _ => None,
+        }
+    }
+
     pub fn diagnostic_code(&self) -> &'static str {
         match self {
             Self::SourceOpen { .. } => "MEDIA.SOURCE_MISSING",
@@ -164,7 +181,7 @@ pub fn ingest_media_read_source_to_cas(
     let tmp_dir = store_dir.join("tmp");
     fs::create_dir_all(&tmp_dir).map_err(|err| MediaIoError::CasWrite {
         path: tmp_dir.clone(),
-        message: err.to_string(),
+        cause: err,
     })?;
 
     let (mut reader, source_path): (Box<dyn Read>, Option<PathBuf>) = match source {
@@ -173,7 +190,7 @@ pub fn ingest_media_read_source_to_cas(
             (
                 Box::new(File::open(&path).map_err(|err| MediaIoError::SourceOpen {
                     path: path.clone(),
-                    message: err.to_string(),
+                    cause: err,
                 })?),
                 Some(path),
             )
@@ -184,7 +201,7 @@ pub fn ingest_media_read_source_to_cas(
     let mut temp =
         tempfile::NamedTempFile::new_in(&tmp_dir).map_err(|err| MediaIoError::CasWrite {
             path: tmp_dir.clone(),
-            message: err.to_string(),
+            cause: err,
         })?;
     let mut blake3_hasher = blake3::Hasher::new();
     let mut sha1_hasher = Sha1::new();
@@ -193,11 +210,16 @@ pub fn ingest_media_read_source_to_cas(
     let mut buffer = [0_u8; 64 * 1024];
 
     loop {
+        #[cfg(test)]
+        io_failure::check(io_failure::Point::Read).map_err(|cause| MediaIoError::SourceRead {
+            path: source_path.clone(),
+            cause,
+        })?;
         let read = reader
             .read(&mut buffer)
             .map_err(|err| MediaIoError::SourceRead {
                 path: source_path.clone(),
-                message: err.to_string(),
+                cause: err,
             })?;
         if read == 0 {
             break;
@@ -210,21 +232,31 @@ pub fn ingest_media_read_source_to_cas(
         blake3_hasher.update(chunk);
         sha1_hasher.update(chunk);
         size_bytes += read as u64;
+        #[cfg(test)]
+        io_failure::check(io_failure::Point::Write).map_err(|cause| MediaIoError::CasWrite {
+            path: temp.path().to_path_buf(),
+            cause,
+        })?;
         temp.write_all(chunk)
             .map_err(|err| MediaIoError::CasWrite {
                 path: temp.path().to_path_buf(),
-                message: err.to_string(),
+                cause: err,
             })?;
     }
     temp.flush().map_err(|err| MediaIoError::CasWrite {
         path: temp.path().to_path_buf(),
-        message: err.to_string(),
+        cause: err,
+    })?;
+    #[cfg(test)]
+    io_failure::check(io_failure::Point::Sync).map_err(|cause| MediaIoError::CasWrite {
+        path: temp.path().to_path_buf(),
+        cause,
     })?;
     temp.as_file()
         .sync_all()
         .map_err(|err| MediaIoError::CasWrite {
             path: temp.path().to_path_buf(),
-            message: err.to_string(),
+            cause: err,
         })?;
 
     let blake3 = blake3_hasher.finalize().to_hex().to_string();
@@ -233,6 +265,7 @@ pub fn ingest_media_read_source_to_cas(
         object_store_path(store_dir, &blake3).map_err(|message| MediaIoError::CasFinalize {
             path: store_dir.to_path_buf(),
             message,
+            cause: None,
         })?;
     let object_path = finalize_temp_object(temp, &final_path, &blake3, size_bytes)?;
 
@@ -256,10 +289,11 @@ fn finalize_temp_object(
         .ok_or_else(|| MediaIoError::CasFinalize {
             path: final_path.to_path_buf(),
             message: "CAS object path has no parent".into(),
+            cause: None,
         })?;
     fs::create_dir_all(parent).map_err(|err| MediaIoError::CasWrite {
         path: parent.to_path_buf(),
-        message: err.to_string(),
+        cause: err,
     })?;
 
     if final_path.exists() {
@@ -277,6 +311,7 @@ fn finalize_temp_object(
                     message: format!(
                         "failed to remove temporary CAS object after persist race: {close_err}"
                     ),
+                    cause: Some(close_err),
                 })?;
             verify_existing_object(final_path, blake3_hex, size_bytes)?;
             Ok(final_path.to_path_buf())
@@ -284,6 +319,7 @@ fn finalize_temp_object(
         Err(err) => Err(MediaIoError::CasFinalize {
             path: final_path.to_path_buf(),
             message: err.error.to_string(),
+            cause: Some(err.error),
         }),
     }
 }
@@ -295,9 +331,7 @@ fn verify_existing_object(
 ) -> Result<(), MediaIoError> {
     let mut file = File::open(path).map_err(|err| MediaIoError::CasExistingIntegrity {
         path: path.to_path_buf(),
-        reason: CasExistingIntegrityReason::OpenFailed {
-            message: err.to_string(),
-        },
+        reason: CasExistingIntegrityReason::OpenFailed { cause: err },
     })?;
     let mut hasher = blake3::Hasher::new();
     let mut read_size = 0_u64;
@@ -307,9 +341,7 @@ fn verify_existing_object(
             .read(&mut buffer)
             .map_err(|err| MediaIoError::CasExistingIntegrity {
                 path: path.to_path_buf(),
-                reason: CasExistingIntegrityReason::ReadFailed {
-                    message: err.to_string(),
-                },
+                reason: CasExistingIntegrityReason::ReadFailed { cause: err },
             })?;
         if read == 0 {
             break;
@@ -507,5 +539,47 @@ fn low(mime: &str) -> SniffedMime {
             mime.into()
         },
         confidence: MediaSniffConfidence::Low,
+    }
+}
+
+/// A test may fail one operation on its own thread. The original error is moved
+/// through the same conversion as the corresponding operating-system failure.
+#[cfg(test)]
+pub(crate) mod io_failure {
+    use std::{cell::RefCell, io};
+
+    #[derive(Clone, Copy, PartialEq, Eq)]
+    pub(crate) enum Point {
+        Read,
+        Write,
+        Sync,
+    }
+
+    thread_local! {
+        static FAILURE: RefCell<Option<(Point, io::Error)>> = const { RefCell::new(None) };
+    }
+
+    pub(super) fn check(point: Point) -> io::Result<()> {
+        FAILURE.with_borrow_mut(|failure| {
+            if failure
+                .as_ref()
+                .is_some_and(|(expected, _)| *expected == point)
+            {
+                Err(failure.take().expect("matching failure").1)
+            } else {
+                Ok(())
+            }
+        })
+    }
+
+    pub(crate) fn during<T>(point: Point, cause: io::Error, operation: impl FnOnce() -> T) -> T {
+        struct Restore(Option<(Point, io::Error)>);
+        impl Drop for Restore {
+            fn drop(&mut self) {
+                FAILURE.set(self.0.take());
+            }
+        }
+        let _restore = Restore(FAILURE.replace(Some((point, cause))));
+        operation()
     }
 }

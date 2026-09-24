@@ -1,22 +1,9 @@
-use anki_forge::authoring::{normalize, to_authoring_canonical_json, NormalizationRequest};
-use anki_forge::product::{HelperDeclaration, ProductDocument};
+use ankiforge::{BuildOptions, Content, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let lowering = ProductDocument::new("example-doc")
-        .with_default_deck("Default")
-        .with_basic("basic-main")
-        .with_helper(
-            "basic-main",
-            HelperDeclaration::AnswerDivider {
-                title: "Answer".into(),
-            },
-        )
-        .add_basic_note("basic-main", "note-1", "Default", "front", "back")
-        .lower()
-        .map_err(|err| anyhow::anyhow!("lower product example: {:?}", err))?;
-
-    let normalized = normalize(NormalizationRequest::new(lowering.authoring_document));
-    println!("{}", to_authoring_canonical_json(&normalized)?);
-
+    let mut project = Project::new("example-doc")?.default_deck("Default");
+    project.add("note-1", Note::basic("front", Content::html("<hr>back")))?;
+    let output = project.build(BuildOptions::temporary())?;
+    println!("{}", serde_json::to_string_pretty(&output.snapshot())?);
     Ok(())
 }

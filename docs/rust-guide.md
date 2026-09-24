@@ -1,125 +1,85 @@
 # Rust authoring guide
 
-Start with [your own Rust application](installation.md) or review the
-[core concepts](concepts.md) before this workflow.
-This guide covers editable projects, validation, media, and repeatable updates
-through the supported Rust API. The snippets use `anyhow` for error propagation;
-add it to your application with `cargo add anyhow`.
-
-- [Projects and diagnostics](#projects-and-diagnostics)
-- [Media troubleshooting](#media-troubleshooting)
-- [Updating distributed decks](#updating-distributed-decks)
-- [Stable note identity](#stable-note-identity)
+One `Project` describes a publication. Create it with a stable namespace, add
+notes under stable keys, and build an APKG. Common types are imported directly
+from `ankiforge`; advanced options live in the public domain modules.
 
 ## Projects and diagnostics
 
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Content, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let mut project = Project::new("Japanese Core")
-        .stable_id("jp-core")
+    let mut project = Project::new("jp-core")?
+        .name("Japanese Core")
         .default_deck("Japanese::Core");
-    project.add_note(Note::basic("食べる", "to eat").stable_id("jp:taberu"))?;
-    project.validate().ensure_success()?;
-    project.write_apkg("jp-core.apkg")?.ensure_success()?;
+    project.add("taberu", Note::basic("食べる", Content::html("<b>to eat</b>")))?;
+    let output = project.build(BuildOptions::to("jp-core.apkg"))?;
+    println!("{} notes", output.report().counts().notes);
+    println!("{}", serde_json::to_string_pretty(&output.snapshot())?);
     Ok(())
 }
 ```
 
-`Project::add_note(...)` and `Project::add_notetype(...)` fail fast for errors
-that are knowable at add time, such as blank or duplicate explicit stable ids,
-unknown note type ids, and unknown field keys. Call
-`project.validate().ensure_success()?` when you want a full Project diagnostic
-checkpoint before building; build still performs normalization, media, writer,
-comparison, and update-safety checks.
+A successful build returns `BuildOutput` with a guaranteed artifact.
+`BuildReport` contains observations: counts, diagnostics, elapsed time and any
+completed comparison. It contains no outcome or artifact ownership. Warnings do
+not turn a successful output into a failure.
 
-`BuildReport` includes an owned artifact handle, note/card/media counts, diagnostics,
-warning count, inspect summary, and duration. Diagnostics expose stable codes
-and structured metadata (`severity`, `domain`, `stage`, `path`,
-`suggested_fix`) so callers do not need to match human-facing strings.
+Schema errors are checked when a model is completed. `Project::add` checks the
+note's key, field references, required fields, deck, tags, and dependency
+conflicts atomically. Failure leaves the project unchanged. The build performs
+remaining card, package and update checks. There is no separate mutable registry
+or required validation checkpoint.
 
-`Project::from(deck)` produces an editable Project, including the Deck's media
-and identity evidence. When a build has no `output` or `artifacts_dir`, its APKG is
-temporary: retain its report/handle while using `artifact.path()`, or call
-`artifact.persist_to(path)` for a permanent copy. The final handle's drop removes
-temporary output. Explicit destinations are caller-owned and survive drop.
+Errors expose inherent `kind()` and `code()` methods and implement
+`std::error::Error`. Use machine codes rather than parsing the displayed message.
+`BuildError::snapshot()` includes the real failure, observations, source-chain
+text and publication facts. Standard error wrappers can preserve the original
+error as their source.
 
-```rust
-use anki_forge::prelude::*;
+## Models and assets
 
-fn add_note(deck: &mut Deck) -> anyhow::Result<()> {
-    if let Err(err) = deck.basic().note("hola", "hello").stable_id("   ").add() {
-        match err.code() {
-            ErrorCode::StableIdBlank => eprintln!("choose a non-empty stable_id"),
-            ErrorCode::StableIdDuplicate => eprintln!("choose a unique stable_id"),
-            other => eprintln!("anki-forge error: {}", other.as_str()),
-        }
-        return Err(err);
-    }
-    Ok(())
-}
-```
+A completed `NoteType` is immutable and shareable. Call `model.note()`, assign
+fields by stable key, and add the result to a project. The note holds its model;
+adding it collects the model and media automatically. Use
+[custom note types](custom-notetypes.md) for declarations and template rules.
 
-For complete explanations, see [custom note types](custom-notetypes.md) and
-[images and audio](media.md). Runnable repository examples:
+`Media::file` and `Media::bytes` acquire owned snapshots. Source files need not
+remain available after import succeeds. `image.image()` and `audio.sound()`
+produce structured content; `Content::sequence` combines them with text or HTML.
+Raw HTML/CSS/script assets must be explicitly included using `builder.asset` or
+`project.add_asset`. See [media](media.md) and [template bundles](template-bundles.md).
 
-```bash
-cargo run -q -p anki_forge --example target_api_custom_notetype
-cargo run -q -p anki_forge --example target_api_media
-```
+## Output ownership
 
-`Note::cloze(...)` intentionally stores the cloze `Text` field as explicit HTML
-so Anki receives raw `{{cN::...}}` markers. Do not assume cloze text is escaped
-like `Note::basic(...)` text.
-
-For custom fields, `.text(key, value)` escapes text and `.html(key, value)`
-preserves trusted HTML. Use `.sound(key, media)` and `.image(key, media)` for
-Anki-compatible media references. Choose the content method explicitly so that
-literal text and intended markup remain distinguishable.
-
-## Media troubleshooting
-
-Register media, keep source files available and unchanged until build completes,
-and match local HTML/CSS references to bare export filenames. Normal builds use
-path-backed media; use inline bytes only for small assets.
-
-Follow the [media tutorial](media.md) for a complete example and the
-[media troubleshooting table](troubleshooting.md#media-and-templates) for collisions,
-missing files, unused bindings, changed sources and inline limits.
-
-## Updating distributed decks
-
-Keep stable project/note IDs and the last distributed APKG or maintained identity
-lockfile. The [update tutorial](updates.md) builds two releases, checks the report,
-and demonstrates both baseline strategies.
-
-`update_safe(lockfile)` reads existing evidence; add
-`write_identity_lockfile(true)` when writing the next candidate evidence.
-Baseline-free `write_apkg()` is appropriate for a first export and does not
-guarantee that Anki applies later edits. Import settings and newer local edits
-still matter.
-
-Keep baselines separate from outputs and writable staging. For path aliases,
-blocked builds, temporary artifacts and publication guarantees, read
-[build and output guarantees](build-guarantees.md).
+Choose `BuildOptions::to(path)` for a persistent output or
+`BuildOptions::temporary()` for an owned temporary file. Retain the output or a
+clone of `output.artifact()` while accessing a temporary path. Its last owner
+removes the file. `persist_to(path)` returns a persistent artifact; on failure the
+original owner remains usable. JSON snapshots contain paths but do not own files.
 
 ## Stable note identity
 
+Use a durable source-record key with `project.add(key, note)`. The project
+namespace, model key, field keys and template keys are independent of display
+names. Content changes do not create a new logical note. Duplicate keys fail
+instead of overwriting. Save and reuse your chosen keys when source records are
+reordered or edited.
 
-The `Deck` API derives AFID (`afid:v1:*`) stable note IDs when no explicit ID is
-provided. Basic notes default to their front field, Cloze uses its cloze
-structure and text skeleton, and Image Occlusion uses image content, dimensions,
-mode, and sorted mask geometry. Editing an identity input can change the derived
-ID. Use `.stable_id("your-source-id")` when notes have an identity in your source
-system that should survive content edits.
+## Updating distributed decks
 
-Explicit `stable_id` values take precedence. The `afid:v1:*` namespace is reserved
-and cannot be supplied as an explicit ID. Blank IDs, duplicate payloads, hash
-collisions, and duplicate stable IDs are rejected during addition or identity
-rebuilding.
+Use the previous original distribution APKG with `update_from`. Its complete
+embedded evidence preserves identity and revision mappings. Independent
+`project.compare(CompareOptions::against(path))` analyzes the candidate and
+reports whether policy would permit publication. See the [two-version workflow](updates.md)
+for high-risk changes, client import limitations and explicit allowances.
 
-For custom Project note types, use stable field/template keys and the public
-`IdentityRecipe::fields(...)` API. See the
-[custom note type example](../anki_forge/examples/target_api_custom_notetype.rs)
-and [template bundle guide](template-bundles.md).
+From a checkout, these examples execute the same public API:
+
+```sh
+cargo run --locked -p ankiforge --example target_api_basic
+cargo run --locked -p ankiforge --example target_api_custom_notetype
+cargo run --locked -p ankiforge --example target_api_media
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
+```

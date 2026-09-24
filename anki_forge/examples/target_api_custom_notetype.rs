@@ -1,31 +1,27 @@
-use anki_forge::prelude::*;
+use ankiforge::schema::GenerationRule;
+use ankiforge::{BuildOptions, Field, NoteType, Project, Template};
 
 fn main() -> anyhow::Result<()> {
-    let vocab = NoteType::custom("jp-vocab")
+    let vocab = NoteType::builder("jp-vocab")
         .name("Japanese Vocabulary")
-        .field(Field::new("Expression").key("expr").identity().sort())
-        .field(Field::new("Meaning").key("meaning").required())
+        .field(Field::new("expr").name("Expression").sort().required())
+        .field(Field::new("meaning").name("Meaning").required())
         .template(
-            Template::new("Recognition")
-                .key("recognition")
-                .front("{{Expression}}")
-                .back("{{FrontSide}}<hr id=\"answer\">{{Meaning}}")
+            Template::new("recognition")
+                .name("Recognition")
+                .front("{{expr}}")
+                .back("{{FrontSide}}<hr id=\"answer\">{{meaning}}")
                 .generate_when(GenerationRule::all(["expr"])),
         )
-        .identity(IdentityRecipe::fields(["expr"]));
-
-    let mut project = Project::new("Japanese Core")
-        .stable_id("jp-core")
-        .default_deck("Japanese::Core");
-    project.add_notetype(vocab)?;
-    project.add_note(
-        Note::new("jp-vocab")
-            .stable_id("jp-vocab:taberu")
-            .text("expr", "食べる")
-            .text("meaning", "to eat"),
+        .build()?;
+    let mut project = Project::new("jp-core")?.default_deck("Japanese::Core");
+    project.add(
+        "taberu",
+        vocab
+            .note()
+            .field("expr", "食べる")
+            .field("meaning", "to eat"),
     )?;
-
-    project.validate().ensure_success()?;
-    project.write_apkg("jp-core.apkg")?.ensure_success()?;
+    project.build(BuildOptions::to("jp-core.apkg"))?;
     Ok(())
 }

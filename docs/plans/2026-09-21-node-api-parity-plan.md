@@ -421,7 +421,7 @@ npm --prefix bindings/node run build
 npm --prefix bindings/node run check
 npm --prefix bindings/node test
 npm --prefix bindings/node run test:parity
-cargo test -p anki_forge --test artifact_lifecycle_tests --locked
+cargo test -p ankiforge --test artifact_lifecycle_tests --locked
 cargo test -p anki_forge_node_native --test json_numbers --locked
 npm --prefix bindings/node run test:legacy
 npm --prefix bindings/node run test:installed

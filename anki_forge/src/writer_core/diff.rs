@@ -1,10 +1,15 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
+#[cfg(feature = "internal-tools")]
+use std::collections::BTreeSet;
 
+#[cfg(feature = "internal-tools")]
 use anyhow::Result;
 use serde_json::Value;
 
+#[cfg(feature = "internal-tools")]
 use crate::writer_core::model::{DiffChange, DiffReport, InspectReport};
 
+#[cfg(feature = "internal-tools")]
 pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffReport> {
     let mut uncompared_domains = BTreeSet::new();
     let mut comparison_limitations = BTreeSet::new();
@@ -116,6 +121,7 @@ pub fn diff_reports(left: &InspectReport, right: &InspectReport) -> Result<DiffR
     })
 }
 
+#[cfg(feature = "internal-tools")]
 fn should_skip_selector(
     domain: &str,
     selector: &str,
@@ -127,10 +133,12 @@ fn should_skip_selector(
         && (left.source_kind == "apkg" || right.source_kind == "apkg")
 }
 
+#[cfg(feature = "internal-tools")]
 fn has_unavailable(left: &InspectReport, right: &InspectReport) -> bool {
     left.observation_status == "unavailable" || right.observation_status == "unavailable"
 }
 
+#[cfg(feature = "internal-tools")]
 fn compare_status(left: &InspectReport, right: &InspectReport) -> String {
     if has_unavailable(left, right) {
         "unavailable".into()
@@ -222,6 +230,7 @@ fn strip_non_semantic_fields(domain: &str, value: &Value) -> Value {
     }
 }
 
+#[cfg(feature = "internal-tools")]
 fn change_for_modified(
     domain: &str,
     selector: &str,
@@ -239,6 +248,7 @@ fn change_for_modified(
     })
 }
 
+#[cfg(feature = "internal-tools")]
 fn change_for_added(domain: &str, selector: &str, right: &Value) -> Result<DiffChange> {
     Ok(DiffChange {
         category: "added".into(),
@@ -251,6 +261,7 @@ fn change_for_added(domain: &str, selector: &str, right: &Value) -> Result<DiffC
     })
 }
 
+#[cfg(feature = "internal-tools")]
 fn change_for_removed(domain: &str, selector: &str, left: &Value) -> Result<DiffChange> {
     Ok(DiffChange {
         category: "removed".into(),
@@ -263,6 +274,7 @@ fn change_for_removed(domain: &str, selector: &str, left: &Value) -> Result<Diff
     })
 }
 
+#[cfg(feature = "internal-tools")]
 fn severity_for_domain(domain: &str) -> &'static str {
     match domain {
         "metadata" => "low",
@@ -271,6 +283,7 @@ fn severity_for_domain(domain: &str) -> &'static str {
     }
 }
 
+#[cfg(feature = "internal-tools")]
 fn compatibility_hint(domain: &str) -> String {
     match domain {
         "notetypes" => "compare the stock notetype shape and fields".into(),
@@ -288,6 +301,7 @@ fn compatibility_hint(domain: &str) -> String {
     }
 }
 
+#[cfg(feature = "internal-tools")]
 fn evidence_refs(value: &Value) -> Vec<String> {
     value
         .get("evidence_refs")
@@ -299,6 +313,7 @@ fn evidence_refs(value: &Value) -> Vec<String> {
         .collect()
 }
 
+#[cfg(feature = "internal-tools")]
 fn merge_evidence_refs(left: &Value, right: &Value) -> Vec<String> {
     let mut refs = BTreeSet::new();
     refs.extend(evidence_refs(left));

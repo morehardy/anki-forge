@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Native APKG identity evidence v1",
+  "type": "object",
+  "properties": {
+    "format_version": {
+      "const": "ankiforge-identity-v1"
+    },
+    "collection_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "identity_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "media": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 18446744073709551615
+          },
+          "sha1": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        },
+        "required": [
+          "size",
+          "sha1"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "models": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4503599627370495
+              },
+              "kind": {
+                "enum": [
+                  "normal",
+                  "cloze"
+                ]
+              },
+              "sort_field": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "mtime_secs": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775807
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "fields": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4503599627370495
+                    },
+                    "slot": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 4294967295
+                    },
+                    "ordinal": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 4294967295
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "slot",
+                    "ordinal"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "field_high_water": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "templates": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4503599627370495
+                    },
+                    "slot": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 4294967295
+                    },
+                    "ordinal": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 4294967295
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "slot",
+                    "ordinal"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "template_high_water": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "sort_field",
+              "active",
+              "mtime_secs",
+              "content_hash",
+              "fields",
+              "field_high_water",
+              "templates",
+              "template_high_water"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "notes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "guid": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{32}$"
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "mtime_secs": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775807
+              },
+              "content_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "masks": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "ordinal": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 499
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ordinal",
+                    "active"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "mask_high_water": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 500
+              },
+              "cards": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4294967295
+                }
+              }
+            },
+            "required": [
+              "guid",
+              "model",
+              "active",
+              "mtime_secs",
+              "content_hash",
+              "masks",
+              "mask_high_water",
+              "cards"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "namespace",
+        "models",
+        "notes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "format_version",
+    "collection_blake3",
+    "identity_blake3",
+    "media",
+    "identity"
+  ],
+  "additionalProperties": false
+}

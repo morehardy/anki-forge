@@ -36,9 +36,6 @@ jobs:
       - name: Product semantics
         run: npm test
         working-directory: bindings/node
-      - name: Independent Rust and Node product parity
-        run: npm run test:parity
-        working-directory: bindings/node
       - name: Check this platform's release files
         run: node scripts/check-package.mjs
         working-directory: bindings/node

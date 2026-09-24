@@ -9,6 +9,7 @@ use crate::writer_core::staging::{
 
 pub use crate::writer_core::staging::BuildArtifactTarget;
 
+#[cfg(feature = "internal-tools")]
 pub fn build(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,
@@ -24,6 +25,7 @@ pub fn build(
     )
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn build_with_guid_plan(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,

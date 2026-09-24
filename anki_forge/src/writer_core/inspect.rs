@@ -1,4 +1,7 @@
+#[cfg(all(test, feature = "internal-tools"))]
+use crate::writer_core::model::PackageBuildResult;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
+#[cfg(any(test, feature = "internal-tools"))]
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -6,14 +9,18 @@ use std::path::{Path, PathBuf};
 use super::apkg_reader::ApkgReader;
 use super::inspect_limits::{check, InspectError, InspectLimits};
 use crate::authoring_core::{
-    MediaReferenceResolution, NormalizedField, NormalizedGenerationRequirement, NormalizedIr,
-    NormalizedNote, NormalizedNotetype, NormalizedTemplate,
+    NormalizedField, NormalizedGenerationRequirement, NormalizedIr, NormalizedNote,
+    NormalizedNotetype, NormalizedTemplate,
 };
 use anyhow::{ensure, Context, Result};
 use prost::Message;
 use rusqlite::Connection;
+#[cfg(any(test, feature = "internal-tools"))]
 use serde::ser::{SerializeMap, SerializeSeq};
-use serde::{Deserialize, Serialize};
+#[cfg(feature = "internal-tools")]
+use serde::Deserialize;
+#[cfg(any(test, feature = "internal-tools"))]
+use serde::Serialize;
 use serde_json::{json, Value};
 use sha1::Digest;
 
@@ -23,15 +30,16 @@ use crate::writer_core::anki_proto::{
 };
 #[cfg(test)]
 use crate::writer_core::canonical_json::to_canonical_json;
+#[cfg(any(test, feature = "internal-tools"))]
 use crate::writer_core::canonical_json::FilteredValue;
+#[cfg(any(test, feature = "internal-tools"))]
 use crate::writer_core::card_plan::plan_cards;
 use crate::writer_core::deck_name::native_deck_name_to_human;
-use crate::writer_core::model::{InspectObservations, InspectReport, PackageBuildResult};
-use crate::writer_core::staging::{
-    resolve_deck_registry, validated_media_output_path, BuildArtifactTarget,
-    ResolvedTemplateTargetDeck,
-};
+#[cfg(any(test, feature = "internal-tools"))]
+use crate::writer_core::model::{InspectObservations, InspectReport};
+use crate::writer_core::staging::{BuildArtifactTarget, ResolvedTemplateTargetDeck};
 
+#[cfg(any(test, feature = "internal-tools"))]
 const OBSERVATION_MODEL_VERSION: &str = "phase3-inspect-v2";
 const DOMAIN_NOTETYPES: &str = "notetypes";
 const DOMAIN_TEMPLATES: &str = "templates";
@@ -100,28 +108,40 @@ struct ResolvedMedia {
     filename: String,
     size: usize,
     sha1_hex: String,
+    #[cfg(any(test, feature = "internal-tools"))]
     binding_id: Option<String>,
+    #[cfg(any(test, feature = "internal-tools"))]
     object_id: Option<String>,
+    #[cfg(any(test, feature = "internal-tools"))]
     object_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]
 struct CollectionData {
     notetypes: Vec<NormalizedNotetype>,
+    #[cfg(any(test, feature = "internal-tools"))]
     notetype_model_ids: BTreeMap<String, i64>,
     notes: Vec<NormalizedNote>,
+    #[cfg(any(test, feature = "internal-tools"))]
     note_identity_metadata: Vec<Value>,
+    #[cfg(any(test, feature = "internal-tools"))]
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+    #[cfg(any(test, feature = "internal-tools"))]
     actual_card_decks: BTreeMap<(String, usize), String>,
     summary_counts: NoteCardCounts,
 }
 
 struct ApkgFacts {
+    identity: Option<crate::build::identity::IdentityEnvelope>,
     normalized_ir: NormalizedIr,
     media: Vec<ResolvedMedia>,
+    #[cfg(any(test, feature = "internal-tools"))]
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
+    #[cfg(any(test, feature = "internal-tools"))]
     actual_card_decks: BTreeMap<(String, usize), String>,
+    #[cfg(any(test, feature = "internal-tools"))]
     note_identity_metadata: Vec<Value>,
+    #[cfg(any(test, feature = "internal-tools"))]
     notetype_model_ids: BTreeMap<String, i64>,
     limitations: ReadLimitations,
     summary_counts: NoteCardCounts,
@@ -152,6 +172,7 @@ pub(crate) struct ApkgInspectSummary {
     pub media: usize,
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub fn inspect_build_result(
     build_result: &PackageBuildResult,
     artifact_target: &BuildArtifactTarget,
@@ -191,6 +212,7 @@ pub fn inspect_build_result(
     anyhow::bail!("package build result does not reference staging or apkg artifacts");
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
     let path = path.as_ref();
     let raw_manifest =
@@ -214,6 +236,7 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
         &media,
         &manifest.template_target_decks,
         None,
+        #[cfg(any(test, feature = "internal-tools"))]
         note_identity_metadata,
         &notetype_model_ids,
     );
@@ -228,10 +251,12 @@ pub fn inspect_staging(path: impl AsRef<Path>) -> Result<InspectReport> {
     ))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn inspect_apkg(path: impl AsRef<Path>) -> std::result::Result<InspectReport, InspectError> {
     inspect_apkg_with_limits(path, &InspectLimits::default())
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn inspect_apkg_with_limits(
     path: impl AsRef<Path>,
     limits: &InspectLimits,
@@ -239,8 +264,9 @@ pub fn inspect_apkg_with_limits(
     inspect_apkg_inner(path.as_ref(), limits).map_err(InspectError::from_anyhow)
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectReport> {
-    let facts = read_apkg_facts(path, limits, ReadProjection::Observations)?;
+    let facts = read_apkg_facts(path, limits, ReadProjection::Observations, false)?;
     let observations = build_observations(
         facts.normalized_ir,
         &facts.media,
@@ -259,31 +285,55 @@ fn inspect_apkg_inner(path: &Path, limits: &InspectLimits) -> Result<InspectRepo
     ))
 }
 
+#[cfg(test)]
 pub(crate) fn inspect_apkg_summary_with_limits(
     path: &Path,
     limits: &InspectLimits,
 ) -> std::result::Result<ApkgInspectSummary, InspectError> {
-    let facts = read_apkg_facts(path, limits, ReadProjection::Summary)
+    let facts = read_apkg_facts(path, limits, ReadProjection::Summary, false)
         .map_err(InspectError::from_anyhow)?;
-    Ok(ApkgInspectSummary {
-        observation_status: facts.limitations.observation_status,
-        notes: facts.summary_counts.notes,
-        cards: facts.summary_counts.cards,
-        notetypes: facts.normalized_ir.notetypes.len(),
-        templates: facts
-            .normalized_ir
-            .notetypes
-            .iter()
-            .map(|notetype| notetype.templates.len())
-            .sum(),
-        fields: facts
-            .normalized_ir
-            .notetypes
-            .iter()
-            .map(|notetype| notetype.fields.len())
-            .sum(),
-        media: facts.media.len(),
-    })
+    Ok(facts.summary())
+}
+
+pub(crate) fn inspect_native_package(
+    path: &Path,
+    limits: &InspectLimits,
+) -> std::result::Result<(ApkgInspectSummary, crate::build::identity::IdentityEnvelope), InspectError>
+{
+    let facts = read_apkg_facts(path, limits, ReadProjection::Summary, true)
+        .map_err(InspectError::from_anyhow)?;
+    let summary = facts.summary();
+    Ok((
+        summary,
+        facts
+            .identity
+            .expect("native inspection requires identity evidence"),
+    ))
+}
+
+impl ApkgFacts {
+    fn summary(&self) -> ApkgInspectSummary {
+        let facts = self;
+        ApkgInspectSummary {
+            observation_status: facts.limitations.observation_status.clone(),
+            notes: facts.summary_counts.notes,
+            cards: facts.summary_counts.cards,
+            notetypes: facts.normalized_ir.notetypes.len(),
+            templates: facts
+                .normalized_ir
+                .notetypes
+                .iter()
+                .map(|notetype| notetype.templates.len())
+                .sum(),
+            fields: facts
+                .normalized_ir
+                .notetypes
+                .iter()
+                .map(|notetype| notetype.fields.len())
+                .sum(),
+            media: facts.media.len(),
+        }
+    }
 }
 
 // Both projections perform the same bounded archive reads, SQLite column
@@ -292,8 +342,26 @@ fn read_apkg_facts(
     path: &Path,
     limits: &InspectLimits,
     projection: ReadProjection,
+    require_identity: bool,
 ) -> Result<ApkgFacts> {
     let mut archive = ApkgReader::open(path, limits)?;
+
+    let identity: Option<crate::build::identity::IdentityEnvelope> = if require_identity {
+        let bytes = archive
+            .bytes(
+                crate::build::identity::EVIDENCE_ENTRY,
+                false,
+                "identity_bytes",
+                limits.max_identity_bytes,
+            )?
+            .ok_or_else(crate::build::identity::EvidenceError::missing)?;
+        Some(
+            serde_json::from_slice(&bytes)
+                .map_err(|cause| crate::build::identity::EvidenceError::invalid(cause.into()))?,
+        )
+    } else {
+        None
+    };
 
     let (version, mut limitations) = read_package_version(&mut archive)?;
     let media = match read_media_entries(&mut archive, version) {
@@ -324,9 +392,13 @@ fn read_apkg_facts(
         media_references: vec![],
     };
     let mut has_core_data = false;
+    #[cfg(any(test, feature = "internal-tools"))]
     let mut template_target_decks = vec![];
+    #[cfg(any(test, feature = "internal-tools"))]
     let mut actual_card_decks = BTreeMap::new();
+    #[cfg(any(test, feature = "internal-tools"))]
     let mut note_identity_metadata = vec![];
+    #[cfg(any(test, feature = "internal-tools"))]
     let mut notetype_model_ids = BTreeMap::new();
     let mut summary_counts = NoteCardCounts::default();
 
@@ -344,13 +416,50 @@ fn read_apkg_facts(
         .is_some()
     {
         drop(collection_file);
+        if let Some(identity) = &identity {
+            identity
+                .validate(&collection_path)
+                .map_err(crate::build::identity::EvidenceError::invalid)?;
+            let actual: BTreeMap<_, _> = media
+                .iter()
+                .map(|media| {
+                    (
+                        media.filename.clone(),
+                        crate::build::identity::MediaIdentity {
+                            size: media.size as u64,
+                            sha1: media.sha1_hex.clone(),
+                        },
+                    )
+                })
+                .collect();
+            if identity.media != actual {
+                return Err(
+                    crate::build::identity::EvidenceError::invalid(anyhow::anyhow!(
+                        "media content disagrees with package identity evidence"
+                    ))
+                    .into(),
+                );
+            }
+        }
         let collection = read_collection_data(&collection_path, projection)?;
         normalized_ir.notetypes = collection.notetypes;
-        notetype_model_ids = collection.notetype_model_ids;
+        #[cfg(any(test, feature = "internal-tools"))]
+        {
+            notetype_model_ids = collection.notetype_model_ids;
+        }
         normalized_ir.notes = collection.notes;
-        note_identity_metadata = collection.note_identity_metadata;
-        template_target_decks = collection.template_target_decks;
-        actual_card_decks = collection.actual_card_decks;
+        #[cfg(any(test, feature = "internal-tools"))]
+        {
+            note_identity_metadata = collection.note_identity_metadata;
+        }
+        #[cfg(any(test, feature = "internal-tools"))]
+        {
+            template_target_decks = collection.template_target_decks;
+        }
+        #[cfg(any(test, feature = "internal-tools"))]
+        {
+            actual_card_decks = collection.actual_card_decks;
+        }
         summary_counts = collection.summary_counts;
         has_core_data = true;
     } else {
@@ -375,17 +484,23 @@ fn read_apkg_facts(
         derive_status(limitations.missing_domains.is_empty(), has_core_data);
 
     Ok(ApkgFacts {
+        identity,
         normalized_ir,
         media,
+        #[cfg(any(test, feature = "internal-tools"))]
         template_target_decks,
+        #[cfg(any(test, feature = "internal-tools"))]
         actual_card_decks,
+        #[cfg(any(test, feature = "internal-tools"))]
         note_identity_metadata,
+        #[cfg(any(test, feature = "internal-tools"))]
         notetype_model_ids,
         limitations,
         summary_counts,
     })
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn build_report(
     source_kind: &str,
     source_ref: String,
@@ -417,6 +532,7 @@ fn build_report(
     }
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn fingerprint_report(
     observation_status: &str,
     missing_domains: &[String],
@@ -461,8 +577,10 @@ fn fingerprint_report(
     format!("artifact:{}", hex::encode(writer.0.finalize()))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 struct FingerprintObservations<'a>(&'a InspectObservations);
 
+#[cfg(any(test, feature = "internal-tools"))]
 impl Serialize for FingerprintObservations<'_> {
     fn serialize<S: serde::Serializer>(
         &self,
@@ -527,6 +645,7 @@ fn strip_value(value: &Value) -> Value {
     }
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn observed_notes(
     notes: Vec<NormalizedNote>,
     notetypes: &[NormalizedNotetype],
@@ -542,6 +661,7 @@ fn observed_notes(
     })
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn actual_cards_for_note<'a>(
     cards: &'a BTreeMap<(String, usize), String>,
     note_id: &str,
@@ -549,12 +669,13 @@ fn actual_cards_for_note<'a>(
     cards.range((note_id.to_owned(), 0)..=(note_id.to_owned(), usize::MAX))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn build_observations(
     normalized_ir: NormalizedIr,
     media: &[ResolvedMedia],
     template_target_decks: &[ResolvedTemplateTargetDeck],
     actual_card_decks: Option<&BTreeMap<(String, usize), String>>,
-    note_identity_metadata: Vec<Value>,
+    #[cfg(any(test, feature = "internal-tools"))] note_identity_metadata: Vec<Value>,
     notetype_model_ids: &BTreeMap<String, i64>,
 ) -> InspectObservations {
     let staging_decks = actual_card_decks
@@ -850,6 +971,7 @@ fn build_observations(
     }
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn template_for_card_ord(
     notetype: &NormalizedNotetype,
     card_ord: u32,
@@ -865,6 +987,7 @@ fn template_for_card_ord(
         .map(|(_, template)| template)
 }
 
+#[cfg(feature = "internal-tools")]
 fn build_note_identity_metadata_from_normalized_ir(normalized_ir: &NormalizedIr) -> Vec<Value> {
     normalized_ir
         .notes
@@ -890,6 +1013,7 @@ fn build_note_identity_metadata_from_normalized_ir(normalized_ir: &NormalizedIr)
         .collect()
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn media_ref_selector(
     owner_kind: &str,
     owner_id: &str,
@@ -907,6 +1031,7 @@ fn media_ref_selector(
     )
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn selector_value(value: &str) -> String {
     let mut escaped = String::with_capacity(value.len() + 2);
     escaped.push('\'');
@@ -932,6 +1057,7 @@ fn selector_value(value: &str) -> String {
     escaped
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn evidence_component(value: &str) -> String {
     let mut escaped = String::with_capacity(value.len());
     for ch in value.chars() {
@@ -951,6 +1077,7 @@ fn evidence_component(value: &str) -> String {
     escaped
 }
 
+#[cfg(feature = "internal-tools")]
 fn resolve_staging_media(
     normalized_ir: &NormalizedIr,
     media_root: &Path,
@@ -1150,8 +1277,11 @@ fn read_media_entries(
                 filename: name,
                 size: usize::try_from(size).context("media size exceeds address space")?,
                 sha1_hex,
+                #[cfg(any(test, feature = "internal-tools"))]
                 binding_id: None,
+                #[cfg(any(test, feature = "internal-tools"))]
                 object_id: None,
+                #[cfg(any(test, feature = "internal-tools"))]
                 object_ref: None,
             });
         }
@@ -1672,10 +1802,14 @@ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<Colle
 
         Ok(CollectionData {
             notetypes: notetype_values,
+            #[cfg(any(test, feature = "internal-tools"))]
             notetype_model_ids,
             notes,
+            #[cfg(any(test, feature = "internal-tools"))]
             note_identity_metadata,
+            #[cfg(any(test, feature = "internal-tools"))]
             template_target_decks,
+            #[cfg(any(test, feature = "internal-tools"))]
             actual_card_decks,
             summary_counts,
         })
@@ -2027,10 +2161,19 @@ fn derive_status(all_domains_present: bool, has_core_data: bool) -> String {
 }
 
 #[derive(Debug, Deserialize)]
+#[cfg(feature = "internal-tools")]
 struct StagingManifest {
     normalized_ir: NormalizedIr,
     #[serde(default)]
     notetype_model_ids: Option<BTreeMap<String, i64>>,
     #[serde(default)]
+    #[cfg(any(test, feature = "internal-tools"))]
     template_target_decks: Vec<ResolvedTemplateTargetDeck>,
 }
+
+#[cfg(any(test, feature = "internal-tools"))]
+use crate::authoring_core::MediaReferenceResolution;
+#[cfg(any(test, feature = "internal-tools"))]
+use crate::writer_core::staging::resolve_deck_registry;
+#[cfg(feature = "internal-tools")]
+use crate::writer_core::staging::validated_media_output_path;

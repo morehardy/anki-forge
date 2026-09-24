@@ -1,80 +1,77 @@
 # Custom note types
 
-Define your own fields and card layout. This example builds one Japanese
-vocabulary note and one recognition card, with stable field and template keys.
+Complete a model once, then create notes from it. The returned `NoteType` is
+immutable and can be reused in functions or multiple projects. A note holds its
+model, so it cannot accidentally refer to an unregistered model name.
 
-## Run the complete example
+## Executable example
 
-From the repository root with [Rust installed](installation.md#requirements):
-
-```sh
-cargo run --locked -p anki_forge --example target_api_custom_notetype
-```
-
-The output is `jp-core.apkg` in the current directory. Import it into Anki and
-open **Japanese::Core** to see **食べる → to eat**.
+The example defines separate stable keys and display names, assigns by key,
+and uses those same keys inside templates.
 
 <!-- source: anki_forge/examples/target_api_custom_notetype.rs -->
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::schema::GenerationRule;
+use ankiforge::{BuildOptions, Field, NoteType, Project, Template};
 
 fn main() -> anyhow::Result<()> {
-    let vocab = NoteType::custom("jp-vocab")
+    let vocab = NoteType::builder("jp-vocab")
         .name("Japanese Vocabulary")
-        .field(Field::new("Expression").key("expr").identity().sort())
-        .field(Field::new("Meaning").key("meaning").required())
+        .field(Field::new("expr").name("Expression").sort().required())
+        .field(Field::new("meaning").name("Meaning").required())
         .template(
-            Template::new("Recognition")
-                .key("recognition")
-                .front("{{Expression}}")
-                .back("{{FrontSide}}<hr id=\"answer\">{{Meaning}}")
+            Template::new("recognition")
+                .name("Recognition")
+                .front("{{expr}}")
+                .back("{{FrontSide}}<hr id=\"answer\">{{meaning}}")
                 .generate_when(GenerationRule::all(["expr"])),
         )
-        .identity(IdentityRecipe::fields(["expr"]));
-
-    let mut project = Project::new("Japanese Core")
-        .stable_id("jp-core")
-        .default_deck("Japanese::Core");
-    project.add_notetype(vocab)?;
-    project.add_note(
-        Note::new("jp-vocab")
-            .stable_id("jp-vocab:taberu")
-            .text("expr", "食べる")
-            .text("meaning", "to eat"),
+        .build()?;
+    let mut project = Project::new("jp-core")?.default_deck("Japanese::Core");
+    project.add(
+        "taberu",
+        vocab
+            .note()
+            .field("expr", "食べる")
+            .field("meaning", "to eat"),
     )?;
-
-    project.validate().ensure_success()?;
-    project.write_apkg("jp-core.apkg")?.ensure_success()?;
+    project.build(BuildOptions::to("jp-core.apkg"))?;
     Ok(())
 }
 ```
 <!-- /source -->
 
-## Read the declaration
+Run from the checkout with
+`cargo run --locked -p ankiforge --example target_api_custom_notetype`.
+Open `jp-core.apkg` in Anki.
 
-| Declaration | Effect |
-| --- | --- |
-| `key("expr")` | Gives the field a stable key for authoring and identity rules |
-| `required()` | Rejects missing or empty content |
-| `optional()` | Permits omission and lowers the field as empty; cannot be combined with required |
-| `sort()` | Selects the field used for sorting; at most one field may set it |
-| `{{Expression}}` | References the field's display name in a template |
-| `{{FrontSide}}` | Reuses the rendered front on the answer side |
-| `GenerationRule::all(["expr"])` | Generates the template's card when all listed fields have content |
-| `IdentityRecipe::fields(["expr"])` | Defines the fallback identity inputs when there is no explicit note ID |
+## Keys and names
 
-`GenerationRule::any(...)` uses any listed field. The default rule is inferred
-from the template; if it cannot be represented as one Anki requirement, declare
-an explicit rule. Required/optional fields and card-generation rules solve different problems.
+`Field::new` and `Template::new` take stable keys. `.name` supplies a display name;
+otherwise the name equals the key. No slug is derived from a name. Empty,
+whitespace and conflicting/reserved keys fail model completion. Names can be
+Chinese or other Unicode text without changing identity keys.
 
-## Keep templates reusable
+Templates bind keys and compile to Anki field names. This covers front/back,
+browser templates, condition sections, filters and Cloze. Other HTML, whitespace
+and script text are preserved. Unknown references fail with a source byte range.
+Field assignment accepts only keys, with no silent trimming or case folding.
 
-Inline declarations are useful for small applications. Use a
-[template bundle](template-bundles.md) when HTML, CSS and assets should be edited
-as separate files. The bundle loader and inline declarations use the same core validation.
+## Validation and generation
 
-For custom Cloze, select one cloze field and one template; extra fields are allowed.
-Its front must contain the cloze filter for the selected display name, such as
-`{{cloze:Sentence}}`. See the complete bundle example in the next guide.
+`required()` rejects missing or empty note content. Fields without it may be
+omitted and render empty. `sort()` selects the sort field; at most one field can
+select it. Generation uses Anki's default rule unless an explicit
+`GenerationRule::all` or `any` is set on a template. These rules reference field
+keys. `builder.cloze_field(key)` selects Cloze semantics for a custom model.
 
-For method details, see the [Rust API guide](rust-api.md#note-types-fields-and-templates).
+`builder.asset(media)` declares an owned CSS/font/script/raw-HTML dependency.
+Typed image and sound content on notes collect assets automatically. Explicit
+assets remain in the output even if no static reference is found.
+
+The same model key can be reused within a project only with the same definition.
+A conflicting definition fails atomically when adding a note. Display-name,
+field or template changes in later releases need [update analysis](updates.md)
+even though their stable keys remain unchanged.
+
+For reusable files and assets, use a [template bundle](template-bundles.md).

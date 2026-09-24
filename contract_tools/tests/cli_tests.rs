@@ -1,7 +1,6 @@
-use anki_forge::writer::build_context_ref;
+use ankiforge::tools::build_context_ref;
 use serde_json::Value;
 use std::{
-    ffi::OsString,
     fs,
     path::{Path, PathBuf},
     process::Command,
@@ -18,113 +17,6 @@ fn run_cli(args: &[&str]) -> std::process::Output {
         .args(args)
         .output()
         .expect("contract_tools binary should run")
-}
-
-fn run_cli_in_dir(args: &[&str], current_dir: &Path) -> std::process::Output {
-    Command::new(cargo_bin())
-        .current_dir(current_dir)
-        .args(args)
-        .output()
-        .expect("contract_tools binary should run")
-}
-
-fn os_args(args: &[&str]) -> Vec<OsString> {
-    args.iter().map(OsString::from).collect()
-}
-
-fn run_cli_os(args: &[OsString]) -> std::process::Output {
-    Command::new(cargo_bin())
-        .args(args)
-        .output()
-        .expect("contract_tools binary should run")
-}
-
-fn product_v2_fixture_path(fixture_name: &str) -> PathBuf {
-    contract_tools::contract_manifest_path()
-        .parent()
-        .expect("manifest parent")
-        .join("fixtures/product-v2")
-        .join(format!("{fixture_name}.json"))
-}
-
-fn run_product_build_fixture(
-    fixture_name: &str,
-    temp_dir: &Path,
-    extra_args: &[OsString],
-) -> std::process::Output {
-    run_product_build_fixture_to(
-        fixture_name,
-        &temp_dir.join(format!("{fixture_name}.apkg")),
-        extra_args,
-    )
-}
-
-fn run_product_build_fixture_to(
-    fixture_name: &str,
-    apkg: &Path,
-    extra_args: &[OsString],
-) -> std::process::Output {
-    let manifest = contract_tools::contract_manifest_path();
-    let input = product_v2_fixture_path(fixture_name);
-    let mut args = vec![
-        OsString::from("product-build"),
-        OsString::from("--manifest"),
-        manifest.as_os_str().to_os_string(),
-        OsString::from("--product-input"),
-        input.as_os_str().to_os_string(),
-        OsString::from("--apkg-out"),
-        apkg.as_os_str().to_os_string(),
-    ];
-    args.extend(extra_args.iter().cloned());
-    run_cli_os(&args)
-}
-
-fn build_basic_stock_baseline(temp_dir: &Path) -> PathBuf {
-    let baseline = temp_dir.join("basic-stock-baseline.apkg");
-    let output = run_product_build_fixture_to(
-        "basic-stock",
-        &baseline,
-        &os_args(&["--output", "contract-json"]),
-    );
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    baseline
-}
-
-fn compare_to_arg(path: &Path) -> Vec<OsString> {
-    vec![
-        OsString::from("--compare-to"),
-        path.as_os_str().to_os_string(),
-    ]
-}
-
-fn fail_on_arg(level: &str) -> Vec<OsString> {
-    os_args(&["--fail-on", level])
-}
-
-fn report_json_arg(path: &Path) -> Vec<OsString> {
-    vec![
-        OsString::from("--report-json"),
-        path.as_os_str().to_os_string(),
-    ]
-}
-
-fn unwritable_report_json_path(temp_dir: &Path) -> PathBuf {
-    let path = temp_dir.join("report-json-target");
-    fs::create_dir(&path).expect("create unwritable report-json target");
-    path
-}
-
-fn diagnostics_include(report: &Value, code: &str) -> bool {
-    report["diagnostics"]
-        .as_array()
-        .expect("diagnostics array")
-        .iter()
-        .any(|diagnostic| diagnostic["code"] == code)
 }
 
 #[test]
@@ -237,7 +129,7 @@ fn load_declared_build_context_ref() -> String {
         contract_tools::manifest::resolve_asset_path(&manifest, "build_context_default")
             .expect("build context asset should resolve");
     let raw = fs::read_to_string(context_path).expect("read build context asset");
-    let context: anki_forge::writer::BuildContext =
+    let context: ankiforge::tools::BuildContext =
         serde_yaml::from_str(&raw).expect("decode build context asset");
     build_context_ref(&context).expect("build context ref")
 }
@@ -249,9 +141,9 @@ fn load_declared_writer_policy_ref() -> String {
     let policy_path = contract_tools::manifest::resolve_asset_path(&manifest, "writer_policy")
         .expect("writer policy asset should resolve");
     let raw = fs::read_to_string(policy_path).expect("read writer policy asset");
-    let policy: anki_forge::writer::WriterPolicy =
+    let policy: ankiforge::tools::WriterPolicy =
         serde_yaml::from_str(&raw).expect("decode writer policy asset");
-    anki_forge::writer::policy_ref(&policy.id, &policy.version)
+    ankiforge::tools::policy_ref(&policy.id, &policy.version)
 }
 
 fn build_basic_package(
@@ -367,12 +259,19 @@ fn summary_command_prints_bundle_version_and_public_axis() {
     );
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    assert!(stdout.contains("bundle_version: 0.6.3"), "stdout: {stdout}");
+    assert!(
+        stdout.contains(&format!("bundle_version: {}", manifest.data.bundle_version)),
+        "stdout: {stdout}"
+    );
     assert!(
         stdout.contains("public_axis: bundle_version"),
         "stdout: {stdout}"
     );
     assert!(stdout.contains("component_versions:"), "stdout: {stdout}");
+    assert!(stdout.contains("authoring_protocol: phase2-v1"));
+    assert!(stdout.contains("writer_protocol: phase3-v1"));
+    assert!(stdout.contains(&load_declared_writer_policy_ref()));
+    assert!(stdout.contains(&load_declared_build_context_ref()));
 
     for (name, asset) in &manifest.data.assets {
         let entry = format!("  {name}: {asset}");
@@ -459,10 +358,8 @@ fn normalize_command_matches_anki_forge_runtime_output() {
     let repo_root = manifest.parent().unwrap().parent().unwrap();
     let input = repo_root.join("contracts/fixtures/valid/minimal-authoring-ir.json");
 
-    let runtime = anki_forge::runtime::load_bundle_from_manifest(&manifest)
-        .unwrap()
-        .runtime;
-    let runtime_result = anki_forge::runtime::normalize_from_path(&runtime, &input).unwrap();
+    let runtime = ankiforge::tools::load_runtime(&manifest).unwrap();
+    let runtime_result = ankiforge::tools::normalize_from_path(&runtime, &input).unwrap();
 
     let cli_output = run_cli(&[
         "normalize",
@@ -544,10 +441,8 @@ fn build_command_matches_anki_forge_runtime_output() {
     let build_input = repo_root.join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
     let artifacts_dir = tempdir().unwrap();
 
-    let runtime = anki_forge::runtime::load_bundle_from_manifest(&manifest)
-        .unwrap()
-        .runtime;
-    let runtime_result = anki_forge::runtime::build_from_path(
+    let runtime = ankiforge::tools::load_runtime(&manifest).unwrap();
+    let runtime_result = ankiforge::tools::build_from_path(
         &runtime,
         &build_input,
         "default",
@@ -691,7 +586,7 @@ fn inspect_and_diff_commands_emit_contract_json_for_real_fixture() {
 }
 
 #[test]
-fn inspect_resource_limits_reach_cli_runtime_and_baseline_loading() {
+fn inspect_resource_limits_reach_cli_and_tool_operations() {
     use std::io::Write;
     let root = tempdir().unwrap();
     let apkg = root.path().join("meta-bomb.apkg");
@@ -706,17 +601,12 @@ fn inspect_resource_limits_reach_cli_runtime_and_baseline_loading() {
     archive.write_all(&[8, 3, 18, 128, 128, 4]).unwrap();
     archive.write_all(&vec![0; 65_536]).unwrap();
     archive.finish().unwrap();
-    let runtime = anki_forge::runtime::inspect_apkg_path(&apkg).unwrap_err();
+    let direct: ankiforge::tools::InspectError = ankiforge::tools::inspect_apkg(&apkg).unwrap_err();
+    assert!(direct.limit_exceeded().is_some());
+    let runtime = ankiforge::tools::inspect_apkg_path(&apkg).unwrap_err();
     assert!(runtime
         .to_string()
         .contains("INSPECT.RESOURCE_LIMIT_EXCEEDED"));
-    let baseline =
-        anki_forge::update_safety::baseline::load_previous_apkg_identity_index(&apkg, None, None)
-            .unwrap_err();
-    assert!(baseline
-        .downcast_ref::<anki_forge::writer::InspectError>()
-        .and_then(|error| error.limit_exceeded())
-        .is_some());
     let output = run_cli(&[
         "inspect",
         "--apkg",
@@ -783,10 +673,8 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     let build_input = repo_root.join("contracts/fixtures/phase3/inputs/basic-normalized-ir.json");
     let artifacts_dir = tempdir().unwrap();
 
-    let runtime = anki_forge::runtime::load_bundle_from_manifest(&manifest)
-        .unwrap()
-        .runtime;
-    let _build_result = anki_forge::runtime::build_from_path(
+    let runtime = ankiforge::tools::load_runtime(&manifest).unwrap();
+    let _build_result = ankiforge::tools::build_from_path(
         &runtime,
         &build_input,
         "default",
@@ -798,8 +686,8 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     let staging_path = artifacts_dir.path().join("staging/manifest.json");
     let apkg_path = artifacts_dir.path().join("package.apkg");
 
-    let runtime_staging = anki_forge::runtime::inspect_staging_path(&staging_path).unwrap();
-    let runtime_apkg = anki_forge::runtime::inspect_apkg_path(&apkg_path).unwrap();
+    let runtime_staging = ankiforge::tools::inspect_staging_path(&staging_path).unwrap();
+    let runtime_apkg = ankiforge::tools::inspect_apkg_path(&apkg_path).unwrap();
 
     let cli_staging = run_cli(&[
         "inspect",
@@ -835,7 +723,7 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     .unwrap();
     fs::write(&right, serde_json::to_string_pretty(&runtime_apkg).unwrap()).unwrap();
 
-    let runtime_diff = anki_forge::runtime::diff_from_paths(&left, &right).unwrap();
+    let runtime_diff = ankiforge::tools::diff_from_paths(&left, &right).unwrap();
     let cli_diff = run_cli(&[
         "diff",
         "--left",
@@ -848,534 +736,6 @@ fn inspect_and_diff_commands_match_anki_forge_runtime_output() {
     assert!(cli_diff.status.success());
     let cli_diff_json: serde_json::Value = serde_json::from_slice(&cli_diff.stdout).unwrap();
     assert_eq!(cli_diff_json, serde_json::to_value(runtime_diff).unwrap());
-}
-
-fn write_basic_product_document(temp_dir: &Path) -> PathBuf {
-    let input = temp_dir.join("basic.product.json");
-    let value = serde_json::json!({
-        "document_id": "phase4-cli",
-        "note_types": [
-            { "Basic": { "id": "basic-main", "name": "Basic" } }
-        ],
-        "notes": [
-            {
-                "Basic": {
-                    "id": "note-1",
-                    "note_type_id": "basic-main",
-                    "deck_name": "Default",
-                    "front": "front",
-                    "back": "back",
-                    "tags": []
-                }
-            }
-        ]
-    });
-    fs::write(&input, serde_json::to_string_pretty(&value).unwrap()).expect("write product");
-    input
-}
-
-#[test]
-fn product_build_command_writes_apkg_and_report_json() {
-    let temp = tempdir().expect("tempdir");
-    let manifest = contract_tools::contract_manifest_path();
-    let input = write_basic_product_document(temp.path());
-    let apkg = temp.path().join("deck.apkg");
-    let report_json = temp.path().join("build-report.json");
-
-    let output = run_cli(&[
-        "product-build",
-        "--manifest",
-        manifest.to_str().unwrap(),
-        "--product-input",
-        input.to_str().unwrap(),
-        "--apkg-out",
-        apkg.to_str().unwrap(),
-        "--report-json",
-        report_json.to_str().unwrap(),
-        "--output",
-        "contract-json",
-    ]);
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    assert!(apkg.exists(), "APKG output should exist");
-    assert!(report_json.exists(), "report JSON should exist");
-    let stdout_report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
-    let file_report: Value =
-        serde_json::from_str(&fs::read_to_string(report_json).expect("read report")).unwrap();
-    assert_eq!(stdout_report["kind"], "anki-forge-build-report");
-    assert_eq!(stdout_report["status"], "success");
-    assert_eq!(stdout_report, file_report);
-}
-
-#[test]
-fn product_build_contract_json_stdout_is_only_report_json() {
-    let temp = tempdir().expect("tempdir");
-    let output = run_product_build_fixture(
-        "basic-stock",
-        temp.path(),
-        &os_args(&["--output", "contract-json"]),
-    );
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout is one JSON value");
-    assert_eq!(report["kind"], "anki-forge-build-report");
-}
-
-#[test]
-fn product_build_cli_writes_identity_lockfile() {
-    let temp = tempdir().expect("tempdir");
-    let lockfile = temp.path().join("anki-forge.lock.json");
-    let output = run_product_build_fixture(
-        "basic-stock",
-        temp.path(),
-        &[
-            OsString::from("--identity-lockfile"),
-            lockfile.as_os_str().to_os_string(),
-            OsString::from("--write-identity-lockfile"),
-            OsString::from("--update-safety"),
-            OsString::from("strict"),
-            OsString::from("--output"),
-            OsString::from("contract-json"),
-        ],
-    );
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    assert!(lockfile.exists());
-
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
-    assert_eq!(report["update_safety"]["mode"], "strict");
-    assert_eq!(
-        report["update_safety"]["lockfile_written"].as_bool(),
-        Some(true)
-    );
-}
-
-#[test]
-fn product_build_cli_disabled_mode_ignores_missing_identity_lockfile() {
-    let temp = tempdir().expect("tempdir");
-    let missing_lockfile = temp.path().join("missing.lock.json");
-    let output = run_product_build_fixture(
-        "basic-stock",
-        temp.path(),
-        &[
-            OsString::from("--identity-lockfile"),
-            missing_lockfile.as_os_str().to_os_string(),
-            OsString::from("--update-safety"),
-            OsString::from("disabled"),
-            OsString::from("--output"),
-            OsString::from("contract-json"),
-        ],
-    );
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
-    assert_eq!(report["update_safety"]["mode"], "disabled");
-    let sources = report["update_safety"]["baseline_sources"]
-        .as_array()
-        .expect("baseline sources");
-    assert!(sources.iter().any(|source| {
-        source["source_kind"] == "lockfile" && source["status"] == "ignored_disabled"
-    }));
-}
-
-#[test]
-fn product_build_cli_report_only_missing_identity_lockfile_warns_without_blocking() {
-    let temp = tempdir().expect("tempdir");
-    let missing_lockfile = temp.path().join("missing.lock.json");
-    let output = run_product_build_fixture(
-        "basic-stock",
-        temp.path(),
-        &[
-            OsString::from("--identity-lockfile"),
-            missing_lockfile.as_os_str().to_os_string(),
-            OsString::from("--update-safety"),
-            OsString::from("report-only"),
-            OsString::from("--output"),
-            OsString::from("contract-json"),
-        ],
-    );
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
-    assert_eq!(report["update_safety"]["mode"], "report_only");
-    let diagnostic = report["diagnostics"]
-        .as_array()
-        .expect("diagnostics")
-        .iter()
-        .find(|diagnostic| diagnostic["code"] == "UPDATE.BASELINE_LOCKFILE_UNREADABLE")
-        .expect("missing lockfile warning");
-    assert_eq!(diagnostic["severity"], "warning");
-}
-
-#[test]
-fn product_build_cli_rejects_identity_lockfile_apkg_path_collision() {
-    let temp = tempdir().expect("tempdir");
-    let colliding_path = temp.path().join("deck.apkg");
-    let output = run_product_build_fixture_to(
-        "basic-stock",
-        &colliding_path,
-        &[
-            OsString::from("--identity-lockfile"),
-            colliding_path.as_os_str().to_os_string(),
-            OsString::from("--write-identity-lockfile"),
-            OsString::from("--output"),
-            OsString::from("contract-json"),
-        ],
-    );
-
-    assert!(!output.status.success());
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
-    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
-}
-
-#[test]
-fn product_build_cli_rejects_apkg_report_json_path_collision() {
-    let temp = tempdir().expect("tempdir");
-    let colliding_path = temp.path().join("deck.apkg");
-    let output = run_product_build_fixture_to(
-        "basic-stock",
-        &colliding_path,
-        &[
-            OsString::from("--report-json"),
-            colliding_path.as_os_str().to_os_string(),
-            OsString::from("--output"),
-            OsString::from("contract-json"),
-        ],
-    );
-
-    assert!(!output.status.success());
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report json");
-    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
-    assert!(!colliding_path.exists());
-}
-
-#[test]
-fn product_build_cli_rejects_output_baseline_alias_and_preserves_baseline() {
-    let temp = tempdir().expect("tempdir");
-    let baseline = build_basic_stock_baseline(temp.path());
-    let original = fs::read(&baseline).unwrap();
-    let manifest = contract_tools::contract_manifest_path();
-    let input = product_v2_fixture_path("compare-risk");
-    let output = run_cli_in_dir(
-        &[
-            "product-build",
-            "--manifest",
-            manifest.to_str().unwrap(),
-            "--product-input",
-            input.to_str().unwrap(),
-            "--apkg-out",
-            "./basic-stock-baseline.apkg",
-            "--compare-to",
-            baseline.to_str().unwrap(),
-            "--fail-on",
-            "low",
-            "--output",
-            "contract-json",
-        ],
-        temp.path(),
-    );
-    assert_eq!(fs::read(&baseline).unwrap(), original);
-    assert_eq!(output.status.code(), Some(3));
-    let report: Value = serde_json::from_slice(&output.stdout).expect("structured failure report");
-    assert_eq!(report["status"], "invalid");
-    assert!(report["artifact"].is_null());
-    assert!(diagnostics_include(&report, "PROJECT.PATH_COLLISION"));
-}
-
-#[test]
-fn product_build_cli_does_not_publish_a_policy_blocked_candidate() {
-    let temp = tempdir().expect("tempdir");
-    let baseline = build_basic_stock_baseline(temp.path());
-    let original = fs::read(&baseline).unwrap();
-    let apkg = temp.path().join("output.apkg");
-    fs::write(&apkg, b"previous publication").unwrap();
-    let mut args = compare_to_arg(&baseline);
-    args.extend(fail_on_arg("low"));
-    args.extend(os_args(&["--output", "contract-json"]));
-    let output = run_product_build_fixture_to("compare-risk", &apkg, &args);
-    assert_eq!(output.status.code(), Some(2));
-    assert_eq!(fs::read(&apkg).unwrap(), b"previous publication");
-    assert_eq!(fs::read(&baseline).unwrap(), original);
-    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(report["status"], "blocked");
-    assert!(report["artifact"].is_null());
-    assert!(!report["diff"]["artifact_diff"]["changes"]
-        .as_array()
-        .unwrap()
-        .is_empty());
-}
-
-#[test]
-fn product_build_policy_failure_prints_report_before_nonzero_exit() {
-    let temp = tempdir().expect("tempdir");
-    let baseline = build_basic_stock_baseline(temp.path());
-    let mut args = compare_to_arg(&baseline);
-    args.extend(fail_on_arg("low"));
-    args.extend(os_args(&["--output", "contract-json"]));
-
-    let output = run_product_build_fixture("compare-risk", temp.path(), &args);
-
-    assert_eq!(
-        output.status.code(),
-        Some(2),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout report JSON");
-    assert_eq!(report["kind"], "anki-forge-build-report");
-    assert_eq!(report["status"], "blocked");
-    assert!(report["diff"].is_object(), "diff present: {report:#?}");
-    assert!(report["risk"].is_object(), "risk present: {report:#?}");
-    assert!(
-        !report["risk"]["findings"]
-            .as_array()
-            .expect("risk findings")
-            .is_empty(),
-        "risk findings should be non-empty: {report:#?}"
-    );
-    assert_eq!(report["risk"]["highest_level"], "low");
-}
-
-#[test]
-fn product_build_compare_to_without_fail_on_attaches_diff_and_risk() {
-    let temp = tempdir().expect("tempdir");
-    let baseline = build_basic_stock_baseline(temp.path());
-    let mut args = compare_to_arg(&baseline);
-    args.extend(os_args(&["--output", "contract-json"]));
-
-    let output = run_product_build_fixture("compare-risk", temp.path(), &args);
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout report JSON");
-    assert_eq!(report["status"], "success");
-    assert_eq!(report["comparison"], "complete");
-    assert!(report["diff"].is_object(), "diff present: {report:#?}");
-    assert!(report["risk"].is_object(), "risk present: {report:#?}");
-    assert!(
-        !report["risk"]["findings"]
-            .as_array()
-            .expect("risk findings")
-            .is_empty(),
-        "risk findings should be non-empty: {report:#?}"
-    );
-    assert_eq!(report["policy"]["status"], "not_evaluated");
-}
-
-#[test]
-fn product_build_empty_project_is_invalid_and_writes_no_artifact() {
-    let temp = tempdir().expect("tempdir");
-    let apkg = temp.path().join("empty.apkg");
-    let output = run_product_build_fixture_to(
-        "empty-product-v2",
-        &apkg,
-        &os_args(&["--output", "contract-json"]),
-    );
-
-    assert_eq!(
-        output.status.code(),
-        Some(3),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout report JSON");
-    assert_eq!(report["status"], "invalid");
-    assert!(report["artifact"].is_null(), "artifact should be null");
-    assert!(!apkg.exists(), "APKG output should not be written");
-}
-
-#[test]
-fn product_v2_handwritten_missing_identity_is_diagnostic() {
-    let temp = tempdir().expect("tempdir");
-    let output = run_product_build_fixture(
-        "missing-custom-identity",
-        temp.path(),
-        &os_args(&["--output", "contract-json"]),
-    );
-    assert_eq!(output.status.code(), Some(3));
-    let report: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert!(diagnostics_include(&report, "PRODUCT.IDENTITY_MISSING"));
-}
-
-#[test]
-fn product_v2_handwritten_reserved_stock_id_is_diagnostic() {
-    let temp = tempdir().expect("tempdir");
-    let output = run_product_build_fixture(
-        "reserved-stock-id",
-        temp.path(),
-        &os_args(&["--output", "contract-json"]),
-    );
-    assert_eq!(output.status.code(), Some(3));
-    let report: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert!(diagnostics_include(
-        &report,
-        "PRODUCT.RESERVED_ID_KIND_MISMATCH"
-    ));
-}
-
-#[test]
-fn product_build_report_json_write_failure_is_reported() {
-    let temp = tempdir().expect("tempdir");
-    let report_json = unwritable_report_json_path(temp.path());
-    let mut args = report_json_arg(&report_json);
-    args.extend(os_args(&["--output", "contract-json"]));
-
-    let output = run_product_build_fixture("basic-stock", temp.path(), &args);
-
-    assert_eq!(
-        output.status.code(),
-        Some(4),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout report JSON");
-    assert_ne!(report["status"], "success");
-    assert!(
-        diagnostics_include(&report, "PROJECT.REPORT_JSON_WRITE_FAILED"),
-        "diagnostic missing from report: {report:#?}"
-    );
-}
-
-#[test]
-fn product_build_command_uses_manifest_when_invoked_outside_repo() {
-    let temp = tempdir().expect("tempdir");
-    let cwd = temp.path().join("outside-repo");
-    fs::create_dir(&cwd).expect("create cwd");
-    let manifest = contract_tools::contract_manifest_path()
-        .canonicalize()
-        .expect("canonical manifest");
-    let input = write_basic_product_document(temp.path());
-    let apkg = temp.path().join("deck.apkg");
-
-    let output = run_cli_in_dir(
-        &[
-            "product-build",
-            "--manifest",
-            manifest.to_str().unwrap(),
-            "--product-input",
-            input.to_str().unwrap(),
-            "--apkg-out",
-            apkg.to_str().unwrap(),
-            "--output",
-            "contract-json",
-        ],
-        &cwd,
-    );
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    assert!(apkg.exists(), "APKG output should exist");
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
-    assert_eq!(report["status"], "success");
-}
-
-#[test]
-fn product_build_report_validates_against_build_report_schema() {
-    let temp = tempdir().expect("tempdir");
-    let manifest = contract_tools::contract_manifest_path();
-    let input = write_basic_product_document(temp.path());
-    let apkg = temp.path().join("deck.apkg");
-
-    let output = run_cli(&[
-        "product-build",
-        "--manifest",
-        manifest.to_str().unwrap(),
-        "--product-input",
-        input.to_str().unwrap(),
-        "--apkg-out",
-        apkg.to_str().unwrap(),
-        "--output",
-        "contract-json",
-    ]);
-
-    assert!(
-        output.status.success(),
-        "stdout: {}\nstderr: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-
-    let report: Value = serde_json::from_slice(&output.stdout).expect("report JSON");
-    let manifest = contract_tools::manifest::load_manifest(&manifest).expect("manifest");
-    let schema_path =
-        contract_tools::manifest::resolve_asset_path(&manifest, "build_report_schema")
-            .expect("schema path");
-    let schema_value: Value =
-        serde_json::from_str(&fs::read_to_string(schema_path).expect("schema")).unwrap();
-    let schema = jsonschema::JSONSchema::compile(&schema_value).expect("schema compiles");
-    let errors = schema
-        .validate(&report)
-        .err()
-        .map(|errors| errors.map(|error| error.to_string()).collect::<Vec<_>>())
-        .unwrap_or_default();
-    assert!(errors.is_empty(), "schema errors: {errors:#?}");
-}
-
-#[test]
-fn product_build_command_returns_invalid_exit_for_missing_baseline() {
-    let temp = tempdir().expect("tempdir");
-    let manifest = contract_tools::contract_manifest_path();
-    let input = write_basic_product_document(temp.path());
-    let apkg = temp.path().join("deck.apkg");
-    let missing = temp.path().join("missing.apkg");
-
-    let output = run_cli(&[
-        "product-build",
-        "--manifest",
-        manifest.to_str().unwrap(),
-        "--product-input",
-        input.to_str().unwrap(),
-        "--apkg-out",
-        apkg.to_str().unwrap(),
-        "--compare-to",
-        missing.to_str().unwrap(),
-        "--fail-on",
-        "high",
-        "--output",
-        "contract-json",
-    ]);
-
-    assert_eq!(output.status.code(), Some(3));
-    let report: Value = serde_json::from_slice(&output.stdout).expect("stdout JSON");
-    assert_eq!(report["status"], "invalid");
-    assert_eq!(report["comparison"], "unavailable");
-    assert_eq!(report["policy"]["status"], "blocked");
 }
 
 fn temp_contract_root(label: &str) -> PathBuf {
@@ -1418,4 +778,14 @@ fn copied_bundled_manifest_path(label: &str) -> PathBuf {
     }
 
     root.join("manifest.yaml")
+}
+
+fn build_basic_stock_baseline(root: &Path) -> PathBuf {
+    let mut project = ankiforge::Project::new("inspect-tests").unwrap();
+    project
+        .add("one", ankiforge::Note::basic("front", "back"))
+        .unwrap();
+    let path = root.join("baseline.apkg");
+    project.build(ankiforge::BuildOptions::to(&path)).unwrap();
+    path
 }

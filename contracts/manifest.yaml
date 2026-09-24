@@ -1,15 +1,15 @@
-bundle_version: "0.6.3"
+bundle_version: "1.0.0"
 component_versions:
-  schema: "0.6.0"
-  fixtures: "0.5.3"
+  schema: "1.0.0"
+  fixtures: "1.0.0"
   service_envelope: "0.1.0"
-  error_registry: "0.6.0"
+  error_registry: "1.0.0"
 compatibility:
   public_axis: bundle_version
 assets:
   manifest_schema: schema/manifest.schema.json
   version_policy: versioning/policy.md
-  bundle_change: versioning/changes/0.6.3.yaml
+  bundle_change: versioning/changes/1.0.0.yaml
   identity_policy_schema: schema/identity-policy.schema.json
   risk_policy_schema: schema/risk-policy.schema.json
   compatibility_classes: versioning/compatibility-classes.yaml
@@ -59,3 +59,7 @@ assets:
   product_document_v3_schema: schema/product-document-v3.schema.json
   template_bundle_schema: schema/template-bundle.schema.json
   template_semantics: semantics/templates.md
+  project_input_schema: schema/project-input.schema.json
+  identity_evidence_schema: schema/identity-evidence.schema.json
+  comparison_report_schema: schema/comparison-report.schema.json
+  native_authoring_semantics: semantics/rust-authoring.md

@@ -1,56 +1,38 @@
-# Custom templates and template bundles
+# Template bundles
 
-Keep field declarations, HTML, CSS and assets together in a reusable directory.
-The loader uses the same validation and card planning as inline custom note types.
+A bundle is a reusable model declaration, template text, CSS and explicit media
+closure. `NoteType::from_bundle(directory)` validates the complete bundle and
+takes owned snapshots before returning the same immutable `NoteType` used by
+inline authoring. It does not partially modify a project.
 
-## Try a complete bundle
-
-From the repository root with Rust 1.92 or later:
-
-```sh
-cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples
-```
-
-Open `target/docs-examples/template.apkg` in Anki. The example imports the
-[complete custom Cloze bundle](../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml),
-then exports one note and two cards in **Languages::Cloze**.
-
-## Bundle layout
-
-```text
-my-template/
-├── anki-template.yaml
-├── front.html
-├── back.html
-├── browser-front.html
-└── style.css
-```
-
-Copy the working example if you want to edit your own version:
+## Run the bundled example
 
 ```sh
-cp -R contracts/fixtures/template-bundle/custom-cloze my-template
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 ```
 
-This is its complete manifest:
+The workflow loads the [custom Cloze fixture](../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)
+and writes `target/docs-examples/template.apkg`. Its template targets
+**Languages::Cloze**. One note generates two cards.
+
+## Manifest and template references
+
+The manifest filename is `anki-template.yaml`. Only the new format is accepted:
 
 <!-- source: contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml -->
 ```yaml
-format_version: template-bundle-v1
+format_version: template-bundle-v2
 note_type:
-  id: language-cloze
+  key: language-cloze
   name: Language Cloze
-  kind: cloze
   cloze_field: text
   fields:
     - key: text
       name: Sentence
-      identity: true
       sort: true
       required: true
     - key: extra
       name: Extra
-      optional: true
   templates:
     - key: cloze
       name: Cloze
@@ -62,71 +44,85 @@ css_file: style.css
 ```
 <!-- /source -->
 
-The [front](../contracts/fixtures/template-bundle/custom-cloze/front.html) uses
-`{{cloze:Sentence}}`; the [back](../contracts/fixtures/template-bundle/custom-cloze/back.html)
-also displays the optional Extra field. HTML uses display names, while
-`cloze_field`, identity and generation rules use stable field keys.
+`note_type.key`, field keys and template keys are required stable identifiers.
+`name` is optional and defaults to the corresponding key. `cloze_field` selects
+a Cloze model; no separate kind declaration is needed. A field without
+`required: true` may be omitted. Unknown manifest properties are rejected.
 
-## Import it into a Project
+Every template uses **field keys**, including front, back and browser variants:
+`{{cloze:text}}`, `{{extra}}`, and conditional sections such as `{{#extra}}`.
+Display names such as Sentence and Extra are generated for Anki after binding.
+The loader preserves original file paths and template byte ranges in errors.
 
-The [complete program](../anki_forge/examples/docs_workflow.rs) passes the fixture
-directory to this function. Pass `Path::new("./my-template")` to use your copy.
-`verify` is the example's package-count check.
+## Load and reuse a model
 
 <!-- source: anki_forge/examples/docs_workflow.rs#bundle -->
 ```rust
 fn bundle(output: &Path, template_directory: &Path) -> anyhow::Result<()> {
-    let mut project = Project::new("Languages").stable_id("docs-languages");
-    project.import_template_bundle(template_directory)?;
-    project.add_note(
-        Note::new("language-cloze")
-            .stable_id("es:capital")
-            .text("text", "{{c1::Madrid}} is in {{c2::Spain}}.")
-            .text("extra", "A city and its country."),
+    let model = NoteType::from_bundle(template_directory)?;
+    let mut project = Project::new("docs-languages")?;
+    project.add(
+        "capital",
+        model
+            .note()
+            .field("text", "{{c1::Madrid}} is in {{c2::Spain}}.")
+            .field("extra", "A city and its country."),
     )?;
-    let report = project.write_apkg(output.join("template.apkg"))?;
-    report.ensure_success()?;
-    verify(&report, 1, 2, 0)?;
+    let built = project.build(BuildOptions::to(output.join("template.apkg")))?;
+    verify(&built, 1, 2, 0)?;
     Ok(())
 }
 ```
 <!-- /source -->
 
-## Fields and generation rules
+For an independent application, this full example expects the same bundle copied
+to `fixtures/template-bundle`:
 
-`required: true` rejects missing or empty content. `optional: true` permits an
-omitted field and lowers it as empty. A field cannot declare both. At most one
-field may declare `sort: true`; otherwise Anki uses the first field.
+```rust
+use ankiforge::{BuildOptions, NoteType, Project};
 
-Normal templates can declare `generation_rule` with `kind: all` or `kind: any`
-and a `fields` list of stable keys. `anki_default` asks the core to infer the
-requirement. If it cannot represent the template accurately as one Anki card
-requirement, provide an explicit rule instead.
+fn main() -> anyhow::Result<()> {
+    let model = NoteType::from_bundle("fixtures/template-bundle")?;
+    let mut project = Project::new("bundle-example")?;
+    project.add("capital", model.note()
+        .field("text", "{{c1::Madrid}} is in {{c2::Spain}}.")
+        .field("extra", "A city and its country."))?;
+    let output = project.build(BuildOptions::to("bundle-example.apkg"))?;
+    assert_eq!(output.report().counts().cards, 2);
+    Ok(())
+}
+```
 
-## Compatibility and migration
+The returned model is independent of the source directory. It can be shared with
+another project or used after that directory is removed. A load failure returns
+no partial model and cleans up its unshared snapshots.
 
-A custom Cloze selects **one cloze field and one card template**. Additional
-fields, such as Extra, are allowed. Its front must use the cloze filter for the
-selected field's display name. One template can generate several cards when the
-note uses distinct cloze numbers.
+## Assets and budgets
 
-ProductDocument v2 custom templates remain normal note types. Repository tooling
-that needs custom Cloze uses v3; Rust's `NoteType::custom_cloze` and the native
-bindings expose custom Cloze directly. Normal consumers do not need ProductDocument.
+Declare every raw template/CSS/script asset explicitly. Each `assets` entry uses
+a path relative to the bundle and a fixed export name:
 
-The [template semantics](../contracts/semantics/templates.md) describe supported
-expressions and filters. Validation does not execute third-party add-on filters
-or certify HTML/CSS/JavaScript behavior; unknown filters are portability warnings.
+```yaml
+assets:
+  - path: assets/badge.png
+    export_as: badge.png
+  - path: assets/labels.woff
+    export_as: labels.woff
+```
 
-## Assets and failures
+Then templates may use `<img src="badge.png">` and CSS may use
+`url('labels.woff')`. The `css_file` property supplies the CSS source file; assets
+are not inferred from arbitrary HTML/CSS/JavaScript. Declared assets remain in the
+APKG even if no static reference is detected. Export names obey the same
+portable-name and Unicode/case collision rules as [Media](media.md).
 
-Bundles may declare CSS, browser templates, target decks and assets with explicit
-export filenames. Every declared file must exist; paths and symlinks must stay
-inside the bundle. Keep media references synchronized with export filenames.
-See the [normal bundle with assets](../contracts/fixtures/template-bundle/custom-normal/anki-template.yaml)
-and [media guide](media.md).
+Absolute paths, traversal escapes and symlinks outside the bundle are rejected.
+The manifest is limited to 256 KiB; each template/CSS text file is limited to
+2 MiB and must be UTF-8. Asset snapshots use the default media budget, or a
+caller-supplied `MediaLimits` through `NoteType::from_bundle_with_limits`.
+Both preflight lengths and actual bytes read are checked.
 
-For missing files or invalid field references, check the reported path and
-[troubleshooting](troubleshooting.md#media-and-templates). Contract fixture checks,
-packaging and embedded-resource regeneration are covered separately in
-[template maintenance](template-maintenance.md).
+Bundle errors retain kind/code, source path, byte offset where applicable, and
+the underlying schema, I/O, YAML, UTF-8 or media error. Model completion validates
+schema; adding notes separately checks project-level conflicts. See
+[custom note types](custom-notetypes.md) and [troubleshooting](troubleshooting.md).

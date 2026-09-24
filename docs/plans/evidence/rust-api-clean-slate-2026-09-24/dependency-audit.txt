@@ -1,0 +1,11 @@
+cargo-deny 0.20.2; RustSec freshly fetched 2026-09-24
+Database commit ef8244d224cb89be53491e0c55a96c1279d9fdf1
+Command: cargo deny --locked --config <temporary copy of deny.toml with db-path only> check advisories licenses bans sources
+Final check after removing obsolete cpufeatures exception (same freshly fetched database, offline):
+warning[unmatched-skip]: skipped crate 'quick-error = ^1.2.3' was not encountered
+   ┌─ /private/tmp/native-deny.toml:49:15
+   │
+49 │     { name = "quick-error", version = "1.2.3" },
+   │               ━━━━━━━━━━━ unmatched skip configuration
+
+advisories ok, bans ok, licenses ok, sources ok

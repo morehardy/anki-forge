@@ -119,6 +119,7 @@ pub struct ComparisonContext {
 }
 
 impl ComparisonContext {
+    #[cfg(feature = "internal-tools")]
     pub fn normalized(fingerprint: impl Into<String>, policy_ref: impl Into<String>) -> Self {
         Self {
             kind: "comparison-context".into(),

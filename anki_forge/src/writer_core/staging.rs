@@ -28,6 +28,7 @@ pub struct BuildArtifactTarget {
     pub root_dir: PathBuf,
     pub stable_ref_prefix: String,
     pub media_store_dir: PathBuf,
+    pub(crate) native_identity: Option<std::sync::Arc<crate::build::identity::PackageIdentity>>,
 }
 
 impl BuildArtifactTarget {
@@ -37,6 +38,7 @@ impl BuildArtifactTarget {
             media_store_dir: root_dir.join(".anki-forge-media"),
             root_dir,
             stable_ref_prefix: stable_ref_prefix.into(),
+            native_identity: None,
         }
     }
 
@@ -62,6 +64,7 @@ impl BuildArtifactTarget {
 }
 
 #[derive(Debug, Clone)]
+#[cfg(all(test, feature = "internal-tools"))]
 pub struct StagingPackage {
     inner: StagingPackageData<NormalizedIr>,
 }
@@ -206,6 +209,7 @@ pub(crate) struct ResolvedTemplateTargetDeck {
     pub(crate) resolved_target_deck_id: i64,
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub(crate) fn load_staging_manifest(
     path: &Path,
 ) -> Result<(NormalizedIr, Option<BTreeMap<String, i64>>)> {
@@ -216,6 +220,7 @@ pub(crate) fn load_staging_manifest(
     Ok((manifest.normalized_ir, manifest.notetype_model_ids))
 }
 
+#[cfg(feature = "internal-tools")]
 pub(crate) fn staging_notetype_ids(
     normalized: &NormalizedIr,
     ids: Option<BTreeMap<String, i64>>,
@@ -233,6 +238,7 @@ pub(crate) fn staging_notetype_ids(
     crate::writer_core::identity::resolve_notetype_ids(normalized, Some(&ids))
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 impl StagingPackage {
     pub fn from_normalized(
         normalized_ir: &NormalizedIr,
@@ -246,10 +252,6 @@ impl StagingPackage {
             None,
         )
         .map(|inner| Self { inner })
-    }
-
-    pub fn diagnostics(&self) -> &[BuildDiagnosticItem] {
-        self.inner.diagnostics()
     }
 
     pub fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
@@ -323,6 +325,7 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             .expect("new staging packages always include validated model IDs")
     }
 
+    #[cfg(all(test, feature = "internal-tools"))]
     pub(crate) fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
         self.materialize_with_prepared_media(target, None)
     }

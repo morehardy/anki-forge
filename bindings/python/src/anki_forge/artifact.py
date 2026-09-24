@@ -8,6 +8,7 @@ from typing import Any
 
 from . import _native
 from .options import absolute_path
+from ._bridge import invoke
 
 
 class ApkgArtifact(Mapping[str, str]):
@@ -27,7 +28,7 @@ class ApkgArtifact(Mapping[str, str]):
         self._handle.close()
 
     def persist_to(self, path: str | PathLike[str]) -> ApkgArtifact:
-        handle = self._handle.persist_to(absolute_path(path, self._base_dir))
+        handle = invoke(self._handle.persist_to, absolute_path(path, self._base_dir))
         return ApkgArtifact(handle, base_dir=self._base_dir)
 
     def __copy__(self) -> ApkgArtifact:

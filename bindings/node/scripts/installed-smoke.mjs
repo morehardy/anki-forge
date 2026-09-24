@@ -204,32 +204,21 @@ try {
     `
     import assert from 'node:assert/strict';
     import { createRequire } from 'node:module';
-    import { Project, Deck, Note, Field, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'anki-forge-node';
+    import { Project, Note, BuildOptions, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'anki-forge-node';
     const cjs = createRequire(import.meta.url)('anki-forge-node');
-    assert.equal(cjs.Project, Project);
-    assert.equal(cjs.ApkgArtifact, ApkgArtifact);
-    assert.equal(cjs.ArtifactClosedError, ArtifactClosedError);
-    const project = new Project('Installed', { stableId: 'installed' });
-    project.addNote(Note.basic('npm', 'Rust', { stableId: 'note' }));
-    (await project.validate()).ensureSuccess();
-    const report = await project.writeApkg('installed.apkg', { inspect: true });
-    report.ensureSuccess();
-    assert.equal(report.inspect.notes, 1);
+    assert.equal(cjs.Project, Project); assert.equal(cjs.ApkgArtifact, ApkgArtifact);
+    const project = new Project('installed').add('note', Note.basic('npm', 'Rust'));
+    const output = await project.build(BuildOptions.to('installed.apkg'));
+    assert.equal(output.report.counts.notes, 1);
     assert.equal(bindingMetadata().bindingVersion, ${JSON.stringify(version)});
-    await report.artifactHandle.close();
-    const deck = new Deck('Converted'); deck.basic('<b>front</b>', 'back');
-    const snapshot = await deck.describe(); assert.equal(snapshot.notes.length, 1);
-    assert.equal(new Field('Prompt').describe().key, 'prompt');
-    assert.equal(deck.media.get('missing'), undefined);
-    const clonedDeck = await deck.clone();
-    const imported = await Project.fromDeck(clonedDeck);
-    const clone = await imported.clone();
-    const temporary = await clone.build({inspectLimits:{maxArchiveBytes:18446744073709551615n}});
-    const artifact = temporary.artifactHandle.clone();
-    await temporary.artifactHandle.close();
+    await output.artifact.close();
+    const clone = project.clone();
+    const temporary = await clone.build(BuildOptions.temporary());
+    const artifact = temporary.artifact.clone(); await temporary.artifact.close();
     const persisted = await artifact.persistTo('persisted.apkg');
     await artifact.close(); await persisted.close();
-    console.log('Installed ESM + CJS → Rust → inspected APKG and parity APIs: passed');
+    assert.throws(() => artifact.clone(), ArtifactClosedError);
+    console.log('Installed ESM + CJS → public Rust API → owned APKG: passed');
   `,
   );
   const cleanEnv = {
@@ -320,33 +309,26 @@ try {
     await fs.writeFile(
       path.join(consumer, `consumer.${extension}`),
       `
-      import { Project, Deck, Note, Field, Template, NoteType, ApkgArtifact, type DeckSnapshot, type NoteSnapshot, type BuildOptions, type BuildReport, type InspectLimits } from 'anki-forge-node';
-      const project = new Project('Typed');
-      project.addNote(Note.basic('front', 'back'));
-      const options: BuildOptions = { output: 'typed.apkg' };
-      const result: Promise<BuildReport> = project.build(options);
-      // @ts-expect-error unknown product options must be rejected
-      project.build({ output: 'x.apkg', launcherExecutable: 'cargo' });
-      // @ts-expect-error fields and templates are distinct opaque values
-      const field: Field = new Template('Card', { front: '{{Front}}', back: '{{Back}}' });
-      const limits: InspectLimits = { maxMediaBytes: 1024, maxArchiveBytes: 18446744073709551615n };
-      const temporary: Promise<BuildReport> = project.build();
-      const cloned: Promise<Project> = project.clone();
-      const converted: Promise<Project> = Project.fromDeck(new Deck('Typed'));
-      const deckView: Promise<DeckSnapshot> = new Deck('Typed').describe();
-      const noteView: NoteSnapshot = Note.basic('one', '1').describe();
-      // @ts-expect-error rendered fields are readonly
-      noteView.renderedFields.Front = 'changed';
-      // @ts-expect-error canonical field keys are readonly
-      new Field('Prompt').describe().key = 'changed';
-      // @ts-expect-error artifact constructors are private
-      new ApkgArtifact({path:'x.apkg'});
-      // @ts-expect-error a path descriptor cannot forge an artifact handle
-      const forged: ApkgArtifact = {path:'x', clone(){return this}, async persistTo(){return this}, async close(){}};
-      // @ts-expect-error bigint alternatives must be bigint, not strings
-      project.build({inspectLimits:{maxEntries:'18446744073709551615'}});
-      // @ts-expect-error note types require Field objects
-      NoteType.custom('bad', { fields: ['Front'], templates: [] });
+      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
+      const project = new Project('typed').add('one', Note.basic('front', 'back'));
+      const result: Promise<BuildOutput> = project.build(BuildOptions.to('typed.apkg'));
+      const limits: InspectLimits = { maxMediaBytes: 1024 };
+      const temporary: Promise<BuildOutput> = project.build(BuildOptions.temporary().inspectLimits(limits));
+      const cloned: Project = project.clone();
+      // @ts-expect-error key is required
+      project.add(Note.basic('front', 'back'));
+      // @ts-expect-error explicit output destination is required
+      project.build();
+      // @ts-expect-error opaque options cannot be forged with a plain object
+      project.build({ output: 'x.apkg' });
+      // @ts-expect-error fields and templates are different declarations
+      const field: Field = new Template('card', {front:'{{front}}',back:'{{back}}'});
+      // @ts-expect-error immutable model has no setters
+      NoteType.builder('m').build().field(new Field('front'));
+      // @ts-expect-error artifacts can only be obtained from builds
+      new ApkgArtifact();
+      // @ts-expect-error successful outcomes cannot be fabricated
+      new BuildOutput();
     `,
     );
     await run(
