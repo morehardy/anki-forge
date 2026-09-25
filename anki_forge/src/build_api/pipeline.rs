@@ -87,17 +87,15 @@ impl Project {
                     ));
                 }
                 if let OutputTarget::Persistent(output) = &options.output {
-                    let aliases_baseline = output == path
-                        || (output.exists()
-                            && path.exists()
-                            && same_file::is_same_file(output, path).map_err(|cause| {
-                                BuildError::new(
-                                    Kind::Configuration,
-                                    "BUILD.OUTPUT_INVALID",
-                                    "could not distinguish output from update baseline",
-                                )
-                                .caused_by(cause)
-                            })?);
+                    let aliases_baseline =
+                        crate::path_alias::paths_alias(output, path).map_err(|cause| {
+                            BuildError::new(
+                                Kind::Configuration,
+                                "BUILD.OUTPUT_INVALID",
+                                "could not distinguish output from update baseline",
+                            )
+                            .caused_by(cause)
+                        })?;
                     if aliases_baseline {
                         return Err(BuildError::new(
                             Kind::Configuration,

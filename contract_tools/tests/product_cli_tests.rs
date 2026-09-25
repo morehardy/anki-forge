@@ -295,6 +295,7 @@ fn apkg_output_cannot_replace_project_input_or_its_file_aliases() {
         project.strip_prefix(&cwd).unwrap().to_owned(),
         root.path().join(".").join("project.json"),
         hardlink,
+        root.path().join("missing").join("..").join("project.json"),
     ];
     #[cfg(unix)]
     {
@@ -308,10 +309,31 @@ fn apkg_output_cannot_replace_project_input_or_its_file_aliases() {
         assert!(String::from_utf8_lossy(&output.stderr)
             .contains("APKG output must not replace project input"));
         assert_eq!(fs::read(&project).unwrap(), original);
-        assert_eq!(fs::read(&alias).unwrap(), original);
+        if alias.exists() {
+            assert_eq!(fs::read(&alias).unwrap(), original);
+        }
     }
     assert!(build(&project, &root.path().join("valid.apkg"), &[])
         .status
         .success());
     assert_eq!(fs::read(&project).unwrap(), original);
+}
+
+#[test]
+fn report_path_rejects_missing_parent_alias_without_side_effects() {
+    let root = tempdir().unwrap();
+    let project = input(root.path(), json!([basic("one", "one")]));
+    let original = fs::read(&project).unwrap();
+    let output = root.path().join("output.apkg");
+    let report = root.path().join("missing").join("..").join("project.json");
+    assert!(!build(
+        &project,
+        &output,
+        &["--report-json", report.to_str().unwrap()]
+    )
+    .status
+    .success());
+    assert_eq!(fs::read(&project).unwrap(), original);
+    assert!(!root.path().join("missing").exists());
+    assert!(!output.exists());
 }

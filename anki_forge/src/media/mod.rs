@@ -98,7 +98,10 @@ impl Media {
             )
             .caused_by(cause)
         })?;
-        if parsed.type_() == mime::STAR || parsed.subtype() == mime::STAR {
+        if parsed.type_() == mime::STAR
+            || parsed.subtype() == mime::STAR
+            || parsed.subtype().as_str().is_empty()
+        {
             return Err(MediaError::new(
                 MediaErrorKind::InvalidMediaType,
                 "MEDIA.TYPE_INVALID",

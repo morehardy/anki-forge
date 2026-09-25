@@ -74,11 +74,8 @@ impl ApkgArtifact {
     pub fn persist_to(&self, path: impl AsRef<Path>) -> Result<Self, PersistError> {
         let path = path.as_ref();
         let mut publication = publication(path);
-        let same = self.path() == path
-            || (path.exists()
-                && same_file::is_same_file(self.path(), path).map_err(|cause| {
-                    PersistError::new(PersistErrorKind::Io, cause, publication.clone())
-                })?);
+        let same = crate::path_alias::paths_alias(self.path(), path)
+            .map_err(|cause| PersistError::new(PersistErrorKind::Io, cause, publication.clone()))?;
         if same {
             return match self.storage.as_ref() {
                 ArtifactStorage::Persistent(_) => Ok(self.clone()),

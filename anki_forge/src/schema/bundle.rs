@@ -66,15 +66,23 @@ fn load(path: &Path, limits: MediaLimits) -> Result<NoteType, Error> {
     }
     let manifest_path = resolve(&root, MANIFEST)?;
     let source = read_text(&manifest_path, MANIFEST_LIMIT)?;
-    let manifest: Manifest = serde_yaml::from_str(&source).map_err(|cause| {
+    let manifest_error = || {
         Error::new(
             Kind::InvalidManifest,
             "TEMPLATE.BUNDLE_MANIFEST_INVALID",
             "parse bundle manifest",
             &manifest_path,
         )
-        .caused_by(cause)
-    })?;
+    };
+    // Preserve YAML scalar types and duplicate-key rejection, then apply the
+    // strict JSON-compatible manifest shape. Direct YAML deserialization can
+    // coerce scalars into strings, and YAML Value deserialization treats null
+    // as an empty sequence.
+    let value: serde_yaml::Value =
+        serde_yaml::from_str(&source).map_err(|cause| manifest_error().caused_by(cause))?;
+    let manifest: Manifest = serde_json::to_value(value)
+        .and_then(serde_json::from_value)
+        .map_err(|cause| manifest_error().caused_by(cause))?;
     if manifest.format_version != "template-bundle-v2" {
         return Err(Error::new(
             Kind::UnsupportedVersion,

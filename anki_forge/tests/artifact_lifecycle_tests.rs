@@ -111,6 +111,7 @@ fn update_output_cannot_replace_baseline_or_its_file_aliases() {
         baseline.strip_prefix(&cwd).unwrap().to_owned(),
         root.path().join(".").join("baseline.apkg"),
         hardlink,
+        root.path().join("missing").join("..").join("baseline.apkg"),
     ];
     #[cfg(unix)]
     {
@@ -138,11 +139,92 @@ fn update_output_cannot_replace_baseline_or_its_file_aliases() {
             "reject before generating a candidate"
         );
         assert_eq!(std::fs::read(&baseline).unwrap(), original);
-        assert_eq!(std::fs::read(&alias).unwrap(), original);
+        if alias.exists() {
+            assert_eq!(std::fs::read(&alias).unwrap(), original);
+        }
     }
+    assert!(!root.path().join("missing").exists());
     let next = changed
         .build(BuildOptions::to(root.path().join("next.apkg")).update_from(&baseline))
         .unwrap();
     assert_eq!(next.report().counts().notes, 2);
     assert_eq!(std::fs::read(&baseline).unwrap(), original);
+}
+
+#[test]
+fn temporary_persistence_rejects_aliases_before_creating_directories() {
+    let root = tempfile::tempdir().unwrap();
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let artifact = output.artifact();
+    let original = std::fs::read(artifact.path()).unwrap();
+    let missing = artifact.path().with_extension("missing-directory");
+    let prospective = missing
+        .join("..")
+        .join(artifact.path().file_name().unwrap());
+    let hardlink = root.path().join("hardlink.apkg");
+    std::fs::hard_link(artifact.path(), &hardlink).unwrap();
+    let mut aliases = vec![
+        artifact.path().to_owned(),
+        prospective,
+        hardlink,
+        root.path().join("missing").join("..").join("hardlink.apkg"),
+    ];
+    #[cfg(unix)]
+    {
+        let symlink = root.path().join("symlink.apkg");
+        std::os::unix::fs::symlink(artifact.path(), &symlink).unwrap();
+        aliases.push(symlink);
+    }
+    for alias in aliases {
+        let error = artifact.persist_to(&alias).unwrap_err();
+        assert_eq!(
+            error.kind(),
+            ankiforge::build::PersistErrorKind::InvalidDestination
+        );
+        assert_eq!(error.publication().stage, PublicationStage::NotPublished);
+        assert!(
+            !missing.exists(),
+            "alias rejection must have no filesystem side effects"
+        );
+        assert!(!root.path().join("missing").exists());
+        assert_eq!(std::fs::read(artifact.path()).unwrap(), original);
+    }
+    // A new, genuinely distinct directory remains a valid destination and the
+    // persistent artifact outlives the temporary source.
+    let saved = artifact
+        .persist_to(root.path().join("new").join("saved.apkg"))
+        .unwrap();
+    drop(output);
+    assert_eq!(std::fs::read(saved.path()).unwrap(), original);
+}
+
+#[cfg(unix)]
+#[test]
+fn persistence_resolves_symlinks_before_parent_components() {
+    let root = tempfile::tempdir().unwrap();
+    let elsewhere = root.path().join("elsewhere");
+    std::fs::create_dir_all(elsewhere.join("child")).unwrap();
+    std::os::unix::fs::symlink(elsewhere.join("child"), root.path().join("link")).unwrap();
+    let output = project()
+        .build(BuildOptions::to(root.path().join("source.apkg")))
+        .unwrap();
+    let original = std::fs::read(output.artifact().path()).unwrap();
+    let destination = root
+        .path()
+        .join("missing")
+        .join("..")
+        .join("link")
+        .join("..")
+        .join("source.apkg");
+    let saved = output.artifact().persist_to(&destination).unwrap();
+    drop(output);
+    assert_eq!(
+        std::fs::read(elsewhere.join("source.apkg")).unwrap(),
+        original
+    );
+    assert_eq!(std::fs::read(saved.path()).unwrap(), original);
+    assert_eq!(
+        std::fs::read(root.path().join("source.apkg")).unwrap(),
+        original
+    );
 }

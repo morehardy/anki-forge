@@ -35,8 +35,7 @@
             "$ref": "#/definitions/relativePath"
           },
           "export_as": {
-            "type": "string",
-            "minLength": 1
+            "$ref": "#/definitions/exportFilename"
           }
         }
       }
@@ -53,7 +52,7 @@
         "name": {
           "anyOf": [
             {
-              "$ref": "#/definitions/nonBlankString"
+              "$ref": "#/definitions/displayName"
             },
             {
               "type": "null"
@@ -135,17 +134,13 @@
     }
   },
   "definitions": {
-    "nonBlankString": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "\\S"
-    },
     "relativePath": {
       "type": "string",
       "minLength": 1,
       "not": {
-        "pattern": "(^/|^[A-Za-z]:[\\\\/]|(^|[\\\\/])\\.\\.([\\\\/]|$))"
-      }
+        "pattern": "(^/|[\\\\:\\u0000]|(^|/)\\.\\.(/|$))"
+      },
+      "$comment": "Portable bundle-relative path syntax. File existence, regular-file checks, symlink containment and file byte budgets are verified by the loader."
     },
     "field": {
       "type": "object",
@@ -232,7 +227,7 @@
         "name": {
           "anyOf": [
             {
-              "$ref": "#/definitions/nonBlankString"
+              "$ref": "#/definitions/displayName"
             },
             {
               "type": "null"
@@ -268,7 +263,7 @@
         "target_deck": {
           "anyOf": [
             {
-              "$ref": "#/definitions/nonBlankString"
+              "$ref": "#/definitions/deckName"
             },
             {
               "type": "null"
@@ -290,10 +285,11 @@
     "stableKey": {
       "type": "string",
       "minLength": 1,
-      "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+      "pattern": "^[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000](?:[\\s\\S]*[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000])?$",
       "not": {
         "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
-      }
+      },
+      "$comment": "Use Rust whitespace explicitly; ECMAScript \\s differs for U+0085 and U+FEFF."
     },
     "fieldKey": {
       "allOf": [
@@ -319,6 +315,37 @@
           }
         }
       ]
+    },
+    "deckName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Match valid_authored_deck_name: nonempty :: components, no boundary whitespace/colons, and no Rust control characters. Single colons and non-control whitespace inside components remain valid.",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]|(^|::)[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:]|[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:](::|$)|:::"
+      }
+    },
+    "exportFilename": {
+      "$comment": "Portable export filename syntax. maxLength counts Unicode scalar values; the runtime additionally enforces the 255 UTF-8 byte budget.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/stableKey"
+        },
+        {
+          "maxLength": 255,
+          "not": {
+            "pattern": "[/\\\\<>:\"|?*\\[\\]]|\\.$|^([cC][oO][nN]|[pP][rR][nN]|[aA][uU][xX]|[nN][uU][lL]|[cC][lL][oO][cC][kK]\\$|([cC][oO][mM]|[lL][pP][tT])[1-9\u00b9\u00b2\u00b3])(\\.|$)"
+          }
+        }
+      ]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Nonblank under Rust str::trim, without control characters; surrounding whitespace is allowed.",
+      "pattern": "[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
+      }
     }
   }
 }

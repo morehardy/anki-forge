@@ -245,7 +245,51 @@
               "fields",
               "templates"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "required": [
+                    "cloze_field"
+                  ],
+                  "properties": {
+                    "cloze_field": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "templates": {
+                      "maxItems": 1,
+                      "items": {
+                        "properties": {
+                          "generation_rule": {
+                            "anyOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "kind"
+                                ],
+                                "properties": {
+                                  "kind": {
+                                    "const": "anki_default"
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
           },
           {
             "type": "object",
@@ -255,8 +299,10 @@
               },
               "path": {
                 "type": "string",
-                "minLength": 1,
-                "pattern": "\\S"
+                "$comment": "Resolved verbatim against the project base directory, including an empty path for that directory; filesystem validity is checked by the loader.",
+                "not": {
+                  "pattern": "\\u0000"
+                }
               }
             },
             "required": [
@@ -287,7 +333,10 @@
                   "path": {
                     "type": "string",
                     "minLength": 1,
-                    "pattern": "\\S"
+                    "$comment": "A filesystem path, without whitespace trimming or Unicode normalization; existence and platform syntax are checked by the loader.",
+                    "not": {
+                      "pattern": "\\u0000"
+                    }
                   }
                 },
                 "required": [
@@ -308,12 +357,11 @@
                       "type": "integer",
                       "minimum": 0,
                       "maximum": 255
-                    }
+                    },
+                    "maxItems": 268435456
                   },
                   "mime": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
+                    "$ref": "#/definitions/concreteMime"
                   }
                 },
                 "required": [
@@ -474,6 +522,13 @@
                     "type": "object",
                     "additionalProperties": {
                       "$ref": "#/definitions/content"
+                    },
+                    "propertyNames": {
+                      "enum": [
+                        "header",
+                        "back_extra",
+                        "comments"
+                      ]
                     }
                   }
                 },
@@ -671,6 +726,14 @@
           }
         }
       ]
+    },
+    "concreteMime": {
+      "type": "string",
+      "$comment": "Matches the concrete type/subtype and parameter syntax accepted by the runtime mime parser. Content/type agreement remains a runtime check.",
+      "pattern": "^[!#$%&'*+\\-.^_`|~0-9A-Za-z]+/[!#$%&'*+\\-.^_`|~0-9A-Za-z]+(?:; *[!#$%&'*+\\-.^_`|~0-9A-Za-z]+=(?:[!#$%&'*+\\-.^_`|~0-9A-Za-z]+|\"[^\\u0000-\\u001f\\u007f][^\\u0000-\\u001f\\u007f\"]*\" *))*(?:; *(?:[!#$%&'*+\\-.^_`|~0-9A-Za-z]+=)?)?(?![\\s\\S])",
+      "not": {
+        "pattern": "^\\*/|^[^/]+/\\*(?:\\+[^+;]*)?(?:;|$)"
+      }
     }
   }
 }

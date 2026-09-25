@@ -7,6 +7,7 @@ mod authoring_core;
 #[path = "diagnostics/mod.rs"]
 mod diagnostics_backend;
 mod parallel_io;
+mod path_alias;
 mod prepared_media;
 #[allow(missing_docs)]
 mod product;

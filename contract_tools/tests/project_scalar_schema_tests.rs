@@ -395,3 +395,201 @@ fn export_filenames_match_media_validation_and_loader() {
         check_loader_and_schema(&validator, &value, accepted);
     }
 }
+
+#[test]
+fn byte_source_mime_syntax_matches_media_and_loader() {
+    let validator = validator();
+    for mime in [
+        "bogus",
+        "*/*",
+        "image/*",
+        "*/plain",
+        "text/",
+        "image/*+xml",
+        "text/plain\n",
+        "text/plain;broken",
+        "text/plain; charset=bad space",
+        "image/png; name=\"unterminated",
+    ] {
+        assert!(
+            Media::bytes(Vec::new(), mime).is_err(),
+            "runtime MIME {mime:?}"
+        );
+        let mut value = recipe();
+        value["assets"] = json!([{"key":"bytes","source":{"kind":"bytes","data":[],"mime":mime}}]);
+        check_loader_and_schema(&validator, &value, false);
+    }
+    // Include MIME parameters, quoted Unicode, suffixes and parser-supported
+    // empty/trailing parameter forms so the schema does not overconstrain input.
+    for top in ["text", "application", "*", "x*", "a+b"] {
+        for sub in [
+            "plain",
+            "vnd.example+json",
+            "*",
+            "*+xml",
+            "*+a+b",
+            "+",
+            "+xml",
+            "x+",
+        ] {
+            for params in [
+                "",
+                ";",
+                "; ",
+                ";charset=utf-8",
+                "; charset=UTF-8",
+                ";a=b;c=d",
+                ";a=b;",
+                ";a=b; ",
+                ";a=",
+                ";a=;b=c",
+                ";a=\"\"",
+                ";a=\"\"\"",
+                ";a=\"quoted value\"",
+                ";a=\"中文\"; b=c",
+                ";a=\"x\" ",
+                ";a=\"x\" bad",
+                "; a=b; c=",
+                "; a=b ",
+                ";\tcharset=utf-8",
+            ] {
+                let mime = format!("{top}/{sub}{params}");
+                let accepted = Media::bytes(Vec::new(), &mime).is_ok();
+                let mut value = recipe();
+                value["assets"] =
+                    json!([{"key":"bytes","source":{"kind":"bytes","data":[],"mime":mime}}]);
+                check_loader_and_schema(&validator, &value, accepted);
+            }
+        }
+    }
+}
+
+#[test]
+fn media_type_requires_a_nonempty_subtype() {
+    let error = Media::bytes(Vec::new(), "text/").unwrap_err();
+    assert_eq!(error.code(), "MEDIA.TYPE_INVALID");
+}
+
+#[test]
+fn cloze_model_cardinality_and_generation_match_runtime() {
+    let validator = validator();
+    for cloze in [None, Some("front")] {
+        for count in [1, 2] {
+            for rule in [
+                Value::Null,
+                json!({"kind":"anki_default"}),
+                json!({"kind":"all","fields":["front"]}),
+                json!({"kind":"any","fields":["front"]}),
+            ] {
+                let mut value = recipe();
+                value["models"][0]["cloze_field"] = json!(cloze);
+                value["models"][0]["templates"] = json!((0..count)
+                    .map(|i| json!({
+                        "key":format!("card-{i}"),
+                        "front":if cloze.is_some() { "{{cloze:front}}" } else { "{{front}}" },
+                        "back":"{{front}}", "generation_rule":rule,
+                    }))
+                    .collect::<Vec<_>>());
+                let accepted = cloze.is_none()
+                    || (count == 1 && (rule.is_null() || rule["kind"] == "anki_default"));
+                check_loader_and_schema(&validator, &value, accepted);
+            }
+        }
+    }
+}
+
+#[test]
+fn inline_media_schema_uses_the_default_runtime_byte_budget() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema: Value = serde_json::from_slice(
+        &fs::read(resolve_asset_path(&manifest, "project_input_schema").unwrap()).unwrap(),
+    )
+    .unwrap();
+    // Compare the independent published contract with the runtime default
+    // without materializing a multi-gigabyte serde_json array at the boundary.
+    assert_eq!(
+        schema["properties"]["assets"]["items"]["properties"]["source"]["oneOf"][1]["properties"]
+            ["data"]["maxItems"],
+        ankiforge::media::MediaLimits::default().max_bytes
+    );
+}
+
+#[test]
+fn project_bundle_path_can_refer_to_its_base_directory() {
+    let root = tempfile::tempdir().unwrap();
+    fs::write(root.path().join("front.html"), "{{front}}").unwrap();
+    fs::write(root.path().join("back.html"), "{{front}}").unwrap();
+    fs::write(
+        root.path().join("anki-template.yaml"),
+        serde_json::to_vec(&json!({
+            "format_version":"template-bundle-v2", "note_type":{"key":"bundle",
+                "fields":[{"key":"front"}],
+                "templates":[{"key":"card","front_file":"front.html","back_file":"back.html"}]}
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    let mut value = recipe();
+    value["models"] = json!([{"kind":"bundle","path":""}]);
+    let path = root.path().join("project.json");
+    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    load_project(&path, None).unwrap();
+    assert!(validator().is_valid(&value));
+}
+
+#[test]
+fn project_paths_reject_nul_on_all_platforms() {
+    let validator = validator();
+    for filename in ["\0", "sub/\0name"] {
+        let mut value = recipe();
+        value["models"] = json!([{"kind":"bundle","path":filename}]);
+        check_loader_and_schema(&validator, &value, false);
+        let mut value = recipe();
+        value["assets"] = json!([{"key":"image","source":{"kind":"file","path":filename}}]);
+        check_loader_and_schema(&validator, &value, false);
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn project_file_paths_preserve_whitespace_and_bom_filenames() {
+    let root = tempfile::tempdir().unwrap();
+    let validator = validator();
+    for filename in [" ", "\u{feff}"] {
+        fs::write(root.path().join(filename), image_bytes()).unwrap();
+        let mut value = recipe();
+        value["assets"] = json!([{"key":"image","source":{"kind":"file","path":filename}}]);
+        let path = root.path().join("project.json");
+        fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+        load_project(&path, None).unwrap();
+        assert!(validator.is_valid(&value), "{filename:?}");
+    }
+}
+
+#[test]
+fn image_occlusion_overrides_allow_only_writable_fields() {
+    let validator = validator();
+    for field in [
+        "header",
+        "back_extra",
+        "comments",
+        "image",
+        "occlusion",
+        "unknown",
+        "",
+    ] {
+        let accepted = matches!(field, "header" | "back_extra" | "comments");
+        let mut value = asset_recipe("image");
+        value["notes"][1]["content"]["fields"] = json!({field: "override"});
+        let note = Note::image_occlusion(Media::bytes(image_bytes(), "image/png").unwrap())
+            .mask(Mask::rect("mask", 0.0, 0.0, 1.0, 1.0))
+            .build()
+            .unwrap()
+            .field(field, "override");
+        assert_eq!(
+            Project::new("fields").unwrap().add("one", note).is_ok(),
+            accepted
+        );
+        check_loader_and_schema(&validator, &value, accepted);
+    }
+}

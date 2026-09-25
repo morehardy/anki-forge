@@ -12,6 +12,9 @@ pub use template_paths::contract_template_bundle_paths;
 
 use std::path::Path;
 
+// Shared with core publication checks; not part of the supported consumer API.
+pub use crate::path_alias::paths_alias;
+
 // These are the concrete DTOs consumed by the contract fixture runner and
 // compatibility oracle, including the field types of their public signatures.
 pub use crate::authoring_core::media::{

@@ -1,7 +1,4 @@
-use std::{
-    io::Write,
-    path::{Path, PathBuf},
-};
+use std::{io::Write, path::Path};
 
 use ankiforge::{
     build::BuildErrorKind,
@@ -202,34 +199,5 @@ fn validate_report_path(
 }
 
 fn paths_alias(first: &Path, second: &Path) -> anyhow::Result<bool> {
-    let first = resolved_destination(first)?;
-    let second = resolved_destination(second)?;
-    Ok(first == second
-        || (first.exists() && second.exists() && same_file::is_same_file(first, second)?))
-}
-
-fn resolved_destination(path: &Path) -> anyhow::Result<PathBuf> {
-    if path.exists() {
-        return Ok(path.canonicalize()?);
-    }
-    let absolute = if path.is_absolute() {
-        path.to_owned()
-    } else {
-        std::env::current_dir()?.join(path)
-    };
-    let mut parent = absolute.as_path();
-    let mut suffix = Vec::new();
-    while !parent.exists() {
-        if let Some(name) = parent.file_name() {
-            suffix.push(name.to_owned());
-        }
-        parent = parent
-            .parent()
-            .ok_or_else(|| anyhow::anyhow!("invalid output path"))?;
-    }
-    let mut resolved = parent.canonicalize()?;
-    for part in suffix.iter().rev() {
-        resolved.push(part);
-    }
-    Ok(resolved)
+    Ok(ankiforge::tools::paths_alias(first, second)?)
 }
