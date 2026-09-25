@@ -336,3 +336,67 @@ fn recognized_bmp_svg_and_mp3_reject_conflicting_byte_mime_types() {
         assert_eq!(error.code(), "MEDIA.TYPE_MISMATCH");
     }
 }
+
+#[test]
+fn typed_sound_preserves_literal_entity_filenames_through_build_and_update() {
+    use ankiforge::{update::CompareOptions, Content};
+    let cases = [
+        ("tone&copy;.mp3", "tone&amp;copy;.mp3"),
+        ("tone&#65;.mp3", "tone&amp;#65;.mp3"),
+        ("tone&#x41;.mp3", "tone&amp;#x41;.mp3"),
+        ("tone&amp;copy;.mp3", "tone&amp;amp;copy;.mp3"),
+        ("tone%26copy;.mp3", "tone%26copy;.mp3"),
+        ("tone#part.mp3", "tone#part.mp3"),
+        ("语音 &copy;.mp3", "语音 &amp;copy;.mp3"),
+        ("plain.mp3", "plain.mp3"),
+    ];
+    let bytes = no_id3_mp3();
+    let mut project = Project::new("literal-sound-names").unwrap();
+    let mut expected_fields = Vec::new();
+    for (index, (name, encoded)) in cases.iter().enumerate() {
+        let media = Media::bytes(bytes.clone(), "audio/mpeg")
+            .unwrap()
+            .with_export_name(*name)
+            .unwrap();
+        project
+            .add(
+                format!("sound-{index}"),
+                Note::basic(
+                    Content::sequence([Content::text("Listen & repeat: "), media.sound()]),
+                    "answer",
+                ),
+            )
+            .unwrap();
+        expected_fields.push(format!(
+            "Listen &amp; repeat: [sound:{encoded}]\u{1f}answer"
+        ));
+    }
+    expected_fields.sort();
+    let first = project.build(BuildOptions::temporary()).unwrap();
+    assert_eq!(common::fields(first.artifact().path()), expected_fields);
+    let entries = common::entries(first.artifact().path());
+    let evidence = common::evidence(first.artifact().path());
+    assert_eq!(first.report().counts().media, cases.len());
+    for (name, _) in cases {
+        assert!(
+            evidence["media"].get(name).is_some(),
+            "literal asset {name}"
+        );
+    }
+    for index in 0..cases.len() {
+        assert_eq!(
+            zstd::decode_all(entries[&index.to_string()].as_slice()).unwrap(),
+            bytes
+        );
+    }
+    assert!(project
+        .compare(CompareOptions::against(first.artifact().path()))
+        .unwrap()
+        .findings()
+        .is_empty());
+    let updated = project
+        .build(BuildOptions::temporary().update_from(first.artifact().path()))
+        .unwrap();
+    assert_eq!(common::fields(updated.artifact().path()), expected_fields);
+    assert_eq!(common::evidence(updated.artifact().path()), evidence);
+}

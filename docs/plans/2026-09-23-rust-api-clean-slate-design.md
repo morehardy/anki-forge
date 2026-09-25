@@ -668,4 +668,10 @@ npm --prefix website run check:examples
 
 本轮验证：完整 Rust quality 通过，包含 22 个公共消费者、34 项 schema gates、17 项 project 和 11 项 bundle schema 回归；媒体修复另有 16 组篡改场景及 62 项 inspect 检查。契约 verify/governance（基线 `8efcb347`）、summary、package 与嵌入归档一致性通过。仓库外消费者针对当前源码运行通过，打包版本仍由四平台 CI 验证。重建 Node 后 21/21 通过；重建并在仓库外安装 Python wheel 后 57 项通过、1 项 Linux 专用字节路径测试跳过，包含 Python cwd 新回归，mypy 通过。
 
+### PR #51 声音引用转义回归（2026-09-25）
+
+提交 `831cd86` 的 41 项 hosted CI 通过后，新审查指出 typed sound 直接嵌入文件名会让 `&copy;` 或 `&#65;` 被解析为另一名称。公开 API 回归已复现 `MEDIA.MISSING_REFERENCE`；渲染现复用文本的单次 HTML 转义，保持 normalization 和 Anki 音频提取的一次解码语义。实际 APKG 回归覆盖命名/十进制/十六进制实体、字面量 `&amp;`、百分号、片段字符、Unicode/空格和普通文件名，核对字段、媒体名字、原始字节以及相同版本 compare/update 的稳定性。用户指南说明传入原始名字，无需调用者预转义。
+
+本轮针对性验证：媒体导出 12/12、公开 API 消费者 22/22、声音引用 3/3，以及 ankiforge 全 targets/features Clippy、格式和 whitespace 检查通过。上游 Anki 源码 `2d44d4d6` 的音频提取同样执行一次实体解码；本轮未重跑真实客户端导入，完整平台/SDK 回归继续由当前提交的 CI 执行。
+
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

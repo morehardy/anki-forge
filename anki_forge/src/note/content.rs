@@ -76,7 +76,14 @@ impl Content {
             Node::Text(value) => crate::product::content::escape_html(value),
             Node::Html(value) => value.clone(),
             Node::Image(media) => format!("<img src=\"{}\">", image_url_path(media.filename())),
-            Node::Sound(media) => format!("[sound:{}]", media.filename()),
+            Node::Sound(media) => {
+                // Sound references decode HTML entities once, including in
+                // Anki's player. Preserve literal entity-like filename text.
+                format!(
+                    "[sound:{}]",
+                    crate::product::content::escape_html(media.filename())
+                )
+            }
             Node::Sequence(values) => values.iter().map(Self::render).collect(),
         }
     }

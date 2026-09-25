@@ -73,6 +73,11 @@ HTML/CSS/script references need `builder.asset(media)` or `project.add_asset(med
 the library does not infer file contents from arbitrary strings. An explicit
 asset is included even without a statically detectable reference.
 
+Pass the literal filename to `with_export_name`. Typed sound references escape
+HTML entities when rendered, so a name such as `tone&copy;.mp3` still refers to
+that exact asset. Do not pre-escape the filename. Percent signs and fragment
+characters in sound filenames remain literal; they are not URL paths.
+
 ## Names, MIME and budgets
 
 Default export names are content-derived and independent of the source path.
