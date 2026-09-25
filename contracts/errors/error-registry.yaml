@@ -802,7 +802,7 @@ codes:
     summary: project already contains a note with this exact stable key
   - id: NOTE.MODEL_CONFLICT
     status: active
-    summary: model key is already bound to a different complete definition
+    summary: model key is already bound to a different complete definition or its trimmed display name is shared by another model key
   - id: NOTE.FIELD_UNKNOWN
     status: active
     summary: note assigns content to an undeclared stable field key
@@ -811,7 +811,7 @@ codes:
     summary: note has empty or missing content in a required field
   - id: NOTE.DECK_INVALID
     status: active
-    summary: deck name has an empty component, surrounding whitespace or control characters
+    summary: deck name has an empty component, surrounding whitespace, leading/trailing colons or control characters
   - id: NOTE.TAG_INVALID
     status: active
     summary: tag is empty, duplicated, reserved or contains whitespace or control characters
