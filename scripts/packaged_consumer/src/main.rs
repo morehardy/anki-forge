@@ -363,6 +363,51 @@ fn native_path_snapshots() -> anyhow::Result<()> {
     Ok(())
 }
 
+fn persistent_artifact_paths() -> anyhow::Result<()> {
+    // This consumer runs sequentially in its own process on every supported
+    // platform, including Windows path handling.
+    let original_cwd = std::env::current_dir()?;
+    let root = tempfile::tempdir()?;
+    let first = root.path().join("first");
+    let second = root.path().join("second");
+    fs::create_dir_all(&first)?;
+    fs::create_dir_all(&second)?;
+    let result = (|| -> anyhow::Result<()> {
+        std::env::set_current_dir(&first)?;
+        let mut project = Project::new("packaged-persistent-paths")?;
+        project.add("one", Note::basic("front", "back"))?;
+        let output = project.build(BuildOptions::to("built.apkg"))?;
+        let built = output.artifact().clone();
+        let saved = built.persist_to("saved.apkg")?;
+        drop(output);
+        let bytes = fs::read(first.join("built.apkg"))?;
+        fs::write(second.join("built.apkg"), b"unrelated build")?;
+        fs::write(second.join("saved.apkg"), b"unrelated copy")?;
+        std::env::set_current_dir(&second)?;
+        ensure!(
+            built.path().is_absolute()
+                && saved.path().is_absolute()
+                && fs::read(built.path())? == bytes
+                && fs::read(saved.path())? == bytes,
+            "persistent paths must retain the published files across cwd changes"
+        );
+        let copied = saved.persist_to("copied.apkg")?;
+        std::env::set_current_dir(&first)?;
+        ensure!(
+            fs::read(copied.path())? == bytes,
+            "successive persistence must copy the original APKG"
+        );
+        ensure!(
+            fs::read(second.join("built.apkg"))? == b"unrelated build"
+                && fs::read(second.join("saved.apkg"))? == b"unrelated copy",
+            "unrelated files must remain untouched"
+        );
+        Ok(())
+    })();
+    std::env::set_current_dir(original_cwd)?;
+    result
+}
+
 fn main() -> anyhow::Result<()> {
     ensure!(
         !ankiforge::facade_api_version().is_empty()
@@ -379,6 +424,7 @@ fn main() -> anyhow::Result<()> {
     occlusion()?;
     updates_and_reports()?;
     native_path_snapshots()?;
+    persistent_artifact_paths()?;
     println!("Packaged consumer verified Basic/Cloze/custom, owned media and bundle closure, IO modes, strict comparison/update, reports, budgets and artifact lifetime using actual APKG contents.");
     Ok(())
 }

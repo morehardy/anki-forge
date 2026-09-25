@@ -83,6 +83,7 @@ fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error
     Ok(())
 }
 fn main() -> Result<(), Box<dyn Error>> {
+    retired_card_history_is_validated()?;
     media_map_metadata_must_match_payloads()?;
     duplicate_media_names_are_not_complete_evidence()?;
     let mut project = Project::new("proof")?;
@@ -311,5 +312,111 @@ fn media_map_metadata_must_match_payloads() -> Result<(), Box<dyn Error>> {
         assert_eq!(error.limit_exceeded().unwrap().resource, "media_bytes");
         assert_eq!(error.limit_exceeded().unwrap().limit, 8);
     }
+    Ok(())
+}
+
+
+fn history_project(stage: u8) -> Result<Project, Box<dyn Error>> {
+    use ankiforge::{Field, Media, NoteType, Template};
+    use ankiforge::note::Mask;
+    let mut project = Project::new("retired-card-history")?;
+    project.add("keep", Note::basic("keep", "answer"))?;
+    let mut builder = NoteType::builder("normal-history").field(Field::new("front")).field(Field::new("gate"));
+    for key in if stage == 0 { &["a", "b", "c"][..] } else { &["c"][..] } {
+        let template = Template::new(*key).front("{{front}}").back("{{front}}");
+        builder = builder.template(if *key == "b" { template.front("{{gate}}{{front}}")
+            .generate_when(ankiforge::schema::GenerationRule::all(["gate"])) } else { template });
+    }
+    let normal = builder.build()?;
+    project.add("normal-peer", normal.note().field("front", "peer").field("gate", "on"))?;
+    if stage != 1 {
+        project.add("retired-normal", normal.note().field("front", "normal").field("gate", ""))?;
+        project.add("retired-empty", normal.note().field("front", "").field("gate", ""))?;
+        project.add("retired-cloze", Note::cloze("{{c1::one}} {{c3::three}}"))?;
+        project.add("retired-io", Note::image_occlusion(Media::file("assets/occlusion.png")?)
+            .mask(Mask::rect("a", 0, 0, 1, 1)).mask(Mask::rect("b", 2, 0, 1, 1)).build()?)?;
+    }
+    if stage == 1 {
+        // The shared model can change from stock IO to custom cloze while a
+        // retired note still records its last published IO mask/card history.
+        let mut builder = NoteType::builder("image_occlusion");
+        for key in ["occlusion", "image", "header", "back_extra", "comments"] {
+            builder = builder.field(Field::new(key));
+        }
+        let cloze = builder.cloze_field("occlusion")
+            .template(Template::new("card").front("{{cloze:occlusion}}").back("{{cloze:occlusion}}"))
+            .build()?;
+        project.add("io-peer", cloze.note().field("occlusion", "{{c1::one}}").field("image", "")
+            .field("header", "").field("back_extra", "").field("comments", ""))?;
+    } else {
+        project.add("io-peer", Note::image_occlusion(Media::file("assets/occlusion.png")?)
+            .mask(Mask::rect("peer", 0, 0, 1, 1)).build()?)?;
+    }
+    Ok(project)
+}
+
+fn retired_card_history_is_validated() -> Result<(), Box<dyn Error>> {
+    use ankiforge::update::{CompareOptions, RiskCode, UpdatePolicy};
+    let original = history_project(0)?.build(BuildOptions::temporary())?;
+    let retired = history_project(1)?;
+    let baseline = retired.build(BuildOptions::temporary().update_from(original.artifact().path())
+        .update_policy(UpdatePolicy::default().allow(RiskCode::NoteRemoved).allow(RiskCode::ModelRemoved)
+            .allow(RiskCode::TemplateRemoved).allow(RiskCode::MaskRemoved)))?;
+    let evidence = |path: &Path| -> serde_json::Value {
+        let mut archive = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
+        serde_json::from_reader::<_, serde_json::Value>(archive.by_name("ankiforge-identity.json").unwrap()).unwrap()["identity"].clone()
+    };
+    let history = evidence(baseline.artifact().path());
+    assert_eq!(history["models"]["normal-history"]["templates"]["a"]["ordinal"], serde_json::Value::Null);
+    assert_eq!(history["models"]["normal-history"]["templates"]["c"]["ordinal"], 0);
+    assert_eq!(history["notes"]["retired-normal"]["cards"], serde_json::json!({"template:a":0,"template:c":2}));
+    assert_eq!(history["notes"]["retired-empty"]["cards"], serde_json::json!({}));
+    assert_eq!(history["notes"]["retired-io"]["active"], false);
+    assert_eq!(history["notes"]["retired-io"]["masks"]["a"]["active"], true);
+    for (what, key, cards) in [
+        ("cloze_out_of_range", "retired-cloze", serde_json::json!({"cloze:501":500})),
+        ("cloze_key", "retired-cloze", serde_json::json!({"cloze:01":0})),
+        ("cloze_prefix", "retired-cloze", serde_json::json!({"template:card":0})),
+        ("bare_key", "retired-cloze", serde_json::json!({"bogus":0})),
+        ("unknown_template", "retired-normal", serde_json::json!({"template:unknown":0})),
+        ("duplicate_ordinal", "retired-normal", serde_json::json!({"template:a":0,"template:b":0})),
+        ("template_out_of_range", "retired-normal", serde_json::json!({"template:c":3})),
+        ("template_order", "retired-normal", serde_json::json!({"template:b":1,"template:c":0})),
+        ("template_gap", "retired-normal", serde_json::json!({"template:b":0,"template:c":2})),
+        ("unknown_mask", "retired-io", serde_json::json!({"mask:unknown":0,"mask:b":1})),
+        ("mask_ordinal", "retired-io", serde_json::json!({"mask:a":1,"mask:b":0})),
+        ("mask_inactive", "retired-io", serde_json::json!({"mask:a":0,"mask:b":1})),
+        ("mask_all_retired", "retired-io", serde_json::json!({"mask:a":0,"mask:b":1})),
+        ("missing_mask_card", "retired-io", serde_json::json!({"mask:a":0})),
+        ("mask_prefix", "retired-io", serde_json::json!({"cloze:1":0,"cloze:2":1})),
+    ] {
+        let output = format!("retired-card-history-{what}.apkg");
+        copy_with(baseline.artifact().path(), &output, |name, data| {
+            if name != "ankiforge-identity.json" { return Some(data); }
+            let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
+            value["identity"]["notes"][key]["cards"] = cards.clone();
+            if what == "mask_inactive" || what == "mask_all_retired" { value["identity"]["notes"][key]["masks"]["a"]["active"] = false.into(); }
+            if what == "mask_all_retired" { value["identity"]["notes"][key]["masks"]["b"]["active"] = false.into(); }
+            value["identity"].sort_all_objects();
+            value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+            Some(serde_json::to_vec(&value).unwrap())
+        });
+        failure(&retired, &output, "UPDATE.EVIDENCE_INVALID");
+        assert_eq!(retired.compare(CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+    }
+    let unchanged = retired.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+    assert_eq!(history, evidence(unchanged.artifact().path()), "a retired note keeps its historical card ordinals while the model evolves");
+    assert!(unchanged.report().comparison().unwrap().findings().is_empty());
+    let revived = history_project(2)?.build(BuildOptions::temporary().update_from(baseline.artifact().path())
+        .update_policy(UpdatePolicy::default().allow(RiskCode::CardRemoved)))?;
+    let restored = evidence(revived.artifact().path());
+    for key in ["retired-normal", "retired-empty", "retired-cloze", "retired-io"] {
+        assert_eq!(history["notes"][key]["guid"], restored["notes"][key]["guid"]);
+        assert_eq!(restored["notes"][key]["active"], true);
+    }
+    assert_eq!(restored["notes"]["retired-normal"]["cards"], serde_json::json!({"template:c":0}));
+    assert_eq!(history["notes"]["retired-io"]["masks"], restored["notes"]["retired-io"]["masks"]);
+    let repeat = history_project(2)?.build(BuildOptions::temporary().update_from(revived.artifact().path()))?;
+    assert!(repeat.report().comparison().unwrap().findings().is_empty());
     Ok(())
 }

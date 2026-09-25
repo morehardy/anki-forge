@@ -19,6 +19,11 @@ path. A report or JSON snapshot does not extend file lifetime. Rust drops owners
 normally; Node exposes `artifact.close()` for deterministic release. Copying the
 path into application state does not create an owner.
 
+Rust artifact handles retain absolute paths, including when the build or
+`persist_to` uses a relative destination. Later changes to the process working
+directory do not redirect reads or copies from an existing handle. Each new
+`persist_to` destination is resolved against the directory at that call.
+
 `BuildReport::snapshot()` contains only observations. `BuildOutput::snapshot()`
 and `BuildError::snapshot()` additionally state the real outcome. A warning can
 appear in a successful snapshot. Do not infer outcome from diagnostic severity,

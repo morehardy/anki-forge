@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use anyhow::ensure;
 
-use super::{IdentityEnvelope, SymbolIdentity};
+use super::{IdentityEnvelope, ModelIdentity, NoteIdentity, SymbolIdentity};
 
 #[derive(Debug)]
 pub(crate) struct EvidenceError {
@@ -163,6 +163,7 @@ impl IdentityEnvelope {
                 ordinals.len() == usize::from(note.mask_high_water),
                 "mask history is incomplete"
             );
+            validate_cards(note, model)?;
             if !note.active {
                 continue;
             }
@@ -187,33 +188,6 @@ impl IdentityEnvelope {
                 has_active_masks == io_models.contains(&model.id),
                 "occlusion structure disagrees with model kind"
             );
-            for (key, ordinal) in &note.cards {
-                if has_active_masks {
-                    let mask = key
-                        .strip_prefix("mask:")
-                        .and_then(|key| note.masks.get(key))
-                        .filter(|mask| mask.active)
-                        .ok_or_else(|| anyhow::anyhow!("card refers to an unknown mask"))?;
-                    ensure!(
-                        *ordinal == u32::from(mask.ordinal),
-                        "mask card identity disagrees with its ordinal"
-                    );
-                } else if model.kind == "cloze" {
-                    ensure!(
-                        *ordinal < 500 && *key == format!("cloze:{}", ordinal + 1),
-                        "cloze card identity is invalid or unsupported"
-                    );
-                } else {
-                    let template = key
-                        .strip_prefix("template:")
-                        .and_then(|key| model.templates.get(key))
-                        .ok_or_else(|| anyhow::anyhow!("card refers to an unknown template"))?;
-                    ensure!(
-                        template.ordinal == Some(*ordinal),
-                        "template card identity disagrees with its ordinal"
-                    );
-                }
-            }
             ensure!(
                 mid == model.id && mtime == note.mtime_secs,
                 "note mapping disagrees with collection"
@@ -229,26 +203,10 @@ impl IdentityEnvelope {
                 .collect::<Result<Vec<_>, _>>()?;
             let expected: BTreeSet<_> = note.cards.values().copied().collect();
             ensure!(
-                expected.len() == note.cards.len(),
-                "duplicate card ordinal mapping"
-            );
-            ensure!(
                 actual.len() == expected.len()
                     && actual.iter().copied().collect::<BTreeSet<_>>() == expected,
                 "card mapping disagrees with actual cards"
             );
-            if has_active_masks {
-                let masks: BTreeSet<_> = note
-                    .masks
-                    .values()
-                    .filter(|mask| mask.active)
-                    .map(|mask| u32::from(mask.ordinal))
-                    .collect();
-                ensure!(
-                    masks == expected,
-                    "mask mapping disagrees with actual cards"
-                );
-            }
         }
         let actual_cards: usize =
             db.query_row("SELECT COUNT(*) FROM cards", [], |row| row.get(0))?;
@@ -258,6 +216,86 @@ impl IdentityEnvelope {
         );
         Ok(())
     }
+}
+
+// Retired notes still drive comparison and revival, even though they have no
+// SQLite rows. Check their intrinsic card history before trusting that history.
+// Their model can have evolved while they were absent, so only active notes
+// must match the model's current template ordinals and stock IO subtype.
+fn validate_cards(note: &NoteIdentity, model: &ModelIdentity) -> anyhow::Result<()> {
+    let ordinals: BTreeSet<_> = note.cards.values().copied().collect();
+    ensure!(
+        ordinals.len() == note.cards.len(),
+        "duplicate card ordinal mapping"
+    );
+    ensure!(
+        note.masks.is_empty() || model.kind == "cloze",
+        "mask history requires a cloze model"
+    );
+    if note.has_active_masks() {
+        for (key, ordinal) in &note.cards {
+            let mask = key
+                .strip_prefix("mask:")
+                .and_then(|key| note.masks.get(key))
+                .filter(|mask| mask.active)
+                .ok_or_else(|| anyhow::anyhow!("card refers to an unknown mask"))?;
+            ensure!(
+                *ordinal == u32::from(mask.ordinal),
+                "mask card identity disagrees with its ordinal"
+            );
+        }
+        let masks: BTreeSet<_> = note
+            .masks
+            .values()
+            .filter(|mask| mask.active)
+            .map(|mask| u32::from(mask.ordinal))
+            .collect();
+        ensure!(
+            masks == ordinals,
+            "mask mapping disagrees with card history"
+        );
+    } else if model.kind == "cloze" {
+        for (key, ordinal) in &note.cards {
+            ensure!(
+                *ordinal < 500 && *key == format!("cloze:{}", ordinal + 1),
+                "cloze card identity is invalid or unsupported"
+            );
+        }
+    } else {
+        let mut history = Vec::new();
+        for (key, ordinal) in &note.cards {
+            let template = key
+                .strip_prefix("template:")
+                .and_then(|key| model.templates.get(key))
+                .ok_or_else(|| anyhow::anyhow!("card refers to an unknown template"))?;
+            if note.active {
+                ensure!(
+                    template.ordinal == Some(*ordinal),
+                    "template card identity disagrees with its ordinal"
+                );
+            } else {
+                // Slot order never changes, but retired templates can disappear
+                // from the contiguous physical ordinals in later model revisions.
+                ensure!(
+                    *ordinal <= template.slot,
+                    "historical template card ordinal exceeds its slot"
+                );
+                history.push((template.slot, *ordinal));
+            }
+        }
+        history.sort_unstable();
+        for pair in history.windows(2) {
+            let [(left_slot, left_ordinal), (right_slot, right_ordinal)] = pair else {
+                unreachable!("windows contain exactly two card histories")
+            };
+            ensure!(
+                left_ordinal < right_ordinal
+                    && right_ordinal - left_ordinal <= right_slot - left_slot,
+                "historical template card ordinals disagree with slot order"
+            );
+        }
+    }
+    Ok(())
 }
 
 fn valid_hash(hash: &str) -> bool {

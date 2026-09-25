@@ -58,7 +58,8 @@ impl ApkgArtifact {
         })
     }
 
-    /// Borrow the path while keeping an artifact handle alive.
+    /// Borrow the absolute path while keeping an artifact handle alive.
+    /// Changing the process working directory does not change this location.
     pub fn path(&self) -> &Path {
         match self.storage.as_ref() {
             ArtifactStorage::Persistent(path) => path,
@@ -71,10 +72,30 @@ impl ApkgArtifact {
     /// Existing destination contents are replaced only after the copy succeeds.
     /// On failure this handle and its original file remain usable. Other clones
     /// retain their original lifetime; the returned handle owns no cleanup.
+    /// Relative destinations are resolved when this method is called, and the
+    /// returned handle retains that absolute location.
     pub fn persist_to(&self, path: impl AsRef<Path>) -> Result<Self, PersistError> {
         let path = path.as_ref();
         let mut publication = publication(path);
-        let same = crate::path_alias::paths_alias(self.path(), path)
+        if path.as_os_str().is_empty() {
+            return Err(PersistError::new(
+                PersistErrorKind::InvalidDestination,
+                io::Error::new(io::ErrorKind::InvalidInput, "output path cannot be empty"),
+                publication,
+            ));
+        }
+        // Anchor before alias checks and publication, preserving filesystem
+        // traversal through symlinks and `..`. Canonicalizing after publishing
+        // could fail after replacement or follow a different destination.
+        let path = if path.is_absolute() {
+            path.to_owned()
+        } else {
+            std::path::absolute(path).map_err(|cause| {
+                PersistError::new(PersistErrorKind::Io, cause, publication.clone())
+            })?
+        };
+        publication.path = path.clone();
+        let same = crate::path_alias::paths_alias(self.path(), &path)
             .map_err(|cause| PersistError::new(PersistErrorKind::Io, cause, publication.clone()))?;
         if same {
             return match self.storage.as_ref() {
@@ -92,8 +113,8 @@ impl ApkgArtifact {
                 }
             };
         }
-        persist_copy(self.path(), path)?;
-        Ok(Self::persistent(path.to_owned()))
+        persist_copy(self.path(), &path)?;
+        Ok(Self::persistent(path))
     }
 
     /// Whether this handle shares ownership of deletion when its last clone drops.

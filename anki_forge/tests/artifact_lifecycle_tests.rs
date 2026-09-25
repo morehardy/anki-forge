@@ -7,6 +7,77 @@ fn project() -> Project {
     project
 }
 
+fn check_relative_artifact_after_chdir(test_name: &str, persist: bool) {
+    // Changing cwd is process-wide, so exercise it in a child that runs only
+    // this test, without interfering with the parallel integration suite.
+    const CHILD: &str = "ANKIFORGE_ARTIFACT_CWD_CHILD";
+    if std::env::var(CHILD).as_deref() != Ok(test_name) {
+        let result = std::process::Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", test_name, "--nocapture"])
+            .env(CHILD, test_name)
+            .output()
+            .unwrap();
+        assert!(
+            result.status.success(),
+            "child failed: {}\n{}",
+            String::from_utf8_lossy(&result.stdout),
+            String::from_utf8_lossy(&result.stderr)
+        );
+        return;
+    }
+    let original_cwd = std::env::current_dir().unwrap();
+    let root = tempfile::tempdir().unwrap();
+    let before = root.path().join("before");
+    let after = root.path().join("after");
+    std::fs::create_dir_all(&before).unwrap();
+    std::fs::create_dir_all(&after).unwrap();
+    std::env::set_current_dir(&before).unwrap();
+    let artifact = if persist {
+        project()
+            .build(BuildOptions::temporary())
+            .unwrap()
+            .artifact()
+            .persist_to("saved.apkg")
+            .unwrap()
+    } else {
+        project()
+            .build(BuildOptions::to("saved.apkg"))
+            .unwrap()
+            .artifact()
+            .clone()
+    };
+    let original = std::fs::read(before.join("saved.apkg")).unwrap();
+    std::fs::write(after.join("saved.apkg"), b"unrelated file").unwrap();
+    std::env::set_current_dir(&after).unwrap();
+    assert!(
+        std::fs::read(artifact.path()).unwrap() == original,
+        "artifact followed cwd to the unrelated file"
+    );
+    assert!(artifact.path().is_absolute());
+    let cloned = artifact.clone();
+    drop(artifact);
+    let copied = cloned.persist_to("copied.apkg").unwrap();
+    assert_eq!(std::fs::read(copied.path()).unwrap(), original);
+    std::env::set_current_dir(root.path()).unwrap();
+    assert_eq!(std::fs::read(copied.path()).unwrap(), original);
+    assert_eq!(std::fs::read(cloned.path()).unwrap(), original);
+    assert_eq!(
+        std::fs::read(after.join("saved.apkg")).unwrap(),
+        b"unrelated file"
+    );
+    std::env::set_current_dir(original_cwd).unwrap();
+}
+
+#[test]
+fn relative_build_artifact_survives_chdir() {
+    check_relative_artifact_after_chdir("relative_build_artifact_survives_chdir", false);
+}
+
+#[test]
+fn relative_persist_artifact_survives_chdir() {
+    check_relative_artifact_after_chdir("relative_persist_artifact_survives_chdir", true);
+}
+
 #[test]
 fn temporary_artifact_is_removed_only_after_the_last_handle_drops() {
     let output = project().build(BuildOptions::temporary()).unwrap();
@@ -93,6 +164,10 @@ fn failed_persistence_keeps_temporary_artifact_usable() {
     let bytes = std::fs::read(artifact.path()).unwrap();
     assert!(artifact.persist_to(root.path()).is_err());
     assert!(artifact.persist_to(artifact.path()).is_err());
+    assert_eq!(
+        artifact.persist_to("").unwrap_err().kind(),
+        ankiforge::build::PersistErrorKind::InvalidDestination
+    );
     assert_eq!(std::fs::read(artifact.path()).unwrap(), bytes);
 }
 
@@ -201,7 +276,8 @@ fn temporary_persistence_rejects_aliases_before_creating_directories() {
 #[cfg(unix)]
 #[test]
 fn persistence_resolves_symlinks_before_parent_components() {
-    let root = tempfile::tempdir().unwrap();
+    let cwd = std::env::current_dir().unwrap();
+    let root = tempfile::tempdir_in(&cwd).unwrap();
     let elsewhere = root.path().join("elsewhere");
     std::fs::create_dir_all(elsewhere.join("child")).unwrap();
     std::os::unix::fs::symlink(elsewhere.join("child"), root.path().join("link")).unwrap();
@@ -216,7 +292,11 @@ fn persistence_resolves_symlinks_before_parent_components() {
         .join("link")
         .join("..")
         .join("source.apkg");
-    let saved = output.artifact().persist_to(&destination).unwrap();
+    let saved = output
+        .artifact()
+        .persist_to(destination.strip_prefix(&cwd).unwrap())
+        .unwrap();
+    assert!(saved.path().is_absolute());
     drop(output);
     assert_eq!(
         std::fs::read(elsewhere.join("source.apkg")).unwrap(),
