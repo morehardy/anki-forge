@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sqlite3
 import subprocess
+import sys
 import zipfile
 import zlib
 import struct
@@ -173,6 +174,32 @@ def test_large_bytes_asset_and_media_budget(tmp_path):
         Media.bytes(data, 'text/css', limits=MediaLimits(max_bytes=100))
     assert error.value.code == 'MEDIA.RESOURCE_LIMIT_EXCEEDED'
     assert error.value.details['limit_exceeded']['observed'] == len(data)
+
+@pytest.mark.parametrize('budget', ['small', 'default'])
+def test_media_budget_rejects_before_binding_copy(budget):
+    result = subprocess.run(
+        [sys.executable, '-I', '-X', 'utf8', str(Path(__file__).with_name('media_budget_probe.py')), budget],
+        text=True, capture_output=True, timeout=30,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+def test_media_byte_budget_boundaries_and_input_ownership(tmp_path):
+    data = b'body { color: navy; }'
+    asset = Media.bytes(data, 'text/css', limits=MediaLimits(len(data))).with_export_name('style.css')
+    del data
+    gc.collect()
+    output = Project('bytes-owner').add_asset(asset).add('n', Note.basic('q', 'a')).build(BuildOptions.temporary())
+    _, _, assets, _, _ = unpack(output.artifact.path, tmp_path)
+    assert assets['style.css'] == b'body { color: navy; }'
+    assert len(Media.bytes(b'', 'application/octet-stream', limits=MediaLimits(0))) == 0
+    with pytest.raises(MediaError) as error:
+        Media.bytes(b'x', 'application/octet-stream', limits=MediaLimits(0))
+    assert error.value.details['limit_exceeded'] == {'resource': 'media_bytes', 'limit': 0, 'observed': 1}
+
+@pytest.mark.parametrize('limit,error_type', [(-1, OverflowError), (1 << 64, OverflowError), (1.5, TypeError), ('1', TypeError)])
+def test_media_byte_budget_validates_native_u64(limit, error_type):
+    with pytest.raises(error_type):
+        Media.bytes(b'x', 'application/octet-stream', limits=MediaLimits(limit))
 
 @pytest.mark.parametrize('name', ['../x.png', 'CON', 'bad/name', 'trailing.'])
 def test_media_names_fail_at_rename(name):

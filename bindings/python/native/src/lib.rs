@@ -9,6 +9,7 @@ use artifacts::NativeArtifact;
 use owned::ProcessOwned;
 use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
+use pyo3::types::PyBytes;
 use serde_json::{json, Value};
 use state::ObjectState;
 use std::{error::Error, path::PathBuf};
@@ -154,10 +155,36 @@ impl NativeMedia {
         })
     }
     #[staticmethod]
-    fn bytes(py: Python<'_>, data: Vec<u8>, media_type: String, max_bytes: u64) -> PyResult<Self> {
+    fn bytes(
+        py: Python<'_>,
+        data: &Bound<'_, PyBytes>,
+        media_type: String,
+        max_bytes: u64,
+    ) -> PyResult<Self> {
+        let data = data.as_bytes();
+        let observed = data.len() as u64;
+        if observed > max_bytes {
+            // Borrow Python's immutable storage so rejected input is never cloned.
+            let code = "MEDIA.RESOURCE_LIMIT_EXCEEDED";
+            return Err(domain_error(
+                "media",
+                code,
+                &format!("{code}: media contains at least {observed} bytes; limit is {max_bytes}"),
+                json!({
+                    "error_kind": "ResourceLimit",
+                    "causes": [],
+                    "source_details": [],
+                    "path": null,
+                    "limit_exceeded": {
+                        "resource": "media_bytes", "limit": max_bytes, "observed": observed
+                    }
+                }),
+            ));
+        }
+        // PyBytes stays alive and immutable while copying and snapshotting without the GIL.
         py.detach(|| {
             Media::bytes_with_limits(
-                data,
+                data.to_vec(),
                 media_type,
                 ankiforge::media::MediaLimits { max_bytes },
             )

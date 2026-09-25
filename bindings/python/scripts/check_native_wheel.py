@@ -82,12 +82,18 @@ def main() -> None:
         assert negative.stdout.count("error:") == 7, negative.stdout
         assert "[attr-defined]" in negative.stdout, negative.stdout
         print("Installed wheel positive/negative consumer typing passed")
+        if not args.observer:
+            probe = work / "media_budget_probe.py"
+            shutil.copyfile(source_root / "tests/media_budget_probe.py", probe)
+            for budget in ("small", "default"):
+                subprocess.run([*isolated_python, str(probe), budget], cwd=work, env=environment, check=True)
         if args.observer:
             observer = args.observer.resolve()
             assert observer.is_file()
             subprocess.run([str(python), "-m", "pip", "install", "pytest==9.1.1"], check=True)
             tests = work / "tests"
             tests.mkdir()
+            shutil.copyfile(source_root / "tests/media_budget_probe.py", tests / "media_budget_probe.py")
             for source in (source_root / "tests").glob("test_*.py"):
                 if source.name in {"test_public_api.py", "test_fork_ownership.py"}:
                     shutil.copyfile(source, tests / source.name)
