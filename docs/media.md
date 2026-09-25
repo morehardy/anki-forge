@@ -103,5 +103,10 @@ before reading. Large snapshots may spill to temporary storage, cleaned up when
 the last owner disappears. Snapshot ownership does not promise an atomic
 filesystem view of a source being modified concurrently during import.
 
+Project JSON applies the same default per-asset budget while decoding an inline
+`bytes` array. It stops at the first excess byte without collecting the rest of
+the array, and retains a `MediaError` with the limit and observed byte count.
+The count at rejection is a lower bound; it is not the unread array's total size.
+
 A valid media package does not prove codec playback on every Anki client. Test
 images, sound and fonts on your target clients. See [troubleshooting](troubleshooting.md#media-and-templates).

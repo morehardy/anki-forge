@@ -5,15 +5,20 @@ use serde::Deserialize;
 
 use crate::{Content, Field, Media, Note, NoteType, Project, Template};
 
+mod decode;
+
 /// Loads `ankiforge-project-v1` tool input through the native authoring API.
 /// Relative media and bundle paths resolve against `base_dir`, or the input's
 /// directory. Media is snapshotted during this operation. Legacy product JSON
 /// is rejected, and no editable or serializable internal IR is returned.
 pub fn load_project(path: impl AsRef<Path>, base_dir: Option<&Path>) -> anyhow::Result<Project> {
     let path = path.as_ref();
-    let input: Input = serde_json::from_reader(
-        std::fs::File::open(path)
-            .with_context(|| format!("open project input {}", path.display()))?,
+    let input = decode::input(
+        std::io::BufReader::new(
+            std::fs::File::open(path)
+                .with_context(|| format!("open project input {}", path.display()))?,
+        ),
+        crate::media::MediaLimits::default(),
     )
     .with_context(|| format!("decode ankiforge-project-v1 input {}", path.display()))?;
     ensure!(
@@ -185,29 +190,21 @@ fn asset<'a>(assets: &'a BTreeMap<String, Media>, key: &str) -> anyhow::Result<&
         .with_context(|| format!("unknown asset {key:?}"))
 }
 
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
 struct Input {
     format_version: String,
     namespace: String,
     name: Option<String>,
     default_deck: Option<String>,
-    #[serde(default)]
     models: Vec<ModelInput>,
-    #[serde(default)]
     assets: Vec<Asset>,
     notes: Vec<NoteSpec>,
 }
 
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
 struct Asset {
     key: String,
     source: AssetSource,
     export_as: Option<String>,
 }
-#[derive(Deserialize)]
-#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 enum AssetSource {
     File { path: String },
     Bytes { data: Vec<u8>, mime: String },
