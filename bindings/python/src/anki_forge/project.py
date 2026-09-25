@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+from pathlib import Path
 from . import _native
 from ._bridge import invoke
 from .artifact import ApkgArtifact
@@ -35,8 +36,9 @@ class Project:
         return self
 
     def build(self, options: BuildOptions) -> BuildOutput:
+        base_dir = Path.cwd()
         snapshot, artifact = invoke(self._handle.build, json.dumps(options._payload()))
-        return BuildOutput(ApkgArtifact(artifact), json.loads(snapshot))
+        return BuildOutput(ApkgArtifact(artifact, base_dir=base_dir), json.loads(snapshot))
 
     def compare(self, options: CompareOptions) -> ComparisonReport:
         return ComparisonReport(json.loads(invoke(self._handle.compare, json.dumps(options._payload()))))

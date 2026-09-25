@@ -338,6 +338,31 @@ fn updates_and_reports() -> anyhow::Result<()> {
     );
     Ok(())
 }
+fn native_path_snapshots() -> anyhow::Result<()> {
+    use ankiforge::build::json::{BuildResultSnapshot, PathSnapshot};
+    #[cfg(unix)]
+    let path = {
+        use std::os::unix::ffi::OsStringExt;
+        PathBuf::from(std::ffi::OsString::from_vec(b"native-\xff.apkg".to_vec()))
+    };
+    #[cfg(windows)]
+    let path = {
+        use std::os::windows::ffi::OsStringExt;
+        PathBuf::from(std::ffi::OsString::from_wide(&[0x61, 0xd800, 0x62]))
+    };
+    let value = serde_json::to_value(BuildResultSnapshot::Success {
+        artifact: path.clone(),
+        temporary: false,
+    })?;
+    ensure!(value["artifact"].is_object(), "native path encoding");
+    let restored: PathSnapshot = serde_json::from_value(value["artifact"].clone())?;
+    ensure!(
+        restored.into_path_buf() == path,
+        "lossless native path round trip"
+    );
+    Ok(())
+}
+
 fn main() -> anyhow::Result<()> {
     ensure!(
         !ankiforge::facade_api_version().is_empty()
@@ -353,6 +378,7 @@ fn main() -> anyhow::Result<()> {
     owned_bundle()?;
     occlusion()?;
     updates_and_reports()?;
+    native_path_snapshots()?;
     println!("Packaged consumer verified Basic/Cloze/custom, owned media and bundle closure, IO modes, strict comparison/update, reports, budgets and artifact lifetime using actual APKG contents.");
     Ok(())
 }

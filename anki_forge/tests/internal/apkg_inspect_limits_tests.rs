@@ -4,6 +4,7 @@ use std::io::Write;
 
 use crate::writer_core::{inspect_apkg, inspect_apkg_with_limits, InspectLimits};
 use prost::Message;
+use sha1::Digest;
 use zip::{write::SimpleFileOptions, CompressionMethod, ZipWriter};
 
 #[derive(Clone, PartialEq, Message)]
@@ -16,6 +17,10 @@ struct Map {
 struct Entry {
     #[prost(string, tag = "1")]
     name: String,
+    #[prost(uint32, tag = "2")]
+    size: u32,
+    #[prost(bytes, tag = "3")]
+    sha1: Vec<u8>,
 }
 
 fn write_archive(
@@ -31,9 +36,24 @@ fn write_archive(
     archive.write_all(&[8, version]).unwrap();
     let map = if version == 3 {
         Map {
-            entries: (0..payloads.len())
-                .map(|i| Entry {
-                    name: format!("asset-{i}.bin"),
+            entries: payloads
+                .iter()
+                .enumerate()
+                .map(|(i, bytes)| {
+                    // Some cases supply precompressed concatenated or invalid
+                    // frames. Valid maps describe decoded bytes; invalid-frame
+                    // cases still fail at the bounded payload decoder first.
+                    let decoded = if nested {
+                        None
+                    } else {
+                        zstd::decode_all(bytes.as_slice()).ok()
+                    };
+                    let bytes = decoded.as_deref().unwrap_or(bytes);
+                    Entry {
+                        name: format!("asset-{i}.bin"),
+                        size: bytes.len().try_into().unwrap(),
+                        sha1: sha1::Sha1::digest(bytes).to_vec(),
+                    }
                 })
                 .collect(),
         }

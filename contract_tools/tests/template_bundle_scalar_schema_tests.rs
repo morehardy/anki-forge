@@ -493,3 +493,49 @@ fn bundle_manifest_budget_is_checked_before_parsing() {
     let error = NoteType::from_bundle(root.path()).unwrap_err();
     assert_eq!(error.code(), "TEMPLATE.BUNDLE_RESOURCE_LIMIT_EXCEEDED");
 }
+
+#[test]
+fn bundle_export_filename_utf8_budget_is_checked_after_schema_validation() {
+    let validator = validator();
+    let root = tempfile::tempdir().unwrap();
+    prepare(root.path());
+    let media = Media::file(root.path().join("asset.txt")).unwrap();
+    let mut cases = Vec::new();
+    for valid in [
+        format!("{}a", "é".repeat(127)),
+        format!("{}abc", "中".repeat(84)),
+        format!("{}abc", "😀".repeat(63)),
+    ] {
+        assert_eq!(valid.len(), 255);
+        cases.extend([
+            (valid.clone(), true),
+            (format!("{valid}a"), false),
+            (format!("{valid}{}", "a".repeat(17)), false),
+        ]);
+    }
+    cases.push(("é".repeat(128), false));
+    for (name, accepted) in cases {
+        assert!(name.chars().count() < 255);
+        assert_eq!(name.len() <= 255, accepted);
+        let mut value = manifest();
+        value["assets"] = json!([{"path": "asset.txt", "export_as": name}]);
+        assert!(validator.is_valid(&value), "shape schema: {name:?}");
+        let direct = media.clone().with_export_name(&name);
+        assert_eq!(direct.is_ok(), accepted, "Media filename: {name:?}");
+        if let Ok(media) = direct {
+            assert_eq!(media.filename(), name);
+        } else {
+            assert_eq!(direct.unwrap_err().code(), "MEDIA.EXPORT_NAME_INVALID");
+        }
+        fs::write(
+            root.path().join("anki-template.yaml"),
+            serde_yaml::to_string(&value).unwrap(),
+        )
+        .unwrap();
+        let loaded = NoteType::from_bundle(root.path());
+        assert_eq!(loaded.is_ok(), accepted, "bundle filename: {name:?}");
+        if let Err(error) = loaded {
+            assert_eq!(error.code(), "MEDIA.EXPORT_NAME_INVALID");
+        }
+    }
+}

@@ -999,3 +999,94 @@ fn native_build_and_comparison_schemas_accept_real_outcomes() {
     )
     .is_ok());
 }
+
+#[test]
+fn native_build_schema_validates_native_path_encodings_in_both_outcomes() {
+    use ankiforge::{BuildOptions, Note, Project};
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "build_report_schema").unwrap()).unwrap();
+    let mut project = Project::new("native-path-schema").unwrap();
+    project.add("one", Note::basic("Front", "Back")).unwrap();
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    let success = serde_json::to_value(output.snapshot()).unwrap();
+    let root = tempfile::tempdir().unwrap();
+    let error = project.build(BuildOptions::to(root.path())).unwrap_err();
+    let failure = serde_json::to_value(error.snapshot()).unwrap();
+    for (snapshot, pointer) in [
+        (&success, "/result/artifact"),
+        (&failure, "/result/publications/0/path"),
+    ] {
+        for (path, accepted) in [
+            (json!("中文.apkg"), true),
+            (json!({"encoding":"unix_bytes","bytes":[47,255]}), true),
+            (
+                json!({"encoding":"windows_wide","units":[67,58,92,55296]}),
+                true,
+            ),
+            (json!({"encoding":"unix_bytes","bytes":[256]}), false),
+            (json!({"encoding":"unix_bytes","bytes":[-1]}), false),
+            (json!({"encoding":"unix_bytes","bytes":[1.5]}), false),
+            (json!({"encoding":"unix_bytes","bytes":[true]}), false),
+            (json!({"encoding":"windows_wide","units":[65536]}), false),
+            (json!({"encoding":"windows_wide","units":[-1]}), false),
+            (json!({"encoding":"unix_bytes","units":[255]}), false),
+            (json!({"encoding":"other","bytes":[255]}), false),
+            (
+                json!({"encoding":"unix_bytes","bytes":[255],"extra":0}),
+                false,
+            ),
+            (json!({"encoding":"windows_wide"}), false),
+            (json!(null), false),
+        ] {
+            let mut value = snapshot.clone();
+            *value.pointer_mut(pointer).unwrap() = path.clone();
+            assert_eq!(
+                validate_value(&schema, &value).is_ok(),
+                accepted,
+                "{pointer}: {path}"
+            );
+        }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn native_build_schema_accepts_real_non_unicode_path_snapshots() {
+    use ankiforge::{build::json::BuildResultSnapshot, BuildOptions, Note, Project};
+    use std::{ffi::OsString, os::unix::ffi::OsStringExt};
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "build_report_schema").unwrap()).unwrap();
+    let root = tempfile::tempdir().unwrap();
+    let path = root
+        .path()
+        .join(OsString::from_vec(b"saved-\xff.apkg".to_vec()));
+    let mut project = Project::new("native-byte-path").unwrap();
+    project.add("one", Note::basic("Front", "Back")).unwrap();
+    // APFS cannot create byte names. Still validate the actual Rust snapshot
+    // serializer here; Linux additionally validates a real published artifact.
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    let mut snapshot = output.snapshot();
+    snapshot.result = BuildResultSnapshot::Success {
+        artifact: path.clone(),
+        temporary: false,
+    };
+    assert!(validate_value(&schema, &serde_json::to_value(snapshot).unwrap()).is_ok());
+    #[cfg(target_os = "linux")]
+    {
+        let published = project.build(BuildOptions::to(&path)).unwrap();
+        assert!(path.is_file());
+        assert!(validate_value(
+            &schema,
+            &serde_json::to_value(published.snapshot()).unwrap()
+        )
+        .is_ok());
+    }
+    let invalid = root
+        .path()
+        .join(OsString::from_vec(b"blocked-\xff\0.apkg".to_vec()));
+    let failed = project.build(BuildOptions::to(invalid)).unwrap_err();
+    assert!(!failed.publications().is_empty());
+    assert!(validate_value(&schema, &serde_json::to_value(failed.snapshot()).unwrap()).is_ok());
+}

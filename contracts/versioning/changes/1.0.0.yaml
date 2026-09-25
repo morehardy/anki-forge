@@ -2,7 +2,7 @@ baseline_version: 0.6.3
 bundle_version: 1.0.0
 compatibility_class: behavior_changing_incompatible
 summary: Replace native authoring, template bundles and update outcomes with explicit stable keys, owned media and verified package identity evidence.
-migration_notes: Use the root Project/Note/NoteType/Media API, template-bundle-v2 and ankiforge-project-v1. Provide namespace and note keys explicitly, mark HTML explicitly, and build updates from original packages carrying ankiforge-identity-v1. Old Deck/prelude/identity recipes/lockfiles and legacy native product input are removed; no compatibility adapter is provided. The contract major version is independent of the Rust crate version.
+migration_notes: Use the root Project/Note/NoteType/Media API, template-bundle-v2 and ankiforge-project-v1. Provide namespace and note keys explicitly, mark HTML explicitly, and build updates from original packages carrying ankiforge-identity-v1. Snapshot paths are Unicode strings or tagged native byte/code-unit arrays. Input schemas describe structural constraints; loaders retain UTF-8 byte-budget checks. Old Deck/prelude/identity recipes/lockfiles and legacy native product input are removed; no compatibility adapter is provided. The contract major version is independent of the Rust crate version.
 changes:
 - path: errors/error-registry.yaml
   before: blake3:7fca0cb851ca157078b80aa22123f75b22c6296b5e2c82ddcd21e3d212b115f7
@@ -39,7 +39,7 @@ changes:
   after: blake3:5db62152fc6fef5f2ab2f11743a71a18f39f4c568b3bf271b81d43726b65e531
 - path: schema/build-report.schema.json
   before: blake3:7a18b870a8c762b16a6d325fe4ac13f40a2ad309a7f103c1959a88e60742dee0
-  after: blake3:d833e47b1cfd4190ab2aa3977bf4fa0a74978b236f62f0b760481dfa56ed6092
+  after: blake3:2d9110b8cbe3783ed53ae3c1c8999a201e268f2987d4ed40b037041fc926d78f
 - path: schema/comparison-report.schema.json
   before: null
   after: blake3:d8a83726afe1eb2a1bb0e313337b7c85de184db502aa112a9a68c05c802199a6
@@ -51,10 +51,10 @@ changes:
   after: blake3:dd6eac50ff97d6ed1abd522dbafc384e801b2de6b79089974b34a7806597cad3
 - path: schema/project-input.schema.json
   before: null
-  after: blake3:84288273a7f6d77fd9785376546bf535502e7e956b04a8ac3354da72a3f83065
+  after: blake3:fffffdc768f9505a0faf1cd3b4b3f2f964f177cb0a5a43740d0f1620b25779f6
 - path: schema/template-bundle.schema.json
   before: blake3:5368f496ae2829b48dcfda86ce063e99503f07b2c3596deb57c2b067267f0dfd
-  after: blake3:ae8e3ba55c23cf29b2f79158473799eddd51c66905b777e67c6b99c3c3708a0d
+  after: blake3:f45c06d88bd28700c971d1d4070a16f71cc90c77ee1a92978b467518e5cc5d56
 - path: semantics/identity-update-safety.md
   before: blake3:0ca24acf240d4dcfa1d5c8a55b03c6fef49b6c88360e48dbcad4fbf25c68b02d
   after: blake3:d1e4c4809c76cee54d467f98a7754798cc977e379f1a7b1c6a8531593c001f3b
@@ -63,7 +63,7 @@ changes:
   after: blake3:51d659fc1f8303b430a3af59bc386a7c3bca01636ee3c67d9f5be37ccb299431
 - path: semantics/rust-authoring.md
   before: null
-  after: blake3:698d4de35866b481e7eab0b6624b492922f1cce7003eae2cb9247ab470f995a9
+  after: blake3:c9efe557bb04a651a866318738c0d4b3dd83c2bbb6407e275aca0e5bcfb12ea7
 - path: semantics/templates.md
   before: blake3:417e89cd68d789282195a71850d9212e06716917cf098c1f0071942035e88246
   after: blake3:38fcc7a352a3221ead39bc613031b38a06467423a72f63386e92d67fc8ef285c

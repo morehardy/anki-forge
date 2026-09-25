@@ -715,6 +715,7 @@
     },
     "exportFilename": {
       "$comment": "Portable export filename syntax. maxLength counts Unicode scalar values; the runtime additionally enforces the 255 UTF-8 byte budget.",
+      "description": "Portable filename. The complete name, including its extension, must fit within 255 UTF-8 bytes. Loaders enforce this byte limit in addition to schema syntax and character-count checks.",
       "allOf": [
         {
           "$ref": "#/definitions/stableKey"

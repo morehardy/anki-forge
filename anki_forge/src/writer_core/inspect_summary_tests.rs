@@ -449,7 +449,7 @@ fn summary_enforces_identical_resource_limits_and_media_boundaries() {
         entries: vec![ArchiveMediaEntry {
             name: "asset.bin".into(),
             size: 1024,
-            sha1: vec![],
+            sha1: sha1::Sha1::digest(vec![b'a'; 1024]).to_vec(),
             legacy_zip_filename: None,
         }],
     }

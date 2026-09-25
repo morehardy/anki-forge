@@ -66,6 +66,46 @@ def test_non_unicode_build_and_update_paths_round_trip(tmp_path):
     output.artifact.close()
     assert restored.is_file()
 
+def test_artifact_relative_destinations_keep_build_invocation_cwd(tmp_path, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    import anki_forge.project as project_module
+
+    invoked = (tmp_path / 'invoked').resolve()
+    changed = (tmp_path / 'changed').resolve()
+    invoked.mkdir()
+    changed.mkdir()
+    project = Project('cwd-at-build').add('one', Note.basic('q', 'a'))
+    invoke = project_module.invoke
+    handles = []
+    original = Path.cwd()
+    try:
+        os.chdir(invoked)
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            def build_then_change_directory(*args, **kwargs):
+                result = invoke(*args, **kwargs)
+                # Force the competing thread into the vulnerable native-return
+                # boundary, without timing sleeps or replacing the real build.
+                executor.submit(os.chdir, changed).result(timeout=10)
+                return result
+            monkeypatch.setattr(project_module, 'invoke', build_then_change_directory)
+            output = project.build(BuildOptions.temporary())
+        handles.append(output.artifact)
+        clone = copy.copy(output.artifact)
+        handles.append(clone)
+        persisted = clone.persist_to('saved.apkg')
+        handles.append(persisted)
+        second = persisted.persist_to('saved-again.apkg')
+        handles.append(second)
+        assert persisted.path == invoked / 'saved.apkg'
+        assert second.path == invoked / 'saved-again.apkg'
+        assert persisted.path.is_file()
+        assert second.path.is_file()
+        assert list(changed.iterdir()) == []
+    finally:
+        os.chdir(original)
+        for artifact in handles:
+            artifact.close()
+
 def png(width=10, height=10):
     def chunk(kind, data):
         return struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data))

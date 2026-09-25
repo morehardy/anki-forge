@@ -372,6 +372,13 @@ fn read_apkg_facts(
             if let InspectError::LimitExceeded(limit) = error {
                 return Err(limit.into());
             }
+            if require_identity {
+                // Native update evidence must cover the actual media map as
+                // well as payload bytes. Retain the decoder/integrity cause;
+                // an empty sidecar manifest must not turn a read failure into
+                // apparently valid empty media evidence.
+                return Err(crate::build::identity::EvidenceError::invalid(error.into()).into());
+            }
             limitations.missing_domains.insert(DOMAIN_MEDIA.into());
             limitations
                 .degradation_reasons
@@ -1208,7 +1215,7 @@ fn read_media_entries(
         )?
         .context("media map missing")?;
     check_media_map_count(&decoded, version, archive.limits.max_entries)?;
-    let entries: Vec<(usize, String)> = if version.media_map_is_hashmap() {
+    let mut entries: Vec<(usize, ArchiveMediaEntry)> = if version.media_map_is_hashmap() {
         let media_map: HashMap<String, String> =
             serde_json::from_slice(&decoded).context("decode legacy media map")?;
         let mut entries = BTreeMap::new();
@@ -1219,15 +1226,21 @@ fn read_media_entries(
                 "duplicate media index"
             );
         }
-        entries.into_iter().collect()
+        entries
+            .into_iter()
+            .map(|(index, name)| {
+                (
+                    index,
+                    ArchiveMediaEntry {
+                        name,
+                        ..ArchiveMediaEntry::default()
+                    },
+                )
+            })
+            .collect()
     } else {
         let entries = MediaEntries::decode(decoded.as_slice()).context("decode media map")?;
-        entries
-            .entries
-            .into_iter()
-            .enumerate()
-            .map(|(index, entry)| (index, entry.name))
-            .collect()
+        entries.entries.into_iter().enumerate().collect()
     };
     let workers = if entries.len() >= MIN_PARALLEL_HASH_ENTRIES {
         std::thread::available_parallelism()
@@ -1258,7 +1271,7 @@ fn read_media_entries(
             }
         }
         let mut resolved: Vec<ResolvedMedia> = Vec::with_capacity(entries.len());
-        for (index, name) in entries {
+        for (index, entry) in &mut entries {
             let slot = (!slots.is_empty()).then(|| resolved.len() % slots.len());
             if let Some(slot) = slot {
                 let (_, receiver, pending) = &mut slots[slot];
@@ -1282,7 +1295,7 @@ fn read_media_entries(
                 slots[slot].2 = Some(resolved.len());
             }
             resolved.push(ResolvedMedia {
-                filename: name,
+                filename: std::mem::take(&mut entry.name),
                 size: usize::try_from(size).context("media size exceeds address space")?,
                 sha1_hex,
                 #[cfg(any(test, feature = "internal-tools"))]
@@ -1296,6 +1309,29 @@ fn read_media_entries(
         for (_, receiver, pending) in &mut slots {
             if let Some(index) = pending.take() {
                 resolved[index].sha1_hex = receiver.recv().context("media hash worker stopped")?;
+            }
+        }
+        if !version.media_map_is_hashmap() {
+            // Validate after all worker results are received, including hashes
+            // collected when a slot was reused. Advertised metadata never
+            // determines allocation sizes or replaces streamed byte budgets.
+            for ((_, entry), actual) in entries.iter().zip(&resolved) {
+                ensure!(
+                    entry.legacy_zip_filename.is_none(),
+                    "latest media map entries must not set legacy_zip_filename"
+                );
+                ensure!(
+                    actual.size as u64 == u64::from(entry.size),
+                    "media payload size mismatch for {}: map={} payload={}",
+                    actual.filename,
+                    entry.size,
+                    actual.size
+                );
+                ensure!(
+                    entry.sha1.len() == 20 && actual.sha1_hex == hex::encode(&entry.sha1),
+                    "media payload sha1 mismatch for {}",
+                    actual.filename
+                );
             }
         }
         Ok(resolved)

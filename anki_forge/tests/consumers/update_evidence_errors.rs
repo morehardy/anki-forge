@@ -12,6 +12,7 @@ struct MediaEntry {
     #[prost(string, tag="1")] name: String,
     #[prost(uint32, tag="2")] size: u32,
     #[prost(bytes, tag="3")] sha1: Vec<u8>,
+    #[prost(uint32, optional, tag="255")] legacy_zip_filename: Option<u32>,
 }
 
 fn copy_with(input: &Path, output: &str, mut edit: impl FnMut(&str, Vec<u8>) -> Option<Vec<u8>>) {
@@ -82,6 +83,7 @@ fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error
     Ok(())
 }
 fn main() -> Result<(), Box<dyn Error>> {
+    media_map_metadata_must_match_payloads()?;
     duplicate_media_names_are_not_complete_evidence()?;
     let mut project = Project::new("proof")?;
     project.add("one", Note::basic("question", "answer"))?;
@@ -244,5 +246,70 @@ fn main() -> Result<(), Box<dyn Error>> {
     assert_eq!(candidate_error.limit_exceeded().unwrap().resource, "identity_bytes");
     assert_eq!(candidate_error.report().counts().notes, 1);
     let _output = project.build(BuildOptions::temporary().update_from("baseline.apkg").inspect_limits(InspectLimits::default()))?;
+    Ok(())
+}
+
+
+fn media_map_metadata_must_match_payloads() -> Result<(), Box<dyn Error>> {
+    // One entry takes the serial path; 17 exercise parallel completion and reuse
+    // of hash-worker slots without changing archive read/decoded-byte budgets.
+    for count in [1, 17, 0] {
+        let mut project = Project::new(format!("media-metadata-{count}"))?;
+        project.add("one", Note::basic("question", "answer"))?;
+        for index in 0..count {
+            project.add_asset(ankiforge::Media::bytes(format!("payload-{index}").into_bytes(), "application/octet-stream")?
+                .with_export_name(format!("proof-{index}.bin"))?)?;
+        }
+        let baseline = project.build(BuildOptions::temporary())?;
+        let mut archive = zip::ZipArchive::new(fs::File::open(baseline.artifact().path())?)?;
+        let mut collection = Vec::new();
+        archive.by_name("collection.anki21b")?.read_to_end(&mut collection)?;
+        let collection_digest = blake3::hash(&zstd::decode_all(collection.as_slice())?).to_hex().to_string();
+        let variants: &[&str] = if count == 0 { &["protobuf", "zstd"] }
+            else { &["size", "sha1", "short_sha1", "legacy_zero", "legacy_missing", "protobuf", "zstd"] };
+        for &what in variants {
+            let output = format!("media-metadata-{count}-{what}.apkg");
+            copy_with(baseline.artifact().path(), &output, |name, data| {
+                if name == "ankiforge-identity.json" {
+                    let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
+                    value["collection_blake3"] = collection_digest.clone().into();
+                    value["identity"].sort_all_objects();
+                    value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+                    return Some(serde_json::to_vec(&value).unwrap());
+                }
+                if name != "media" { return Some(data); }
+                if what == "zstd" { let mut truncated = data; truncated.pop(); return Some(truncated); }
+                if what == "protobuf" { return Some(zstd::encode_all([0xff].as_slice(), 0).unwrap()); }
+                let mut media = MediaIndex::decode(zstd::decode_all(data.as_slice()).unwrap().as_slice()).unwrap();
+                // Exercise both a hash received during slot reuse and the final
+                // pending entry drained after the media loop.
+                let index = if what == "sha1" { 0 } else { media.entries.len() - 1 };
+                let entry = &mut media.entries[index];
+                match what {
+                    "size" => entry.size += 1,
+                    "sha1" => entry.sha1[0] ^= 0xff,
+                    "short_sha1" => { entry.sha1.pop(); },
+                    "legacy_zero" => entry.legacy_zip_filename = Some(0),
+                    "legacy_missing" => entry.legacy_zip_filename = Some(999),
+                    _ => unreachable!(),
+                }
+                Some(zstd::encode_all(media.encode_to_vec().as_slice(), 0).unwrap())
+            });
+            let error = failure(&project, &output, "UPDATE.EVIDENCE_INVALID");
+            assert_eq!(error.kind(), if what == "zstd" { BuildErrorKind::Io } else { BuildErrorKind::Validation });
+            if what == "protobuf" { assert!(has_source::<prost::DecodeError>(&error), "retain the original protobuf cause: {error:?}"); }
+            if what == "zstd" { assert!(has_source::<std::io::Error>(&error), "retain the original decoder cause: {error:?}"); }
+            assert_eq!(project.compare(ankiforge::update::CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+        }
+        let valid = project.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        assert_eq!(valid.report().counts().media, count);
+        assert!(valid.report().comparison().unwrap().findings().is_empty());
+        if count == 0 { continue; }
+        let mut limits = InspectLimits::default(); limits.max_media_bytes = 8;
+        let error = project.build(BuildOptions::temporary().update_from(baseline.artifact().path()).inspect_limits(limits)).unwrap_err();
+        assert_eq!(error.kind(), BuildErrorKind::ResourceLimit);
+        assert_eq!(error.limit_exceeded().unwrap().resource, "media_bytes");
+        assert_eq!(error.limit_exceeded().unwrap().limit, 8);
+    }
     Ok(())
 }

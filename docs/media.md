@@ -84,6 +84,13 @@ checks use Unicode NFC plus case folding: case-only or normalization-only
 variants also conflict. Exactly identical name/content pairs are idempotent;
 different contents under one name fail without partial registration.
 
+The complete export filename, including its extension, is limited to 255 UTF-8
+bytes. Project and template-bundle JSON Schemas check filename syntax and
+character count; the loaders additionally check this byte budget. For example,
+128 repetitions of `é` pass the schema's character limit but occupy 256 bytes
+and return `MEDIA.EXPORT_NAME_INVALID` when loaded. Use `tools::load_project` or
+`NoteType::from_bundle` to validate the complete input before building.
+
 MIME syntax and identifiable content must agree. Native bytes have no 64 KiB
 inline restriction. The default import budget is 256 MiB per asset;
 `file_with_limits` and `bytes_with_limits` accept `MediaLimits { max_bytes }`

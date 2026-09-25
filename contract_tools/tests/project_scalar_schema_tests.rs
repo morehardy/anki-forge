@@ -593,3 +593,53 @@ fn image_occlusion_overrides_allow_only_writable_fields() {
         check_loader_and_schema(&validator, &value, accepted);
     }
 }
+
+#[test]
+fn export_filename_utf8_budget_is_checked_after_schema_validation() {
+    let validator = validator();
+    let media = Media::bytes(image_bytes(), "image/png").unwrap();
+    // Include two-, three- and four-byte characters mixed with ASCII. Keep
+    // every case below 255 characters so only the runtime byte budget differs.
+    let mut cases = Vec::new();
+    for valid in [
+        format!("{}a", "é".repeat(127)),
+        format!("{}abc", "中".repeat(84)),
+        format!("{}abc", "😀".repeat(63)),
+    ] {
+        assert_eq!(valid.len(), 255);
+        cases.extend([
+            (valid.clone(), true),
+            (format!("{valid}a"), false),
+            (format!("{valid}{}", "a".repeat(17)), false),
+        ]);
+    }
+    cases.push(("é".repeat(128), false));
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("project.json");
+    for (name, accepted) in cases {
+        assert!(name.chars().count() < 255);
+        assert_eq!(name.len() <= 255, accepted);
+        let mut value = asset_recipe("image");
+        value["assets"][0]["export_as"] = json!(name);
+        assert!(validator.is_valid(&value), "shape schema: {name:?}");
+        let direct = media.clone().with_export_name(&name);
+        assert_eq!(direct.is_ok(), accepted, "Media filename: {name:?}");
+        if let Ok(media) = direct {
+            assert_eq!(media.filename(), name);
+        } else {
+            assert_eq!(direct.unwrap_err().code(), "MEDIA.EXPORT_NAME_INVALID");
+        }
+        fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+        let loaded = load_project(&path, None);
+        assert_eq!(loaded.is_ok(), accepted, "project filename: {name:?}");
+        if let Err(error) = loaded {
+            assert_eq!(
+                error
+                    .downcast_ref::<ankiforge::media::MediaError>()
+                    .unwrap()
+                    .code(),
+                "MEDIA.EXPORT_NAME_INVALID"
+            );
+        }
+    }
+}

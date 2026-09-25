@@ -15,6 +15,14 @@ blocks publication. `BuildOutput` owns a successful artifact; observation-only
 reports and JSON snapshots cannot keep temporary files alive. Typed errors retain
 source chains and truthful publication/durability facts.
 
+Native filesystem paths in snapshots preserve their exact bytes/code units:
+Unicode paths are strings; other Unix/Windows paths use tagged numeric arrays.
+The build-report schema covers both forms. Input schemas describe structural
+constraints; loaders additionally enforce UTF-8 byte budgets, filesystem/media
+validity and references. In particular, portable export names retain the 255-byte
+runtime limit without restricting the accepted Unicode alphabet to fit a
+character-count approximation.
+
 This replaces the former public Deck facade, mutable registry, inferred identity
 recipes, lockfile update protocol and SDK transport to ProductDocument. It
 supersedes contrary interface/update decisions in ADRs 0003, 0004, 0014, 0015,

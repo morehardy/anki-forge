@@ -40,6 +40,11 @@ is rejected. There is no transport-driven 64 KiB authoring limit.
 
 Default export filenames derive from content digest and MIME essence. Fixed names
 must be portable and contain no paths, controls or reserved filesystem names.
+The runtime also enforces a maximum of 255 UTF-8 bytes per filename. Draft-07
+input schemas check filename syntax and at most 255 Unicode characters;
+multi-byte names still require the runtime byte-budget check. Schema validation
+is the structural stage, not a guarantee that media import or project loading
+will succeed. Valid Unicode filenames within the byte budget remain supported.
 Conflict keys use Unicode NFC and default case folding. Different original names
 with equal conflict keys fail even for equal bytes; exact name/content pairs are
 idempotent. CSS, font, script and handwritten HTML assets are explicitly declared
@@ -60,6 +65,13 @@ Persisting copies atomically beside the destination before replacement and repor
 whether publication happened and durability was confirmed. A late sync failure
 may return failure with a published path; it must never claim nothing was written.
 JSON report saving is separate and never changes an already-completed build result.
+Snapshot artifact/publication paths serialize as Unicode strings when possible.
+Other native paths use `{ "encoding": "unix_bytes", "bytes": [...] }` on Unix
+or `{ "encoding": "windows_wide", "units": [...] }` on Windows. Each byte is an
+integer from 0 to 255; each UTF-16 unit is an integer from 0 to 65535. The governed
+build-report schema accepts both native encodings on all platforms; reconstructing
+a filesystem path requires the matching platform. No lossy replacement or artifact
+ownership is implied by a path snapshot.
 
 Inspection budgets apply independently to baseline and candidate: archive bytes,
 entry count, central directory, individual/total ZIP expansion, metadata, media

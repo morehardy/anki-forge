@@ -655,4 +655,17 @@ npm --prefix website run check:examples
 
 本轮本地验证：完整 Rust quality 通过，包括工作区/all-features 测试、22 个独立公共消费者、Clippy、rustdoc/doctest 和发布内容检查；媒体导出 11 项及共享媒体 76 项通过。Node 重新构建后 21/21 通过，TypeScript 检查通过；重新构建并在仓库外安装的 Python wheel 56 项通过、1 项 Linux 成功字节路径用例按平台跳过，mypy 通过。原始五类失败均已有修复前复现；跨平台专属路径行为仍由本次提交的 hosted CI 验证。
 
+### PR #51 定期复查补充（2026-09-25）
+
+提交 `c617480` 的 41 项 hosted CI 全部通过，PR 网站部署按规则跳过；完整读取正式 review 正文和行内线程后，继续处理以下边界：
+
+- Python 与 Node 使用同一调用时目录语义：进入释放 GIL 的 native build 前保存 `Path.cwd()`，artifact clone 和多次相对路径 persist 沿用该目录。回归以真实 native 构建配合确定性的返回边界 hook，让另一线程切换 cwd；旧实现把文件发到新目录的问题已复现。
+- build-report schema 增加共享的原生路径定义，成功 artifact 和失败 publication 接受字符串、Unix 字节数组、Windows UTF-16 单元数组；拒绝错误标签、缺失/额外属性、非整数和越界单元。测试验证实际 Rust 快照序列化与真实失败，Linux 额外验证成功发布。打包消费者补充原生路径无损往返，使 Windows 分支随四平台消费者矩阵执行。
+- 完整身份检查保留并验证 Latest media map 的 size、SHA-1 和 legacy_zip_filename 元数据，核对流式读取的真实 payload，不使用不可信声明值决定分配或预算。并行散列完成后统一核对；媒体解析或完整性错误保留原始 source，不能被缺失媒体观察的降级路径掩盖。
+- 文件名 255 UTF-8 字节限制继续由 Media 和加载器执行，符合此前方案记录的两阶段校验边界。两个输入 schema 的用户可见说明、领域语义和文档明确该限制；新增 project/bundle 回归验证 2/3/4 字节 Unicode 混合 ASCII 在 255 字节接受、256/272 字节拒绝及 128 个 `é` 的反例。没有为了字符数近似而排除原本合法的 Unicode 名字，也不把 schema 成功描述为一定能加载。
+
+上述契约调整计入尚未发布的 bundle 1.0.0 精确变更清单，并重新生成嵌入归档。
+
+本轮验证：完整 Rust quality 通过，包含 22 个公共消费者、34 项 schema gates、17 项 project 和 11 项 bundle schema 回归；媒体修复另有 16 组篡改场景及 62 项 inspect 检查。契约 verify/governance（基线 `8efcb347`）、summary、package 与嵌入归档一致性通过。仓库外消费者针对当前源码运行通过，打包版本仍由四平台 CI 验证。重建 Node 后 21/21 通过；重建并在仓库外安装 Python wheel 后 57 项通过、1 项 Linux 专用字节路径测试跳过，包含 Python cwd 新回归，mypy 通过。
+
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

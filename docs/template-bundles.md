@@ -115,6 +115,10 @@ Then templates may use `<img src="badge.png">` and CSS may use
 are not inferred from arbitrary HTML/CSS/JavaScript. Declared assets remain in the
 APKG even if no static reference is detected. Export names obey the same
 portable-name and Unicode/case collision rules as [Media](media.md).
+The complete export name is limited to 255 UTF-8 bytes, including its extension.
+The JSON Schema checks syntax and character count; `NoteType::from_bundle`
+also enforces the byte budget, file contents and references before returning a
+validated model. A successful schema check alone does not guarantee loading.
 
 Absolute paths, traversal escapes and symlinks outside the bundle are rejected.
 The manifest is limited to 256 KiB; each template/CSS text file is limited to

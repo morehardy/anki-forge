@@ -20,9 +20,7 @@
               "const": "success"
             },
             "artifact": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "\\S"
+              "$ref": "#/definitions/nativePath"
             },
             "temporary": {
               "type": "boolean"
@@ -72,7 +70,7 @@
                 "type": "object",
                 "properties": {
                   "path": {
-                    "type": "string"
+                    "$ref": "#/definitions/nativePath"
                   },
                   "stage": {
                     "enum": [
@@ -667,5 +665,57 @@
     "result",
     "report"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "definitions": {
+    "nativePath": {
+      "description": "Lossless native filesystem path. Unicode paths are strings; encoded arrays preserve original Unix bytes or Windows UTF-16 code units. Encodings describe their original platform and carry no file ownership.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "const": "unix_bytes"
+            },
+            "bytes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              }
+            }
+          },
+          "required": [
+            "encoding",
+            "bytes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "const": "windows_wide"
+            },
+            "units": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              }
+            }
+          },
+          "required": [
+            "encoding",
+            "units"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
 }
