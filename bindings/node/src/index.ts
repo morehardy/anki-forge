@@ -118,7 +118,7 @@ export class Media {
     return new Media(
       await asyncCall(() =>
         native().NativeMedia.bytes(
-          Buffer.from(bytes),
+          Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength),
           mediaType,
           limitsJSON(limits),
         ),

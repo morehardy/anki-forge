@@ -29,9 +29,7 @@
     "name": {
       "anyOf": [
         {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "\\S"
+          "$ref": "#/definitions/displayName"
         },
         {
           "type": "null"
@@ -41,9 +39,7 @@
     "default_deck": {
       "anyOf": [
         {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "\\S"
+          "$ref": "#/definitions/deckName"
         },
         {
           "type": "null"
@@ -66,9 +62,7 @@
               "name": {
                 "anyOf": [
                   {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
+                    "$ref": "#/definitions/displayName"
                   },
                   {
                     "type": "null"
@@ -118,9 +112,7 @@
                     "name": {
                       "anyOf": [
                         {
-                          "type": "string",
-                          "minLength": 1,
-                          "pattern": "\\S"
+                          "$ref": "#/definitions/displayName"
                         },
                         {
                           "type": "null"
@@ -156,9 +148,7 @@
                     "target_deck": {
                       "anyOf": [
                         {
-                          "type": "string",
-                          "minLength": 1,
-                          "pattern": "\\S"
+                          "$ref": "#/definitions/deckName"
                         },
                         {
                           "type": "null"
@@ -245,9 +235,7 @@
               "assets": {
                 "type": "array",
                 "items": {
-                  "type": "string",
-                  "minLength": 1,
-                  "pattern": "\\S"
+                  "$ref": "#/definitions/assetKey"
                 }
               }
             },
@@ -286,7 +274,7 @@
         "type": "object",
         "properties": {
           "key": {
-            "$ref": "#/definitions/stableKey"
+            "$ref": "#/definitions/assetKey"
           },
           "source": {
             "oneOf": [
@@ -340,9 +328,7 @@
           "export_as": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 1,
-                "pattern": "\\S"
+                "$ref": "#/definitions/exportFilename"
               },
               {
                 "type": "null"
@@ -439,9 +425,7 @@
                     "const": "image_occlusion"
                   },
                   "image": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "\\S"
+                    "$ref": "#/definitions/assetKey"
                   },
                   "masks": {
                     "type": "array",
@@ -452,16 +436,20 @@
                           "$ref": "#/definitions/stableKey"
                         },
                         "x": {
-                          "type": "number"
+                          "type": "number",
+                          "minimum": 0
                         },
                         "y": {
-                          "type": "number"
+                          "type": "number",
+                          "minimum": 0
                         },
                         "width": {
-                          "type": "number"
+                          "type": "number",
+                          "exclusiveMinimum": 0
                         },
                         "height": {
-                          "type": "number"
+                          "type": "number",
+                          "exclusiveMinimum": 0
                         }
                       },
                       "required": [
@@ -472,7 +460,9 @@
                         "height"
                       ],
                       "additionalProperties": false
-                    }
+                    },
+                    "minItems": 1,
+                    "maxItems": 500
                   },
                   "mode": {
                     "enum": [
@@ -499,9 +489,7 @@
           "deck": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 1,
-                "pattern": "\\S"
+                "$ref": "#/definitions/deckName"
               },
               {
                 "type": "null"
@@ -583,9 +571,7 @@
               ]
             },
             "asset": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "\\S"
+              "$ref": "#/definitions/assetKey"
             }
           },
           "required": [
@@ -618,10 +604,11 @@
     "stableKey": {
       "type": "string",
       "minLength": 1,
-      "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+      "pattern": "^[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000](?:[\\s\\S]*[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000])?$",
       "not": {
         "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
-      }
+      },
+      "$comment": "Use Rust whitespace explicitly; ECMAScript \\s differs for U+0085 and U+FEFF."
     },
     "fieldKey": {
       "allOf": [
@@ -644,6 +631,43 @@
               "Tags",
               "Type"
             ]
+          }
+        }
+      ]
+    },
+    "deckName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Match valid_authored_deck_name: nonempty :: components, no boundary whitespace/colons, and no Rust control characters. Single colons and non-control whitespace inside components remain valid.",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]|(^|::)[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:]|[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:](::|$)|:::"
+      }
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Nonblank under Rust str::trim, without control characters; surrounding whitespace is allowed.",
+      "pattern": "[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
+      }
+    },
+    "assetKey": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Opaque loader alias, matched exactly without trimming or normalization; unlike stable identity keys, only all-Rust-whitespace aliases are forbidden.",
+      "pattern": "[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]"
+    },
+    "exportFilename": {
+      "$comment": "Portable export filename syntax. maxLength counts Unicode scalar values; the runtime additionally enforces the 255 UTF-8 byte budget.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/stableKey"
+        },
+        {
+          "maxLength": 255,
+          "not": {
+            "pattern": "[/\\\\<>:\"|?*\\[\\]]|\\.$|^([cC][oO][nN]|[pP][rR][nN]|[aA][uU][xX]|[nN][uU][lL]|[cC][lL][oO][cC][kK]\\$|([cC][oO][mM]|[lL][pP][tT])[1-9\u00b9\u00b2\u00b3])(\\.|$)"
           }
         }
       ]

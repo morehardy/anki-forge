@@ -95,3 +95,54 @@ fn failed_persistence_keeps_temporary_artifact_usable() {
     assert!(artifact.persist_to(artifact.path()).is_err());
     assert_eq!(std::fs::read(artifact.path()).unwrap(), bytes);
 }
+
+#[test]
+fn update_output_cannot_replace_baseline_or_its_file_aliases() {
+    let cwd = std::env::current_dir().unwrap();
+    let root = tempfile::tempdir_in(&cwd).unwrap();
+    let baseline = root.path().join("baseline.apkg");
+    let original_project = project();
+    original_project.build(BuildOptions::to(&baseline)).unwrap();
+    let original = std::fs::read(&baseline).unwrap();
+    let hardlink = root.path().join("hardlink.apkg");
+    std::fs::hard_link(&baseline, &hardlink).unwrap();
+    let mut aliases = vec![
+        baseline.clone(),
+        baseline.strip_prefix(&cwd).unwrap().to_owned(),
+        root.path().join(".").join("baseline.apkg"),
+        hardlink,
+    ];
+    #[cfg(unix)]
+    {
+        let symlink = root.path().join("symlink.apkg");
+        std::os::unix::fs::symlink(&baseline, &symlink).unwrap();
+        aliases.push(symlink);
+    }
+    let mut changed = original_project;
+    changed
+        .add("new-note", Note::basic("new", "answer"))
+        .unwrap();
+    for alias in aliases {
+        let error = changed
+            .build(BuildOptions::to(&alias).update_from(&baseline))
+            .unwrap_err();
+        assert_eq!(
+            error.kind(),
+            ankiforge::build::BuildErrorKind::Configuration
+        );
+        assert_eq!(error.code(), "BUILD.OUTPUT_INVALID");
+        assert!(error.publications().is_empty());
+        assert_eq!(
+            error.report().counts().notes,
+            0,
+            "reject before generating a candidate"
+        );
+        assert_eq!(std::fs::read(&baseline).unwrap(), original);
+        assert_eq!(std::fs::read(&alias).unwrap(), original);
+    }
+    let next = changed
+        .build(BuildOptions::to(root.path().join("next.apkg")).update_from(&baseline))
+        .unwrap();
+    assert_eq!(next.report().counts().notes, 2);
+    assert_eq!(std::fs::read(&baseline).unwrap(), original);
+}

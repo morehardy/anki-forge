@@ -109,11 +109,38 @@ impl NativeMedia {
         mime: String,
         limits: String,
     ) -> Result<Object<'env>> {
+        let limits = options::media_limits(&limits)?;
+        let observed = bytes.len() as u64;
+        if observed > limits.max_bytes {
+            // Reject before cloning the JS buffer into the worker's owned input.
+            let code = "MEDIA.RESOURCE_LIMIT_EXCEEDED";
+            return Err(Error::from_reason(
+                json!({
+                    "domain": "media",
+                    "kind": "ResourceLimit",
+                    "code": code,
+                    "message": format!("{code}: media contains at least {observed} bytes; limit is {}", limits.max_bytes),
+                    "causes": [],
+                    "sourceDetails": [],
+                    "details": {
+                        "path": null,
+                        "limitExceeded": {
+                            "resource": "media_bytes",
+                            "limit": limits.max_bytes,
+                            "observed": observed
+                        }
+                    }
+                })
+                .to_string(),
+            ));
+        }
         tasks::spawn(
             env,
             MediaTask {
+                // Capture accepted bytes synchronously so caller mutations after
+                // this call cannot change the snapshot processed by the worker.
                 source: Some(MediaSource::Bytes(bytes.to_vec(), mime)),
-                limits: options::media_limits(&limits)?,
+                limits,
             },
         )
     }

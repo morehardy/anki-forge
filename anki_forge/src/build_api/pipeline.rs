@@ -86,6 +86,26 @@ impl Project {
                         "baseline path cannot be empty",
                     ));
                 }
+                if let OutputTarget::Persistent(output) = &options.output {
+                    let aliases_baseline = output == path
+                        || (output.exists()
+                            && path.exists()
+                            && same_file::is_same_file(output, path).map_err(|cause| {
+                                BuildError::new(
+                                    Kind::Configuration,
+                                    "BUILD.OUTPUT_INVALID",
+                                    "could not distinguish output from update baseline",
+                                )
+                                .caused_by(cause)
+                            })?);
+                    if aliases_baseline {
+                        return Err(BuildError::new(
+                            Kind::Configuration,
+                            "BUILD.OUTPUT_INVALID",
+                            "output must not replace the original update baseline; choose a separate destination",
+                        ));
+                    }
+                }
                 let (summary, envelope) = crate::writer_core::inspect::inspect_native_package(
                     path,
                     &options.inspect_limits,

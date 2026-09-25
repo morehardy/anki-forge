@@ -820,7 +820,7 @@ codes:
     summary: project display name is blank or contains control characters
   - id: BUILD.OUTPUT_INVALID
     status: active
-    summary: persistent build output path is empty
+    summary: persistent build output path is empty or aliases the update baseline
   - id: BUILD.WORKSPACE_FAILED
     status: active
     summary: private build workspace could not be created

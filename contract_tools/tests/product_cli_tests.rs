@@ -281,3 +281,37 @@ fn project_loader_owns_media_and_builds_custom_cloze_and_structured_io() {
         .iter()
         .any(|template| template["question_format"] == "{{#题目}}{{题目}}{{/题目}}"));
 }
+
+#[test]
+fn apkg_output_cannot_replace_project_input_or_its_file_aliases() {
+    let cwd = std::env::current_dir().unwrap();
+    let root = tempfile::tempdir_in(&cwd).unwrap();
+    let project = input(root.path(), json!([basic("one", "one")]));
+    let original = fs::read(&project).unwrap();
+    let hardlink = root.path().join("hardlink.apkg");
+    fs::hard_link(&project, &hardlink).unwrap();
+    let mut aliases = vec![
+        project.clone(),
+        project.strip_prefix(&cwd).unwrap().to_owned(),
+        root.path().join(".").join("project.json"),
+        hardlink,
+    ];
+    #[cfg(unix)]
+    {
+        let symlink = root.path().join("symlink.apkg");
+        std::os::unix::fs::symlink(&project, &symlink).unwrap();
+        aliases.push(symlink);
+    }
+    for alias in aliases {
+        let output = build(&project, &alias, &[]);
+        assert!(!output.status.success(), "alias: {alias:?}");
+        assert!(String::from_utf8_lossy(&output.stderr)
+            .contains("APKG output must not replace project input"));
+        assert_eq!(fs::read(&project).unwrap(), original);
+        assert_eq!(fs::read(&alias).unwrap(), original);
+    }
+    assert!(build(&project, &root.path().join("valid.apkg"), &[])
+        .status
+        .success());
+    assert_eq!(fs::read(&project).unwrap(), original);
+}

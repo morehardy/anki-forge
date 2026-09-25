@@ -632,5 +632,8 @@ npm --prefix website run check:examples
 - Python wheel 隔离测试通过 `-I -X utf8` 启动，保留 Windows 中文目录覆盖，并消除重定向输出使用本地代码页导致的异常。
 - crates.io 已存在 0.1.0，故 Rust clean-slate 版本改为 0.2.0；同步路径依赖、锁文件、Python 加载器版本断言和当前版本文档。保留 SemVer 检查，不为有意破坏性改动绕过门禁。
 - 后续 review 补齐三项输入/证据边界：拒绝媒体 map 中重复的导出文件名，防止收集为映射时覆盖条目后误判完整证据；项目标签 schema 与 Rust 的精确 Unicode 空白/控制字符、保留前缀和去重规则保持一致，并重建尚未发布的 bundle 1.0.0；不同模型 key 的显示名按 writer 的 trim 与 SQLite BINARY 规则检查冲突，在 add 时原子拒绝，保留大小写、Unicode 组合形式及内部空格的有效区别。
+- schema 的三个牌组入口同步运行时规则，IO masks 明确为 1–500 个，坐标非负且尺寸为正；显示名、稳定键、资产别名及导出文件名补齐同类标量约束和 Unicode 边界。新增 8 项 schema/API/loader 对照回归，连同标签和 schema gates 共 41 项通过；UTF-8 字节预算、图像尺寸和跨引用关系仍由运行时验证。
+- CLI 在读取项目或构建前拒绝 APKG 输出覆盖项目 JSON；更新构建在检查基线和生成候选包前拒绝输出覆盖原始基线，返回 `BUILD.OUTPUT_INVALID`。直接、相对、符号链接和硬链接别名均有文件保留回归，正常独立输出仍可成功。
+- Node `Media.bytes` 通过不复制数据的 Buffer 视图传入原生层，先解析预算并检查长度，再同步取得合法输入的自有副本。独立子进程验证显式 bigint 预算和默认 256 MiB 预算在拒绝时不会产生整块复制；子数组偏移及调用后立即修改输入的快照语义保持不变。Node 完整语义检查由 17 项增加至 19 项。
 
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

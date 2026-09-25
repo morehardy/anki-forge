@@ -42,6 +42,10 @@ pub struct ProductCompareRequest<'a> {
 
 pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutcome> {
     validate_output(request.output)?;
+    ensure!(
+        !paths_alias(Path::new(request.apkg_out), Path::new(request.project))?,
+        "APKG output must not replace project input"
+    );
     validate_report_path(
         request.report_json,
         &[request.project, request.apkg_out],
@@ -188,16 +192,20 @@ fn validate_report_path(
     let Some(report) = report else {
         return Ok(());
     };
-    let report = resolved_destination(Path::new(report))?;
     for path in protected.iter().copied().chain(baseline) {
-        let path = resolved_destination(Path::new(path))?;
         ensure!(
-            report != path
-                && !(report.exists() && path.exists() && same_file::is_same_file(&report, &path)?),
+            !paths_alias(Path::new(report), Path::new(path))?,
             "report path must not replace project input, APKG output or baseline"
         );
     }
     Ok(())
+}
+
+fn paths_alias(first: &Path, second: &Path) -> anyhow::Result<bool> {
+    let first = resolved_destination(first)?;
+    let second = resolved_destination(second)?;
+    Ok(first == second
+        || (first.exists() && second.exists() && same_file::is_same_file(first, second)?))
 }
 
 fn resolved_destination(path: &Path) -> anyhow::Result<PathBuf> {

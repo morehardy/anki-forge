@@ -214,6 +214,49 @@ test("media budgets, MIME and portable conflicts preserve atomic project state",
   t.after(() => out.artifact.close());
   assert.equal(out.report.counts.media, 1);
 });
+test("media byte budgets reject before allocating binding copies", () => {
+  // Fresh processes make peak RSS independent of other tests and retained heaps.
+  // Fault in the caller's storage before measuring: only binding overhead counts.
+  for (const useDefault of [false, true]) {
+    const result = spawnSync(process.execPath, ["--input-type=module", "--eval", `
+      import assert from "node:assert/strict";
+      import { Media, MediaError } from ${JSON.stringify(new URL("../dist/index.mjs", import.meta.url).href)};
+      await Media.bytes(new Uint8Array([1]), "application/octet-stream");
+      const limit = ${useDefault ? 256 * 1024 * 1024 : 1024};
+      const bytes = new Uint8Array(${useDefault ? 256 * 1024 * 1024 + 1 : 64 * 1024 * 1024});
+      bytes.fill(1);
+      const before = process.resourceUsage().maxRSS;
+      await assert.rejects(
+        Media.bytes(bytes, "application/octet-stream", ${useDefault ? "{}" : "{ maxBytes: BigInt(limit) }"}),
+        error => error instanceof MediaError &&
+          error.kind === "ResourceLimit" &&
+          error.code === "MEDIA.RESOURCE_LIMIT_EXCEEDED" &&
+          error.details.limitExceeded.resource === "media_bytes" &&
+          error.details.limitExceeded.limit === limit &&
+          error.details.limitExceeded.observed === bytes.length,
+      );
+      const overhead = (process.resourceUsage().maxRSS - before) * 1024;
+      assert(overhead < 32 * 1024 * 1024,
+        "rejecting over-budget bytes allocated " + overhead + " bytes of resident memory");
+    `], { encoding: "utf8", timeout: 30000 });
+    assert.equal(result.status, 0, result.stderr || String(result.error));
+  }
+});
+test("media bytes snapshot a subarray before the caller can mutate it", async (t) => {
+  const expected = png();
+  const backing = new Uint8Array(expected.length + 14);
+  const view = backing.subarray(7, backing.length - 7);
+  view.set(expected);
+  const pending = Media.bytes(view, "image/png", { maxBytes: view.byteLength });
+  backing.fill(0);
+  const media = await pending;
+  assert.equal(media.byteLength, expected.length);
+  const out = await new Project("snapshot")
+    .add("image", Note.basic(media.image(), "answer"))
+    .build(BuildOptions.temporary());
+  t.after(() => out.artifact.close());
+  assert.deepEqual(Buffer.from(inspect(out.artifact.path).media[0].bytes), expected);
+});
 test("bundle v2 returns reusable model whose assets survive directory deletion", async (t) => {
   const d = await temp(t);
   await fs.writeFile(path.join(d, "badge.png"), png());

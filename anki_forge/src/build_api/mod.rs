@@ -71,6 +71,7 @@ impl BuildOptions {
 
     /// Updates from the previous original distribution APKG. Complete embedded
     /// identity evidence is required; an Anki re-export is not a baseline.
+    /// A persistent output must not be this path or an alias of the same file.
     pub fn update_from(mut self, path: impl Into<PathBuf>) -> Self {
         self.mode = BuildMode::Update(path.into());
         self
