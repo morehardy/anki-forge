@@ -37,6 +37,36 @@ fn check_loader_and_schema(validator: &jsonschema::JSONSchema, value: &Value, ac
 }
 
 #[test]
+fn authored_field_separator_matches_loader_in_every_content_form() {
+    let validator = validator();
+    for (text, accepted) in [
+        ("before\u{1f}after", false),
+        ("\u{1f}", false),
+        ("line\n\ttab\r\u{1e}\u{7f}", true),
+        ("&#31; &#x1f; \\u001f", true),
+    ] {
+        for content in [
+            json!(text),
+            json!({"kind": "text", "value": text}),
+            json!({"kind": "html", "value": text}),
+            json!({"kind": "sequence", "items": ["safe", {
+                "kind": "sequence", "items": [{"kind": "html", "value": text}]
+            }]}),
+        ] {
+            for note_content in [
+                json!({"kind": "basic", "front": content, "back": "answer"}),
+                json!({"kind": "basic", "front": "question", "back": content}),
+                json!({"kind": "custom", "model": "custom", "fields": {"front": content}}),
+            ] {
+                let mut value = recipe();
+                value["notes"][0]["content"] = note_content;
+                check_loader_and_schema(&validator, &value, accepted);
+            }
+        }
+    }
+}
+
+#[test]
 fn deck_names_match_runtime_and_loader_at_every_input_location() {
     let validator = validator();
     let mut cases = vec![

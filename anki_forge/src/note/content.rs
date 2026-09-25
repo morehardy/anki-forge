@@ -6,6 +6,8 @@ use crate::Media;
 ///
 /// Image and sound nodes retain their media snapshots until the project is
 /// rendered. Constructing content does not register media or add a note.
+/// Values are preserved until rendering; [`crate::Project::add`] rejects raw
+/// U+001F because Anki reserves it as the separator between stored fields.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[must_use = "pass this content to a note field or a content sequence"]
 pub struct Content(Node);
@@ -20,6 +22,16 @@ enum Node {
 }
 
 impl Content {
+    pub(crate) fn contains_field_separator(&self) -> bool {
+        match &self.0 {
+            Node::Text(value) | Node::Html(value) => value.contains('\u{1f}'),
+            Node::Sequence(values) => values.iter().any(Self::contains_field_separator),
+            // Media filenames already reject control characters, and generated
+            // image/sound markup cannot introduce a raw field separator.
+            Node::Image(_) | Node::Sound(_) => false,
+        }
+    }
+
     pub(crate) fn has_value(&self) -> bool {
         match &self.0 {
             Node::Text(value) => !value.trim().is_empty(),

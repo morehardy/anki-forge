@@ -20,6 +20,8 @@ pub(crate) struct PackageIdentity {
     pub namespace: String,
     pub models: BTreeMap<String, ModelIdentity>,
     pub notes: BTreeMap<String, NoteIdentity>,
+    // Last published bytes for each portable filename, including omitted media.
+    pub media_history: BTreeMap<String, MediaIdentity>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -176,6 +178,7 @@ impl PackageIdentity {
             namespace: project.namespace.clone(),
             models,
             notes,
+            media_history: BTreeMap::new(),
         })
     }
 
@@ -336,7 +339,7 @@ impl PackageIdentity {
             .iter()
             .map(|object| (&object.id, object))
             .collect();
-        let media = normalized
+        let media: BTreeMap<_, _> = normalized
             .media_bindings
             .iter()
             .map(|binding| {
@@ -350,12 +353,30 @@ impl PackageIdentity {
                 )
             })
             .collect();
+        let mut identity = self.clone();
+        let mut history: BTreeMap<_, _> = identity
+            .media_history
+            .into_iter()
+            .map(|(filename, content)| {
+                (
+                    crate::media::assets::filename_identity(&filename),
+                    (filename, content),
+                )
+            })
+            .collect();
+        for (filename, content) in &media {
+            history.insert(
+                crate::media::assets::filename_identity(filename),
+                (filename.clone(), content.clone()),
+            );
+        }
+        identity.media_history = history.into_values().collect();
         Ok(serde_json::to_vec(&IdentityEnvelope {
             format_version: "ankiforge-identity-v1".into(),
             collection_blake3: file_hash(collection)?,
-            identity_blake3: identity_checksum(self)?,
+            identity_blake3: identity_checksum(&identity)?,
             media,
-            identity: self.clone(),
+            identity,
         })?)
     }
 }

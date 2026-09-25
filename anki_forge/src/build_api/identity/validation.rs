@@ -43,6 +43,48 @@ impl std::error::Error for EvidenceError {
 }
 
 impl IdentityEnvelope {
+    fn validate_media_history(&self) -> anyhow::Result<()> {
+        use crate::media::{assets::filename_identity, validate_name};
+
+        // Retired payloads cannot be re-read from this archive. Their intrinsic
+        // structure and checksum are checked, as with retired model/note history;
+        // current records must additionally match the fully inspected media map.
+        let mut history_names = BTreeSet::new();
+        for (filename, content) in &self.identity.media_history {
+            validate_name(filename)?;
+            ensure!(
+                history_names.insert(filename_identity(filename)),
+                "duplicate portable media history identity"
+            );
+            ensure!(
+                content.sha1.len() == 40
+                    && content
+                        .sha1
+                        .bytes()
+                        .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)),
+                "invalid media history digest"
+            );
+        }
+        let mut active_names = BTreeSet::new();
+        for (filename, content) in &self.media {
+            validate_name(filename)?;
+            let key = filename_identity(filename);
+            ensure!(
+                active_names.insert(key),
+                "duplicate portable media filename identity"
+            );
+            let history =
+                self.identity.media_history.get(filename).ok_or_else(|| {
+                    anyhow::anyhow!("current media is missing from media history")
+                })?;
+            ensure!(
+                *history == *content,
+                "current media disagrees with its last published history"
+            );
+        }
+        Ok(())
+    }
+
     pub(crate) fn validate(&self, collection: &std::path::Path) -> anyhow::Result<()> {
         ensure!(
             self.format_version == "ankiforge-identity-v1",
@@ -61,6 +103,7 @@ impl IdentityEnvelope {
             !self.identity.namespace.trim().is_empty(),
             "missing namespace"
         );
+        self.validate_media_history()?;
         let db = rusqlite::Connection::open_with_flags(
             collection,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,

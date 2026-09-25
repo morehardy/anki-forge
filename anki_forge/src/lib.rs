@@ -11,6 +11,7 @@ mod path_alias;
 mod prepared_media;
 #[allow(missing_docs)]
 mod product;
+mod regular_file;
 #[allow(missing_docs)]
 mod runtime;
 #[allow(missing_docs)]

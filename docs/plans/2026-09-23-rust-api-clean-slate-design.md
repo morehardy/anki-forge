@@ -316,8 +316,11 @@ ComparisonReport::snapshot(&self) -> update::json::ComparisonSnapshot
 | 笔记身份 | key → namespace 隔离的 GUID、模型 key、活动状态、内容摘要、mtime |
 | 卡片与 IO | 普通模板 key / cloze 编号 / mask key → 实际 card ordinal；mask 删除记录与高水位 |
 | 内容绑定 | 解码后 collection 的 BLAKE3；媒体名 → 实际大小及 SHA-1；规范化 identity JSON 的 BLAKE3 |
+| 媒体历史 | 按 NFC + Unicode case folding 的文件名身份保存最后一次发布的原始文件名、大小和 SHA-1；省略版本保留记录，重新发布时更新该身份记录 |
 
 identity 摘要对递归按 key 排序的紧凑 JSON 计算，保留数组顺序。摘要用于发现损坏与不一致，不声称提供发布者认证。读取时还要核对实际数据库的 model/config ID、kind、sort field、GUID、mtime、卡片 key 与 ordinal，以及实际媒体；不能仅通过 checksum 就信任映射。拒绝重复 ZIP 条目、未知格式、缺失和不完整的映射。新的完整证据独立于旧 notes.data 部分 metadata；不从后者恢复缺失的新证据。
+
+当前媒体 manifest 只描述本包实际 payload；`identity.media_history` 另外保留已省略媒体的最后发布事实，并计入 identity 摘要和证据字节预算。历史文件名必须合法且不存在 portable identity 冲突，当前 manifest 的每一项必须与历史记录一致。省略的旧 payload 不在本包，不能重算其摘要，也不能声称已经认证；继承可信边界与退休模型/笔记历史相同。A → 省略 → 同名 B 为 `MEDIA_CHANGED` Medium，大小写/NFC 变体遵循同一判定；B 再次发布不产生变化，恢复相同 bytes 为 Info。比较仅相对指定分发基线，不代表掌握每个学习者的本地媒体状态。
 
 字段/模板的历史 slot 与 Anki 物理 ordinal 是两个概念。现有声明仅调序时保留基线顺序和未显式更改的 sort field；删减后按历史 slot 为当前成员生成连续 ordinal，同时保留退休 config ID 与 slot，恢复原 key 时复用。新 key 不占用别人的历史身份。IO 的 cloze ordinal 可以留空洞，删除后不重新分给其他 mask。恢复曾整体退休的 note/model 时仍与其历史定义比较，不能只当作无风险新增。
 
@@ -712,3 +715,15 @@ npm --prefix website run check:examples
 本轮验证：FIFO 子进程回归在旧打开方式下确定性超时，修复后连同正常读取、预算、原始 I/O、fork 所有权的 5 项快照单测通过。Rust quality 所需检查全部通过，包括 136 项默认库、374 项 all-features 库、22 个公共消费者、6 项媒体生命周期、工作区集成测试、34 项 schema gates、Clippy、rustdoc/doctest、精确发布内容及嵌入契约一致性；提交前的 payload 检查使用脚本提供的未提交源码选项，其余剩余检查顺序续跑完成。契约治理通过；cargo-deny 0.20.2 使用现有 RustSec 数据库完成 advisories、bans、licenses、sources 检查。新增直接依赖只引用锁文件已有 rustix 版本。最终跨平台与 SDK 验证仍以本次提交 CI 为准。
 
 随后 benchmark CI 的 `--locked` 检查发现独立 adapter 锁文件也需同步该直接依赖。补齐 `benchmarks/adapters/rust/Cargo.lock` 的 rustix 引用，未改变任何依赖版本；另一个独立 roundtrip oracle 不依赖 ankiforge，不受此次依赖关系变更影响。按 CI 流程重新执行 prepare（保留 `--locked`）、46 项单测及真实 Rust/genanki smoke，两个 200 notes / 200 cards 产物均通过物理和语义检查，执行前后身份一致。提交后的精确 crate payload 检查也再次通过。
+
+### PR #51 字段边界与媒体发布历史（2026-09-26）
+
+提交 `92fe6e4` 的 41 项 hosted CI 全部通过，PR 网站部署按规则跳过。随后五条审查中四条成立，按以下边界补齐：
+
+- 模板文本与媒体源共用描述符验证的文件打开函数。Unix 在打开时启用 NONBLOCK/CLOEXEC，验证实际普通文件及大小后恢复正常读取，不重新打开路径；模板原有路径包含检查、limit+1 流式预算和原始 I/O 错误继续保留。已复现普通文件被替换为无写入者 FIFO 时旧实现阻塞；新模板回归与既有媒体进程回归通过。
+- `Project::add` 原子拒绝 Text、Html 和任意嵌套 Sequence 中的原始 U+001F，返回 `InvalidContent` / `NOTE.FIELD_CONTENT_INVALID`。同样覆盖 Cloze/hint、自定义字段及 IO 的可写字段，避免 Anki SQLite 字段分隔符被当作正文输出。Content 构造继续不失败，其他控制字符、HTML 字符引用与字面量转义不被改写。JSON schema、错误注册表、原生语义和 SDK 测试同步约束；拒绝后同 key 可重试，不泄漏模型或媒体。
+- `identity.media_history` 按统一 NFC + Unicode case folding 的文件名身份保留最后发布的描述符。A → 省略 → B 仍触发 Medium 媒体替换风险；B → B 无新风险，重复省略不反复报告删除，同 bytes 恢复为 Info。ASCII 大小写、NFC/NFD 和完整 Unicode 折叠都与 Assets 的碰撞判定一致；报告保留前后原始名字。当前媒体清单只包含真实 payload，验证历史结构、portable 唯一性、当前清单一致性及原有证据预算；省略 payload 的可信边界已明确写入契约。
+
+另一条要求跳过 SemVer 的意见不适用：官方 crates.io API 确认 `ankiforge 0.1.0` 于 2026-02-12 发布且未 yanked，当前 SemVer job `108165391570` 已成功以它比较 0.2.0。保留现有门禁并附证据解决线程。尚未发布的 contract bundle 1.0.0 精确变更清单与嵌入归档已同步更新。
+
+本轮验证：修复前分别复现 FIFO 阻塞、原始字段分隔符被接受和媒体恢复仅报 Added；修复后模板打开 3 项、媒体进程 5 项、项目原子性 16 项及两组媒体公共消费者通过，涵盖 15 组重签历史篡改、预算、原始错误及目标文件保护。完整 Rust quality 通过，包括 139 项默认库、377 项 all-features 库、22 个公共消费者、34 项 schema gates、Clippy、rustdoc/doctest 和精确打包检查；新增 project schema/loader 对照 18 项、identity schema 2 项通过，契约治理与嵌入归档一致性通过。Node 重建后 22/22 通过，Python wheel 重建并在仓库外隔离安装后 60 项通过、1 项 Linux 字节路径专用测试按平台跳过，正反 typing 检查通过。媒体生产改动另经独立只读复核，无新增发现。最终跨平台、SDK 和 benchmark 状态继续以新提交的 hosted CI 为准。

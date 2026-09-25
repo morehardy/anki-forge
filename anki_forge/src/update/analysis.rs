@@ -95,14 +95,31 @@ impl ComparisonReport {
                 _ => {}
             }
         }
-        for key in keys(&before.media, &after.media) {
-            let old = before.media.get(key);
-            let new = after.media.get(key);
-            let path = format!("media[{key:?}]");
+        let old_history = media_history(before);
+        let new_history = media_history(after);
+        let active_names = |envelope: &IdentityEnvelope| {
+            envelope
+                .media
+                .keys()
+                .map(|name| crate::media::assets::filename_identity(name))
+                .collect::<BTreeSet<_>>()
+        };
+        let old_active = active_names(before);
+        let new_active = active_names(after);
+        for key in old_active.union(&new_active) {
+            let old = old_history.get(key);
+            let new = new_history.get(key).filter(|_| new_active.contains(key));
+            let filename = new.or(old).expect("verified active media has history").0;
+            let path = format!("media[{filename:?}]");
+            let evidence = |(filename, content): &(
+                &String,
+                &crate::build::identity::MediaIdentity,
+            )| json!({"filename": filename, "content": content});
             match (old, new) {
-                (Some(old), None) => push(&mut findings, Code::MediaRemoved, Level::Low, path, Some(json!(old)), None, "Media omitted; import does not delete the previous learner copy."),
-                (None, Some(new)) => push(&mut findings, Code::MediaAdded, Level::Info, path, None, Some(json!(new)), "New exported media filename."),
-                (Some(old), Some(new)) if old != new => push(&mut findings, Code::MediaChanged, Level::Medium, path, Some(json!(old)), Some(json!(new)), "An existing export filename now refers to different bytes; review Anki media conflict handling."),
+                (Some(old), None) => push(&mut findings, Code::MediaRemoved, Level::Low, path, Some(evidence(old)), None, "Media omitted; import does not delete the previous learner copy."),
+                (None, Some(new)) => push(&mut findings, Code::MediaAdded, Level::Info, path, None, Some(evidence(new)), "New exported media filename."),
+                (Some(old), Some(new)) if old.1 != new.1 => push(&mut findings, Code::MediaChanged, Level::Medium, path, Some(evidence(old)), Some(evidence(new)), "A previously published portable filename now refers to different bytes, including across omitted releases; review Anki media conflict handling."),
+                (Some(_), Some(new)) if !old_active.contains(key) => push(&mut findings, Code::MediaAdded, Level::Info, path, None, Some(evidence(new)), "Previously omitted media is restored with its last published bytes."),
                 _ => {}
             }
         }
@@ -126,6 +143,22 @@ impl ComparisonReport {
             candidate_counts,
         }
     }
+}
+
+fn media_history(
+    envelope: &IdentityEnvelope,
+) -> BTreeMap<unicase::UniCase<String>, (&String, &crate::build::identity::MediaIdentity)> {
+    envelope
+        .identity
+        .media_history
+        .iter()
+        .map(|(name, content)| {
+            (
+                crate::media::assets::filename_identity(name),
+                (name, content),
+            )
+        })
+        .collect()
 }
 
 fn keys<'a, T, U>(

@@ -144,6 +144,24 @@ test("artifact relative destinations retain cwd from build invocation", async (t
   }
 });
 
+test("raw field delimiters fail atomically through the native AddError", () => {
+  for (const content of [
+    "before\x1fafter",
+    Content.html("<b>before\x1fafter</b>"),
+    Content.sequence(["safe", Content.sequence([Content.text("\x1f")])]),
+  ]) {
+    const project = new Project("field-delimiter");
+    assert.throws(
+      () => project.add("one", Note.basic(content, "answer")),
+      (error) => error instanceof AddError &&
+        error.code === "NOTE.FIELD_CONTENT_INVALID" && error.kind === "InvalidContent",
+    );
+    assert.equal(project.length, 0);
+    project.add("one", Note.basic("valid", "answer"));
+    assert.equal(project.length, 1);
+  }
+});
+
 test("explicit keys and strings as Text; only Project authors publications", async (t) => {
   const p = new Project("parity").add(
     "hello",

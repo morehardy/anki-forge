@@ -6,7 +6,7 @@ migration_notes: Use the root Project/Note/NoteType/Media API, template-bundle-v
 changes:
 - path: errors/error-registry.yaml
   before: blake3:7fca0cb851ca157078b80aa22123f75b22c6296b5e2c82ddcd21e3d212b115f7
-  after: blake3:e59af73edbcd4c2b4a26802b9c37ec4e506c1c1e6f914a053d72ddc1e70a61a4
+  after: blake3:ab8b2c13353e4b58119b8d39b183d5001bdf0eb76c6decfc5e711bf540cb765c
 - path: fixtures/template-bundle/custom-cloze/anki-template.yaml
   before: blake3:e435959fe163fa29a626ff1ed88fe7a3f4c82d72e539875d3aed18a6aa1646cc
   after: blake3:f0ff403979d2f80d77b54d7ba4796d5dbd3458744907450a956ff4aa56858b01
@@ -45,25 +45,25 @@ changes:
   after: blake3:d8a83726afe1eb2a1bb0e313337b7c85de184db502aa112a9a68c05c802199a6
 - path: schema/identity-evidence.schema.json
   before: null
-  after: blake3:00a85d62c0a84d839a2230b7ee635844e80a020ee11e475a6bc0ae43eba68679
+  after: blake3:9d93997d11ce1da959a4b93e554b8d758a855e953f9303a09ba9c71276c9badc
 - path: schema/manifest.schema.json
   before: blake3:223e9ca30b986d8add1de2ba9a56690c55685a633188e4524b9ddc8898864775
   after: blake3:dd6eac50ff97d6ed1abd522dbafc384e801b2de6b79089974b34a7806597cad3
 - path: schema/project-input.schema.json
   before: null
-  after: blake3:fffffdc768f9505a0faf1cd3b4b3f2f964f177cb0a5a43740d0f1620b25779f6
+  after: blake3:599d7427f6eb6f414a4f3dd2967bad7c35d80592ab19ce4d55de7d924ed4c9b7
 - path: schema/template-bundle.schema.json
   before: blake3:5368f496ae2829b48dcfda86ce063e99503f07b2c3596deb57c2b067267f0dfd
   after: blake3:f45c06d88bd28700c971d1d4070a16f71cc90c77ee1a92978b467518e5cc5d56
 - path: semantics/identity-update-safety.md
   before: blake3:0ca24acf240d4dcfa1d5c8a55b03c6fef49b6c88360e48dbcad4fbf25c68b02d
-  after: blake3:d1e4c4809c76cee54d467f98a7754798cc977e379f1a7b1c6a8531593c001f3b
+  after: blake3:d1a743e0b8969478ba701e03605251bde4e8af2d79fd310ba0f2e8066e8161bc
 - path: semantics/note-stable-id.md
   before: blake3:6d784bf7b2c3e5eeb7d127b45e52481b22cf18605155c04a5adb4aad04378e4b
   after: blake3:51d659fc1f8303b430a3af59bc386a7c3bca01636ee3c67d9f5be37ccb299431
 - path: semantics/rust-authoring.md
   before: null
-  after: blake3:c9efe557bb04a651a866318738c0d4b3dd83c2bbb6407e275aca0e5bcfb12ea7
+  after: blake3:ae3a550182900f5de7572b45ba32bc74dfc080fa00e1866a3ba9a06e8a04cce3
 - path: semantics/templates.md
   before: blake3:417e89cd68d789282195a71850d9212e06716917cf098c1f0071942035e88246
   after: blake3:38fcc7a352a3221ead39bc613031b38a06467423a72f63386e92d67fc8ef285c

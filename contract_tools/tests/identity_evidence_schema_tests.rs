@@ -26,6 +26,68 @@ fn package_entries(path: &Path) -> BTreeMap<String, Vec<u8>> {
 }
 
 #[test]
+fn media_history_schema_covers_active_and_omitted_release_descriptors() {
+    let manifest = load_manifest(contract_manifest_path()).unwrap();
+    let schema =
+        load_schema(resolve_asset_path(&manifest, "identity_evidence_schema").unwrap()).unwrap();
+    let mut omitted = Project::new("media-history-schema").unwrap();
+    omitted.add("one", Note::basic("Front", "Back")).unwrap();
+    let mut published = omitted.clone();
+    published
+        .add_asset(
+            ankiforge::Media::bytes(b"content".to_vec(), "application/octet-stream")
+                .unwrap()
+                .with_export_name("Café.bin")
+                .unwrap(),
+        )
+        .unwrap();
+    let first = published.build(BuildOptions::temporary()).unwrap();
+    let next = omitted
+        .build(BuildOptions::temporary().update_from(first.artifact().path()))
+        .unwrap();
+    let first: Value = serde_json::from_slice(
+        &package_entries(first.artifact().path())["ankiforge-identity.json"],
+    )
+    .unwrap();
+    let next: Value =
+        serde_json::from_slice(&package_entries(next.artifact().path())["ankiforge-identity.json"])
+            .unwrap();
+    assert_eq!(first["identity"]["media_history"], first["media"]);
+    assert_eq!(next["identity"]["media_history"], first["media"]);
+    assert_eq!(next["media"], json!({}));
+    for envelope in [first, next] {
+        assert!(schema.is_valid(&envelope));
+        for mutation in [
+            "missing",
+            "empty-filename",
+            "negative-size",
+            "invalid-digest",
+            "unknown-property",
+        ] {
+            let mut invalid = envelope.clone();
+            let history = &mut invalid["identity"]["media_history"];
+            match mutation {
+                "missing" => {
+                    invalid["identity"]
+                        .as_object_mut()
+                        .unwrap()
+                        .remove("media_history");
+                }
+                "empty-filename" => {
+                    let content = history.as_object_mut().unwrap().remove("Café.bin").unwrap();
+                    history[""] = content;
+                }
+                "negative-size" => history["Café.bin"]["size"] = json!(-1),
+                "invalid-digest" => history["Café.bin"]["sha1"] = json!("invalid"),
+                "unknown-property" => history["Café.bin"]["unknown"] = json!(true),
+                _ => unreachable!(),
+            }
+            assert!(!schema.is_valid(&invalid), "{mutation}");
+        }
+    }
+}
+
+#[test]
 fn identity_revision_timestamps_match_schema_and_verified_package_validation() {
     let manifest = load_manifest(contract_manifest_path()).unwrap();
     let schema =

@@ -582,7 +582,11 @@
     "content": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+          "not": {
+            "pattern": "\\u001f"
+          }
         },
         {
           "type": "object",
@@ -591,7 +595,11 @@
               "const": "text"
             },
             "value": {
-              "type": "string"
+              "type": "string",
+              "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+              "not": {
+                "pattern": "\\u001f"
+              }
             }
           },
           "required": [
@@ -607,7 +615,11 @@
               "const": "html"
             },
             "value": {
-              "type": "string"
+              "type": "string",
+              "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+              "not": {
+                "pattern": "\\u001f"
+              }
             }
           },
           "required": [

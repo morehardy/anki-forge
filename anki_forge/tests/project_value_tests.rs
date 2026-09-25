@@ -395,3 +395,140 @@ fn model_name_comparison_preserves_case_unicode_and_internal_spaces() {
     expected.sort();
     assert_eq!(actual, expected);
 }
+
+#[test]
+fn raw_field_delimiters_are_rejected_in_every_authored_content_form() {
+    let image = Media::file(common::fixture("pixel.png")).unwrap();
+    let custom = named_model("custom-delimiter", "Custom delimiter");
+    let cases = [
+        Note::basic("a\u{1f}b", "c"),
+        Note::basic("a", "b\u{1f}c"),
+        Note::basic(Content::html("<b>a\u{1f}b</b>"), "c"),
+        Note::basic(
+            Content::sequence([
+                Content::text("before"),
+                Content::sequence([Content::html("<i>valid</i>"), Content::text("a\u{1f}b")]),
+            ]),
+            "back",
+        ),
+        Note::basic(
+            Content::sequence([
+                image.image(),
+                Content::sequence([Content::text("valid"), Content::html("a\u{1f}b")]),
+            ]),
+            "back",
+        ),
+        Note::cloze("{{c1::answer\u{1f}extra}}"),
+        Note::cloze("{{c1::answer::hint\u{1f}extra}}"),
+        Note::cloze(Content::html("<b>{{c1::answer::hint\u{1f}extra}}</b>")),
+        Note::cloze("{{c1::answer}}").field("back_extra", "a\u{1f}b"),
+        custom.note().field("question", "a\u{1f}b"),
+        Note::image_occlusion(image)
+            .mask(Mask::rect("pixel", 0, 0, 1, 1))
+            .build()
+            .unwrap()
+            .field("header", Content::html("a\u{1f}b")),
+    ];
+    for (index, note) in cases.into_iter().enumerate() {
+        let mut project = Project::new("field-delimiter").unwrap();
+        let original = note.clone();
+        let error = project
+            .add("one", note.clone())
+            .expect_err("raw field separator must not enter the project");
+        assert_eq!(error.code(), "NOTE.FIELD_CONTENT_INVALID", "case {index}");
+        assert_eq!(error.kind(), ankiforge::note::AddErrorKind::InvalidContent);
+        assert!(error.to_string().contains("U+001F"));
+        assert_eq!(
+            note, original,
+            "validation must not rewrite the authored value"
+        );
+        assert!(project.is_empty());
+        project
+            .add("one", Note::basic("repaired", "answer"))
+            .unwrap();
+        let output = project.build(BuildOptions::temporary()).unwrap();
+        assert_eq!(output.report().counts().notes, 1);
+        assert_eq!(output.report().counts().media, 0);
+        assert_eq!(
+            common::fields(output.artifact().path()),
+            ["repaired\u{1f}answer"]
+        );
+    }
+}
+
+#[test]
+fn invalid_field_content_does_not_reserve_keys_models_or_media() {
+    let mut project = Project::new("atomic-field-content").unwrap();
+    project
+        .add("existing", Note::basic("unchanged", "answer"))
+        .unwrap();
+    let before = project.build(BuildOptions::temporary()).unwrap();
+    let image = Media::file(common::fixture("pixel.png")).unwrap();
+    let model = named_model("custom", "Rejected model");
+    let note = model.note().field(
+        "question",
+        Content::sequence([image.image(), Content::text("bad\u{1f}field")]),
+    );
+    let error = project.add("retry", note).unwrap_err();
+    assert_eq!(error.code(), "NOTE.FIELD_CONTENT_INVALID");
+    assert_eq!(project.len(), 1);
+    let after = project
+        .build(BuildOptions::temporary().update_from(before.artifact().path()))
+        .unwrap();
+    assert_eq!(
+        common::entries(after.artifact().path()),
+        common::entries(before.artifact().path())
+    );
+    let replacement = named_model("custom", "Accepted model");
+    project
+        .add("retry", replacement.note().field("question", "accepted"))
+        .unwrap();
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    assert_eq!(output.report().counts().notes, 2);
+    assert_eq!(output.report().counts().media, 0);
+}
+
+#[test]
+fn valid_control_characters_and_html_entities_keep_exact_field_boundaries() {
+    let controls = "line\nnext\tcolumn\rreturn\u{1e}record\u{7f}end";
+    let mut project = Project::new("valid-field-controls").unwrap();
+    project.add("text", Note::basic(controls, "back")).unwrap();
+    project
+        .add(
+            "html",
+            Note::basic(
+                Content::html(format!("<p>{controls} &#31; &#x1f;</p>")),
+                "back",
+            ),
+        )
+        .unwrap();
+    project
+        .add(
+            "sequence",
+            Note::basic(
+                Content::sequence([
+                    Content::text("before\n"),
+                    Content::html("<b>middle\t</b>"),
+                    Content::text("after\r"),
+                ]),
+                "back",
+            ),
+        )
+        .unwrap();
+    project
+        .add(
+            "cloze",
+            Note::cloze(format!("{{{{c1::{controls}::hint\ttext}}}}")),
+        )
+        .unwrap();
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    let fields = common::fields(output.artifact().path());
+    assert_eq!(fields.len(), 4);
+    assert!(fields
+        .iter()
+        .all(|value| value.split('\u{1f}').count() == 2));
+    assert!(fields.contains(&format!("{controls}\u{1f}back")));
+    assert!(fields.contains(&format!("<p>{controls} &#31; &#x1f;</p>\u{1f}back")));
+    assert!(fields.contains(&"before\n<b>middle\t</b>after\r\u{1f}back".to_string()));
+    assert!(fields.contains(&format!("{{{{c1::{controls}::hint\ttext}}}}\u{1f}")));
+}

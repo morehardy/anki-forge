@@ -4,6 +4,8 @@ use ankiforge::update::{CompareError, CompareOptions, ComparisonReport, PolicyEr
 use std::{error::Error, fs};
 
 fn main() -> Result<(), Box<dyn Error>> {
+    media_history_survives_omitted_releases()?;
+    media_names_share_asset_collision_identity()?;
     fn error<T: Error + Send + Sync + 'static>() {}
     error::<CompareError>(); error::<PolicyError>();
     let mut baseline = Project::new("policy")?;
@@ -60,5 +62,95 @@ fn main() -> Result<(), Box<dyn Error>> {
     assert_eq!(error.code(), "BUILD.INSPECT_FAILED");
     let wrapped = anyhow::Error::new(error).context("compare lesson");
     assert!(wrapped.downcast_ref::<CompareError>().is_some());
+    Ok(())
+}
+
+fn media_project(filename: Option<&str>, bytes: &[u8]) -> Result<Project, Box<dyn Error>> {
+    let mut project = Project::new("media-release-history")?;
+    project.add("one", Note::basic("question", "answer"))?;
+    if let Some(filename) = filename {
+        project.add_asset(ankiforge::Media::bytes(bytes.to_vec(), "application/octet-stream")?
+            .with_export_name(filename)?)?;
+    }
+    Ok(project)
+}
+
+fn media_history_survives_omitted_releases() -> Result<(), Box<dyn Error>> {
+    let first = media_project(Some("picture.bin"), b"original")?
+        .build(BuildOptions::temporary())?;
+    let omitted = media_project(None, b"")?.build(BuildOptions::temporary()
+        .update_from(first.artifact().path()))?;
+    assert_eq!(omitted.report().counts().media, 0);
+    let changed = media_project(Some("picture.bin"), b"replacement")?;
+    let policy = UpdatePolicy::default().fail_on(RiskLevel::Medium);
+    let report = changed.compare(CompareOptions::against(omitted.artifact().path())
+        .update_policy(policy.clone()))?;
+    assert!(report.findings().iter().any(|finding| finding.code() == RiskCode::MediaChanged),
+        "omitting media must not erase the risk of replacing a learner's retained bytes: {report:?}");
+    assert!(!report.findings().iter().any(|finding| finding.code() == RiskCode::MediaAdded));
+    fs::write("media-protected.apkg", b"existing destination")?;
+    let error = changed.build(BuildOptions::to("media-protected.apkg")
+        .update_from(omitted.artifact().path()).update_policy(policy)).unwrap_err();
+    assert_eq!(error.code(), "UPDATE.POLICY_BLOCKED");
+    assert!(error.publications().is_empty());
+    assert_eq!(fs::read("media-protected.apkg")?, b"existing destination");
+    let restored = media_project(Some("picture.bin"), b"original")?
+        .compare(CompareOptions::against(omitted.artifact().path()))?;
+    assert_eq!(restored.findings().iter().map(|f| f.code()).collect::<Vec<_>>(), [RiskCode::MediaAdded]);
+    let accepted = changed.build(BuildOptions::temporary()
+        .update_from(omitted.artifact().path())
+        .update_policy(UpdatePolicy::default().fail_on(RiskLevel::Medium).allow(RiskCode::MediaChanged)))?;
+    assert_eq!(accepted.report().comparison().unwrap().highest_risk(), Some(RiskLevel::Medium));
+    assert_eq!(accepted.report().comparison().unwrap().policy().allowed_codes(), [RiskCode::MediaChanged]);
+    let repeat = changed.build(BuildOptions::temporary().update_from(accepted.artifact().path()))?;
+    assert!(repeat.report().comparison().unwrap().findings().is_empty(), "equal successive releases stay unchanged");
+    // The last published descriptor advances to B, so restoring old A after
+    // two omitted releases must still be a change, not an informational add.
+    let omitted_again = media_project(None, b"")?.build(BuildOptions::temporary()
+        .update_from(repeat.artifact().path()))?;
+    let omitted_twice = media_project(None, b"")?.build(BuildOptions::temporary()
+        .update_from(omitted_again.artifact().path()))?;
+    assert!(omitted_twice.report().comparison().unwrap().findings().is_empty());
+    let original = media_project(Some("picture.bin"), b"original")?
+        .compare(CompareOptions::against(omitted_twice.artifact().path()))?;
+    assert_eq!(original.findings().iter().map(|f| f.code()).collect::<Vec<_>>(), [RiskCode::MediaChanged]);
+    let fresh = media_project(Some("another.bin"), b"replacement")?
+        .compare(CompareOptions::against(omitted_twice.artifact().path()))?;
+    assert_eq!(fresh.findings().iter().map(|f| f.code()).collect::<Vec<_>>(), [RiskCode::MediaAdded]);
+    Ok(())
+}
+
+fn media_names_share_asset_collision_identity() -> Result<(), Box<dyn Error>> {
+    for (before, after) in [("Logo.bin", "logo.bin"), ("café.bin", "cafe\u{301}.bin"), ("Straße.bin", "STRASSE.bin")] {
+        let original = media_project(Some(before), b"old-content")?;
+        let baseline = original.build(BuildOptions::temporary())?;
+        let equal = media_project(Some(after), b"old-content")?;
+        let equal_output = equal.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        assert!(equal_output.report().comparison().unwrap().findings().is_empty(), "spelling alone is not a byte change: {before} -> {after}");
+        assert!(equal.compare(CompareOptions::against(equal_output.artifact().path()))?.findings().is_empty());
+        let changed = media_project(Some(after), b"new-content")?;
+        let strict = UpdatePolicy::default().fail_on(RiskLevel::Medium);
+        let report = changed.compare(CompareOptions::against(baseline.artifact().path()).update_policy(strict.clone()))?;
+        assert_eq!(report.findings().iter().map(|f| f.code()).collect::<Vec<_>>(), [RiskCode::MediaChanged], "{before} -> {after}");
+        assert!(!report.policy().allows_publication());
+        let facts = &report.findings()[0].evidence()[0];
+        assert_eq!(facts.before.as_ref().unwrap()["filename"], before);
+        assert_eq!(facts.after.as_ref().unwrap()["filename"], after);
+        assert_eq!(facts.before.as_ref().unwrap()["content"]["size"], 11);
+        assert_ne!(facts.before.as_ref().unwrap()["content"]["sha1"], facts.after.as_ref().unwrap()["content"]["sha1"]);
+        fs::write("alias-protected.apkg", b"existing destination")?;
+        let error = changed.build(BuildOptions::to("alias-protected.apkg")
+            .update_from(baseline.artifact().path()).update_policy(strict)).unwrap_err();
+        assert_eq!(error.kind(), BuildErrorKind::PolicyBlocked);
+        assert!(error.publications().is_empty());
+        assert_eq!(fs::read("alias-protected.apkg")?, b"existing destination");
+        let omitted = media_project(None, b"")?.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        let recovered = changed.compare(CompareOptions::against(omitted.artifact().path()))?;
+        assert_eq!(recovered.findings().iter().map(|f| f.code()).collect::<Vec<_>>(), [RiskCode::MediaChanged]);
+        let mut collision = original.clone();
+        let error = collision.add_asset(ankiforge::Media::bytes(b"old-content".to_vec(), "application/octet-stream")?
+            .with_export_name(after)?).unwrap_err();
+        assert_eq!(error.code(), "MEDIA.EXPORT_NAME_COLLISION", "same identity governs authoring and updates");
+    }
     Ok(())
 }

@@ -17,23 +17,7 @@
     "media": {
       "type": "object",
       "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 18446744073709551615
-          },
-          "sha1": {
-            "type": "string",
-            "pattern": "^[0-9a-f]{40}$"
-          }
-        },
-        "required": [
-          "size",
-          "sha1"
-        ],
-        "additionalProperties": false
+        "$ref": "#/definitions/mediaContent"
       }
     },
     "identity": {
@@ -248,12 +232,24 @@
             ],
             "additionalProperties": false
           }
+        },
+        "media_history": {
+          "description": "Last published content per portable filename identity, keyed by its last original filename spelling and retained when omitted from the current media map.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "$ref": "#/definitions/mediaContent"
+          }
         }
       },
       "required": [
         "namespace",
         "models",
-        "notes"
+        "notes",
+        "media_history"
       ],
       "additionalProperties": false
     }
@@ -265,5 +261,26 @@
     "media",
     "identity"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "definitions": {
+    "mediaContent": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "sha1": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      },
+      "required": [
+        "size",
+        "sha1"
+      ],
+      "additionalProperties": false
+    }
+  }
 }

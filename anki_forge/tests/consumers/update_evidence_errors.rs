@@ -83,6 +83,7 @@ fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error
     Ok(())
 }
 fn main() -> Result<(), Box<dyn Error>> {
+    media_history_is_complete_and_validated()?;
     numeric_ids_are_bound_to_namespace_and_stable_keys()?;
     note_guids_are_bound_to_namespace_and_stable_key()?;
     retired_card_history_is_validated()?;
@@ -249,6 +250,67 @@ fn main() -> Result<(), Box<dyn Error>> {
     assert_eq!(candidate_error.limit_exceeded().unwrap().resource, "identity_bytes");
     assert_eq!(candidate_error.report().counts().notes, 1);
     let _output = project.build(BuildOptions::temporary().update_from("baseline.apkg").inspect_limits(InspectLimits::default()))?;
+    Ok(())
+}
+
+fn media_history_is_complete_and_validated() -> Result<(), Box<dyn Error>> {
+    let mut project = Project::new("media-history-proof")?;
+    project.add("one", Note::basic("question", "answer"))?;
+    let mut published = project.clone();
+    published.add_asset(ankiforge::Media::bytes(b"original".to_vec(), "application/octet-stream")?
+        .with_export_name("Café.bin")?)?;
+    let active = published.build(BuildOptions::temporary())?;
+    let retired = project.build(BuildOptions::temporary().update_from(active.artifact().path()))?;
+    for (index, baseline) in [active.artifact().path(), retired.artifact().path()].into_iter().enumerate() {
+        for mutation in ["missing-field", "digest", "duplicate-case", "duplicate-nfc", "unsafe-name", "negative-size", "missing-active", "changed-active", "renamed-active"] {
+            if index == 1 && matches!(mutation, "missing-active" | "changed-active" | "renamed-active") { continue; }
+            let output = format!("media-history-{index}-{mutation}.apkg");
+            copy_with(baseline, &output, |name, data| {
+                if name != "ankiforge-identity.json" { return Some(data); }
+                let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
+                let history = &mut value["identity"]["media_history"];
+                match mutation {
+                    "missing-field" => { value["identity"].as_object_mut().unwrap().remove("media_history"); }
+                    "digest" => history["Café.bin"]["sha1"] = "not-a-digest".into(),
+                    "duplicate-case" => { let old = history["Café.bin"].clone(); history["CAFÉ.BIN"] = old; }
+                    "duplicate-nfc" => { let old = history["Café.bin"].clone(); history["Cafe\u{301}.bin"] = old; }
+                    "unsafe-name" => { let old = history.as_object_mut().unwrap().remove("Café.bin").unwrap(); history["../outside.bin"] = old; }
+                    "negative-size" => history["Café.bin"]["size"] = (-1).into(),
+                    "missing-active" => { history.as_object_mut().unwrap().clear(); }
+                    "changed-active" => history["Café.bin"]["sha1"] = "0".repeat(40).into(),
+                    "renamed-active" => { let old = history.as_object_mut().unwrap().remove("Café.bin").unwrap(); history["CAFÉ.BIN"] = old; }
+                    _ => unreachable!(),
+                }
+                // A fresh checksum must not turn malformed or inconsistent
+                // history into valid evidence for the current or retired file.
+                value["identity"].sort_all_objects();
+                value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+                Some(serde_json::to_vec(&value).unwrap())
+            });
+            let error = failure(&project, &output, "UPDATE.EVIDENCE_INVALID");
+            assert_eq!(error.kind(), BuildErrorKind::Validation);
+            assert!(error.source().is_some());
+            assert!(error.report().baseline_counts().is_none());
+            assert_eq!(project.compare(ankiforge::update::CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+        }
+    }
+    // Historical bytes are charged to the existing bounded identity reader
+    // even when the current media manifest and payload set are empty.
+    let envelope_bytes = {
+        let mut archive = zip::ZipArchive::new(fs::File::open(retired.artifact().path())?)?;
+        let size = archive.by_name("ankiforge-identity.json")?.size(); size
+    };
+    let mut limits = InspectLimits::default(); limits.max_identity_bytes = envelope_bytes - 1;
+    fs::write("protected.apkg", "keep previous destination")?;
+    let error = project.build(BuildOptions::to("protected.apkg")
+        .update_from(retired.artifact().path()).inspect_limits(limits)).unwrap_err();
+    assert_eq!(error.kind(), BuildErrorKind::ResourceLimit);
+    assert_eq!(error.limit_exceeded().unwrap().resource, "identity_bytes");
+    assert!(error.publications().is_empty());
+    assert_eq!(fs::read_to_string("protected.apkg")?, "keep previous destination");
+    let valid = project.build(BuildOptions::temporary().update_from(retired.artifact().path()))?;
+    assert_eq!(valid.report().counts().media, 0);
+    assert!(valid.report().comparison().unwrap().findings().is_empty());
     Ok(())
 }
 

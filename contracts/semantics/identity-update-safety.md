@@ -89,3 +89,32 @@ are Low; model rendering changes and replacement media bytes are Medium. Exact
 before/after evidence accompanies each finding. Restored entities compare with
 retained history, so omitting then restoring an entity cannot bypass structural
 risk checks. Equal total card counts do not hide card replacement.
+
+Media comparisons use the same portable filename identity as asset collection:
+NFC normalization followed by full Unicode case folding. A change from `Logo.png`
+to `logo.png`, or between canonically equivalent Unicode spellings, addresses the
+same media identity. Different bytes produce `RISK.MEDIA_CHANGED` (Medium), not a
+new-file finding; equal bytes do not produce a change solely for the spelling.
+Evidence retains both original filenames so the report does not hide that rename.
+
+The identity payload's required `media_history` map retains the last published
+filename and content descriptor (size and SHA-1) for every portable filename
+identity, including omitted files. The separate envelope `media` map describes
+only the current archive payloads and remains verified against their actual bytes.
+Every current entry must match its history descriptor and original filename.
+Both current and historical maps must have unique portable filename identities;
+history keys preserve the last original spelling and must be valid portable
+filenames. All historical descriptors must have valid sizes and digests. The
+history is covered by the identity checksum and its decoded bytes count against
+the existing identity evidence inspection budget.
+
+For example, publishing bytes A, omitting the file, then publishing bytes B at
+the same portable name reports `RISK.MEDIA_CHANGED`. Reintroducing A after the
+omitted release reports an informational restoration. Publishing B advances the
+last published descriptor to B, so the next identical B release has no media
+finding. This is a comparison against the selected verified baseline, not against
+every release a learner may have imported. The history does not retain every old
+byte revision or prove that the learner accepted a previous replacement. As with
+retired notes and models, omitted media payloads cannot be independently checked
+against the current collection; the checksum is an integrity check, not an
+authenticated release chain. Publishers must retain a trustworthy baseline.

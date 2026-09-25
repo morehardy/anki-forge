@@ -1,5 +1,4 @@
 use std::{
-    fs::File,
     io::Read,
     path::{Component, Path, PathBuf},
 };
@@ -246,16 +245,19 @@ fn read_text(path: &Path, limit: u64) -> Result<String, Error> {
             path,
         ));
     }
-    let file = File::open(path).map_err(&io_error)?;
-    let metadata = file.metadata().map_err(&io_error)?;
-    if !metadata.is_file() {
-        return Err(Error::new(
-            Kind::InvalidFile,
+    read_text_after_preflight(path, limit)
+}
+
+fn read_text_after_preflight(path: &Path, limit: u64) -> Result<String, Error> {
+    let io_error = |cause| {
+        Error::new(
+            Kind::Io,
             "TEMPLATE.BUNDLE_FILE_INVALID",
-            "opened bundle text is not a regular file",
+            "read bundle text",
             path,
-        ));
-    }
+        )
+        .caused_by(cause)
+    };
     let exceeded = |observed| {
         Error::new(
             Kind::ResourceLimit,
@@ -265,9 +267,16 @@ fn read_text(path: &Path, limit: u64) -> Result<String, Error> {
         )
         .caused_by(TemplateBundleLimitExceeded { limit, observed })
     };
-    if metadata.len() > limit {
-        return Err(exceeded(metadata.len()));
-    }
+    let file = crate::regular_file::open(path, limit).map_err(|error| match error {
+        crate::regular_file::OpenError::Io(cause) => io_error(cause),
+        crate::regular_file::OpenError::NotRegular => Error::new(
+            Kind::InvalidFile,
+            "TEMPLATE.BUNDLE_FILE_INVALID",
+            "opened bundle text is not a regular file",
+            path,
+        ),
+        crate::regular_file::OpenError::LimitExceeded { observed, .. } => exceeded(observed),
+    })?;
     let mut bytes = Vec::new();
     file.take(limit + 1)
         .read_to_end(&mut bytes)
@@ -284,4 +293,118 @@ fn read_text(path: &Path, limit: u64) -> Result<String, Error> {
         )
         .caused_by(cause)
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[cfg(unix)]
+    #[test]
+    fn replaced_bundle_text_fifo_does_not_block() {
+        use std::{
+            process::{Command, Stdio},
+            time::{Duration, Instant},
+        };
+        const CHILD: &str = "ANKIFORGE_BUNDLE_FIFO_REPLACEMENT_TEST";
+        if let Some(root) = std::env::var_os(CHILD) {
+            let path = PathBuf::from(root).join("front.html");
+            std::fs::write(&path, b"regular template before open").unwrap();
+            assert!(path.metadata().unwrap().is_file());
+            // Replace precisely between read_text's preflight and descriptor
+            // open. No writer can release an accidentally blocking FIFO open.
+            std::fs::remove_file(&path).unwrap();
+            assert!(Command::new("mkfifo")
+                .arg(&path)
+                .status()
+                .unwrap()
+                .success());
+            let error = read_text_after_preflight(&path, TEXT_LIMIT).unwrap_err();
+            assert_eq!(error.kind(), Kind::InvalidFile);
+            assert_eq!(error.code(), "TEMPLATE.BUNDLE_FILE_INVALID");
+            assert_eq!(error.path(), Some(path.as_path()));
+            return;
+        }
+        let root = tempfile::tempdir().unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                "schema::bundle::tests::replaced_bundle_text_fifo_does_not_block",
+                "--nocapture",
+            ])
+            .env(CHILD, root.path())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let started = Instant::now();
+        while child.try_wait().unwrap().is_none() {
+            if started.elapsed() > Duration::from_secs(5) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("opening replacement bundle FIFO blocked without a writer");
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        let output = child.wait_with_output().unwrap();
+        assert!(String::from_utf8_lossy(&output.stdout).contains("running 1 test"));
+        assert!(
+            output.status.success(),
+            "{}\n{}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
+    fn opened_text_preserves_budgets_utf8_and_original_io_errors() {
+        use std::error::Error as _;
+        let root = tempfile::tempdir().unwrap();
+        let path = root.path().join("front.html");
+        std::fs::write(&path, b"12345").unwrap();
+        assert_eq!(read_text(&path, 5).unwrap(), "12345");
+        let error = read_text_after_preflight(&path, 4).unwrap_err();
+        assert_eq!(error.kind(), Kind::ResourceLimit);
+        let limit = error
+            .source()
+            .unwrap()
+            .downcast_ref::<TemplateBundleLimitExceeded>()
+            .unwrap();
+        assert_eq!((limit.limit, limit.observed), (4, 5));
+        let error = read_text_after_preflight(&root.path().join("missing"), 5).unwrap_err();
+        assert_eq!(error.kind(), Kind::Io);
+        let cause = error
+            .source()
+            .unwrap()
+            .downcast_ref::<std::io::Error>()
+            .unwrap();
+        assert_eq!(cause.kind(), std::io::ErrorKind::NotFound);
+        assert!(cause.raw_os_error().is_some());
+        std::fs::write(&path, [0xff]).unwrap();
+        assert_eq!(read_text(&path, 5).unwrap_err().kind(), Kind::InvalidFile);
+        assert_eq!(
+            read_text(root.path(), 5).unwrap_err().kind(),
+            Kind::InvalidFile
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn contained_text_symlinks_remain_valid_and_escaping_links_are_rejected() {
+        let root = tempfile::tempdir().unwrap();
+        let canonical = root.path().canonicalize().unwrap();
+        let file = root.path().join("front.html");
+        std::fs::write(&file, "{{front}}").unwrap();
+        std::os::unix::fs::symlink(&file, root.path().join("alias.html")).unwrap();
+        assert_eq!(
+            read_text(&resolve(&canonical, "alias.html").unwrap(), TEXT_LIMIT).unwrap(),
+            "{{front}}"
+        );
+        let outside = tempfile::NamedTempFile::new().unwrap();
+        std::os::unix::fs::symlink(outside.path(), root.path().join("escape.html")).unwrap();
+        assert_eq!(
+            resolve(&canonical, "escape.html").unwrap_err().kind(),
+            Kind::UnsafePath
+        );
+    }
 }

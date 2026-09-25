@@ -29,6 +29,12 @@ output; Cloze delimiters retain their deletion semantics. Explicit Html is emitt
 as author markup. Image and Sound content retain owned Media values. Sequence
 retains child nodes. Rendering and dependency collection happen within the one
 native pipeline; adapters do not render and rewrap content as raw HTML.
+Adding a note rejects the raw U+001F Anki field separator in any Text or Html
+node, including nested sequences and Cloze/IO fields, with InvalidContent and
+NOTE.FIELD_CONTENT_INVALID before changing the Project. Content construction
+remains infallible. Other text controls, HTML character references and literal
+backslash escapes are not silently rewritten or rejected by this field-boundary
+check.
 
 Media imports own immutable snapshots. File import streams bytes and calculates a
 digest; data beyond the internal 1 MiB memory threshold is kept in owned temporary

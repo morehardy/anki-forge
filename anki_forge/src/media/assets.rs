@@ -9,6 +9,11 @@ use super::Media;
 #[derive(Debug, Clone, Default)]
 pub(crate) struct Assets(BTreeMap<UniCase<String>, Media>);
 
+/// The same portable filename identity governs collection and update history.
+pub(crate) fn filename_identity(name: &str) -> UniCase<String> {
+    UniCase::unicode(name.nfc().collect::<String>())
+}
+
 #[derive(Debug)]
 pub(crate) struct AssetConflict {
     pub(crate) code: &'static str,
@@ -18,14 +23,14 @@ pub(crate) struct AssetConflict {
 impl Assets {
     pub(crate) fn add(&mut self, media: Media) -> Result<(), AssetConflict> {
         if self.check(&media)? {
-            let key = UniCase::unicode(media.filename().nfc().collect::<String>());
+            let key = filename_identity(media.filename());
             self.0.insert(key, media);
         }
         Ok(())
     }
 
     pub(crate) fn check(&self, media: &Media) -> Result<bool, AssetConflict> {
-        let key = UniCase::unicode(media.filename().nfc().collect::<String>());
+        let key = filename_identity(media.filename());
         if let Some(existing) = self.0.get(&key) {
             if existing.filename() != media.filename() {
                 return Err(AssetConflict {

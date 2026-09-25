@@ -809,6 +809,9 @@ codes:
   - id: NOTE.FIELD_REQUIRED
     status: active
     summary: note has empty or missing content in a required field
+  - id: NOTE.FIELD_CONTENT_INVALID
+    status: active
+    summary: authored note field contains the reserved raw U+001F Anki field separator
   - id: NOTE.DECK_INVALID
     status: active
     summary: deck name has an empty component, surrounding whitespace, leading/trailing colons or control characters

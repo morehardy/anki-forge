@@ -210,6 +210,21 @@ def test_explicit_schema_and_note_keys_reject_invalid_values(key):
         project.add(key, Note.basic('q', 'a'))
     assert len(project) == 0
 
+@pytest.mark.parametrize('content', [
+    'before\x1fafter',
+    Content.html('<b>before\x1fafter</b>'),
+    Content.sequence(['safe', Content.sequence([Content.text('\x1f')])]),
+])
+def test_raw_field_delimiters_fail_atomically_through_native_add_error(content):
+    project = Project('field-delimiter')
+    with pytest.raises(AddError) as error:
+        project.add('one', Note.basic(content, 'answer'))
+    assert error.value.code == 'NOTE.FIELD_CONTENT_INVALID'
+    assert error.value.kind == 'InvalidContent'
+    assert len(project) == 0
+    project.add('one', Note.basic('valid', 'answer'))
+    assert len(project) == 1
+
 def test_invalid_namespace_and_duplicate_note_key_are_structured():
     with pytest.raises(SchemaError) as error:
         Project('')

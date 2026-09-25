@@ -63,6 +63,7 @@ impl Project {
     /// Adds a note under an explicit stable key. Any error leaves all project
     /// state unchanged. Reusing a model key requires an identical definition;
     /// distinct models must have distinct display names after trimming whitespace.
+    /// Field content must not contain the raw U+001F Anki field separator.
     pub fn add(&mut self, key: impl Into<String>, note: Note) -> Result<(), AddError> {
         let key = key.into();
         if key.trim().is_empty() || key.trim() != key || key.chars().any(char::is_control) {
@@ -129,7 +130,7 @@ impl Project {
                 ),
             ));
         }
-        for field in note.fields.keys() {
+        for (field, content) in &note.fields {
             if !note
                 .model
                 .fields()
@@ -143,6 +144,13 @@ impl Project {
                         "field key {field:?} is absent from model {:?}",
                         note.model.key()
                     ),
+                ));
+            }
+            if content.contains_field_separator() {
+                return Err(AddError::new(
+                    Kind::InvalidContent,
+                    "NOTE.FIELD_CONTENT_INVALID",
+                    format!("field {field:?} contains U+001F, which Anki reserves as its field separator"),
                 ));
             }
         }

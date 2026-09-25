@@ -11,6 +11,8 @@ pub enum AddErrorKind {
     UnknownField,
     /// A required field has no nonempty content.
     RequiredField,
+    /// A field contains the reserved U+001F Anki field separator.
+    InvalidContent,
     /// The model's stable key has a different definition, or its name is already in use.
     ModelConflict,
     /// Media names or their bound contents conflict.

@@ -241,33 +241,13 @@ impl std::fmt::Debug for Snapshot {
 }
 
 fn open_source(path: &Path, limits: MediaLimits) -> Result<File, MediaError> {
-    #[cfg(unix)]
-    let source = rustix::fs::open(
-        path,
-        rustix::fs::OFlags::RDONLY | rustix::fs::OFlags::NONBLOCK | rustix::fs::OFlags::CLOEXEC,
-        rustix::fs::Mode::empty(),
-    )
-    .map(File::from)
-    .map_err(|error| MediaError::io("open media source", error.into()))?;
-    #[cfg(not(unix))]
-    let source = File::open(path).map_err(|e| MediaError::io("open media source", e))?;
-    let metadata = source
-        .metadata()
-        .map_err(|e| MediaError::io("inspect opened media source", e))?;
-    if !metadata.is_file() {
-        return Err(not_regular());
-    }
-    check_limit(metadata.len(), limits)?;
-    #[cfg(unix)]
-    {
-        // Only a verified regular descriptor can reach normal blocking reads.
-        // Keep every other status flag; neither operation reopens the pathname.
-        let flags = rustix::fs::fcntl_getfl(&source)
-            .map_err(|error| MediaError::io("inspect media source flags", error.into()))?;
-        rustix::fs::fcntl_setfl(&source, flags & !rustix::fs::OFlags::NONBLOCK)
-            .map_err(|error| MediaError::io("restore media source reads", error.into()))?;
-    }
-    Ok(source)
+    crate::regular_file::open(path, limits.max_bytes).map_err(|error| match error {
+        crate::regular_file::OpenError::Io(cause) => MediaError::io("open media source", cause),
+        crate::regular_file::OpenError::NotRegular => not_regular(),
+        crate::regular_file::OpenError::LimitExceeded { limit, observed } => {
+            MediaError::exceeded(limit, observed)
+        }
+    })
 }
 
 fn check_limit(observed: u64, limits: MediaLimits) -> Result<(), MediaError> {
