@@ -710,3 +710,5 @@ npm --prefix website run check:examples
 - Unix 媒体源在路径预检查后以 `NONBLOCK | CLOEXEC` 打开，先核对实际描述符的普通文件类型和大小，再恢复正常阻塞读取，全程不重新打开路径。这样目录中的普通文件即使在检查后被替换为无写入者的 FIFO，也会被拒绝而非无限等待。使用已经锁定的 rustix 1.1.4 安全 API，不引入 unsafe；其他平台保持原打开方式。既有字节预算、原始 I/O 原因、合法符号链接、媒体快照和发布行为不变。
 
 本轮验证：FIFO 子进程回归在旧打开方式下确定性超时，修复后连同正常读取、预算、原始 I/O、fork 所有权的 5 项快照单测通过。Rust quality 所需检查全部通过，包括 136 项默认库、374 项 all-features 库、22 个公共消费者、6 项媒体生命周期、工作区集成测试、34 项 schema gates、Clippy、rustdoc/doctest、精确发布内容及嵌入契约一致性；提交前的 payload 检查使用脚本提供的未提交源码选项，其余剩余检查顺序续跑完成。契约治理通过；cargo-deny 0.20.2 使用现有 RustSec 数据库完成 advisories、bans、licenses、sources 检查。新增直接依赖只引用锁文件已有 rustix 版本。最终跨平台与 SDK 验证仍以本次提交 CI 为准。
+
+随后 benchmark CI 的 `--locked` 检查发现独立 adapter 锁文件也需同步该直接依赖。补齐 `benchmarks/adapters/rust/Cargo.lock` 的 rustix 引用，未改变任何依赖版本；另一个独立 roundtrip oracle 不依赖 ankiforge，不受此次依赖关系变更影响。按 CI 流程重新执行 prepare（保留 `--locked`）、46 项单测及真实 Rust/genanki smoke，两个 200 notes / 200 cards 产物均通过物理和语义检查，执行前后身份一致。提交后的精确 crate payload 检查也再次通过。
