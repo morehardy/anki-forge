@@ -8,7 +8,7 @@ are separate facts; this page does not announce a release.
 
 | Interface | Source version | Intended environment | Evidence |
 | --- | --- | --- | --- |
-| Rust | 0.1.0 | Rust 1.92+ | [Release audit](rust-crate-release-readiness.md) and current packaged-consumer gates |
+| Rust | 0.2.0 | Rust 1.92+ | [Release audit](rust-crate-release-readiness.md) and current packaged-consumer gates |
 | Node / TypeScript | 0.2.0 | Node 22.13+; macOS arm64/x64, Linux x64 GNU, Windows x64 | [Node coverage](../bindings/node/COVERAGE.md) |
 | Python | 0.2.0 | Ordinary CPython 3.11/3.12; macOS arm64/x64, Linux x64, Windows x64 | [Python coverage](../bindings/python/COVERAGE.md) |
 
