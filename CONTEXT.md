@@ -40,6 +40,10 @@ _Avoid_: Crate version, release version
 The production-quality `ankiforge` 0.1.0 release on crates.io. It satisfies release and runtime quality gates while retaining pre-1.0 freedom to revise the public API through minor-version changes.
 _Avoid_: Stable 1.0, beta-quality package
 
+**Clean-Slate Release**:
+The `ankiforge` 0.2.0 release replaces the public authoring API without compatibility adapters. The minor-version bump records the intentional break from the published 0.1.0 API.
+_Avoid_: Compatible patch, republished 0.1.0
+
 **Tier 1 Platform**:
 A platform on which every Rust Distribution release must compile and pass its required test suite: Linux x86_64, Windows x86_64, macOS x86_64, and macOS ARM64.
 _Avoid_: Best-effort target, untested target
@@ -49,7 +53,7 @@ A Rust target outside the Tier 1 set that may work but carries no release-blocki
 _Avoid_: Supported platform
 
 **Supported Rust Baseline**:
-Rust 1.92.0 is the minimum compiler version promised for the 0.1.x release line. Releases are also verified against the current stable compiler, and any baseline increase is announced through a versioned release.
+Rust 1.92.0 is the minimum compiler version promised for the 0.2.x release line. Releases are also verified against the current stable compiler, and any baseline increase is announced through a versioned release.
 _Avoid_: stable, latest Rust
 
 **Authoritative Release Event**:

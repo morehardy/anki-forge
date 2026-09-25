@@ -1,31 +1,38 @@
 import path from "node:path";
+import { accessSync, constants } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { root, targets } from "./platforms.mjs";
 const platform = targets.find(
   (p) => p.os === process.platform && p.cpu === process.arch,
 );
 if (!platform) throw new Error("Unsupported test platform");
-const build = spawnSync(
-  "cargo",
-  [
-    "build",
-    "--offline",
-    "--locked",
-    "-p",
-    "anki_forge_node_native",
-    "--example",
-    "sdk_parity",
-    "--message-format=json",
-  ],
-  { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] },
-);
-if (build.status !== 0) process.exit(build.status ?? 1);
-const observer = build.stdout
-  .trim()
-  .split("\n")
-  .map((l) => JSON.parse(l))
-  .find((x) => x.target?.name === "sdk_parity" && x.executable)?.executable;
-if (!observer) throw new Error("Missing semantic observer");
+let observer = process.env.ANKI_FORGE_TEST_OBSERVER;
+if (observer) {
+  observer = path.resolve(observer);
+  accessSync(observer, process.platform === "win32" ? constants.F_OK : constants.X_OK);
+} else {
+  const build = spawnSync(
+    "cargo",
+    [
+      "build",
+      "--offline",
+      "--locked",
+      "-p",
+      "anki_forge_node_native",
+      "--example",
+      "sdk_parity",
+      "--message-format=json",
+    ],
+    { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] },
+  );
+  if (build.status !== 0) process.exit(build.status ?? 1);
+  observer = build.stdout
+    .trim()
+    .split("\n")
+    .map((l) => JSON.parse(l))
+    .find((x) => x.target?.name === "sdk_parity" && x.executable)?.executable;
+  if (!observer) throw new Error("Missing semantic observer");
+}
 const result = spawnSync(
   process.execPath,
   ["--expose-gc", "--test", "test/public-api.test.mjs"],

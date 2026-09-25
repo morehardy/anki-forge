@@ -186,7 +186,7 @@ client limitations, and verified import behavior.
 
 Moving from genanki? See the [Python migration guide](docs/python/genanki-migration.md).
 
-**Release status:** the checkout declares Rust `0.1.0`, Node `0.2.0`, and Python
+**Release status:** the checkout declares Rust `0.2.0`, Node `0.2.0`, and Python
 `0.2.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
 outstanding publication gates; npm publication and full platform verification
 for the Node candidate are pending. Python 0.2 has recorded wheel/source verification

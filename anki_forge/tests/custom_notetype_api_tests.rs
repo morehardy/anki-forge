@@ -5,6 +5,55 @@ use ankiforge::{
 use ankiforge::{BuildOptions, Field, NoteType, Project, Template};
 
 #[test]
+fn template_target_decks_reject_invalid_names_at_model_completion() {
+    for deck in [
+        "",
+        " ",
+        "::Child",
+        "Parent::",
+        "Parent::::Child",
+        " Parent",
+        "Parent ::Child",
+        "Parent:: Child",
+        "Parent\nChild",
+        "Parent\u{1f}Child",
+    ] {
+        let error = NoteType::builder("vocab")
+            .field(Field::new("front"))
+            .template(
+                Template::new("recognition")
+                    .front("{{front}}")
+                    .target_deck(deck),
+            )
+            .build()
+            .expect_err(&format!("invalid target deck {deck:?} must not complete"));
+        assert_eq!(
+            error.kind(),
+            ankiforge::schema::SchemaErrorKind::InvalidName
+        );
+        assert_eq!(error.code(), "SCHEMA.NAME_INVALID");
+    }
+}
+
+#[test]
+fn bundle_target_decks_use_the_same_model_validation() {
+    let root = tempfile::tempdir().unwrap();
+    std::fs::write(root.path().join("front.html"), "{{front}}").unwrap();
+    std::fs::write(root.path().join("back.html"), "{{front}}").unwrap();
+    for deck in ["", "Parent::", "Parent:: Child"] {
+        std::fs::write(root.path().join("anki-template.yaml"), format!(
+            "format_version: template-bundle-v2\nnote_type:\n  key: vocab\n  fields:\n    - key: front\n  templates:\n    - key: recognition\n      front_file: front.html\n      back_file: back.html\n      target_deck: {deck:?}\n"
+        )).unwrap();
+        let error = NoteType::from_bundle(root.path()).unwrap_err();
+        let cause = std::error::Error::source(&error)
+            .unwrap()
+            .downcast_ref::<ankiforge::schema::SchemaError>()
+            .unwrap();
+        assert_eq!(cause.code(), "SCHEMA.NAME_INVALID");
+    }
+}
+
+#[test]
 fn validated_model_retains_keys_labels_and_template_options() {
     let vocab = NoteType::builder("jp-vocab")
         .name("Japanese Vocabulary")

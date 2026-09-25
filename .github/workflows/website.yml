@@ -57,6 +57,8 @@ jobs:
         with:
           toolchain: '1.92.0'
       - uses: Swatinem/rust-cache@v2
+      - name: Fetch locked dependencies for offline documentation consumers
+        run: cargo fetch --locked --manifest-path ../Cargo.toml
       - run: npm ci
       - run: npm test
       - run: npm run check:examples

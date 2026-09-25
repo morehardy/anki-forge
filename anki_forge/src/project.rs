@@ -211,11 +211,7 @@ impl Project {
 }
 
 pub(crate) fn validate_deck(name: &str) -> Result<(), AddError> {
-    if name.chars().any(char::is_control)
-        || name
-            .split("::")
-            .any(|component| component.trim().is_empty() || component.trim() != component)
-    {
+    if !crate::writer_core::deck_name::valid_authored_deck_name(name) {
         Err(AddError::new(Kind::InvalidDeck, "NOTE.DECK_INVALID", "deck names need nonempty components without surrounding whitespace or control characters"))
     } else {
         Ok(())

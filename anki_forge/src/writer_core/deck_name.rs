@@ -5,6 +5,13 @@ use unicode_normalization::UnicodeNormalization;
 
 const NATIVE_DECK_SEPARATOR: char = '\u{1f}';
 
+pub(crate) fn valid_authored_deck_name(name: &str) -> bool {
+    !name.chars().any(char::is_control)
+        && name
+            .split("::")
+            .all(|component| !component.trim().is_empty() && component.trim() == component)
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct ResolvedDeck {
     pub(crate) id: i64,

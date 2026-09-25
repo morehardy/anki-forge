@@ -172,7 +172,7 @@ namespace 和 note key 标识笔记。每个生成的 APKG 都携带完整身份
 
 从 genanki 迁移？请参考 [Python 迁移指南](docs/python/genanki-migration.md)。
 
-**发布状态：** 当前源码声明的版本为 Rust `0.1.0`、Node `0.2.0` 和 Python `0.2.0`。
+**发布状态：** 当前源码声明的版本为 Rust `0.2.0`、Node `0.2.0` 和 Python `0.2.0`。
 Python 0.2 已记录 wheel 与源码包验证，见[验证范围](bindings/python/COVERAGE.md)；这不代表已发布到 PyPI。
 [Rust 发布审计](docs/rust-crate-release-readiness.md) 记录了尚未完成的发布条件；
 Node 候选版本的 npm 发布和完整平台验证也仍待完成。

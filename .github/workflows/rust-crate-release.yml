@@ -144,7 +144,7 @@ jobs:
               assert!(!ankiforge::embedded_contract_version().is_empty());
               let mut project = Project::new("release.verify")?;
               project.add("first", Note::basic("front", "back"))?;
-              let output = project.build(BuildOptions::new())?;
+              let output = project.build(BuildOptions::temporary())?;
               assert!(output.artifact().path().is_file());
               assert_eq!(output.report().counts().notes, 1);
               Ok(())

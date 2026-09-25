@@ -57,6 +57,18 @@ pub(super) fn validate(model: &NoteTypeBuilder) -> Result<(), SchemaError> {
     for template in &model.templates {
         symbol(template.key.as_str(), "template key", false)?;
         name(&template.name, "template name", false)?;
+        if let Some(deck) = &template.target_deck {
+            if !crate::writer_core::deck_name::valid_authored_deck_name(deck) {
+                return Err(SchemaError::new(
+                    Kind::InvalidName,
+                    "SCHEMA.NAME_INVALID",
+                    format!(
+                        "invalid target deck {deck:?} for template {:?}: deck names need nonempty components without surrounding whitespace or control characters",
+                        template.key.as_str()
+                    ),
+                ));
+            }
+        }
         if !template_keys.insert(template.key.as_str())
             || !template_names.insert(template.name.as_str())
         {

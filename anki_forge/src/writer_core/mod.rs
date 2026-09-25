@@ -2,7 +2,7 @@ pub(crate) mod anki_proto;
 mod apkg_index;
 mod apkg_reader;
 mod compat_schema;
-mod deck_name;
+pub(crate) mod deck_name;
 pub(crate) mod identity;
 mod inspect_limits;
 pub(crate) mod note_data;

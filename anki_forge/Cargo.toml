@@ -1,6 +1,6 @@
 [package]
 name = "ankiforge"
-version = "0.1.0"
+version = "0.2.0"
 edition.workspace = true
 rust-version.workspace = true
 description = "A typed Rust toolkit for building and validating Anki decks"
@@ -30,7 +30,7 @@ include = [
 [features]
 default = []
 # Repository-only seam for the unpublished contract tool and deep conformance
-# tests. It is not part of the supported 0.1 consumer interface.
+# tests. It is not part of the supported 0.2 consumer interface.
 internal-tools = []
 
 [dependencies]

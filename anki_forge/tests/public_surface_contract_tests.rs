@@ -109,6 +109,21 @@ blake3 = "1"
 }
 
 #[test]
+fn release_workflow_consumer_uses_the_current_public_api() {
+    let workflow = include_str!("../../.github/workflows/rust-crate-release.yml");
+    let source = workflow
+        .split_once("<<'RS'\n")
+        .expect("release verification Rust heredoc")
+        .1
+        .lines()
+        .take_while(|line| line.trim() != "RS")
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(source.contains("fn main()"));
+    Consumer::new().run(&source);
+}
+
+#[test]
 fn schema_consumer_contract() {
     let consumer = Consumer::new();
     // A successful control distinguishes compiler failures from missing dependencies.

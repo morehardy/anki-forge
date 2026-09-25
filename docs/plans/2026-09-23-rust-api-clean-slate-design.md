@@ -578,7 +578,7 @@ npm --prefix website run check:examples
 - Node 已迁移到默认 Rust API；17 项 native/APKG 合约、独立安装 ESM/CJS/types、只读安装目录、worker/lifetime 与文档示例通过。Python 已迁移，47 项 native/APKG 测试、类型正反探针、6 个示例和独立 wheel 安装通过。SDK 不再持有另一套旧 Deck/registry/identity 语义。
 - CLI/tools 已迁移为精选操作及 DTO；原生 recipe 使用 ankiforge-project-v1。CLI 8 项通过，含报告原子替换、hardlink 别名拒绝、写报告失败保留真实构建快照。仓库工具调用与覆盖矩阵见 contract_tools/README.md。
 - 真实 Anki oracle：7 条版本链 × 4 种导入配置，28 个场景、96 次实际导入；所有既有 note/card IDs、GUID、ordinal 与排程检查通过。85 次正文符合目标，11 次由模型合并/排序字段变更产生的客户端 mtime 或无 merge 冲突限制已明确断言。IO 两种模式均核对精确 mask 内容及 2→2→3→3 实际卡数。证据见 scripts/roundtrip_oracle/RESULTS.md 和 docs/plans/evidence/rust-api-clean-slate-2026-09-24/anki-import-oracle.json。Always 同秒跳过只核对上游源码，本次自然时序未触发，不宣称已实测。
-- 契约 bundle 1.0.0 的实际 schema/semantics/fixture/error-registry 变更及精确摘要清单通过 release 治理验证。major bump 表达有意破坏性变更，独立于 Rust crate 0.1.0；无旧接口适配层。嵌入 archive 可重现重建、实际 package payload 精确清单和仓库外 packaged consumer 均通过验收。
+- 契约 bundle 1.0.0 的实际 schema/semantics/fixture/error-registry 变更及精确摘要清单通过 release 治理验证。major bump 表达有意破坏性变更，独立于 Rust crate 0.2.0；无旧接口适配层。嵌入 archive 可重现重建、实际 package payload 精确清单和仓库外 packaged consumer 均通过验收。
 - Rust/common/Node/Python 指南与示例已迁移。旧 api-design.md 大方案已替换为指向本方案的入口，历史 ADR 标记被 ADR 0023 取代，避免把历史实验当作当前接口约束。归档性能图明确不代表新 Project API 的测量结果。
 
 ### 旧测试的迁移去向
@@ -621,3 +621,15 @@ npm --prefix website run check:examples
 - 网站 check:docs、build、check、test、check:site 通过；文档执行器逐个执行完整程序并检查 ZIP/SQLite/媒体，每轮 16 次执行、22 个 APKG。最后发现的消费者可执行文件竞争已修复：默认消费者两进程各 21/21，网站两进程各 16/22；媒体探针也按进程隔离，4 项生命周期及测量脚本冒烟通过。
 - cargo-deny 0.20.2 使用 2026-09-24 新刷新的 RustSec 数据库，advisories/licenses/bans/sources 全通过。64/256 MiB 测量和 96 次 Anki 导入的原始证据保留，并明确其平台、样本、版本及客户端限制。
 - 四平台 × Rust 1.92/stable 的受保护 CI 矩阵保留。其他平台和当前 stable 通道仍须 hosted CI 验证；1.98.1 仅代表明确安装的工具链。正式发布的外部配置、来源审查及维护者批准仍按发布流程处理。本轮完成本地实现和验收，未推送、未创建 release tag、未发布。
+
+### PR #51 审查与 CI 修复（2026-09-25）
+
+以上本地交付记录对应首次提交；实现现已提交到目标为 `main` 的 [PR #51](https://github.com/morehardy/anki-forge/pull/51)。首轮 hosted CI 的四平台 × Rust 1.92/stable 打包消费者全部通过，审查和其他任务还发现以下需要修正的事项：
+
+- 发布后验证示例改用 `BuildOptions::temporary()`；PR 测试直接编译并执行工作流中的实际 Rust 程序，防止只在发布后发现 API 过期。
+- 模板 `target_deck` 在完成 NoteType 和加载 bundle 时复用项目牌组名称规则，拒绝空名称、空层级、首尾空白和控制字符，返回 `SCHEMA.NAME_INVALID`。两条入口都有先失败后通过的回归测试。
+- 网站离线消费者验证前显式 `cargo fetch --locked`。Node 消费者矩阵下载同平台构建任务产出的独立观察程序，避免依赖消费者机器的 Cargo 缓存；完整 17 项语义检查保留。
+- Python wheel 隔离测试通过 `-I -X utf8` 启动，保留 Windows 中文目录覆盖，并消除重定向输出使用本地代码页导致的异常。
+- crates.io 已存在 0.1.0，故 Rust clean-slate 版本改为 0.2.0；同步路径依赖、锁文件、Python 加载器版本断言和当前版本文档。保留 SemVer 检查，不为有意破坏性改动绕过门禁。
+
+这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

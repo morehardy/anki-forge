@@ -66,10 +66,13 @@ def main() -> None:
         environment = {key: value for key, value in os.environ.items() if not key.startswith(("PYTHON", "ANKI_FORGE", "MYPY"))}
         # Native operation must not find a repository CLI or compiler on PATH.
         environment["PATH"] = str(python.parent)
-        subprocess.run([str(python), "-I", "-c", SMOKE], cwd=work, env=environment, check=True)
+        # Isolated mode ignores PYTHONUTF8; request UTF-8 explicitly so printing
+        # the Unicode installation path also works with Windows redirected stdout.
+        isolated_python = [str(python), "-I", "-X", "utf8"]
+        subprocess.run([*isolated_python, "-c", SMOKE], cwd=work, env=environment, check=True)
         example = work / "native_workflow.py"
         shutil.copyfile(source_root / "examples/native_workflow.py", example)
-        subprocess.run([str(python), "-I", str(example), str(work / "example output")], cwd=work, env=environment, check=True)
+        subprocess.run([*isolated_python, str(example), str(work / "example output")], cwd=work, env=environment, check=True)
         for filename in ("positive.py", "negative.py"):
             shutil.copyfile(source_root / "tests/typing" / filename, work / filename)
         command = [sys.executable, "-m", "mypy", "--strict", "--no-incremental", "--python-executable", str(python)]
@@ -89,7 +92,7 @@ def main() -> None:
                 if source.name in {"test_public_api.py", "test_fork_ownership.py"}:
                     shutil.copyfile(source, tests / source.name)
             environment["ANKI_FORGE_PYTHON_OBSERVER"] = str(observer)
-            subprocess.run([str(python), "-I", "-m", "pytest", str(tests), "-q"], cwd=work, env=environment, check=True)
+            subprocess.run([*isolated_python, "-m", "pytest", str(tests), "-q"], cwd=work, env=environment, check=True)
 
 
 if __name__ == "__main__":

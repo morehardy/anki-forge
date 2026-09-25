@@ -6,6 +6,8 @@ new minor release.
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
 ### Clean-slate authoring
 
 - Replace Deck/prelude and mutable registries with root `Project`, `Note`,
@@ -20,6 +22,10 @@ new minor release.
   comparison, project-input and identity-evidence schemas. Bundle and crate
   versions are independent.
 - Migrate Node/Python, repository tools and documentation to the same public API.
+- Reject invalid template target deck names when completing a model or loading a
+  template bundle, using the same rules as project and note deck names.
+- Compile the exact post-publication verification example in PR checks and use
+  the current temporary-output constructor.
 
 The earlier development entries below record superseded implementations. This
 clean-slate change removes their retired interfaces; no compatibility adapter is
@@ -176,5 +182,6 @@ provided. Current behavior is documented in the crate README.
 - An explicitly unsupported `internal-tools` feature for the repository's
   unpublished contract tooling and deep conformance tests.
 
-[Unreleased]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.1.0...HEAD
+[Unreleased]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.2.0...HEAD
+[0.2.0]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.1.0...anki-forge-v0.2.0
 [0.1.0]: https://github.com/morehardy/anki-forge/releases/tag/anki-forge-v0.1.0

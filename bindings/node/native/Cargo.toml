@@ -12,7 +12,7 @@ test = false
 doctest = false
 
 [dependencies]
-ankiforge = { path = "../../../anki_forge", version = "0.1.0", default-features = false }
+ankiforge = { path = "../../../anki_forge", version = "0.2.0", default-features = false }
 napi = { version = "=3.12.2", default-features = false, features = ["napi8", "tokio_rt"] }
 napi-derive = "=3.6.3"
 serde = { version = "1", features = ["derive"] }
