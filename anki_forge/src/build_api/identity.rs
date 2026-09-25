@@ -406,6 +406,8 @@ fn note_guid(namespace: &str, key: &str) -> String {
     digest(&[namespace, "note", key])[..32].into()
 }
 
+// Creation and validation share this derivation. Reconciliation preserves IDs
+// for existing keys and takes newly declared keys' IDs directly from creation.
 fn numeric_id(namespace: &str, kind: &str, model: &str, key: &str) -> i64 {
     let hash = digest(&[namespace, kind, model, key]);
     (i64::from_str_radix(&hash[..13], 16).expect("BLAKE3 is hexadecimal") & ((1_i64 << 52) - 1))

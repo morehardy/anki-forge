@@ -78,11 +78,27 @@ impl IdentityEnvelope {
                 "invalid or duplicate model identity"
             );
             ensure!(
+                model.id == super::numeric_id(&self.identity.namespace, "model", key, ""),
+                "model ID disagrees with namespace and stable key"
+            );
+            ensure!(
                 model.mtime_secs > 0 && valid_hash(&model.content_hash),
                 "invalid model revision"
             );
-            validate_symbols(&model.fields, model.field_high_water)?;
-            validate_symbols(&model.templates, model.template_high_water)?;
+            validate_symbols(
+                &self.identity.namespace,
+                key,
+                "field",
+                &model.fields,
+                model.field_high_water,
+            )?;
+            validate_symbols(
+                &self.identity.namespace,
+                key,
+                "template",
+                &model.templates,
+                model.template_high_water,
+            )?;
             ensure!(
                 matches!(model.kind.as_str(), "normal" | "cloze"),
                 "unknown model kind"
@@ -307,6 +323,9 @@ fn valid_hash(hash: &str) -> bool {
 }
 
 fn validate_symbols(
+    namespace: &str,
+    model_key: &str,
+    kind: &str,
     symbols: &std::collections::BTreeMap<String, SymbolIdentity>,
     high_water: u32,
 ) -> anyhow::Result<()> {
@@ -317,6 +336,10 @@ fn validate_symbols(
         ensure!(
             !key.trim().is_empty() && value.id > 0 && ids.insert(value.id),
             "invalid or duplicate config ID"
+        );
+        ensure!(
+            value.id == super::numeric_id(namespace, kind, model_key, key),
+            "config ID disagrees with namespace, model and stable key"
         );
         ensure!(
             value.slot < high_water && slots.insert(value.slot),

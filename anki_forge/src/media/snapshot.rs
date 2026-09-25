@@ -132,22 +132,15 @@ impl Snapshot {
         path: &Path,
         limits: MediaLimits,
     ) -> Result<(Arc<Self>, Vec<u8>), MediaError> {
-        // Check file type before opening, including FIFO/device inputs which
-        // could otherwise block. The opened handle is checked again below.
+        // Reject invalid inputs early. open_source also checks the descriptor
+        // and prevents a replacement FIFO from blocking between these steps.
         let metadata =
             std::fs::metadata(path).map_err(|e| MediaError::io("inspect media source", e))?;
         if !metadata.is_file() {
             return Err(not_regular());
         }
         check_limit(metadata.len(), limits)?;
-        let mut source = File::open(path).map_err(|e| MediaError::io("open media source", e))?;
-        let metadata = source
-            .metadata()
-            .map_err(|e| MediaError::io("inspect opened media source", e))?;
-        if !metadata.is_file() {
-            return Err(not_regular());
-        }
-        check_limit(metadata.len(), limits)?;
+        let mut source = open_source(path, limits)?;
         let mut memory = Vec::new();
         let mut spool = None::<tempfile::NamedTempFile>;
         let mut sample = Vec::with_capacity(SAMPLE_BYTES);
@@ -247,6 +240,36 @@ impl std::fmt::Debug for Snapshot {
     }
 }
 
+fn open_source(path: &Path, limits: MediaLimits) -> Result<File, MediaError> {
+    #[cfg(unix)]
+    let source = rustix::fs::open(
+        path,
+        rustix::fs::OFlags::RDONLY | rustix::fs::OFlags::NONBLOCK | rustix::fs::OFlags::CLOEXEC,
+        rustix::fs::Mode::empty(),
+    )
+    .map(File::from)
+    .map_err(|error| MediaError::io("open media source", error.into()))?;
+    #[cfg(not(unix))]
+    let source = File::open(path).map_err(|e| MediaError::io("open media source", e))?;
+    let metadata = source
+        .metadata()
+        .map_err(|e| MediaError::io("inspect opened media source", e))?;
+    if !metadata.is_file() {
+        return Err(not_regular());
+    }
+    check_limit(metadata.len(), limits)?;
+    #[cfg(unix)]
+    {
+        // Only a verified regular descriptor can reach normal blocking reads.
+        // Keep every other status flag; neither operation reopens the pathname.
+        let flags = rustix::fs::fcntl_getfl(&source)
+            .map_err(|error| MediaError::io("inspect media source flags", error.into()))?;
+        rustix::fs::fcntl_setfl(&source, flags & !rustix::fs::OFlags::NONBLOCK)
+            .map_err(|error| MediaError::io("restore media source reads", error.into()))?;
+    }
+    Ok(source)
+}
+
 fn check_limit(observed: u64, limits: MediaLimits) -> Result<(), MediaError> {
     if observed > limits.max_bytes {
         Err(MediaError::exceeded(limits.max_bytes, observed))
@@ -266,6 +289,106 @@ fn not_regular() -> MediaError {
 #[cfg(test)]
 mod process_tests {
     use super::*;
+
+    #[cfg(unix)]
+    #[test]
+    fn replaced_source_fifo_does_not_block() {
+        use std::{
+            process::{Command, Stdio},
+            time::{Duration, Instant},
+        };
+        const CHILD: &str = "ANKIFORGE_FIFO_REPLACEMENT_TEST";
+        if let Some(root) = std::env::var_os(CHILD) {
+            let path = std::path::PathBuf::from(root).join("source");
+            std::fs::write(&path, b"regular file before open").unwrap();
+            let metadata = std::fs::metadata(&path).unwrap();
+            assert!(metadata.is_file());
+            check_limit(metadata.len(), MediaLimits::default()).unwrap();
+            // Deterministically replace the checked file at the preflight/open
+            // boundary. There is deliberately no writer to release a FIFO open.
+            std::fs::remove_file(&path).unwrap();
+            assert!(Command::new("mkfifo")
+                .arg(&path)
+                .status()
+                .unwrap()
+                .success());
+            let error = open_source(&path, MediaLimits::default()).unwrap_err();
+            assert_eq!(error.kind(), MediaErrorKind::NotRegularFile);
+            assert_eq!(error.code(), "MEDIA.SOURCE_NOT_REGULAR_FILE");
+            return;
+        }
+        let root = tempfile::tempdir().unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                "media::snapshot::process_tests::replaced_source_fifo_does_not_block",
+                "--nocapture",
+            ])
+            .env(CHILD, root.path())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let started = Instant::now();
+        while child.try_wait().unwrap().is_none() {
+            if started.elapsed() > Duration::from_secs(5) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("opening the replacement FIFO blocked without a writer");
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        let output = child.wait_with_output().unwrap();
+        assert!(
+            String::from_utf8_lossy(&output.stdout).contains("running 1 test"),
+            "the isolated replacement test must actually run"
+        );
+        assert!(
+            output.status.success(),
+            "{}\n{}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
+    fn opened_source_retains_budget_and_original_io_errors() {
+        use std::error::Error;
+        let root = tempfile::tempdir().unwrap();
+        let path = root.path().join("source");
+        std::fs::write(&path, b"12345").unwrap();
+        let mut source = open_source(&path, MediaLimits { max_bytes: 5 }).unwrap();
+        #[cfg(unix)]
+        {
+            assert!(!rustix::fs::fcntl_getfl(&source)
+                .unwrap()
+                .contains(rustix::fs::OFlags::NONBLOCK));
+            let alias = root.path().join("alias");
+            std::os::unix::fs::symlink(&path, &alias).unwrap();
+            let mut through_alias = open_source(&alias, MediaLimits { max_bytes: 5 }).unwrap();
+            let mut bytes = Vec::new();
+            through_alias.read_to_end(&mut bytes).unwrap();
+            assert_eq!(bytes, b"12345");
+        }
+        let mut bytes = Vec::new();
+        source.read_to_end(&mut bytes).unwrap();
+        assert_eq!(bytes, b"12345");
+        let error = open_source(&path, MediaLimits { max_bytes: 4 }).unwrap_err();
+        assert_eq!(error.kind(), MediaErrorKind::ResourceLimit);
+        let exceeded = error.limit_exceeded().unwrap();
+        assert_eq!((exceeded.limit, exceeded.observed), (4, 5));
+        let error = open_source(&root.path().join("missing"), MediaLimits::default()).unwrap_err();
+        assert_eq!(error.kind(), MediaErrorKind::Io);
+        assert_eq!(
+            error
+                .source()
+                .unwrap()
+                .downcast_ref::<std::io::Error>()
+                .unwrap()
+                .kind(),
+            std::io::ErrorKind::NotFound
+        );
+    }
 
     #[test]
     fn inherited_cache_lock_is_never_waited_on() {

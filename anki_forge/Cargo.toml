@@ -62,6 +62,9 @@ zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
 zstd = "0.13"
 image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
 
+[target.'cfg(unix)'.dependencies]
+rustix = { version = "1", features = ["fs"] }
+
 [dev-dependencies]
 proptest = "1.6"
 

@@ -83,6 +83,7 @@ fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error
     Ok(())
 }
 fn main() -> Result<(), Box<dyn Error>> {
+    numeric_ids_are_bound_to_namespace_and_stable_keys()?;
     note_guids_are_bound_to_namespace_and_stable_key()?;
     retired_card_history_is_validated()?;
     media_map_metadata_must_match_payloads()?;
@@ -506,6 +507,116 @@ fn note_guids_are_bound_to_namespace_and_stable_key() -> Result<(), Box<dyn Erro
         assert_eq!(envelope(restored.artifact().path())["identity"]["notes"]["one"]["guid"], original_guid);
         let other = guid_project("another-namespace", Some("one"))?.build(BuildOptions::temporary())?;
         assert_ne!(envelope(other.artifact().path())["identity"]["notes"]["one"]["guid"], original_guid);
+    }
+    Ok(())
+}
+
+
+fn numeric_project(model_key: &str, field_key: &str, template_key: &str, stage: u8) -> Result<Project, Box<dyn Error>> {
+    use ankiforge::{Field, NoteType, Template};
+    let mut project = Project::new("numeric-proof::中文")?;
+    project.add("keep", Note::basic("keep", "answer"))?;
+    if stage == 1 { return Ok(project); }
+    let mut builder = NoteType::builder(model_key).name("数字模型")
+        .field(Field::new("front").name("Front").sort())
+        .template(Template::new("front-card").name("Front card").front("{{front}}").back("{{front}}"));
+    if stage != 2 {
+        builder = builder.field(Field::new(field_key).name("Back"))
+            .template(Template::new(template_key).name("Back card").front(format!("{{{{{field_key}}}}}")).back("{{front}}"));
+    }
+    if stage == 3 {
+        builder = builder.field(Field::new("new-field").name("New field"))
+            .template(Template::new("new-card").front("{{new-field}}").back("{{front}}"));
+    }
+    let model = builder.build()?;
+    let mut note = model.note().field("front", "question");
+    if stage != 2 { note = note.field(field_key, "answer"); }
+    if stage == 3 { note = note.field("new-field", "new content"); }
+    project.add("one", note)?;
+    Ok(project)
+}
+
+fn numeric_ids_are_bound_to_namespace_and_stable_keys() -> Result<(), Box<dyn Error>> {
+    use ankiforge::update::{CompareOptions, RiskCode, UpdatePolicy};
+    let envelope = |path: &Path| -> serde_json::Value {
+        let mut archive = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
+        serde_json::from_reader(archive.by_name("ankiforge-identity.json").unwrap()).unwrap()
+    };
+    let original = numeric_project("vocab", "back", "back-card", 0)?.build(BuildOptions::temporary())?;
+    let original_identity = envelope(original.artifact().path())["identity"].clone();
+    // Check active records, a retired model, and retired members of an active
+    // model independently: none of these may bypass canonical ID validation.
+    for stage in 0..=2 {
+        let project = numeric_project("vocab", "back", "back-card", stage)?;
+        let baseline = project.build(BuildOptions::temporary().update_from(original.artifact().path())
+            .update_policy(UpdatePolicy::default().allow(RiskCode::NoteRemoved).allow(RiskCode::ModelRemoved)
+                .allow(RiskCode::FieldRemoved).allow(RiskCode::TemplateRemoved)))?;
+        let baseline_identity = envelope(baseline.artifact().path())["identity"].clone();
+        for what in ["model", "field", "template"] {
+            let output = format!("numeric-id-{stage}-{what}.apkg");
+            copy_with(baseline.artifact().path(), &output, |name, data| {
+                if name != "ankiforge-identity.json" { return Some(data); }
+                let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
+                let identity = &mut value["identity"];
+                match what {
+                    "model" => {
+                        let models = identity["models"].as_object_mut().unwrap();
+                        let model = models.remove("vocab").unwrap();
+                        models.insert("renamed-model".into(), model);
+                        for note in identity["notes"].as_object_mut().unwrap().values_mut() {
+                            if note["model"] == "vocab" { note["model"] = "renamed-model".into(); }
+                        }
+                    }
+                    "field" => {
+                        let fields = identity["models"]["vocab"]["fields"].as_object_mut().unwrap();
+                        let field = fields.remove("back").unwrap();
+                        fields.insert("renamed-field".into(), field);
+                    }
+                    "template" => {
+                        let templates = identity["models"]["vocab"]["templates"].as_object_mut().unwrap();
+                        let template = templates.remove("back-card").unwrap();
+                        templates.insert("renamed-template".into(), template);
+                        for note in identity["notes"].as_object_mut().unwrap().values_mut() {
+                            if note["model"] == "vocab" {
+                                let cards = note["cards"].as_object_mut().unwrap();
+                                if let Some(ordinal) = cards.remove("template:back-card") { cards.insert("template:renamed-template".into(), ordinal); }
+                            }
+                        }
+                    }
+                    _ => unreachable!(),
+                }
+                identity.sort_all_objects();
+                value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+                Some(serde_json::to_vec(&value).unwrap())
+            });
+            let candidate = numeric_project(if what == "model" { "renamed-model" } else { "vocab" },
+                if what == "field" { "renamed-field" } else { "back" },
+                if what == "template" { "renamed-template" } else { "back-card" }, stage)?;
+            let error = failure(&candidate, &output, "UPDATE.EVIDENCE_INVALID");
+            assert_eq!(error.kind(), BuildErrorKind::Validation);
+            assert!(error.report().baseline_counts().is_none(), "reject forged IDs before candidate planning");
+            assert_eq!(candidate.compare(CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+            let restored_key = numeric_project("vocab", "back", "back-card", 0)?;
+            let error = failure(&restored_key, &output, "UPDATE.EVIDENCE_INVALID");
+            assert!(error.report().baseline_counts().is_none(), "restoring the original key must not fail later through a reused numeric ID");
+        }
+        let repeat = project.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        assert_eq!(envelope(repeat.artifact().path())["identity"], baseline_identity);
+        assert!(repeat.report().comparison().unwrap().findings().is_empty());
+        let restored = numeric_project("vocab", "back", "back-card", 3)?
+            .build(BuildOptions::temporary().update_from(baseline.artifact().path())
+                .update_policy(UpdatePolicy::default().allow(RiskCode::FieldAdded).allow(RiskCode::TemplateAdded)))?;
+        let restored_identity = envelope(restored.artifact().path())["identity"].clone();
+        assert_eq!(restored_identity["models"]["vocab"]["id"], original_identity["models"]["vocab"]["id"]);
+        assert_eq!(restored_identity["notes"]["one"]["guid"], original_identity["notes"]["one"]["guid"]);
+        for (group, keys) in [("fields", &["front", "back"][..]), ("templates", &["front-card", "back-card"][..])] {
+            for key in keys { assert_eq!(restored_identity["models"]["vocab"][group][*key], original_identity["models"]["vocab"][group][*key]); }
+        }
+        let fresh = numeric_project("vocab", "back", "back-card", 3)?.build(BuildOptions::temporary())?;
+        let fresh_identity = envelope(fresh.artifact().path())["identity"].clone();
+        for (group, key) in [("fields", "new-field"), ("templates", "new-card")] {
+            assert_eq!(restored_identity["models"]["vocab"][group][key]["id"], fresh_identity["models"]["vocab"][group][key]["id"], "reconciliation uses the same derivation as a fresh declaration");
+        }
     }
     Ok(())
 }
