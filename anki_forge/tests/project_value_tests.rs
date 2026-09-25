@@ -164,6 +164,39 @@ fn content_and_display_names_do_not_change_explicit_note_identity() {
 }
 
 #[test]
+fn deck_components_with_edge_colons_fail_before_collection_or_build() {
+    for deck in [
+        ":",
+        ":Parent",
+        "Parent:",
+        "Parent:::Child",
+        "Parent::Child:",
+    ] {
+        let mut default = Project::new("invalid-default").unwrap().default_deck(deck);
+        assert_eq!(
+            default
+                .add("one", Note::basic("front", "back"))
+                .unwrap_err()
+                .code(),
+            "NOTE.DECK_INVALID"
+        );
+        assert_eq!(
+            default.build(BuildOptions::temporary()).unwrap_err().code(),
+            "NOTE.DECK_INVALID"
+        );
+        let mut overridden = Project::new("invalid-override").unwrap();
+        assert_eq!(
+            overridden
+                .add("one", Note::basic("front", "back").deck(deck))
+                .unwrap_err()
+                .code(),
+            "NOTE.DECK_INVALID"
+        );
+        overridden.add("one", Note::basic("front", "back")).unwrap();
+    }
+}
+
+#[test]
 fn project_default_deck_and_per_note_override_are_both_exported() {
     let mut project = Project::new("destinations").unwrap().default_deck("Course");
     project
@@ -172,7 +205,7 @@ fn project_default_deck_and_per_note_override_are_both_exported() {
     project
         .add(
             "override",
-            Note::basic("two", "answer").deck("Course::Advanced"),
+            Note::basic("two", "answer").deck("Course::Advanced: Part 1"),
         )
         .unwrap();
     let output = project.build(BuildOptions::temporary()).unwrap();
@@ -185,7 +218,7 @@ fn project_default_deck_and_per_note_override_are_both_exported() {
         .unwrap()
         .map(Result::unwrap)
         .collect();
-    assert_eq!(names, ["Course", "Course\u{1f}Advanced"]);
+    assert_eq!(names, ["Course", "Course\u{1f}Advanced: Part 1"]);
 }
 
 #[test]

@@ -627,7 +627,7 @@ npm --prefix website run check:examples
 以上本地交付记录对应首次提交；实现现已提交到目标为 `main` 的 [PR #51](https://github.com/morehardy/anki-forge/pull/51)。首轮 hosted CI 的四平台 × Rust 1.92/stable 打包消费者全部通过，审查和其他任务还发现以下需要修正的事项：
 
 - 发布后验证示例改用 `BuildOptions::temporary()`；PR 测试直接编译并执行工作流中的实际 Rust 程序，防止只在发布后发现 API 过期。
-- 模板 `target_deck` 在完成 NoteType 和加载 bundle 时复用项目牌组名称规则，拒绝空名称、空层级、首尾空白和控制字符，返回 `SCHEMA.NAME_INVALID`。两条入口都有先失败后通过的回归测试。
+- 模板 `target_deck` 在完成 NoteType 和加载 bundle 时复用项目牌组名称规则，拒绝空名称、空层级、首尾空白/冒号和控制字符，返回 `SCHEMA.NAME_INVALID`。两条入口都有先失败后通过的回归测试；后续 review 的 `:` / `Parent:::Child` 反例同时覆盖默认牌组和笔记覆盖入口，内部冒号的有效名称核对实际 APKG 输出。
 - 网站离线消费者验证前显式 `cargo fetch --locked`。Node 消费者矩阵下载同平台构建任务产出的独立观察程序，避免依赖消费者机器的 Cargo 缓存；完整 17 项语义检查保留。
 - Python wheel 隔离测试通过 `-I -X utf8` 启动，保留 Windows 中文目录覆盖，并消除重定向输出使用本地代码页导致的异常。
 - crates.io 已存在 0.1.0，故 Rust clean-slate 版本改为 0.2.0；同步路径依赖、锁文件、Python 加载器版本断言和当前版本文档。保留 SemVer 检查，不为有意破坏性改动绕过门禁。

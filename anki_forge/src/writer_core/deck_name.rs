@@ -7,9 +7,11 @@ const NATIVE_DECK_SEPARATOR: char = '\u{1f}';
 
 pub(crate) fn valid_authored_deck_name(name: &str) -> bool {
     !name.chars().any(char::is_control)
-        && name
-            .split("::")
-            .all(|component| !component.trim().is_empty() && component.trim() == component)
+        && name.split("::").all(|component| {
+            let trimmed = component
+                .trim_matches(|character: char| character.is_whitespace() || character == ':');
+            !trimmed.is_empty() && trimmed == component
+        })
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

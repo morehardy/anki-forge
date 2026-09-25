@@ -17,6 +17,11 @@ fn template_target_decks_reject_invalid_names_at_model_completion() {
         "Parent:: Child",
         "Parent\nChild",
         "Parent\u{1f}Child",
+        ":",
+        ":Parent",
+        "Parent:",
+        "Parent:::Child",
+        "Parent::Child:",
     ] {
         let error = NoteType::builder("vocab")
             .field(Field::new("front"))
@@ -40,7 +45,7 @@ fn bundle_target_decks_use_the_same_model_validation() {
     let root = tempfile::tempdir().unwrap();
     std::fs::write(root.path().join("front.html"), "{{front}}").unwrap();
     std::fs::write(root.path().join("back.html"), "{{front}}").unwrap();
-    for deck in ["", "Parent::", "Parent:: Child"] {
+    for deck in ["", "Parent::", "Parent:: Child", ":", "Parent:::Child"] {
         std::fs::write(root.path().join("anki-template.yaml"), format!(
             "format_version: template-bundle-v2\nnote_type:\n  key: vocab\n  fields:\n    - key: front\n  templates:\n    - key: recognition\n      front_file: front.html\n      back_file: back.html\n      target_deck: {deck:?}\n"
         )).unwrap();

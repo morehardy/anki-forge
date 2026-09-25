@@ -63,7 +63,7 @@ pub(super) fn validate(model: &NoteTypeBuilder) -> Result<(), SchemaError> {
                     Kind::InvalidName,
                     "SCHEMA.NAME_INVALID",
                     format!(
-                        "invalid target deck {deck:?} for template {:?}: deck names need nonempty components without surrounding whitespace or control characters",
+                        "invalid target deck {deck:?} for template {:?}: deck names need nonempty components without surrounding whitespace, leading/trailing colons or control characters",
                         template.key.as_str()
                     ),
                 ));
