@@ -1,100 +1,62 @@
 # Python API
 
-This reference describes the native Python 0.2 product API. Start with the
-[Python quickstart](quick-start.md). The package includes `py.typed`; public
-signatures are in [the package source](../../bindings/python/src/anki_forge/__init__.py).
+The SDK calls the default Rust public API through a native extension. It includes `py.typed` and checked public signatures. Start with the [quickstart](quick-start.md).
 
-## Project and notes
+## Project and note values
 
-| API | Return / behavior | Defaults and requirements |
-| --- | --- | --- |
-| `Project(name, stable_id=None, default_deck=None, *, base_dir=None)` | A Rust-backed Project | base_dir captures the current directory; settings are read-only |
-| `project.add_note(note)` | The Project for chaining | Validates and snapshots the input |
-| `project.add_notetype(note_type)` | The Project for chaining | Declare the type before adding its notes |
-| `project.validate()` | `ValidationReport` | Authoring checks; no APKG or media re-read |
-| `project.import_template_bundle(path)` | The Project for chaining | Relative to base_dir; failed imports leave no partial additions |
-| `Project.from_deck(deck)` | A Project snapshot | Preserves the original Deck |
-| `Note.basic(front, back, stable_id=...)` | Mutable input Note | Escapes text |
-| `Note.cloze(text, back_extra=..., stable_id=...)` | Mutable input Note | Preserves HTML/cloze text; extra is text-escaped |
-| `Note(type_id).text/.html/.image/.sound(...)` | The input Note | Finish edits before passing it to add_note |
-
-`project.notes` and `project.notetypes` are detached observations. Editing them or
-an already-added input does not change the Project. Construct the desired new
-Project with the same stable identities when updating a dataset.
-
-## Custom note types
-
-Use `NoteType.custom(id)` or `NoteType.custom_cloze(id, cloze_field=...)`, then
-chain `.field(Field(...))`, `.template(Template(...))`, `.identity(...)` and
-`.css(...)`. Consult [the exact constructors](../../bindings/python/src/anki_forge/notetype.py)
-for positional/keyword details.
-
-Fields have display names and stable keys. `required=True` and `optional=True`
-are mutually exclusive. `GenerationRule.all([...])` / `.any([...])` use keys;
-template HTML references display names. Explicit identities use
-`IdentityRecipe.fields([...])`; retain old keys during a 0.1 migration.
-
-## Media
-
-| API | Return / behavior |
+| Entry | Behavior |
 | --- | --- |
-| `project.media.add_file(path, export_as=...)` | `MediaRef`; reads and fingerprints the file immediately |
-| `project.media.add_bytes(source_label=..., data=..., export_as=...)` | `MediaRef`; snapshots non-empty bytes/bytearray up to 64 KiB |
-| `MediaRegistry.inline_limit_bytes()` | Current core inline limit |
-| `media.image()` / `media.sound()` | Content values using the registered export filename |
+| `Project(namespace, *, name=None, default_deck=None)` | Validates the explicit stable namespace; display name defaults to namespace |
+| `project.add(key, note)` | Atomically collects the note, model and owned media; duplicate note keys fail |
+| `project.add_asset(media)` | Includes an explicit raw HTML/CSS/script dependency |
+| `len(project)` | Number of successfully added notes |
+| `Note.basic(front, back)` | Built-in Basic model; strings mean Text |
+| `Note.cloze(text)` | Built-in Cloze model; strings mean Text and retain cloze syntax |
+| `note.field(key, content)` | Returns a new note with the field assignment; key validation occurs on add |
+| `note.deck(name)` / `.tag(tag)` / `.tags(tags)` | Returns a configured note |
+| `note.note_type` | The immutable owned model |
 
-Keep file sources available and unchanged until export. A reference from another
-Project only resolves if the destination registers that export filename. Deck
-has its own `DeckMediaRef` and media rules.
+Ordinary strings become Text. `Content.text(value)` and `Content.html(value)` are explicit constructors; `Content.sequence(iterable)` composes strings and content without rendering or losing media dependencies. A field does not accept a raw filename as a media reference.
 
-## Build and output
+## Models and templates
 
-| API | Result | Behavior |
-| --- | --- | --- |
-| `project.build(options=None)` | `BuildReport` | Default options; temporary artifact without an explicit destination |
-| `project.write_apkg(path, *, options=None, ...)` | `BuildReport` | Persistent output; selected comparison/lockfile keywords are also supported |
-| `project.diff_against_apkg(path, *, inspect_limits=None)` | `ProjectDiffReport` | No package publication or lockfile advancement |
-| `project.to_apkg_bytes(options=None)` | `bytes` | Reads the complete built package into memory |
-| `project.write_to(binary_file, options=None)` | Written byte count | Copies a completed package in bounded chunks, leaves the stream open |
+`NoteType.builder(key)` returns an immutable builder. Its `.name`, `.field`, `.template`, `.css`, `.cloze_field` and `.asset` methods return updated builders. `.build()` validates the complete definition and returns an immutable NoteType. `model.note()` creates a note owning that model. `NoteType.from_bundle(path, limits=MediaLimits())` loads the same model and its assets from the current bundle format; the optional budget applies separately to each asset before reading.
 
-Call `ensure_success()` on validation/build/diff reports. Counts are dictionary
-entries such as `report.counts["notes"]`. `raw` and `to_json()` retain core fields
-and Python integer precision. A deserialized report contains path metadata,
-not ownership of a temporary file.
+`Field(key, name=None, required=False, sort=False)` separates the stable key from the display name. `Template(key, front, back, name=None, browser_front=None, browser_back=None, target_deck=None, generation=GenerationRule())` uses field keys in every source string. `GenerationRule.all(keys)` and `.any(keys)` configure card generation. The default infers Anki's field-presence condition. A builder's `.cloze_field(key)` declares custom cloze generation.
 
-## BuildOptions
+## Media and occlusion
 
-`BuildOptions` is immutable; unspecified (`None`) values keep Rust defaults.
-
-| Fields | Purpose |
+| Entry | Behavior |
 | --- | --- |
-| `output`, `artifacts_dir`, `report_json` | Permanent output and optional retained evidence |
-| `inspect`, `inspect_limits` | Inspection settings; `InspectLimits()` reads current core defaults |
-| `compare_to`, `fail_on` | Previous APKG and optional risk threshold |
-| `identity_lockfile`, `write_identity_lockfile`, `update_safety` | Identity/revision evidence and update policy |
-| `self_contained`, `media_mode` | Explicit inline behavior or normal path-backed media |
-| `media_policy`, `media_store_dir` | Advanced SDK media configuration |
+| `Media.file(path, *, limits=MediaLimits())` | Reads an owned snapshot immediately |
+| `Media.bytes(data, media_type, *, limits=MediaLimits())` | Owns bytes with an explicit MIME type |
+| `media.with_export_name(name)` | Returns a new filename value sharing the snapshot; previous references retain their names |
+| `media.filename`, `media.media_type`, `len(media)` | Read-only snapshot metadata |
+| `media.image()` / `.sound()` | Typed content that retains the snapshot |
 
-`.first_update_safe_build(path)` returns strict options that write the first
-lockfile. `.update_safe(path)` returns strict options that read it. Explicitly
-request `write_identity_lockfile=True` for candidate evidence advancement.
-`report_json` needs a persistent output/artifact destination. See
-[diagnostics and update-safe builds](diagnostics.md).
+`MediaLimits(max_bytes=256 << 20)` controls each import before snapshot creation. Large media can spill to owned temporary storage. Naming conflicts are validated across all explicit and automatically collected assets.
 
-## Artifacts, Deck and errors
+`Note.image_occlusion(media)` returns an ImageOcclusionBuilder. Chain `.mask(Mask.rect(key, x, y, width, height))`, optionally `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)`, then `.build()`. The default mode is `HIDE_ALL_GUESS_ONE`. Completion decodes the image and validates stable mask keys and finite in-bounds pixel coordinates. On the returned Note, set `header`, `back_extra` or `comments` normally. The generated `image` and `occlusion` fields cannot be assigned manually.
 
-`report.artifact` is an owning handle when present. Retain it to keep temporary
-output alive; `copy.copy(handle)` creates another owner. `persist_to(path)`
-returns a persistent handle, and `close()` releases an owner. Explicit outputs
-survive cleanup. Reports and artifacts support context managers.
+## Operations and results
 
-`Deck` offers `add_basic`, `add_cloze`, `add_image_occlusion`, validation and the
-same build/output helpers. Deck text follows Rust Deck HTML semantics. See
-[the complete native workflow](../../bindings/python/examples/native_workflow.py)
-and [Image Occlusion limits](../image-occlusion.md).
+| Entry | Result |
+| --- | --- |
+| `project.build(BuildOptions.to(path))` | BuildOutput with a guaranteed persistent artifact |
+| `project.build(BuildOptions.temporary())` | BuildOutput with an owned temporary artifact |
+| `options.update_from(path)` | Returns options for updating from complete baseline evidence |
+| `project.compare(CompareOptions.against(path))` | Completed ComparisonReport, including a separate publication policy decision |
+| `options.update_policy(policy)` | Applies explicit risk policy to Update/Compare; invalid for Create |
+| `options.inspect_limits(limits)` | Applies finite limits independently to baseline and candidate |
 
-Add/media/bundle failures raise structured exceptions; build failures are
-reported through `BuildReport`, and `ensure_success()` raises `BuildError` with
-the report. Read [diagnostics](diagnostics.md) for paths, codes and import errors.
-Each native object permits one operation at a time; use separate objects for
-concurrent work. Native objects and Artifact handles cannot be reused after fork.
+BuildOutput has `.artifact`, `.report` and `.snapshot()`. BuildReport exposes `.counts` (BuildCounts with notes/cards/media), `.diagnostics`, `.comparison` and `.snapshot()`. A report has no outcome or file owner. ComparisonReport exposes `.findings`, `.policy`, `.allows_publication` and `.snapshot()`. Snapshots are ordinary JSON-serializable dictionaries and contain no artifact ownership.
+
+ApkgArtifact exposes `.path`, `.persist_to(path)` and `.close()`. Copying it with `copy.copy` retains another owner; a context manager releases that owner on exit. Temporary output disappears when its last owner is released. Persistent paths survive handle cleanup. A failed persist keeps the source handle usable.
+
+`UpdatePolicy()` blocks High and Critical findings. `.fail_on(RiskLevel.MEDIUM)` changes the threshold. `.allow('RISK.NOTE_REMOVED')` explicitly accepts the whole registered category, preserving evidence. Unknown codes fail immediately. `InspectLimits` exposes all finite byte/count budgets, including `max_identity_bytes`; it cannot disable required inspections.
+
+## Errors and concurrency
+
+Failures raise SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError or PersistError. Each exposes `kind`, `code`, `details`, structured observations in `source_details`, and source-chain text in `causes`, and retains the native exception as `__cause__`. I/O causes retain a chained OSError where available. BuildError provides `.report` and `.snapshot()`; CompareError provides partial `.report`; PersistError details include actual publication facts.
+
+Native Project operations release the GIL and reject simultaneous use of the same object with `BINDING.PROJECT_BUSY`; independent projects can run concurrently. After a process fork, recreate all native values and handles. Inherited handles reject operations with `BINDING.FORKED_OBJECT`, and their cleanup cannot remove parent-owned files. Child-created values operate and clean up normally. See [diagnostics](diagnostics.md).

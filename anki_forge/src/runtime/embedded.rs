@@ -7,20 +7,24 @@ use std::{
 
 use anyhow::{ensure, Context};
 use flate2::read::GzDecoder;
+#[cfg(test)]
 use tempfile::TempDir;
 
 use crate::writer_core::{BuildContext, WriterPolicy};
 
+#[cfg(test)]
 use super::{load_bundle_from_manifest, RuntimeBundle, RuntimeMode};
 
 const EMBEDDED_BUNDLE_VERSION: &str = env!("ANKI_FORGE_EMBEDDED_BUNDLE_VERSION");
 const EMBEDDED_BUNDLE: &[u8] = include_bytes!(env!("ANKI_FORGE_EMBEDDED_BUNDLE_PATH"));
 
+#[cfg(test)]
 struct EmbeddedRuntime {
     _extraction_dir: TempDir,
     bundle: RuntimeBundle,
 }
 
+#[cfg(test)]
 static EMBEDDED_RUNTIME: OnceLock<Result<EmbeddedRuntime, String>> = OnceLock::new();
 static EMBEDDED_WRITER_DEFAULTS: OnceLock<Result<(WriterPolicy, BuildContext), String>> =
     OnceLock::new();
@@ -184,6 +188,7 @@ pub const fn embedded_bundle_version() -> &'static str {
 }
 
 /// Loads the self-contained contract bundle shipped in this crate.
+#[cfg(test)]
 pub fn load_embedded_bundle() -> anyhow::Result<RuntimeBundle> {
     let runtime =
         EMBEDDED_RUNTIME.get_or_init(|| materialize_embedded_runtime().map_err(|e| e.to_string()));
@@ -193,6 +198,7 @@ pub fn load_embedded_bundle() -> anyhow::Result<RuntimeBundle> {
     }
 }
 
+#[cfg(test)]
 fn materialize_embedded_runtime() -> anyhow::Result<EmbeddedRuntime> {
     let extraction_dir =
         tempfile::tempdir().context("create embedded contract extraction directory")?;
@@ -265,8 +271,10 @@ mod tests {
     #[test]
     fn in_memory_defaults_match_complete_path_runtime() {
         let (policy, context) = super::load_writer_defaults().unwrap();
-        let (runtime, path_policy, path_context) =
-            crate::runtime::load_default_writer_stack().unwrap();
+        let bundle = super::load_embedded_bundle().unwrap();
+        let path_policy = crate::runtime::load_writer_policy(&bundle, "default").unwrap();
+        let path_context = crate::runtime::load_build_context(&bundle, "default").unwrap();
+        let runtime = bundle.runtime;
         assert_eq!(
             serde_json::to_value(policy).unwrap(),
             serde_json::to_value(path_policy).unwrap()

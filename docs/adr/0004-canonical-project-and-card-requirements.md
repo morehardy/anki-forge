@@ -1,5 +1,7 @@
 # ADR 0004: Canonical Project Lowering and Persisted Card Requirements
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 ## Context
 
 The typed Rust Project and template-bundle paths previously converted custom

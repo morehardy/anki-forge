@@ -535,10 +535,7 @@ fn classify_ref(raw_ref: &str, url_semantics: bool) -> ReferenceClassification {
     if local_ref.contains(['/', '\\']) {
         return ReferenceClassification::Unsafe("decoded-path-separator");
     }
-    if !local_ref
-        .bytes()
-        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
-    {
+    if crate::media::validate_name(&local_ref).is_err() {
         return ReferenceClassification::Unsafe("helper-unsafe-character");
     }
 

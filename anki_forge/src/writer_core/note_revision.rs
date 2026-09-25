@@ -1,19 +1,25 @@
+#[cfg(any(test, feature = "internal-tools"))]
 use std::collections::{BTreeMap, BTreeSet};
 
+#[cfg(any(test, feature = "internal-tools"))]
 use serde::{Deserialize, Serialize};
 
+#[cfg(any(test, feature = "internal-tools"))]
 use crate::authoring_core::NormalizedNote;
 
+#[cfg(any(test, feature = "internal-tools"))]
 const HASH_PREFIX: &str = "note-content.v1:blake3:";
 pub(crate) const INITIAL_MTIME_SECS: i64 = 1;
 
 /// Full note content evidence, independent of the fields used to derive identity.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[cfg(any(test, feature = "internal-tools"))]
 pub struct NoteRevision {
     pub content_hash: String,
     pub mtime_secs: i64,
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 impl NoteRevision {
     pub(crate) fn from_note(note: &NormalizedNote) -> Self {
         let payload = revision_payload_json(note);
@@ -22,16 +28,9 @@ impl NoteRevision {
             mtime_secs: note.mtime_secs.unwrap_or(INITIAL_MTIME_SECS),
         }
     }
-
-    pub(crate) fn validate(&self) -> anyhow::Result<()> {
-        let hash = self.content_hash.strip_prefix(HASH_PREFIX).unwrap_or("");
-        anyhow::ensure!(self.mtime_secs > 0 && hash.len() == 64
-            && hash.bytes().all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte)),
-            "UPDATE.NOTE_REVISION_INVALID: expected a positive time and a supported full-content hash");
-        Ok(())
-    }
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn revision_payload_json(note: &NormalizedNote) -> String {
     // This fixed payload contains only strings, a BTreeMap and sorted tags.
     // Declare struct fields in canonical order so direct serialization keeps

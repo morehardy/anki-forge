@@ -8,7 +8,8 @@ use napi::{Env, Result, Task};
 pub fn spawn<'env, T: Task + 'static>(env: &'env Env, mut task: T) -> Result<Object<'env>> {
     let (deferred, promise) = env.create_deferred()?;
     spawn_blocking(move || {
-        let result = task.compute();
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| task.compute()))
+            .unwrap_or_else(|_| Err(napi::Error::from_reason("BINDING.TASK_PANIC")));
         deferred.resolve(move |env| {
             let value = match result {
                 Ok(output) => task.resolve(env, output),

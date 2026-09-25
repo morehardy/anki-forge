@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use anyhow::Context;
 
-use crate::writer::{diff_reports, DiffReport, InspectReport};
+use crate::writer_core::{diff_reports, DiffReport, InspectReport};
 
 pub fn diff_from_paths(
     left_path: impl AsRef<Path>,

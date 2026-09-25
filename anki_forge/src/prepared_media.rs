@@ -3,7 +3,9 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::fs::File;
 use std::io::{self, Read, Write};
-use std::path::{Path, PathBuf};
+#[cfg(test)]
+use std::path::Path;
+use std::path::PathBuf;
 use std::sync::mpsc::{sync_channel, SyncSender};
 use std::sync::{Arc, Mutex};
 
@@ -26,11 +28,12 @@ const MAX_WORKERS: usize = 4;
 
 type CandidateArchive = StreamZip<tempfile::NamedTempFile>;
 
+#[cfg(test)]
 pub(crate) enum RegisteredFingerprint {
     Sha1(String),
-    Blake3 { digest: String, size: u64 },
 }
 
+#[cfg(test)]
 struct RegisteredSource {
     path: PathBuf,
     fingerprint: RegisteredFingerprint,
@@ -38,12 +41,14 @@ struct RegisteredSource {
 
 pub(crate) struct PreparedMedia {
     archive: Mutex<Option<CandidateArchive>>,
+    #[cfg(test)]
     registered: BTreeMap<String, RegisteredSource>,
     objects: BTreeMap<String, (String, u64)>,
     export_order: Vec<String>,
 }
 
 impl PreparedMedia {
+    #[cfg(test)]
     pub(crate) fn new_in(directory: &Path) -> io::Result<Self> {
         let file = tempfile::NamedTempFile::new_in(directory)?;
         let mut archive = StreamZip::new(file);
@@ -56,6 +61,7 @@ impl PreparedMedia {
         })
     }
 
+    #[cfg(test)]
     pub(crate) fn register_source(
         &mut self,
         id: String,
@@ -126,7 +132,10 @@ impl PreparedMedia {
                                 },
                             )
                             .map_err(|error| {
-                                diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error.to_string())
+                                let mut diagnostic =
+                                    diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error.to_string());
+                                diagnostic.io_cause = error.downcast::<io::Error>().ok();
+                                diagnostic
                             })?;
                         export_order.push(item.desired_filename.clone());
                     }
@@ -229,6 +238,7 @@ impl PreparedMedia {
         context: &mut zstd::zstd_safe::CCtx<'static>,
         pool: &PayloadPool,
     ) -> Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError> {
+        #[cfg(test)]
         let source = if let Some(registered) = self.registered.get(&item.id) {
             let metadata = std::fs::metadata(&registered.path)
                 .map_err(|error| source_error(item, &registered.path, error))?;
@@ -249,10 +259,14 @@ impl PreparedMedia {
         } else {
             prepare_media_source(item, options)?
         };
+        #[cfg(not(test))]
+        let source = prepare_media_source(item, options)?;
+        #[cfg(test)]
+        let registered = self.registered.contains_key(&item.id);
+        #[cfg(not(test))]
+        let registered = false;
         let limit = options.media_policy.max_media_object_bytes;
-        if !self.registered.contains_key(&item.id)
-            && limit.is_some_and(|limit| source.known_size_bytes() > limit)
-        {
+        if !registered && limit.is_some_and(|limit| source.known_size_bytes() > limit) {
             return Err(diagnostic(
                 item,
                 "MEDIA.SIZE_LIMIT_EXCEEDED",
@@ -266,8 +280,7 @@ impl PreparedMedia {
             PreparedMediaSource::InlineBytes(bytes) => Box::new(io::Cursor::new(bytes)),
         };
         let sink = pool.payload();
-        let encode_error =
-            |error: io::Error| diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error.to_string());
+        let encode_error = |error: io::Error| io_diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error);
         let mut encoder = zstd::stream::Encoder::with_context(sink, context);
         let mut sha1 = Sha1::new();
         let mut blake3 = blake3::Hasher::new();
@@ -277,7 +290,7 @@ impl PreparedMedia {
         loop {
             let count = reader
                 .read(&mut buffer)
-                .map_err(|error| diagnostic(item, "MEDIA.SOURCE_READ_FAILED", error.to_string()))?;
+                .map_err(|error| io_diagnostic(item, "MEDIA.SOURCE_READ_FAILED", error))?;
             if count == 0 {
                 break;
             }
@@ -288,7 +301,7 @@ impl PreparedMedia {
                     "media size overflow".into(),
                 )
             })?;
-            if !self.registered.contains_key(&item.id) && limit.is_some_and(|limit| size > limit) {
+            if !registered && limit.is_some_and(|limit| size > limit) {
                 return Err(diagnostic(
                     item,
                     "MEDIA.SIZE_LIMIT_EXCEEDED",
@@ -306,13 +319,10 @@ impl PreparedMedia {
         }
         let sha1 = hex::encode(sha1.finalize());
         let blake3 = blake3.finalize().to_hex().to_string();
+        #[cfg(test)]
         if let Some(registered) = self.registered.get(&item.id) {
             let matches = match &registered.fingerprint {
                 RegisteredFingerprint::Sha1(expected) => &sha1 == expected,
-                RegisteredFingerprint::Blake3 {
-                    digest,
-                    size: expected_size,
-                } => &blake3 == digest && size == *expected_size,
             };
             if !matches {
                 return Err(diagnostic(
@@ -390,7 +400,14 @@ fn diagnostic(item: &AuthoringMedia, code: &str, summary: String) -> MediaIngest
             summary,
             path: Some(item.id.clone()),
         }],
+        io_cause: None,
     }
+}
+
+fn io_diagnostic(item: &AuthoringMedia, code: &str, cause: io::Error) -> MediaIngestError {
+    let mut error = diagnostic(item, code, cause.to_string());
+    error.io_cause = Some(cause);
+    error
 }
 
 fn source_error(
@@ -398,7 +415,7 @@ fn source_error(
     path: &std::path::Path,
     error: io::Error,
 ) -> MediaIngestError {
-    diagnostic(
+    let mut diagnostic = diagnostic(
         item,
         if error.kind() == io::ErrorKind::NotFound {
             "MEDIA.SOURCE_MISSING"
@@ -406,7 +423,9 @@ fn source_error(
             "MEDIA.SOURCE_READ_FAILED"
         },
         format!("read media source {}: {error}", path.display()),
-    )
+    );
+    diagnostic.io_cause = Some(error);
+    diagnostic
 }
 
 #[cfg(test)]

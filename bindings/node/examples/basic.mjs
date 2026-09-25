@@ -1,18 +1,26 @@
-import { Project, Note } from 'anki-forge-node';
-import os from 'node:os';
-import path from 'node:path';
-import fs from 'node:fs/promises';
-
-const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), 'anki-forge-example-'));
-const project = new Project('Spanish', {
-  stableId: 'spanish-a1',
-  defaultDeck: 'Spanish::A1',
-  baseDir,
-});
-project.addNote(Note.basic('hola', 'hello', { stableId: 'es:hola' }));
-project.addNote(Note.cloze('{{c1::uno}}, {{c2::dos}}', { stableId: 'es:numbers' }));
-(await project.validate()).ensureSuccess();
-const report = await project.writeApkg('spanish.apkg');
-report.ensureSuccess();
-console.log(report.prettyReport());
-console.log(`APKG: ${report.artifact.path}`);
+import {
+  Project,
+  Note,
+  Content,
+  BuildOptions,
+  CompareOptions,
+} from "../dist/index.mjs";
+const project = new Project("example").name("Example").defaultDeck("Learning");
+project.add("hello", Note.basic("Hello <world>", Content.html("<b>你好</b>")));
+const first = await project.build(BuildOptions.temporary());
+try {
+  const next = new Project("example").defaultDeck("Learning");
+  next.add("hello", Note.basic("Hello <world>", "你好，世界"));
+  console.log(
+    (
+      await next.compare(CompareOptions.against(first.artifact.path))
+    ).snapshot(),
+  );
+  const updated = await next.build(
+    BuildOptions.temporary().updateFrom(first.artifact.path),
+  );
+  console.log(updated.snapshot());
+  await updated.artifact.close();
+} finally {
+  await first.artifact.close();
+}

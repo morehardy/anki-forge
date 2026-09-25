@@ -51,7 +51,7 @@ Python Product objects
   -> Python BuildReport / DiagnosticsError
 ```
 
-This approach avoids PyO3 release complexity while preserving one semantic pipeline. It also aligns with the existing `contract_tools product-build` command and `anki_forge::runtime::build_product_document_with_writer_stack(...)`.
+This approach avoids PyO3 release complexity while preserving one semantic pipeline. It also aligns with the existing `contract_tools product-build` command and `ankiforge::runtime::build_product_document_with_writer_stack(...)`.
 
 ## Alternatives Considered
 

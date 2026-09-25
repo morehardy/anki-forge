@@ -1,7 +1,13 @@
+#[cfg(all(test, feature = "internal-tools"))]
+use crate::writer_core::staging::{
+    load_staging_manifest, staging_notetype_ids, MaterializedStaging,
+};
 use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
-use std::path::{Path, PathBuf};
+use std::path::Path;
+#[cfg(all(test, feature = "internal-tools"))]
+use std::path::PathBuf;
 
 #[cfg(test)]
 use crate::authoring_core::stock::resolve_stock_notetype;
@@ -26,13 +32,11 @@ use crate::writer_core::compat_schema::{
 };
 use crate::writer_core::deck_name::DeckRegistry;
 use crate::writer_core::model::{WriterGuidAssignment, WriterGuidPlan};
-use crate::writer_core::staging::{
-    load_staging_manifest, resolve_deck_registry, staging_notetype_ids, BuildArtifactTarget,
-    MaterializedStaging,
-};
+use crate::writer_core::staging::{resolve_deck_registry, BuildArtifactTarget};
 
 pub struct ApkgMaterialization {
     pub apkg_ref: String,
+    #[cfg(all(test, feature = "internal-tools"))]
     pub apkg_path: PathBuf,
     pub package_fingerprint: String,
 }
@@ -101,6 +105,7 @@ fn validate_guid_plan<'a>(
     Ok(by_note)
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub fn emit_apkg(
     materialized: &MaterializedStaging,
     artifact_target: &BuildArtifactTarget,
@@ -191,8 +196,16 @@ fn emit_apkg_with_plans(
             normalized_ir,
             guid_assignments,
             notetype_ids,
+            artifact_target.native_identity.as_deref(),
         )?;
         write_zstd_collection_entry(&mut zip, latest_collection.path())?;
+        if let Some(identity) = artifact_target.native_identity.as_deref() {
+            write_stored_entry(
+                &mut zip,
+                crate::build::identity::EVIDENCE_ENTRY,
+                &identity.envelope(latest_collection.path(), normalized_ir)?,
+            )?;
+        }
         drop(latest_collection);
         write_stored_entry(&mut zip, "collection.anki2", LEGACY_UPGRADE_COLLECTION)?;
 
@@ -216,6 +229,7 @@ fn emit_apkg_with_plans(
 
     Ok(ApkgMaterialization {
         apkg_ref: package_ref(artifact_target),
+        #[cfg(all(test, feature = "internal-tools"))]
         apkg_path,
         package_fingerprint,
     })
@@ -230,8 +244,19 @@ fn write_sequential_package(
     prepared: &crate::prepared_media::PreparedMedia,
 ) -> Result<String> {
     let mut zip = prepared.take_archive(normalized)?;
-    let collection =
-        create_latest_collection_file(&target.root_dir, normalized, guids, notetype_ids)?;
+    let collection = create_latest_collection_file(
+        &target.root_dir,
+        normalized,
+        guids,
+        notetype_ids,
+        target.native_identity.as_deref(),
+    )?;
+    if let Some(identity) = target.native_identity.as_deref() {
+        zip.bytes(
+            crate::build::identity::EVIDENCE_ENTRY,
+            &identity.envelope(collection.path(), normalized)?,
+        )?;
+    }
     let mut encoded = tempfile::NamedTempFile::new_in(&target.root_dir)?;
     let (size, crc) = {
         let output = std::io::BufWriter::with_capacity(64 * 1024, encoded.as_file_mut());
@@ -442,6 +467,7 @@ fn create_latest_collection_file(
     normalized_ir: &NormalizedIr,
     guid_assignments: &GuidAssignments<'_>,
     notetype_ids: &std::collections::BTreeMap<String, i64>,
+    identity: Option<&crate::build::identity::PackageIdentity>,
 ) -> Result<tempfile::NamedTempFile> {
     let source = create_collection_source(
         root_dir,
@@ -450,6 +476,20 @@ fn create_latest_collection_file(
         notetype_ids,
         COLLECTION_MEMORY_MAX_PAGES,
     )?;
+    if let Some(identity) = identity {
+        let transaction = source.connection.unchecked_transaction()?;
+        for model in identity.models.values().filter(|model| model.active) {
+            transaction.execute(
+                "UPDATE notetypes SET mtime_secs = ?1 WHERE id = ?2",
+                [model.mtime_secs, model.id],
+            )?;
+            transaction.execute(
+                "UPDATE templates SET mtime_secs = ?1 WHERE ntid = ?2",
+                [model.mtime_secs, model.id],
+            )?;
+        }
+        transaction.commit()?;
+    }
     // Keep compaction without rewriting and journaling the source database.
     // An empty, uniquely reserved file also cleans up on any error path.
     let compacted =
@@ -1136,9 +1176,14 @@ mod tests {
         let root = tempfile::tempdir().unwrap();
         let normalized = two_basic_notes();
         let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
-        let collection =
-            create_latest_collection_file(root.path(), &normalized, &Default::default(), &ids)
-                .unwrap();
+        let collection = create_latest_collection_file(
+            root.path(),
+            &normalized,
+            &Default::default(),
+            &ids,
+            None,
+        )
+        .unwrap();
         let path = collection.path().to_owned();
         assert_streamed_collection_matches_buffered_zip(&path);
         let conn = Connection::open(&path).unwrap();

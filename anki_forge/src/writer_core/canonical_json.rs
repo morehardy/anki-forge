@@ -1,6 +1,8 @@
 use anyhow::Result;
+#[cfg(any(test, feature = "internal-tools"))]
 use serde::ser::{SerializeMap, SerializeSeq};
 use serde::Serialize;
+#[cfg(any(test, feature = "internal-tools"))]
 use serde_json::Value;
 
 pub fn to_canonical_json(value: &impl Serialize) -> Result<String> {
@@ -11,11 +13,13 @@ pub fn to_canonical_json(value: &impl Serialize) -> Result<String> {
 
 /// Borrow a JSON value while recursively excluding metadata keys. Object keys
 /// are sorted explicitly, including when a consumer enables `preserve_order`.
+#[cfg(any(test, feature = "internal-tools"))]
 pub(crate) struct FilteredValue<'a> {
     pub value: &'a Value,
     pub excluded: &'static [&'static str],
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 impl Serialize for FilteredValue<'_> {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self.value {

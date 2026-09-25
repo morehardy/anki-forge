@@ -1,60 +1,80 @@
 # Build and output guarantees
 
-Use this reference when retaining artifacts or publishing updates. For a first
-export use the [installation guide](installation.md); for a release sequence use
-[update and distribute a deck](updates.md).
+`Project::build` returns `BuildOutput` only after a successful operation, with a
+guaranteed APKG artifact. A failed operation returns `BuildError` with structured
+kind/code, observations, underlying causes and actual publication facts.
 
 ## Temporary and persistent artifacts
 
-A build without an explicit output or artifact directory returns a temporary
-`ApkgArtifact`. Keep its report or an owning artifact handle alive while using
-the path. Copying the path does not retain the file. Use `persist_to(path)`,
-`write_apkg(path)` or an explicit output for a permanent package.
+Choose the ownership model explicitly:
 
-Explicit destinations are caller-owned and survive handle cleanup. Report JSON
-is a snapshot and cannot own an artifact, so automatic `report_json` requires
-an output or artifact directory. See the full
-[artifact ownership contract](../anki_forge/README.md#artifact-ownership).
+| Request | Ownership |
+| --- | --- |
+| `BuildOptions::to(path)` | Persistent destination; survives handle cleanup |
+| `BuildOptions::temporary()` | Temporary file; deleted with its last artifact owner |
+| `artifact.persist_to(path)` | New persistent owner; original owner remains usable |
+
+Keep the `BuildOutput` or a cloned artifact alive while reading a temporary
+path. A report or JSON snapshot does not extend file lifetime. Rust drops owners
+normally; Node exposes `artifact.close()` for deterministic release. Copying the
+path into application state does not create an owner.
+
+Rust artifact handles retain absolute paths, including when the build or
+`persist_to` uses a relative destination. Later changes to the process working
+directory do not redirect reads or copies from an existing handle. Each new
+`persist_to` destination is resolved against the directory at that call.
+
+`BuildReport::snapshot()` contains only observations. `BuildOutput::snapshot()`
+and `BuildError::snapshot()` additionally state the real outcome. A warning can
+appear in a successful snapshot. Do not infer outcome from diagnostic severity,
+a path's existence, or whether a report has comparison findings.
 
 ## Baselines and publication
 
-When using `compare_to(previous_apkg)`, keep the baseline separate from the
-output, `artifacts_dir/package.apkg`, report JSON, and any writable identity
-lockfile. Builds reject existing same-file aliases (including relative paths,
-symlinks, and hard links) with `PROJECT.PATH_COLLISION` before writing. This
-includes the actual `staging/manifest.json` destination, whose links may point
-outside the artifact directory. Baselines, outputs, retained packages, and
-identity lockfiles (including read-only ones) must stay outside the writable
-`staging/` tree and its media directory, including directory aliases. Staging
-materialization must not overwrite these files before a risk rejection.
+For updates, retain the previous original distribution APKG as an immutable
+baseline and choose a separate output destination. Baseline evidence and
+candidate content are checked before publication. Policy rejection does not
+replace the output. Missing or corrupt evidence and exhausted inspection budgets
+are hard failures.
 
-New destinations are rechecked after creation and before lockfile/report writes,
-so filesystem-specific case folding cannot turn an APKG into JSON. A collision
-detected after publication returns an error but keeps the valid published APKG.
+Publication uses atomic replacement of the APKG. This is a per-file guarantee;
+writing an application's separate JSON report is a separate operation. The
+ordinary build does not write an additional identity file: complete versioned
+evidence is embedded in the distribution package.
 
-The baseline is inspected once before building; GUID reconciliation and diff
-use that same snapshot. The candidate APKG is compared and checked against
-`fail_on(...)` before publishing the APKG or updating the identity lockfile.
-On a blocked build, existing outputs and lockfiles remain unchanged, and the
-report retains diff/risk evidence with `artifact: null`. A separate report JSON
-can still be written; intermediate staging/media files may remain in an explicit
-artifact directory. Successful publication uses atomic replacement per file,
-not a transaction spanning the APKG, lockfile, and report.
-Output-only builds copy directly from the private candidate to the requested
-output; no extra package copy is made in the disposable artifact workspace.
-Private candidates live inside the artifact workspace, so an explicit
-`artifacts_dir(...)` also selects their filesystem; they are removed after the
-build. Lockfiles use an exclusively reserved temporary file beside the target,
-so temporary names cannot overwrite existing baselines or outputs.
+A late error can occur after publication, for example while confirming
+persistence. Error snapshots therefore record `PublicationSnapshot` facts:
+`path`, `stage` (`not_published` or `published`), `temporary`, and durability
+(`confirmed` or `unconfirmed`). Check these facts before retrying or announcing
+that no file was written. `PersistError` also preserves its publication fact and
+actual I/O source. Atomic replacement alone does not establish durability after
+a crash.
 
-## Inspection and failures
+Snapshot serialization preserves native paths without accessing the filesystem.
+Unicode paths remain JSON strings. Non-UTF-8 Unix paths use
+`{"encoding":"unix_bytes","bytes":[...]}`; Windows paths with unpaired UTF-16
+surrogates use `{"encoding":"windows_wide","units":[...]}`. The arrays contain
+the exact native bytes or code units. Success artifact paths, failure publication
+paths, and binding error-path details all use this representation. These values
+describe paths and do not retain artifact ownership. A filesystem may reject a
+particular native path, but its publication failure facts remain serializable.
 
-Inspection applies finite archive, entry-count, expansion and zstd-window budgets
-to the candidate and baseline. Start with `InspectLimits::default()` and raise
-only the relevant budget for a trusted larger deck. These limits are not a
-process-wide memory or CPU sandbox.
+## Inspection limits
 
-Check structured errors and reports. A late persistence failure can retain a
-valid published artifact in the error report. See
-[errors and concurrency](../anki_forge/README.md#errors-and-concurrency) and
-[troubleshooting](troubleshooting.md#updates-and-outputs).
+Finite archive, entry-count, expansion, decoded collection/media and zstd-window
+budgets apply independently to baseline and candidate. Start with
+`InspectLimits::default()` and deliberately raise a relevant limit when needed.
+A limit of zero is not unlimited. These counters are not a process-wide memory
+or CPU sandbox; media imports have a separate earlier per-asset budget.
+
+## Concurrent work
+
+Rust builds borrow immutable project state. Owned models and media can be shared
+across projects. The Node binding captures a project snapshot when build or
+compare is invoked, so later additions do not change that request. Retain the
+artifact owner until all readers have finished; closing the last temporary owner
+while a separate consumer still needs its path is an application lifetime error.
+
+Package inspection cannot establish every client-side behavior. Test rendering,
+playback and update imports with the intended Anki versions and settings. See
+[updates](updates.md) for scheduling and schema-change limits.

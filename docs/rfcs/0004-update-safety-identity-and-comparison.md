@@ -70,7 +70,7 @@ fingerprints plus the embedded bundle are regenerated from the changed writer.
 
 - `cargo test --workspace --all-features --no-fail-fast`: passed (existing ignored
   tests were not enabled).
-- `cargo test -p anki_forge --features internal-tools --test
+- `cargo test -p ankiforge --features internal-tools --test
   update_safety_blind_spots_tests --test writer_core_diff_tests`: 17 passed,
   including 14 new regressions. This focused rerun also covers the final staging
   validation change: legacy missing assignments recover positional IDs, while an

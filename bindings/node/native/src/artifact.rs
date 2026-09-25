@@ -1,12 +1,10 @@
-use anki_forge::build::{ApkgArtifact, BuildError, BuildReport};
+use ankiforge::build::{ApkgArtifact, BuildOptions, BuildOutput};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use serde_json::json;
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::path::PathBuf;
 use std::sync::Mutex;
-
-use crate::reports;
 
 /// A single independently releasable owner, backed by the core's shared artifact.
 #[napi]
@@ -89,7 +87,15 @@ impl Task for ArtifactTask {
                 .expect("persist task owns an artifact")
                 .persist_to(&path)
                 .map(Some)
-                .map_err(|error| Error::from_reason(format!("BINDING.ARTIFACT_IO: {error}"))),
+                .map_err(|error| {
+                    crate::domain(
+                        "persist",
+                        error.kind(),
+                        error.code(),
+                        &error,
+                        json!({"publication":error.publication()}),
+                    )
+                }),
             None => {
                 drop(self.artifact.take());
                 Ok(None)
@@ -103,45 +109,26 @@ impl Task for ArtifactTask {
     }
 }
 
-/// The ownership-bearing part travels beside JSON, including on domain failure.
-pub struct BuildOutcome {
-    pub result: String,
-    pub artifact: Option<ApkgArtifact>,
+/// Build on an owned project snapshot so later JS edits cannot race this operation.
+pub struct BuildTask {
+    pub project: ankiforge::Project,
+    pub options: BuildOptions,
 }
-
-impl BuildOutcome {
-    pub fn from_result(result: std::result::Result<BuildReport, BuildError>) -> Self {
-        match result {
-            Ok(report) => Self {
-                result: reports::success(reports::build_report(&report)),
-                artifact: report.artifact,
-            },
-            Err(error) => {
-                let mut details = reports::build_report(&error.report);
-                details["cause"] = json!(format!("{:?}", error.cause));
-                Self {
-                    result: reports::failure(
-                        "build",
-                        error.code().as_str(),
-                        &error.to_string(),
-                        details,
-                    ),
-                    artifact: error.report.artifact,
-                }
-            }
-        }
+impl Task for BuildTask {
+    type Output = BuildOutput;
+    type JsValue = NativeBuildResult;
+    fn compute(&mut self) -> Result<BuildOutput> {
+        self.project.build(self.options.clone()).map_err(|e| crate::domain("build", e.kind(), e.code(), &e, json!({"snapshot": e.snapshot(), "limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"entry":l.entry,"limit":l.limit,"observed":l.observed}))})))
     }
-
-    pub fn into_native(self) -> NativeBuildResult {
-        NativeBuildResult {
-            result: self.result,
-            artifact: self.artifact.map(NativeApkgArtifact::new),
-        }
+    fn resolve(&mut self, _env: Env, output: BuildOutput) -> Result<NativeBuildResult> {
+        Ok(NativeBuildResult {
+            snapshot: serde_json::to_string(&output.snapshot()).expect("serializable snapshot"),
+            artifact: NativeApkgArtifact::new(output.artifact().clone()),
+        })
     }
 }
-
 #[napi(object, object_from_js = false)]
 pub struct NativeBuildResult {
-    pub result: String,
-    pub artifact: Option<NativeApkgArtifact>,
+    pub snapshot: String,
+    pub artifact: NativeApkgArtifact,
 }

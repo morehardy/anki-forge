@@ -36,9 +36,6 @@ jobs:
       - name: Product semantics
         run: npm test
         working-directory: bindings/node
-      - name: Independent Rust and Node product parity
-        run: npm run test:parity
-        working-directory: bindings/node
       - name: Check this platform's release files
         run: node scripts/check-package.mjs
         working-directory: bindings/node
@@ -54,6 +51,13 @@ jobs:
         with:
           name: node-runtime-${{ matrix.os }}
           path: bindings/node/npm
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-observer-${{ matrix.os }}
+          path: |
+            target/debug/examples/sdk_parity
+            target/debug/examples/sdk_parity.exe
           if-no-files-found: error
 
   installed-consumer:
@@ -85,6 +89,15 @@ jobs:
       - name: Install from registry containing all four platform tarballs
         run: npm run test:installed -- --all
         working-directory: bindings/node
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-observer-${{ matrix.os }}
+          path: target/node-test-observer
+      - name: Restore observer executable permission
+        if: runner.os != 'Windows'
+        run: chmod +x target/node-test-observer/sdk_parity
       - name: Product behavior on the supported Node line
+        env:
+          ANKI_FORGE_TEST_OBSERVER: ${{ github.workspace }}/target/node-test-observer/sdk_parity${{ runner.os == 'Windows' && '.exe' || '' }}
         run: npm test
         working-directory: bindings/node

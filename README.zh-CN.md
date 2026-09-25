@@ -26,7 +26,8 @@
 
 **1,000 条文本笔记，53.9 ms 完成导出**，genanki 耗时 115.5 ms，**导出耗时减少了 53.3%**。
 在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki **少 34.7–53.3%**。
-下图对比原生 Rust `Deck` API 与 genanki；Node 和 Python 绑定未参与这次性能测试。
+下图是旧 Rust `Deck` API 与 genanki 的归档测量，不代表当前 Project API 的性能；
+Node 和 Python 绑定未参与这次测试。
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
@@ -67,15 +68,12 @@ README 中的图表由这份已归档的 CSV 生成，没有引入新的测量�
 生成为 `spanish.apkg`，可直接导入 Anki 桌面版：
 
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let mut deck = Deck::new("Spanish");
-    deck.basic()
-        .note("hola", "hello")
-        .stable_id("es:hola")
-        .add()?;
-    deck.write_apkg("spanish.apkg")?.ensure_success()?;
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("spanish.apkg"))?;
     Ok(())
 }
 ```
@@ -85,7 +83,7 @@ fn main() -> anyhow::Result<()> {
 ```sh
 git clone https://github.com/morehardy/anki-forge.git
 cd anki-forge
-cargo run -q -p anki_forge --example target_api_basic
+cargo run -q -p ankiforge --example target_api_basic
 ```
 
 将当前目录下的 `spanish.apkg` 导入 Anki，即可开始学习 **hola → hello**。
@@ -101,12 +99,11 @@ cargo run -q -p anki_forge --example target_api_basic
 请将路径调整为本地仓库的位置。示例使用 `anyhow` 处理错误：
 
 ```sh
-cargo add anki_forge --path ../anki-forge/anki_forge
+cargo add ankiforge --path ../anki-forge/anki_forge
 cargo add anyhow
 ```
 
-用 `Deck` 可以快速导出一个 APKG；需要自定义笔记类型、媒体、校验和多次更新时，
-可使用 `Project`。更多内容见 [Rust 编写指南](docs/rust-guide.md)。
+统一使用 `Project` 编写 stock 或自定义笔记、持有媒体、比较和更新。更多内容见 [Rust 编写指南](docs/rust-guide.md)。
 
 </details>
 
@@ -122,7 +119,7 @@ cargo add anyhow
 运行自包含的[卡片展示示例](anki_forge/examples/readme_showcase.rs)，即可生成这三张卡片：
 
 ```sh
-cargo run -q -p anki_forge --example readme_showcase
+cargo run -q -p ankiforge --example readme_showcase
 ```
 
 示例会生成 `readme-showcase.apkg`，包含三张卡片，以及现场生成的波形图和一秒钟的音频，
@@ -132,9 +129,9 @@ cargo run -q -p anki_forge --example readme_showcase
 | 想制作更丰富的卡片 | 从这里开始 |
 | --- | --- |
 | 自定义字段、布局和卡片生成规则 | [自定义笔记类型](anki_forge/examples/target_api_custom_notetype.rs) |
-| 图片、声音和模板媒体 | [媒体示例](anki_forge/examples/target_api_media.rs) · [故障排查](docs/rust-guide.md#media-troubleshooting) |
+| 图片、声音和模板媒体 | [媒体示例](anki_forge/examples/target_api_media.rs) · [故障排查](docs/troubleshooting.md) |
 | 可复用的模板、CSS 和资源 | [模板包](docs/template-bundles.md) |
-| 图片遮挡（Image Occlusion） | [支持的模式与限制](bindings/node/README.md#deck-and-image-occlusion) |
+| 图片遮挡（Image Occlusion） | [支持的模式与限制](docs/image-occlusion.md) |
 
 ## 持续改进已发布的牌组
 
@@ -148,36 +145,34 @@ cargo run -q -p anki_forge --example readme_showcase
 保留上一次分发的 APKG。修改 `Project` 中的笔记后，将它作为下一次构建的对比基线：
 
 ```rust
-let options = BuildOptions::new()
-    .output("spanish-v2.apkg")
-    .compare_to("spanish-v1.apkg");
-project.build(options)?.ensure_success()?;
+let options = BuildOptions::to("spanish-v2.apkg")
+    .update_from("spanish-v1.apkg");
+let output = project.build(options)?;
+println!("{:?}", output.report().comparison());
 ```
 
 [可直接运行的更新示例](anki_forge/examples/readme_update.rs) 会生成两个版本，并打印对比报告：
 
 ```sh
-cargo run -q -p anki_forge --example readme_update
+cargo run -q -p ankiforge --example readme_update
 ```
 
-稳定 ID 用来保持笔记身份一致；上一版 APKG 或持续维护的身份锁文件（identity lockfile）
-则提供修订依据。单独调用 `write_apkg()` 并不保证 Anki 会应用后续修改，
-实际导入结果仍受 Anki 的导入设置和本地较新修改的影响。
-
-对于长期维护的项目，请配合身份锁文件使用 `first_update_safe_build(...)` / `update_safe(...)`。
-锁文件维护、风险阈值和构建报告的说明见[完整更新流程](docs/rust-guide.md#updating-distributed-decks)。
+namespace 和 note key 标识笔记。每个生成的 APKG 都携带完整身份和修订证据；
+保留原始分发包，并用 `update_from` 生成下一版本。Anki 重新导出的包不作为基线。
+字段是否更新仍取决于客户端导入设置和本地修改时间。风险策略、实际导入验证
+与客户端限制见[完整更新流程](docs/updates.md)。
 
 ## 选择你的开发语言
 
 | 语言 | 使用入口 | 本地源码环境要求与安装 |
 | --- | --- | --- |
-| **Rust** | 用 `Deck` 快速导出；用 `Project` 自定义内容并管理更新 | Rust 1.92+ · [使用指南](docs/rust-guide.md) |
-| **Node.js / TypeScript** | 原生 Rust `Deck` 和 `Project` 对象 | Node 22.13+ · [SDK 安装与状态](bindings/node/README.md) |
+| **Rust** | `Project`、`Note`、拥有型模型和媒体 | Rust 1.92+ · [使用指南](docs/rust-guide.md) |
+| **Node.js / TypeScript** | 原生 Rust `Project`、`Note` 和拥有型值 | Node 22.13+ · [SDK 安装与状态](bindings/node/README.md) |
 | **Python** | 通过 Rust 运行时使用 `Project`、`Note`、自定义笔记类型和媒体 | CPython 3.11/3.12 · [源码安装](bindings/python/README.md#from-a-source-checkout) |
 
 从 genanki 迁移？请参考 [Python 迁移指南](docs/python/genanki-migration.md)。
 
-**发布状态：** 当前源码声明的版本为 Rust `0.1.0`、Node `0.2.0` 和 Python `0.2.0`。
+**发布状态：** 当前源码声明的版本为 Rust `0.2.0`、Node `0.2.0` 和 Python `0.2.0`。
 Python 0.2 已记录 wheel 与源码包验证，见[验证范围](bindings/python/COVERAGE.md)；这不代表已发布到 PyPI。
 [Rust 发布审计](docs/rust-crate-release-readiness.md) 记录了尚未完成的发布条件；
 Node 候选版本的 npm 发布和完整平台验证也仍待完成。
@@ -185,13 +180,13 @@ Node 候选版本的 npm 发布和完整平台验证也仍待完成。
 
 ## 兼容性与限制
 
-- Rust API 尚处于 1.0 之前的阶段。请使用 `anki_forge::prelude`；
-  `internal-tools` 仅供仓库内部工具使用。详见[受支持的接口](anki_forge/README.md#supported-01-interface)。
-- 图片遮挡目前支持 `hide-all-guess-one`。`hide-one-guess-one` 渲染器存在分组填空限制，
-  详见[行为记录](bindings/node/README.md#deck-and-image-occlusion)。
-- Project 的 Basic/text 接口会转义文本；Cloze 和 Deck 便捷接口保留 HTML。
-  详见[内容语义](docs/concepts.md#text-and-html)。
-- 构建报告和临时产物有明确的归属与保留规则，详见[产物归属](anki_forge/README.md#artifact-ownership)。
+- 常用类型从 `ankiforge` 根路径导入；高级类型位于 `note`、`schema`、`media`、
+  `build`、`update`、`diagnostics`。隐藏的 `tools` 需要 `internal-tools`，仅供仓库工具使用。
+- 图片遮挡支持 hide-all-guess-one 和 hide-one-guess-one，mask 使用稳定 key。
+  详见[图片遮挡](docs/image-occlusion.md)。
+- 所有笔记的字符串统一作为文本；HTML 使用 `Content::html`，typed 图片/音频保留资源所有权。
+- 构建成功返回必有产物的 `BuildOutput`。产物句柄持有临时文件，单独保存报告快照不会延长文件寿命。
+  详见[构建保证](docs/build-guarantees.md)。
 
 ## 参与贡献
 

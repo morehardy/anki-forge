@@ -28,6 +28,7 @@ pub struct BuildArtifactTarget {
     pub root_dir: PathBuf,
     pub stable_ref_prefix: String,
     pub media_store_dir: PathBuf,
+    pub(crate) native_identity: Option<std::sync::Arc<crate::build::identity::PackageIdentity>>,
 }
 
 impl BuildArtifactTarget {
@@ -37,6 +38,7 @@ impl BuildArtifactTarget {
             media_store_dir: root_dir.join(".anki-forge-media"),
             root_dir,
             stable_ref_prefix: stable_ref_prefix.into(),
+            native_identity: None,
         }
     }
 
@@ -62,6 +64,7 @@ impl BuildArtifactTarget {
 }
 
 #[derive(Debug, Clone)]
+#[cfg(all(test, feature = "internal-tools"))]
 pub struct StagingPackage {
     inner: StagingPackageData<NormalizedIr>,
 }
@@ -206,6 +209,7 @@ pub(crate) struct ResolvedTemplateTargetDeck {
     pub(crate) resolved_target_deck_id: i64,
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 pub(crate) fn load_staging_manifest(
     path: &Path,
 ) -> Result<(NormalizedIr, Option<BTreeMap<String, i64>>)> {
@@ -216,6 +220,7 @@ pub(crate) fn load_staging_manifest(
     Ok((manifest.normalized_ir, manifest.notetype_model_ids))
 }
 
+#[cfg(feature = "internal-tools")]
 pub(crate) fn staging_notetype_ids(
     normalized: &NormalizedIr,
     ids: Option<BTreeMap<String, i64>>,
@@ -233,6 +238,7 @@ pub(crate) fn staging_notetype_ids(
     crate::writer_core::identity::resolve_notetype_ids(normalized, Some(&ids))
 }
 
+#[cfg(all(test, feature = "internal-tools"))]
 impl StagingPackage {
     pub fn from_normalized(
         normalized_ir: &NormalizedIr,
@@ -246,10 +252,6 @@ impl StagingPackage {
             None,
         )
         .map(|inner| Self { inner })
-    }
-
-    pub fn diagnostics(&self) -> &[BuildDiagnosticItem] {
-        self.inner.diagnostics()
     }
 
     pub fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
@@ -323,6 +325,7 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             .expect("new staging packages always include validated model IDs")
     }
 
+    #[cfg(all(test, feature = "internal-tools"))]
     pub(crate) fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
         self.materialize_with_prepared_media(target, None)
     }
@@ -399,7 +402,7 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
                 writer: file,
                 hash: sha1::Sha1::new(),
             });
-            serde_json::to_writer(&mut writer, &CanonicalManifest(&self.manifest))?;
+            write_manifest_json(&mut writer, &self.manifest)?;
             writer.flush()?;
             let writer = writer.into_inner().map_err(|error| error.into_error())?;
             Ok(format!("artifact:{}", hex::encode(writer.hash.finalize())))
@@ -412,6 +415,21 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             artifact_fingerprint,
         })
     }
+}
+
+fn write_manifest_json<T: Borrow<NormalizedIr>>(
+    writer: impl Write,
+    manifest: &StagingManifest<T>,
+) -> Result<()> {
+    serde_json::to_writer(writer, &CanonicalManifest(manifest)).map_err(|error| {
+        // serde_json::Error::source skips the contained io::Error itself.
+        // Recover that exact error, including its OS code or custom payload.
+        if error.is_io() {
+            anyhow::Error::new(std::io::Error::from(error))
+        } else {
+            anyhow::Error::new(error)
+        }
+    })
 }
 
 pub(crate) fn invalid_result(
@@ -1078,6 +1096,38 @@ pub(crate) fn validated_media_output_path(media_dir: &Path, filename: &str) -> R
 #[cfg(test)]
 mod canonical_stream_tests {
     use super::*;
+
+    #[test]
+    fn manifest_serialization_keeps_the_original_write_error() {
+        let bundle = crate::runtime::load_embedded_bundle().unwrap();
+        let ir: NormalizedIr = serde_json::from_slice(
+            &fs::read(
+                bundle
+                    .runtime
+                    .bundle_root
+                    .join("fixtures/phase3/inputs/basic-normalized-ir.json"),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let manifest = StagingManifest {
+            kind: "staging-package".into(),
+            tool_contract_version: "phase3-v1".into(),
+            writer_policy_ref: "policy".into(),
+            build_context_ref: "context".into(),
+            normalized_ir: ir,
+            notetype_model_ids: None,
+            template_target_decks: Vec::new(),
+        };
+        let file = tempfile::NamedTempFile::new().unwrap();
+        let mut read_only = fs::File::open(file.path()).unwrap();
+        let error = write_manifest_json(&mut read_only, &manifest).unwrap_err();
+        let original = error
+            .downcast_ref::<std::io::Error>()
+            .expect("original filesystem error");
+        assert!(original.raw_os_error().is_some());
+        assert_eq!(fs::metadata(file.path()).unwrap().len(), 0);
+    }
 
     #[test]
     fn streamed_manifest_matches_the_previous_canonical_bytes_and_hash() {

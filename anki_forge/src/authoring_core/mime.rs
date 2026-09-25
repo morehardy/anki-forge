@@ -7,16 +7,11 @@ pub fn mime_from_filename(name: &str) -> Option<&'static str> {
     mime_from_extension(extension)
 }
 
-pub fn mime_from_filename_or_octet(name: &str) -> String {
-    mime_from_filename(name)
-        .unwrap_or(APPLICATION_OCTET_STREAM)
-        .into()
-}
-
 pub fn mime_from_extension(extension: &str) -> Option<&'static str> {
     let extension = extension.trim_start_matches('.').to_ascii_lowercase();
     match extension.as_str() {
         "png" => Some("image/png"),
+        "bmp" => Some("image/bmp"),
         "jpg" | "jpeg" => Some("image/jpeg"),
         "svg" => Some("image/svg+xml"),
         "gif" => Some("image/gif"),

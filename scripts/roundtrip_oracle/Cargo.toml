@@ -13,3 +13,5 @@ anyhow = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tempfile = "3.17.1"
+# Protocol values for the upstream public CardsService observation API.
+anki_proto = { path = "../../docs/source/anki/rslib/proto" }

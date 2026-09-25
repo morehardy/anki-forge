@@ -740,3 +740,246 @@ codes:
   - id: PRODUCT.NOTE_TYPE_KIND_UNSUPPORTED
     status: active
     summary: Product v3 custom note type kind is unsupported
+  - id: SCHEMA.KEY_INVALID
+    status: active
+    summary: stable model, field or template key is blank, reserved or syntactically invalid
+  - id: SCHEMA.NAME_INVALID
+    status: active
+    summary: display name is blank, reserved or cannot be encoded safely
+  - id: SCHEMA.DECLARATIONS_MISSING
+    status: active
+    summary: note type does not declare at least one field and one template
+  - id: SCHEMA.FIELD_DUPLICATE
+    status: active
+    summary: field keys or display names are duplicated
+  - id: SCHEMA.SORT_FIELD_DUPLICATE
+    status: active
+    summary: more than one field is selected for sorting
+  - id: SCHEMA.FIELD_SYMBOL_CONFLICT
+    status: active
+    summary: field display name conflicts with another field stable key
+  - id: SCHEMA.TEMPLATE_DUPLICATE
+    status: active
+    summary: template keys or display names are duplicated
+  - id: SCHEMA.CLOZE_DECLARATION_INVALID
+    status: active
+    summary: cloze model lacks its declared field or has an invalid template count
+  - id: SCHEMA.CLOZE_FILTER_MISMATCH
+    status: active
+    summary: cloze template does not consistently render its declared cloze field
+  - id: SCHEMA.CLOZE_FIELD_REQUIRED
+    status: active
+    summary: normal model contains a cloze filter without declaring a cloze field
+  - id: SCHEMA.GENERATION_INVALID
+    status: active
+    summary: explicit generation rule has empty or unknown fields or is used on a cloze model
+  - id: MEDIA.SNAPSHOT_IO_FAILED
+    status: active
+    summary: reading a source or owned media snapshot failed
+  - id: MEDIA.RESOURCE_LIMIT_EXCEEDED
+    status: active
+    summary: media snapshot import exceeded its configured byte budget
+  - id: MEDIA.TYPE_INVALID
+    status: active
+    summary: declared media MIME type is malformed or a wildcard
+  - id: MEDIA.TYPE_MISMATCH
+    status: active
+    summary: recognized media contents contradict the declared MIME type
+  - id: MEDIA.EXPORT_NAME_INVALID
+    status: active
+    summary: export filename is unsafe or nonportable
+  - id: MEDIA.EXPORT_NAME_COLLISION
+    status: active
+    summary: distinct media export names collide after Unicode NFC and default case folding
+  - id: SCHEMA.NAMESPACE_INVALID
+    status: active
+    summary: project namespace is blank or contains surrounding whitespace, control characters or path separators
+  - id: NOTE.KEY_INVALID
+    status: active
+    summary: explicit note key is blank or contains surrounding whitespace or control characters
+  - id: NOTE.KEY_DUPLICATE
+    status: active
+    summary: project already contains a note with this exact stable key
+  - id: NOTE.MODEL_CONFLICT
+    status: active
+    summary: model key is already bound to a different complete definition or its trimmed display name is shared by another model key
+  - id: NOTE.FIELD_UNKNOWN
+    status: active
+    summary: note assigns content to an undeclared stable field key
+  - id: NOTE.FIELD_REQUIRED
+    status: active
+    summary: note has empty or missing content in a required field
+  - id: NOTE.FIELD_CONTENT_INVALID
+    status: active
+    summary: authored note field contains the reserved raw U+001F Anki field separator
+  - id: NOTE.DECK_INVALID
+    status: active
+    summary: deck name has an empty component, surrounding whitespace, leading/trailing colons or control characters
+  - id: NOTE.TAG_INVALID
+    status: active
+    summary: tag is empty, duplicated, reserved or contains whitespace or control characters
+  - id: BUILD.NAME_INVALID
+    status: active
+    summary: project display name is blank or contains control characters
+  - id: BUILD.OUTPUT_INVALID
+    status: active
+    summary: persistent build output path is empty or aliases the update baseline
+  - id: BUILD.WORKSPACE_FAILED
+    status: active
+    summary: private build workspace could not be created
+  - id: BUILD.MEDIA_STAGING_FAILED
+    status: active
+    summary: owned media could not be staged for the writer
+  - id: BUILD.ARTIFACT_MISSING
+    status: active
+    summary: successful writer did not return its required artifact
+  - id: BUILD.INSPECT_FAILED
+    status: active
+    summary: required candidate APKG inspection failed
+  - id: BUILD.INSPECT_INCOMPLETE
+    status: active
+    summary: required candidate inspection did not observe every required domain
+  - id: PERSIST.DESTINATION_INVALID
+    status: active
+    summary: persistence destination is empty or aliases a temporary source
+  - id: PERSIST.IO_FAILED
+    status: active
+    summary: preparing, copying, replacing or confirming durability of an artifact failed
+  - id: TEMPLATE.BUNDLE_RESOURCE_LIMIT_EXCEEDED
+    status: active
+    summary: template bundle manifest or text exceeded its finite read budget
+  - id: NOTE.IO_MASKS_EMPTY
+    status: active
+    summary: image-occlusion note has no masks
+  - id: NOTE.IO_MASK_KEY_INVALID
+    status: active
+    summary: mask key is blank or contains surrounding whitespace or control characters
+  - id: NOTE.IO_MASK_KEY_DUPLICATE
+    status: active
+    summary: image-occlusion note repeats a stable mask key
+  - id: NOTE.IO_RECT_INVALID
+    status: active
+    summary: mask rectangle is nonfinite, empty, negative or outside the displayed image
+  - id: NOTE.IO_ORDINAL_EXHAUSTED
+    status: active
+    summary: image-occlusion note cannot allocate another ordinal within the supported limit of 500
+  - id: NOTE.IO_IMAGE_INVALID
+    status: active
+    summary: image-occlusion image cannot be fully decoded in a supported raster format
+  - id: NOTE.IO_IMAGE_READ_FAILED
+    status: active
+    summary: reading or normalizing the owned image-occlusion snapshot failed
+  - id: NOTE.IO_IMAGE_RESOURCE_LIMIT
+    status: active
+    summary: image-occlusion decoding or normalized snapshot exceeds its finite byte budget
+  - id: NOTE.IO_FIELD_RESERVED
+    status: active
+    summary: image-occlusion note attempts to overwrite a structurally generated field
+  - id: NOTE.IO_STRUCTURE_REQUIRED
+    status: active
+    summary: image-occlusion model was used without a validated image and stable mask definitions
+  - id: BUILD.IDENTITY_ENCODING_FAILED
+    status: active
+    summary: identity facts could not be serialized
+  - id: BUILD.CLOCK_INVALID
+    status: active
+    summary: system clock cannot provide a supported publication timestamp
+  - id: BUILD.IDENTITY_PLAN_INVALID
+    status: active
+    summary: normalized content disagrees with its native identity plan
+  - id: BUILD.NORMALIZE_FAILED
+    status: active
+    summary: authored content could not be normalized
+  - id: BUILD.RUNTIME_DEFAULTS_FAILED
+    status: active
+    summary: embedded writer defaults could not be loaded
+  - id: BUILD.WRITER_FAILED
+    status: active
+    summary: candidate writer could not complete generation
+  - id: BUILD.BASELINE_INVALID
+    status: active
+    summary: update baseline path is empty
+  - id: BUILD.UPDATE_POLICY_WITHOUT_BASELINE
+    status: active
+    summary: an explicit update policy was supplied for a create request
+  - id: UPDATE.EVIDENCE_MISSING
+    status: active
+    summary: the original distribution identity evidence is absent
+  - id: UPDATE.EVIDENCE_INVALID
+    status: active
+    summary: identity evidence is malformed, incomplete or inconsistent with collection or media
+  - id: UPDATE.NAMESPACE_MISMATCH
+    status: active
+    summary: baseline belongs to a different project namespace
+  - id: UPDATE.MODEL_KIND_CHANGED
+    status: active
+    summary: an existing model key changes between normal and cloze kinds
+  - id: UPDATE.NOTE_MODEL_CHANGED
+    status: active
+    summary: an existing note key is reassigned to a different model
+  - id: UPDATE.REVISION_EXHAUSTED
+    status: active
+    summary: a modification timestamp cannot be advanced
+  - id: UPDATE.IDENTITY_EXHAUSTED
+    status: active
+    summary: persistent symbol history cannot allocate another slot
+  - id: UPDATE.BASELINE_INCOMPLETE
+    status: active
+    summary: required baseline inspection did not complete every required domain
+  - id: UPDATE.POLICY_BLOCKED
+    status: active
+    summary: completed comparison contains unaccepted findings at or above the policy threshold
+  - id: UPDATE.UNMATCHED_ALLOWANCE
+    status: active
+    summary: an explicit risk-category allowance matched no finding
+  - id: UPDATE.RISK_CODE_INVALID
+    status: active
+    summary: policy text is not a registered acceptable risk category
+  - id: NOTE.CLOZE_ORDINAL_EXCEEDED
+    status: active
+    summary: cloze numbering exceeds the supported range from 1 through 500
+  - id: RISK.NOTE_ADDED
+    status: active
+    summary: A new or restored note is present in the candidate.
+  - id: RISK.NOTE_CHANGED
+    status: active
+    summary: An existing note's content, deck or tags changed.
+  - id: RISK.NOTE_REMOVED
+    status: active
+    summary: A previously published note is omitted; APKG import does not delete it from a learner's collection.
+  - id: RISK.CARD_ADDED
+    status: active
+    summary: An existing note generates a new card identity.
+  - id: RISK.CARD_REMOVED
+    status: active
+    summary: An existing note no longer generates a previously published card identity.
+  - id: RISK.MODEL_ADDED
+    status: active
+    summary: A new or restored note type is present.
+  - id: RISK.MODEL_CHANGED
+    status: active
+    summary: An existing model's display, rendering or configuration changed.
+  - id: RISK.SORT_FIELD_CHANGED
+    status: active
+    summary: The model's sort field changed, which can advance target note timestamps during import.
+  - id: RISK.MODEL_REMOVED
+    status: active
+    summary: A previously published model is omitted from the candidate.
+  - id: RISK.FIELD_REMOVED
+    status: active
+    summary: An existing model omits a field; model merging retains it in the target.
+  - id: RISK.TEMPLATE_ADDED
+    status: active
+    summary: An existing model has a new or restored card template.
+  - id: RISK.MASK_ADDED
+    status: active
+    summary: An image-occlusion note has a new or restored mask card.
+  - id: RISK.MASK_REMOVED
+    status: active
+    summary: An image-occlusion mask is omitted; its ordinal remains reserved.
+  - id: RISK.MEDIA_ADDED
+    status: active
+    summary: A new media filename is included.
+  - id: RISK.MEDIA_CHANGED
+    status: active
+    summary: An existing export filename refers to different bytes.

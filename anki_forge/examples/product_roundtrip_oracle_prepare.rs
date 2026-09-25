@@ -1,22 +1,22 @@
+//! Prepares native Project distributions for the real Anki roundtrip oracle.
+use ankiforge::{
+    tools::{inspect_apkg, load_project},
+    BuildOptions,
+};
+use anyhow::{bail, Context};
+use serde::Serialize;
 use std::{
     collections::BTreeMap,
     fs,
     path::{Path, PathBuf},
 };
 
-use anki_forge::authoring::{
-    normalize_with_options, MediaPolicy, NormalizationRequest, NormalizeOptions,
-};
-use anki_forge::product::ProductDocument;
-use anki_forge::writer::{
-    build as writer_build, inspect_apkg, BuildArtifactTarget, BuildContext, InspectReport,
-    WriterPolicy,
-};
-use anyhow::{bail, ensure, Context};
-use serde::Serialize;
-use serde_json::Value;
-
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
+struct PreparedPackage {
+    apkg_path: PathBuf,
+    notetype_ids_by_name: BTreeMap<String, String>,
+}
+#[derive(Serialize)]
 struct RoundtripOracleInput {
     label: String,
     first_case: PathBuf,
@@ -25,213 +25,90 @@ struct RoundtripOracleInput {
     second_package: PreparedPackage,
 }
 
-#[derive(Debug, Serialize)]
-struct PreparedPackage {
-    apkg_path: PathBuf,
-    notetype_ids_by_name: BTreeMap<String, String>,
-}
-
 fn main() -> anyhow::Result<()> {
-    let (output_path, first_case, second_case, label) = parse_args()?;
-    let work_root = output_path
-        .parent()
-        .context("output path must have a parent directory")?;
-    fs::create_dir_all(work_root)
-        .with_context(|| format!("create oracle work root {}", work_root.display()))?;
-
-    let first_package =
-        build_phase5a_case_apkg(&first_case, &label, &work_root.join("first-package"), "v1")?;
-    let second_package = build_phase5a_case_apkg(
-        &second_case,
-        &label,
-        &work_root.join("second-package"),
-        "v2",
-    )?;
-
-    let input = RoundtripOracleInput {
-        label,
-        first_case,
-        second_case,
-        first_package,
-        second_package,
+    let args = std::env::args().skip(1).collect::<Vec<_>>();
+    let (output, supplied) = match args.as_slice() {
+        [output] => (PathBuf::from(output), None),
+        [output, first, second, label] => (PathBuf::from(output), Some((PathBuf::from(first), PathBuf::from(second), label.clone()))),
+        _ => bail!("usage: product_roundtrip_oracle_prepare <output.json> [first-project.json second-project.json label]"),
     };
-
-    fs::write(&output_path, serde_json::to_string_pretty(&input)?)
-        .with_context(|| format!("write oracle input {}", output_path.display()))?;
-
-    println!("{}", output_path.display());
-
+    let root = output.parent().context("output needs a parent")?;
+    fs::create_dir_all(root)?;
+    let (first_case, second_case, label) = if let Some(cases) = supplied {
+        cases
+    } else {
+        let first = root.join("native-v1.json");
+        let second = root.join("native-v2.json");
+        fs::write(&first, serde_json::to_vec_pretty(&default_input(false))?)?;
+        fs::write(&second, serde_json::to_vec_pretty(&default_input(true))?)?;
+        (first, second, "native-io-font-roundtrip".into())
+    };
+    let first_package = prepare(&first_case, &root.join("first.apkg"), None)?;
+    let second_package = prepare(
+        &second_case,
+        &root.join("second.apkg"),
+        Some(&first_package.apkg_path),
+    )?;
+    fs::write(
+        &output,
+        serde_json::to_vec_pretty(&RoundtripOracleInput {
+            label,
+            first_case,
+            second_case,
+            first_package,
+            second_package,
+        })?,
+    )?;
+    println!("{}", output.display());
     Ok(())
 }
 
-fn parse_args() -> anyhow::Result<(PathBuf, PathBuf, PathBuf, String)> {
-    let args = std::env::args().skip(1).collect::<Vec<_>>();
-    match args.as_slice() {
-        [output_path] => Ok((
-            PathBuf::from(output_path),
-            repo_root().join("anki_forge/tests/fixtures/product/io_font_bundle_roundtrip_v1.case.json"),
-            repo_root().join("anki_forge/tests/fixtures/product/io_font_bundle_roundtrip_v2.case.json"),
-            "phase5a-io-font-roundtrip".into(),
-        )),
-        [output_path, first_case, second_case, label] => Ok((
-            PathBuf::from(output_path),
-            resolve_repo_relative(first_case),
-            resolve_repo_relative(second_case),
-            label.clone(),
-        )),
-        _ => bail!(
-            "usage: cargo run -p anki_forge --example product_roundtrip_oracle_prepare -- <output.json> [first_case second_case label]"
-        ),
-    }
-}
-
-fn build_phase5a_case_apkg(
-    case_path: &Path,
-    label: &str,
-    artifact_root: &Path,
-    suffix: &str,
+fn prepare(
+    input: &Path,
+    destination: &Path,
+    baseline: Option<&Path>,
 ) -> anyhow::Result<PreparedPackage> {
-    let raw = fs::read_to_string(case_path)
-        .with_context(|| format!("read phase5a product fixture {}", case_path.display()))?;
-    let document: ProductDocument = serde_json::from_str(&raw)
-        .with_context(|| format!("decode phase5a product fixture {}", case_path.display()))?;
-
-    let lowering = document.lower().map_err(|err| {
-        anyhow::anyhow!(
-            "lower phase5a product fixture {}: {:?}",
-            case_path.display(),
-            err
-        )
-    })?;
-    if artifact_root.exists() {
-        fs::remove_dir_all(artifact_root)
-            .with_context(|| format!("remove old artifact root {}", artifact_root.display()))?;
+    let project = load_project(input, None)?;
+    let mut options = BuildOptions::to(destination);
+    if let Some(baseline) = baseline {
+        options = options.update_from(baseline);
     }
-
-    let media_store_dir = artifact_root.join("media-store");
-    let normalized = normalize_with_options(
-        NormalizationRequest::new(lowering.authoring_document),
-        NormalizeOptions {
-            base_dir: case_path
-                .parent()
-                .context("fixture path must have a parent directory")?
-                .to_path_buf(),
-            media_store_dir: media_store_dir.clone(),
-            media_policy: MediaPolicy::default_strict(),
-        },
-    );
-    ensure!(
-        normalized.result_status == "success",
-        "phase5a product fixture must normalize successfully: {:?}",
-        normalized.diagnostics
-    );
-    let normalized_ir = normalized
-        .normalized_ir
-        .context("successful normalization must return normalized IR")?;
-
-    let target = BuildArtifactTarget::new(
-        artifact_root.to_path_buf(),
-        format!("artifacts/phase5a-roundtrip/{label}-{suffix}"),
-    )
-    .with_media_store_dir(media_store_dir);
-    let build_result = writer_build(
-        &normalized_ir,
-        &phase5a_writer_policy(),
-        &phase5a_build_context(),
-        &target,
-    )
-    .with_context(|| format!("build phase5a product fixture {}", case_path.display()))?;
-    ensure!(
-        build_result.result_status == "success",
-        "phase5a roundtrip build must succeed for {}: {:?}",
-        case_path.display(),
-        build_result.diagnostics
-    );
-    let apkg_ref = build_result
-        .apkg_ref
-        .as_deref()
-        .context("phase5a roundtrip build must emit an apkg_ref")?;
-    let apkg_path = artifact_path_from_ref(&target, apkg_ref);
-    let inspect_report = inspect_apkg(&apkg_path)
-        .with_context(|| format!("inspect phase5a apkg {}", apkg_path.display()))?;
-
+    let output = project.build(options)?;
+    let inspected = inspect_apkg(output.artifact().path())?;
+    let notetype_ids_by_name = inspected
+        .observations
+        .notetypes
+        .iter()
+        .map(|model| {
+            Ok((
+                model["name"].as_str().context("model name")?.into(),
+                model["id"].as_str().context("model id")?.into(),
+            ))
+        })
+        .collect::<anyhow::Result<_>>()?;
     Ok(PreparedPackage {
-        apkg_path,
-        notetype_ids_by_name: inspect_notetype_ids_by_name(&inspect_report)?,
+        apkg_path: output.artifact().path().to_owned(),
+        notetype_ids_by_name,
     })
 }
 
-fn inspect_notetype_ids_by_name(
-    inspect_report: &InspectReport,
-) -> anyhow::Result<BTreeMap<String, String>> {
-    let mut ids_by_name = BTreeMap::new();
-    for notetype in &inspect_report.observations.notetypes {
-        let name = required_str_field(notetype, "name")?.to_string();
-        let id = required_str_field(notetype, "id")?.to_string();
-        ensure!(
-            ids_by_name.insert(name.clone(), id).is_none(),
-            "phase5a oracle requires unique notetype names, found duplicate '{}'",
-            name
-        );
-    }
-    Ok(ids_by_name)
-}
-
-fn artifact_path_from_ref(target: &BuildArtifactTarget, reference: &str) -> PathBuf {
-    let prefix = target.stable_ref_prefix.trim_end_matches('/');
-    let trimmed = reference
-        .strip_prefix(prefix)
-        .unwrap_or(reference)
-        .trim_start_matches('/');
-    if trimmed.is_empty() {
-        target.root_dir.clone()
-    } else {
-        target.root_dir.join(trimmed)
-    }
-}
-
-fn required_str_field<'a>(value: &'a Value, field: &str) -> anyhow::Result<&'a str> {
-    value
-        .get(field)
-        .and_then(Value::as_str)
-        .with_context(|| format!("missing string field {}", field))
-}
-
-fn resolve_repo_relative(path: &str) -> PathBuf {
-    let candidate = PathBuf::from(path);
-    if candidate.is_absolute() {
-        candidate
-    } else {
-        repo_root().join(candidate)
-    }
-}
-
-fn repo_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .expect("repo root")
-        .to_path_buf()
-}
-
-fn phase5a_writer_policy() -> WriterPolicy {
-    WriterPolicy {
-        id: "writer-policy.default".into(),
-        version: "1.0.0".into(),
-        compatibility_target: "latest-only".into(),
-        stock_notetype_mode: "source-grounded".into(),
-        media_entry_mode: "inline".into(),
-        apkg_version: "latest".into(),
-    }
-}
-
-fn phase5a_build_context() -> BuildContext {
-    BuildContext {
-        id: "build-context.default".into(),
-        version: "1.0.0".into(),
-        emit_apkg: true,
-        materialize_staging: true,
-        media_resolution_mode: "pre-resolved".into(),
-        unresolved_asset_behavior: "fail".into(),
-        fingerprint_mode: "canonical".into(),
-    }
+fn default_input(updated: bool) -> serde_json::Value {
+    let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/public-api");
+    serde_json::json!({
+        "format_version": "ankiforge-project-v1", "namespace": "native-io-roundtrip",
+        "default_deck": "Oracle::Native",
+        "assets": [
+            {"key":"image", "source":{"kind":"file", "path":fixtures.join("occlusion.png")}},
+            {"key":"font", "source":{"kind":"file", "path":fixtures.join("labels.woff")}, "export_as":"labels.woff"}
+        ],
+        "notes":[{"key":"diagram", "content":{
+            "kind":"image_occlusion", "image":"image",
+            "masks":[
+                {"key":"nucleus", "x":if updated {20} else {10}, "y":10,"width":10,"height":10},
+                {"key":"wall", "x":60,"y":10,"width":10,"height":10}
+            ],
+            "fields":{"header":if updated {"Updated diagram"} else {"Diagram"},
+                "back_extra":{"kind":"html", "value":"<style>@font-face{font-family:Labels;src:url(labels.woff)}</style><span style='font-family:Labels'>Cell</span>"}}
+        }}]
+    })
 }

@@ -1,6 +1,6 @@
 # Rust Distribution Release Runbook
 
-This runbook applies only to the crates.io `anki_forge` Rust Distribution. It
+This runbook applies only to the crates.io `ankiforge` Rust Distribution. It
 does not certify generated APKG semantics or publish the contract bundle as a
 separate product.
 
@@ -24,7 +24,7 @@ must agree. Never reuse or move a release tag.
 Before the first release, a repository administrator must verify the following
 external state:
 
-- the crates.io `anki_forge` name and ownership;
+- the crates.io `ankiforge` name and ownership;
 - a crates.io Trusted Publisher scoped to this repository and release workflow;
 - a GitHub environment named `crates-io` with designated-maintainer approval;
 - branch/tag rules that require the Rust crate CI workflow.
@@ -57,7 +57,7 @@ crates.io versions are immutable. Do not overwrite a package or reuse a tag.
 
 - For a normal defect, fix forward and publish a higher patch version.
 - For a severe unusable or unsafe release, a crate owner may run
-  `cargo yank --version X.Y.Z anki_forge`, record the reason publicly, then
+  `cargo yank --version X.Y.Z ankiforge`, record the reason publicly, then
   publish a corrective version. Yanking is not deletion and existing lockfiles
   can continue to resolve the version.
 - For a security defect, coordinate disclosure, publish a RustSec-compatible

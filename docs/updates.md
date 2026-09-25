@@ -1,114 +1,115 @@
-# Update and distribute a deck
+# Update and distribute a publication
 
-Correct a note from **hello** to **hello; hi** while keeping its stable ID
-`es:hola`. The key ingredients are stable project/note identities and evidence
-from the last distributed APKG or an identity lockfile.
+Keep the project namespace and note/model/field/template keys stable. Build each
+new release from the previous **original distribution APKG**, which carries
+complete versioned identity evidence. Save that package with its source revision.
 
-## Run a two-version example
-
-From the repository root:
+## Run two versions and compare
 
 ```sh
-cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 ```
 
-The program writes `spanish-v1.apkg` and `spanish-v2.apkg` in `target/docs-examples`.
-It checks that the second build has one note, one card, a comparison report and
-one preserved note identity. These are package/build checks, not a review-history guarantee.
-
-## Compare against the previous package
-
-This excerpt from the [complete program](../anki_forge/examples/docs_workflow.rs)
-constructs both source versions. Its `verify` helper checks inspected counts.
+This writes `spanish-v1.apkg` and `spanish-v2.apkg`, compares the changed answer,
+and checks the updated package counts. The executable source is:
 
 <!-- source: anki_forge/examples/docs_workflow.rs#updates -->
 ```rust
 fn vocabulary(answer: &str) -> anyhow::Result<Project> {
-    let mut project = Project::new("Spanish")
-        .stable_id("docs-spanish-updates")
-        .default_deck("Spanish");
-    project.add_note(Note::basic("hola", answer).stable_id("es:hola"))?;
+    let mut project = Project::new("docs-spanish-updates")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", answer))?;
     Ok(project)
 }
 
 fn updates(output: &Path) -> anyhow::Result<()> {
     let previous = output.join("spanish-v1.apkg");
     let next = output.join("spanish-v2.apkg");
-    vocabulary("hello")?
-        .write_apkg(&previous)?
-        .ensure_success()?;
-    let report =
-        vocabulary("hello; hi")?.build(BuildOptions::new().output(&next).compare_to(&previous))?;
-    report.ensure_success()?;
-    verify(&report, 1, 1, 0)?;
-    ensure!(report.diff.is_some());
-    let safety = report.update_safety.as_ref().expect("baseline evidence");
-    ensure!(safety.notes_preserved == 1 && safety.notes_failed == 0);
+    vocabulary("hello")?.build(BuildOptions::to(&previous))?;
+    let project = vocabulary("hello; hi")?;
+    let comparison = project.compare(CompareOptions::against(&previous))?;
+    ensure!(comparison.policy().allows_publication());
+    let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
+    verify(&built, 1, 1, 0)?;
+    ensure!(built.report().comparison().is_some());
     Ok(())
 }
 ```
 <!-- /source -->
 
-Keep the project ID, note IDs and existing field/template keys stable. Give a new
-logical note a new ID. Keep the previous package separate from the new output.
-Changed content advances baseline revision evidence; unchanged content preserves it.
+`compare` completes successfully even when findings would block publication.
+Read `comparison.policy().allows_publication()` separately from the original
+risk level and evidence. `build(...update_from(...))` runs the same analysis and
+returns `BuildError` if its policy blocks the candidate, before publication.
 
-## Use an identity lockfile
+## Policy and inspection limits
 
-A lockfile is another way to carry release evidence. The following function uses
-`vocabulary(...)` from the preceding example:
+This full program selects a stricter threshold and uses the same configuration
+for comparison and update:
 
-<!-- source: anki_forge/examples/docs_workflow.rs#lockfile -->
 ```rust
-fn lockfile_updates(output: &Path) -> anyhow::Result<()> {
-    let lockfile = output.join("identity.lock.json");
-    vocabulary("hello")?
-        .build(
-            BuildOptions::new()
-                .output(output.join("locked-v1.apkg"))
-                .first_update_safe_build(&lockfile),
-        )?
-        .ensure_success()?;
-    let report = vocabulary("hello; hi")?.build(
-        BuildOptions::new()
-            .output(output.join("locked-v2.apkg"))
-            .update_safe(&lockfile)
-            .write_identity_lockfile(true),
-    )?;
-    report.ensure_success()?;
-    verify(&report, 1, 1, 0)?;
-    let safety = report.update_safety.as_ref().expect("lockfile evidence");
-    ensure!(safety.notes_preserved == 1 && safety.notes_failed == 0);
-    ensure!(lockfile.is_file());
+use ankiforge::{BuildOptions, Note, Project};
+use ankiforge::build::InspectLimits;
+use ankiforge::update::{CompareOptions, RiskLevel, UpdatePolicy};
+
+fn main() -> anyhow::Result<()> {
+    let mut first = Project::new("policy-example")?;
+    first.add("cell", Note::basic("Cell?", "Unit of life"))?;
+    first.build(BuildOptions::to("policy-v1.apkg"))?;
+    let mut next = Project::new("policy-example")?;
+    next.add("cell", Note::basic("Cell?", "The basic unit of life"))?;
+    let mut limits = InspectLimits::default();
+    limits.max_collection_bytes = 1 << 30;
+    let policy = UpdatePolicy::default().fail_on(RiskLevel::Medium);
+    let comparison = next.compare(CompareOptions::against("policy-v1.apkg")
+        .inspect_limits(limits.clone()).update_policy(policy.clone()))?;
+    assert!(comparison.policy().allows_publication());
+    next.build(BuildOptions::to("policy-v2.apkg").update_from("policy-v1.apkg")
+        .inspect_limits(limits).update_policy(policy))?;
     Ok(())
 }
 ```
-<!-- /source -->
 
-`first_update_safe_build(...)` establishes the first lockfile. Later
-`update_safe(...)` reads it. Reading does not advance it: request
-`write_identity_lockfile(true)` when the candidate should write new evidence.
-These strict builds need a stable project identity and sufficient baseline evidence.
+The default policy blocks High and Critical findings. After reviewing a specific
+category, a caller can deliberately choose
+`UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. It accepts **all findings
+in that category**, retaining their original level and evidence. It does not
+claim to approve selected notes individually. An allowance with no matching
+finding produces a warning; unknown risk codes are rejected. Do not automatically
+allow every code returned by a comparison.
 
-The example writes candidate outputs to its own directory. In your release
-process, keep the previous release's APKG and lockfile immutable, work with a copy,
-and archive the accepted candidate evidence only after validation. A legacy lockfile
-without revision evidence may require the previous APKG for migration.
+Missing or corrupt evidence, namespace mismatch, invalid candidate data and
+inspection limits are hard errors, not allowable risk categories. Comparison
+returns an error with completed observations when analysis cannot finish.
+Explicit policy on a create request without `update_from` is a configuration
+error regardless of setter order.
 
-## Review and distribute
+## Evidence and identity
 
-1. Save the last distributed APKG and identity lockfile with their source revision.
-2. Build to separate candidate paths and inspect the diagnostics, diff and update-safety report.
-3. Test both first import and an update into an existing test collection in your target Anki version.
-4. Check edited fields, card structure, media, local edits and the review state relevant to your users.
-5. Distribute the accepted candidate and keep its APKG/lockfile as the next release's evidence.
+The package includes `ankiforge-identity.json` with the
+`ankiforge-identity-v1` format. It binds model/config IDs, note GUIDs, historical
+field/template slots, card/mask ordinals, revisions and media to the actual
+collection and payloads. Anki re-export does not preserve this evidence and is
+not a usable update baseline. Missing evidence is never silently reconstructed.
 
-Anki's import settings, local edits and client behavior still govern imported
-updates. Stable IDs do not override them. A baseline-free `write_apkg()` is a
-first-export path and does not guarantee later content updates.
+Display-name and content edits preserve identity keys. Unchanged content keeps
+its baseline revision; changed content advances it. Reordering fields/templates
+preserves historical mappings. Retired identities remain reserved so that
+restoring the same key can reuse them. A note key cannot move to another model,
+and a model key cannot change between normal and Cloze kinds.
 
-For path collisions, temporary artifacts, blocked builds and atomic replacement,
-see [build and output guarantees](build-guarantees.md). For language-specific
-options, see the [Rust API](rust-api.md#build-options),
-[Node API](node/api.md#build-compare-and-output), or
-[Python diagnostics](python/diagnostics.md#update-safe-builds).
+## Client import behavior and release review
+
+An APKG is a distribution package, not deletion synchronization. Omitting notes,
+fields, templates or masks does not delete existing learner data. Field/template
+schema changes and sort-field changes are high-risk because Anki merge and import
+settings affect their behavior. Schema changes can copy models or update target
+note timestamps before note-content comparison.
+
+Test first import and updates into an existing collection on the clients you
+support. Check fields, GUIDs, card sets, local edits and existing scheduling with
+the intended merge and note-update settings. Stable identity alone does not
+promise that newer local edits are overwritten or deleted history is restored.
+
+Write candidates to a path separate from the archived baseline. After review,
+distribute the accepted package and retain it as the next release's evidence.
+See [build guarantees](build-guarantees.md) for ownership and publication facts.

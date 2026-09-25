@@ -1,144 +1,138 @@
-# anki_forge
+# ankiforge
 
-[Website](https://ankiforge.dev/) · [Rust documentation](https://ankiforge.dev/docs/rust-guide/) ·
-[GitHub](https://github.com/morehardy/anki-forge) · [Issues](https://github.com/morehardy/anki-forge/issues)
+[Website](https://ankiforge.dev/) · [GitHub](https://github.com/morehardy/anki-forge)
 
-`anki_forge` is a typed Rust library for building Anki decks. The crate ships
-its default contract resources, so normal use does not require a source
-checkout, a particular working directory, or a separate runtime installation.
+Build Anki packages with owned notes, validated models and media snapshots.
+The crate embeds its contract resources and works outside the repository.
+Rust 1.92.0 or later is required.
 
 ```rust,no_run
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 
-fn main() -> anyhow::Result<()> {
-    let mut deck = Deck::new("Spanish");
-    deck.basic()
-        .note("hola", "hello")
-        .stable_id("es:hola")
-        .add()?;
-    deck.write_apkg("spanish.apkg")?.ensure_success()?;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", "hello"))?;
+    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+    assert_eq!(output.report().counts().notes, 1);
     Ok(())
 }
 ```
 
-The crate version is `0.1.0`; it embeds contract bundle `0.6.3`. These are
-independent compatibility axes. Rust 1.92.0 is the minimum supported compiler
-for the 0.1.x line.
+Use a stable project namespace and note key from the first release. Display names,
+content and deck names can change independently. A project can contain several decks;
+set the default with `Project::default_deck` or use `Note::deck` for individual notes.
 
-## Supported 0.1 interface
+The common values are available at the crate root. Additional APIs live in
+[`note`], [`schema`], [`media`], [`build`], [`update`] and [`diagnostics`].
+The optional `internal-tools` feature exposes selected repository verification
+operations under `tools`; applications should use the default features.
 
-The supported consumer interface is intentionally small: import
-`anki_forge::prelude::*`, or use the root `Deck`, `Project`, and `Severity`
-exports. `facade_api_version()` and `embedded_contract_version()` expose the
-two compatibility axes. Normal consumers do not need contract loading,
-normalization IR, writer, inspection, or persistence modules.
+## Models and content
 
-The `internal-tools` Cargo feature exists only for this repository's
-unpublished contract tool and deep conformance tests. Its hidden modules are
-not covered by the 0.1 compatibility promise and must not be enabled by
-downstream applications.
+```rust,no_run
+use ankiforge::{Field, NoteType, Template, Project, Content};
 
-## Updating distributed decks
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let model = NoteType::builder("vocabulary")
+        .name("Vocabulary")
+        .field(Field::new("front").name("Question").required())
+        .field(Field::new("back").name("Answer"))
+        .template(Template::new("recognition")
+            .front("{{front}}")
+            .back("{{FrontSide}}<hr>{{back}}"))
+        .build()?;
+    let mut project = Project::new("language-course")?;
+    project.add("hola", model.note()
+        .field("front", "hola")
+        .field("back", Content::html("<b>hello</b>")))?;
+    Ok(())
+}
+```
 
-For a project with stable project/note identities, build updates using
-`BuildOptions::new().output("v2.apkg").compare_to("v1.apkg")`, where `v1.apkg` is
-the latest distributed version. Alternatively, use a maintained identity lockfile
-with `.update_safe("identity.json").write_identity_lockfile(true)` after the first
-`.first_update_safe_build("identity.json")` build. Keep the baseline separate from
-the new output and advance it only after verifying the release.
+A completed model is immutable and cheaply cloneable. Notes own their model;
+adding a note automatically collects the model and media. Templates and note field
+assignments refer to stable field keys. Display names are compiled to Anki field
+references during output. Plain strings are escaped text, including in Cloze notes;
+use `Content::html` for explicit markup.
 
-Changed note content advances its baseline modification time; unchanged content
-preserves it. This also covers answer-only edits, tags, and content reverts while
-keeping same-input/same-baseline builds reproducible. Legacy lockfiles without
-revision evidence require a previous APKG for strict migration. Baseline-free
-`write_apkg` is a first-release export, not a guarantee that Anki will update
-existing notes. Newer local edits remain governed by Anki's import settings.
+## Media
 
-Report-only builds with missing or unreadable baseline evidence leave the identity
-lockfile unchanged, even if writing was requested, and report
-`UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED`. Recover the evidence before retrying;
-rejected requested lockfiles are high risk and can be blocked with
-`.fail_on(RiskLevel::High)`.
+```rust,no_run
+use ankiforge::{BuildOptions, Media, Note, Project};
 
-## Media exports
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let image = Media::file("cell.png")?;
+    let mut project = Project::new("biology")?;
+    project.add("cell", Note::basic(image.image(), "A cell"))?;
+    project.build(BuildOptions::to("biology.apkg"))?;
+    Ok(())
+}
+```
 
-Register each source with `deck.media().add(MediaSource::from_file(path))?`, or
-`project.media_mut().add_file(path)?.export_as(filename)?`. Registration validates
-the source immediately; export checks for subsequent content changes. No batch
-registration method, thread setup or performance option is needed. File-backed
-Deck registration reads larger blocks and reuses image header bytes for dimensions.
+`Media::file` acquires an owned snapshot before returning. Deleting or changing the
+source later does not change this value. `Media::bytes` takes ownership of bytes and
+requires a MIME type. Large snapshots use temporary storage shared between clones;
+the last owner cleans it up. Import budgets are configurable through `MediaLimits`.
 
-Default temporary exports prepare media in parallel internally, stream through
-bounded encoding queues and retain final package inspection. Explicit artifact/CAS
-directories retain inspectable media files. These storage modes can produce different ZIP entry ordering and
-package hashes while preserving the same decoded content and Anki identities.
+Content automatically retains typed image and sound references. Declare files used
+in handwritten HTML, CSS or scripts with `NoteTypeBuilder::asset` or
+`Project::add_asset`. `Media::with_export_name` sets a portable fixed name before
+creating references; names that collide after Unicode normalization and case folding
+are rejected. The `template-bundle-v2` loader returns the same immutable NoteType.
 
-## Artifact ownership
+## Updates and comparison
 
-`Project::from(deck)` imports the Deck into editable Project state. You can then
-add notes, custom note types, template bundles, and media normally. Imported
-HTML, note identities, media sources, and diagnostic locations are preserved.
+```rust,no_run
+use ankiforge::{BuildOptions, Note, Project};
+use ankiforge::update::CompareOptions;
 
-File-media input copies created during a build are owned only until
-normalization finishes and are cleaned up on failure too. Repeated builds and
-newly registered media updates can reuse an artifact directory. Existing
-caller-owned files and source aliases are never taken over or deleted.
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?;
+    project.add("hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("v1.apkg"))?;
 
-`build(BuildOptions::new())` returns a temporary `ApkgArtifact`. Keep the report
-or clone its artifact handle while using `artifact.path()`. The last report,
-error, or artifact clone removes the temporary APKG; staging files are already
-cleaned up when the build returns. Copying only the path does not keep it alive.
+    let mut next = Project::new("spanish")?;
+    next.add("hola", Note::basic("hola", "hello; hi"))?;
+    let comparison = next.compare(CompareOptions::against("v1.apkg"))?;
+    assert!(comparison.policy().allows_publication());
+    next.build(BuildOptions::to("v2.apkg").update_from("v1.apkg"))?;
+    Ok(())
+}
+```
 
-For a permanent file, use `write_apkg(path)`, `BuildOptions::output(path)`, or
-`artifact.persist_to(path)?`. The latter atomically copies the APKG and returns
-a persistent handle without changing the lifetime of existing clones. Explicit
-`output` and `artifacts_dir` destinations are never deleted by handle cleanup.
-Persisting a temporary artifact onto its own path is rejected.
+Keep the original distributed APKG as the next baseline. Packages carry complete
+identity evidence; an Anki re-export is not a valid replacement. Update builds preserve
+known note, model and card identities. Both baseline and candidate inspection have
+independent finite resource budgets.
 
-Automatic `report_json` requires an explicit `output` or `artifacts_dir`, since
-JSON cannot own a temporary file. Manually serialized reports are snapshots;
-persist the artifact first if its path must remain usable after the handle drops.
-A late lockfile/report failure retains any already-published artifact in the
-returned error report.
+Comparison returns a complete report even when policy would block publication.
+Builds block High and Critical risks by default, before replacing the destination.
+Use typed `UpdatePolicy` and `RiskCode` values to accept specific risk categories;
+evidence and original risk levels remain in the report. Hard validation errors cannot
+be accepted. Configuring update policy on a first-release build is an error.
 
-## Errors and concurrency
+Anki import behavior also depends on learner edits and import settings. Structural
+changes can require Anki's model merge option; imported packages do not delete omitted
+learner notes or cards. Read comparison evidence before accepting these changes.
 
-APKG inspection has finite archive, entry-count, expansion, and zstd-window
-budgets. `BuildOptions::inspect_limits(InspectLimits)` applies the same policy to
-current and baseline APKGs. Start with `InspectLimits::default()` and explicitly
-raise individual fields only for trusted large decks. Resource failures carry
-`INSPECT.RESOURCE_LIMIT_EXCEEDED`; report-only baselines remain unavailable, and
-current-artifact failures prevent publication. These are decompression budgets,
-not a total process memory or CPU sandbox.
+## Artifacts, reports and errors
 
-High-level `Deck` and `Project` operations return structured errors and build
-reports; callers should inspect stable diagnostic codes instead of matching
-human-readable messages. File-writing operations are synchronous and may leave
-diagnostic evidence in a requested report path when a build fails.
+A successful build always returns `BuildOutput` with an `ApkgArtifact` and observations.
+`BuildOptions::temporary()` creates an artifact removed after its last handle drops;
+copying its path or serializing a snapshot does not retain the file. `BuildOptions::to`
+and `ApkgArtifact::persist_to` atomically publish a persistent file.
 
-`compare_to(...)` baselines are read-only: output, report, and writable lockfile
-paths must not alias them, including through symlinks or hard links. Baselines,
-outputs, retained packages, and identity lockfiles must also stay
-outside writable staging/media directories, including directory aliases.
-Comparison and risk checks use a snapshot captured before building and run before APKG or
-lockfile publication. A policy-blocked build preserves existing outputs and
-lockfiles and reports diff/risk evidence with no artifact path. Publication is
-atomic per file, not transactional across all requested files.
-New destinations are rechecked after creation, so a late path-collision error
-may leave a valid published APKG but cannot replace it with lockfile/report JSON.
-Private candidates follow the artifact workspace's filesystem and are cleaned
-up after building. Lockfile publication uses an exclusively reserved temporary
-file beside its target, without reusing predictable names that may alias inputs
-or outputs.
+`BuildReport` contains observations only. Obtain the actual outcome from
+`BuildOutput::snapshot` or `BuildError::snapshot`. Publication failures retain the
+publication stage and any already-published path. Saving JSON is a separate operation;
+it does not affect artifact ownership.
 
-Values are ordinary owned Rust values and may be moved between threads when
-their fields permit it. A single builder or project is not designed for
-concurrent mutation; coordinate shared mutation in the calling application.
-The embedded read-only contract runtime is initialized once and can be loaded
-concurrently.
+Public errors implement `std::error::Error + Send + Sync + 'static`, expose stable
+`kind` and `code`, and retain underlying causes. Match these instead of display text.
+Owned values may be moved between threads; synchronize mutation of a shared project.
 
-See the [repository documentation](https://github.com/morehardy/anki-forge)
-for custom note types, media, update-safe builds, compatibility policy, and
-release operations.
+This checkout embeds contract bundle `1.0.0`.
+The crate version and embedded contract version are separate compatibility axes,
+reported by `facade_api_version()` and `embedded_contract_version()`.
 
 Licensed under MIT.

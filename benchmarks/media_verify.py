@@ -4,7 +4,7 @@ import html
 import json
 import zipfile
 
-from verify import InvalidArtifact, MAX_BYTES, require, zstd_decode
+from verify import InvalidArtifact, MAX_BYTES, NATIVE_IDENTITY, native_metadata, require, zstd_decode
 
 
 def _varint(data, offset):
@@ -63,19 +63,25 @@ def media_map(raw, modern):
 def check_media(path, expected):
     media = {item["filename"]: item for item in expected.get("media", [])}
     require(len(media) == len(expected.get("media", [])), "duplicate fixture media filename")
+    require(path.stat().st_size <= MAX_BYTES, "archive exceeds verifier budget")
     with zipfile.ZipFile(path) as archive:
         entries = archive.infolist()
         names = [entry.filename for entry in entries]
         require(len(names) == len(set(names)), "duplicate archive entry")
-        require(len(names) <= len(media) + 4, "unexpected archive entries")
+        identity_count = int(NATIVE_IDENTITY in names)
+        require(len(names) <= len(media) + 4 + identity_count, "unexpected archive entries")
         require(sum(entry.file_size for entry in entries) <= MAX_BYTES, "archive expansion budget")
         modern = "meta" in names and archive.read("meta") == b"\x08\x03"
+        identity = native_metadata(archive)
+        require(identity is None or modern, "native identity requires modern APKG")
         mapping = media_map(archive.read("media"), modern)
         require(len(mapping) == len(media), "media count mismatch")
         require({item["filename"] for item in mapping.values()} == set(media), "media filenames mismatch")
         require(set(mapping).isdisjoint({"meta", "media", "collection.anki2", "collection.anki21", "collection.anki21b"}), "media key overlaps metadata")
         require(all(key.isdigit() and str(int(key)) == key for key in mapping), "noncanonical media entry key")
         metadata = {"meta", "media", "collection.anki2", "collection.anki21", "collection.anki21b"}
+        if identity is not None:
+            metadata.add(NATIVE_IDENTITY)
         require(set(names) - metadata == set(mapping), "unaccounted archive payload")
         decoded_total = 0
         for key, info in mapping.items():

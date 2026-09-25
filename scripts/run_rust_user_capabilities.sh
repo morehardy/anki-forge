@@ -8,7 +8,7 @@ Usage:
   scripts/run_rust_user_capabilities.sh --manual-desktop <scenario>
 
 Runs ignored Rust user API capability scenarios.
-Automated all-scenario mode expects the complete first matrix. During incremental implementation, pass named scenarios.
+Runs the native public API matrix with optional retained packages and manual import checklists.
 USAGE
 }
 
@@ -52,7 +52,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 list_file="$(mktemp "${TMPDIR:-/tmp}/anki-forge-rust-capabilities-list.XXXXXX")"
-if ! cargo test -p anki_forge --features internal-tools \
+if ! cargo test -p ankiforge --no-default-features \
   --test rust_user_capability_matrix -- --ignored --list >"$list_file"; then
   printf 'fail harness %s kept\n' "$list_file" >&2
   exit 2
@@ -192,7 +192,7 @@ for scenario in "${selected[@]}"; do
 
   if ANKI_FORGE_CAPABILITY_MODE="$mode" \
     ANKI_FORGE_CAPABILITY_ARTIFACT_DIR="$artifact_dir" \
-    cargo test -p anki_forge --features internal-tools \
+    cargo test -p ankiforge --no-default-features \
       --test rust_user_capability_matrix "$scenario" -- --ignored --exact --nocapture
   then
     if [[ "$mode" == "manual-desktop" ]] && ! finalize_manual_artifacts "$artifact_dir"; then

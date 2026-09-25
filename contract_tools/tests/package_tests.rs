@@ -1,4 +1,4 @@
-use anki_forge::{prelude::*, writer::inspect_apkg};
+use ankiforge::{tools::inspect_apkg, BuildOptions, NoteType, Project};
 use flate2::read::GzDecoder;
 use std::{
     fs::{self, File},
@@ -43,7 +43,16 @@ fn package_command_emits_a_bundle_artifact_with_manifest_and_contract_assets() {
 
     assert_eq!(
         artifact_path.file_name().and_then(|name| name.to_str()),
-        Some("anki-forge-contract-bundle-0.6.3.tar.gz")
+        Some(
+            format!(
+                "anki-forge-contract-bundle-{}.tar.gz",
+                contract_tools::manifest::load_manifest(&manifest_path)
+                    .unwrap()
+                    .data
+                    .bundle_version
+            )
+            .as_str()
+        )
     );
 
     let extracted_root = extract_artifact(&artifact_path);
@@ -66,13 +75,24 @@ fn packaged_template_bundle_fixtures_build_and_inspect() {
     .expect("package contracts");
     let extracted = extract_artifact(&artifact);
 
-    for (bundle, note, note_type_id, cards, media, css, front, back, browser_front, target_deck) in [
+    for (
+        bundle,
+        field,
+        content,
+        note_type_id,
+        cards,
+        media,
+        css,
+        front,
+        back,
+        browser_front,
+        target_deck,
+    ) in [
         (
             "custom-normal",
-            Note::new("language-card")
-                .stable_id("normal:1")
-                .text("prompt", "hello"),
-            "language-card",
+            "prompt",
+            "hello",
+            "model:language-card",
             1,
             1,
             ".card { background-image: url(icon.svg); }\n",
@@ -84,10 +104,9 @@ fn packaged_template_bundle_fixtures_build_and_inspect() {
         ),
         (
             "custom-cloze",
-            Note::new("language-cloze")
-                .stable_id("cloze:1")
-                .text("text", "{{c1::Madrid}} is in {{c2::Spain}}"),
-            "language-cloze",
+            "text",
+            "{{c1::Madrid}} is in {{c2::Spain}}",
+            "model:language-cloze",
             2,
             0,
             ".cloze { color: #c00; }\n",
@@ -101,18 +120,20 @@ fn packaged_template_bundle_fixtures_build_and_inspect() {
             .path()
             .join("contracts/fixtures/template-bundle")
             .join(bundle);
+        let model = NoteType::from_bundle(&root).expect("load extracted v2 fixture");
         let mut project = Project::new(bundle)
-            .stable_id(bundle)
+            .expect("namespace")
             .default_deck("Templates");
         project
-            .import_template_bundle(&root)
-            .expect("import extracted fixture");
-        project.add_note(note).expect("add fixture note");
+            .add("fixture-note", model.note().field(field, content))
+            .expect("add fixture note");
         let apkg = out_dir.path().join(format!("{bundle}.apkg"));
-        let report = project.write_apkg(&apkg).expect("build extracted fixture");
-        assert_eq!(report.counts.notes, 1);
-        assert_eq!(report.counts.cards, cards);
-        assert_eq!(report.counts.media, media);
+        let output = project
+            .build(BuildOptions::to(&apkg))
+            .expect("build extracted fixture");
+        assert_eq!(output.report().counts().notes, 1);
+        assert_eq!(output.report().counts().cards, cards);
+        assert_eq!(output.report().counts().media, media);
 
         let inspected = inspect_apkg(&apkg).expect("inspect fixture APKG");
         assert_eq!(inspected.observation_status, "complete");
@@ -160,6 +181,41 @@ fn packaged_template_bundle_fixtures_build_and_inspect() {
                 .iter()
                 .any(|value| value["filename"] == "icon.svg"));
         }
+    }
+}
+
+#[test]
+fn historical_template_manifest_paths_remain_hashable_without_legacy_authoring() {
+    let root = tempdir().unwrap();
+    fs::create_dir(root.path().join("nested")).unwrap();
+    for path in ["nested/front.html", "back.html", "style.css", "image.svg"] {
+        fs::write(root.path().join(path), "fixture data").unwrap();
+    }
+    let manifest = "format_version: template-bundle-v1\ncss_file: style.css\nnote_type:\n  id: legacy-model\n  templates:\n    - key: card\n      front_file: nested/front.html\n      back_file: back.html\nassets:\n  - path: image.svg\n";
+    fs::write(root.path().join("anki-template.yaml"), manifest).unwrap();
+    assert_eq!(
+        ankiforge::tools::contract_template_bundle_paths(root.path()).unwrap(),
+        [
+            "anki-template.yaml",
+            "back.html",
+            "image.svg",
+            "nested/front.html",
+            "style.css"
+        ]
+        .map(PathBuf::from)
+    );
+    assert!(
+        NoteType::from_bundle(root.path()).is_err(),
+        "historical declarations cannot become native models"
+    );
+    for unsafe_path in ["../outside.html", "/tmp/outside.html", "C:\\outside.html"] {
+        fs::write(
+            root.path().join("anki-template.yaml"),
+            manifest.replace("nested/front.html", unsafe_path),
+        )
+        .unwrap();
+        let error = ankiforge::tools::contract_template_bundle_paths(root.path()).unwrap_err();
+        assert!(format!("{error:#}").contains("TEMPLATE.BUNDLE_PATH_UNSAFE"));
     }
 }
 
@@ -224,8 +280,7 @@ fn package_template_bundles_include_only_declared_inputs_at_their_relative_paths
     );
 
     let extracted = extract_artifact(&artifact);
-    Project::new("Nested bundle")
-        .import_template_bundle(extracted.path().join(prefix))
+    let _model = NoteType::from_bundle(extracted.path().join(prefix))
         .expect("declared paths remain usable after extraction");
 }
 
@@ -260,8 +315,7 @@ fn package_template_bundles_preserve_internal_symlink_aliases_and_reject_escapes
         .expect("alias payload")
         .file_type()
         .is_file());
-    Project::new("Alias bundle")
-        .import_template_bundle(extracted.path().join(prefix))
+    let _model = NoteType::from_bundle(extracted.path().join(prefix))
         .expect("alias resolves in extracted bundle");
 
     fs::remove_file(alias).expect("remove internal alias");

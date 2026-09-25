@@ -1,60 +1,74 @@
 # Image Occlusion
 
-Create a question by covering a rectangular part of an image. The supported
-example uses **hide-all-guess-one**: all selected regions are hidden, and each
-card asks for one region.
+Create a structured image-occlusion note from an owned image and rectangles.
+Each mask needs a stable key that continues to identify the same region through
+later versions. The note joins a project through the ordinary `add(key, note)`
+path.
 
 ## Run the example
 
-From the repository root with [Rust installed](installation.md#requirements):
-
 ```sh
-cargo run --locked -p anki_forge --example docs_workflow -- target/docs-examples
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 ```
 
-Open `target/docs-examples/diagram.apkg` in Anki. The example uses the repository's
-228 × 86 PNG fixture, covers one rectangle and checks one note, one card and one
-media file. The [complete program](../anki_forge/examples/docs_workflow.rs) supplies
-the image path and output directory to this function:
+Open `target/docs-examples/diagram.apkg` in Anki. The complete executable loads
+the repository's occlusion image and checks one note, one card and one asset.
 
 <!-- source: anki_forge/examples/docs_workflow.rs#occlusion -->
 ```rust
 fn occlusion(output: &Path, diagram: &Path) -> anyhow::Result<()> {
-    let mut deck = Deck::new("Diagram");
-    let image = deck.media().add(MediaSource::from_file(diagram))?;
-    deck.image_occlusion()
-        .note(image)
-        .mode(IoMode::HideAllGuessOne)
-        .rect(10, 10, 40, 25)
-        .stable_id("diagram:region-1")
-        .add()?;
-    let report = deck.write_apkg(output.join("diagram.apkg"))?;
-    report.ensure_success()?;
-    verify(&report, 1, 1, 1)?;
+    let image = Media::file(diagram)?;
+    let note = Note::image_occlusion(image)
+        .mask(Mask::rect("region-1", 10, 10, 40, 25))
+        .build()?;
+    let mut project = Project::new("docs-diagram")?.default_deck("Diagram");
+    project.add("diagram", note)?;
+    let built = project.build(BuildOptions::to(output.join("diagram.apkg")))?;
+    verify(&built, 1, 1, 1)?;
     Ok(())
 }
 ```
 <!-- /source -->
 
-## Choose your regions
+## Multiple masks and modes
 
-`rect(x, y, width, height)` uses image pixels measured from the top-left corner.
-Use positive widths/heights and rectangles within the image bounds. Add another
-`.rect(...)` call for another region. When using your own image, choose coordinates
-for its actual dimensions rather than its scaled size in a browser preview.
+This standalone example expects `fixtures/occlusion.png`, a decoded image at
+least 80×80 pixels:
 
-The Deck API can derive note identity from image content, dimensions, mode and
-mask geometry. An explicit stable ID makes source identity deliberate. Compare
-with the previous APKG when changing the image or masks of a distributed deck.
+```rust
+use ankiforge::{BuildOptions, Media, Note, Project};
+use ankiforge::note::{Mask, OcclusionMode};
 
-## Current limitation
+fn main() -> anyhow::Result<()> {
+    let note = Note::image_occlusion(Media::file("fixtures/occlusion.png")?)
+        .mask(Mask::rect("nucleus", 10, 10, 20, 20))
+        .mask(Mask::rect("wall", 50, 50, 20, 20))
+        .mode(OcclusionMode::HideOneGuessOne)
+        .build()?
+        .field("header", "Cell structure")
+        .field("back_extra", "Review the diagram.");
+    let mut project = Project::new("cell-diagram")?;
+    project.add("cell", note)?;
+    let output = project.build(BuildOptions::to("cell-diagram.apkg"))?;
+    assert_eq!(output.report().counts().cards, 2);
+    Ok(())
+}
+```
 
-The shared core currently rejects **hide-one-guess-one** grouped cloze output
-with `PRODUCT.CLOZE_MARKER_MALFORMED`. Use `IoMode::HideAllGuessOne` in Rust,
-`hide-all-guess-one` in Node, or `hide_all_guess_one` in Python. This limitation
-applies across bindings; it is not fixed by selecting a different language.
+`HideAllGuessOne` is the default; `HideOneGuessOne` is also supported. Each keyed
+mask produces its own cloze card. Coordinates are finite pixel values on the
+displayed image, after EXIF orientation. The library fully decodes PNG, JPEG,
+GIF, WebP and BMP; the decoded buffer budget is 256 MiB, independent of the
+compressed media import budget. Rectangles must have positive dimensions, lie
+inside the image and use unique nonempty keys.
 
-See [Node's Deck API](node/api.md#media-and-deck),
-[Python's Deck API](python/api.md#artifacts-deck-and-errors), and
-[compatibility](compatibility.md) for the verified scope. Package checks do not
-substitute for rendering tests in the Anki versions you intend to support.
+The builder validates the image and masks before returning a `Note`. Use ordinary
+`field` assignments for `header`, `back_extra` and `comments`; the generated
+`image` and `occlusion` fields are reserved and cannot be overridden.
+
+When updating from a previous distribution, mask keys preserve card ordinals
+across ordering changes. Removed masks reserve their ordinals; restoring the
+same key reuses the ordinal. New keys never inherit another mask's identity.
+The supported allocation is 1–500, and exhaustion fails explicitly. Removing or
+adding masks is visible in [update risk analysis](updates.md); omission from an
+APKG does not delete a learner's existing card.

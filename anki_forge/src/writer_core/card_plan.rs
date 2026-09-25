@@ -1,6 +1,6 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
-use crate::authoring_core::{NormalizedIr, NormalizedNote, NormalizedNotetype, NormalizedTemplate};
+use crate::authoring_core::{NormalizedNote, NormalizedNotetype, NormalizedTemplate};
 
 use crate::writer_core::apkg::strip_html_preserving_media_filenames;
 
@@ -25,24 +25,6 @@ pub fn plan_cards(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Vec<P
             card_ord: template.ord.unwrap_or(template_index as u32),
         })
         .collect()
-}
-
-pub fn count_cards(normalized_ir: &NormalizedIr) -> usize {
-    let notetypes = normalized_ir
-        .notetypes
-        .iter()
-        .map(|notetype| (notetype.id.as_str(), notetype))
-        .collect::<BTreeMap<_, _>>();
-
-    normalized_ir
-        .notes
-        .iter()
-        .filter_map(|note| {
-            notetypes
-                .get(note.notetype_id.as_str())
-                .map(|notetype| plan_cards(note, notetype).len())
-        })
-        .sum()
 }
 
 fn plan_cloze_cards(note: &NormalizedNote, notetype: &NormalizedNotetype) -> Vec<PlannedCard> {

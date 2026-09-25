@@ -286,8 +286,8 @@ fn add_case_transitive_entries(
         "template-bundle" => {
             let relative_root = template_bundle_fixture_root(Path::new(&case.input))?;
             let root = contracts_root.join(relative_root);
-            let paths = anki_forge::product::template_bundle::template_bundle_relative_paths(root)
-                .with_context(|| {
+            let paths =
+                ankiforge::tools::contract_template_bundle_paths(root).with_context(|| {
                     format!(
                         "failed to collect template-bundle fixture inputs: {}",
                         case.id

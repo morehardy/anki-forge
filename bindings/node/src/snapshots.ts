@@ -1,91 +1,97 @@
-/** Immutable observations of Rust product values; these are not editable authoring IR. */
-export interface FieldSnapshot {
-  readonly key: string;
-  readonly name: string;
-  readonly identity: boolean;
-  readonly sort: boolean;
-  readonly required: boolean;
-  readonly optional: boolean;
-  readonly keyAutoDerived: boolean;
+/** JSON data mirrors Rust snapshots; saving a snapshot never owns an artifact. */
+export type PathSnapshot =
+  | string
+  | { readonly encoding: "unix_bytes"; readonly bytes: readonly number[] }
+  | { readonly encoding: "windows_wide"; readonly units: readonly number[] };
+export type RiskLevel = "info" | "low" | "medium" | "high" | "critical";
+export type RiskCode =
+  | "RISK.NOTE_ADDED"
+  | "RISK.NOTE_CHANGED"
+  | "RISK.NOTE_REMOVED"
+  | "RISK.CARD_ADDED"
+  | "RISK.CARD_REMOVED"
+  | "RISK.MODEL_ADDED"
+  | "RISK.MODEL_CHANGED"
+  | "RISK.SORT_FIELD_CHANGED"
+  | "RISK.MODEL_REMOVED"
+  | "RISK.FIELD_ADDED"
+  | "RISK.FIELD_REMOVED"
+  | "RISK.TEMPLATE_ADDED"
+  | "RISK.TEMPLATE_REMOVED"
+  | "RISK.MASK_ADDED"
+  | "RISK.MASK_REMOVED"
+  | "RISK.MEDIA_ADDED"
+  | "RISK.MEDIA_CHANGED"
+  | "RISK.MEDIA_REMOVED";
+export interface Diagnostic {
+  readonly severity: string;
+  readonly code: string;
+  readonly message: string;
+  readonly [key: string]: unknown;
 }
-export interface IdentityRecipeSnapshot {
-  readonly fieldKeys: readonly string[];
+export interface BuildCounts {
+  readonly notes: number;
+  readonly cards: number;
+  readonly media: number;
 }
-export type GenerationRuleSnapshot =
-  | { readonly kind: 'anki_default' }
-  | { readonly kind: 'all' | 'any'; readonly fields: readonly string[] }
-  | { readonly kind: 'cloze'; readonly field: string };
-export interface TemplateSnapshot {
-  readonly key: string;
-  readonly name: string;
-  readonly front: string;
-  readonly back: string;
-  readonly browserFront: string | null;
-  readonly browserBack: string | null;
-  readonly targetDeck: string | null;
-  readonly generateWhen: GenerationRuleSnapshot;
+export interface ComparisonEvidence {
+  readonly selector: string;
+  readonly before: unknown;
+  readonly after: unknown;
 }
-export interface NoteTypeSnapshot {
-  readonly id: string;
-  readonly kind: 'normal' | 'cloze';
-  readonly clozeField: string | null;
-  readonly name: string | null;
-  readonly fields: readonly FieldSnapshot[];
-  readonly templates: readonly TemplateSnapshot[];
-  readonly css: string | null;
-  readonly identity: IdentityRecipeSnapshot | null;
+export interface RiskFinding {
+  readonly code: RiskCode;
+  readonly level: RiskLevel;
+  readonly message: string;
+  readonly evidence: readonly ComparisonEvidence[];
 }
-export interface NoteSnapshot {
-  readonly noteTypeId: string;
-  readonly stableId: string | null;
-  readonly deckName: string | null;
-  readonly tags: readonly string[];
-  readonly identity: IdentityRecipeSnapshot | null;
-  readonly renderedFields: Readonly<Record<string, string>>;
+export interface PolicySnapshot {
+  readonly allows_publication: boolean;
+  readonly threshold: RiskLevel;
+  readonly allowed_codes: readonly RiskCode[];
+  readonly unmatched_allowances: readonly RiskCode[];
+  readonly blocking_findings: readonly RiskFinding[];
 }
-export interface ResolvedDeckIdentitySnapshot {
-  readonly stableId: string;
-  readonly recipeId: string | null;
-  readonly provenance:
-    | 'explicit_stable_id'
-    | 'inferred_from_note_fields'
-    | 'inferred_from_notetype_fields'
-    | 'inferred_from_stock_recipe';
-  readonly canonicalPayload: string | null;
-  readonly usedOverride: boolean;
+export interface ComparisonSnapshot {
+  readonly schema_version: string;
+  readonly findings: readonly RiskFinding[];
+  readonly highest_risk: RiskLevel | null;
+  readonly policy: PolicySnapshot;
+  readonly diagnostics: readonly Diagnostic[];
+  readonly baseline_counts: BuildCounts;
+  readonly candidate_counts: BuildCounts;
 }
-interface DeckNoteSnapshotBase {
-  readonly id: string;
-  readonly stableId: string | null;
-  readonly tags: readonly string[];
-  readonly generated: boolean;
-  readonly resolvedIdentity: ResolvedDeckIdentitySnapshot | null;
+export interface ReportSnapshot {
+  readonly schema_version: string;
+  readonly counts: BuildCounts;
+  readonly baseline_counts: BuildCounts | null;
+  readonly diagnostics: readonly Diagnostic[];
+  readonly duration_ms: number;
+  readonly comparison: ComparisonSnapshot | null;
 }
-export type DeckNoteSnapshot = DeckNoteSnapshotBase &
-  (
-    | {
-        readonly kind: 'basic';
-        readonly front: string;
-        readonly back: string;
-        readonly identityOverride: {
-          readonly fields: readonly ('front' | 'back')[];
-          readonly reasonCode: string;
-        } | null;
-      }
-    | { readonly kind: 'cloze'; readonly text: string; readonly extra: string }
-    | {
-        readonly kind: 'image_occlusion';
-        readonly image: string;
-        readonly mode: import('./types').IoMode;
-        readonly rects: readonly Readonly<import('./types').Rect>[];
-        readonly header: string;
-        readonly backExtra: string;
-        readonly comments: string;
-      }
-  );
-export interface DeckSnapshot {
-  readonly name: string;
-  readonly stableId: string | null;
-  readonly identityPolicy: { readonly basic: readonly ('front' | 'back')[] | null };
-  readonly notes: readonly DeckNoteSnapshot[];
+export interface PublicationSnapshot {
+  readonly path: PathSnapshot;
+  readonly stage: "not_published" | "published";
+  readonly temporary: boolean;
+  readonly durability: "confirmed" | "unconfirmed";
+}
+export type BuildResultSnapshot =
+  | {
+      readonly status: "success";
+      readonly artifact: PathSnapshot;
+      readonly temporary: boolean;
+    }
+  | {
+      readonly status: "failure";
+      readonly kind: string;
+      readonly code: string;
+      readonly message: string;
+      readonly causes: readonly string[];
+      readonly publications: readonly PublicationSnapshot[];
+    };
+export interface BuildSnapshot {
+  readonly schema_version: string;
+  readonly tool_version: string;
+  readonly result: BuildResultSnapshot;
+  readonly report: ReportSnapshot;
 }

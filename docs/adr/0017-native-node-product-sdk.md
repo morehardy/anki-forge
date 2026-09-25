@@ -1,5 +1,7 @@
 # ADR 0017: Own Rust product objects behind the Node SDK
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 Status: implemented locally; platform and publication gates remain open.
 
 The Node 0.1 wrapper launches `contract_tools` and passes product documents over

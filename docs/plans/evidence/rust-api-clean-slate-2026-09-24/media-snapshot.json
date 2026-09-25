@@ -1,0 +1,502 @@
+{
+  "schema_version": "ankiforge-media-snapshot-measurement-v1",
+  "measured_at_utc": "2026-09-24T09:01:49.069465+00:00",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.5",
+    "rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+    "cargo": "cargo 1.92.0 (344c4567c 2025-10-21)",
+    "build_profile": "debug",
+    "probe_sha256": "be005e32c72cdebecb4f14c0fe3982ffee324ebc41778c3091b54a08996cced4",
+    "media_snapshot_source_sha256": "08ac27de779bccfaaa7474534b4015b3fa8ce65f436f566b85ffc45f58c7a712",
+    "consumer": "standalone crate; ankiforge default-features=false; no internal-tools"
+  },
+  "method": {
+    "input": "exact-size 8-bit mono PCM WAV; generated before child startup; warm filesystem cache; no cache eviction",
+    "rss": "per-child wait4 ru_maxrss, converted from bytes on macOS / KiB on Linux; includes loader, allocator and caller Vec for bytes mode",
+    "disk": "2 ms nominal polling of isolated snapshot directory plus synchronous post-import checkpoints; source inputs and build outputs excluded",
+    "limitations": [
+      "One sample per scenario; this is not a statistical performance bound.",
+      "RSS includes all child allocations and does not include all filesystem page-cache memory or system-wide memory.",
+      "Whole-process wall_ms includes startup and observer polling; import_ms separately times each API call plus checkpoint bookkeeping. Do not subtract baseline latency or RSS to infer a precise incremental cost.",
+      "Sampled disk peaks can miss short-lived transients; checkpoint values prove retained storage only.",
+      "Allocated bytes use filesystem st_blocks*512 and are not a portable physical-device accounting guarantee.",
+      "Debug build, cache state, filesystem, hardware and concurrent workload affect latency and RSS.",
+      "Repeated imports still read/hash/spool the input before sharing retained storage; a temporary second spool is allowed.",
+      "Lifecycle and failure correctness are asserted by the separate default-consumer test, not inferred from RSS thresholds."
+    ]
+  },
+  "results": [
+    {
+      "mode": "measure-baseline",
+      "input_bytes": 0,
+      "imports": 0,
+      "wall_ms": 3199.04,
+      "peak_rss_bytes": 3817472,
+      "user_cpu_ms": 1.764,
+      "system_cpu_ms": 4.222,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 1247,
+        "sampled_peaks": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        },
+        "checkpoint_peak_retained_logical_bytes": 0,
+        "checkpoint_peak_retained_files": 0,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "imports": 0
+          },
+          "phase": "baseline",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-file",
+      "input_bytes": 67108864,
+      "imports": 1,
+      "wall_ms": 1027.352,
+      "peak_rss_bytes": 6766592,
+      "user_cpu_ms": 859.782,
+      "system_cpu_ms": 80.359,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 380,
+        "sampled_peaks": {
+          "files": 1,
+          "logical_bytes": 67043328,
+          "allocated_bytes": 67043328
+        },
+        "checkpoint_peak_retained_logical_bytes": 67108864,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 1015.0546250000001,
+            "input_bytes": 67108864,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 1,
+            "mode": "measure-file",
+            "total_ms": 1019.3447090000001
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-file",
+      "input_bytes": 67108864,
+      "imports": 3,
+      "wall_ms": 3457.783,
+      "peak_rss_bytes": 7847936,
+      "user_cpu_ms": 2701.755,
+      "system_cpu_ms": 239.421,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 1165,
+        "sampled_peaks": {
+          "files": 2,
+          "logical_bytes": 134152192,
+          "allocated_bytes": 134873088
+        },
+        "checkpoint_peak_retained_logical_bytes": 67108864,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 995.448958,
+            "input_bytes": 67108864,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 2,
+            "import_ms": 1314.464375,
+            "input_bytes": 67108864,
+            "retained_owners": 2
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 3,
+            "import_ms": 1114.445333,
+            "input_bytes": 67108864,
+            "retained_owners": 3
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 3,
+            "mode": "measure-file",
+            "total_ms": 3444.987875
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-file",
+      "input_bytes": 268435456,
+      "imports": 1,
+      "wall_ms": 4271.234,
+      "peak_rss_bytes": 6782976,
+      "user_cpu_ms": 3595.53,
+      "system_cpu_ms": 256.56,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 1522,
+        "sampled_peaks": {
+          "files": 1,
+          "logical_bytes": 268304384,
+          "allocated_bytes": 268959744
+        },
+        "checkpoint_peak_retained_logical_bytes": 268435456,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 4244.674167,
+            "input_bytes": 268435456,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 268435456,
+            "sizes": [
+              268435456
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 1,
+            "mode": "measure-file",
+            "total_ms": 4256.845625000001
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-file",
+      "input_bytes": 268435456,
+      "imports": 3,
+      "wall_ms": 13806.9,
+      "peak_rss_bytes": 7913472,
+      "user_cpu_ms": 10145.272,
+      "system_cpu_ms": 719.998,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 4844,
+        "sampled_peaks": {
+          "files": 2,
+          "logical_bytes": 536739840,
+          "allocated_bytes": 541982720
+        },
+        "checkpoint_peak_retained_logical_bytes": 268435456,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 5281.8150829999995,
+            "input_bytes": 268435456,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 268435456,
+            "sizes": [
+              268435456
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 2,
+            "import_ms": 4727.428125,
+            "input_bytes": 268435456,
+            "retained_owners": 2
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 268435456,
+            "sizes": [
+              268435456
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 3,
+            "import_ms": 3753.72875,
+            "input_bytes": 268435456,
+            "retained_owners": 3
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 268435456,
+            "sizes": [
+              268435456
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 3,
+            "mode": "measure-file",
+            "total_ms": 13784.030291000001
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-bytes",
+      "input_bytes": 67108864,
+      "imports": 1,
+      "wall_ms": 932.774,
+      "peak_rss_bytes": 72826880,
+      "user_cpu_ms": 856.492,
+      "system_cpu_ms": 49.912,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 356,
+        "sampled_peaks": {
+          "files": 1,
+          "logical_bytes": 0,
+          "allocated_bytes": 67108864
+        },
+        "checkpoint_peak_retained_logical_bytes": 67108864,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 920.836125,
+            "input_bytes": 67108864,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 1,
+            "mode": "measure-bytes",
+            "total_ms": 924.435041
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    },
+    {
+      "mode": "measure-bytes",
+      "input_bytes": 67108864,
+      "imports": 3,
+      "wall_ms": 2822.25,
+      "peak_rss_bytes": 72892416,
+      "user_cpu_ms": 2550.18,
+      "system_cpu_ms": 135.297,
+      "disk": {
+        "sample_interval_ms": 2.0,
+        "samples": 1072,
+        "sampled_peaks": {
+          "files": 2,
+          "logical_bytes": 67108864,
+          "allocated_bytes": 134217728
+        },
+        "checkpoint_peak_retained_logical_bytes": 67108864,
+        "checkpoint_peak_retained_files": 1,
+        "after_exit": {
+          "files": 0,
+          "logical_bytes": 0,
+          "allocated_bytes": 0
+        }
+      },
+      "observations": [
+        {
+          "observations": {
+            "import": 1,
+            "import_ms": 891.567709,
+            "input_bytes": 67108864,
+            "retained_owners": 1
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 2,
+            "import_ms": 949.639375,
+            "input_bytes": 67108864,
+            "retained_owners": 2
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "import": 3,
+            "import_ms": 960.0649169999999,
+            "input_bytes": 67108864,
+            "retained_owners": 3
+          },
+          "phase": "import_complete",
+          "storage": {
+            "files": 1,
+            "logical_bytes": 67108864,
+            "sizes": [
+              67108864
+            ]
+          }
+        },
+        {
+          "observations": {
+            "imports": 3,
+            "mode": "measure-bytes",
+            "total_ms": 2812.622042
+          },
+          "phase": "all_owners_dropped",
+          "storage": {
+            "files": 0,
+            "logical_bytes": 0,
+            "sizes": []
+          }
+        }
+      ]
+    }
+  ]
+}

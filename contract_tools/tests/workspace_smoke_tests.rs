@@ -11,12 +11,12 @@ fn repository_exposes_a_contract_bundle_entrypoint() {
 
 #[test]
 fn workspace_exposes_authoring_core_contract_version() {
-    assert_eq!(anki_forge::authoring::tool_contract_version(), "phase2-v1");
+    assert_eq!(ankiforge::tools::authoring_contract_version(), "phase2-v1");
 }
 
 #[test]
 fn workspace_exposes_writer_core_contract_version() {
-    assert_eq!(anki_forge::writer::tool_contract_version(), "phase3-v1");
+    assert_eq!(ankiforge::tools::writer_contract_version(), "phase3-v1");
 }
 
 #[test]

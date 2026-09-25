@@ -1,19 +1,20 @@
 # Rust Crate Release Readiness
 
-Audit date: 2026-08-27
+Audit updated: 2026-09-24 (clean-slate local implementation and acceptance complete)
 
 ## Scope and verdict
 
-This audit covers the crates.io `anki_forge` Rust Distribution. It deliberately
+This audit covers the crates.io `ankiforge` Rust Distribution. It deliberately
 does not claim that generated APKG artifacts are production-ready.
 
 The repository now contains a release-candidate and publication flow. The crate
 can be packaged as a single self-contained product and consumed outside the
 workspace. The CI and review defects recorded on the release PR are closed, and
 deep repository interfaces are available only through the unsupported, hidden
-`internal-tools` feature. Item-level documentation enforcement and source
-provenance review remain explicit publication blockers instead of being treated
-as satisfied by packaging success.
+`internal-tools` feature. The public interface now enforces item-level documentation on actual definitions.
+Source provenance review and hosted platform evidence remain publication conditions.
+Implementation status is tracked in the [current plan](plans/2026-09-23-rust-api-clean-slate-design.md#8-实施记录);
+current local results are recorded in the [acceptance evidence](plans/evidence/rust-api-clean-slate-2026-09-24/verification.md).
 
 Production publication is still blocked until maintainers verify the external
 crates.io/GitHub controls and the hosted Tier 1 workflow passes on the release
@@ -24,15 +25,15 @@ implementation.
 
 | Requirement | Repository state | Result |
 | --- | --- | --- |
-| One public crate | Authoring and writer cores are private modules inside `anki_forge`; `contract_tools` is `publish = false` | Implemented |
-| Self-contained runtime | Deterministic bundle `0.6.0` is embedded and loaded with `RuntimeMode::Installed` | Implemented |
+| One public crate | Authoring and writer cores are private modules inside `ankiforge`; `contract_tools` is `publish = false` | Implemented |
+| Self-contained runtime | Deterministic bundle `1.0.0` is embedded and loaded by the private runtime | Implemented |
 | Crate/bundle mapping | Public version functions, README, changelog, metadata check, and Release Record carry both versions | Implemented |
 | Registry identity | Description, MIT license, repository, official homepage and Rust guide URLs, keywords, categories, README, and changelog are present | Implemented |
 | Explicit payload | Cargo `include` allowlist plus required/forbidden path audit | Implemented |
 | Hermetic package | `cargo package --locked --offline` verifies committed package contents | Implemented |
 | Packaged consumer | Fresh external project uses only extracted package source and builds an APKG through the supported facade offline after dependency prefetch | Implemented |
-| Documentation | Crate guide, compiling doctest, errors/concurrency notes, warning-free rustdoc, and a compile boundary that hides repository internals by default are present; broad `missing_docs` exemptions still prevent item-level completeness from being enforced | Partial; publication blocker |
-| API surface | Default consumers receive only `prelude`, root `Deck`/`Project`/`Severity`, and version inspection; unpublished tooling explicitly enables hidden `internal-tools` modules | Implemented |
+| Documentation | Public definitions and impls enforce `missing_docs`; current guides cover owned values, errors, reports, and updates | Passed locally for the current candidate |
+| API surface | Root common types and six public domains; internals private; hidden curated `tools` requires `internal-tools` | Implemented |
 | Source provenance | The package excludes `docs/source`; the compatibility schema implementation still requires maintainer/legal provenance review before an MIT publication | External review required |
 | Dependency policy | `cargo-deny` blocks advisories, unapproved licenses, wildcard registry dependencies, unknown sources, and unreviewed duplicate-version splits | Implemented |
 | Security remediation | Vulnerable locked versions of `anyhow`, `url`/`idna`, `rand`, and `tar` were upgraded without advisory exceptions | Implemented |
@@ -45,32 +46,40 @@ implementation.
 
 ## Verified locally
 
-The following checks passed during implementation:
+The current production implementation (`399bc19`) passed:
 
-- workspace/all-target compilation after consolidating the crate topology;
-- deterministic contract package reproduction;
-- package payload audit and release metadata/tag validation;
-- warning-free rustdoc and compiling public quick-start doctest;
-- extracted `.crate` verification and fresh packaged-consumer execution;
-- current `cargo-deny` advisory, license, bans, and source checks;
-- targeted runtime, authoring, writer, and package regression tests.
+- complete Rust quality and local `verify-ci` gates, including all-feature
+  workspace tests, warning-free Clippy/rustdoc, and doctests;
+- independent default public contracts (21), capability scenarios (23), and
+  positive/negative public-boundary probes;
+- deterministic embedded bundle reproduction, exact payload and release metadata;
+- offline packaged consumers on Rust 1.92.0 and installed 1.98.1;
+- rebuilt Node (17) and Python (47) native tests, independent installation and
+  typing checks, including a final sdist-to-wheel build outside the repository;
+- documentation execution (16 complete programs, 22 independently inspected
+  APKG outputs) and website checks;
+- fresh RustSec/cargo-deny advisory, license, bans, and source checks.
 
-The full workspace suite is run once at implementation completion. Linux,
-Windows, and both macOS architectures cannot all be proven by one local machine;
-their required evidence comes from `.github/workflows/rust-crate-ci.yml`.
+A final verification-harness race was fixed and independently reviewed; concurrent
+consumer and documentation runs passed. These changes do not alter production
+sources. Exact commands, log digests, review findings and limits are in the
+[acceptance record](plans/evidence/rust-api-clean-slate-2026-09-24/verification.md).
+
+This is macOS ARM64 evidence. Other Tier 1 platforms and the current stable channel
+require `.github/workflows/rust-crate-ci.yml`; installed Rust 1.98.1 is not a claim
+that the stable channel was refreshed.
 
 ## Remaining publication blockers
 
 The remaining items require source review, external authority, or hosted state:
 
-1. Remove the broad default-surface `missing_docs` exemptions and document every supported public item.
-2. Confirm that the packaged compatibility schema source has provenance compatible with the intended MIT distribution; do not rely only on excluding the upstream mirror from the Cargo payload.
-3. Confirm that the crates.io `anki_forge` name is available/owned by the intended maintainers.
-4. Configure the crates.io Trusted Publisher for this repository and workflow.
-5. Configure the protected GitHub `crates-io` environment with required reviewers.
-6. Protect release tags and require the Rust crate CI checks on the exact release commit.
-7. Observe a green Tier 1/MSRV/stable matrix and review candidate evidence.
-8. Obtain explicit human approval before creating the first authoritative tag.
+1. Confirm that the packaged compatibility schema source has provenance compatible with the intended MIT distribution; do not rely only on excluding the upstream mirror from the Cargo payload.
+2. Confirm that the crates.io `ankiforge` name is available/owned by the intended maintainers.
+3. Configure the crates.io Trusted Publisher for this repository and workflow.
+4. Configure the protected GitHub `crates-io` environment with required reviewers.
+5. Protect release tags and require the Rust crate CI checks on the exact release commit.
+6. Observe a green Tier 1/MSRV/stable matrix and review candidate evidence.
+7. Obtain explicit human approval before creating the first authoritative tag.
 
 Until those are satisfied, the correct action is rehearsal (`cargo publish
 --dry-run`), not publication.

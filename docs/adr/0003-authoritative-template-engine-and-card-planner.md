@@ -1,5 +1,7 @@
 # ADR 0003: Authoritative Template Engine and Card Planner
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 ## Context
 
 Template parsing, Cloze counting, and card creation previously lived in

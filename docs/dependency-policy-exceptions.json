@@ -1,12 +1,5 @@
 [
   {
-    "crate": "cpufeatures",
-    "version": "0.2.17",
-    "owner": "release-maintainers",
-    "reason": "sha1 and blake3 currently require different compatible major lines",
-    "expires": "2027-08-26"
-  },
-  {
     "crate": "getrandom",
     "version": "0.2.15",
     "owner": "release-maintainers",
@@ -25,6 +18,13 @@
     "version": "0.4.15",
     "owner": "release-maintainers",
     "reason": "tempfile and tar transitive trees currently require separate rustix lines",
+    "expires": "2027-08-26"
+  },
+  {
+    "crate": "quick-error",
+    "version": "1.2.3",
+    "owner": "release-maintainers",
+    "reason": "proptest process-isolation dependency rusty-fork uses quick-error 1; production image-webp decoding requires incompatible quick-error 2",
     "expires": "2027-08-26"
   },
   {

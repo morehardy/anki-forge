@@ -64,16 +64,12 @@ pub struct ProductLoweringError {
 }
 
 impl ProductLoweringError {
-    pub fn code(&self) -> crate::diagnostics::ErrorCode {
+    pub fn code(&self) -> &str {
         self.product_diagnostics
             .first()
-            .map(|diagnostic| crate::diagnostics::ErrorCode::from_code(diagnostic.code))
-            .or_else(|| {
-                self.lowering_diagnostics
-                    .first()
-                    .map(|diagnostic| crate::diagnostics::ErrorCode::from_code(diagnostic.code))
-            })
-            .unwrap_or_else(|| crate::diagnostics::ErrorCode::from_code("PROJECT.LOWER_FAILED"))
+            .map(|item| item.code)
+            .or_else(|| self.lowering_diagnostics.first().map(|item| item.code))
+            .unwrap_or("PROJECT.LOWER_FAILED")
     }
 
     fn message(&self) -> &str {
@@ -96,9 +92,3 @@ impl std::fmt::Display for ProductLoweringError {
 }
 
 impl std::error::Error for ProductLoweringError {}
-
-impl crate::diagnostics::ErrorCodeExt for ProductLoweringError {
-    fn code(&self) -> crate::diagnostics::ErrorCode {
-        ProductLoweringError::code(self)
-    }
-}

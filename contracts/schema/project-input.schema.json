@@ -1,0 +1,752 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Native tool project input recipe v1",
+  "type": "object",
+  "properties": {
+    "format_version": {
+      "const": "ankiforge-project-v1"
+    },
+    "namespace": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/stableKey"
+        },
+        {
+          "not": {
+            "pattern": "[/\\\\]"
+          }
+        },
+        {
+          "not": {
+            "enum": [
+              ".",
+              ".."
+            ]
+          }
+        }
+      ]
+    },
+    "name": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/displayName"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "default_deck": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/deckName"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "custom"
+              },
+              "key": {
+                "$ref": "#/definitions/stableKey"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/displayName"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "$ref": "#/definitions/fieldKey"
+                    },
+                    "name": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/definitions/fieldKey"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "sort": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "key"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "templates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "$ref": "#/definitions/stableKey"
+                    },
+                    "name": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/definitions/displayName"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "front": {
+                      "type": "string"
+                    },
+                    "back": {
+                      "type": "string"
+                    },
+                    "browser_front": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "browser_back": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "target_deck": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/definitions/deckName"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "generation_rule": {
+                      "anyOf": [
+                        {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "required": [
+                                "kind"
+                              ],
+                              "additionalProperties": false,
+                              "properties": {
+                                "kind": {
+                                  "const": "anki_default"
+                                }
+                              }
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "kind",
+                                "fields"
+                              ],
+                              "additionalProperties": false,
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "all",
+                                    "any"
+                                  ]
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "minItems": 1,
+                                  "uniqueItems": true,
+                                  "items": {
+                                    "$ref": "#/definitions/fieldKey"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "front",
+                    "back"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "css": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cloze_field": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/fieldKey"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "assets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/assetKey"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "key",
+              "fields",
+              "templates"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "required": [
+                    "cloze_field"
+                  ],
+                  "properties": {
+                    "cloze_field": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "templates": {
+                      "maxItems": 1,
+                      "items": {
+                        "properties": {
+                          "generation_rule": {
+                            "anyOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "kind"
+                                ],
+                                "properties": {
+                                  "kind": {
+                                    "const": "anki_default"
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "bundle"
+              },
+              "path": {
+                "type": "string",
+                "$comment": "Resolved verbatim against the project base directory, including an empty path for that directory; filesystem validity is checked by the loader.",
+                "not": {
+                  "pattern": "\\u0000"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "path"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "$ref": "#/definitions/assetKey"
+          },
+          "source": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "file"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "$comment": "A filesystem path, without whitespace trimming or Unicode normalization; existence and platform syntax are checked by the loader.",
+                    "not": {
+                      "pattern": "\\u0000"
+                    }
+                  }
+                },
+                "required": [
+                  "kind",
+                  "path"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "bytes"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 255
+                    },
+                    "maxItems": 268435456
+                  },
+                  "mime": {
+                    "$ref": "#/definitions/concreteMime"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "data",
+                  "mime"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "export_as": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/exportFilename"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "source"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "$ref": "#/definitions/stableKey"
+          },
+          "content": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "basic"
+                  },
+                  "front": {
+                    "$ref": "#/definitions/content"
+                  },
+                  "back": {
+                    "$ref": "#/definitions/content"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "front",
+                  "back"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "cloze"
+                  },
+                  "text": {
+                    "$ref": "#/definitions/content"
+                  },
+                  "back_extra": {
+                    "$ref": "#/definitions/content"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "custom"
+                  },
+                  "model": {
+                    "$ref": "#/definitions/stableKey"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/definitions/content"
+                    },
+                    "propertyNames": {
+                      "$ref": "#/definitions/fieldKey"
+                    }
+                  }
+                },
+                "required": [
+                  "kind",
+                  "model",
+                  "fields"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "image_occlusion"
+                  },
+                  "image": {
+                    "$ref": "#/definitions/assetKey"
+                  },
+                  "masks": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "$ref": "#/definitions/stableKey"
+                        },
+                        "x": {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        "y": {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        "width": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        "height": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "x",
+                        "y",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1,
+                    "maxItems": 500
+                  },
+                  "mode": {
+                    "enum": [
+                      "hide_all_guess_one",
+                      "hide_one_guess_one"
+                    ]
+                  },
+                  "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/definitions/content"
+                    },
+                    "propertyNames": {
+                      "enum": [
+                        "header",
+                        "back_extra",
+                        "comments"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "kind",
+                  "image",
+                  "masks"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "deck": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/deckName"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "$comment": "Match Rust char::is_control and char::is_whitespace explicitly; ECMAScript \\s differs for U+0085 and U+FEFF. The afid:: prefix is reserved, case-sensitively.",
+              "not": {
+                "pattern": "[\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]|^afid::"
+              }
+            }
+          }
+        },
+        "required": [
+          "key",
+          "content"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "format_version",
+    "namespace",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "content": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+          "not": {
+            "pattern": "\\u001f"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "text"
+            },
+            "value": {
+              "type": "string",
+              "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+              "not": {
+                "pattern": "\\u001f"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "html"
+            },
+            "value": {
+              "type": "string",
+              "description": "Authored field content cannot contain the raw U+001F Anki field separator.",
+              "not": {
+                "pattern": "\\u001f"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "image",
+                "sound"
+              ]
+            },
+            "asset": {
+              "$ref": "#/definitions/assetKey"
+            }
+          },
+          "required": [
+            "kind",
+            "asset"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "sequence"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/content"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000](?:[\\s\\S]*[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000])?$",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
+      },
+      "$comment": "Use Rust whitespace explicitly; ECMAScript \\s differs for U+0085 and U+FEFF."
+    },
+    "fieldKey": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/stableKey"
+        },
+        {
+          "not": {
+            "pattern": "[{}:#^/!]"
+          }
+        },
+        {
+          "not": {
+            "enum": [
+              "Card",
+              "CardFlag",
+              "Deck",
+              "FrontSide",
+              "Subdeck",
+              "Tags",
+              "Type"
+            ]
+          }
+        }
+      ]
+    },
+    "deckName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Match valid_authored_deck_name: nonempty :: components, no boundary whitespace/colons, and no Rust control characters. Single colons and non-control whitespace inside components remain valid.",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]|(^|::)[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:]|[\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000:](::|$)|:::"
+      }
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Nonblank under Rust str::trim, without control characters; surrounding whitespace is allowed.",
+      "pattern": "[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]",
+      "not": {
+        "pattern": "[\\u0000-\\u001f\\u007f-\\u009f]"
+      }
+    },
+    "assetKey": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Opaque loader alias, matched exactly without trimming or normalization; unlike stable identity keys, only all-Rust-whitespace aliases are forbidden.",
+      "pattern": "[^\\u0009-\\u000d\\u0020\\u0085\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]"
+    },
+    "exportFilename": {
+      "$comment": "Portable export filename syntax. maxLength counts Unicode scalar values; the runtime additionally enforces the 255 UTF-8 byte budget.",
+      "description": "Portable filename. The complete name, including its extension, must fit within 255 UTF-8 bytes. Loaders enforce this byte limit in addition to schema syntax and character-count checks.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/stableKey"
+        },
+        {
+          "maxLength": 255,
+          "not": {
+            "pattern": "[/\\\\<>:\"|?*\\[\\]]|\\.$|^([cC][oO][nN]|[pP][rR][nN]|[aA][uU][xX]|[nN][uU][lL]|[cC][lL][oO][cC][kK]\\$|([cC][oO][mM]|[lL][pP][tT])[1-9\u00b9\u00b2\u00b3])(\\.|$)"
+          }
+        }
+      ]
+    },
+    "concreteMime": {
+      "type": "string",
+      "$comment": "Matches the concrete type/subtype and parameter syntax accepted by the runtime mime parser. Content/type agreement remains a runtime check.",
+      "pattern": "^[!#$%&'*+\\-.^_`|~0-9A-Za-z]+/[!#$%&'*+\\-.^_`|~0-9A-Za-z]+(?:; *[!#$%&'*+\\-.^_`|~0-9A-Za-z]+=(?:[!#$%&'*+\\-.^_`|~0-9A-Za-z]+|\"[^\\u0000-\\u001f\\u007f][^\\u0000-\\u001f\\u007f\"]*\" *))*(?:; *(?:[!#$%&'*+\\-.^_`|~0-9A-Za-z]+=)?)?(?![\\s\\S])",
+      "not": {
+        "pattern": "^\\*/|^[^/]+/\\*(?:\\+[^+;]*)?(?:;|$)"
+      }
+    }
+  }
+}
