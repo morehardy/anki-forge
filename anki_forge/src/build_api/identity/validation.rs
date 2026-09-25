@@ -138,6 +138,10 @@ impl IdentityEnvelope {
                 "invalid or duplicate note identity"
             );
             ensure!(
+                note.guid == super::note_guid(&self.identity.namespace, key),
+                "note GUID disagrees with namespace and stable key"
+            );
+            ensure!(
                 note.mtime_secs > 0 && valid_hash(&note.content_hash),
                 "invalid note revision"
             );

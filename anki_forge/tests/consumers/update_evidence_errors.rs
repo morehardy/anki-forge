@@ -83,6 +83,7 @@ fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error
     Ok(())
 }
 fn main() -> Result<(), Box<dyn Error>> {
+    note_guids_are_bound_to_namespace_and_stable_key()?;
     retired_card_history_is_validated()?;
     media_map_metadata_must_match_payloads()?;
     duplicate_media_names_are_not_complete_evidence()?;
@@ -418,5 +419,93 @@ fn retired_card_history_is_validated() -> Result<(), Box<dyn Error>> {
     assert_eq!(history["notes"]["retired-io"]["masks"], restored["notes"]["retired-io"]["masks"]);
     let repeat = history_project(2)?.build(BuildOptions::temporary().update_from(revived.artifact().path()))?;
     assert!(repeat.report().comparison().unwrap().findings().is_empty());
+    Ok(())
+}
+
+
+fn guid_project(namespace: &str, key: Option<&str>) -> Result<Project, Box<dyn Error>> {
+    let mut project = Project::new(namespace)?;
+    project.add("keep", Note::basic("keep", "answer"))?;
+    if let Some(key) = key { project.add(key, Note::basic("one", "answer"))?; }
+    Ok(project)
+}
+
+fn note_guids_are_bound_to_namespace_and_stable_key() -> Result<(), Box<dyn Error>> {
+    use ankiforge::update::{CompareOptions, RiskCode, UpdatePolicy};
+    const NAMESPACE: &str = "guid-proof::中文";
+    let envelope = |path: &Path| -> serde_json::Value {
+        let mut archive = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
+        serde_json::from_reader(archive.by_name("ankiforge-identity.json").unwrap()).unwrap()
+    };
+    for retired in [false, true] {
+        let original = guid_project(NAMESPACE, Some("one"))?.build(BuildOptions::temporary())?;
+        let retired_output = if retired {
+            Some(guid_project(NAMESPACE, None)?.build(BuildOptions::temporary().update_from(original.artifact().path())
+                .update_policy(UpdatePolicy::default().allow(RiskCode::NoteRemoved)))?)
+        } else { None };
+        let baseline = retired_output.as_ref().unwrap_or(&original);
+        let original_envelope = envelope(baseline.artifact().path());
+        let original_guid = original_envelope["identity"]["notes"]["one"]["guid"].as_str().unwrap();
+        for what in ["renamed_key", "namespace", "guid"] {
+            let mut value = original_envelope.clone();
+            let mut replacement_collection = None;
+            match what {
+                "renamed_key" => {
+                    let notes = value["identity"]["notes"].as_object_mut().unwrap();
+                    let note = notes.remove("one").unwrap();
+                    notes.insert("another-key".into(), note);
+                }
+                "namespace" => value["identity"]["namespace"] = "another-namespace".into(),
+                "guid" => {
+                    let forged_guid = "0".repeat(32);
+                    assert_ne!(original_guid, forged_guid);
+                    value["identity"]["notes"]["one"]["guid"] = forged_guid.clone().into();
+                    if !retired {
+                        // Keep SQLite and the envelope mutually consistent. The
+                        // missing proof is specifically namespace + key derivation.
+                        let mut archive = zip::ZipArchive::new(fs::File::open(baseline.artifact().path())?)?;
+                        let mut compressed = Vec::new();
+                        archive.by_name("collection.anki21b")?.read_to_end(&mut compressed)?;
+                        fs::write("guid-forged.sqlite", zstd::decode_all(compressed.as_slice())?)?;
+                        let db = rusqlite::Connection::open("guid-forged.sqlite")?;
+                        assert_eq!(db.execute("UPDATE notes SET guid = ?1 WHERE guid = ?2", [&forged_guid, original_guid])?, 1);
+                        drop(db);
+                        let bytes = fs::read("guid-forged.sqlite")?;
+                        value["collection_blake3"] = blake3::hash(&bytes).to_hex().to_string().into();
+                        replacement_collection = Some(zstd::encode_all(bytes.as_slice(), 0)?);
+                    }
+                }
+                _ => unreachable!(),
+            }
+            value["identity"].sort_all_objects();
+            value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"])?).to_hex().to_string().into();
+            let output = format!("guid-proof-{retired}-{what}.apkg");
+            copy_with(baseline.artifact().path(), &output, |name, bytes| {
+                if name == "ankiforge-identity.json" { return Some(serde_json::to_vec(&value).unwrap()); }
+                if name == "collection.anki21b" { if let Some(bytes) = &replacement_collection { return Some(bytes.clone()); } }
+                Some(bytes)
+            });
+            let candidate = guid_project(if what == "namespace" { "another-namespace" } else { NAMESPACE },
+                if retired { None } else { Some(if what == "renamed_key" { "another-key" } else { "one" }) })?;
+            let error = failure(&candidate, &output, "UPDATE.EVIDENCE_INVALID");
+            assert_eq!(error.kind(), BuildErrorKind::Validation);
+            assert!(error.report().baseline_counts().is_none(), "reject the baseline before planning a candidate with colliding GUIDs");
+            assert!(error.report().comparison().is_none());
+            assert_eq!(candidate.compare(CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+            if what == "renamed_key" {
+                let restore_original_key = guid_project(NAMESPACE, Some("one"))?;
+                let error = failure(&restore_original_key, &output, "UPDATE.EVIDENCE_INVALID");
+                assert!(error.report().baseline_counts().is_none(), "reject the forged old key before restoring one creates a duplicate GUID");
+            }
+        }
+        let current = guid_project(NAMESPACE, if retired { None } else { Some("one") })?;
+        let repeat = current.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        assert_eq!(envelope(repeat.artifact().path())["identity"], original_envelope["identity"]);
+        assert!(repeat.report().comparison().unwrap().findings().is_empty());
+        let restored = guid_project(NAMESPACE, Some("one"))?.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+        assert_eq!(envelope(restored.artifact().path())["identity"]["notes"]["one"]["guid"], original_guid);
+        let other = guid_project("another-namespace", Some("one"))?.build(BuildOptions::temporary())?;
+        assert_ne!(envelope(other.artifact().path())["identity"]["notes"]["one"]["guid"], original_guid);
+    }
     Ok(())
 }

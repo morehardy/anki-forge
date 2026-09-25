@@ -138,10 +138,16 @@ fn run(mode: &str, cap_file_size: bool) {
         command.arg(mode).arg(workspace.path());
         command
     };
+    let requested_temp = if mode.starts_with("relative-temp-") {
+        command.current_dir(workspace.path());
+        Path::new("snapshots")
+    } else {
+        &temp
+    };
     command
-        .env("TMPDIR", &temp)
-        .env("TMP", &temp)
-        .env("TEMP", &temp);
+        .env("TMPDIR", requested_temp)
+        .env("TMP", requested_temp)
+        .env("TEMP", requested_temp);
     let output = output_with_timeout(command);
     assert!(
         output.status.success(),
@@ -176,6 +182,16 @@ fn same_large_content_from_file_and_bytes_retains_one_spool() {
 #[test]
 fn rejected_values_clean_their_snapshot_without_removing_existing_owners() {
     run("validation-failure", false);
+}
+
+#[test]
+fn relative_temp_directory_keeps_file_snapshots_owned_across_chdir() {
+    run("relative-temp-file", false);
+}
+
+#[test]
+fn relative_temp_directory_keeps_byte_snapshots_owned_across_chdir() {
+    run("relative-temp-bytes", false);
 }
 
 #[cfg(unix)]

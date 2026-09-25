@@ -155,6 +155,42 @@ fn duplicate(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
+fn relative_temp(mode: &str, workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+    #[cfg(unix)]
+    ensure!(!std::env::temp_dir().is_absolute(), "exercise an actual relative TMPDIR");
+    let source = workspace.join("source.wav");
+    let length = source.metadata()?.len();
+    let expected = digest(File::open(&source)?)?;
+    let original = if mode == "relative-temp-file" {
+        Media::file(&source)?
+    } else {
+        Media::bytes(fs::read(&source)?, "audio/wav")?
+    }.with_export_name("owned.wav")?;
+    one_snapshot(temp, length)?;
+    let filename = fs::read_dir(temp)?.next().context("snapshot file")??.file_name();
+    let other = workspace.join("other");
+    let other_temp = other.join("snapshots");
+    fs::create_dir_all(&other_temp)?;
+    let decoy = other_temp.join(filename);
+    fs::write(&decoy, b"unrelated snapshot")?;
+    let retained = original.clone();
+    drop(original);
+    fs::remove_file(source)?;
+    std::env::set_current_dir(&other)?;
+    let mut project = Project::new("relative-temp-directory")?;
+    project.add("one", Note::basic(retained.sound(), "answer"))?;
+    let output = project.build(BuildOptions::to(workspace.join("relative-temp.apkg")))?;
+    verify_archive(output.artifact().path(), expected)?;
+    drop(output);
+    drop(project);
+    one_snapshot(temp, length)?;
+    drop(retained);
+    ensure!(inventory(temp)?["files"] == 0, "last owner cleans the original directory");
+    ensure!(fs::read(decoy)? == b"unrelated snapshot", "cleanup must not touch the new cwd");
+    emit("relative_temp_owner_dropped", temp, json!({"package_payload_verified":true,"decoy_preserved":true}))?;
+    Ok(())
+}
+
 fn validation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     let source = workspace.join("source.wav");
     let retained = Media::file(&source)?.with_export_name("keep.wav")?;
@@ -277,6 +313,7 @@ fn main() -> anyhow::Result<()> {
         }
         "lifecycle" => lifecycle(&workspace, &temp),
         "duplicate" => duplicate(&workspace, &temp),
+        "relative-temp-file" | "relative-temp-bytes" => relative_temp(&mode, &workspace, &temp),
         "validation-failure" => validation_failure(&workspace, &temp),
         "write-failure" => write_failure(&workspace, &temp),
         "measure-file" | "measure-bytes" => measure(

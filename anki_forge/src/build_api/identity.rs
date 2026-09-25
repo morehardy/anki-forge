@@ -160,7 +160,7 @@ impl PackageIdentity {
                 (
                     key.clone(),
                     NoteIdentity {
-                        guid: digest(&[&project.namespace, "note", key])[..32].into(),
+                        guid: note_guid(&project.namespace, key),
                         model: note.model.key().into(),
                         active: true,
                         mtime_secs: now,
@@ -398,6 +398,12 @@ fn digest(parts: &[&str]) -> String {
         hash.update(part.as_bytes());
     }
     hash.finalize().to_hex().to_string()
+}
+
+// Shared by creation and evidence validation, including retired notes whose
+// rows are absent from SQLite but whose identities can later be restored.
+fn note_guid(namespace: &str, key: &str) -> String {
+    digest(&[namespace, "note", key])[..32].into()
 }
 
 fn numeric_id(namespace: &str, kind: &str, model: &str, key: &str) -> i64 {
