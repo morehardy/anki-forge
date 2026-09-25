@@ -60,6 +60,8 @@ impl PackageIdentity {
                 ));
             }
             previous.active = true;
+            // IO and custom cloze share Anki's cloze kind. Leaving IO retires
+            // its masks without losing the ordinals needed if IO is restored.
             for mask in previous.masks.values_mut() {
                 mask.active = false;
             }

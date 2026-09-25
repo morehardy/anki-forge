@@ -628,11 +628,12 @@ export class Project {
   async build(options: BuildOptions): Promise<BuildOutput> {
     if (!(options instanceof BuildOptions))
       throw new TypeError("Expected BuildOptions");
+    const baseDir = process.cwd();
     const result = await asyncCall(() =>
       this.#handle.build(JSON.stringify(options)),
     );
     return makeOutput(
-      artifactFromNative(result.artifact, process.cwd()),
+      artifactFromNative(result.artifact, baseDir),
       JSON.parse(result.snapshot),
     );
   }

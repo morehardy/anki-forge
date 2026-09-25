@@ -33,23 +33,25 @@ impl ComparisonReport {
                 (None, Some(new)) => push(&mut findings, Code::NoteAdded, Level::Info, path, None, Some(json!({"guid":new.guid})), "New or restored note."),
                 (Some(old), Some(new)) => {
                     if !old.active { push(&mut findings, Code::NoteAdded, Level::Info, path.clone(), None, Some(json!({"guid":new.guid})), "Historical note restored; its prior schema and cards still require comparison."); }
-                    if old.masks.is_empty() && new.masks.is_empty() {
-                        for key in keys(&old.cards, &new.cards) {
-                            // Schema membership changes already have their own
-                            // high-risk category, avoiding duplicate allowances.
-                            if let Some(template) = key.strip_prefix("template:") {
-                                let old_model = &before.identity.models[&old.model];
-                                let new_model = &after.identity.models[&new.model];
-                                if old_model.templates.get(template).is_none_or(|t| t.ordinal.is_none()) ||
-                                    new_model.templates.get(template).is_none_or(|t| t.ordinal.is_none()) { continue; }
-                            }
-                            let card_path = format!("{path}.cards[{key:?}]");
-                            match (old.cards.get(key), new.cards.get(key)) {
-                                (Some(ord), None) => push(&mut findings, Code::CardRemoved, Level::High, card_path, Some(json!(ord)), None,
-                                    "A previously generated card is omitted. Card counts alone do not describe identity changes or learner scheduling."),
-                                (None, Some(ord)) => push(&mut findings, Code::CardAdded, Level::Info, card_path, None, Some(json!(ord)), "A new card identity is generated for this note."),
-                                _ => {}
-                            }
+                    for key in keys(&old.cards, &new.cards) {
+                        // Mask identities have their own risk categories. A
+                        // history of IO must not hide ordinary cloze card
+                        // changes, including transitions into or out of IO.
+                        if key.starts_with("mask:") { continue; }
+                        // Schema membership changes already have their own
+                        // high-risk category, avoiding duplicate allowances.
+                        if let Some(template) = key.strip_prefix("template:") {
+                            let old_model = &before.identity.models[&old.model];
+                            let new_model = &after.identity.models[&new.model];
+                            if old_model.templates.get(template).is_none_or(|t| t.ordinal.is_none()) ||
+                                new_model.templates.get(template).is_none_or(|t| t.ordinal.is_none()) { continue; }
+                        }
+                        let card_path = format!("{path}.cards[{key:?}]");
+                        match (old.cards.get(key), new.cards.get(key)) {
+                            (Some(ord), None) => push(&mut findings, Code::CardRemoved, Level::High, card_path, Some(json!(ord)), None,
+                                "A previously generated card is omitted. Card counts alone do not describe identity changes or learner scheduling."),
+                            (None, Some(ord)) => push(&mut findings, Code::CardAdded, Level::Info, card_path, None, Some(json!(ord)), "A new card identity is generated for this note."),
+                            _ => {}
                         }
                     }
                     if old.content_hash != new.content_hash {

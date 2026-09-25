@@ -99,6 +99,16 @@ outcome and report. `update::json::ComparisonSnapshot` separates original findin
 from policy evaluation. All snapshot DTOs implement `serde::Serialize` and own no
 files. No extension trait is required.
 
+Snapshot path fields retain their native `PathBuf` values in Rust. Their JSON
+form is a string for valid Unicode, or a lossless native encoding:
+`{"encoding":"unix_bytes","bytes":[...]}` for non-UTF-8 Unix names, and
+`{"encoding":"windows_wide","units":[...]}` for Windows names containing
+unpaired UTF-16 surrogates. This applies both to successful artifact paths and
+failure publication paths. To restore a JSON path on its original platform,
+deserialize it as `build::json::PathSnapshot` and call `into_path_buf()`; encoded
+paths from a different platform are rejected. `PathSnapshot::new(path)` provides
+the same representation when serializing an error's native path yourself.
+
 Errors live with their operations: schema and bundle errors in `schema`, add/IO
 errors in `note`, media errors in `media`, build/persist errors in `build`, and
 compare/policy errors in `update`. Each provides `kind()` and `code()`, implements

@@ -16,7 +16,17 @@ impl Project {
     /// output always owns an artifact; a report alone never represents success.
     pub fn build(&self, options: BuildOptions) -> Result<BuildOutput, BuildError> {
         let started = Instant::now();
-        let (candidate, mut report) = self.prepare_candidate(&options)?;
+        let mut result = self.build_and_publish(options);
+        let elapsed = started.elapsed();
+        match &mut result {
+            Ok(output) => output.report.duration = elapsed,
+            Err(error) => error.report.duration = elapsed,
+        }
+        result
+    }
+
+    fn build_and_publish(&self, options: BuildOptions) -> Result<BuildOutput, BuildError> {
+        let (candidate, report) = self.prepare_candidate(&options)?;
         if report
             .comparison
             .as_ref()
@@ -41,7 +51,6 @@ impl Project {
                 error
             })?,
         };
-        report.duration = started.elapsed();
         Ok(BuildOutput { artifact, report })
     }
 
@@ -50,6 +59,19 @@ impl Project {
         options: &BuildOptions,
     ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
         let started = Instant::now();
+        let mut result = self.prepare_candidate_inner(options);
+        let elapsed = started.elapsed();
+        match &mut result {
+            Ok((_, report)) => report.duration = elapsed,
+            Err(error) => error.report.duration = elapsed,
+        }
+        result
+    }
+
+    fn prepare_candidate_inner(
+        &self,
+        options: &BuildOptions,
+    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
         crate::project::validate_deck(&self.default_deck).map_err(|cause| {
             BuildError::new(Kind::Configuration, cause.code(), "invalid default deck")
                 .caused_by(cause)
@@ -127,12 +149,10 @@ impl Project {
         match self.prepare_from_baseline(options, baseline) {
             Ok((candidate, mut report)) => {
                 report.baseline_counts = baseline_counts;
-                report.duration = started.elapsed();
                 Ok((candidate, report))
             }
             Err(mut error) => {
                 error.report.baseline_counts = baseline_counts;
-                error.report.duration = started.elapsed();
                 Err(error)
             }
         }
@@ -388,4 +408,54 @@ fn inspection_error(cause: crate::writer_core::InspectError, message: &str) -> B
         source = error.source();
     }
     BuildError::new(kind, code, message).caused_by(cause)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{update::CompareOptions, Note};
+    use std::time::Duration;
+
+    fn project() -> Project {
+        let mut project = Project::new("failure-duration").unwrap();
+        project.add("one", Note::basic("front", "back")).unwrap();
+        project
+    }
+
+    #[test]
+    fn baseline_inspection_failures_record_elapsed_work_for_build_and_compare() {
+        let root = tempfile::tempdir().unwrap();
+        let malformed = root.path().join("malformed.apkg");
+        std::fs::write(&malformed, b"not a ZIP archive").unwrap();
+        let project = project();
+        for baseline in [root.path().join("missing.apkg"), malformed] {
+            let started = Instant::now();
+            let error = project
+                .build(BuildOptions::temporary().update_from(&baseline))
+                .unwrap_err();
+            assert!(error.report().duration() > Duration::ZERO);
+            assert!(error.report().duration() <= started.elapsed());
+            assert!(error.publications().is_empty());
+            assert_eq!(error.report().counts().notes, 0);
+            assert!(error.source().is_some());
+
+            let started = Instant::now();
+            let error = project
+                .compare(CompareOptions::against(&baseline))
+                .unwrap_err();
+            assert!(error.report().duration() > Duration::ZERO);
+            assert!(error.report().duration() <= started.elapsed());
+            assert!(error.source().is_some());
+        }
+    }
+
+    #[test]
+    fn early_configuration_errors_record_duration_without_fabricating_observations() {
+        let error = project().build(BuildOptions::to("")).unwrap_err();
+        assert_eq!(error.kind(), Kind::Configuration);
+        assert!(error.report().duration() > Duration::ZERO);
+        assert_eq!(error.report().counts().notes, 0);
+        assert!(error.report().baseline_counts().is_none());
+        assert!(error.publications().is_empty());
+    }
 }

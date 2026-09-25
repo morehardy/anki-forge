@@ -2,6 +2,10 @@ These original test fixtures are generated for this repository under its MIT lic
 
 - `pixel.png`: a valid 1 × 1 RGBA PNG (blue pixel), encoded with the standard PNG signature, IHDR, zlib-compressed IDAT and CRC-checked chunks.
 - `silence.wav`: a valid mono, 16-bit PCM WAV containing 80 silent samples at 8 kHz.
+- `no-id3.mp3`: original mono silence encoded as MPEG-1 Layer III at 44.1 kHz and
+  32 kbps, with ID3 and Xing headers disabled. The generation command is recorded
+  in `media_export_optimization_tests.rs`; FFmpeg can decode the complete 418-byte
+  fixture without errors.
 - `occlusion.png`: an original solid blue 100 × 80 RGB image.
 - `rotated.jpg`: the same pixels with EXIF orientation 6, displayed as 80 × 100.
   Recreate these inputs with `make_images.py` and Pillow.

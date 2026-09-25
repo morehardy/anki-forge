@@ -11,6 +11,7 @@ pub fn mime_from_extension(extension: &str) -> Option<&'static str> {
     let extension = extension.trim_start_matches('.').to_ascii_lowercase();
     match extension.as_str() {
         "png" => Some("image/png"),
+        "bmp" => Some("image/bmp"),
         "jpg" | "jpeg" => Some("image/jpeg"),
         "svg" => Some("image/svg+xml"),
         "gif" => Some("image/gif"),

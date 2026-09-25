@@ -645,4 +645,14 @@ npm --prefix website run check:examples
 
 本轮五条 review 修复的本地验证完成：完整 Rust quality（含全工作区/all-features 测试、22 个独立公共消费者、Clippy、rustdoc/doctest、精确发布内容和契约归档检查）通过；最终哈希投影另经完整 Clippy、4 个更新消费者验证。writer 11 项针对性测试、artifact 7 项单测及 8 项生命周期测试通过；最终重新编译原生模块后 Node 20/20、实际安装 Python wheel 55/55 通过。
 
+### PR #51 后续五条审查修复（2026-09-25）
+
+- IO 转为同 key 的自定义 Cloze 时，退休 mask 只保留编号历史，当前卡片按 active masks 识别；再次转回 IO 复用旧 ordinal，并为新 mask 继续分配高水位编号。比较器始终核对普通卡片，不因 IO 历史而漏报 Cloze 卡删除；mask 继续使用独立风险类别，避免重复放行要求。回归覆盖双向转换、等数量换卡、默认策略阻断、既有目标保留及身份稳定。
+- JSON 路径快照采用无损表示：Unicode 路径仍为字符串，其他 Unix 路径使用 `unix_bytes`，Windows 孤立代理码使用 `windows_wide`。成功产物、失败发布事实及 SDK 的媒体/bundle 错误共用这套编码，避免发布后序列化失败或 Python native panic；Python build/compare 输入同时支持原生路径往返。Rust 运行时仍使用 PathBuf。APFS 拒绝非法 UTF-8 文件名，本机验证真实失败路径和编码往返，Linux CI 额外验证真实成功发布及后续更新，Windows CI 验证宽字符往返。
+- 文件媒体识别补齐 SVG、BMP 和无 ID3 MP3，内容签名优先，只有未知内容或兼容文本可使用受支持的扩展名提示。真实 APKG 回归检查导出扩展名、媒体字节、字段引用及 BMP 遮罩卡，错误声明继续返回类型冲突；新增原创音频 fixture 并记录生成方法。
+- build 和 compare 的候选准备在统一返回边界记录实际耗时，早期配置/基线失败不再保留初始化零值；build 的耗时还覆盖策略判断、发布及失败清理。回归验证缺失/损坏基线的错误、原始 source 和未伪造的观察数据，不人为增加毫秒数。
+- Node 在调用 build、进入异步等待前捕获当前目录，并随 artifact clone/persist 保留。真实异步回归在构建期间调用 `process.chdir`，验证连续相对路径发布仍落在调用时目录。
+
+本轮本地验证：完整 Rust quality 通过，包括工作区/all-features 测试、22 个独立公共消费者、Clippy、rustdoc/doctest 和发布内容检查；媒体导出 11 项及共享媒体 76 项通过。Node 重新构建后 21/21 通过，TypeScript 检查通过；重新构建并在仓库外安装的 Python wheel 56 项通过、1 项 Linux 成功字节路径用例按平台跳过，mypy 通过。原始五类失败均已有修复前复现；跨平台专属路径行为仍由本次提交的 hosted CI 验证。
+
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

@@ -2,6 +2,7 @@
 mod artifact;
 mod options;
 mod tasks;
+use ankiforge::build::json::PathSnapshot;
 use ankiforge::note::{Mask, OcclusionMode};
 use ankiforge::schema::GenerationRule;
 use ankiforge::{Content, Field, Media, Note, NoteType, Project, Template};
@@ -18,7 +19,7 @@ fn parse<T: serde::de::DeserializeOwned>(s: &str) -> Result<T> {
 }
 fn source_detail(error: &(dyn std::error::Error + 'static)) -> Value {
     if let Some(e) = error.downcast_ref::<ankiforge::media::MediaError>() {
-        return json!({"type":"media","kind":format!("{:?}",e.kind()),"code":e.code(),"path":e.path(),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))});
+        return json!({"type":"media","kind":format!("{:?}",e.kind()),"code":e.code(),"path":e.path().map(PathSnapshot::new),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))});
     }
     if let Some(e) = error.downcast_ref::<ankiforge::schema::SchemaError>() {
         return json!({"type":"schema","kind":format!("{:?}",e.kind()),"code":e.code(),"location":e.location().map(|l|json!({"template":l.template.as_str(),"side":format!("{:?}",l.side),"byteRange":{"start":l.byte_range.start,"end":l.byte_range.end}}))});
@@ -191,7 +192,7 @@ impl Task for MediaTask {
     fn compute(&mut self) -> Result<Media> {
         match self.source.take().expect("task runs once") {
         MediaSource::File(p)=>Media::file_with_limits(p,self.limits), MediaSource::Bytes(b,m)=>Media::bytes_with_limits(b,m,self.limits)
-    }.map_err(|e|domain("media",e.kind(),e.code(),&e,json!({"path":e.path(),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))})))
+    }.map_err(|e|domain("media",e.kind(),e.code(),&e,json!({"path":e.path().map(PathSnapshot::new),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))})))
     }
     fn resolve(&mut self, _env: Env, inner: Media) -> Result<NativeMedia> {
         Ok(NativeMedia { inner })
@@ -335,7 +336,7 @@ impl Task for BundleTask {
                 e.kind(),
                 e.code(),
                 &e,
-                json!({"path":e.path(),"byteOffset":e.byte_offset()}),
+                json!({"path":e.path().map(PathSnapshot::new),"byteOffset":e.byte_offset()}),
             )
         })
     }

@@ -61,6 +61,9 @@ impl Media {
     }
 
     /// Streams a regular file into owned storage using the default byte budget.
+    /// Content signatures determine its type. A supported suffix can identify
+    /// otherwise unknown bytes or a plain-text fragment, but cannot override a
+    /// conflicting content signature or turn recognizable text into binary media.
     pub fn file(path: impl AsRef<Path>) -> Result<Self, MediaError> {
         Self::file_with_limits(path, MediaLimits::default())
     }
@@ -73,8 +76,29 @@ impl Media {
         let path = path.as_ref();
         let (snapshot, sample) =
             Snapshot::file(path, limits).map_err(|error| error.at_path(path))?;
-        let media_type = sniff_mime(&sample)
-            .map_or_else(|| "application/octet-stream".into(), |sniffed| sniffed.mime);
+        let extension_type = path
+            .extension()
+            .and_then(|value| value.to_str())
+            .and_then(crate::authoring_core::mime::mime_from_extension);
+        let media_type = match sniff_mime(&sample) {
+            Some(sniffed) if sniffed.confidence == MediaSniffConfidence::High => {
+                // A compatible container hint can distinguish Opus/Ogg or
+                // audio/video MP4; a contradictory suffix never overrides magic.
+                extension_type
+                    .filter(|expected| mime_type_subtype_compatible(expected, &sniffed.mime))
+                    .map_or(sniffed.mime, str::to_owned)
+            }
+            Some(sniffed) => {
+                // Plain text may be a CSS/HTML fragment. Do not reinterpret
+                // recognizable text as binary media merely because of its suffix.
+                extension_type
+                    .filter(|expected| {
+                        sniffed.mime == "text/plain" && expected.starts_with("text/")
+                    })
+                    .map_or(sniffed.mime, str::to_owned)
+            }
+            None => extension_type.unwrap_or("application/octet-stream").into(),
+        };
         Ok(Self::new(snapshot, media_type))
     }
 
@@ -220,6 +244,7 @@ pub(crate) fn validate_name(name: &str) -> Result<(), MediaError> {
 fn extension(media_type: &str) -> &'static str {
     match media_type {
         "image/png" => "png",
+        "image/bmp" => "bmp",
         "image/jpeg" => "jpg",
         "image/gif" => "gif",
         "image/webp" => "webp",

@@ -235,3 +235,61 @@ fn unique_test_root(label: &str) -> std::path::PathBuf {
     fs::create_dir_all(&root).unwrap();
     root
 }
+
+#[test]
+fn sniff_svg_skips_xml_preambles_without_matching_embedded_or_similar_tags() {
+    for bytes in [
+        b"<svg/>".as_slice(),
+        b" \n<svg xmlns=\"http://www.w3.org/2000/svg\">".as_slice(),
+        b"\xef\xbb\xbf<?xml version=\"1.0\"?><svg/>".as_slice(),
+        b"<!-- first --><!-- second --><svg/>".as_slice(),
+        b"<!DOCTYPE svg PUBLIC \"public > identifier\" \"external\"><svg/>".as_slice(),
+        b"<!DOCTYPE svg [<!ENTITY item \" > [ ] \" >]><svg/>".as_slice(),
+    ] {
+        let sniffed = sniff_mime(bytes).unwrap();
+        assert_eq!(sniffed.mime, "image/svg+xml");
+        assert_eq!(sniffed.confidence, MediaSniffConfidence::High);
+    }
+    for bytes in [
+        b"<svg-prefix/>".as_slice(),
+        b"<svgtest/>".as_slice(),
+        b"<!-- <svg/>".as_slice(),
+        b"<?xml <svg/>".as_slice(),
+        b"<html><svg/></html>".as_slice(),
+        b"a document containing <svg/>".as_slice(),
+        b"BM is an ordinary text prefix".as_slice(),
+    ] {
+        let sniffed = sniff_mime(bytes).unwrap();
+        assert_eq!(sniffed.confidence, MediaSniffConfidence::Low);
+        assert!(!sniffed.mime.starts_with("image/"));
+    }
+}
+
+#[test]
+fn sniff_mp3_requires_consistent_layer_three_frames_and_preserves_aac() {
+    for (header, length) in [
+        ([0xff, 0xfb, 0x90, 0x00], 417), // MPEG-1, 128 kbps, 44100 Hz.
+        ([0xff, 0xf3, 0x80, 0x00], 208), // MPEG-2, 64 kbps, 22050 Hz.
+        ([0xff, 0xe3, 0x80, 0x00], 417), // MPEG-2.5, 64 kbps, 11025 Hz.
+    ] {
+        let mut bytes = vec![0; length + 4];
+        bytes[..4].copy_from_slice(&header);
+        bytes[length..].copy_from_slice(&header);
+        let sniffed = sniff_mime(&bytes).unwrap();
+        assert_eq!(sniffed.mime, "audio/mpeg");
+        assert_eq!(sniffed.confidence, MediaSniffConfidence::High);
+        bytes[length + 2] |= 4; // The next frame contradicts the stream's sample rate.
+        assert!(sniff_mime(&bytes).is_none());
+    }
+    for bytes in [
+        [0xff, 0xfb, 0x90, 0x00], // Header alone, without the next frame.
+        [0xff, 0xeb, 0x90, 0x00], // Reserved MPEG version.
+        [0xff, 0xfb, 0xfc, 0x00], // Reserved bitrate and sample rate.
+    ] {
+        assert!(sniff_mime(&bytes).is_none());
+    }
+    assert_eq!(
+        sniff_mime(&[0xff, 0xf1, 0x50, 0x80]).unwrap().mime,
+        "audio/aac"
+    );
+}

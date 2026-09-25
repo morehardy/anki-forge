@@ -182,12 +182,13 @@ impl IdentityEnvelope {
                 .get(guid.as_str())
                 .ok_or_else(|| anyhow::anyhow!("unmapped note GUID"))?;
             let model = &self.identity.models[&note.model];
+            let has_active_masks = note.has_active_masks();
             ensure!(
-                note.masks.is_empty() != io_models.contains(&model.id),
+                has_active_masks == io_models.contains(&model.id),
                 "occlusion structure disagrees with model kind"
             );
             for (key, ordinal) in &note.cards {
-                if !note.masks.is_empty() {
+                if has_active_masks {
                     let mask = key
                         .strip_prefix("mask:")
                         .and_then(|key| note.masks.get(key))
@@ -236,7 +237,7 @@ impl IdentityEnvelope {
                     && actual.iter().copied().collect::<BTreeSet<_>>() == expected,
                 "card mapping disagrees with actual cards"
             );
-            if !note.masks.is_empty() {
+            if has_active_masks {
                 let masks: BTreeSet<_> = note
                     .masks
                     .values()

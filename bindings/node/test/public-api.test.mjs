@@ -113,6 +113,37 @@ test("byte media shares container matching and canonical filenames with Rust", a
   }
 });
 
+test("artifact relative destinations retain cwd from build invocation", async (t) => {
+  const root = await fs.realpath(await temp(t));
+  const invoked = path.join(root, "invoked");
+  const changed = path.join(root, "changed");
+  await fs.mkdir(invoked);
+  await fs.mkdir(changed);
+  const original = process.cwd();
+  const handles = [];
+  try {
+    process.chdir(invoked);
+    const project = new Project("cwd-at-build").add("one", Note.basic("q", "a"));
+    const pending = project.build(BuildOptions.temporary());
+    process.chdir(changed);
+    const output = await pending;
+    handles.push(output.artifact);
+    const clone = output.artifact.clone();
+    handles.push(clone);
+    const persisted = await clone.persistTo("saved.apkg");
+    handles.push(persisted);
+    const second = await persisted.persistTo("saved-again.apkg");
+    handles.push(second);
+    assert.equal(persisted.path, path.join(invoked, "saved.apkg"));
+    assert.equal(second.path, path.join(invoked, "saved-again.apkg"));
+    assert.equal((await fs.stat(persisted.path)).isFile(), true);
+    assert.deepEqual(await fs.readdir(changed), []);
+  } finally {
+    process.chdir(original);
+    for (const artifact of handles) await artifact.close();
+  }
+});
+
 test("explicit keys and strings as Text; only Project authors publications", async (t) => {
   const p = new Project("parity").add(
     "hello",

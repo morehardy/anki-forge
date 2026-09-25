@@ -228,3 +228,57 @@ fn persistence_resolves_symlinks_before_parent_components() {
         original
     );
 }
+
+#[cfg(all(unix, not(target_os = "macos")))]
+#[test]
+fn non_unicode_success_paths_are_lossless_json_after_publication() {
+    use std::os::unix::ffi::{OsStrExt, OsStringExt};
+    let root = tempfile::tempdir().unwrap();
+    let path = root
+        .path()
+        .join(std::ffi::OsString::from_vec(b"saved-\xff.apkg".to_vec()));
+    let output = project().build(BuildOptions::to(&path)).unwrap();
+    assert!(path.is_file());
+    assert_eq!(output.artifact().path(), path);
+    let value = serde_json::to_value(output.snapshot()).unwrap();
+    assert_eq!(
+        value["result"]["artifact"],
+        serde_json::json!({"encoding":"unix_bytes", "bytes":path.as_os_str().as_bytes()})
+    );
+    let bytes =
+        serde_json::from_value::<Vec<u8>>(value["result"]["artifact"]["bytes"].clone()).unwrap();
+    let restored = std::path::PathBuf::from(std::ffi::OsString::from_vec(bytes));
+    assert_eq!(restored, path);
+    drop(output);
+    assert!(restored.is_file());
+}
+
+#[cfg(unix)]
+#[test]
+fn non_unicode_failure_publications_are_lossless_json() {
+    use std::os::unix::ffi::{OsStrExt, OsStringExt};
+    let root = tempfile::tempdir().unwrap();
+    let path = root
+        .path()
+        .join(std::ffi::OsString::from_vec(b"blocked-\xfe".to_vec()));
+    // APFS rejects invalid UTF-8 names itself; byte-oriented Unix filesystems
+    // need an existing directory here to force the same pre-publication error.
+    #[cfg(not(target_os = "macos"))]
+    std::fs::create_dir(&path).unwrap();
+    let error = project().build(BuildOptions::to(&path)).unwrap_err();
+    assert_eq!(
+        error.publications()[0].stage,
+        PublicationStage::NotPublished
+    );
+    let expected =
+        serde_json::json!({"encoding":"unix_bytes", "bytes":path.as_os_str().as_bytes()});
+    let value = serde_json::to_value(error.snapshot()).unwrap();
+    assert_eq!(value["result"]["publications"][0]["path"], expected);
+    let output = project().build(BuildOptions::temporary()).unwrap();
+    let error = output.artifact().persist_to(&path).unwrap_err();
+    assert_eq!(
+        serde_json::to_value(error.publication()).unwrap()["path"],
+        expected
+    );
+    assert!(output.artifact().path().is_file());
+}

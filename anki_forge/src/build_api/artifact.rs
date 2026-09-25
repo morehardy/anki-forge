@@ -530,4 +530,28 @@ mod tests {
             _ => panic!("late failure must remain a failed operation"),
         }
     }
+
+    #[cfg(not(target_os = "macos"))]
+    #[test]
+    fn late_failure_with_non_unicode_path_keeps_serializable_published_facts() {
+        use std::os::unix::ffi::{OsStrExt, OsStringExt};
+        let root = tempfile::tempdir().unwrap();
+        let destination = root.path().join(std::ffi::OsString::from_vec(
+            b"published-\xff.apkg".to_vec(),
+        ));
+        let error =
+            directory_sync_failure::during(|| project().build(BuildOptions::to(&destination)))
+                .unwrap_err();
+        assert_eq!(error.publications()[0].stage, PublicationStage::Published);
+        assert!(destination.is_file());
+        let value = serde_json::to_value(error.snapshot()).unwrap();
+        assert_eq!(
+            value["result"]["publications"][0]["path"],
+            serde_json::json!({"encoding":"unix_bytes", "bytes":destination.as_os_str().as_bytes()})
+        );
+        assert_eq!(
+            value["result"]["publications"][0]["durability"],
+            "unconfirmed"
+        );
+    }
 }

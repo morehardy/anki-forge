@@ -59,4 +59,14 @@ Budgets apply separately to each inspected baseline and candidate. Media import 
 
 Use `BuildOptions.temporary()` when no persistent path is wanted. Retain the output or an artifact handle while consuming the file; `artifact.persist_to(path)` makes a persistent copy. If persistence fails, PersistError details record the target's publication stage and the original handle remains usable.
 
+Snapshot and error-detail paths are strings when valid Unicode. Unix byte names
+that Python represents with `surrogateescape` appear in JSON as
+`{"encoding": "unix_bytes", "bytes": [...]}`; restore them with
+`Path(os.fsdecode(bytes(value["bytes"])))`. Windows names containing unpaired
+UTF-16 surrogates use `{"encoding": "windows_wide", "units": [...]}`, with each
+array entry holding one original 16-bit code unit. Encoded paths describe their
+original platform. Runtime `artifact.path` remains a `pathlib.Path`, and
+`BuildOptions.to`, `update_from`, and `CompareOptions.against` preserve native
+path values through the binding.
+
 A missing or mismatched native extension raises an import error identifying `BINDING.EXTENSION_UNAVAILABLE` or `BINDING.VERSION_MISMATCH`. Install a matching wheel, or rebuild a source checkout with maturin. Concurrent operations on one Project are rejected; use independent projects for concurrent work.

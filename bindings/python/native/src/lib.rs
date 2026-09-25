@@ -4,6 +4,7 @@ mod options;
 mod owned;
 mod state;
 
+use ankiforge::build::json::PathSnapshot;
 use ankiforge::{Content, Media, Note, NoteType, Project};
 use artifacts::NativeArtifact;
 use owned::ProcessOwned;
@@ -24,7 +25,7 @@ pub fn domain_error(kind: &str, code: &str, message: &str, details: Value) -> Py
 pub fn error_details(kind: impl std::fmt::Debug, error: &(dyn Error + 'static)) -> Value {
     let mut details = json!({"error_kind":format!("{kind:?}"),"causes":error_causes(error),"source_details": source_details(error)});
     if let Some(error) = error.downcast_ref::<ankiforge::media::MediaError>() {
-        details["path"] = json!(error.path());
+        details["path"] = json!(error.path().map(PathSnapshot::new));
         details["limit_exceeded"] = error.limit_exceeded().map_or(
             Value::Null,
             |l| json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}),
@@ -45,7 +46,7 @@ pub fn error_details(kind: impl std::fmt::Debug, error: &(dyn Error + 'static)) 
         details["publication"] = json!(error.publication());
     }
     if let Some(error) = error.downcast_ref::<ankiforge::schema::TemplateBundleError>() {
-        details["path"] = json!(error.path());
+        details["path"] = json!(error.path().map(PathSnapshot::new));
         details["byte_offset"] = json!(error.byte_offset());
     }
     details
@@ -55,7 +56,7 @@ fn source_details(error: &(dyn Error + 'static)) -> Vec<Value> {
     let mut source = error.source();
     while let Some(cause) = source {
         let value = if let Some(e) = cause.downcast_ref::<ankiforge::media::MediaError>() {
-            json!({"type":"media", "kind":format!("{:?}",e.kind()), "code":e.code(), "path":e.path(), "limit_exceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))})
+            json!({"type":"media", "kind":format!("{:?}",e.kind()), "code":e.code(), "path":e.path().map(PathSnapshot::new), "limit_exceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))})
         } else if let Some(e) =
             cause.downcast_ref::<ankiforge::schema::TemplateBundleLimitExceeded>()
         {

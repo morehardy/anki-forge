@@ -45,6 +45,15 @@ that no file was written. `PersistError` also preserves its publication fact and
 actual I/O source. Atomic replacement alone does not establish durability after
 a crash.
 
+Snapshot serialization preserves native paths without accessing the filesystem.
+Unicode paths remain JSON strings. Non-UTF-8 Unix paths use
+`{"encoding":"unix_bytes","bytes":[...]}`; Windows paths with unpaired UTF-16
+surrogates use `{"encoding":"windows_wide","units":[...]}`. The arrays contain
+the exact native bytes or code units. Success artifact paths, failure publication
+paths, and binding error-path details all use this representation. These values
+describe paths and do not retain artifact ownership. A filesystem may reject a
+particular native path, but its publication failure facts remain serializable.
+
 ## Inspection limits
 
 Finite archive, entry-count, expansion, decoded collection/media and zstd-window

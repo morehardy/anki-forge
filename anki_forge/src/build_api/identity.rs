@@ -58,6 +58,14 @@ pub(crate) struct NoteIdentity {
     pub cards: BTreeMap<String, u32>,
 }
 
+impl NoteIdentity {
+    // Retired mask entries reserve historical ordinals even when this note is
+    // currently an ordinary cloze note. Only active entries describe IO cards.
+    fn has_active_masks(&self) -> bool {
+        self.masks.values().any(|mask| mask.active)
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct MaskIdentity {
@@ -241,6 +249,7 @@ impl PackageIdentity {
             let identity = self.notes.get_mut(&note.id).ok_or_else(invalid_plan)?;
             let model = models[&note.notetype_id];
             let symbols = &self.models[&identity.model].templates;
+            let has_active_masks = identity.has_active_masks();
             identity.cards = crate::writer_core::card_plan::plan_cards(note, model)
                 .iter()
                 .map(|card| {
@@ -251,7 +260,7 @@ impl PackageIdentity {
                             "cloze numbers must be between 1 and 500; split this note",
                         ));
                     }
-                    let key = if !identity.masks.is_empty() {
+                    let key = if has_active_masks {
                         let mask = identity
                             .masks
                             .iter()

@@ -2,11 +2,33 @@ from __future__ import annotations
 from dataclasses import dataclass, replace, asdict
 from enum import StrEnum
 from os import PathLike
+import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, TypedDict
 from . import _native
 from ._bridge import invoke
 PathInput = str | PathLike[str]
+
+class _UnixPathSnapshot(TypedDict):
+    encoding: Literal['unix_bytes']
+    bytes: list[int]
+
+class _WindowsPathSnapshot(TypedDict):
+    encoding: Literal['windows_wide']
+    units: list[int]
+
+_PathSnapshot = str | _UnixPathSnapshot | _WindowsPathSnapshot
+
+def _path_snapshot(path: str) -> _PathSnapshot:
+    """Encode native paths without substituting invalid Unicode code units."""
+    try:
+        path.encode('utf-8')
+        return path
+    except UnicodeEncodeError:
+        if os.name == 'nt':
+            raw = path.encode('utf-16-le', errors='surrogatepass')
+            return {'encoding': 'windows_wide', 'units': [int.from_bytes(raw[i:i + 2], 'little') for i in range(0, len(raw), 2)]}
+        return {'encoding': 'unix_bytes', 'bytes': list(os.fsencode(path))}
 
 def absolute_path(path: PathInput, base_dir: Path | None = None) -> str:
     value = Path(path).expanduser()
@@ -74,7 +96,8 @@ class BuildOptions:
         return replace(self, _policy=policy)
 
     def _payload(self) -> dict[str, Any]:
-        return dict(output=self._output, baseline=self._baseline,
+        return dict(output=_path_snapshot(self._output) if self._output is not None else None,
+                    baseline=_path_snapshot(self._baseline) if self._baseline is not None else None,
                     limits=asdict(self._limits) if self._limits else None,
                     policy=self._policy._payload() if self._policy else None)
 
@@ -95,5 +118,5 @@ class CompareOptions:
         return replace(self, _policy=policy)
 
     def _payload(self) -> dict[str, Any]:
-        return dict(baseline=self._baseline, limits=asdict(self._limits) if self._limits else None,
+        return dict(baseline=_path_snapshot(self._baseline), limits=asdict(self._limits) if self._limits else None,
                     policy=self._policy._payload() if self._policy else None)

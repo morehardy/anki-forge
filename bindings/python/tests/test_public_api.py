@@ -19,6 +19,53 @@ from anki_forge import (
     PolicyError, TemplateBundleError, PersistError,
 )
 
+@pytest.mark.skipif(os.name != 'posix', reason='Unix byte-path transport')
+def test_non_unicode_error_paths_remain_structured_json(tmp_path):
+    path = tmp_path / os.fsdecode(b'missing-\xff')
+    expected = {'encoding': 'unix_bytes', 'bytes': list(os.fsencode(path))}
+    with pytest.raises(MediaError) as media:
+        Media.file(path)
+    assert media.value.details['path'] == expected
+    assert isinstance(media.value.__cause__.__cause__, OSError)
+    assert any(source['type'] == 'io' for source in media.value.details['source_details'])
+    with pytest.raises(TemplateBundleError) as bundle:
+        NoteType.from_bundle(path)
+    assert bytes(bundle.value.details['path']['bytes']).startswith(os.fsencode(path))
+    assert bundle.value.details['path']['encoding'] == 'unix_bytes'
+    output = Project('byte-path-error').add('one', Note.basic('q', 'a')).build(BuildOptions.temporary())
+    blocked = path / 'missing' / 'output.apkg'
+    # macOS rejects the byte path itself. Other Unix filesystems need a
+    # non-directory ancestor to guarantee a failure before publication.
+    if sys.platform != 'darwin':
+        path.write_bytes(b'keep')
+    with pytest.raises(PersistError) as persist:
+        output.artifact.persist_to(blocked)
+    assert persist.value.details['publication']['path'] == {
+        'encoding': 'unix_bytes', 'bytes': list(os.fsencode(blocked))}
+    assert persist.value.details['publication']['stage'] == 'not_published'
+    project = Project('byte-path-build-error').add('one', Note.basic('q', 'a'))
+    with pytest.raises(BuildError) as build:
+        project.build(BuildOptions.to(blocked))
+    assert build.value.snapshot()['result']['publications'][0]['path'] == persist.value.details['publication']['path']
+    json.dumps(build.value.snapshot())
+    assert output.artifact.path.is_file()
+
+@pytest.mark.skipif(not sys.platform.startswith('linux'), reason='Requires a byte-oriented Unix filesystem; APFS rejects non-UTF8 names')
+def test_non_unicode_build_and_update_paths_round_trip(tmp_path):
+    path = tmp_path / os.fsdecode(b'saved-\xff.apkg')
+    project = Project('byte-path-success').add('one', Note.basic('q', 'a'))
+    output = project.build(BuildOptions.to(path))
+    snapshot = json.loads(json.dumps(output.snapshot()))
+    assert snapshot['result']['artifact'] == {'encoding': 'unix_bytes', 'bytes': list(os.fsencode(path))}
+    restored = Path(os.fsdecode(bytes(snapshot['result']['artifact']['bytes'])))
+    assert restored == output.artifact.path == path
+    assert restored.is_file()
+    assert not project.compare(CompareOptions.against(restored)).findings
+    updated = project.build(BuildOptions.temporary().update_from(restored))
+    assert updated.report.counts.notes == 1
+    output.artifact.close()
+    assert restored.is_file()
+
 def png(width=10, height=10):
     def chunk(kind, data):
         return struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data))

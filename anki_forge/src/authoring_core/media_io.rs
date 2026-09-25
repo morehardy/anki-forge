@@ -374,7 +374,11 @@ pub fn sniff_mime(bytes: &[u8]) -> Option<SniffedMime> {
         Some(high("image/gif"))
     } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WEBP") {
         Some(high("image/webp"))
-    } else if bytes.starts_with(b"ID3") {
+    } else if is_bmp(bytes) {
+        Some(high("image/bmp"))
+    } else if is_svg(bytes) {
+        Some(high("image/svg+xml"))
+    } else if bytes.starts_with(b"ID3") || is_mp3_frames(bytes) {
         Some(high("audio/mpeg"))
     } else if bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WAVE") {
         Some(high("audio/wav"))
@@ -405,6 +409,125 @@ pub fn sniff_mime(bytes: &[u8]) -> Option<SniffedMime> {
     } else {
         None
     }
+}
+
+fn is_bmp(bytes: &[u8]) -> bool {
+    if bytes.len() < 26 || !bytes.starts_with(b"BM") {
+        return false;
+    }
+    let header_size = u32::from_le_bytes(bytes[14..18].try_into().unwrap());
+    let pixel_offset = u32::from_le_bytes(bytes[10..14].try_into().unwrap());
+    let planes_offset = match header_size {
+        12 => 22,
+        40 | 52 | 56 | 64 | 108 | 124 if bytes.len() >= 30 => 26,
+        _ => return false,
+    };
+    let planes = u16::from_le_bytes(bytes[planes_offset..planes_offset + 2].try_into().unwrap());
+    let depth = u16::from_le_bytes(
+        bytes[planes_offset + 2..planes_offset + 4]
+            .try_into()
+            .unwrap(),
+    );
+    pixel_offset >= 14 + header_size && planes == 1 && matches!(depth, 1 | 2 | 4 | 8 | 16 | 24 | 32)
+}
+
+fn is_svg(bytes: &[u8]) -> bool {
+    let mut remaining = bytes.strip_prefix(b"\xef\xbb\xbf").unwrap_or(bytes);
+    loop {
+        remaining = remaining.trim_ascii_start();
+        let delimiter = if remaining.starts_with(b"<?xml") {
+            b"?>".as_slice()
+        } else if remaining.starts_with(b"<!--") {
+            b"-->".as_slice()
+        } else if remaining.starts_with(b"<!DOCTYPE") {
+            // Ignore '>' inside a quoted identifier or internal DTD subset.
+            let mut quote = None;
+            let mut depth = 0usize;
+            let end = remaining.iter().enumerate().find_map(|(index, &byte)| {
+                if let Some(expected) = quote {
+                    if byte == expected {
+                        quote = None;
+                    }
+                } else {
+                    match byte {
+                        b'\'' | b'"' => quote = Some(byte),
+                        b'[' => depth += 1,
+                        b']' => depth = depth.saturating_sub(1),
+                        b'>' if depth == 0 => return Some(index + 1),
+                        _ => {}
+                    }
+                }
+                None
+            });
+            let Some(end) = end else {
+                return false;
+            };
+            remaining = &remaining[end..];
+            continue;
+        } else {
+            break;
+        };
+        let Some(end) = remaining
+            .windows(delimiter.len())
+            .position(|part| part == delimiter)
+        else {
+            return false;
+        };
+        remaining = &remaining[end + delimiter.len()..];
+    }
+    remaining
+        .strip_prefix(b"<svg")
+        .and_then(|tail| tail.first())
+        .is_some_and(|byte| byte.is_ascii_whitespace() || matches!(byte, b'>' | b'/'))
+}
+
+fn is_mp3_frames(bytes: &[u8]) -> bool {
+    // Two consecutive Layer III frame headers avoid confusing arbitrary 0xff
+    // bytes or ADTS AAC with MPEG audio. A file extension can still identify
+    // an unrecognized short/free-format stream without a high-confidence claim.
+    let Some((length, version, frequency)) = mp3_frame(bytes) else {
+        return false;
+    };
+    bytes
+        .get(length..)
+        .and_then(mp3_frame)
+        .is_some_and(|(_, next_version, next_frequency)| {
+            next_version == version && next_frequency == frequency
+        })
+}
+
+fn mp3_frame(bytes: &[u8]) -> Option<(usize, u8, u8)> {
+    let header = bytes.get(..4)?;
+    let version = (header[1] >> 3) & 3;
+    let frequency = (header[2] >> 2) & 3;
+    let bitrate = header[2] >> 4;
+    if header[0] != 0xff || header[1] & 0xe0 != 0xe0
+        || version == 1 || header[1] & 6 != 2 // Reserved version or non-Layer-III audio.
+        || frequency == 3 || bitrate == 0 || bitrate == 15
+        || header[3] & 3 == 2
+    // Reserved emphasis.
+    {
+        return None;
+    }
+    const MPEG1: [usize; 14] = [
+        32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320,
+    ];
+    const MPEG2: [usize; 14] = [8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160];
+    let base_rate = [44100, 48000, 32000][usize::from(frequency)];
+    let divisor = match version {
+        3 => 1,
+        2 => 2,
+        _ => 4,
+    };
+    let sample_rate = base_rate / divisor;
+    let bitrate = if version == 3 { MPEG1 } else { MPEG2 }[usize::from(bitrate - 1)];
+    let coefficient = if version == 3 { 144000 } else { 72000 };
+    let padding = usize::from((header[2] >> 1) & 1);
+    Some((
+        coefficient * bitrate / sample_rate + padding,
+        version,
+        frequency,
+    ))
 }
 
 fn is_aac_adts(bytes: &[u8]) -> bool {

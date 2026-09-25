@@ -3,11 +3,13 @@ import type {
   BuildSnapshot,
   ReportSnapshot,
   PublicationSnapshot,
+  PathSnapshot,
 } from "./snapshots";
 export interface ErrorSourceDetail {
   readonly type: string;
   readonly kind?: string;
   readonly code?: string;
+  readonly path?: PathSnapshot | null;
   readonly [key: string]: unknown;
 }
 export class NativeLoadError extends Error {

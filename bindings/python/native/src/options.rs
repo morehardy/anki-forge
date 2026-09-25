@@ -1,17 +1,16 @@
 use crate::{core_error, mapped};
 use ankiforge::{
-    build::InspectLimits,
+    build::{json::PathSnapshot, InspectLimits},
     update::{CompareOptions, RiskLevel, UpdatePolicy},
     BuildOptions,
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
 use serde::Deserialize;
-use std::path::PathBuf;
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BuildInput {
-    output: Option<PathBuf>,
-    baseline: Option<PathBuf>,
+    output: Option<PathSnapshot>,
+    baseline: Option<PathSnapshot>,
     limits: Option<InspectInput>,
     policy: Option<PolicyInput>,
 }
@@ -19,9 +18,10 @@ impl BuildInput {
     pub fn options(self) -> PyResult<BuildOptions> {
         let mut b = self
             .output
+            .map(PathSnapshot::into_path_buf)
             .map_or_else(BuildOptions::temporary, BuildOptions::to);
         if let Some(p) = self.baseline {
-            b = b.update_from(p);
+            b = b.update_from(p.into_path_buf());
         }
         if let Some(l) = self.limits {
             b = b.inspect_limits(l.limits());
@@ -35,13 +35,13 @@ impl BuildInput {
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CompareInput {
-    baseline: PathBuf,
+    baseline: PathSnapshot,
     limits: Option<InspectInput>,
     policy: Option<PolicyInput>,
 }
 impl CompareInput {
     pub fn options(self) -> PyResult<CompareOptions> {
-        let mut b = CompareOptions::against(self.baseline);
+        let mut b = CompareOptions::against(self.baseline.into_path_buf());
         if let Some(l) = self.limits {
             b = b.inspect_limits(l.limits());
         }

@@ -115,6 +115,15 @@ apply independently to baseline and candidate. Unknown options fail.
 
 ## Artifact lifetime and concurrency
 
+JSON snapshot paths use the exported `PathSnapshot` type. Unicode paths are
+strings; non-Unicode native paths use `{ encoding: "unix_bytes", bytes: number[] }`
+or `{ encoding: "windows_wide", units: number[] }`. The arrays preserve the exact
+Unix bytes or Windows UTF-16 code units. This includes artifact paths in build
+snapshots, publication paths in failures, and structured error-path details.
+Decode an encoded path only for its original platform; on Unix,
+`Buffer.from(value.bytes)` preserves a byte path for Node filesystem functions.
+The Node authoring methods continue to accept string paths.
+
 Keep an artifact owner alive while consuming `.path`. `.clone()` creates an
 independent owner; `await .close()` releases that owner. The last temporary owner
 deletes its file. `await .persistTo(path)` returns a persistent artifact and
