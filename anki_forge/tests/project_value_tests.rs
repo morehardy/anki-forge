@@ -278,3 +278,120 @@ fn missing_explicit_html_media_can_be_repaired_after_a_failed_build() {
         1
     );
 }
+
+fn named_model(key: &str, name: &str) -> NoteType {
+    NoteType::builder(key)
+        .name(name)
+        .field(Field::new("question"))
+        .template(Template::new("card").front("{{question}}"))
+        .build()
+        .unwrap()
+}
+
+#[test]
+fn model_name_conflicts_fail_atomically_before_building() {
+    for stock_first in [false, true] {
+        for name in ["Basic", " Basic ", "\u{a0}Basic\u{2003}"] {
+            let mut project = Project::new("model-conflicts").unwrap();
+            let custom = named_model("custom", name);
+            let asset = Media::file(common::fixture("pixel.png")).unwrap();
+            let (first, conflicting, repaired) = if stock_first {
+                (
+                    Note::basic("first", "answer"),
+                    custom.note().field("question", asset.image()),
+                    named_model("custom", "Distinct")
+                        .note()
+                        .field("question", "repaired"),
+                )
+            } else {
+                (
+                    custom.note().field("question", "first"),
+                    Note::basic("conflicting", asset.image()),
+                    custom.note().field("question", "repaired"),
+                )
+            };
+            project.add("first", first).unwrap();
+            let before = project.build(BuildOptions::temporary()).unwrap();
+            let error = project.add("second", conflicting).unwrap_err();
+            assert_eq!(error.kind(), ankiforge::note::AddErrorKind::ModelConflict);
+            assert_eq!(error.code(), "NOTE.MODEL_CONFLICT");
+            assert_eq!(project.len(), 1);
+            let unchanged = project.build(BuildOptions::temporary()).unwrap();
+            assert_eq!(unchanged.report().counts(), before.report().counts());
+            assert_eq!(
+                common::fields(unchanged.artifact().path()),
+                common::fields(before.artifact().path())
+            );
+            project.add("second", repaired).unwrap();
+            let after = project.build(BuildOptions::temporary()).unwrap();
+            assert_eq!(after.report().counts().notes, 2);
+            assert_eq!(after.report().counts().media, 0);
+        }
+    }
+}
+
+#[test]
+fn distinct_custom_keys_cannot_share_a_normalized_model_name() {
+    let mut project = Project::new("custom-model-conflict").unwrap();
+    project
+        .add(
+            "first",
+            named_model("one", " Shared ")
+                .note()
+                .field("question", "one"),
+        )
+        .unwrap();
+    let error = project
+        .add(
+            "second",
+            named_model("two", "Shared").note().field("question", "two"),
+        )
+        .unwrap_err();
+    assert_eq!(error.code(), "NOTE.MODEL_CONFLICT");
+    project
+        .add(
+            "second",
+            named_model("two", "Other").note().field("question", "two"),
+        )
+        .unwrap();
+    assert_eq!(
+        project
+            .build(BuildOptions::temporary())
+            .unwrap()
+            .report()
+            .counts()
+            .notes,
+        2
+    );
+}
+
+#[test]
+fn model_name_comparison_preserves_case_unicode_and_internal_spaces() {
+    let names = ["Basic", "basic", "É", "E\u{301}", "A B", "A  B"];
+    let mut project = Project::new("distinct-model-names").unwrap();
+    for (index, name) in names.iter().enumerate() {
+        let model = named_model(&format!("model-{index}"), name);
+        for copy in 0..2 {
+            project
+                .add(
+                    format!("note-{index}-{copy}"),
+                    model.note().field("question", "value"),
+                )
+                .unwrap();
+        }
+    }
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    assert_eq!(output.report().counts().notes, 12);
+    let (_root, db) = common::collection(output.artifact().path());
+    let mut query = db
+        .prepare("SELECT name FROM notetypes ORDER BY name")
+        .unwrap();
+    let actual = query
+        .query_map([], |row| row.get::<_, String>(0))
+        .unwrap()
+        .map(Result::unwrap)
+        .collect::<Vec<_>>();
+    let mut expected = names.to_vec();
+    expected.sort();
+    assert_eq!(actual, expected);
+}

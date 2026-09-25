@@ -61,7 +61,8 @@ impl Project {
     }
 
     /// Adds a note under an explicit stable key. Any error leaves all project
-    /// state unchanged. Reusing a model key requires an identical definition.
+    /// state unchanged. Reusing a model key requires an identical definition;
+    /// distinct models must have distinct display names after trimming whitespace.
     pub fn add(&mut self, key: impl Into<String>, note: Note) -> Result<(), AddError> {
         let key = key.into();
         if key.trim().is_empty() || key.trim() != key || key.chars().any(char::is_control) {
@@ -108,6 +109,23 @@ impl Project {
                 format!(
                     "model key {:?} already names a different definition",
                     note.model.key()
+                ),
+            ));
+        }
+        // Lowering trims model names, and idx_notetypes_name uses SQLite's
+        // BINARY collation: preserve case, Unicode and internal whitespace.
+        let name = note.model.display_name().trim();
+        if let Some(existing) = self
+            .models
+            .values()
+            .find(|model| model.key() != note.model.key() && model.display_name().trim() == name)
+        {
+            return Err(AddError::new(
+                Kind::ModelConflict,
+                "NOTE.MODEL_CONFLICT",
+                format!(
+                    "model name {name:?} is already used by model key {:?}",
+                    existing.key()
                 ),
             ));
         }

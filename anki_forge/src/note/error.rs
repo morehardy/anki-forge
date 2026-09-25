@@ -11,7 +11,7 @@ pub enum AddErrorKind {
     UnknownField,
     /// A required field has no nonempty content.
     RequiredField,
-    /// The model's stable key is already bound to a different definition.
+    /// The model's stable key has a different definition, or its name is already in use.
     ModelConflict,
     /// Media names or their bound contents conflict.
     MediaConflict,

@@ -432,6 +432,14 @@ fn read_apkg_facts(
                     )
                 })
                 .collect();
+            if actual.len() != media.len() {
+                return Err(
+                    crate::build::identity::EvidenceError::invalid(anyhow::anyhow!(
+                        "duplicate media filenames prevent complete package identity evidence"
+                    ))
+                    .into(),
+                );
+            }
             if identity.media != actual {
                 return Err(
                     crate::build::identity::EvidenceError::invalid(anyhow::anyhow!(

@@ -1,6 +1,18 @@
 use ankiforge::{BuildOptions, Note, Project};
 use ankiforge::build::{BuildError, BuildErrorKind, InspectLimits};
 use std::{error::Error, fs, io::{Read, Write}, path::Path};
+use prost::Message;
+
+#[derive(Clone, PartialEq, Message)]
+struct MediaIndex {
+    #[prost(message, repeated, tag="1")] entries: Vec<MediaEntry>,
+}
+#[derive(Clone, PartialEq, Message)]
+struct MediaEntry {
+    #[prost(string, tag="1")] name: String,
+    #[prost(uint32, tag="2")] size: u32,
+    #[prost(bytes, tag="3")] sha1: Vec<u8>,
+}
 
 fn copy_with(input: &Path, output: &str, mut edit: impl FnMut(&str, Vec<u8>) -> Option<Vec<u8>>) {
     let mut source = zip::ZipArchive::new(fs::File::open(input).unwrap()).unwrap();
@@ -28,7 +40,49 @@ fn failure(project: &Project, baseline: &str, code: &str) -> BuildError {
     assert_eq!(fs::read_to_string("protected.apkg").unwrap(), "keep previous destination");
     error
 }
+
+fn duplicate_media_names_are_not_complete_evidence() -> Result<(), Box<dyn Error>> {
+    let mut project = Project::new("media-proof")?;
+    project.add("one", Note::basic("question", "answer"))?;
+    project.add_asset(ankiforge::Media::bytes(b"original".to_vec(), "application/octet-stream")?
+        .with_export_name("proof.bin")?)?;
+    let baseline = project.build(BuildOptions::temporary())?;
+    for altered_first_payload in [false, true] {
+        let output = format!("duplicate-media-{altered_first_payload}.apkg");
+        let mut original_payload = Vec::new();
+        copy_with(baseline.artifact().path(), &output, |name, data| {
+            if name == "media" {
+                let decoded = zstd::decode_all(data.as_slice()).unwrap();
+                let mut media = MediaIndex::decode(decoded.as_slice()).unwrap();
+                assert_eq!(media.entries.len(), 1);
+                media.entries.push(media.entries[0].clone());
+                return Some(zstd::encode_all(media.encode_to_vec().as_slice(), 0).unwrap());
+            }
+            if name == "0" {
+                original_payload = data.clone();
+                if altered_first_payload {
+                    return Some(zstd::encode_all(b"hidden!!".as_slice(), 0).unwrap());
+                }
+            }
+            Some(data)
+        });
+        // The last duplicate has the original payload, so a lossy filename map
+        // agrees with the untouched identity manifest despite the extra entry.
+        let file = fs::OpenOptions::new().read(true).write(true).open(&output)?;
+        let mut zip = zip::ZipWriter::new_append(file)?;
+        zip.start_file("1", zip::write::SimpleFileOptions::default())?;
+        zip.write_all(&original_payload)?;
+        zip.finish()?;
+        assert_eq!(failure(&project, &output, "UPDATE.EVIDENCE_INVALID").kind(), BuildErrorKind::Validation);
+        let error = project.compare(ankiforge::update::CompareOptions::against(&output)).unwrap_err();
+        assert_eq!(error.code(), "UPDATE.EVIDENCE_INVALID");
+    }
+    let accepted = project.build(BuildOptions::temporary().update_from(baseline.artifact().path()))?;
+    assert_eq!(accepted.report().counts().media, 1);
+    Ok(())
+}
 fn main() -> Result<(), Box<dyn Error>> {
+    duplicate_media_names_are_not_complete_evidence()?;
     let mut project = Project::new("proof")?;
     project.add("one", Note::basic("question", "answer"))?;
     let baseline = project.build(BuildOptions::to("baseline.apkg"))?;

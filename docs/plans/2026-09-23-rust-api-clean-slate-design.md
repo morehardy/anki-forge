@@ -631,5 +631,6 @@ npm --prefix website run check:examples
 - 网站离线消费者验证前显式 `cargo fetch --locked`。Node 消费者矩阵下载同平台构建任务产出的独立观察程序，避免依赖消费者机器的 Cargo 缓存；完整 17 项语义检查保留。
 - Python wheel 隔离测试通过 `-I -X utf8` 启动，保留 Windows 中文目录覆盖，并消除重定向输出使用本地代码页导致的异常。
 - crates.io 已存在 0.1.0，故 Rust clean-slate 版本改为 0.2.0；同步路径依赖、锁文件、Python 加载器版本断言和当前版本文档。保留 SemVer 检查，不为有意破坏性改动绕过门禁。
+- 后续 review 补齐三项输入/证据边界：拒绝媒体 map 中重复的导出文件名，防止收集为映射时覆盖条目后误判完整证据；项目标签 schema 与 Rust 的精确 Unicode 空白/控制字符、保留前缀和去重规则保持一致，并重建尚未发布的 bundle 1.0.0；不同模型 key 的显示名按 writer 的 trim 与 SQLite BINARY 规则检查冲突，在 add 时原子拒绝，保留大小写、Unicode 组合形式及内部空格的有效区别。
 
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

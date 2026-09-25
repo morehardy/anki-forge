@@ -510,10 +510,14 @@
           },
           "tags": {
             "type": "array",
+            "uniqueItems": true,
             "items": {
               "type": "string",
               "minLength": 1,
-              "pattern": "\\S"
+              "$comment": "Match Rust char::is_control and char::is_whitespace explicitly; ECMAScript \\s differs for U+0085 and U+FEFF. The afid:: prefix is reserved, case-sensitively.",
+              "not": {
+                "pattern": "[\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]|^afid::"
+              }
             }
           }
         },
