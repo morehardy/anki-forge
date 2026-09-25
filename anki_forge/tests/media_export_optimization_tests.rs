@@ -134,3 +134,60 @@ fn deleting_or_replacing_source_paths_after_import_does_not_change_snapshots() {
         common::entries(next.artifact().path())
     );
 }
+
+#[test]
+fn byte_media_accepts_compatible_containers_through_publication() {
+    let mut project = Project::new("compatible-byte-media").unwrap();
+    project.add("one", Note::basic("front", "back")).unwrap();
+    for (bytes, declared, extension) in [
+        (b"\x1a\x45\xdf\xa3webm".as_slice(), "audio/webm", "webm"),
+        (b"OggSOpusHead".as_slice(), "audio/opus", "opus"),
+        (b"\0\0\0\x18ftypisom".as_slice(), "audio/mp4", "m4a"),
+        (b"\0\0\0\x18ftypM4A ".as_slice(), "video/mp4", "mp4"),
+    ] {
+        let media = Media::bytes(bytes.to_vec(), declared).unwrap();
+        assert!(media.filename().ends_with(&format!(".{extension}")));
+        assert_eq!(media.media_type(), declared);
+        project.add_asset(media).unwrap();
+    }
+    let output = project.build(BuildOptions::temporary()).unwrap();
+    assert_eq!(output.report().counts().media, 4);
+    let evidence = common::evidence(output.artifact().path());
+    assert_eq!(evidence["media"].as_object().unwrap().len(), 4);
+}
+
+#[test]
+fn byte_media_canonicalizes_type_casing_without_changing_parameters() {
+    for (bytes, declared, canonical, extension) in [
+        (
+            b"\x89PNG\r\n\x1a\n".as_slice(),
+            "IMAGE/PNG",
+            "image/png",
+            "png",
+        ),
+        (
+            b"\x1a\x45\xdf\xa3webm".as_slice(),
+            "AUDIO/WEBM; codecs=Opus",
+            "audio/webm; codecs=Opus",
+            "webm",
+        ),
+        (
+            b"OggSOpusHead".as_slice(),
+            "AUDIO/OPUS",
+            "audio/opus",
+            "opus",
+        ),
+    ] {
+        let media = Media::bytes(bytes.to_vec(), declared).unwrap();
+        let lower = Media::bytes(bytes.to_vec(), canonical).unwrap();
+        assert_eq!(media.media_type(), canonical);
+        assert_eq!(media.filename(), lower.filename());
+        assert!(media.filename().ends_with(&format!(".{extension}")));
+    }
+    assert_eq!(
+        Media::bytes(b"\x89PNG\r\n\x1a\n".to_vec(), "AUDIO/WEBM")
+            .unwrap_err()
+            .code(),
+        "MEDIA.TYPE_MISMATCH"
+    );
+}

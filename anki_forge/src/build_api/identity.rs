@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use super::{BuildError, BuildErrorKind as Kind};
 use crate::{authoring_core::NormalizedIr, Project};
 
+mod content;
 mod reconcile;
 mod validation;
 pub(crate) use validation::EvidenceError;
@@ -176,6 +177,7 @@ impl PackageIdentity {
         project: &Project,
         normalized: &mut NormalizedIr,
     ) -> Result<(), BuildError> {
+        let decks = crate::writer_core::staging::resolve_deck_registry(normalized);
         for model in &mut normalized.notetypes {
             let key = model.id.strip_prefix("model:").ok_or_else(invalid_plan)?;
             let identity = self.models.get_mut(key).ok_or_else(invalid_plan)?;
@@ -223,7 +225,7 @@ impl PackageIdentity {
             }
             model.fields.sort_by_key(|f| f.ord);
             model.templates.sort_by_key(|t| t.ord);
-            let hash = value_hash(model)?;
+            let hash = content::model_from_plan(model, &decks).map_err(content_error)?;
             reconcile::advance_revision(
                 &mut identity.content_hash,
                 &mut identity.mtime_secs,
@@ -272,13 +274,9 @@ impl PackageIdentity {
                     Ok((key, card.card_ord))
                 })
                 .collect::<Result<_, BuildError>>()?;
-            let hash = value_hash(&(
-                &note.notetype_id,
-                &note.deck_name,
-                &note.fields,
-                &note.tags,
-                &identity.cards,
-            ))?;
+            let hash =
+                content::note_from_plan(note, model, self.models[&identity.model].id, &decks)
+                    .map_err(content_error)?;
             reconcile::advance_revision(
                 &mut identity.content_hash,
                 &mut identity.mtime_secs,
@@ -399,17 +397,13 @@ fn numeric_id(namespace: &str, kind: &str, model: &str, key: &str) -> i64 {
         .max(1)
 }
 
-fn value_hash(value: &impl Serialize) -> Result<String, BuildError> {
-    serde_json::to_vec(value)
-        .map(|bytes| blake3::hash(&bytes).to_hex().to_string())
-        .map_err(|cause| {
-            BuildError::new(
-                Kind::Internal,
-                "BUILD.IDENTITY_ENCODING_FAILED",
-                "encode identity facts",
-            )
-            .caused_by(cause)
-        })
+fn content_error(cause: anyhow::Error) -> BuildError {
+    BuildError::new(
+        Kind::Internal,
+        "BUILD.IDENTITY_ENCODING_FAILED",
+        "encode stored identity facts",
+    )
+    .caused_by_anyhow(cause)
 }
 
 fn timestamp() -> Result<i64, BuildError> {

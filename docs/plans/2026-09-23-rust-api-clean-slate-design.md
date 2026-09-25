@@ -638,5 +638,11 @@ npm --prefix website run check:examples
 - bundle/project schema 对照审计补齐便携相对路径、导出文件名、目标牌组、具体 MIME、IO 可写字段、Cloze 模型结构和内联媒体预算；保留项目文件路径的真实文件系统语义。bundle YAML 先保留类型及重复键校验，再按严格结构解析，拒绝把 null、数字或布尔值隐式转成字符串。MIME 同时拒绝空子类型。
 - 发布路径检查统一为只读的逐组件解析：先解析已有符号链接，再处理父目录和尚不存在的目录，最后比较文件身份。临时 artifact、更新基线和 CLI 项目/报告路径均拒绝 `missing/../source` 别名，不产生目录副作用；合法新目录、符号链接父目录语义和持久产物脱离临时 owner 后的生命周期均有回归。
 - Python 媒体入口改为借用不可变 `bytes`，在任何绑定副本分配前检查预算；合法输入的复制和快照继续释放 GIL。真实安装 wheel 的小预算与默认 256 MiB 预算回归在旧实现上分别观察到约 65/257 MiB 的额外内存，修复后通过；同一探针覆盖 wheel 与 sdist 安装流程。完整安装测试增加至 54 项，保留错误详情、异常链、u64 边界、输入释放后的产物内容及 fork 资源归属验证。
+- 字节媒体入口复用底层媒体管线的 MIME 兼容判断：接受 WebM 的音频/视频声明、Ogg/Opus 和 MP4 容器的兼容类型，保留合法参数与具体声明；默认文件名按规范化类型生成，`audio/webm` 使用 `.webm`。真正的类型冲突继续返回 `MEDIA.TYPE_MISMATCH`，Rust、Node 与 Python 均覆盖真实构建及导出内容。
+- 更新证据的活跃 revision 必须与 SQLite 实际内容一致：共享投影覆盖模型名称、配置、字段与模板，笔记字段、标签和每张卡片的实际牌组及影响 `{{CardFlag}}` 渲染的 flags；模板目标牌组另行核对。牌组按名称而非包内分配的数字 ID 进入哈希，避免新增无关牌组造成误报。无卡或所有模板均覆盖目的地时，未影响实际产物的默认牌组变更不推进 revision。篡改内容哈希、复制未来候选哈希、修改 SQLite 内容或卡片牌组/flags 后重新计算信封摘要，均不能绕过 build/compare 的证据校验，既有目标文件保持不变。
+- writer 在进程内保留原始错误，staging、媒体复制、APKG 输出及 SQLite 存储故障归类为 `Io`，不再一律报告 authored validation；报告继续保留之前收集的诊断。实际文件冲突、JSON 写入失败和 SQLite `SQLITE_FULL` 回归验证错误类别与具体 source，临时文件重试耗尽也保留最后一次操作系统错误。
+- Unix 发布到新建的多层目录时，同步叶目录及每层新目录在父目录中的条目，全部成功才确认 durability。任一祖先目录同步失败继续报告 `Published / Unconfirmed`，保留原始 I/O 原因、已发布内容及原 artifact。回归覆盖相对路径、空 parent、符号链接和 `..`，其他平台仍如实保留未确认状态。
+
+本轮五条 review 修复的本地验证完成：完整 Rust quality（含全工作区/all-features 测试、22 个独立公共消费者、Clippy、rustdoc/doctest、精确发布内容和契约归档检查）通过；最终哈希投影另经完整 Clippy、4 个更新消费者验证。writer 11 项针对性测试、artifact 7 项单测及 8 项生命周期测试通过；最终重新编译原生模块后 Node 20/20、实际安装 Python wheel 55/55 通过。
 
 这些调整补齐实现与验证边界，不引入兼容层。当前提交的最终 hosted CI 状态以 PR checks 为准；本次仍不创建 release tag 或发布包。

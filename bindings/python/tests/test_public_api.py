@@ -218,6 +218,28 @@ def test_media_mime_and_name_conflicts_are_atomic():
     p.add('n', Note.basic('q', 'a'))
     assert p.build(BuildOptions.temporary()).report.counts.media == 1
 
+def test_media_bytes_share_container_matching_and_canonical_names(tmp_path):
+    cases = [
+        (png(), 'IMAGE/PNG', 'image/png', '.png'),
+        (bytes.fromhex('1a45dfa37765626d'), 'AUDIO/WEBM; codecs=Opus', 'audio/webm; codecs=Opus', '.webm'),
+        (b'OggSOpusHead', 'AUDIO/OPUS', 'audio/opus', '.opus'),
+        (bytes.fromhex('000000186674797069736f6d'), 'audio/mp4', 'audio/mp4', '.m4a'),
+    ]
+    project = Project('mime-containers').add('one', Note.basic('q', 'a'))
+    expected = {}
+    for data, declared, canonical, extension in cases:
+        media = Media.bytes(data, declared)
+        lower = Media.bytes(data, canonical)
+        assert media.media_type == canonical
+        assert media.filename == lower.filename
+        assert media.filename.endswith(extension)
+        expected[media.filename] = data
+        project.add_asset(media)
+    output = project.build(BuildOptions.temporary())
+    _, _, assets, _, _ = unpack(output.artifact.path, tmp_path)
+    assert assets == expected
+    assert output.report.counts.media == len(cases)
+
 @pytest.mark.parametrize('mode', list(OcclusionMode))
 def test_io_masks_create_distinct_cards_and_preserve_structure(tmp_path, mode):
     note = (Note.image_occlusion(Media.bytes(png(), 'image/png')).mode(mode)

@@ -12,7 +12,10 @@ pub(crate) use assets::Assets;
 
 pub use error::{MediaError, MediaErrorKind, MediaLimitExceeded};
 
-use crate::authoring_core::media_io::{sniff_mime, MediaSniffConfidence};
+use crate::authoring_core::{
+    media::mime_type_subtype_compatible,
+    media_io::{sniff_mime, MediaSniffConfidence},
+};
 use snapshot::Snapshot;
 use std::{path::Path, sync::Arc};
 
@@ -110,7 +113,7 @@ impl Media {
         }
         if let Some(sniffed) = sniff_mime(&bytes[..bytes.len().min(snapshot::SAMPLE_BYTES)]) {
             if sniffed.confidence == MediaSniffConfidence::High
-                && sniffed.mime != parsed.essence_str()
+                && !mime_type_subtype_compatible(&sniffed.mime, parsed.essence_str())
             {
                 return Err(MediaError::new(
                     MediaErrorKind::MediaTypeMismatch,
@@ -124,8 +127,13 @@ impl Media {
     }
 
     fn new(snapshot: Arc<Snapshot>, media_type: String) -> Self {
-        let essence = media_type.split(';').next().unwrap_or(&media_type);
-        let extension = extension(essence);
+        let essence = media_type
+            .split(';')
+            .next()
+            .unwrap_or(&media_type)
+            .trim()
+            .to_ascii_lowercase();
+        let extension = extension(&essence);
         let mut name_hash = blake3::Hasher::new_derive_key("ankiforge:media-name:v1");
         name_hash.update(snapshot.digest.as_bytes());
         name_hash.update(essence.as_bytes());
@@ -223,7 +231,7 @@ fn extension(media_type: &str) -> &'static str {
         "audio/mp4" => "m4a",
         "audio/aac" => "aac",
         "video/mp4" => "mp4",
-        "video/webm" => "webm",
+        "audio/webm" | "video/webm" => "webm",
         "font/woff" => "woff",
         "font/woff2" => "woff2",
         "font/ttf" => "ttf",

@@ -9,6 +9,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 pub enum MediaWriterError {
     CasObjectMissing {
         path: PathBuf,
+        cause: std::io::Error,
     },
     CasObjectSizeMismatch {
         path: PathBuf,
@@ -25,11 +26,13 @@ pub enum MediaWriterError {
     CasObjectReadFailed {
         path: PathBuf,
         message: String,
+        cause: std::io::Error,
     },
     CasObjectCopyFailed {
         from: PathBuf,
         to: PathBuf,
         message: String,
+        cause: Option<std::io::Error>,
     },
     ManifestInvariantViolation {
         code: &'static str,
@@ -52,7 +55,7 @@ impl MediaWriterError {
 
     pub fn diagnostic_path(&self) -> Option<String> {
         match self {
-            Self::CasObjectMissing { path } | Self::CasObjectReadFailed { path, .. } => {
+            Self::CasObjectMissing { path, .. } | Self::CasObjectReadFailed { path, .. } => {
                 Some(path.display().to_string())
             }
             Self::CasObjectCopyFailed { to, .. } => Some(to.display().to_string()),
@@ -67,7 +70,7 @@ impl MediaWriterError {
 impl fmt::Display for MediaWriterError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::CasObjectMissing { path } => {
+            Self::CasObjectMissing { path, .. } => {
                 write!(formatter, "CAS object missing: {}", path.display())
             }
             Self::CasObjectSizeMismatch { path, object_id } => {
@@ -91,14 +94,16 @@ impl fmt::Display for MediaWriterError {
                     path.display()
                 )
             }
-            Self::CasObjectReadFailed { path, message } => {
+            Self::CasObjectReadFailed { path, message, .. } => {
                 write!(
                     formatter,
                     "CAS object read failed {}: {message}",
                     path.display()
                 )
             }
-            Self::CasObjectCopyFailed { from, to, message } => {
+            Self::CasObjectCopyFailed {
+                from, to, message, ..
+            } => {
                 write!(
                     formatter,
                     "CAS object copy failed {} -> {}: {message}",
@@ -111,7 +116,17 @@ impl fmt::Display for MediaWriterError {
     }
 }
 
-impl std::error::Error for MediaWriterError {}
+impl std::error::Error for MediaWriterError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Self::CasObjectMissing { cause, .. } | Self::CasObjectReadFailed { cause, .. } => {
+                Some(cause)
+            }
+            Self::CasObjectCopyFailed { cause, .. } => cause.as_ref().map(|cause| cause as _),
+            _ => None,
+        }
+    }
+}
 
 #[cfg(all(test, feature = "internal-tools"))]
 pub fn copy_verified_cas_object_to_path(
@@ -134,12 +149,7 @@ impl PreparedMediaCopy {
     pub(crate) fn publish(mut self) -> Result<(), MediaWriterError> {
         let temp_path = self.temp_path.as_ref().expect("unpublished media copy");
         fs::rename(temp_path, &self.output_path).map_err(|error| {
-            copy_failed_with_cleanup(
-                &self.source,
-                &self.output_path,
-                temp_path,
-                error.to_string(),
-            )
+            copy_failed_with_cleanup(&self.source, &self.output_path, temp_path, error)
         })?;
         self.temp_path.take();
         Ok(())
@@ -178,11 +188,7 @@ pub(crate) fn prepare_verified_cas_copy(
             Ok(read) => read,
             Err(err) => {
                 drop(output);
-                return Err(read_failed_with_cleanup(
-                    &source,
-                    &temp_path,
-                    err.to_string(),
-                ));
+                return Err(read_failed_with_cleanup(&source, &temp_path, err));
             }
         };
         if read == 0 {
@@ -198,7 +204,7 @@ pub(crate) fn prepare_verified_cas_copy(
                 &source,
                 output_path,
                 &temp_path,
-                err.to_string(),
+                err,
             ));
         }
     }
@@ -215,7 +221,7 @@ pub(crate) fn prepare_verified_cas_copy(
             &source,
             output_path,
             &temp_path,
-            err.to_string(),
+            err,
         ));
     }
     drop(output);
@@ -232,6 +238,7 @@ fn create_temp_output_file(
             from: source.to_path_buf(),
             to: output_path.to_path_buf(),
             message: "output path has no parent directory".into(),
+            cause: None,
         })?;
     let filename = output_path
         .file_name()
@@ -242,6 +249,7 @@ fn create_temp_output_file(
         .map(|duration| duration.as_nanos())
         .unwrap_or(0);
 
+    let mut last_collision = None;
     for attempt in 0..100 {
         let temp_path = parent.join(format!(
             ".{filename}.tmp-{}-{nonce}-{attempt}",
@@ -253,12 +261,16 @@ fn create_temp_output_file(
             .open(&temp_path)
         {
             Ok(file) => return Ok((temp_path, file)),
-            Err(err) if err.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(err) if err.kind() == std::io::ErrorKind::AlreadyExists => {
+                last_collision = Some(err);
+                continue;
+            }
             Err(err) => {
                 return Err(MediaWriterError::CasObjectCopyFailed {
                     from: source.to_path_buf(),
                     to: output_path.to_path_buf(),
                     message: format!("create temp output {}: {err}", temp_path.display()),
+                    cause: Some(err),
                 });
             }
         }
@@ -268,6 +280,7 @@ fn create_temp_output_file(
         from: source.to_path_buf(),
         to: output_path.to_path_buf(),
         message: "create unique temp output: too many collisions".into(),
+        cause: last_collision,
     })
 }
 
@@ -275,8 +288,9 @@ fn copy_failed_with_cleanup(
     source: &Path,
     output_path: &Path,
     temp_path: &Path,
-    message: String,
+    cause: std::io::Error,
 ) -> MediaWriterError {
+    let message = cause.to_string();
     let message = match fs::remove_file(temp_path) {
         Ok(()) => message,
         Err(err) if err.kind() == std::io::ErrorKind::NotFound => message,
@@ -289,10 +303,16 @@ fn copy_failed_with_cleanup(
         from: source.to_path_buf(),
         to: output_path.to_path_buf(),
         message,
+        cause: Some(cause),
     }
 }
 
-fn read_failed_with_cleanup(source: &Path, temp_path: &Path, message: String) -> MediaWriterError {
+fn read_failed_with_cleanup(
+    source: &Path,
+    temp_path: &Path,
+    cause: std::io::Error,
+) -> MediaWriterError {
+    let message = cause.to_string();
     let message = match fs::remove_file(temp_path) {
         Ok(()) => message,
         Err(err) if err.kind() == std::io::ErrorKind::NotFound => message,
@@ -304,6 +324,7 @@ fn read_failed_with_cleanup(source: &Path, temp_path: &Path, message: String) ->
     MediaWriterError::CasObjectReadFailed {
         path: source.to_path_buf(),
         message,
+        cause,
     }
 }
 
@@ -324,6 +345,7 @@ pub fn verify_cas_object_streaming(
             .map_err(|err| MediaWriterError::CasObjectReadFailed {
                 path: path.clone(),
                 message: err.to_string(),
+                cause: err,
             })?;
         if read == 0 {
             break;
@@ -383,11 +405,67 @@ fn classify_open_error(path: &Path, err: std::io::Error) -> MediaWriterError {
     if err.kind() == std::io::ErrorKind::NotFound {
         MediaWriterError::CasObjectMissing {
             path: path.to_path_buf(),
+            cause: err,
         }
     } else {
         MediaWriterError::CasObjectReadFailed {
             path: path.to_path_buf(),
             message: err.to_string(),
+            cause: err,
         }
+    }
+}
+
+#[cfg(test)]
+mod io_error_tests {
+    use super::*;
+    use std::error::Error;
+
+    #[test]
+    fn real_cas_filesystem_failures_keep_the_os_error() {
+        let root = tempfile::tempdir().unwrap();
+        let bytes = b"content";
+        let object = crate::authoring_core::MediaObject {
+            id: "object".into(),
+            object_ref: "unused".into(),
+            blake3: blake3::hash(bytes).to_hex().to_string(),
+            sha1: hex::encode(Sha1::digest(bytes)),
+            size_bytes: bytes.len() as u64,
+            mime: "text/plain".into(),
+        };
+        let path = cas_object_path(root.path(), &object).unwrap();
+        let assert_io = |error: MediaWriterError, code| {
+            assert_eq!(error.diagnostic_code(), code);
+            let io = error
+                .source()
+                .unwrap()
+                .downcast_ref::<std::io::Error>()
+                .unwrap();
+            assert!(io.raw_os_error().is_some());
+        };
+        assert_io(
+            verify_cas_object_streaming(root.path(), &object).unwrap_err(),
+            "MEDIA.CAS_OBJECT_MISSING",
+        );
+        fs::create_dir_all(&path).unwrap();
+        assert_io(
+            verify_cas_object_streaming(root.path(), &object).unwrap_err(),
+            "MEDIA.CAS_OBJECT_READ_FAILED",
+        );
+        fs::remove_dir(&path).unwrap();
+        fs::write(&path, bytes).unwrap();
+        let blocked = root.path().join("occupied");
+        fs::write(&blocked, b"file").unwrap();
+        let error =
+            match prepare_verified_cas_copy(root.path(), &object, &blocked.join("output.txt")) {
+                Ok(_) => panic!("a file cannot act as the output parent"),
+                Err(error) => error,
+            };
+        assert_io(error, "MEDIA.CAS_OBJECT_COPY_FAILED");
+        // Integrity failures retain their domain classification, not I/O.
+        fs::write(&path, b"wrong").unwrap();
+        let mismatch = verify_cas_object_streaming(root.path(), &object).unwrap_err();
+        assert_eq!(mismatch.diagnostic_code(), "MEDIA.CAS_OBJECT_SIZE_MISMATCH");
+        assert!(mismatch.source().is_none());
     }
 }

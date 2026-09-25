@@ -402,7 +402,7 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
                 writer: file,
                 hash: sha1::Sha1::new(),
             });
-            serde_json::to_writer(&mut writer, &CanonicalManifest(&self.manifest))?;
+            write_manifest_json(&mut writer, &self.manifest)?;
             writer.flush()?;
             let writer = writer.into_inner().map_err(|error| error.into_error())?;
             Ok(format!("artifact:{}", hex::encode(writer.hash.finalize())))
@@ -415,6 +415,21 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             artifact_fingerprint,
         })
     }
+}
+
+fn write_manifest_json<T: Borrow<NormalizedIr>>(
+    writer: impl Write,
+    manifest: &StagingManifest<T>,
+) -> Result<()> {
+    serde_json::to_writer(writer, &CanonicalManifest(manifest)).map_err(|error| {
+        // serde_json::Error::source skips the contained io::Error itself.
+        // Recover that exact error, including its OS code or custom payload.
+        if error.is_io() {
+            anyhow::Error::new(std::io::Error::from(error))
+        } else {
+            anyhow::Error::new(error)
+        }
+    })
 }
 
 pub(crate) fn invalid_result(
@@ -1081,6 +1096,38 @@ pub(crate) fn validated_media_output_path(media_dir: &Path, filename: &str) -> R
 #[cfg(test)]
 mod canonical_stream_tests {
     use super::*;
+
+    #[test]
+    fn manifest_serialization_keeps_the_original_write_error() {
+        let bundle = crate::runtime::load_embedded_bundle().unwrap();
+        let ir: NormalizedIr = serde_json::from_slice(
+            &fs::read(
+                bundle
+                    .runtime
+                    .bundle_root
+                    .join("fixtures/phase3/inputs/basic-normalized-ir.json"),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let manifest = StagingManifest {
+            kind: "staging-package".into(),
+            tool_contract_version: "phase3-v1".into(),
+            writer_policy_ref: "policy".into(),
+            build_context_ref: "context".into(),
+            normalized_ir: ir,
+            notetype_model_ids: None,
+            template_target_decks: Vec::new(),
+        };
+        let file = tempfile::NamedTempFile::new().unwrap();
+        let mut read_only = fs::File::open(file.path()).unwrap();
+        let error = write_manifest_json(&mut read_only, &manifest).unwrap_err();
+        let original = error
+            .downcast_ref::<std::io::Error>()
+            .expect("original filesystem error");
+        assert!(original.raw_os_error().is_some());
+        assert_eq!(fs::metadata(file.path()).unwrap().len(), 0);
+    }
 
     #[test]
     fn streamed_manifest_matches_the_previous_canonical_bytes_and_hash() {

@@ -159,6 +159,8 @@ fn persist_copy(source: &Path, target: &Path) -> Result<PublicationSnapshot, Per
         .filter(|parent| !parent.as_os_str().is_empty())
         .unwrap_or_else(|| Path::new("."));
     let result = (|| -> io::Result<()> {
+        #[cfg(unix)]
+        let directories = directories_to_sync(parent)?;
         std::fs::create_dir_all(parent)?;
         let mut temporary = tempfile::Builder::new()
             .prefix(".ankiforge-publish-")
@@ -170,9 +172,11 @@ fn persist_copy(source: &Path, target: &Path) -> Result<PublicationSnapshot, Per
         facts.stage = PublicationStage::Published;
         #[cfg(unix)]
         {
-            #[cfg(test)]
-            directory_sync_failure::check()?;
-            std::fs::File::open(parent)?.sync_all()?;
+            for directory in directories {
+                #[cfg(test)]
+                directory_sync_failure::check(&directory)?;
+                std::fs::File::open(directory)?.sync_all()?;
+            }
             facts.durability = Durability::Confirmed;
         }
         Ok(())
@@ -183,16 +187,65 @@ fn persist_copy(source: &Path, target: &Path) -> Result<PublicationSnapshot, Per
     }
 }
 
+#[cfg(unix)]
+fn directories_to_sync(parent: &Path) -> io::Result<Vec<PathBuf>> {
+    let mut directories = vec![parent.to_owned()];
+    // Record missing directory entries before create_dir_all makes them look
+    // pre-existing. Each needs its parent synced, in addition to the leaf
+    // directory containing the published file. Preserve filesystem traversal
+    // through symlinks and `..`; lexical normalization would skip directories
+    // that must actually be created to make such a path traversable.
+    for directory in parent.ancestors() {
+        let directory = if directory.as_os_str().is_empty() {
+            Path::new(".")
+        } else {
+            directory
+        };
+        match directory.metadata() {
+            Ok(_) => break,
+            Err(error) if error.kind() == io::ErrorKind::NotFound => {
+                if let Some(ancestor) = directory.parent() {
+                    directories.push(if ancestor.as_os_str().is_empty() {
+                        PathBuf::from(".")
+                    } else {
+                        ancestor.to_owned()
+                    });
+                }
+            }
+            Err(error) => return Err(error),
+        }
+    }
+    Ok(directories)
+}
+
 #[cfg(all(test, unix))]
 mod directory_sync_failure {
-    use std::{cell::Cell, io};
+    use std::{
+        cell::RefCell,
+        io,
+        path::{Path, PathBuf},
+    };
 
-    thread_local! {
-        static ENABLED: Cell<bool> = const { Cell::new(false) };
+    struct Observation {
+        fail_at: Option<usize>,
+        paths: Vec<PathBuf>,
     }
 
-    pub(super) fn check() -> io::Result<()> {
-        if ENABLED.with(Cell::get) {
+    thread_local! {
+        static ACTIVE: RefCell<Option<Observation>> = const { RefCell::new(None) };
+    }
+
+    pub(super) fn check(path: &Path) -> io::Result<()> {
+        let fail = ACTIVE.with(|active| {
+            let mut active = active.borrow_mut();
+            let Some(observation) = active.as_mut() else {
+                return false;
+            };
+            let index = observation.paths.len();
+            observation.paths.push(path.to_owned());
+            observation.fail_at == Some(index)
+        });
+        if fail {
             // EIO on Unix. Keep a concrete OS I/O error in the source chain.
             Err(io::Error::from_raw_os_error(5))
         } else {
@@ -201,14 +254,30 @@ mod directory_sync_failure {
     }
 
     pub(super) fn during<T>(operation: impl FnOnce() -> T) -> T {
-        struct Reset(bool);
+        observe(Some(0), operation).0
+    }
+
+    pub(super) fn observe<T>(
+        fail_at: Option<usize>,
+        operation: impl FnOnce() -> T,
+    ) -> (T, Vec<PathBuf>) {
+        struct Reset(Option<Observation>);
         impl Drop for Reset {
             fn drop(&mut self) {
-                ENABLED.with(|enabled| enabled.set(self.0));
+                ACTIVE.with(|active| {
+                    active.replace(self.0.take());
+                });
             }
         }
-        let _reset = Reset(ENABLED.with(|enabled| enabled.replace(true)));
-        operation()
+        let _reset = Reset(ACTIVE.with(|active| {
+            active.replace(Some(Observation {
+                fail_at,
+                paths: Vec::new(),
+            }))
+        }));
+        let result = operation();
+        let paths = ACTIVE.with(|active| active.borrow().as_ref().unwrap().paths.clone());
+        (result, paths)
     }
 }
 
@@ -225,6 +294,164 @@ mod tests {
         let mut project = Project::new("late-directory-sync").unwrap();
         project.add("one", Note::basic("front", "back")).unwrap();
         project
+    }
+
+    #[test]
+    fn nested_persistence_syncs_every_new_directory_entry_before_confirming_durability() {
+        let root = tempfile::tempdir().unwrap();
+        let source = root.path().join("source.apkg");
+        std::fs::write(&source, b"owned artifact").unwrap();
+        let destination = root.path().join("new/nested/saved.apkg");
+        let (result, synced) =
+            directory_sync_failure::observe(None, || persist_copy(&source, &destination));
+        let facts = result.unwrap();
+        assert_eq!(facts.stage, PublicationStage::Published);
+        assert_eq!(facts.durability, Durability::Confirmed);
+        assert_eq!(
+            synced,
+            vec![
+                root.path().join("new/nested"),
+                root.path().join("new"),
+                root.path().to_owned()
+            ]
+        );
+        assert_eq!(std::fs::read(destination).unwrap(), b"owned artifact");
+    }
+
+    #[test]
+    fn ancestor_sync_failure_preserves_published_bytes_and_original_artifact() {
+        let output = project().build(BuildOptions::temporary()).unwrap();
+        let source = output.artifact().path().to_owned();
+        let bytes = std::fs::read(&source).unwrap();
+        for fail_at in [1, 2] {
+            let root = tempfile::tempdir().unwrap();
+            let destination = root.path().join("new/nested/saved.apkg");
+            let (result, synced) = directory_sync_failure::observe(Some(fail_at), || {
+                output.artifact().persist_to(&destination)
+            });
+            let error = result.unwrap_err();
+            assert_eq!(synced.len(), fail_at + 1);
+            assert_eq!(error.kind(), PersistErrorKind::Io);
+            assert_eq!(error.publication().stage, PublicationStage::Published);
+            assert_eq!(error.publication().durability, Durability::Unconfirmed);
+            assert_eq!(error.publication().path, destination);
+            assert_eq!(
+                error
+                    .source()
+                    .unwrap()
+                    .downcast_ref::<io::Error>()
+                    .unwrap()
+                    .raw_os_error(),
+                Some(5)
+            );
+            assert_eq!(std::fs::read(&destination).unwrap(), bytes);
+            assert_eq!(std::fs::read(&source).unwrap(), bytes);
+            assert!(matches!(
+                output.snapshot().result,
+                BuildResultSnapshot::Success { .. }
+            ));
+        }
+    }
+
+    #[test]
+    fn ancestor_sync_failure_during_build_retains_inspected_counts_and_publication() {
+        let root = tempfile::tempdir().unwrap();
+        let destination = root.path().join("new/nested/saved.apkg");
+        let (result, synced) = directory_sync_failure::observe(Some(2), || {
+            project().build(BuildOptions::to(&destination))
+        });
+        let error = result.unwrap_err();
+        assert_eq!(synced.len(), 3);
+        assert_eq!(error.kind(), BuildErrorKind::Publication);
+        assert_eq!(error.report().counts().notes, 1);
+        assert_eq!(error.publications()[0].stage, PublicationStage::Published);
+        assert_eq!(error.publications()[0].durability, Durability::Unconfirmed);
+        let cause = error
+            .source()
+            .unwrap()
+            .downcast_ref::<PersistError>()
+            .unwrap();
+        assert_eq!(
+            cause
+                .source()
+                .unwrap()
+                .downcast_ref::<io::Error>()
+                .unwrap()
+                .raw_os_error(),
+            Some(5)
+        );
+        assert_eq!(
+            crate::writer_core::inspect_apkg(&destination)
+                .unwrap()
+                .observation_status,
+            "complete"
+        );
+    }
+
+    #[test]
+    fn persistence_syncs_relative_directory_chains_and_empty_parents() {
+        let cwd = std::env::current_dir().unwrap();
+        let root = tempfile::tempdir_in(&cwd).unwrap();
+        let source = root.path().join("source.apkg");
+        std::fs::write(&source, b"owned artifact").unwrap();
+        let relative_root = root.path().strip_prefix(&cwd).unwrap();
+        let destination = relative_root.join("new/nested/saved.apkg");
+        let (result, synced) =
+            directory_sync_failure::observe(None, || persist_copy(&source, &destination));
+        assert_eq!(result.unwrap().durability, Durability::Confirmed);
+        assert_eq!(
+            synced,
+            vec![
+                relative_root.join("new/nested"),
+                relative_root.join("new"),
+                relative_root.to_owned()
+            ]
+        );
+        assert_eq!(std::fs::read(destination).unwrap(), b"owned artifact");
+
+        // Keep ownership of this scratch path so the replaced file is cleaned
+        // up without changing the process-wide working directory in tests.
+        let scratch = tempfile::NamedTempFile::new_in(&cwd).unwrap();
+        let destination = Path::new(scratch.path().file_name().unwrap());
+        assert_eq!(destination.parent(), Some(Path::new("")));
+        let (result, synced) =
+            directory_sync_failure::observe(None, || persist_copy(&source, destination));
+        assert_eq!(result.unwrap().durability, Durability::Confirmed);
+        assert_eq!(synced, vec![PathBuf::from(".")]);
+        assert_eq!(std::fs::read(destination).unwrap(), b"owned artifact");
+    }
+
+    #[test]
+    fn persistence_syncs_created_entries_reached_through_symlinks_and_parent_components() {
+        let root = tempfile::tempdir().unwrap();
+        let elsewhere = root.path().join("elsewhere");
+        std::fs::create_dir_all(elsewhere.join("child")).unwrap();
+        std::os::unix::fs::symlink(elsewhere.join("child"), root.path().join("link")).unwrap();
+        let source = root.path().join("source.apkg");
+        std::fs::write(&source, b"owned artifact").unwrap();
+        let destination = root.path().join("missing/../link/../new/nested/saved.apkg");
+        let (result, synced) =
+            directory_sync_failure::observe(None, || persist_copy(&source, &destination));
+        assert_eq!(result.unwrap().durability, Durability::Confirmed);
+        let synced: std::collections::BTreeSet<_> = synced
+            .into_iter()
+            .map(|path| path.canonicalize().unwrap())
+            .collect();
+        for directory in [
+            elsewhere.join("new/nested"),
+            elsewhere.join("new"),
+            elsewhere,
+            root.path().join("missing"),
+            root.path().to_owned(),
+        ] {
+            assert!(
+                synced.contains(&directory.canonicalize().unwrap()),
+                "directory entry was not synced: {}",
+                directory.display()
+            );
+        }
+        assert_eq!(std::fs::read(&destination).unwrap(), b"owned artifact");
+        assert_eq!(std::fs::read(source).unwrap(), b"owned artifact");
     }
 
     #[test]

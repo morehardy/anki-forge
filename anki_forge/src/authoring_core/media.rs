@@ -599,7 +599,7 @@ fn mime_type_subtype_eq(left: &str, right: &str) -> bool {
     left.eq_ignore_ascii_case(right)
 }
 
-fn mime_type_subtype_compatible(left: &str, right: &str) -> bool {
+pub(crate) fn mime_type_subtype_compatible(left: &str, right: &str) -> bool {
     mime_type_subtype_eq(left, right) || mime_container_compatible(left, right)
 }
 

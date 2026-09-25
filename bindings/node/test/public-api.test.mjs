@@ -85,6 +85,34 @@ function model(name = "中文") {
     .build();
 }
 
+test("byte media shares container matching and canonical filenames with Rust", async () => {
+  const cases = [
+    [png(), "IMAGE/PNG", "image/png", ".png"],
+    [Buffer.from("1a45dfa37765626d", "hex"), "AUDIO/WEBM; codecs=Opus", "audio/webm; codecs=Opus", ".webm"],
+    [Buffer.from("OggSOpusHead"), "AUDIO/OPUS", "audio/opus", ".opus"],
+    [Buffer.from("000000186674797069736f6d", "hex"), "audio/mp4", "audio/mp4", ".m4a"],
+  ];
+  const project = new Project("mime-containers").add("one", Note.basic("q", "a"));
+  for (const [bytes, declared, canonical, extension] of cases) {
+    const media = await Media.bytes(bytes, declared);
+    const lower = await Media.bytes(bytes, canonical);
+    assert.equal(media.mediaType, canonical);
+    assert.equal(media.filename, lower.filename);
+    assert.ok(media.filename.endsWith(extension));
+    project.addAsset(media);
+  }
+  const output = await project.build(BuildOptions.temporary());
+  try {
+    assert.equal(output.report.counts.media, cases.length);
+    assert.deepEqual(
+      inspect(output.artifact.path).media.map((item) => Buffer.from(item.bytes).toString("hex")).sort(),
+      cases.map(([bytes]) => bytes.toString("hex")).sort(),
+    );
+  } finally {
+    await output.artifact.close();
+  }
+});
+
 test("explicit keys and strings as Text; only Project authors publications", async (t) => {
   const p = new Project("parity").add(
     "hello",

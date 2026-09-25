@@ -120,6 +120,10 @@ impl IdentityEnvelope {
             // model reader; here each physical row must match the package map.
             validate_rows(&db, model.id, "fields", &model.fields)?;
             validate_rows(&db, model.id, "templates", &model.templates)?;
+            ensure!(
+                model.content_hash == super::content::model_from_collection(&db, model.id)?,
+                "model content fingerprint disagrees with collection"
+            );
         }
         let count: usize = db.query_row("SELECT COUNT(*) FROM notes", [], |row| row.get(0))?;
         ensure!(
@@ -212,6 +216,11 @@ impl IdentityEnvelope {
             ensure!(
                 mid == model.id && mtime == note.mtime_secs,
                 "note mapping disagrees with collection"
+            );
+            ensure!(
+                note.content_hash
+                    == super::content::note_from_collection(&db, id, mid, model.kind == "cloze")?,
+                "note content fingerprint disagrees with collection"
             );
             let actual = db
                 .prepare("SELECT ord FROM cards WHERE nid = ?1")?

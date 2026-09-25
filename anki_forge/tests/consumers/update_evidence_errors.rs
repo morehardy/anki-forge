@@ -97,14 +97,50 @@ fn main() -> Result<(), Box<dyn Error>> {
         Some(serde_json::to_vec(&value).unwrap())
     });
     failure(&project, "mapping.apkg", "UPDATE.EVIDENCE_INVALID");
+    // Copy the exact future candidate fingerprints into an unchanged baseline.
+    // Trusting these hashes would suppress the real ModelChanged/NoteChanged
+    // findings, even though the candidate and SQLite baseline differ.
+    for model_change in [false, true] {
+        let mut candidate = Project::new("proof")?;
+        if model_change {
+            let model = ankiforge::NoteType::builder("basic").name("Edited Basic")
+                .field(ankiforge::Field::new("front").name("Front"))
+                .field(ankiforge::Field::new("back").name("Back"))
+                .template(ankiforge::Template::new("card").front("{{front}}").back("{{back}}"))
+                .build()?;
+            candidate.add("one", model.note().field("front", "question").field("back", "answer"))?;
+        } else { candidate.add("one", Note::basic("future changed question", "answer"))?; }
+        let candidate_output = candidate.build(BuildOptions::temporary())?;
+        let mut archive = zip::ZipArchive::new(fs::File::open(candidate_output.artifact().path())?)?;
+        let future: serde_json::Value = serde_json::from_reader(archive.by_name("ankiforge-identity.json")?)?;
+        let domain = if model_change { "models" } else { "notes" };
+        let key = if model_change { "basic" } else { "one" };
+        let output = format!("forged-future-{domain}.apkg");
+        copy_with(baseline.artifact().path(), &output, |name, data| {
+            if name != "ankiforge-identity.json" { return Some(data); }
+            let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
+            assert_ne!(value["identity"][domain][key]["content_hash"], future["identity"][domain][key]["content_hash"]);
+            value["identity"][domain][key]["content_hash"] = future["identity"][domain][key]["content_hash"].clone();
+            value["identity"].sort_all_objects();
+            value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+            Some(serde_json::to_vec(&value).unwrap())
+        });
+        failure(&candidate, &output, "UPDATE.EVIDENCE_INVALID");
+        assert_eq!(candidate.compare(ankiforge::update::CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
+        let normal = candidate.compare(ankiforge::update::CompareOptions::against(baseline.artifact().path()))?;
+        let expected = if model_change { ankiforge::update::RiskCode::ModelChanged } else { ankiforge::update::RiskCode::NoteChanged };
+        assert!(normal.findings().iter().any(|finding| finding.code() == expected));
+    }
     // A correct checksum alone does not establish semantic consistency with
     // the SQLite collection. Invalid mappings must still be rejected.
-    for what in ["card_key", "model_kind", "sort_field"] {
+    for what in ["card_key", "model_kind", "sort_field", "model_content_hash", "note_content_hash"] {
         let path = format!("inconsistent-{what}.apkg");
         copy_with(baseline.artifact().path(), &path, |name, data| {
             if name != "ankiforge-identity.json" { return Some(data); }
             let mut value: serde_json::Value = serde_json::from_slice(&data).unwrap();
             match what {
+                "model_content_hash" => { value["identity"]["models"].as_object_mut().unwrap().values_mut().next().unwrap()["content_hash"] = "0".repeat(64).into(); }
+                "note_content_hash" => { value["identity"]["notes"]["one"]["content_hash"] = "0".repeat(64).into(); }
                 "card_key" => { value["identity"]["notes"]["one"]["cards"] = serde_json::json!({"template:unknown-card": 0}); }
                 "model_kind" => { value["identity"]["models"].as_object_mut().unwrap().values_mut().next().unwrap()["kind"] = "cloze".into(); }
                 "sort_field" => { value["identity"]["models"].as_object_mut().unwrap().values_mut().next().unwrap()["sort_field"] = "back".into(); }
@@ -115,6 +151,55 @@ fn main() -> Result<(), Box<dyn Error>> {
             Some(serde_json::to_vec(&value).unwrap())
         });
         failure(&project, &path, "UPDATE.EVIDENCE_INVALID");
+    }
+    let target_model = ankiforge::NoteType::builder("targeted")
+        .field(ankiforge::Field::new("front"))
+        .template(ankiforge::Template::new("card").front("{{front}}").back("{{front}}").target_deck("Template::Destination"))
+        .build()?;
+    let mut target_project = Project::new("target-proof")?.default_deck("Note::Destination");
+    target_project.add("one", target_model.note().field("front", "question"))?;
+    let target_baseline = target_project.build(BuildOptions::temporary())?;
+    let _target_control = target_project.build(BuildOptions::temporary().update_from(target_baseline.artifact().path()))?;
+    // A producer can recompute unkeyed envelope digests. Semantic validation
+    // must compare the evidence to the actual SQLite content nonetheless.
+    for (what, sql) in [
+        ("note_fields", "UPDATE notes SET flds = 'changed question' || char(31) || 'answer'"),
+        ("model_name", "UPDATE notetypes SET name = 'changed display name'"),
+        // Protobuf accepts a repeated scalar tag with the last value winning.
+        // Preserve every existing config field while changing real CSS/format.
+        ("model_css", "UPDATE notetypes SET config = CAST(config || X'1A0178' AS BLOB)"),
+        ("template_format", "UPDATE templates SET config = CAST(config || X'0A0178' AS BLOB)"),
+        ("field_name", "UPDATE fields SET name = 'changed field name' WHERE ord = 0"),
+        ("template_name", "UPDATE templates SET name = 'changed template name'"),
+        ("note_tags", "UPDATE notes SET tags = 'changed_tag'"),
+        ("card_flags", "UPDATE cards SET flags = 1"),
+        ("target_card_deck", "UPDATE cards SET did = 1"),
+        ("card_deck", "INSERT INTO decks SELECT 987, 'Wrong Deck', mtime_secs, usn, common, kind FROM decks WHERE id = 1; UPDATE cards SET did = 987"),
+    ] {
+        let output = format!("resigned-{what}.apkg");
+        let (test_project, source) = if what == "target_card_deck" { (&target_project, target_baseline.artifact().path()) } else { (&project, baseline.artifact().path()) };
+        let mut archive = zip::ZipArchive::new(fs::File::open(source)?)?;
+        let mut compressed = Vec::new();
+        archive.by_name("collection.anki21b")?.read_to_end(&mut compressed)?;
+        let sqlite_path = format!("resigned-{what}.sqlite");
+        fs::write(&sqlite_path, zstd::decode_all(compressed.as_slice())?)?;
+        let db = rusqlite::Connection::open(&sqlite_path)?;
+        db.execute_batch(sql)?;
+        drop(db);
+        let sqlite = fs::read(&sqlite_path)?;
+        let digest = blake3::hash(&sqlite).to_hex().to_string();
+        let compressed = zstd::encode_all(sqlite.as_slice(), 0)?;
+        copy_with(source, &output, |name, bytes| {
+            if name == "collection.anki21b" { return Some(compressed.clone()); }
+            if name != "ankiforge-identity.json" { return Some(bytes); }
+            let mut value: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+            value["collection_blake3"] = digest.clone().into();
+            value["identity"].sort_all_objects();
+            value["identity_blake3"] = blake3::hash(&serde_json::to_vec(&value["identity"]).unwrap()).to_hex().to_string().into();
+            Some(serde_json::to_vec(&value).unwrap())
+        });
+        failure(test_project, &output, "UPDATE.EVIDENCE_INVALID");
+        assert_eq!(test_project.compare(ankiforge::update::CompareOptions::against(&output)).unwrap_err().code(), "UPDATE.EVIDENCE_INVALID");
     }
     copy_with(baseline.artifact().path(), "collection.apkg", |name, data| {
         if name != "collection.anki21b" { return Some(data); }

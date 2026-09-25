@@ -89,7 +89,7 @@ pub(super) fn generate(
     let ids = identity.model_ids();
     let guids = identity.guid_plan();
     target.native_identity = Some(std::sync::Arc::new(identity));
-    let result = crate::writer_core::build::build_with_identity_plan(
+    let attempt = crate::writer_core::build::build_with_identity_plan(
         &normalized.normalized_ir,
         &policy,
         &context,
@@ -99,6 +99,7 @@ pub(super) fn generate(
         Some(&ids),
     )
     .map_err(|cause| generation_error("BUILD.WRITER_FAILED", cause, &report))?;
+    let result = attempt.result;
     for diagnostic in &result.diagnostics.items {
         report.diagnostics.push(Diagnostic {
             code: diagnostic.code.clone(),
@@ -125,7 +126,17 @@ pub(super) fn generate(
             .find(|d| d.severity == Severity::Error)
             .map(|d| d.code.as_str())
             .unwrap_or("BUILD.WRITER_FAILED");
-        let mut error = BuildError::new(Kind::Validation, code, "writer rejected authored content");
+        let kind = if attempt.cause.as_ref().is_some_and(is_io_failure) {
+            Kind::Io
+        } else if result.result_status == "invalid" {
+            Kind::Validation
+        } else {
+            Kind::Internal
+        };
+        let mut error = BuildError::new(kind, code, "generate private candidate");
+        if let Some(cause) = attempt.cause {
+            error = error.caused_by_anyhow(cause);
+        }
         error.report = Box::new(report);
         return Err(error);
     }
@@ -151,8 +162,27 @@ pub(super) fn generate(
     Ok((artifact, report))
 }
 
+fn is_io_failure(cause: &anyhow::Error) -> bool {
+    cause.chain().any(|source| {
+        source.is::<std::io::Error>()
+            || matches!(
+                source
+                    .downcast_ref::<rusqlite::Error>()
+                    .and_then(rusqlite::Error::sqlite_error_code),
+                Some(
+                    rusqlite::ErrorCode::PermissionDenied
+                        | rusqlite::ErrorCode::ReadOnly
+                        | rusqlite::ErrorCode::SystemIoFailure
+                        | rusqlite::ErrorCode::DiskFull
+                        | rusqlite::ErrorCode::CannotOpen
+                        | rusqlite::ErrorCode::FileLockingProtocolFailed
+                )
+            )
+    })
+}
+
 fn generation_error(code: &str, cause: anyhow::Error, report: &BuildReport) -> BuildError {
-    let kind = if cause.chain().any(|source| source.is::<std::io::Error>()) {
+    let kind = if is_io_failure(&cause) {
         Kind::Io
     } else {
         Kind::Internal
@@ -166,6 +196,99 @@ fn generation_error(code: &str, cause: anyhow::Error, report: &BuildReport) -> B
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn writer_filesystem_failures_keep_native_io_causes() {
+        use std::error::Error;
+
+        for (obstruction, is_directory, expected_code) in [
+            (
+                "candidate/staging",
+                false,
+                "PHASE3.STAGING_MATERIALIZATION_FAILED",
+            ),
+            (
+                "candidate/staging/manifest.json",
+                true,
+                "PHASE3.STAGING_MATERIALIZATION_FAILED",
+            ),
+            (
+                "candidate/.package.apkg.tmp",
+                true,
+                "PHASE3.APKG_EMISSION_FAILED",
+            ),
+            (
+                "candidate/package.apkg",
+                true,
+                "PHASE3.APKG_EMISSION_FAILED",
+            ),
+            (
+                "candidate/staging/media/unused.txt",
+                true,
+                "MEDIA.CAS_OBJECT_COPY_FAILED",
+            ),
+        ] {
+            let inputs = tempfile::tempdir().unwrap();
+            let occupied = inputs.path().join(obstruction);
+            if is_directory {
+                std::fs::create_dir_all(&occupied).unwrap();
+            } else {
+                std::fs::create_dir_all(occupied.parent().unwrap()).unwrap();
+                std::fs::write(&occupied, b"occupied").unwrap();
+            }
+            std::fs::write(inputs.path().join("unused.txt"), b"media bytes").unwrap();
+            let mut project = Project::new("writer-io").unwrap();
+            project
+                .add("one", crate::Note::basic("front", "back"))
+                .unwrap();
+            let document: ProductDocument = serde_json::from_value(serde_json::json!({
+                "product_document_version": "product-v3", "document_id": "writer-io",
+                "note_types": [{"kind": "custom", "id": "model:basic", "note_type_kind": "normal",
+                    "fields": [{"key": "front", "name": "Front"}, {"key": "back", "name": "Back"}],
+                    "templates": [{"key": "card", "name": "Card 1", "front": "{{addon:Front}}", "back": "{{Back}}"}]}],
+                "notes": [{"kind": "custom", "note_type_id": "model:basic", "stable_id": "one", "deck_name": "Default",
+                    "fields": {"front": {"kind": "html", "value": "front"}, "back": {"kind": "html", "value": "back"}}}],
+                "media": [{"id": "unused", "export_as": "unused.txt", "source": {"kind": "file", "path": "unused.txt"}}]
+            })).unwrap();
+            let error = generate(
+                &project,
+                &document,
+                inputs.path(),
+                PackageIdentity::create(&project).unwrap(),
+            )
+            .unwrap_err();
+            assert_eq!(error.code(), expected_code, "{obstruction}");
+            assert_eq!(error.kind(), Kind::Io, "{obstruction}");
+            assert_eq!(error.report().counts().notes, 1);
+            assert!(error
+                .report()
+                .diagnostics()
+                .iter()
+                .any(|d| d.code == "TEMPLATE.FILTER_UNKNOWN"));
+            assert!(error
+                .report()
+                .diagnostics()
+                .iter()
+                .any(|d| d.code == expected_code && d.source.is_some()));
+            assert!(error.publications().is_empty());
+            let mut cause = error.source();
+            let original = loop {
+                let next = cause.expect("writer filesystem cause must be retained");
+                if let Some(io) = next.downcast_ref::<std::io::Error>() {
+                    break io;
+                }
+                cause = next.source();
+            };
+            assert!(original.raw_os_error().is_some());
+            let snapshot = serde_json::to_value(error.snapshot()).unwrap();
+            assert_eq!(snapshot["result"]["kind"], "io");
+            assert!(snapshot["result"]["causes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|value| value.as_str() == Some(original.to_string().as_str())));
+        }
+    }
 
     #[test]
     fn normalization_io_failure_keeps_original_filesystem_cause() {
@@ -329,6 +452,39 @@ mod tests {
             .iter()
             .any(|diagnostic| diagnostic.code == "MEDIA.UNUSED_BINDING"));
         assert_eq!(error.kind(), Kind::Internal);
+    }
+
+    #[test]
+    fn sqlite_disk_full_keeps_the_native_database_cause() {
+        use std::error::Error;
+        let root = tempfile::tempdir().unwrap();
+        let database = rusqlite::Connection::open(root.path().join("limited.sqlite")).unwrap();
+        database.pragma_update(None, "max_page_count", 1).unwrap();
+        let cause = database
+            .execute_batch("CREATE TABLE notes(value TEXT)")
+            .unwrap_err();
+        assert_eq!(
+            cause.sqlite_error_code(),
+            Some(rusqlite::ErrorCode::DiskFull)
+        );
+        let error = generation_error(
+            "PHASE3.APKG_EMISSION_FAILED",
+            anyhow::Error::new(cause).context("create collection"),
+            &BuildReport::default(),
+        );
+        assert_eq!(error.kind(), Kind::Io);
+        let original = error
+            .source()
+            .unwrap()
+            .source()
+            .unwrap()
+            .downcast_ref::<rusqlite::Error>()
+            .unwrap();
+        assert_eq!(
+            original.sqlite_error_code(),
+            Some(rusqlite::ErrorCode::DiskFull)
+        );
+        assert!(error.publications().is_empty());
     }
 
     #[test]
