@@ -1,4 +1,4 @@
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, NoteType, Project};
 use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -10,35 +10,35 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Err("unexpected extra arguments".into());
     }
 
-    let mut project = Project::new(&scenario)
-        .stable_id(format!("manual:{scenario}"))
-        .default_deck("Anki Forge Manual");
-    project.import_template_bundle(bundle)?;
+    let mut project = Project::new(format!("manual:{scenario}"))?.default_deck("Anki Forge Manual");
+    let model = NoteType::from_bundle(bundle)?;
 
     match scenario.as_str() {
         "S10_custom_normal_bundle" => {
-            project.add_note(
-                Note::new("desktop-custom-normal")
-                    .stable_id("manual:custom-normal:1")
-                    .text("prompt", "Capital of Spain?")
-                    .text("sort_key", "Spain"),
+            project.add(
+                "manual:custom-normal:1",
+                model
+                    .note()
+                    .field("prompt", "Capital of Spain?")
+                    .field("sort_key", "Spain"),
             )?;
         }
         "S11_custom_cloze_bundle" => {
-            project.add_note(
-                Note::new("desktop-custom-cloze")
-                    .stable_id("manual:custom-cloze:1")
-                    .text("text", "{{c1::Madrid}} is in {{c2::Spain}}"),
+            project.add(
+                "manual:custom-cloze:1",
+                model
+                    .note()
+                    .field("text", "{{c1::Madrid}} is in {{c2::Spain}}"),
             )?;
         }
         _ => return Err(format!("unsupported template-bundle scenario '{scenario}'").into()),
     }
 
-    let report = project.write_apkg(output)?;
-    report.ensure_success()?;
+    let report = project.build(BuildOptions::to(output))?;
+    let counts = report.report().counts();
     println!(
         "generated {} note(s), {} card(s), {} media item(s)",
-        report.counts.notes, report.counts.cards, report.counts.media
+        counts.notes, counts.cards, counts.media
     );
     Ok(())
 }

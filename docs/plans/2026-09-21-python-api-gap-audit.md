@@ -252,7 +252,7 @@ Python 在可变对象中维护 `Note` / `NoteType` / `Project`，序列化为 p
 
 ## 本次验证记录与置信边界
 
-本次执行了 `cargo build -p contract_tools --release --locked`，命中缓存并成功；所有 probe 使用临时目录，没有改实现。除静态审查外，运行了公共 Python API probes、经现有 runtime 的真实导出，以及只使用 `anki_forge::prelude::*` 的 Rust 对照 probe。
+本次执行了 `cargo build -p contract_tools --release --locked`，命中缓存并成功；所有 probe 使用临时目录，没有改实现。除静态审查外，运行了公共 Python API probes、经现有 runtime 的真实导出，以及只使用 `ankiforge::prelude::*` 的 Rust 对照 probe。
 
 | Probe | 观察结果 |
 |---|---|

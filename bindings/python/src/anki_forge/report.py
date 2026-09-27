@@ -1,441 +1,61 @@
 from __future__ import annotations
-
-from copy import copy, deepcopy
-from dataclasses import dataclass, field, replace
-from types import TracebackType
-from typing import Any, Generic, Mapping, TypeVar
-
-from .diagnostics import BuildError, Diagnostic, DiagnosticsError, ProjectDiffError, ProtocolError, SourceSpan
-
-BUILD_REPORT_KIND = "anki-forge-build-report"
-BUILD_REPORT_SCHEMA_VERSION = "phase4-build-report-v2"
-ALLOWED_STATUSES = {"success", "blocked", "invalid", "error"}
-ALLOWED_COMPARISONS = {"not_requested", "complete", "partial", "unavailable"}
-COUNT_FIELDS = ("notes", "cards", "media")
-MEDIA_FIELDS = (
-    "objects",
-    "bindings",
-    "references",
-    "missing_references",
-    "unsafe_references",
-    "unused_bindings",
-    "unique_bytes",
-)
-MEDIA_SOURCE_MODES = {"inline", "path_backed"}
-POLICY_FIELDS = {"status", "threshold", "highest_risk", "blocking_findings"}
-POLICY_STATUSES = {"passed", "blocked", "not_evaluated"}
-RISK_LEVELS = {"info", "low", "medium", "high", "critical"}
-
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Any
+from .artifact import ApkgArtifact
 
 @dataclass(frozen=True)
-class ValidationReport:
-    """Diagnostics from core validation, without normalization or APKG writing."""
+class BuildCounts:
+    notes: int
+    cards: int
+    media: int
 
-    diagnostics: tuple[Diagnostic, ...]
+class ComparisonReport:
+    def __init__(self, snapshot: dict[str, Any]) -> None:
+        self._snapshot = deepcopy(snapshot)
 
-    @property
-    def has_errors(self) -> bool:
-        return any(diagnostic.severity == "error" for diagnostic in self.diagnostics)
-
-    def ensure_success(self) -> None:
-        if self.has_errors:
-            raise DiagnosticsError("anki-forge validation failed", report=self)
-
-
-ArtifactT = TypeVar("ArtifactT", bound=Mapping[str, Any], covariant=True)
-
-
-@dataclass(frozen=True)
-class BuildReport(Generic[ArtifactT]):
-    status: str
-    comparison: str
-    artifact: ArtifactT | None
-    counts: Mapping[str, int]
-    media: Mapping[str, Any]
-    diagnostics: tuple[Diagnostic, ...]
-    inspect: Mapping[str, Any] | None = None
-    previous_inspect: Mapping[str, Any] | None = None
-    update_safety: Mapping[str, Any] | None = None
-    diff: Mapping[str, Any] | None = None
-    risk: Mapping[str, Any] | None = None
-    metrics: Mapping[str, Any] = field(default_factory=lambda: {"duration_ms": 0})
-    policy: Mapping[str, Any] = field(default_factory=lambda: {
-        "status": "not_evaluated", "threshold": None, "highest_risk": None, "blocking_findings": [],
-    })
-    tool_version: str = "anki-forge-python"
-    schema_version: str = BUILD_REPORT_SCHEMA_VERSION
-    failure_cause: str | None = None
-    failure_code: str | None = None
-    _raw: dict[str, Any] | None = field(default=None, repr=False, compare=False)
-
-    @classmethod
-    def from_json(cls, payload: object) -> BuildReport[Mapping[str, Any]]:
-        if not isinstance(payload, dict):
-            raise ProtocolError("build report must be a JSON object")
-        payload = deepcopy(payload)
-        if payload.get("kind") != BUILD_REPORT_KIND:
-            raise ProtocolError("build report has unexpected kind")
-        if payload.get("schema_version") != BUILD_REPORT_SCHEMA_VERSION:
-            raise ProtocolError("build report has unexpected schema_version")
-
-        status = _required_non_empty_string(payload, "status")
-        if status not in ALLOWED_STATUSES:
-            raise ProtocolError(f"build report has unsupported status: {status}")
-        comparison = _required_non_empty_string(payload, "comparison")
-        if comparison not in ALLOWED_COMPARISONS:
-            raise ProtocolError(f"build report has unsupported comparison: {comparison}")
-
-        artifact = _artifact(payload.get("artifact"))
-        counts = _required_int_map(payload, "counts", COUNT_FIELDS)
-        media = _required_media(payload)
-        diagnostics = _diagnostics(payload.get("diagnostics"))
-
-        _metrics(payload.get("metrics"))
-        _policy(payload.get("policy"))
-
-        return BuildReport(
-            status=status,
-            comparison=comparison,
-            artifact=artifact,
-            counts=counts,
-            media=media,
-            diagnostics=diagnostics,
-            inspect=_optional_object(payload, "inspect"),
-            previous_inspect=_optional_object(payload, "previous_inspect"),
-            update_safety=_optional_object(payload, "update_safety"),
-            diff=_optional_object(payload, "diff"),
-            risk=_optional_object(payload, "risk"),
-            metrics=deepcopy(payload["metrics"]),
-            policy=deepcopy(payload["policy"]),
-            tool_version=_required_non_empty_string(payload, "tool_version"),
-            schema_version=payload["schema_version"],
-            failure_cause=_nullable_string(payload, "failure_cause") if "failure_cause" in payload else None,
-            failure_code=_nullable_string(payload, "failure_code") if "failure_code" in payload else None,
-            _raw=deepcopy(payload),
-        )
+    def snapshot(self) -> dict[str, Any]:
+        return deepcopy(self._snapshot)
 
     @property
-    def raw(self) -> dict[str, Any]:
-        """Return an independent copy of the complete report, including extensions."""
-        return self.to_json()
-
-    def to_json(self) -> dict[str, Any]:
-        if self._raw is not None:
-            return deepcopy(self._raw)
-        return _report_to_json(self)
-
-    def ensure_success(self) -> None:
-        has_error = any(diagnostic.severity in {"error", "critical"} for diagnostic in self.diagnostics)
-        if self.status != "success" or self.artifact is None or has_error:
-            raise BuildError(self)
-
-    def close(self) -> None:
-        """Release this report's reference; independently held artifacts stay alive."""
-        object.__setattr__(self, "artifact", None)
-
-    def __copy__(self) -> BuildReport[ArtifactT]:
-        return replace(self, artifact=copy(self.artifact) if self.artifact is not None else None)
-
-    def __enter__(self) -> BuildReport[ArtifactT]:
-        return self
-
-    def __exit__(self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: TracebackType | None) -> None:
-        self.close()
-
-
-@dataclass(frozen=True)
-class ProjectDiffReport:
-    status: str
-    comparison: str
-    diagnostics: tuple[Diagnostic, ...]
-    current_inspect: Mapping[str, Any] | None
-    previous_inspect: Mapping[str, Any] | None
-    update_safety: Mapping[str, Any] | None
-    diff: Mapping[str, Any] | None
-    risk: Mapping[str, Any] | None
-    metrics: Mapping[str, Any]
-    failure_cause: str | None
-    _raw: dict[str, Any] = field(repr=False, compare=False)
-
-    @classmethod
-    def from_json(cls, payload: object) -> ProjectDiffReport:
-        if not isinstance(payload, dict):
-            raise ProtocolError("comparison report must be a JSON object")
-        payload = deepcopy(payload)
-        status = _required_non_empty_string(payload, "status")
-        comparison = _required_non_empty_string(payload, "comparison")
-        if status not in ALLOWED_STATUSES or comparison not in ALLOWED_COMPARISONS:
-            raise ProtocolError("comparison report has unsupported status/comparison")
-        _metrics(payload.get("metrics"))
-        return cls(
-            status=status, comparison=comparison, diagnostics=_diagnostics(payload.get("diagnostics")),
-            current_inspect=_optional_object(payload, "current_inspect"),
-            previous_inspect=_optional_object(payload, "previous_inspect"),
-            update_safety=_optional_object(payload, "update_safety"), diff=_optional_object(payload, "diff"),
-            risk=_optional_object(payload, "risk"), metrics=deepcopy(payload["metrics"]),
-            failure_cause=_nullable_string(payload, "failure_cause") if "failure_cause" in payload else None,
-            _raw=deepcopy(payload),
-        )
+    def findings(self) -> tuple[dict[str, Any], ...]:
+        return tuple(deepcopy(self._snapshot["findings"]))
 
     @property
-    def raw(self) -> dict[str, Any]:
-        return self.to_json()
+    def allows_publication(self) -> bool:
+        return bool(self._snapshot["policy"]["allows_publication"])
 
-    def to_json(self) -> dict[str, Any]:
-        return deepcopy(self._raw)
+    @property
+    def policy(self) -> dict[str, Any]:
+        return deepcopy(self._snapshot["policy"])
 
-    def ensure_success(self) -> None:
-        if self.status != "success" or any(d.severity == "error" for d in self.diagnostics):
-            raise ProjectDiffError(self)
+class BuildReport:
+    """Observations only: this report neither owns a file nor represents success."""
+    def __init__(self, snapshot: dict[str, Any]) -> None:
+        self._snapshot = deepcopy(snapshot)
 
+    def snapshot(self) -> dict[str, Any]:
+        return deepcopy(self._snapshot)
 
-def _required_non_empty_string(payload: dict[str, Any], key: str) -> str:
-    value = payload.get(key)
-    if not isinstance(value, str) or not value:
-        raise ProtocolError(f"build report {key} must be a non-empty string")
-    return value
+    @property
+    def counts(self) -> BuildCounts:
+        return BuildCounts(**self._snapshot["counts"])
 
+    @property
+    def diagnostics(self) -> tuple[dict[str, Any], ...]:
+        return tuple(deepcopy(self._snapshot["diagnostics"]))
 
-def _required_int_map(payload: dict[str, Any], key: str, fields: tuple[str, ...]) -> dict[str, int]:
-    value = payload.get(key)
-    if not isinstance(value, dict):
-        raise ProtocolError(f"build report {key} must be an object")
-    if not set(fields).issubset(value):
-        raise ProtocolError(f"build report {key} is missing required fields")
-    parsed: dict[str, int] = {}
-    for field in fields:
-        parsed[field] = _non_negative_int(value.get(field), f"{key}.{field}")
-    return parsed
+    @property
+    def comparison(self) -> ComparisonReport | None:
+        value = self._snapshot["comparison"]
+        return ComparisonReport(value) if value is not None else None
 
+class BuildOutput:
+    """A successful build with an owning artifact and independent observations."""
+    def __init__(self, artifact: ApkgArtifact, snapshot: dict[str, Any]) -> None:
+        self.artifact = artifact
+        self._snapshot = deepcopy(snapshot)
+        self.report = BuildReport(snapshot["report"])
 
-def _required_media(payload: dict[str, Any]) -> dict[str, Any]:
-    value = payload.get("media")
-    if not isinstance(value, dict):
-        raise ProtocolError("build report media must be an object")
-    if not set(MEDIA_FIELDS).issubset(value):
-        raise ProtocolError("build report media is missing required fields")
-
-    parsed: dict[str, Any] = {}
-    for field in MEDIA_FIELDS:
-        parsed[field] = _non_negative_int(value.get(field), f"media.{field}")
-
-    entries = value.get("entries", [])
-    if not isinstance(entries, list):
-        raise ProtocolError("build report media.entries must be an array")
-    parsed_entries: list[dict[str, Any]] = []
-    for index, entry in enumerate(entries):
-        if not isinstance(entry, dict):
-            raise ProtocolError(f"build report media.entries[{index}] must be an object")
-        media_id = entry.get("id")
-        filename = entry.get("filename")
-        source_mode = entry.get("source_mode")
-        if not isinstance(media_id, str) or not media_id:
-            raise ProtocolError(f"build report media.entries[{index}].id must be a non-empty string")
-        if not isinstance(filename, str) or not filename:
-            raise ProtocolError(f"build report media.entries[{index}].filename must be a non-empty string")
-        if not isinstance(source_mode, str) or source_mode not in MEDIA_SOURCE_MODES:
-            raise ProtocolError(f"build report media.entries[{index}].source_mode is unsupported")
-        parsed_entries.append(
-            {
-                "id": media_id,
-                "filename": filename,
-                "source_mode": source_mode,
-                "size_bytes": _non_negative_int(
-                    entry.get("size_bytes"),
-                    f"media.entries[{index}].size_bytes",
-                ),
-            }
-        )
-    parsed["entries"] = parsed_entries
-    return parsed
-
-
-def _artifact(value: object) -> Mapping[str, Any] | None:
-    if value is None:
-        return None
-    if not isinstance(value, dict):
-        raise ProtocolError("build report artifact must be an object or null")
-    if "path" not in value:
-        raise ProtocolError("build report artifact must contain path")
-    if not isinstance(value["path"], str) or not value["path"]:
-        raise ProtocolError("build report artifact.path must be a non-empty string")
-    return value
-
-
-def _metrics(value: object) -> None:
-    if not isinstance(value, dict):
-        raise ProtocolError("build report metrics must be an object")
-    if "duration_ms" not in value:
-        raise ProtocolError("build report metrics must contain duration_ms")
-    _non_negative_int(value.get("duration_ms"), "metrics.duration_ms")
-
-
-def _policy(value: object) -> None:
-    if not isinstance(value, dict):
-        raise ProtocolError("build report policy must be an object")
-    if not POLICY_FIELDS.issubset(value):
-        raise ProtocolError("build report policy is missing required fields")
-    status = value["status"]
-    if not isinstance(status, str) or status not in POLICY_STATUSES:
-        raise ProtocolError("build report policy.status is unsupported")
-    for key in ("threshold", "highest_risk"):
-        risk_value = value[key]
-        if risk_value is not None and (not isinstance(risk_value, str) or risk_value not in RISK_LEVELS):
-            raise ProtocolError(f"build report policy.{key} is unsupported")
-    blocking_findings = value["blocking_findings"]
-    if not isinstance(blocking_findings, list) or not all(isinstance(item, str) for item in blocking_findings):
-        raise ProtocolError("build report policy.blocking_findings must be an array of strings")
-
-
-def _non_negative_int(value: object, label: str) -> int:
-    if type(value) is not int or value < 0:
-        raise ProtocolError(f"build report {label} must be a non-negative integer")
-    return value
-
-
-def _diagnostics(value: object) -> tuple[Diagnostic, ...]:
-    if not isinstance(value, list):
-        raise ProtocolError("build report diagnostics must be an array")
-    diagnostics: list[Diagnostic] = []
-    required_fields = {"code", "severity", "domain", "stage", "path", "message", "suggested_fix"}
-    for item in value:
-        if not isinstance(item, dict):
-            raise ProtocolError("build report diagnostic must be an object")
-        if not required_fields.issubset(item):
-            raise ProtocolError("build report diagnostic is missing required v2 fields")
-        severity = _required_non_empty_string(item, "severity")
-        if severity not in {"error", "warning", "info"}:
-            raise ProtocolError("build report diagnostic severity is unsupported")
-        diagnostics.append(
-            Diagnostic(
-                code=_required_non_empty_string(item, "code"),
-                severity=severity,
-                message=_required_non_empty_string(item, "message"),
-                domain=_required_non_empty_string(item, "domain"),
-                stage=_required_non_empty_string(item, "stage"),
-                path=_nullable_string(item, "path"),
-                span=_source_span(item.get("span")),
-                suggested_fix=_nullable_string(item, "suggested_fix"),
-            )
-        )
-    return tuple(diagnostics)
-
-
-def _source_span(value: object) -> SourceSpan | None:
-    if value is None:
-        return None
-    if not isinstance(value, dict):
-        raise ProtocolError("build report diagnostic span must be an object or null")
-    byte_start = _non_negative_int(value.get("byte_start"), "diagnostics.span.byte_start")
-    byte_end = _non_negative_int(value.get("byte_end"), "diagnostics.span.byte_end")
-    if byte_end < byte_start:
-        raise ProtocolError("build report diagnostic span byte_end must not precede byte_start")
-    return SourceSpan(byte_start=byte_start, byte_end=byte_end)
-
-
-def _nullable_string(payload: dict[str, Any], key: str) -> str | None:
-    value = payload[key]
-    if value is None:
-        return None
-    if not isinstance(value, str):
-        raise ProtocolError(f"build report diagnostic {key} must be a string or null")
-    return value
-
-
-def _optional_object(payload: dict[str, Any], key: str) -> Mapping[str, Any] | None:
-    value = payload.get(key)
-    if value is None:
-        return None
-    if not isinstance(value, dict):
-        raise ProtocolError(f"build report {key} must be an object")
-    return value
-
-
-DIAGNOSTIC_DOMAIN_BY_PREFIX = {
-    "AFID": "identity",
-    "COMPARE": "comparison",
-    "DECK": "deck",
-    "MEDIA": "media",
-    "NOTETYPE": "notetype",
-    "TEMPLATE": "notetype",
-    "PRODUCT": "product",
-    "PROJECT": "project",
-    "RISK": "risk",
-    "UPDATE": "update_safety",
-}
-DIAGNOSTIC_STAGE_BY_PREFIX = {
-    "AFID": "validate",
-    "COMPARE": "compare",
-    "DECK": "validate",
-    "MEDIA": "normalize",
-    "NOTETYPE": "validate",
-    "TEMPLATE": "validate",
-    "PRODUCT": "validate",
-    "PROJECT": "build",
-    "RISK": "risk",
-    "UPDATE": "update_safety",
-}
-
-def _diagnostic_prefix(code: str) -> str | None:
-    prefix, separator, _ = code.partition(".")
-    if not separator:
-        return None
-    return prefix
-
-
-def _inferred_diagnostic_domain(code: str) -> str:
-    prefix = _diagnostic_prefix(code)
-    if prefix is None:
-        return "unknown"
-    return DIAGNOSTIC_DOMAIN_BY_PREFIX.get(prefix, "unknown")
-
-
-def _inferred_diagnostic_stage(code: str) -> str:
-    prefix = _diagnostic_prefix(code)
-    if prefix is None:
-        return "unknown"
-    return DIAGNOSTIC_STAGE_BY_PREFIX.get(prefix, "unknown")
-
-
-def _report_to_json(report: BuildReport) -> dict[str, object]:
-    if report._raw is not None:
-        return report.to_json()
-    return {
-        "kind": "anki-forge-build-report",
-        "schema_version": report.schema_version,
-        "tool_version": report.tool_version,
-        "status": report.status,
-        "comparison": report.comparison,
-        "artifact": dict(report.artifact) if report.artifact is not None else None,
-        "counts": dict(report.counts),
-        "media": dict(report.media),
-        "diagnostics": [
-            {
-                "code": diagnostic.code,
-                "severity": diagnostic.severity,
-                "domain": diagnostic.domain or _inferred_diagnostic_domain(diagnostic.code),
-                "stage": diagnostic.stage or _inferred_diagnostic_stage(diagnostic.code),
-                "path": diagnostic.path,
-                "span": (
-                    {
-                        "byte_start": diagnostic.span.byte_start,
-                        "byte_end": diagnostic.span.byte_end,
-                    }
-                    if diagnostic.span is not None
-                    else None
-                ),
-                "message": diagnostic.message,
-                "suggested_fix": diagnostic.suggested_fix,
-            }
-            for diagnostic in report.diagnostics
-        ],
-        "metrics": dict(report.metrics),
-        "policy": dict(report.policy),
-        "inspect": report.inspect,
-        "previous_inspect": report.previous_inspect,
-        "update_safety": report.update_safety,
-        "diff": report.diff,
-        "risk": report.risk,
-        "failure_cause": report.failure_cause,
-        "failure_code": report.failure_code,
-    }
+    def snapshot(self) -> dict[str, Any]:
+        return deepcopy(self._snapshot)

@@ -1,7 +1,9 @@
 use crate::authoring_core::NormalizedIr;
 use anyhow::Result;
 
-use crate::writer_core::model::{BuildContext, PackageBuildResult, WriterGuidPlan, WriterPolicy};
+use crate::writer_core::model::{
+    BuildContext, BuildDiagnosticItem, PackageBuildResult, WriterGuidPlan, WriterPolicy,
+};
 use crate::writer_core::staging::{
     error_result, error_result_with_domain, invalid_result, success_result, BorrowedStagingPackage,
     ErrorResultDetails,
@@ -9,6 +11,36 @@ use crate::writer_core::staging::{
 
 pub use crate::writer_core::staging::BuildArtifactTarget;
 
+/// Keep process-local causes beside the legacy serializable result. Native
+/// callers must not reconstruct failures from diagnostic text.
+pub(crate) struct BuildAttempt {
+    pub(crate) result: PackageBuildResult,
+    pub(crate) cause: Option<anyhow::Error>,
+}
+
+impl From<PackageBuildResult> for BuildAttempt {
+    fn from(result: PackageBuildResult) -> Self {
+        Self {
+            result,
+            cause: None,
+        }
+    }
+}
+
+fn failed_attempt(
+    mut result: PackageBuildResult,
+    mut observations: Vec<BuildDiagnosticItem>,
+    cause: anyhow::Error,
+) -> BuildAttempt {
+    observations.append(&mut result.diagnostics.items);
+    result.diagnostics.items = observations;
+    BuildAttempt {
+        result,
+        cause: Some(cause),
+    }
+}
+
+#[cfg(feature = "internal-tools")]
 pub fn build(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,
@@ -24,6 +56,7 @@ pub fn build(
     )
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn build_with_guid_plan(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,
@@ -40,6 +73,7 @@ pub fn build_with_guid_plan(
         guid_plan,
         None,
     )
+    .map(|attempt| attempt.result)
 }
 
 /// Product builds retain staging artifacts but keep the APKG private until
@@ -52,7 +86,7 @@ pub(crate) fn build_with_identity_plan(
     apkg_target: &BuildArtifactTarget,
     guid_plan: Option<&WriterGuidPlan>,
     notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
-) -> Result<PackageBuildResult> {
+) -> Result<BuildAttempt> {
     build_with_prepared_media(
         normalized_ir,
         writer_policy,
@@ -75,7 +109,7 @@ pub(crate) fn build_with_prepared_media(
     guid_plan: Option<&WriterGuidPlan>,
     notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
     prepared_media: Option<&crate::prepared_media::PreparedMedia>,
-) -> Result<PackageBuildResult> {
+) -> Result<BuildAttempt> {
     if !build_context.materialize_staging {
         return Ok(error_result(
             writer_policy,
@@ -85,7 +119,8 @@ pub(crate) fn build_with_prepared_media(
             "build",
             "materialize_staging",
             Some(format!("build-context={}", build_context.id)),
-        ));
+        )
+        .into());
     }
 
     let package = match BorrowedStagingPackage::from_normalized_with_ids(
@@ -95,44 +130,48 @@ pub(crate) fn build_with_prepared_media(
         notetype_ids,
     ) {
         Ok(package) => package,
-        Err(diagnostics) => return Ok(invalid_result(writer_policy, build_context, diagnostics)),
+        Err(diagnostics) => {
+            return Ok(invalid_result(writer_policy, build_context, diagnostics).into())
+        }
     };
 
     let diagnostics = package.diagnostics().to_vec();
     let materialized =
         match package.materialize_with_prepared_media(artifact_target, prepared_media) {
             Ok(materialized) => materialized,
-            Err(err) => {
-                if let Some(media_err) =
-                    err.downcast_ref::<crate::writer_core::media::MediaWriterError>()
+            Err(cause) => {
+                let result = if let Some(media_err) =
+                    cause.downcast_ref::<crate::writer_core::media::MediaWriterError>()
                 {
-                    return Ok(error_result_with_domain(
+                    error_result_with_domain(
                         writer_policy,
                         build_context,
                         ErrorResultDetails {
                             code: media_err.diagnostic_code().into(),
-                            summary: err.to_string(),
+                            summary: cause.to_string(),
                             domain: "media".into(),
                             stage: "materialize_staging".into(),
                             operation: "write_media".into(),
                             path: media_err.diagnostic_path(),
                         },
-                    ));
-                }
-                return Ok(error_result(
-                    writer_policy,
-                    build_context,
-                    "PHASE3.STAGING_MATERIALIZATION_FAILED",
-                    err.to_string(),
-                    "materialize_staging",
-                    "write_manifest",
-                    Some(
-                        artifact_target
-                            .staging_manifest_path()
-                            .display()
-                            .to_string(),
-                    ),
-                ));
+                    )
+                } else {
+                    error_result(
+                        writer_policy,
+                        build_context,
+                        "PHASE3.STAGING_MATERIALIZATION_FAILED",
+                        cause.to_string(),
+                        "materialize_staging",
+                        "write_manifest",
+                        Some(
+                            artifact_target
+                                .staging_manifest_path()
+                                .display()
+                                .to_string(),
+                        ),
+                    )
+                };
+                return Ok(failed_attempt(result, diagnostics, cause));
             }
         };
 
@@ -145,47 +184,37 @@ pub(crate) fn build_with_prepared_media(
             prepared_media,
         ) {
             Ok(apkg) => Some(apkg),
-            Err(err) => {
-                if err
+            Err(cause) => {
+                let identity_failure = if cause
                     .to_string()
                     .starts_with("UPDATE.WRITER_GUID_PLAN_MISMATCH")
                 {
-                    return Ok(error_result_with_domain(
-                        writer_policy,
-                        build_context,
-                        ErrorResultDetails {
-                            code: "UPDATE.WRITER_GUID_PLAN_MISMATCH".into(),
-                            summary: err.to_string(),
-                            domain: "identity".into(),
-                            stage: "emit_apkg".into(),
-                            operation: "validate_guid_plan".into(),
-                            path: None,
-                        },
-                    ));
-                }
-                if err
+                    Some(("UPDATE.WRITER_GUID_PLAN_MISMATCH", "validate_guid_plan"))
+                } else if cause
                     .to_string()
                     .starts_with("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE")
                 {
-                    return Ok(error_result_with_domain(
+                    Some(("UPDATE.NOTE_DATA_METADATA_UNMERGEABLE", "merge_note_data"))
+                } else {
+                    None
+                };
+                let result = if let Some((code, operation)) = identity_failure {
+                    error_result_with_domain(
                         writer_policy,
                         build_context,
                         ErrorResultDetails {
-                            code: "UPDATE.NOTE_DATA_METADATA_UNMERGEABLE".into(),
-                            summary: err.to_string(),
+                            code: code.into(),
+                            summary: cause.to_string(),
                             domain: "identity".into(),
                             stage: "emit_apkg".into(),
-                            operation: "merge_note_data".into(),
+                            operation: operation.into(),
                             path: None,
                         },
-                    ));
-                }
-                return Ok(apkg_error_result(
-                    writer_policy,
-                    build_context,
-                    apkg_target,
-                    err,
-                ));
+                    )
+                } else {
+                    apkg_error_result(writer_policy, build_context, apkg_target, &cause)
+                };
+                return Ok(failed_attempt(result, diagnostics, cause));
             }
         }
     } else {
@@ -197,14 +226,14 @@ pub(crate) fn build_with_prepared_media(
         result.package_fingerprint = Some(apkg.package_fingerprint);
     }
 
-    Ok(result)
+    Ok(result.into())
 }
 
 fn apkg_error_result(
     writer_policy: &WriterPolicy,
     build_context: &BuildContext,
     artifact_target: &BuildArtifactTarget,
-    err: anyhow::Error,
+    err: &anyhow::Error,
 ) -> PackageBuildResult {
     if let Some(media_err) = err.downcast_ref::<crate::writer_core::media::MediaWriterError>() {
         return error_result_with_domain(
@@ -254,9 +283,10 @@ mod tests {
             &sample_writer_policy(),
             &sample_build_context(),
             &BuildArtifactTarget::new("/tmp/anki-forge-apkg-error", "artifacts/error"),
-            anyhow::Error::new(
+            &anyhow::Error::new(
                 crate::writer_core::media::MediaWriterError::CasObjectMissing {
                     path: missing_path,
+                    cause: std::io::Error::from(std::io::ErrorKind::NotFound),
                 },
             ),
         );
@@ -276,7 +306,7 @@ mod tests {
             &sample_writer_policy(),
             &sample_build_context(),
             &BuildArtifactTarget::new("/tmp/anki-forge-apkg-error", "artifacts/error"),
-            anyhow::anyhow!("zip write failed"),
+            &anyhow::anyhow!("zip write failed"),
         );
 
         assert_eq!(result.result_status, "error");

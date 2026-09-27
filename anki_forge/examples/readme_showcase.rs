@@ -1,5 +1,6 @@
 //! Reproducible README cards. Run from a checkout; no external media is needed.
-use anki_forge::prelude::*;
+use ankiforge::schema::GenerationRule;
+use ankiforge::{BuildOptions, Field, Media, Note, NoteType, Project, Template};
 use std::{f32::consts::TAU, fs, path::PathBuf};
 
 fn main() -> anyhow::Result<()> {
@@ -7,14 +8,14 @@ fn main() -> anyhow::Result<()> {
         .nth(1)
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from("readme-showcase.apkg"));
-    let mut project = Project::new("anki-forge Showcase")
-        .stable_id("readme-showcase")
+    let mut project = Project::new("readme-showcase")?
+        .name("anki-forge Showcase")
         .default_deck("anki-forge::Showcase");
-    project.add_note(Note::basic("hola", "hello").stable_id("es:hola"))?;
-    project.add_note(
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    project.add(
+        "sound:pitch",
         Note::cloze("A sound's pitch depends on its {{c1::frequency}}.")
-            .extra("More cycles per second, higher pitch.")
-            .stable_id("sound:pitch"),
+            .field("back_extra", "More cycles per second, higher pitch."),
     )?;
 
     let points = (0..=320)
@@ -24,62 +25,54 @@ fn main() -> anyhow::Result<()> {
     let wave = format!(
         r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 104"><path d="M0 52H320" stroke="#bfad98"/><polyline points="{points}" fill="none" stroke="#bd562e" stroke-width="3"/></svg>"##
     );
-    let picture = project
-        .media_mut()
-        .add_bytes("waveform.svg", wave.into_bytes())?
-        .export_as("waveform.svg")?;
-    let audio = project
-        .media_mut()
-        .add_bytes("concert-a.wav", concert_a())?
-        .export_as("concert-a.wav")?;
-    project.add_notetype(
-        NoteType::custom("ear-training")
-            .name("Ear Training")
-            .field(Field::new("Prompt").key("prompt").identity())
-            .field(Field::new("Answer").key("answer").required())
-            .field(Field::new("Picture").key("picture").required())
-            .field(Field::new("Audio").key("audio").required())
-            .template(
-                Template::new("Listen")
-                    .key("listen")
-                    .front(concat!(
-                        "<div class='eyebrow'>EAR TRAINING</div>",
-                        "<div class='prompt'>{{Prompt}}</div>",
-                        "<div class='wave'>{{Picture}}</div>",
-                        "{{Audio}}"
-                    ))
-                    .back("{{FrontSide}}<hr id='answer'><div class='meaning'>{{Answer}}</div>")
-                    .generate_when(GenerationRule::all(["prompt"])),
-            )
-            .identity(IdentityRecipe::fields(["prompt"]))
-            .css(concat!(
-                ".card { font-family: Arial, sans-serif; text-align: center; ",
-                "background: #f7f1e7; color: #372c25; margin: 0; padding: 24px 18px; }",
-                ".eyebrow { font-size: 11px; letter-spacing: 2px; color: #875d46; }",
-                ".prompt { font-size: 23px; margin: 16px 0 0; }",
-                ".wave img { width: 100%; max-width: 320px; height: 80px; margin: 10px 0; }",
-                "audio { width: 100%; max-width: 290px; height: 34px; }",
-                "#answer { border: 0; border-top: 1px solid #d8c9b9; margin: 20px 0 15px; }",
-                ".meaning { font-size: 20px; }",
-                ".card.nightMode { background: #2b241f; color: #f5e8d7; }",
-                ".nightMode .eyebrow { color: #ddb08d; }"
-            )),
+    let picture =
+        Media::bytes(wave.into_bytes(), "image/svg+xml")?.with_export_name("waveform.svg")?;
+    let audio = Media::bytes(concert_a(), "audio/wav")?.with_export_name("concert-a.wav")?;
+    let model = NoteType::builder("ear-training")
+        .name("Ear Training")
+        .field(Field::new("prompt").name("Prompt"))
+        .field(Field::new("answer").name("Answer").required())
+        .field(Field::new("picture").name("Picture").required())
+        .field(Field::new("audio").name("Audio").required())
+        .template(
+            Template::new("listen")
+                .name("Listen")
+                .front(concat!(
+                    "<div class='eyebrow'>EAR TRAINING</div>",
+                    "<div class='prompt'>{{prompt}}</div>",
+                    "<div class='wave'>{{picture}}</div>",
+                    "{{audio}}"
+                ))
+                .back("{{FrontSide}}<hr id='answer'><div class='meaning'>{{answer}}</div>")
+                .generate_when(GenerationRule::all(["prompt"])),
+        )
+        .css(concat!(
+            ".card { font-family: Arial, sans-serif; text-align: center; ",
+            "background: #f7f1e7; color: #372c25; margin: 0; padding: 24px 18px; }",
+            ".eyebrow { font-size: 11px; letter-spacing: 2px; color: #875d46; }",
+            ".prompt { font-size: 23px; margin: 16px 0 0; }",
+            ".wave img { width: 100%; max-width: 320px; height: 80px; margin: 10px 0; }",
+            "audio { width: 100%; max-width: 290px; height: 34px; }",
+            "#answer { border: 0; border-top: 1px solid #d8c9b9; margin: 20px 0 15px; }",
+            ".meaning { font-size: 20px; }",
+            ".card.nightMode { background: #2b241f; color: #f5e8d7; }",
+            ".nightMode .eyebrow { color: #ddb08d; }"
+        ))
+        .build()?;
+    project.add(
+        "sound:a4",
+        model
+            .note()
+            .field("prompt", "Name this pitch.")
+            .field("answer", "A4 · 440 Hz")
+            .field("picture", picture.image())
+            .field("audio", audio.sound()),
     )?;
-    project.add_note(
-        Note::new("ear-training")
-            .stable_id("sound:a4")
-            .text("prompt", "Name this pitch.")
-            .text("answer", "A4 · 440 Hz")
-            .image("picture", picture)
-            .sound("audio", audio),
-    )?;
-    project.validate().ensure_success()?;
     if let Some(parent) = output.parent().filter(|p| !p.as_os_str().is_empty()) {
         fs::create_dir_all(parent)?;
     }
-    let report = project.write_apkg(&output)?;
-    report.ensure_success()?;
-    println!("{}", report.pretty_report());
+    let report = project.build(BuildOptions::to(&output))?;
+    println!("{}", serde_json::to_string_pretty(&report.snapshot())?);
     Ok(())
 }
 

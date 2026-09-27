@@ -1,5 +1,7 @@
 # ADR 0022: Preserve Node artifact ownership and copy authoring state explicitly
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 Status: implemented locally; external release gates remain separate.
 
 The supported comparison target is Rust's product interface, as defined by

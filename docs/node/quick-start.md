@@ -1,12 +1,13 @@
-# Your first deck with Node
+# Your first publication with Node
 
-Build one Basic note and one Cloze note using the native Node SDK. The result
-contains two notes and three cards. This is a source-checkout workflow for the
-0.2 candidate; see [release status](../compatibility.md).
+The SDK uses Rust's default public API through a native addon. A Project has an
+explicit namespace; every note has an explicit source key. A successful build
+returns an artifact and observations. See [release status](../compatibility.md)
+before choosing a registry package.
 
 ## Build and run from source
 
-Use Node 22.13 or later and Rust 1.92. From the repository root:
+Use Node 22.13+ and Rust 1.92+. From the repository root:
 
 ```sh
 cd bindings/node
@@ -15,66 +16,84 @@ npm run build
 npm run example:minimal
 ```
 
-The example prints the APKG's absolute path in a temporary directory. Open that
-file with Anki to see **hola → hello** and the two Cloze questions **uno / dos**.
-The example helper selects the native binary built for your host.
-
-This is the complete program run by the helper:
+The helper selects your rebuilt host binary. This source example creates a
+publication, compares an edited version and builds the update. Its temporary
+artifacts are closed after use:
 
 <!-- source: bindings/node/examples/basic.mjs -->
 ```js
-import { Project, Note } from 'anki-forge-node';
-import os from 'node:os';
-import path from 'node:path';
-import fs from 'node:fs/promises';
-
-const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), 'anki-forge-example-'));
-const project = new Project('Spanish', {
-  stableId: 'spanish-a1',
-  defaultDeck: 'Spanish::A1',
-  baseDir,
-});
-project.addNote(Note.basic('hola', 'hello', { stableId: 'es:hola' }));
-project.addNote(Note.cloze('{{c1::uno}}, {{c2::dos}}', { stableId: 'es:numbers' }));
-(await project.validate()).ensureSuccess();
-const report = await project.writeApkg('spanish.apkg');
-report.ensureSuccess();
-console.log(report.prettyReport());
-console.log(`APKG: ${report.artifact.path}`);
+import {
+  Project,
+  Note,
+  Content,
+  BuildOptions,
+  CompareOptions,
+} from "../dist/index.mjs";
+const project = new Project("example").name("Example").defaultDeck("Learning");
+project.add("hello", Note.basic("Hello <world>", Content.html("<b>你好</b>")));
+const first = await project.build(BuildOptions.temporary());
+try {
+  const next = new Project("example").defaultDeck("Learning");
+  next.add("hello", Note.basic("Hello <world>", "你好，世界"));
+  console.log(
+    (
+      await next.compare(CompareOptions.against(first.artifact.path))
+    ).snapshot(),
+  );
+  const updated = await next.build(
+    BuildOptions.temporary().updateFrom(first.artifact.path),
+  );
+  console.log(updated.snapshot());
+  await updated.artifact.close();
+} finally {
+  await first.artifact.close();
+}
 ```
 <!-- /source -->
 
-## Install a local build in your application
+To retain an APKG for manual import, choose `BuildOptions.to('example.apkg')`
+instead of temporary output, or call `output.artifact.persistTo(path)` while the
+original owner remains alive. Closing a persistent artifact does not delete it.
 
-From `bindings/node`, package the built SDK and its host-platform binary:
+## Install a local build
+
+From `bindings/node`, run:
 
 ```sh
 npm run pack:local
 ```
 
-The command prints an `artifacts/<version>/<platform>/` directory. It contains
-the main `anki-forge-node` tarball and a separate platform tarball, plus an
-integrity manifest. In your application's directory, install **both actual files**
-with `npm install --offline --ignore-scripts --omit=optional`, followed by their
-absolute paths. Explicitly installing the platform tarball avoids requesting
-unpublished optional platform packages from a registry.
+Install both actual tarballs printed by that command: the facade and matching
+host-native package. For an unpublished local build, pass their absolute paths
+to `npm install --offline --ignore-scripts --omit=optional`. Installing the
+host-native tarball explicitly avoids fetching a candidate platform version from
+a registry.
 
-Save the program above as `make-deck.mjs` and run `node make-deck.mjs`. To write
-into your application directory, set `baseDir` to `process.cwd()` instead of the
-example's generated temporary directory. Use `.mjs` or configure `type: module`.
-CommonJS uses `require('anki-forge-node')`; TypeScript consumers should install
-TypeScript and `@types/node` as development dependencies.
+Application code imports from `anki-forge-node`; the repository example above
+uses its sibling built `dist` directory. A minimal installed application is:
 
-A future public installation uses the released package and matching platform
-binary. Confirm registry availability and platform support before relying on it.
+```js
+import { Project, Note, BuildOptions } from 'anki-forge-node';
+const project = new Project('spanish').defaultDeck('Spanish');
+project.add('hola', Note.basic('hola', 'hello'));
+const output = await project.build(BuildOptions.to('spanish.apkg'));
+console.log(output.artifact.path, output.report.counts);
+await output.artifact.close();
+```
 
-## Await each operation
+Use `.mjs` or configure `type: module`. CommonJS can
+`require('anki-forge-node')`; both formats share the same implementation and
+class identities. TypeScript declarations ship with the package.
 
-`addNote` and `addNoteType` are synchronous. Media registration, validation,
-importing bundles and exporting are asynchronous. Await each asynchronous
-operation before using the same Project/Deck again. Independent objects may work
-concurrently. Errors carry structured codes and reports.
+## Values and asynchronous operations
 
-Continue with the [Node API](api.md), [core concepts](../concepts.md), or
-[update workflow](../updates.md). [Installation troubleshooting](../troubleshooting.md#installation)
-covers native load and candidate-package problems.
+`add` and completed-model construction are synchronous. Media import, bundle
+loading, comparison, build, artifact persistence and artifact close are
+asynchronous. Await their results. Build and compare capture project state when
+invoked, so later additions cannot alter an in-flight request. Clone a project
+when you want independent future edits.
+
+Strings mean Text for every note kind. Use `Content.html` for intentional HTML.
+Models and media are reusable immutable values; no separate registration step
+is required. Continue with the [Node API](api.md), [core concepts](../concepts.md),
+or [update workflow](../updates.md).

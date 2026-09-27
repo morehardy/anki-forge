@@ -77,17 +77,14 @@ fn resolve_request_path(cwd: &Path, path: &Path) -> PathBuf {
     }
 }
 
-fn resolve_runtime(
-    options: &RuntimeOptions,
-) -> anyhow::Result<anki_forge::runtime::ResolvedRuntime> {
+fn resolve_runtime(options: &RuntimeOptions) -> anyhow::Result<ankiforge::tools::ResolvedRuntime> {
     let cwd = resolved_cwd(options)?;
     if let Some(manifest_path) = &options.manifest_path {
         let manifest_path = resolve_request_path(&cwd, manifest_path);
-        return anki_forge::runtime::load_bundle_from_manifest(manifest_path)
-            .map(|bundle| bundle.runtime);
+        return ankiforge::tools::load_runtime(manifest_path);
     }
 
-    anki_forge::runtime::discover_workspace_runtime(cwd)
+    ankiforge::tools::discover_workspace_runtime(cwd)
 }
 
 fn print_json(text: String) {
@@ -95,9 +92,9 @@ fn print_json(text: String) {
 }
 
 fn main() -> anyhow::Result<()> {
-    let path = env::args().nth(1).context(
-        "usage: cargo run -p anki_forge --example conformance_surface -- <request.json>",
-    )?;
+    let path = env::args()
+        .nth(1)
+        .context("usage: cargo run -p ankiforge --example conformance_surface -- <request.json>")?;
     let raw = fs::read_to_string(&path)
         .with_context(|| format!("failed to read request file: {path}"))?;
     let envelope: ConformanceEnvelope =
@@ -110,8 +107,8 @@ fn main() -> anyhow::Result<()> {
                 serde_json::from_value(envelope.request).context("normalize request is invalid")?;
             let runtime = resolve_runtime(&envelope.runtime_options)?;
             let input_path = resolve_request_path(&cwd, &request.input_path);
-            let result = anki_forge::runtime::normalize_from_path(&runtime, &input_path)?;
-            print_json(anki_forge::authoring::to_authoring_canonical_json(&result)?);
+            let result = ankiforge::tools::normalize_from_path(&runtime, &input_path)?;
+            print_json(ankiforge::tools::canonical_json(&result)?);
         }
         "build" => {
             let request: BuildRequest =
@@ -119,36 +116,36 @@ fn main() -> anyhow::Result<()> {
             let runtime = resolve_runtime(&envelope.runtime_options)?;
             let input_path = resolve_request_path(&cwd, &request.input_path);
             let artifacts_dir = resolve_request_path(&cwd, &request.artifacts_dir);
-            let result = anki_forge::runtime::build_from_path(
+            let result = ankiforge::tools::build_from_path(
                 &runtime,
                 &input_path,
                 &request.writer_policy,
                 &request.build_context,
                 &artifacts_dir,
             )?;
-            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
+            print_json(ankiforge::tools::canonical_json(&result)?);
         }
         "inspect" => {
             let request: InspectRequest =
                 serde_json::from_value(envelope.request).context("inspect request is invalid")?;
             let result = match (request.staging_path, request.apkg_path) {
                 (Some(path), None) => {
-                    anki_forge::runtime::inspect_staging_path(resolve_request_path(&cwd, &path))?
+                    ankiforge::tools::inspect_staging_path(resolve_request_path(&cwd, &path))?
                 }
                 (None, Some(path)) => {
-                    anki_forge::runtime::inspect_apkg_path(resolve_request_path(&cwd, &path))?
+                    ankiforge::tools::inspect_apkg_path(resolve_request_path(&cwd, &path))?
                 }
                 _ => bail!("inspect request requires exactly one of staging or apkg"),
             };
-            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
+            print_json(ankiforge::tools::canonical_json(&result)?);
         }
         "diff" => {
             let request: DiffRequest =
                 serde_json::from_value(envelope.request).context("diff request is invalid")?;
             let left_path = resolve_request_path(&cwd, &request.left_path);
             let right_path = resolve_request_path(&cwd, &request.right_path);
-            let result = anki_forge::runtime::diff_from_paths(&left_path, &right_path)?;
-            print_json(anki_forge::writer::to_writer_canonical_json(&result)?);
+            let result = ankiforge::tools::diff_from_paths(&left_path, &right_path)?;
+            print_json(ankiforge::tools::canonical_json(&result)?);
         }
         other => bail!("unsupported command: {other}"),
     }

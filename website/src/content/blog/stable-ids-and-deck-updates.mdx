@@ -25,7 +25,7 @@ The meaning has expanded. The logical note is still the same.
 
 An explicit stable ID gives a note a durable key. Keep that ID when you edit the note, and choose a new ID when you create a different logical note.
 
-Identity also has a project context. Keep the project’s stable ID consistent across releases of the same deck. A note ID on its own is only one part of a repeatable update workflow.
+Identity also has a project context. Keep the project’s namespace consistent across releases of the same deck. A note ID on its own is only one part of a repeatable update workflow.
 
 ## Give the next build a baseline
 
@@ -37,13 +37,15 @@ In this excerpt, `project` contains the revised note, `previous` points to versi
 
 Keep the input package and output package at different paths. Overwriting the baseline removes evidence you need to understand and verify the release.
 
-## An identity lockfile is another baseline
+## Keep the original distributed package
 
-For a first release, `first_update_safe_build(...)` establishes an identity lockfile. Later builds can read it with `update_safe(...)`.
+Every generated package carries complete identity and revision evidence. The next
+build validates that evidence against the actual database and media before
+reusing identities. Preserve the original package you distributed; an Anki
+re-export is not a supported baseline.
 
-Reading a lockfile does not automatically advance it. For a release that should record new notes and deletions as the next baseline, explicitly request `write_identity_lockfile(true)`. Store the resulting lockfile alongside your release history.
-
-The <a href={sitePath('/docs/updates/')}>authoring guide</a> contains the complete sequence and describes the guarantees and limits.
+The <a href={sitePath('/docs/updates/')}>authoring guide</a> describes strict
+updates, risk policies and client import limitations.
 
 ## Inspect the build and the import
 

@@ -1,5 +1,7 @@
 # ADR 0019: Consume temporary Project text during Deck export
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 ## Decision
 
 The build pipeline accepts either a borrowed authoring input or ownership of the

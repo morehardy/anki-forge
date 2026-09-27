@@ -1,4 +1,4 @@
-use anki_forge::authoring::{AuthoringNotetype, NormalizedIr};
+use ankiforge::tools::{AuthoringNotetype, NormalizedIr};
 use anyhow::{ensure, Context};
 use prost::Message;
 use rusqlite::Connection;
@@ -150,11 +150,11 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
             .parent()
             .map(|parent| parent.join(".anki-forge-media"));
         let mut artifact_target =
-            anki_forge::writer::BuildArtifactTarget::new(artifact_root, stable_ref_prefix);
+            ankiforge::tools::BuildArtifactTarget::new(artifact_root, stable_ref_prefix);
         if let Some(media_store_dir) = media_store_dir {
             artifact_target = artifact_target.with_media_store_dir(media_store_dir);
         }
-        let build_result = anki_forge::writer::build(
+        let build_result = ankiforge::tools::build_contract(
             &normalized_ir,
             &writer_policy,
             &build_context,
@@ -180,7 +180,7 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
             apkg_path.display()
         );
 
-        let inspect_report = anki_forge::writer::inspect_apkg(&apkg_path)
+        let inspect_report = ankiforge::tools::inspect_apkg(&apkg_path)
             .with_context(|| format!("inspect apkg for compat oracle case {}", case.id))?;
         validate_supported_package(&apkg_path, &inspect_report)
             .with_context(|| format!("compat oracle validation failed for {}", case.id))?;
@@ -191,7 +191,7 @@ pub fn run_compat_oracle_gates(manifest_path: impl AsRef<Path>) -> anyhow::Resul
 
 pub fn validate_supported_package(
     apkg_path: impl AsRef<Path>,
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
 ) -> anyhow::Result<()> {
     ensure!(
         inspect_report.observation_status == "complete",
@@ -282,7 +282,7 @@ pub fn validate_supported_package(
 }
 
 fn validate_stock_lane_invariants(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
 ) -> anyhow::Result<()> {
     for notetype in &inspect_report.observations.notetypes {
         let notetype_id = required_str_field(notetype, "id")?;
@@ -295,19 +295,18 @@ fn validate_stock_lane_invariants(
             kind
         );
         let observed_css = required_str_field(notetype, "css")?;
-        let expected_stock =
-            anki_forge::authoring::stock::resolve_stock_notetype(&AuthoringNotetype {
-                id: notetype_id.to_string(),
-                kind: kind.to_string(),
-                name: Some(name.to_string()),
-                original_stock_kind: original_stock_kind.map(ToOwned::to_owned),
-                original_id: None,
-                fields: None,
-                templates: None,
-                css: None,
-                field_metadata: vec![],
-            })
-            .with_context(|| format!("resolve stock notetype shape for {}", notetype_id))?;
+        let expected_stock = ankiforge::tools::resolve_stock_notetype(&AuthoringNotetype {
+            id: notetype_id.to_string(),
+            kind: kind.to_string(),
+            name: Some(name.to_string()),
+            original_stock_kind: original_stock_kind.map(ToOwned::to_owned),
+            original_id: None,
+            fields: None,
+            templates: None,
+            css: None,
+            field_metadata: vec![],
+        })
+        .with_context(|| format!("resolve stock notetype shape for {}", notetype_id))?;
 
         ensure!(
             expected_stock.name == name,
@@ -401,7 +400,7 @@ fn read_media_payload_entries(
 }
 
 fn read_inspect_media_entries(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
 ) -> anyhow::Result<BTreeMap<String, (usize, String)>> {
     let mut media = BTreeMap::new();
     for entry in &inspect_report.observations.media {
@@ -414,7 +413,7 @@ fn read_inspect_media_entries(
 }
 
 fn read_media_references_from_notes(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
 ) -> anyhow::Result<BTreeSet<String>> {
     let mut references = BTreeSet::new();
     for entry in &inspect_report.observations.references {
@@ -436,7 +435,7 @@ fn read_media_references_from_notes(
 }
 
 fn fields_for_notetype_in_order(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
     notetype_id: &str,
 ) -> anyhow::Result<Vec<String>> {
     let mut fields = Vec::new();
@@ -456,7 +455,7 @@ struct ObservedTemplate {
 }
 
 fn templates_for_notetype_in_order(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
     notetype_id: &str,
 ) -> anyhow::Result<Vec<ObservedTemplate>> {
     let mut templates = Vec::new();
@@ -498,7 +497,7 @@ fn read_collection_counts(collection_bytes: &[u8]) -> anyhow::Result<CollectionC
 }
 
 fn read_inspect_counts(
-    inspect_report: &anki_forge::writer::InspectReport,
+    inspect_report: &ankiforge::tools::InspectReport,
 ) -> anyhow::Result<InspectCounts> {
     let counts = inspect_report
         .observations
@@ -566,7 +565,7 @@ fn read_optional_zip_entry(
 }
 
 fn artifact_path_from_ref(
-    target: &anki_forge::writer::BuildArtifactTarget,
+    target: &ankiforge::tools::BuildArtifactTarget,
     reference: &str,
 ) -> PathBuf {
     let prefix = target.stable_ref_prefix.trim_end_matches('/');
@@ -635,5 +634,5 @@ fn hex_lower(bytes: &[u8]) -> String {
 }
 
 fn extract_media_references(field: &str) -> Vec<String> {
-    anki_forge::writer::extract_media_references(field)
+    ankiforge::tools::extract_media_references(field)
 }

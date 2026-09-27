@@ -96,7 +96,7 @@ bindings/python/src/anki_forge/
 
 bindings/python/native/     新增，名称和布局在技术试验后固定
   authoring / media / build / reports / artifacts / state
-  → 同仓库 anki_forge 核心
+  → 同仓库 ankiforge 核心
 ```
 
 Maturin 支持 Python 源码与 Rust 扩展混合布局，适合保留 Python 友好入口；具体 PyO3/Maturin 版本在技术试验中验证并锁定，不在本计划凭空指定版本。[Maturin 混合项目](https://www.maturin.rs/project_layout.html)

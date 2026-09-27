@@ -1,4 +1,4 @@
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Content, Media as OwnedMedia, Note, Project};
 use anyhow::{bail, ensure, Context};
 use serde::Deserialize;
 use std::{collections::BTreeMap, path::Path};
@@ -72,8 +72,8 @@ fn main() -> anyhow::Result<()> {
                 "protocol": "basic-apkg-v1", "adapter": "anki-forge/rust",
                 "protocols": ["basic-apkg-v1", "basic-media-apkg-v1"],
                 "media_registration": "individual",
-                "crate_version": anki_forge::facade_api_version(),
-                "bundle_version": anki_forge::embedded_contract_version(),
+                "crate_version": ankiforge::facade_api_version(),
+                "bundle_version": ankiforge::embedded_contract_version(),
                 "features": "default", "adapter_features": adapter_features,
                 "allocator": if cfg!(feature = "mimalloc") { "mimalloc" } else { "system" },
                 "allocator_version": if cfg!(feature = "mimalloc") { Some("0.1.52") } else { None },
@@ -94,36 +94,33 @@ fn main() -> anyhow::Result<()> {
         "unsupported workload"
     );
     ensure!(workload.notes.len() == workload.note_count, "wrong count");
-    let mut deck = Deck::new(workload.deck_name);
+    let mut project = Project::new("benchmark.basic-v1")?.default_deck(workload.deck_name);
     let parent = Path::new(input).parent().context("input parent")?;
     let mut media_by_id = BTreeMap::new();
     for media in workload.media {
-        let reference = deck
-            .media()
-            .add(MediaSource::from_file(parent.join(&media.path)))?;
+        let snapshot = OwnedMedia::file(parent.join(&media.path))?
+            .with_export_name(&media.filename)?;
         ensure!(
             matches!(media.kind.as_str(), "image" | "audio"),
             "unsupported media kind"
         );
-        ensure!(
-            reference.name() == media.filename,
-            "media filename mismatch"
-        );
+        project.add_asset(snapshot)?;
         ensure!(
             media_by_id.insert(media.id.clone(), media).is_none(),
             "duplicate media id"
         );
     }
-    for note in workload.notes {
-        // Deck fields accept HTML, just like genanki. Escape plain text here,
-        // inside the measured invocation, without changing the shared fixture.
-        deck.basic()
-            .note(
-                render_field(&note.front, &note.front_media, &media_by_id)?,
-                render_field(&note.back, &note.back_media, &media_by_id)?,
-            )
-            .add()?;
+    for (index, note) in workload.notes.into_iter().enumerate() {
+        // Both adapters render the same escaped text and media markup inside
+        // the measured process; the native API makes the HTML intent explicit.
+        project.add(
+            format!("record.{index}"),
+            Note::basic(
+                Content::html(render_field(&note.front, &note.front_media, &media_by_id)?),
+                Content::html(render_field(&note.back, &note.back_media, &media_by_id)?),
+            ),
+        )?;
     }
-    deck.write_apkg(output)?.ensure_success()?;
+    project.build(BuildOptions::to(output))?;
     Ok(())
 }

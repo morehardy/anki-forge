@@ -15,6 +15,7 @@ pub(crate) struct PipelinedSha1 {
 }
 
 impl PipelinedSha1 {
+    #[cfg(test)]
     pub(crate) fn new() -> Self {
         Self {
             serial: Sha1::new(),

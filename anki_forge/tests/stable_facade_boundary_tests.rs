@@ -1,4 +1,4 @@
-use std::{fs, process::Command};
+use std::{fs, path::Path, process::Command};
 
 struct FacadeProbe {
     root: tempfile::TempDir,
@@ -23,7 +23,7 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-anki_forge = {{ path = {manifest_dir}, default-features = false }}
+ankiforge = {{ path = {manifest_dir}, default-features = false }}
 "#
             ),
         )
@@ -36,90 +36,97 @@ anki_forge = {{ path = {manifest_dir}, default-features = false }}
         Command::new(std::env::var("CARGO").unwrap_or_else(|_| "cargo".into()))
             .args(["check", "--quiet", "--offline"])
             .current_dir(self.root.path())
-            .env("CARGO_TARGET_DIR", self.root.path().join("target"))
+            .env(
+                "CARGO_TARGET_DIR",
+                Path::new(env!("CARGO_MANIFEST_DIR")).join("../target/public-consumer"),
+            )
             .output()
             .expect("run facade probe")
     }
 }
 
-#[test]
-fn default_features_compile_the_documented_facade() {
-    let output = FacadeProbe::new().check(
-        r#"
-use anki_forge::prelude::*;
-use anki_forge::{Deck, Project, Severity};
-
-fn main() {
-    let _deck = Deck::new("Stable Deck");
-    let _project = Project::new("Stable Project");
-    let _severity = Severity::Warning;
-    let mut limits = InspectLimits::default();
-    limits.max_collection_bytes = 128 << 20;
-    let _options = BuildOptions::new().inspect_limits(limits);
-    assert!(!anki_forge::facade_api_version().is_empty());
-    assert!(!anki_forge::embedded_contract_version().is_empty());
+const CONTROL: &str = r#"
+use ankiforge::{Project, Note, NoteType, Field, Template, Content, Media, BuildOptions, BuildOutput};
+use ankiforge::{note, schema, media, build, update, diagnostics};
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("boundary-probe")?;
+    project.add("first", Note::basic("front", "back"))?;
+    let _: BuildOptions = BuildOptions::temporary().inspect_limits(build::InspectLimits::default());
+    let _: Option<(NoteType, Field, Template, Content, Media, BuildOutput)> = None;
+    let _: Option<(note::AddError, schema::SchemaError, media::MediaError,
+        update::CompareError, diagnostics::Diagnostic)> = None;
+    Ok(())
 }
-"#,
-    );
+"#;
 
+#[test]
+fn default_features_compile_the_documented_domains() {
+    let output = FacadeProbe::new().check(CONTROL);
     assert!(
         output.status.success(),
-        "documented facade failed to compile:\n{}",
+        "{}",
         String::from_utf8_lossy(&output.stderr)
     );
 }
 
 #[test]
-fn default_features_hide_repository_internal_modules() {
+fn default_features_hide_implementation_and_retired_entry_points() {
     let probe = FacadeProbe::new();
-    for module in [
-        "authoring",
-        "build",
+    let control = probe.check(CONTROL);
+    assert!(
+        control.status.success(),
+        "{}",
+        String::from_utf8_lossy(&control.stderr)
+    );
+    for symbol in [
+        "prelude",
+        "Deck",
         "deck",
-        "diagnostics",
-        "diff",
         "product",
-        "risk",
+        "authoring",
+        "authoring_core",
+        "writer",
+        "writer_core",
         "runtime",
         "update_safety",
-        "writer",
+        "risk",
+        "diff",
+        "build_backend",
+        "diagnostics_backend",
+        "tools",
     ] {
-        let output = probe.check(&format!(
-            "use anki_forge::{module};\nfn main() {{ let _ = stringify!({module}); }}\n"
-        ));
-        assert!(
-            !output.status.success(),
-            "internal module {module} unexpectedly compiled for default consumers"
-        );
+        let output = probe.check(&format!("use ankiforge::{symbol}; fn main() {{}}"));
         let stderr = String::from_utf8_lossy(&output.stderr);
+        assert!(!output.status.success(), "{symbol} is reachable");
         assert!(
             stderr.contains("private module") || stderr.contains("unresolved import"),
-            "unexpected compiler output for {module}:\n{stderr}"
+            "unrelated failure for {symbol}: {stderr}"
         );
     }
 }
 
 #[test]
-fn default_features_hide_project_normalization_ir() {
-    let output = FacadeProbe::new().check(
-        r#"
-use anki_forge::Project;
-
-fn main() {
-    let project = Project::new("Stable Project");
-    let _ = project.normalize();
-}
-"#,
-    );
-
+fn default_features_hide_lowering_and_normalization_ir() {
+    let probe = FacadeProbe::new();
+    let control = probe.check(CONTROL);
     assert!(
-        !output.status.success(),
-        "Project::normalize unexpectedly exposed internal normalization IR"
+        control.status.success(),
+        "{}",
+        String::from_utf8_lossy(&control.stderr)
     );
-    let stderr = String::from_utf8_lossy(&output.stderr);
-    assert!(
-        stderr.contains("no method named `normalize`")
-            || stderr.contains("no method named 'normalize'"),
-        "unexpected compiler output for Project::normalize:\n{stderr}"
-    );
+    for method in [
+        "normalize",
+        "lower",
+        "to_authoring_document",
+        "lowering_plan",
+    ] {
+        let output = probe.check(&format!(
+            "fn main() {{ let project = ankiforge::Project::new(\"probe\").unwrap(); let _ = project.{method}(); }}"));
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        assert!(!output.status.success(), "{method} exposes IR");
+        assert!(
+            stderr.contains(&format!("no method named `{method}`")),
+            "{stderr}"
+        );
+    }
 }

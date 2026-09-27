@@ -1,115 +1,120 @@
 ---
 asset_refs:
-  - schema/identity-index.schema.json
-  - schema/identity-lockfile.schema.json
-  - schema/update-safety-summary.schema.json
+  - schema/identity-evidence.schema.json
+  - schema/comparison-report.schema.json
+  - schema/build-report.schema.json
+  - errors/error-registry.yaml
 ---
 
-# Identity Update Safety Semantics
+# Native publication identity and update semantics
 
-Phase 3 update safety is built around `identity-index-v1`, `identity-lockfile-v1`, and `identity-note-v1`.
+Native Rust, Node, Python and product CLI authoring use one Project pipeline.
+A project requires an explicit namespace; every note requires an explicit stable
+key. Body text, display names and source filenames do not supply identity.
+The update baseline is the original distributed APKG, including its complete
+`ankiforge-identity.json` evidence entry. An Anki re-export does not retain this
+entry and cannot serve as a baseline. There is no lockfile alternative, identity
+inference mode, report-only evidence bypass, or legacy input migration fallback.
 
-The only Phase 3 GUID derivation version is `guid.raw-stable-id.v1`. It sets `current_guid_candidate` to the resolved Product `stable_id` with no truncation or hashing. Changing this rule requires a new `guid_derivation_version`.
+## Evidence and verification
 
-`IdentityIndex.source_ref` uses stable logical values:
+The `ankiforge-identity-v1` envelope contains the namespace; every active and
+retired note/model; model IDs; field/template config IDs, historical slots and
+current physical ordinals; note GUIDs; content revision hashes and modification
+times; card key/ordinal mappings; and IO mask keys, retirement flags and ordinal
+high water. Active normal field/template physical ordinals are contiguous in
+historical slot order. Removing a symbol does not free its permanent slot.
+Restoring a key reuses its identity and compares against its retained history.
 
-- `current`
-- `baseline.previous_apkg.primary`
-- `baseline.identity_lockfile.primary`
+The envelope binds the actual decoded collection using BLAKE3 and each actual
+decoded media file using length and SHA-1. Its identity checksum is BLAKE3 of
+compact JSON with recursively sorted object keys. Reading a baseline or candidate
+checks format, checksums, namespace, actual SQLite IDs/kinds/ordinals/revisions,
+active cardinalities, semantic card mappings, masks and media descriptors.
+Missing, malformed, inconsistent or incomplete evidence is a hard failure.
+Duplicate ZIP entry names are rejected before any member is trusted. Checksums
+establish consistency, not authenticity or authorization of the publisher.
 
-Lockfile JSON must use lexicographic object-key ordering by Unicode scalar value after JSON string decoding. Arrays with semantic order preserve that order. Identity entries are sorted by `stable_id`.
+New IDs use BLAKE3 derive-key context `ankiforge.package-identity.v1` and UTF-8
+components prefixed with unsigned 64-bit big-endian byte lengths. A new note's
+GUID takes the first 32 hexadecimal characters of the namespace/note/key digest.
+Numeric model/field/template IDs use namespace/kind/model-key/symbol-key; the
+first 13 hexadecimal characters produce a positive 52-bit integer, replacing
+zero with one. Existing baseline identities take precedence. Colliding assigned
+IDs fail validation. A note key cannot change its model, and a model key cannot
+change between normal and Cloze kinds.
 
-Limitations describe source evidence and diagnostics describe build events. Implementations must derive overlapping values from one internal classifier pass.
+Card mappings use `template:<key>`, `cloze:<number>` and `mask:<key>`. Cloze
+numbers must be 1–500. IO masks allocate zero-based ordinals from a persistent
+high water of at most 500. Movement and declaration order do not change a mask's
+ordinal. Retired ordinals are never assigned to a different mask key; restoring
+the original key reuses its ordinal. Exhaustion requires splitting the note.
 
-## Numeric notetype identity (bundle 0.5.0)
+## Revisions and actual Anki imports
 
-The logical `note_type_id` and numeric `anki_model_id` are distinct identities.
-Model assignments are selected before writing, persisted in staging, written to
-Anki's notetypes and note references, recovered by inspection, and recorded in
-the identity lockfile. Selection precedence is previous APKG, identity lockfile,
-then deterministic derivation for a new logical type. Conflicting known baseline
-IDs produce `UPDATE.NOTETYPE_MODEL_ID_CONFLICT`; the APKG is artifact truth.
+Initial model/note modification times use current Unix seconds. Unchanged
+normalized content preserves its baseline hash and time; changed content advances
+to `max(now, baseline + 1)`, with checked overflow. Note content hashes cover
+normalized model reference, deck, fields, tags and card mapping. Model hashes
+cover normalized model content with established IDs/ordinals. These revisions
+must be written into the actual Anki SQLite rows, not only the envelope.
 
-New IDs use BLAKE3 derive-key context `anki-forge.notetype-id.v1` over the UTF-8
-document ID followed by the logical notetype ID. Each string is prefixed with its
-byte length as an unsigned 64-bit big-endian integer. Interpret the first eight
-digest bytes as big-endian, mask to 53 bits, and replace zero with one. Names and
-declaration order are not inputs. Baseline IDs are preserved, not rehashed.
-Assignments must be positive and unique across current and reserved absent types;
-collisions block writing even in report-only mode. Rewritten lockfiles retain
-absent notetype identities so removing and later reintroducing a type does not
-allocate another ID. The note GUID derivation rule is unchanged.
+Anki finds notes by GUID and existing cards by its target note ID and template
+ordinal. Scheduling preservation therefore requires actual import verification;
+matching generated package IDs alone is insufficient. Field/template config IDs
+support model merging. Anki's default import rejects incompatible schemas; merge
+mode unions schemas and may retain target-only fields and templates. APKG import
+does not delete omitted learner notes, cards or media. A structural or sort-field
+change can advance target note times before content import; publisher timestamps
+cannot guarantee overwriting newer local edits under `IfNewer` settings.
+Comparison findings must expose these limitations, even when a risk is accepted.
 
-Legacy lockfiles with `anki_model_id: null` remain readable. For a matching type,
-strict mode requires a previous APKG to recover the actual ID, otherwise it stops
-with `UPDATE.NOTETYPE_MODEL_ID_MISSING` before writing output or lockfile.
-Report-only warns and may use a derived ID, but cannot claim identity preservation.
-Old staging manifests without model assignments use their original positional
-IDs; new manifests always carry an explicit assignment map.
+## Comparison and publication policy
 
-Field membership is compared by field key even with a lockfile-only baseline.
-`UPDATE.FIELD_REMOVED` blocks strict updates and yields high import risk;
-`UPDATE.FIELD_ADDED` warns and yields medium risk. Report-only downgrades the
-removal diagnostic to a warning without lowering its risk. Existing field rename,
-order, and config-ID checks still apply.
+`compare` returns a complete comparison with original findings, evidence and a
+separate policy decision. Blocking risk is a successful comparison. Hard failures
+return structured errors with completed observations retained. A verified baseline's
+counts survive subsequent candidate generation or inspection failure; an absent
+count observation is distinct from zero observed entities.
 
-When diagnostic and semantic-diff evidence identify the same removed field,
-emit one `RISK.FIELD_REMOVED_OR_RENAMED` finding with both evidence references
-and the higher risk level. Different field selectors remain separate findings;
-diff-only field removal retains its existing medium-risk classification.
+`build` applies the same comparison before publication. High and Critical findings
+block by default. Typed allowances accept specific registered risk categories and
+never remove findings or downgrade their original severity. Unmatched allowances
+produce `UPDATE.UNMATCHED_ALLOWANCE`. Unknown codes, wildcard allowances and hard
+error codes are invalid. Explicit policy on Create fails regardless of setter order.
 
-## Note content revision (bundle 0.5.0)
+Field/template additions and removals, sort-field changes and omitted notes/cards
+are High risks. IO additions are Medium, removals High. Ordinary content changes
+are Low; model rendering changes and replacement media bytes are Medium. Exact
+before/after evidence accompanies each finding. Restored entities compare with
+retained history, so omitting then restoring an entity cannot bypass structural
+risk checks. Equal total card counts do not hide card replacement.
 
-An identity entry may carry `revision: {content_hash, mtime_secs}`. This is distinct
-from `canonical_payload_hash`, which may cover only the fields used for identity.
-The full-content digest is `note-content.v1:blake3:` followed by the lowercase
-64-character BLAKE3 digest of canonical JSON with keys `notetype_id`, `fields`,
-and `tags`. Fields retain every normalized field name/value. Tags are split on
-the writer's ASCII space separator, with empty parts removed, deduplicated and
-sorted. GUID, source metadata, deck names, and modification time are not hashed.
+Media comparisons use the same portable filename identity as asset collection:
+NFC normalization followed by full Unicode case folding. A change from `Logo.png`
+to `logo.png`, or between canonically equivalent Unicode spellings, addresses the
+same media identity. Different bytes produce `RISK.MEDIA_CHANGED` (Medium), not a
+new-file finding; equal bytes do not produce a change solely for the spelling.
+Evidence retains both original filenames so the report does not hide that rename.
 
-APKG inspection recomputes revision evidence from actual stored note fields,
-tags, logical notetype ID, and `notes.mod`. Embedded metadata is not revision
-truth. Per stable identity, select previous APKG evidence before lockfile evidence.
-Conflicting known revisions emit `UPDATE.NOTE_REVISION_CONFLICT`.
+The identity payload's required `media_history` map retains the last published
+filename and content descriptor (size and SHA-1) for every portable filename
+identity, including omitted files. The separate envelope `media` map describes
+only the current archive payloads and remains verified against their actual bytes.
+Every current entry must match its history descriptor and original filename.
+Both current and historical maps must have unique portable filename identities;
+history keys preserve the last original spelling and must be valid portable
+filenames. All historical descriptors must have valid sizes and digests. The
+history is covered by the identity checksum and its decoded bytes count against
+the existing identity evidence inspection budget.
 
-For equal content, preserve baseline `mtime_secs`. For changed content, use checked
-`baseline.mtime_secs + 1`; even a content revert advances. A new note starts at the
-deterministic initial value `1`. These logical revision times occupy Anki's time
-field but do not represent wall-clock build time. No system clock is consulted.
-The chosen revision is written to normalized staging, actual APKG notes, and the
-identity lockfile. Temporarily absent notes retain revision history in lockfiles.
-
-Legacy entries without revision remain readable. Strict updates of those notes
-require the previous APKG; otherwise `UPDATE.NOTE_REVISION_MISSING` blocks writing.
-Report-only downgrades the diagnostic to a warning but retains high risk
-`RISK.NOTE_UPDATE_UNVERIFIED`. Overflow blocks both modes, and invalid evidence is
-rejected by baseline readers. A non-authoritative report-only build cannot promise
-that Anki will apply the update.
-
-Same current content and same baseline produce the same selected times. Consumers
-must use their latest distributed APKG, or persist the updated identity lockfile
-after each release (`write_identity_lockfile(true)`). Baseline-free/disabled builds
-remain deterministic first-release exports, not update-safe replacements. Anki's
-own import conditions still govern newer local edits in the receiving collection.
-
-## Report-only persistence and rejected baselines
-
-Report-only permission to emit a best-effort APKG is not permission to turn
-unverified baseline evidence into a trusted lockfile. If a requested APKG or
-lockfile baseline is unreadable, or an existing note/type still lacks revision
-or model-ID evidence, skip the entire requested lockfile write. Preserve any
-existing lockfile byte-for-byte, emit `UPDATE.LOCKFILE_WRITE_SKIPPED_UNVERIFIED`,
-and leave `update_safety.lockfile_written` false. A later strict build must still
-require recovery. A readable previous APKG can supply missing legacy evidence;
-normal first-release lockfile creation and verified report-only updates still write.
-
-`UPDATE.BASELINE_LOCKFILE_UNREADABLE` and `UPDATE.BASELINE_APKG_UNREADABLE`
-always contribute high risk
-`RISK.BASELINE_UNAVAILABLE`, even when report-only downgrades its diagnostic to
-a warning. This includes invalid model IDs/revisions and parse/read failures.
-Identity rejection remains high risk even if raw artifact comparison is complete.
-The finding retains the baseline source and diagnostic evidence. An APKG rejection
-and an unavailable comparison describe one APKG baseline risk, not two findings.
-`fail_on(High)`
-blocks publication without changing existing output or lockfile bytes.
+For example, publishing bytes A, omitting the file, then publishing bytes B at
+the same portable name reports `RISK.MEDIA_CHANGED`. Reintroducing A after the
+omitted release reports an informational restoration. Publishing B advances the
+last published descriptor to B, so the next identical B release has no media
+finding. This is a comparison against the selected verified baseline, not against
+every release a learner may have imported. The history does not retain every old
+byte revision or prove that the learner accepted a previous replacement. As with
+retired notes and models, omitted media payloads cannot be independently checked
+against the current collection; the checksum is an integrity check, not an
+authenticated release chain. Publishers must retain a trustworthy baseline.

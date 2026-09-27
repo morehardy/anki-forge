@@ -1,6 +1,6 @@
 # ADR 0011: License the Rust Distribution Under MIT
 
-The crates.io release needs explicit downstream usage rights, and the repository previously had no root license for its project-owned Rust distribution code. Project-owned source packaged in `anki_forge` is released under the MIT License; third-party mirrors such as the upstream Anki source are excluded from the crate and retain their own licenses.
+The crates.io release needs explicit downstream usage rights, and the repository previously had no root license for its project-owned Rust distribution code. Project-owned source packaged in `ankiforge` is released under the MIT License; third-party mirrors such as the upstream Anki source are excluded from the crate and retain their own licenses.
 
 ## Consequences
 

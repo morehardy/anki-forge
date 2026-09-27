@@ -1,144 +1,70 @@
-# Your first deck with Python
+# Python quickstart
 
-Create one Spanish flashcard using the native Python 0.2 SDK. This guide uses
-the source checkout; the [verification record](../../bindings/python/COVERAGE.md)
-is not a claim that the candidate has been published to PyPI.
-
-## Install from source
-
-You need Git, Rust 1.92 and ordinary CPython 3.11 or 3.12. From the repository root:
+The native Python SDK wraps the Rust public API. Use Python 3.11 or newer and install the platform wheel:
 
 ```sh
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install maturin==1.15.0
-maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
-python bindings/python/examples/docs_basic.py target/python-basic
+python -m pip install anki-forge
 ```
 
-On Windows, activate `.venv\Scripts\Activate.ps1` in PowerShell instead of the
-shell activation command. Select a supported interpreter when creating the venv.
-The first Maturin build compiles Rust dependencies. Adding the source directory
-to `PYTHONPATH` does not build the native extension.
+Choose a stable project namespace and stable note keys from your data. Names and content can then change without turning each edit into a new note.
 
-## Read the complete program
-
-<!-- source: bindings/python/examples/docs_basic.py -->
 ```python
-"""python docs_basic.py [OUTPUT_DIRECTORY]"""
-from pathlib import Path
-import sys
+from anki_forge import Project, Note, BuildOptions
 
-from anki_forge import Note, Project
-
-output = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-output.mkdir(parents=True, exist_ok=True)
-project = Project("Spanish", stable_id="docs-spanish", default_deck="Spanish", base_dir=output)
-project.add_note(Note.basic("hola", "hello", stable_id="es:hola"))
-project.validate().ensure_success()
-report = project.write_apkg("spanish.apkg")
-report.ensure_success()
-assert report.counts["notes"] == 1 and report.counts["cards"] == 1
-print(output / "spanish.apkg")
-```
-<!-- /source -->
-
-Open `target/python-basic/spanish.apkg` in Anki. The **Spanish** deck contains one
-note and one card: **hola → hello**. The assertions check package report counts.
-Anki is needed to study the deck, not to generate the package.
-
-## Use it in your own application
-
-Keep the same virtual environment active, save the complete program as
-`make_deck.py` in your application directory, and run `python make_deck.py`.
-It writes `spanish.apkg` in that directory. For a separate environment, build a
-wheel from the checkout and install the matching file:
-
-```sh
-maturin build --manifest-path bindings/python/native/Cargo.toml --release --locked --out bindings/python/dist
+project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
+project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
+output = project.build(BuildOptions.to('biology.apkg'))
+print(output.artifact.path)
+print(output.report.counts.notes)
 ```
 
-Activate the destination environment and run `python -m pip install` with the
-actual absolute path to that wheel. Choose the file for the destination platform;
-the installed consumer does not need Cargo, the checkout or contract files.
+`Project` is the only container. A note can override its deck with `.deck('Science::Revision')`; no separate Deck object is needed. Note methods return new values, so retain the result of each configuration call.
 
-## Custom note types
+## Text, HTML and owned media
 
-Use `NoteType.custom`, `Field` and `Template` to declare your own fields and HTML.
-HTML uses display names; field setters and generation rules use stable keys.
-See the [Python API](api.md#custom-note-types) and the
-[complete native workflow](../../bindings/python/examples/native_workflow.py).
+Strings are always text, including in Cloze notes. Use `Content.html` for explicit HTML. Image and sound content owns media dependencies and adds them to the project automatically.
 
-Project additions capture input snapshots. Finish editing a Note/NoteType before
-adding it. Construction settings are read-only; build a new Project with the same
-stable identities for a revised dataset.
-
-## Media
-
-Run the self-contained media example; it generates a real SVG and one-second WAV:
-
-```sh
-python bindings/python/examples/docs_media.py target/python-media
-```
-
-Import `target/python-media/media.apkg`. Its two cards reveal a green circle and
-play an A4 tone, with two registered media files.
-
-<!-- source: bindings/python/examples/docs_media.py -->
 ```python
-"""Generate real image/audio assets: python docs_media.py [OUTPUT_DIRECTORY]."""
-from pathlib import Path
-import math
-import struct
-import sys
-import wave
+from anki_forge import Content, Media
 
-from anki_forge import Note, Project
-
-output = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-output.mkdir(parents=True, exist_ok=True)
-(output / "diagram.svg").write_text(
-    '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="120">'
-    '<rect width="240" height="120" fill="#edf3f1"/>'
-    '<circle cx="120" cy="60" r="35" fill="#116e60"/></svg>',
-    encoding="utf-8",
-)
-with wave.open(str(output / "tone.wav"), "wb") as audio:
-    audio.setnchannels(1)
-    audio.setsampwidth(2)
-    audio.setframerate(8000)
-    audio.writeframes(b"".join(
-        struct.pack("<h", int(4000 * math.sin(2 * math.pi * 440 * i / 8000)))
-        for i in range(8000)
-    ))
-
-project = Project("Media", stable_id="docs-media", base_dir=output)
-picture = project.media.add_file("diagram.svg", export_as="diagram.svg")
-sound = project.media.add_file("tone.wav", export_as="tone.wav")
-project.add_note(Note.basic("Reveal a green circle", "", stable_id="media:circle").image("back", picture))
-project.add_note(Note.basic("Play A4 (440 Hz)", "", stable_id="media:tone").sound("back", sound))
-report = project.write_apkg("media.apkg")
-report.ensure_success()
-assert report.counts["notes"] == 2 and report.counts["cards"] == 2 and report.counts["media"] == 2
-print(output / "media.apkg")
-```
-<!-- /source -->
-
-File registration reads and fingerprints the source immediately. Keep files
-available and unchanged through build. For small in-memory content, `add_bytes`
-accepts bytes/bytearray up to 64 KiB and rejects empty input. Relative paths use
-`base_dir` fixed at construction. See [diagnostics](diagnostics.md).
-
-## Long-term projects
-
-Keep stable project and note IDs. A previous APKG or identity lockfile supplies
-revision evidence; see [update-safe builds](diagnostics.md#update-safe-builds).
-For bundles, comparison, Artifact ownership and file output, run:
-
-```sh
-python bindings/python/examples/native_workflow.py target/python-workflow
+image = Media.file('cell.png')
+project.add('cell-picture', Note.basic(
+    Content.sequence(['Identify: ', image.image()]),
+    Content.html('<strong>A cell</strong>'),
+))
 ```
 
-Each Project/Deck permits one active operation. Independent objects can work
-concurrently; mutable authoring inputs require caller synchronization.
-Existing Python 0.1 users should read [migration](../../bindings/python/MIGRATION.md).
+`Media.file` snapshots the bytes immediately. The original file may be changed or deleted after this call. Reuse the Media value in any project. `Media.bytes(data, 'image/png')` accepts an owned snapshot with an explicit MIME type. To choose a filename, call `.with_export_name('cell.png')` before creating content references. Assets referenced only in handwritten HTML, CSS or scripts are declared with `project.add_asset(media)`.
+
+## Complete a custom model
+
+```python
+from anki_forge import Field, Template, NoteType
+
+model = (NoteType.builder('vocab').name('词汇')
+    .field(Field('front', name='正面', required=True))
+    .field(Field('back', name='背面'))
+    .template(Template('recognition', '{{front}}', '{{FrontSide}}<hr>{{back}}', name='识别'))
+    .build())
+project.add('word:cell', model.note().field('front', 'cell').field('back', '细胞'))
+```
+
+The builder validates fields, templates and their references. The completed model is immutable. Note fields and template expressions use stable keys; Anki displays the separate names. Adding a note collects its model automatically and atomically. `NoteType.from_bundle(path)` loads the same immutable model from a `template-bundle-v2` bundle.
+
+## Compare and update
+
+```python
+from anki_forge import CompareOptions
+
+next_project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+next_project.add('cell', Note.basic('What is a cell?', 'The basic structural unit of life'))
+next_project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
+comparison = next_project.compare(CompareOptions.against('biology.apkg'))
+print(comparison.findings)
+next_project.build(BuildOptions.to('biology-v2.apkg').update_from('biology.apkg'))
+```
+
+Use the previous original distribution as the baseline. It carries complete identity evidence inside the APKG. A high-risk comparison is a completed analysis; its `allows_publication` may be false. A build using the same blocking policy raises `BuildError` before publishing. See [diagnostics and update policy](diagnostics.md) for explicit risk acceptance and inspection budgets.
+
+For temporary output, use `BuildOptions.temporary()` and retain `output.artifact` for as long as the file is needed. A saved path or JSON snapshot does not retain that file. See the [API reference](api.md) and [complete executable workflow](../../bindings/python/examples/native_workflow.py).

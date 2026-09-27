@@ -28,8 +28,9 @@ images, audio, and video into a single `.apkg` file, ready to import into Anki.
 
 **1,000 text notes in 53.9 ms**, versus 115.5 ms with genanki — **53.3% less
 export time**. Across all five 1,000-note workloads, the measured Rust exports
-took **34.7–53.3% less time**. The chart compares the native Rust `Deck` API with
-genanki; Node and Python bindings were not benchmarked.
+took **34.7–53.3% less time**. These archived measurements compare the former Rust `Deck` API with
+genanki. They do not measure the current Project API; Node and Python bindings
+were not benchmarked.
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
@@ -74,15 +75,12 @@ The [complete Basic example](anki_forge/examples/target_api_basic.rs) turns one
 word pair — **hola → hello** — into `spanish.apkg`, ready to import into Anki Desktop:
 
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let mut deck = Deck::new("Spanish");
-    deck.basic()
-        .note("hola", "hello")
-        .stable_id("es:hola")
-        .add()?;
-    deck.write_apkg("spanish.apkg")?.ensure_success()?;
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("spanish.apkg"))?;
     Ok(())
 }
 ```
@@ -92,7 +90,7 @@ Run it from source with **Rust 1.92.0**:
 ```sh
 git clone https://github.com/morehardy/anki-forge.git
 cd anki-forge
-cargo run -q -p anki_forge --example target_api_basic
+cargo run -q -p ankiforge --example target_api_basic
 ```
 
 Import `spanish.apkg` from the current directory into Anki to study **hola → hello**.
@@ -109,12 +107,11 @@ or the [Python source setup](bindings/python/README.md#from-a-source-checkout).
 Adjust the path to your local checkout. The example uses `anyhow` for error handling:
 
 ```sh
-cargo add anki_forge --path ../anki-forge/anki_forge
+cargo add ankiforge --path ../anki-forge/anki_forge
 cargo add anyhow
 ```
 
-Use `Deck` for a short path to one APKG, or `Project` for custom note types, media,
-validation, and repeated updates. Continue with the [Rust authoring guide](docs/rust-guide.md).
+Use `Project` for stock and custom notes, owned media, comparison, and updates. Continue with the [Rust authoring guide](docs/rust-guide.md).
 
 </details>
 
@@ -131,7 +128,7 @@ Build all three cards with the self-contained
 [showcase example](anki_forge/examples/readme_showcase.rs):
 
 ```sh
-cargo run -q -p anki_forge --example readme_showcase
+cargo run -q -p ankiforge --example readme_showcase
 ```
 
 It writes `readme-showcase.apkg`: three cards plus a generated waveform and a
@@ -142,9 +139,9 @@ or read the [sample verification and reproduction guide](docs/assets/readme/READ
 | Build something richer | Start here |
 | --- | --- |
 | Your own fields, layouts, and card-generation rules | [Custom note types](anki_forge/examples/target_api_custom_notetype.rs) |
-| Pictures, sound, and template media | [Media example](anki_forge/examples/target_api_media.rs) · [troubleshooting](docs/rust-guide.md#media-troubleshooting) |
+| Pictures, sound, and template media | [Media example](anki_forge/examples/target_api_media.rs) · [troubleshooting](docs/troubleshooting.md) |
 | Reusable templates, CSS, and assets | [Template bundles](docs/template-bundles.md) |
-| Image Occlusion | [Supported mode and limitation](bindings/node/README.md#deck-and-image-occlusion) |
+| Image Occlusion | [Supported mode and limitation](docs/image-occlusion.md) |
 
 ## Build once. Keep improving.
 
@@ -159,39 +156,37 @@ Keep the previous distributed APKG. After editing the notes in your `Project`,
 use it as the baseline for the next build:
 
 ```rust
-let options = BuildOptions::new()
-    .output("spanish-v2.apkg")
-    .compare_to("spanish-v1.apkg");
-project.build(options)?.ensure_success()?;
+let options = BuildOptions::to("spanish-v2.apkg")
+    .update_from("spanish-v1.apkg");
+let output = project.build(options)?;
+println!("{:?}", output.report().comparison());
 ```
 
 The [runnable update example](anki_forge/examples/readme_update.rs) creates both
 versions and prints the comparison report:
 
 ```sh
-cargo run -q -p anki_forge --example readme_update
+cargo run -q -p ankiforge --example readme_update
 ```
 
-Stable IDs preserve note identity; a previous APKG or a maintained identity
-lockfile provides revision evidence. A plain `write_apkg()` does not guarantee
-that Anki applies later edits, and Anki's import settings and newer local edits
-still govern the import.
-
-For long-lived projects, use `first_update_safe_build(...)` / `update_safe(...)`
-with an identity lockfile. See the [complete update workflow](docs/rust-guide.md#updating-distributed-decks)
-for lockfile maintenance, risk thresholds, and build reports.
+The namespace and note keys identify your notes. Every generated package carries
+complete identity and revision evidence; retain the original distributed APKG
+and use `update_from` when producing its successor. An Anki re-export is not a
+supported baseline. Anki import settings and newer local edits still govern
+whether fields update. See the [update workflow](docs/updates.md) for policies,
+client limitations, and verified import behavior.
 
 ## Choose your language
 
 | Language | Entry point | Setup in this checkout |
 | --- | --- | --- |
-| **Rust** | `Deck` for simple exports; `Project` for custom authoring and updates | Rust 1.92+ · [guide](docs/rust-guide.md) |
-| **Node.js / TypeScript** | Native Rust `Deck` and `Project` objects | Node 22.13+ · [SDK setup and status](bindings/node/README.md) |
+| **Rust** | `Project`, `Note`, owned schemas and media | Rust 1.92+ · [guide](docs/rust-guide.md) |
+| **Node.js / TypeScript** | Native Rust `Project`, `Note` and owned values | Node 22.13+ · [SDK setup and status](bindings/node/README.md) |
 | **Python** | `Project`, `Note`, custom note types, and media through the Rust runtime | CPython 3.11/3.12 · [source setup](bindings/python/README.md#from-a-source-checkout) |
 
 Moving from genanki? See the [Python migration guide](docs/python/genanki-migration.md).
 
-**Release status:** the checkout declares Rust `0.1.0`, Node `0.2.0`, and Python
+**Release status:** the checkout declares Rust `0.2.0`, Node `0.2.0`, and Python
 `0.2.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
 outstanding publication gates; npm publication and full platform verification
 for the Node candidate are pending. Python 0.2 has recorded wheel/source verification
@@ -201,15 +196,15 @@ on registry availability.
 
 ## Compatibility and limitations
 
-- The Rust API is pre-1.0. Use `anki_forge::prelude`; `internal-tools` is reserved
-  for repository tooling. See the [supported interface](anki_forge/README.md#supported-01-interface).
-- Image Occlusion currently supports `hide-all-guess-one`. The
-  `hide-one-guess-one` renderer has a grouped-cloze limitation; see the
-  [recorded behavior](bindings/node/README.md#deck-and-image-occlusion).
-- Project Basic/text setters escape text. Cloze and Deck convenience inputs preserve
-  HTML; see [content semantics](docs/concepts.md#text-and-html).
-- Build reports and temporary artifacts have explicit ownership and persistence
-  rules. See [artifact ownership](anki_forge/README.md#artifact-ownership).
+- Import common types from `ankiforge` and advanced types from `note`, `schema`,
+  `media`, `build`, `update`, or `diagnostics`. The hidden `tools` interface requires
+  `internal-tools` and is reserved for repository tooling.
+- Image Occlusion supports both hide-all-guess-one and hide-one-guess-one, with
+  stable mask keys. See [Image Occlusion](docs/image-occlusion.md).
+- Strings are text for every note kind. Use `Content::html` for trusted markup;
+  typed image and sound content retain their owned assets.
+- Successful builds return `BuildOutput`. Its artifact owns temporary output;
+  keeping a report snapshot alone does not retain files. See [build guarantees](docs/build-guarantees.md).
 
 ## Contributing
 

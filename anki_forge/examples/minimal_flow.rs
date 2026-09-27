@@ -9,7 +9,7 @@ fn repo_root() -> PathBuf {
 
 fn main() -> anyhow::Result<()> {
     let repo_root = repo_root();
-    let runtime = anki_forge::runtime::discover_workspace_runtime(&repo_root)?;
+    let runtime = ankiforge::tools::discover_workspace_runtime(&repo_root)?;
 
     let input_path = repo_root.join("contracts/fixtures/phase3/inputs/basic-authoring-ir.json");
     let normalized_ir_path = repo_root.join("tmp/phase4-examples/minimal-flow/normalized-ir.json");
@@ -22,7 +22,7 @@ fn main() -> anyhow::Result<()> {
         fs::remove_dir_all(&artifacts_dir)?;
     }
 
-    let normalized = anki_forge::runtime::normalize_from_path(&runtime, &input_path)?;
+    let normalized = ankiforge::tools::normalize_from_path(&runtime, &input_path)?;
     let normalized_ir = normalized
         .normalized_ir
         .as_ref()
@@ -32,7 +32,7 @@ fn main() -> anyhow::Result<()> {
         serde_json::to_string_pretty(normalized_ir)?,
     )?;
 
-    let build = anki_forge::runtime::build_from_path(
+    let build = ankiforge::tools::build_from_path(
         &runtime,
         &normalized_ir_path,
         "default",
@@ -41,7 +41,7 @@ fn main() -> anyhow::Result<()> {
     )?;
     let staging_path = artifacts_dir.join("staging/manifest.json");
     let apkg_path = artifacts_dir.join("package.apkg");
-    let inspect = anki_forge::runtime::inspect_apkg_path(&apkg_path)?;
+    let inspect = ankiforge::tools::inspect_apkg_path(&apkg_path)?;
 
     println!("runtime.mode={:?}", runtime.mode);
     println!("runtime.bundle_version={}", runtime.bundle_version);

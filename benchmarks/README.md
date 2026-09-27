@@ -1,11 +1,14 @@
 # Export benchmarks
 
-An independent, unpublished suite in this repository. The text suite compares the native Rust public `Deck` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
+An independent, unpublished suite in this repository. The text suite compares the native Rust public `Project` API with genanki 0.13.1 on **100 / 200 / 500 / 1,000 Basic notes**, one card per note. No anki-forge Node or Python binding is measured. See the [reviewed specification](../docs/superpowers/specs/2026-09-06-basic-export-benchmark-spec.md).
 
-## Latest Rust/genanki comparison: 2026-09-21
+The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
+retain their original source snapshots and do not measure this adapter.
 
-The [current report](results/20260921-readme-genanki/report.md) measures the
-current working-tree Rust code against freshly measured genanki 0.13.1 across
+## Archived Rust/genanki comparison: 2026-09-21
+
+The [archived report](results/20260921-readme-genanki/report.md) measures the
+2026-09-21 Rust Deck implementation against freshly measured genanki 0.13.1 across
 all 20 text/media cells. This is one complete session on M1 Pro / 32 GiB /
 macOS 27.0 / AC power, with 10 timings and 5 separate peak-RSS samples per
 implementation/cell, plus three warmups before each phase.
@@ -185,7 +188,7 @@ default = []
 mimalloc = ["dep:mimalloc"]
 
 [dependencies]
-# Keep the application's existing anki_forge dependency.
+# Keep the application's existing ankiforge dependency.
 mimalloc = { version = "=0.1.52", optional = true, default-features = false }
 ```
 

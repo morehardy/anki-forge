@@ -55,7 +55,7 @@ run_one() {
 
   if [[ "${scene}" == "S10_custom_normal_bundle" || "${scene}" == "S11_custom_cloze_bundle" ]]; then
     echo "==> ${scene}: build template bundle"
-    cargo run -q -p anki_forge --example manual_template_bundle_scenario -- \
+    cargo run -q -p ankiforge --example manual_template_bundle_scenario -- \
       "${scene}" \
       "${SCENARIO_ROOT}/${scene}/input/bundle" \
       "${out_dir}/package.apkg"

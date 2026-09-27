@@ -72,16 +72,12 @@ if [[ "$mode" == "fast" ]]; then
   exit 0
 fi
 
-run cargo test -p anki_forge --features internal-tools --example conformance_surface
-run cargo run -p anki_forge --features internal-tools --example minimal_flow
-run node --test bindings/node/test/raw.test.js
-run node --test bindings/node/test/structured.test.js
-run npm --prefix bindings/node run example:legacy
+run cargo test -p ankiforge --features internal-tools --example conformance_surface
+run cargo run -p ankiforge --features internal-tools --example minimal_flow
 run npm --prefix bindings/node run setup
 run npm --prefix bindings/node run build
 run npm --prefix bindings/node run check
 run npm --prefix bindings/node run test:product
-run npm --prefix bindings/node run test:parity
 run npm --prefix bindings/node run test:installed
 run npm --prefix bindings/node run example:minimal
 run npm --prefix bindings/node run check:package
@@ -91,8 +87,7 @@ run target/python-ci-venv/bin/python -m pip install pytest==9.1.1 mypy==2.3.1 ma
 run env "VIRTUAL_ENV=$repo_root/target/python-ci-venv" target/python-ci-venv/bin/maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
 run cargo build -p anki_forge_python_native --example python_parity --locked
 run target/python-ci-venv/bin/python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
-run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python -m pytest bindings/python/tests -q \
-  --ignore=bindings/python/tests/test_import_isolation.py
+run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python -m pytest bindings/python/tests -q
 run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python bindings/python/examples/minimal_flow.py
 run target/python-ci-venv/bin/python bindings/python/examples/native_workflow.py target/python-ci-example
 run cargo run -p contract_tools -- verify --manifest "$manifest_path"

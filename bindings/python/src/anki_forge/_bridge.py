@@ -1,24 +1,22 @@
-"""Translate private extension errors at the Python public boundary."""
+"""Translate native failures while retaining machine identifiers and source chains."""
 from __future__ import annotations
-
-from collections.abc import Callable
 import json
+from collections.abc import Callable
 from typing import ParamSpec, TypeVar
-
 from . import _native
-from .diagnostics import AuthoringError, DeckError, MediaError, ProductNoteError, ProjectAddError, TemplateBundleError
-from .report import _diagnostics
-
+from .diagnostics import (ForgeError, SchemaError, AddError, MediaError, ImageOcclusionError,
+                          TemplateBundleError, CompareError, PolicyError, PersistError, BuildError)
 P = ParamSpec("P")
 T = TypeVar("T")
-
-
 def invoke(operation: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
     try:
         return operation(*args, **kwargs)
     except _native.OperationError as error:
-        payload = json.loads(str(error))
-        details = payload.get("details") or {}
-        diagnostic = _diagnostics([details["diagnostic"]])[0] if "diagnostic" in details else None
-        cls = {"add": ProjectAddError, "media": MediaError, "note": ProductNoteError, "bundle": TemplateBundleError, "deck": DeckError}.get(payload["kind"], AuthoringError)
-        raise cls(payload["code"], payload["message"], diagnostic=diagnostic, details=details) from error
+        value = json.loads(str(error))
+        details = value["details"]
+        cls = {"schema": SchemaError, "add": AddError, "media": MediaError,
+               "note": ImageOcclusionError, "bundle": TemplateBundleError,
+               "compare": CompareError, "policy": PolicyError, "persist": PersistError,
+               "build": BuildError}.get(value["kind"], ForgeError)
+        raise cls(value["code"], value["message"],
+                  kind=details.get("error_kind", value["kind"]), details=details) from error

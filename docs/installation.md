@@ -1,69 +1,69 @@
-# Add Anki Forge to your application
+# Install and run
 
-Create a Rust application that writes `spanish.apkg`. These instructions use the
-current source checkout; they do not assume a package has been published.
-For other languages, use the [Node quickstart](node/quick-start.md) or
-[Python quickstart](python/quick-start.md).
+These guides describe the current source checkout. See
+[compatibility and release status](compatibility.md) before selecting a published
+package. A source version is not evidence that the same version is available in
+a public registry.
 
 ## Requirements
 
-Use Git and Rust 1.92 or later. Anki is only needed to import and study the result;
-the library can generate packages without an Anki installation.
+- Rust 1.92 or later for the Rust library and source builds.
+- Node.js 22.13 or later for the native Node SDK.
+- Ordinary CPython 3.11/3.12 for the declared Python verification matrix.
 
-## Create your application
+A compiler is needed to build native packages from source. Applications using a
+matching prebuilt native package do not invoke Cargo at runtime.
 
-Run these commands in the directory where you keep your projects. The checkout
-and your application will be siblings. Skip cloning if you already have a checkout,
-and adjust the dependency path to its location.
+## Rust application from a checkout
 
-```sh
-git clone https://github.com/morehardy/anki-forge.git
-cargo new my-decks
-cd my-decks
-cargo add anki_forge --path ../anki-forge/anki_forge
-cargo add anyhow
+Create a small binary application. In its `Cargo.toml`, point `ankiforge` at the
+checkout's `anki_forge` directory; replace the path with your actual checkout.
+`anyhow` is an application choice for concise error propagation, and `serde_json`
+is used by the reporting examples.
+
+```toml
+[dependencies]
+ankiforge = { path = "/absolute/path/to/anki-forge/anki_forge" }
+anyhow = "1"
+serde_json = "1"
 ```
 
-Replace `src/main.rs` with this complete program:
+Save this as `src/main.rs`, then run `cargo run`:
 
-<!-- source: anki_forge/examples/target_api_basic.rs -->
 ```rust
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let mut deck = Deck::new("Spanish");
-    deck.basic()
-        .note("hola", "hello")
-        .stable_id("es:hola")
-        .add()?;
-    deck.write_apkg("spanish.apkg")?.ensure_success()?;
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", "hello"))?;
+    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+    println!("{}", output.artifact().path().display());
     Ok(())
 }
 ```
-<!-- /source -->
 
-Run it from `my-decks`:
+Open `spanish.apkg` with Anki. The namespace `spanish` and key `hola` identify the
+publication and note; the deck name is a display destination. Continue with
+[the Rust guide](rust-guide.md) or [Basic and Cloze cards](cards.md).
+
+## Run repository examples
+
+From the repository root:
 
 ```sh
-cargo run
+cargo run --locked -p ankiforge --example target_api_basic
+cargo run --locked -p ankiforge --example target_api_custom_notetype
+cargo run --locked -p ankiforge --example target_api_media
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 ```
 
-The first run compiles dependencies. It writes `my-decks/spanish.apkg`, containing
-one note and one card. Open the file with Anki and import it into your collection.
-The **Spanish** deck asks **hola** and reveals **hello**.
+The workflow example uses repository fixtures for bundle, image and audio
+coverage and creates its output directory. No network media download is needed.
 
-The crate includes its default resources. You do not need `contract_tools`,
-external contract files, or the `internal-tools` Cargo feature.
+## Node and Python
 
-## Keep your project reproducible
-
-Commit your application source and `Cargo.lock`. A path dependency uses the local
-checkout, so record the Anki Forge commit you tested when sharing your application.
-Follow the [release status](compatibility.md) before replacing it with a registry dependency.
-
-If compilation fails, check the dependency path and `rustc --version`; see
-[installation troubleshooting](troubleshooting.md#installation).
-
-Continue with [core concepts](concepts.md), [Basic and Cloze cards](cards.md),
-or [custom note types](custom-notetypes.md). Before distributing an updated deck,
-read [updates and baselines](updates.md).
+Use [the Node quick start](node/quick-start.md) or
+[the Python quick start](python/quick-start.md) for native builds and local package
+installation. Keep each facade and native binary at matching versions. Supported
+host packages are platform-specific; an executable for another operating system
+or CPU cannot be substituted.

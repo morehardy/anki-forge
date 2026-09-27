@@ -2,7 +2,7 @@
 //! reader exposes only validated directory/footer bytes and fixed local headers;
 //! malformed directories cannot trigger fallback scans into arbitrary payloads.
 use std::cell::Cell;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -127,6 +127,7 @@ pub(crate) fn open(path: &Path, limits: &InspectLimits) -> Result<ZipArchive<Ind
         }
     }
     let mut local_headers = BTreeMap::new();
+    let mut names = BTreeSet::new();
     let mut offset = 0usize;
     for _ in 0..count {
         let fixed = snapshot
@@ -142,6 +143,10 @@ pub(crate) fn open(path: &Path, limits: &InspectLimits) -> Result<ZipArchive<Ind
         ensure!(
             next as u64 <= directory_size,
             "ZIP central header exceeds directory"
+        );
+        ensure!(
+            names.insert(&snapshot[offset + 46..offset + 46 + name_len]),
+            "duplicate ZIP entry name"
         );
         let mut local_offset = u32_at(fixed, 42) as u64;
         let extra = &snapshot[offset + 46 + name_len..offset + 46 + name_len + extra_len];
@@ -213,6 +218,12 @@ pub(crate) fn open(path: &Path, limits: &InspectLimits) -> Result<ZipArchive<Ind
         reader,
     )?;
     indexing.set(false);
+    // Reject different raw encodings that the ZIP library collapses to the
+    // same decoded name, as well as raw duplicates checked above.
+    ensure!(
+        archive.len() as u64 == count,
+        "ambiguous decoded ZIP entry names"
+    );
     check("entries", None, limits.max_entries, archive.len() as u64)?;
     Ok(archive)
 }

@@ -24,7 +24,7 @@ bash "$repo_root/scripts/check_dependency_policy_exceptions.sh"
 
 mkdir -p "$output_dir"
 cp "$crate_path" "$output_dir/"
-cp "$sbom_path" "$output_dir/anki_forge.cdx.json"
+cp "$sbom_path" "$output_dir/ankiforge.cdx.json"
 cp "$repo_root/anki_forge/CHANGELOG.md" "$output_dir/CHANGELOG.md"
 cp "$repo_root/docs/dependency-policy-exceptions.json" "$output_dir/"
 
@@ -49,5 +49,5 @@ jq -n \
   --arg package_sha256 "$checksum" \
   --arg ci_evidence "$ci_evidence" \
   --slurpfile exceptions "$repo_root/docs/dependency-policy-exceptions.json" \
-  '{schema_version:"anki-forge-rust-release-v1",tag:$tag,commit:$commit,crate_version:$crate_version,bundle_version:$bundle_version,msrv:"1.92.0",stable_verified:true,tier1_platforms:["x86_64-unknown-linux-gnu","x86_64-pc-windows-msvc","x86_64-apple-darwin","aarch64-apple-darwin"],package_sha256:$package_sha256,sbom:"anki_forge.cdx.json",changelog:"CHANGELOG.md",ci_evidence:$ci_evidence,dependency_policy_exceptions:$exceptions[0]}' \
+  '{schema_version:"anki-forge-rust-release-v1",tag:$tag,commit:$commit,crate_version:$crate_version,bundle_version:$bundle_version,msrv:"1.92.0",stable_verified:true,tier1_platforms:["x86_64-unknown-linux-gnu","x86_64-pc-windows-msvc","x86_64-apple-darwin","aarch64-apple-darwin"],package_sha256:$package_sha256,sbom:"ankiforge.cdx.json",changelog:"CHANGELOG.md",ci_evidence:$ci_evidence,dependency_policy_exceptions:$exceptions[0]}' \
   >"$output_dir/release-record.json"

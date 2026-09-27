@@ -10,7 +10,7 @@ crate_version="$(awk '
 ' "$manifest")"
 
 [[ -n "$crate_version" ]] || {
-  echo "failed to resolve anki_forge crate version" >&2
+  echo "failed to resolve ankiforge crate version" >&2
   exit 1
 }
 
@@ -27,7 +27,7 @@ registry_api="${ANKI_FORGE_CRATES_IO_API_BASE:-https://crates.io/api/v1/crates}"
 status="$(curl --silent --show-error --location --retry 3 --retry-all-errors \
   --user-agent 'anki-forge-release-ci/0.1 (https://github.com/morehardy/anki-forge)' \
   --output /dev/null --write-out '%{http_code}' \
-  "$registry_api/anki_forge/$crate_version")"
+  "$registry_api/ankiforge/$crate_version")"
 case "$status" in
   200)
     printf 'required=true\n'

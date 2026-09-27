@@ -1,12 +1,10 @@
 //! Keep the first distributed APKG as evidence when publishing a revision.
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 use std::{fs, path::PathBuf};
 
 fn spanish(meaning: &str) -> anyhow::Result<Project> {
-    let mut project = Project::new("Spanish")
-        .stable_id("spanish")
-        .default_deck("Spanish");
-    project.add_note(Note::basic("hola", meaning).stable_id("es:hola"))?;
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("es:hola", Note::basic("hola", meaning))?;
     Ok(project)
 }
 
@@ -19,10 +17,8 @@ fn main() -> anyhow::Result<()> {
     let previous = directory.join("spanish-v1.apkg");
     let next = directory.join("spanish-v2.apkg");
 
-    spanish("hello")?.write_apkg(&previous)?.ensure_success()?;
-    let report =
-        spanish("hello; hi")?.build(BuildOptions::new().output(&next).compare_to(&previous))?;
-    report.ensure_success()?;
-    println!("{}", report.pretty_report());
+    spanish("hello")?.build(BuildOptions::to(&previous))?;
+    let report = spanish("hello; hi")?.build(BuildOptions::to(&next).update_from(&previous))?;
+    println!("{}", serde_json::to_string_pretty(&report.snapshot())?);
     Ok(())
 }

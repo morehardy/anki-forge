@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+#[cfg(any(test, feature = "internal-tools"))]
 use serde_json::Value;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -12,6 +13,7 @@ pub struct WriterPolicy {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(all(test, feature = "internal-tools"))]
 pub struct VerificationPolicy {
     pub id: String,
     pub version: String,
@@ -21,6 +23,7 @@ pub struct VerificationPolicy {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(all(test, feature = "internal-tools"))]
 pub struct VerificationGateRule {
     pub minimum_comparison_status: String,
     pub allowed_observation_statuses: Vec<String>,
@@ -80,6 +83,7 @@ pub struct PackageBuildResult {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(any(test, feature = "internal-tools"))]
 pub struct InspectObservations {
     pub notetypes: Vec<Value>,
     pub templates: Vec<Value>,
@@ -92,6 +96,7 @@ pub struct InspectObservations {
     pub references: Vec<Value>,
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 impl InspectObservations {
     pub(crate) fn domains(&self) -> [(&'static str, &[Value]); 9] {
         // An exhaustive destructure makes adding a field require updating this inventory.
@@ -121,6 +126,7 @@ impl InspectObservations {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(any(test, feature = "internal-tools"))]
 pub struct InspectReport {
     pub kind: String,
     pub observation_model_version: String,
@@ -134,6 +140,7 @@ pub struct InspectReport {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(feature = "internal-tools")]
 pub struct DiffChange {
     pub category: String,
     pub domain: String,
@@ -146,6 +153,7 @@ pub struct DiffChange {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(feature = "internal-tools")]
 pub struct DiffReport {
     pub kind: String,
     pub comparison_status: String,
@@ -165,6 +173,7 @@ pub struct WriterGuidPlan {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg(test)]
 pub struct NoteIdentityMetadata {
     pub schema_version: String,
     pub stable_id: String,

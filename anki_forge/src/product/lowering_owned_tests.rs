@@ -12,7 +12,17 @@ fn assert_plans_equal(actual: &LoweringPlan, expected: &LoweringPlan) {
     assert_eq!(actual.lowering_diagnostics, expected.lowering_diagnostics);
 }
 
-fn assert_owned_matches_borrowed(raw: Value) -> LoweringPlan {
+fn assert_owned_matches_borrowed(mut raw: Value) -> LoweringPlan {
+    for (index, note) in raw["notes"]
+        .as_array_mut()
+        .into_iter()
+        .flatten()
+        .enumerate()
+    {
+        if note.get("stable_id").is_none() {
+            note["stable_id"] = json!(format!("explicit-{index}"));
+        }
+    }
     let document: ProductDocument = serde_json::from_value(raw).unwrap();
     let original = document.clone();
     let serialized = serde_json::to_vec(&document).unwrap();

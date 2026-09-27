@@ -1,64 +1,61 @@
 # Core concepts
 
-Anki Forge builds `.apkg` packages from notes, note types, templates and media.
-A package can contain multiple decks. Anki imports the package and manages study scheduling.
+## Project and note
 
-## Notes and cards
+A `Project` is one publication with a stable namespace and a human-readable
+name. It can place notes in several Anki decks: `default_deck` supplies the
+fallback and `Note::deck` overrides it. A deck is a destination, not a second
+container for authoring, media or builds.
 
-| Term | Meaning | Example |
-| --- | --- | --- |
-| Note | One item of learning content, stored in fields | A vocabulary entry with “hola” and “hello” |
-| Note type | Declares fields and templates for a kind of note | Basic, Cloze, or your custom vocabulary type |
-| Field | A named value on a note | Expression, Meaning, Audio |
-| Template | Defines the front and back of a card | Show Expression, then Meaning |
-| Card | One reviewable question generated from a note | A forward vocabulary question |
-| Deck | A destination that groups cards in Anki | `Spanish::Vocabulary` |
-| Project | The authoring container for notes, note types and media | A source dataset exported into one or more decks |
+A `Note` carries its model and content. `project.add(key, note)` assigns a
+required stable source key and atomically collects dependencies. Duplicate keys,
+unknown fields, conflicting models or media fail without partially adding state.
+The project namespace and record keys must survive edits and source reordering.
+Display names and text are not identity keys.
 
-A Basic note normally produces one card. A Cloze note with `c1` and `c2`
-produces two cards. Repeating `c1` hides those occurrences together on one card.
-A custom normal note type can have multiple templates, each with its own generation rule.
+## Models, fields and templates
 
-## Choose Deck or Project
+`NoteType::builder(key)` accumulates declarations; `.build()` validates and
+returns a shareable immutable model. `model.note()` creates a note holding it.
+Built-in Basic, Cloze and Image Occlusion notes carry their own models.
 
-| Start with | Use it for | Next step |
-| --- | --- | --- |
-| `Deck` | A short Basic, Cloze or Image Occlusion workflow | [First Rust application](installation.md) |
-| `Project` | Custom fields/templates, explicit text and HTML, validation and update configuration | [Authoring guide](rust-guide.md) |
-
-Rust uses `Project::from(deck)` to move a Deck into a Project. Python provides
-`Project.from_deck(deck)` as a snapshot. Node exposes separate Deck and Project
-constructors; use its documented authoring methods. The language API guides
-describe ownership and concurrency details.
-
-## Field keys and display names
-
-A custom field can have the stable key `expr` and display name `Expression`.
-Use the key in authoring code and identity/generation rules. Use the display name
-in template HTML: `{{Expression}}`. A template also has a stable key and a display name.
-
-Keep explicit field and template keys across releases. Custom derived identity
-can also depend on selected field display names; a stable key alone does not
-make every rename identity-preserving. Use explicit note IDs when your source
-already supplies durable keys, and compare proposed changes against a baseline.
+Fields and templates have stable keys and optional display names. Author
+templates with field keys, for example `{{front}}`, even when the Anki display
+name is `正面`. Completion validates and compiles references, including sections,
+filters, Cloze and browser templates. Assignments also use keys, never a guessed
+key or display-name fallback.
 
 ## Text and HTML
 
-`Note::basic(...)` and `.text(...)` on the Rust Project API escape text.
-`.html(...)` preserves HTML. `Note::cloze(...)` preserves HTML and cloze markers;
-its extra field is text. Node/Python Project conveniences follow the same core behavior.
+Ordinary strings always mean Text, across Basic, Cloze and custom notes. Text
+escapes HTML; `Content::html` intentionally includes markup. Cloze syntax such as
+`{{c1::answer}}` is preserved in Text without making embedded HTML trusted.
+`Content::sequence` combines text, HTML, images and sounds into one field.
 
-The Rust **Deck** Basic/Cloze lanes accept HTML content, as do the bindings' Deck
-conveniences. Choose Project text setters when you need literal text escaping.
-These interfaces are not interchangeable escape policies.
+Typed image and sound content retain media dependencies until export. Do not
+render media to strings before adding it unless you also declare the asset
+explicitly for your hand-written HTML/CSS/script.
 
-## Stable identity and release history
+## Media ownership
 
-Give each logical note a stable ID, such as `es:hola`. Keep it when correcting
-that note's wording; use a different ID for a new note. Keep the project's stable
-ID across releases as well. Do not put explicit IDs in the reserved `afid:v1:*` namespace.
+`Media` is an owned snapshot with a deterministic content-derived filename.
+Import succeeds only after reading and validating the input under its budget.
+The source file may then change or disappear. Clones share storage and can be
+used in multiple projects. `with_export_name` selects a fixed portable filename
+without changing existing clones or content nodes.
 
-Identity says which note is being updated. A previous APKG or maintained identity
-lockfile provides revision evidence for the update. A plain first export does
-not guarantee later imports will update existing content. Follow the
-[complete update workflow](updates.md) and verify Anki's import behavior separately.
+Typed references collect media automatically. Explicit assets on a model or
+project are included even if static analysis cannot identify their use. The
+library does not discover file contents from arbitrary HTML or scripts.
+
+## Build and update
+
+A successful build returns an output with a guaranteed APKG. A report contains
+observations; a snapshot is JSON data and owns no files. Temporary artifacts
+remain alive only while at least one artifact owner remains.
+
+An update uses complete evidence embedded in the previous original distribution
+APKG. Independent comparison separates findings from a publication policy.
+High-risk findings block updates by default; hard errors cannot be allowed.
+Anki import settings, local edits and card scheduling still require client
+validation. See [updates](updates.md) and [build guarantees](build-guarantees.md).

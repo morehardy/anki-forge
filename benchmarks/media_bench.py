@@ -111,7 +111,7 @@ def run(args):
     if metadata["genanki"].get("genanki") != "0.13.1" or metadata["genanki"].get("architecture") != platform.machine():
         raise RuntimeError("wrong genanki version or cross-architecture comparator")
     feature_tree = bench.command(["cargo", "tree", "--locked", "--offline", "--manifest-path", str(bench.SUITE / "adapters/rust/Cargo.toml"), "-e", "features"] + bench.rust_feature_args(rust_configuration["adapter_features"]))
-    if 'anki_forge feature "internal-tools"' in feature_tree:
+    if 'ankiforge feature "internal-tools"' in feature_tree:
         raise RuntimeError("measured Rust adapter must use public default features")
     provenance = bench.build_provenance(adapters)
     required = [bench.COLLECTOR, bench.INSPECTOR, Path(next(adapter for adapter in adapters if adapter["id"] == "rust")["command"][0])]

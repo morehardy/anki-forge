@@ -228,7 +228,7 @@ def manifest(adapters, fixture_evidence, mode, attempts, budget_bytes):
     rust_configuration = rust_adapter_configuration(metadata["rust"])
     feature_tree = command(["cargo", "tree", "--locked", "--offline", "--manifest-path", str(SUITE / "adapters/rust/Cargo.toml"), "-e", "features"]
                            + rust_feature_args(rust_configuration["adapter_features"]))
-    if 'anki_forge feature "internal-tools"' in feature_tree:
+    if 'ankiforge feature "internal-tools"' in feature_tree:
         raise RuntimeError("measured Rust adapter must not enable internal-tools")
     return {"schema": "basic-benchmark-run-v1", "spec_revision": 3, "created_utc": utc(), "mode": mode,
             "source_commit": command(["git", "rev-parse", "HEAD"]),

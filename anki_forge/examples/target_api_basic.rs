@@ -1,11 +1,8 @@
-use anki_forge::prelude::*;
+use ankiforge::{BuildOptions, Note, Project};
 
 fn main() -> anyhow::Result<()> {
-    let mut deck = Deck::new("Spanish");
-    deck.basic()
-        .note("hola", "hello")
-        .stable_id("es:hola")
-        .add()?;
-    deck.write_apkg("spanish.apkg")?.ensure_success()?;
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("spanish.apkg"))?;
     Ok(())
 }

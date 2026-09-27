@@ -5,15 +5,19 @@ use std::{
     sync::{Arc, Mutex, OnceLock},
 };
 
-use anyhow::{anyhow, bail, Context};
+#[cfg(feature = "internal-tools")]
+use anyhow::bail;
+use anyhow::{anyhow, Context};
 use jsonschema::JSONSchema;
 use serde_json::Value;
 use url::Url;
 
+#[cfg(feature = "internal-tools")]
 use super::{resolve_asset_path, RuntimeBundle};
 
 static SCHEMA_CACHE: OnceLock<Mutex<HashMap<PathBuf, Arc<JSONSchema>>>> = OnceLock::new();
 
+#[cfg(feature = "internal-tools")]
 pub(crate) fn load_schema_asset(
     bundle: &RuntimeBundle,
     key: &str,
@@ -53,6 +57,7 @@ pub(crate) fn load_schema(path: impl AsRef<Path>) -> anyhow::Result<Arc<JSONSche
         .clone())
 }
 
+#[cfg(feature = "internal-tools")]
 pub(crate) fn validate_value(schema: &JSONSchema, value: &Value) -> anyhow::Result<()> {
     if let Err(errors) = schema.validate(value) {
         let details = errors

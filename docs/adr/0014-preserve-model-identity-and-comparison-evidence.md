@@ -1,5 +1,7 @@
 # ADR 0014: Preserve model identity and compare all observed domains
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 ## Decision
 
 Numeric Anki notetype IDs are persistent identities. New IDs are derived by one

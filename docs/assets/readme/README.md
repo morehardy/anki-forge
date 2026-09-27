@@ -31,7 +31,7 @@ independent renderer additionally needs the local upstream Anki source and
 `protoc`; see the [Anki oracle setup](../../../benchmarks/README.md).
 
 ```sh
-cargo run --locked -p anki_forge --example readme_showcase -- target/readme/showcase.apkg
+cargo run --locked -p ankiforge --example readme_showcase -- target/readme/showcase.apkg
 cargo run --locked --manifest-path scripts/roundtrip_oracle/Cargo.toml --bin readme_render -- target/readme/rendered target/readme/showcase.apkg
 MPLCONFIGDIR=target/readme/matplotlib benchmarks/.venv/bin/python scripts/generate_readme_assets.py --cards target/readme/rendered/cards.json --package target/readme/showcase.apkg
 ```
@@ -84,7 +84,7 @@ package and a revision against that package. To check both imports in the same
 temporary Anki collection:
 
 ```sh
-cargo run --locked -p anki_forge --example readme_update -- target/readme/updates
+cargo run --locked -p ankiforge --example readme_update -- target/readme/updates
 cargo run --locked --manifest-path scripts/roundtrip_oracle/Cargo.toml --bin readme_render -- target/readme/updated target/readme/updates/spanish-v1.apkg target/readme/updates/spanish-v2.apkg
 ```
 

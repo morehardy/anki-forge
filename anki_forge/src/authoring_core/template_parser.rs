@@ -2,6 +2,15 @@
 pub struct ParsedTemplate {
     pub tokens: Vec<TemplateToken>,
     pub issues: Vec<TemplateParseIssue>,
+    /// Field references in source order, including both ends of sections.
+    pub references: Vec<TemplateFieldReference>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TemplateFieldReference {
+    /// The field only, excluding filters, delimiters and surrounding whitespace.
+    pub byte_range: std::ops::Range<usize>,
+    pub expression_range: std::ops::Range<usize>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -40,6 +49,7 @@ pub struct TemplateParseIssue {
 pub fn parse_template(source: &str) -> ParsedTemplate {
     let mut tokens = Vec::new();
     let mut issues = Vec::new();
+    let mut references = Vec::new();
     let mut sections = Vec::<(String, usize)>::new();
     let mut cursor = 0;
 
@@ -66,11 +76,28 @@ pub fn parse_template(source: &str) -> ParsedTemplate {
             break;
         };
         let close = open + 2 + relative_close;
-        let expression = source[open + 2..close].trim();
+        let expression_range = trim_range(source, open + 2..close);
+        let expression = &source[expression_range.clone()];
         if expression.is_empty() {
             issues.push(syntax_issue("template expression cannot be empty", open));
             cursor = close + 2;
             continue;
+        }
+
+        if !expression.starts_with('!') {
+            let field_start = if expression.starts_with(['#', '^', '/']) {
+                expression_range.start + 1
+            } else {
+                expression
+                    .rfind(':')
+                    .map_or(expression_range.start, |colon| {
+                        expression_range.start + colon + 1
+                    })
+            };
+            references.push(TemplateFieldReference {
+                byte_range: trim_range(source, field_start..expression_range.end),
+                expression_range: open..close + 2,
+            });
         }
 
         if let Some(field) = expression.strip_prefix('#') {
@@ -114,6 +141,12 @@ pub fn parse_template(source: &str) -> ParsedTemplate {
             tokens.push(TemplateToken::Comment);
         } else {
             let segments = expression.split(':').map(str::trim).collect::<Vec<_>>();
+            if segments.iter().any(|segment| segment.is_empty()) {
+                issues.push(syntax_issue(
+                    "template filter and field segments must be nonempty",
+                    open,
+                ));
+            }
             let field = segments.last().copied().unwrap_or_default().to_string();
             let filters = segments[..segments.len().saturating_sub(1)]
                 .iter()
@@ -137,7 +170,18 @@ pub fn parse_template(source: &str) -> ParsedTemplate {
         });
     }
 
-    ParsedTemplate { tokens, issues }
+    ParsedTemplate {
+        tokens,
+        issues,
+        references,
+    }
+}
+
+fn trim_range(source: &str, range: std::ops::Range<usize>) -> std::ops::Range<usize> {
+    let raw = &source[range.clone()];
+    let trimmed_start = raw.trim_start();
+    let start = range.start + raw.len() - trimmed_start.len();
+    start..start + trimmed_start.trim_end().len()
 }
 
 pub fn is_special_template_field(field: &str) -> bool {
@@ -145,6 +189,28 @@ pub fn is_special_template_field(field: &str) -> bool {
         field,
         "Card" | "CardFlag" | "Deck" | "FrontSide" | "Subdeck" | "Tags" | "Type"
     )
+}
+
+/// Rewrites only parsed field-reference byte ranges. Unknown bindings (including
+/// Anki system expressions) retain their exact original text.
+pub(crate) fn rewrite_fields(
+    source: &str,
+    parsed: &ParsedTemplate,
+    bindings: &std::collections::BTreeMap<&str, &str>,
+) -> String {
+    let mut output = String::with_capacity(source.len());
+    let mut cursor = 0;
+    for reference in &parsed.references {
+        let field = &source[reference.byte_range.clone()];
+        let Some(name) = bindings.get(field) else {
+            continue;
+        };
+        output.push_str(&source[cursor..reference.byte_range.start]);
+        output.push_str(name);
+        cursor = reference.byte_range.end;
+    }
+    output.push_str(&source[cursor..]);
+    output
 }
 
 fn syntax_issue(message: &str, byte_offset: usize) -> TemplateParseIssue {

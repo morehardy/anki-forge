@@ -8,8 +8,8 @@ pub fn run(
     artifacts_dir: &str,
     output: &str,
 ) -> anyhow::Result<String> {
-    let runtime = anki_forge::runtime::load_bundle_from_manifest(manifest)?.runtime;
-    let result = anki_forge::runtime::build_from_path(
+    let runtime = ankiforge::tools::load_runtime(manifest)?;
+    let result = ankiforge::tools::build_from_path(
         &runtime,
         input,
         writer_policy,
@@ -18,7 +18,7 @@ pub fn run(
     )?;
 
     match output {
-        "contract-json" => anki_forge::writer::to_writer_canonical_json(&result),
+        "contract-json" => ankiforge::tools::canonical_json(&result),
         "human" => Ok(format!("status: {}", result.result_status)),
         other => bail!("unsupported build output mode: {other}"),
     }

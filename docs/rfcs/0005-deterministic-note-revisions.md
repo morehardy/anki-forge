@@ -100,7 +100,7 @@ To rerun the real import oracle, set `ANKI_FORGE_ANKI_PYTHON` to the Python
 executable of an installed Anki environment, then run:
 
 ```sh
-cargo test -p anki_forge --features internal-tools \
+cargo test -p ankiforge --features internal-tools \
   --test update_safety_note_revision_tests \
   real_anki_applies_content_updates_without_changing_identity_or_review_state \
   -- --ignored --nocapture

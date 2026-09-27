@@ -5,7 +5,11 @@ asset_refs:
   - errors/error-registry.yaml
 ---
 
-# Note Stable ID Semantics
+# Low-level identity fixture protocol
+
+This document governs the retained protocol fixtures only. Native Project authors
+provide explicit namespace/note keys and use [package identity semantics](identity-update-safety.md);
+they do not infer IDs from the recipe inputs below.
 
 `afid:v1:*` note identity is computed from a structured payload serialized by
 `contracts/semantics/canonical-serialization.md`.

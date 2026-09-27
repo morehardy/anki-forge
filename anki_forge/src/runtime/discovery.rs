@@ -1,5 +1,8 @@
-use std::path::{Path, PathBuf};
+#[cfg(feature = "internal-tools")]
+use std::path::Path;
+use std::path::PathBuf;
 
+#[cfg(feature = "internal-tools")]
 use anyhow::{bail, Context};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -16,6 +19,7 @@ pub struct ResolvedRuntime {
     pub bundle_version: String,
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn discover_workspace_runtime(start: impl AsRef<Path>) -> anyhow::Result<ResolvedRuntime> {
     let start = start.as_ref();
     let start = start

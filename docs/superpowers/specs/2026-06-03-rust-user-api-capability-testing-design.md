@@ -72,7 +72,7 @@ Rust user API
 
 The inspection step is an APKG observation oracle. It is allowed to inspect the generated package, but tests should not assert on private lowering decisions unless the user-visible package or report requires them.
 
-The inspection oracle is the existing `anki_forge::writer::inspect_apkg(path)` re-export, which returns the existing `InspectReport` shape from the writer layer. Matrix helpers should derive assertions from that report's observed note types, fields, templates, cards, media filenames, media references, deck names, and note identity metadata. They should not parse zip entries directly unless a future scenario needs a package property that `InspectReport` cannot expose; in that case, add a focused inspection projection before adding ad hoc zip assertions.
+The inspection oracle is the existing `ankiforge::writer::inspect_apkg(path)` re-export, which returns the existing `InspectReport` shape from the writer layer. Matrix helpers should derive assertions from that report's observed note types, fields, templates, cards, media filenames, media references, deck names, and note identity metadata. They should not parse zip entries directly unless a future scenario needs a package property that `InspectReport` cannot expose; in that case, add a focused inspection projection before adding ad hoc zip assertions.
 
 `inspect_apkg(path)` returns `anyhow::Result<InspectReport>`. In success scenarios, an `Err` from `inspect_apkg` is a harness/package-generation failure, and an `Ok(report)` with degraded observation status or missing required observed domains is a package observation failure. Success scenarios should assert that inspection succeeds and that the inspected observations contain the scenario's expected package surface.
 
@@ -140,7 +140,7 @@ The `rust_user_capability_matrix` test target must be compiled unconditionally b
 Each scenario id must also be the Rust ignored test function name. The script uses Cargo's test list as the source of truth instead of maintaining a separate scenario list. It discovers scenarios with:
 
 ```bash
-cargo test -p anki_forge --test rust_user_capability_matrix -- --ignored --list
+cargo test -p ankiforge --test rust_user_capability_matrix -- --ignored --list
 ```
 
 The first matrix defines at least 23 full-matrix scenario ids: 7 success scenarios, 10 diagnostic and warning scenarios, and 6 update-safety scenarios. The `rust_user_capability_matrix` target should reserve ignored root-level tests for capability scenarios, so the script can parse listed test names directly. For all-scenario runs, the script loops over the discovered ordered list and invokes each scenario separately; for named runs, it validates names against the discovered list and invokes only those names. Discovery is a script sanity check: if parsing finds zero scenarios, a name outside `[a-z0-9_]+`, or fewer than 23 scenarios before a spec update reduces the matrix, the script exits with infrastructure code `2` and prints the raw `cargo test --list` output location.
@@ -148,7 +148,7 @@ The first matrix defines at least 23 full-matrix scenario ids: 7 success scenari
 The script should call the exact target explicitly. A single-scenario automated invocation uses:
 
 ```bash
-cargo test -p anki_forge --test rust_user_capability_matrix "$scenario" -- --ignored --exact --nocapture
+cargo test -p ankiforge --test rust_user_capability_matrix "$scenario" -- --ignored --exact --nocapture
 ```
 
 The ordinary workspace test run still compiles the full matrix test target, which catches API signature breakage without executing every heavy scenario. Manual Desktop export uses the same scenario ids and builders, but the script sets `ANKI_FORGE_CAPABILITY_MODE=manual-desktop`; automated matrix runs set or default to `ANKI_FORGE_CAPABILITY_MODE=automated`.

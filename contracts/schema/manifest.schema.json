@@ -1,7 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["bundle_version", "component_versions", "compatibility", "assets"],
+  "required": [
+    "bundle_version",
+    "component_versions",
+    "compatibility",
+    "assets"
+  ],
   "additionalProperties": false,
   "properties": {
     "bundle_version": {
@@ -11,7 +16,12 @@
     },
     "component_versions": {
       "type": "object",
-      "required": ["schema", "fixtures", "service_envelope", "error_registry"],
+      "required": [
+        "schema",
+        "fixtures",
+        "service_envelope",
+        "error_registry"
+      ],
       "additionalProperties": {
         "type": "string",
         "minLength": 1
@@ -37,7 +47,9 @@
     },
     "compatibility": {
       "type": "object",
-      "required": ["public_axis"],
+      "required": [
+        "public_axis"
+      ],
       "additionalProperties": false,
       "properties": {
         "public_axis": {
@@ -97,7 +109,11 @@
         "identity_update_safety_semantics",
         "product_document_v3_schema",
         "template_bundle_schema",
-        "template_semantics"
+        "template_semantics",
+        "project_input_schema",
+        "identity_evidence_schema",
+        "comparison_report_schema",
+        "native_authoring_semantics"
       ],
       "additionalProperties": false,
       "properties": {
@@ -306,6 +322,22 @@
           "minLength": 1
         },
         "template_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "project_input_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_evidence_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_report_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_authoring_semantics": {
           "type": "string",
           "minLength": 1
         }

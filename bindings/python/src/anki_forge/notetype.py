@@ -1,253 +1,106 @@
 from __future__ import annotations
-
-import string
-from dataclasses import dataclass, field
-from typing import Iterable, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from .identity import IdentityRecipe
-
-from .diagnostics import ValidationError
+from dataclasses import dataclass, replace, asdict
+from collections.abc import Iterable
+import json
 from . import _native
-
-_ASCII_CONTROL = "".join(chr(value) for value in range(32)) + chr(127)
-_ASCII_WHITESPACE = "".join(chr(value) for value in range(128) if chr(value) in string.whitespace)
-
-
-def _has_control(value: str) -> bool:
-    return any(char in _ASCII_CONTROL for char in value)
-
-
-def _reject_ascii_control(value: str, label: str) -> None:
-    if _has_control(value):
-        raise ValidationError(f"{label} must not contain ASCII control characters")
-
-
-def _validate_non_empty(value: str, label: str) -> str:
-    _reject_ascii_control(value, label)
-    stripped = value.strip(_ASCII_WHITESPACE)
-    if not stripped:
-        raise ValidationError(f"{label} must not be empty")
-    return stripped
-
-
-def _validate_optional_non_empty(value: str | None, label: str) -> str | None:
-    if value is None:
-        return None
-    return _validate_non_empty(value, label)
-
-
-def _validate_source(value: str, label: str) -> str:
-    """Preserve authoring strings; their semantic validation belongs to Rust."""
-    if not isinstance(value, str):
-        raise ValidationError(f"{label} must be a string")
-    return value
-
-
-def _validate_optional_source(value: str | None, label: str) -> str | None:
-    return None if value is None else _validate_source(value, label)
-
-
-def _validate_id(value: str, label: str = "id") -> str:
-    return _validate_non_empty(value, label)
-
-
-def _validate_tag(value: str) -> str:
-    normalized = _validate_non_empty(value, "tag")
-    if any(char in _ASCII_WHITESPACE for char in normalized):
-        raise ValidationError("tag must not contain whitespace")
-    return normalized
-
-
-@dataclass(frozen=True)
-class GenerationRule:
-    kind: str
-    fields: tuple[str, ...] = ()
-    field: str | None = None
-
-    def __post_init__(self) -> None:
-        kind = _validate_non_empty(self.kind, "generation rule kind")
-        if kind not in {"anki_default", "all", "any", "cloze"}:
-            raise ValidationError(f"unknown generation rule kind: {kind}")
-
-        fields = tuple(_validate_source(field_key, "field key") for field_key in self.fields)
-        field = _validate_optional_source(self.field, "field")
-
-        if kind in {"all", "any"}:
-            if not fields:
-                raise ValidationError(f"{kind} generation rule requires at least one field key")
-            if field is not None:
-                raise ValidationError(f"{kind} generation rule must not set field")
-        elif kind == "cloze":
-            if fields:
-                raise ValidationError("cloze generation rule must not set fields")
-            if field is None:
-                raise ValidationError("cloze generation rule requires a field")
-        elif fields or field is not None:
-            raise ValidationError("anki_default generation rule must not set fields or field")
-
-        object.__setattr__(self, "kind", kind)
-        object.__setattr__(self, "fields", fields)
-        object.__setattr__(self, "field", field)
-
-    @classmethod
-    def anki_default(cls) -> GenerationRule:
-        return cls(kind="anki_default")
-
-    @classmethod
-    def all(cls, field_keys: Iterable[str]) -> GenerationRule:
-        return cls(kind="all", fields=tuple(field_keys))
-
-    @classmethod
-    def any(cls, field_keys: Iterable[str]) -> GenerationRule:
-        return cls(kind="any", fields=tuple(field_keys))
-
-    @classmethod
-    def cloze(cls, field: str) -> GenerationRule:
-        return cls(kind="cloze", field=field)
-
+from ._bridge import invoke
+from .media import Media, MediaLimits
+from .options import PathInput, absolute_path
 
 @dataclass(frozen=True)
 class Field:
-    name: str
-    key: str | None = None
-    identity: bool = False
-    sort: bool = False
+    key: str
+    name: str | None = None
     required: bool = False
-    optional: bool = False
-    key_auto_derived: bool = field(init=False, repr=False, compare=False)
+    sort: bool = False
 
-    def __post_init__(self) -> None:
-        if self.required and self.optional:
-            raise ValidationError("field cannot be both required and optional")
-        name = _validate_source(self.name, "field name")
-        key = _validate_source(self.key, "field key") if self.key is not None else _native.default_field_key(name)
-        object.__setattr__(self, "key_auto_derived", self.key is None)
-        object.__setattr__(self, "name", name)
-        object.__setattr__(self, "key", key)
+@dataclass(frozen=True)
+class GenerationRule:
+    kind: str = "anki_default"
+    fields: tuple[str, ...] = ()
 
+    @staticmethod
+    def all(fields: Iterable[str]) -> GenerationRule:
+        return GenerationRule("all", tuple(fields))
+
+    @staticmethod
+    def any(fields: Iterable[str]) -> GenerationRule:
+        return GenerationRule("any", tuple(fields))
 
 @dataclass(frozen=True)
 class Template:
-    name: str
+    key: str
     front: str
     back: str
-    key: str | None = None
-    generate_when: GenerationRule | None = None
+    name: str | None = None
     browser_front: str | None = None
     browser_back: str | None = None
     target_deck: str | None = None
+    generation: GenerationRule = GenerationRule()
 
-    def __post_init__(self) -> None:
-        name = _validate_source(self.name, "template name")
-        key = _validate_source(self.key, "template key") if self.key is not None else _native.default_template_key(name)
-        front = _validate_source(self.front, "template front")
-        back = _validate_source(self.back, "template back")
-        browser_front = _validate_optional_source(self.browser_front, "browser front")
-        browser_back = _validate_optional_source(self.browser_back, "browser back")
-        target_deck = _validate_optional_source(self.target_deck, "target deck")
-        generate_when = self.generate_when or GenerationRule.anki_default()
-        if not isinstance(generate_when, GenerationRule):
-            raise ValidationError("template generate_when must be a GenerationRule")
-        object.__setattr__(self, "name", name)
-        object.__setattr__(self, "key", key)
-        object.__setattr__(self, "front", front)
-        object.__setattr__(self, "back", back)
-        object.__setattr__(self, "browser_front", browser_front)
-        object.__setattr__(self, "browser_back", browser_back)
-        object.__setattr__(self, "target_deck", target_deck)
-        object.__setattr__(self, "generate_when", generate_when)
-
-
-@dataclass
+@dataclass(frozen=True)
 class NoteType:
-    id: str
-    name: str | None = None
-    fields: list[Field] = field(default_factory=list)
-    templates: list[Template] = field(default_factory=list)
-    css_value: str | None = None
-    custom_value: bool = True
-    kind_value: str = "normal"
-    cloze_field: str | None = None
-    identity_value: IdentityRecipe | None = None
+    """A completed model validated by Rust; its definition cannot be mutated."""
+    _handle: _native.NativeNoteType
 
-    def __setattr__(self, name: str, value: object) -> None:
-        if name == "id" and "id" in self.__dict__:
-            raise AttributeError("note type id is immutable")
-        super().__setattr__(name, value)
+    @staticmethod
+    def builder(key: str) -> NoteTypeBuilder:
+        return NoteTypeBuilder(key)
 
-    def __delattr__(self, name: str) -> None:
-        if name == "id" and "id" in self.__dict__:
-            raise AttributeError("note type id is immutable")
-        super().__delattr__(name)
+    @staticmethod
+    def from_bundle(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> NoteType:
+        return NoteType(invoke(_native.NativeNoteType.from_bundle, absolute_path(path), limits.max_bytes))
 
-    def __post_init__(self) -> None:
-        note_type_id = _validate_id(self.id, "note type id")
-        object.__setattr__(self, "id", note_type_id)
-        object.__setattr__(self, "name", _validate_source(self.name, "note type name") if self.name is not None else note_type_id)
-        if self.kind_value not in {"normal", "cloze"}:
-            raise ValidationError("note type kind must be normal or cloze")
-        if self.kind_value == "cloze":
-            object.__setattr__(
-                self,
-                "cloze_field",
-                _validate_source(self.cloze_field, "cloze field")
-                if self.cloze_field is not None
-                else None,
-            )
-        elif self.cloze_field is not None:
-            raise ValidationError("normal note type must not set cloze_field")
-        if self.css_value is not None:
-            _validate_source(self.css_value, "css")
+    @property
+    def key(self) -> str:
+        return self._handle.key()
 
-    @classmethod
-    def custom(cls, note_type_id: str, name: str | None = None, css: str | None = None) -> NoteType:
-        return cls(note_type_id, name=name, css_value=css, custom_value=True)
+    @property
+    def name(self) -> str:
+        return self._handle.display_name()
 
-    @classmethod
-    def custom_cloze(
-        cls,
-        note_type_id: str,
-        cloze_field: str,
-        name: str | None = None,
-        css: str | None = None,
-    ) -> NoteType:
-        return cls(
-            note_type_id,
-            name=name,
-            css_value=css,
-            custom_value=True,
-            kind_value="cloze",
-            cloze_field=cloze_field,
-        )
+    def note(self) -> Note:
+        from .note import Note
+        return Note(self._handle.note())
 
-    def css(self, css: str | None) -> NoteType:
-        """Set CSS for this note type, or clear CSS when passed None."""
-        if css is None:
-            self.css_value = None
-        else:
-            _validate_source(css, "css")
-            self.css_value = css
-        return self
+@dataclass(frozen=True)
+class NoteTypeBuilder:
+    _key: str
+    _name: str | None = None
+    _fields: tuple[Field, ...] = ()
+    _templates: tuple[Template, ...] = ()
+    _css: str = ""
+    _cloze_field: str | None = None
+    _assets: tuple[Media, ...] = ()
 
-    def identity(self, recipe: IdentityRecipe) -> NoteType:
-        from .identity import IdentityRecipe
+    def name(self, value: str) -> NoteTypeBuilder:
+        return replace(self, _name=value)
 
-        if not isinstance(recipe, IdentityRecipe):
-            raise ValidationError("note type identity must be an IdentityRecipe")
-        self.identity_value = recipe
-        return self
+    def field(self, value: Field) -> NoteTypeBuilder:
+        return replace(self, _fields=(*self._fields, value))
 
-    def field(self, field: Field) -> NoteType:
-        self.fields.append(field)
-        return self
+    def template(self, value: Template) -> NoteTypeBuilder:
+        return replace(self, _templates=(*self._templates, value))
 
-    def template(self, template: Template) -> NoteType:
-        self.templates.append(template)
-        return self
+    def css(self, value: str) -> NoteTypeBuilder:
+        return replace(self, _css=value)
 
-    def validate(self) -> NoteType:
-        from .project import Project
+    def cloze_field(self, key: str) -> NoteTypeBuilder:
+        return replace(self, _cloze_field=key)
 
-        Project("NoteType validation").add_notetype(self)
-        return self
+    def asset(self, value: Media) -> NoteTypeBuilder:
+        return replace(self, _assets=(*self._assets, value))
+
+    def build(self) -> NoteType:
+        templates = [asdict(t) for t in self._templates]
+        for t in templates:
+            if t["generation"]["kind"] == "anki_default":
+                t["generation"].pop("fields")
+        value = dict(key=self._key, name=self._name, fields=[asdict(f) for f in self._fields],
+                     templates=templates, css=self._css, cloze_field=self._cloze_field)
+        return NoteType(invoke(_native.NativeNoteType.build, json.dumps(value),
+                               [m._handle for m in self._assets]))
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .note import Note

@@ -13,7 +13,7 @@ inputs. Explain the expected file, card/note counts and how to inspect the resul
 Then cover the relevant errors and link to a next task and API reference.
 
 Keep field keys, display names, note IDs and card counts distinct. Describe
-Project text escaping and Deck HTML semantics accurately. Record each language's
+uniform text escaping and explicit Content::html accurately. Record each language's
 own version and supported behavior; core support does not imply SDK parity.
 
 ## Keep code synchronized
@@ -36,8 +36,9 @@ check repository link targets, and check declared version tables. Use
 It updates marked blocks only; it does not prove the program works.
 
 The website build runs the Rust showcase and documentation workflow. CI also
-runs the complete source-linked Basic/custom examples, a Python documentation
-example job, and the Node minimal/installed example checks. New guides must
+runs every complete imported Rust main plus the Basic/custom/media/workflow
+examples in isolated directories, observes their APKG contents, and checks Python
+and Node installed examples. New guides must
 extend the relevant execution check when they add another complete program.
 
 ## Structure and compatibility

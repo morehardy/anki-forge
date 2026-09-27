@@ -134,7 +134,7 @@ IndexNow 可以在部署成功且公共 URL 已可用后通知发生变化的 UR
 
 ### 5.3 品牌身份与外部信任
 
-统一使用可相互对应的名称：展示名 `Anki Forge`、仓库/包名 `anki-forge`、Rust 标识 `anki_forge`、Node 包名 `anki-forge-node`。在一处项目介绍中解释这些对应关系，保留真实仓库链接。
+统一使用可相互对应的名称：展示名 `Anki Forge`、仓库/包名 `anki-forge`、Rust 标识 `ankiforge`、Node 包名 `anki-forge-node`。在一处项目介绍中解释这些对应关系，保留真实仓库链接。
 
 当前源文件可做的具体改动：
 

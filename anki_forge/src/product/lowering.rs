@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::authoring_core::stock::{stock_lowering_defaults, StockLoweringDefaults};
 
-use crate::authoring::{
+use crate::authoring_core::{
     AuthoringDocument, AuthoringField, AuthoringMedia, AuthoringMediaSource, AuthoringNote,
     AuthoringNotetype, AuthoringTemplate,
 };
@@ -589,6 +589,7 @@ fn lower_legacy_product_document(
 
 // Project creates this payload solely for lowering. Consume its notes so HTML
 // and note metadata can move into Authoring without changing document APIs.
+#[cfg(test)]
 pub(crate) fn lower_owned_product_v2_document(
     document_id: String,
     mut payload: ProductDocumentV2Payload,
@@ -1007,6 +1008,10 @@ fn lower_product_v2_custom_notetype(
     custom: &ProductCustomNoteTypeV2,
     dialect: ProductLoweringDialect,
 ) -> AuthoringNotetype {
+    let stock = custom.stock_kind.as_deref().map(|kind| {
+        crate::authoring_core::stock::stock_lowering_defaults(kind)
+            .expect("native stock marker identifies a built-in model")
+    });
     let field_name_by_key = custom
         .fields
         .iter()
@@ -1022,8 +1027,14 @@ fn lower_product_v2_custom_notetype(
             config_id: Some(crate::product::stable_config_id(
                 "field", &custom.id, &field.key,
             )),
-            tag: None,
-            prevent_deletion: false,
+            tag: stock
+                .as_ref()
+                .and_then(|defaults| defaults.fields.get(ord))
+                .and_then(|field| field.tag),
+            prevent_deletion: stock
+                .as_ref()
+                .and_then(|defaults| defaults.fields.get(ord))
+                .is_some_and(|field| field.prevent_deletion),
             sort: field.sort,
         })
         .collect();
@@ -1091,7 +1102,7 @@ fn lower_product_v2_custom_notetype(
             "normal".into()
         },
         name: custom.name.clone(),
-        original_stock_kind: None,
+        original_stock_kind: custom.stock_kind.clone(),
         original_id: None,
         fields: Some(fields),
         templates: Some(templates),
@@ -1603,47 +1614,13 @@ fn lower_product_v2_stock_note(
         field_source_keys.insert(authoring_name.to_string(), source_key.to_string());
     }
 
-    let note_id = if let Some(stable_id) = stock.stable_id.as_deref() {
-        stable_id.to_string()
-    } else if stock.note_type_id == "basic" {
-        match crate::deck::identity::derive_basic_stock_stable_id_from_front(
-            fields.get("Front").map(String::as_str).unwrap_or_default(),
-        ) {
-            Ok(stable_id) => stable_id,
-            Err(error) => {
-                push_product_diagnostic_at(
-                    plan,
-                    "PRODUCT.IDENTITY_MISSING",
-                    format!("could not derive basic stock identity: {error}"),
-                    stock.source_path.as_deref(),
-                );
-                return;
-            }
-        }
-    } else if stock.note_type_id == "cloze" {
-        match crate::deck::identity::derive_cloze_stock_stable_id_from_text(
-            fields.get("Text").map(String::as_str).unwrap_or_default(),
-        ) {
-            Ok(stable_id) => stable_id,
-            Err(error) => {
-                push_product_diagnostic_at(
-                    plan,
-                    "PRODUCT.IDENTITY_MISSING",
-                    format!("could not derive cloze stock identity: {error}"),
-                    stock.source_path.as_deref(),
-                );
-                return;
-            }
-        }
-    } else if stock.note_type_id == "image_occlusion" {
+    let Some(note_id) = stock.stable_id.clone() else {
         push_product_diagnostic_at(
             plan,
             "PRODUCT.IDENTITY_MISSING",
-            "image occlusion stock notes require stable_id until IO identity inference is supported",
+            "native notes require an explicit stable key",
             stock.source_path.as_deref(),
         );
-        return;
-    } else {
         return;
     };
 
@@ -1767,55 +1744,14 @@ fn lower_product_v2_custom_note(
         return;
     }
 
-    let note_id = if let Some(stable_id) = note.stable_id.as_deref() {
-        stable_id.to_string()
-    } else {
-        let identity_fields = custom_identity_field_keys(notetype);
-        if identity_fields.is_empty() {
-            push_product_diagnostic_at(
-                plan,
-                "PRODUCT.IDENTITY_MISSING",
-                format!(
-                    "custom note type '{}' has no identity fields for derived note identity",
-                    notetype.id
-                ),
-                note.source_path.as_deref(),
-            );
-            return;
-        }
-        for key in &identity_fields {
-            if !field_by_key.contains_key(key.as_str()) {
-                push_product_diagnostic_at(
-                    plan,
-                    "PRODUCT.IDENTITY_FIELD_UNKNOWN",
-                    format!(
-                        "custom note type '{}' identity references unknown field key '{}'",
-                        notetype.id, key
-                    ),
-                    notetype.source_path.as_deref(),
-                );
-                return;
-            }
-        }
-        let selected_fields = identity_fields
-            .into_iter()
-            .map(|key| {
-                let (_, field) = field_by_key
-                    .get(key.as_str())
-                    .expect("identity field keys were validated before derivation");
-                let value = fields
-                    .get(&field.name)
-                    .map(|value| crate::deck::identity::normalize_field_text_for_identity(value))
-                    .unwrap_or_default();
-                crate::product::identity::CustomIdentityFieldComponent {
-                    key,
-                    name: field.name.clone(),
-                    value,
-                }
-            })
-            .collect();
-        crate::product::identity::derive_custom_notetype_identity(&notetype.id, selected_fields)
-            .stable_id
+    let Some(note_id) = note.stable_id.clone() else {
+        push_product_diagnostic_at(
+            plan,
+            "PRODUCT.IDENTITY_MISSING",
+            "native notes require an explicit stable key",
+            note.source_path.as_deref(),
+        );
+        return;
     };
 
     let authoring_index = plan.authoring_document.notes.len();
@@ -1852,19 +1788,6 @@ fn lower_product_v2_custom_note(
         product_id,
         authoring_id: note_id,
     });
-}
-
-fn custom_identity_field_keys(notetype: &ProductCustomNoteTypeV2) -> Vec<String> {
-    match notetype.identity.as_ref() {
-        Some(ProductIdentityV2::Fields { fields }) => fields.clone(),
-        Some(ProductIdentityV2::Unknown(_)) => Vec::new(),
-        None => notetype
-            .fields
-            .iter()
-            .filter(|field| field.identity)
-            .map(|field| field.key.clone())
-            .collect(),
-    }
 }
 
 fn render_owned_v2_content(

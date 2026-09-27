@@ -22,6 +22,7 @@ pub fn selector_resolve_error_code(error: &SelectorResolveError) -> &'static str
     }
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
     if request.input.media.is_empty() {
         return normalize_with_options(
@@ -56,17 +57,19 @@ pub fn normalize(request: NormalizationRequest) -> NormalizationResult {
     )
 }
 
+#[cfg(feature = "internal-tools")]
 pub fn normalize_with_options(
     request: NormalizationRequest,
     options: NormalizeOptions,
 ) -> NormalizationResult {
-    normalize_with_prepared_media(request, options, None)
+    normalize_with_prepared_media(request, options, None, &mut None)
 }
 
 pub(crate) fn normalize_with_prepared_media(
     request: NormalizationRequest,
     options: NormalizeOptions,
     prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+    io_cause: &mut Option<std::io::Error>,
 ) -> NormalizationResult {
     let risk_policy_ref = request
         .comparison_context
@@ -281,15 +284,17 @@ pub(crate) fn normalize_with_prepared_media(
     ) {
         Ok(ingest) => ingest,
         Err(error) => {
-            let items = error
-                .diagnostics
-                .into_iter()
-                .map(media_ingest_diagnostic_to_item)
-                .collect::<Vec<_>>();
+            *io_cause = error.io_cause;
+            diagnostics.extend(
+                error
+                    .diagnostics
+                    .into_iter()
+                    .map(media_ingest_diagnostic_to_item),
+            );
             return invalid_result(
                 policy_refs,
                 request.comparison_context,
-                items,
+                diagnostics,
                 format!("det:{metadata_document_id}"),
                 "media ingestion failed".into(),
             );
@@ -713,5 +718,67 @@ fn invalid_result_with_normalized_ir(
         },
         normalized_ir,
         merge_risk_report,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parallel_media_io_failure_preserves_prior_warnings_and_protocol_shape() {
+        let root = tempfile::tempdir().unwrap();
+        std::fs::write(root.path().join("asset.txt"), b"source bytes").unwrap();
+        let store = root.path().join("blocked-store");
+        std::fs::write(&store, b"file occupying the store directory").unwrap();
+        let input = crate::authoring_core::model::AuthoringDocument {
+            kind: "authoring-document".into(),
+            schema_version: "1".into(),
+            metadata_document_id: "media-io-warning".into(),
+            notetypes: Vec::new(),
+            notes: Vec::new(),
+            media: (0..20)
+                .map(|index| crate::authoring_core::model::AuthoringMedia {
+                    id: format!("asset-{index}"),
+                    desired_filename: format!("asset-{index}.txt"),
+                    source: crate::authoring_core::media::AuthoringMediaSource::Path {
+                        path: "asset.txt".into(),
+                    },
+                    declared_mime: None,
+                })
+                .collect(),
+        };
+        let mut request = NormalizationRequest::new(input);
+        request.identity_override_mode = Some("random".into());
+        request.reason_code = Some("test".into());
+        let mut cause = None;
+        let result = normalize_with_prepared_media(
+            request,
+            NormalizeOptions {
+                base_dir: root.path().to_owned(),
+                media_store_dir: store,
+                media_policy: crate::authoring_core::media::MediaPolicy::default_strict(),
+            },
+            None,
+            &mut cause,
+        );
+        assert_eq!(result.result_status, "invalid");
+        assert_eq!(
+            result.diagnostics.items[0].code,
+            "PHASE2.IDENTITY_RANDOM_OVERRIDE"
+        );
+        assert_eq!(
+            result
+                .diagnostics
+                .items
+                .iter()
+                .filter(|item| item.code == "MEDIA.CAS_WRITE_FAILED")
+                .count(),
+            20
+        );
+        assert!(cause.unwrap().raw_os_error().is_some());
+        let value = serde_json::to_value(result).unwrap();
+        assert!(value.get("io_cause").is_none());
+        assert!(value.get("cause").is_none());
     }
 }

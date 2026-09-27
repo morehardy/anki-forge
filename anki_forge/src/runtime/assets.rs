@@ -1,16 +1,19 @@
+use std::{collections::BTreeMap, path::Path};
+#[cfg(any(test, feature = "internal-tools"))]
 use std::{
-    collections::BTreeMap,
     fs,
-    path::{Path, PathBuf},
+    path::PathBuf,
     sync::{Mutex, OnceLock},
 };
 
+#[cfg(any(test, feature = "internal-tools"))]
 use crate::writer_core::{BuildContext, WriterPolicy};
 use anyhow::{bail, ensure, Context};
 use jsonschema::JSONSchema;
 use serde::Deserialize;
 use serde_json::Value as JsonValue;
 
+#[cfg(any(test, feature = "internal-tools"))]
 use super::discovery::{ResolvedRuntime, RuntimeMode};
 
 #[derive(Debug, Deserialize)]
@@ -28,11 +31,13 @@ pub(super) struct ManifestData {
 }
 
 #[derive(Debug, Clone)]
+#[cfg(any(test, feature = "internal-tools"))]
 pub struct RuntimeBundle {
     pub runtime: ResolvedRuntime,
     pub assets: BTreeMap<String, String>,
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn load_bundle_from_manifest(manifest_path: impl AsRef<Path>) -> anyhow::Result<RuntimeBundle> {
     let manifest_path = manifest_path.as_ref();
     let manifest_path = manifest_path
@@ -100,6 +105,7 @@ pub(super) fn validate_manifest(
     Ok(manifest)
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn resolve_asset_path(bundle: &RuntimeBundle, key: &str) -> anyhow::Result<PathBuf> {
     let rel = bundle
         .assets
@@ -109,6 +115,7 @@ pub fn resolve_asset_path(bundle: &RuntimeBundle, key: &str) -> anyhow::Result<P
         .with_context(|| format!("failed to resolve asset path for key: {key}"))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn load_writer_policy(bundle: &RuntimeBundle, selector: &str) -> anyhow::Result<WriterPolicy> {
     if selector != "default" {
         bail!("only default writer_policy selector is supported initially");
@@ -120,6 +127,7 @@ pub fn load_writer_policy(bundle: &RuntimeBundle, selector: &str) -> anyhow::Res
     serde_yaml::from_str(&raw).with_context(|| format!("decode writer policy: {}", path.display()))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 pub fn load_build_context(bundle: &RuntimeBundle, selector: &str) -> anyhow::Result<BuildContext> {
     if selector != "default" {
         bail!("only default build_context selector is supported initially");
@@ -131,6 +139,7 @@ pub fn load_build_context(bundle: &RuntimeBundle, selector: &str) -> anyhow::Res
     serde_yaml::from_str(&raw).with_context(|| format!("decode build context: {}", path.display()))
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn validate_bundle_assets(
     bundle_root: &Path,
     assets: &BTreeMap<String, String>,
@@ -143,6 +152,7 @@ fn validate_bundle_assets(
     Ok(())
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn resolve_contract_relative_path(
     bundle_root: impl AsRef<Path>,
     relative: impl AsRef<Path>,
@@ -189,6 +199,7 @@ pub(super) fn validate_relative_asset_path(relative: &Path) -> anyhow::Result<()
     Ok(())
 }
 
+#[cfg(any(test, feature = "internal-tools"))]
 fn manifest_schema(schema_path: &Path) -> anyhow::Result<&'static JsonValue> {
     static MANIFEST_SCHEMAS: OnceLock<Mutex<BTreeMap<PathBuf, &'static JsonValue>>> =
         OnceLock::new();

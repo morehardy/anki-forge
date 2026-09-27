@@ -4,7 +4,7 @@
 - 状态：实施中；已完成本机可运行候选版，四平台、完整一致性及正式发布仍未完成。勾选项表示已落地的子任务，不表示整阶段验收通过。
 - 目标：用户通过 npm 安装后，使用完整的 JavaScript / TypeScript 产品接口；构建与业务规则由现有 Rust 核心执行。
 - 完整性基线：当前 Rust 的 Deck、Project 及其可达用户能力，不要求向 Node 暴露全部内部 IR、writer、contract 管理工具。
-- 推荐主路线：TypeScript 产品接口 + napi-rs 原生适配层 + anki_forge Rust 核心 + 按平台发布的 npm 预编译包。
+- 推荐主路线：TypeScript 产品接口 + napi-rs 原生适配层 + ankiforge Rust 核心 + 按平台发布的 npm 预编译包。
 - 完成标准：第 11 节全部满足。最小 Basic 示例是中间里程碑，不代表 SDK 已完成。
 
 2026-09-21 的增量能力审计与补齐顺序见 [Node 接口缺口清单与 Rust 能力对齐实施方案](2026-09-21-node-api-parity-plan.md)。该方案补充临时产物所有权、Deck 转换、分块写入、读取与克隆等缺口，不改变下文已记录的验证状态。
@@ -46,7 +46,7 @@ Node-API 提供原生扩展接口及 ABI 稳定性；具体 Node-API 级别、�
 | --- | --- | --- |
 | TypeScript 产品模块 | JS 风格构造、参数形状、路径基准、Promise、报告与异常、Node Writable 适配 | 不计算 GUID、config ID、卡片数量、模板生成规则或更新风险 |
 | Rust 原生 Adapter | 对象与类型转换、持有核心对象、异步任务、错误和报告投影 | 每个用户操作调用已有 Rust 方法，不复制另一套产品规则 |
-| anki_forge 核心 | 产品校验、媒体与模板处理、身份、构建、比较、风险和发布行为 | 保持为语义来源；发现跨语言能力缺口时先补核心复用点 |
+| ankiforge 核心 | 产品校验、媒体与模板处理、身份、构建、比较、风险和发布行为 | 保持为语义来源；发现跨语言能力缺口时先补核心复用点 |
 
 新增 bindings/node/native，为 publish = false 的 cdylib workspace member。初期使用 prelude；需要命名完整报告、策略等类型时，可由仓库内原生 Adapter 使用 internal-tools。记录该内部使用关系，不把它变成 Rust 下游的稳定接口。默认 Rust 消费者的可见模块和兼容承诺保持由现有边界测试约束。
 

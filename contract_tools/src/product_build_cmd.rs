@@ -1,149 +1,203 @@
-use std::path::PathBuf;
+use std::{io::Write, path::Path};
 
-use anki_forge::build::{
-    BuildOptions, BuildReportJson, BuildStatus, ProjectNormalizeOptions, RiskLevel,
+use ankiforge::{
+    build::BuildErrorKind,
+    update::{CompareOptions, RiskLevel, UpdatePolicy},
+    BuildOptions,
 };
-use anki_forge::product::ProductDocument;
+use anyhow::{ensure, Context};
 
 pub enum ProductBuildOutcome {
     Success(String),
-    ReportFailure { json: String, exit_code: i32 },
+    ReportFailure {
+        json: String,
+        exit_code: i32,
+        followup_error: Option<String>,
+    },
 }
 
 pub struct ProductBuildRequest<'a> {
-    pub manifest: &'a str,
-    pub product_input: &'a str,
+    pub project: &'a str,
     pub base_dir: Option<&'a str>,
     pub apkg_out: &'a str,
-    pub compare_to: Option<&'a str>,
+    pub update_from: Option<&'a str>,
     pub fail_on: Option<&'a str>,
+    pub allow: &'a [String],
     pub report_json: Option<&'a str>,
-    pub identity_lockfile: Option<&'a str>,
-    pub write_identity_lockfile: bool,
-    pub update_safety: Option<&'a str>,
+    pub output: &'a str,
+}
+
+pub struct ProductCompareRequest<'a> {
+    pub project: &'a str,
+    pub base_dir: Option<&'a str>,
+    pub baseline: &'a str,
+    pub fail_on: Option<&'a str>,
+    pub allow: &'a [String],
+    pub report_json: Option<&'a str>,
     pub output: &'a str,
 }
 
 pub fn run(request: ProductBuildRequest<'_>) -> anyhow::Result<ProductBuildOutcome> {
-    let ProductBuildRequest {
-        manifest,
-        product_input,
-        base_dir,
-        apkg_out,
-        compare_to,
-        fail_on,
-        report_json,
-        identity_lockfile,
-        write_identity_lockfile,
-        update_safety,
-        output,
-    } = request;
-
-    let manifest = crate::manifest::load_manifest(manifest)?;
-    crate::manifest::resolve_asset_path(&manifest, "build_report_schema")?;
-    let runtime_bundle = anki_forge::runtime::load_bundle_from_manifest(&manifest.path)?;
-    let writer_policy = anki_forge::runtime::load_writer_policy(&runtime_bundle, "default")?;
-    let build_context = anki_forge::runtime::load_build_context(&runtime_bundle, "default")?;
-    let product_input_path = PathBuf::from(product_input);
-    let product_input_base_dir = base_dir
-        .map(PathBuf::from)
-        .or_else(|| product_input_path.parent().map(PathBuf::from))
-        .unwrap_or_else(|| PathBuf::from("."));
-    let raw = std::fs::read_to_string(&product_input_path)?;
-    let document: ProductDocument = serde_json::from_str(&raw)?;
-
-    let mut options = BuildOptions::new()
-        .output(PathBuf::from(apkg_out))
-        .normalize_options(ProjectNormalizeOptions::strict().base_dir(product_input_base_dir));
-    if let Some(compare_to) = compare_to {
-        options = options.compare_to(compare_to);
-    }
-    if let Some(fail_on) = fail_on {
-        options = options.fail_on(parse_risk_level(fail_on)?);
-    }
-    if let Some(report_json) = report_json {
-        options = options.report_json(report_json);
-    }
-    if let Some(identity_lockfile) = identity_lockfile {
-        options = options.identity_lockfile(identity_lockfile);
-    }
-    if write_identity_lockfile {
-        options = options.write_identity_lockfile(true);
-    }
-    if let Some(update_safety) = update_safety {
-        options = options.update_safety(parse_update_safety_mode(update_safety)?);
-    }
-
-    let result = anki_forge::runtime::build_product_document_with_writer_stack(
-        document,
-        options,
-        writer_policy,
-        build_context,
+    validate_output(request.output)?;
+    ensure!(
+        !paths_alias(Path::new(request.apkg_out), Path::new(request.project))?,
+        "APKG output must not replace project input"
     );
-
-    match result {
-        Ok(report) => {
-            let body = render(&report, output)?;
-            if report.status == BuildStatus::Success {
-                Ok(ProductBuildOutcome::Success(body))
-            } else {
-                Ok(ProductBuildOutcome::ReportFailure {
-                    json: body,
-                    exit_code: exit_code_for_status(report.status),
-                })
-            }
+    validate_report_path(
+        request.report_json,
+        &[request.project, request.apkg_out],
+        request.update_from,
+    )?;
+    let project = ankiforge::tools::load_project(request.project, request.base_dir.map(Path::new))?;
+    let mut options = BuildOptions::to(request.apkg_out);
+    if let Some(path) = request.update_from {
+        options = options.update_from(path);
+    }
+    if request.fail_on.is_some() || !request.allow.is_empty() {
+        options = options.update_policy(policy(request.fail_on, request.allow)?);
+    }
+    let (snapshot, exit_code) = match project.build(options) {
+        Ok(output) => (output.snapshot(), 0),
+        Err(error) => {
+            let exit = match error.kind() {
+                BuildErrorKind::PolicyBlocked => 2,
+                BuildErrorKind::Configuration | BuildErrorKind::Validation => 3,
+                _ => 4,
+            };
+            (error.snapshot(), exit)
         }
-        Err(err) => {
-            let body = render(&err.report, output)?;
-            let exit_code = exit_code_for_status(err.report.status);
-            Ok(ProductBuildOutcome::ReportFailure {
-                json: body,
-                exit_code,
-            })
+    };
+    finish(
+        serde_json::to_value(snapshot)?,
+        exit_code,
+        request.report_json,
+        request.output,
+    )
+}
+
+pub fn compare(request: ProductCompareRequest<'_>) -> anyhow::Result<ProductBuildOutcome> {
+    validate_output(request.output)?;
+    validate_report_path(
+        request.report_json,
+        &[request.project, request.baseline],
+        None,
+    )?;
+    let project = ankiforge::tools::load_project(request.project, request.base_dir.map(Path::new))?;
+    let options = CompareOptions::against(request.baseline)
+        .update_policy(policy(request.fail_on, request.allow)?);
+    match project.compare(options) {
+        Ok(report) => finish(
+            serde_json::to_value(report.snapshot())?,
+            0,
+            request.report_json,
+            request.output,
+        ),
+        Err(error) => {
+            // An incomplete comparison is not a ComparisonSnapshot.
+            let snapshot = serde_json::json!({
+                "schema_version": "ankiforge-comparison-error-v1",
+                "code": error.code(), "message": error.to_string(),
+                "report": error.report().snapshot(),
+            });
+            finish(snapshot, 3, request.report_json, request.output)
         }
     }
 }
 
-fn render(report: &anki_forge::build::BuildReport, output: &str) -> anyhow::Result<String> {
-    match output {
-        "contract-json" => Ok(serde_json::to_string_pretty(
-            &BuildReportJson::from_report(report),
-        )?),
-        "human" => Ok(format!(
-            "status: {:?}\ncomparison: {:?}\nhighest_risk: {:?}\n",
-            report.status,
-            report.comparison,
-            report.risk.as_ref().and_then(|risk| risk.highest_level)
-        )),
-        other => anyhow::bail!("unsupported product-build output mode: {other}"),
+fn policy(level: Option<&str>, allow: &[String]) -> anyhow::Result<UpdatePolicy> {
+    let mut policy = UpdatePolicy::default();
+    if let Some(level) = level {
+        policy = policy.fail_on(match level {
+            "info" => RiskLevel::Info,
+            "low" => RiskLevel::Low,
+            "medium" => RiskLevel::Medium,
+            "high" => RiskLevel::High,
+            "critical" => RiskLevel::Critical,
+            other => anyhow::bail!("unsupported fail-on level: {other}"),
+        });
     }
+    for code in allow {
+        policy = policy.allow(code.parse()?);
+    }
+    Ok(policy)
 }
 
-fn parse_risk_level(value: &str) -> anyhow::Result<RiskLevel> {
-    match value {
-        "info" => Ok(RiskLevel::Info),
-        "low" => Ok(RiskLevel::Low),
-        "medium" => Ok(RiskLevel::Medium),
-        "high" => Ok(RiskLevel::High),
-        "critical" => Ok(RiskLevel::Critical),
-        other => anyhow::bail!("unsupported fail-on level: {other}"),
-    }
+fn validate_output(output: &str) -> anyhow::Result<()> {
+    ensure!(
+        matches!(output, "contract-json" | "human"),
+        "unsupported output mode: {output}"
+    );
+    Ok(())
 }
 
-fn parse_update_safety_mode(value: &str) -> anyhow::Result<anki_forge::build::UpdateSafetyMode> {
-    match value {
-        "strict" => Ok(anki_forge::build::UpdateSafetyMode::Strict),
-        "report-only" | "report_only" => Ok(anki_forge::build::UpdateSafetyMode::ReportOnly),
-        "disabled" => Ok(anki_forge::build::UpdateSafetyMode::Disabled),
-        other => anyhow::bail!("unsupported update-safety mode: {other}"),
+fn finish(
+    snapshot: serde_json::Value,
+    exit_code: i32,
+    report_json: Option<&str>,
+    output: &str,
+) -> anyhow::Result<ProductBuildOutcome> {
+    let json = serde_json::to_string_pretty(&snapshot)?;
+    let body = if output == "contract-json" {
+        json.clone()
+    } else if let Some(result) = snapshot.get("result") {
+        format!("result: {}\n", serde_json::to_string_pretty(result)?)
+    } else {
+        format!("comparison: {}\n", serde_json::to_string_pretty(&snapshot)?)
+    };
+    if let Some(path) = report_json {
+        if let Err(error) = write_report(Path::new(path), &json) {
+            return Ok(ProductBuildOutcome::ReportFailure {
+                json: body, exit_code: 4,
+                followup_error: Some(format!("report write failed at {path:?}: {error:#}; the operation result above remains valid")),
+            });
+        }
     }
+    Ok(if exit_code == 0 {
+        ProductBuildOutcome::Success(body)
+    } else {
+        ProductBuildOutcome::ReportFailure {
+            json: body,
+            exit_code,
+            followup_error: None,
+        }
+    })
 }
 
-fn exit_code_for_status(status: BuildStatus) -> i32 {
-    match status {
-        BuildStatus::Success => 0,
-        BuildStatus::Blocked => 2,
-        BuildStatus::Invalid => 3,
-        BuildStatus::Error => 4,
+fn write_report(path: &Path, json: &str) -> anyhow::Result<()> {
+    let parent = path
+        .parent()
+        .filter(|path| !path.as_os_str().is_empty())
+        .unwrap_or_else(|| Path::new("."));
+    let mut temporary = tempfile::Builder::new()
+        .prefix(".ankiforge-report-")
+        .tempfile_in(parent)?;
+    temporary.write_all(json.as_bytes())?;
+    temporary.as_file().sync_all()?;
+    temporary.persist(path).map_err(|error| error.error)?;
+    #[cfg(unix)]
+    std::fs::File::open(parent)?
+        .sync_all()
+        .context("report was replaced but directory synchronization failed")?;
+    Ok(())
+}
+
+fn validate_report_path(
+    report: Option<&str>,
+    protected: &[&str],
+    baseline: Option<&str>,
+) -> anyhow::Result<()> {
+    let Some(report) = report else {
+        return Ok(());
+    };
+    for path in protected.iter().copied().chain(baseline) {
+        ensure!(
+            !paths_alias(Path::new(report), Path::new(path))?,
+            "report path must not replace project input, APKG output or baseline"
+        );
     }
+    Ok(())
+}
+
+fn paths_alias(first: &Path, second: &Path) -> anyhow::Result<bool> {
+    Ok(ankiforge::tools::paths_alias(first, second)?)
 }

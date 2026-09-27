@@ -17,31 +17,26 @@ import gc
 import importlib.util
 from importlib.metadata import version
 from pathlib import Path
-from anki_forge import Note, Project
+from anki_forge import Note, Project, Media, BuildOptions
 assert version("anki-forge") == "0.2.0"
 assert importlib.util.find_spec("anki_forge_python") is None
-root = Path.cwd()
-project = Project("Installed", stable_id="installed")
-project.add_note(Note.basic("<front>", "answer", stable_id="note-1"))
-report = project.build()
-report.ensure_success()
-assert report.counts == {"notes": 1, "cards": 1, "media": 0}
-artifact = report.artifact
+project = Project("installed").add("note-1", Note.basic("<front>", "answer"))
+output = project.build(BuildOptions.temporary())
+assert output.report.counts.notes == 1
+artifact, snapshot = output.artifact, output.snapshot()
 path = artifact.path
-del report
+del output
 gc.collect()
 assert path.is_file()
 artifact.close()
 assert not path.exists()
-source = root / "音频 file.wav"
-source.write_bytes(b"RIFF first")
-ref = project.media.add_file(source, export_as="audio.wav")
-project.add_note(Note.basic("Media", "").sound("back", ref))
-source.write_bytes(b"RIFF changed")
-report = project.build()
-assert any(d.code == "MEDIA.SOURCE_CHANGED" for d in report.diagnostics)
-assert report.artifact is None
-print("Installed native wheel: Basic, media evidence and Artifact lifetime passed")
+source = Path("theme.css")
+source.write_bytes(b".card { color: navy; }")
+media = Media.file(source).with_export_name("theme.css")
+source.unlink()
+project.add_asset(media)
+assert project.build(BuildOptions.temporary()).report.counts.media == 1
+print("Installed native wheel: explicit keys, media snapshot and artifact lifetime passed")
 '''
 
 
@@ -71,31 +66,39 @@ def main() -> None:
         environment = {key: value for key, value in os.environ.items() if not key.startswith(("PYTHON", "ANKI_FORGE", "MYPY"))}
         # Native operation must not find a repository CLI or compiler on PATH.
         environment["PATH"] = str(python.parent)
-        subprocess.run([str(python), "-I", "-c", SMOKE], cwd=work, env=environment, check=True)
+        # Isolated mode ignores PYTHONUTF8; request UTF-8 explicitly so printing
+        # the Unicode installation path also works with Windows redirected stdout.
+        isolated_python = [str(python), "-I", "-X", "utf8"]
+        subprocess.run([*isolated_python, "-c", SMOKE], cwd=work, env=environment, check=True)
         example = work / "native_workflow.py"
         shutil.copyfile(source_root / "examples/native_workflow.py", example)
-        subprocess.run([str(python), "-I", str(example), str(work / "example output")], cwd=work, env=environment, check=True)
+        subprocess.run([*isolated_python, str(example), str(work / "example output")], cwd=work, env=environment, check=True)
         for filename in ("positive.py", "negative.py"):
             shutil.copyfile(source_root / "tests/typing" / filename, work / filename)
         command = [sys.executable, "-m", "mypy", "--strict", "--no-incremental", "--python-executable", str(python)]
         subprocess.run([*command, "positive.py"], cwd=work, env=environment, check=True)
         negative = subprocess.run([*command, "negative.py"], cwd=work, env=environment, text=True, capture_output=True)
         assert negative.returncode == 1, negative.stdout + negative.stderr
-        assert negative.stdout.count("error:") == 6, negative.stdout
+        assert negative.stdout.count("error:") == 7, negative.stdout
         assert "[attr-defined]" in negative.stdout, negative.stdout
         print("Installed wheel positive/negative consumer typing passed")
+        if not args.observer:
+            probe = work / "media_budget_probe.py"
+            shutil.copyfile(source_root / "tests/media_budget_probe.py", probe)
+            for budget in ("small", "default"):
+                subprocess.run([*isolated_python, str(probe), budget], cwd=work, env=environment, check=True)
         if args.observer:
             observer = args.observer.resolve()
             assert observer.is_file()
             subprocess.run([str(python), "-m", "pip", "install", "pytest==9.1.1"], check=True)
             tests = work / "tests"
             tests.mkdir()
+            shutil.copyfile(source_root / "tests/media_budget_probe.py", tests / "media_budget_probe.py")
             for source in (source_root / "tests").glob("test_*.py"):
-                if source.name.startswith("test_native_") or source.name in {"test_report.py", "test_product_api_model.py", "test_product_e2e.py", "test_product_validation_parity.py"}:
+                if source.name in {"test_public_api.py", "test_fork_ownership.py"}:
                     shutil.copyfile(source, tests / source.name)
-            shutil.copytree(source_root / "tests/fixtures", tests / "fixtures")
             environment["ANKI_FORGE_PYTHON_OBSERVER"] = str(observer)
-            subprocess.run([str(python), "-I", "-m", "pytest", str(tests), "-q"], cwd=work, env=environment, check=True)
+            subprocess.run([*isolated_python, "-m", "pytest", str(tests), "-q"], cwd=work, env=environment, check=True)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,259 @@
+#![cfg(feature = "internal-tools")]
+
+use std::{
+    fs,
+    path::{Path, PathBuf},
+    time::{SystemTime, UNIX_EPOCH},
+};
+
+use crate::runtime::{
+    build_from_path, diff_from_paths, discover_workspace_runtime, inspect_apkg_path,
+    inspect_staging_path, load_build_context, load_bundle_from_manifest, load_writer_policy,
+    normalize_from_path, RuntimeMode,
+};
+use serde_yaml::Value as YamlValue;
+
+fn repo_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .expect("workspace root")
+        .to_path_buf()
+}
+
+fn temp_bundle_root(name: &str) -> PathBuf {
+    let unique = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("system clock before unix epoch")
+        .as_nanos();
+    std::env::temp_dir().join(format!(
+        "anki_forge_runtime_facade_{name}_{}_{}",
+        std::process::id(),
+        unique
+    ))
+}
+
+fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) {
+    let src = src.as_ref();
+    let dst = dst.as_ref();
+    fs::create_dir_all(dst).expect("create destination directory");
+
+    for entry in fs::read_dir(src).expect("read source directory") {
+        let entry = entry.expect("read source directory entry");
+        let file_type = entry.file_type().expect("inspect source entry");
+        let target_path = dst.join(entry.file_name());
+
+        if file_type.is_dir() {
+            copy_dir_all(entry.path(), target_path);
+        } else {
+            fs::copy(entry.path(), target_path).expect("copy source file");
+        }
+    }
+}
+
+fn read_manifest_value() -> YamlValue {
+    let raw = fs::read_to_string(repo_root().join("contracts/manifest.yaml"))
+        .expect("read workspace manifest");
+    serde_yaml::from_str(&raw).expect("parse workspace manifest")
+}
+
+fn manifest_mapping(value: &mut YamlValue) -> &mut serde_yaml::Mapping {
+    value.as_mapping_mut().expect("manifest must be a mapping")
+}
+
+fn assets_mapping(value: &mut YamlValue) -> &mut serde_yaml::Mapping {
+    manifest_mapping(value)
+        .get_mut(YamlValue::String("assets".into()))
+        .and_then(YamlValue::as_mapping_mut)
+        .expect("manifest assets must be a mapping")
+}
+
+fn write_bundle_fixture(name: &str, manifest: &YamlValue) -> PathBuf {
+    let root = temp_bundle_root(name);
+    let contracts_root = root.join("contracts");
+    copy_dir_all(repo_root().join("contracts"), &contracts_root);
+    fs::write(
+        contracts_root.join("manifest.yaml"),
+        serde_yaml::to_string(manifest).expect("serialize manifest"),
+    )
+    .expect("write temp manifest");
+    contracts_root.join("manifest.yaml")
+}
+
+fn write_json_fixture(path: impl AsRef<Path>, value: &impl serde::Serialize) {
+    fs::write(
+        path,
+        serde_json::to_string_pretty(value).expect("serialize JSON fixture"),
+    )
+    .expect("write JSON fixture");
+}
+
+#[test]
+fn workspace_runtime_discovers_manifest_bundle_root_and_bundle_version() {
+    let resolved = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
+
+    assert_eq!(resolved.mode, RuntimeMode::Workspace);
+    assert!(resolved.manifest_path.ends_with("contracts/manifest.yaml"));
+    assert!(resolved.bundle_root.ends_with("contracts"));
+    assert_eq!(
+        resolved.bundle_version,
+        read_manifest_value()["bundle_version"].as_str().unwrap()
+    );
+}
+
+#[test]
+fn runtime_loads_default_phase3_assets_from_manifest() {
+    let bundle = load_bundle_from_manifest(repo_root().join("contracts/manifest.yaml"))
+        .expect("load runtime bundle");
+
+    assert!(bundle.assets.contains_key("writer_policy"));
+    assert!(bundle.assets.contains_key("build_context_default"));
+
+    let writer_policy = load_writer_policy(&bundle, "default").expect("load writer policy");
+    let build_context = load_build_context(&bundle, "default").expect("load build context");
+
+    assert_eq!(writer_policy.id, "writer-policy.default");
+    assert_eq!(build_context.id, "build-context.default");
+}
+
+#[test]
+fn runtime_bundle_loading_rejects_manifests_missing_component_versions() {
+    let mut manifest = read_manifest_value();
+    manifest_mapping(&mut manifest).remove(YamlValue::String("component_versions".into()));
+    let manifest_path = write_bundle_fixture("missing_component_versions", &manifest);
+
+    let err = load_bundle_from_manifest(&manifest_path).expect_err("bundle load should fail");
+
+    assert!(
+        err.to_string().contains("component_versions"),
+        "unexpected error: {err}"
+    );
+}
+
+#[test]
+fn runtime_bundle_loading_rejects_invalid_asset_paths() {
+    let mut manifest = read_manifest_value();
+    assets_mapping(&mut manifest).insert(
+        YamlValue::String("writer_policy".into()),
+        YamlValue::String("policies/missing-writer-policy.yaml".into()),
+    );
+    let manifest_path = write_bundle_fixture("missing_asset", &manifest);
+
+    let err = load_bundle_from_manifest(&manifest_path).expect_err("bundle load should fail");
+
+    assert!(
+        err.to_string().contains("missing-writer-policy")
+            || err.to_string().contains("writer_policy"),
+        "unexpected error: {err}"
+    );
+}
+
+#[test]
+fn runtime_normalize_and_build_from_paths_match_repository_contracts() {
+    let runtime = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
+    let authoring_input = repo_root().join("contracts/fixtures/valid/minimal-authoring-ir.json");
+    let normalized = normalize_from_path(&runtime, &authoring_input).expect("normalize from path");
+    assert_eq!(normalized.kind, "normalization-result");
+    assert_eq!(normalized.result_status, "success");
+    let normalized_ir = normalized
+        .normalized_ir
+        .as_ref()
+        .expect("minimal authoring input should normalize");
+
+    let runtime_root = temp_bundle_root("runtime_operations");
+    fs::create_dir_all(&runtime_root).expect("create runtime operations root");
+    let build_input = runtime_root.join("normalized-ir.json");
+    write_json_fixture(&build_input, normalized_ir);
+    let artifacts_dir = runtime_root.join("artifacts");
+    let build_result =
+        build_from_path(&runtime, &build_input, "default", "default", &artifacts_dir)
+            .expect("build from path");
+    assert_eq!(build_result.kind, "package-build-result");
+    assert_eq!(build_result.result_status, "success");
+
+    let staging_report = inspect_staging_path(artifacts_dir.join("staging/manifest.json"))
+        .expect("inspect staging from path");
+    assert_eq!(staging_report.kind, "inspect-report");
+    assert_eq!(staging_report.source_kind, "staging");
+    assert_eq!(staging_report.observation_status, "complete");
+
+    let apkg_report =
+        inspect_apkg_path(artifacts_dir.join("package.apkg")).expect("inspect apkg from path");
+    assert_eq!(apkg_report.kind, "inspect-report");
+    assert_eq!(apkg_report.source_kind, "apkg");
+    assert_eq!(apkg_report.observation_status, "complete");
+
+    let reports_dir = temp_bundle_root("runtime_reports");
+    fs::create_dir_all(&reports_dir).expect("create reports directory");
+    let left = reports_dir.join("left.inspect.json");
+    let right = reports_dir.join("right.inspect.json");
+    write_json_fixture(&left, &staging_report);
+    write_json_fixture(&right, &apkg_report);
+
+    let diff_report = diff_from_paths(&left, &right).expect("diff inspect reports from paths");
+    assert_eq!(diff_report.kind, "diff-report");
+    assert_eq!(diff_report.comparison_status, "complete");
+    assert!(diff_report.changes.is_empty());
+}
+
+#[test]
+fn runtime_build_accepts_serialized_normalized_output_from_normalize() {
+    let runtime = discover_workspace_runtime(repo_root()).expect("discover workspace runtime");
+    let authoring_input =
+        repo_root().join("contracts/fixtures/phase3/inputs/basic-authoring-ir.json");
+    let normalized = normalize_from_path(&runtime, &authoring_input).expect("normalize from path");
+    let normalized_ir = normalized
+        .normalized_ir
+        .as_ref()
+        .expect("basic authoring input should normalize");
+
+    let root = temp_bundle_root("runtime_serialized_normalized");
+    fs::create_dir_all(&root).expect("create serialized normalized root");
+    let normalized_path = root.join("normalized-ir.json");
+    write_json_fixture(&normalized_path, normalized_ir);
+
+    let artifacts_dir = root.join("artifacts");
+    let build_result = build_from_path(
+        &runtime,
+        &normalized_path,
+        "default",
+        "default",
+        &artifacts_dir,
+    )
+    .expect("build should accept serialized normalized output");
+
+    assert_eq!(build_result.kind, "package-build-result");
+    assert_eq!(build_result.result_status, "success");
+}
+
+#[test]
+fn saved_legacy_inspection_compares_partially_with_current_evidence() {
+    let root = tempfile::tempdir().unwrap();
+    let apkg = root.path().join("deck.apkg");
+    let mut project = crate::Project::new("versioned-evidence").unwrap();
+    project
+        .add("note", crate::Note::basic("Question", "Answer"))
+        .unwrap();
+    project.build(crate::BuildOptions::to(&apkg)).unwrap();
+    let current = inspect_apkg_path(&apkg).unwrap();
+    let mut legacy = current.clone();
+    legacy.observation_model_version = "phase3-inspect-v1".into();
+    for notetype in &mut legacy.observations.notetypes {
+        notetype.as_object_mut().unwrap().remove("anki_model_id");
+    }
+    for reference in &mut legacy.observations.references {
+        reference.as_object_mut().unwrap().remove("revision");
+    }
+    let old_path = root.path().join("old.inspect.json");
+    let new_path = root.path().join("new.inspect.json");
+    write_json_fixture(&old_path, &legacy);
+    write_json_fixture(&new_path, &current);
+
+    let diff = diff_from_paths(&old_path, &new_path).unwrap();
+    assert_eq!(diff.comparison_status, "partial", "{diff:?}");
+    assert!(diff
+        .comparison_limitations
+        .contains(&"observation model versions differ".into()));
+    let same_model = diff_from_paths(&new_path, &new_path).unwrap();
+    assert_eq!(same_model.comparison_status, "complete");
+    assert!(same_model.changes.is_empty());
+}

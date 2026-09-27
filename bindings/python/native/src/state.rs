@@ -78,3 +78,16 @@ impl<T: Send> ObjectState<T> {
         })
     }
 }
+
+impl<T> Drop for ObjectState<T> {
+    fn drop(&mut self) {
+        if self.pid != std::process::id() {
+            // Exclusive access needs no inherited mutex lock. The child does not
+            // own the copied Arc accounting or the parent's temporary files.
+            let state = self.state.get_mut().unwrap_or_else(|e| e.into_inner());
+            if let State::Ready(value) = std::mem::replace(state, State::Failed) {
+                std::mem::forget(value);
+            }
+        }
+    }
+}

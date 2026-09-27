@@ -1,342 +1,281 @@
+//! Imports successive original distributions into the same real Anki collection.
+//! No package or collection mtimes are changed to force a successful update.
+use anki::services::CardsService;
+use anki::{
+    collection::CollectionBuilder,
+    import_export::package::{ImportAnkiPackageOptions, UpdateCondition},
+    search::SortMode,
+};
+use anyhow::{ensure, Context};
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use std::{
-    collections::{BTreeMap, BTreeSet},
+    collections::BTreeMap,
     fs,
     path::{Path, PathBuf},
 };
 
-use anki::collection::CollectionBuilder;
-use anki::import_export::package::ImportAnkiPackageOptions;
-use anyhow::{bail, ensure, Context};
-use serde::Deserialize;
-use serde_json::{json, Value};
-use tempfile::tempdir;
-
-#[derive(Debug, Deserialize)]
-struct RoundtripOracleInput {
-    label: String,
-    first_case: PathBuf,
-    second_case: PathBuf,
-    first_package: PreparedPackage,
-    second_package: PreparedPackage,
+#[derive(Deserialize)]
+struct Input {
+    format_version: String,
+    scenarios: Vec<Scenario>,
 }
-
-#[derive(Debug, Deserialize)]
-struct PreparedPackage {
-    apkg_path: PathBuf,
-    notetype_ids_by_name: BTreeMap<String, String>,
+#[derive(Deserialize)]
+struct Scenario {
+    name: String,
+    stages: Vec<Stage>,
 }
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct Phase5aRoundTripResult {
-    after_first_import: Phase5aImportState,
-    after_second_import: Phase5aImportState,
+#[derive(Deserialize)]
+struct Stage {
+    apkg: PathBuf,
+    expected_fields: BTreeMap<String, String>,
+    structural: bool,
+    source_mtime: i64,
+    guid: String,
+    candidate_cards: BTreeMap<String, u16>,
+    comparison: Value,
 }
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct Phase5aImportState {
+#[derive(Clone, Debug, Serialize, PartialEq, Eq)]
+struct Schedule {
+    kind: i64,
+    queue: i64,
+    due: i64,
+    interval: i64,
+    factor: i64,
+    reps: i64,
+    lapses: i64,
+    left: i64,
+    odue: i64,
+    odid: i64,
+}
+#[derive(Clone, Debug, Serialize)]
+struct Card {
+    id: i64,
+    note_id: i64,
+    ordinal: u16,
+    schedule: Schedule,
+}
+#[derive(Clone, Debug, Serialize)]
+struct Observation {
     notetype_count: usize,
-    conflicting_notes: usize,
-    field_ords: BTreeMap<String, Vec<u32>>,
-    template_ords: BTreeMap<String, Vec<u32>>,
-    referenced_static_media: BTreeSet<String>,
-    template_target_decks: Vec<TemplateDeckTarget>,
+    note_id: i64,
+    guid: String,
+    model_id: i64,
+    mtime: i64,
+    model_name: String,
+    fields: BTreeMap<String, String>,
+    field_order: Vec<String>,
+    template_order: Vec<String>,
+    cards: Vec<Card>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct TemplateDeckTarget {
-    template_name: String,
-    deck_name: String,
-    deck_id: i64,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct Phase5aCollectionState {
-    notetype_count: usize,
-    template_target_decks: Vec<TemplateDeckTarget>,
-    field_ords: BTreeMap<String, Vec<u32>>,
-    template_ords: BTreeMap<String, Vec<u32>>,
-}
-
-fn main() -> anyhow::Result<()> {
-    let input_path = parse_args()?;
-    let input = load_input(&input_path)?;
-    let roundtrip = run_phase5a_roundtrip_oracle(&input)?;
-    verify_roundtrip(&roundtrip)?;
-
-    println!(
-        "{}",
-        serde_json::to_string_pretty(&json!({
-            "status": "ok",
-            "label": input.label,
-            "first_case": input.first_case.display().to_string(),
-            "second_case": input.second_case.display().to_string(),
-            "after_first_import": summarize_state(&roundtrip.after_first_import),
-            "after_second_import": summarize_state(&roundtrip.after_second_import),
-        }))?
+fn observe(col: &mut anki::prelude::Collection, _path: &Path) -> anyhow::Result<Observation> {
+    let ids = col.search_notes_unordered("")?;
+    ensure!(
+        ids.len() == 1,
+        "oracle expects one imported note, found {}",
+        ids.len()
     );
-
-    Ok(())
+    let note = col.storage.get_note(ids[0])?.context("imported note")?;
+    let model = col
+        .get_notetype(note.notetype_id)?
+        .context("imported model")?;
+    let mut cards = vec![];
+    for cid in col.search_cards("", SortMode::NoOrder)? {
+        let c = col.get_card(anki_proto::cards::CardId { cid: cid.0 })?;
+        cards.push(Card {
+            id: c.id,
+            note_id: c.note_id,
+            ordinal: c.template_idx as u16,
+            schedule: Schedule {
+                kind: c.ctype as i64,
+                queue: c.queue as i64,
+                due: c.due as i64,
+                interval: c.interval as i64,
+                factor: c.ease_factor as i64,
+                reps: c.reps as i64,
+                lapses: c.lapses as i64,
+                left: c.remaining_steps as i64,
+                odue: c.original_due as i64,
+                odid: c.original_deck_id,
+            },
+        });
+    }
+    cards.sort_by_key(|c| c.ordinal);
+    Ok(Observation {
+        notetype_count: col.get_all_notetypes()?.len(),
+        note_id: note.id.0,
+        guid: note.guid.clone(),
+        model_id: note.notetype_id.0,
+        mtime: note.mtime.0,
+        model_name: model.name.clone(),
+        fields: model
+            .fields
+            .iter()
+            .zip(note.fields())
+            .map(|(f, v)| (f.name.clone(), v.clone()))
+            .collect(),
+        field_order: model.fields.iter().map(|f| f.name.clone()).collect(),
+        template_order: model.templates.iter().map(|t| t.name.clone()).collect(),
+        cards,
+    })
 }
-
-fn parse_args() -> anyhow::Result<PathBuf> {
-    let args = std::env::args().skip(1).collect::<Vec<_>>();
-    match args.as_slice() {
-        [input_path] => Ok(PathBuf::from(input_path)),
-        _ => bail!(
-            "usage: cargo run --manifest-path scripts/roundtrip_oracle/Cargo.toml -- <prepared-input.json>"
-        ),
+fn run(scenario: &Scenario, merge: bool, condition: UpdateCondition) -> anyhow::Result<Value> {
+    let root = tempfile::tempdir()?;
+    let path = root.path().join("learner.anki2");
+    let mut builder = CollectionBuilder::new(&path);
+    builder.with_desktop_media_paths();
+    let mut col = builder.build()?;
+    let mut previous: Option<Observation> = None;
+    let mut history = vec![];
+    let mut limitations = vec![];
+    for (index, stage) in scenario.stages.iter().enumerate() {
+        let imported = col
+            .import_apkg(
+                &stage.apkg,
+                ImportAnkiPackageOptions {
+                    merge_notetypes: merge,
+                    update_notes: condition as i32,
+                    update_notetypes: condition as i32,
+                    ..Default::default()
+                },
+            )
+            .with_context(|| {
+                format!(
+                    "{} stage {index}, merge={merge}, condition={condition:?}",
+                    scenario.name
+                )
+            })?;
+        if index == 0 {
+            let ids = col.search_cards("", SortMode::NoOrder)?;
+            col.set_due_date(&ids, "23", None)?;
+            let mut scheduled = vec![];
+            for cid in ids {
+                let mut card = col.get_card(anki_proto::cards::CardId { cid: cid.0 })?;
+                card.reps = 17;
+                card.lapses = 3;
+                card.ease_factor = 2710;
+                scheduled.push(card);
+            }
+            let _ = col.update_cards(anki_proto::cards::UpdateCardsRequest {
+                cards: scheduled,
+                skip_undo_entry: false,
+            })?;
+        }
+        let observed = observe(&mut col, &path)?;
+        ensure!(
+            observed.guid == stage.guid,
+            "{}: imported GUID differs from authored identity",
+            scenario.name
+        );
+        let body_matches = stage
+            .expected_fields
+            .iter()
+            .all(|(key, value)| observed.fields.get(key) == Some(value));
+        if let Some(previous) = &previous {
+            ensure!(
+                observed.note_id == previous.note_id && observed.guid == previous.guid,
+                "{}: existing note identity changed",
+                scenario.name
+            );
+            for before in &previous.cards {
+                let after = observed
+                    .cards
+                    .iter()
+                    .find(|c| c.id == before.id)
+                    .with_context(|| {
+                        format!("{}: existing card {} disappeared", scenario.name, before.id)
+                    })?;
+                ensure!(
+                    before.ordinal == after.ordinal,
+                    "{}: existing card ordinal changed",
+                    scenario.name
+                );
+                ensure!(
+                    before.schedule == after.schedule,
+                    "{}: existing scheduling changed for card {}",
+                    scenario.name,
+                    before.id
+                );
+            }
+            if !body_matches {
+                if stage.structural && !merge && !imported.output.conflicting.is_empty() {
+                    limitations.push(json!({"stage":index,"kind":"schema_conflict_without_merge","detail":"Anki retains the old note; enabling model merge is required for this structural update."}));
+                } else if timestamp_blocks(condition, previous.mtime, stage.source_mtime) {
+                    limitations.push(json!({"stage":index,"kind":"existing_note_timestamp_prevented_update","condition":format!("{condition:?}"),"source_mtime":stage.source_mtime,"previous_mtime":previous.mtime,"observed_mtime":observed.mtime,"detail":"The previous imported learner note is not eligible for this timestamp-based update. This can persist after an earlier schema change advanced its timestamp."}));
+                } else if stage.structural
+                    && observed.mtime > previous.mtime
+                    && timestamp_blocks(condition, observed.mtime, stage.source_mtime)
+                {
+                    limitations.push(json!({"stage":index,"kind":"schema_timestamp_prevented_content_update","condition":format!("{condition:?}"),"source_mtime":stage.source_mtime,"previous_mtime":previous.mtime,"observed_mtime":observed.mtime,"detail":"The schema or sort-field operation advanced the learner note timestamp before its body update decision. No timestamps were altered by this oracle."}));
+                } else {
+                    anyhow::bail!("{} stage {index} unexpectedly retained content (merge={merge}, {condition:?}): {:?}, expected {:?}",scenario.name,observed.fields,stage.expected_fields);
+                }
+            }
+        } else {
+            ensure!(body_matches, "{}: initial content mismatch", scenario.name);
+        }
+        if body_matches {
+            for ordinal in stage.candidate_cards.values() {
+                ensure!(
+                    observed.cards.iter().any(|c| c.ordinal == *ordinal),
+                    "{}: candidate active card {ordinal} absent after real import",
+                    scenario.name
+                );
+            }
+        }
+        history.push(json!({"stage":index,"apkg":stage.apkg,"source_mtime":stage.source_mtime,
+            "candidate_cards":stage.candidate_cards,"comparison":stage.comparison,
+            "body_matches_candidate":body_matches,"conflicting_notes":imported.output.conflicting.len(),
+            "new_notes":imported.output.new.len(),"updated_notes":imported.output.updated.len(),"observed":observed}));
+        previous = Some(observed);
+    }
+    Ok(
+        json!({"scenario":scenario.name,"merge_notetypes":merge,"update_condition":format!("{condition:?}"),
+        "history":history,"limitations":limitations}),
+    )
+}
+fn timestamp_blocks(condition: UpdateCondition, target: i64, incoming: i64) -> bool {
+    match condition {
+        UpdateCondition::IfNewer => target >= incoming,
+        UpdateCondition::Always => target == incoming,
+        UpdateCondition::Never => true,
     }
 }
-
-fn load_input(path: &Path) -> anyhow::Result<RoundtripOracleInput> {
-    let raw = fs::read_to_string(path)
-        .with_context(|| format!("read roundtrip oracle input {}", path.display()))?;
-    serde_json::from_str(&raw)
-        .with_context(|| format!("decode roundtrip oracle input {}", path.display()))
-}
-
-fn run_phase5a_roundtrip_oracle(
-    input: &RoundtripOracleInput,
-) -> anyhow::Result<Phase5aRoundTripResult> {
-    let collection_root = tempdir().context("create phase5a upstream collection tempdir")?;
-    let collection_path = collection_root.path().join("phase5a-roundtrip.anki2");
-    let mut builder = CollectionBuilder::new(&collection_path);
-    builder.with_desktop_media_paths();
-    let mut collection = builder.build().context("build upstream collection")?;
-
-    let first_import = collection
-        .import_apkg(
-            &input.first_package.apkg_path,
-            ImportAnkiPackageOptions::default(),
-        )
-        .context("import first phase5a package into upstream collection")?;
-    let after_first_import = summarize_phase5a_import_state(
-        &mut collection,
-        &collection_path,
-        &input.first_package.notetype_ids_by_name,
-        first_import.output.conflicting.len(),
-    )?;
-
-    let second_import = collection
-        .import_apkg(
-            &input.second_package.apkg_path,
-            ImportAnkiPackageOptions {
-                merge_notetypes: true,
-                ..Default::default()
-            },
-        )
-        .context("re-import second phase5a package into upstream collection")?;
-    let after_second_import = summarize_phase5a_import_state(
-        &mut collection,
-        &collection_path,
-        &input.second_package.notetype_ids_by_name,
-        second_import.output.conflicting.len(),
-    )?;
-
-    Ok(Phase5aRoundTripResult {
-        after_first_import,
-        after_second_import,
-    })
-}
-
-fn summarize_phase5a_import_state(
-    collection: &mut anki::prelude::Collection,
-    collection_path: &Path,
-    notetype_ids_by_name: &BTreeMap<String, String>,
-    conflicting_notes: usize,
-) -> anyhow::Result<Phase5aImportState> {
-    let collection_state = read_phase5a_collection_state(collection, notetype_ids_by_name)?;
-
-    Ok(Phase5aImportState {
-        notetype_count: collection_state.notetype_count,
-        conflicting_notes,
-        field_ords: collection_state.field_ords,
-        template_ords: collection_state.template_ords,
-        referenced_static_media: read_phase5a_imported_media(&collection_path.with_extension("media"))?,
-        template_target_decks: collection_state.template_target_decks,
-    })
-}
-
-fn read_phase5a_collection_state(
-    collection: &mut anki::prelude::Collection,
-    notetype_ids_by_name: &BTreeMap<String, String>,
-) -> anyhow::Result<Phase5aCollectionState> {
-    let mut field_ords = BTreeMap::new();
-    let mut template_ords = BTreeMap::new();
-    let mut template_target_decks = vec![];
-    let notetypes = collection.get_all_notetypes()?;
-
-    for notetype in &notetypes {
-        let product_notetype_id = notetype_ids_by_name
-            .get(&notetype.name)
-            .cloned()
-            .unwrap_or_else(|| format!("notetype-{}", notetype.id.0));
-        field_ords.insert(
-            product_notetype_id.clone(),
-            notetype
-                .fields
-                .iter()
-                .map(|field| {
-                    field.ord.with_context(|| {
-                        format!(
-                            "missing field ord after upstream import for {}",
-                            notetype.name
-                        )
-                    })
-                })
-                .collect::<anyhow::Result<Vec<_>>>()?,
-        );
-        template_ords.insert(
-            product_notetype_id,
-            notetype
-                .templates
-                .iter()
-                .map(|template| {
-                    template.ord.with_context(|| {
-                        format!(
-                            "missing template ord after upstream import for {}::{}",
-                            notetype.name, template.name
-                        )
-                    })
-                })
-                .collect::<anyhow::Result<Vec<_>>>()?,
-        );
-
-        for template in &notetype.templates {
-            if template.config.target_deck_id > 0 {
-                let deck_id = anki::decks::DeckId(template.config.target_deck_id);
-                let deck_name = collection
-                    .get_deck(deck_id)?
-                    .map(|deck| deck.human_name())
-                    .unwrap_or_else(|| format!("deck-{}", deck_id.0));
-                template_target_decks.push(TemplateDeckTarget {
-                    template_name: template.name.clone(),
-                    deck_name,
-                    deck_id: deck_id.0,
-                });
+fn main() -> anyhow::Result<()> {
+    let mut args = std::env::args().skip(1);
+    let input: Input = serde_json::from_slice(&fs::read(
+        args.next().context("prepared-input.json required")?,
+    )?)?;
+    ensure!(
+        input.format_version == "native-anki-oracle-v1",
+        "unsupported prepared input"
+    );
+    let mut results = vec![];
+    let mut failures = 0;
+    for scenario in &input.scenarios {
+        for merge in [false, true] {
+            for condition in [UpdateCondition::IfNewer, UpdateCondition::Always] {
+                match run(scenario, merge, condition) {
+                    Ok(result) => results.push(result),
+                    Err(error) => {
+                        failures += 1;
+                        results.push(json!({"scenario":scenario.name,"merge_notetypes":merge,
+                            "update_condition":format!("{condition:?}"),"error":format!("{error:#}")}));
+                    }
+                }
             }
         }
     }
-
-    template_target_decks.sort_by(|left, right| {
-        (&left.template_name, &left.deck_name, left.deck_id).cmp(&(
-            &right.template_name,
-            &right.deck_name,
-            right.deck_id,
-        ))
-    });
-
-    Ok(Phase5aCollectionState {
-        notetype_count: notetypes.len(),
-        template_target_decks,
-        field_ords,
-        template_ords,
-    })
-}
-
-fn read_phase5a_imported_media(media_root: &Path) -> anyhow::Result<BTreeSet<String>> {
-    if !media_root.exists() {
-        return Ok(BTreeSet::new());
+    let report = json!({"status":if failures==0{"verified"}else{"failed"},"failures":failures,"timestamp_intervention":false,"results":results});
+    let encoded = serde_json::to_string_pretty(&report)?;
+    if let Some(path) = args.next() {
+        fs::write(path, &encoded)?;
     }
-
-    let mut filenames = BTreeSet::new();
-    for entry in fs::read_dir(media_root)
-        .with_context(|| format!("read media dir {}", media_root.display()))?
-    {
-        let entry =
-            entry.with_context(|| format!("read media entry in {}", media_root.display()))?;
-        if entry
-            .file_type()
-            .with_context(|| format!("stat media entry {}", entry.path().display()))?
-            .is_file()
-        {
-            filenames.insert(entry.file_name().to_string_lossy().into_owned());
-        }
-    }
-    Ok(filenames)
-}
-
-fn verify_roundtrip(roundtrip: &Phase5aRoundTripResult) -> anyhow::Result<()> {
+    println!("{encoded}");
     ensure!(
-        roundtrip.after_first_import.notetype_count == roundtrip.after_second_import.notetype_count,
-        "notetype count changed across imports"
-    );
-    ensure!(
-        roundtrip.after_first_import.conflicting_notes == 0,
-        "first import produced conflicting notes"
-    );
-    ensure!(
-        roundtrip.after_second_import.conflicting_notes == 0,
-        "second import produced conflicting notes"
-    );
-    ensure!(
-        roundtrip.after_first_import.field_ords.get("io-main") == Some(&vec![0, 1, 2, 3, 4]),
-        "unexpected io field ords after first import"
-    );
-    ensure!(
-        roundtrip.after_second_import.field_ords.get("io-main") == Some(&vec![0, 1, 2, 3, 4]),
-        "unexpected io field ords after second import"
-    );
-    ensure!(
-        roundtrip.after_first_import.field_ords == roundtrip.after_second_import.field_ords,
-        "field ords changed across imports"
-    );
-    ensure!(
-        roundtrip.after_first_import.template_ords.get("io-main") == Some(&vec![0]),
-        "unexpected io template ords after first import"
-    );
-    ensure!(
-        roundtrip.after_second_import.template_ords.get("io-main") == Some(&vec![0]),
-        "unexpected io template ords after second import"
-    );
-    ensure!(
-        roundtrip.after_first_import.template_ords == roundtrip.after_second_import.template_ords,
-        "template ords changed across imports"
-    );
-    ensure!(
-        roundtrip.after_first_import.template_target_decks
-            == roundtrip.after_second_import.template_target_decks,
-        "template target decks changed across imports"
-    );
-    ensure!(
-        roundtrip.after_first_import.referenced_static_media
-            != roundtrip.after_second_import.referenced_static_media,
-        "static media should change after the second import"
-    );
-    ensure!(
-        roundtrip
-            .after_second_import
-            .referenced_static_media
-            .iter()
-            .any(|name| name.starts_with("_io-main_") && name.ends_with(".woff2")),
-        "second import should include the namespaced io font asset"
-    );
-    ensure!(
-        roundtrip
-            .after_second_import
-            .template_target_decks
-            .iter()
-            .any(|item| item.template_name == "Image Occlusion" && item.deck_id > 0),
-        "second import should resolve a positive template target deck id"
+        failures == 0,
+        "{failures} import-setting scenarios failed; see the recorded report"
     );
     Ok(())
-}
-
-fn summarize_state(state: &Phase5aImportState) -> Value {
-    json!({
-        "notetype_count": state.notetype_count,
-        "conflicting_notes": state.conflicting_notes,
-        "field_ords": state.field_ords,
-        "template_ords": state.template_ords,
-        "referenced_static_media": state.referenced_static_media,
-        "template_target_decks": state
-            .template_target_decks
-            .iter()
-            .map(|item| json!({
-                "template_name": item.template_name,
-                "deck_name": item.deck_name,
-                "deck_id": item.deck_id,
-            }))
-            .collect::<Vec<_>>(),
-    })
 }

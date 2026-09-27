@@ -15,8 +15,8 @@ const generated = path.join(website, 'src/generated');
 await mkdir(generated, { recursive: true });
 await checkDocumentation();
 await writeFile(path.join(generated, 'versions.json'), JSON.stringify(await packageVersions(), null, 2) + '\n');
-execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'anki_forge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
-execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'anki_forge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
+execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
+execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
 
 const sourcePath = 'anki_forge/examples/website_showcase.rs';
 const source = await readFile(path.join(root, sourcePath), 'utf8');

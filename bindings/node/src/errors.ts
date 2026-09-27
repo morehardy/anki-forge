@@ -1,146 +1,122 @@
-import type { Diagnostic } from './types';
-import type { BuildReport, ValidationReport, ProjectDiffReport } from './report';
-
+import { deepFreeze } from "./internal/validation";
+import type {
+  BuildSnapshot,
+  ReportSnapshot,
+  PublicationSnapshot,
+  PathSnapshot,
+} from "./snapshots";
+export interface ErrorSourceDetail {
+  readonly type: string;
+  readonly kind?: string;
+  readonly code?: string;
+  readonly path?: PathSnapshot | null;
+  readonly [key: string]: unknown;
+}
 export class NativeLoadError extends Error {
-  readonly code = 'BINDING.NATIVE_LOAD_FAILED';
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);
-    this.name = 'NativeLoadError';
+    this.name = "NativeLoadError";
   }
 }
-export class BindingProtocolError extends Error {
-  readonly code = 'BINDING.PROTOCOL_ERROR';
-  constructor(message: string) {
-    super(message);
-    this.name = 'BindingProtocolError';
-  }
-}
-export class ProjectBusyError extends Error {
-  readonly code = 'BINDING.PROJECT_BUSY';
-  constructor() {
-    super(
-      'This project has an operation in progress. Await it before using the project again.',
-    );
-    this.name = 'ProjectBusyError';
-  }
-}
-export class ProjectFailedError extends Error {
-  readonly code = 'BINDING.PROJECT_FAILED';
-  constructor() {
-    super('The native project encountered an unrecoverable error. Create a new project.');
-    this.name = 'ProjectFailedError';
-  }
-}
-export class ProjectAddError extends Error {
+export class ForgeError extends Error {
+  readonly kind: string;
   readonly code: string;
-  constructor(readonly diagnostic: Diagnostic) {
-    super(diagnostic.message);
-    this.name = 'ProjectAddError';
-    this.code = diagnostic.code;
-  }
-}
-export class BuildError extends Error {
+  readonly domain: string;
+  readonly causes: readonly string[];
+  readonly sourceDetails: readonly ErrorSourceDetail[];
+  readonly details: Readonly<Record<string, unknown>>;
   constructor(
-    message: string,
-    readonly code: string,
-    readonly report: BuildReport,
-    readonly failureCause?: string,
+    data: {
+      message: string;
+      kind: string;
+      code: string;
+      domain: string;
+      causes?: string[];
+      sourceDetails?: ErrorSourceDetail[];
+      details?: Record<string, unknown>;
+    },
+    cause?: unknown,
   ) {
-    super(message);
-    this.name = 'BuildError';
+    super(data.message, { cause });
+    this.name = new.target.name;
+    this.kind = data.kind;
+    this.code = data.code;
+    this.domain = data.domain;
+    this.causes = Object.freeze(data.causes ?? []);
+    this.sourceDetails = deepFreeze(data.sourceDetails ?? []);
+    this.details = deepFreeze(data.details ?? {});
   }
 }
-export class MediaError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-  ) {
-    super(message);
-    this.name = 'MediaError';
+export class SchemaError extends ForgeError {}
+export class AddError extends ForgeError {}
+export class MediaError extends ForgeError {}
+export class TemplateBundleError extends ForgeError {}
+export class ImageOcclusionError extends ForgeError {}
+export class PolicyError extends ForgeError {}
+export class ConfigurationError extends ForgeError {}
+export class CompareError extends ForgeError {
+  get report(): ReportSnapshot {
+    return this.details.report as ReportSnapshot;
   }
 }
-export class ProjectDiffError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-    readonly report: ProjectDiffReport,
-    readonly failureCause?: string,
-  ) {
-    super(message);
-    this.name = 'ProjectDiffError';
+export class BuildError extends ForgeError {
+  snapshot(): BuildSnapshot {
+    return this.details.snapshot as BuildSnapshot;
+  }
+  get report(): ReportSnapshot {
+    return this.snapshot().report;
   }
 }
-export class ProductNoteError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-  ) {
-    super(message);
-    this.name = 'ProductNoteError';
+export class PersistError extends ForgeError {
+  get publication(): PublicationSnapshot {
+    return this.details.publication as PublicationSnapshot;
   }
 }
-export class DeckError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-  ) {
-    super(message);
-    this.name = 'DeckError';
-  }
-}
-export class TemplateBundleError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-    readonly path: string | null,
-    readonly byteOffset: number | null,
-  ) {
-    super(message);
-    this.name = 'TemplateBundleError';
-  }
-}
-export class ValidationError extends Error {
-  readonly code: string;
-  constructor(readonly report: ValidationReport) {
-    const diagnostic = report.diagnostics.find((item) => item.severity === 'error');
-    super(diagnostic?.message ?? 'Validation failed');
-    this.name = 'ValidationError';
-    this.code = diagnostic?.code ?? 'BINDING.VALIDATION_FAILED';
-  }
-}
-
 export class ArtifactClosedError extends Error {
-  readonly code = 'BINDING.ARTIFACT_CLOSED';
-  constructor() {
-    super('This artifact handle has been closed. Retain a clone before closing it.');
-    this.name = 'ArtifactClosedError';
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "ArtifactClosedError";
   }
+  readonly code = "BINDING.ARTIFACT_CLOSED";
+  readonly kind = "Closed";
 }
-export class ArtifactError extends Error {
-  constructor(
-    message: string,
-    cause: unknown,
-    readonly code: 'BINDING.ARTIFACT_IO' | 'BINDING.ARTIFACT_FAILED' = 'BINDING.ARTIFACT_IO',
-  ) {
-    super(message, { cause });
-    this.name = 'ArtifactError';
-  }
-}
-
 export function nativeError(error: unknown): never {
-  if (error instanceof Error && error.message === 'BINDING.ARTIFACT_FAILED')
-    throw new ArtifactError(
-      'Native artifact operation failed',
-      error,
-      'BINDING.ARTIFACT_FAILED',
-    );
-  if (error instanceof Error && error.message === 'BINDING.ARTIFACT_CLOSED')
-    throw new ArtifactClosedError();
-  if (error instanceof Error && error.message.startsWith('BINDING.ARTIFACT_IO: '))
-    throw new ArtifactError(error.message.slice('BINDING.ARTIFACT_IO: '.length), error);
-  if (error instanceof Error && error.message === 'BINDING.PROJECT_BUSY')
-    throw new ProjectBusyError();
-  if (error instanceof Error && error.message === 'BINDING.PROJECT_FAILED')
-    throw new ProjectFailedError();
-  throw error;
+  if (error instanceof ForgeError) throw error;
+  const message = error instanceof Error ? error.message : String(error);
+  if (message === "BINDING.ARTIFACT_CLOSED")
+    throw new ArtifactClosedError(message, { cause: error });
+  let data;
+  try {
+    data = JSON.parse(message);
+  } catch {
+    throw error;
+  }
+  if (!data || typeof data.code !== "string") throw error;
+  const constructors: Record<string, typeof ForgeError> = {
+    schema: SchemaError,
+    add: AddError,
+    media: MediaError,
+    bundle: TemplateBundleError,
+    occlusion: ImageOcclusionError,
+    policy: PolicyError,
+    configuration: ConfigurationError,
+    compare: CompareError,
+    build: BuildError,
+    persist: PersistError,
+  };
+  throw new (constructors[data.domain] ?? ForgeError)(data, error);
+}
+export function call<T>(fn: () => T): T {
+  try {
+    return fn();
+  } catch (e) {
+    return nativeError(e);
+  }
+}
+export async function asyncCall<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (e) {
+    return nativeError(e);
+  }
 }

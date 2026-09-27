@@ -22,9 +22,10 @@ fn missing_template_bundle_dependencies_fail_verify_and_package() {
     copy_tree(&contracts_root(), root.path());
     let manifest = root.path().join("manifest.yaml");
     let output = tempfile::tempdir().expect("package output");
-    let artifact = output
-        .path()
-        .join("anki-forge-contract-bundle-0.6.3.tar.gz");
+    let artifact = output.path().join(format!(
+        "anki-forge-contract-bundle-{}.tar.gz",
+        load_manifest(&manifest).unwrap().data.bundle_version
+    ));
     fs::write(&artifact, b"previous artifact").expect("seed previous artifact");
 
     for (bundle, files) in [

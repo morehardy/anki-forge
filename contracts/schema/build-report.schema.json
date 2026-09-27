@@ -1,142 +1,721 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://anki-forge.local/schema/build-report.schema.json",
-  "title": "Anki Forge Build Report",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Native build outcome and observation snapshot",
   "type": "object",
-  "required": [
-    "kind",
-    "schema_version",
-    "tool_version",
-    "status",
-    "comparison",
-    "counts",
-    "media",
-    "diagnostics",
-    "metrics",
-    "policy"
-  ],
   "properties": {
-    "kind": { "const": "anki-forge-build-report" },
-    "schema_version": { "enum": ["phase4-build-report-v1", "phase4-build-report-v2"] },
-    "tool_version": { "type": "string", "minLength": 1 },
-    "artifact": {
-      "type": ["object", "null"],
-      "required": ["path"],
-      "properties": { "path": { "type": "string", "minLength": 1 } },
-      "additionalProperties": false
+    "schema_version": {
+      "const": "ankiforge-build-v1"
     },
-    "status": { "enum": ["success", "blocked", "invalid", "error"] },
-    "comparison": { "enum": ["not_requested", "complete", "partial", "unavailable"] },
-    "counts": {
-      "type": "object",
-      "required": ["notes", "cards", "media"],
-      "properties": {
-        "notes": { "type": "integer", "minimum": 0 },
-        "cards": { "type": "integer", "minimum": 0 },
-        "media": { "type": "integer", "minimum": 0 }
-      },
-      "additionalProperties": false
+    "tool_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
     },
-    "media": {
-      "type": "object",
-      "required": [
-        "objects",
-        "bindings",
-        "references",
-        "missing_references",
-        "unsafe_references",
-        "unused_bindings",
-        "unique_bytes"
-      ],
-      "properties": {
-        "objects": { "type": "integer", "minimum": 0 },
-        "bindings": { "type": "integer", "minimum": 0 },
-        "references": { "type": "integer", "minimum": 0 },
-        "missing_references": { "type": "integer", "minimum": 0 },
-        "unsafe_references": { "type": "integer", "minimum": 0 },
-        "unused_bindings": { "type": "integer", "minimum": 0 },
-        "unique_bytes": { "type": "integer", "minimum": 0 },
-        "entries": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/media_entry" }
-        }
-      },
-      "additionalProperties": false
-    },
-    "diagnostics": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "code",
-          "severity",
-          "domain",
-          "stage",
-          "path",
-          "message",
-          "suggested_fix"
-        ],
-        "properties": {
-          "code": { "type": "string", "minLength": 1 },
-          "severity": { "enum": ["error", "warning", "info"] },
-          "domain": { "type": "string", "minLength": 1 },
-          "stage": { "type": "string", "minLength": 1 },
-          "path": { "type": ["string", "null"] },
-          "span": {
-            "oneOf": [
-              { "type": "null" },
-              {
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "success"
+            },
+            "artifact": {
+              "$ref": "#/definitions/nativePath"
+            },
+            "temporary": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "status",
+            "artifact",
+            "temporary"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "failure"
+            },
+            "kind": {
+              "enum": [
+                "configuration",
+                "validation",
+                "resource_limit",
+                "io",
+                "publication",
+                "policy_blocked",
+                "internal"
+              ]
+            },
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "message": {
+              "type": "string"
+            },
+            "causes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "publications": {
+              "type": "array",
+              "items": {
                 "type": "object",
-                "required": ["byte_start", "byte_end"],
                 "properties": {
-                  "byte_start": { "type": "integer", "minimum": 0 },
-                  "byte_end": { "type": "integer", "minimum": 0 }
+                  "path": {
+                    "$ref": "#/definitions/nativePath"
+                  },
+                  "stage": {
+                    "enum": [
+                      "not_published",
+                      "published"
+                    ]
+                  },
+                  "temporary": {
+                    "type": "boolean"
+                  },
+                  "durability": {
+                    "enum": [
+                      "confirmed",
+                      "unconfirmed"
+                    ]
+                  }
                 },
+                "required": [
+                  "path",
+                  "stage",
+                  "temporary",
+                  "durability"
+                ],
                 "additionalProperties": false
               }
-            ]
+            }
           },
-          "message": { "type": "string", "minLength": 1 },
-          "suggested_fix": { "type": ["string", "null"] }
+          "required": [
+            "status",
+            "kind",
+            "code",
+            "message",
+            "causes",
+            "publications"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "ankiforge-report-v1"
         },
-        "additionalProperties": false
-      }
-    },
-    "metrics": {
-      "type": "object",
-      "required": ["duration_ms"],
-      "properties": { "duration_ms": { "type": "integer", "minimum": 0 } },
-      "additionalProperties": false
-    },
-    "inspect": { "type": ["object", "null"] },
-    "previous_inspect": { "type": ["object", "null"] },
-    "update_safety": { "type": ["object", "null"] },
-    "diff": { "type": ["object", "null"] },
-    "risk": { "type": ["object", "null"] },
-    "policy": {
-      "type": "object",
-      "required": ["status", "threshold", "highest_risk", "blocking_findings"],
-      "properties": {
-        "status": { "enum": ["passed", "blocked", "not_evaluated"] },
-        "threshold": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
-        "highest_risk": { "type": ["string", "null"], "enum": ["info", "low", "medium", "high", "critical", null] },
-        "blocking_findings": { "type": "array", "items": { "type": "string" } }
+        "counts": {
+          "type": "object",
+          "properties": {
+            "notes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cards": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "media": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "notes",
+            "cards",
+            "media"
+          ],
+          "additionalProperties": false
+        },
+        "baseline_counts": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "notes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "cards": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "media": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "notes",
+                "cards",
+                "media"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string"
+                      },
+                      "byte_range": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "byte_range"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "help": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "severity",
+              "message",
+              "source",
+              "help"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "comparison": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schema_version": {
+                  "const": "ankiforge-comparison-v1"
+                },
+                "findings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "enum": [
+                          "RISK.NOTE_ADDED",
+                          "RISK.NOTE_CHANGED",
+                          "RISK.NOTE_REMOVED",
+                          "RISK.CARD_ADDED",
+                          "RISK.CARD_REMOVED",
+                          "RISK.MODEL_ADDED",
+                          "RISK.MODEL_CHANGED",
+                          "RISK.MODEL_REMOVED",
+                          "RISK.SORT_FIELD_CHANGED",
+                          "RISK.FIELD_ADDED",
+                          "RISK.FIELD_REMOVED",
+                          "RISK.TEMPLATE_ADDED",
+                          "RISK.TEMPLATE_REMOVED",
+                          "RISK.MASK_ADDED",
+                          "RISK.MASK_REMOVED",
+                          "RISK.MEDIA_ADDED",
+                          "RISK.MEDIA_CHANGED",
+                          "RISK.MEDIA_REMOVED"
+                        ]
+                      },
+                      "level": {
+                        "enum": [
+                          "info",
+                          "low",
+                          "medium",
+                          "high",
+                          "critical"
+                        ]
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "evidence": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "\\S"
+                            },
+                            "before": {},
+                            "after": {}
+                          },
+                          "required": [
+                            "selector",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "level",
+                      "message",
+                      "evidence"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "highest_risk": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "info",
+                        "low",
+                        "medium",
+                        "high",
+                        "critical"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policy": {
+                  "type": "object",
+                  "properties": {
+                    "allows_publication": {
+                      "type": "boolean"
+                    },
+                    "threshold": {
+                      "enum": [
+                        "info",
+                        "low",
+                        "medium",
+                        "high",
+                        "critical"
+                      ]
+                    },
+                    "allowed_codes": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "RISK.NOTE_ADDED",
+                          "RISK.NOTE_CHANGED",
+                          "RISK.NOTE_REMOVED",
+                          "RISK.CARD_ADDED",
+                          "RISK.CARD_REMOVED",
+                          "RISK.MODEL_ADDED",
+                          "RISK.MODEL_CHANGED",
+                          "RISK.MODEL_REMOVED",
+                          "RISK.SORT_FIELD_CHANGED",
+                          "RISK.FIELD_ADDED",
+                          "RISK.FIELD_REMOVED",
+                          "RISK.TEMPLATE_ADDED",
+                          "RISK.TEMPLATE_REMOVED",
+                          "RISK.MASK_ADDED",
+                          "RISK.MASK_REMOVED",
+                          "RISK.MEDIA_ADDED",
+                          "RISK.MEDIA_CHANGED",
+                          "RISK.MEDIA_REMOVED"
+                        ]
+                      }
+                    },
+                    "unmatched_allowances": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "RISK.NOTE_ADDED",
+                          "RISK.NOTE_CHANGED",
+                          "RISK.NOTE_REMOVED",
+                          "RISK.CARD_ADDED",
+                          "RISK.CARD_REMOVED",
+                          "RISK.MODEL_ADDED",
+                          "RISK.MODEL_CHANGED",
+                          "RISK.MODEL_REMOVED",
+                          "RISK.SORT_FIELD_CHANGED",
+                          "RISK.FIELD_ADDED",
+                          "RISK.FIELD_REMOVED",
+                          "RISK.TEMPLATE_ADDED",
+                          "RISK.TEMPLATE_REMOVED",
+                          "RISK.MASK_ADDED",
+                          "RISK.MASK_REMOVED",
+                          "RISK.MEDIA_ADDED",
+                          "RISK.MEDIA_CHANGED",
+                          "RISK.MEDIA_REMOVED"
+                        ]
+                      }
+                    },
+                    "blocking_findings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "enum": [
+                              "RISK.NOTE_ADDED",
+                              "RISK.NOTE_CHANGED",
+                              "RISK.NOTE_REMOVED",
+                              "RISK.CARD_ADDED",
+                              "RISK.CARD_REMOVED",
+                              "RISK.MODEL_ADDED",
+                              "RISK.MODEL_CHANGED",
+                              "RISK.MODEL_REMOVED",
+                              "RISK.SORT_FIELD_CHANGED",
+                              "RISK.FIELD_ADDED",
+                              "RISK.FIELD_REMOVED",
+                              "RISK.TEMPLATE_ADDED",
+                              "RISK.TEMPLATE_REMOVED",
+                              "RISK.MASK_ADDED",
+                              "RISK.MASK_REMOVED",
+                              "RISK.MEDIA_ADDED",
+                              "RISK.MEDIA_CHANGED",
+                              "RISK.MEDIA_REMOVED"
+                            ]
+                          },
+                          "level": {
+                            "enum": [
+                              "info",
+                              "low",
+                              "medium",
+                              "high",
+                              "critical"
+                            ]
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "evidence": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "selector": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "pattern": "\\S"
+                                },
+                                "before": {},
+                                "after": {}
+                              },
+                              "required": [
+                                "selector",
+                                "before",
+                                "after"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "level",
+                          "message",
+                          "evidence"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "allows_publication",
+                    "threshold",
+                    "allowed_codes",
+                    "unmatched_allowances",
+                    "blocking_findings"
+                  ],
+                  "additionalProperties": false
+                },
+                "diagnostics": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "severity": {
+                        "enum": [
+                          "info",
+                          "warning",
+                          "error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "path": {
+                                "type": "string"
+                              },
+                              "byte_range": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "end": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      }
+                                    },
+                                    "required": [
+                                      "start",
+                                      "end"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "path",
+                              "byte_range"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "help": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "severity",
+                      "message",
+                      "source",
+                      "help"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "baseline_counts": {
+                  "type": "object",
+                  "properties": {
+                    "notes": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "cards": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "media": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "notes",
+                    "cards",
+                    "media"
+                  ],
+                  "additionalProperties": false
+                },
+                "candidate_counts": {
+                  "type": "object",
+                  "properties": {
+                    "notes": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "cards": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "media": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "notes",
+                    "cards",
+                    "media"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "schema_version",
+                "findings",
+                "highest_risk",
+                "policy",
+                "diagnostics",
+                "baseline_counts",
+                "candidate_counts"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
       },
+      "required": [
+        "schema_version",
+        "counts",
+        "baseline_counts",
+        "diagnostics",
+        "duration_ms",
+        "comparison"
+      ],
       "additionalProperties": false
     }
   },
-  "$defs": {
-    "media_entry": {
-      "type": "object",
-      "required": ["id", "filename", "source_mode", "size_bytes"],
-      "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "filename": { "type": "string", "minLength": 1 },
-        "source_mode": { "enum": ["inline", "path_backed"] },
-        "size_bytes": { "type": "integer", "minimum": 0 }
-      },
-      "additionalProperties": false
+  "required": [
+    "schema_version",
+    "tool_version",
+    "result",
+    "report"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "nativePath": {
+      "description": "Lossless native filesystem path. Unicode paths are strings; encoded arrays preserve original Unix bytes or Windows UTF-16 code units. Encodings describe their original platform and carry no file ownership.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "const": "unix_bytes"
+            },
+            "bytes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              }
+            }
+          },
+          "required": [
+            "encoding",
+            "bytes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "const": "windows_wide"
+            },
+            "units": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              }
+            }
+          },
+          "required": [
+            "encoding",
+            "units"
+          ],
+          "additionalProperties": false
+        }
+      ]
     }
-  },
-  "additionalProperties": false
+  }
 }

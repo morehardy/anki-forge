@@ -14,6 +14,8 @@ from hashing import sha256
 from workload import QFMT, AFMT, serialize
 
 MAX_BYTES = 128 * 1024 * 1024
+NATIVE_IDENTITY = "ankiforge-identity.json"
+MAX_IDENTITY_BYTES = 64 * 1024 * 1024
 
 
 class InvalidArtifact(ValueError):
@@ -42,6 +44,38 @@ def zstd_decode(raw):
     return data
 
 
+def native_metadata(archive):
+    """Check envelope shape only; identity reconciliation belongs to Rust consumers."""
+    if NATIVE_IDENTITY not in archive.namelist():
+        return None
+    require(archive.getinfo(NATIVE_IDENTITY).file_size <= MAX_IDENTITY_BYTES,
+            "native identity metadata exceeds verifier budget")
+
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            require(key not in result, "duplicate native identity JSON key")
+            result[key] = value
+        return result
+
+    raw = archive.read(NATIVE_IDENTITY)
+    value = json.loads(raw, object_pairs_hook=unique)
+    require(isinstance(value, dict), "native identity envelope must be an object")
+    require(value.get("format_version") == "ankiforge-identity-v1", "unknown native identity format")
+    for key in ("collection_blake3", "identity_blake3"):
+        digest = value.get(key)
+        require(isinstance(digest, str) and len(digest) == 64
+                and all(c in "0123456789abcdef" for c in digest), "invalid native identity digest")
+    identity = value.get("identity")
+    require(isinstance(value.get("media"), dict) and isinstance(identity, dict), "invalid native identity envelope")
+    require(isinstance(identity.get("namespace"), str) and bool(identity["namespace"].strip())
+            and isinstance(identity.get("models"), dict) and isinstance(identity.get("notes"), dict),
+            "invalid native identity structure")
+    return {"entry": NATIVE_IDENTITY, "format_version": value["format_version"],
+            "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw),
+            "scope": "JSON envelope shape only; hashes, assignments and update semantics are not verified"}
+
+
 def read_package(path, expected=None):
     from media_verify import check_media
     expected_media = (expected or {}).get("media", [])
@@ -62,7 +96,11 @@ def read_package(path, expected=None):
         else:
             raise UnsupportedVerifier(f"unknown APKG metadata: {meta!r}")
         require(canonical in names and "media" in names, "missing canonical collection or media map")
+        identity = native_metadata(archive)
+        require(identity is None or version == 3, "native identity requires modern APKG")
         allowed = {canonical, "media", "meta"}
+        if identity is not None:
+            allowed.add(NATIVE_IDENTITY)
         if version > 1:
             allowed.add("collection.anki2")
         if expected_media:
@@ -80,9 +118,11 @@ def read_package(path, expected=None):
         require(raw.startswith(b"SQLite format 3\x00"), "canonical entry is not SQLite")
         return raw, {"version": version, "canonical_entry": canonical,
                      "nested_compression": "zstd" if version == 3 else "none",
+                     "native_identity": identity,
                      "payloads": [{"name": e.filename, "zip_method": e.compress_type,
                                    "stored_bytes": e.compress_size, "decoded_zip_bytes": e.file_size,
-                                   "role": "canonical" if e.filename == canonical else
+                                   "role": "native_identity_metadata" if e.filename == NATIVE_IDENTITY else
+                                           "canonical" if e.filename == canonical else
                                            "compatibility_placeholder" if e.filename == "collection.anki2" else "metadata"}
                                   for e in info], "media_count": media_count}
 

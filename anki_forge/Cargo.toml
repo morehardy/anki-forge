@@ -1,6 +1,6 @@
 [package]
-name = "anki_forge"
-version = "0.1.0"
+name = "ankiforge"
+version = "0.2.0"
 edition.workspace = true
 rust-version.workspace = true
 description = "A typed Rust toolkit for building and validating Anki decks"
@@ -14,6 +14,7 @@ categories = ["api-bindings", "data-structures"]
 include = [
     "build.rs",
     "src/**",
+    "!**/.DS_Store",
     "assets/**",
     "examples/target_api_basic.rs",
     "examples/target_api_custom_notetype.rs",
@@ -23,12 +24,13 @@ include = [
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
+    "!tests/fixtures/**",
 ]
 
 [features]
 default = []
 # Repository-only seam for the unpublished contract tool and deep conformance
-# tests. It is not part of the supported 0.1 consumer interface.
+# tests. It is not part of the supported 0.2 consumer interface.
 internal-tools = []
 
 [dependencies]
@@ -40,6 +42,7 @@ flate2 = "1"
 hex = "0.4"
 html-escape = "0.2"
 imagesize = "0.13"
+mime = "0.3"
 jsonschema = { version = "0.18.3", default-features = false }
 prost = "0.13"
 rand = "0.8.6"
@@ -57,6 +60,10 @@ unicode-normalization = "0.1"
 url = "2.5.4"
 zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
 zstd = "0.13"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
+
+[target.'cfg(unix)'.dependencies]
+rustix = { version = "1", features = ["fs"] }
 
 [dev-dependencies]
 proptest = "1.6"
@@ -69,16 +76,11 @@ name = "conformance_surface"
 required-features = ["internal-tools"]
 
 [[example]]
-name = "deck_basic_flow"
-required-features = ["internal-tools"]
-
-[[example]]
 name = "minimal_flow"
 required-features = ["internal-tools"]
 
 [[example]]
 name = "product_basic_flow"
-required-features = ["internal-tools"]
 
 [[example]]
 name = "product_roundtrip_oracle_prepare"

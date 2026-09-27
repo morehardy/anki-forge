@@ -1,5 +1,7 @@
 # ADR 0021: Own Rust product objects behind the Python SDK
 
+> Historical decision. Current public authoring and update behavior is defined by [ADR 0023](0023-owned-authoring-and-package-update-evidence.md) and the [clean-slate plan](../plans/2026-09-23-rust-api-clean-slate-design.md).
+
 Status: accepted and implemented. Trial and final implementation gates passed at
 `5f6ac7d`; see the [verification record](../plans/2026-09-22-python-api-parity-progress.md).
 No package or release tag has been published.

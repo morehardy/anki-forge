@@ -1,4 +1,4 @@
-use anki_forge::prelude::ApkgArtifact;
+use ankiforge::build::{ApkgArtifact, PersistError};
 use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
 use std::path::PathBuf;
@@ -70,7 +70,7 @@ impl NativeArtifact {
             artifact
                 .persist_to(path)
                 .map(Self::from)
-                .map_err(PyErr::from)
+                .map_err(persist_error)
         })
     }
 
@@ -94,4 +94,8 @@ impl NativeArtifact {
             .take();
         Ok(())
     }
+}
+
+fn persist_error(error: PersistError) -> PyErr {
+    crate::core_error("persist", error.kind(), error.code(), &error)
 }
