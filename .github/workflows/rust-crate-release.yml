@@ -38,7 +38,8 @@ jobs:
       - name: Generate CycloneDX SBOM
         run: |
           cargo install cargo-cyclonedx --version 0.5.9 --locked
-          cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json
+          cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json \
+            --override-filename bom.json
       - name: Stage release candidate inputs
         run: |
           mkdir release-inputs

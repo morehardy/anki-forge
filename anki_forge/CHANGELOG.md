@@ -6,7 +6,7 @@ new minor release.
 
 ## [Unreleased]
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2026-09-28
 
 ### Clean-slate authoring
 
