@@ -1,7 +1,8 @@
 # Node and TypeScript API
 
 The `anki-forge-node` entry point exposes the sole Project authoring model.
-Types are defined in [the public source](../../bindings/node/src/index.ts) and
+Types are defined in [the public source](../../bindings/node/src/index.ts),
+[report classes](../../bindings/node/src/report.ts), and
 [JSON snapshot declarations](../../bindings/node/src/snapshots.ts). Start with
 [the quick start](quick-start.md).
 
@@ -93,12 +94,16 @@ unique keys. `image` and `occlusion` are reserved generated fields. See
 | `options.updatePolicy(policy)` | Configure update/compare risk policy |
 
 A successful output exposes `.artifact`, `.report` and `.snapshot()`.
-The report exposes `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`,
-`.comparison`, and `.snapshot()`;
-it has no outcome or file ownership. Comparisons expose `.findings`,
+The `BuildReport` exposes `.counts`, `.baselineCounts`, `.durationMs`, `.diagnostics`,
+`.comparison`, and `.snapshot()`; it has no outcome or file ownership.
+`.comparison` is a `ComparisonReport` or `null`, using the same class as
+`project.compare()`. Comparisons expose `.findings`,
 `.highestRisk`, `.policy`, `.diagnostics`, and `.snapshot()`.
 Snapshot field names mirror Rust JSON, including `allows_publication` and
 `schema_version`; they are not camel-cased copies of the native report.
+Use `report.comparison.highestRisk` on a comparison object, or
+`report.snapshot().comparison.highest_risk` in its JSON snapshot, after checking
+for `null`.
 
 `new UpdatePolicy()` blocks High/Critical. `.failOn('medium')` changes the
 threshold. `.allow('RISK.NOTE_REMOVED')` explicitly accepts that whole category
@@ -123,6 +128,13 @@ snapshots, publication paths in failures, and structured error-path details.
 Decode an encoded path only for its original platform; on Unix,
 `Buffer.from(value.bytes)` preserves a byte path for Node filesystem functions.
 The Node authoring methods continue to accept string paths.
+
+Relative media and bundle paths are anchored when the read is invoked;
+build destinations and baselines are anchored when options are constructed.
+On POSIX, symbolic links followed by `..` retain filesystem traversal semantics.
+`persistTo` anchors relative destinations to the working directory captured by
+the original build, including on cloned and persisted handles. Later working
+directory changes do not redirect these paths.
 
 Keep an artifact owner alive while consuming `.path`. `.clone()` creates an
 independent owner; `await .close()` releases that owner. The last temporary owner
@@ -149,7 +161,10 @@ I/O/schema/media/limit causes, and operation `details`.
 The original native exception is retained as the JS `cause`.
 
 `BuildError.snapshot()` preserves failure and publication facts;
-`BuildError.report` and `CompareError.report` expose observations.
+`BuildError.report` and `CompareError.report` return `BuildReport`, just like
+`BuildOutput.report`. Use `.baselineCounts` and `.comparison` on these reports;
+use `.snapshot()` for the snake_case JSON fields. A failed comparison can have
+partial observations and a `null` comparison.
 `PersistError.publication` records whether the target was already published and
 whether durability was confirmed. Media/inspection errors retain limit details.
 Use these machine fields instead of parsing error messages.

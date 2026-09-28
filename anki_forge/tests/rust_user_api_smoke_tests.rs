@@ -1,5 +1,6 @@
 mod common;
 use ankiforge::schema::GenerationRule;
+use ankiforge::update::CompareOptions;
 use ankiforge::{BuildOptions, Content, Field, Note, NoteType, Project, Template};
 
 fn single(note: Note) -> Project {
@@ -225,6 +226,65 @@ fn malformed_cloze_is_rejected_before_publication() {
             "{error:?}"
         );
         assert!(error.publications().is_empty());
+    }
+}
+
+#[test]
+fn unicode_literal_cloze_prefixes_preserve_cards_in_build_and_compare() {
+    let baseline = single(Note::cloze("{{c1::answer}}"))
+        .build(BuildOptions::temporary())
+        .unwrap();
+    for text in [
+        "{{c中文}} {{c1::answer}} literal {{c🚀}}",
+        "{{c1::answer {{c中文}} }}",
+        "{{c1::answer {{c🚀}} }}",
+        "{{c{{c1::answer}} trailing {{c",
+    ] {
+        let project = single(Note::cloze(text));
+        let output = project.build(BuildOptions::temporary()).unwrap();
+        assert_eq!(card_ordinals(&output), [0], "{text}");
+        assert_eq!(
+            common::fields(output.artifact().path()),
+            [format!("{text}\u{1f}")]
+        );
+        let comparison = project
+            .compare(CompareOptions::against(baseline.artifact().path()))
+            .unwrap();
+        assert_eq!(comparison.snapshot().candidate_counts.cards, 1, "{text}");
+        assert!(comparison.policy().allows_publication(), "{text}");
+        let update = project
+            .build(BuildOptions::temporary().update_from(baseline.artifact().path()))
+            .unwrap();
+        assert_eq!(card_ordinals(&update), [0], "{text}");
+    }
+}
+
+#[test]
+fn malformed_clozes_after_unicode_prefixes_return_structured_errors() {
+    let baseline = single(Note::cloze("{{c1::answer}}"))
+        .build(BuildOptions::temporary())
+        .unwrap();
+    for text in [
+        "{{c中文}} {{c0::zero}}",
+        "{{c🚀}} {{c1::unclosed",
+        "{{c1::answer {{c中文 {{c2::nested}}}}",
+    ] {
+        let project = single(Note::cloze(text));
+        let error = project.build(BuildOptions::temporary()).unwrap_err();
+        assert!(error.code().contains("CLOZE"), "{text}: {error:?}");
+        assert!(error.publications().is_empty());
+        let error = project
+            .compare(CompareOptions::against(baseline.artifact().path()))
+            .unwrap_err();
+        assert!(
+            error
+                .report()
+                .diagnostics()
+                .iter()
+                .any(|d| d.code.contains("CLOZE")),
+            "{text}: {error:?}"
+        );
+        assert_eq!(error.report().baseline_counts().unwrap().notes, 1);
     }
 }
 

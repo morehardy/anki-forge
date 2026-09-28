@@ -204,12 +204,14 @@ try {
     `
     import assert from 'node:assert/strict';
     import { createRequire } from 'node:module';
-    import { Project, Note, BuildOptions, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'anki-forge-node';
+    import { Project, Note, BuildOptions, BuildReport, ComparisonReport, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'anki-forge-node';
     const cjs = createRequire(import.meta.url)('anki-forge-node');
     assert.equal(cjs.Project, Project); assert.equal(cjs.ApkgArtifact, ApkgArtifact);
+    assert.equal(cjs.BuildReport, BuildReport); assert.equal(cjs.ComparisonReport, ComparisonReport);
     const project = new Project('installed').add('note', Note.basic('npm', 'Rust'));
     const output = await project.build(BuildOptions.to('installed.apkg'));
     assert.equal(output.report.counts.notes, 1);
+    assert(output.report instanceof BuildReport);
     assert.equal(bindingMetadata().bindingVersion, ${JSON.stringify(version)});
     await output.artifact.close();
     const clone = project.clone();
@@ -309,12 +311,29 @@ try {
     await fs.writeFile(
       path.join(consumer, `consumer.${extension}`),
       `
-      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
+      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, BuildReport, ComparisonReport, BuildError, CompareError, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
       const project = new Project('typed').add('one', Note.basic('front', 'back'));
       const result: Promise<BuildOutput> = project.build(BuildOptions.to('typed.apkg'));
       const limits: InspectLimits = { maxMediaBytes: 1024 };
       const temporary: Promise<BuildOutput> = project.build(BuildOptions.temporary().inspectLimits(limits));
       const cloned: Project = project.clone();
+      function readReport(report: BuildReport): void {
+        const comparison: ComparisonReport | null = report.comparison;
+        if (comparison) {
+          const risk = comparison.highestRisk;
+          const jsonRisk = comparison.snapshot().highest_risk;
+          // @ts-expect-error snake_case belongs only to snapshots
+          comparison.highest_risk;
+        }
+        report.baselineCounts;
+        report.snapshot().baseline_counts;
+      }
+      declare const output: BuildOutput;
+      declare const buildError: BuildError;
+      declare const compareError: CompareError;
+      readReport(output.report);
+      readReport(buildError.report);
+      readReport(compareError.report);
       // @ts-expect-error key is required
       project.add(Note.basic('front', 'back'));
       // @ts-expect-error explicit output destination is required

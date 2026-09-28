@@ -19,6 +19,8 @@ const {
   CompareOptions,
   UpdatePolicy,
   BuildError,
+  BuildReport,
+  ComparisonReport,
   AddError,
   SchemaError,
   MediaError,
@@ -160,6 +162,145 @@ test("raw field delimiters fail atomically through the native AddError", () => {
     project.add("one", Note.basic("valid", "answer"));
     assert.equal(project.length, 1);
   }
+});
+
+async function symlinkPaths(t) {
+  const root = await fs.realpath(await temp(t));
+  const actual = path.join(root, "actual");
+  await fs.mkdir(path.join(actual, "child"), { recursive: true });
+  await fs.symlink(path.join(actual, "child"), path.join(root, "link"));
+  // Keep these components intact: path.join/resolve would erase the trigger.
+  return {
+    root,
+    actual,
+    prefixes: [root + "/link/..", path.relative(process.cwd(), root) + "/link/.."],
+  };
+}
+
+test("POSIX media and bundle paths follow symlinks before parent components", {
+  skip: process.platform === "win32",
+}, async (t) => {
+  const { root, actual, prefixes } = await symlinkPaths(t);
+  const expected = Buffer.from("expected-content");
+  await fs.writeFile(path.join(actual, "input.txt"), expected);
+  await fs.writeFile(path.join(root, "input.txt"), "wrong");
+  for (const directory of [root, actual]) {
+    await fs.writeFile(path.join(directory, "front.html"), "{{front}}");
+    await fs.writeFile(path.join(directory, "back.html"), "{{front}}");
+    await fs.writeFile(path.join(directory, "anki-template.yaml"),
+      `format_version: template-bundle-v2\nnote_type:\n  key: paths\n  name: ${directory === actual ? "Expected" : "Wrong"}\n  fields:\n    - key: front\n  templates:\n    - key: card\n      front_file: front.html\n      back_file: back.html\n`);
+  }
+  const owned = await Media.bytes(expected, "text/plain");
+  for (const prefix of prefixes) {
+    const media = await Media.file(prefix + "/input.txt");
+    assert.equal(media.filename, owned.filename);
+    assert.equal(media.byteLength, expected.length);
+    const model = await NoteType.fromBundle(prefix);
+    assert.equal(model.displayName, "Expected");
+  }
+});
+
+test("POSIX build, baseline and persistence paths retain symlink traversal", {
+  skip: process.platform === "win32",
+}, async (t) => {
+  const { root, actual, prefixes } = await symlinkPaths(t);
+  const first = new Project("path-traversal").add("one", Note.basic("q", "a"));
+  const next = new Project("path-traversal").add("one", Note.basic("q", "edited"));
+  const handles = [];
+  try {
+    for (const [index, prefix] of prefixes.entries()) {
+      const filename = `baseline-${index}.apkg`;
+      const decoy = path.join(root, filename);
+      await fs.writeFile(decoy, "unrelated file");
+      const baseline = await first.build(BuildOptions.to(prefix + "/" + filename));
+      handles.push(baseline.artifact);
+      const expected = path.join(actual, filename);
+      assert.equal(await fs.realpath(baseline.artifact.path), expected);
+      assert.equal(await fs.readFile(decoy, "utf8"), "unrelated file");
+      const comparison = await next.compare(CompareOptions.against(prefix + "/" + filename));
+      assert(comparison.findings.some((f) => f.code === "RISK.NOTE_CHANGED"));
+      const update = await next.build(BuildOptions.temporary().updateFrom(prefix + "/" + filename));
+      handles.push(update.artifact);
+      const savedName = `saved-${index}.apkg`;
+      await fs.writeFile(path.join(root, savedName), "keep this too");
+      const saved = await update.artifact.persistTo(prefix + "/" + savedName);
+      handles.push(saved);
+      assert.equal(await fs.realpath(saved.path), path.join(actual, savedName));
+      assert.equal(await fs.readFile(path.join(root, savedName), "utf8"), "keep this too");
+      assert.deepEqual(await fs.readFile(saved.path), await fs.readFile(update.artifact.path));
+      await assert.rejects(
+        next.build(BuildOptions.to(prefix + "/" + filename).updateFrom(expected)),
+        (e) => e instanceof BuildError && e.code === "BUILD.OUTPUT_INVALID",
+      );
+      assert.equal(await fs.readFile(decoy, "utf8"), "unrelated file");
+    }
+  } finally {
+    for (const handle of handles) await handle.close();
+  }
+});
+
+test("Windows drive-relative and rooted paths capture the requested directory", {
+  skip: process.platform !== "win32",
+}, async (t) => {
+  const root = await fs.realpath(await temp(t));
+  const original = process.cwd();
+  const drive = path.parse(root).root.slice(0, 2);
+  const variants = [
+    (name) => name,
+    (name) => drive + name,
+    (name) => path.join(root, name).slice(2),
+    (name) => path.join(root, name),
+  ];
+  function inDirectory(operation) {
+    process.chdir(root);
+    try { return operation(); }
+    finally { process.chdir(original); }
+  }
+  const expected = Buffer.from("windows-paths");
+  await fs.writeFile(path.join(root, "input.txt"), expected);
+  for (const [index, variant] of variants.entries()) {
+    const media = await inDirectory(() => Media.file(variant("input.txt")));
+    assert.equal(media.byteLength, expected.length);
+    const project = new Project("windows-paths").add("one", Note.basic("q", "a"));
+    const options = inDirectory(() => BuildOptions.to(variant(`out-${index}.apkg`)));
+    const output = await project.build(options);
+    t.after(() => output.artifact.close());
+    assert.equal(await fs.realpath(output.artifact.path), path.join(root, `out-${index}.apkg`));
+    const temporary = await inDirectory(() => project.build(BuildOptions.temporary()));
+    t.after(() => temporary.artifact.close());
+    const saved = await temporary.artifact.persistTo(variant(`saved-${index}.apkg`));
+    t.after(() => saved.close());
+    assert.equal(await fs.realpath(saved.path), path.join(root, `saved-${index}.apkg`));
+  }
+});
+
+test("Unicode literal cloze prefixes build and compare without native panics", async (t) => {
+  const baseline = await new Project("unicode-cloze")
+    .add("one", Note.cloze("{{c1::answer}}"))
+    .build(BuildOptions.temporary());
+  t.after(() => baseline.artifact.close());
+  for (const text of [
+    "{{c中文}} {{c1::answer}} literal {{c🚀}}",
+    "{{c1::answer {{c中文}} }}",
+  ]) {
+    const project = new Project("unicode-cloze").add("one", Note.cloze(text));
+    const output = await project.build(BuildOptions.temporary());
+    t.after(() => output.artifact.close());
+    assert.equal(output.report.counts.cards, 1);
+    assert.equal(inspect(output.artifact.path).notes[0].fields, text + "\x1f");
+    const comparison = await project.compare(CompareOptions.against(baseline.artifact.path));
+    assert.equal(comparison.snapshot().candidate_counts.cards, 1);
+  }
+  const malformed = new Project("unicode-cloze")
+    .add("one", Note.cloze("{{c中文}} {{c1::unclosed"));
+  await assert.rejects(
+    malformed.build(BuildOptions.temporary()),
+    (e) => e instanceof BuildError && e.code === "PRODUCT.CLOZE_MARKER_MALFORMED",
+  );
+  await assert.rejects(
+    malformed.compare(CompareOptions.against(baseline.artifact.path)),
+    (e) => e instanceof CompareError && e.code === "PRODUCT.CLOZE_MARKER_MALFORMED",
+  );
 });
 
 test("explicit keys and strings as Text; only Project authors publications", async (t) => {
@@ -417,14 +558,21 @@ test("compare keeps high-risk evidence and update blocks until explicit category
   const comparison = await next.compare(
     CompareOptions.against(first.artifact.path),
   );
+  assert(comparison instanceof ComparisonReport);
   assert.equal(comparison.policy.allows_publication, false);
   assert(comparison.findings.some((f) => f.code === "RISK.NOTE_REMOVED"));
   await assert.rejects(
     next.build(BuildOptions.temporary().updateFrom(first.artifact.path)),
-    (e) =>
-      e instanceof BuildError &&
-      e.snapshot().result.status === "failure" &&
-      e.report.comparison.policy.allows_publication === false,
+    (e) => {
+      assert(e instanceof BuildError);
+      assert(e.report instanceof BuildReport);
+      assert(e.report.comparison instanceof ComparisonReport);
+      assert.equal(e.report.comparison.highestRisk, comparison.highestRisk);
+      assert.deepEqual(e.report.snapshot(), e.snapshot().report);
+      assert.deepEqual(e.report.comparison.snapshot(), comparison.snapshot());
+      return e.snapshot().result.status === "failure" &&
+        e.report.comparison.policy.allows_publication === false;
+    },
   );
   const policy = new UpdatePolicy().allow("RISK.NOTE_REMOVED");
   const accepted = await next.compare(
@@ -438,6 +586,13 @@ test("compare keeps high-risk evidence and update blocks until explicit category
       .updateFrom(first.artifact.path),
   );
   t.after(() => out.artifact.close());
+  assert(out.report instanceof BuildReport);
+  assert(out.report.comparison instanceof ComparisonReport);
+  assert.equal(out.report.comparison.highestRisk, "high");
+  assert.deepEqual(out.report.comparison.snapshot(), accepted.snapshot());
+  assert.deepEqual(out.report.snapshot(), out.snapshot().report);
+  assert.equal(out.report.snapshot().comparison.highest_risk, "high");
+  assert(Object.isFrozen(out.report.comparison));
   assert.deepEqual(out.report.comparison.policy, accepted.policy);
   const before = inspect(first.artifact.path).notes.find((n) =>
       n.fields.startsWith("a\x1f"),
@@ -658,14 +813,17 @@ test("verified baseline observations survive a later candidate error", async (t)
     next.compare(CompareOptions.against(first.artifact.path)),
     (e) =>
       e instanceof CompareError &&
-      e.report.baseline_counts.notes === 1 &&
+      e.report instanceof BuildReport &&
+      e.report.baselineCounts.notes === 1 &&
+      e.report.snapshot().baseline_counts.notes === 1 &&
       e.report.comparison === null,
   );
   await assert.rejects(
     next.build(BuildOptions.temporary().updateFrom(first.artifact.path)),
     (e) =>
       e instanceof BuildError &&
-      e.report.baseline_counts.notes === 1 &&
+      e.report instanceof BuildReport &&
+      e.report.baselineCounts.notes === 1 &&
       e.snapshot().result.status === "failure",
   );
 });

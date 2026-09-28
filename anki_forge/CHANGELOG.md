@@ -39,6 +39,8 @@ provided. Current behavior is documented in the crate README.
 
 ### Fixed
 
+- Scan literal Cloze prefixes without splitting UTF-8 characters, preserving
+  card generation and structured build/compare errors for Unicode input.
 - Compare filtered observation trees directly and merge sorted selector indexes,
   preserving numeric JSON representations, duplicate handling and diff evidence.
 - Borrow SQLite note text during inspection and move parsed identity metadata,

@@ -61,7 +61,7 @@ try {
 } finally { await first.artifact.close(); }
 ```
 
-`BuildOutput` always owns an artifact; `BuildReport` is observations only. `snapshot()` produces JSON data without extending temporary-file lifetime. `artifact.clone()` creates another owner; the last `close()` deletes a temporary file. `persistTo(path)` returns a persistent owner and retains publication facts on failure. Use standard Node file streams on `artifact.path` while retaining the artifact.
+`BuildOutput` always owns an artifact; `BuildReport` is observations only. Success and error `.report` accessors both return `BuildReport`; its `.comparison` is a `ComparisonReport` or `null`, with the same interface as `project.compare()`. `snapshot()` produces JSON data without extending temporary-file lifetime. `artifact.clone()` creates another owner; the last `close()` deletes a temporary file. `persistTo(path)` returns a persistent owner and retains publication facts on failure. Use standard Node file streams on `artifact.path` while retaining the artifact.
 
 Errors have `kind`, `code`, `causes` (native source-chain text), structured `sourceDetails` for recognized native causes, and operation `details`. `BuildError.snapshot()` contains the failure, report and publication facts; `CompareError.report` contains observations from incomplete analysis. No error code is inferred from human wording. Build and compare capture the project at invocation and run on a worker; later additions cannot mutate an in-flight request.
 

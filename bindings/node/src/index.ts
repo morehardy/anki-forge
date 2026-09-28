@@ -1,4 +1,4 @@
-import path from "node:path";
+import { absolutePath } from "./internal/paths";
 import {
   native,
   type NativeContent,
@@ -10,14 +10,14 @@ import {
 import { call, asyncCall } from "./errors";
 import { deepFreeze, string } from "./internal/validation";
 import { ApkgArtifact, artifactFromNative } from "./artifact";
+import { BuildReport, ComparisonReport } from "./report";
 import type {
   BuildSnapshot,
-  ReportSnapshot,
-  ComparisonSnapshot,
   RiskLevel,
   RiskCode,
 } from "./snapshots";
 export { ApkgArtifact } from "./artifact";
+export { BuildReport, ComparisonReport } from "./report";
 export {
   NativeLoadError,
   ForgeError,
@@ -103,7 +103,7 @@ export class Media {
     string(filename, "filename");
     return new Media(
       await asyncCall(() =>
-        native().NativeMedia.file(path.resolve(filename), limitsJSON(limits)),
+        native().NativeMedia.file(absolutePath(filename), limitsJSON(limits)),
       ),
     );
   }
@@ -222,7 +222,7 @@ export class NoteType {
     return new NoteType(
       await asyncCall(() =>
         native().NativeNoteType.fromBundle(
-          path.resolve(filename),
+          absolutePath(filename),
           limitsJSON(limits),
         ),
       ),
@@ -449,7 +449,7 @@ export class BuildOptions {
   static to(filename: string): BuildOptions {
     string(filename, "output");
     return new BuildOptions({
-      output: path.resolve(filename),
+      output: absolutePath(filename),
       temporary: false,
     });
   }
@@ -460,7 +460,7 @@ export class BuildOptions {
     string(filename, "baseline");
     return new BuildOptions({
       ...this.#data,
-      updateFrom: path.resolve(filename),
+      updateFrom: absolutePath(filename),
     });
   }
   inspectLimits(limits: InspectLimits): BuildOptions {
@@ -494,7 +494,7 @@ export class CompareOptions {
   }
   static against(filename: string): CompareOptions {
     string(filename, "baseline");
-    return new CompareOptions({ baseline: path.resolve(filename) });
+    return new CompareOptions({ baseline: absolutePath(filename) });
   }
   inspectLimits(limits: InspectLimits): CompareOptions {
     limitsJSON(limits);
@@ -512,53 +512,6 @@ export class CompareOptions {
         ? JSON.parse(limitsJSON(this.#data.inspectLimits))
         : undefined,
     };
-  }
-}
-export class BuildReport {
-  readonly #snapshot: ReportSnapshot;
-  constructor(snapshot: ReportSnapshot) {
-    this.#snapshot = deepFreeze(snapshot);
-    Object.freeze(this);
-  }
-  get counts() {
-    return this.#snapshot.counts;
-  }
-  get baselineCounts() {
-    return this.#snapshot.baseline_counts;
-  }
-  get durationMs() {
-    return this.#snapshot.duration_ms;
-  }
-  get diagnostics() {
-    return this.#snapshot.diagnostics;
-  }
-  get comparison() {
-    return this.#snapshot.comparison;
-  }
-  snapshot(): ReportSnapshot {
-    return this.#snapshot;
-  }
-}
-export class ComparisonReport {
-  readonly #snapshot: ComparisonSnapshot;
-  constructor(snapshot: ComparisonSnapshot) {
-    this.#snapshot = deepFreeze(snapshot);
-    Object.freeze(this);
-  }
-  get findings() {
-    return this.#snapshot.findings;
-  }
-  get highestRisk() {
-    return this.#snapshot.highest_risk;
-  }
-  get policy() {
-    return this.#snapshot.policy;
-  }
-  get diagnostics() {
-    return this.#snapshot.diagnostics;
-  }
-  snapshot(): ComparisonSnapshot {
-    return this.#snapshot;
   }
 }
 const outputToken = Symbol("BuildOutput");
