@@ -108,7 +108,9 @@ fn scan_cloze_card_ords<'a>(values: impl Iterator<Item = &'a str>) -> (BTreeSet<
                 if after_prefix.starts_with("::") {
                     malformed = true;
                 }
-                remaining = &after_prefix[after_prefix.len().min(1)..];
+                // The ASCII prefix already advanced the cursor. Keep the
+                // remaining UTF-8 intact, including another adjacent prefix.
+                remaining = after_prefix;
                 continue;
             }
             let after_digits = &after_prefix[digit_count..];
@@ -152,7 +154,7 @@ fn contains_numbered_cloze_start(value: &str) -> bool {
         {
             return true;
         }
-        remaining = &after_prefix[after_prefix.len().min(1)..];
+        remaining = after_prefix;
     }
     false
 }

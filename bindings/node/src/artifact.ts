@@ -1,4 +1,4 @@
-import path from "node:path";
+import { absolutePath } from "./internal/paths";
 import type { NativeApkgArtifact } from "./internal/native";
 import { nativeError } from "./errors";
 import { string } from "./internal/validation";
@@ -18,7 +18,7 @@ export class ApkgArtifact {
     baseDir: string,
   ) {
     if (key !== token)
-      throw new TypeError("Obtain artifact handles from a native build report");
+      throw new TypeError("Obtain artifact handles from a native build output");
     this.#handle = handle;
     this.#baseDir = baseDir;
     this.path = handle.path;
@@ -41,7 +41,7 @@ export class ApkgArtifact {
     string(filename, "filename");
     try {
       return adopt(
-        await this.#handle.persistTo(path.resolve(this.#baseDir, filename)),
+        await this.#handle.persistTo(absolutePath(filename, this.#baseDir)),
         this.#baseDir,
       );
     } catch (error) {

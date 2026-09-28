@@ -5,3 +5,10 @@
 Coverage includes explicit identity and text/HTML parity, immutable model reuse and atomic conflicts, media file snapshots and >64 KiB bytes, budgets/MIME/naming errors, bundle-v2 ownership, both IO modes and stable mask validation, compare/update policy and identity preservation, structured error causes and source metadata, error template locations and budgets, observations retained after baseline success/candidate failure, successful warning outcomes, lossless u64 budgets, artifact clone/persist/close, concurrent build snapshots, and worker teardown. `scripts/installed-smoke.mjs` tests installed ESM/CJS packages, README examples, TypeScript .mts/.cts consumers, and read-only node_modules.
 
 These tests do not substitute for the repository's real Anki import oracle, four-platform native rebuilds, or release validation. `npm run test:parity` runs the same public contract suite, which always includes Rust parity.
+
+Regression cases also cover Unicode literal Cloze prefixes through build/compare,
+uniform report classes on success and failure with unchanged JSON snapshots,
+and POSIX symlink/parent traversal for media, bundles, build destinations,
+baselines and persisted copies. Windows runs exercise drive-relative and rooted
+paths across working-directory changes. Installed ESM/CJS and TypeScript probes
+verify that the same report classes are exported and accepted on every report path.

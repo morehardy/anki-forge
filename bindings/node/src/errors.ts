@@ -1,4 +1,5 @@
 import { deepFreeze } from "./internal/validation";
+import { BuildReport } from "./report";
 import type {
   BuildSnapshot,
   ReportSnapshot,
@@ -55,16 +56,16 @@ export class ImageOcclusionError extends ForgeError {}
 export class PolicyError extends ForgeError {}
 export class ConfigurationError extends ForgeError {}
 export class CompareError extends ForgeError {
-  get report(): ReportSnapshot {
-    return this.details.report as ReportSnapshot;
+  get report(): BuildReport {
+    return new BuildReport(this.details.report as ReportSnapshot);
   }
 }
 export class BuildError extends ForgeError {
   snapshot(): BuildSnapshot {
     return this.details.snapshot as BuildSnapshot;
   }
-  get report(): ReportSnapshot {
-    return this.snapshot().report;
+  get report(): BuildReport {
+    return new BuildReport(this.snapshot().report);
   }
 }
 export class PersistError extends ForgeError {
