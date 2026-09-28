@@ -39,7 +39,7 @@ jobs:
       - run: |
           cargo install cargo-cyclonedx --version 0.5.9 --locked
           cargo cyclonedx --manifest-path anki_forge/Cargo.toml --format json \
-            --override-filename bom.json
+            --override-filename bom
       - name: Stage rehearsal candidate inputs
         run: |
           mkdir release-inputs
