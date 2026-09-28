@@ -8,9 +8,7 @@ fn main() -> anyhow::Result<()> {
         .nth(1)
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from("readme-showcase.apkg"));
-    let mut project = Project::new("readme-showcase")?
-        .name("anki-forge Showcase")
-        .default_deck("anki-forge::Showcase");
+    let mut project = Project::new("readme-showcase")?.default_deck("anki-forge::Showcase");
     project.add("es:hola", Note::basic("hola", "hello"))?;
     project.add(
         "sound:pitch",

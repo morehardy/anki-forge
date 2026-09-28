@@ -6,7 +6,7 @@ The SDK calls the default Rust public API through a native extension. It include
 
 | Entry | Behavior |
 | --- | --- |
-| `Project(namespace, *, name=None, default_deck=None)` | Validates the explicit stable namespace; display name defaults to namespace |
+| `Project(namespace, *, default_deck=None)` | Validates the explicit stable namespace and configures the default deck |
 | `project.add(key, note)` | Atomically collects the note, model and owned media; duplicate note keys fail |
 | `project.add_asset(media)` | Includes an explicit raw HTML/CSS/script dependency |
 | `len(project)` | Number of successfully added notes |
@@ -60,3 +60,21 @@ ApkgArtifact exposes `.path`, `.persist_to(path)` and `.close()`. Copying it wit
 Failures raise SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError or PersistError. Each exposes `kind`, `code`, `details`, structured observations in `source_details`, and source-chain text in `causes`, and retains the native exception as `__cause__`. I/O causes retain a chained OSError where available. BuildError provides `.report` and `.snapshot()`; CompareError provides partial `.report`; PersistError details include actual publication facts.
 
 Native Project operations release the GIL and reject simultaneous use of the same object with `BINDING.PROJECT_BUSY`; independent projects can run concurrently. After a process fork, recreate all native values and handles. Inherited handles reject operations with `BINDING.FORKED_OBJECT`, and their cleanup cannot remove parent-owned files. Child-created values operate and clean up normally. See [diagnostics](diagnostics.md).
+
+## Addition context
+
+Failed additions leave the project unchanged. Structured context records the
+original note/model keys and the target, with optional conflict or media usage
+details. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through
+`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed
+context/detail. Node fields use camelCase and are deeply frozen; Python uses
+snake_case TypedDicts. Tags retain their insertion index; field locations retain
+original sequence indices (null/None for the field, [] for its root) and optional
+UTF-8 byte ranges. Default-deck errors from build have no note/model keys and
+remain available in the source chain.
+
+Typed images require image/* MIME at addition; sound references accept audio/*
+or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
+infallible; explicit assets and raw HTML are unaffected. The check uses retained
+import MIME, and does not certify playback. Build's independent MIME/extension
+validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.

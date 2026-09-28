@@ -42,7 +42,7 @@ fn check(validator: &jsonschema::JSONSchema, root: &Path, value: &Value, accepte
     fs::write(
         &project_path,
         serde_json::to_vec(&json!({
-            "format_version": "ankiforge-project-v1", "namespace": "bundle-parity",
+            "format_version": "ankiforge-project-v2", "namespace": "bundle-parity",
             "models": [{"kind": "bundle", "path": "."}], "notes": []
         }))
         .unwrap(),

@@ -34,7 +34,7 @@ export {
   ArtifactClosedError,
 } from "./errors";
 export type * from "./snapshots";
-export type { ErrorSourceDetail } from "./errors";
+export type { ErrorSourceDetail, AddTarget, AddContext, AddDetail, AddErrorDetails, MediaUsage, MediaConflictKind } from "./errors";
 export { bindingMetadata } from "./internal/native";
 export type { BindingMetadata } from "./internal/native";
 export type ContentLike = string | Content;
@@ -550,11 +550,6 @@ export class Project {
     this.namespace = namespace;
     this.#handle = call(() => new (native().NativeProject)(namespace));
     Object.freeze(this);
-  }
-  name(value: string): this {
-    string(value, "name");
-    call(() => this.#handle.name(value));
-    return this;
   }
   defaultDeck(value: string): this {
     string(value, "defaultDeck");

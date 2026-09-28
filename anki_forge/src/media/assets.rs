@@ -14,10 +14,47 @@ pub(crate) fn filename_identity(name: &str) -> UniCase<String> {
     UniCase::unicode(name.nfc().collect::<String>())
 }
 
+/// Why two assets cannot occupy the same portable filename space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
+pub enum MediaConflictKind {
+    /// Different spellings collide after NFC normalization and case folding.
+    PortableNameCollision,
+    /// The same filename refers to different bytes.
+    DifferentContent,
+}
+
 #[derive(Debug)]
 pub(crate) struct AssetConflict {
-    pub(crate) code: &'static str,
-    pub(crate) message: String,
+    pub(crate) kind: MediaConflictKind,
+    pub(crate) existing_name: String,
+    pub(crate) incoming_name: String,
+}
+
+impl AssetConflict {
+    pub(crate) fn code(&self) -> &'static str {
+        match self.kind {
+            MediaConflictKind::PortableNameCollision => "MEDIA.EXPORT_NAME_COLLISION",
+            MediaConflictKind::DifferentContent => "MEDIA.DUPLICATE_FILENAME_CONFLICT",
+        }
+    }
+}
+
+impl std::fmt::Display for AssetConflict {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.kind {
+            MediaConflictKind::PortableNameCollision => write!(
+                f,
+                "media names {:?} and {:?} collide after Unicode normalization and case folding",
+                self.existing_name, self.incoming_name
+            ),
+            MediaConflictKind::DifferentContent => write!(
+                f,
+                "media name {:?} is bound to different content",
+                self.incoming_name
+            ),
+        }
+    }
 }
 
 impl Assets {
@@ -34,20 +71,16 @@ impl Assets {
         if let Some(existing) = self.0.get(&key) {
             if existing.filename() != media.filename() {
                 return Err(AssetConflict {
-                    code: "MEDIA.EXPORT_NAME_COLLISION",
-                    message: format!(
-                        "media names {:?} and {:?} collide after Unicode normalization and case folding",
-                        existing.filename(), media.filename()
-                    ),
+                    kind: MediaConflictKind::PortableNameCollision,
+                    existing_name: existing.filename().into(),
+                    incoming_name: media.filename().into(),
                 });
             }
             if !existing.same_content(media) {
                 return Err(AssetConflict {
-                    code: "MEDIA.DUPLICATE_FILENAME_CONFLICT",
-                    message: format!(
-                        "media name {:?} is bound to different content",
-                        media.filename()
-                    ),
+                    kind: MediaConflictKind::DifferentContent,
+                    existing_name: existing.filename().into(),
+                    incoming_name: media.filename().into(),
                 });
             }
             return Ok(false);

@@ -4,7 +4,7 @@ No legacy compatibility layer is retained. Replace the old Deck/registry/runtime
 
 | Previous workflow | Current workflow |
 | --- | --- |
-| Deck or Project with optional stable ID | `Project(namespace, name=..., default_deck=...)` |
+| Deck or Project with optional stable ID | `Project(namespace, default_deck=...)` |
 | `add_note(note)` and content-derived identity | `add(stable_key, note)` |
 | Mutable NoteType and add_notetype | `NoteType.builder(key)...build()`, then `model.note()` |
 | String model references | Notes own their validated model |

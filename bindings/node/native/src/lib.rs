@@ -1,4 +1,5 @@
 //! N-API transport over the default, public ankiforge API.
+mod add_errors;
 mod artifact;
 mod options;
 mod tasks;
@@ -18,6 +19,9 @@ fn parse<T: serde::de::DeserializeOwned>(s: &str) -> Result<T> {
     serde_json::from_str(s).map_err(|e| configuration_error(e.to_string()))
 }
 fn source_detail(error: &(dyn std::error::Error + 'static)) -> Value {
+    if let Some(e) = error.downcast_ref::<ankiforge::note::AddError>() {
+        return add_errors::source(e);
+    }
     if let Some(e) = error.downcast_ref::<ankiforge::media::MediaError>() {
         return json!({"type":"media","kind":format!("{:?}",e.kind()),"code":e.code(),"path":e.path().map(PathSnapshot::new),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))});
     }
@@ -53,13 +57,16 @@ fn domain(
     Error::from_reason(json!({"domain":domain,"kind":format!("{kind:?}"),"code":code,"message":error.to_string(),"causes":causes,"sourceDetails":source_details,"details":details}).to_string())
 }
 macro_rules! err {
+    ("add", $e:expr) => {
+        domain("add", $e.kind(), $e.code(), &$e, add_errors::details(&$e))
+    };
     ($domain:expr, $e:expr) => {
         domain($domain, $e.kind(), $e.code(), &$e, Value::Null)
     };
 }
 #[napi]
 pub fn binding_metadata() -> String {
-    json!({"bindingVersion":env!("CARGO_PKG_VERSION"),"bindingProtocolVersion":4,"target":env!("ANKI_FORGE_NODE_TARGET"),"nodeApiVersion":8}).to_string()
+    json!({"bindingVersion":env!("CARGO_PKG_VERSION"),"bindingProtocolVersion":5,"target":env!("ANKI_FORGE_NODE_TARGET"),"nodeApiVersion":8}).to_string()
 }
 
 #[napi]
@@ -421,10 +428,6 @@ impl NativeProject {
         Project::new(namespace)
             .map(|inner| Self { inner })
             .map_err(|e| err!("schema", e))
-    }
-    #[napi]
-    pub fn name(&mut self, name: String) {
-        self.inner = self.inner.clone().name(name)
     }
     #[napi]
     pub fn default_deck(&mut self, name: String) {

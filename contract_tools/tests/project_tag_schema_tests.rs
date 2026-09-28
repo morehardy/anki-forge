@@ -13,7 +13,7 @@ fn project_tag_schema_matches_runtime_validation() {
         load_schema(resolve_asset_path(&manifest, "project_input_schema").unwrap()).unwrap();
     let check = |tags: Vec<String>, accepted: bool| {
         let value = json!({
-            "format_version": "ankiforge-project-v1",
+            "format_version": "ankiforge-project-v2",
             "namespace": "tag-parity",
             "notes": [{
                 "key": "one",

@@ -1,16 +1,22 @@
 use ankiforge::{Field, Media, Note, NoteType, Project, Template};
-use ankiforge::note::{AddError, AddErrorKind};
+use ankiforge::note::{AddContext, AddDetail, AddTarget, AddError, AddErrorKind};
+use ankiforge::media::{MediaConflictKind, MediaUsage};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     fn standard_error<T: std::error::Error + Send + Sync + 'static>() {}
     standard_error::<AddError>();
     assert_eq!(Project::new("  ").unwrap_err().code(), "SCHEMA.NAMESPACE_INVALID");
-    let mut project = Project::new("biology")?.name("生物").default_deck("生物::细胞");
+    let mut project = Project::new("biology")?.default_deck("生物::细胞");
     assert!(project.is_empty());
     project.add("cell", Note::basic("cell", "细胞"))?;
     let error = project.add("cell", Note::basic("changed", "修改")).unwrap_err();
     assert_eq!(error.kind(), AddErrorKind::DuplicateKey);
     assert_eq!(error.code(), "NOTE.KEY_DUPLICATE");
+    let context: &AddContext = error.context();
+    let _: &AddTarget = context.target();
+    let _: Option<&AddDetail> = error.detail();
+    let _: MediaUsage = MediaUsage::Sound;
+    let _: MediaConflictKind = MediaConflictKind::DifferentContent;
     assert_eq!(project.len(), 1);
 
     let asset = Media::bytes(b".card { color: blue; }".to_vec(), "text/css")?

@@ -18,7 +18,15 @@ new minor release.
   typed errors with real causes and publication facts.
 - Compare and update from verified original packages carrying complete identity
   evidence. Remove identity recipes, lockfiles and the old native product input.
-- Embed contract bundle `1.0.0`, with v2 template bundles and native build,
+- Remove Project titles across Rust, Node, Python and JSON recipes. Migrate recipes
+  to `ankiforge-project-v2` and remove top-level `name` (including null).
+- Reject incompatible image/sound MIME categories atomically at note addition;
+  sound references accept audio and video. Constructors remain infallible.
+- Expose structured addition context, original content paths and UTF-8 ranges,
+  model/media conflicts and media usage details in Rust and both SDKs.
+- Require Node native protocol 5 and Python embedded contract 2.0.0 to reject
+  mixed installations; identity and report formats remain unchanged.
+- Embed contract bundle `2.0.0`, with v2 template bundles and native build,
   comparison, project-input and identity-evidence schemas. Bundle and crate
   versions are independent.
 - Migrate Node/Python, repository tools and documentation to the same public API.

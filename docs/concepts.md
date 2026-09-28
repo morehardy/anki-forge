@@ -2,8 +2,7 @@
 
 ## Project and note
 
-A `Project` is one publication with a stable namespace and a human-readable
-name. It can place notes in several Anki decks: `default_deck` supplies the
+A `Project` is one publication with a stable namespace. It can place notes in several Anki decks: `default_deck` supplies the
 fallback and `Note::deck` overrides it. A deck is a destination, not a second
 container for authoring, media or builds.
 

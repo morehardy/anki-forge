@@ -22,14 +22,61 @@ enum Node {
 }
 
 impl Content {
-    pub(crate) fn contains_field_separator(&self) -> bool {
+    pub(crate) fn validate(&self) -> Result<(), ContentError> {
+        self.validate_at(&mut Vec::new())
+    }
+
+    fn validate_at(&self, path: &mut Vec<usize>) -> Result<(), ContentError> {
         match &self.0 {
-            Node::Text(value) | Node::Html(value) => value.contains('\u{1f}'),
-            Node::Sequence(values) => values.iter().any(Self::contains_field_separator),
-            // Media filenames already reject control characters, and generated
-            // image/sound markup cannot introduce a raw field separator.
-            Node::Image(_) | Node::Sound(_) => false,
+            Node::Text(value) | Node::Html(value) => {
+                if let Some(offset) = value.find('\u{1f}') {
+                    return Err(ContentError {
+                        kind: super::AddErrorKind::InvalidContent,
+                        code: "NOTE.FIELD_CONTENT_INVALID",
+                        message:
+                            "field contains U+001F, which Anki reserves as its field separator"
+                                .into(),
+                        path: path.clone(),
+                        byte_range: Some(offset..offset + 1),
+                        detail: None,
+                    });
+                }
+            }
+            Node::Sequence(values) => {
+                for (index, value) in values.iter().enumerate() {
+                    path.push(index);
+                    let result = value.validate_at(path);
+                    path.pop();
+                    result?;
+                }
+            }
+            Node::Image(media) | Node::Sound(media) => {
+                let requested = if matches!(&self.0, Node::Image(_)) {
+                    crate::media::MediaUsage::Image
+                } else {
+                    crate::media::MediaUsage::Sound
+                };
+                if !requested.accepts(media.media_type()) {
+                    return Err(ContentError {
+                        kind: super::AddErrorKind::InvalidMediaUsage,
+                        code: "NOTE.MEDIA_USAGE_INVALID",
+                        message: format!(
+                            "media {:?} of type {:?} cannot be used as {requested:?}",
+                            media.filename(),
+                            media.media_type()
+                        ),
+                        path: path.clone(),
+                        byte_range: None,
+                        detail: Some(Box::new(super::AddDetail::MediaUsage {
+                            requested,
+                            media_name: media.filename().into(),
+                            media_type: media.media_type().into(),
+                        })),
+                    });
+                }
+            }
         }
+        Ok(())
     }
 
     pub(crate) fn has_value(&self) -> bool {
@@ -71,16 +118,31 @@ impl Content {
         Self(Node::Sound(media))
     }
 
-    pub(crate) fn visit_media(&self, visitor: &mut impl FnMut(&Media)) {
+    pub(crate) fn try_visit_media<E>(
+        &self,
+        visitor: &mut impl FnMut(&Media, &[usize]) -> Result<(), E>,
+    ) -> Result<(), E> {
+        self.visit_media_at(&mut Vec::new(), visitor)
+    }
+
+    fn visit_media_at<E>(
+        &self,
+        path: &mut Vec<usize>,
+        visitor: &mut impl FnMut(&Media, &[usize]) -> Result<(), E>,
+    ) -> Result<(), E> {
         match &self.0 {
-            Node::Image(media) | Node::Sound(media) => visitor(media),
+            Node::Image(media) | Node::Sound(media) => visitor(media, path)?,
             Node::Sequence(values) => {
-                for value in values {
-                    value.visit_media(visitor);
+                for (index, value) in values.iter().enumerate() {
+                    path.push(index);
+                    let result = value.visit_media_at(path, visitor);
+                    path.pop();
+                    result?;
                 }
             }
             Node::Text(_) | Node::Html(_) => {}
         }
+        Ok(())
     }
 
     pub(crate) fn render(&self) -> String {
@@ -138,4 +200,14 @@ impl From<Cow<'_, str>> for Content {
     fn from(value: Cow<'_, str>) -> Self {
         Self::text(value.into_owned())
     }
+}
+
+// A local content failure; the project supplies note/model/field identifiers.
+pub(crate) struct ContentError {
+    pub(crate) kind: super::AddErrorKind,
+    pub(crate) code: &'static str,
+    pub(crate) message: String,
+    pub(crate) path: Vec<usize>,
+    pub(crate) byte_range: Option<std::ops::Range<usize>>,
+    pub(crate) detail: Option<Box<super::AddDetail>>,
 }

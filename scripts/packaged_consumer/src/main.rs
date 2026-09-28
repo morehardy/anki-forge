@@ -25,7 +25,7 @@ fn model() -> anyhow::Result<NoteType> {
 }
 fn basic_custom_cloze() -> anyhow::Result<()> {
     let custom = model()?;
-    let mut p = Project::new("packaged-content")?.name("打包消费者");
+    let mut p = Project::new("packaged-content")?;
     p.add(
         "basic",
         Note::basic("<literal>", Content::html("<b>answer</b>")),
@@ -246,7 +246,7 @@ fn updates_and_reports() -> anyhow::Result<()> {
     original.add("keep", Note::basic("question", "original"))?;
     original.add("remove", Note::basic("omitted", "answer"))?;
     original.build(BuildOptions::to("v1.apkg"))?;
-    let mut next = Project::new("packaged-update")?.name("Renamed project");
+    let mut next = Project::new("packaged-update")?;
     next.add("keep", Note::basic("question", "changed"))?;
     let comparison = next.compare(CompareOptions::against("v1.apkg"))?;
     ensure!(

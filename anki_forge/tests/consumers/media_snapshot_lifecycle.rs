@@ -223,6 +223,11 @@ fn validation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
         project.len() == 1 && inventory(temp)? == before,
         "failed add retained the rejected asset"
     );
+    let usage_error = project.add("misuse", Note::basic(Media::file(&altered)?.image(), "answer")).unwrap_err();
+    ensure!(usage_error.code() == "NOTE.MEDIA_USAGE_INVALID");
+    ensure!(inventory(temp)? == before, "retained media usage error owns no rejected snapshot");
+    let conflict_error = project.add_asset(Media::file(&altered)?.with_export_name("keep.wav")?).unwrap_err();
+    ensure!(inventory(temp)? == before, "retained media conflict error owns no rejected snapshot");
     emit(
         "failures_preserve_existing_owner",
         temp,
@@ -231,6 +236,8 @@ fn validation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     drop(project);
     drop(retained);
     ensure!(inventory(temp)?["files"] == 0);
+    ensure!(usage_error.context().note_key() == Some("misuse"));
+    ensure!(conflict_error.detail().is_some());
     emit("existing_owner_dropped", temp, json!({}))?;
     Ok(())
 }

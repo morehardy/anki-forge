@@ -13,6 +13,31 @@ export interface ErrorSourceDetail {
   readonly path?: PathSnapshot | null;
   readonly [key: string]: unknown;
 }
+/** Location in the caller's original note/content, before rendering. */
+export type AddTarget =
+  | { readonly type: "note_key" | "note" | "model" | "unknown" }
+  | { readonly type: "field"; readonly fieldKey: string; readonly contentPath: readonly number[] | null; readonly byteRange: { readonly start: number; readonly end: number } | null }
+  | { readonly type: "tag"; readonly index: number; readonly value: string }
+  | { readonly type: "deck"; readonly name: string; readonly inherited: boolean }
+  | { readonly type: "model_asset" | "occlusion_image" | "explicit_asset"; readonly mediaName: string }
+  | { readonly type: "project_default_deck"; readonly name: string };
+export interface AddContext {
+  readonly noteKey: string | null;
+  readonly modelKey: string | null;
+  readonly target: AddTarget;
+}
+export type MediaUsage = "image" | "sound" | "unknown";
+export type MediaConflictKind = "portable_name_collision" | "different_content" | "unknown";
+export type AddDetail =
+  | { readonly type: "model_definition_conflict" | "unknown" }
+  | { readonly type: "model_name_conflict"; readonly existingModelKey: string; readonly conflictingName: string }
+  | { readonly type: "media_conflict"; readonly kind: MediaConflictKind; readonly existingName: string; readonly incomingName: string }
+  | { readonly type: "media_usage"; readonly requested: MediaUsage; readonly mediaName: string; readonly mediaType: string };
+/** Deeply frozen facts; null detail means no additional conflict evidence. */
+export interface AddErrorDetails extends Readonly<Record<string, unknown>> {
+  readonly context: AddContext;
+  readonly detail: AddDetail | null;
+}
 export class NativeLoadError extends Error {
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);
@@ -49,7 +74,9 @@ export class ForgeError extends Error {
   }
 }
 export class SchemaError extends ForgeError {}
-export class AddError extends ForgeError {}
+export class AddError extends ForgeError {
+  declare readonly details: AddErrorDetails;
+}
 export class MediaError extends ForgeError {}
 export class TemplateBundleError extends ForgeError {}
 export class ImageOcclusionError extends ForgeError {}

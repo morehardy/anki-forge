@@ -7,6 +7,7 @@ import json
 
 __version__ = "0.2.0"
 _CORE_API_VERSION = "0.2.0"
+_CONTRACT_VERSION = "2.0.0"
 
 
 @dataclass(frozen=True)
@@ -30,8 +31,8 @@ def _load() -> Versions:
         metadata = Versions(**value)
         if metadata.binding_version != __version__ or metadata.core_version != _CORE_API_VERSION:
             raise ValueError(f"expected binding {__version__}, core {_CORE_API_VERSION}; found {metadata}")
-        if not isinstance(metadata.contract_version, str) or not metadata.contract_version:
-            raise ValueError("missing embedded contract version")
+        if metadata.contract_version != _CONTRACT_VERSION:
+            raise ValueError(f"expected contract {_CONTRACT_VERSION}; found {metadata.contract_version}")
     except (AttributeError, TypeError, ValueError) as error:
         raise ImportError(f"BINDING.VERSION_MISMATCH: {error}; reinstall anki-forge to replace mixed package files") from error
     return metadata

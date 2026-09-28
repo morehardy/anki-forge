@@ -419,6 +419,16 @@ fn every_uncommitted_value_warns_when_discarded_but_explicit_drop_is_allowed() {
             &["unused_must_use", type_name]);
         consumer.run(&format!("#![deny(unused_must_use)]\nfn main() {{ let _ = {expression}; }}"));
     }
-    consumer.rejects("#![deny(unused_must_use)]\nfn main() { ankiforge::Project::new(\"course\").unwrap().name(\"New name\"); }", &["unused_must_use", "name"]);
+
     consumer.rejects("#![deny(unused_must_use)]\nfn main() { ankiforge::Project::new(\"course\").unwrap().default_deck(\"New deck\"); }", &["unused_must_use", "default_deck"]);
+}
+
+#[test]
+fn removed_project_titles_are_not_part_of_the_public_interface() {
+    let consumer = Consumer::new();
+    consumer.rejects(
+        r#"fn main() { let _ = ankiforge::Project::new("course").unwrap().name("title"); }"#,
+        &["E0599", "name"],
+    );
+    consumer.rejects(r#"fn main() { let p = ankiforge::Project::new("course").unwrap(); let _ = p.display_name(); }"#, &["E0599", "display_name"]);
 }

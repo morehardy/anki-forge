@@ -110,3 +110,15 @@ The count at rejection is a lower bound; it is not the unread array's total size
 
 A valid media package does not prove codec playback on every Anki client. Test
 images, sound and fonts on your target clients. See [troubleshooting](troubleshooting.md#media-and-templates).
+
+### Typed image and sound usage
+
+Constructors stay infallible. `Project::add` checks the retained import MIME:
+images require `image/*`, sound references accept `audio/*` and `video/*`.
+`application/octet-stream`, text, fonts and PDF fail typed usage with
+`NOTE.MEDIA_USAGE_INVALID`; register them as explicit assets for raw HTML/CSS.
+Valid explicit unknown image/video MIME declarations pass category validation,
+without certifying that a decoder or player supports the bytes. Renaming a file
+never changes retained MIME. Build still sniffs staged bytes and validates the
+export extension independently: PNG named `wrong.mp3` can pass image addition
+and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.

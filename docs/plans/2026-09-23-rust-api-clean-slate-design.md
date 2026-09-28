@@ -142,7 +142,7 @@ Template::generate_when(self, rule: GenerationRule) -> Self
 
 cloze_field 将自定义模型声明为 cloze 模型；引用、模板和生成规则的匹配在模型 `.build()` 时统一校验。原 identity recipe 已有意删除，不为保持旧调用方式重新引入。
 
-项目构造的首参数是稳定 namespace，显示标题单独设置；`Project::new` 验证 namespace。添加笔记的 key 必填，重复 key 报错，不默默覆盖。正文修改、显示名称修改、媒体内容修改不自动成为另一条笔记。
+项目构造的首参数是稳定 namespace，Project 不再设显示标题（后续优化方案已生效）；`Project::new` 验证 namespace。添加笔记的 key 必填，重复 key 报错，不默默覆盖。正文修改、显示名称修改、媒体内容修改不自动成为另一条笔记。
 
 主接口删除隐式内容身份和自动 recipe 回退。没有业务主键的调用者需要选择并持久化 key；若明确要内容寻址，可以在数据导入层显式计算 key。这个负担是真实的，但从内容推导身份无法同时保证内容修改后的稳定更新。
 
@@ -385,7 +385,6 @@ use ankiforge::{BuildOptions, Content, Field, Media, Note, NoteType, Project, Te
 
 fn lesson() -> Result<Project, Box<dyn std::error::Error>> {
     let mut project = Project::new("biology")?
-        .name("生物")
         .default_deck("生物::细胞");
 
     project.add("cell-definition", Note::basic("什么是细胞？", "生命的基本单位"))?;

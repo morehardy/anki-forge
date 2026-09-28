@@ -95,7 +95,7 @@ fn prepare(
 fn default_input(updated: bool) -> serde_json::Value {
     let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/public-api");
     serde_json::json!({
-        "format_version": "ankiforge-project-v1", "namespace": "native-io-roundtrip",
+        "format_version": "ankiforge-project-v2", "namespace": "native-io-roundtrip",
         "default_deck": "Oracle::Native",
         "assets": [
             {"key":"image", "source":{"kind":"file", "path":fixtures.join("occlusion.png")}},

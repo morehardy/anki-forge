@@ -601,3 +601,32 @@ def test_bundle_media_budget_can_be_raised_and_keeps_typed_source(tmp_path):
     model = NoteType.from_bundle(root, limits=MediaLimits(len(data)))
     out = Project('raised-bundle-budget').add('n', model.note().field('front', 'q')).build(BuildOptions.temporary())
     assert unpack(out.artifact.path, tmp_path)[2]['picture.png'] == data
+
+
+def test_structured_addition_errors_retain_nested_locations_and_sources():
+    image = Media.bytes(png(), 'image/png').with_export_name('cell.png')
+    project = Project('structured-errors')
+    with pytest.raises(AddError) as failure:
+        project.add('cell', Note.basic(Content.sequence([
+            Content.text('prefix'), Content.sequence([image.sound()]),
+        ]), 'answer'))
+    error = failure.value
+    assert error.code == 'NOTE.MEDIA_USAGE_INVALID'
+    assert error.details['context']['note_key'] == 'cell'
+    assert error.details['context']['target'] == {
+        'type': 'field', 'field_key': 'front', 'content_path': [1, 0], 'byte_range': None,
+    }
+    assert error.details['detail'] == {
+        'type': 'media_usage', 'requested': 'sound', 'media_name': 'cell.png', 'media_type': 'image/png',
+    }
+    project.add('cell', Note.basic(image.image(), 'answer'))
+    assert len(project) == 1
+    invalid = Project('default-deck-context', default_deck='bad::')
+    with pytest.raises(BuildError) as build:
+        invalid.build(BuildOptions.temporary())
+    source = next(s for s in build.value.source_details if s['type'] == 'add')
+    assert source['context']['note_key'] is None
+    assert source['context']['target'] == {'type': 'project_default_deck', 'name': 'bad::'}
+    with pytest.raises(TypeError):
+        Project('removed-title', name='title')
+    assert not hasattr(project, 'name')

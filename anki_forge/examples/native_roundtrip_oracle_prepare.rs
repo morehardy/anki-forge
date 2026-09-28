@@ -67,13 +67,7 @@ fn basic(root: &Path) -> anyhow::Result<Value> {
         .iter()
         .enumerate()
     {
-        let mut p = Project::new("oracle-basic")?
-            .name(if index == 0 {
-                "Original title"
-            } else {
-                "Renamed title"
-            })
-            .default_deck("Oracle::Basic");
+        let mut p = Project::new("oracle-basic")?.default_deck("Oracle::Basic");
         p.add("subject", Note::basic("question", *text))?;
         let baseline = stages
             .last()

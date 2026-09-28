@@ -5,3 +5,5 @@ Project('p').add(Note.basic('q', 'a'))
 Project('p').add_notetype('model')
 Media.bytes('text', 'text/plain')
 BuildOptions.temporary().inspect(False)
+Project('p', name='removed')
+Project('p').name

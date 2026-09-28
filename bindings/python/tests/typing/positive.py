@@ -10,3 +10,16 @@ Note.cloze('{{c1::word}}').field('back_extra', 'extra')
 
 from anki_forge import MediaLimits
 budgeted_model = NoteType.from_bundle("bundle", limits=MediaLimits(max_bytes=512 << 20))
+
+from anki_forge import AddError, AddContext, AddDetail
+
+def read_add_error(error: AddError) -> str | None:
+    context: AddContext = error.details['context']
+    target = context['target']
+    if target['type'] == 'field':
+        path: list[int] | None = target['content_path']
+        key: str = target['field_key']
+    detail: AddDetail | None = error.details['detail']
+    if detail is not None and detail['type'] == 'media_usage':
+        return detail['media_type']
+    return context['note_key']

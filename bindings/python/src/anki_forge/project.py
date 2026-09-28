@@ -11,18 +11,13 @@ from .report import BuildOutput, ComparisonReport
 
 class Project:
     """The sole authoring container, identified by an explicit stable namespace."""
-    def __init__(self, namespace: str, *, name: str | None = None, default_deck: str | None = None) -> None:
-        self._handle = invoke(_native.NativeProject, namespace, name, default_deck)
+    def __init__(self, namespace: str, *, default_deck: str | None = None) -> None:
+        self._handle = invoke(_native.NativeProject, namespace, default_deck)
         self._namespace = namespace
-        self._name = namespace if name is None else name
 
     @property
     def namespace(self) -> str:
         return self._namespace
-
-    @property
-    def name(self) -> str:
-        return self._name
 
     def __len__(self) -> int:
         return invoke(self._handle.len)

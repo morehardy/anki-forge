@@ -147,7 +147,6 @@ fn content_and_display_names_do_not_change_explicit_note_identity() {
     let before = common::evidence(first.artifact().path());
     let mut next = Project::new("spanish")
         .unwrap()
-        .name("Renamed course")
         .default_deck("Renamed deck");
     next.add("hola", Note::basic("<b>hola</b>", "new answer"))
         .unwrap();

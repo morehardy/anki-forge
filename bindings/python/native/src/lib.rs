@@ -1,3 +1,4 @@
+mod add_errors;
 mod artifacts;
 mod authoring;
 mod options;
@@ -24,6 +25,11 @@ pub fn domain_error(kind: &str, code: &str, message: &str, details: Value) -> Py
 }
 pub fn error_details(kind: impl std::fmt::Debug, error: &(dyn Error + 'static)) -> Value {
     let mut details = json!({"error_kind":format!("{kind:?}"),"causes":error_causes(error),"source_details": source_details(error)});
+    if let Some(error) = error.downcast_ref::<ankiforge::note::AddError>() {
+        let mut addition = add_errors::details(error);
+        details["context"] = addition["context"].take();
+        details["detail"] = addition["detail"].take();
+    }
     if let Some(error) = error.downcast_ref::<ankiforge::media::MediaError>() {
         details["path"] = json!(error.path().map(PathSnapshot::new));
         details["limit_exceeded"] = error.limit_exceeded().map_or(
@@ -55,7 +61,9 @@ fn source_details(error: &(dyn Error + 'static)) -> Vec<Value> {
     let mut details = Vec::new();
     let mut source = error.source();
     while let Some(cause) = source {
-        let value = if let Some(e) = cause.downcast_ref::<ankiforge::media::MediaError>() {
+        let value = if let Some(e) = cause.downcast_ref::<ankiforge::note::AddError>() {
+            add_errors::source(e)
+        } else if let Some(e) = cause.downcast_ref::<ankiforge::media::MediaError>() {
             json!({"type":"media", "kind":format!("{:?}",e.kind()), "code":e.code(), "path":e.path().map(PathSnapshot::new), "limit_exceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"limit":l.limit,"observed":l.observed}))})
         } else if let Some(e) =
             cause.downcast_ref::<ankiforge::schema::TemplateBundleLimitExceeded>()
@@ -346,16 +354,9 @@ struct NativeProject {
 #[pymethods]
 impl NativeProject {
     #[new]
-    #[pyo3(signature=(namespace, name=None, default_deck=None))]
-    fn new(
-        namespace: String,
-        name: Option<String>,
-        default_deck: Option<String>,
-    ) -> PyResult<Self> {
+    #[pyo3(signature=(namespace, default_deck=None))]
+    fn new(namespace: String, default_deck: Option<String>) -> PyResult<Self> {
         let mut project = Project::new(namespace).map_err(mapped!("schema"))?;
-        if let Some(name) = name {
-            project = project.name(name);
-        }
         if let Some(deck) = default_deck {
             project = project.default_deck(deck);
         }

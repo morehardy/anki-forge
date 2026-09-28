@@ -145,7 +145,11 @@ impl NoteTypeBuilder {
         let mut assets = crate::media::Assets::default();
         for asset in self.assets.drain(..) {
             assets.add(asset).map_err(|error| {
-                SchemaError::new(SchemaErrorKind::AssetConflict, error.code, error.message)
+                SchemaError::new(
+                    SchemaErrorKind::AssetConflict,
+                    error.code(),
+                    error.to_string(),
+                )
             })?;
         }
         self.assets = assets.into_values();

@@ -812,6 +812,9 @@ codes:
   - id: NOTE.FIELD_CONTENT_INVALID
     status: active
     summary: authored note field contains the reserved raw U+001F Anki field separator
+  - id: NOTE.MEDIA_USAGE_INVALID
+    status: active
+    summary: typed image or sound content uses an incompatible retained MIME category
   - id: NOTE.DECK_INVALID
     status: active
     summary: deck name has an empty component, surrounding whitespace, leading/trailing colons or control characters
@@ -819,7 +822,7 @@ codes:
     status: active
     summary: tag is empty, duplicated, reserved or contains whitespace or control characters
   - id: BUILD.NAME_INVALID
-    status: active
+    status: deprecated
     summary: project display name is blank or contains control characters
   - id: BUILD.OUTPUT_INVALID
     status: active

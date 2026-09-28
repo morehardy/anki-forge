@@ -6,7 +6,7 @@ A Project is one publication. Its namespace and each note key are stable identit
 
 ```js
 import { Project, Note, Content, BuildOptions } from 'anki-forge-node';
-const project = new Project('biology').name('Biology').defaultDeck('Biology');
+const project = new Project('biology').defaultDeck('Biology');
 project.add('cell', Note.basic('What is a <cell>?', Content.html('<b>Life’s basic unit</b>')));
 const output = await project.build(BuildOptions.to('biology-v1.apkg'));
 console.log(output.report.counts, output.snapshot());
@@ -68,3 +68,20 @@ Errors have `kind`, `code`, `causes` (native source-chain text), structured `sou
 `BuildOptions.inspectLimits` and `CompareOptions.inspectLimits` accept nonnegative safe integer or `bigint` budgets (through `u64::MAX`) such as `{ maxArchiveBytes: 1_000_000, maxCollectionBytes: 100_000_000 }`. All twelve Rust inspection counters are available, independently applied to baseline and candidate. Media constructors accept `{ maxBytes }` before reading. Zero is a real zero budget. Unknown options are rejected by the native transport.
 
 This is an intentional breaking API: no Deck authoring container, media registry, mutable NoteType, implicit note identity, lockfile options, or legacy runtime export remains. Local development: `npm run setup`, `npm run build`, `npm test`, `npm run test:installed`. Tests inspect real APKG note fields, GUIDs, card counts and media bytes, and compare an independent Rust producer.
+
+### Addition diagnostics
+
+Projects have a stable namespace and optional default deck, with no title.
+Image and sound constructors remain infallible; adding a note checks retained
+MIME categories: image/* for images, audio/* or video/* for sound references.
+Other categories raise AddError with code NOTE.MEDIA_USAGE_INVALID. Raw HTML and
+explicit assets retain their existing behavior; category checking does not promise
+decodability. Build still performs its independent MIME/extension checks.
+
+`AddError.details` has deeply frozen typed `context` and nullable `detail`.
+The context includes `noteKey`, `modelKey` and a discriminated `target`; field
+targets carry `fieldKey`, `contentPath` and `byteRange`.
+Native protocol 5 is required, including for native packages also labelled 0.2.0.
+A field path is null/None for the field, [] for root content, or zero-based
+indices into the original sequences. Byte ranges use UTF-8 offsets in the
+original text/HTML leaf. Nested source details preserve the same facts.

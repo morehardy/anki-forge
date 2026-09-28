@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Native tool project input recipe v1",
+  "title": "Native tool project input recipe v2",
   "type": "object",
   "properties": {
     "format_version": {
-      "const": "ankiforge-project-v1"
+      "const": "ankiforge-project-v2"
     },
     "namespace": {
       "allOf": [
@@ -23,16 +23,6 @@
               ".."
             ]
           }
-        }
-      ]
-    },
-    "name": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/displayName"
-        },
-        {
-          "type": "null"
         }
       ]
     },
@@ -735,7 +725,7 @@
         {
           "maxLength": 255,
           "not": {
-            "pattern": "[/\\\\<>:\"|?*\\[\\]]|\\.$|^([cC][oO][nN]|[pP][rR][nN]|[aA][uU][xX]|[nN][uU][lL]|[cC][lL][oO][cC][kK]\\$|([cC][oO][mM]|[lL][pP][tT])[1-9\u00b9\u00b2\u00b3])(\\.|$)"
+            "pattern": "[/\\\\<>:\"|?*\\[\\]]|\\.$|^([cC][oO][nN]|[pP][rR][nN]|[aA][uU][xX]|[nN][uU][lL]|[cC][lL][oO][cC][kK]\\$|([cC][oO][mM]|[lL][pP][tT])[1-9¹²³])(\\.|$)"
           }
         }
       ]

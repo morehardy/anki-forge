@@ -15,7 +15,7 @@ fn validator() -> jsonschema::JSONSchema {
 
 fn recipe() -> Value {
     json!({
-        "format_version": "ankiforge-project-v1", "namespace": "scalar-parity",
+        "format_version": "ankiforge-project-v2", "namespace": "scalar-parity",
         "models": [{"kind": "custom", "key": "custom",
             "fields": [{"key": "front"}],
             "templates": [{"key": "card", "front": "{{front}}", "back": "{{front}}"}]}],
@@ -275,49 +275,18 @@ fn stable_keys_match_rust_unicode_trimming() {
 }
 
 #[test]
-fn project_names_match_validation_at_build_time() {
+fn recipe_v2_rejects_old_versions_and_project_titles() {
     let validator = validator();
-    for name in [
-        None,
-        Some(""),
-        Some(" \u{85} "),
-        Some("bad\0name"),
-        Some("作品"),
-        Some(" padded name "),
-        Some("\u{feff}"),
-    ] {
-        let accepted =
-            name.is_none_or(|name| !name.trim().is_empty() && !name.chars().any(char::is_control));
-        let mut value = recipe();
-        value["name"] = json!(name);
-        let mut project = Project::new("scalar-parity").unwrap();
-        if let Some(name) = name {
-            project = project.name(name);
-        }
-        project.add("one", Note::basic("Front", "Back")).unwrap();
-        let direct = project.build(ankiforge::BuildOptions::temporary());
-        assert_eq!(direct.is_ok(), accepted, "runtime project name: {name:?}");
-        if let Err(error) = direct {
-            assert_eq!(error.code(), "BUILD.NAME_INVALID");
-        }
-        let root = tempfile::tempdir().unwrap();
-        let path = root.path().join("project.json");
-        fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
-        // The loader defers project configuration validation until build,
-        // just like the infallible Project::name setter.
-        let loaded = load_project(&path, None)
-            .unwrap()
-            .build(ankiforge::BuildOptions::temporary());
-        assert_eq!(loaded.is_ok(), accepted, "loaded project name: {name:?}");
-        if let Err(error) = loaded {
-            assert_eq!(error.code(), "BUILD.NAME_INVALID");
-        }
-        assert_eq!(
-            validator.is_valid(&value),
-            accepted,
-            "schema project name: {name:?}"
-        );
+    let mut value = recipe();
+    value["format_version"] = json!("ankiforge-project-v2");
+    check_loader_and_schema(&validator, &value, true);
+    for title in [json!(null), json!("作品")] {
+        value["name"] = title;
+        check_loader_and_schema(&validator, &value, false);
     }
+    value.as_object_mut().unwrap().remove("name");
+    value["format_version"] = json!("ankiforge-project-v1");
+    check_loader_and_schema(&validator, &value, false);
 }
 
 fn asset_recipe(key: &str) -> Value {

@@ -25,7 +25,6 @@ export interface NativeNoteType {
   note(): NativeNote;
 }
 export interface NativeProject {
-  name(name: string): void;
   defaultDeck(name: string): void;
   add(key: string, note: NativeNote): void;
   addAsset(media: NativeMedia): void;
@@ -108,9 +107,9 @@ export function native(): NativeModule {
       throw new Error(
         `Native version ${metadata.bindingVersion} does not match SDK ${VERSION}`,
       );
-    if (metadata.bindingProtocolVersion !== 4)
+    if (metadata.bindingProtocolVersion !== 5)
       throw new Error(
-        `Native protocol ${metadata.bindingProtocolVersion ?? "missing"} does not match SDK protocol 4`,
+        `Native protocol ${metadata.bindingProtocolVersion ?? "missing"} does not match SDK protocol 5`,
       );
     loaded = binding;
     return binding;

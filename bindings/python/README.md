@@ -4,7 +4,7 @@ The Python SDK calls the default public Rust API through a PyO3 extension. `Proj
 
 ```python
 from anki_forge import Project, Note, BuildOptions
-project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+project = Project('biology-course', default_deck='Science::Biology')
 project.add('cell', Note.basic('What is a cell?', 'A unit of life'))
 output = project.build(BuildOptions.to('biology.apkg'))
 print(output.artifact.path, output.report.counts.notes)
@@ -40,7 +40,7 @@ Updates use the original prior distribution APKG, which contains complete identi
 
 ```python
 from anki_forge import CompareOptions
-next_project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+next_project = Project('biology-course', default_deck='Science::Biology')
 next_project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
 comparison = next_project.compare(CompareOptions.against('biology.apkg'))
 output = next_project.build(BuildOptions.to('biology-v2.apkg').update_from('biology.apkg'))
@@ -53,3 +53,22 @@ Successful builds always return `BuildOutput.artifact`. `BuildReport` contains o
 Development: run `maturin develop --manifest-path bindings/python/native/Cargo.toml`, build the independent observer with `cargo build -p anki_forge_python_native --example python_parity`, then run `python -m pytest bindings/python/tests` and `python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge`.
 
 Native handles belong to their creating process. After `os.fork()`, inherited handles reject operations with `BINDING.FORKED_OBJECT`; dropping them cannot remove parent-owned snapshots. Create new values in the child for child-side work. Those new values retain normal cleanup.
+
+### Addition diagnostics
+
+Projects have a stable namespace and optional default deck, with no title.
+Image and sound constructors remain infallible; adding a note checks retained
+MIME categories: image/* for images, audio/* or video/* for sound references.
+Other categories raise AddError with code NOTE.MEDIA_USAGE_INVALID. Raw HTML and
+explicit assets retain their existing behavior; category checking does not promise
+decodability. Build still performs its independent MIME/extension checks.
+
+`AddError.details` is described by exported `AddErrorDetails` TypedDict, with
+`context` and nullable `detail`, alongside `error_kind`, `causes` and
+`source_details`. Context includes `note_key`, `model_key` and `target`; field
+targets include `field_key`, `content_path` and `byte_range`.
+Native metadata must report embedded contract 2.0.0, even when binding/core
+versions both match 0.2.0.
+A field path is null/None for the field, [] for root content, or zero-based
+indices into the original sequences. Byte ranges use UTF-8 offsets in the
+original text/HTML leaf. Nested source details preserve the same facts.

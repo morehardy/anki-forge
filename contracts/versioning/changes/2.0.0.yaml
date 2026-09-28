@@ -1,0 +1,15 @@
+baseline_version: 1.0.0
+bundle_version: 2.0.0
+compatibility_class: behavior_changing_incompatible
+summary: Remove project titles and validate typed media with structured addition errors.
+migration_notes: Remove Project title setters/parameters and top-level recipe name, including null; use ankiforge-project-v2. Image content requires image MIME and sound accepts audio or video. Inspect structured addition context/detail instead of parsing messages. Rebuild Node native protocol 5 and Python native with embedded contract 2.0.0. Keep namespace, deck, model/field/template names and ankiforge-identity-v1 unchanged; report/build/comparison DTO versions are unchanged.
+changes:
+- path: errors/error-registry.yaml
+  before: blake3:ab8b2c13353e4b58119b8d39b183d5001bdf0eb76c6decfc5e711bf540cb765c
+  after: blake3:867f5390a97c0d924e4ef51cca78a0e687d2ae78f7c41509444ddcbcb5a52e66
+- path: schema/project-input.schema.json
+  before: blake3:599d7427f6eb6f414a4f3dd2967bad7c35d80592ab19ce4d55de7d924ed4c9b7
+  after: blake3:9a9e7701552a5672d0c1dd1c4cad535b8006185cc9c0a6685706cda6583afa73
+- path: semantics/rust-authoring.md
+  before: blake3:ae3a550182900f5de7572b45ba32bc74dfc080fa00e1866a3ba9a06e8a04cce3
+  after: blake3:189a6e49b0f84780210677b43bb10177a2b8a383bd25381dd3b9f3fb9a69e9cb
