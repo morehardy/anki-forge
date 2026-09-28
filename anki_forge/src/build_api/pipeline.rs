@@ -76,13 +76,6 @@ impl Project {
             BuildError::new(Kind::Configuration, cause.code(), "invalid default deck")
                 .caused_by(cause)
         })?;
-        if self.name.trim().is_empty() || self.name.chars().any(char::is_control) {
-            return Err(BuildError::new(
-                Kind::Configuration,
-                "BUILD.NAME_INVALID",
-                "project display name must be nonempty and contain no control characters",
-            ));
-        }
         if matches!(&options.output, OutputTarget::Persistent(path) if path.as_os_str().is_empty())
         {
             return Err(BuildError::new(

@@ -849,3 +849,28 @@ test("unmatched allowance is a warning and preserves real successful outcome", a
   assert(out.report.diagnostics.length > 0);
   assert.equal(out.report.baselineCounts.notes, 1);
 });
+
+test("structured addition errors retain nested locations and source context", async () => {
+  const image = (await Media.bytes(png(), "image/png")).withExportName("cell.png");
+  const project = new Project("structured-errors");
+  assert.throws(() => project.add("cell", Note.basic(Content.sequence([
+    Content.text("prefix"), Content.sequence([image.sound()]),
+  ]), "answer")), (error) => {
+    assert.ok(error instanceof AddError);
+    assert.equal(error.code, "NOTE.MEDIA_USAGE_INVALID");
+    assert.equal(error.details.context.noteKey, "cell");
+    assert.deepEqual(error.details.context.target, { type: "field", fieldKey: "front", contentPath: [1, 0], byteRange: null });
+    assert.deepEqual(error.details.detail, { type: "media_usage", requested: "sound", mediaName: "cell.png", mediaType: "image/png" });
+    assert.ok(Object.isFrozen(error.details.context.target.contentPath));
+    return true;
+  });
+  project.add("cell", Note.basic(image.image(), "answer"));
+  assert.equal(project.length, 1);
+  await assert.rejects(project.defaultDeck("bad::").build(BuildOptions.temporary()), (error) => {
+    const source = error.sourceDetails.find((s) => s.type === "add");
+    assert.equal(source.context.noteKey, null);
+    assert.deepEqual(source.context.target, { type: "project_default_deck", name: "bad::" });
+    return true;
+  });
+  assert.equal(typeof project.name, "undefined");
+});

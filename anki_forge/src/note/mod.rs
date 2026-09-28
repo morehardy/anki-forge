@@ -1,10 +1,12 @@
 //! Notes retain a validated model and typed content until added to a project.
 
 mod content;
+mod context;
 mod error;
 mod occlusion;
 mod occlusion_error;
 pub use content::Content;
+pub use context::{AddContext, AddDetail, AddTarget};
 pub use error::{AddError, AddErrorKind};
 pub use occlusion::{ImageOcclusionBuilder, Mask, OcclusionMode};
 pub use occlusion_error::{ImageOcclusionError, ImageOcclusionErrorKind};

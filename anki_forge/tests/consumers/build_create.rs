@@ -22,7 +22,7 @@ fn entry(archive: &mut zip::ZipArchive<fs::File>, name: &str) -> Vec<u8> {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut project = Project::new("biology")?.name("生物").default_deck("生物::细胞");
+    let mut project = Project::new("biology")?.default_deck("生物::细胞");
     project.add("definition", Note::basic("<b>cell</b> &", Content::html("<b>细胞</b>")))?;
     project.add("cloze", Note::cloze("<b>{{c1::细胞}}</b> {{c2::细胞膜}}"))?;
     let original_image = fs::read("assets/pixel.png")?;

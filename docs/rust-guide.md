@@ -11,7 +11,6 @@ use ankiforge::{BuildOptions, Content, Note, Project};
 
 fn main() -> anyhow::Result<()> {
     let mut project = Project::new("jp-core")?
-        .name("Japanese Core")
         .default_deck("Japanese::Core");
     project.add("taberu", Note::basic("食べる", Content::html("<b>to eat</b>")))?;
     let output = project.build(BuildOptions::to("jp-core.apkg"))?;
@@ -83,3 +82,24 @@ cargo run --locked -p ankiforge --example target_api_custom_notetype
 cargo run --locked -p ankiforge --example target_api_media
 cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 ```
+
+### Addition errors and media categories
+
+`Project` uses a stable namespace and optional default deck; it has no display
+title. `NoteType`, `Field` and `Template` still support display names.
+`Project::add` is atomic. Inspect `AddError::context()` for note/model keys and
+`note::AddTarget` for the original location; `detail()` returns `note::AddDetail`
+for conflicts or incompatible media usage. Match these non-exhaustive enums with
+`..` on data variants and a fallback arm. A field's `content_path` is `None` for
+the field, `Some([])` for its root, or sequence indices for a nested node.
+Separator byte ranges point into the original UTF-8 Text/Html leaf.
+
+`Media::image()` and `sound()` remain infallible. Addition requires `image/*` for
+images and `audio/*` or `video/*` for sound references. Other categories produce
+`NOTE.MEDIA_USAGE_INVALID`. This checks retained MIME, not decoding or playback.
+Raw HTML and explicit assets retain their existing behavior. Export renaming does
+not change MIME: a PNG renamed `wrong.mp3` passes image addition but can still fail
+build's independent sniffing/extension check with `MEDIA.DECLARED_MIME_MISMATCH`.
+
+Tool recipes now require `ankiforge-project-v2` without top-level `name`; v1 is
+rejected. Contract bundle is 2.0.0; package identity stays `ankiforge-identity-v1`.

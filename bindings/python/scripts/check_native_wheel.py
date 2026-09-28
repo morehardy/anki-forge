@@ -79,7 +79,7 @@ def main() -> None:
         subprocess.run([*command, "positive.py"], cwd=work, env=environment, check=True)
         negative = subprocess.run([*command, "negative.py"], cwd=work, env=environment, text=True, capture_output=True)
         assert negative.returncode == 1, negative.stdout + negative.stderr
-        assert negative.stdout.count("error:") == 7, negative.stdout
+        assert negative.stdout.count("error:") == 9, negative.stdout
         assert "[attr-defined]" in negative.stdout, negative.stdout
         print("Installed wheel positive/negative consumer typing passed")
         if not args.observer:
@@ -95,7 +95,7 @@ def main() -> None:
             tests.mkdir()
             shutil.copyfile(source_root / "tests/media_budget_probe.py", tests / "media_budget_probe.py")
             for source in (source_root / "tests").glob("test_*.py"):
-                if source.name in {"test_public_api.py", "test_fork_ownership.py"}:
+                if source.name in {"test_public_api.py", "test_fork_ownership.py", "test_loader_compatibility.py"}:
                     shutil.copyfile(source, tests / source.name)
             environment["ANKI_FORGE_PYTHON_OBSERVER"] = str(observer)
             subprocess.run([*isolated_python, "-m", "pytest", str(tests), "-q"], cwd=work, env=environment, check=True)

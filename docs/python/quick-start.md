@@ -11,7 +11,7 @@ Choose a stable project namespace and stable note keys from your data. Names and
 ```python
 from anki_forge import Project, Note, BuildOptions
 
-project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+project = Project('biology-course', default_deck='Science::Biology')
 project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
 project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
 output = project.build(BuildOptions.to('biology.apkg'))
@@ -57,7 +57,7 @@ The builder validates fields, templates and their references. The completed mode
 ```python
 from anki_forge import CompareOptions
 
-next_project = Project('biology-course', name='Biology', default_deck='Science::Biology')
+next_project = Project('biology-course', default_deck='Science::Biology')
 next_project.add('cell', Note.basic('What is a cell?', 'The basic structural unit of life'))
 next_project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
 comparison = next_project.compare(CompareOptions.against('biology.apkg'))

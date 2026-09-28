@@ -1,6 +1,8 @@
 # Rust API 设计入口
 
-当前唯一实施方案是 [Rust API clean-slate design](plans/2026-09-23-rust-api-clean-slate-design.md)。原先的多阶段 Deck/Project/prelude 方案已删除，避免两份设计同时约束实现。
+现有实现的设计基线是 [Rust API clean-slate design](plans/2026-09-23-rust-api-clean-slate-design.md)。原先的多阶段 Deck/Project/prelude 方案已删除。
+
+已实施的定向修订见 [媒体用途、添加错误与项目标题优化方案](plans/2026-09-28-rust-api-validation-and-errors-design.md)：在添加时校验媒体用途，补充结构化错误定位，并删除项目标题接口。它只修订这三项；其余设计沿用现有基线。以下指南描述修订后的接口；[实施记录](plans/2026-09-28-rust-api-validation-and-errors-implementation.md) 列出了验证证据与平台边界。
 
 日常用法见 [Rust guide](rust-guide.md) 和 [API reference](rust-api.md)。关键边界如下：
 

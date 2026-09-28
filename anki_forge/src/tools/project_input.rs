@@ -7,7 +7,7 @@ use crate::{Content, Field, Media, Note, NoteType, Project, Template};
 
 mod decode;
 
-/// Loads `ankiforge-project-v1` tool input through the native authoring API.
+/// Loads `ankiforge-project-v2` tool input through the native authoring API.
 /// Relative media and bundle paths resolve against `base_dir`, or the input's
 /// directory. Media is snapshotted during this operation. Legacy product JSON
 /// is rejected, and no editable or serializable internal IR is returned.
@@ -20,16 +20,13 @@ pub fn load_project(path: impl AsRef<Path>, base_dir: Option<&Path>) -> anyhow::
         ),
         crate::media::MediaLimits::default(),
     )
-    .with_context(|| format!("decode ankiforge-project-v1 input {}", path.display()))?;
+    .with_context(|| format!("decode ankiforge-project-v2 input {}", path.display()))?;
     ensure!(
-        input.format_version == "ankiforge-project-v1",
+        input.format_version == "ankiforge-project-v2",
         "unsupported project format_version"
     );
     let base = base_dir.unwrap_or_else(|| path.parent().unwrap_or_else(|| Path::new(".")));
     let mut project = Project::new(input.namespace)?;
-    if let Some(name) = input.name {
-        project = project.name(name);
-    }
     if let Some(deck) = input.default_deck {
         project = project.default_deck(deck);
     }
@@ -193,7 +190,6 @@ fn asset<'a>(assets: &'a BTreeMap<String, Media>, key: &str) -> anyhow::Result<&
 struct Input {
     format_version: String,
     namespace: String,
-    name: Option<String>,
     default_deck: Option<String>,
     models: Vec<ModelInput>,
     assets: Vec<Asset>,

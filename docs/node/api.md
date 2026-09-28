@@ -11,7 +11,7 @@ Types are defined in [the public source](../../bindings/node/src/index.ts),
 | API | Behavior |
 | --- | --- |
 | `new Project(namespace)` | Validate a stable publication namespace |
-| `.name(title).defaultDeck(name)` | Set project display values; returns the project |
+| `.defaultDeck(name)` | Set the default destination; returns the project |
 | `.add(key, note)` | Atomically collect note/model/media; duplicate keys fail |
 | `.addAsset(media)` | Include an explicit raw HTML/CSS/script resource |
 | `.clone()` | Independent editable project sharing immutable values |
@@ -170,3 +170,21 @@ whether durability was confirmed. Media/inspection errors retain limit details.
 Use these machine fields instead of parsing error messages.
 `ArtifactClosedError` reports use of a closed owner; `NativeLoadError` reports
 missing, incompatible or stale native packages.
+
+## Addition context
+
+Failed additions leave the project unchanged. Structured context records the
+original note/model keys and the target, with optional conflict or media usage
+details. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through
+`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed
+context/detail. Node fields use camelCase and are deeply frozen; Python uses
+snake_case TypedDicts. Tags retain their insertion index; field locations retain
+original sequence indices (null/None for the field, [] for its root) and optional
+UTF-8 byte ranges. Default-deck errors from build have no note/model keys and
+remain available in the source chain.
+
+Typed images require image/* MIME at addition; sound references accept audio/*
+or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
+infallible; explicit assets and raw HTML are unaffected. The check uses retained
+import MIME, and does not certify playback. Build's independent MIME/extension
+validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.

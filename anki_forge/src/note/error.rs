@@ -1,3 +1,4 @@
+use super::{AddContext, AddDetail};
 use std::fmt;
 
 /// The reason a note or explicit asset could not be added to a project.
@@ -13,6 +14,8 @@ pub enum AddErrorKind {
     RequiredField,
     /// A field contains the reserved U+001F Anki field separator.
     InvalidContent,
+    /// A typed image or sound node uses an incompatible media category.
+    InvalidMediaUsage,
     /// The model's stable key has a different definition, or its name is already in use.
     ModelConflict,
     /// Media names or their bound contents conflict.
@@ -31,15 +34,44 @@ pub struct AddError {
     kind: AddErrorKind,
     code: &'static str,
     message: String,
+    context: Box<AddContext>,
+    detail: Option<AddDetail>,
 }
 
 impl AddError {
-    pub(crate) fn new(kind: AddErrorKind, code: &'static str, message: impl Into<String>) -> Self {
+    pub(crate) fn new(
+        kind: AddErrorKind,
+        code: &'static str,
+        message: impl Into<String>,
+        context: AddContext,
+    ) -> Self {
         Self {
             kind,
             code,
             message: message.into(),
+            context: Box::new(context),
+            detail: None,
         }
+    }
+
+    pub(crate) fn with_context(mut self, context: AddContext) -> Self {
+        self.context = Box::new(context);
+        self
+    }
+
+    pub(crate) fn with_detail(mut self, detail: AddDetail) -> Self {
+        self.detail = Some(detail);
+        self
+    }
+
+    /// Returns owned note identifiers and the authored location, without parsing Display.
+    pub fn context(&self) -> &AddContext {
+        &self.context
+    }
+
+    /// Returns structured conflict or media-usage evidence, when applicable.
+    pub fn detail(&self) -> Option<&AddDetail> {
+        self.detail.as_ref()
     }
 
     /// Returns the structured category independent of human wording.

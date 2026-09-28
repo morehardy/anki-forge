@@ -1,6 +1,6 @@
 """Owned authoring values backed by the Rust public API."""
 from ._loader import Versions, __version__, versions
-from .diagnostics import (ForgeError, SchemaError, AddError, MediaError, ImageOcclusionError,
+from .diagnostics import (AddContext, AddTarget, AddDetail, AddErrorDetails, MediaUsage, MediaConflictKind, ForgeError, SchemaError, AddError, MediaError, ImageOcclusionError,
                           TemplateBundleError, CompareError, PolicyError, PersistError, BuildError)
 from .content import Content
 from .media import Media, MediaLimits
@@ -11,7 +11,7 @@ from .options import BuildOptions, CompareOptions, InspectLimits, UpdatePolicy, 
 from .report import BuildCounts, BuildOutput, BuildReport, ComparisonReport
 from .artifact import ApkgArtifact
 
-__all__ = ["Versions", "__version__", "versions", "ForgeError", "SchemaError", "AddError",
+__all__ = ["Versions", "__version__", "versions", "AddContext", "AddTarget", "AddDetail", "AddErrorDetails", "MediaUsage", "MediaConflictKind", "ForgeError", "SchemaError", "AddError",
            "MediaError", "ImageOcclusionError", "TemplateBundleError", "CompareError", "PolicyError",
            "PersistError", "BuildError", "Content", "Media", "MediaLimits", "Note", "Mask",
            "OcclusionMode", "ImageOcclusionBuilder", "Field", "Template", "GenerationRule",

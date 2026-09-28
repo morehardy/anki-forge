@@ -86,3 +86,34 @@ and identity evidence. The identity entry defaults to 64 MiB. Resource errors re
 budget, entry, limit and observed values and cannot be ignored by update policy.
 Public errors expose stable kind/code and real source chains; binding adapters
 preserve these facts, observation snapshots and publication stages.
+
+Project has no display title. Its namespace is stable identity; default_deck and
+per-note deck select destinations. Model, field and template display names remain.
+Tool recipes require ankiforge-project-v2 and reject the top-level name member,
+including null. Recipe v1 is rejected, even without a name member. Package identity
+remains ankiforge-identity-v1 and build/report/comparison DTO versions are unchanged.
+
+Image and Sound constructors remain infallible. Project::add validates the retained
+import MIME: Image requires image/*; Sound accepts audio/* or video/* (Anki's sound
+reference also plays video). Other categories, including application/octet-stream,
+fail with InvalidMediaUsage / NOTE.MEDIA_USAGE_INVALID. A syntactically valid MIME
+declaration for unidentified bytes establishes a category, not decodability or
+playability. Explicit assets and raw HTML do not acquire typed-content checks.
+Export names do not change retained MIME. Build-time staging still sniffs content
+and checks extension-derived declarations, so PNG named wrong.mp3 passes image
+addition but fails build with MEDIA.DECLARED_MIME_MISMATCH.
+
+AddError exposes owned AddContext and optional AddDetail. Note additions always
+retain the attempted note key (even invalid) and model key; standalone assets and
+project default-deck build checks have neither. Targets distinguish note keys,
+whole notes, models, fields, original tag positions, explicit/inherited decks,
+model assets, occlusion images, explicit assets and project default decks.
+Field paths are null for the field itself, [] for its root content, and zero-based
+indices into the original nested sequences otherwise. Separator errors carry a
+half-open UTF-8 byte range in the original Text/Html leaf. Conflict details retain
+model keys/names or original media names and collision kind; media misuse retains
+requested usage, filename and import MIME. Errors retain no media or artifact owner.
+Adapters preserve these facts in AddError.details and nested source details, using
+camelCase in Node and snake_case in Python, with explicit snake_case discriminants.
+Node details are deeply frozen. New Node wrappers require native protocol 5;
+Python wrappers require embedded contract 2.0.0. BUILD.NAME_INVALID is deprecated.

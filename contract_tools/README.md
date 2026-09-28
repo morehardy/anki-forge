@@ -23,13 +23,13 @@ Build JSON is the native `ankiforge-build-v1` BuildSnapshot. Exit codes are 0 fo
 
 Removed native-product flags: `--manifest`, `--product-input`, `--compare-to`, `--identity-lockfile`, `--write-identity-lockfile`, and `--update-safety`. Native product operations use the embedded library contracts. Legacy ProductDocument JSON is rejected rather than converted with its old identity or HTML semantics.
 
-## Project input: ankiforge-project-v1
+## Project input: ankiforge-project-v2
 
 This is a repository tool input recipe, loaded by `tools::load_project`. It is not serialization of Project internals. Unknown fields are rejected. Stable keys are required; no names are silently converted to keys.
 
 ```json
 {
-  "format_version": "ankiforge-project-v1",
+  "format_version": "ankiforge-project-v2",
   "namespace": "biology",
   "name": "Biology",
   "default_deck": "Biology::Cells",

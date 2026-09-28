@@ -26,7 +26,7 @@ implementation.
 | Requirement | Repository state | Result |
 | --- | --- | --- |
 | One public crate | Authoring and writer cores are private modules inside `ankiforge`; `contract_tools` is `publish = false` | Implemented |
-| Self-contained runtime | Deterministic bundle `1.0.0` is embedded and loaded by the private runtime | Implemented |
+| Self-contained runtime | Deterministic bundle `2.0.0` is embedded and loaded by the private runtime | Implemented |
 | Crate/bundle mapping | Public version functions, README, changelog, metadata check, and Release Record carry both versions | Implemented |
 | Registry identity | Description, MIT license, repository, official homepage and Rust guide URLs, keywords, categories, README, and changelog are present | Implemented |
 | Explicit payload | Cargo `include` allowlist plus required/forbidden path audit | Implemented |

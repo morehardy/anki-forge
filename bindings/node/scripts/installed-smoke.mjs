@@ -311,7 +311,7 @@ try {
     await fs.writeFile(
       path.join(consumer, `consumer.${extension}`),
       `
-      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, BuildReport, ComparisonReport, BuildError, CompareError, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
+      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, BuildReport, ComparisonReport, BuildError, CompareError, AddError, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
       const project = new Project('typed').add('one', Note.basic('front', 'back'));
       const result: Promise<BuildOutput> = project.build(BuildOptions.to('typed.apkg'));
       const limits: InspectLimits = { maxMediaBytes: 1024 };
@@ -334,6 +334,22 @@ try {
       readReport(output.report);
       readReport(buildError.report);
       readReport(compareError.report);
+      declare const addError: AddError;
+      const target = addError.details.context.target;
+      if (target.type === 'field') {
+        const key: string = target.fieldKey;
+        const path: readonly number[] | null = target.contentPath;
+        // @ts-expect-error context facts are immutable
+        target.contentPath = [];
+        // @ts-expect-error nested content paths are immutable
+        target.contentPath?.push(0);
+      }
+      const detail = addError.details.detail;
+      if (detail?.type === 'media_usage') {
+        const mime: string = detail.mediaType;
+      }
+      // @ts-expect-error project titles were removed
+      project.name('title');
       // @ts-expect-error key is required
       project.add(Note.basic('front', 'back'));
       // @ts-expect-error explicit output destination is required
@@ -418,7 +434,7 @@ try {
   console.log("Mismatched native version is rejected: passed");
   await fs.writeFile(
     path.join(wrongRuntime, "index.cjs"),
-    `exports.NativeProject = class {}; exports.bindingMetadata = () => JSON.stringify({bindingVersion:${JSON.stringify(version)},bindingProtocolVersion:1});`,
+    `exports.NativeProject = class {}; exports.bindingMetadata = () => JSON.stringify({bindingVersion:${JSON.stringify(version)},bindingProtocolVersion:4});`,
   );
   await run(
     [

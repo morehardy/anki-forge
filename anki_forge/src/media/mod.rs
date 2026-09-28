@@ -7,8 +7,11 @@
 pub(crate) mod assets;
 mod error;
 mod snapshot;
+mod usage;
 
 pub(crate) use assets::Assets;
+pub use assets::MediaConflictKind;
+pub use usage::MediaUsage;
 
 pub use error::{MediaError, MediaErrorKind, MediaLimitExceeded};
 

@@ -94,14 +94,13 @@ impl<'de> Visitor<'de> for InputVisitor<'_> {
     }
     fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> Result<Input, A::Error> {
         let (mut format_version, mut namespace, mut notes) = (None, None, None);
-        let (mut name, mut default_deck) = (None, None);
+        let mut default_deck = None;
         let (mut models, mut assets) = (Vec::new(), Vec::new());
         let mut seen = BTreeSet::new();
         while let Some(key) = key(&mut map, &mut seen)? {
             match key.as_str() {
                 "format_version" => format_version = Some(map.next_value()?),
                 "namespace" => namespace = Some(map.next_value()?),
-                "name" => name = map.next_value()?,
                 "default_deck" => default_deck = map.next_value()?,
                 "models" => models = map.next_value()?,
                 "assets" => assets = map.next_value_seed(Assets(self.0))?,
@@ -112,7 +111,6 @@ impl<'de> Visitor<'de> for InputVisitor<'_> {
                         &[
                             "format_version",
                             "namespace",
-                            "name",
                             "default_deck",
                             "models",
                             "assets",
@@ -126,7 +124,6 @@ impl<'de> Visitor<'de> for InputVisitor<'_> {
             format_version: required(format_version, "format_version")?,
             namespace: required(namespace, "namespace")?,
             notes: required(notes, "notes")?,
-            name,
             default_deck,
             models,
             assets,
@@ -295,7 +292,7 @@ mod tests {
 
     fn recipe(source: &str) -> String {
         format!(
-            r#"{{"format_version":"ankiforge-project-v1","namespace":"budget","notes":[],"assets":[{{"key":"one","source":{source}}}]}}"#
+            r#"{{"format_version":"ankiforge-project-v2","namespace":"budget","notes":[],"assets":[{{"key":"one","source":{source}}}]}}"#
         )
     }
 
@@ -337,7 +334,7 @@ mod tests {
             assert_eq!(error.code(), "MEDIA.RESOURCE_LIMIT_EXCEEDED");
             assert_eq!(error.limit_exceeded().unwrap().observed, limit as u64 + 1);
         }
-        let json = br#"{"format_version":"ankiforge-project-v1","namespace":"budget","notes":[],"assets":[{"key":"one","source":{"data":[0,1],"kind":"bytes","mime":"text/css"}},{"key":"two","source":{"data":[2,3],"kind":"bytes","mime":"text/css"}}]}"#;
+        let json = br#"{"format_version":"ankiforge-project-v2","namespace":"budget","notes":[],"assets":[{"key":"one","source":{"data":[0,1],"kind":"bytes","mime":"text/css"}},{"key":"two","source":{"data":[2,3],"kind":"bytes","mime":"text/css"}}]}"#;
         assert_eq!(
             input(json.as_slice(), MediaLimits { max_bytes: 2 })
                 .unwrap()
@@ -401,7 +398,7 @@ mod tests {
                 "{json}"
             );
         }
-        let minimal = br#"{"format_version":"ankiforge-project-v1","namespace":"minimal","name":null,"default_deck":null,"notes":[]}"#;
+        let minimal = br#"{"format_version":"ankiforge-project-v2","namespace":"minimal","default_deck":null,"notes":[]}"#;
         let decoded = input(minimal.as_slice(), MediaLimits { max_bytes: 0 }).unwrap();
         assert!(decoded.models.is_empty() && decoded.assets.is_empty());
     }
@@ -442,7 +439,7 @@ mod tests {
                 ""
             };
             let prefix = format!(
-                r#"{{"format_version":"ankiforge-project-v1","namespace":"budget","notes":[],"assets":[{{"key":"one","source":{{{kind}"data":[0,1,2,3,4{separator}"#
+                r#"{{"format_version":"ankiforge-project-v2","namespace":"budget","notes":[],"assets":[{{"key":"one","source":{{{kind}"data":[0,1,2,3,4{separator}"#
             );
             // The malformed unread tail also proves rejection happens during
             // the sequence, before tag buffering or full recipe validation.

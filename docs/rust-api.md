@@ -11,7 +11,7 @@ applications do not need them.
 | Entry | Responsibility |
 | --- | --- |
 | `Project::new(namespace)` | Validate a stable publication namespace |
-| `project.name(title).default_deck(name)` | Set display title and default destination |
+| `project.default_deck(name)` | Set the default destination |
 | `project.add(key, note)` | Atomically collect the note, model and media |
 | `project.add_asset(media)` | Include an explicit raw HTML/CSS/script asset |
 | `Note::basic(front, back)` / `Note::cloze(text)` | Create a note carrying its built-in model |
@@ -113,3 +113,21 @@ Errors live with their operations: schema and bundle errors in `schema`, add/IO
 errors in `note`, media errors in `media`, build/persist errors in `build`, and
 compare/policy errors in `update`. Each provides `kind()` and `code()`, implements
 `std::error::Error + Send + Sync + 'static`, and retains real source errors.
+
+## Addition context
+
+Failed additions leave the project unchanged. Structured context records the
+original note/model keys and the target, with optional conflict or media usage
+details. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through
+`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed
+context/detail. Node fields use camelCase and are deeply frozen; Python uses
+snake_case TypedDicts. Tags retain their insertion index; field locations retain
+original sequence indices (null/None for the field, [] for its root) and optional
+UTF-8 byte ranges. Default-deck errors from build have no note/model keys and
+remain available in the source chain.
+
+Typed images require image/* MIME at addition; sound references accept audio/*
+or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
+infallible; explicit assets and raw HTML are unaffected. The check uses retained
+import MIME, and does not certify playback. Build's independent MIME/extension
+validation still applies. See [the design](plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.

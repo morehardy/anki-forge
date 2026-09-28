@@ -18,7 +18,7 @@ fn input(root: &Path, notes: Value) -> PathBuf {
     fs::write(
         &path,
         serde_json::to_vec(&json!({
-            "format_version":"ankiforge-project-v1", "namespace":"cli-project", "notes":notes
+            "format_version":"ankiforge-project-v2", "namespace":"cli-project", "notes":notes
         }))
         .unwrap(),
     )
@@ -253,7 +253,7 @@ fn project_loader_owns_media_and_builds_custom_cloze_and_structured_io() {
     .unwrap();
     let path = root.path().join("project.json");
     fs::write(&path, serde_json::to_vec(&json!({
-        "format_version":"ankiforge-project-v1", "namespace":"assets",
+        "format_version":"ankiforge-project-v2", "namespace":"assets",
         "assets":[
             {"key":"image","source":{"kind":"file","path":"image.png"}},
             {"key":"audio","source":{"kind":"bytes","data":fs::read(fixtures.join("silence.wav")).unwrap(),"mime":"audio/wav"}},

@@ -5,7 +5,7 @@ import {
   BuildOptions,
   CompareOptions,
 } from "../dist/index.mjs";
-const project = new Project("example").name("Example").defaultDeck("Learning");
+const project = new Project("example").defaultDeck("Learning");
 project.add("hello", Note.basic("Hello <world>", Content.html("<b>你好</b>")));
 const first = await project.build(BuildOptions.temporary());
 try {
