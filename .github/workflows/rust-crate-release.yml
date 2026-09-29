@@ -168,6 +168,7 @@ jobs:
       - name: Create or complete immutable GitHub evidence release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             existing_assets="$(mktemp -d)"
