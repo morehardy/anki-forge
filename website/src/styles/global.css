@@ -32,6 +32,8 @@ code { font-size: 0.86em; }
 .desktop-nav { display: flex; gap: 28px; align-items: center; margin-left: auto; font-size: 14px; }
 .desktop-nav a { color: var(--af-muted); text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
 .desktop-nav a:hover, .desktop-nav a[aria-current] { color: var(--af-accent); }
+.github-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+.github-link .icon { width: 22px; height: 22px; }
 .header-tools { display: flex; align-items: center; gap: 16px; }
 .theme-label select { border: 1px solid var(--af-line); background: var(--af-bg); color: var(--af-muted); font-size: 12px; border-radius: 6px; padding: 6px 7px; min-height: 34px; }
 .mobile-menu { display: none; font-size: 14px; }
@@ -40,6 +42,7 @@ code { font-size: 0.86em; }
 /* Layer 1 is the mobile menu; layer 3 is the keyboard skip link. */
 .mobile-menu nav { position: absolute; z-index: 1; right: 16px; top: 67px; width: 210px; padding: 12px; background: var(--af-paper); border: 1px solid var(--af-line); border-radius: var(--af-radius); box-shadow: 0 12px 32px #142d2910; }
 .mobile-menu nav a { display: block; padding: 10px 12px; text-decoration: none; }
+.mobile-menu nav .github-link { display: flex; justify-content: flex-start; }
 .hero-actions { display: flex; gap: 23px; align-items: center; margin-top: 21px; flex-wrap: wrap; }
 .button { display: inline-flex; justify-content: center; align-items: center; gap: 12px; padding: 11px 18px; border: 1px solid transparent; border-radius: 7px; background: var(--af-accent); color: var(--af-on-accent); text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; min-height: 44px; }
 .button:hover { filter: brightness(1.08); }
@@ -126,7 +129,7 @@ code { font-size: 0.86em; }
 .post-card h3 a:hover { color: var(--af-accent); }
 .post-card p { color: var(--af-muted); font-size: 15px; margin: 13px 0 17px; }
 .site-footer { padding: 28px 0 32px; border-top: 1px solid var(--af-line); display: flex; justify-content: space-between; align-items: center; gap: 30px; color: var(--af-muted); font-size: 12px; }
-.site-footer nav { display: flex; gap: 24px; }
+.site-footer nav { display: flex; align-items: center; gap: 24px; }
 .site-footer a { color: var(--af-muted); text-decoration: none; }
 .page-intro { padding-block: 65px 48px; max-width: 750px; }
 .page-intro h1, .article-header h1 { font-size: clamp(39px, 4.7vw, 57px); line-height: 1.12; }
