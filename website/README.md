@@ -1,6 +1,6 @@
 # Anki Forge website
 
-The public homepage, examples, blog, and documentation. Built as a static Astro site with Starlight, Markdown/MDX, native CSS, and a small TypeScript script for the card demos. No application server is required.
+The public homepage, examples, blog, and documentation. Built as a static Astro site with Starlight, Markdown/MDX, native CSS, and small TypeScript scripts for the animations and card demos. No application server is required.
 
 ## Develop locally
 
@@ -33,13 +33,15 @@ Astro runs the preview server in the background. Use `npm run preview:stop` when
 
 ## Content and examples
 
-- `src/pages/index.astro`: homepage, with an interactive code-to-card workbench.
+- `src/pages/index.astro`: homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
+- `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One timeline keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
+- `src/components/PerformanceEvidence.astro`: export metrics from the archived benchmark CSV, with links to its methodology and limitations.
 - `src/pages/examples/index.astro`: all examples and package downloads.
 - `src/content/blog/`: Markdown or MDX posts, each with `title`, `description`, `date`, `category` (`Tutorial` or `Engineering`), and optional `draft: true`.
 - `src/content/docs/docs/`: introductory site docs. Task guides, language guides and references are generated from the repository sources listed in `scripts/content-links.mjs`. Edit those source files; each generated page links to its editable source.
-- `src/styles/tokens.css`: the shared light/dark palette; `global.css` styles the public pages and `docs.css` adapts Starlight.
+- `src/styles/tokens.css`: the shared light/dark palette; `global.css` styles the public pages, `home.css` and `showcase.css` style the homepage, and `docs.css` adapts Starlight.
 
-`scripts/prepare-site.mjs` runs `anki_forge/examples/website_showcase.rs`. The Rust program builds Basic, Cloze, media, and two-version update packages, checks the inspected counts, and verifies preserved identity in the update report. The preparation script extracts displayed source regions from that same file and records package hashes in `generated/showcase.json`.
+`scripts/prepare-site.mjs` runs `anki_forge/examples/website_showcase.rs`. The Rust program builds Basic, Cloze, media, Image Occlusion, a combined four-card showcase deck, and two-version update packages. It checks inspected counts and verifies preserved identity in the update report. The preparation script extracts displayed source regions from that same file and records package hashes in `generated/showcase.json`.
 
 The previews share the notes’ fields with the Rust examples. They simplify Anki’s rendering and do not emulate its scheduler or import behavior. The media example’s full source includes its custom note type and synthesized waveform/tone; the displayed snippet concentrates on attaching the media.
 

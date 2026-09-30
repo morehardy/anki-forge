@@ -1,25 +1,34 @@
 ---
 import { getCollection } from 'astro:content';
 import SiteLayout from '../layouts/SiteLayout.astro';
+import HomeShowcase from '../components/HomeShowcase.astro';
+import PerformanceEvidence from '../components/PerformanceEvidence.astro';
 import ExampleWorkbench from '../components/ExampleWorkbench.astro';
 import UpdateDemo from '../components/UpdateDemo.astro';
 import InstallCommand from '../components/InstallCommand.astro';
 import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
-import { repository, sitePath } from '../lib/site';
+import { sitePath } from '../lib/site';
+import '../styles/home.css';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
 ---
-<SiteLayout>
+<SiteLayout description="Build Basic, Cloze, Image Occlusion, and custom Anki cards with Rust, Node.js, or Python. Explore runnable examples and archived export benchmarks.">
   <div class="container">
-    <section class="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title">Anki decks,<br /><span>built from code.</span></h1>
-      <div class="hero-copy">
-        <p>Turn knowledge into Anki decks with Rust. Write your notes, add media, and keep identities stable as content changes.</p>
-        <div class="hero-actions"><a class="button" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a><a class="text-link" href={repository}>View on GitHub <Icon name="arrowUpRight" /></a></div>
+    <section class="home-hero" aria-labelledby="hero-title">
+      <div class="home-hero-copy">
+        <h1 id="hero-title">Build beyond<br /><span>basic flashcards.</span></h1>
+        <p>Basic, Cloze, Media, Image Occlusion. Create Anki decks with Rust, Node.js, or Python.</p>
+        <div class="hero-actions"><a class="button" href={sitePath('/examples/')}>Explore cards <Icon name="arrowRight" /></a><a class="text-link" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a></div>
       </div>
+      <HomeShowcase />
     </section>
-    <ExampleWorkbench />
-    <p class="demo-caption">Real code. Downloadable decks. A simplified preview of the cards inside.</p>
+    <PerformanceEvidence />
+
+    <section class="home-examples" aria-labelledby="examples-heading">
+      <div class="home-examples-heading"><h2 id="examples-heading">See the code. Try the card.</h2><p>Switch between runnable Rust examples, flip the previews, and download the decks they produce.</p></div>
+      <ExampleWorkbench />
+      <div class="home-more-cards"><span>Go further</span><a href={sitePath('/docs/custom-notetypes/')}>Custom templates <Icon name="arrowRight" /></a><a href={sitePath('/docs/image-occlusion/')}>Occlusion modes <Icon name="arrowRight" /></a><a href={sitePath('/docs/media/')}>Media and video <Icon name="arrowRight" /></a></div>
+    </section>
 
     <section class="section identity-section" aria-labelledby="identity-heading" data-reveal>
       <div class="section-copy">

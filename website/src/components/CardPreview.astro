@@ -4,7 +4,7 @@ import { sitePath } from '../lib/site';
 import Icon from './Icon.astro';
 interface Props { example: CardExample; prefix: string }
 const { example, prefix } = Astro.props;
-const cloze = example.front.match(/^(.*?)\{\{c1::(.*?)\}\}(.*)$/);
+const { clozeParts: cloze } = example;
 ---
 <div class="card-preview" data-card-preview>
   <div class="preview-label"><span>{example.deck}</span><Icon name="cards" /></div>
@@ -14,11 +14,13 @@ const cloze = example.front.match(/^(.*?)\{\{c1::(.*?)\}\}(.*)$/);
         {example.id === 'basic' && <><span class="card-caption">Spanish → English</span><p class="card-word">{example.front}</p><span class="card-caption">What does this mean?</span></>}
         {example.id === 'cloze' && cloze && <><span class="card-caption">Complete the sentence</span><p class="card-sentence">{cloze[1]}<span class="cloze">[…]</span>{cloze[3]}</p></>}
         {example.id === 'media' && <><span class="card-caption">Ear training</span><p class="card-prompt">{example.front}</p><img class="waveform" src={sitePath(`/generated/${example.image}`)} width="320" height="104" alt="Illustrative waveform of a synthesized tone" /></>}
+        {example.id === 'occlusion' && <><span class="card-caption">Cell anatomy</span><p class="card-prompt">{example.front}</p><div class="occlusion-diagram"><img src={sitePath(`/generated/${example.image}`)} width={example.imageWidth} height={example.imageHeight} alt="Animal cell cross section with one structure hidden" /><span class="occlusion-cover" style={example.maskStyle} aria-hidden="true">?</span></div></>}
       </div>
       <div class="flashcard-face flashcard-back" data-side="back" aria-hidden="true">
         {example.id === 'basic' && <><span class="card-caption">{example.front}</span><p class="card-answer">{example.back}</p><span class="card-caption">A greeting in Spanish.</span></>}
         {example.id === 'cloze' && cloze && <><span class="card-caption">Complete the sentence</span><p class="card-sentence">{cloze[1]}<span class="cloze">{cloze[2]}</span>{cloze[3]}</p><span class="card-caption">{example.back}</span></>}
         {example.id === 'media' && <><span class="card-caption">A synthesized sine tone</span><p class="card-answer">{example.back}</p><span class="card-caption">One second of concert A.</span></>}
+        {example.id === 'occlusion' && <><span class="card-caption">Cell anatomy</span><p class="card-answer">{example.back}</p><div class="occlusion-diagram"><img src={sitePath(`/generated/${example.image}`)} width={example.imageWidth} height={example.imageHeight} alt="Animal cell cross section showing its coral-colored nucleus" /></div></>}
       </div>
     </div>
   </div>
