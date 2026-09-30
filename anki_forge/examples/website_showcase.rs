@@ -1,4 +1,5 @@
 //! Build the website previews from actual public-API packages.
+use ankiforge::note::Mask;
 use ankiforge::schema::GenerationRule;
 use ankiforge::update::CompareOptions;
 use ankiforge::{BuildOptions, BuildOutput, Field, Media, Note, NoteType, Project, Template};
@@ -6,10 +7,19 @@ use anyhow::ensure;
 use serde_json::{json, Value};
 use std::{f32::consts::TAU, fs, path::Path};
 
-fn verified(output: &BuildOutput, media: usize) -> anyhow::Result<Value> {
+fn verified_counts(
+    output: &BuildOutput,
+    notes: usize,
+    cards: usize,
+    media: usize,
+) -> anyhow::Result<Value> {
     let counts = output.report().counts();
-    ensure!(counts.notes == 1 && counts.cards == 1 && counts.media == media);
+    ensure!(counts.notes == notes && counts.cards == cards && counts.media == media);
     Ok(json!({"notes": counts.notes, "cards": counts.cards, "media": counts.media}))
+}
+
+fn verified(output: &BuildOutput, media: usize) -> anyhow::Result<Value> {
+    verified_counts(output, 1, 1, media)
 }
 
 fn basic(output: &Path) -> anyhow::Result<Value> {
@@ -39,11 +49,8 @@ fn cloze(output: &Path) -> anyhow::Result<Value> {
     )
 }
 
-fn media(output: &Path) -> anyhow::Result<Value> {
-    let mut project = Project::new("website-ear-training")?.default_deck("Ear Training");
-    fs::write(output.join("waveform.svg"), waveform())?;
-    fs::write(output.join("concert-a.wav"), concert_a())?;
-    let model = NoteType::builder("ear-training")
+fn ear_training_model() -> anyhow::Result<NoteType> {
+    Ok(NoteType::builder("ear-training")
         .name("Ear Training")
         .field(Field::new("prompt").name("Prompt"))
         .field(Field::new("answer").name("Answer").required())
@@ -61,7 +68,14 @@ fn media(output: &Path) -> anyhow::Result<Value> {
             "h2{font-size:24px;font-weight:500} img{width:100%;max-width:320px;}",
             "hr{border:0;border-top:1px solid #a3b9b1;margin:24px 0}"
         ))
-        .build()?;
+        .build()?)
+}
+
+fn media(output: &Path) -> anyhow::Result<Value> {
+    let mut project = Project::new("website-ear-training")?.default_deck("Ear Training");
+    fs::write(output.join("waveform.svg"), waveform())?;
+    fs::write(output.join("concert-a.wav"), concert_a())?;
+    let model = ear_training_model()?;
     // website:media:start
     let (prompt, answer) = ("Name this pitch.", "A4, 440 Hz");
     let picture = Media::file(output.join("waveform.svg"))?.with_export_name("waveform.svg")?;
@@ -82,6 +96,57 @@ fn media(output: &Path) -> anyhow::Result<Value> {
         "front":prompt, "back":answer, "image":"waveform.svg", "audio":"concert-a.wav",
         "file":"ear-training.apkg", "counts":verified(&built,2)?}),
     )
+}
+
+fn occlusion_note(output: &Path) -> anyhow::Result<Note> {
+    // website:occlusion:start
+    let image =
+        Media::file(output.join("cell-anatomy.png"))?.with_export_name("cell-anatomy.png")?;
+    Ok(Note::image_occlusion(image)
+        .mask(Mask::rect("nucleus", 296, 106, 240, 232))
+        .build()?
+        .field("header", "Cell anatomy")
+        .field("back_extra", "Nucleus"))
+    // website:occlusion:end
+}
+
+fn occlusion(output: &Path) -> anyhow::Result<Value> {
+    let image_path = output.join("cell-anatomy.png");
+    fs::write(&image_path, include_bytes!("assets/cell-anatomy.png"))?;
+    let (image_width, image_height) = image::image_dimensions(&image_path)?;
+    let mut project = Project::new("website-cell-anatomy")?.default_deck("Cell Anatomy");
+    project.add("cell:nucleus", occlusion_note(output)?)?;
+    let built = project.build(BuildOptions::to(output.join("cell-anatomy.apkg")))?;
+    Ok(
+        json!({"id":"occlusion", "label":"Image Occlusion", "deck":"Cell Anatomy",
+        "stableId":"cell:nucleus", "front":"Which structure is hidden?", "back":"Nucleus",
+        "image":"cell-anatomy.png", "imageWidth":image_width, "imageHeight":image_height,
+        "mask":{"x":296,"y":106,"width":240,"height":232},
+        "file":"cell-anatomy.apkg", "counts":verified(&built,1)?}),
+    )
+}
+
+fn combined(output: &Path) -> anyhow::Result<Value> {
+    let mut project = Project::new("website-all-cards")?.default_deck("Anki Forge Showcase");
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    project.add(
+        "sound:pitch",
+        Note::cloze("A sound's pitch depends on its {{c1::frequency}}."),
+    )?;
+    let picture = Media::file(output.join("waveform.svg"))?.with_export_name("waveform.svg")?;
+    let audio = Media::file(output.join("concert-a.wav"))?.with_export_name("concert-a.wav")?;
+    project.add(
+        "sound:a4",
+        ear_training_model()?
+            .note()
+            .field("prompt", "Name this pitch.")
+            .field("answer", "A4, 440 Hz")
+            .field("picture", picture.image())
+            .field("audio", audio.sound()),
+    )?;
+    project.add("cell:nucleus", occlusion_note(output)?)?;
+    let built = project.build(BuildOptions::to(output.join("showcase.apkg")))?;
+    Ok(json!({"file":"showcase.apkg", "counts":verified_counts(&built,4,4,3)?}))
 }
 
 fn spanish(back: &str) -> anyhow::Result<Project> {
@@ -115,14 +180,20 @@ fn main() -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("pass an output directory"))?;
     let output = Path::new(&directory);
     fs::create_dir_all(output)?;
-    let manifest = json!({"schemaVersion":1, "crateVersion":ankiforge::facade_api_version(),
-        "examples":[basic(output)?,cloze(output)?,media(output)?], "update":updates(output)?});
+    let examples = [
+        basic(output)?,
+        cloze(output)?,
+        media(output)?,
+        occlusion(output)?,
+    ];
+    let manifest = json!({"schemaVersion":2, "crateVersion":ankiforge::facade_api_version(),
+        "examples":examples, "combined":combined(output)?, "update":updates(output)?});
     fs::write(
         output.join("showcase.json"),
         serde_json::to_vec_pretty(&manifest)?,
     )?;
     println!(
-        "Built 3 card examples and 2 update packages in {}",
+        "Built 4 card examples, a combined deck, and 2 update packages in {}",
         output.display()
     );
     Ok(())

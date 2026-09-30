@@ -80,13 +80,16 @@ for (const name of ['sitemap-index.xml', 'sitemap-0.xml', 'rss.xml']) {
 }
 await stat(path.join(dist, 'pagefind/pagefind.js'));
 const manifest = JSON.parse(await readFile(path.join(dist, 'generated/showcase.json'), 'utf8'));
-assert.equal(manifest.examples.length, 3);
-for (const example of manifest.examples) {
+assert.equal(manifest.schemaVersion, 2);
+assert.deepEqual(manifest.examples.map(example => example.id), ['basic', 'cloze', 'media', 'occlusion']);
+for (const example of [...manifest.examples, manifest.combined]) {
   const bytes = await readFile(path.join(dist, 'generated', example.file));
   record(createHash('sha256').update(bytes).digest('hex') === example.sha256, `${example.file}: download hash does not match preview manifest`);
   record(bytes.length === example.bytes, `${example.file}: download size does not match preview manifest`);
-  record(example.counts.notes === 1 && example.counts.cards === 1, `${example.file}: unexpected verified counts`);
 }
+for (const example of manifest.examples) record(example.counts.notes === 1 && example.counts.cards === 1, `${example.file}: unexpected verified counts`);
+const combined = manifest.combined;
+record(combined.counts.notes === 4 && combined.counts.cards === 4 && combined.counts.media === 3, `${combined.file}: unexpected verified counts`);
 record(manifest.update.notesPreserved === 1, 'Update example did not preserve note identity');
 for (const file of [manifest.update.previous, manifest.update.next]) await stat(path.join(dist, 'generated', file));
 if (siteConfig.customDomain) assert.equal((await readFile(path.join(dist, 'CNAME'), 'utf8')).trim(), siteConfig.customDomain);

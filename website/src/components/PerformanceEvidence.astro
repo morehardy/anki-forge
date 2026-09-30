@@ -1,0 +1,57 @@
+---
+import comparison from '../../../benchmarks/results/20260921-readme-genanki/comparison.csv?raw';
+import Icon from './Icon.astro';
+import { repository } from '../lib/site';
+
+const [header, ...records] = comparison.trim().split(/\r?\n/).map(row => row.split(','));
+const column = (name: string) => header.indexOf(name);
+const workloads = [
+  { profile: 'basic-mixed-text-v1', label: 'Text only' },
+  { profile: 'basic-image-unique-v2', label: 'Unique images' },
+  { profile: 'basic-audio-unique-v2', label: 'Unique audio' },
+  { profile: 'basic-mixed-unique-v2', label: 'Mixed, unique media' },
+  { profile: 'basic-mixed-shared-v2', label: 'Mixed, shared media' },
+];
+const results = workloads.map(workload => {
+  const record = records.find(row => row[column('profile')] === workload.profile && row[column('notes')] === '1000');
+  if (!record) throw new Error(`Missing archived benchmark: ${workload.profile}`);
+  return {
+    ...workload,
+    rust: Number(record[column('rust_time_ms_median')]),
+    genanki: Number(record[column('genanki_time_ms_median')]),
+    saved: Number(record[column('time_saved_pct')]),
+  };
+});
+const maxTime = Math.max(...results.map(result => result.genanki));
+const textResult = results[0];
+const minimumSaved = Math.min(...results.map(result => result.saved));
+const maximumSaved = Math.max(...results.map(result => result.saved));
+const evidence = `${repository}/blob/main/benchmarks/results/20260921-readme-genanki`;
+---
+<section class="home-performance" aria-labelledby="performance-heading">
+  <div class="home-performance-summary">
+    <div class="home-performance-title">
+      <h2 id="performance-heading">The export, measured.</h2>
+      <p>Archived Rust Deck API versus genanki 0.13.1 · 1,000 Basic notes per workload</p>
+    </div>
+    <div class="home-performance-metric"><strong>{textResult.rust.toFixed(1)}<span> ms</span></strong><span>Text-only export</span></div>
+    <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>Less time across five workloads</span></div>
+  </div>
+  <p class="home-performance-context">Medians from 10 runs per workload on an Apple M1 Pro, September 2026. These archived results do not measure the current Project API or Node/Python bindings. <a href={`${evidence}/report.md`}>Method and limitations <Icon name="arrowUpRight" /></a></p>
+
+  <div class="home-benchmark" data-reveal>
+    <div class="home-benchmark-intro">
+      <h3>Five kinds of input.<br />One reproducible comparison.</h3>
+      <p>Export times include process startup through exit. Every row contains 1,000 Basic notes; media content changes by workload.</p>
+    </div>
+    <div class="home-benchmark-chart" aria-label="Median export times in milliseconds">
+      <div class="home-benchmark-key"><span><i class="home-key-rust"></i>Anki Forge Rust</span><span><i class="home-key-genanki"></i>genanki</span></div>
+      {results.map(result => <div class="home-benchmark-row" style={`--rust-width: ${(result.rust / maxTime * 100).toFixed(1)}%; --genanki-width: ${(result.genanki / maxTime * 100).toFixed(1)}%`}>
+        <div class="home-benchmark-label"><span>{result.label}</span><strong>{result.saved.toFixed(1)}% less time</strong></div>
+        <div class="home-benchmark-bars" aria-hidden="true"><span class="home-rust-bar"></span><span class="home-genanki-bar"></span></div>
+        <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
+      </div>)}
+    </div>
+    <div class="home-benchmark-footnote"><p>Default APKG formats differ. The Rust run used more peak memory in some media workloads. Results describe the recorded source snapshot, not a release guarantee.</p><a class="text-link" href={`${evidence}/comparison.csv`}>Explore raw timings <Icon name="arrowUpRight" /></a></div>
+  </div>
+</section>

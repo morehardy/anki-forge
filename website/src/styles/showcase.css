@@ -1,0 +1,109 @@
+/* Cards stay level and accumulate toward the upper right, matching the brand mark.
+   The shared timeline in scripts/showcase.ts then folds the stack into a box.
+   Local layers: box shadow 0, cards 1–4 (back to front), box 5.
+   Without animation, three stacked cards and a full preview remain visible. */
+.forge-studio {
+  --forge-card: #fdfefd;
+  --forge-edge: #d4dfda;
+  --forge-text: #193b32;
+  --forge-muted: #637c72;
+  --forge-highlight: #e4f3eb;
+  --forge-shadow: #153e2920;
+  --forge-wire: #b4cec0;
+  --forge-box: #315c4e;
+  --forge-box-edge: #24483c;
+  --forge-box-side: #264b3e;
+  --forge-box-lid: #608e78;
+  --forge-box-ink: #f3faf6;
+  --forge-box-muted: #c6dbce;
+  --forge-box-tape: #b4d0bc;
+  --card-x: 72cqw;
+  --card-y: 26cqw;
+  --stack-x: 21.5cqw;
+  --stack-y: 32cqw;
+  --bundle-x: calc(50cqw - var(--card-x));
+  --bundle-y: calc(28cqw - var(--card-y));
+  position: relative;
+  min-width: 0;
+  overflow: clip;
+  container-type: inline-size;
+  isolation: isolate;
+}
+:root[data-theme='dark'] .forge-studio {
+  --forge-card: #1c2c27;
+  --forge-edge: #3b5449;
+  --forge-text: #e4f1e9;
+  --forge-muted: #9bb5a7;
+  --forge-highlight: #294739;
+  --forge-shadow: #030e0b65;
+  --forge-wire: #405f4e;
+  --forge-box: #33594b;
+  --forge-box-edge: #6c947c;
+  --forge-box-side: #244538;
+  --forge-box-lid: #658d76;
+  --forge-box-tape: #accbb5;
+}
+.forge-stage { position: relative; width: 100%; aspect-ratio: 100 / 54; }
+.forge-composition { position: absolute; inset: 0; }
+.forge-card { --delivery-x: calc(var(--stack-x) + var(--stack-index) * 2.3cqw - var(--card-x)); --delivery-y: calc(var(--stack-y) - var(--stack-index) * 2.3cqw - var(--card-y)); position: absolute; z-index: var(--card-layer); left: var(--card-x); top: var(--card-y); width: 50cqw; height: 35cqw; transform: translate(-50%, -50%) translate(var(--delivery-x), var(--delivery-y)) scale(.62); perspective: 1000px; transform-style: preserve-3d; }
+.forge-card.is-first { transform: translate(-50%, -50%); }
+.forge-card-flipper { position: absolute; inset: 0; transform-style: preserve-3d; }
+.forge-card-face { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 3.2cqw 3.8cqw; border: 1px solid var(--forge-edge); border-radius: 2.1cqw; background: var(--forge-card); color: var(--forge-text); box-shadow: 0 1px 1px var(--forge-shadow), 0 1.6cqw 3.2cqw -.8cqw var(--forge-shadow); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.forge-card-back { transform: rotateY(180deg); border-color: var(--forge-wire); }
+.forge-card-label { display: flex; align-items: center; justify-content: space-between; gap: 1cqw; color: var(--forge-muted); font-size: clamp(9px, 2.1cqw, 12px); line-height: 1; }
+.forge-card-label > span:last-child { color: var(--forge-muted); font-size: .88em; }
+.forge-card-type { display: inline-flex; align-items: center; gap: 1.2cqw; font-weight: 550; }
+.forge-card-type .icon { width: 3.3cqw; height: 3.3cqw; color: var(--af-accent); }
+.forge-card-body { display: flex; flex: 1; min-height: 0; align-items: center; justify-content: center; flex-direction: column; gap: 1.4cqw; padding-top: 1.7cqw; text-align: center; }
+.forge-card-word { font-size: 9cqw; font-weight: 550; line-height: 1.1; letter-spacing: -.055em; }
+.forge-card-back .forge-card-word, .forge-card-answer { color: var(--af-accent); }
+.forge-card-caption { color: var(--forge-muted); font-size: clamp(9px, 2cqw, 12px); line-height: 1.45; }
+.forge-card-sentence { font-size: 3.8cqw; font-weight: 520; line-height: 1.45; letter-spacing: -.035em; }
+.forge-card-sentence mark { display: inline-block; min-width: 3ch; padding: 0 .65cqw; border-radius: .7cqw; background: var(--forge-highlight); color: var(--af-accent); }
+.forge-card-cloze .forge-card-caption { max-width: 30ch; }
+.forge-card-prompt { font-size: 4cqw; font-weight: 550; line-height: 1.3; letter-spacing: -.035em; }
+.forge-card-answer { font-size: 5.4cqw; }
+.forge-audio-line { display: flex; align-items: center; gap: 2cqw; }
+.forge-audio-line > .icon { width: 3.8cqw; height: 3.8cqw; color: var(--af-accent); }
+.forge-wave { display: block; width: 32cqw; height: 8.5cqw; object-fit: contain; }
+.forge-card-occlusion .forge-card-face { padding-block: 2.6cqw; }
+.forge-card-occlusion .forge-card-prompt { display: grid; place-items: center; min-height: 3.6cqw; font-size: 2.5cqw; line-height: 1.2; }
+.forge-card-occlusion .forge-card-answer { font-size: 3cqw; }
+.forge-card-occlusion .forge-card-body { gap: .5cqw; padding-top: 1cqw; }
+.forge-cell { position: relative; flex: none; width: 36.5cqw; }
+.forge-cell img { display: block; width: 100%; height: auto; }
+.forge-cell-mask { position: absolute; display: grid; place-items: center; border: 1px solid #c8e6d9; border-radius: .8cqw; background: #214c3f; color: #effaf4; font-size: 4.3cqw; font-weight: 500; box-shadow: 0 .5cqw 1.1cqw #153d3140; }
+.forge-stack-label { position: absolute; left: 22.5cqw; top: 46cqw; display: flex; align-items: center; gap: 1.1cqw; transform: translateX(-50%); color: var(--forge-muted); font-size: clamp(9px, 1.9cqw, 11px); white-space: nowrap; }
+.forge-stack-label .icon { width: 2.8cqw; height: 2.8cqw; color: var(--af-accent); }
+.forge-box { position: absolute; z-index: 5; left: 32cqw; top: 23cqw; width: 33cqw; height: 23cqw; opacity: 0; }
+.forge-box-front, .forge-box-side, .forge-box-lid { position: absolute; border: 1px solid var(--forge-box-edge); backface-visibility: hidden; }
+.forge-box-front { inset: 0; border-radius: .6cqw; background: var(--forge-box); color: var(--forge-box-ink); transform-origin: center bottom; box-shadow: inset 0 1px 0 #ffffff12; }
+.forge-box-side { top: 0; left: 100%; width: 6.5cqw; height: 100%; border-left: 0; border-radius: 0 .5cqw .5cqw 0; background: var(--forge-box-side); transform: skewY(-45deg); transform-origin: left top; }
+.forge-box-lid { left: 6.5cqw; top: -6.5cqw; width: 100%; height: 6.5cqw; border-radius: .5cqw .5cqw 0 0; background: var(--forge-box-lid); transform: skewX(-45deg); transform-origin: left top; }
+.forge-box-label { padding: 3.8cqw 3.1cqw 2cqw; }
+.forge-box-heading { display: flex; align-items: center; justify-content: space-between; color: var(--forge-box-muted); font-size: clamp(8px, 2.1cqw, 12px); line-height: 1.2; }
+.forge-box-heading .icon { width: 3.1cqw; height: 3.1cqw; }
+.forge-box-label > strong { display: block; margin-top: .4cqw; font-size: 6.8cqw; font-weight: 550; line-height: 1.1; letter-spacing: -.055em; }
+.forge-box-counts { display: flex; align-items: center; gap: 1cqw; margin-top: 2cqw; color: var(--forge-box-muted); font-size: clamp(8px, 1.7cqw, 10px); line-height: 1.2; white-space: nowrap; }
+.forge-box-counts > span { opacity: .5; }
+.forge-box-seal { position: absolute; left: 44%; width: 12%; background: var(--forge-box-tape); transform-origin: center top; }
+.forge-box-seal-front { top: -1px; height: 3cqw; border-radius: 0 0 .25cqw .25cqw; }
+.forge-box-seal-top { inset-block: -1px; }
+.forge-box-shadow { position: absolute; z-index: 0; left: 30cqw; top: 44cqw; width: 44cqw; height: 5cqw; border-radius: 50%; background: var(--forge-shadow); filter: blur(1.2cqw); opacity: 0; }
+.forge-caption { display: flex; align-items: center; justify-content: center; gap: 2.5cqw; min-height: 44px; margin-top: 8px; color: var(--af-muted); text-decoration: none; font-size: 12px; }
+.forge-caption strong { color: var(--af-ink); font-weight: 550; }
+.forge-caption-action { display: inline-flex; align-items: center; gap: 6px; color: var(--af-accent); font-size: 11px; }
+.forge-caption:hover .forge-caption-action { text-decoration: underline; text-underline-offset: 4px; }
+
+@media (max-width: 767px) {
+  .forge-studio { width: min(100%, 520px); margin-inline: auto; }
+  .forge-caption { font-size: 11px; gap: 12px; }
+  .forge-caption-action { font-size: 10px; }
+}
+@media (max-width: 374px) {
+  .forge-caption { flex-wrap: wrap; gap: 0 12px; line-height: 1.5; }
+  .forge-card-label { font-size: 8px; }
+  .forge-card-cloze .forge-card-body { gap: .8cqw; padding-top: 1.2cqw; }
+  .forge-card-cloze .forge-card-sentence { font-size: 3.6cqw; line-height: 1.4; }
+  .forge-card-cloze .forge-card-caption { font-size: 8px; line-height: 1.35; }
+}

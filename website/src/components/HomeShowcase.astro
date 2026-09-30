@@ -1,0 +1,54 @@
+---
+import { examples, showcase } from '../lib/examples';
+import { sitePath } from '../lib/site';
+import Icon from './Icon.astro';
+import '../styles/showcase.css';
+
+const typeIcons: Record<string, 'textAa' | 'bracketsCurly' | 'waveform' | 'scan'> = { basic: 'textAa', cloze: 'bracketsCurly', media: 'waveform', occlusion: 'scan' };
+---
+<div class="forge-studio" data-forge-studio>
+  <div class="forge-stage" role="img" aria-label="Basic, Cloze, Media, and Image Occlusion cards appear on the right, flip, and stack toward the upper right of the deck on the left. The four cards come together and fold into one .apkg box, then the sequence repeats.">
+    <div class="forge-composition" aria-hidden="true">
+      {examples.map((example, index) => (
+        <div class:list={['forge-card', `forge-card-${example.id}`, { 'is-first': index === 0 }]} style={`--stack-index:${index};--card-layer:${examples.length - index}`}>
+          <div class="forge-card-flipper">
+            {[false, true].map(answer => (
+              <div class:list={['forge-card-face', { 'forge-card-back': answer }]}>
+                <div class="forge-card-label">
+                  <span class="forge-card-type"><Icon name={typeIcons[example.id]} />{example.label}</span>
+                  <span>{answer ? 'Back' : 'Front'}</span>
+                </div>
+                <div class="forge-card-body">
+                  {example.id === 'basic' && <><strong class="forge-card-word">{answer ? example.back : example.front}</strong><span class="forge-card-caption">{answer ? 'English' : 'Spanish'}</span></>}
+                  {example.clozeParts && <><p class="forge-card-sentence">{example.clozeParts[1]}<mark>{answer ? example.clozeParts[2] : '[...]'}</mark>{example.clozeParts[3]}</p><span class="forge-card-caption">{answer ? example.back : 'Fill the gap.'}</span></>}
+                  {example.id === 'media' && <><p class:list={['forge-card-prompt', { 'forge-card-answer': answer }]}>{answer ? example.back : example.front}</p><div class="forge-audio-line"><Icon name="speakerHigh" /><img class="forge-wave" src={sitePath(`/generated/${example.image}`)} width="320" height="104" alt="" /></div><span class="forge-card-caption">Image + audio</span></>}
+                  {example.id === 'occlusion' && <><div class="forge-cell"><img src={sitePath(`/generated/${example.image}`)} width={example.imageWidth} height={example.imageHeight} alt="" />{!answer && <span class="forge-cell-mask" style={example.maskStyle}>?</span>}</div><p class:list={['forge-card-prompt', { 'forge-card-answer': answer }]}>{answer ? example.back : example.front}</p></>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div class="forge-stack-label"><Icon name="cards" /><span>Anki deck</span></div>
+      <div class="forge-box-shadow"></div>
+      <div class="forge-box">
+        <div class="forge-box-side"></div>
+        <div class="forge-box-front">
+          <div class="forge-box-label">
+            <div class="forge-box-heading"><span>showcase</span><Icon name="check" /></div>
+            <strong>.apkg</strong>
+            <span class="forge-box-counts">{showcase.combined.counts.cards} cards <span>/</span> {showcase.combined.counts.media} media</span>
+          </div>
+          <span class="forge-box-seal forge-box-seal-front"></span>
+        </div>
+        <div class="forge-box-lid"><span class="forge-box-seal forge-box-seal-top"></span></div>
+      </div>
+    </div>
+  </div>
+  <a class="forge-caption" href={sitePath(`/generated/${showcase.combined.file}`)} download><span>Four card types. <strong>One Anki deck.</strong></span><span class="forge-caption-action">Download <Icon name="arrowRight" /></span></a>
+</div>
+<script>
+  import { animateShowcase } from '../scripts/showcase';
+  const studio = document.querySelector<HTMLElement>('[data-forge-studio]');
+  if (studio) animateShowcase(studio);
+</script>

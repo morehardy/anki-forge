@@ -9,7 +9,7 @@ const { id = 'examples' } = Astro.props;
 <section class="example-workbench" id={id} data-workbench aria-label="Code and card examples">
   <div class="workbench-bar">
     <div class="example-tabs" role="tablist" aria-label="Card type">
-      {examples.map((example, index) => <button type="button" role="tab" id={`${id}-tab-${example.id}`} aria-controls={`${id}-panel-${example.id}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-tab={example.id}>{example.label}</button>)}
+      {examples.map((example, index) => <button type="button" role="tab" id={`${id}-tab-${example.id}`} aria-controls={`${id}-panel-${example.id}`} aria-label={example.label} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-tab={example.id}>{example.id === 'occlusion' ? 'Occlusion' : example.label}</button>)}
     </div>
     <span class="workbench-hint">Rust source → card preview</span>
   </div>

@@ -6,7 +6,13 @@ import copy from '@phosphor-icons/core/assets/regular/copy.svg?raw';
 import scan from '@phosphor-icons/core/assets/regular/scan.svg?raw';
 import palette from '@phosphor-icons/core/assets/regular/palette.svg?raw';
 import arrowsClockwise from '@phosphor-icons/core/assets/regular/arrows-clockwise.svg?raw';
-const icons = { arrowRight, arrowUpRight, cards, copy, scan, palette, arrowsClockwise };
+import textAa from '@phosphor-icons/core/assets/regular/text-aa.svg?raw';
+import bracketsCurly from '@phosphor-icons/core/assets/regular/brackets-curly.svg?raw';
+import waveform from '@phosphor-icons/core/assets/regular/waveform.svg?raw';
+import speakerHigh from '@phosphor-icons/core/assets/regular/speaker-high.svg?raw';
+import check from '@phosphor-icons/core/assets/regular/check.svg?raw';
+import githubLogo from '../assets/github-logo.svg?raw';
+const icons = { arrowRight, arrowUpRight, cards, copy, scan, palette, arrowsClockwise, textAa, bracketsCurly, waveform, speakerHigh, check, githubLogo };
 interface Props { name: keyof typeof icons; class?: string }
 const { name, class: className = '' } = Astro.props;
 ---

@@ -28,7 +28,7 @@ for (const example of [...data.examples, { id: 'updates' }]) {
   const code = source.split(start)[1].split(end)[0].replace(/^\n/, '').trimEnd().split('\n').map(line => line.replace(/^ {4}/, '')).join('\n');
   await writeFile(path.join(generated, `${example.id}.rs`), code);
 }
-for (const example of data.examples) {
+for (const example of [...data.examples, data.combined]) {
   const bytes = await readFile(path.join(output, example.file));
   example.bytes = bytes.length;
   example.sha256 = createHash('sha256').update(bytes).digest('hex');
