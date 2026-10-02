@@ -13,7 +13,9 @@ const npmCli =
   process.env.npm_execpath ??
   path.resolve(
     path.dirname(process.execPath),
-    "../lib/node_modules/npm/bin/npm-cli.js",
+    process.platform === "win32"
+      ? "node_modules/npm/bin/npm-cli.js"
+      : "../lib/node_modules/npm/bin/npm-cli.js",
   );
 const temporary = await fs.mkdtemp(
   path.join(os.tmpdir(), "anki-forge-installed-"),

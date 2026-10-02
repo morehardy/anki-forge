@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: node-sdk-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
 jobs:
   metadata:
     name: npm metadata and release guards
@@ -161,7 +165,8 @@ jobs:
         run: npm run check:release
         working-directory: bindings/node
       - name: Install from registry containing all four platform tarballs
-        run: npm run test:installed -- --candidate ../../release-candidate
+        # Invoke Node directly: old npm on PowerShell can swallow forwarded flags.
+        run: node scripts/installed-smoke.mjs --candidate ../../release-candidate
         working-directory: bindings/node
       - uses: actions/download-artifact@v4
         with:

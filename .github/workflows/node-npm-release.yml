@@ -100,7 +100,7 @@ jobs:
       - run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
         working-directory: bindings/node/toolchain
       - name: Install the exact release from npm and exercise it without Rust
-        run: npm run test:installed -- --candidate ../../release-candidate --public
+        run: node scripts/installed-smoke.mjs --candidate ../../release-candidate --public
         working-directory: bindings/node
 
   promote:

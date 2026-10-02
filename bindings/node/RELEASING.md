@@ -57,7 +57,7 @@ python3 bindings/node/scripts/npm_release.py metadata
 python3 -m unittest discover -s bindings/node/scripts -p 'test_*.py' -v
 cd bindings/node
 npm run setup
-npm run build -- --release
+node scripts/build.mjs --release
 npm run check
 npm test
 npm run test:installed
@@ -83,7 +83,7 @@ Retention is 90 days for release rehearsals/tags, 14 days for ordinary CI.
 ```sh
 python3 bindings/node/scripts/npm_release.py verify --directory /path/to/candidate
 cd bindings/node
-npm run test:installed -- --candidate /path/to/candidate
+node scripts/installed-smoke.mjs --candidate /path/to/candidate
 ```
 
 The local test registry serves the frozen tarballs without repacking. Publishing
