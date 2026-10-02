@@ -1,5 +1,11 @@
 # anki-forge
 
+[![CI](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml)
+[![Rust CI](https://github.com/morehardy/anki-forge/actions/workflows/rust-crate-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/rust-crate-ci.yml)
+[![Node CI](https://github.com/morehardy/anki-forge/actions/workflows/node-sdk-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/node-sdk-ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Website](https://github.com/morehardy/anki-forge/actions/workflows/website.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/website.yml)
+
 English · [简体中文](README.zh-CN.md)
 
 [Website](https://ankiforge.dev/) · [Documentation](https://ankiforge.dev/docs/) ·
