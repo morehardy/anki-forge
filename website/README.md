@@ -51,7 +51,13 @@ Documentation code blocks marked with `<!-- source: ... -->` are compared to the
 
 Source SDK versions on the language page are generated from package metadata. Version statements in the compatibility table and root READMEs are checked against those values; release status remains a separately maintained claim.
 
-Icons come from Phosphor. Its MIT license is included in the generated assets.
+The brand mark is maintained in `../docs/assets/brand/ankiforge.svg`. The header,
+documentation title, favicon, social image, and both root READMEs use this design.
+The build creates its dark variant in `../docs/assets/brand/ankiforge-dark.svg` and
+regenerates the favicon and social image. The front card has an opaque fill to
+cover the overlapping rear outline in both themes.
+
+Interface icons come from Phosphor. Its MIT license is included in the generated assets.
 
 ## GitHub Pages
 

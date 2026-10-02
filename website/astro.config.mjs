@@ -11,6 +11,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Anki Forge',
+      logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },
       description: 'Generate and validate Anki decks with Rust. Keep note identities stable as your content evolves.',
       favicon: '/favicon.svg',
       disable404Route: true,

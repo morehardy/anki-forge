@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import BrandMark from './BrandMark.astro';
 import { repository, sitePath } from '../lib/site';
 const links = [
   { label: 'Guide', path: '/docs/' },
@@ -8,7 +9,7 @@ const links = [
 ];
 ---
 <header class="site-header container">
-  <a class="wordmark" href={sitePath('/')} aria-label="ankiforge home"><Icon name="cards" />ankiforge</a>
+  <a class="wordmark" href={sitePath('/')} aria-label="ankiforge home"><BrandMark />ankiforge</a>
   <nav class="desktop-nav" aria-label="Main navigation">
     {links.map(link => <a href={sitePath(link.path)} aria-current={Astro.url.pathname.startsWith(sitePath(link.path)) ? 'page' : undefined}>{link.label}</a>)}
     <a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a>

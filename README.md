@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/ankiforge-dark.svg">
+  <img src="docs/assets/brand/ankiforge.svg" alt="Anki Forge logo: stacked cards with a folded corner and card loop" width="96" height="96">
+</picture>
+
 # anki-forge
 
 [![CI](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml)
