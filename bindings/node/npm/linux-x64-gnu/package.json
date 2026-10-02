@@ -1,8 +1,13 @@
 {
-  "name": "anki-forge-node-linux-x64-gnu",
+  "name": "ankiforge-linux-x64-gnu",
   "version": "0.2.0",
-  "description": "Native runtime for anki-forge-node (x86_64-unknown-linux-gnu)",
+  "description": "Native runtime for ankiforge (x86_64-unknown-linux-gnu)",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "next"
+  },
   "homepage": "https://ankiforge.dev/",
   "bugs": {
     "url": "https://github.com/morehardy/anki-forge/issues"

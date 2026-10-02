@@ -5,12 +5,33 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      retention-days:
+        type: number
+        default: 14
 
 permissions:
   contents: read
 
+concurrency:
+  group: node-sdk-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
 jobs:
+  metadata:
+    name: npm metadata and release guards
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python bindings/node/scripts/npm_release.py metadata
+      - run: python -m unittest discover -s bindings/node/scripts -p 'test_*.py' -v
+
   native-build:
+    needs: metadata
     name: Native runtime (${{ matrix.os }})
     strategy:
       fail-fast: false
@@ -39,6 +60,8 @@ jobs:
       - name: Check this platform's release files
         run: node scripts/check-package.mjs
         working-directory: bindings/node
+      - name: Check generated metadata is committed
+        run: git diff --exit-code -- bindings/node/npm bindings/node/LICENSE
       - name: macOS dynamic dependencies
         if: runner.os == 'macOS'
         shell: bash
@@ -50,8 +73,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: node-runtime-${{ matrix.os }}
-          path: bindings/node/npm
+          path: bindings/node/npm/*/*.node
           if-no-files-found: error
+          retention-days: ${{ inputs.retention-days || 14 }}
       - uses: actions/upload-artifact@v4
         with:
           name: node-observer-${{ matrix.os }}
@@ -59,9 +83,54 @@ jobs:
             target/debug/examples/sdk_parity
             target/debug/examples/sdk_parity.exe
           if-no-files-found: error
+          retention-days: ${{ inputs.retention-days || 14 }}
+
+  candidate:
+    needs: native-build
+    name: Freeze five npm tarballs
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+      - name: Verify notices against the locked dependency graph
+        run: |
+          cargo fetch --locked
+          python bindings/python/scripts/generate_notices.py --binding node --check
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: node-runtime-*
+          merge-multiple: true
+          path: bindings/node/npm
+      - run: npm ci --ignore-scripts
+        working-directory: bindings/node/toolchain
+      - run: npm run build:js
+        working-directory: bindings/node
+      - run: npm run pack:release
+        working-directory: bindings/node
+      - name: Freeze exact bytes and build identity
+        shell: bash
+        run: |
+          version=$(node -p "require('./bindings/node/package.json').version")
+          mkdir release-candidate
+          cp bindings/node/artifacts/"$version"/all/*.tgz release-candidate/
+          python bindings/node/scripts/npm_release.py candidate --directory release-candidate >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate/
+          retention-days: ${{ inputs.retention-days || 14 }}
+          if-no-files-found: error
 
   installed-consumer:
-    needs: native-build
+    needs: candidate
     name: npm consumer (${{ matrix.os }}, Node ${{ matrix.node }})
     strategy:
       fail-fast: false
@@ -74,6 +143,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate
+      - name: Check candidate checksums and archive payloads
+        run: python bindings/node/scripts/npm_release.py verify --directory release-candidate
       - uses: actions/download-artifact@v4
         with:
           pattern: node-runtime-*
@@ -87,7 +165,8 @@ jobs:
         run: npm run check:release
         working-directory: bindings/node
       - name: Install from registry containing all four platform tarballs
-        run: npm run test:installed -- --all
+        # Invoke Node directly: old npm on PowerShell can swallow forwarded flags.
+        run: node scripts/installed-smoke.mjs --candidate ../../release-candidate
         working-directory: bindings/node
       - uses: actions/download-artifact@v4
         with:
@@ -101,3 +180,15 @@ jobs:
           ANKI_FORGE_TEST_OBSERVER: ${{ github.workspace }}/target/node-test-observer/sdk_parity${{ runner.os == 'Windows' && '.exe' || '' }}
         run: npm test
         working-directory: bindings/node
+
+  ready:
+    name: npm candidate ready
+    if: always()
+    needs: [metadata, native-build, candidate, installed-consumer]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Require every release gate
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 -c 'import json, os; results = json.loads(os.environ["RESULTS"]); assert all(job["result"] == "success" for job in results.values()), results'

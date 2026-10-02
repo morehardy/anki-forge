@@ -1,8 +1,13 @@
 {
-  "name": "anki-forge-node",
+  "name": "ankiforge",
   "version": "0.2.0",
   "description": "Typed Node.js SDK for stable Anki publications, powered by Rust",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "next"
+  },
   "homepage": "https://ankiforge.dev/",
   "bugs": {
     "url": "https://github.com/morehardy/anki-forge/issues"
@@ -41,10 +46,10 @@
     "COVERAGE.md"
   ],
   "optionalDependencies": {
-    "anki-forge-node-darwin-arm64": "0.2.0",
-    "anki-forge-node-darwin-x64": "0.2.0",
-    "anki-forge-node-linux-x64-gnu": "0.2.0",
-    "anki-forge-node-win32-x64-msvc": "0.2.0"
+    "ankiforge-darwin-arm64": "0.2.0",
+    "ankiforge-darwin-x64": "0.2.0",
+    "ankiforge-linux-x64-gnu": "0.2.0",
+    "ankiforge-win32-x64-msvc": "0.2.0"
   },
   "scripts": {
     "build": "node scripts/build.mjs",

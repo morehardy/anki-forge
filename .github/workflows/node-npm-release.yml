@@ -1,0 +1,135 @@
+name: node-npm-release
+
+on:
+  push:
+    tags: ["npm-v*"]
+  # A manual run builds and tests a candidate; it cannot publish or move tags.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: node-npm-release
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check version and protected release tag
+        shell: bash
+        env:
+          RELEASE_EVENT: ${{ github.event_name }}
+          REF_PROTECTED: ${{ github.ref_protected }}
+        run: |
+          if [[ "$RELEASE_EVENT" == push ]]; then
+            [[ "$REF_PROTECTED" == true ]] || {
+              echo "Configure an active npm-v* tag ruleset before publishing" >&2
+              exit 1
+            }
+            git merge-base --is-ancestor HEAD origin/main
+            python bindings/node/scripts/npm_release.py metadata --tag "$GITHUB_REF_NAME"
+          else
+            python bindings/node/scripts/npm_release.py metadata
+          fi
+
+  candidate:
+    needs: preflight
+    uses: ./.github/workflows/node-sdk-ci.yml
+    with:
+      retention-days: 90
+
+  publish:
+    if: github.event_name == 'push' && github.ref_type == 'tag' && github.repository == 'morehardy/anki-forge'
+    needs: candidate
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/ankiforge
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # Pin a CLI supporting OIDC publish AND dist-tag. No NODE_AUTH_TOKEN.
+      - run: npm install --global npm@11.21.0 --ignore-scripts --registry=https://registry.npmjs.org
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate
+      - name: Publish native packages first, then main, using the frozen tarballs
+        run: python bindings/node/scripts/npm_release.py publish --directory release-candidate
+
+  public-consumer:
+    needs: publish
+    name: Public npm (${{ matrix.os }}, Node ${{ matrix.node }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-15-intel, macos-14]
+        node: ["22.13.0", 22, 24, 26]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate
+      - name: Verify public metadata and tarball bytes against the candidate
+        run: python bindings/node/scripts/npm_release.py verify-published --directory release-candidate
+      - run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
+        working-directory: bindings/node/toolchain
+      - name: Install the exact release from npm and exercise it without Rust
+        run: node scripts/installed-smoke.mjs --candidate ../../release-candidate --public
+        working-directory: bindings/node
+
+  promote:
+    needs: public-consumer
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/ankiforge
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: npm install --global npm@11.21.0 --ignore-scripts --registry=https://registry.npmjs.org
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate
+      - name: Promote verified native packages, then main, to latest
+        run: python bindings/node/scripts/npm_release.py promote --directory release-candidate
+      - name: Record the verified release
+        shell: bash
+        run: |
+          python bindings/node/scripts/npm_release.py verify-published --directory release-candidate >> "$GITHUB_STEP_SUMMARY"
+          echo 'All 16 public consumer jobs passed before latest promotion.' >> "$GITHUB_STEP_SUMMARY"

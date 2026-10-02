@@ -30,6 +30,7 @@ export async function preparePlatforms() {
           version: main.version,
           description: `Native runtime for ${main.name} (${item.target})`,
           license: main.license,
+          publishConfig: main.publishConfig,
           homepage: main.homepage,
           bugs: main.bugs,
           repository: main.repository,

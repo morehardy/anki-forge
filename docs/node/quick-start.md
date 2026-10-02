@@ -69,11 +69,11 @@ to `npm install --offline --ignore-scripts --omit=optional`. Installing the
 host-native tarball explicitly avoids fetching a candidate platform version from
 a registry.
 
-Application code imports from `anki-forge-node`; the repository example above
+Application code imports from `ankiforge`; the repository example above
 uses its sibling built `dist` directory. A minimal installed application is:
 
 ```js
-import { Project, Note, BuildOptions } from 'anki-forge-node';
+import { Project, Note, BuildOptions } from 'ankiforge';
 const project = new Project('spanish').defaultDeck('Spanish');
 project.add('hola', Note.basic('hola', 'hello'));
 const output = await project.build(BuildOptions.to('spanish.apkg'));
@@ -82,7 +82,7 @@ await output.artifact.close();
 ```
 
 Use `.mjs` or configure `type: module`. CommonJS can
-`require('anki-forge-node')`; both formats share the same implementation and
+`require('ankiforge')`; both formats share the same implementation and
 class identities. TypeScript declarations ship with the package.
 
 ## Values and asynchronous operations

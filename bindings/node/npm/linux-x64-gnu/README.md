@@ -1,5 +1,5 @@
-# anki-forge-node-linux-x64-gnu
+# ankiforge-linux-x64-gnu
 
-Platform runtime installed automatically by `anki-forge-node`.
+Platform runtime installed automatically by `ankiforge`.
 
 [Website](https://ankiforge.dev/) · [Node / TypeScript documentation](https://ankiforge.dev/docs/node-quickstart/) · [Issues](https://github.com/morehardy/anki-forge/issues)
