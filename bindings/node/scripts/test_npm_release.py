@@ -159,6 +159,12 @@ class ReleaseTests(unittest.TestCase):
         with patch.object(release, "fetch", return_value=b'{"latest":"999.0.0"}'), self.assertRaisesRegex(ValueError, "downgrade"):
             release.latest_versions(record["packages"])
 
+    def test_staged_bootstrap_latest_can_be_promoted(self):
+        item = {"name": "ankiforge", "version": self.version}
+        for latest in ("0.0.0-stage", self.version + "-rc.1", self.version + "+build.1"):
+            with self.subTest(latest=latest), patch.object(release, "fetch", return_value=json.dumps({"latest": latest}).encode()):
+                self.assertEqual(release.latest_versions([item]), {"ankiforge": latest})
+
     def test_registry_timeout_and_external_tarball_url(self):
         with patch.object(release, "registry_matches", return_value=False), self.assertRaises(TimeoutError):
             release.wait_for_registry([{"name": "missing"}], 0)

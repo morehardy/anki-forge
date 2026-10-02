@@ -246,7 +246,10 @@ def latest_versions(packages: list[dict]) -> dict[str, str | None]:
         require(raw is not None, f"Package is missing: {item['name']}")
         latest = json.loads(raw).get("latest")
         # Refuse to roll a newer stable release back after retrying an old run.
-        require(latest is None or stable_version(latest) <= stable_version(item["version"]),
+        # A staged bootstrap may have latest=0.0.0-stage. For a stable candidate,
+        # an equal-core prerelease is always older; build metadata does not order.
+        latest_core = latest.split("-", 1)[0].split("+", 1)[0] if latest else None
+        require(latest is None or stable_version(latest_core) <= stable_version(item["version"]),
                 f"Refusing to downgrade latest for {item['name']}: {latest}")
         result[item["name"]] = latest
     return result
