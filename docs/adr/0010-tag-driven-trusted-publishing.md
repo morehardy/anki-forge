@@ -1,6 +1,6 @@
 # ADR 0010: Use Tag-Driven Trusted Publishing
 
-Production publication needs one auditable authority without developer-machine state or long-lived registry secrets. A protected `anki-forge-vX.Y.Z` tag whose version matches `Cargo.toml` is the only formal release trigger; CI publishes to crates.io through Trusted Publishing, and local `cargo publish` is not part of the release process.
+Rust production publication needs one auditable authority without developer-machine state or long-lived registry secrets. A protected `anki-forge-vX.Y.Z` tag whose version matches `Cargo.toml` is the only formal Rust release trigger; CI publishes to crates.io through Trusted Publishing, and local `cargo publish` is not part of the release process. Python uses the independent tags described in [ADR 0025](0025-python-tag-driven-trusted-publishing.md).
 
 ## Consequences
 

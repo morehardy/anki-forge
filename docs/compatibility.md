@@ -10,7 +10,7 @@ are separate facts; this page does not announce a release.
 | --- | --- | --- | --- |
 | Rust | 0.2.0 | Rust 1.92+ | [Release audit](rust-crate-release-readiness.md) and current packaged-consumer gates |
 | Node / TypeScript | 0.2.0 | Node 22.13+; macOS arm64/x64, Linux x64 GNU, Windows x64 | [Node coverage](../bindings/node/COVERAGE.md) |
-| Python | 0.2.0 | Ordinary CPython 3.11/3.12; macOS arm64/x64, Linux x64, Windows x64 | [Python coverage](../bindings/python/COVERAGE.md) |
+| Python | 0.2.0 | Ordinary CPython 3.11–3.14; macOS arm64/x64, Linux x64, Windows x64 | [Python coverage](../bindings/python/COVERAGE.md) and [release gates](python-release-runbook.md) |
 
 Do not extend a local verification result to every platform in the intended
 matrix. Other Python versions, free-threaded interpreters and subinterpreters

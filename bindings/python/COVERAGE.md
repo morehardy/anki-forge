@@ -5,3 +5,10 @@
 Coverage includes stable namespaces and note keys, immutable custom models, field-key template compilation, Text versus explicit HTML, Cloze, owned media snapshots, large bytes and budgets, portable filenames and atomic conflicts, structured image occlusion and both modes, complete comparison and update policy, identity preservation, operation snapshots, temporary artifact lifetime, persistence failure facts, and removed API boundaries. Bundle tests cover manifest, template-text and asset budget details, including a raised asset budget. IO tests require NaN, infinities and out-of-bounds coordinates to fail with the Rust domain error at builder completion. `tests/test_fork_ownership.py` uses isolated subprocesses with deadlines and real PNG snapshots larger than 1 MiB to test each owning value across fork, parent continuity, child-created values and cleanup. Typing probes cover current positive usage and rejected old/mistyped operations. Installed wheel and source-distribution scripts exercise package isolation and actual native loading.
 
 These checks do not establish real Anki import/update behavior; the repository's Anki oracle and platform matrix remain separate gates.
+
+The native wheel workflow exercises each cp311-abi3 wheel on ordinary CPython
+3.11, 3.12, 3.13 and 3.14 across the four declared platforms. The PyPI release
+workflow also verifies the five candidate distributions, preserves hashes,
+and repeats installed-consumer checks with wheels selected from public PyPI.
+Workflow configuration is not a claim that any version has been published or
+that a specific run has passed. See the [Python release runbook](../../docs/python-release-runbook.md).

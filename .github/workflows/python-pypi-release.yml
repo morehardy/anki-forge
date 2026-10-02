@@ -1,0 +1,172 @@
+name: python-pypi-release
+
+on:
+  push:
+    tags: ["python-v*"]
+  # Manual runs rehearse the entire candidate pipeline without uploading.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-pypi-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate release metadata and tag authority
+        id: metadata
+        shell: bash
+        env:
+          RELEASE_EVENT: ${{ github.event_name }}
+          REF_PROTECTED: ${{ github.ref_protected }}
+        run: |
+          if [[ "$RELEASE_EVENT" == push ]]; then
+            [[ "$REF_PROTECTED" == true ]] || {
+              echo "Configure an active tag ruleset for python-v* before publication" >&2
+              exit 1
+            }
+            git merge-base --is-ancestor HEAD origin/main
+            python bindings/python/scripts/python_release.py metadata --tag "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          else
+            python bindings/python/scripts/python_release.py metadata >> "$GITHUB_OUTPUT"
+          fi
+      - name: Reject an existing PyPI version before building
+        if: github.event_name == 'push'
+        env:
+          RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
+        run: python bindings/python/scripts/python_release.py unpublished --version "$RELEASE_VERSION"
+
+  quality:
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+          components: rustfmt,clippy
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install pytest==9.1.1 mypy==2.3.1 maturin==1.15.0
+      - run: ./scripts/verify-ci.sh
+
+  build:
+    needs: preflight
+    uses: ./.github/workflows/python-native-trial.yml
+    with:
+      retention-days: 90
+
+  candidate:
+    needs: [quality, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: python-native-*
+          merge-multiple: true
+          path: release-candidate/dist
+      - name: Check file set, metadata and checksums
+        env:
+          RELEASE_COMMIT: ${{ github.sha }}
+          RELEASE_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python bindings/python/scripts/python_release.py candidate \
+            --dist release-candidate/dist --evidence release-candidate \
+            --commit "$RELEASE_COMMIT" --ref "$GITHUB_REF_NAME" \
+            --run-id "$GITHUB_RUN_ID" --run-url "$RELEASE_RUN_URL" >> "$GITHUB_STEP_SUMMARY"
+      - run: python -m pip install twine==6.2.0
+      - run: python -m twine check --strict release-candidate/dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-pypi-candidate
+          path: release-candidate/
+          retention-days: 90
+          if-no-files-found: error
+
+  publish:
+    if: github.event_name == 'push' && github.ref_type == 'tag' && github.repository == 'morehardy/anki-forge'
+    needs: candidate
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/anki-forge/
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-pypi-candidate
+          path: release-candidate
+      - name: Recheck original bytes and stage only missing files on retries
+        id: plan
+        run: |
+          python3 bindings/python/scripts/python_release.py prepare-upload \
+            --record release-candidate/release.json --dist release-candidate/dist \
+            --output upload-dist --attempt "$GITHUB_RUN_ATTEMPT" --run-id "$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
+      - name: Publish through the PyPI Trusted Publisher
+        if: steps.plan.outputs.upload_needed == 'true'
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          packages-dir: upload-dist/
+          print-hash: true
+
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-pypi-candidate
+          path: release-candidate
+      - name: Verify all five public PyPI files against the original manifest
+        run: python bindings/python/scripts/python_release.py verify-published --record release-candidate/release.json
+
+  installed:
+    needs: registry
+    name: PyPI consumer (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-14]
+        python: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install mypy==2.3.1
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-pypi-candidate
+          path: release-candidate
+      - name: Select a real PyPI wheel and exercise an isolated installation
+        run: python bindings/python/scripts/python_release.py install-published --record release-candidate/release.json

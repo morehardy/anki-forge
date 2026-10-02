@@ -10,6 +10,7 @@ import tempfile
 import venv
 import zipfile
 import shutil
+import tomllib
 
 
 SMOKE = '''
@@ -18,7 +19,7 @@ import importlib.util
 from importlib.metadata import version
 from pathlib import Path
 from anki_forge import Note, Project, Media, BuildOptions
-assert version("anki-forge") == "0.2.0"
+assert version("anki-forge") == EXPECTED_VERSION
 assert importlib.util.find_spec("anki_forge_python") is None
 project = Project("installed").add("note-1", Note.basic("<front>", "answer"))
 output = project.build(BuildOptions.temporary())
@@ -44,9 +45,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("wheel", type=Path)
     parser.add_argument("--observer", type=Path, help="run the full public suite with this independent Rust producer")
+    parser.add_argument("--expected-version", help="expected release version; defaults to this checkout's pyproject.toml")
     args = parser.parse_args()
     wheel = args.wheel.resolve()
     source_root = Path(__file__).resolve().parents[1]
+    expected_version = args.expected_version or tomllib.loads((source_root / "pyproject.toml").read_text())["project"]["version"]
     with zipfile.ZipFile(wheel) as archive:
         names = archive.namelist()
         assert any(name.endswith((".so", ".pyd")) for name in names), "missing native extension"
@@ -58,7 +61,9 @@ def main() -> None:
         assert any(name.endswith("/THIRD_PARTY_NOTICES.md") for name in names)
     with tempfile.TemporaryDirectory(prefix="anki-forge-installed-") as directory:
         root = Path(directory)
-        venv.EnvBuilder(with_pip=True).create(root / "venv")
+        # Match `python -m venv` on POSIX: standalone Python builds can lose
+        # their bundled shared-library location when the executable is copied.
+        venv.EnvBuilder(with_pip=True, symlinks=os.name != "nt").create(root / "venv")
         python = root / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
         subprocess.run([str(python), "-m", "pip", "install", "--no-index", "--no-deps", str(wheel)], check=True)
         work = root / "安装 test"
@@ -69,7 +74,7 @@ def main() -> None:
         # Isolated mode ignores PYTHONUTF8; request UTF-8 explicitly so printing
         # the Unicode installation path also works with Windows redirected stdout.
         isolated_python = [str(python), "-I", "-X", "utf8"]
-        subprocess.run([*isolated_python, "-c", SMOKE], cwd=work, env=environment, check=True)
+        subprocess.run([*isolated_python, "-c", f"EXPECTED_VERSION = {expected_version!r}\n" + SMOKE], cwd=work, env=environment, check=True)
         example = work / "native_workflow.py"
         shutil.copyfile(source_root / "examples/native_workflow.py", example)
         subprocess.run([*isolated_python, str(example), str(work / "example output")], cwd=work, env=environment, check=True)

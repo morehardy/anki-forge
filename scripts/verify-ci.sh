@@ -57,6 +57,7 @@ manifest_path="$repo_root/contracts/manifest.yaml"
 dist_dir="$repo_root/dist"
 python_path="$repo_root/bindings/python/src"
 
+run python3 -m unittest discover -s bindings/python/scripts -p 'test_*.py'
 run cargo fmt --all -- --check
 run bash ./scripts/check_contract_governance.sh
 run cargo clippy --workspace --all-targets -- -D warnings

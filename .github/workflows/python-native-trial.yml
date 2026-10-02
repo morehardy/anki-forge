@@ -3,6 +3,10 @@ name: python-native-trial
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      retention-days:
+        type: number
+        default: 14
   push:
     branches: [codex/python-sdk-parity]
 
@@ -10,8 +14,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: python-native-trial-${{ github.ref }}
-  cancel-in-progress: true
+  group: python-native-trial-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
 
 jobs:
   source:
@@ -36,7 +40,8 @@ jobs:
         with:
           name: python-native-source
           path: target/python-native-sdist/*.tar.gz
-          retention-days: 14
+          retention-days: ${{ inputs.retention-days || 14 }}
+          if-no-files-found: error
   wheel:
     name: native wheel (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
@@ -94,8 +99,23 @@ jobs:
       - run: python -m pip install mypy==2.3.1
       - name: Install and exercise the same abi3 wheel on Python 3.12
         run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); observer = Path('target/debug/examples') / ('python_parity.exe' if sys.platform == 'win32' else 'python_parity'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel), '--observer', str(observer)], check=True)"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          architecture: ${{ matrix.architecture }}
+      - run: python -m pip install mypy==2.3.1
+      - name: Install and exercise the same abi3 wheel on Python 3.13
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); observer = Path('target/debug/examples') / ('python_parity.exe' if sys.platform == 'win32' else 'python_parity'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel), '--observer', str(observer)], check=True)"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          architecture: ${{ matrix.architecture }}
+      - run: python -m pip install mypy==2.3.1
+      - name: Install and exercise the same abi3 wheel on Python 3.14
+        run: python -c "from pathlib import Path; import subprocess, sys; wheel, = Path('target/python-native-wheels').glob('*.whl'); observer = Path('target/debug/examples') / ('python_parity.exe' if sys.platform == 'win32' else 'python_parity'); subprocess.run([sys.executable, 'bindings/python/scripts/check_native_wheel.py', str(wheel), '--observer', str(observer)], check=True)"
       - uses: actions/upload-artifact@v4
         with:
           name: python-native-${{ matrix.target }}
           path: target/python-native-wheels/*.whl
-          retention-days: 14
+          retention-days: ${{ inputs.retention-days || 14 }}
+          if-no-files-found: error
