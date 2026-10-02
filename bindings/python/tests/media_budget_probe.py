@@ -1,7 +1,7 @@
 """Fresh-process memory probe used by the installed-wheel public API tests."""
 import sys
 
-from anki_forge import Media, MediaError, MediaLimits
+from ankiforge import Media, MediaError, MediaLimits
 
 
 if sys.platform == "win32":

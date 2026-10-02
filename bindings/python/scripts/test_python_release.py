@@ -24,22 +24,22 @@ class ReleaseTests(unittest.TestCase):
         self.dist.mkdir()
         self.metadata = {"version": "0.2.0", "core_version": "0.2.0",
                          "contract_version": "2.0.0", "requires_python": ">=3.11"}
-        self.package_metadata = ("Metadata-Version: 2.4\nName: anki-forge\nVersion: 0.2.0\n"
+        self.package_metadata = ("Metadata-Version: 2.4\nName: ankiforge\nVersion: 0.2.0\n"
                                  "Requires-Python: >=3.11\nLicense-Expression: MIT\n\n").encode()
         for platform in ("manylinux_2_17_x86_64.manylinux2014_x86_64", "win_amd64",
                          "macosx_10_12_x86_64", "macosx_11_0_arm64"):
             self.write_wheel(platform)
-        with tarfile.open(self.dist / "anki_forge-0.2.0.tar.gz", "w:gz") as archive:
-            member = tarfile.TarInfo("anki_forge-0.2.0/PKG-INFO")
+        with tarfile.open(self.dist / "ankiforge-0.2.0.tar.gz", "w:gz") as archive:
+            member = tarfile.TarInfo("ankiforge-0.2.0/PKG-INFO")
             member.size = len(self.package_metadata)
             archive.addfile(member, io.BytesIO(self.package_metadata))
 
     def write_wheel(self, platform: str, *, metadata: bytes | None = None, abi: str = "abi3") -> Path:
-        path = self.dist / f"anki_forge-0.2.0-cp311-{abi}-{platform}.whl"
+        path = self.dist / f"ankiforge-0.2.0-cp311-{abi}-{platform}.whl"
         with zipfile.ZipFile(path, "w") as archive:
-            archive.writestr("anki_forge-0.2.0.dist-info/METADATA", metadata or self.package_metadata)
+            archive.writestr("ankiforge-0.2.0.dist-info/METADATA", metadata or self.package_metadata)
             tags = "".join(f"Tag: cp311-{abi}-{part}\n" for part in platform.split("."))
-            archive.writestr("anki_forge-0.2.0.dist-info/WHEEL", "Wheel-Version: 1.0\n" + tags + "\n")
+            archive.writestr("ankiforge-0.2.0.dist-info/WHEEL", "Wheel-Version: 1.0\n" + tags + "\n")
         return path
 
     def candidate(self) -> dict:
@@ -47,7 +47,7 @@ class ReleaseTests(unittest.TestCase):
                                         commit="a" * 40, ref="python-v0.2.0", run_id="123", run_url="https://example.test/run/123")
 
     def published(self, record: dict, count: int = 5) -> dict:
-        return {"info": {"name": "anki-forge", "version": "0.2.0"}, "urls": [
+        return {"info": {"name": "ankiforge", "version": "0.2.0"}, "urls": [
             {"filename": entry["filename"], "size": entry["size"], "digests": {"sha256": entry["sha256"]}, "yanked": False}
             for entry in record["files"][:count]]}
 
@@ -91,11 +91,33 @@ class ReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, message):
                 self.candidate()
 
+    def test_old_distribution_names_are_not_aliases(self) -> None:
+        record = self.candidate()
+        for old_name in ("anki-forge", "anki_forge"):
+            with self.subTest(old_name=old_name):
+                metadata = self.package_metadata.replace(b"Name: ankiforge", f"Name: {old_name}".encode())
+                with self.assertRaisesRegex(ValueError, "wrong project name"):
+                    release.check_metadata(metadata, "0.2.0", ">=3.11")
+                published = self.published(record)
+                published["info"]["name"] = old_name
+                with self.assertRaisesRegex(ValueError, "identity"):
+                    release.missing_files(record, published)
+
+    def test_old_distribution_filenames_are_rejected(self) -> None:
+        for original in (next(self.dist.glob("*win_amd64.whl")), self.dist / "ankiforge-0.2.0.tar.gz"):
+            renamed = original.with_name(original.name.replace("ankiforge-", "anki_forge-", 1))
+            original.rename(renamed)
+            try:
+                with self.assertRaisesRegex(ValueError, "unexpected .* name or version"):
+                    self.candidate()
+            finally:
+                renamed.rename(original)
+
     def test_wheel_internal_tags_must_match_filename(self) -> None:
         path = self.write_wheel("win_amd64")
         with zipfile.ZipFile(path, "w") as archive:
-            archive.writestr("anki_forge-0.2.0.dist-info/METADATA", self.package_metadata)
-            archive.writestr("anki_forge-0.2.0.dist-info/WHEEL", "Tag: cp311-abi3-linux_x86_64\n\n")
+            archive.writestr("ankiforge-0.2.0.dist-info/METADATA", self.package_metadata)
+            archive.writestr("ankiforge-0.2.0.dist-info/WHEEL", "Tag: cp311-abi3-linux_x86_64\n\n")
         with self.assertRaisesRegex(ValueError, "WHEEL tags"):
             self.candidate()
 
@@ -191,10 +213,10 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "expected tag"):
             release.source_metadata(release.REPOSITORY, "anki-forge-v0.2.0")
 
-    def test_source_binding_core_and_contract_mismatches_are_rejected(self) -> None:
+    def metadata_checkout(self) -> Path:
         checkout = self.root / "checkout"
         paths = ("bindings/python/pyproject.toml", "bindings/python/native/Cargo.toml",
-                 "anki_forge/Cargo.toml", "bindings/python/src/anki_forge/_loader.py")
+                 "anki_forge/Cargo.toml", "bindings/python/src/ankiforge/_loader.py")
         for name in paths:
             target = checkout / name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -203,7 +225,25 @@ class ReleaseTests(unittest.TestCase):
         target = checkout / "anki_forge/assets/contracts" / bundle.name
         target.parent.mkdir(parents=True)
         target.touch()
-        loader = checkout / paths[-1]
+        return checkout
+
+    def test_source_distribution_and_import_names_must_match(self) -> None:
+        checkout = self.metadata_checkout()
+        manifest = checkout / "bindings/python/pyproject.toml"
+        original = manifest.read_text()
+        for before, after, message in (
+            ('name = "ankiforge"', 'name = "anki-forge"', "expected distribution name"),
+            ('module-name = "ankiforge._native"', 'module-name = "anki_forge._native"', "import package names"),
+            ('python-packages = ["ankiforge"]', 'python-packages = ["anki_forge"]', "import package names"),
+        ):
+            with self.subTest(before=before):
+                manifest.write_text(original.replace(before, after))
+                with self.assertRaisesRegex(ValueError, message):
+                    release.source_metadata(checkout)
+
+    def test_source_binding_core_and_contract_mismatches_are_rejected(self) -> None:
+        checkout = self.metadata_checkout()
+        loader = checkout / "bindings/python/src/ankiforge/_loader.py"
         original = loader.read_text()
         for assignment, message in (("__version__", "binding versions"),
                                     ("_CORE_API_VERSION", "core versions"),

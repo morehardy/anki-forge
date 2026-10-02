@@ -1,4 +1,4 @@
-from anki_forge import Field, Template, NoteType, Project, BuildOptions
+from ankiforge import Field, Template, NoteType, Project, BuildOptions
 model = (NoteType.builder('vocab').name('词汇')
     .field(Field('front', name='正面', required=True))
     .field(Field('back', name='背面'))

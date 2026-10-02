@@ -13,7 +13,7 @@ AnkiForge uses stable data keys, validated immutable models, owned media snapsho
 | GUID derived from field contents | Explicit stable namespace and note key |
 
 ```python
-from anki_forge import Project, NoteType, Field, Template, BuildOptions
+from ankiforge import Project, NoteType, Field, Template, BuildOptions
 
 model = (NoteType.builder('vocabulary').name('Vocabulary')
     .field(Field('word', name='Word', required=True))

@@ -2,8 +2,12 @@
 
 The Python SDK calls the default public Rust API through a PyO3 extension. `Project` is the sole authoring container. Choose a stable namespace and a stable key for every note; display names and content can change independently.
 
+The distribution name and import package are both `ankiforge`. Once the release
+is available on PyPI, install it with `python -m pip install ankiforge`.
+See the [release status](../../docs/compatibility.md) before choosing a version.
+
 ```python
-from anki_forge import Project, Note, BuildOptions
+from ankiforge import Project, Note, BuildOptions
 project = Project('biology-course', default_deck='Science::Biology')
 project.add('cell', Note.basic('What is a cell?', 'A unit of life'))
 output = project.build(BuildOptions.to('biology.apkg'))
@@ -13,7 +17,7 @@ print(output.artifact.path, output.report.counts.notes)
 Strings always mean plain text. Use `Content.html(...)` for HTML, and `Content.sequence(...)` to combine text, HTML, images and sounds while retaining their dependencies.
 
 ```python
-from anki_forge import Media, Content
+from ankiforge import Media, Content
 image = Media.file('cell.png')
 project.add('cell-image', Note.basic(Content.sequence(['Cell: ', image.image()]), '细胞'))
 ```
@@ -23,7 +27,7 @@ Media owns a snapshot immediately; deleting the input file later is safe. `Media
 Custom models are completed and validated before creating notes:
 
 ```python
-from anki_forge import Field, Template, NoteType
+from ankiforge import Field, Template, NoteType
 model = (NoteType.builder('vocab').name('词汇')
     .field(Field('front', name='正面'))
     .field(Field('back', name='背面'))
@@ -39,7 +43,7 @@ For image occlusion, use `Note.image_occlusion(media).mask(Mask.rect('nucleus', 
 Updates use the original prior distribution APKG, which contains complete identity evidence:
 
 ```python
-from anki_forge import CompareOptions
+from ankiforge import CompareOptions
 next_project = Project('biology-course', default_deck='Science::Biology')
 next_project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
 comparison = next_project.compare(CompareOptions.against('biology.apkg'))
@@ -50,7 +54,7 @@ A complete comparison returns a `ComparisonReport` even if its policy blocks pub
 
 Successful builds always return `BuildOutput.artifact`. `BuildReport` contains observations only. `output.snapshot()`, `output.report.snapshot()` and `BuildError.snapshot()` return JSON-serializable copies that do not own files. With `BuildOptions.temporary()`, retain an artifact handle while using the file; close it or release all copies to delete the temporary output. `artifact.persist_to(path)` returns a new persistent handle. Failures preserve domain exception types, `kind`, `code`, source-chain text in `causes`, and publication facts where relevant.
 
-Development: run `maturin develop --manifest-path bindings/python/native/Cargo.toml`, build the independent observer with `cargo build -p anki_forge_python_native --example python_parity`, then run `python -m pytest bindings/python/tests` and `python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge`.
+Development: run `maturin develop --manifest-path bindings/python/native/Cargo.toml`, build the independent observer with `cargo build -p anki_forge_python_native --example python_parity`, then run `python -m pytest bindings/python/tests` and `python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/ankiforge`.
 
 Native handles belong to their creating process. After `os.fork()`, inherited handles reject operations with `BINDING.FORKED_OBJECT`; dropping them cannot remove parent-owned snapshots. Create new values in the child for child-side work. Those new values retain normal cleanup.
 

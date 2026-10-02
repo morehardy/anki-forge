@@ -140,7 +140,7 @@ environment; PYTHONPATH alone does not build the extension.
 maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
 cargo build -p anki_forge_python_native --example python_parity --locked
 python -m pytest bindings/python/tests -q
-python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
+python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/ankiforge
 ```
 
 The native SDK calls the same Rust public API. See [Python coverage](../bindings/python/COVERAGE.md) for installed-wheel,

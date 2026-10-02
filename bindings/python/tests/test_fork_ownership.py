@@ -9,7 +9,7 @@ import pytest
 PROBE = r'''
 import gc, os, signal, struct, sys, traceback, zlib
 from pathlib import Path
-from anki_forge import BuildOptions, Content, Field, Media, Note, NoteType, Project, Template
+from ankiforge import BuildOptions, Content, Field, Media, Note, NoteType, Project, Template
 root = Path(os.environ['TMPDIR'])
 kind = sys.argv[1]
 def chunk(tag, data):

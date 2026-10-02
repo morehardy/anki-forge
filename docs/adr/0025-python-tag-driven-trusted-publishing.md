@@ -1,6 +1,8 @@
 # ADR 0025: Publish Python Candidates through a Protected Tag and OIDC
 
-Python releases use `python-vX.Y.Z` tags independently of the Cargo tags in
+The Python distribution and import package are both `ankiforge`. The GitHub
+repository remains `morehardy/anki-forge`. Python releases use `python-vX.Y.Z`
+tags independently of the Cargo tags in
 ADR 0010. The authoritative tag points to a commit on `main` and matches the
 Python/native binding versions. A protected `pypi` environment gates the single
 upload job in `python-pypi-release.yml`, which uses PyPI Trusted Publishing.

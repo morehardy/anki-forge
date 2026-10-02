@@ -13,7 +13,7 @@ import tempfile
 def main() -> None:
     source = Path(sys.argv[1]).resolve()
     smoke = Path(__file__).with_name("check_native_wheel.py").resolve()
-    with tempfile.TemporaryDirectory(prefix="anki-forge-sdist-") as directory:
+    with tempfile.TemporaryDirectory(prefix="ankiforge-sdist-") as directory:
         root = Path(directory)
         with tarfile.open(source) as archive:
             # Early Python 3.11 versions do not yet expose tarfile's data filter.
@@ -31,6 +31,8 @@ def main() -> None:
         unpacked, = (path for path in root.iterdir() if path.is_dir())
         assert (unpacked / "Cargo.lock").is_file()
         assert (unpacked / "anki_forge/build.rs").is_file()
+        assert (unpacked / "src/ankiforge/__init__.py").is_file()
+        assert not (unpacked / "src/anki_forge").exists()
         environment = os.environ.copy()
         environment["PATH"] = str(Path(sys.executable).parent) + os.pathsep + environment.get("PATH", "")
         # Share dependency compilation only; package source must be self-contained.

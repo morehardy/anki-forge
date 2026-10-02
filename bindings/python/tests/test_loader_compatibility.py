@@ -1,7 +1,7 @@
 """Same package versions must not let an older embedded contract slip through."""
 import json
 import pytest
-from anki_forge import _loader, _native
+from ankiforge import _loader, _native
 
 
 def test_same_version_old_native_contract_is_rejected(monkeypatch):

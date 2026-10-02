@@ -1,7 +1,7 @@
 [project]
-name = "anki-forge"
+name = "ankiforge"
 version = "0.2.0"
-description = "Python Product API for anki-forge"
+description = "Python Product API for Anki Forge"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
@@ -15,16 +15,16 @@ Issues = "https://github.com/morehardy/anki-forge/issues"
 
 [build-system]
 requires = ["maturin==1.15.0"]
-build-backend = "anki_forge_build"
+build-backend = "ankiforge_build"
 backend-path = ["."]
 
 [tool.maturin]
 manifest-path = "native/Cargo.toml"
 python-source = "src"
-module-name = "anki_forge._native"
-python-packages = ["anki_forge"]
-exclude = ["src/anki_forge/_runtime/**", "src/anki_forge_python/**"]
-include = [{ path = "anki_forge_build.py", format = "sdist" }]
+module-name = "ankiforge._native"
+python-packages = ["ankiforge"]
+exclude = ["src/ankiforge/_runtime/**", "src/anki_forge/**", "src/anki_forge_python/**"]
+include = [{ path = "ankiforge_build.py", format = "sdist" }]
 
 [tool.mypy]
 python_version = "3.11"

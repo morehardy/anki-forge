@@ -4,7 +4,7 @@ use pyo3::prelude::*;
 use std::path::PathBuf;
 use std::sync::Mutex;
 
-#[pyclass(frozen, module = "anki_forge._native")]
+#[pyclass(frozen, module = "ankiforge._native")]
 pub struct NativeArtifact {
     inner: Mutex<Option<ApkgArtifact>>,
     pid: u32,

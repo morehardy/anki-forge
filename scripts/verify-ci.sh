@@ -87,7 +87,7 @@ run python3 -m venv target/python-ci-venv
 run target/python-ci-venv/bin/python -m pip install pytest==9.1.1 mypy==2.3.1 maturin==1.15.0
 run env "VIRTUAL_ENV=$repo_root/target/python-ci-venv" target/python-ci-venv/bin/maturin develop --manifest-path bindings/python/native/Cargo.toml --locked
 run cargo build -p anki_forge_python_native --example python_parity --locked
-run target/python-ci-venv/bin/python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/anki_forge
+run target/python-ci-venv/bin/python -m mypy --config-file bindings/python/pyproject.toml bindings/python/src/ankiforge
 run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python -m pytest bindings/python/tests -q
 run env "PYTHONPATH=$python_path" target/python-ci-venv/bin/python bindings/python/examples/minimal_flow.py
 run target/python-ci-venv/bin/python bindings/python/examples/native_workflow.py target/python-ci-example

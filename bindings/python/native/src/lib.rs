@@ -118,7 +118,7 @@ macro_rules! mapped {
 }
 pub(crate) use mapped;
 
-#[pyclass(frozen, skip_from_py_object, module = "anki_forge._native")]
+#[pyclass(frozen, skip_from_py_object, module = "ankiforge._native")]
 struct NativeContent {
     inner: ProcessOwned<Content>,
 }
@@ -147,7 +147,7 @@ impl NativeContent {
         })
     }
 }
-#[pyclass(frozen, skip_from_py_object, module = "anki_forge._native")]
+#[pyclass(frozen, skip_from_py_object, module = "ankiforge._native")]
 struct NativeMedia {
     inner: ProcessOwned<Media>,
 }
@@ -233,7 +233,7 @@ impl NativeMedia {
         })
     }
 }
-#[pyclass(frozen, skip_from_py_object, module = "anki_forge._native")]
+#[pyclass(frozen, skip_from_py_object, module = "ankiforge._native")]
 struct NativeNoteType {
     inner: ProcessOwned<NoteType>,
 }
@@ -277,7 +277,7 @@ fn error_causes(error: &dyn Error) -> Vec<String> {
     }
     out
 }
-#[pyclass(frozen, skip_from_py_object, module = "anki_forge._native")]
+#[pyclass(frozen, skip_from_py_object, module = "ankiforge._native")]
 struct NativeNote {
     inner: ProcessOwned<Note>,
 }
@@ -347,7 +347,7 @@ impl NativeNote {
         })
     }
 }
-#[pyclass(frozen, module = "anki_forge._native")]
+#[pyclass(frozen, module = "ankiforge._native")]
 struct NativeProject {
     state: ObjectState<Project>,
 }
