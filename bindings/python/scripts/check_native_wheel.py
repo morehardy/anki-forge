@@ -18,8 +18,10 @@ import gc
 import importlib.util
 from importlib.metadata import version
 from pathlib import Path
-from anki_forge import Note, Project, Media, BuildOptions
-assert version("anki-forge") == EXPECTED_VERSION
+from ankiforge import Note, Project, Media, BuildOptions, _native
+assert version("ankiforge") == EXPECTED_VERSION
+assert _native.NativeProject.__module__ == "ankiforge._native"
+assert importlib.util.find_spec("anki_forge") is None
 assert importlib.util.find_spec("anki_forge_python") is None
 project = Project("installed").add("note-1", Note.basic("<front>", "answer"))
 output = project.build(BuildOptions.temporary())
@@ -53,13 +55,13 @@ def main() -> None:
     with zipfile.ZipFile(wheel) as archive:
         names = archive.namelist()
         assert any(name.endswith((".so", ".pyd")) for name in names), "missing native extension"
-        assert not any("anki_forge_python/" in name or "anki_forge/_runtime/" in name for name in names)
-        assert "anki_forge/py.typed" in names
-        assert "anki_forge/_native.pyi" in names
+        assert not any(name.startswith(("anki_forge/", "anki_forge_python/", "ankiforge/_runtime/")) for name in names)
+        assert "ankiforge/py.typed" in names
+        assert "ankiforge/_native.pyi" in names
         assert not any(name.endswith(("/runtime.py", "/product_json.py", "/native_project.py", "/native_media.py")) for name in names)
         assert any(name.endswith("/LICENSE") for name in names)
         assert any(name.endswith("/THIRD_PARTY_NOTICES.md") for name in names)
-    with tempfile.TemporaryDirectory(prefix="anki-forge-installed-") as directory:
+    with tempfile.TemporaryDirectory(prefix="ankiforge-installed-") as directory:
         root = Path(directory)
         # Match `python -m venv` on POSIX: standalone Python builds can lose
         # their bundled shared-library location when the executable is copied.

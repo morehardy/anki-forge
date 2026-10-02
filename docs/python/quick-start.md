@@ -3,13 +3,13 @@
 The native Python SDK wraps the Rust public API. Use Python 3.11 or newer and install the platform wheel:
 
 ```sh
-python -m pip install anki-forge
+python -m pip install ankiforge
 ```
 
 Choose a stable project namespace and stable note keys from your data. Names and content can then change without turning each edit into a new note.
 
 ```python
-from anki_forge import Project, Note, BuildOptions
+from ankiforge import Project, Note, BuildOptions
 
 project = Project('biology-course', default_deck='Science::Biology')
 project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
@@ -26,7 +26,7 @@ print(output.report.counts.notes)
 Strings are always text, including in Cloze notes. Use `Content.html` for explicit HTML. Image and sound content owns media dependencies and adds them to the project automatically.
 
 ```python
-from anki_forge import Content, Media
+from ankiforge import Content, Media
 
 image = Media.file('cell.png')
 project.add('cell-picture', Note.basic(
@@ -40,7 +40,7 @@ project.add('cell-picture', Note.basic(
 ## Complete a custom model
 
 ```python
-from anki_forge import Field, Template, NoteType
+from ankiforge import Field, Template, NoteType
 
 model = (NoteType.builder('vocab').name('词汇')
     .field(Field('front', name='正面', required=True))
@@ -55,7 +55,7 @@ The builder validates fields, templates and their references. The completed mode
 ## Compare and update
 
 ```python
-from anki_forge import CompareOptions
+from ankiforge import CompareOptions
 
 next_project = Project('biology-course', default_deck='Science::Biology')
 next_project.add('cell', Note.basic('What is a cell?', 'The basic structural unit of life'))

@@ -1,6 +1,6 @@
 # Python / PyPI release runbook
 
-The public distribution is `anki-forge`; users import `anki_forge`. Only a
+The public distribution is `ankiforge`; users import `ankiforge`. Only a
 protected `python-vX.Y.Z` tag can publish. The tag must point to a commit already
 on `main`. Python tags do not trigger the independent crates.io release workflow.
 
@@ -16,7 +16,7 @@ on `main`. Python tags do not trigger the independent crates.io release workflow
 
    | Field | Value |
    | --- | --- |
-   | PyPI project name | `anki-forge` |
+   | PyPI project name | `ankiforge` |
    | Repository owner | `morehardy` |
    | Repository name | `anki-forge` |
    | Workflow filename | `python-pypi-release.yml` |
@@ -47,6 +47,10 @@ The `python-pypi-candidate` artifact holds `dist/` (the five distributions),
 `release.json` (commit, tag, run ID, metadata, file sizes/hashes) and `SHA256SUMS`.
 Its retention is 90 days, subject to repository limits. The upload job consumes
 these exact bytes; it does not rebuild distributions.
+
+After a package-name change, rebuild rehearsal candidates from the renamed
+source. Do not rename old wheel/sdist files: their metadata and import package
+would still refer to the old project.
 
 ## Rehearsal and publication
 

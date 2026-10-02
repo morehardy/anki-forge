@@ -4,7 +4,7 @@ A successful build returns BuildOutput with a guaranteed artifact. A failed buil
 
 ```python
 import json
-from anki_forge import Project, Note, BuildOptions, BuildError
+from ankiforge import Project, Note, BuildOptions, BuildError
 
 project = Project('course').add('term', Note.basic('Question', 'Answer'))
 try:
@@ -24,7 +24,7 @@ BuildReport only contains observations. Its snapshot has counts, diagnostics, el
 ## Compare before publication
 
 ```python
-from anki_forge import CompareOptions, UpdatePolicy
+from ankiforge import CompareOptions, UpdatePolicy
 
 comparison = project.compare(CompareOptions.against('course-v1.apkg'))
 print(comparison.findings)
@@ -49,7 +49,7 @@ Acceptance covers every finding in the named category. The findings keep their o
 ## Budgets and artifact ownership
 
 ```python
-from anki_forge import InspectLimits
+from ankiforge import InspectLimits
 
 limits = InspectLimits(max_archive_bytes=3 << 30)
 options = BuildOptions.to('course-v2.apkg').update_from('course-v1.apkg').inspect_limits(limits)

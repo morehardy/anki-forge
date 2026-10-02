@@ -1,4 +1,4 @@
-from anki_forge import (Project, Note, NoteType, Field, Template, Content, Media,
+from ankiforge import (Project, Note, NoteType, Field, Template, Content, Media,
                         BuildOptions, CompareOptions, UpdatePolicy, BuildOutput)
 model = NoteType.builder('vocab').field(Field('front')).template(Template('card', '{{front}}', '{{FrontSide}}')).build()
 media = Media.bytes(b'.card{}', 'text/css').with_export_name('style.css')
@@ -8,10 +8,10 @@ output.artifact.persist_to('out.apkg')
 project.compare(CompareOptions.against('out.apkg').update_policy(UpdatePolicy().allow('RISK.NOTE_CHANGED')))
 Note.cloze('{{c1::word}}').field('back_extra', 'extra')
 
-from anki_forge import MediaLimits
+from ankiforge import MediaLimits
 budgeted_model = NoteType.from_bundle("bundle", limits=MediaLimits(max_bytes=512 << 20))
 
-from anki_forge import AddError, AddContext, AddDetail
+from ankiforge import AddError, AddContext, AddDetail
 
 def read_add_error(error: AddError) -> str | None:
     context: AddContext = error.details['context']

@@ -1,4 +1,4 @@
-from anki_forge import BuildOptions, InspectLimits, Project, Note, Media
+from ankiforge import BuildOptions, InspectLimits, Project, Note, Media
 InspectLimits(max_entries='unbounded')
 Note.basic(7, 'back')
 Project('p').add(Note.basic('q', 'a'))

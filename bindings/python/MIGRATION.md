@@ -1,5 +1,10 @@
 # Clean-slate Python API
 
+Use `python -m pip install ankiforge` and `from ankiforge import ...`.
+The former `anki-forge` distribution and `anki_forge` import name are not
+compatibility aliases. For a source checkout, rebuild the native extension
+with Maturin after changing names. See the [setup guide](README.md).
+
 No legacy compatibility layer is retained. Replace the old Deck/registry/runtime APIs with the owned public model:
 
 | Previous workflow | Current workflow |

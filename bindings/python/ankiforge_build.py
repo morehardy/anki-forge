@@ -34,7 +34,7 @@ def _pins(data: bytes) -> set[tuple[str, str, str, str]]:
 def build_sdist(sdist_directory: str, config_settings: Mapping[str, Any] | None = None) -> str:
     filename = maturin.build_sdist(sdist_directory, config_settings)
     path = Path(sdist_directory, filename).resolve()
-    with tempfile.TemporaryDirectory(prefix="anki-forge-sdist-lock-") as directory:
+    with tempfile.TemporaryDirectory(prefix="ankiforge-sdist-lock-") as directory:
         root = Path(directory)
         with tarfile.open(path) as archive:
             members = archive.getmembers()

@@ -1,7 +1,7 @@
 """Create and update an original distribution using owned media and stable keys."""
 from pathlib import Path
 import sys
-from anki_forge import BuildOptions, CompareOptions, Content, Media, Note, Project
+from ankiforge import BuildOptions, CompareOptions, Content, Media, Note, Project
 
 root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path('output')
 root.mkdir(parents=True, exist_ok=True)

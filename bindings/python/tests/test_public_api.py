@@ -12,7 +12,7 @@ import zipfile
 import zlib
 import struct
 import pytest
-from anki_forge import (
+from ankiforge import (
     Project, Note, Content, NoteType, Field, Template, GenerationRule, Media, MediaLimits,
     BuildOptions, CompareOptions, UpdatePolicy, InspectLimits, RiskLevel, Mask, OcclusionMode,
     SchemaError, AddError, MediaError, ImageOcclusionError, BuildError, CompareError,
@@ -68,7 +68,7 @@ def test_non_unicode_build_and_update_paths_round_trip(tmp_path):
 
 def test_artifact_relative_destinations_keep_build_invocation_cwd(tmp_path, monkeypatch):
     from concurrent.futures import ThreadPoolExecutor
-    import anki_forge.project as project_module
+    import ankiforge.project as project_module
 
     invoked = (tmp_path / 'invoked').resolve()
     changed = (tmp_path / 'changed').resolve()
@@ -430,9 +430,9 @@ def test_persist_failure_keeps_source_and_publication_facts(tmp_path):
     assert permanent.path.exists()
 
 def test_removed_api_is_absent():
-    import anki_forge
+    import ankiforge
     for name in ['Deck', 'MediaRegistry', 'MediaRef', 'IdentityRecipe', 'UpdateSafetyMode']:
-        assert not hasattr(anki_forge, name)
+        assert not hasattr(ankiforge, name)
     assert not hasattr(Project, 'add_notetype')
     assert not hasattr(Project, 'add_note')
 

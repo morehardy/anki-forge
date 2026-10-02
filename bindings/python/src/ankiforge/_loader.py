@@ -19,11 +19,11 @@ class Versions:
 
 def _load() -> Versions:
     try:
-        native = importlib.import_module("anki_forge._native")
+        native = importlib.import_module("ankiforge._native")
     except (ImportError, OSError) as error:
         raise ImportError(
-            "BINDING.EXTENSION_UNAVAILABLE: cannot load the anki-forge native extension; "
-            "reinstall a compatible anki-forge wheel for CPython 3.11+ and your platform. "
+            "BINDING.EXTENSION_UNAVAILABLE: cannot load the ankiforge native extension; "
+            "reinstall a compatible ankiforge wheel for CPython 3.11+ and your platform. "
             "A source checkout requires `maturin develop` first."
         ) from error
     try:
@@ -34,7 +34,7 @@ def _load() -> Versions:
         if metadata.contract_version != _CONTRACT_VERSION:
             raise ValueError(f"expected contract {_CONTRACT_VERSION}; found {metadata.contract_version}")
     except (AttributeError, TypeError, ValueError) as error:
-        raise ImportError(f"BINDING.VERSION_MISMATCH: {error}; reinstall anki-forge to replace mixed package files") from error
+        raise ImportError(f"BINDING.VERSION_MISMATCH: {error}; reinstall ankiforge to replace mixed package files") from error
     return metadata
 
 

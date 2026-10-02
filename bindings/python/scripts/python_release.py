@@ -25,7 +25,7 @@ from urllib.request import urlopen
 import zipfile
 
 
-PROJECT = "anki-forge"
+PROJECT = "ankiforge"
 REPOSITORY = Path(__file__).resolve().parents[3]
 VERSION_RE = re.compile(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)")
 TARGETS = {"linux-x64", "windows-x64", "macos-x64", "macos-arm64"}
@@ -41,11 +41,15 @@ def normalized_name(name: str) -> str:
 
 
 def source_metadata(root: Path, tag: str | None = None) -> dict[str, str]:
-    project = tomllib.loads((root / "bindings/python/pyproject.toml").read_text())["project"]
+    configuration = tomllib.loads((root / "bindings/python/pyproject.toml").read_text())
+    project = configuration["project"]
+    require(configuration["tool"]["maturin"]["module-name"] == f"{PROJECT}._native" and
+            configuration["tool"]["maturin"]["python-packages"] == [PROJECT],
+            "Python distribution and import package names must both be ankiforge")
     native = tomllib.loads((root / "bindings/python/native/Cargo.toml").read_text())
     core = tomllib.loads((root / "anki_forge/Cargo.toml").read_text())["package"]
     loader: dict[str, str] = {}
-    for node in ast.parse((root / "bindings/python/src/anki_forge/_loader.py").read_text()).body:
+    for node in ast.parse((root / "bindings/python/src" / PROJECT / "_loader.py").read_text()).body:
         if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant):
             for target in node.targets:
                 if isinstance(target, ast.Name) and isinstance(node.value.value, str):
@@ -91,21 +95,21 @@ def distribution_info(path: Path, version: str, requires_python: str) -> dict[st
     require(path.is_file() and not path.is_symlink(), f"distribution must be a regular file: {path.name}")
     if path.name.endswith(".whl"):
         parts = path.name.removesuffix(".whl").split("-", 2)
-        require(len(parts) == 3 and parts[:2] == ["anki_forge", version], "unexpected wheel name or version")
+        require(len(parts) == 3 and parts[:2] == [PROJECT, version], "unexpected wheel name or version")
         python_tag, abi, platforms = parts[2].split("-")
         require(python_tag == "cp311" and abi == "abi3", "expected a cp311-abi3 wheel")
         target = wheel_target(platforms)
-        dist_info = f"anki_forge-{version}.dist-info"
+        dist_info = f"{PROJECT}-{version}.dist-info"
         with zipfile.ZipFile(path) as archive:
             check_metadata(archive.read(f"{dist_info}/METADATA"), version, requires_python)
             wheel = message_from_bytes(archive.read(f"{dist_info}/WHEEL"))
             require(set(wheel.get_all("Tag", [])) == {f"cp311-abi3-{tag}" for tag in platforms.split(".")},
                     "WHEEL tags disagree with filename")
     else:
-        require(path.name == f"anki_forge-{version}.tar.gz", "unexpected source distribution name or version")
+        require(path.name == f"{PROJECT}-{version}.tar.gz", "unexpected source distribution name or version")
         target = "source"
         with tarfile.open(path) as archive:
-            member = archive.getmember(f"anki_forge-{version}/PKG-INFO")
+            member = archive.getmember(f"{PROJECT}-{version}/PKG-INFO")
             require(member.isfile(), "sdist metadata must be a regular file")
             content = archive.extractfile(member)
             require(content is not None, "sdist metadata is missing")
@@ -214,7 +218,7 @@ def verify_published(record: dict[str, Any], attempts: int, delay: float) -> Non
 
 
 def install_published(record: dict[str, Any]) -> None:
-    with tempfile.TemporaryDirectory(prefix="anki-forge-pypi-") as directory:
+    with tempfile.TemporaryDirectory(prefix="ankiforge-pypi-") as directory:
         root = Path(directory)
         command = [sys.executable, "-m", "pip", "--isolated", "download", "--index-url", "https://pypi.org/simple",
                    "--only-binary=:all:", "--no-deps", "--no-cache-dir", "--dest", str(root),
