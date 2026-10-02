@@ -94,7 +94,7 @@ export function native(): NativeModule {
     throw new NativeLoadError(
       "ANKI_FORGE_NATIVE_PATH must be an absolute development artifact path.",
     );
-  const packageName = `anki-forge-node-${suffix}`;
+  const packageName = `ankiforge-${suffix}`;
   try {
     const binding = require(override ?? packageName) as NativeModule;
     if (

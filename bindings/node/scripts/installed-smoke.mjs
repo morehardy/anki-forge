@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { deflateSync } from "node:zlib";
 import { spawn } from "node:child_process";
+import { parseArgs } from "node:util";
 import { root, targets } from "./platforms.mjs";
 
 const npmCli =
@@ -22,7 +23,13 @@ const tarballs = path.join(temporary, "tarballs");
 await fs.mkdir(tarballs);
 const metadata = new Map();
 const packages = new Map();
-const allPlatforms = process.argv.includes("--all");
+const { values: options } = parseArgs({ options: {
+  all: { type: "boolean", default: false },
+  candidate: { type: "string" },
+  public: { type: "boolean", default: false },
+} });
+assert.ok(!options.public || options.candidate, "--public requires --candidate");
+const allPlatforms = options.all;
 function run(args, cwd, env = process.env) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, args, {
@@ -70,76 +77,93 @@ const server = http.createServer((request, response) => {
   response.end("{}");
 });
 try {
-  await new Promise((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", resolve);
-  });
-  const registry = `http://127.0.0.1:${server.address().port}`;
+  if (!options.public) {
+    await new Promise((resolve, reject) => {
+      server.once("error", reject);
+      server.listen(0, "127.0.0.1", resolve);
+    });
+  }
+  const registry = options.public ? "https://registry.npmjs.org" : `http://127.0.0.1:${server.address().port}`;
   const host = targets.find(
     (item) => item.os === process.platform && item.cpu === process.arch,
   );
   if (!host) throw new Error("Unsupported smoke-test host");
-  await fs.access(path.join(root, "npm", host.suffix, "anki-forge.node"));
-  // Pack real distributable files and let npm resolve optional dependencies from
-  // this disposable registry. No npm link, source-tree module fallback or CLI.
-  const packedTargets = allPlatforms ? targets : [host];
-  for (const item of packedTargets)
-    await fs.access(path.join(root, "npm", item.suffix, "anki-forge.node"));
-  for (const directory of [
-    root,
-    ...packedTargets.map((item) => path.join(root, "npm", item.suffix)),
-  ]) {
-    const [packed] = JSON.parse(
-      await run(
-        [
-          npmCli,
-          "pack",
-          "--json",
-          "--ignore-scripts",
-          "--cache",
-          cache,
-          "--pack-destination",
-          tarballs,
-        ],
-        directory,
-      ),
-    );
-    const manifest = JSON.parse(
-      await fs.readFile(path.join(directory, "package.json"), "utf8"),
-    );
-    const bytes = await fs.readFile(path.join(tarballs, packed.filename));
-    assert.ok(
-      packed.files.some((file) => file.path === "THIRD_PARTY_NOTICES.md"),
-      `${packed.name} must distribute third-party notices`,
-    );
-    packages.set(packed.filename, bytes);
-    manifest.dist = {
-      tarball: `${registry}/${packed.filename}`,
-      integrity: `sha512-${createHash("sha512").update(bytes).digest("base64")}`,
-    };
-    metadata.set(manifest.name, manifest);
-    if (directory === root) {
-      assert.ok(packed.files.some((file) => file.path === "dist/index.d.mts"));
-      assert.ok(
-        !packed.files.some(
-          (file) =>
-            file.path.startsWith("native/") || file.path.endsWith(".node"),
+  if (options.candidate) {
+    const record = JSON.parse(await fs.readFile(path.join(options.candidate, "release.json"), "utf8"));
+    assert.deepEqual(record.packages.map(p => p.name).sort(), ["ankiforge", ...targets.map(t => `ankiforge-${t.suffix}`)].sort());
+    for (const item of record.packages) {
+      assert.equal(item.filename, `${item.name}-${record.version}.tgz`);
+      const bytes = await fs.readFile(path.join(options.candidate, item.filename));
+      assert.equal(createHash("sha256").update(bytes).digest("hex"), item.sha256);
+      assert.equal(`sha512-${createHash("sha512").update(bytes).digest("base64")}`, item.integrity);
+      packages.set(item.filename, bytes);
+      metadata.set(item.name, { ...item.manifest, dist: {
+        tarball: `${registry}/${item.filename}`, integrity: item.integrity,
+      } });
+    }
+  } else {
+    await fs.access(path.join(root, "npm", host.suffix, "anki-forge.node"));
+    // Pack real distributable files and let npm resolve optional dependencies from
+    // this disposable registry. No npm link, source-tree module fallback or CLI.
+    const packedTargets = allPlatforms ? targets : [host];
+    for (const item of packedTargets)
+      await fs.access(path.join(root, "npm", item.suffix, "anki-forge.node"));
+    for (const directory of [
+      root,
+      ...packedTargets.map((item) => path.join(root, "npm", item.suffix)),
+    ]) {
+      const [packed] = JSON.parse(
+        await run(
+          [
+            npmCli,
+            "pack",
+            "--json",
+            "--ignore-scripts",
+            "--cache",
+            cache,
+            "--pack-destination",
+            tarballs,
+          ],
+          directory,
         ),
       );
+      const manifest = JSON.parse(
+        await fs.readFile(path.join(directory, "package.json"), "utf8"),
+      );
+      const bytes = await fs.readFile(path.join(tarballs, packed.filename));
+      assert.ok(
+        packed.files.some((file) => file.path === "THIRD_PARTY_NOTICES.md"),
+        `${packed.name} must distribute third-party notices`,
+      );
+      packages.set(packed.filename, bytes);
+      manifest.dist = {
+        tarball: `${registry}/${packed.filename}`,
+        integrity: `sha512-${createHash("sha512").update(bytes).digest("base64")}`,
+      };
+      metadata.set(manifest.name, manifest);
+      if (directory === root) {
+        assert.ok(packed.files.some((file) => file.path === "dist/index.d.mts"));
+        assert.ok(
+          !packed.files.some(
+            (file) =>
+              file.path.startsWith("native/") || file.path.endsWith(".node"),
+          ),
+        );
+      }
     }
-  }
-  // Supply metadata for non-host packages, so npm performs OS/CPU filtering.
-  for (const item of targets.filter((item) => !packedTargets.includes(item))) {
-    const manifest = JSON.parse(
-      await fs.readFile(
-        path.join(root, "npm", item.suffix, "package.json"),
-        "utf8",
-      ),
-    );
-    metadata.set(manifest.name, {
-      ...manifest,
-      dist: { tarball: `${registry}/must-not-fetch-${item.suffix}.tgz` },
-    });
+    // Supply metadata for non-host packages, so npm performs OS/CPU filtering.
+    for (const item of targets.filter((item) => !packedTargets.includes(item))) {
+      const manifest = JSON.parse(
+        await fs.readFile(
+          path.join(root, "npm", item.suffix, "package.json"),
+          "utf8",
+        ),
+      );
+      metadata.set(manifest.name, {
+        ...manifest,
+        dist: { tarball: `${registry}/must-not-fetch-${item.suffix}.tgz` },
+      });
+    }
   }
   const consumer = path.join(temporary, "consumer 安装 path");
   await fs.mkdir(consumer);
@@ -147,12 +171,12 @@ try {
     path.join(consumer, "package.json"),
     '{"private":true,"type":"module"}\n',
   );
-  const version = metadata.get("anki-forge-node").version;
+  const version = metadata.get("ankiforge").version;
   await run(
     [
       npmCli,
       "install",
-      `anki-forge-node@${version}`,
+      `ankiforge@${version}`,
       "--registry",
       registry,
       "--cache",
@@ -180,13 +204,20 @@ try {
     ],
     consumer,
   );
+  const lock = JSON.parse(await fs.readFile(path.join(consumer, "package-lock.json"), "utf8"));
+  for (const name of ["ankiforge", `ankiforge-${host.suffix}`]) {
+    const installed = lock.packages[`node_modules/${name}`];
+    assert.equal(installed.version, version);
+    assert.equal(installed.integrity, metadata.get(name).dist.integrity);
+    if (options.public) assert.equal(new URL(installed.resolved).origin, "https://registry.npmjs.org");
+  }
   assert.ok(
     (
       await fs.stat(
         path.join(
           consumer,
           "node_modules",
-          `anki-forge-node-${host.suffix}`,
+          `ankiforge-${host.suffix}`,
           "anki-forge.node",
         ),
       )
@@ -195,7 +226,7 @@ try {
   for (const item of targets.filter((item) => item !== host)) {
     await assert.rejects(
       fs.access(
-        path.join(consumer, "node_modules", `anki-forge-node-${item.suffix}`),
+        path.join(consumer, "node_modules", `ankiforge-${item.suffix}`),
       ),
     );
   }
@@ -204,8 +235,8 @@ try {
     `
     import assert from 'node:assert/strict';
     import { createRequire } from 'node:module';
-    import { Project, Note, BuildOptions, BuildReport, ComparisonReport, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'anki-forge-node';
-    const cjs = createRequire(import.meta.url)('anki-forge-node');
+    import { Project, Note, BuildOptions, BuildReport, ComparisonReport, ApkgArtifact, ArtifactClosedError, bindingMetadata } from 'ankiforge';
+    const cjs = createRequire(import.meta.url)('ankiforge');
     assert.equal(cjs.Project, Project); assert.equal(cjs.ApkgArtifact, ApkgArtifact);
     assert.equal(cjs.BuildReport, BuildReport); assert.equal(cjs.ComparisonReport, ComparisonReport);
     const project = new Project('installed').add('note', Note.basic('npm', 'Rust'));
@@ -275,7 +306,7 @@ try {
   wav.write("data", 36);
   wav.writeUInt32LE(wav.length - 44, 40);
   await fs.writeFile(path.join(consumer, "hola.wav"), wav);
-  const readme = await fs.readFile(path.join(root, "README.md"), "utf8");
+  const readme = await fs.readFile(path.join(consumer, "node_modules/ankiforge/README.md"), "utf8");
   const examples = [...readme.matchAll(/```js\r?\n([\s\S]*?)```/g)];
   assert.ok(examples.length >= 3, "Expected runnable README examples");
   for (const [index, match] of examples.entries()) {
@@ -311,7 +342,7 @@ try {
     await fs.writeFile(
       path.join(consumer, `consumer.${extension}`),
       `
-      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, BuildReport, ComparisonReport, BuildError, CompareError, AddError, ApkgArtifact, type InspectLimits } from 'anki-forge-node';
+      import { Project, Note, Field, Template, NoteType, BuildOptions, BuildOutput, BuildReport, ComparisonReport, BuildError, CompareError, AddError, ApkgArtifact, type InspectLimits } from 'ankiforge';
       const project = new Project('typed').add('one', Note.basic('front', 'back'));
       const result: Promise<BuildOutput> = project.build(BuildOptions.to('typed.apkg'));
       const limits: InspectLimits = { maxMediaBytes: 1024 };
@@ -386,7 +417,7 @@ try {
   }
   console.log("Installed TypeScript ESM + CJS declarations: passed");
   await fs.rm(
-    path.join(consumer, "node_modules", `anki-forge-node-${host.suffix}`),
+    path.join(consumer, "node_modules", `ankiforge-${host.suffix}`),
     {
       recursive: true,
     },
@@ -395,7 +426,7 @@ try {
     [
       "--input-type=module",
       "-e",
-      `import { Project, NativeLoadError } from 'anki-forge-node';
+      `import { Project, NativeLoadError } from 'ankiforge';
     try { new Project('Missing'); process.exit(2); } catch (error) {
       if (!(error instanceof NativeLoadError) || !error.message.includes('--include=optional')) process.exit(3);
     }`,
@@ -408,7 +439,7 @@ try {
   const wrongRuntime = path.join(
     consumer,
     "node_modules",
-    `anki-forge-node-${host.suffix}`,
+    `ankiforge-${host.suffix}`,
   );
   await fs.mkdir(wrongRuntime);
   await fs.writeFile(
@@ -423,7 +454,7 @@ try {
     [
       "--input-type=module",
       "-e",
-      `import { Project, NativeLoadError } from 'anki-forge-node';
+      `import { Project, NativeLoadError } from 'ankiforge';
     try { new Project('Wrong version'); process.exit(2); } catch (error) {
       if (!(error instanceof NativeLoadError) || !error.message.includes('does not match SDK')) process.exit(3);
     }`,
@@ -440,7 +471,7 @@ try {
     [
       "--input-type=module",
       "-e",
-      `import { Project, NativeLoadError } from 'anki-forge-node';
+      `import { Project, NativeLoadError } from 'ankiforge';
     try { new Project('Old protocol'); process.exit(2); } catch(error) {
       if (!(error instanceof NativeLoadError) || !error.message.includes('does not match SDK protocol')) process.exit(3);
     }`,
@@ -450,6 +481,6 @@ try {
   );
   console.log("Same-version outdated native protocol is rejected: passed");
 } finally {
-  await new Promise((resolve) => server.close(resolve));
+  if (server.listening) await new Promise((resolve) => server.close(resolve));
   await fs.rm(temporary, { recursive: true, force: true });
 }

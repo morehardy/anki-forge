@@ -188,8 +188,10 @@ Moving from genanki? See the [Python migration guide](docs/python/genanki-migrat
 
 **Release status:** the checkout declares Rust `0.2.0`, Node `0.2.0`, and Python
 `0.2.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
-outstanding publication gates; npm publication and full platform verification
-for the Node candidate are pending. Python 0.2 has recorded wheel/source verification
+outstanding publication gates. The Node SDK uses the npm name `ankiforge`; its
+[release workflow](bindings/node/RELEASING.md) builds and verifies five packages,
+with npm ownership and the first public release still requiring maintainer setup.
+Python 0.2 has recorded wheel/source verification
 ([scope](bindings/python/COVERAGE.md)); this is not a PyPI publication notice.
 Follow the linked source instructions and release documentation before relying
 on registry availability.

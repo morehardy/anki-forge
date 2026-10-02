@@ -1,11 +1,15 @@
-# anki-forge-node
+# ankiforge
 
-Node.js 22.13+ SDK using the default public Rust API. Install with optional dependencies enabled: `npm install --include=optional anki-forge-node`.
+Node.js 22.13+ SDK using the default public Rust API. Install with optional dependencies enabled: `npm install --include=optional ankiforge`.
+
+Supported native runtimes: macOS arm64/x64, Linux x64 glibc, and Windows x64.
+For source builds, candidate tarballs and first-publication setup, see the
+[release runbook](RELEASING.md) and the repository's release status.
 
 A Project is one publication. Its namespace and each note key are stable identity; display names and content may change. Strings are text; use `Content.html` for intentional markup.
 
 ```js
-import { Project, Note, Content, BuildOptions } from 'anki-forge-node';
+import { Project, Note, Content, BuildOptions } from 'ankiforge';
 const project = new Project('biology').defaultDeck('Biology');
 project.add('cell', Note.basic('What is a <cell>?', Content.html('<b>Life’s basic unit</b>')));
 const output = await project.build(BuildOptions.to('biology-v1.apkg'));
@@ -16,7 +20,7 @@ await output.artifact.close(); // Persistent files remain on disk.
 Models are validated and immutable. Fields and templates have explicit keys; templates reference keys, while Anki receives display names. A note holds its model, so no separate registration is required. Builder methods return new values.
 
 ```js
-import { Project, NoteType, Field, Template, BuildOptions } from 'anki-forge-node';
+import { Project, NoteType, Field, Template, BuildOptions } from 'ankiforge';
 const model = NoteType.builder('vocabulary')
   .name('词汇')
   .field(new Field('front', { name: '正面', required: true }))
@@ -33,7 +37,7 @@ finally { await output.artifact.close(); }
 Media imports take owned snapshots immediately. Source files can subsequently change or disappear. `Media.bytes(Uint8Array, mime, limits?)` supports assets larger than 64 KiB. Typed image/sound content collects dependencies automatically; `project.addAsset(media)` and `builder.asset(media)` include raw HTML/CSS/script assets explicitly. Fixed names are validated and conflicting names fail atomically.
 
 ```js
-import { Project, Note, Media, Mask, BuildOptions } from 'anki-forge-node';
+import { Project, Note, Media, Mask, BuildOptions } from 'ankiforge';
 const image = (await Media.file('diagram.png')).withExportName('diagram.png');
 const note = Note.imageOcclusion(image)
   .mask(Mask.rect('nucleus', 10, 10, 20, 20))
@@ -49,7 +53,7 @@ await output.artifact.close();
 Updates use the previous original distribution APKG, including its complete embedded identity evidence. Compare completes even when policy blocks publication; build throws a `BuildError` for the same blocked policy. Missing/corrupt evidence is always an error. Default policy blocks High and Critical findings. `new UpdatePolicy().allow('RISK.NOTE_REMOVED')` explicitly accepts that whole category and preserves its evidence. APKG omission does not delete learners’ existing notes.
 
 ```js
-import { Project, Note, BuildOptions, CompareOptions } from 'anki-forge-node';
+import { Project, Note, BuildOptions, CompareOptions } from 'ankiforge';
 const first = await new Project('update-example').add('cell', Note.basic('Cell?', 'Unit of life'))
   .build(BuildOptions.temporary());
 try {

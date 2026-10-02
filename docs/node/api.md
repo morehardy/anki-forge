@@ -1,6 +1,6 @@
 # Node and TypeScript API
 
-The `anki-forge-node` entry point exposes the sole Project authoring model.
+The `ankiforge` entry point exposes the sole Project authoring model.
 Types are defined in [the public source](../../bindings/node/src/index.ts),
 [report classes](../../bindings/node/src/report.ts), and
 [JSON snapshot declarations](../../bindings/node/src/snapshots.ts). Start with
@@ -27,7 +27,7 @@ Use explicit business keys; neither content nor display names derive identity.
 ## Immutable models
 
 ```js
-import { NoteType, Field, Template, GenerationRule } from 'anki-forge-node';
+import { NoteType, Field, Template, GenerationRule } from 'ankiforge';
 const model = NoteType.builder('vocabulary')
   .name('词汇')
   .field(new Field('front', { name: '正面', required: true, sort: true }))
@@ -68,7 +68,7 @@ raw HTML/CSS/script references. Media limits accept `{ maxBytes }`; the default
 is 256 MiB and native bytes have no 64 KiB inline restriction.
 
 ```js
-import { Media, Note, Mask } from 'anki-forge-node';
+import { Media, Note, Mask } from 'ankiforge';
 const image = await Media.file('diagram.png');
 const note = Note.imageOcclusion(image)
   .mask(Mask.rect('nucleus', 10, 10, 20, 20))

@@ -10,7 +10,10 @@ rust-version = "1.92"
 unsafe_code = "forbid"
 
 # Rust's debuginfo stripping can misalign Mach-O string tables on macOS 27.
-# Keep the native Python image loadable on the supported Rust 1.92 baseline.
+# Keep both native binding images loadable on the supported Rust 1.92 baseline.
 # https://github.com/rust-lang/rust/issues/157750
 [profile.release.package.anki_forge_python_native]
+strip = "none"
+
+[profile.release.package.anki_forge_node_native]
 strip = "none"
