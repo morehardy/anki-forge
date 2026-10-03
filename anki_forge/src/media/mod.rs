@@ -19,6 +19,7 @@ use crate::authoring_core::{
     media::mime_type_subtype_compatible,
     media_io::{sniff_mime, MediaSniffConfidence},
 };
+pub(crate) use snapshot::ReaderCache;
 use snapshot::Snapshot;
 use std::{path::Path, sync::Arc};
 

@@ -37,6 +37,7 @@ pub(super) fn normalize(
     document: &ProductDocument,
     base_dir: &Path,
     media_store_dir: &Path,
+    prepared_media: Option<&mut crate::prepared_media::PreparedMedia>,
 ) -> Result<NormalizeOutput, NormalizeError> {
     let lowering = document.lower().map_err(|error| NormalizeError {
         message: "lower authored content".into(),
@@ -54,7 +55,7 @@ pub(super) fn normalize(
             media_store_dir: media_store_dir.to_owned(),
             media_policy: MediaPolicy::default_strict(),
         },
-        None,
+        prepared_media,
         &mut io_cause,
     );
     diagnostics.extend(result.diagnostics.items.into_iter().map(|item| {

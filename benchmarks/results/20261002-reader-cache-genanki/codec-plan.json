@@ -1,0 +1,33 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "default": {},
+    "level1": {
+      "ANKIFORGE_DIAG_ZSTD_LEVEL": "1"
+    },
+    "fast1": {
+      "ANKIFORGE_DIAG_ZSTD_LEVEL": "-1"
+    },
+    "level1_budget16": {
+      "ANKIFORGE_DIAG_ZSTD_LEVEL": "1",
+      "ANKIFORGE_DIAG_SNAPSHOT_BUDGET": "16777216"
+    }
+  },
+  "warmup_repeats": 1,
+  "timing_repeats": 5,
+  "expected_exports": 120,
+  "expected_anki_checks": 20,
+  "schedule_seed": 20261003,
+  "binary_sha256": {
+    "official": "3c9588a104bddcf114a5be389d542b6bd9899cd52e1c1c2e1b21d5004919b864",
+    "probe": "4331217991dd68c29e010da0b2b17bfb6b524f1c171283090691a9f4165e7ec8"
+  },
+  "purpose": "Locate residual cost. Instrumented diagnostic stages alter only one variable from default; official assesses instrumentation overhead. No production changes."
+}

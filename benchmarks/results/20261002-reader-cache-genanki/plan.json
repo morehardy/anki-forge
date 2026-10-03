@@ -1,0 +1,112 @@
+{
+  "created_utc": "2026-10-02T13:03:32.877303+00:00",
+  "name": "20261002-reader-cache-genanki",
+  "source_commit": "937d9387413d97a4d82b8a140172128a565e8351",
+  "git_status": "M anki_forge/src/authoring_core/media_io.rs\n M anki_forge/src/build_api/artifact.rs\n M anki_forge/src/build_api/candidate.rs\n M anki_forge/src/build_api/identity.rs\n M anki_forge/src/build_api/identity/content.rs\n M anki_forge/src/build_api/identity/validation.rs\n M anki_forge/src/build_api/normalize.rs\n M anki_forge/src/build_api/pipeline.rs\n M anki_forge/src/media/assets.rs\n M anki_forge/src/media/mod.rs\n M anki_forge/src/media/snapshot.rs\n M anki_forge/src/prepared_media.rs\n M anki_forge/src/writer_core/build.rs\n M anki_forge/src/writer_core/pipelined_sha1.rs\n M anki_forge/src/writer_core/stream_zip.rs\n M anki_forge/tests/consumers/media_snapshot_lifecycle.rs\n M anki_forge/tests/media_snapshot_lifecycle_tests.rs\n M benchmarks/.gitignore\n M benchmarks/README.md\n?? anki_forge/src/build_api/identity/canonical.rs\n?? anki_forge/src/media/snapshot/\n?? benchmarks/results/20261002-latest-genanki/\n?? benchmarks/results/20261002-optimized-genanki/\n?? benchmarks/results/20261002-performance-diagnosis/\n?? benchmarks/results/20261002-residual-performance-diagnosis/\n?? benchmarks/results/20261002-spool-genanki/\n?? docs/assets/brand/card-loop-combination/\n?? docs/assets/brand/icon-options/\n?? docs/assets/brand/stacked-card-options/\n?? docs/plans/2026-09-28-release-readiness-audit.md\n?? docs/plans/2026-10-02-geo-source-notes.md\n?? docs/plans/2026-10-02-npm-release-checklist.md\n?? docs/plans/2026-10-02-website-readme-product-spec.md",
+  "exploratory_dirty_source": true,
+  "runner_sha256": "5d49b4cb01e068fc59544f046bb236e90b18c2fe40596c3e84f175ae931d325b",
+  "source_snapshot_sha256": "dcf626a9913d971a03bbca09fd678d663160d8ed462986d798b5c0839595f48b",
+  "source_patch_sha256": "cc7bcb2dee2f11e40a38da6a9560e4072899c7d674408b001d88951a2796a84a",
+  "source_and_inputs_sha256": "0e6a56fdbac082ae68111b57d5ff9fe905fa155f31757bdc61efa5be10e10154",
+  "media_inputs_sha256": "92262e2b790d201af8c38faf7a2c05f27a07562b9cf30d80f5ee5972dadb5462",
+  "python": "3.11.0 (v3.11.0:deaf509e8f, Oct 24 2022, 14:43:23) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "python_executable": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+  "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t93%; charging; 0:32 remaining present: true",
+  "matrix": [
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 1000
+    }
+  ],
+  "timing_repeats": 10,
+  "rss_repeats": 5,
+  "warmups_before_each_phase": 3,
+  "expected_attempts": 840,
+  "expected_anki_imports": 40,
+  "schedule_seed": 20260907,
+  "headline_metric": "median elapsed time from native process spawn to exit; includes startup, parsing, export and shutdown",
+  "rss_metric": "single_process_peak_rss_os_v1, 5 independent invocations",
+  "report_quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "verification_schedule": "after both adjacent exporters exit, outside timing, following current media_bench.py",
+  "no_selective_retries": true,
+  "cold_cache_controlled": false,
+  "purpose": "Measure bounded-reader-cache and canonical-checksum optimized Project API against the 2026-09-21 Deck API archive and preceding optimized Project API using identical fixtures; one standard session; no selective retries.",
+  "oracle_reuse_check_sha256": "44da5f30426ccba004915b3b58501a49129e63fc95e25d70a44045b2da9afeb2",
+  "host_hardware_sha256": "8313ff0dcac3c8c1d60cf0945699059a9ede252b26f0b23971320e62d91fcabe"
+}

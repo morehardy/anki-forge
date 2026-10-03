@@ -1,0 +1,545 @@
+--- a/anki_forge/src/media/assets.rs
++++ b/anki_forge/src/media/assets.rs
+@@ -11,7 +11,11 @@
+ 
+ /// The same portable filename identity governs collection and update history.
+ pub(crate) fn filename_identity(name: &str) -> UniCase<String> {
+-    UniCase::unicode(name.nfc().collect::<String>())
++    if name.is_ascii() {
++        UniCase::ascii(name.to_owned())
++    } else {
++        UniCase::new(name.nfc().collect::<String>())
++    }
+ }
+ 
+ /// Why two assets cannot occupy the same portable filename space.
+@@ -100,3 +104,47 @@
+         self.0.into_values().collect()
+     }
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use std::{
++        collections::hash_map::DefaultHasher,
++        hash::{Hash, Hasher},
++    };
++
++    #[test]
++    fn portable_identity_keeps_unicode_ordering_and_hashes_across_ascii_keys() {
++        let names = [
++            "Logo.bin",
++            "logo.bin",
++            "Straße.bin",
++            "STRASSE.bin",
++            "K.bin",
++            "K.bin",
++            "café.bin",
++            "cafe\u{301}.bin",
++            "中.bin",
++            "a.bin",
++            "Z.bin",
++            "ß.bin",
++            "ss.bin",
++        ];
++        let hash = |key: &UniCase<String>| {
++            let mut h = DefaultHasher::new();
++            key.hash(&mut h);
++            h.finish()
++        };
++        for a in names {
++            let key = filename_identity(a);
++            let original = UniCase::unicode(a.nfc().collect::<String>());
++            assert_eq!(hash(&key), hash(&original));
++            for b in names {
++                let other = filename_identity(b);
++                let original_other = UniCase::unicode(b.nfc().collect::<String>());
++                assert_eq!(key == other, original == original_other);
++                assert_eq!(key.cmp(&other), original.cmp(&original_other));
++            }
++        }
++    }
++}
+--- a/anki_forge/src/media/snapshot.rs
++++ b/anki_forge/src/media/snapshot.rs
+@@ -11,6 +11,8 @@
+ 
+ use super::{MediaError, MediaErrorKind, MediaLimits};
+ 
++mod spool;
++
+ const MEMORY_THRESHOLD: usize = 1024 * 1024;
+ const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
+ const BUFFER_BYTES: usize = 64 * 1024;
+@@ -28,11 +30,13 @@
+ enum Storage {
+     Memory(Vec<u8>),
+     File(tempfile::TempPath),
++    Segment(spool::Segment),
+ }
+ 
+ enum Reader<'a> {
+     Memory(Cursor<&'a [u8]>),
+     File(File),
++    Segment(spool::Reader),
+ }
+ 
+ impl Read for Reader<'_> {
+@@ -40,6 +44,7 @@
+         match self {
+             Self::Memory(reader) => reader.read(bytes),
+             Self::File(reader) => reader.read(bytes),
++            Self::Segment(reader) => reader.read(bytes),
+         }
+     }
+ }
+@@ -49,11 +54,16 @@
+         match self {
+             Self::Memory(reader) => reader.seek(position),
+             Self::File(reader) => reader.seek(position),
+-        }
+-    }
+-}
+-
+-type Cache = HashMap<(blake3::Hash, u64), Weak<Snapshot>>;
++            Self::Segment(reader) => reader.seek(position),
++        }
++    }
++}
++
++#[derive(Default)]
++struct Cache {
++    snapshots: HashMap<(blake3::Hash, u64), Weak<Snapshot>>,
++    spool: spool::Pool,
++}
+ struct SnapshotCache {
+     process: AtomicU32,
+     // Accessed only while holding entries for this process.
+@@ -87,7 +97,7 @@
+         if self.process.load(Ordering::Relaxed) != process {
+             // Never upgrade inherited Weak pointers: their Arc accounting is
+             // copied, and cannot keep the parent's temporary files alive.
+-            *entries = Some(HashMap::new());
++            *entries = Some(Cache::default());
+             self.memory_bytes.store(0, Ordering::Relaxed);
+             self.process.store(process, Ordering::Release);
+         }
+@@ -105,26 +115,33 @@
+         };
+         let cache = entries.as_mut().expect("process cache is initialized");
+         let key = (self.digest, self.len);
+-        if let Some(existing) = cache.get(&key).and_then(Weak::upgrade) {
++        if let Some(existing) = cache.snapshots.get(&key).and_then(Weak::upgrade) {
+             return Ok(existing);
+         }
+         let used = SNAPSHOTS.memory_bytes.load(Ordering::Relaxed);
+         if used.saturating_add(self.memory_bytes()) > MEMORY_BUDGET {
+-            self.spill_memory()?;
++            if let Storage::Memory(bytes) = &self.storage {
++                self.storage = Storage::Segment(
++                    cache
++                        .spool
++                        .store(bytes)
++                        .map_err(|error| MediaError::io("write media snapshot", error))?,
++                );
++            }
+         }
+         self.cached_memory_bytes = self.memory_bytes();
+         SNAPSHOTS
+             .memory_bytes
+             .store(used + self.cached_memory_bytes, Ordering::Relaxed);
+         let owned = Arc::new(self);
+-        cache.insert(key, Arc::downgrade(&owned));
++        cache.snapshots.insert(key, Arc::downgrade(&owned));
+         Ok(owned)
+     }
+ 
+     fn memory_bytes(&self) -> usize {
+         match &self.storage {
+             Storage::Memory(bytes) => bytes.capacity(),
+-            Storage::File(_) => 0,
++            Storage::File(_) | Storage::Segment(_) => 0,
+         }
+     }
+ 
+@@ -232,6 +249,10 @@
+     pub(crate) fn reader(&self) -> Result<impl Read + Seek + Send + '_, MediaError> {
+         match &self.storage {
+             Storage::Memory(bytes) => Ok(Reader::Memory(Cursor::new(bytes.as_slice()))),
++            Storage::Segment(segment) => segment
++                .reader()
++                .map(Reader::Segment)
++                .map_err(|e| MediaError::io("read owned media snapshot", e)),
+             Storage::File(path) => File::open(path)
+                 .map(Reader::File)
+                 .map_err(|e| MediaError::io("read owned media snapshot", e)),
+@@ -259,10 +280,11 @@
+                 .fetch_sub(self.cached_memory_bytes, Ordering::Relaxed);
+             let key = (self.digest, self.len);
+             if cache
++                .snapshots
+                 .get(&key)
+                 .is_some_and(|entry| std::ptr::eq(entry.as_ptr(), self))
+             {
+-                cache.remove(&key);
++                cache.snapshots.remove(&key);
+             }
+         }
+     }
+@@ -421,7 +443,13 @@
+             drop(parent);
+             assert_eq!(result, Ok(true), "child waited on an inherited cache lock");
+         });
+-        assert!(cache.lock(2).unwrap().as_ref().unwrap().is_empty());
++        assert!(cache
++            .lock(2)
++            .unwrap()
++            .as_ref()
++            .unwrap()
++            .snapshots
++            .is_empty());
+     }
+ 
+     #[test]
+@@ -434,8 +462,15 @@
+             .unwrap()
+             .as_mut()
+             .unwrap()
++            .snapshots
+             .insert((parent.digest, parent.len), Arc::downgrade(&parent));
+-        assert!(cache.lock(2).unwrap().as_ref().unwrap().is_empty());
++        assert!(cache
++            .lock(2)
++            .unwrap()
++            .as_ref()
++            .unwrap()
++            .snapshots
++            .is_empty());
+         // The parent's snapshot remains readable after discarding the child cache.
+         let mut bytes = Vec::new();
+         parent.reader().unwrap().read_to_end(&mut bytes).unwrap();
+--- /dev/null
++++ b/anki_forge/src/media/snapshot/spool.rs
+@@ -0,0 +1,201 @@
++//! Bounded spill blocks shared only by their live immutable snapshot segments.
++use std::{
++    fs::File,
++    io::{self, Read, Seek, SeekFrom, Write},
++    sync::{Arc, Weak},
++};
++
++const BLOCK_BYTES: u64 = 4 * 1024 * 1024;
++
++#[derive(Default)]
++pub(super) struct Pool {
++    current: Weak<Block>,
++    length: u64,
++}
++
++#[derive(Debug)]
++struct Block {
++    path: Option<tempfile::TempPath>,
++    process: u32,
++}
++
++impl Block {
++    fn path(&self) -> &std::path::Path {
++        self.path.as_deref().expect("live spill block owns a path")
++    }
++}
++
++impl Drop for Block {
++    fn drop(&mut self) {
++        // Arc counts are copied at fork. A child must never unlink parent storage.
++        if self.process != std::process::id() {
++            if let Some(path) = self.path.take() {
++                std::mem::forget(path);
++            }
++        }
++    }
++}
++
++#[derive(Debug)]
++pub(super) struct Segment {
++    block: Arc<Block>,
++    offset: u64,
++    length: u64,
++}
++
++impl Pool {
++    // The process-local snapshot cache serializes append operations. No file
++    // descriptor or strong storage owner remains in the cache between calls.
++    pub(super) fn store(&mut self, bytes: &[u8]) -> io::Result<Segment> {
++        let existing = self
++            .current
++            .upgrade()
++            .filter(|_| self.length + bytes.len() as u64 <= BLOCK_BYTES);
++        let (block, mut file, offset) = match existing {
++            Some(block) => {
++                let file = File::options().write(true).open(block.path())?;
++                (block, file, self.length)
++            }
++            None => {
++                let (file, path) = tempfile::NamedTempFile::new()?.into_parts();
++                (
++                    Arc::new(Block {
++                        path: Some(path),
++                        process: std::process::id(),
++                    }),
++                    file,
++                    0,
++                )
++            }
++        };
++        file.seek(SeekFrom::Start(offset))?;
++        if let Err(error) = file.write_all(bytes) {
++            // Roll back a partial append while preserving the original I/O cause.
++            // Even if truncation fails, never reuse the failed block's tail.
++            let _ = file.set_len(offset);
++            self.current = Weak::new();
++            self.length = 0;
++            return Err(error);
++        }
++        self.length = offset + bytes.len() as u64;
++        self.current = Arc::downgrade(&block);
++        Ok(Segment {
++            block,
++            offset,
++            length: bytes.len() as u64,
++        })
++    }
++}
++
++impl Segment {
++    pub(super) fn reader(&self) -> io::Result<Reader> {
++        let mut file = File::open(self.block.path())?;
++        file.seek(SeekFrom::Start(self.offset))?;
++        Ok(Reader {
++            file,
++            offset: self.offset,
++            length: self.length,
++            position: 0,
++        })
++    }
++}
++
++pub(super) struct Reader {
++    file: File,
++    offset: u64,
++    length: u64,
++    position: u64,
++}
++
++impl Read for Reader {
++    fn read(&mut self, bytes: &mut [u8]) -> io::Result<usize> {
++        let limit = self
++            .length
++            .saturating_sub(self.position)
++            .min(bytes.len() as u64) as usize;
++        let count = self.file.read(&mut bytes[..limit])?;
++        self.position += count as u64;
++        Ok(count)
++    }
++}
++
++impl Seek for Reader {
++    fn seek(&mut self, from: SeekFrom) -> io::Result<u64> {
++        let position = match from {
++            SeekFrom::Start(position) => i128::from(position),
++            SeekFrom::Current(delta) => i128::from(self.position) + i128::from(delta),
++            SeekFrom::End(delta) => i128::from(self.length) + i128::from(delta),
++        };
++        let invalid =
++            || io::Error::new(io::ErrorKind::InvalidInput, "invalid snapshot segment seek");
++        let position = u64::try_from(position).map_err(|_| invalid())?;
++        let absolute = self.offset.checked_add(position).ok_or_else(invalid)?;
++        self.file.seek(SeekFrom::Start(absolute))?;
++        self.position = position;
++        Ok(position)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn readers_are_independent_and_cannot_cross_segment_boundaries() {
++        let mut pool = Pool::default();
++        let first = pool.store(b"first").unwrap();
++        let second = pool.store(b"second").unwrap();
++        assert!(Arc::ptr_eq(&first.block, &second.block));
++        let path = first.block.path().to_owned();
++        let mut a = first.reader().unwrap();
++        let mut b = second.reader().unwrap();
++        assert_eq!(a.seek(SeekFrom::End(-2)).unwrap(), 3);
++        let mut bytes = Vec::new();
++        a.read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, b"st");
++        assert_eq!(a.seek(SeekFrom::Current(-5)).unwrap(), 0);
++        bytes.clear();
++        a.read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, b"first");
++        assert_eq!(b.seek(SeekFrom::End(-3)).unwrap(), 3);
++        bytes.clear();
++        b.read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, b"ond");
++        assert!(b.seek(SeekFrom::Start(20)).is_ok());
++        assert_eq!(b.read(&mut [0; 10]).unwrap(), 0);
++        assert!(b.seek(SeekFrom::End(-7)).is_err());
++        drop((a, b, first));
++        assert!(path.exists(), "another segment still owns the shared block");
++        drop(second);
++        assert!(!path.exists(), "weak pool must not retain dead storage");
++    }
++
++    #[test]
++    fn full_blocks_rotate_and_each_block_has_its_own_cleanup_owner() {
++        let mut pool = Pool::default();
++        let first = pool.store(&vec![1; BLOCK_BYTES as usize]).unwrap();
++        let second = pool.store(b"next block").unwrap();
++        assert!(!Arc::ptr_eq(&first.block, &second.block));
++        let first_path = first.block.path().to_owned();
++        let second_path = second.block.path().to_owned();
++        drop(first);
++        assert!(!first_path.exists());
++        assert!(second_path.exists());
++        drop(second);
++        assert!(!second_path.exists());
++        let fresh = pool.store(b"fresh").unwrap();
++        assert_eq!(fresh.offset, 0, "expired weak block must start a new file");
++    }
++
++    #[test]
++    fn inherited_block_cleanup_preserves_parent_path() {
++        let file = tempfile::NamedTempFile::new().unwrap();
++        let path = file.path().to_owned();
++        drop(Block {
++            path: Some(file.into_temp_path()),
++            process: std::process::id().wrapping_add(1),
++        });
++        assert!(path.exists());
++        std::fs::remove_file(path).unwrap();
++    }
++}
+--- a/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
++++ b/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
+@@ -314,6 +314,48 @@
+     );
+     ensure!(inventory(&temp)?["files"] == 0);
+     match mode.as_str() {
++        "fd-stress" => {
++            let mut owners = Vec::new();
++            for index in 0..300_u16 {
++                let mut bytes = vec![index as u8; 1024 * 1024];
++                bytes[..2].copy_from_slice(&index.to_le_bytes());
++                owners.push(Media::bytes(bytes, "application/octet-stream")?);
++            }
++            let storage = inventory(&temp)?;
++            ensure!(storage["logical_bytes"] == 296 * 1024 * 1024);
++            ensure!(storage["files"] == 74, "exercise more blocks than allowed descriptors");
++            let last = owners.pop().context("last segment")?;
++            drop(owners);
++            ensure!(inventory(&temp)?["files"] == 1, "only the final live block remains");
++            drop(last);
++            ensure!(inventory(&temp)?["files"] == 0);
++            emit("many_blocks_keep_only_active_writer", &temp, json!({}))?;
++            Ok(())
++        }
++        "append-failure" => {
++            let mut owners = Vec::new();
++            for index in 0..64_u8 {
++                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
++            }
++            let retained = Media::bytes(vec![254; 4096], "application/octet-stream")?;
++            let before = inventory(&temp)?;
++            ensure!(before["files"] == 1 && before["logical_bytes"] == 4096);
++            let error = Media::bytes(vec![255; 64 * 1024], "application/octet-stream").unwrap_err();
++            let cause = std::error::Error::source(&error)
++                .and_then(|error| error.downcast_ref::<std::io::Error>()).context("original I/O cause")?;
++            ensure!(cause.kind() == std::io::ErrorKind::FileTooLarge);
++            ensure!(inventory(&temp)? == before, "partial append changed existing storage");
++            let path = fs::read_dir(&temp)?.next().context("retained block")??.path();
++            ensure!(fs::read(path)? == vec![254; 4096], "failed append overwrote a live segment");
++            let duplicate = Media::bytes(vec![254; 4096], "application/octet-stream")?;
++            ensure!(duplicate == retained && inventory(&temp)? == before);
++            drop(duplicate);
++            drop(retained);
++            drop(owners);
++            ensure!(inventory(&temp)?["files"] == 0);
++            emit("failed_append_preserved_existing_segment", &temp, json!({}))?;
++            Ok(())
++        }
+         "budget-failure" => {
+             let mut owners = Vec::new();
+             for index in 0..64_u8 {
+@@ -332,15 +374,27 @@
+         }
+         "bounded-small" => {
+             let mut owners = Vec::new();
+-            for index in 0..128_u8 {
+-                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
++            for index in 0..256_u16 {
++                owners.push(Media::bytes(vec![index as u8; 64 * 1024], "application/octet-stream")?);
+             }
+-            ensure!(inventory(&temp)?["files"].as_u64().unwrap() >= 64,
+-                "small snapshots exceeded the shared 4 MiB memory budget");
+-            let duplicate = Media::bytes(vec![127; 64 * 1024], "application/octet-stream")?;
++            let storage = inventory(&temp)?;
++            ensure!(storage["logical_bytes"] == 12 * 1024 * 1024,
++                "small snapshots exceeded the shared 4 MiB memory budget: {storage}");
++            ensure!(storage["files"].as_u64().unwrap() <= 3,
++                "small snapshots must share bounded spill blocks: {storage}");
++            ensure!(storage["sizes"].as_array().unwrap().iter().all(|v| v.as_u64().unwrap() <= 4 * 1024 * 1024),
++                "spill blocks must have bounded retained storage");
++            let duplicate = Media::bytes(vec![255; 64 * 1024], "application/octet-stream")?;
+             let before = inventory(&temp)?;
+             drop(duplicate);
+             ensure!(inventory(&temp)? == before, "duplicate snapshot must share storage");
++            let mut project = Project::new("shared-spill-blocks")?;
++            for media in &owners {project.add_asset(media.clone())?;}
++            project.add("one", Note::basic("Question", "Answer"))?;
++            let output = project.build(BuildOptions::to(workspace.join("segments.apkg")))?;
++            ensure!(output.report().counts().media == 256);
++            drop(output);
++            drop(project);
+             drop(owners);
+             ensure!(inventory(&temp)?["files"] == 0);
+             let small = Media::bytes(vec![255; 64 * 1024], "application/octet-stream")?;
+--- a/anki_forge/tests/media_snapshot_lifecycle_tests.rs
++++ b/anki_forge/tests/media_snapshot_lifecycle_tests.rs
+@@ -122,15 +122,15 @@
+     fs::create_dir(&temp).unwrap();
+     wave(&workspace.path().join("source.wav"), 8 << 20);
+     wave(&workspace.path().join("sentinel.wav"), 1536 << 10);
+-    let mut command = if cap_file_size || mode == "bounded-small" {
++    let mut command = if cap_file_size || matches!(mode, "bounded-small" | "fd-stress") {
+         // POSIX shell limits affect only the exec'd consumer. Ignoring SIGXFSZ
+         // makes write(2) return EFBIG after a real partial spool write.
+         let mut command = Command::new("sh");
+         command.args([
+             "-c",
+-            if mode == "bounded-small" {
++            if matches!(mode, "bounded-small" | "fd-stress") {
+                 "ulimit -n 64; exec \"$1\" \"$2\" \"$3\""
+-            } else if mode == "budget-failure" {
++            } else if matches!(mode, "budget-failure" | "append-failure") {
+                 "trap '' XFSZ; ulimit -f 16; exec \"$1\" \"$2\" \"$3\""
+             } else {
+                 "trap '' XFSZ; ulimit -f 4096; exec \"$1\" \"$2\" \"$3\""
+@@ -216,3 +216,14 @@
+ fn failed_partial_spool_write_is_cleaned_and_other_owners_survive() {
+     run("write-failure", true);
+ }
++
++#[cfg(unix)]
++#[test]
++fn failed_append_preserves_live_segments_and_cleans_only_its_partial_tail() {
++    run("append-failure", true);
++}
++
++#[test]
++fn more_live_spill_blocks_than_descriptor_limit_remain_importable_and_clean() {
++    run("fd-stress", false);
++}

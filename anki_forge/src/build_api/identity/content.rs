@@ -183,51 +183,82 @@ pub(super) fn note_from_plan(
     })
 }
 
-pub(super) fn note_from_collection(
-    db: &rusqlite::Connection,
-    note: i64,
-    model: i64,
-    cloze: bool,
-) -> anyhow::Result<String> {
-    let (fields, tags): (String, String) = db.query_row(
-        "SELECT flds, tags FROM notes WHERE id = ?1",
-        [note],
-        |row| Ok((row.get(0)?, row.get(1)?)),
-    )?;
-    let template_decks = config_rows(db, model, "templates")?
-        .into_iter()
-        .map(|(ordinal, _, bytes)| {
-            Ok((
-                ordinal,
-                anki_proto::decode_template_config(&bytes)?.target_deck_id,
-            ))
+/// Reuses card queries and model configuration for a single validation pass.
+pub(super) struct NoteReader<'db> {
+    db: &'db rusqlite::Connection,
+    cards: rusqlite::Statement<'db>,
+    template_decks: BTreeMap<i64, BTreeMap<u32, i64>>,
+}
+
+impl<'db> NoteReader<'db> {
+    pub(super) fn new(db: &'db rusqlite::Connection) -> anyhow::Result<Self> {
+        Ok(Self {
+            db,
+            cards: db.prepare("SELECT cards.ord, cards.did, decks.name, cards.flags FROM cards LEFT JOIN decks ON decks.id = cards.did WHERE cards.nid = ?1 ORDER BY cards.ord")?,
+            template_decks: BTreeMap::new(),
         })
-        .collect::<anyhow::Result<BTreeMap<_, _>>>()?;
-    let rows = db.prepare(
-        "SELECT cards.ord, cards.did, decks.name, cards.flags FROM cards LEFT JOIN decks ON decks.id = cards.did WHERE cards.nid = ?1 ORDER BY cards.ord",
-    )?.query_map([note], |row| Ok((row.get::<_, u32>(0)?, row.get::<_, i64>(1)?, row.get::<_, Option<String>>(2)?, row.get::<_, i64>(3)?)))?
-        .collect::<Result<Vec<_>, _>>()?;
-    let cards = rows
-        .into_iter()
-        .map(|(ordinal, deck, name, flags)| {
-            let target = template_decks
-                .get(&if cloze { 0 } else { ordinal })
-                .context("card refers to a missing template")?;
-            ensure!(
-                *target == 0 || *target == deck,
-                "card destination disagrees with template target deck"
+    }
+
+    pub(super) fn read(
+        &mut self,
+        note: i64,
+        model: i64,
+        cloze: bool,
+        fields: &str,
+        tags: &str,
+    ) -> anyhow::Result<(String, Vec<u32>)> {
+        if let std::collections::btree_map::Entry::Vacant(entry) = self.template_decks.entry(model)
+        {
+            entry.insert(
+                config_rows(self.db, model, "templates")?
+                    .into_iter()
+                    .map(|(ordinal, _, bytes)| {
+                        Ok((
+                            ordinal,
+                            anki_proto::decode_template_config(&bytes)?.target_deck_id,
+                        ))
+                    })
+                    .collect::<anyhow::Result<_>>()?,
             );
-            Ok((
-                ordinal,
-                name.context("card refers to a missing deck")?,
-                flags,
-            ))
-        })
-        .collect::<anyhow::Result<Vec<_>>>()?;
-    hash(&NoteContent {
-        model,
-        fields: &fields,
-        tags: &tags,
-        cards: &cards,
-    })
+        }
+        let template_decks = &self.template_decks[&model];
+        let rows = self
+            .cards
+            .query_map([note], |row| {
+                Ok((
+                    row.get::<_, u32>(0)?,
+                    row.get::<_, i64>(1)?,
+                    row.get::<_, Option<String>>(2)?,
+                    row.get::<_, i64>(3)?,
+                ))
+            })?
+            .collect::<Result<Vec<_>, _>>()?;
+        let cards = rows
+            .into_iter()
+            .map(|(ordinal, deck, name, flags)| {
+                let target = template_decks
+                    .get(&if cloze { 0 } else { ordinal })
+                    .context("card refers to a missing template")?;
+                ensure!(
+                    *target == 0 || *target == deck,
+                    "card destination disagrees with template target deck"
+                );
+                Ok((
+                    ordinal,
+                    name.context("card refers to a missing deck")?,
+                    flags,
+                ))
+            })
+            .collect::<anyhow::Result<Vec<_>>>()?;
+        let ordinals = cards.iter().map(|(ordinal, _, _)| *ordinal).collect();
+        Ok((
+            hash(&NoteContent {
+                model,
+                fields,
+                tags,
+                cards: &cards,
+            })?,
+            ordinals,
+        ))
+    }
 }

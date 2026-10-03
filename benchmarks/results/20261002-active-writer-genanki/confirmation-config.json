@@ -1,0 +1,18 @@
+{
+  "purpose": "Final uninstrumented comparison: frozen round3 versus active writer + private synced candidate publication + streaming collection digest; 4 MiB resident budget; other experimental switches excluded",
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "modes": {
+    "before": {
+      "binary": "before"
+    },
+    "after": {
+      "binary": "after"
+    }
+  }
+}

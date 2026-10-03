@@ -5,6 +5,53 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Current Project API comparison: 2026-10-02
+
+The [current-code report](results/20261002-latest-genanki/report.md) compares
+commit `4265fc4` with the archived 2026-09-21 Deck API using identical inputs.
+All 840 exports and 40 selected Anki checks passed. All 20 Rust timing medians
+increased; the report retains RSS, package sizes, independently remeasured
+genanki, quartiles and exact environment/source evidence. API paths and desktop
+conditions differ between dates; these are descriptive results, not an isolated
+root-cause diagnosis. See the [evidence index](results/20261002-latest-genanki/README.md).
+
+The subsequent [diagnosis](results/20261002-performance-diagnosis/report.md)
+includes repeated sync ablations and same-host rebuilt historical-source tests.
+It identifies the lost PreparedMedia path, intermediate CAS/staging sync costs,
+and additional native identity-validation work. Its probes are separate source
+copies; they are diagnostic evidence, not a production repair.
+
+The [optimized rerun](results/20261002-optimized-genanki/report.md) measures
+owned-snapshot streaming, a shared snapshot memory budget, reused identity
+queries and exclusive candidate publication against both archived baselines.
+Its frozen working-tree patch, full 20-cell matrix, original output validation
+and Anki checks are retained separately from the pre-optimization evidence.
+
+The [residual-cost diagnosis](results/20261002-residual-performance-diagnosis/report.md)
+uses unchanged optimized runtime sources, repeated same-host historical
+comparisons and isolated single-variable probes. It locates the per-object
+snapshot spill/cleanup cost, separates identity-validation stages and retains
+the higher RSS of an increased snapshot budget. All 216 exports and 36 selected
+Anki checks passed; these diagnostic samples do not replace the full matrix.
+
+The [shared-spool rerun](results/20261002-spool-genanki/report.md) compares the
+subsequent bounded snapshot-block and portable-name optimizations primarily with
+the 2026-09-21 archive, and also with the preceding optimized Project runtime.
+Its complete matrix retains fresh genanki measurements, independent RSS,
+package sizes, ownership/failure regression evidence and frozen source hashes.
+
+The [reader-cache and codec investigation](results/20261002-reader-cache-genanki/report.md)
+tests remaining costs against the current shared-spool runtime and the September
+21 archive. It covers bounded per-worker snapshot readers, canonical identity
+checksum serialization and a fast outer zstd frame for PNG. The report retains
+single-variable controls, rejected alternatives and the final full matrix.
+
+The [active-writer follow-up](results/20261002-active-writer-genanki/report.md)
+measures reuse of the active snapshot writer, publication of an already-synced
+private candidate and collection hashing during inspection. It retains separate
+controls for source opening, snapshot budgets and hashing, plus bounded-FD,
+failure, ownership and publication regression evidence.
+
 ## Archived Rust/genanki comparison: 2026-09-21
 
 The [archived report](results/20260921-readme-genanki/report.md) measures the

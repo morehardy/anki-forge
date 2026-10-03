@@ -1,0 +1,110 @@
+diff -ru /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity/content.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity/content.rs
+--- /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity/content.rs	2026-10-02 18:15:42
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity/content.rs	2026-10-02 18:23:32
+@@ -34,6 +34,7 @@
+ }
+ 
+ fn hash(value: &impl Serialize) -> anyhow::Result<String> {
++ let _detail_scope=crate::diag::Scope::new("identity.content_hash");
+     Ok(blake3::hash(&serde_json::to_vec(value)?)
+         .to_hex()
+         .to_string())
+@@ -123,6 +124,7 @@
+     db: &rusqlite::Connection,
+     model: i64,
+ ) -> anyhow::Result<String> {
++ let _detail_scope=crate::diag::Scope::new("identity.model_content");
+     let (name, config) = db.query_row(
+         "SELECT name, config FROM notetypes WHERE id = ?1",
+         [model],
+diff -ru /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity/validation.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity/validation.rs
+--- /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity/validation.rs	2026-10-02 18:15:42
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity/validation.rs	2026-10-02 18:23:32
+@@ -44,6 +44,7 @@
+ 
+ impl IdentityEnvelope {
+     fn validate_media_history(&self) -> anyhow::Result<()> {
++ let _detail_scope=crate::diag::Scope::new("identity.media_history");
+         use crate::media::{assets::filename_identity, validate_name};
+ 
+         // Retired payloads cannot be re-read from this archive. Their intrinsic
+@@ -114,6 +115,7 @@
+             count == self.identity.models.values().filter(|m| m.active).count(),
+             "incomplete model mapping"
+         );
++        let _model_scope=crate::diag::Scope::new("identity.validate_models");
+         let mut model_ids = BTreeSet::new();
+         let mut io_models = BTreeSet::new();
+         for (key, model) in &self.identity.models {
+@@ -185,11 +187,13 @@
+                 "model content fingerprint disagrees with collection"
+             );
+         }
++        drop(_model_scope);
+         let count: usize = db.query_row("SELECT COUNT(*) FROM notes", [], |row| row.get(0))?;
+         ensure!(
+             count == self.identity.notes.values().filter(|n| n.active).count(),
+             "incomplete note mapping"
+         );
++        let _mapping_scope=crate::diag::Scope::new("identity.validate_note_mapping");
+         let mut guids = BTreeSet::new();
+         let mut active = BTreeMap::new();
+         for (key, note) in &self.identity.notes {
+@@ -234,6 +238,8 @@
+             ensure!(model.active, "active note refers to a retired model");
+             active.insert(note.guid.as_str(), note);
+         }
++        drop(_mapping_scope);
++        let _rows_scope=crate::diag::Scope::new("identity.validate_note_rows");
+         let mut content = super::content::NoteReader::new(&db)?;
+         let mut statement = db.prepare("SELECT id, guid, mid, mod, flds, tags FROM notes")?;
+         let mut rows = statement.query([])?;
+diff -ru /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity.rs
+--- /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/build_api/identity.rs	2026-10-02 18:15:42
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/build_api/identity.rs	2026-10-02 18:23:32
+@@ -384,7 +384,10 @@
+ }
+ 
+ pub(crate) fn identity_checksum(identity: &PackageIdentity) -> anyhow::Result<String> {
+-    let json = crate::writer_core::canonical_json::to_canonical_json(identity)?;
++ let _detail_scope=crate::diag::Scope::new("identity.checksum");
++    let mut value = {let _s=crate::diag::Scope::new("identity.checksum_to_value");serde_json::to_value(identity)?};
++    {let _s=crate::diag::Scope::new("identity.checksum_sort");value.sort_all_objects();}
++    let json = {let _s=crate::diag::Scope::new("identity.checksum_serialize");serde_json::to_string(&value)?};
+     Ok(blake3::hash(json.as_bytes()).to_hex().to_string())
+ }
+ 
+@@ -409,12 +412,14 @@
+ }
+ 
+ pub(crate) fn file_hash(path: &Path) -> std::io::Result<String> {
++ let _detail_scope=crate::diag::Scope::new("identity.file_hash");
+     let mut hash = blake3::Hasher::new();
+     std::io::copy(&mut std::fs::File::open(path)?, &mut hash)?;
+     Ok(hash.finalize().to_hex().to_string())
+ }
+ 
+ fn digest(parts: &[&str]) -> String {
++ let _detail_scope=crate::diag::Scope::new("identity.key_digest");
+     let mut hash = blake3::Hasher::new_derive_key("ankiforge.package-identity.v1");
+     for part in parts {
+         hash.update(&(part.len() as u64).to_be_bytes());
+diff -ru /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/writer_core/inspect.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/writer_core/inspect.rs
+--- /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/probe-source/anki_forge/src/writer_core/inspect.rs	2026-10-02 18:15:42
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/residual-20261002/detail-source/anki_forge/src/writer_core/inspect.rs	2026-10-02 18:23:32
+@@ -348,6 +348,7 @@
+  let _diagnostic_scope=crate::diag::Scope::new("inspect.facts");
+     let mut archive = ApkgReader::open(path, limits)?;
+ 
++    let _parse_scope=crate::diag::Scope::new("inspect.identity_parse");
+     let identity: Option<crate::build::identity::IdentityEnvelope> = if require_identity {
+         let bytes = archive
+             .bytes(
+@@ -365,6 +366,7 @@
+         None
+     };
+ 
++    drop(_parse_scope);
+     let (version, mut limitations) = read_package_version(&mut archive)?;
+     let media = match read_media_entries(&mut archive, version) {
+         Ok(media) => media,

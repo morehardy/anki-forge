@@ -1,0 +1,444 @@
+   Compiling target-lexicon v0.13.5
+   Compiling syn v2.0.115
+   Compiling synstructure v0.13.2
+   Compiling pyo3-macros-backend v0.29.2
+   Compiling displaydoc v0.2.5
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling prost-derive v0.13.5
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling pyo3-build-config v0.29.2
+   Compiling thiserror v2.0.18
+   Compiling pyo3-ffi v0.29.2
+   Compiling pyo3 v0.29.2
+   Compiling zerofrom v0.1.8
+   Compiling prost v0.13.5
+   Compiling zip v2.4.2
+   Compiling serde v1.0.228
+   Compiling yoke v0.8.3
+   Compiling pyo3-macros v0.29.2
+   Compiling ahash v0.8.11
+   Compiling serde_yaml v0.9.34+deprecated
+   Compiling hashbrown v0.14.5
+   Compiling zerovec v0.11.8
+   Compiling zerotrie v0.2.5
+   Compiling hashlink v0.9.1
+   Compiling tinystr v0.8.4
+   Compiling potential_utf v0.1.6
+   Compiling icu_collections v2.3.0
+   Compiling icu_locale_core v2.3.0
+   Compiling rusqlite v0.32.1
+   Compiling icu_provider v2.3.1
+   Compiling icu_properties v2.3.0
+   Compiling icu_normalizer v2.3.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.4
+   Compiling jsonschema v0.18.3
+   Compiling ankiforge v0.2.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+   Compiling anki_forge_python_native v0.2.0 (/Users/hp/Desktop/2026/anki-forge/bindings/python/native)
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-Wl,-exported_symbols_list" "-Wl,/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/rustc0zO5uk/list" "/var/folders/xy/0x3613wd08q0hmhjyrjz4sp00000gn/T/rustc0zO5uk/symbols.o" "<17 object files omitted>" "/Users/hp/Desktop/2026/anki-forge/target/release/deps/{libpyo3-2bb1e70d657fdc99,libpyo3_ffi-9ed23a22077eaecb,libankiforge-f06e9b1ecdcbe16b,libtar-c381d0319e8ffdf9,libxattr-66a98867d007ffc3,libfiletime-ffd1f0b3aec2271e,libserde_yaml-67cafe669d914f55,libryu-28277660ae7cbfae,libunsafe_libyaml-cec434fc0d35b189,librustix-e0ab449d499c1f1d,libzstd-1fe04d7dd9786092,libzstd_safe-d73151b0bb3052de,libzstd_sys-0040b23347707b11,libsame_file-b5413cd87c4a84a9,libhex-57df7ea8bf5237c6,libblake3-ffb0e88651c5dafa,libconstant_time_eq-bea317a59dd644fe,libarrayvec-af71de836bc05cdf,libarrayref-db5bef20cb5c942c,libtempfile-60d0f0d333021ede,libgetrandom-ff1d2eddf8648ee9,libfastrand-01416487909ac35a,librustix-194ba392d895578c,liberrno-6ec2328b80c5594e,libmime-009f005f35fd611a,librand-cbb12c425b984031,librand_chacha-bb5eb450b3147ecc,libppv_lite86-03cc07a5faa8b11e,libzerocopy-6af0799e13f0dacc,librand_core-7eb1861bd070773b,libimage-a42c3e5f4c29e049,libbytemuck-83ef1e9adc8ca500,libmoxcms-e8ff729c8897824b,libpxfm-a32b8b5475db7acb,libimage_webp-4773060656ed4aab,libquick_error-42f6a26a02ffff0b,libpng-314b9e8fee4e72ed,libfdeflate-00c62e07b97d56ea,libzune_jpeg-c083e9773aecad5c,libzune_core-e4fa3f217b06d59d,libgif-705f3f4476cc354b,libcolor_quant-39717d0f4bdbd6d8,libweezl-94c7be62d5de6f06,libbyteorder_lite-4727cf83ec5b95a0,librusqlite-0d1ad695280e5f46,libbitflags-9f2533d4f0cdebf3,libfallible_streaming_iterator-994d97ac9e862c4e,libfallible_iterator-30e3e4dd85ed7ea1,libhashlink-38a923d41782b72b,libhashbrown-bfa44e6fa187e63d,liblibsqlite3_sys-513c54bdd20128f2,libunicode_normalization-0e6e2a8108c99185,libtinyvec-205e1c52a94f1498,libtinyvec_macros-7627264e204f6dc9,libunicase-fffc1f1eb791cc53,libzip-62f3efbc478451ab,libzopfli-2f379ea610e76f6d,libbumpalo-6eb040fd140b1e56,liblog-3ade471a8a7671e0,libthiserror-fa727062c083f4ec,libindexmap-5994a06c8c9ddf91,libequivalent-778fff95b159475b,libhashbrown-55057a1579ced0e8,libprost-047ac5808ee5df53,libbytes-0f9e531f4e69436b,libflate2-3c3dd4c16f7aa07b,libminiz_oxide-fac2705617e49a0d,libsimd_adler32-fb1f02c13d4f061f,libcrc32fast-06966845e6600a07,libjsonschema-e9cd06d29fd471fe,libregex-aba2f4327a4b5cc9,libiso8601-2bbb9654fdd1985c,libnom-4c5abcb87bae067e,libbytecount-bf78519f704ee056,libtime-49ca35079c7661c9,libtime_core-946a1d6754b48ac1,libnum_conv-93032f47e3b7335b,libderanged-1191c39c2a638bad,libpowerfmt-71acd632597a29c7,libparking_lot-68e018910c1c9d35,libparking_lot_core-e43ff90134f8a411,liblock_api-342cf1170491a893,libscopeguard-e5ddecdd13398348,libfraction-52a63695311e7dc3,liblazy_static-f26eeb73f4807ba4,libnum-78a81ea173ef087b,libnum_iter-bb6656b7d9bd6afc,libnum_rational-fbd64fff8921bf3d,libnum_complex-c6fd10e2796ae32a,libnum_bigint-2907d5b9e2f79485,libnum_integer-4fee00d16f1b4a63,libnum_traits-0122a61357144fa9,libuuid-3a389dabfb0f3584,libfancy_regex-c57f450683b451e4,libbit_set-598566b8eb071e2c,libbit_vec-f9d9a4fa91991694,libregex_automata-40ea86c47ba4dc0a,libaho_corasick-bb70622cb9e51580,libregex_syntax-f03d270595f6d6f1,libnum_cmp-ad94a24cdc2a77bd,libahash-ff29f3a0db806275,libgetrandom-9ff56f66cfab265c,libonce_cell-8599c565144347e6,libzerocopy-f54e7c59bf3592c6,liburl-5f35c23f246540f9,libidna-8805e4686a64f907,libidna_adapter-cd7afea97709f9c8,libicu_properties-f458ea4cb64a245d,libicu_properties_data-5abe2ecec421c1c6,libicu_normalizer-faf895ae310fb2b6,libsmallvec-d3127389f44ab675,libicu_normalizer_data-d10cca1df00fe81e,libicu_collections-f05ff1fd9cfed30f,libutf8_iter-1a2c8e5c136804ef,libpotential_utf-93e24311aaa2c299,libicu_provider-a2a3693471c310b9,libicu_locale_core-da948963c51da93a,libtinystr-47c0311de6940143,liblitemap-8988aae96e8f70f6,libwriteable-7f852bc92e21a0c2,libzerovec-9a3e5fd61e10bf5e,libzerotrie-c5624b2ed1dc3baf,libyoke-81556177f67ddafa,libstable_deref_trait-87a10928968ac7a3,libzerofrom-93ef4a9b30adafc7,libform_urlencoded-584f41a6ac39f73d,libpercent_encoding-0f9ba94d2df02e16,libserde_json-155ce4bc1e68e985,libmemchr-3594b7a25187c5e6,libitoa-4fc411ce26f05817,libzmij-af2b6cfa8862edd8,libanyhow-d41dcca271ed7c95,libhtml_escape-138b0d88a8a8d134,libutf8_width-97d1c3e52bebfe70,libbase64-23ac21a3527a302b,libsha1-e1f20dc61ddbbe9e,libcpufeatures-85570fe288d810e9,liblibc-230786505689b81a,libcfg_if-4277c1d092df4ae3,libdigest-a42f03778b24dae9,libconst_oid-4e367a00fe5658a3,libcrypto_common-ec02a6fa6d8ea92f,libblock_buffer-0e879c1534ec2c61,libhybrid_array-30c940e53cf2c8ce,libtypenum-68689eed866d3cae,libserde-6063e8ff58556f9c,libserde_core-26717d2283eedb39}.rlib" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-liconv" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-L" "/Users/hp/Desktop/2026/anki-forge/target/release/build/blake3-3756db72ad26ffe1/out" "-L" "/Users/hp/Desktop/2026/anki-forge/target/release/build/libsqlite3-sys-0b01cb736b8c66db/out" "-L" "/Users/hp/Desktop/2026/anki-forge/target/release/build/zstd-sys-be0e119dea3d03e6/out" "-o" "/Users/hp/Desktop/2026/anki-forge/target/release/deps/lib_native.dylib" "-Wl,-dead_strip" "-dynamiclib" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[5](44ff4c55aa9e5133-entropy_common.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[6](44ff4c55aa9e5133-error_private.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[7](44ff4c55aa9e5133-fse_decompress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[8](44ff4c55aa9e5133-pool.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[10](44ff4c55aa9e5133-zstd_common.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[11](fb80479a5fb81f6a-fse_compress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[12](fb80479a5fb81f6a-hist.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[13](fb80479a5fb81f6a-huf_compress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[14](fb80479a5fb81f6a-zstd_compress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[15](fb80479a5fb81f6a-zstd_compress_literals.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[16](fb80479a5fb81f6a-zstd_compress_sequences.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[17](fb80479a5fb81f6a-zstd_compress_superblock.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[18](fb80479a5fb81f6a-zstd_double_fast.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[19](fb80479a5fb81f6a-zstd_fast.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[20](fb80479a5fb81f6a-zstd_lazy.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[21](fb80479a5fb81f6a-zstd_ldm.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[22](fb80479a5fb81f6a-zstd_opt.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[23](fb80479a5fb81f6a-zstd_preSplit.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[25](88f362f13b0528ed-huf_decompress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[26](88f362f13b0528ed-zstd_ddict.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[27](88f362f13b0528ed-zstd_decompress.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[28](88f362f13b0528ed-zstd_decompress_block.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[29](a6c81c75fc82913a-cover.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[30](a6c81c75fc82913a-divsufsort.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[31](a6c81c75fc82913a-fastcover.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[32](a6c81c75fc82913a-zdict.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[33](3f451b2306bc13c8-zstd_v01.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[34](3f451b2306bc13c8-zstd_v02.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[35](3f451b2306bc13c8-zstd_v03.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[36](3f451b2306bc13c8-zstd_v04.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[37](3f451b2306bc13c8-zstd_v05.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[38](3f451b2306bc13c8-zstd_v06.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libzstd_sys-0040b23347707b11.rlib[39](3f451b2306bc13c8-zstd_v07.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/libblake3-ffb0e88651c5dafa.rlib[5](a1edd97dd51cd48d-blake3_neon.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/Users/hp/Desktop/2026/anki-forge/target/release/deps/liblibsqlite3_sys-513c54bdd20128f2.rlib[4](c877a2978823c39d-sqlite3.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          Undefined symbols for architecture arm64:
+            "_PyBaseObject_Type", referenced from:
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h082297bd0c31330b in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h082297bd0c31330b in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h082297bd0c31330b in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5da4a759ccb6feaa in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5da4a759ccb6feaa in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5da4a759ccb6feaa in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5ddf07f6d12c728f in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5ddf07f6d12c728f in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                _$LT$pyo3..pycell..impl_..PyStaticClassObject$LT$T$GT$$u20$as$u20$pyo3..pycell..impl_..PyClassObjectBaseLayout$LT$T$GT$$GT$::tp_dealloc::h5ddf07f6d12c728f in _native._native.8c3fd56837601fc8-cgu.06.rcgu.o
+                ...
+            "_PyBytes_AsString", referenced from:
+                pyo3::types::bytes::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..bytes..PyBytes$GT$$GT$::as_bytes::h0da31fa747bebd26 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..string..PyString$GT$$GT$::to_string_lossy::hd62f2e3f64494d8e (.llvm.15223169717846506535) in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$std..ffi..os_str..OsString$GT$::extract::hef90cb4fc75edf16 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyBytes_Size", referenced from:
+                pyo3::types::bytes::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..bytes..PyBytes$GT$$GT$::as_bytes::h0da31fa747bebd26 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..string..PyString$GT$$GT$::to_string_lossy::hd62f2e3f64494d8e (.llvm.15223169717846506535) in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$std..ffi..os_str..OsString$GT$::extract::hef90cb4fc75edf16 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyBytes_Type", referenced from:
+                _native::NativeMedia::__pymethod_bytes__::h2b211bd114fad12d in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+            "_PyCMethod_New", referenced from:
+                pyo3::impl_::pyfunction::create_py_c_function::he09f3e71f5d529d4 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::impl_::pyfunction::create_py_c_function::he09f3e71f5d529d4 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyDict_Next", referenced from:
+                pyo3::impl_::extract_argument::FunctionDescription::extract_arguments_tuple_dict::hed31e86be0a038ee in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                pyo3::impl_::extract_argument::FunctionDescription::extract_arguments_tuple_dict::hed31e86be0a038ee in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+            "_PyDict_Size", referenced from:
+                pyo3::types::dict::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..dict..PyDict$GT$$GT$::iter_borrowed::h9265107b6facabb9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyErr_Fetch", referenced from:
+                pyo3::err::err_state::PyErrStateNormalized::take::h6d7413ba0c574f7b in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                pyo3::err::err_state::lazy_into_normalized_ffi_tuple::h5a4057a27334fc42 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyErr_GivenExceptionMatches", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyErr_NewExceptionWithDoc", referenced from:
+                pyo3::err::PyErr::new_type::hdb164448ab8853d4 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                pyo3::err::PyErr::new_type::hdb164448ab8853d4 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h9448df924eed2415 (.llvm.13789364405053416610) in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+            "_PyErr_NormalizeException", referenced from:
+                pyo3::err::err_state::PyErrStateNormalized::take::h6d7413ba0c574f7b in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                pyo3::err::err_state::lazy_into_normalized_ffi_tuple::h5a4057a27334fc42 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyErr_Occurred", referenced from:
+                pyo3::types::iterator::_$LT$impl$u20$core..iter..traits..iterator..Iterator$u20$for$u20$pyo3..instance..Bound$LT$pyo3..types..iterator..PyIterator$GT$$GT$::next::h8bce2b8182ad1d3c in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyErr_PrintEx", referenced from:
+                pyo3::err::PyErr::print_panic_and_unwind::hc3dae99490c18025 (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyErr_Restore", referenced from:
+                pyo3::err::err_state::PyErrState::restore::h3f1b23d468a253c5 in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyErr_SetObject", referenced from:
+                pyo3::err::err_state::lazy_into_normalized_ffi_tuple::h5a4057a27334fc42 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyErr_SetString", referenced from:
+                pyo3::err::err_state::lazy_into_normalized_ffi_tuple::h5a4057a27334fc42 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyErr_WriteUnraisable", referenced from:
+                pyo3::impl_::trampoline::trampoline_unraisable::h643ba62d62974a1b in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::instance::panic_on_null::hec139564a997e609 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::instance::python_format::h68cf6b1dc64550cc in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..err..PyErr$u20$as$u20$core..fmt..Debug$GT$::fmt::h7ceb1dbed842f07b in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                pyo3::impl_::pyclass::lazy_type_object::type_object_init_failed::h700976810a1089e0 in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+            "_PyEval_RestoreThread", referenced from:
+                pyo3_ffi::ceval::PyEval_RestoreThread::h1837ccf4813192b0 in libpyo3_ffi-9ed23a22077eaecb.rlib[3](pyo3_ffi-9ed23a22077eaecb.pyo3_ffi.3759f52d375e4fd8-cgu.0.rcgu.o)
+            "_PyEval_SaveThread", referenced from:
+                pyo3::sync::once_lock::init_once_cell_py_attached::h31bc9fe6e374afbe in libpyo3-2bb1e70d657fdc99.rlib[7](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.04.rcgu.o)
+                pyo3::sync::once_lock::init_once_cell_py_attached::hcbe80476288ad051 in libpyo3-2bb1e70d657fdc99.rlib[7](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.04.rcgu.o)
+                pyo3::internal::state::SuspendAttach::new::h467fbf4662b46594 in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+                pyo3::err::err_state::PyErrState::make_normalized::h1858384a0c8a2749 in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                _$LT$std..sync..poison..mutex..Mutex$LT$T$GT$$u20$as$u20$pyo3..sync..MutexExt$LT$T$GT$$GT$::lock_py_attached::hf9a3e7b6780cb0cc (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyExc_AttributeError", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hca864a9f426f5af8 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+            "_PyExc_BaseException", referenced from:
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h9448df924eed2415 (.llvm.13789364405053416610) in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+            "_PyExc_BlockingIOError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h9f50f9d7c371097a in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_BrokenPipeError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h20840d51ef17831c in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_ConnectionAbortedError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h9d76782ad99b9cb1 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_ConnectionRefusedError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hdbd07093d416a15b in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_ConnectionResetError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h48a8491e5c651203 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_Exception", referenced from:
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h52fc591c91c5adb9 (.llvm.16490264493850185090) in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+            "_PyExc_FileExistsError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h619485bb2d2949c6 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_FileNotFoundError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h764507579876fa95 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_InterruptedError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h57fb7a48581a2069 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_IsADirectoryError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h1aea2c518416aa08 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_MemoryError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h5a95478a94a8b2b0 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_NotADirectoryError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h7d90fd3b5f9e2e2c in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_OSError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h38236b84329d4024 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::ha6446735cf0c0c1b in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_PermissionError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h594bf41750c5232c in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_RuntimeError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hc7f67139748ace41 in _native._native.8c3fd56837601fc8-cgu.05.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8cf2cba78a1c9cf3 in _native._native.8c3fd56837601fc8-cgu.08.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hc7f67139748ace41 in _native._native.8c3fd56837601fc8-cgu.08.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8cf2cba78a1c9cf3 (.llvm.9067286206549425568) in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h92a6ca02b1900cee in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+            "_PyExc_SystemError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h387eaf9314edc84d (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_TimeoutError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hd27c740eb5f6fc16 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyExc_TypeError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h64273fddda596175 (.llvm.6360141287161682500) in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8b53d36d4a4b8c83 (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h0a658725cf2c91f1 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h0a658725cf2c91f1 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::err::err_state::lazy_into_normalized_ffi_tuple::h5a4057a27334fc42 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h4f3640fa372a0aa1 in libpyo3-2bb1e70d657fdc99.rlib[15](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.12.rcgu.o)
+            "_PyExc_ValueError", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8cb260fd71caf797 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hbad7c3af62fe53dd in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8cb260fd71caf797 in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hadddd439fef1687b (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h85f287fb32f9c3c4 in libpyo3-2bb1e70d657fdc99.rlib[16](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.13.rcgu.o)
+            "_PyException_SetCause", referenced from:
+                pyo3::err::PyErr::set_cause::h066d335edeea6963 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyException_SetTraceback", referenced from:
+                pyo3::err::PyErr::into_value::h92c0b30c2025cb96 in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+            "_PyFloat_AsDouble", referenced from:
+                pyo3::types::float::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$f64$GT$::extract::h3dc078d17fc16192 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyGILState_Ensure", referenced from:
+                pyo3_ffi::pystate::PyGILState_Ensure::h30990cbf2451b67c in libpyo3_ffi-9ed23a22077eaecb.rlib[3](pyo3_ffi-9ed23a22077eaecb.pyo3_ffi.3759f52d375e4fd8-cgu.0.rcgu.o)
+            "_PyGILState_Release", referenced from:
+                _$LT$pyo3..err..PyErr$u20$as$u20$core..fmt..Debug$GT$::fmt::h7ceb1dbed842f07b in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                _$LT$pyo3..err..PyErr$u20$as$u20$core..fmt..Debug$GT$::fmt::h7ceb1dbed842f07b in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                _$LT$pyo3..internal..state..AttachGuard$u20$as$u20$core..ops..drop..Drop$GT$::drop::h6c76d81757673e43 in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+                std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hfa3039cf73495483 in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hfa3039cf73495483 in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyImport_Import", referenced from:
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h7d93b495f4d24080 (.llvm.16490264493850185090) in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h97ed788653fd738b (.llvm.16490264493850185090) in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyIter_Next", referenced from:
+                pyo3::types::iterator::_$LT$impl$u20$core..iter..traits..iterator..Iterator$u20$for$u20$pyo3..instance..Bound$LT$pyo3..types..iterator..PyIterator$GT$$GT$::next::h8bce2b8182ad1d3c in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyList_Append", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::add::inner::h2786dfbf26ce95fc in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+            "_PyList_New", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyList_Type", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyLong_AsUnsignedLongLong", referenced from:
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyLong_FromSsize_t", referenced from:
+                pyo3::impl_::pyclass::get_sequence_item_from_mapping::h89ae27a9044e9f9d in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                pyo3::impl_::pyclass::assign_sequence_item_from_mapping::h7eb1ceb61f2d8b4c in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyLong_FromUnsignedLongLong", referenced from:
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$usize$GT$::into_pyobject::h4354f20b4f8535ec in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyLong_Type", referenced from:
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyModuleDef_Init", referenced from:
+                pyo3::impl_::pymodule::ModuleDef::init_multi_phase::hf8618d52e2ba95f9 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyModule_GetNameObject", referenced from:
+                pyo3::impl_::pyfunction::create_py_c_function::he09f3e71f5d529d4 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyModule_Type", referenced from:
+                _native::_native::_PYO3_DEF::__pyo3_module_exec::h87b4d1f0ef3f274d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                _native::_native::_PYO3_DEF::__pyo3_module_exec::h87b4d1f0ef3f274d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                _native::_native::_PYO3_DEF::__pyo3_module_exec::h87b4d1f0ef3f274d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+            "_PyNumber_Index", referenced from:
+                pyo3::conversions::std::num::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$u64$GT$::extract::h514230907dbaa959 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyOS_FSPath", referenced from:
+                pyo3::conversions::std::path::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$std..path..PathBuf$GT$::extract::hd2c798aabbcb03fc in libpyo3-2bb1e70d657fdc99.rlib[7](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.04.rcgu.o)
+            "_PyObject_Call", referenced from:
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..call..PyCallArgs$u20$for$u20$$LP$T0$C$$RP$$GT$::call_positional::h452cfaf96d089748 in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                pyo3::call::PyCallArgs::call_method_positional::h0ca111663e09bf3e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyObject_CallNoArgs", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyObject_DelItem", referenced from:
+                pyo3::impl_::pyclass::assign_sequence_item_from_mapping::h7eb1ceb61f2d8b4c in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyObject_GC_UnTrack", referenced from:
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::h27f2dc3ab243df5d in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::h5010d02db5317b2e in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::h98710dc093c05b49 in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::ha7a3eba03b697a2c in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::hbe25d0c32ea70587 in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+                pyo3::impl_::pyclass::tp_dealloc_with_gc::hc047ec429a22b233 in _native._native.8c3fd56837601fc8-cgu.10.rcgu.o
+            "_PyObject_GenericGetDict", referenced from:
+                pyo3::pyclass::create_type_object::create_type_object::inner::h2384d7b25256adc5 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+            "_PyObject_GenericSetDict", referenced from:
+                pyo3::pyclass::create_type_object::create_type_object::inner::h2384d7b25256adc5 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+            "_PyObject_GetAttr", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::add_function::ha670aefb3f9115e9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::call::PyCallArgs::call_method_positional::h0ca111663e09bf3e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..any..PyAny$GT$$u20$as$u20$pyo3..types..any..PyAnyMethods$GT$::getattr::inner::h5f2f8f238b14a187 in libpyo3-2bb1e70d657fdc99.rlib[15](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.12.rcgu.o)
+                ...
+            "_PyObject_GetItem", referenced from:
+                pyo3::impl_::pyclass::get_sequence_item_from_mapping::h89ae27a9044e9f9d in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyObject_GetIter", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..any..PyAny$GT$$u20$as$u20$pyo3..types..any..PyAnyMethods$GT$::try_iter::h25852dbba059dd9c in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyObject_Repr", referenced from:
+                _$LT$pyo3..instance..Bound$LT$T$GT$$u20$as$u20$core..fmt..Debug$GT$::fmt::hdf24edeecb530ba6 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyObject_SetAttr", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::index::hffc8b4388b84c3b9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::add::inner::h2786dfbf26ce95fc in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+            "_PyObject_SetAttrString", referenced from:
+                pyo3::sync::GILOnceCell$LT$T$GT$::init::h7c6908ac59b64030 in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+            "_PyObject_SetItem", referenced from:
+                pyo3::impl_::pyclass::assign_sequence_item_from_mapping::h7eb1ceb61f2d8b4c in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "_PyObject_Size", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..any..PyAny$GT$$u20$as$u20$pyo3..types..any..PyAnyMethods$GT$::len::h00c957f8f933f25a in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyObject_Str", referenced from:
+                _$LT$$RF$T$u20$as$u20$core..fmt..Display$GT$::fmt::hf3549bec6a7a44fd in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$T$GT$$u20$as$u20$core..fmt..Display$GT$::fmt::h8071672aa91d01c7 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::err::PyErr::print_panic_and_unwind::hc3dae99490c18025 (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PySequence_Check", referenced from:
+                pyo3::conversions::std::vec::extract_sequence::h4f23ac78c844d249 in _native._native.8c3fd56837601fc8-cgu.09.rcgu.o
+                pyo3::conversions::std::vec::extract_sequence::ha6b2dea3d31affb9 in _native._native.8c3fd56837601fc8-cgu.09.rcgu.o
+                pyo3::conversions::std::vec::extract_sequence::hb62b93b58e2e4259 in _native._native.8c3fd56837601fc8-cgu.09.rcgu.o
+                pyo3::conversions::std::vec::extract_sequence::heb4c3b6f0966378c in _native._native.8c3fd56837601fc8-cgu.09.rcgu.o
+            "_PyTraceBack_Print", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyTuple_GetItem", referenced from:
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..tuple..PyTuple$GT$$GT$::get_borrowed_item_unchecked::h1ccd32e691de7ece in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyTuple_New", referenced from:
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$$LP$T0$C$T1$RP$$GT$::into_pyobject::h260b157e1f53a15d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..call..PyCallArgs$u20$for$u20$$LP$T0$C$$RP$$GT$::call_positional::h452cfaf96d089748 in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::haafeff606fca8a64 in libpyo3-2bb1e70d657fdc99.rlib[9](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.06.rcgu.o)
+                _$LT$T$u20$as$u20$pyo3..err..PyErrArguments$GT$::arguments::h31aeed89a31ecd44 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::impl_::extract_argument::argument_extraction_error::hdba522d22faf9bae in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..internal..pyclass_init..PyNativeTypeInitializer$LT$T$GT$$u20$as$u20$pyo3..internal..pyclass_init..PyObjectInit$LT$T$GT$$GT$::into_new_object::inner::h0a75b336343daf87 in libpyo3-2bb1e70d657fdc99.rlib[15](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.12.rcgu.o)
+            "_PyTuple_SetItem", referenced from:
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$$LP$T0$C$T1$RP$$GT$::into_pyobject::h260b157e1f53a15d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$$LP$T0$C$T1$RP$$GT$::into_pyobject::h260b157e1f53a15d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..call..PyCallArgs$u20$for$u20$$LP$T0$C$$RP$$GT$::call_positional::h452cfaf96d089748 in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::haafeff606fca8a64 in libpyo3-2bb1e70d657fdc99.rlib[9](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.06.rcgu.o)
+                _$LT$T$u20$as$u20$pyo3..err..PyErrArguments$GT$::arguments::h31aeed89a31ecd44 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::impl_::extract_argument::argument_extraction_error::hdba522d22faf9bae in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyTuple_Size", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..tuple..PyTuple$GT$$u20$as$u20$pyo3..types..tuple..PyTupleMethods$GT$::len::hbbbd26308829b88b in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..tuple..PyTuple$GT$$GT$::iter_borrowed::h516abf6689e84312 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::types::tuple::wrong_tuple_length::h9c8b6523f3b5cbd8 in libpyo3-2bb1e70d657fdc99.rlib[16](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.13.rcgu.o)
+            "_PyTuple_Type", referenced from:
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$$LP$T0$C$T1$C$T2$C$T3$C$T4$RP$$GT$::extract::h4b16f0291f389b61 in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyType_FromSpec", referenced from:
+                pyo3::pyclass::create_type_object::create_type_object::inner::h2384d7b25256adc5 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+            "_PyType_GetFlags", referenced from:
+                _native::NativeMedia::__pymethod_bytes__::h2b211bd114fad12d in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                pyo3::types::tuple::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$$LP$T0$C$T1$C$T2$C$T3$C$T4$RP$$GT$::extract::h4b16f0291f389b61 in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                pyo3::impl_::extract_argument::extract_argument::ha0177aee933e9ae0 in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                pyo3::impl_::extract_argument::extract_argument::hb17c7f07f01e705a in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                pyo3::impl_::extract_argument::extract_argument::hd2b9793834d2098a in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                pyo3::impl_::extract_argument::extract_argument::hf669a5387977e3e4 in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h7d93b495f4d24080 (.llvm.16490264493850185090) in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                ...
+            "_PyType_GetName", referenced from:
+                pyo3::instance::python_format::h68cf6b1dc64550cc in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyType_GetQualName", referenced from:
+                _$LT$pyo3..err..cast_error..DisplayCastError$u20$as$u20$core..fmt..Display$GT$::fmt::hcb5ae3b399f8733b in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyType_GetSlot", referenced from:
+                pyo3::impl_::pymethods::call_super_clear::h0b43b1a182198adb in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_clear::h0b43b1a182198adb in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_clear::h0b43b1a182198adb in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_clear::h0b43b1a182198adb in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_clear::h0b43b1a182198adb in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_traverse::h29486427287f7b48 in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_traverse::h29486427287f7b48 in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_traverse::h29486427287f7b48 in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                pyo3::impl_::pymethods::call_super_traverse::h29486427287f7b48 in libpyo3-2bb1e70d657fdc99.rlib[13](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.10.rcgu.o)
+                ...
+            "_PyType_IsSubtype", referenced from:
+                _native::_native::_PYO3_DEF::__pyo3_module_exec::h87b4d1f0ef3f274d in _native._native.8c3fd56837601fc8-cgu.07.rcgu.o
+                pyo3::instance::Borrowed$LT$T$GT$::cast::inner::h6eee68973990a214 in _native._native.8c3fd56837601fc8-cgu.08.rcgu.o
+                pyo3::instance::Borrowed$LT$T$GT$::cast::inner::h7d3cda9bf4fcdc7e in _native._native.8c3fd56837601fc8-cgu.08.rcgu.o
+                pyo3::instance::Borrowed$LT$T$GT$::cast::inner::hcff41aff9c837416 in _native._native.8c3fd56837601fc8-cgu.08.rcgu.o
+            "_PyType_Type", referenced from:
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::h7d93b495f4d24080 (.llvm.16490264493850185090) in _native._native.8c3fd56837601fc8-cgu.11.rcgu.o
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+            "_PyUnicode_AsEncodedString", referenced from:
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..string..PyString$GT$$GT$::to_string_lossy::hd62f2e3f64494d8e (.llvm.15223169717846506535) in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+            "_PyUnicode_AsUTF8AndSize", referenced from:
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Py$LT$pyo3..types..string..PyString$GT$$GT$::to_cow::h9cc081d895ce6511 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..string..PyString$GT$$GT$::to_string_lossy::hd62f2e3f64494d8e (.llvm.15223169717846506535) in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::types::string::_$LT$impl$u20$pyo3..instance..Borrowed$LT$pyo3..types..string..PyString$GT$$GT$::to_str::h334a53a34f28b531 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::conversions::std::string::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$alloc..string..String$GT$::extract::h918c90f8a3933f49 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::conversions::std::string::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$$RF$str$GT$::extract::h399d1ba6f7b0b7d7 in libpyo3-2bb1e70d657fdc99.rlib[12](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.09.rcgu.o)
+            "_PyUnicode_DecodeFSDefaultAndSize", referenced from:
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$$RF$std..ffi..os_str..OsStr$GT$::into_pyobject::hc34c6ac1a3e988b5 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyUnicode_EncodeFSDefault", referenced from:
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$std..ffi..os_str..OsString$GT$::extract::hef90cb4fc75edf16 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+            "_PyUnicode_FromStringAndSize", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h387eaf9314edc84d (.llvm.12804869242703522969) in libpyo3-2bb1e70d657fdc99.rlib[4](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.01.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h0a658725cf2c91f1 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hca864a9f426f5af8 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+                pyo3::types::string::PyString::new::he5298fc61449a173 in libpyo3-2bb1e70d657fdc99.rlib[6](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.03.rcgu.o)
+                pyo3::err::impls::_$LT$impl$u20$pyo3..err..PyErrArguments$u20$for$u20$std..io..error..Error$GT$::arguments::hde396098aef889ce in libpyo3-2bb1e70d657fdc99.rlib[7](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.04.rcgu.o)
+                pyo3::err::impls::_$LT$impl$u20$pyo3..err..PyErrArguments$u20$for$u20$alloc..ffi..c_str..NulError$GT$::arguments::h184f2b271f350052 in libpyo3-2bb1e70d657fdc99.rlib[7](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.04.rcgu.o)
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..IntoPyObject$u20$for$u20$$RF$std..ffi..os_str..OsStr$GT$::into_pyobject::hc34c6ac1a3e988b5 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                ...
+            "_PyUnicode_InternInPlace", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h95c02a9b94d10c95 (.llvm.13789364405053416610) in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+                once_cell::imp::OnceCell$LT$T$GT$::initialize::_$u7b$$u7b$closure$u7d$$u7d$::hdec854b1b594d633 (.llvm.13789364405053416610) in libpyo3-2bb1e70d657fdc99.rlib[18](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.15.rcgu.o)
+            "_PyUnicode_Type", referenced from:
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..module..PyModule$GT$$u20$as$u20$pyo3..types..module..PyModuleMethods$GT$::add_function::ha670aefb3f9115e9 in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                _$LT$pyo3..instance..Bound$LT$pyo3..types..traceback..PyTraceback$GT$$u20$as$u20$pyo3..types..traceback..PyTracebackMethods$GT$::format::hb57e410dba1dd85e in libpyo3-2bb1e70d657fdc99.rlib[3](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.00.rcgu.o)
+                pyo3::conversions::std::osstr::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$std..ffi..os_str..OsString$GT$::extract::hef90cb4fc75edf16 in libpyo3-2bb1e70d657fdc99.rlib[8](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.05.rcgu.o)
+                pyo3::conversions::std::string::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$alloc..string..String$GT$::extract::h918c90f8a3933f49 in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                pyo3::conversions::std::string::_$LT$impl$u20$pyo3..conversion..FromPyObject$u20$for$u20$$RF$str$GT$::extract::h399d1ba6f7b0b7d7 in libpyo3-2bb1e70d657fdc99.rlib[12](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.09.rcgu.o)
+            "_Py_IsInitialized", referenced from:
+                pyo3::internal::state::AttachGuard::attach::h4939f4292cfa1cc3 in libpyo3-2bb1e70d657fdc99.rlib[10](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.07.rcgu.o)
+                std::sync::once::Once::call_once_force::_$u7b$$u7b$closure$u7d$$u7d$::h138cc100bc50149a (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hdab271ca6ed75d9f (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h926bd57f07a8535e (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hdce975d9526832f6 (.llvm.17017743714310442436) in libpyo3-2bb1e70d657fdc99.rlib[14](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.11.rcgu.o)
+            "__Py_DecRef", referenced from:
+                core::ptr::drop_in_place$LT$core..cell..UnsafeCell$LT$core..option..Option$LT$pyo3..err..err_state..PyErrStateInner$GT$$GT$$GT$::h346bc27e148c6097 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$core..cell..UnsafeCell$LT$core..option..Option$LT$pyo3..err..err_state..PyErrStateInner$GT$$GT$$GT$::h346bc27e148c6097 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$core..cell..UnsafeCell$LT$core..option..Option$LT$pyo3..instance..Py$LT$pyo3..types..traceback..PyTraceback$GT$$GT$$GT$$GT$::h0f4ea601b34bc12f in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$std..sync..poison..mutex..Mutex$LT$core..option..Option$LT$pyo3..instance..Py$LT$pyo3..types..traceback..PyTraceback$GT$$GT$$GT$$GT$::h1778331626c71b88 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$pyo3..instance..Py$LT$pyo3..types..any..PyAny$GT$$GT$::hb4457ccd1bb44605 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$alloc..vec..Vec$LT$pyo3..instance..Py$LT$_native..NativeMedia$GT$$GT$$GT$::h31bcb79b507d66dd in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ptr::drop_in_place$LT$alloc..vec..Vec$LT$pyo3..instance..Py$LT$_native..NativeContent$GT$$GT$$GT$::h9d3f6c6de0e1ee91 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                ...
+            "__Py_IncRef", referenced from:
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h10e12b8a365f8cb4 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h38236b84329d4024 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h8cb260fd71caf797 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::hbad7c3af62fe53dd in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::NativeMedia::__pymethod_bytes__::h2b211bd114fad12d in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::NativeProject::__pymethod_add__::h19c940059d1ad6c6 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::NativeProject::__pymethod_add_asset__::h6b4aefc2daada288 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                ...
+            "__Py_NoneStruct", referenced from:
+                _native::NativeProject::__pymethod_add__::h19c940059d1ad6c6 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::NativeProject::__pymethod___new____::h4a8404e8ff2f21ee in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::NativeProject::__pymethod_add_asset__::h6b4aefc2daada288 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::__pyfunction_validate_risk_code::h36624e208fad7016 in _native._native.8c3fd56837601fc8-cgu.00.rcgu.o
+                _native::artifacts::NativeArtifact::__pymethod_close__::hfe13194345f1a995 in _native._native.8c3fd56837601fc8-cgu.14.rcgu.o
+                _$LT$pyo3..err..cast_error..DisplayCastError$u20$as$u20$core..fmt..Display$GT$::fmt::hcb5ae3b399f8733b in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                _$LT$pyo3..err..cast_error..DisplayClassInfo$u20$as$u20$core..fmt..Display$GT$::fmt::h16b589b33c01fd8c in libpyo3-2bb1e70d657fdc99.rlib[11](pyo3-2bb1e70d657fdc99.pyo3.53f21b80162f6ee1-cgu.08.rcgu.o)
+                ...
+          ld: symbol(s) not found for architecture arm64
+          clang: error: linker command failed with exit code 1 (use -v to see invocation)
+          
+
+error: could not compile `anki_forge_python_native` (lib) due to 1 previous error

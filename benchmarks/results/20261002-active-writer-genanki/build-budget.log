@@ -1,0 +1,12 @@
+   Compiling ankiforge v0.2.0 (/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/import-round4-20261002/budget-source/anki_forge)
+warning: constant `MEMORY_BUDGET` is never used
+  --> /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/import-round4-20261002/budget-source/anki_forge/src/media/snapshot.rs:18:7
+   |
+18 | const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
+   |       ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `ankiforge` (lib) generated 1 warning
+   Compiling anki-forge-benchmark v0.1.0 (/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/import-round4-20261002/budget-source/benchmarks/adapters/rust)
+    Finished `release` profile [optimized] target(s) in 16.25s

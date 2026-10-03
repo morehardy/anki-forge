@@ -78,6 +78,7 @@ pub fn build_with_guid_plan(
 
 /// Product builds retain staging artifacts but keep the APKG private until
 /// comparison and policy evaluation have succeeded.
+#[cfg(feature = "internal-tools")]
 pub(crate) fn build_with_identity_plan(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,

@@ -682,7 +682,7 @@ pub(crate) mod io_failure {
         static FAILURE: RefCell<Option<(Point, io::Error)>> = const { RefCell::new(None) };
     }
 
-    pub(super) fn check(point: Point) -> io::Result<()> {
+    pub(crate) fn check(point: Point) -> io::Result<()> {
         FAILURE.with_borrow_mut(|failure| {
             if failure
                 .as_ref()

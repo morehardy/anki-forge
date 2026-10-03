@@ -1,0 +1,29 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "baseline": {},
+    "skip_cas": {
+      "ANKIFORGE_DIAG_SKIP_CAS_SYNC": "1"
+    },
+    "skip_staging": {
+      "ANKIFORGE_DIAG_SKIP_STAGE_SYNC": "1"
+    },
+    "skip_both": {
+      "ANKIFORGE_DIAG_SKIP_CAS_SYNC": "1",
+      "ANKIFORGE_DIAG_SKIP_STAGE_SYNC": "1"
+    }
+  },
+  "warmups_per_combination": 1,
+  "timing_repeats": 3,
+  "expected_exports": 80,
+  "binary_sha256": "be7cdee9965974b47c4fe3724bf65425171b5cbd4387d7d151a3b8eff08240f5",
+  "source_commit": "4265fc4751daa18164cbf85bda425f2120e0f57d",
+  "purpose": "Diagnose two independent intermediate sync calls; final artifact synchronization and checks unchanged; not a production repair."
+}

@@ -1,0 +1,1455 @@
+{
+  "schema": "readme-genanki-comparison-v1",
+  "run_id": "20261002-latest-genanki",
+  "source_commit": "4265fc4751daa18164cbf85bda425f2120e0f57d",
+  "exploratory_dirty_source": true,
+  "started_utc": "2026-10-02T07:31:03.507811+00:00",
+  "completed_utc": "2026-10-02T07:51:59.314121+00:00",
+  "host": {
+    "cpu": "Apple M1 Pro",
+    "physical_cores": 10,
+    "logical_cores": 10,
+    "ram_bytes": 34359738368,
+    "system": "macOS 27.0",
+    "system_build": "26A428",
+    "architecture": "arm64",
+    "queried_utc": "2026-10-02T07:29:54.868434+00:00",
+    "hardware_query": "/usr/sbin/sysctl -n machdep.cpu.brand_string hw.memsize hw.physicalcpu hw.logicalcpu",
+    "system_query": "/usr/bin/sw_vers",
+    "observation_note": "Hardware queried with read-only sandbox escalation; exporters use the default sandbox; native AC power guarded before/after every launch."
+  },
+  "adapter_metadata": {
+    "rust": {
+      "adapter": "anki-forge/rust",
+      "adapter_features": [],
+      "allocator": "system",
+      "allocator_version": null,
+      "bundle_version": "2.0.0",
+      "crate_version": "0.2.0",
+      "features": "default",
+      "media_registration": "individual",
+      "process_scope": "single_process",
+      "protocol": "basic-apkg-v1",
+      "protocols": [
+        "basic-apkg-v1",
+        "basic-media-apkg-v1"
+      ]
+    },
+    "genanki": {
+      "protocol": "basic-apkg-v1",
+      "adapter": "genanki/python",
+      "protocols": [
+        "basic-apkg-v1",
+        "basic-media-apkg-v1"
+      ],
+      "genanki": "0.13.1",
+      "python": "3.11.0",
+      "architecture": "arm64",
+      "process_scope": "single_process",
+      "model": "genanki.BASIC_MODEL"
+    }
+  },
+  "quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "cells": [
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "纯文本",
+      "english_label": "Text only",
+      "notes": 100,
+      "resources": {
+        "profile": "basic-mixed-text-v1",
+        "notes": 100,
+        "media_files": 0,
+        "media_bytes": 0
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 40.036,
+          "q1": 38.331500000000005,
+          "q3": 43.6695,
+          "min": 36.147,
+          "max": 47.06
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 14.03125,
+          "q1": 14.015625,
+          "q3": 14.078125,
+          "min": 14.015625,
+          "max": 14.15625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 96382.0,
+          "q1": 96381.0,
+          "q3": 96382.75,
+          "min": 96381,
+          "max": 96384
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 112.55199999999999,
+          "q1": 110.58625,
+          "q3": 121.0625,
+          "min": 108.637,
+          "max": 132.866
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.109375,
+          "q1": 27.734375,
+          "q3": 28.15625,
+          "min": 27.703125,
+          "max": 28.15625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 135386.0,
+          "q1": 135386.0,
+          "q3": 135386.0,
+          "min": 135386,
+          "max": 135386
+        }
+      },
+      "time_saved_pct": 64.42888620371028,
+      "time_saved_ms": 72.51599999999999,
+      "genanki_over_rust": 2.811269857128584,
+      "rss_mib_saved_pct": 50.08337965536409,
+      "apkg_bytes_saved_pct": 28.80947808488322
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "纯文本",
+      "english_label": "Text only",
+      "notes": 200,
+      "resources": {
+        "profile": "basic-mixed-text-v1",
+        "notes": 200,
+        "media_files": 0,
+        "media_bytes": 0
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 45.411,
+          "q1": 42.5325,
+          "q3": 47.831,
+          "min": 41.957,
+          "max": 54.351
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 15.703125,
+          "q1": 15.625,
+          "q3": 15.8125,
+          "min": 15.5625,
+          "max": 15.828125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 134362.0,
+          "q1": 134362.0,
+          "q3": 134363.0,
+          "min": 134361,
+          "max": 134364
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 116.467,
+          "q1": 114.36125,
+          "q3": 120.351,
+          "min": 110.279,
+          "max": 126.078
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.5,
+          "q1": 28.296875,
+          "q3": 28.578125,
+          "min": 28.046875,
+          "max": 28.671875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 209114.0,
+          "q1": 209114.0,
+          "q3": 209114.0,
+          "min": 209114,
+          "max": 209114
+        }
+      },
+      "time_saved_pct": 61.009556355019015,
+      "time_saved_ms": 71.056,
+      "genanki_over_rust": 2.564731012309793,
+      "rss_mib_saved_pct": 44.901315789473685,
+      "apkg_bytes_saved_pct": 35.74700880859244
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "纯文本",
+      "english_label": "Text only",
+      "notes": 500,
+      "resources": {
+        "profile": "basic-mixed-text-v1",
+        "notes": 500,
+        "media_files": 0,
+        "media_bytes": 0
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 59.9375,
+          "q1": 58.4545,
+          "q3": 61.93425,
+          "min": 57.623,
+          "max": 73.714
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 20.296875,
+          "q1": 20.125,
+          "q3": 20.46875,
+          "min": 20.125,
+          "max": 20.53125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 247734.5,
+          "q1": 247734.0,
+          "q3": 247735.0,
+          "min": 247733,
+          "max": 247740
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 123.65299999999999,
+          "q1": 121.88575,
+          "q3": 128.409,
+          "min": 114.512,
+          "max": 137.631
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 29.46875,
+          "q1": 29.421875,
+          "q3": 29.90625,
+          "min": 29.171875,
+          "max": 30.0
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 475354.0,
+          "q1": 475354.0,
+          "q3": 475354.0,
+          "min": 475354,
+          "max": 475354
+        }
+      },
+      "time_saved_pct": 51.5276620866457,
+      "time_saved_ms": 63.71549999999999,
+      "genanki_over_rust": 2.0630323253388947,
+      "rss_mib_saved_pct": 31.124072110286317,
+      "apkg_bytes_saved_pct": 47.88420840047628
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "label": "纯文本",
+      "english_label": "Text only",
+      "notes": 1000,
+      "resources": {
+        "profile": "basic-mixed-text-v1",
+        "notes": 1000,
+        "media_files": 0,
+        "media_bytes": 0
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 90.99000000000001,
+          "q1": 86.86575,
+          "q3": 93.91375000000001,
+          "min": 83.504,
+          "max": 101.454
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.40625,
+          "q1": 28.21875,
+          "q3": 28.546875,
+          "min": 28.1875,
+          "max": 28.625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 436478.0,
+          "q1": 436478.0,
+          "q3": 436478.0,
+          "min": 436477,
+          "max": 436478
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 132.2685,
+          "q1": 130.77425,
+          "q3": 140.82475,
+          "min": 127.356,
+          "max": 163.401
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 32.671875,
+          "q1": 32.546875,
+          "q3": 32.765625,
+          "min": 32.234375,
+          "max": 32.828125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 868570.0,
+          "q1": 868570.0,
+          "q3": 868570.0,
+          "min": 868570,
+          "max": 868570
+        }
+      },
+      "time_saved_pct": 31.208110774674225,
+      "time_saved_ms": 41.27849999999998,
+      "genanki_over_rust": 1.453659742828882,
+      "rss_mib_saved_pct": 13.05595408895266,
+      "apkg_bytes_saved_pct": 49.74751603209874
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "独立图片",
+      "english_label": "Unique images",
+      "notes": 100,
+      "resources": {
+        "profile": "basic-image-unique-v2",
+        "notes": 100,
+        "media_files": 100,
+        "media_bytes": 6415200
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 950.267,
+          "q1": 900.52475,
+          "q3": 969.0319999999999,
+          "min": 840.753,
+          "max": 1044.062
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 22.953125,
+          "q1": 22.875,
+          "q3": 23.0625,
+          "min": 22.5,
+          "max": 23.15625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 6539948.0,
+          "q1": 6539947.25,
+          "q3": 6539948.0,
+          "min": 6539947,
+          "max": 6539950
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 140.40300000000002,
+          "q1": 138.3885,
+          "q3": 142.2905,
+          "min": 137.932,
+          "max": 158.213
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.34375,
+          "q1": 27.625,
+          "q3": 28.859375,
+          "min": 27.609375,
+          "max": 29.0
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 6565050.0,
+          "q1": 6565050.0,
+          "q3": 6565050.0,
+          "min": 6565050,
+          "max": 6565050
+        }
+      },
+      "time_saved_pct": -576.8138857431821,
+      "time_saved_ms": -809.864,
+      "genanki_over_rust": 0.14775110574185993,
+      "rss_mib_saved_pct": 19.01874310915105,
+      "apkg_bytes_saved_pct": 0.382358093236157
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "独立图片",
+      "english_label": "Unique images",
+      "notes": 200,
+      "resources": {
+        "profile": "basic-image-unique-v2",
+        "notes": 200,
+        "media_files": 200,
+        "media_bytes": 12830400
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 2003.6354999999999,
+          "q1": 1928.2134999999998,
+          "q3": 2043.30675,
+          "min": 1714.155,
+          "max": 2271.707
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 31.40625,
+          "q1": 31.375,
+          "q3": 31.46875,
+          "min": 31.171875,
+          "max": 31.484375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 13021878.0,
+          "q1": 13021878.0,
+          "q3": 13021879.0,
+          "min": 13021878,
+          "max": 13021880
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 174.0735,
+          "q1": 169.58375,
+          "q3": 193.66875,
+          "min": 162.449,
+          "max": 248.351
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 29.3125,
+          "q1": 28.90625,
+          "q3": 29.453125,
+          "min": 28.515625,
+          "max": 29.765625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 13068774.0,
+          "q1": 13068774.0,
+          "q3": 13068774.0,
+          "min": 13068774,
+          "max": 13068774
+        }
+      },
+      "time_saved_pct": -1051.0284448810414,
+      "time_saved_ms": -1829.562,
+      "genanki_over_rust": 0.08687882601401303,
+      "rss_mib_saved_pct": -7.14285714285714,
+      "apkg_bytes_saved_pct": 0.3588400870655484
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "独立图片",
+      "english_label": "Unique images",
+      "notes": 500,
+      "resources": {
+        "profile": "basic-image-unique-v2",
+        "notes": 500,
+        "media_files": 500,
+        "media_bytes": 32076000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 4833.23,
+          "q1": 4793.73625,
+          "q3": 4934.80825,
+          "min": 4363.09,
+          "max": 5146.085
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 56.40625,
+          "q1": 56.296875,
+          "q3": 56.46875,
+          "min": 56.21875,
+          "max": 56.46875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 32466413.0,
+          "q1": 32466412.25,
+          "q3": 32466413.75,
+          "min": 32466316,
+          "max": 32466414
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 265.641,
+          "q1": 257.04224999999997,
+          "q3": 267.78875,
+          "min": 243.968,
+          "max": 274.685
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 31.5,
+          "q1": 31.359375,
+          "q3": 32.1875,
+          "min": 30.828125,
+          "max": 32.359375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 32633194.0,
+          "q1": 32633194.0,
+          "q3": 32633194.0,
+          "min": 32633194,
+          "max": 32633194
+        }
+      },
+      "time_saved_pct": -1719.4593455076586,
+      "time_saved_ms": -4567.589,
+      "genanki_over_rust": 0.05496138193299306,
+      "rss_mib_saved_pct": -79.06746031746033,
+      "apkg_bytes_saved_pct": 0.5110777694638191
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "label": "独立图片",
+      "english_label": "Unique images",
+      "notes": 1000,
+      "resources": {
+        "profile": "basic-image-unique-v2",
+        "notes": 1000,
+        "media_files": 1000,
+        "media_bytes": 64152000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 9863.0955,
+          "q1": 9590.81175,
+          "q3": 10131.25,
+          "min": 9338.294,
+          "max": 11005.499
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 98.28125,
+          "q1": 98.171875,
+          "q3": 99.1875,
+          "min": 98.078125,
+          "max": 99.375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 64874059.0,
+          "q1": 64874059.0,
+          "q3": 64874060.0,
+          "min": 64873964,
+          "max": 64874061
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 424.981,
+          "q1": 397.5715,
+          "q3": 502.45599999999996,
+          "min": 389.056,
+          "max": 563.475
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 35.765625,
+          "q1": 35.484375,
+          "q3": 35.953125,
+          "min": 35.34375,
+          "max": 36.1875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 65192774.0,
+          "q1": 65192774.0,
+          "q3": 65192774.0,
+          "min": 65192774,
+          "max": 65192774
+        }
+      },
+      "time_saved_pct": -2220.8321077883484,
+      "time_saved_ms": -9438.1145,
+      "genanki_over_rust": 0.043087994027838424,
+      "rss_mib_saved_pct": -174.79248580166012,
+      "apkg_bytes_saved_pct": 0.48888086891347715
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "独立音频",
+      "english_label": "Unique audio",
+      "notes": 100,
+      "resources": {
+        "profile": "basic-audio-unique-v2",
+        "notes": 100,
+        "media_files": 100,
+        "media_bytes": 3204400
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 943.5845,
+          "q1": 875.03475,
+          "q3": 950.669,
+          "min": 825.578,
+          "max": 995.343
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 19.6875,
+          "q1": 19.4375,
+          "q3": 19.796875,
+          "min": 19.421875,
+          "max": 19.8125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 3299761.0,
+          "q1": 3299760.0,
+          "q3": 3299761.0,
+          "min": 3299759,
+          "max": 3299762
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 137.872,
+          "q1": 134.24275,
+          "q3": 143.728,
+          "min": 131.62,
+          "max": 178.086
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.171875,
+          "q1": 28.0,
+          "q3": 28.6875,
+          "min": 27.34375,
+          "max": 28.875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 3354250.0,
+          "q1": 3354250.0,
+          "q3": 3354250.0,
+          "min": 3354250,
+          "max": 3354250
+        }
+      },
+      "time_saved_pct": -584.3916821399558,
+      "time_saved_ms": -805.7125000000001,
+      "genanki_over_rust": 0.1461151597975592,
+      "rss_mib_saved_pct": 30.116472545757066,
+      "apkg_bytes_saved_pct": 1.6244764105239673
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "独立音频",
+      "english_label": "Unique audio",
+      "notes": 200,
+      "resources": {
+        "profile": "basic-audio-unique-v2",
+        "notes": 200,
+        "media_files": 200,
+        "media_bytes": 6408800
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 1942.411,
+          "q1": 1874.75675,
+          "q3": 1978.85225,
+          "min": 1701.753,
+          "max": 2023.757
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 25.046875,
+          "q1": 25.0,
+          "q3": 25.046875,
+          "min": 24.859375,
+          "max": 25.09375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 6560737.0,
+          "q1": 6560737.0,
+          "q3": 6560737.0,
+          "min": 6560736,
+          "max": 6560738
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 159.988,
+          "q1": 156.52675,
+          "q3": 164.54874999999998,
+          "min": 150.893,
+          "max": 204.418
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 29.71875,
+          "q1": 28.9375,
+          "q3": 29.71875,
+          "min": 28.9375,
+          "max": 29.734375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 6643078.0,
+          "q1": 6643078.0,
+          "q3": 6643078.0,
+          "min": 6643078,
+          "max": 6643078
+        }
+      },
+      "time_saved_pct": -1114.0979323449258,
+      "time_saved_ms": -1782.423,
+      "genanki_over_rust": 0.0823656785304449,
+      "rss_mib_saved_pct": 15.720294426919034,
+      "apkg_bytes_saved_pct": 1.2395007254167423
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "独立音频",
+      "english_label": "Unique audio",
+      "notes": 500,
+      "resources": {
+        "profile": "basic-audio-unique-v2",
+        "notes": 500,
+        "media_files": 500,
+        "media_bytes": 16022000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 4606.968,
+          "q1": 4438.9132500000005,
+          "q3": 4808.73575,
+          "min": 4260.203,
+          "max": 4966.791
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 40.578125,
+          "q1": 40.5625,
+          "q3": 40.625,
+          "min": 40.46875,
+          "max": 40.671875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 16325986.0,
+          "q1": 16325985.0,
+          "q3": 16325986.0,
+          "min": 16325984,
+          "max": 16325986
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 230.25400000000002,
+          "q1": 227.96525,
+          "q3": 285.7695,
+          "min": 219.783,
+          "max": 329.716
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 31.734375,
+          "q1": 31.59375,
+          "q3": 31.953125,
+          "min": 31.234375,
+          "max": 32.09375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 16562810.0,
+          "q1": 16562810.0,
+          "q3": 16562810.0,
+          "min": 16562810,
+          "max": 16562810
+        }
+      },
+      "time_saved_pct": -1900.8199640397124,
+      "time_saved_ms": -4376.714,
+      "genanki_over_rust": 0.049979509299825836,
+      "rss_mib_saved_pct": -27.868045297882826,
+      "apkg_bytes_saved_pct": 1.4298539921667852
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "label": "独立音频",
+      "english_label": "Unique audio",
+      "notes": 1000,
+      "resources": {
+        "profile": "basic-audio-unique-v2",
+        "notes": 1000,
+        "media_files": 1000,
+        "media_bytes": 32044000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 9388.619,
+          "q1": 8948.4545,
+          "q3": 9918.327000000001,
+          "min": 8064.689,
+          "max": 10485.474
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 66.796875,
+          "q1": 66.765625,
+          "q3": 67.359375,
+          "min": 66.734375,
+          "max": 67.609375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 32597929.0,
+          "q1": 32597929.0,
+          "q3": 32597929.0,
+          "min": 32597928,
+          "max": 32597929
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 386.33299999999997,
+          "q1": 368.6915,
+          "q3": 437.41225,
+          "min": 358.721,
+          "max": 522.868
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 36.15625,
+          "q1": 35.953125,
+          "q3": 36.46875,
+          "min": 35.921875,
+          "max": 36.640625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 33043814.0,
+          "q1": 33043814.0,
+          "q3": 33043814.0,
+          "min": 33043814,
+          "max": 33043814
+        }
+      },
+      "time_saved_pct": -2330.188205511826,
+      "time_saved_ms": -9002.286,
+      "genanki_over_rust": 0.041149076344454916,
+      "rss_mib_saved_pct": -84.74503025064823,
+      "apkg_bytes_saved_pct": 1.3493751054282077
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "混合独立媒体",
+      "english_label": "Mixed, unique media",
+      "notes": 100,
+      "resources": {
+        "profile": "basic-mixed-unique-v2",
+        "notes": 100,
+        "media_files": 70,
+        "media_bytes": 3527400
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 659.8820000000001,
+          "q1": 642.827,
+          "q3": 667.2719999999999,
+          "min": 610.058,
+          "max": 753.429
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 19.734375,
+          "q1": 19.625,
+          "q3": 19.90625,
+          "min": 19.53125,
+          "max": 20.0625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 3636122.0,
+          "q1": 3636122.0,
+          "q3": 3636122.0,
+          "min": 3636121,
+          "max": 3636123
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 139.40499999999997,
+          "q1": 130.87475,
+          "q3": 142.54325,
+          "min": 125.178,
+          "max": 156.122
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.28125,
+          "q1": 28.015625,
+          "q3": 28.296875,
+          "min": 27.34375,
+          "max": 28.4375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 3674130.0,
+          "q1": 3674130.0,
+          "q3": 3674130.0,
+          "min": 3674130,
+          "max": 3674130
+        }
+      },
+      "time_saved_pct": -373.3560489222052,
+      "time_saved_ms": -520.4770000000001,
+      "genanki_over_rust": 0.2112574672441436,
+      "rss_mib_saved_pct": 30.22099447513812,
+      "apkg_bytes_saved_pct": 1.0344761889209186
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "混合独立媒体",
+      "english_label": "Mixed, unique media",
+      "notes": 200,
+      "resources": {
+        "profile": "basic-mixed-unique-v2",
+        "notes": 200,
+        "media_files": 140,
+        "media_bytes": 7054800
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 1393.252,
+          "q1": 1356.7050000000002,
+          "q3": 1423.8905,
+          "min": 1142.336,
+          "max": 1515.987
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 25.296875,
+          "q1": 25.21875,
+          "q3": 25.296875,
+          "min": 25.046875,
+          "max": 25.359375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 7218533.0,
+          "q1": 7218532.25,
+          "q3": 7218534.0,
+          "min": 7218532,
+          "max": 7218535
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 151.236,
+          "q1": 149.8635,
+          "q3": 153.54524999999998,
+          "min": 146.051,
+          "max": 181.011
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.890625,
+          "q1": 28.5,
+          "q3": 28.953125,
+          "min": 28.34375,
+          "max": 29.328125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 7282658.0,
+          "q1": 7282658.0,
+          "q3": 7282658.0,
+          "min": 7282658,
+          "max": 7282658
+        }
+      },
+      "time_saved_pct": -821.2436192440954,
+      "time_saved_ms": -1242.016,
+      "genanki_over_rust": 0.1085489200805023,
+      "rss_mib_saved_pct": 12.43915630070308,
+      "apkg_bytes_saved_pct": 0.8805164268320675
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "混合独立媒体",
+      "english_label": "Mixed, unique media",
+      "notes": 500,
+      "resources": {
+        "profile": "basic-mixed-unique-v2",
+        "notes": 500,
+        "media_files": 350,
+        "media_bytes": 17637000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 3276.538,
+          "q1": 3196.41575,
+          "q3": 3456.469,
+          "min": 2894.936,
+          "max": 3619.285
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 41.703125,
+          "q1": 41.46875,
+          "q3": 41.84375,
+          "min": 41.421875,
+          "max": 42.015625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 17959347.0,
+          "q1": 17959346.25,
+          "q3": 17959347.0,
+          "min": 17959345,
+          "max": 17959348
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 212.2025,
+          "q1": 207.46325,
+          "q3": 222.3825,
+          "min": 201.994,
+          "max": 354.4
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 31.5625,
+          "q1": 31.375,
+          "q3": 31.59375,
+          "min": 31.1875,
+          "max": 31.625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 18161760.0,
+          "q1": 18161760.0,
+          "q3": 18161760.0,
+          "min": 18161760,
+          "max": 18161760
+        }
+      },
+      "time_saved_pct": -1444.0619219848966,
+      "time_saved_ms": -3064.3355,
+      "genanki_over_rust": 0.06476424201397939,
+      "rss_mib_saved_pct": -32.128712871287135,
+      "apkg_bytes_saved_pct": 1.114501017522529
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "label": "混合独立媒体",
+      "english_label": "Mixed, unique media",
+      "notes": 1000,
+      "resources": {
+        "profile": "basic-mixed-unique-v2",
+        "notes": 1000,
+        "media_files": 700,
+        "media_bytes": 35274000
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 6649.202,
+          "q1": 6422.66475,
+          "q3": 6918.30925,
+          "min": 6151.209,
+          "max": 7219.92
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 68.171875,
+          "q1": 68.15625,
+          "q3": 68.625,
+          "min": 68.046875,
+          "max": 68.734375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 35858388.0,
+          "q1": 35858387.0,
+          "q3": 35858388.0,
+          "min": 35858386,
+          "max": 35858389
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 341.0005,
+          "q1": 319.88675,
+          "q3": 415.9355,
+          "min": 309.733,
+          "max": 512.346
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 35.125,
+          "q1": 35.0625,
+          "q3": 35.203125,
+          "min": 34.875,
+          "max": 35.484375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 36249906.0,
+          "q1": 36249906.0,
+          "q3": 36249906.0,
+          "min": 36249906,
+          "max": 36249906
+        }
+      },
+      "time_saved_pct": -1849.9097508654681,
+      "time_saved_ms": -6308.2015,
+      "genanki_over_rust": 0.05128442480766865,
+      "rss_mib_saved_pct": -94.08362989323844,
+      "apkg_bytes_saved_pct": 1.0800524558601587
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "混合共享媒体",
+      "english_label": "Mixed, shared media",
+      "notes": 100,
+      "resources": {
+        "profile": "basic-mixed-shared-v2",
+        "notes": 100,
+        "media_files": 49,
+        "media_bytes": 2469180
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 461.25300000000004,
+          "q1": 429.93425,
+          "q3": 492.201,
+          "min": 417.922,
+          "max": 528.746
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 18.375,
+          "q1": 18.34375,
+          "q3": 18.484375,
+          "min": 18.328125,
+          "max": 18.734375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2572090.5,
+          "q1": 2572090.0,
+          "q3": 2572091.0,
+          "min": 2572089,
+          "max": 2572092
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 129.3855,
+          "q1": 124.096,
+          "q3": 141.28900000000002,
+          "min": 113.243,
+          "max": 151.39
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.046875,
+          "q1": 27.890625,
+          "q3": 28.078125,
+          "min": 27.625,
+          "max": 28.296875
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2613726.0,
+          "q1": 2613726.0,
+          "q3": 2613726.0,
+          "min": 2613726,
+          "max": 2613726
+        }
+      },
+      "time_saved_pct": -256.4951250333306,
+      "time_saved_ms": -331.86750000000006,
+      "genanki_over_rust": 0.28050874465857134,
+      "rss_mib_saved_pct": 34.48467966573816,
+      "apkg_bytes_saved_pct": 1.5929558033244473
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "混合共享媒体",
+      "english_label": "Mixed, shared media",
+      "notes": 200,
+      "resources": {
+        "profile": "basic-mixed-shared-v2",
+        "notes": 200,
+        "media_files": 49,
+        "media_bytes": 2469180
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 447.79499999999996,
+          "q1": 442.0975,
+          "q3": 460.0205,
+          "min": 418.653,
+          "max": 502.153
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 20.203125,
+          "q1": 20.171875,
+          "q3": 20.21875,
+          "min": 19.828125,
+          "max": 20.234375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2610637.0,
+          "q1": 2610636.0,
+          "q3": 2610637.0,
+          "min": 2610635,
+          "max": 2610638
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 133.19799999999998,
+          "q1": 124.042,
+          "q3": 137.62525,
+          "min": 120.479,
+          "max": 147.113
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 28.5,
+          "q1": 28.3125,
+          "q3": 28.5,
+          "min": 28.265625,
+          "max": 28.8125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2687454.0,
+          "q1": 2687454.0,
+          "q3": 2687454.0,
+          "min": 2687454,
+          "max": 2687454
+        }
+      },
+      "time_saved_pct": -236.1874802924969,
+      "time_saved_ms": -314.597,
+      "genanki_over_rust": 0.29745307562612355,
+      "rss_mib_saved_pct": 29.111842105263154,
+      "apkg_bytes_saved_pct": 2.858355901161469
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "混合共享媒体",
+      "english_label": "Mixed, shared media",
+      "notes": 500,
+      "resources": {
+        "profile": "basic-mixed-shared-v2",
+        "notes": 500,
+        "media_files": 49,
+        "media_bytes": 2469180
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 460.89300000000003,
+          "q1": 450.94599999999997,
+          "q3": 471.52049999999997,
+          "min": 444.402,
+          "max": 494.429
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 24.796875,
+          "q1": 24.703125,
+          "q3": 24.859375,
+          "min": 24.59375,
+          "max": 24.890625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2725254.0,
+          "q1": 2725253.25,
+          "q3": 2725254.0,
+          "min": 2725253,
+          "max": 2725255
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 134.28699999999998,
+          "q1": 131.762,
+          "q3": 135.67125,
+          "min": 127.868,
+          "max": 150.699
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 29.921875,
+          "q1": 29.546875,
+          "q3": 30.109375,
+          "min": 29.328125,
+          "max": 30.703125
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2961886.0,
+          "q1": 2961886.0,
+          "q3": 2961886.0,
+          "min": 2961886,
+          "max": 2961886
+        }
+      },
+      "time_saved_pct": -243.21490538920378,
+      "time_saved_ms": -326.60600000000005,
+      "genanki_over_rust": 0.29136263731495154,
+      "rss_mib_saved_pct": 17.127937336814625,
+      "apkg_bytes_saved_pct": 7.9892338867869945
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "label": "混合共享媒体",
+      "english_label": "Mixed, shared media",
+      "notes": 1000,
+      "resources": {
+        "profile": "basic-mixed-shared-v2",
+        "notes": 1000,
+        "media_files": 49,
+        "media_bytes": 2469180
+      },
+      "status": "verified_exploratory",
+      "rust": {
+        "time_ms": {
+          "n": 10,
+          "median": 492.39250000000004,
+          "q1": 467.8565,
+          "q3": 505.3945,
+          "min": 464.524,
+          "max": 522.3
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 32.90625,
+          "q1": 32.859375,
+          "q3": 32.921875,
+          "min": 32.59375,
+          "max": 32.984375
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 2916193.0,
+          "q1": 2916193.0,
+          "q3": 2916193.0,
+          "min": 2916192,
+          "max": 2916194
+        }
+      },
+      "genanki": {
+        "time_ms": {
+          "n": 10,
+          "median": 142.93099999999998,
+          "q1": 142.25075,
+          "q3": 151.89575,
+          "min": 140.573,
+          "max": 175.031
+        },
+        "rss_mib": {
+          "n": 5,
+          "median": 33.34375,
+          "q1": 32.953125,
+          "q3": 33.359375,
+          "min": 32.609375,
+          "max": 33.65625
+        },
+        "apkg_bytes": {
+          "n": 10,
+          "median": 3375582.0,
+          "q1": 3375582.0,
+          "q3": 3375582.0,
+          "min": 3375582,
+          "max": 3375582
+        }
+      },
+      "time_saved_pct": -244.49664523441385,
+      "time_saved_ms": -349.46150000000006,
+      "genanki_over_rust": 0.2902785887274887,
+      "rss_mib_saved_pct": 1.3120899718837897,
+      "apkg_bytes_saved_pct": 13.609179098596924
+    }
+  ]
+}

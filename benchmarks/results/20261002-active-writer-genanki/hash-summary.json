@@ -1,0 +1,697 @@
+[
+  {
+    "profile": "basic-mixed-text-v1",
+    "streaming": {
+      "n": 6,
+      "samples_ms": [
+        70.077,
+        61.882,
+        69.206,
+        62.038,
+        71.474,
+        62.838
+      ],
+      "median_ms": 66.022,
+      "rss_mib": 27.3359375,
+      "artifact_bytes": 436478.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "preflight": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "memory_copy": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "share": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_read": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "blake3": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_open": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "snapshot_file": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    },
+    "direct": {
+      "n": 6,
+      "samples_ms": [
+        61.823,
+        64.912,
+        63.087,
+        66.453,
+        62.893,
+        69.795
+      ],
+      "median_ms": 63.999500000000005,
+      "rss_mib": 27.4609375,
+      "artifact_bytes": 436478.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "preflight": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "memory_copy": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "share": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_read": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "blake3": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_open": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "snapshot_file": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-image-unique-v2",
+    "streaming": {
+      "n": 6,
+      "samples_ms": [
+        271.926,
+        285.827,
+        281.534,
+        361.28,
+        311.806,
+        353.687
+      ],
+      "median_ms": 298.8165,
+      "rss_mib": 39.96875,
+      "artifact_bytes": 64874060.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.7014385,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 8.5864355,
+          "count": 1000.0
+        },
+        "memory_copy": {
+          "ms": 1.407321,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 31.9550325,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.3883315,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 5.940595500000001,
+          "count": 2000.0
+        },
+        "blake3": {
+          "ms": 38.933772000000005,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5759464999999999,
+          "count": 1000.0
+        },
+        "get_flags": {
+          "ms": 0.28130849999999996,
+          "count": 1000.0
+        },
+        "source_open": {
+          "ms": 25.214840000000002,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 121.3120115,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 31.0568775,
+          "count": 935.0
+        },
+        "open_source": {
+          "ms": 27.33529,
+          "count": 1000.0
+        }
+      }
+    },
+    "direct": {
+      "n": 6,
+      "samples_ms": [
+        275.705,
+        260.336,
+        282.95,
+        283.91,
+        356.471,
+        309.445
+      ],
+      "median_ms": 283.43,
+      "rss_mib": 40.34375,
+      "artifact_bytes": 64874060.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.6038865,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.879894999999999,
+          "count": 1000.0
+        },
+        "memory_copy": {
+          "ms": 1.4238545,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 28.9202855,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.371397,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 5.865448000000001,
+          "count": 2000.0
+        },
+        "blake3": {
+          "ms": 38.037589,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5515749999999999,
+          "count": 1000.0
+        },
+        "get_flags": {
+          "ms": 0.270932,
+          "count": 1000.0
+        },
+        "source_open": {
+          "ms": 23.580629000000002,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 108.89329749999999,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 28.227241,
+          "count": 935.0
+        },
+        "open_source": {
+          "ms": 24.9063865,
+          "count": 1000.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-audio-unique-v2",
+    "streaming": {
+      "n": 6,
+      "samples_ms": [
+        210.269,
+        211.271,
+        207.841,
+        234.896,
+        217.254,
+        228.526
+      ],
+      "median_ms": 214.2625,
+      "rss_mib": 40.7421875,
+      "artifact_bytes": 32597929.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.6509050000000001,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.850326,
+          "count": 1000.0
+        },
+        "memory_copy": {
+          "ms": 0.867541,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 16.169026,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.366289,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 3.4768464999999997,
+          "count": 2000.0
+        },
+        "blake3": {
+          "ms": 20.4227435,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5526055000000001,
+          "count": 1000.0
+        },
+        "get_flags": {
+          "ms": 0.27161199999999996,
+          "count": 1000.0
+        },
+        "source_open": {
+          "ms": 23.298489,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 75.370295,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 15.5579,
+          "count": 870.0
+        },
+        "open_source": {
+          "ms": 24.629813,
+          "count": 1000.0
+        }
+      }
+    },
+    "direct": {
+      "n": 6,
+      "samples_ms": [
+        211.45,
+        213.883,
+        213.981,
+        220.181,
+        226.512,
+        223.946
+      ],
+      "median_ms": 217.08100000000002,
+      "rss_mib": 40.9140625,
+      "artifact_bytes": 32597929.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.638855,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 8.239086,
+          "count": 1000.0
+        },
+        "memory_copy": {
+          "ms": 0.9195935,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 16.350062,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.369466,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 3.633587,
+          "count": 2000.0
+        },
+        "blake3": {
+          "ms": 20.3577395,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5520345,
+          "count": 1000.0
+        },
+        "get_flags": {
+          "ms": 0.27155799999999997,
+          "count": 1000.0
+        },
+        "source_open": {
+          "ms": 23.7072175,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 76.3370855,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 15.844939,
+          "count": 870.0
+        },
+        "open_source": {
+          "ms": 25.018930500000003,
+          "count": 1000.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-unique-v2",
+    "streaming": {
+      "n": 6,
+      "samples_ms": [
+        195.207,
+        193.304,
+        186.397,
+        189.919,
+        188.209,
+        263.881
+      ],
+      "median_ms": 191.6115,
+      "rss_mib": 40.3515625,
+      "artifact_bytes": 35858388.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.476854,
+          "count": 700.0
+        },
+        "preflight": {
+          "ms": 5.5876850000000005,
+          "count": 700.0
+        },
+        "memory_copy": {
+          "ms": 0.9324115,
+          "count": 700.0
+        },
+        "share": {
+          "ms": 14.8922895,
+          "count": 700.0
+        },
+        "set_flags": {
+          "ms": 0.2675185,
+          "count": 700.0
+        },
+        "source_read": {
+          "ms": 3.4256515,
+          "count": 1400.0
+        },
+        "blake3": {
+          "ms": 21.474735,
+          "count": 700.0
+        },
+        "descriptor_stat": {
+          "ms": 0.3887295,
+          "count": 700.0
+        },
+        "get_flags": {
+          "ms": 0.1890465,
+          "count": 700.0
+        },
+        "source_open": {
+          "ms": 16.461602499999998,
+          "count": 700.0
+        },
+        "snapshot_file": {
+          "ms": 64.751913,
+          "count": 700.0
+        },
+        "spool_store": {
+          "ms": 14.514232,
+          "count": 618.0
+        },
+        "open_source": {
+          "ms": 17.40061,
+          "count": 700.0
+        }
+      }
+    },
+    "direct": {
+      "n": 6,
+      "samples_ms": [
+        207.709,
+        195.935,
+        202.506,
+        228.583,
+        205.757,
+        186.875
+      ],
+      "median_ms": 204.13150000000002,
+      "rss_mib": 40.28125,
+      "artifact_bytes": 35858388.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.48128899999999997,
+          "count": 700.0
+        },
+        "preflight": {
+          "ms": 5.692036,
+          "count": 700.0
+        },
+        "memory_copy": {
+          "ms": 0.966445,
+          "count": 700.0
+        },
+        "share": {
+          "ms": 15.805888,
+          "count": 700.0
+        },
+        "set_flags": {
+          "ms": 0.26598,
+          "count": 700.0
+        },
+        "source_read": {
+          "ms": 3.46891,
+          "count": 1400.0
+        },
+        "blake3": {
+          "ms": 21.4128915,
+          "count": 700.0
+        },
+        "descriptor_stat": {
+          "ms": 0.4069375,
+          "count": 700.0
+        },
+        "get_flags": {
+          "ms": 0.194766,
+          "count": 700.0
+        },
+        "source_open": {
+          "ms": 17.2087615,
+          "count": 700.0
+        },
+        "snapshot_file": {
+          "ms": 65.9507215,
+          "count": 700.0
+        },
+        "spool_store": {
+          "ms": 15.3644465,
+          "count": 618.0
+        },
+        "open_source": {
+          "ms": 18.180585,
+          "count": 700.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-shared-v2",
+    "streaming": {
+      "n": 6,
+      "samples_ms": [
+        79.15,
+        79.504,
+        83.544,
+        76.957,
+        79.481,
+        72.98
+      ],
+      "median_ms": 79.3155,
+      "rss_mib": 35.5078125,
+      "artifact_bytes": 2916193.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.034002000000000004,
+          "count": 49.0
+        },
+        "preflight": {
+          "ms": 0.42470600000000003,
+          "count": 49.0
+        },
+        "memory_copy": {
+          "ms": 0.23872900000000002,
+          "count": 49.0
+        },
+        "share": {
+          "ms": 0.023644,
+          "count": 49.0
+        },
+        "set_flags": {
+          "ms": 0.019062000000000003,
+          "count": 49.0
+        },
+        "source_read": {
+          "ms": 0.2536455,
+          "count": 98.0
+        },
+        "blake3": {
+          "ms": 1.512645,
+          "count": 49.0
+        },
+        "descriptor_stat": {
+          "ms": 0.028563,
+          "count": 49.0
+        },
+        "get_flags": {
+          "ms": 0.014001,
+          "count": 49.0
+        },
+        "source_open": {
+          "ms": 1.217433,
+          "count": 49.0
+        },
+        "snapshot_file": {
+          "ms": 3.856792,
+          "count": 49.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 1.2904390000000001,
+          "count": 49.0
+        }
+      }
+    },
+    "direct": {
+      "n": 6,
+      "samples_ms": [
+        73.448,
+        70.6,
+        82.695,
+        82.48,
+        75.742,
+        75.365
+      ],
+      "median_ms": 75.5535,
+      "rss_mib": 35.390625,
+      "artifact_bytes": 2916193.0,
+      "stages": {
+        "source_close": {
+          "ms": 0.032979999999999995,
+          "count": 49.0
+        },
+        "preflight": {
+          "ms": 0.3846265,
+          "count": 49.0
+        },
+        "memory_copy": {
+          "ms": 0.24866700000000003,
+          "count": 49.0
+        },
+        "share": {
+          "ms": 0.021148,
+          "count": 49.0
+        },
+        "set_flags": {
+          "ms": 0.0190195,
+          "count": 49.0
+        },
+        "source_read": {
+          "ms": 0.2426855,
+          "count": 98.0
+        },
+        "blake3": {
+          "ms": 1.5071065,
+          "count": 49.0
+        },
+        "descriptor_stat": {
+          "ms": 0.027042,
+          "count": 49.0
+        },
+        "get_flags": {
+          "ms": 0.0138345,
+          "count": 49.0
+        },
+        "source_open": {
+          "ms": 1.1946430000000001,
+          "count": 49.0
+        },
+        "snapshot_file": {
+          "ms": 3.7429155,
+          "count": 49.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 1.264206,
+          "count": 49.0
+        }
+      }
+    }
+  }
+]

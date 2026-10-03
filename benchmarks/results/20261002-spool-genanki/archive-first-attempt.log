@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/spool-20261002/archive.py", line 35, in <module>
+    pack('confirmation-and-probes.tar.gz',entries)
+  File "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/spool-20261002/archive.py", line 15, in pack
+    assert p.is_file() and key not in hashes and p.suffix not in {'.apkg','.sqlite','.db'}
+AssertionError

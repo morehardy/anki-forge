@@ -1,7 +1,8 @@
 use std::path::Path;
 
 use super::{
-    identity::PackageIdentity, ApkgArtifact, BuildError, BuildErrorKind as Kind, BuildReport,
+    artifact::PrivateCandidate, identity::PackageIdentity, BuildError, BuildErrorKind as Kind,
+    BuildReport,
 };
 use crate::{
     diagnostics::{Diagnostic, Severity},
@@ -16,30 +17,47 @@ pub(super) fn generate(
     document: &ProductDocument,
     inputs: &Path,
     mut identity: PackageIdentity,
-) -> Result<(ApkgArtifact, BuildReport), BuildError> {
+) -> Result<(PrivateCandidate, BuildReport), BuildError> {
     let media_store = inputs.join("media-store");
+    let mut prepared_media = if project.assets.values().next().is_some() {
+        let mut prepared =
+            crate::prepared_media::PreparedMedia::new_in(inputs).map_err(|cause| {
+                generation_error(
+                    "BUILD.MEDIA_STAGING_FAILED",
+                    cause.into(),
+                    &BuildReport::default(),
+                )
+            })?;
+        for media in project.assets.values() {
+            prepared.register_owned(media.clone());
+        }
+        Some(prepared)
+    } else {
+        None
+    };
     let mut normalized =
-        super::normalize::normalize(document, inputs, &media_store).map_err(|cause| {
-            let diagnostics: Vec<_> = cause
-                .diagnostics
-                .iter()
-                .cloned()
-                .map(Diagnostic::from_backend)
-                .collect();
-            let code = diagnostics
-                .iter()
-                .find(|d| d.severity == Severity::Error)
-                .map(|d| d.code.as_str())
-                .unwrap_or("BUILD.NORMALIZE_FAILED");
-            let kind = if cause.io_cause.is_some() {
-                Kind::Io
-            } else {
-                Kind::Validation
-            };
-            let mut error = BuildError::new(kind, code, "normalize authored content");
-            error.report.diagnostics = diagnostics;
-            error.caused_by(cause)
-        })?;
+        super::normalize::normalize(document, inputs, &media_store, prepared_media.as_mut())
+            .map_err(|cause| {
+                let diagnostics: Vec<_> = cause
+                    .diagnostics
+                    .iter()
+                    .cloned()
+                    .map(Diagnostic::from_backend)
+                    .collect();
+                let code = diagnostics
+                    .iter()
+                    .find(|d| d.severity == Severity::Error)
+                    .map(|d| d.code.as_str())
+                    .unwrap_or("BUILD.NORMALIZE_FAILED");
+                let kind = if cause.io_cause.is_some() {
+                    Kind::Io
+                } else {
+                    Kind::Validation
+                };
+                let mut error = BuildError::new(kind, code, "normalize authored content");
+                error.report.diagnostics = diagnostics;
+                error.caused_by(cause)
+            })?;
     let mut report = BuildReport {
         diagnostics: normalized
             .diagnostics
@@ -89,7 +107,7 @@ pub(super) fn generate(
     let ids = identity.model_ids();
     let guids = identity.guid_plan();
     target.native_identity = Some(std::sync::Arc::new(identity));
-    let attempt = crate::writer_core::build::build_with_identity_plan(
+    let attempt = crate::writer_core::build::build_with_prepared_media(
         &normalized.normalized_ir,
         &policy,
         &context,
@@ -97,6 +115,7 @@ pub(super) fn generate(
         &target,
         Some(&guids),
         Some(&ids),
+        prepared_media.as_ref(),
     )
     .map_err(|cause| generation_error("BUILD.WRITER_FAILED", cause, &report))?;
     let result = attempt.result;
@@ -149,7 +168,7 @@ pub(super) fn generate(
     })?;
     let path = crate::writer_core::artifact_path_from_ref(&target, path)
         .map_err(|cause| generation_error("BUILD.ARTIFACT_MISSING", cause, &report))?;
-    let artifact = ApkgArtifact::temporary_from_candidate(&path).map_err(|cause| {
+    let artifact = PrivateCandidate::retain(&path).map_err(|cause| {
         let mut error = BuildError::new(
             Kind::Io,
             "BUILD.WORKSPACE_FAILED",
@@ -196,6 +215,69 @@ fn generation_error(code: &str, cause: anyhow::Error, report: &BuildReport) -> B
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn owned_media_build_does_not_require_input_or_cas_copies() {
+        use std::io::Read;
+        let inputs = tempfile::tempdir().unwrap();
+        let mut project = Project::new("owned-media").unwrap();
+        project
+            .add("one", crate::Note::basic("front", "back"))
+            .unwrap();
+        let mut media = Vec::new();
+        for index in 0..20 {
+            let name = format!("asset-{index:02}.txt");
+            project
+                .add_asset(
+                    crate::Media::bytes(b"owned bytes".to_vec(), "text/plain")
+                        .unwrap()
+                        .with_export_name(&name)
+                        .unwrap(),
+                )
+                .unwrap();
+            media.push(serde_json::json!({"id": name, "export_as": name,
+                "source": {"kind": "file", "path": format!("assets/{name}")}}));
+        }
+        let document: ProductDocument = serde_json::from_value(serde_json::json!({
+            "product_document_version": "product-v3", "document_id": "owned-media",
+            "note_types": [{"kind": "custom", "id": "model:basic", "note_type_kind": "normal",
+                "fields": [{"key": "front", "name": "Front"}, {"key": "back", "name": "Back"}],
+                "templates": [{"key": "card", "name": "Card 1", "front": "{{Front}}", "back": "{{Back}}"}]}],
+            "notes": [{"kind": "custom", "note_type_id": "model:basic", "stable_id": "one", "deck_name": "Default",
+                "fields": {"front": {"kind": "html", "value": "front"}, "back": {"kind": "html", "value": "back"}}}],
+            "media": media
+        })).unwrap();
+        let (artifact, report) = generate(
+            &project,
+            &document,
+            inputs.path(),
+            PackageIdentity::create(&project).unwrap(),
+        )
+        .unwrap();
+        assert_eq!(report.counts.media, 20);
+        assert!(!inputs.path().join("assets").exists());
+        assert!(!inputs.path().join("media-store").exists());
+        assert_eq!(
+            std::fs::read_dir(inputs.path().join("candidate/staging/media"))
+                .unwrap()
+                .count(),
+            0
+        );
+        let mut archive =
+            zip::ZipArchive::new(std::fs::File::open(artifact.path()).unwrap()).unwrap();
+        for index in 0..20 {
+            let mut encoded = Vec::new();
+            archive
+                .by_name(&index.to_string())
+                .unwrap()
+                .read_to_end(&mut encoded)
+                .unwrap();
+            assert_eq!(
+                zstd::stream::decode_all(encoded.as_slice()).unwrap(),
+                b"owned bytes"
+            );
+        }
+    }
 
     #[test]
     fn writer_filesystem_failures_keep_native_io_causes() {
@@ -367,7 +449,6 @@ mod tests {
         for (point, code) in [
             (Point::Read, "MEDIA.SOURCE_READ_FAILED"),
             (Point::Write, "MEDIA.CAS_WRITE_FAILED"),
-            (Point::Sync, "MEDIA.CAS_WRITE_FAILED"),
         ] {
             std::fs::write(&destination, b"previous complete output").unwrap();
             let token = Arc::new(());

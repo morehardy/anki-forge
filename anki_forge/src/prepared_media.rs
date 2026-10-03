@@ -3,7 +3,6 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::fs::File;
 use std::io::{self, Read, Write};
-#[cfg(test)]
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::mpsc::{sync_channel, SyncSender};
@@ -41,6 +40,7 @@ struct RegisteredSource {
 
 pub(crate) struct PreparedMedia {
     archive: Mutex<Option<CandidateArchive>>,
+    owned: BTreeMap<String, crate::Media>,
     #[cfg(test)]
     registered: BTreeMap<String, RegisteredSource>,
     objects: BTreeMap<String, (String, u64)>,
@@ -48,17 +48,22 @@ pub(crate) struct PreparedMedia {
 }
 
 impl PreparedMedia {
-    #[cfg(test)]
     pub(crate) fn new_in(directory: &Path) -> io::Result<Self> {
         let file = tempfile::NamedTempFile::new_in(directory)?;
         let mut archive = StreamZip::new(file);
         archive.bytes("meta", &[8, 3]).map_err(io::Error::other)?;
         Ok(Self {
             archive: Mutex::new(Some(archive)),
+            owned: BTreeMap::new(),
+            #[cfg(test)]
             registered: BTreeMap::new(),
             objects: BTreeMap::new(),
             export_order: Vec::new(),
         })
+    }
+
+    pub(crate) fn register_owned(&mut self, media: crate::Media) {
+        self.owned.insert(media.filename().to_owned(), media);
     }
 
     #[cfg(test)]
@@ -148,8 +153,12 @@ impl PreparedMedia {
             };
         if workers == 1 {
             let mut context = zstd::zstd_safe::CCtx::create();
+            let mut readers = crate::media::ReaderCache::default();
             for &(index, item) in &jobs {
-                accept(index, self.prepare_one(item, options, &mut context, &pool));
+                accept(
+                    index,
+                    self.prepare_one(item, options, &mut context, &pool, &mut readers),
+                );
             }
         } else {
             std::thread::scope(|scope| {
@@ -171,6 +180,7 @@ impl PreparedMedia {
                             .name("anki-forge-media".into())
                             .spawn_scoped(scope, move || {
                                 let mut context = zstd::zstd_safe::CCtx::create();
+                                let mut readers = crate::media::ReaderCache::default();
                                 loop {
                                     let job = receiver.lock().expect("media job queue lock").recv();
                                     let Ok((position, reply)) = job else { break };
@@ -180,6 +190,7 @@ impl PreparedMedia {
                                             options,
                                             &mut context,
                                             pool,
+                                            &mut readers,
                                         ))
                                         .is_err()
                                     {
@@ -237,57 +248,92 @@ impl PreparedMedia {
         options: &NormalizeOptions,
         context: &mut zstd::zstd_safe::CCtx<'static>,
         pool: &PayloadPool,
+        readers: &mut crate::media::ReaderCache,
     ) -> Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError> {
-        #[cfg(test)]
-        let source = if let Some(registered) = self.registered.get(&item.id) {
-            let metadata = std::fs::metadata(&registered.path)
-                .map_err(|error| source_error(item, &registered.path, error))?;
-            if !metadata.is_file() {
-                return Err(diagnostic(
-                    item,
-                    "MEDIA.SOURCE_NOT_REGULAR_FILE",
-                    format!(
-                        "source is not a regular file: {}",
-                        registered.path.display()
-                    ),
-                ));
-            }
-            PreparedMediaSource::Path {
-                path: registered.path.clone(),
-                size_bytes: metadata.len(),
-            }
+        let owned = self.owned.get(&item.id);
+        let source = if owned.is_some() {
+            None
         } else {
-            prepare_media_source(item, options)?
+            #[cfg(test)]
+            let source = if let Some(registered) = self.registered.get(&item.id) {
+                let metadata = std::fs::metadata(&registered.path)
+                    .map_err(|error| source_error(item, &registered.path, error))?;
+                if !metadata.is_file() {
+                    return Err(diagnostic(
+                        item,
+                        "MEDIA.SOURCE_NOT_REGULAR_FILE",
+                        format!(
+                            "source is not a regular file: {}",
+                            registered.path.display()
+                        ),
+                    ));
+                }
+                PreparedMediaSource::Path {
+                    path: registered.path.clone(),
+                    size_bytes: metadata.len(),
+                }
+            } else {
+                prepare_media_source(item, options)?
+            };
+            #[cfg(not(test))]
+            let source = prepare_media_source(item, options)?;
+            Some(source)
         };
-        #[cfg(not(test))]
-        let source = prepare_media_source(item, options)?;
         #[cfg(test)]
         let registered = self.registered.contains_key(&item.id);
         #[cfg(not(test))]
         let registered = false;
         let limit = options.media_policy.max_media_object_bytes;
-        if !registered && limit.is_some_and(|limit| source.known_size_bytes() > limit) {
+        let known_size = owned.map_or_else(
+            || source.as_ref().expect("unowned source").known_size_bytes(),
+            |media| media.snapshot.len,
+        );
+        if !registered && limit.is_some_and(|limit| known_size > limit) {
             return Err(diagnostic(
                 item,
                 "MEDIA.SIZE_LIMIT_EXCEEDED",
                 "source exceeds max_media_object_bytes".into(),
             ));
         }
-        let mut reader: Box<dyn Read + '_> = match &source {
-            PreparedMediaSource::Path { path, .. } => {
-                Box::new(File::open(path).map_err(|error| source_error(item, path, error))?)
+        let mut reader: Box<dyn Read + '_> = if let Some(media) = owned {
+            media.snapshot.cached_reader(readers).map_err(|error| {
+                io_diagnostic(item, "MEDIA.SOURCE_READ_FAILED", io::Error::other(error))
+            })?
+        } else {
+            match source.as_ref().expect("unowned source") {
+                PreparedMediaSource::Path { path, .. } => {
+                    Box::new(File::open(path).map_err(|error| source_error(item, path, error))?)
+                }
+                PreparedMediaSource::InlineBytes(bytes) => Box::new(io::Cursor::new(bytes)),
             }
-            PreparedMediaSource::InlineBytes(bytes) => Box::new(io::Cursor::new(bytes)),
         };
         let sink = pool.payload();
         let encode_error = |error: io::Error| io_diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error);
         let mut encoder = zstd::stream::Encoder::with_context(sink, context);
+        // PNG pixels are already compressed. A fast outer frame avoids spending
+        // another full compression search on that stream. Reset the level for
+        // every job because this worker's context is reused across media types.
+        let level = if owned.is_some_and(|media| {
+            media.media_type().split(';').next().map(str::trim) == Some("image/png")
+        }) {
+            -1
+        } else {
+            3
+        };
+        encoder
+            .set_parameter(zstd::zstd_safe::CParameter::CompressionLevel(level))
+            .map_err(encode_error)?;
         let mut sha1 = Sha1::new();
         let mut blake3 = blake3::Hasher::new();
         let mut size = 0u64;
         let mut sample = Vec::with_capacity(8192);
         let mut buffer = [0u8; BUFFER_BYTES];
         loop {
+            #[cfg(test)]
+            crate::authoring_core::media_io::io_failure::check(
+                crate::authoring_core::media_io::io_failure::Point::Read,
+            )
+            .map_err(|error| io_diagnostic(item, "MEDIA.SOURCE_READ_FAILED", error))?;
             let count = reader
                 .read(&mut buffer)
                 .map_err(|error| io_diagnostic(item, "MEDIA.SOURCE_READ_FAILED", error))?;
@@ -314,11 +360,25 @@ impl PreparedMedia {
             sha1.update(bytes);
             blake3.update(bytes);
             if limit.is_none_or(|limit| size <= limit) {
+                #[cfg(test)]
+                crate::authoring_core::media_io::io_failure::check(
+                    crate::authoring_core::media_io::io_failure::Point::Write,
+                )
+                .map_err(encode_error)?;
                 encoder.write_all(bytes).map_err(encode_error)?;
             }
         }
         let sha1 = hex::encode(sha1.finalize());
         let blake3 = blake3.finalize().to_hex().to_string();
+        if let Some(media) = owned {
+            if blake3 != media.snapshot.digest.to_hex().as_str() || size != media.snapshot.len {
+                return Err(diagnostic(
+                    item,
+                    "MEDIA.SOURCE_CHANGED",
+                    "owned media snapshot changed".into(),
+                ));
+            }
+        }
         #[cfg(test)]
         if let Some(registered) = self.registered.get(&item.id) {
             let matches = match &registered.fingerprint {
@@ -432,6 +492,71 @@ fn source_error(
 mod tests {
     use super::*;
     use std::io::Seek;
+
+    #[test]
+    fn reused_codec_restores_default_level_after_png_and_preserves_payloads() {
+        use crate::authoring_core::media::AuthoringMediaSource;
+        use image::ImageEncoder;
+
+        let root = tempfile::tempdir().unwrap();
+        let options = NormalizeOptions {
+            base_dir: root.path().into(),
+            media_store_dir: root.path().join("unused-cas"),
+            media_policy: crate::authoring_core::media::MediaPolicy::default_strict(),
+        };
+        let mut pixels = vec![0; 128 * 128 * 3];
+        for (index, byte) in pixels.iter_mut().enumerate() {
+            *byte = (index.wrapping_mul(37) ^ (index >> 7)) as u8;
+        }
+        let mut png = Vec::new();
+        image::codecs::png::PngEncoder::new(&mut png)
+            .write_image(&pixels, 128, 128, image::ExtendedColorType::Rgb8)
+            .unwrap();
+        let binary = pixels.repeat(4);
+        let mut prepared = PreparedMedia::new_in(root.path()).unwrap();
+        let mut items = Vec::new();
+        for (name, bytes, mime) in [
+            ("000.png", &png, "image/png"),
+            ("001.bin", &binary, "application/octet-stream"),
+        ] {
+            prepared.register_owned(
+                crate::Media::bytes(bytes.clone(), mime)
+                    .unwrap()
+                    .with_export_name(name)
+                    .unwrap(),
+            );
+            items.push(AuthoringMedia {
+                id: name.into(),
+                desired_filename: name.into(),
+                source: AuthoringMediaSource::Path { path: name.into() },
+                declared_mime: None,
+            });
+        }
+        assert!(prepared
+            .prepare_all(&items, &options)
+            .iter()
+            .all(|r| r.as_ref().unwrap().is_ok()));
+        let archive = prepared.archive.get_mut().unwrap().take().unwrap();
+        let (mut file, _) = archive.finish().unwrap();
+        file.rewind().unwrap();
+        let mut zip = zip::ZipArchive::new(file).unwrap();
+        assert_eq!(
+            zstd::stream::decode_all(zip.by_name("0").unwrap()).unwrap(),
+            png
+        );
+        let mut actual = Vec::new();
+        zip.by_name("1").unwrap().read_to_end(&mut actual).unwrap();
+        let mut default = zstd::stream::Encoder::new(Vec::new(), 0).unwrap();
+        for block in binary.chunks(BUFFER_BYTES) {
+            default.write_all(block).unwrap();
+        }
+        assert_eq!(
+            actual,
+            default.finish().unwrap(),
+            "PNG settings leaked to the next job"
+        );
+        assert_eq!(zstd::stream::decode_all(actual.as_slice()).unwrap(), binary);
+    }
 
     #[test]
     fn one_large_encoded_payload_uses_available_build_memory() {

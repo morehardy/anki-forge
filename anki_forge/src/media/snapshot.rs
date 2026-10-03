@@ -4,14 +4,18 @@ use std::{
     io::{Cursor, Read, Seek, SeekFrom, Write},
     path::Path,
     sync::{
-        atomic::{AtomicU32, Ordering},
+        atomic::{AtomicU32, AtomicUsize, Ordering},
         Arc, Mutex, MutexGuard, Weak,
     },
 };
 
 use super::{MediaError, MediaErrorKind, MediaLimits};
 
+mod spool;
+pub(crate) use spool::ReaderCache;
+
 const MEMORY_THRESHOLD: usize = 1024 * 1024;
+const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
 const BUFFER_BYTES: usize = 64 * 1024;
 pub(super) const SAMPLE_BYTES: usize = 8192;
 
@@ -20,17 +24,20 @@ pub(crate) struct Snapshot {
     pub(crate) len: u64,
     storage: Storage,
     process: u32,
+    cached_memory_bytes: usize,
 }
 
 #[derive(Debug)]
 enum Storage {
     Memory(Vec<u8>),
-    File(tempfile::NamedTempFile),
+    File(tempfile::TempPath),
+    Segment(spool::Segment),
 }
 
 enum Reader<'a> {
     Memory(Cursor<&'a [u8]>),
     File(File),
+    Segment(spool::Reader),
 }
 
 impl Read for Reader<'_> {
@@ -38,6 +45,7 @@ impl Read for Reader<'_> {
         match self {
             Self::Memory(reader) => reader.read(bytes),
             Self::File(reader) => reader.read(bytes),
+            Self::Segment(reader) => reader.read(bytes),
         }
     }
 }
@@ -47,13 +55,20 @@ impl Seek for Reader<'_> {
         match self {
             Self::Memory(reader) => reader.seek(position),
             Self::File(reader) => reader.seek(position),
+            Self::Segment(reader) => reader.seek(position),
         }
     }
 }
 
-type Cache = HashMap<(blake3::Hash, u64), Weak<Snapshot>>;
+#[derive(Default)]
+struct Cache {
+    snapshots: HashMap<(blake3::Hash, u64), Weak<Snapshot>>,
+    spool: spool::Pool,
+}
 struct SnapshotCache {
     process: AtomicU32,
+    // Accessed only while holding entries for this process.
+    memory_bytes: AtomicUsize,
     entries: Mutex<Option<Cache>>,
 }
 
@@ -61,6 +76,7 @@ impl SnapshotCache {
     const fn new() -> Self {
         Self {
             process: AtomicU32::new(0),
+            memory_bytes: AtomicUsize::new(0),
             entries: Mutex::new(None),
         }
     }
@@ -82,7 +98,8 @@ impl SnapshotCache {
         if self.process.load(Ordering::Relaxed) != process {
             // Never upgrade inherited Weak pointers: their Arc accounting is
             // copied, and cannot keep the parent's temporary files alive.
-            *entries = Some(HashMap::new());
+            *entries = Some(Cache::default());
+            self.memory_bytes.store(0, Ordering::Relaxed);
             self.process.store(process, Ordering::Release);
         }
         Some(entries)
@@ -92,18 +109,54 @@ impl SnapshotCache {
 static SNAPSHOTS: SnapshotCache = SnapshotCache::new();
 
 impl Snapshot {
-    fn shared(self) -> Arc<Self> {
+    fn shared(mut self) -> Result<Arc<Self>, MediaError> {
         let Some(mut entries) = SNAPSHOTS.lock(self.process) else {
-            return Arc::new(self);
+            self.spill_memory()?;
+            return Ok(Arc::new(self));
         };
         let cache = entries.as_mut().expect("process cache is initialized");
         let key = (self.digest, self.len);
-        if let Some(existing) = cache.get(&key).and_then(Weak::upgrade) {
-            return existing;
+        if let Some(existing) = cache.snapshots.get(&key).and_then(Weak::upgrade) {
+            return Ok(existing);
         }
+        let used = SNAPSHOTS.memory_bytes.load(Ordering::Relaxed);
+        if used.saturating_add(self.memory_bytes()) > MEMORY_BUDGET {
+            if let Storage::Memory(bytes) = &self.storage {
+                self.storage = Storage::Segment(
+                    cache
+                        .spool
+                        .store(bytes)
+                        .map_err(|error| MediaError::io("write media snapshot", error))?,
+                );
+            }
+        }
+        self.cached_memory_bytes = self.memory_bytes();
+        SNAPSHOTS
+            .memory_bytes
+            .store(used + self.cached_memory_bytes, Ordering::Relaxed);
         let owned = Arc::new(self);
-        cache.insert(key, Arc::downgrade(&owned));
-        owned
+        cache.snapshots.insert(key, Arc::downgrade(&owned));
+        Ok(owned)
+    }
+
+    fn memory_bytes(&self) -> usize {
+        match &self.storage {
+            Storage::Memory(bytes) => bytes.capacity(),
+            Storage::File(_) | Storage::Segment(_) => 0,
+        }
+    }
+
+    fn spill_memory(&mut self) -> Result<(), MediaError> {
+        if let Storage::Memory(bytes) = &self.storage {
+            if !bytes.is_empty() {
+                let mut file = tempfile::NamedTempFile::new()
+                    .map_err(|error| MediaError::io("create media snapshot", error))?;
+                file.write_all(bytes)
+                    .map_err(|error| MediaError::io("write media snapshot", error))?;
+                self.storage = Storage::File(file.into_temp_path());
+            }
+        }
+        Ok(())
     }
 
     pub(super) fn bytes(bytes: Vec<u8>, limits: MediaLimits) -> Result<Arc<Self>, MediaError> {
@@ -115,17 +168,18 @@ impl Snapshot {
                 .map_err(|e| MediaError::io("create media snapshot", e))?;
             file.write_all(&bytes)
                 .map_err(|e| MediaError::io("write media snapshot", e))?;
-            Storage::File(file)
+            Storage::File(file.into_temp_path())
         } else {
             Storage::Memory(bytes)
         };
-        Ok(Self {
+        Self {
             digest,
             len,
             storage,
             process: std::process::id(),
+            cached_memory_bytes: 0,
         }
-        .shared())
+        .shared()
     }
 
     pub(super) fn file(
@@ -177,7 +231,7 @@ impl Snapshot {
             }
         }
         let storage = match spool {
-            Some(file) => Storage::File(file),
+            Some(file) => Storage::File(file.into_temp_path()),
             None => Storage::Memory(memory),
         };
         Ok((
@@ -186,17 +240,39 @@ impl Snapshot {
                 len,
                 storage,
                 process: std::process::id(),
+                cached_memory_bytes: 0,
             }
-            .shared(),
+            .shared()?,
             sample,
         ))
+    }
+
+    // Preparation borrows a worker-local descriptor for a bounded segment.
+    // The immutable snapshot stays alive for the full borrowed reader lifetime.
+    pub(crate) fn cached_reader<'a>(
+        &'a self,
+        cache: &'a mut ReaderCache,
+    ) -> Result<Box<dyn Read + Send + 'a>, MediaError> {
+        match &self.storage {
+            Storage::Memory(bytes) => Ok(Box::new(Cursor::new(bytes.as_slice()))),
+            Storage::File(path) => File::open(path)
+                .map(|file| Box::new(file) as _)
+                .map_err(|e| MediaError::io("read owned media snapshot", e)),
+            Storage::Segment(segment) => segment
+                .cached_reader(cache)
+                .map(|file| Box::new(file) as _)
+                .map_err(|e| MediaError::io("read owned media snapshot", e)),
+        }
     }
 
     pub(crate) fn reader(&self) -> Result<impl Read + Seek + Send + '_, MediaError> {
         match &self.storage {
             Storage::Memory(bytes) => Ok(Reader::Memory(Cursor::new(bytes.as_slice()))),
-            Storage::File(file) => file
-                .reopen()
+            Storage::Segment(segment) => segment
+                .reader()
+                .map(Reader::Segment)
+                .map_err(|e| MediaError::io("read owned media snapshot", e)),
+            Storage::File(path) => File::open(path)
                 .map(Reader::File)
                 .map_err(|e| MediaError::io("read owned media snapshot", e)),
         }
@@ -206,26 +282,28 @@ impl Snapshot {
 impl Drop for Snapshot {
     fn drop(&mut self) {
         if self.process != std::process::id() {
-            // Close the inherited descriptor, but do not unlink a file still
+            // Do not unlink a file still
             // owned by the parent. Forget only TempPath's cleanup token; its
             // tiny allocation is reclaimed when this child process exits.
-            if let Storage::File(file) =
+            if let Storage::File(path) =
                 std::mem::replace(&mut self.storage, Storage::Memory(Vec::new()))
             {
-                let (file, path) = file.into_parts();
-                drop(file);
                 std::mem::forget(path);
             }
             return;
         }
         if let Some(mut entries) = SNAPSHOTS.lock(self.process) {
             let cache = entries.as_mut().expect("process cache is initialized");
+            SNAPSHOTS
+                .memory_bytes
+                .fetch_sub(self.cached_memory_bytes, Ordering::Relaxed);
             let key = (self.digest, self.len);
             if cache
+                .snapshots
                 .get(&key)
                 .is_some_and(|entry| std::ptr::eq(entry.as_ptr(), self))
             {
-                cache.remove(&key);
+                cache.snapshots.remove(&key);
             }
         }
     }
@@ -384,7 +462,13 @@ mod process_tests {
             drop(parent);
             assert_eq!(result, Ok(true), "child waited on an inherited cache lock");
         });
-        assert!(cache.lock(2).unwrap().as_ref().unwrap().is_empty());
+        assert!(cache
+            .lock(2)
+            .unwrap()
+            .as_ref()
+            .unwrap()
+            .snapshots
+            .is_empty());
     }
 
     #[test]
@@ -397,8 +481,15 @@ mod process_tests {
             .unwrap()
             .as_mut()
             .unwrap()
+            .snapshots
             .insert((parent.digest, parent.len), Arc::downgrade(&parent));
-        assert!(cache.lock(2).unwrap().as_ref().unwrap().is_empty());
+        assert!(cache
+            .lock(2)
+            .unwrap()
+            .as_ref()
+            .unwrap()
+            .snapshots
+            .is_empty());
         // The parent's snapshot remains readable after discarding the child cache.
         let mut bytes = Vec::new();
         parent.reader().unwrap().read_to_end(&mut bytes).unwrap();
@@ -412,8 +503,9 @@ mod process_tests {
         let inherited = Snapshot {
             digest: blake3::hash(b"parent"),
             len: 6,
-            storage: Storage::File(file),
+            storage: Storage::File(file.into_temp_path()),
             process: std::process::id().wrapping_add(1),
+            cached_memory_bytes: 0,
         };
         drop(inherited);
         assert!(
@@ -427,8 +519,9 @@ mod process_tests {
         drop(Snapshot {
             digest: blake3::hash(b"child"),
             len: 5,
-            storage: Storage::File(file),
+            storage: Storage::File(file.into_temp_path()),
             process: std::process::id(),
+            cached_memory_bytes: 0,
         });
         assert!(!path.exists(), "local snapshot leaked its temporary file");
     }

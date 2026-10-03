@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use super::{BuildError, BuildErrorKind as Kind};
 use crate::{authoring_core::NormalizedIr, Project};
 
+mod canonical;
 mod content;
 mod reconcile;
 mod validation;
@@ -382,8 +383,9 @@ impl PackageIdentity {
 }
 
 pub(crate) fn identity_checksum(identity: &PackageIdentity) -> anyhow::Result<String> {
-    let json = crate::writer_core::canonical_json::to_canonical_json(identity)?;
-    Ok(blake3::hash(json.as_bytes()).to_hex().to_string())
+    Ok(blake3::hash(&canonical::bytes(identity)?)
+        .to_hex()
+        .to_string())
 }
 
 fn symbols<'a>(

@@ -1,0 +1,7766 @@
+{
+  "status": "completed",
+  "binary_sha256": "be7cdee9965974b47c4fe3724bf65425171b5cbd4387d7d151a3b8eff08240f5",
+  "rows": [
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_both",
+      "elapsed_ms": 3229.45,
+      "rss_mib": 28.78125,
+      "artifact_sha256": "23338d78f2bd26733ccfd6cdf8b9624c9b9dd8b5bd0bb5114ae396f2d83d3e24",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 4.780958
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 9.746875
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.875333
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 42.1775
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.336875
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.803459
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 26.214334
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 1.375125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 5.113375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.3e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 82.087417
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.382458
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 71.928375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 4.705
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 19.384083
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.823375
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 22.337375
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1293.394,
+      "rss_mib": 69.40625,
+      "artifact_sha256": "fb692efbd7d33bd39c9e3750e36de0d4019e0f602cf3392af5659d60527c7ce4",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.43225
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 84.427917
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.582541
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 597.743667
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.640208
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.523042
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 49.662292
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 562.033127
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.480905
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 188.992823
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 307.439868
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.38222
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 215.813125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 219.527459
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 107.49475
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1090.424375
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.220375
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1001.93125
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.264167
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 195.871958
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 161.995791
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 359.619333
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "baseline",
+      "elapsed_ms": 85.405,
+      "rss_mib": 28.78125,
+      "artifact_sha256": "6c2cf163093600157e29366733f3f6f8d69e0d9202e707e8def1acda68e45401",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.739875
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 8.504041
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.849084
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 38.943916
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.158417
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.500542
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.373708
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.816541
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.721708
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 0.000167
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 78.140208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.964542
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 69.060125
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.303583
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.205334
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.834542
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 20.13325
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_staging",
+      "elapsed_ms": 82.88,
+      "rss_mib": 28.421875,
+      "artifact_sha256": "6c2cf163093600157e29366733f3f6f8d69e0d9202e707e8def1acda68e45401",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.671583
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 8.239209
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.775791
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 37.381709
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.1255
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 26.893459
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.787542
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.735375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.4e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 75.713042
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.957416
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 66.966875
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.351292
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.599375
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.91
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 20.613417
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 6245.822,
+      "rss_mib": 100.1875,
+      "artifact_sha256": "4d2e326e9fdedddf8865eedbbbd6c11a7354763314226d510098a513cd33a89b",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 13.193417
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 130.369625
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 13.395958
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 5264.426
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.400375
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.485792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.612291
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18360.049785
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7536.309969
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 273.563817
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 408.664514
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.557687
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4687.910125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4691.991
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 152.662167
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5954.315958
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.175083
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5818.50425
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.310208
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 334.32675
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 213.382833
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 549.764875
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 5773.122,
+      "rss_mib": 68.171875,
+      "artifact_sha256": "26d511572ef60c05996718da72e2c393f881ade61c6db7e5fc35fd3116a231ee",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.634708
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 65.966667
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.800416
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4891.878166
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.170625
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.491042
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.02
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 692.470895
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.691169
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 225.821503
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 15052.200673
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9255.916331
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 251.097875
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 255.268875
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 131.7065
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5528.685708
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.182125
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5457.08875
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.2725
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 223.281917
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4394.69025
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4620.414042
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 10399.403,
+      "rss_mib": 67.421875,
+      "artifact_sha256": "b6501a8d02906b686f5a1cfafb9589919372e6cd14024c8bde7de6e2eab425ca",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.885209
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 66.082167
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.044166
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 9710.392708
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.427542
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.490208
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.654666
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 20158.823322
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8767.774959
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 70.874159
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 14707.671746
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9391.216495
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 5148.631833
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 5152.973208
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 127.464916
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 10311.52825
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.15925
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 10242.551458
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 4.779792
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 214.088417
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4321.157709
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4537.990917
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 4137.202,
+      "rss_mib": 68.640625,
+      "artifact_sha256": "d5d51681964744376b3d6e66a8d535d4790a97e5abc221e58253b460e2c05678",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.758167
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 71.343625
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.909458
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3598.274875
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.772083
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.484916
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 49.0365
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 12433.362918
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5213.33858
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 59.511296
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 268.944908
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.592622
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 3188.977917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3192.729292
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 100.083791
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 4064.140125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.182542
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3988.617625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.357417
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 222.305417
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 162.254709
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 386.366708
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 332.319,
+      "rss_mib": 33.6875,
+      "artifact_sha256": "9e4ceec8b5012611f7870df499fcb9e811d29ce285f653af7a2b925f20eaf265",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.504666
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.031291
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.622375
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 238.122917
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.669916
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.50925
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.306083
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 677.696665
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 387.76088
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 13.27375
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 14.115335
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.029413
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 177.0045
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 180.216667
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.619375
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 311.072958
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.21975
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 297.343
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.276458
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 31.642042
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 11.28625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 44.102458
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 4151.135,
+      "rss_mib": 68.90625,
+      "artifact_sha256": "e872c4be2837a06b0264ea67df6f16dec09c36c59d84109239e7d957cfd10758",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.079292
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 248.046542
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.230375
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3425.668416
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.655
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.492417
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 53.318666
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 508.78462
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.542651
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 60.062253
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 10092.151619
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6150.757363
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 185.928375
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 189.709375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 97.777167
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 4077.225125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.188917
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3825.418708
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.451209
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 245.422459
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2974.208833
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3221.4485
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1942.53,
+      "rss_mib": 98.9375,
+      "artifact_sha256": "9cb394be8bbfa1481fdb5017e5af06b0f411329326d3d5f12a8d4a43f999d413",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.970459
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 156.305667
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.176
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 1095.329209
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.395834
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.482167
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.143333
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 989.433619
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.721071
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 97.068001
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 1016.548795
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.523826
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 343.539875
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 347.611
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 161.857792
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1828.144375
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.266458
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1666.658584
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.283875
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 345.637375
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 382.689041
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 730.352209
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5725.872,
+      "rss_mib": 67.859375,
+      "artifact_sha256": "ec4f8d6e8a066418d069917d7cfdf359e51a5a388ac777a43c786c979c008423",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 13.653667
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 67.175041
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 13.834958
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 5033.976833
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.265291
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.496792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.850666
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18005.38764
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7528.653155
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 70.980862
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 334.986912
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.545738
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4591.890625
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4596.028625
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 131.566625
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5637.120208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.203166
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5566.323584
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.355
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 219.006666
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 195.362166
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 416.495417
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_cas",
+      "elapsed_ms": 95.983,
+      "rss_mib": 28.890625,
+      "artifact_sha256": "f65a33df08db743c225180a815aa51f9c1f8f6415ba9389b2c349d4f6fcdb581",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.802667
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 9.948917
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.9115
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 48.083708
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.144208
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.51025
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.17125
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.855375
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.886209
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.4e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 88.461209
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.031042
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 78.014167
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.335292
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 26.812791
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.024541
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 29.966375
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 157.842,
+      "rss_mib": 33.875,
+      "artifact_sha256": "fa30ff05cdf6855afa6c0e88b921743807a18ec4992f8fe64b6bed7ecdbe5f6e",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.60025
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.709
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.7245
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 72.532917
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.663792
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.502209
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.452084
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 31.645119
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.040669
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.352249
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 14.094999
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.030413
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 12.130208
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 15.134417
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.667959
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 145.713625
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.2425
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 131.326625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.40075
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.4665
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 10.887209
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 42.555917
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "baseline",
+      "elapsed_ms": 499.212,
+      "rss_mib": 34.1875,
+      "artifact_sha256": "b73e537b28633ce54f03d2908490bf2300655d2e88b22d5139227133d8fbeb27",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 4.837833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.556333
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.951958
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 412.524083
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.672542
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.493042
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.913375
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 729.052536
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 430.935503
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.364912
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 573.937292
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 404.763828
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 190.034584
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 193.007208
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.581167
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 486.772209
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.184417
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 472.348458
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.311042
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.623
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 174.7245
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 206.530708
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 7437.956,
+      "rss_mib": 68.96875,
+      "artifact_sha256": "a39d4800d81511338a0397952daa70d5859f4ec79c05c22aee5f50d621dcb489",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.522833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 81.649958
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.670958
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 6877.482583
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 6.387041
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.487875
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 49.693458
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 13343.034991
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5519.232839
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 59.444302
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 10840.12551
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6734.503201
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 3412.976125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3417.201583
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 99.23625
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 7364.878
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.181709
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 7279.679875
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 5.209291
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 209.043875
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3227.768542
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3439.500459
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1444.216,
+      "rss_mib": 68.109375,
+      "artifact_sha256": "271acaef44a9e10495a88655cfc401a5c8f44ed5f49a86b0a25c5041fa4c2b5a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.236959
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 58.976917
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.391417
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 748.218459
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.219958
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.499791
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 60.281292
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 798.138054
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.820998
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 75.873709
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 347.877622
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.560915
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 278.796334
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 283.022125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 150.487542
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1350.519958
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.357333
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1286.99175
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.367833
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 240.940917
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 204.222459
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 447.26325
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 340.564,
+      "rss_mib": 33.953125,
+      "artifact_sha256": "f41e288d4b1518ed9a9d7459c19a2a29ed0bd3b7a8175236e0e604ba0eafec84",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.030958
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 12.080208
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.153375
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 253.400666
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.684917
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.530083
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 32.283542
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 31.367375
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.030668
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.24021
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 664.930581
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 461.738208
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 12.046709
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 15.06625
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.224875
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 328.498333
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.095333
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 314.498834
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.345791
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.731125
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 192.162542
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 224.100542
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 10595.271,
+      "rss_mib": 99.28125,
+      "artifact_sha256": "ddb2e78d4f0078af73b51200a9a8134c420505e8941f9ac3be0b259aad7e2376",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.788666
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 146.436791
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.967583
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 9741.994709
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 7.384792
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.4865
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 60.66625
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18448.844849
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8073.97694
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 105.569589
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 15655.878127
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9344.280074
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4715.357917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4719.829125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 154.268292
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 10471.664041
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.163583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 10314.211625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 5.02175
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 364.093417
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4630.93975
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4997.756167
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 5720.073,
+      "rss_mib": 99.296875,
+      "artifact_sha256": "998f2e49405911de5736bbea639d30b90848b82b67d69888b874ca85ed3290a6",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.074583
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 153.701583
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.275083
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4847.584583
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.410375
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.496292
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.346042
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 750.678666
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.887873
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 102.509094
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 14433.27427
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8974.116435
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 262.255042
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 266.368666
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 158.522959
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5599.7745
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.207708
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5434.0005
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.42375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 344.339958
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4217.042083
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4563.481041
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 11120.018,
+      "rss_mib": 99.03125,
+      "artifact_sha256": "1acc4faaf02de4044343919f466a672873bddd7f3860032b9238108ab6a9f0ab",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.320542
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 332.6375
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.512542
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 9840.677542
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 8.31025
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.52125
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.945458
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 19553.038957
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 9391.355585
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 101.968017
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 15171.767668
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9527.380489
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 5004.213209
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 5008.916541
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 171.307208
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 10998.057125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.186625
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 10653.15925
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 5.359834
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 361.804208
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4442.9345
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4807.488792
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 3896.451,
+      "rss_mib": 69.734375,
+      "artifact_sha256": "413d96abc39acd6ae2446b307175679e05e014701618ab90df3d7bcee64c9b41",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.25225
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 78.10025
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.450166
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3116.088333
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.702166
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.502166
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 51.680833
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 733.134547
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.661851
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 207.44845
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 8999.5178
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6575.611586
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 246.818625
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 250.762417
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 174.768833
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3674.451459
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.214416
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3593.384375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.432709
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 218.549416
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2629.250167
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 2849.59175
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 3825.521,
+      "rss_mib": 68.828125,
+      "artifact_sha256": "d82880ebe9259e29e5dbfb16f02e65186f63a58dad37325f7a4f966a06b21f49",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 12.715208
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 84.303666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 12.898042
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3254.966
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.7405
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.515459
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 50.553209
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 11268.155027
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5607.602126
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 62.414048
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 258.945285
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.38417
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 2865.796458
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 2869.819083
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 100.049708
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3748.77675
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.194458
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3660.620916
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.359334
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 214.981334
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 147.140583
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 364.000292
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 371.874,
+      "rss_mib": 33.515625,
+      "artifact_sha256": "c2ba3d5ebb62354ee85cdf960c244c3ea423b4bc6921b226b5fa14f35d9b1f75",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.270125
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 14.049542
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.37975
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 274.422583
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.789292
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.499083
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 28.960166
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 802.493462
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 464.826831
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 12.640256
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 14.096294
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.037418
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 211.423958
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 214.683167
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.757792
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 351.261625
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.12025
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 335.190125
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.808208
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 29.9515
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 12.34775
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 43.529917
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 165.096,
+      "rss_mib": 33.71875,
+      "artifact_sha256": "6af459a0c8bad6fe6d956e8fabc866fc788bbc36d9437ea2f3d3cfe6a99bd1e8",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.511833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.274625
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.650083
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 77.544916
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.6185
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.494958
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.519375
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 34.252418
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.03833
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.431333
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 17.854125
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.039291
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 12.980542
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 15.987833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.7975
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 152.701834
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.265
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 138.736041
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.32875
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 31.194875
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 12.422416
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 44.805375
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1703.449,
+      "rss_mib": 98.796875,
+      "artifact_sha256": "0ab17d30db2099f99088d3be8e57c1d534a481763ac093a0bfdcb7fb0feddca6",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 17.598792
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 117.776167
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 17.813166
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 874.428625
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.527834
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.489542
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 60.054458
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 792.189459
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.981456
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 103.97559
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 410.097757
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.526159
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 280.739416
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 285.125625
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 167.855125
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1581.378792
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.324291
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1454.663416
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.402459
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 348.548458
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 211.289083
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 561.924667
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1954.978,
+      "rss_mib": 68.4375,
+      "artifact_sha256": "796948bd369959b7a205242c1e243cf8e6db01dbd1ce91ecf3357466fd3a470d",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 17.672333
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 74.788833
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 17.829333
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 1082.979208
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.399458
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.488083
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 76.349416
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 1130.805303
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.032677
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 183.221162
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 514.186044
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 6.07726
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 404.1795
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 408.397417
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 138.872209
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1753.787125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.263125
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1674.999291
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.526
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 350.046125
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 296.665166
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 648.819959
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 5197.76,
+      "rss_mib": 99.703125,
+      "artifact_sha256": "fdd89b8e5e2c87ffebd50786315cd3e3237cffff834eecc5b94370b9c90bd64a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.782833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 108.1705
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.996041
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4356.197625
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.540125
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.522958
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 60.521583
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 803.237279
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.359144
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 102.588901
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 12839.980648
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8987.673136
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 280.040167
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 284.109375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 158.569625
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5076.837708
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.151583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 4962.085792
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.391958
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 363.599792
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3689.842625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4055.597167
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1166.926,
+      "rss_mib": 68.90625,
+      "artifact_sha256": "fce59801c337d165314b652b5d0fca5c3a05ec2cf7cc5ce3f9ee21d6da8c8913",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.048208
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 59.325917
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.22075
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 581.455792
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.641833
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506583
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 52.72875
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 526.634532
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.529452
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 62.2928
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 272.393789
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.440034
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 192.597125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 196.404125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 110.706834
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1090.885625
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.332292
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1028.208209
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.429916
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 205.727833
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 158.976875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 366.501958
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 324.452,
+      "rss_mib": 34.0625,
+      "artifact_sha256": "b6d0f2a790048af12f6024c51f2861e5aa03169c6abe8f7cc5360138ba700363",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.830292
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.899916
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.945584
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 237.230458
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.767667
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.499667
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.067417
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 31.555289
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.033416
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.300085
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 590.013547
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 489.18179
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 12.22025
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 15.2335
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.602916
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 312.128458
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.138708
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 297.149375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.394708
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.62225
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 175.870792
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 207.730708
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_both",
+      "elapsed_ms": 88.169,
+      "rss_mib": 29.421875,
+      "artifact_sha256": "b2afded2ac4543743b33024969ff4b4a12c343aa5342d37f79cc84ad9b34755a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.279375
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 10.209708
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.383625
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 39.469959
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.420792
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506542
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.865833
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.80725
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.815917
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.3e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 80.795292
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.976292
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 70.010042
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.390959
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.52275
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.9695
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 20.584875
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "baseline",
+      "elapsed_ms": 83.481,
+      "rss_mib": 28.734375,
+      "artifact_sha256": "b2afded2ac4543743b33024969ff4b4a12c343aa5342d37f79cc84ad9b34755a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.427292
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 7.527
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.518583
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 38.564542
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.107583
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.507083
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.481834
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.787709
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.6445
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.1e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 76.72925
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.965583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 68.735625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.307542
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.078417
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.088625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 20.245875
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_cas",
+      "elapsed_ms": 96.524,
+      "rss_mib": 29.4375,
+      "artifact_sha256": "ec2ee5eec10498a7f82316ffa0d6886f5508dc6111475ea727e82b10bcf79670",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.033291
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 9.213167
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.124917
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 39.258458
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.185042
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.4955
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 37.592292
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.787
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.729917
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.1e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 89.443167
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.974416
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 79.628166
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.332541
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.966125
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.053375
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 21.115042
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5352.588,
+      "rss_mib": 68.296875,
+      "artifact_sha256": "18f8c4d09c93f6d501dc3760c16f6357cb982f2e69ed3b88a0814ac24240d5f3",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.043833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 72.39125
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.26275
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4619.063542
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.8915
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506166
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 64.231208
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16021.496369
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8543.117656
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 71.218408
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 428.162854
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 1.012969
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4059.006417
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4063.305208
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 128.096209
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5263.267208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.166625
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5186.932
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.960375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 244.076125
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 291.432875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 537.613292
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 9316.537,
+      "rss_mib": 68.390625,
+      "artifact_sha256": "47e2ff1a5e5d9541bafd54f4067ed603353c2889ac1e94058963fa97449c0619",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.083208
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 64.479875
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.290625
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 8616.244459
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.817458
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.497166
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.692542
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 17211.056331
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7775.133291
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 71.354906
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 13783.345051
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8746.087137
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4385.958416
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4390.5445
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 135.804208
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 9227.203833
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.235375
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 9158.728959
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.794333
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 226.257667
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3978.855125
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4207.791042
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_staging",
+      "elapsed_ms": 101.206,
+      "rss_mib": 29.296875,
+      "artifact_sha256": "1a7e8760b76d496811dfb2dec953181cd142b5a94e9504de90570752c8a9715f",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 18.541667
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 8.663208
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 18.66725
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 52.918792
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.194667
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.500125
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.111042
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.882333
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.949833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.2e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 93.909875
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.966417
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 84.70025
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.420667
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 19.610625
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.079875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 22.841
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "baseline",
+      "elapsed_ms": 491.753,
+      "rss_mib": 33.75,
+      "artifact_sha256": "f504d913ccf26d1117313346242176269ee7002ea941d0ee6e0b352d80cd58e6",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 4.111583
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.049833
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.229167
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 400.335875
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.770583
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.504792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.232125
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 763.318293
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 372.653167
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 5.348207
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 512.278582
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 409.931794
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 198.828708
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 201.979333
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 9.183208
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 478.003292
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.203333
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 463.117792
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.255375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 31.580667
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 153.232167
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 186.01475
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 6619.714,
+      "rss_mib": 70.046875,
+      "artifact_sha256": "8cff78ce90ce2a5049ab6806ba5b87dab8b540204cab7585f50c083cdae24f20",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": true,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.95775
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 71.619375
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.135125
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 6064.540917
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.883917
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.486042
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 50.123291
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 11624.708532
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5718.12271
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 64.10101
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 9723.695823
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6778.533162
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 2947.615458
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 2951.752375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 104.879
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 6541.498584
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.213791
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 6467.014083
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.340667
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 205.922167
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2887.507458
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3095.240917
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 5347.271,
+      "rss_mib": 68.375,
+      "artifact_sha256": "044a760a23a06608dc41891129d87bfa121bf18f9311ebce121a5b509d220a38",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.63125
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 59.519292
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.849792
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4618.364459
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.226333
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.489375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.34975
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 752.000875
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.782453
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 71.399638
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 13820.541618
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9701.284229
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 281.728542
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 287.352792
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 151.91075
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5258.185084
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.3085
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5195.968334
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.39525
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 229.705708
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4084.440542
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4316.578541
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5552.692,
+      "rss_mib": 100.21875,
+      "artifact_sha256": "6b5ce9fe00ab07ee482a373cd71f64387a92ecb0af665dfcb5292a62a7bc9776",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 13.372291
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 90.553292
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 13.583625
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4642.005375
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.433625
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.487833
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 79.055291
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16031.657828
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7578.874507
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 106.221224
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 381.690093
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.539844
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4072.896833
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4076.964417
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 191.348833
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5428.108958
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.292792
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5332.284292
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.333042
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 335.226041
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 204.651458
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 541.9895
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 4800.207,
+      "rss_mib": 68.59375,
+      "artifact_sha256": "bac41228cc7f818d619184dfecf326ac6f40af7f6a9eaacef8f80fae27021b08",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.762666
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 54.862417
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.918541
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4063.015959
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.340958
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.483375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 83.817
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 797.692463
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.093372
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 72.670194
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 11772.625174
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8771.210951
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 289.075833
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 293.507292
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 129.090708
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 4709.509208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.254334
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 4651.010583
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.320625
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 265.895958
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3486.477833
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3754.897708
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 356.244,
+      "rss_mib": 33.765625,
+      "artifact_sha256": "51175fba8b0c3d8da948b778d06f04ac9aac9178869cd6e6a85cc6c619304cd8",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 4.778417
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 14.492417
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.899292
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 266.573666
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.74675
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.52925
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.598042
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 781.031419
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 454.600793
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.321205
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 17.423545
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.036918
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 205.225042
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 208.23875
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.196458
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 343.519875
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.201209
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 328.110875
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.743
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.666625
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 12.998875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 44.868708
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 4907.265,
+      "rss_mib": 99.75,
+      "artifact_sha256": "43dad7fd89b55c412a493bd7213628139807cbe3d1247117ceea0bee5069a265",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.322667
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 110.823959
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.547375
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4079.685167
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.367208
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.510625
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.441625
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 903.33006
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.71926
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 101.246868
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 11727.028275
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8338.208935
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 310.608333
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 314.884958
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 164.406084
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 4787.556125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.281583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 4671.730417
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.453792
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 346.372542
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3398.274
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3746.831916
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 3818.992,
+      "rss_mib": 68.90625,
+      "artifact_sha256": "ee8567ca58abdfa064f930d88f371c5cbaa9536cf13d71791b496c439f2d62b9",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 11.837917
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 70.5925
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 12.018833
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3204.964834
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.719667
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.516625
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 51.565208
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 10948.651584
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5568.228175
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 76.69565
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 288.698832
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.395668
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 2776.817917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 2780.955
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 117.145334
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3726.285792
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.210458
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3651.936583
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.260458
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 217.218
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 184.848
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 403.852958
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_cas",
+      "elapsed_ms": 94.087,
+      "rss_mib": 29.21875,
+      "artifact_sha256": "70c160eb6f60f362b77b7f7288c9a8a717a6290125c18c778c8e7d4af89bdca8",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.742875
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 10.867625
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.846167
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 43.818292
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.631125
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.503084
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 28.891791
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.789917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.768958
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 0.000167
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 86.961375
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.009583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 75.543708
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.366667
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 19.128375
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.147334
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 22.418667
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 8235.94,
+      "rss_mib": 99.71875,
+      "artifact_sha256": "2aa2ac40b6b5a0646f042688e3386e66933228e82b340f980040ee2ebb3e6880",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.495417
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 144.565
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.66675
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 7351.6145
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.492959
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.492792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.239875
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 15547.571183
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7749.32079
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 104.008211
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 10439.439882
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8207.383961
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 3936.848791
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3941.052333
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 159.842166
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 8112.912792
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.181292
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 7963.969125
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.393333
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 375.647
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3014.550209
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3392.385625
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "baseline",
+      "elapsed_ms": 95.001,
+      "rss_mib": 29.453125,
+      "artifact_sha256": "cc333c7e0e8c57e20c3fd8e21f45ffce4cca82bc9ebea1c808b5cf0ba83a151a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.108125
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 10.997666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.33725
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 43.245958
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.310625
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.573792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.500875
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.8865
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4.043458
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.2e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 87.509792
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.075459
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 75.924125
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.489917
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 19.796667
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.167959
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 23.118583
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_both",
+      "elapsed_ms": 95.119,
+      "rss_mib": 29.328125,
+      "artifact_sha256": "cc333c7e0e8c57e20c3fd8e21f45ffce4cca82bc9ebea1c808b5cf0ba83a151a",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.569041
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 9.506917
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.698917
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 43.322917
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.249041
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.513834
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 31.26775
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.856167
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.940375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 0.0
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 87.566584
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.051916
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 77.489417
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.81375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 21.551292
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.989792
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 24.773709
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 413.64,
+      "rss_mib": 33.375,
+      "artifact_sha256": "cbcfb3cf8b43a98f7968fd0d587efd078ae3829f2ac8ea88ee655cf6168d1958",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 3.957458
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 16.431666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.097667
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 290.160417
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.667917
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506875
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 48.057917
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 34.624583
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.038331
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 13.011167
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 802.179288
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 500.709001
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 12.89075
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 16.026167
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 6.897833
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 392.173542
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.248833
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 374.346458
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.359875
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.74675
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 229.963125
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 261.936959
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_staging",
+      "elapsed_ms": 135.273,
+      "rss_mib": 29.390625,
+      "artifact_sha256": "764d171d38cafa212961fa3980c00f6c934b1297858fd0253b4432fb9b69f78b",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.821875
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 11.728959
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.94625
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 75.21375
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.02575
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 1.797708
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 34.866042
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.896291
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 11.216208
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.4e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 126.943333
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.284792
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 114.629375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 8.178542
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 32.630666
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4.680334
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 41.012458
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 6230.36,
+      "rss_mib": 69.59375,
+      "artifact_sha256": "b1fb252ff91b26966a506ba5846ac21adc35843bac6e59b8c19c5ca5ff6d3e45",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.881333
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 82.095084
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.095875
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 5429.961334
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.810708
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.525667
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 51.631834
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 11130.564895
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5642.739704
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 251.155505
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 7969.905039
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 5938.697463
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 2827.529875
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 2831.99175
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 132.361583
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5961.233834
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.18175
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5875.50025
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 5.240875
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 233.644625
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2342.322333
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 2578.334583
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5747.571,
+      "rss_mib": 98.9375,
+      "artifact_sha256": "d5e7fef3fd1db97cbaf121ad8806d390f692c9bbb572ec8401e06c63b12fcf34",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 13.749709
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 103.481916
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 13.9385
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4707.193417
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.865084
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.503417
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.695917
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 15596.295064
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7914.394385
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 283.126692
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 418.942209
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.60983
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 3955.624375
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3959.845833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 184.17775
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5445.565791
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.232542
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5336.892959
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.286125
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 486.9145
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 234.655375
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 723.645792
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1556.66,
+      "rss_mib": 68.265625,
+      "artifact_sha256": "dcabdc48c552121cc8b49b6c7a66117fa166cb983fb60bccf812ce39dcdd9e3c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.584541
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 53.314209
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.767292
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 699.091375
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.330917
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.515
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.961292
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 706.417303
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.852579
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 238.276951
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 346.643826
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.771285
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 245.029583
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 249.608667
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 132.573042
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1298.391042
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.215792
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1240.9665
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.510584
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 228.12375
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 204.628834
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 434.888375
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 195.832,
+      "rss_mib": 33.84375,
+      "artifact_sha256": "d273cd0014adf8e649569e074a016dc69caafb3bafd8de9b3fba1f3c24525592",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.88375
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 14.435833
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.99375
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 90.49575
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.661583
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.509583
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 31.153708
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 50.636124
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.04929
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 13.952584
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 17.09037
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.02954
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 21.374166
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 24.507625
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 7.559417
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 172.825875
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 2.544041
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 157.569833
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.476916
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 32.749584
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 13.796541
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 47.755708
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "baseline",
+      "elapsed_ms": 443.651,
+      "rss_mib": 33.4375,
+      "artifact_sha256": "d273cd0014adf8e649569e074a016dc69caafb3bafd8de9b3fba1f3c24525592",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 4.416166
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.729584
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 4.672417
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 354.961125
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.757875
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506833
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.472166
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 605.561625
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 322.282671
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.819752
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 488.266294
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 368.644168
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 160.012208
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 163.339209
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 7.697041
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 430.399208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.368167
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 415.989542
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.761375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 32.037209
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 145.095958
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 178.35975
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1724.15,
+      "rss_mib": 99.359375,
+      "artifact_sha256": "5964a59c6caeecb776ec27e17ff5f97167344893a62771cf914b6964204d14ce",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.265375
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 113.824875
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.4515
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 877.783125
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.399083
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.546375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.720917
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 797.739654
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.148319
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 102.58986
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 432.242011
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.587427
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 285.336667
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 289.570292
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 170.405084
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1603.133542
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.227
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1485.299083
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.427375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 326.300333
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 240.86875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 569.317084
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1341.995,
+      "rss_mib": 70.15625,
+      "artifact_sha256": "347c9475ababa69679bee42bd061d7cc78ffa789c6f63d75f99cf944c3994a74",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 14.325208
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 73.728625
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 14.515541
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 574.198584
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.694084
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.487416
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 106.896334
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 524.457345
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.803832
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 185.28978
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 256.519414
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.427765
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 192.704042
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 196.608667
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 100.987
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1142.139541
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.2985
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1064.736625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.42025
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 201.58675
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 151.289459
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 354.794417
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5396.803,
+      "rss_mib": 68.03125,
+      "artifact_sha256": "10695cc3e0f86d2c591d25eb024fc3ca959c03507ba1ad3174a2df325005ee2c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.288666
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 67.25775
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.511166
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4662.448916
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.227084
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.49875
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.772959
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16544.370045
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8585.549567
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 71.980075
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 358.46346
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.821621
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4198.649791
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4202.812958
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 138.459042
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5306.072417
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.340333
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5235.156292
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.35675
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 220.31175
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 219.047917
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 441.505459
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 8767.703,
+      "rss_mib": 68.3125,
+      "artifact_sha256": "76edac7beaac63ef91fc7265dffd009b41a4a47a9afefc59aa25d569db34c9b7",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.631583
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 54.074
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.81575
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 8056.444
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.33375
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.494833
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.609708
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16208.567284
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7924.2318
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 78.4813
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 12679.29084
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8719.633505
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4116.122167
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4120.452
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 142.898583
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 8669.590625
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.194375
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 8612.575292
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.312792
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 239.0695
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3679.334625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3920.51
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 3512.682,
+      "rss_mib": 69.0,
+      "artifact_sha256": "ab8f4b21c7fc45e245dcfd6dacf607bd3f6c768f96268277f599f238fa733db4",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.274917
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 55.610083
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.458625
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 2953.857875
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.903542
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.488916
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 49.813125
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 555.151287
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.540401
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 63.246962
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 8589.545893
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6237.212541
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 198.021917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 201.77725
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 111.490542
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3435.496458
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.199
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3375.888083
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.357667
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 198.268
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2535.032125
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 2735.199583
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5874.496,
+      "rss_mib": 99.6875,
+      "artifact_sha256": "b0ad1f2bb371ebe5926bc216f4f7dc54fd63a4982ced5aaa7ff3cfe6cdcc5216",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 12.173708
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 319.568
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 12.372791
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 4823.514875
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.708208
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.484625
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.330167
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16552.914701
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8508.744988
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 102.825433
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 465.928502
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.674093
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4200.687375
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4204.909667
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 164.721667
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5751.616375
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.15575
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5426.190042
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.38575
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 336.016292
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 258.268458
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 596.463625
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 5800.629,
+      "rss_mib": 67.65625,
+      "artifact_sha256": "f780d003ff7214aba223e8f684cecde8f63a82645755b00738a110a2cee1d380",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.463417
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 60.353708
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.662959
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 5078.01525
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.958458
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.578584
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 67.252125
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18212.105355
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 9316.417129
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 73.793738
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 341.984152
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.536882
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4614.321667
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4618.997833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 128.572334
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 5708.608334
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.24275
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 5646.080417
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 4.47025
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 240.37325
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 195.311375
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 437.862792
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "baseline",
+      "elapsed_ms": 488.356,
+      "rss_mib": 33.6875,
+      "artifact_sha256": "f144163b05f560db5aecf3618b5baa2ec5fd6468261598efc71cb2cad9e193c9",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.065792
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 12.904708
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.182459
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 402.577209
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.813875
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.526666
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.455334
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 781.398463
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 448.028167
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 4.384789
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 497.203085
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 420.715257
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 204.918959
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 208.056958
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 7.397084
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 475.62
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.1105
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 461.824375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.380458
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.811875
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 147.871167
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 179.941375
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 3717.769,
+      "rss_mib": 69.46875,
+      "artifact_sha256": "74c0329df6ed5d08334d8ff92be8e960eb4b6bb3ad35a137d2323cf4a4e1c154",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.816792
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 86.592958
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.016125
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3126.40575
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 6.699584
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.493875
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 51.503
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 10782.932471
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5217.084794
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 62.496836
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 269.997083
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.378704
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 2736.6255
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 2740.7655
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 102.880541
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3639.562
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.229792
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3548.482083
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.443375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 212.212166
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 150.048167
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 364.160416
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_staging",
+      "elapsed_ms": 87.815,
+      "rss_mib": 28.75,
+      "artifact_sha256": "3596925613ddbd32612724010ff54c9621a9bcfcfa0dfa0a4395d7c339ffa9bd",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.416083
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 10.197292
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.51575
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 40.012875
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.146333
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.497625
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.689417
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.791875
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.669041
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 0.0
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 81.222542
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.99025
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 70.444709
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.365166
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 17.297792
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.024584
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 20.488292
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1769.18,
+      "rss_mib": 99.46875,
+      "artifact_sha256": "574145d5c8a58adb3254f408c50d7f6126439473afd92250c12635106f3c4547",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.413292
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 131.15875
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.618333
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 909.545041
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.344708
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.495
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 60.566792
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 879.841671
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.731136
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 103.244558
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 402.076791
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.559309
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 322.723792
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 326.774083
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 169.57
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1646.89925
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.316208
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1509.644
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.516375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 337.8655
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 226.70775
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 566.693083
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 378.415,
+      "rss_mib": 33.34375,
+      "artifact_sha256": "8909f7ee192e427432099a36bf9d8d412d04d45c6d9abe15e9884a000630256c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.545125
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.386666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.726917
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 274.601709
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.778916
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.53125
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 33.527917
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 47.673126
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.041666
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 5.313915
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 679.052495
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 468.892871
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 19.006417
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 22.356792
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 11.419125
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 361.764291
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.410042
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 346.973583
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.439
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 39.543333
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 196.942083
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 238.133791
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 6335.712,
+      "rss_mib": 97.796875,
+      "artifact_sha256": "3a0e518a8b077b9c06fb9657b388ef620df6bb49d2c9c93eaa6db4da37215462",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.1395
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 130.008334
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.33225
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 5338.54175
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.4185
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.487083
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 153.063416
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 913.048982
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 1.057584
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 101.96346
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 14947.180829
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9292.870878
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 313.422583
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 317.627083
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 159.772416
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 6212.044333
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.212583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 6076.506667
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.467416
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 616.296625
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4382.12325
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 5000.655834
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_staging",
+      "elapsed_ms": 345.814,
+      "rss_mib": 33.25,
+      "artifact_sha256": "d656b3cdb4dc91cc1f45ae2e81809bbcf3cf5ce59832471da27bedeedc554a93",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.247209
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.774875
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.372167
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 255.61725
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.682708
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.50375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.459167
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 743.529584
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 402.459626
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 5.005874
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 14.743039
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.029833
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 193.872917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 196.971959
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 7.586791
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 331.854208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.208875
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 316.955583
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.342167
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 32.513708
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 11.472542
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 45.1785
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1252.071,
+      "rss_mib": 69.296875,
+      "artifact_sha256": "c35df021057380be30061d07bce544b737821da1240fa0d936517497b3ec93af",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.119292
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 70.828291
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.318
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 566.472167
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.637709
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.498208
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 50.271625
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 551.842337
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.556464
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 180.825964
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 236.937709
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 0.366088
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 200.528292
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 204.357417
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 118.336666
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1056.953208
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.22575
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 982.112167
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.453166
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 204.654291
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 140.059875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 346.567833
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "baseline",
+      "elapsed_ms": 95.93,
+      "rss_mib": 29.015625,
+      "artifact_sha256": "c9de04c0392b93ad525b611fd623ecdc469d827a19b172fcded760cdd70aa06c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.386833
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 13.646542
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.488708
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 41.037625
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.150542
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.500417
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 30.419416
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.99825
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.89825
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.3e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 88.270709
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.929792
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 74.021291
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.234708
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 18.436667
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.97925
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 21.508833
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_both",
+      "elapsed_ms": 84.586,
+      "rss_mib": 28.4375,
+      "artifact_sha256": "c9de04c0392b93ad525b611fd623ecdc469d827a19b172fcded760cdd70aa06c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 5.230708
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 9.186125
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 5.339709
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 37.414417
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.17625
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.505125
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.49225
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.816625
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.797833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.2e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 77.55825
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.928083
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 67.860917
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.279666
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 18.015584
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.946083
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 21.052542
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 179.484,
+      "rss_mib": 33.703125,
+      "artifact_sha256": "b8b0716776129b0b59452a63948ac3d32813aa20962ddb1bbf9045e2c646afed",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.256333
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 12.386834
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.363709
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 90.216125
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.852875
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.506292
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.497833
+        },
+        "media.cas_ingest": {
+          "count": 49,
+          "ms": 68.599039
+        },
+        "media.cas_sync": {
+          "count": 49,
+          "ms": 0.038249
+        },
+        "media.import": {
+          "count": 49,
+          "ms": 5.039998
+        },
+        "media.staging_copy": {
+          "count": 49,
+          "ms": 19.038544
+        },
+        "media.staging_sync": {
+          "count": 49,
+          "ms": 0.031628
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 23.946
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 28.521333
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.510792
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 165.170667
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 2.220833
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 152.117375
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.298792
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 30.794917
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 14.013625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 46.076291
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 3460.779,
+      "rss_mib": 69.421875,
+      "artifact_sha256": "81d754962e0ec3c041b946aa68304ae335a5991ab0cad7d3397c8bd18f2f7627",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 6.782333
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 77.336417
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 6.954958
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 2849.94525
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.651458
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.496375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 54.404375
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 612.56884
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 0.542129
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 63.176791
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 8067.359752
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 5953.208787
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 211.492542
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 215.321125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 112.257583
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 3382.2425
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.258541
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 3300.656583
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.316584
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 218.662583
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2397.860667
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 2618.566875
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_cas",
+      "elapsed_ms": 4470.73,
+      "rss_mib": 68.375,
+      "artifact_sha256": "dd30b43ec34b9d508a472a7cde0db7987ed775a23581141c222260a3297d0c46",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 9.142958
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 58.953125
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 9.35275
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 3662.060583
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.195958
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.48525
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 62.27175
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 785.573841
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.676882
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 182.895709
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 10695.468619
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8569.606252
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 309.154084
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 313.708166
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 132.886917
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 4270.154459
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.212167
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 4207.812208
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.268042
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 217.095416
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3112.303625
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3331.5645
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "skip_both",
+      "elapsed_ms": 1427.023,
+      "rss_mib": 68.09375,
+      "artifact_sha256": "563b9b5cb7fcf6593a02bcdc0163261cd4fd31f8c57228aadb328299b99f0965",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.632834
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 61.462666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.8255
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 729.215209
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.218084
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.485416
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.442166
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 733.7872
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 0.738737
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 73.16571
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 340.251865
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 0.67896
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 271.778416
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 276.074125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 121.262791
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 1335.700583
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.178667
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 1269.704334
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.340042
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 225.82775
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 206.909334
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 434.823208
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "skip_cas",
+      "elapsed_ms": 104.567,
+      "rss_mib": 29.5,
+      "artifact_sha256": "a2545e9ff39aa7efb3f234bf57ae904da3cc3e542d966b481d387fece4fa2c06",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 10.799666
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 11.194791
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 10.895333
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 44.46925
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.27825
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.510958
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.71425
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 1.641125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4.733208
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.1e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 94.91125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 7.179291
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 83.179209
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.3925
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 18.323
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.901334
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 21.349916
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 7291.741,
+      "rss_mib": 69.0625,
+      "artifact_sha256": "43bfef6ac54e1cd952071ad973e8fcc71490ffa9db450335ad5e49b65d1f101e",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.496792
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 80.89675
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.69475
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 6689.301792
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.71175
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.538875
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 58.017709
+        },
+        "media.cas_ingest": {
+          "count": 700,
+          "ms": 12813.364957
+        },
+        "media.cas_sync": {
+          "count": 700,
+          "ms": 5784.787525
+        },
+        "media.import": {
+          "count": 700,
+          "ms": 63.935599
+        },
+        "media.staging_copy": {
+          "count": 700,
+          "ms": 10641.314781
+        },
+        "media.staging_sync": {
+          "count": 700,
+          "ms": 6402.944627
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 3269.73075
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3273.629125
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 99.0245
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 7210.465667
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.238291
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 7125.47625
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.710542
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 256.657292
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3139.791125
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3398.382458
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 10095.609,
+      "rss_mib": 99.765625,
+      "artifact_sha256": "5538bcb4f761bceadb2d893f37ba9bce7e27ec2e4fc4f61b475baf1214927db2",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 8.304375
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 128.586666
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 8.515166
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 9014.488917
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.375584
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 1.584375
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 59.645041
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18924.998683
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8356.707961
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 297.634488
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 12921.764715
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9088.643153
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4860.095959
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4864.6245
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 212.656333
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 9776.408375
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.269208
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 9641.560084
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.565958
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 342.229084
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3785.88475
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4130.351375
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "baseline",
+      "elapsed_ms": 10311.075,
+      "rss_mib": 68.1875,
+      "artifact_sha256": "1c9c21bec6c6d770165fe2fc179cde275700abb156c57ed0b64be881eab03f7c",
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "oracle_passed": false,
+      "stages": {
+        "artifact.owned_publish": {
+          "count": 1,
+          "ms": 7.759584
+        },
+        "artifact.persist_copy": {
+          "count": 1,
+          "ms": 79.313333
+        },
+        "artifact.retain": {
+          "count": 1,
+          "ms": 7.952292
+        },
+        "candidate.generate": {
+          "count": 1,
+          "ms": 9445.395417
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.790083
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.5085
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 61.385584
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 18810.798411
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8254.397772
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 184.870106
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 14861.180943
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 9862.663378
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4806.367708
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4811.417708
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 118.561542
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 10108.220416
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.330834
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 10025.683709
+        },
+        "runtime.writer_defaults": {
+          "count": 1,
+          "ms": 3.319125
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 249.699083
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 4364.806375
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 4616.921584
+        }
+      }
+    }
+  ]
+}
