@@ -1,0 +1,115 @@
+{
+  "created_utc": "2026-10-08T12:57:56.171324+00:00",
+  "name": "20261008-latest-commit-genanki",
+  "source_commit": "11991964b06896b2e07ba09cbb3e6465f7585099",
+  "git_status": "M benchmarks/.gitignore\n M benchmarks/README.md\n?? benchmarks/results/20261003-next-directions/\n?? benchmarks/results/20261003-optimization-paths/\n?? benchmarks/results/20261003-post-commit-diagnosis/\n?? benchmarks/results/20261003-structural-dataflow/\n?? benchmarks/results/20261003-structural-genanki/\n?? benchmarks/results/20261008-residual-paths/\n?? docs/assets/brand/card-loop-combination/\n?? docs/assets/brand/icon-options/\n?? docs/assets/brand/stacked-card-options/\n?? docs/plans/2026-09-28-release-readiness-audit.md\n?? docs/plans/2026-10-02-geo-source-notes.md\n?? docs/plans/2026-10-02-npm-release-checklist.md\n?? docs/plans/2026-10-02-website-readme-product-spec.md",
+  "exploratory_dirty_source": true,
+  "measured_sources_match_commit": true,
+  "measured_source_check_sha256": "1c32fdacacd690b55aec53101cde3b2b53b6a093eff6f4ac09c025679974f892",
+  "runner_sha256": "98865961d38d2f6d8e3d1e28bc9851b1e0bc3d3a4ab04e7c03a4a9b74193b482",
+  "source_snapshot_sha256": "ff45819fa220f6d4670dd03b4efc605c5c104803c9f50d679ed2e5988363395c",
+  "source_patch_sha256": "726b11d222afe97a208fe888ca622615e399341dd3816e19d1cb1c03ada9372e",
+  "source_and_inputs_sha256": "74814dd4005a6554a87dffc60c10e6c163a51995df35f4481ade0a18f8079367",
+  "media_inputs_sha256": "92262e2b790d201af8c38faf7a2c05f27a07562b9cf30d80f5ee5972dadb5462",
+  "python": "3.11.0 (v3.11.0:deaf509e8f, Oct 24 2022, 14:43:23) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "python_executable": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+  "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t71%; charging; 1:51 remaining present: true",
+  "matrix": [
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 1000
+    }
+  ],
+  "timing_repeats": 10,
+  "rss_repeats": 5,
+  "warmups_before_each_phase": 3,
+  "expected_attempts": 840,
+  "expected_anki_imports": 40,
+  "schedule_seed": 20260907,
+  "headline_metric": "median elapsed time from native process spawn to exit; includes startup, parsing, export and shutdown",
+  "rss_metric": "single_process_peak_rss_os_v1, 5 independent invocations",
+  "report_quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "verification_schedule": "after both adjacent exporters exit, outside timing, following current media_bench.py",
+  "no_selective_retries": true,
+  "cold_cache_controlled": false,
+  "purpose": "Measure committed 1199196, including build-time validated defaults, immutable memory digest reuse, four-worker media imports, a 16 MiB encoded pool and a 64 MiB snapshot budget against the archived 2026-09-21 Deck results using byte-identical fixtures. Default features, System allocator, one full standard session, fresh genanki, no selective retries. This standard build matrix does not measure Node COW, prepare-publish reuse, or repeated Media.bytes workloads.",
+  "oracle_reuse_check_sha256": "2a6d4b29dbab5e5f7268c5e40a57c9437a86f9c95313498e3b9bd64ad853721b",
+  "host_hardware_sha256": "8313ff0dcac3c8c1d60cf0945699059a9ede252b26f0b23971320e62d91fcabe",
+  "historical_summary_sha256": "ae76c40b36970722834807715247c9acaf2fa7c1be6990bdef6caa3cba80cd0c"
+}

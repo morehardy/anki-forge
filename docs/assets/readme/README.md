@@ -67,15 +67,23 @@ Confirm the output is PNG; some screenshot tools return JPEG bytes by default.
 
 ## Benchmark provenance
 
-The charts use only the 1,000-note rows in the archived
-[comparison CSV](../../../benchmarks/results/20260921-readme-genanki/comparison.csv).
+The charts use only the 1,000-note rows from the 2026-10-08 benchmark of commit
+`1199196`, comparing the Rust `Project` API with genanki 0.13.1. The values come
+from the archived
+[comparison CSV](../../../benchmarks/results/20261008-latest-commit-genanki/comparison.csv).
 They show both implementations for all five workloads on a shared linear axis
 starting at zero. Each value is the median of 10 runs. Light/dark and mobile
 variants use identical values.
 
-The [full report](../../../benchmarks/results/20260921-readme-genanki/report.md)
+The [full report](../../../benchmarks/results/20261008-latest-commit-genanki/report.md)
 contains sample spread, memory measurements, format differences, and source
 provenance. Regenerating the README artwork does not rerun or modify that benchmark.
+
+Regenerate only the four performance charts with:
+
+```sh
+MPLCONFIGDIR=target/readme/matplotlib benchmarks/.venv/bin/python scripts/generate_readme_assets.py --charts-only
+```
 
 ## Update example check
 

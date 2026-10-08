@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "head": "11991964b06896b2e07ba09cbb3e6465f7585099",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "HEAD",
+    "--",
+    "Cargo.toml",
+    "Cargo.lock",
+    "rust-toolchain.toml",
+    ".cargo",
+    "anki_forge",
+    "contract_tools",
+    "contracts",
+    "bindings",
+    "benchmarks/adapters",
+    "benchmarks/adapters.json",
+    "benchmarks/native",
+    "benchmarks/requirements.lock",
+    ":(glob)benchmarks/*.py",
+    ":(glob)benchmarks/*golden.json"
+  ],
+  "returncode": 0,
+  "scope": "Tracked production, bindings, adapter, harness, fixtures recipe and build inputs match commit; unrelated documentation changes remain in working tree.",
+  "worktree_status": " M benchmarks/.gitignore\n M benchmarks/README.md\n?? benchmarks/results/20261003-next-directions/\n?? benchmarks/results/20261003-optimization-paths/\n?? benchmarks/results/20261003-post-commit-diagnosis/\n?? benchmarks/results/20261003-structural-dataflow/\n?? benchmarks/results/20261003-structural-genanki/\n?? benchmarks/results/20261008-residual-paths/\n?? docs/assets/brand/card-loop-combination/\n?? docs/assets/brand/icon-options/\n?? docs/assets/brand/stacked-card-options/\n?? docs/plans/2026-09-28-release-readiness-audit.md\n?? docs/plans/2026-10-02-geo-source-notes.md\n?? docs/plans/2026-10-02-npm-release-checklist.md\n?? docs/plans/2026-10-02-website-readme-product-spec.md\n"
+}

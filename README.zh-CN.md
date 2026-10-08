@@ -35,22 +35,22 @@
 
 ## 可核验的性能表现
 
-**1,000 条文本笔记，53.9 ms 完成导出**，genanki 耗时 115.5 ms，**导出耗时减少了 53.3%**。
-在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki **少 34.7–53.3%**。
-下图是旧 Rust `Deck` API 与 genanki 的归档测量，不代表当前 Project API 的性能；
+**1,000 条文本笔记，52.7 ms 完成导出**，genanki 耗时 105.0 ms，**导出耗时减少了 49.8%**。
+在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki **少 45.7–53.9%**。
+下图对比当前 Rust `Project` API 与 genanki 0.13.1，媒体通过 `Media::files` 批量导入。
 Node 和 Python 绑定未参与这次测试。
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
-  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 53.9 / 115.5；图片 238.6 / 365.5；音频 175.5 / 298.8；混合独立媒体 160.1 / 279.5；混合共享媒体 69.1 / 124.0。每种场景均为 1,000 条笔记。" width="1000">
+  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 52.7 / 105.0；图片 150.7 / 320.2；音频 128.7 / 275.4；混合独立媒体 110.5 / 239.5；混合共享媒体 61.4 / 112.9。每种场景均为 1,000 条笔记。" width="1000">
 </picture>
 
-测试于 **2026-09-21** 在一台 **Apple M1 Pro** 上的同一轮测试中完成，
+测试于 **2026-10-08** 在一台 **Apple M1 Pro** 上的同一轮测试中完成，
 耗时取**每种实现、每种场景各 10 次运行的中位数**，计时包含进程启动到退出的完整过程。
-两种实现默认使用的 APKG 格式不同，结果对应[已记录的源码快照](benchmarks/results/20260921-readme-genanki/source-snapshot.json)，
-不代表已发布版本，也不保证在其他平台上有相同表现。
+两种实现默认使用的 APKG 格式不同。结果对应提交 **`1199196`** 在本机的表现，
+[源码快照](benchmarks/results/20261008-latest-commit-genanki/source-snapshot.json)记录了测量代码与环境。
 
 **本次基准测试的验证结果：** 全部 840 次导出均通过内容检查，
 全部 40 项 Anki 导入、内容与代表性卡片渲染检查均通过。
@@ -62,13 +62,13 @@ Node 和 Python 绑定未参与这次测试。
 两种实现于同一轮测试中交替执行，每个测试组合采集 10 次耗时样本，
 并另外采集 5 次峰值驻留内存（RSS）样本。测试未控制桌面后台负载和文件系统缓存。
 
-内存占用随场景而变化。在 1,000 张独立图片的场景中，Rust 的峰值 RSS 为 **40.25 MiB**，
-genanki 为 **35.77 MiB**。导出包大小的差异也包含两个库默认格式和压缩方式的影响。
+内存占用随场景而变化。在 1,000 张独立图片的场景中，Rust 的峰值 RSS 为 **92.45 MiB**，
+genanki 为 **35.59 MiB**。导出包大小的差异也包含两个库默认格式和压缩方式的影响。
 本次基准检查不包含图形界面交互和实际音频播放。
 
-查看[完整报告](benchmarks/results/20260921-readme-genanki/report.md)、
-[原始耗时数据](benchmarks/results/20260921-readme-genanki/comparison.csv)
-与[复现说明](benchmarks/results/20260921-readme-genanki/README.md)。
+查看[完整报告](benchmarks/results/20261008-latest-commit-genanki/report.md)、
+[原始耗时数据](benchmarks/results/20261008-latest-commit-genanki/comparison.csv)
+与[复现说明](benchmarks/results/20261008-latest-commit-genanki/README.md)。
 README 中的图表由这份已归档的 CSV 生成，没有引入新的测量数据。
 
 </details>

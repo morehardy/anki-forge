@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs/assets/readme"
 PREVIEW = ROOT / "target/readme/preview"
-CSV = ROOT / "benchmarks/results/20260921-readme-genanki/comparison.csv"
+CSV = ROOT / "benchmarks/results/20261008-latest-commit-genanki/comparison.csv"
 PROFILES = [
     ("basic-mixed-text-v1", "Text only"),
     ("basic-image-unique-v2", "Unique images"),
@@ -156,7 +156,7 @@ def benchmark_charts() -> None:
     with CSV.open() as source:
         rows = {row["profile"]: row for row in csv.DictReader(source) if row["notes"] == "1000"}
     plt.rcParams.update({"font.family": "DejaVu Sans", "svg.fonttype": "path",
-                         "svg.hashsalt": "anki-forge-readme-20260921"})
+                         "svg.hashsalt": "anki-forge-readme-20261008"})
     for theme, colors in PALETTES.items():
         for mobile in (False, True):
             fig, ax = plt.subplots(figsize=(4.4, 8.1) if mobile else (10, 6.2))
@@ -192,13 +192,13 @@ def benchmark_charts() -> None:
                      color=colors["muted"])
             fig.legend([plt.Rectangle((0, 0), 1, 1, color=colors["accent"]),
                         plt.Rectangle((0, 0), 1, 1, color=colors["other"])],
-                       ["anki-forge · Rust Deck", "genanki"], loc="upper left", bbox_to_anchor=(.05 if mobile else .02, .865 if mobile else .83),
+                       ["anki-forge · Rust Project", "genanki"], loc="upper left", bbox_to_anchor=(.05 if mobile else .02, .865 if mobile else .83),
                        ncol=2, frameon=False, fontsize=11 if mobile else 16, labelcolor=colors["ink"], handlelength=1)
             suffix = f"{theme}{'-mobile' if mobile else ''}"
             svg_path = ASSETS / f"export-times-{suffix}.svg"
             fig.savefig(svg_path, metadata={"Date": None,
-                        "Title": "Rust Deck and genanki: five 1,000-note export workloads",
-                        "Description": "M1 Pro, 2026-09-21 source snapshot. Startup included. Default APKG formats differ."})
+                        "Title": "Rust Project and genanki: five 1,000-note export workloads",
+                        "Description": "M1 Pro, 2026-10-08, commit 1199196. Startup included. Default APKG formats differ."})
             plt.close(fig)
             # Matplotlib emits trailing spaces in multiline SVG path data.
             svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
@@ -206,10 +206,16 @@ def benchmark_charts() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--charts-only", action="store_true",
+                        help="Regenerate benchmark SVGs without refreshing card previews")
     parser.add_argument("--cards", type=Path, default=ASSETS / "source/cards.json")
     parser.add_argument("--package", type=Path, default=ASSETS / "showcase.apkg")
     args = parser.parse_args()
     ASSETS.mkdir(parents=True, exist_ok=True)
+    if args.charts_only:
+        benchmark_charts()
+        print(f"Benchmark charts: {ASSETS}")
+        return
     PREVIEW.mkdir(parents=True, exist_ok=True)
     source = ASSETS / "source"
     source.mkdir(exist_ok=True)

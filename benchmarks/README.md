@@ -5,6 +5,17 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Latest committed code versus September 21: 2026-10-08
+
+The [latest full comparison](results/20261008-latest-commit-genanki/report.md)
+measures commit `1199196` with the exact September 21 inputs. Timing medians
+decrease in 15/20 cells and increase in five. At 1,000 notes, text/images/audio/
+mixed unique/shared media take 2.2%/36.8%/26.7%/31.0%/11.2% less time; unique-media
+RSS is higher, reaching 92.45 MiB for images. All 840 exports and 40 actual Anki
+imports pass. These are separate sessions/API generations, so the differences
+do not isolate the last commit. Complete distributions, package sizes, fresh
+genanki measurements and offline record replay are retained.
+
 ## Production defaults and memory digests: 2026-10-08
 
 The [implementation report](results/20261008-defaults-digest-implementation/report.md)

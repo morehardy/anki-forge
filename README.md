@@ -37,25 +37,25 @@ images, audio, and video into a single `.apkg` file, ready to import into Anki.
 
 ## Performance you can inspect
 
-**1,000 text notes in 53.9 ms**, versus 115.5 ms with genanki — **53.3% less
+**1,000 text notes in 52.7 ms**, versus 105.0 ms with genanki — **49.8% less
 export time**. Across all five 1,000-note workloads, the measured Rust exports
-took **34.7–53.3% less time**. These archived measurements compare the former Rust `Deck` API with
-genanki. They do not measure the current Project API; Node and Python bindings
-were not benchmarked.
+took **45.7–53.9% less time**. These measurements compare the current Rust
+`Project` API, using `Media::files` for media imports, with genanki 0.13.1.
+Node and Python bindings were not benchmarked.
 
 <picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
   <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
-  <img src="docs/assets/readme/export-times-light.svg" alt="Median export time in milliseconds, Rust / genanki: text 53.9 / 115.5; images 238.6 / 365.5; audio 175.5 / 298.8; mixed unique media 160.1 / 279.5; mixed shared media 69.1 / 124.0. Each workload has 1,000 notes." width="1000">
+  <img src="docs/assets/readme/export-times-light.svg" alt="Median export time in milliseconds, Rust / genanki: text 52.7 / 105.0; images 150.7 / 320.2; audio 128.7 / 275.4; mixed unique media 110.5 / 239.5; mixed shared media 61.4 / 112.9. Each workload has 1,000 notes." width="1000">
 </picture>
 
 Median export times from **10 runs per implementation and workload**, measured
-in one session on an **Apple M1 Pro** on **2026-09-21**. Timings include process
+in one session on an **Apple M1 Pro** on **2026-10-08**. Timings include process
 startup through exit.
-The default APKG formats differ, and results describe the
-[recorded source snapshot](benchmarks/results/20260921-readme-genanki/source-snapshot.json),
-not a published release or a cross-platform guarantee.
+The default APKG formats differ. Results describe commit **`1199196`** on this
+host; the [source snapshot](benchmarks/results/20261008-latest-commit-genanki/source-snapshot.json)
+records the measured code and environment.
 
 **Verification in this benchmark:** all 840 exports passed content checks, and
 all 40 Anki import, content, and representative-render checks passed.
@@ -68,14 +68,14 @@ Both implementations were measured in the same session, with alternating order,
 10 timing samples and 5 separate peak-RSS samples per cell. Desktop background
 load and filesystem cache were uncontrolled.
 
-Memory use varies by workload. At 1,000 unique images, Rust used **40.25 MiB**
-peak RSS versus **35.77 MiB** for genanki. Package-size differences include the
+Memory use varies by workload. At 1,000 unique images, Rust used **92.45 MiB**
+peak RSS versus **35.59 MiB** for genanki. Package-size differences include the
 libraries' different default formats and compression. GUI interaction and
 audible playback were not part of the benchmark checks.
 
-Read the [full report](benchmarks/results/20260921-readme-genanki/report.md),
-[raw timings](benchmarks/results/20260921-readme-genanki/comparison.csv), and
-[reproduction instructions](benchmarks/results/20260921-readme-genanki/README.md).
+Read the [full report](benchmarks/results/20261008-latest-commit-genanki/report.md),
+[raw timings](benchmarks/results/20261008-latest-commit-genanki/comparison.csv), and
+[reproduction instructions](benchmarks/results/20261008-latest-commit-genanki/README.md).
 The README chart is generated from that archived CSV; it introduces no new measurements.
 
 </details>

@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "this_session": {
+    "benchmark_harness": {
+      "passed": 46,
+      "log": "benchmark-tests.log"
+    },
+    "smoke": {
+      "notes_per_implementation": 200,
+      "implementations": [
+        "rust",
+        "genanki"
+      ],
+      "status": "passed",
+      "log": "smoke.log"
+    },
+    "release_tools_rebuilt": [
+      "Rust exporter",
+      "contract inspector",
+      "native collector"
+    ],
+    "production_changes": false
+  },
+  "prior_commit_regressions": {
+    "reference": "benchmarks/results/20261008-defaults-digest-implementation/quality.json",
+    "sha256": "74f05043c7883630c6c21b1bad50bb78cad4a57bf45f262e7a908d515b13b3d3",
+    "rerun_this_session": false,
+    "results": {
+      "rust_workspace_all_features": "passed",
+      "node_passed": 30,
+      "node_skipped": 1,
+      "python_passed": 68,
+      "python_skipped": 1,
+      "mypy_files": 14,
+      "packaged_consumer_and_tamper_guards": "passed"
+    }
+  },
+  "limitations": [
+    "Local macOS arm64 benchmark only.",
+    "No new cross-platform CI or Node/Python performance measurement."
+  ]
+}
