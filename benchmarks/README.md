@@ -5,6 +5,27 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Production media budgets and batch imports: 2026-10-08
+
+The [production comparison](results/20261008-media-defaults-genanki/report.md)
+uses the exact September 21 fixtures for one full 20-cell Rust/genanki matrix.
+The Rust adapter now calls public `Media::files`, with up to four import workers;
+the shared live-snapshot budget is 64 MiB and the encoded pool is 16 MiB.
+Rust, Node and Python expose the batch method. Existing single-file callers
+must adopt it to gain import concurrency. The archived report retains all
+timing/RSS samples, checks and cross-session limitations.
+
+## RSS / speed exploration: 2026-10-08
+
+The [RSS / speed experiments](results/20261008-rss-speed-exploration/report.md)
+test bounded media imports, cached text derivations, snapshot/encoded-payload
+budgets and zstd alternatives in isolated source copies. Independent confirmation
+favours four import workers and a 16 MiB encoded pool: combined large-media
+exports take 26–32% less time with roughly 4 MiB additional peak RSS. Text gains
+are smaller and wide-field gains did not reliably reproduce. All 1,826 exports
+and 185 selected Anki checks passed; that exploration left production unchanged.
+Raw evidence, controls, unsuccessful alternatives and statistics replay are retained.
+
 ## Publication implementation and current comparison
 
 The [publication implementation evidence](results/20261003-publication-implementation/README.md)

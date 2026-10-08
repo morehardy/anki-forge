@@ -272,9 +272,49 @@ fn write_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
+fn batch_files(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+    ensure!(Media::files(Vec::<PathBuf>::new())?.is_empty());
+    let sentinel = Media::file(workspace.join("sentinel.wav"))?;
+    let before = inventory(temp)?;
+    let mut paths = Vec::new();
+    for index in 0..20_u8 {
+        let path = workspace.join(format!("batch-{index}.bin"));
+        fs::write(&path, vec![index; (2 << 20) + index as usize])?;
+        paths.push(path);
+    }
+    let mut invalid = paths.clone();
+    invalid[3] = workspace.join("missing-first");
+    invalid[17] = workspace.join("missing-last");
+    let error = Media::files(&invalid).unwrap_err();
+    ensure!(error.path() == Some(invalid[3].as_path()), "error must follow input order");
+    ensure!(std::error::Error::source(&error).is_some());
+    ensure!(inventory(temp)? == before, "failed batch leaked snapshots or removed existing owners");
+    let error = Media::files_with_limits(&paths, ankiforge::media::MediaLimits { max_bytes: 2 << 20 }).unwrap_err();
+    ensure!(error.path() == Some(paths[1].as_path()));
+    ensure!(error.limit_exceeded().unwrap().observed == (2 << 20) + 1);
+    ensure!(inventory(temp)? == before, "limited batch leaked snapshots");
+    paths.push(paths[0].clone());
+    let media = Media::files(&paths)?;
+    ensure!(media.len() == 21 && media[0] == media[20]);
+    for (index, item) in media[..20].iter().enumerate() {
+        ensure!(item == &Media::file(&paths[index])?, "batch order/content differs from serial import");
+        fs::remove_file(&paths[index])?;
+    }
+    let mut project = Project::new("batch-owned-files")?;
+    project.add("one", Note::basic("q", "a"))?;
+    for item in media { project.add_asset(item)?; }
+    let output = project.build(BuildOptions::to(workspace.join("batch.apkg")))?;
+    ensure!(output.report().counts().media == 20);
+    drop((output, project));
+    ensure!(inventory(temp)? == before, "successful batch retained abandoned storage");
+    drop(sentinel);
+    emit("batch_files_released", temp, json!({"unique_files":20}))?;
+    Ok(())
+}
+
 fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     let mut owners = Vec::new();
-    for index in 0..8_u8 {
+    for index in 0..68_u8 {
         owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
     }
     let before = inventory(temp)?;
@@ -284,7 +324,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     // creating its replacement fails after the old writer has been closed.
     let hidden = workspace.join("unavailable-snapshots");
     fs::rename(temp, &hidden)?;
-    let failed = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream");
+    let failed = Media::bytes(vec![68; 1024 * 1024], "application/octet-stream");
     fs::rename(&hidden, temp)?;
     let error = failed.unwrap_err();
     ensure!(error.kind() == ankiforge::media::MediaErrorKind::Io);
@@ -294,7 +334,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     ensure!(cause.kind() == std::io::ErrorKind::NotFound);
     ensure!(inventory(temp)? == before, "failed rotation changed the old block");
 
-    let retry = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream")?;
+    let retry = Media::bytes(vec![68; 1024 * 1024], "application/octet-stream")?;
     let after = inventory(temp)?;
     ensure!(after["files"] == 2 && after["logical_bytes"] == 5 * 1024 * 1024);
     let mut project = Project::new("retry-failed-spill-rotation")?;
@@ -303,7 +343,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
         project.add_asset(media.clone())?;
     }
     let output = project.build(BuildOptions::to(workspace.join("rotation-retry.apkg")))?;
-    ensure!(output.report().counts().media == 9);
+    ensure!(output.report().counts().media == 69);
     drop((output, project, owners));
     one_snapshot(temp, 1024 * 1024)?;
     drop(retry);
@@ -416,7 +456,7 @@ fn main() -> anyhow::Result<()> {
         "early-duplicate" => early_duplicate(&workspace, &temp),
         "fd-stress" => {
             let mut owners = Vec::new();
-            for index in 0..300_u16 {
+            for index in 0..360_u16 {
                 let mut bytes = vec![index as u8; 1024 * 1024];
                 bytes[..2].copy_from_slice(&index.to_le_bytes());
                 owners.push(Media::bytes(bytes, "application/octet-stream")?);
@@ -428,7 +468,7 @@ fn main() -> anyhow::Result<()> {
             project.add("one", Note::basic("Question", "Answer"))?;
             for media in &owners { project.add_asset(media.clone())?; }
             let output = project.build(BuildOptions::to(workspace.join("fd-stress.apkg")))?;
-            ensure!(output.report().counts().media == 300,
+            ensure!(output.report().counts().media == 360,
                 "all blocks must remain exportable under the descriptor limit");
             drop((output, project));
             let last = owners.pop().context("last segment")?;
@@ -441,8 +481,8 @@ fn main() -> anyhow::Result<()> {
             // final owner of an active block. A leaked writer descriptor would
             // exhaust the same 64-FD limit even though all its paths vanished.
             let mut resident = Vec::new();
-            for index in 0..4_u8 {
-                resident.push(Media::bytes(vec![250 + index; 1024 * 1024], "application/octet-stream")?);
+            for index in 0..64_u8 {
+                resident.push(Media::bytes(vec![128 + index; 1024 * 1024], "application/octet-stream")?);
             }
             for index in 0..96_u8 {
                 let media = Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?;
@@ -457,7 +497,7 @@ fn main() -> anyhow::Result<()> {
         "append-failure" => {
             let mut owners = Vec::new();
             for index in 0..64_u8 {
-                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
+                owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
             }
             let retained = Media::bytes(vec![254; 4096], "application/octet-stream")?;
             let before = inventory(&temp)?;
@@ -496,7 +536,7 @@ fn main() -> anyhow::Result<()> {
         "budget-failure" => {
             let mut owners = Vec::new();
             for index in 0..64_u8 {
-                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
+                owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
             }
             ensure!(inventory(&temp)?["files"] == 0);
             let error = Media::bytes(vec![255; 64 * 1024], "application/octet-stream").unwrap_err();
@@ -511,17 +551,21 @@ fn main() -> anyhow::Result<()> {
         }
         "bounded-small" => {
             let mut owners = Vec::new();
-            for index in 0..256_u16 {
-                owners.push(Media::bytes(vec![index as u8; 64 * 1024], "application/octet-stream")?);
+            for index in 0..1216_u16 {
+                let mut bytes = vec![index as u8; 64 * 1024];
+                bytes[..2].copy_from_slice(&index.to_le_bytes());
+                owners.push(Media::bytes(bytes, "application/octet-stream")?);
             }
             let storage = inventory(&temp)?;
             ensure!(storage["logical_bytes"] == 12 * 1024 * 1024,
-                "small snapshots exceeded the shared 4 MiB memory budget: {storage}");
+                "small snapshots exceeded the shared 64 MiB memory budget: {storage}");
             ensure!(storage["files"].as_u64().unwrap() <= 3,
                 "small snapshots must share bounded spill blocks: {storage}");
             ensure!(storage["sizes"].as_array().unwrap().iter().all(|v| v.as_u64().unwrap() <= 4 * 1024 * 1024),
                 "spill blocks must have bounded retained storage");
-            let duplicate = Media::bytes(vec![255; 64 * 1024], "application/octet-stream")?;
+            let mut bytes = vec![1215_u16 as u8; 64 * 1024];
+            bytes[..2].copy_from_slice(&1215_u16.to_le_bytes());
+            let duplicate = Media::bytes(bytes, "application/octet-stream")?;
             let before = inventory(&temp)?;
             drop(duplicate);
             ensure!(inventory(&temp)? == before, "duplicate snapshot must share storage");
@@ -529,7 +573,7 @@ fn main() -> anyhow::Result<()> {
             for media in &owners {project.add_asset(media.clone())?;}
             project.add("one", Note::basic("Question", "Answer"))?;
             let output = project.build(BuildOptions::to(workspace.join("segments.apkg")))?;
-            ensure!(output.report().counts().media == 256);
+            ensure!(output.report().counts().media == 1216);
             drop(output);
             drop(project);
             drop(owners);
@@ -544,6 +588,7 @@ fn main() -> anyhow::Result<()> {
             emit("baseline", &temp, json!({"imports":0}))?;
             Ok(())
         }
+        "batch-files" => batch_files(&workspace, &temp),
         "lifecycle" => lifecycle(&workspace, &temp),
         "duplicate" => duplicate(&workspace, &temp),
         "relative-temp-file" | "relative-temp-bytes" => relative_temp(&mode, &workspace, &temp),

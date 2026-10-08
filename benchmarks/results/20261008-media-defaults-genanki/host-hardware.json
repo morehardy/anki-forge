@@ -1,0 +1,13 @@
+{
+  "cpu": "Apple M1 Pro",
+  "physical_cores": 10,
+  "logical_cores": 10,
+  "ram_bytes": 34359738368,
+  "system": "macOS 27.0",
+  "system_build": "26A428",
+  "architecture": "arm64",
+  "queried_utc": "2026-10-02T12:55:21.288841+00:00",
+  "hardware_query": "sysctl -n machdep.cpu.brand_string hw.memsize hw.physicalcpu hw.logicalcpu",
+  "system_query": "sw_vers",
+  "observation_note": "Hardware read through approved sysctl immediately before preparation completed; all four values match the archived host. Power and load are independently recorded for this run."
+}

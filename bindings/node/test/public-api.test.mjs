@@ -38,6 +38,30 @@ function inspect(filename) {
   assert.equal(r.status, 0, r.stderr);
   return JSON.parse(r.stdout);
 }
+test("batch media preserves order, snapshots, limits and first error", async (t) => {
+  const d = await temp(t);
+  assert.deepEqual(await Media.files([]), []);
+  const paths = Array.from({ length: 20 }, (_, i) => path.join(d, `${i}.css`));
+  for (const [i, filename] of paths.entries()) await fs.writeFile(filename, "x".repeat(i + 1));
+  const batch = await Media.files(paths);
+  assert.deepEqual(batch.map((item) => item.byteLength), Array.from({ length: 20 }, (_, i) => i + 1));
+  for (const [i, filename] of paths.entries()) {
+    assert.equal(batch[i].filename, (await Media.file(filename)).filename);
+  }
+  await assert.rejects(Media.files(paths, { maxBytes: 1 }), (error) =>
+    error instanceof MediaError && error.details.path === paths[1] &&
+    error.details.limitExceeded.observed === 2);
+  await fs.unlink(paths[3]);
+  await fs.unlink(paths[17]);
+  await assert.rejects(Media.files(paths), (error) =>
+    error instanceof MediaError && error.details.path === paths[3]);
+  for (const filename of paths) await fs.rm(filename, { force: true });
+  const project = new Project("batch-files").add("n", Note.basic("q", "a"));
+  for (const item of batch) project.addAsset(item);
+  const output = await project.build(BuildOptions.temporary());
+  t.after(() => output.artifact.close());
+  assert.equal(output.report.counts.media, 20);
+});
 async function temp(t) {
   const d = await fs.mkdtemp(path.join(os.tmpdir(), "node-public-"));
   t.after(() => fs.rm(d, { recursive: true, force: true }));
@@ -735,6 +759,8 @@ test("worker teardown safely releases in-flight native operations", async (t) =>
   const { Worker } = await import("node:worker_threads");
   const url = new URL("../dist/index.mjs", import.meta.url).href;
   const directory = await temp(t);
+  const source = path.join(await temp(t), "batch-source.bin");
+  await fs.writeFile(source, Buffer.alloc(2 << 20, 7));
   const previousTmp = process.env.TMPDIR;
   process.env.TMPDIR = directory;
   t.after(() => {
@@ -746,19 +772,21 @@ test("worker teardown safely releases in-flight native operations", async (t) =>
     .build(BuildOptions.temporary());
   t.after(() => baseline.artifact.close());
   assert.equal(path.dirname(baseline.artifact.path), directory);
-  for (const operation of ["build", "compare", "preparePublication"]) {
+  for (const operation of ["build", "compare", "preparePublication", "files"]) {
     for (let i = 0; i < 3; i++) {
       const worker = new Worker(
         `const { parentPort } = require('node:worker_threads');
         (async () => {
-          const { Project, Note, BuildOptions, CompareOptions } = await import(${JSON.stringify(url)});
+          const { Project, Note, Media, BuildOptions, CompareOptions } = await import(${JSON.stringify(url)});
           const project = new Project('worker');
           for (let i = 0; i < 1000; i++) project.add(String(i), Note.basic('question ' + i, 'answer'));
           const operation = ${JSON.stringify(operation)};
           const options = operation === 'compare'
             ? CompareOptions.against(${JSON.stringify(baseline.artifact.path)})
             : BuildOptions.temporary();
-          const pending = project[operation](options);
+          const pending = operation === 'files'
+            ? Media.files(Array(32).fill(${JSON.stringify(source)}))
+            : project[operation](options);
           parentPort.postMessage('started');
           await pending;
         })()`,

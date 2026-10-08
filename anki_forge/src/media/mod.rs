@@ -5,6 +5,7 @@
 //! final owner. Construct an export name before placing media in content.
 
 pub(crate) mod assets;
+mod batch;
 mod error;
 mod snapshot;
 mod usage;

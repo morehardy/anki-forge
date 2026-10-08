@@ -55,6 +55,7 @@ interface NativeModule {
     sequence(items: NativeContent[]): NativeContent;
   };
   NativeMedia: {
+    files(paths: string[], limits: string): Promise<NativeMedia[]>;
     file(path: string, limits: string): Promise<NativeMedia>;
     bytes(bytes: Buffer, mime: string, limits: string): Promise<NativeMedia>;
   };

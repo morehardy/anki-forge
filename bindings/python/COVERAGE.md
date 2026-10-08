@@ -14,3 +14,6 @@ Workflow configuration is not a claim that any version has been published or
 that a specific run has passed. See the [Python release runbook](../../docs/python-release-runbook.md).
 
 Prepared publication adapts the same Rust candidate/policy pipeline with single-use publication, idempotent cleanup, independent reports and process ownership. Metadata requires native binding protocol 1.
+
+Batch media tests cover iterable inputs, ordered snapshots, per-file limits,
+the first error in input order and exact exported bytes after source deletion.

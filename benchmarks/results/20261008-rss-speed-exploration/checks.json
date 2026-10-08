@@ -1,0 +1,88 @@
+[
+  {
+    "name": "harness",
+    "argv": [
+      "benchmarks/.venv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "benchmarks/tests"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge",
+    "environment": {},
+    "returncode": 0,
+    "seconds": 3.4424970149993896,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/harness.log",
+    "log_sha256": "9200062b7ed738d24eb1fd79ea0a092ac7608a9ad9d3f9c6d08fd577bec9ed25"
+  },
+  {
+    "name": "bulk-owned",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "ankiforge",
+      "--lib",
+      "owned_media_build_does_not_require_input_or_cas_copies"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "environment": {
+      "ANKIFORGE_RSS_CODEC": "bulk"
+    },
+    "returncode": 0,
+    "seconds": 15.417590856552124,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/bulk-owned.log",
+    "log_sha256": "cd0526c7452342c7d5ce04411a145425111996bfbb2bcedf6246f4347dfbeb25"
+  },
+  {
+    "name": "pledged-owned",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "ankiforge",
+      "--lib",
+      "owned_media_build_does_not_require_input_or_cas_copies"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "environment": {
+      "ANKIFORGE_RSS_CODEC": "pledged"
+    },
+    "returncode": 0,
+    "seconds": 0.34713292121887207,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/pledged-owned.log",
+    "log_sha256": "b98ee0fee5e3b39be7c8aae0d0cf5c10401aeeed64586c312f560dde59387377"
+  },
+  {
+    "name": "text-integration",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "ankiforge",
+      "--test",
+      "prepared_publication_tests",
+      "--test",
+      "custom_notetype_api_tests",
+      "--test",
+      "media_snapshot_lifecycle_tests"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "environment": {
+      "ANKIFORGE_RSS_ROWS_MIB": "64",
+      "ANKIFORGE_RSS_ROW_WORKERS": "4",
+      "ANKIFORGE_RSS_RENDER_WORKERS": "4"
+    },
+    "returncode": 0,
+    "seconds": 49.12628102302551,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/text-integration.log",
+    "log_sha256": "554202f085c31c4a020e0e33ab3eb7eda6f8ab5cc475a67f70fc52604504b2c5"
+  }
+]

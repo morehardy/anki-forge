@@ -243,3 +243,8 @@ fn cached_large_bytes_skip_unavailable_temp_storage_but_still_validate_each_impo
 fn concurrent_large_byte_imports_preserve_exact_content_and_cleanup() {
     run("concurrent-duplicates", false);
 }
+
+#[test]
+fn batch_files_preserve_order_limits_ownership_and_clean_up_before_returning_errors() {
+    run("batch-files", false);
+}

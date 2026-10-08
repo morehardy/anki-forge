@@ -71,7 +71,7 @@ fn main() -> anyhow::Result<()> {
             serde_json::json!({
                 "protocol": "basic-apkg-v1", "adapter": "anki-forge/rust",
                 "protocols": ["basic-apkg-v1", "basic-media-apkg-v1"],
-                "media_registration": "individual",
+                "media_registration": "bounded_batch",
                 "crate_version": ankiforge::facade_api_version(),
                 "bundle_version": ankiforge::embedded_contract_version(),
                 "features": "default", "adapter_features": adapter_features,
@@ -102,15 +102,22 @@ fn main() -> anyhow::Result<()> {
     let parent = Path::new(input).parent().context("input parent")?;
     let mut media_by_id = BTreeMap::new();
     let mut retained_media = Vec::new();
+    ensure!(repeats > 0, "at least one import");
+    let paths = workload.media.iter().flat_map(|media| {
+        std::iter::repeat_n(parent.join(&media.path), repeats)
+    });
+    let snapshots = if mode == "bytes" {
+        paths.map(|path| OwnedMedia::bytes(std::fs::read(path)?, "audio/wav").map_err(Into::into))
+            .collect::<anyhow::Result<Vec<_>>>()?
+    } else {
+        OwnedMedia::files(paths)?
+    };
+    let mut snapshots = snapshots.into_iter();
     for media in workload.media {
         let mut snapshot = None;
         for _ in 0..repeats {
-            let owned = if mode == "bytes" {
-                OwnedMedia::bytes(std::fs::read(parent.join(&media.path))?, "audio/wav")?
-            } else {
-                OwnedMedia::file(parent.join(&media.path))?
-            }
-            .with_export_name(&media.filename)?;
+            let owned = snapshots.next().context("imported media")?
+                .with_export_name(&media.filename)?;
             retained_media.push(owned.clone());
             snapshot = Some(owned);
         }

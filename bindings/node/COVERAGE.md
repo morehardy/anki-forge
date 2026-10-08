@@ -14,3 +14,6 @@ paths across working-directory changes. Installed ESM/CJS and TypeScript probes
 verify that the same report classes are exported and accepted on every report path.
 
 Prepared publication owns an inspected private candidate, supports one publish attempt and idempotent close, retains reports after close and exposes structured unavailable reasons. Task snapshots use native copy on write; outputs remain isolated from subsequent authoring.
+
+Batch media tests cover ordered snapshots, per-file limits, the first error in
+input order, source deletion before export and Worker teardown during import.

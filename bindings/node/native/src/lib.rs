@@ -102,6 +102,16 @@ pub struct NativeMedia {
 #[napi]
 impl NativeMedia {
     #[napi]
+    pub fn files<'env>(env: &'env Env, paths: Vec<String>, limits: String) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            MediaFilesTask {
+                paths: Some(paths),
+                limits: options::media_limits(&limits)?,
+            },
+        )
+    }
+    #[napi]
     pub fn file<'env>(env: &'env Env, path: String, limits: String) -> Result<Object<'env>> {
         tasks::spawn(
             env,
@@ -189,6 +199,38 @@ impl NativeMedia {
 enum MediaSource {
     File(String),
     Bytes(Vec<u8>, String),
+}
+struct MediaFilesTask {
+    paths: Option<Vec<String>>,
+    limits: ankiforge::media::MediaLimits,
+}
+impl Task for MediaFilesTask {
+    type Output = Vec<Media>;
+    type JsValue = Vec<NativeMedia>;
+    fn compute(&mut self) -> Result<Self::Output> {
+        Media::files_with_limits(self.paths.take().expect("task runs once"), self.limits).map_err(
+            |e| {
+                domain(
+                    "media",
+                    e.kind(),
+                    e.code(),
+                    &e,
+                    json!({
+                        "path": e.path().map(PathSnapshot::new),
+                        "limitExceeded": e.limit_exceeded().map(|l| json!({
+                            "resource": l.resource, "limit": l.limit, "observed": l.observed
+                        }))
+                    }),
+                )
+            },
+        )
+    }
+    fn resolve(&mut self, _env: Env, items: Self::Output) -> Result<Self::JsValue> {
+        Ok(items
+            .into_iter()
+            .map(|inner| NativeMedia { inner })
+            .collect())
+    }
 }
 struct MediaTask {
     source: Option<MediaSource>,

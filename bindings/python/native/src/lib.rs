@@ -155,6 +155,21 @@ struct NativeMedia {
 #[pymethods]
 impl NativeMedia {
     #[staticmethod]
+    fn files(py: Python<'_>, paths: Vec<PathBuf>, max_bytes: u64) -> PyResult<Vec<Self>> {
+        py.detach(|| {
+            Media::files_with_limits(paths, ankiforge::media::MediaLimits { max_bytes })
+                .map(|items| {
+                    items
+                        .into_iter()
+                        .map(|inner| Self {
+                            inner: inner.into(),
+                        })
+                        .collect()
+                })
+                .map_err(mapped!("media"))
+        })
+    }
+    #[staticmethod]
     fn file(py: Python<'_>, path: PathBuf, max_bytes: u64) -> PyResult<Self> {
         py.detach(|| {
             Media::file_with_limits(path, ankiforge::media::MediaLimits { max_bytes })

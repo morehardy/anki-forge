@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "measured_sources_checked": 2594,
+  "only_changes_after_measurement": {
+    "anki_forge/PACKAGE_FILES.txt": {
+      "measured_sha256": "7f83b58d242e0c8c903b263195d6da5f0ade832b19cf0304a694686a5f3fa1f0",
+      "final_sha256": "b899e426199aa33bdc02eb613472017b148155592e97dded6550578d187e9049",
+      "reason": "add new source to distribution inventory"
+    },
+    "bindings/node/native/src/lib.rs": {
+      "measured_sha256": "b01972a52a1c0460b7aad9e940766adb37c26d96130ae81a096fe312af48bacc",
+      "final_sha256": "a0c78bb436ca8abda59a17fc10e4df98d0b75cc1ea0e8ab1ebf1d3b28ab294d4",
+      "reason": "rustfmt only, verified against formatting the archived source"
+    },
+    "bindings/python/native/src/lib.rs": {
+      "measured_sha256": "11fb9b275d31c1af0453602db896eb3d463946809ad5da0d0ed2279254c91396",
+      "final_sha256": "32a4615ab337c4390a3d39349fdbe1e80de9199658b057106ec9e1846e60438c",
+      "reason": "rustfmt only, verified against formatting the archived source"
+    }
+  },
+  "core_and_benchmark_adapter_unchanged": true,
+  "bindings_changes_verified_rustfmt_only": true,
+  "package_payload_check": "passed"
+}

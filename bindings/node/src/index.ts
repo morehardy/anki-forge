@@ -98,6 +98,21 @@ export class Media {
     mediaHandles.set(this, handle);
     Object.freeze(this);
   }
+  /** Import in input order with up to four workers; reject without partial results. */
+  static async files(
+    filenames: readonly string[],
+    limits: MediaLimits = {},
+  ): Promise<Media[]> {
+    if (!Array.isArray(filenames)) throw new TypeError("Expected an array of filenames");
+    const paths = filenames.map((filename) => {
+      string(filename, "filename");
+      return absolutePath(filename);
+    });
+    const handles = await asyncCall(() =>
+      native().NativeMedia.files(paths, limitsJSON(limits)),
+    );
+    return handles.map((handle) => new Media(handle));
+  }
   static async file(
     filename: string,
     limits: MediaLimits = {},

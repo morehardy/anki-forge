@@ -122,3 +122,21 @@ without certifying that a decoder or player supports the bytes. Renaming a file
 never changes retained MIME. Build still sniffs staged bytes and validates the
 export extension independently: PNG named `wrong.mp3` can pass image addition
 and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
+
+## Batch file imports
+
+Use `Media::files(paths)` in Rust, `await Media.files(paths)` in Node, or
+`Media.files(paths)` in Python to import files in input order with at most four
+workers per call. Batches below 16 files run serially. Rust also provides
+`files_with_limits`; Node and Python accept the same limits as `file`.
+The limit applies to each asset. If an import fails, the call waits for started
+work, drops the batch's snapshots, and returns the first error in input order.
+Existing media owners remain valid. Python releases the GIL during import;
+Node performs the work off the event loop. Single-file imports remain immediate
+owned snapshots; callers must opt into the batch method for import concurrency.
+
+Live snapshots share a **64 MiB** process-wide memory budget. Individual assets
+larger than 1 MiB still stream to temporary files. Encoded media share a lazily
+allocated **16 MiB** buffer pool per preparation and spill when it fills. These
+budgets exclude other working memory and are not an RSS cap; concurrent builds
+can each own an encoding pool.

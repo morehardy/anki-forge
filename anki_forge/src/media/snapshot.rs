@@ -15,7 +15,9 @@ mod spool;
 pub(crate) use spool::ReaderCache;
 
 const MEMORY_THRESHOLD: usize = 1024 * 1024;
-const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
+// Shared by live snapshots across all projects in this process. Assets larger
+// than MEMORY_THRESHOLD still stream to disk; this is not a process RSS cap.
+const MEMORY_BUDGET: usize = 64 * 1024 * 1024;
 const BUFFER_BYTES: usize = 64 * 1024;
 pub(super) const SAMPLE_BYTES: usize = 8192;
 

@@ -8,6 +8,12 @@ new minor release.
 
 ### Performance
 
+- Add ordered `Media::files` / `files_with_limits` imports with up to four
+  workers and matching Node/Python `Media.files` methods. Failed batches join
+  their workers and release partial snapshots before returning the first error.
+- Raise the shared live-snapshot budget from 4 to 64 MiB and the lazy encoded
+  media pool from 4.5 to 16 MiB. Assets over 1 MiB still stream to disk; these
+  budgets do not bound total process RSS.
 - Consume temporary native authoring content without building unused legacy
   mirrors, and reuse bound card plans for note fingerprints and report counts.
 - Omit the unused whole-package SHA-1 in native builds while retaining complete

@@ -1,0 +1,750 @@
+diff --git a/anki_forge/CHANGELOG.md b/anki_forge/CHANGELOG.md
+index 5ac5e96..66d5870 100644
+--- a/anki_forge/CHANGELOG.md
++++ b/anki_forge/CHANGELOG.md
+@@ -8,6 +8,12 @@ new minor release.
+ 
+ ### Performance
+ 
++- Add ordered `Media::files` / `files_with_limits` imports with up to four
++  workers and matching Node/Python `Media.files` methods. Failed batches join
++  their workers and release partial snapshots before returning the first error.
++- Raise the shared live-snapshot budget from 4 to 64 MiB and the lazy encoded
++  media pool from 4.5 to 16 MiB. Assets over 1 MiB still stream to disk; these
++  budgets do not bound total process RSS.
+ - Consume temporary native authoring content without building unused legacy
+   mirrors, and reuse bound card plans for note fingerprints and report counts.
+ - Omit the unused whole-package SHA-1 in native builds while retaining complete
+diff --git a/anki_forge/src/media/mod.rs b/anki_forge/src/media/mod.rs
+index c277a73..254ddad 100644
+--- a/anki_forge/src/media/mod.rs
++++ b/anki_forge/src/media/mod.rs
+@@ -5,6 +5,7 @@
+ //! final owner. Construct an export name before placing media in content.
+ 
+ pub(crate) mod assets;
++mod batch;
+ mod error;
+ mod snapshot;
+ mod usage;
+diff --git a/anki_forge/src/media/snapshot.rs b/anki_forge/src/media/snapshot.rs
+index 8e69271..d2f5674 100644
+--- a/anki_forge/src/media/snapshot.rs
++++ b/anki_forge/src/media/snapshot.rs
+@@ -15,7 +15,9 @@ mod spool;
+ pub(crate) use spool::ReaderCache;
+ 
+ const MEMORY_THRESHOLD: usize = 1024 * 1024;
+-const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
++// Shared by live snapshots across all projects in this process. Assets larger
++// than MEMORY_THRESHOLD still stream to disk; this is not a process RSS cap.
++const MEMORY_BUDGET: usize = 64 * 1024 * 1024;
+ const BUFFER_BYTES: usize = 64 * 1024;
+ pub(super) const SAMPLE_BYTES: usize = 8192;
+ 
+diff --git a/anki_forge/src/parallel_io.rs b/anki_forge/src/parallel_io.rs
+index 2542352..601efad 100644
+--- a/anki_forge/src/parallel_io.rs
++++ b/anki_forge/src/parallel_io.rs
+@@ -1,5 +1,6 @@
+ //! Scoped I/O jobs with at most four active operations and ordered results.
+-//! Results must be metadata or owned temporary files, not buffered payloads.
++//! Results may own snapshots or encoded payloads only through their shared
++//! memory budgets; jobs must not retain unbounded independent buffers.
+ use std::panic::{catch_unwind, AssertUnwindSafe};
+ use std::sync::atomic::{AtomicUsize, Ordering};
+ use std::sync::Mutex;
+diff --git a/anki_forge/src/prepared_media/payload.rs b/anki_forge/src/prepared_media/payload.rs
+index 0240d64..dd848f0 100644
+--- a/anki_forge/src/prepared_media/payload.rs
++++ b/anki_forge/src/prepared_media/payload.rs
+@@ -4,7 +4,8 @@ use std::io::{self, Seek, Write};
+ use std::sync::{Arc, Mutex};
+ 
+ const BLOCK_BYTES: usize = 64 * 1024;
+-pub(super) const MEMORY_BYTES: usize = 9 * 512 * 1024;
++// Allocated lazily and shared by all encoding workers in one preparation.
++pub(super) const MEMORY_BYTES: usize = 16 * 1024 * 1024;
+ 
+ #[derive(Clone)]
+ pub(super) struct PayloadPool(Arc<Mutex<PoolState>>);
+diff --git a/anki_forge/tests/consumers/media_snapshot_lifecycle.rs b/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
+index 6b37b9f..24b3087 100644
+--- a/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
++++ b/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
+@@ -272,9 +272,49 @@ fn write_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+     Ok(())
+ }
+ 
++fn batch_files(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
++    ensure!(Media::files(Vec::<PathBuf>::new())?.is_empty());
++    let sentinel = Media::file(workspace.join("sentinel.wav"))?;
++    let before = inventory(temp)?;
++    let mut paths = Vec::new();
++    for index in 0..20_u8 {
++        let path = workspace.join(format!("batch-{index}.bin"));
++        fs::write(&path, vec![index; (2 << 20) + index as usize])?;
++        paths.push(path);
++    }
++    let mut invalid = paths.clone();
++    invalid[3] = workspace.join("missing-first");
++    invalid[17] = workspace.join("missing-last");
++    let error = Media::files(&invalid).unwrap_err();
++    ensure!(error.path() == Some(invalid[3].as_path()), "error must follow input order");
++    ensure!(std::error::Error::source(&error).is_some());
++    ensure!(inventory(temp)? == before, "failed batch leaked snapshots or removed existing owners");
++    let error = Media::files_with_limits(&paths, ankiforge::media::MediaLimits { max_bytes: 2 << 20 }).unwrap_err();
++    ensure!(error.path() == Some(paths[1].as_path()));
++    ensure!(error.limit_exceeded().unwrap().observed == (2 << 20) + 1);
++    ensure!(inventory(temp)? == before, "limited batch leaked snapshots");
++    paths.push(paths[0].clone());
++    let media = Media::files(&paths)?;
++    ensure!(media.len() == 21 && media[0] == media[20]);
++    for (index, item) in media[..20].iter().enumerate() {
++        ensure!(item == &Media::file(&paths[index])?, "batch order/content differs from serial import");
++        fs::remove_file(&paths[index])?;
++    }
++    let mut project = Project::new("batch-owned-files")?;
++    project.add("one", Note::basic("q", "a"))?;
++    for item in media { project.add_asset(item)?; }
++    let output = project.build(BuildOptions::to(workspace.join("batch.apkg")))?;
++    ensure!(output.report().counts().media == 20);
++    drop((output, project));
++    ensure!(inventory(temp)? == before, "successful batch retained abandoned storage");
++    drop(sentinel);
++    emit("batch_files_released", temp, json!({"unique_files":20}))?;
++    Ok(())
++}
++
+ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+     let mut owners = Vec::new();
+-    for index in 0..8_u8 {
++    for index in 0..68_u8 {
+         owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
+     }
+     let before = inventory(temp)?;
+@@ -284,7 +324,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+     // creating its replacement fails after the old writer has been closed.
+     let hidden = workspace.join("unavailable-snapshots");
+     fs::rename(temp, &hidden)?;
+-    let failed = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream");
++    let failed = Media::bytes(vec![68; 1024 * 1024], "application/octet-stream");
+     fs::rename(&hidden, temp)?;
+     let error = failed.unwrap_err();
+     ensure!(error.kind() == ankiforge::media::MediaErrorKind::Io);
+@@ -294,7 +334,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+     ensure!(cause.kind() == std::io::ErrorKind::NotFound);
+     ensure!(inventory(temp)? == before, "failed rotation changed the old block");
+ 
+-    let retry = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream")?;
++    let retry = Media::bytes(vec![68; 1024 * 1024], "application/octet-stream")?;
+     let after = inventory(temp)?;
+     ensure!(after["files"] == 2 && after["logical_bytes"] == 5 * 1024 * 1024);
+     let mut project = Project::new("retry-failed-spill-rotation")?;
+@@ -303,7 +343,7 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+         project.add_asset(media.clone())?;
+     }
+     let output = project.build(BuildOptions::to(workspace.join("rotation-retry.apkg")))?;
+-    ensure!(output.report().counts().media == 9);
++    ensure!(output.report().counts().media == 69);
+     drop((output, project, owners));
+     one_snapshot(temp, 1024 * 1024)?;
+     drop(retry);
+@@ -416,7 +456,7 @@ fn main() -> anyhow::Result<()> {
+         "early-duplicate" => early_duplicate(&workspace, &temp),
+         "fd-stress" => {
+             let mut owners = Vec::new();
+-            for index in 0..300_u16 {
++            for index in 0..360_u16 {
+                 let mut bytes = vec![index as u8; 1024 * 1024];
+                 bytes[..2].copy_from_slice(&index.to_le_bytes());
+                 owners.push(Media::bytes(bytes, "application/octet-stream")?);
+@@ -428,7 +468,7 @@ fn main() -> anyhow::Result<()> {
+             project.add("one", Note::basic("Question", "Answer"))?;
+             for media in &owners { project.add_asset(media.clone())?; }
+             let output = project.build(BuildOptions::to(workspace.join("fd-stress.apkg")))?;
+-            ensure!(output.report().counts().media == 300,
++            ensure!(output.report().counts().media == 360,
+                 "all blocks must remain exportable under the descriptor limit");
+             drop((output, project));
+             let last = owners.pop().context("last segment")?;
+@@ -441,8 +481,8 @@ fn main() -> anyhow::Result<()> {
+             // final owner of an active block. A leaked writer descriptor would
+             // exhaust the same 64-FD limit even though all its paths vanished.
+             let mut resident = Vec::new();
+-            for index in 0..4_u8 {
+-                resident.push(Media::bytes(vec![250 + index; 1024 * 1024], "application/octet-stream")?);
++            for index in 0..64_u8 {
++                resident.push(Media::bytes(vec![128 + index; 1024 * 1024], "application/octet-stream")?);
+             }
+             for index in 0..96_u8 {
+                 let media = Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?;
+@@ -457,7 +497,7 @@ fn main() -> anyhow::Result<()> {
+         "append-failure" => {
+             let mut owners = Vec::new();
+             for index in 0..64_u8 {
+-                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
++                owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
+             }
+             let retained = Media::bytes(vec![254; 4096], "application/octet-stream")?;
+             let before = inventory(&temp)?;
+@@ -496,7 +536,7 @@ fn main() -> anyhow::Result<()> {
+         "budget-failure" => {
+             let mut owners = Vec::new();
+             for index in 0..64_u8 {
+-                owners.push(Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?);
++                owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
+             }
+             ensure!(inventory(&temp)?["files"] == 0);
+             let error = Media::bytes(vec![255; 64 * 1024], "application/octet-stream").unwrap_err();
+@@ -511,17 +551,21 @@ fn main() -> anyhow::Result<()> {
+         }
+         "bounded-small" => {
+             let mut owners = Vec::new();
+-            for index in 0..256_u16 {
+-                owners.push(Media::bytes(vec![index as u8; 64 * 1024], "application/octet-stream")?);
++            for index in 0..1216_u16 {
++                let mut bytes = vec![index as u8; 64 * 1024];
++                bytes[..2].copy_from_slice(&index.to_le_bytes());
++                owners.push(Media::bytes(bytes, "application/octet-stream")?);
+             }
+             let storage = inventory(&temp)?;
+             ensure!(storage["logical_bytes"] == 12 * 1024 * 1024,
+-                "small snapshots exceeded the shared 4 MiB memory budget: {storage}");
++                "small snapshots exceeded the shared 64 MiB memory budget: {storage}");
+             ensure!(storage["files"].as_u64().unwrap() <= 3,
+                 "small snapshots must share bounded spill blocks: {storage}");
+             ensure!(storage["sizes"].as_array().unwrap().iter().all(|v| v.as_u64().unwrap() <= 4 * 1024 * 1024),
+                 "spill blocks must have bounded retained storage");
+-            let duplicate = Media::bytes(vec![255; 64 * 1024], "application/octet-stream")?;
++            let mut bytes = vec![1215_u16 as u8; 64 * 1024];
++            bytes[..2].copy_from_slice(&1215_u16.to_le_bytes());
++            let duplicate = Media::bytes(bytes, "application/octet-stream")?;
+             let before = inventory(&temp)?;
+             drop(duplicate);
+             ensure!(inventory(&temp)? == before, "duplicate snapshot must share storage");
+@@ -529,7 +573,7 @@ fn main() -> anyhow::Result<()> {
+             for media in &owners {project.add_asset(media.clone())?;}
+             project.add("one", Note::basic("Question", "Answer"))?;
+             let output = project.build(BuildOptions::to(workspace.join("segments.apkg")))?;
+-            ensure!(output.report().counts().media == 256);
++            ensure!(output.report().counts().media == 1216);
+             drop(output);
+             drop(project);
+             drop(owners);
+@@ -544,6 +588,7 @@ fn main() -> anyhow::Result<()> {
+             emit("baseline", &temp, json!({"imports":0}))?;
+             Ok(())
+         }
++        "batch-files" => batch_files(&workspace, &temp),
+         "lifecycle" => lifecycle(&workspace, &temp),
+         "duplicate" => duplicate(&workspace, &temp),
+         "relative-temp-file" | "relative-temp-bytes" => relative_temp(&mode, &workspace, &temp),
+diff --git a/anki_forge/tests/media_snapshot_lifecycle_tests.rs b/anki_forge/tests/media_snapshot_lifecycle_tests.rs
+index 9b5f7f3..21c609a 100644
+--- a/anki_forge/tests/media_snapshot_lifecycle_tests.rs
++++ b/anki_forge/tests/media_snapshot_lifecycle_tests.rs
+@@ -243,3 +243,8 @@ fn cached_large_bytes_skip_unavailable_temp_storage_but_still_validate_each_impo
+ fn concurrent_large_byte_imports_preserve_exact_content_and_cleanup() {
+     run("concurrent-duplicates", false);
+ }
++
++#[test]
++fn batch_files_preserve_order_limits_ownership_and_clean_up_before_returning_errors() {
++    run("batch-files", false);
++}
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index 2f71fb3..efc0690 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -21,7 +21,14 @@ results/*
+ !results/20261002-spool-genanki/
+ !results/20261002-reader-cache-genanki/
+ !results/20261002-active-writer-genanki/
++!results/20261003-post-commit-diagnosis/
++!results/20261003-optimization-paths/
+ adapters/rust/target/
+ __pycache__/
++!results/20261003-structural-dataflow/
++!results/20261003-structural-genanki/
++!results/20261003-next-directions/
+ !results/20261003-publication-implementation/
+ !results/20261004-publication-genanki/
++!results/20261008-rss-speed-exploration/
++!results/20261008-media-defaults-genanki/
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index fccabf1..3388464 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -5,6 +5,27 @@ An independent, unpublished suite in this repository. The text suite compares th
+ The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
+ retain their original source snapshots and do not measure this adapter.
+ 
++## Production media budgets and batch imports: 2026-10-08
++
++The [production comparison](results/20261008-media-defaults-genanki/report.md)
++uses the exact September 21 fixtures for one full 20-cell Rust/genanki matrix.
++The Rust adapter now calls public `Media::files`, with up to four import workers;
++the shared live-snapshot budget is 64 MiB and the encoded pool is 16 MiB.
++Rust, Node and Python expose the batch method. Existing single-file callers
++must adopt it to gain import concurrency. The archived report retains all
++timing/RSS samples, checks and cross-session limitations.
++
++## RSS / speed exploration: 2026-10-08
++
++The [RSS / speed experiments](results/20261008-rss-speed-exploration/report.md)
++test bounded media imports, cached text derivations, snapshot/encoded-payload
++budgets and zstd alternatives in isolated source copies. Independent confirmation
++favours four import workers and a 16 MiB encoded pool: combined large-media
++exports take 26–32% less time with roughly 4 MiB additional peak RSS. Text gains
++are smaller and wide-field gains did not reliably reproduce. All 1,826 exports
++and 185 selected Anki checks passed; that exploration left production unchanged.
++Raw evidence, controls, unsuccessful alternatives and statistics replay are retained.
++
+ ## Publication implementation and current comparison
+ 
+ The [publication implementation evidence](results/20261003-publication-implementation/README.md)
+@@ -68,6 +89,51 @@ private candidate and collection hashing during inspection. It retains separate
+ controls for source opening, snapshot budgets and hashing, plus bounded-FD,
+ failure, ownership and publication regression evidence.
+ 
++The [post-commit diagnosis](results/20261003-post-commit-diagnosis/report.md)
++examines the committed runtime with fresh stage measurements, an inspection
++hashing control and a borrowed identity-serialization candidate. All 330 exports
++and 35 selected Anki checks passed. Serial inspection was slower; the identity
++candidate remains experimental because its overall timing and RSS evidence did
++not establish a reliable benefit. Production code remains at `eb4b463`.
++
++The [optimization-path exploration](results/20261003-optimization-paths/report.md)
++isolates nine candidates and tests a combined identity/SQLite candidate. All
++690 diagnostic exports and 74 selected Anki checks passed; separate duplicate-byte
++and ID microbenchmarks are retained with their narrower scope. Borrowed identity,
++ID derivation and SQLite connection reuse reduce local work, but combined export
++timing remains inconclusive. Thread, PNG and memory-digest controls did not show
++a reliable general improvement. Production code and the formal matrix are unchanged.
++
++The [structural dataflow experiments](results/20261003-structural-dataflow/report.md)
++remove an unused native legacy mirror, move temporary HTML ownership, reuse local
++card plans and omit an unconsumed native package fingerprint. All 460 exports and
++49 selected Anki checks passed; a separate 16-export Cloze workload passed raw and
++semantic checks without Anki. Uninstrumented confirmation shows about 2.2–4.4 MiB
++paired RSS savings on standard profiles and 43.3 MiB on wide text. Standard timing
++intervals still cross zero; wide text shows a roughly 36.2 ms paired saving.
++Candidates remain experimental; production and the historical matrix are unchanged.
++
++The [production structural rerun](results/20261003-structural-genanki/report.md)
++implements those four dataflow changes with no public API changes or experimental
++switches. Its single complete matrix retains 840 validated exports, 40 actual Anki
++checks and 10 timings/5 independent RSS samples per implementation/cell. All 20
++Rust timing medians remain above Sep 21; at 1,000 notes they are 7.3–19.9% higher.
++Independent RSS at 1,000 notes is 8.1–9.7% lower than the preceding implementation's
++archive. These are separate sessions; the report does not attribute their full
++differences to code. Sources, the uncommitted patch, regression evidence and offline
++replay are retained.
++
++The [five-direction exploration](results/20261003-next-directions/report.md)
++tests isolated staging omission, collection-to-ZIP streaming, Node project COW,
++prepared candidate reuse and early duplicate-byte lookup against same-executable
++controls. All 576 formal artifacts and 44 selected Anki checks passed, with 433
++Rust library tests. No-change compare-then-publish reuse reduced total medians
++36.3–46.6%; Node improved synchronous submission latency, wide fields benefited
++from staging omission, and repeated large bytes benefited from early lookup.
++Collection-only ZIP streaming had no established speed benefit. The report keeps
++paired uncertainty, independent RSS regressions, preparation failures, complete
++sources and replayable records. These candidates remain isolated from production.
++
+ ## Archived Rust/genanki comparison: 2026-09-21
+ 
+ The [archived report](results/20260921-readme-genanki/report.md) measures the
+diff --git a/benchmarks/adapters/rust/src/main.rs b/benchmarks/adapters/rust/src/main.rs
+index fa0ccc3..faa443d 100644
+--- a/benchmarks/adapters/rust/src/main.rs
++++ b/benchmarks/adapters/rust/src/main.rs
+@@ -71,7 +71,7 @@ fn main() -> anyhow::Result<()> {
+             serde_json::json!({
+                 "protocol": "basic-apkg-v1", "adapter": "anki-forge/rust",
+                 "protocols": ["basic-apkg-v1", "basic-media-apkg-v1"],
+-                "media_registration": "individual",
++                "media_registration": "bounded_batch",
+                 "crate_version": ankiforge::facade_api_version(),
+                 "bundle_version": ankiforge::embedded_contract_version(),
+                 "features": "default", "adapter_features": adapter_features,
+@@ -102,15 +102,22 @@ fn main() -> anyhow::Result<()> {
+     let parent = Path::new(input).parent().context("input parent")?;
+     let mut media_by_id = BTreeMap::new();
+     let mut retained_media = Vec::new();
++    ensure!(repeats > 0, "at least one import");
++    let paths = workload.media.iter().flat_map(|media| {
++        std::iter::repeat_n(parent.join(&media.path), repeats)
++    });
++    let snapshots = if mode == "bytes" {
++        paths.map(|path| OwnedMedia::bytes(std::fs::read(path)?, "audio/wav").map_err(Into::into))
++            .collect::<anyhow::Result<Vec<_>>>()?
++    } else {
++        OwnedMedia::files(paths)?
++    };
++    let mut snapshots = snapshots.into_iter();
+     for media in workload.media {
+         let mut snapshot = None;
+         for _ in 0..repeats {
+-            let owned = if mode == "bytes" {
+-                OwnedMedia::bytes(std::fs::read(parent.join(&media.path))?, "audio/wav")?
+-            } else {
+-                OwnedMedia::file(parent.join(&media.path))?
+-            }
+-            .with_export_name(&media.filename)?;
++            let owned = snapshots.next().context("imported media")?
++                .with_export_name(&media.filename)?;
+             retained_media.push(owned.clone());
+             snapshot = Some(owned);
+         }
+diff --git a/bindings/node/COVERAGE.md b/bindings/node/COVERAGE.md
+index e2f2129..3e791c6 100644
+--- a/bindings/node/COVERAGE.md
++++ b/bindings/node/COVERAGE.md
+@@ -14,3 +14,6 @@ paths across working-directory changes. Installed ESM/CJS and TypeScript probes
+ verify that the same report classes are exported and accepted on every report path.
+ 
+ Prepared publication owns an inspected private candidate, supports one publish attempt and idempotent close, retains reports after close and exposes structured unavailable reasons. Task snapshots use native copy on write; outputs remain isolated from subsequent authoring.
++
++Batch media tests cover ordered snapshots, per-file limits, the first error in
++input order, source deletion before export and Worker teardown during import.
+diff --git a/bindings/node/native/src/lib.rs b/bindings/node/native/src/lib.rs
+index 65075de..caf9ec5 100644
+--- a/bindings/node/native/src/lib.rs
++++ b/bindings/node/native/src/lib.rs
+@@ -101,6 +101,13 @@ pub struct NativeMedia {
+ }
+ #[napi]
+ impl NativeMedia {
++    #[napi]
++    pub fn files<'env>(env: &'env Env, paths: Vec<String>, limits: String) -> Result<Object<'env>> {
++        tasks::spawn(env, MediaFilesTask {
++            paths: Some(paths),
++            limits: options::media_limits(&limits)?,
++        })
++    }
+     #[napi]
+     pub fn file<'env>(env: &'env Env, path: String, limits: String) -> Result<Object<'env>> {
+         tasks::spawn(
+@@ -190,6 +197,26 @@ enum MediaSource {
+     File(String),
+     Bytes(Vec<u8>, String),
+ }
++struct MediaFilesTask {
++    paths: Option<Vec<String>>,
++    limits: ankiforge::media::MediaLimits,
++}
++impl Task for MediaFilesTask {
++    type Output = Vec<Media>;
++    type JsValue = Vec<NativeMedia>;
++    fn compute(&mut self) -> Result<Self::Output> {
++        Media::files_with_limits(self.paths.take().expect("task runs once"), self.limits)
++            .map_err(|e| domain("media", e.kind(), e.code(), &e, json!({
++                "path": e.path().map(PathSnapshot::new),
++                "limitExceeded": e.limit_exceeded().map(|l| json!({
++                    "resource": l.resource, "limit": l.limit, "observed": l.observed
++                }))
++            })))
++    }
++    fn resolve(&mut self, _env: Env, items: Self::Output) -> Result<Self::JsValue> {
++        Ok(items.into_iter().map(|inner| NativeMedia { inner }).collect())
++    }
++}
+ struct MediaTask {
+     source: Option<MediaSource>,
+     limits: ankiforge::media::MediaLimits,
+diff --git a/bindings/node/src/index.ts b/bindings/node/src/index.ts
+index 11094aa..0172beb 100644
+--- a/bindings/node/src/index.ts
++++ b/bindings/node/src/index.ts
+@@ -98,6 +98,21 @@ export class Media {
+     mediaHandles.set(this, handle);
+     Object.freeze(this);
+   }
++  /** Import in input order with up to four workers; reject without partial results. */
++  static async files(
++    filenames: readonly string[],
++    limits: MediaLimits = {},
++  ): Promise<Media[]> {
++    if (!Array.isArray(filenames)) throw new TypeError("Expected an array of filenames");
++    const paths = filenames.map((filename) => {
++      string(filename, "filename");
++      return absolutePath(filename);
++    });
++    const handles = await asyncCall(() =>
++      native().NativeMedia.files(paths, limitsJSON(limits)),
++    );
++    return handles.map((handle) => new Media(handle));
++  }
+   static async file(
+     filename: string,
+     limits: MediaLimits = {},
+diff --git a/bindings/node/src/internal/native.ts b/bindings/node/src/internal/native.ts
+index 8e1063a..8ffef14 100644
+--- a/bindings/node/src/internal/native.ts
++++ b/bindings/node/src/internal/native.ts
+@@ -55,6 +55,7 @@ interface NativeModule {
+     sequence(items: NativeContent[]): NativeContent;
+   };
+   NativeMedia: {
++    files(paths: string[], limits: string): Promise<NativeMedia[]>;
+     file(path: string, limits: string): Promise<NativeMedia>;
+     bytes(bytes: Buffer, mime: string, limits: string): Promise<NativeMedia>;
+   };
+diff --git a/bindings/node/test/public-api.test.mjs b/bindings/node/test/public-api.test.mjs
+index 0961ef8..3a16dcb 100644
+--- a/bindings/node/test/public-api.test.mjs
++++ b/bindings/node/test/public-api.test.mjs
+@@ -38,6 +38,30 @@ function inspect(filename) {
+   assert.equal(r.status, 0, r.stderr);
+   return JSON.parse(r.stdout);
+ }
++test("batch media preserves order, snapshots, limits and first error", async (t) => {
++  const d = await temp(t);
++  assert.deepEqual(await Media.files([]), []);
++  const paths = Array.from({ length: 20 }, (_, i) => path.join(d, `${i}.css`));
++  for (const [i, filename] of paths.entries()) await fs.writeFile(filename, "x".repeat(i + 1));
++  const batch = await Media.files(paths);
++  assert.deepEqual(batch.map((item) => item.byteLength), Array.from({ length: 20 }, (_, i) => i + 1));
++  for (const [i, filename] of paths.entries()) {
++    assert.equal(batch[i].filename, (await Media.file(filename)).filename);
++  }
++  await assert.rejects(Media.files(paths, { maxBytes: 1 }), (error) =>
++    error instanceof MediaError && error.details.path === paths[1] &&
++    error.details.limitExceeded.observed === 2);
++  await fs.unlink(paths[3]);
++  await fs.unlink(paths[17]);
++  await assert.rejects(Media.files(paths), (error) =>
++    error instanceof MediaError && error.details.path === paths[3]);
++  for (const filename of paths) await fs.rm(filename, { force: true });
++  const project = new Project("batch-files").add("n", Note.basic("q", "a"));
++  for (const item of batch) project.addAsset(item);
++  const output = await project.build(BuildOptions.temporary());
++  t.after(() => output.artifact.close());
++  assert.equal(output.report.counts.media, 20);
++});
+ async function temp(t) {
+   const d = await fs.mkdtemp(path.join(os.tmpdir(), "node-public-"));
+   t.after(() => fs.rm(d, { recursive: true, force: true }));
+@@ -735,6 +759,8 @@ test("worker teardown safely releases in-flight native operations", async (t) =>
+   const { Worker } = await import("node:worker_threads");
+   const url = new URL("../dist/index.mjs", import.meta.url).href;
+   const directory = await temp(t);
++  const source = path.join(await temp(t), "batch-source.bin");
++  await fs.writeFile(source, Buffer.alloc(2 << 20, 7));
+   const previousTmp = process.env.TMPDIR;
+   process.env.TMPDIR = directory;
+   t.after(() => {
+@@ -746,19 +772,21 @@ test("worker teardown safely releases in-flight native operations", async (t) =>
+     .build(BuildOptions.temporary());
+   t.after(() => baseline.artifact.close());
+   assert.equal(path.dirname(baseline.artifact.path), directory);
+-  for (const operation of ["build", "compare", "preparePublication"]) {
++  for (const operation of ["build", "compare", "preparePublication", "files"]) {
+     for (let i = 0; i < 3; i++) {
+       const worker = new Worker(
+         `const { parentPort } = require('node:worker_threads');
+         (async () => {
+-          const { Project, Note, BuildOptions, CompareOptions } = await import(${JSON.stringify(url)});
++          const { Project, Note, Media, BuildOptions, CompareOptions } = await import(${JSON.stringify(url)});
+           const project = new Project('worker');
+           for (let i = 0; i < 1000; i++) project.add(String(i), Note.basic('question ' + i, 'answer'));
+           const operation = ${JSON.stringify(operation)};
+           const options = operation === 'compare'
+             ? CompareOptions.against(${JSON.stringify(baseline.artifact.path)})
+             : BuildOptions.temporary();
+-          const pending = project[operation](options);
++          const pending = operation === 'files'
++            ? Media.files(Array(32).fill(${JSON.stringify(source)}))
++            : project[operation](options);
+           parentPort.postMessage('started');
+           await pending;
+         })()`,
+diff --git a/bindings/python/COVERAGE.md b/bindings/python/COVERAGE.md
+index 385b5f5..b310713 100644
+--- a/bindings/python/COVERAGE.md
++++ b/bindings/python/COVERAGE.md
+@@ -14,3 +14,6 @@ Workflow configuration is not a claim that any version has been published or
+ that a specific run has passed. See the [Python release runbook](../../docs/python-release-runbook.md).
+ 
+ Prepared publication adapts the same Rust candidate/policy pipeline with single-use publication, idempotent cleanup, independent reports and process ownership. Metadata requires native binding protocol 1.
++
++Batch media tests cover iterable inputs, ordered snapshots, per-file limits,
++the first error in input order and exact exported bytes after source deletion.
+diff --git a/bindings/python/native/src/lib.rs b/bindings/python/native/src/lib.rs
+index fa2d62e..31355b5 100644
+--- a/bindings/python/native/src/lib.rs
++++ b/bindings/python/native/src/lib.rs
+@@ -154,6 +154,16 @@ struct NativeMedia {
+ }
+ #[pymethods]
+ impl NativeMedia {
++    #[staticmethod]
++    fn files(py: Python<'_>, paths: Vec<PathBuf>, max_bytes: u64) -> PyResult<Vec<Self>> {
++        py.detach(|| {
++            Media::files_with_limits(paths, ankiforge::media::MediaLimits { max_bytes })
++                .map(|items| {
++                    items.into_iter().map(|inner| Self { inner: inner.into() }).collect()
++                })
++                .map_err(mapped!("media"))
++        })
++    }
+     #[staticmethod]
+     fn file(py: Python<'_>, path: PathBuf, max_bytes: u64) -> PyResult<Self> {
+         py.detach(|| {
+diff --git a/bindings/python/src/ankiforge/_native.pyi b/bindings/python/src/ankiforge/_native.pyi
+index c4da207..c44daab 100644
+--- a/bindings/python/src/ankiforge/_native.pyi
++++ b/bindings/python/src/ankiforge/_native.pyi
+@@ -8,6 +8,8 @@ class NativeContent:
+     @staticmethod
+     def sequence(values: list[NativeContent]) -> NativeContent: ...
+ class NativeMedia:
++    @staticmethod
++    def files(paths: list[str], max_bytes: int) -> list[NativeMedia]: ...
+     @staticmethod
+     def file(path: str, max_bytes: int) -> NativeMedia: ...
+     @staticmethod
+diff --git a/bindings/python/src/ankiforge/media.py b/bindings/python/src/ankiforge/media.py
+index 28d358b..f9ebf01 100644
+--- a/bindings/python/src/ankiforge/media.py
++++ b/bindings/python/src/ankiforge/media.py
+@@ -1,5 +1,6 @@
+ from __future__ import annotations
+ from dataclasses import dataclass
++from collections.abc import Iterable
+ from . import _native
+ from ._bridge import invoke
+ from .content import Content
+@@ -18,6 +19,12 @@ class Media:
+     def file(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> Media:
+         return Media(invoke(_native.NativeMedia.file, absolute_path(path), limits.max_bytes))
+ 
++    @staticmethod
++    def files(paths: Iterable[PathInput], *, limits: MediaLimits = MediaLimits()) -> list[Media]:
++        """Import in input order with up to four workers; fail without partial results."""
++        handles = invoke(_native.NativeMedia.files, [absolute_path(path) for path in paths], limits.max_bytes)
++        return [Media(handle) for handle in handles]
++
+     @staticmethod
+     def bytes(data: bytes, media_type: str, *, limits: MediaLimits = MediaLimits()) -> Media:
+         return Media(invoke(_native.NativeMedia.bytes, data, media_type, limits.max_bytes))
+diff --git a/bindings/python/tests/test_public_api.py b/bindings/python/tests/test_public_api.py
+index 95ddd55..84d1d50 100644
+--- a/bindings/python/tests/test_public_api.py
++++ b/bindings/python/tests/test_public_api.py
+@@ -19,6 +19,33 @@ from ankiforge import (
+     PolicyError, TemplateBundleError, PersistError,
+ )
+ 
++def test_batch_media_preserves_order_snapshots_and_first_error(tmp_path):
++    assert Media.files([]) == []
++    paths = [tmp_path / f'{i}.css' for i in range(20)]
++    for i, path in enumerate(paths):
++        path.write_text('x' * (i + 1))
++    batch = Media.files(iter(paths))
++    assert [len(item) for item in batch] == list(range(1, 21))
++    assert [item.filename for item in batch] == [Media.file(path).filename for path in paths]
++    with pytest.raises(MediaError) as limited:
++        Media.files(paths, limits=MediaLimits(max_bytes=1))
++    assert limited.value.details['path'] == str(paths[1])
++    assert limited.value.details['limit_exceeded']['observed'] == 2
++    paths[3].unlink()
++    paths[17].unlink()
++    with pytest.raises(MediaError) as missing:
++        Media.files(paths)
++    assert missing.value.details['path'] == str(paths[3])
++    for path in paths:
++        path.unlink(missing_ok=True)
++    project = Project('batch-files').add('n', Note.basic('q', 'a'))
++    for item in batch:
++        project.add_asset(item)
++    output = project.build(BuildOptions.temporary())
++    assert output.report.counts.media == 20
++    _, _, assets, _, _ = unpack(output.artifact.path, tmp_path)
++    assert assets == {item.filename: b'x' * (i + 1) for i, item in enumerate(batch)}
++
+ @pytest.mark.skipif(os.name != 'posix', reason='Unix byte-path transport')
+ def test_non_unicode_error_paths_remain_structured_json(tmp_path):
+     path = tmp_path / os.fsdecode(b'missing-\xff')
+diff --git a/docs/media.md b/docs/media.md
+index 2d0250d..bb6af78 100644
+--- a/docs/media.md
++++ b/docs/media.md
+@@ -122,3 +122,21 @@ without certifying that a decoder or player supports the bytes. Renaming a file
+ never changes retained MIME. Build still sniffs staged bytes and validates the
+ export extension independently: PNG named `wrong.mp3` can pass image addition
+ and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
++
++## Batch file imports
++
++Use `Media::files(paths)` in Rust, `await Media.files(paths)` in Node, or
++`Media.files(paths)` in Python to import files in input order with at most four
++workers per call. Batches below 16 files run serially. Rust also provides
++`files_with_limits`; Node and Python accept the same limits as `file`.
++The limit applies to each asset. If an import fails, the call waits for started
++work, drops the batch's snapshots, and returns the first error in input order.
++Existing media owners remain valid. Python releases the GIL during import;
++Node performs the work off the event loop. Single-file imports remain immediate
++owned snapshots; callers must opt into the batch method for import concurrency.
++
++Live snapshots share a **64 MiB** process-wide memory budget. Individual assets
++larger than 1 MiB still stream to temporary files. Encoded media share a lazily
++allocated **16 MiB** buffer pool per preparation and spill when it fills. These
++budgets exclude other working memory and are not an RSS cap; concurrent builds
++can each own an encoding pool.
+diff --git a/anki_forge/src/media/batch.rs b/anki_forge/src/media/batch.rs
+new file mode 100644
+index 0000000..4da3f30
+--- /dev/null
++++ b/anki_forge/src/media/batch.rs
+@@ -0,0 +1,48 @@
++use std::path::{Path, PathBuf};
++
++use super::{Media, MediaError, MediaLimits};
++
++impl Media {
++    /// Imports owned file snapshots in input order, using at most four workers.
++    /// Batches smaller than 16 files run serially. Each asset uses the default
++    /// byte limit; retained snapshots share the process-wide memory budget.
++    ///
++    /// All started work is joined before returning. On failure, returns the
++    /// first error in input order and drops every snapshot owned by this batch.
++    /// Existing media owners remain valid. Files are snapshotted independently,
++    /// so this is not an atomic view of a concurrently changing directory.
++    pub fn files<P: AsRef<Path>>(
++        paths: impl IntoIterator<Item = P>,
++    ) -> Result<Vec<Self>, MediaError> {
++        Self::files_with_limits(paths, MediaLimits::default())
++    }
++
++    /// Like [`Media::files`], with a byte limit applied to each individual file.
++    pub fn files_with_limits<P: AsRef<Path>>(
++        paths: impl IntoIterator<Item = P>,
++        limits: MediaLimits,
++    ) -> Result<Vec<Self>, MediaError> {
++        let paths: Vec<PathBuf> = paths.into_iter().map(|p| p.as_ref().to_owned()).collect();
++        if paths.len() < 16 {
++            return paths
++                .iter()
++                .map(|path| Self::file_with_limits(path, limits))
++                .collect();
++        }
++        crate::parallel_io::ordered(paths.len(), |index| {
++            Self::file_with_limits(&paths[index], limits)
++        })
++        .into_iter()
++        .enumerate()
++        .map(|(index, result)| {
++            result.unwrap_or_else(|()| {
++                Err(MediaError::io(
++                    "media import worker panicked",
++                    std::io::Error::other("media import worker panicked"),
++                )
++                .at_path(&paths[index]))
++            })
++        })
++        .collect()
++    }
++}

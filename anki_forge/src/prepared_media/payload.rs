@@ -4,7 +4,8 @@ use std::io::{self, Seek, Write};
 use std::sync::{Arc, Mutex};
 
 const BLOCK_BYTES: usize = 64 * 1024;
-pub(super) const MEMORY_BYTES: usize = 9 * 512 * 1024;
+// Allocated lazily and shared by all encoding workers in one preparation.
+pub(super) const MEMORY_BYTES: usize = 16 * 1024 * 1024;
 
 #[derive(Clone)]
 pub(super) struct PayloadPool(Arc<Mutex<PoolState>>);

@@ -19,6 +19,33 @@ from ankiforge import (
     PolicyError, TemplateBundleError, PersistError,
 )
 
+def test_batch_media_preserves_order_snapshots_and_first_error(tmp_path):
+    assert Media.files([]) == []
+    paths = [tmp_path / f'{i}.css' for i in range(20)]
+    for i, path in enumerate(paths):
+        path.write_text('x' * (i + 1))
+    batch = Media.files(iter(paths))
+    assert [len(item) for item in batch] == list(range(1, 21))
+    assert [item.filename for item in batch] == [Media.file(path).filename for path in paths]
+    with pytest.raises(MediaError) as limited:
+        Media.files(paths, limits=MediaLimits(max_bytes=1))
+    assert limited.value.details['path'] == str(paths[1])
+    assert limited.value.details['limit_exceeded']['observed'] == 2
+    paths[3].unlink()
+    paths[17].unlink()
+    with pytest.raises(MediaError) as missing:
+        Media.files(paths)
+    assert missing.value.details['path'] == str(paths[3])
+    for path in paths:
+        path.unlink(missing_ok=True)
+    project = Project('batch-files').add('n', Note.basic('q', 'a'))
+    for item in batch:
+        project.add_asset(item)
+    output = project.build(BuildOptions.temporary())
+    assert output.report.counts.media == 20
+    _, _, assets, _, _ = unpack(output.artifact.path, tmp_path)
+    assert assets == {item.filename: b'x' * (i + 1) for i, item in enumerate(batch)}
+
 @pytest.mark.skipif(os.name != 'posix', reason='Unix byte-path transport')
 def test_non_unicode_error_paths_remain_structured_json(tmp_path):
     path = tmp_path / os.fsdecode(b'missing-\xff')
