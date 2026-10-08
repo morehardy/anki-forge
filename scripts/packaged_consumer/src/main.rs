@@ -422,6 +422,16 @@ fn main() -> anyhow::Result<()> {
     owned_media()?;
     owned_bundle()?;
     occlusion()?;
+    let mut publication = Project::new("packaged-prepared")?;
+    publication.add("one", Note::basic("reviewed", "answer"))?;
+    let prepared: ankiforge::build::PreparedPublication = publication.prepare_publication(BuildOptions::temporary())?;
+    let observations = prepared.report().clone();
+    drop(publication);
+    let published = prepared.publish()?;
+    ensure!(published.report().counts().notes == 1 && observations.counts().notes == 1);
+    let temporary = published.artifact().path().to_owned();
+    drop(published);
+    ensure!(!temporary.exists());
     updates_and_reports()?;
     native_path_snapshots()?;
     persistent_artifact_paths()?;

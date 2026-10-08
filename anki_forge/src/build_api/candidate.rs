@@ -1,3 +1,4 @@
+use crate::product::ProductDocument;
 use std::path::Path;
 
 use super::{
@@ -6,7 +7,6 @@ use super::{
 };
 use crate::{
     diagnostics::{Diagnostic, Severity},
-    product::ProductDocument,
     Project,
 };
 
@@ -14,20 +14,40 @@ use crate::{
 /// The caller owns inspection, comparison and publication of this private file.
 pub(super) fn generate(
     project: &Project,
-    document: &ProductDocument,
+    document: ProductDocument,
+    inputs: &Path,
+    identity: PackageIdentity,
+) -> Result<(PrivateCandidate, BuildReport), BuildError> {
+    use crate::writer_core::stream_zip::PackageFingerprint;
+    // Native callers inspect the actual candidate before publication and do
+    // not expose the low-level writer's whole-package SHA-1.
+    generate_with_fingerprint(
+        project,
+        document,
+        inputs,
+        identity,
+        PackageFingerprint::Omit,
+    )
+}
+
+fn generate_with_fingerprint(
+    project: &Project,
+    document: ProductDocument,
     inputs: &Path,
     mut identity: PackageIdentity,
+    fingerprint: crate::writer_core::stream_zip::PackageFingerprint,
 ) -> Result<(PrivateCandidate, BuildReport), BuildError> {
     let media_store = inputs.join("media-store");
     let mut prepared_media = if project.assets.values().next().is_some() {
         let mut prepared =
-            crate::prepared_media::PreparedMedia::new_in(inputs).map_err(|cause| {
-                generation_error(
-                    "BUILD.MEDIA_STAGING_FAILED",
-                    cause.into(),
-                    &BuildReport::default(),
-                )
-            })?;
+            crate::prepared_media::PreparedMedia::new_in_with_fingerprint(inputs, fingerprint)
+                .map_err(|cause| {
+                    generation_error(
+                        "BUILD.MEDIA_STAGING_FAILED",
+                        cause.into(),
+                        &BuildReport::default(),
+                    )
+                })?;
         for media in project.assets.values() {
             prepared.register_owned(media.clone());
         }
@@ -81,22 +101,10 @@ pub(super) fn generate(
             error.report = Box::new(report.clone());
             error
         })?;
-    let models: std::collections::BTreeMap<_, _> = normalized
-        .normalized_ir
-        .notetypes
-        .iter()
-        .map(|m| (&m.id, m))
-        .collect();
+    let cards = identity.bound_card_count(&normalized.normalized_ir);
     report.counts = super::BuildCounts {
         notes: normalized.normalized_ir.notes.len(),
-        cards: normalized
-            .normalized_ir
-            .notes
-            .iter()
-            .map(|note| {
-                crate::writer_core::card_plan::plan_cards(note, models[&note.notetype_id]).len()
-            })
-            .sum(),
+        cards,
         media: normalized.normalized_ir.media_bindings.len(),
     };
     let (policy, context) = crate::runtime::defaults::load_embedded_writer_defaults()
@@ -107,6 +115,8 @@ pub(super) fn generate(
     let ids = identity.model_ids();
     let guids = identity.guid_plan();
     target.native_identity = Some(std::sync::Arc::new(identity));
+    target.package_fingerprint = fingerprint;
+    target.staging_output = crate::writer_core::staging::StagingOutput::NativeOnly;
     let attempt = crate::writer_core::build::build_with_prepared_media(
         &normalized.normalized_ir,
         &policy,
@@ -216,6 +226,130 @@ fn generation_error(code: &str, cause: anyhow::Error, report: &BuildReport) -> B
 mod tests {
     use super::*;
 
+    fn project_and_document(size: Option<usize>) -> (Project, ProductDocument) {
+        let mut project = Project::new("dataflow-fingerprint").unwrap();
+        project
+            .add("one", crate::Note::basic("front", "back"))
+            .unwrap();
+        let mut media = Vec::new();
+        if let Some(size) = size {
+            let mut state = 42_u32;
+            let bytes: Vec<_> = (0..size)
+                .map(|_| {
+                    state = state.wrapping_mul(1_664_525).wrapping_add(1_013_904_223);
+                    b'!' + ((state >> 24) % 90) as u8
+                })
+                .collect();
+            project
+                .add_asset(
+                    crate::Media::bytes(bytes, "text/plain")
+                        .unwrap()
+                        .with_export_name("asset.txt")
+                        .unwrap(),
+                )
+                .unwrap();
+            media.push(
+                serde_json::json!({"id":"asset.txt", "export_as":"asset.txt",
+                "source":{"kind":"file", "path":"assets/asset.txt"}}),
+            );
+        }
+        let document = serde_json::from_value(serde_json::json!({
+            "product_document_version":"product-v3", "document_id":"dataflow-fingerprint",
+            "note_types":[{"kind":"custom", "id":"model:basic", "note_type_kind":"normal",
+                "fields":[{"key":"front", "name":"Front"}, {"key":"back", "name":"Back"}],
+                "templates":[{"key":"card", "name":"Card 1", "front":"{{Front}}", "back":"{{Back}}"}]}],
+            "notes":[{"kind":"custom", "note_type_id":"model:basic", "stable_id":"one", "deck_name":"Default",
+                "fields":{"front":{"kind":"html", "value":"front"}, "back":{"kind":"html", "value":"back"}}}],
+            "media":media
+        })).unwrap();
+        (project, document)
+    }
+
+    #[test]
+    fn native_fingerprint_modes_keep_bytes_reports_and_full_inspection_identical() {
+        use crate::writer_core::stream_zip::PackageFingerprint;
+        for size in [None, Some(17), Some(2 * 1024 * 1024 + 17)] {
+            let (project, document) = project_and_document(size);
+            let identity = PackageIdentity::create(&project).unwrap();
+            let mut results = Vec::new();
+            for mode in [PackageFingerprint::Compute, PackageFingerprint::Omit] {
+                let inputs = tempfile::tempdir().unwrap();
+                let (candidate, report) = generate_with_fingerprint(
+                    &project,
+                    document.clone(),
+                    inputs.path(),
+                    identity.clone(),
+                    mode,
+                )
+                .unwrap();
+                let bytes = std::fs::read(candidate.path()).unwrap();
+                let (summary, envelope) = crate::writer_core::inspect::inspect_native_package(
+                    candidate.path(),
+                    &super::super::InspectLimits::default(),
+                )
+                .unwrap();
+                assert_eq!(summary.notes, 1);
+                assert_eq!(summary.cards, 1);
+                assert_eq!(summary.media, usize::from(size.is_some()));
+                if size.is_some() {
+                    let limits = super::super::InspectLimits {
+                        max_media_bytes: 0,
+                        ..Default::default()
+                    };
+                    let error = crate::writer_core::inspect::inspect_native_package(
+                        candidate.path(),
+                        &limits,
+                    )
+                    .unwrap_err();
+                    assert_eq!(error.limit_exceeded().unwrap().resource, "media_bytes");
+                }
+                let artifact = candidate.into_artifact();
+                let path = artifact.path().to_owned();
+                drop(artifact);
+                assert!(
+                    !path.exists(),
+                    "last candidate owner must clean its package"
+                );
+                results.push((
+                    bytes,
+                    serde_json::to_value(report.snapshot()).unwrap(),
+                    summary,
+                    serde_json::to_value(envelope).unwrap(),
+                ));
+                inputs.close().unwrap();
+            }
+            assert_eq!(results[0], results[1]);
+        }
+    }
+
+    #[test]
+    fn native_fingerprint_modes_preserve_real_writer_failures_and_cleanup() {
+        use crate::writer_core::stream_zip::PackageFingerprint;
+        for size in [None, Some(2 * 1024 * 1024 + 17)] {
+            let (project, document) = project_and_document(size);
+            let identity = PackageIdentity::create(&project).unwrap();
+            let mut outcomes = Vec::new();
+            for mode in [PackageFingerprint::Compute, PackageFingerprint::Omit] {
+                let inputs = tempfile::tempdir().unwrap();
+                std::fs::create_dir_all(inputs.path().join("candidate/package.apkg")).unwrap();
+                let error = generate_with_fingerprint(
+                    &project,
+                    document.clone(),
+                    inputs.path(),
+                    identity.clone(),
+                    mode,
+                )
+                .unwrap_err();
+                assert!(error.publications().is_empty());
+                assert_eq!(error.kind(), Kind::Io);
+                outcomes.push((error.kind(), error.code().to_owned()));
+                drop(error);
+                inputs.close().unwrap();
+            }
+            assert_eq!(outcomes[0], outcomes[1]);
+        }
+    }
+
     #[test]
     fn owned_media_build_does_not_require_input_or_cas_copies() {
         use std::io::Read;
@@ -249,7 +383,7 @@ mod tests {
         })).unwrap();
         let (artifact, report) = generate(
             &project,
-            &document,
+            document.clone(),
             inputs.path(),
             PackageIdentity::create(&project).unwrap(),
         )
@@ -280,6 +414,24 @@ mod tests {
     }
 
     #[test]
+    fn native_build_does_not_materialize_a_staging_manifest() {
+        let inputs = tempfile::tempdir().unwrap();
+        let manifest = inputs.path().join("candidate/staging/manifest.json");
+        std::fs::create_dir_all(&manifest).unwrap();
+        let (project, document) = project_and_document(None);
+        let (candidate, report) = generate(
+            &project,
+            document,
+            inputs.path(),
+            PackageIdentity::create(&project).unwrap(),
+        )
+        .unwrap();
+        assert_eq!(report.counts().notes, 1);
+        assert!(candidate.path().is_file());
+        assert!(manifest.is_dir());
+    }
+
+    #[test]
     fn writer_filesystem_failures_keep_native_io_causes() {
         use std::error::Error;
 
@@ -287,11 +439,6 @@ mod tests {
             (
                 "candidate/staging",
                 false,
-                "PHASE3.STAGING_MATERIALIZATION_FAILED",
-            ),
-            (
-                "candidate/staging/manifest.json",
-                true,
                 "PHASE3.STAGING_MATERIALIZATION_FAILED",
             ),
             (
@@ -334,7 +481,7 @@ mod tests {
             })).unwrap();
             let error = generate(
                 &project,
-                &document,
+                document.clone(),
                 inputs.path(),
                 PackageIdentity::create(&project).unwrap(),
             )
@@ -394,7 +541,7 @@ mod tests {
             "media": [{"id": "unused", "export_as": "unused.txt", "source": {"kind": "file", "path": "unused.txt"}}]
         })).unwrap();
         let identity = PackageIdentity::create(&project).unwrap();
-        let error = generate(&project, &document, inputs.path(), identity).unwrap_err();
+        let error = generate(&project, document.clone(), inputs.path(), identity).unwrap_err();
         assert_eq!(error.kind(), Kind::Io);
         assert_eq!(error.code(), "MEDIA.CAS_WRITE_FAILED");
         assert!(error
@@ -526,7 +673,7 @@ mod tests {
         })).unwrap();
         let mut identity = PackageIdentity::create(&project).unwrap();
         identity.models.clear();
-        let error = generate(&project, &document, inputs.path(), identity).unwrap_err();
+        let error = generate(&project, document.clone(), inputs.path(), identity).unwrap_err();
         assert!(error
             .report()
             .diagnostics()

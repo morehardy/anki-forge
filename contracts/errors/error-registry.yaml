@@ -986,3 +986,6 @@ codes:
   - id: RISK.MEDIA_CHANGED
     status: active
     summary: An existing export filename refers to different bytes.
+  - id: BUILD.PREPARED_UNAVAILABLE
+    status: active
+    summary: prepared publication owner has been closed or consumed by an earlier publication attempt

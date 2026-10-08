@@ -4,7 +4,7 @@ The SDK is `ankiforge`, with four exact-version optional native packages:
 `ankiforge-darwin-arm64`, `ankiforge-darwin-x64`, `ankiforge-linux-x64-gnu`,
 and `ankiforge-win32-x64-msvc`. All five share one version. The internal Rust
 crate remains `anki_forge_node_native`, the addon filename is `anki-forge.node`,
-and the binding protocol is **5**. There is no legacy export. A crates.io release
+and the binding protocol is **6**. There is no legacy export. A crates.io release
 is not a prerequisite for publishing this native SDK.
 
 ## One-time account and repository setup

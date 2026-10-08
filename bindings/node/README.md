@@ -85,7 +85,48 @@ decodability. Build still performs its independent MIME/extension checks.
 `AddError.details` has deeply frozen typed `context` and nullable `detail`.
 The context includes `noteKey`, `modelKey` and a discriminated `target`; field
 targets carry `fieldKey`, `contentPath` and `byteRange`.
-Native protocol 5 is required, including for native packages also labelled 0.2.0.
+Native protocol 6 is required, including for native packages also labelled 0.2.0.
 A field path is null/None for the field, [] for root content, or zero-based
 indices into the original sequences. Byte ranges use UTF-8 offsets in the
 original text/HTML leaf. Nested source details preserve the same facts.
+
+### Prepare, review and publish
+
+```js
+import { Project, Note, BuildOptions, BuildError } from 'ankiforge';
+const project = new Project('review-once').add('one', Note.basic('Question', 'Answer'));
+const previous = await project.build(BuildOptions.to('previous.apkg'));
+await previous.artifact.close();
+const prepared = await project.preparePublication(
+  BuildOptions.to('next.apkg').updateFrom('previous.apkg'),
+);
+try {
+  const report = prepared.report; // immutable observations, no file ownership
+  console.log(report.comparison?.snapshot());
+  if (report.comparison?.policy.allows_publication !== false) {
+    const output = await prepared.publish();
+    await output.artifact.close(); // persistent next.apkg remains
+  }
+} catch (error) {
+  if (error instanceof BuildError) console.log(error.snapshot().result);
+  // Inspect publication/durability facts: a late failure can follow replacement.
+  throw error;
+} finally {
+  await prepared.close(); // idempotent; cleans an unpublished candidate
+}
+```
+
+`publish()` takes the native owner immediately and performs one worker task.
+Every attempt consumes it, including policy and I/O rejection. Repeated calls
+reject with `PreparedPublicationStateError`, code `BUILD.PREPARED_UNAVAILABLE`,
+and `reason` `consumed` or `closed`. Closing after publish begins does not cancel
+it. Reports remain readable after close. Options bind at preparation invocation;
+changing policy or destination requires another preparation. Duration excludes
+review waiting. Neither reports nor JSON can be converted back into an owner.
+
+Build, compare, preparation and clones share immutable native Project versions.
+Authoring changes remain synchronous and isolated. The first change while another
+snapshot lives may copy the Project; later exclusive changes do not. This shifts
+copying out of Promise submission and does not promise faster first edits, better
+worst timer delay or lower RSS. JavaScript byte inputs are still copied before
+worker submission. Use protocol 6 binaries with these wrappers.

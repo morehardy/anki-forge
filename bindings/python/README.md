@@ -71,8 +71,40 @@ decodability. Build still performs its independent MIME/extension checks.
 `context` and nullable `detail`, alongside `error_kind`, `causes` and
 `source_details`. Context includes `note_key`, `model_key` and `target`; field
 targets include `field_key`, `content_path` and `byte_range`.
-Native metadata must report embedded contract 2.0.0, even when binding/core
+Native metadata must report embedded contract 2.1.0, even when binding/core
 versions both match 0.2.0.
 A field path is null/None for the field, [] for root content, or zero-based
 indices into the original sequences. Byte ranges use UTF-8 offsets in the
 original text/HTML leaf. Nested source details preserve the same facts.
+
+### Prepare, review and publish
+
+```python
+from ankiforge import Project, Note, BuildOptions, BuildError
+project = Project('review-once').add('one', Note.basic('Question', 'Answer'))
+previous = project.build(BuildOptions.to('previous.apkg'))
+previous.artifact.close()
+prepared = project.prepare_publication(
+    BuildOptions.to('next.apkg').update_from('previous.apkg')
+)
+try:
+    report = prepared.report  # observations; does not own the candidate
+    if report.comparison is None or report.comparison.allows_publication:
+        output = prepared.publish()
+        output.artifact.close()  # persistent next.apkg remains
+except BuildError as error:
+    print(error.snapshot()['result'])  # actual publication/durability facts
+    raise
+finally:
+    prepared.close()  # idempotent; deletes an unused candidate
+```
+
+One publish attempt consumes the owner, including policy or I/O failure. Later
+calls raise `PreparedPublicationStateError` with code `BUILD.PREPARED_UNAVAILABLE`
+and reason `closed` or `consumed`; close does not cancel an already running
+publication. Relative paths bind at preparation invocation, and Project changes
+cannot modify the reviewed APKG. Reports survive close without retaining files.
+Change options or retry by preparing again. Duration excludes review waiting.
+Late errors can mean replacement succeeded with unconfirmed durability; inspect
+publication facts before deciding what to do. Native binding protocol 1 and
+contract bundle 2.1.0 are required; older same-version binaries are rejected.

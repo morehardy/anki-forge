@@ -131,7 +131,7 @@ Public errors implement `std::error::Error + Send + Sync + 'static`, expose stab
 `kind` and `code`, and retain underlying causes. Match these instead of display text.
 Owned values may be moved between threads; synchronize mutation of a shared project.
 
-This checkout embeds contract bundle `2.0.0`.
+This checkout embeds contract bundle `2.1.0`.
 The crate version and embedded contract version are separate compatibility axes,
 reported by `facade_api_version()` and `embedded_contract_version()`.
 
@@ -156,4 +156,39 @@ not change MIME: a PNG renamed `wrong.mp3` passes image addition but can still f
 build's independent sniffing/extension check with `MEDIA.DECLARED_MIME_MISMATCH`.
 
 Tool recipes now require `ankiforge-project-v2` without top-level `name`; v1 is
-rejected. Contract bundle is 2.0.0; package identity stays `ankiforge-identity-v1`.
+rejected. Contract bundle is 2.1.0; package identity stays `ankiforge-identity-v1`.
+
+### Review once, publish once
+
+```rust,no_run
+use ankiforge::{BuildOptions, Project};
+# fn publish(project: &Project) -> Result<(), Box<dyn std::error::Error>> {
+let prepared = project.prepare_publication(
+    BuildOptions::to("next.apkg").update_from("previous.apkg"),
+)?;
+let report = prepared.report().clone(); // observations; owns no file
+if report.comparison().is_some_and(|c| !c.policy().allows_publication()) {
+    drop(prepared); // deletes the unpublished candidate; reprepare with a new policy
+    return Ok(());
+}
+match prepared.publish() { // consumes the owner on every outcome
+    Ok(output) => println!("Published {}", output.artifact().path().display()),
+    Err(error) => {
+        // Replacement may have succeeded even if durability confirmation failed.
+        eprintln!("{:?}", error.publications());
+        return Err(error.into());
+    }
+}
+# Ok(())
+# }
+```
+
+Preparation performs full bounded inspection and comparison. No destination is
+published until `publish`, which uses the same private candidate and rechecks
+baseline aliases. Relative paths bind at preparation invocation. Project edits
+cannot change the candidate. Report duration excludes time spent reviewing.
+Dropping an unpublished owner cleans it; temporary published output follows the
+usual last-artifact-owner cleanup rule. There is no restore-from-JSON or retry on
+an already consumed owner. Native builds omit the unused staging manifest but
+retain embedded identity evidence and media validation. Internal staging tools
+still receive their complete manifest and fingerprint.

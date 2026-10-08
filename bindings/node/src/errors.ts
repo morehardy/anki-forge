@@ -100,6 +100,9 @@ export class PersistError extends ForgeError {
     return this.details.publication as PublicationSnapshot;
   }
 }
+export class PreparedPublicationStateError extends ForgeError {
+  get reason(): "closed" | "consumed" { return this.details.reason as "closed" | "consumed"; }
+}
 export class ArtifactClosedError extends Error {
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);
@@ -131,6 +134,7 @@ export function nativeError(error: unknown): never {
     compare: CompareError,
     build: BuildError,
     persist: PersistError,
+    prepared: PreparedPublicationStateError,
   };
   throw new (constructors[data.domain] ?? ForgeError)(data, error);
 }

@@ -111,24 +111,45 @@ impl Task for ArtifactTask {
 
 /// Build on an owned project snapshot so later JS edits cannot race this operation.
 pub struct BuildTask {
-    pub project: ankiforge::Project,
+    pub project: Option<std::sync::Arc<ankiforge::Project>>,
     pub options: BuildOptions,
 }
 impl Task for BuildTask {
     type Output = BuildOutput;
     type JsValue = NativeBuildResult;
     fn compute(&mut self) -> Result<BuildOutput> {
-        self.project.build(self.options.clone()).map_err(|e| crate::domain("build", e.kind(), e.code(), &e, json!({"snapshot": e.snapshot(), "limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"entry":l.entry,"limit":l.limit,"observed":l.observed}))})))
+        self.project
+            .take()
+            .expect("build task owns snapshot")
+            .build(self.options.clone())
+            .map_err(build_error)
     }
     fn resolve(&mut self, _env: Env, output: BuildOutput) -> Result<NativeBuildResult> {
-        Ok(NativeBuildResult {
-            snapshot: serde_json::to_string(&output.snapshot()).expect("serializable snapshot"),
-            artifact: NativeApkgArtifact::new(output.artifact().clone()),
-        })
+        Ok(output.into())
     }
 }
 #[napi(object, object_from_js = false)]
 pub struct NativeBuildResult {
     pub snapshot: String,
     pub artifact: NativeApkgArtifact,
+}
+
+impl From<BuildOutput> for NativeBuildResult {
+    fn from(output: BuildOutput) -> Self {
+        Self {
+            snapshot: serde_json::to_string(&output.snapshot()).expect("serializable snapshot"),
+            artifact: NativeApkgArtifact::new(output.artifact().clone()),
+        }
+    }
+}
+
+pub(crate) fn build_error(error: ankiforge::build::BuildError) -> Error {
+    crate::domain(
+        "build",
+        error.kind(),
+        error.code(),
+        &error,
+        json!({"snapshot": error.snapshot(), "limitExceeded":error.limit_exceeded().map(|l|
+            json!({"resource":l.resource,"entry":l.entry,"limit":l.limit,"observed":l.observed}))}),
+    )
 }

@@ -23,12 +23,21 @@ use crate::writer_core::model::{
 };
 use crate::writer_core::policy::{build_context_ref, policy_ref};
 
+/// Native builds need validated staging media, but no manifest artifact.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum StagingOutput {
+    Complete,
+    NativeOnly,
+}
+
 #[derive(Debug, Clone)]
 pub struct BuildArtifactTarget {
     pub root_dir: PathBuf,
     pub stable_ref_prefix: String,
     pub media_store_dir: PathBuf,
     pub(crate) native_identity: Option<std::sync::Arc<crate::build::identity::PackageIdentity>>,
+    pub(crate) staging_output: StagingOutput,
+    pub(crate) package_fingerprint: super::stream_zip::PackageFingerprint,
 }
 
 impl BuildArtifactTarget {
@@ -39,6 +48,8 @@ impl BuildArtifactTarget {
             root_dir,
             stable_ref_prefix: stable_ref_prefix.into(),
             native_identity: None,
+            staging_output: StagingOutput::Complete,
+            package_fingerprint: super::stream_zip::PackageFingerprint::Compute,
         }
     }
 
@@ -327,14 +338,15 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
 
     #[cfg(all(test, feature = "internal-tools"))]
     pub(crate) fn materialize(&self, target: &BuildArtifactTarget) -> Result<MaterializedStaging> {
-        self.materialize_with_prepared_media(target, None)
+        self.materialize_with_prepared_media(target, None)?
+            .ok_or_else(|| anyhow::anyhow!("complete staging was not requested"))
     }
 
     pub(crate) fn materialize_with_prepared_media(
         &self,
         target: &BuildArtifactTarget,
         prepared_media: Option<&crate::prepared_media::PreparedMedia>,
-    ) -> Result<MaterializedStaging> {
+    ) -> Result<Option<MaterializedStaging>> {
         let staging_dir = target.staging_dir();
         fs::create_dir_all(&staging_dir)
             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
@@ -395,6 +407,9 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
             }
         }
 
+        if target.staging_output == StagingOutput::NativeOnly {
+            return Ok(None);
+        }
         let manifest_path = target.staging_manifest_path();
         let artifact_fingerprint = (|| -> Result<String> {
             let file = fs::File::create(&manifest_path)?;
@@ -409,11 +424,11 @@ impl<T: Borrow<NormalizedIr> + Serialize> StagingPackageData<T> {
         })()
         .with_context(|| format!("write staging manifest {}", manifest_path.display()))?;
 
-        Ok(MaterializedStaging {
+        Ok(Some(MaterializedStaging {
             manifest_ref: target.staging_ref(),
             manifest_path,
             artifact_fingerprint,
-        })
+        }))
     }
 }
 
@@ -457,7 +472,7 @@ pub(crate) fn invalid_result(
 pub(crate) fn success_result(
     writer_policy: &WriterPolicy,
     build_context: &BuildContext,
-    staging: MaterializedStaging,
+    staging: Option<MaterializedStaging>,
     diagnostics: Vec<BuildDiagnosticItem>,
 ) -> PackageBuildResult {
     PackageBuildResult {
@@ -466,8 +481,8 @@ pub(crate) fn success_result(
         tool_contract_version: crate::writer_core::tool_contract_version().into(),
         writer_policy_ref: policy_ref(&writer_policy.id, &writer_policy.version),
         build_context_ref: resolved_build_context_ref(build_context),
-        staging_ref: Some(staging.manifest_ref),
-        artifact_fingerprint: Some(staging.artifact_fingerprint),
+        staging_ref: staging.as_ref().map(|s| s.manifest_ref.clone()),
+        artifact_fingerprint: staging.map(|s| s.artifact_fingerprint),
         package_fingerprint: None,
         apkg_ref: None,
         diagnostics: BuildDiagnostics {

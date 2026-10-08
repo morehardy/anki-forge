@@ -78,3 +78,45 @@ assert not set(root.iterdir()), 'parent-owned files were not cleaned'
 def test_fork_owned_values_do_not_remove_parent_snapshots(tmp_path: Path, kind: str) -> None:
     environment = {**os.environ, 'TMPDIR': str(tmp_path)}
     subprocess.run([sys.executable, '-c', PROBE, kind], env=environment, check=True, timeout=30)
+
+PREPARED_PROBE = r'''
+import gc, os, signal, traceback
+from pathlib import Path
+from ankiforge import BuildOptions, Note, Project
+root = Path(os.environ['TMPDIR'])
+prepared = Project('fork-prepared').add('one', Note.basic('q', 'a')).prepare_publication(BuildOptions.temporary())
+before = set(root.iterdir())
+assert len(before) == 1, before
+pid = os.fork()
+if pid == 0:
+    signal.alarm(15)
+    try:
+        for operation in (prepared.publish, prepared.close):
+            try:
+                operation()
+            except RuntimeError as error:
+                assert 'BINDING.FORKED_OBJECT' in str(error)
+            else:
+                raise AssertionError('child used inherited candidate')
+        del operation, prepared
+        gc.collect()
+        assert all(path.exists() for path in before)
+    except BaseException:
+        traceback.print_exc()
+        os._exit(1)
+    os._exit(0)
+_, status = os.waitpid(pid, 0)
+assert os.waitstatus_to_exitcode(status) == 0
+output = prepared.publish()
+assert output.report.counts.notes == 1 and output.artifact.path.is_file()
+output.artifact.close()
+prepared.close()
+del output, prepared
+gc.collect()
+assert not set(root.iterdir())
+'''
+
+@pytest.mark.skipif(not hasattr(os, 'fork'), reason='fork is unavailable')
+def test_prepared_owner_child_cannot_publish_close_or_delete_parent_candidate(tmp_path: Path) -> None:
+    subprocess.run([sys.executable, '-c', PREPARED_PROBE],
+                   env={**os.environ, 'TMPDIR': str(tmp_path)}, check=True, timeout=30)

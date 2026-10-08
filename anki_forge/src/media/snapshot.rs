@@ -163,6 +163,22 @@ impl Snapshot {
         let len = bytes.len() as u64;
         check_limit(len, limits)?;
         let digest = blake3::hash(&bytes);
+        // Every caller has already validated its own budget and MIME. Hash
+        // outside the lock, then acquire a strong owner before any redundant
+        // disk work. shared() still arbitrates concurrent misses on registration.
+        if bytes.len() > MEMORY_THRESHOLD {
+            if let Some(mut entries) = SNAPSHOTS.lock(std::process::id()) {
+                if let Some(existing) = entries
+                    .as_mut()
+                    .expect("process cache is initialized")
+                    .snapshots
+                    .get(&(digest, len))
+                    .and_then(Weak::upgrade)
+                {
+                    return Ok(existing);
+                }
+            }
+        }
         let storage = if bytes.len() > MEMORY_THRESHOLD {
             let mut file = tempfile::NamedTempFile::new()
                 .map_err(|e| MediaError::io("create media snapshot", e))?;

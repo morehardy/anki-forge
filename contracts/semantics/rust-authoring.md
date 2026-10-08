@@ -115,5 +115,51 @@ model keys/names or original media names and collision kind; media misuse retain
 requested usage, filename and import MIME. Errors retain no media or artifact owner.
 Adapters preserve these facts in AddError.details and nested source details, using
 camelCase in Node and snake_case in Python, with explicit snake_case discriminants.
-Node details are deeply frozen. New Node wrappers require native protocol 5;
-Python wrappers require embedded contract 2.0.0. BUILD.NAME_INVALID is deprecated.
+Node details are deeply frozen. New Node wrappers require native protocol 6;
+Python wrappers require embedded contract 2.1.0. BUILD.NAME_INVALID is deprecated.
+
+## Prepared publication
+
+Project.prepare_publication (Node preparePublication) accepts BuildOptions and
+returns a single-use owner of a fully inspected private candidate. Preparation
+runs the same bounded baseline/candidate inspection, identity verification and
+complete comparison as build/compare. A blocked policy is readable in the
+BuildReport; publish consumes the owner and enforces that stored decision.
+Reports and JSON snapshots own no files and cannot reconstruct a candidate.
+Prepare never publishes the destination. Drop or SDK close removes unpublished
+storage. Publish consumes the owner on success, policy refusal or I/O failure;
+SDK repeats raise PreparedPublicationStateError / BUILD.PREPARED_UNAVAILABLE with
+reason closed or consumed before scheduling work. Close is idempotent and does
+not cancel a publication that has taken ownership. Python inherited owners may
+not publish or close in a forked child. Node cleanup uses its existing workers.
+
+Paths retain their invocation-time working-directory meaning, including native
+symlink/parent traversal. Publication rejects aliases of the original baseline
+identity, its resolved location and its current anchored path. The comparison
+remains preparation-time evidence; baseline mutation is unsupported. Publish
+retains atomic replacement, source error chains and truthful publication and
+durability facts. Report duration includes preparation plus publication work,
+excluding review time. Existing single-call build duration includes all work.
+
+Node tasks and clones share immutable Project versions. add, addAsset and
+defaultDeck detach before mutation when another owner is live; failed additions
+remain atomic. This defers copying to the first edit while a snapshot is live,
+not a guarantee of faster authoring, lower worst latency or lower RSS. Mutable
+JavaScript bytes are still copied before task submission. Python authoring
+ownership is unchanged. Node protocol 6 and Python binding protocol 1 are
+required; old same-version native extensions are rejected.
+
+Native APKG generation validates staging data and media but omits the unused
+manifest JSON, SHA-1 and file. Internal Tools Interface staging calls keep their
+real manifest bytes, fingerprints and references. Omitted manifest references
+are absent, not fabricated. Manifest-only serialization/write failures therefore
+no longer occur in native builds. All required I/O, integrity and final APKG
+inspection remain; embedded identity evidence is unaffected.
+
+Large bytes imports validate each call's budget and MIME before hashing and
+looking up live immutable storage. A hit obtains a strong owner before leaving
+the cache lock and before creating a redundant file; metadata remains per Media.
+Miss registration still arbitrates concurrent duplicates. Weak ownership, PID
+and inherited-lock protections, memory thresholds/budgets and last-owner cleanup
+are unchanged. Hit-only redundant I/O failures no longer occur. No permanent
+cache, shared mutable bytes, in-flight waiting or physical-I/O claim is added.

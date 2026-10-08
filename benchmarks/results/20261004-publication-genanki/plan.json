@@ -1,0 +1,113 @@
+{
+  "created_utc": "2026-10-04T00:36:07.252843+00:00",
+  "name": "20261004-publication-genanki",
+  "source_commit": "c61188e8744b3abcd76b7acf97c37d0c30e1445c",
+  "git_status": "M benchmarks/.gitignore\n M benchmarks/README.md\n?? benchmarks/results/20261003-next-directions/\n?? benchmarks/results/20261003-optimization-paths/\n?? benchmarks/results/20261003-post-commit-diagnosis/\n?? benchmarks/results/20261003-structural-dataflow/\n?? benchmarks/results/20261003-structural-genanki/\n?? docs/assets/brand/card-loop-combination/\n?? docs/assets/brand/icon-options/\n?? docs/assets/brand/stacked-card-options/\n?? docs/plans/2026-09-28-release-readiness-audit.md\n?? docs/plans/2026-10-02-geo-source-notes.md\n?? docs/plans/2026-10-02-npm-release-checklist.md\n?? docs/plans/2026-10-02-website-readme-product-spec.md",
+  "exploratory_dirty_source": true,
+  "runner_sha256": "0499de63c1d0b525cfd197fbdfe25688297856f77df9e357571d0c5e9f14ead8",
+  "source_snapshot_sha256": "a57e93e2d98e34119eae65d170be2e97b21b1e811fdcfb378f426fd93f4ceee8",
+  "source_patch_sha256": "a0a07f14c902a31de98dc409a3c488d8aee28dccce1419320034b78ff6da8451",
+  "source_and_inputs_sha256": "6729a040d6fb6376d0fdb339fed0d2b2ab4175890c5197a3478fce38c7260bd8",
+  "media_inputs_sha256": "92262e2b790d201af8c38faf7a2c05f27a07562b9cf30d80f5ee5972dadb5462",
+  "python": "3.11.0 (v3.11.0:deaf509e8f, Oct 24 2022, 14:43:23) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "python_executable": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+  "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; discharging; 4:24 remaining present: true",
+  "matrix": [
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-audio-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-image-unique-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-shared-v2",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-text-v1",
+      "notes": 1000
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 100
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 200
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 500
+    },
+    {
+      "profile": "basic-mixed-unique-v2",
+      "notes": 1000
+    }
+  ],
+  "timing_repeats": 10,
+  "rss_repeats": 5,
+  "warmups_before_each_phase": 3,
+  "expected_attempts": 840,
+  "expected_anki_imports": 40,
+  "schedule_seed": 20260907,
+  "headline_metric": "median elapsed time from native process spawn to exit; includes startup, parsing, export and shutdown",
+  "rss_metric": "single_process_peak_rss_os_v1, 5 independent invocations",
+  "report_quantiles": "Hyndman-Fan type 7; Q1/Q3 interpolated at (n-1)*p from raw timing samples",
+  "verification_schedule": "after both adjacent exporters exit, outside timing, following current media_bench.py",
+  "no_selective_retries": true,
+  "cold_cache_controlled": false,
+  "purpose": "Measure current c61188e publication implementation against the archived 2026-09-21 Deck results using byte-identical fixtures. Default features, System allocator, one full standard session, fresh genanki, no selective retries. This standard build matrix does not measure Node COW, prepare-publish reuse, or repeated Media.bytes workloads.",
+  "oracle_reuse_check_sha256": "532248d74e23c916502ddf7398b31c711648c4306d12fd13891e2f19c48914c2",
+  "host_hardware_sha256": "8313ff0dcac3c8c1d60cf0945699059a9ede252b26f0b23971320e62d91fcabe",
+  "historical_summary_sha256": "ae76c40b36970722834807715247c9acaf2fa7c1be6990bdef6caa3cba80cd0c"
+}

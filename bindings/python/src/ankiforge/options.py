@@ -77,17 +77,19 @@ class BuildOptions:
     _baseline: str | None = None
     _limits: InspectLimits | None = None
     _policy: UpdatePolicy | None = None
+    _prepare_output: str | None = None
+    _prepare_baseline: str | None = None
 
     @staticmethod
     def to(path: PathInput) -> BuildOptions:
-        return BuildOptions(absolute_path(path))
+        return BuildOptions(absolute_path(path), _prepare_output=os.fspath(path))
 
     @staticmethod
     def temporary() -> BuildOptions:
         return BuildOptions(None)
 
     def update_from(self, path: PathInput) -> BuildOptions:
-        return replace(self, _baseline=absolute_path(path))
+        return replace(self, _baseline=absolute_path(path), _prepare_baseline=os.fspath(path))
 
     def inspect_limits(self, limits: InspectLimits) -> BuildOptions:
         return replace(self, _limits=limits)
@@ -95,9 +97,15 @@ class BuildOptions:
     def update_policy(self, policy: UpdatePolicy) -> BuildOptions:
         return replace(self, _policy=policy)
 
-    def _payload(self) -> dict[str, Any]:
-        return dict(output=_path_snapshot(self._output) if self._output is not None else None,
-                    baseline=_path_snapshot(self._baseline) if self._baseline is not None else None,
+    def _payload(self, *, prepare: bool = False) -> dict[str, Any]:
+        output, baseline = self._output, self._baseline
+        if prepare:
+            if self._prepare_output is not None:
+                output = absolute_path(self._prepare_output) if self._prepare_output else ""
+            if self._prepare_baseline is not None:
+                baseline = absolute_path(self._prepare_baseline) if self._prepare_baseline else ""
+        return dict(output=_path_snapshot(output) if output is not None else None,
+                    baseline=_path_snapshot(baseline) if baseline is not None else None,
                     limits=asdict(self._limits) if self._limits else None,
                     policy=self._policy._payload() if self._policy else None)
 

@@ -4,18 +4,29 @@ use std::io::{self, BufWriter, Write};
 
 use super::pipelined_sha1::PipelinedSha1;
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum PackageFingerprint {
+    Compute,
+    Omit,
+}
+
 pub(crate) struct StreamZip<W: Write> {
     output: BufWriter<W>,
-    hash: PipelinedSha1,
+    hash: Option<PipelinedSha1>,
     position: u64,
     central: Vec<Vec<u8>>,
 }
 
 impl<W: Write> StreamZip<W> {
+    #[cfg(test)]
     pub(crate) fn new(output: W) -> Self {
+        Self::with_fingerprint(output, PackageFingerprint::Compute)
+    }
+
+    pub(crate) fn with_fingerprint(output: W, fingerprint: PackageFingerprint) -> Self {
         Self {
             output: BufWriter::with_capacity(128 * 1024, output),
-            hash: PipelinedSha1::new(),
+            hash: (fingerprint == PackageFingerprint::Compute).then(PipelinedSha1::new),
             position: 0,
             central: Vec::new(),
         }
@@ -119,7 +130,7 @@ impl<W: Write> StreamZip<W> {
         Ok(())
     }
 
-    pub(crate) fn finish(mut self) -> io::Result<(W, String)> {
+    pub(crate) fn finish(mut self) -> io::Result<(W, Option<String>)> {
         let start = self.position;
         let central = std::mem::take(&mut self.central);
         let count = central.len() as u64;
@@ -154,7 +165,10 @@ impl<W: Write> StreamZip<W> {
         u16le(&mut end, 0);
         self.write_all(&end)?;
         self.output.flush()?;
-        let fingerprint = format!("package:{}", self.hash.finish()?);
+        let fingerprint = match self.hash {
+            Some(hash) => Some(format!("package:{}", hash.finish()?)),
+            None => None,
+        };
         Ok((
             self.output
                 .into_inner()
@@ -167,7 +181,9 @@ impl<W: Write> StreamZip<W> {
 impl<W: Write> Write for StreamZip<W> {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
         let written = self.output.write(bytes)?;
-        self.hash.update(&bytes[..written])?;
+        if let Some(hash) = &mut self.hash {
+            hash.update(&bytes[..written])?;
+        }
         self.position = self
             .position
             .checked_add(written as u64)
@@ -194,6 +210,83 @@ mod tests {
     use super::*;
     use sha1::{Digest, Sha1};
     use std::io::{Cursor, Read};
+
+    #[test]
+    fn optional_fingerprint_keeps_small_and_large_zip_bytes_exact() {
+        for size in [0, 19, 256 * 1024 - 1, 256 * 1024 + 1, 2 * 1024 * 1024 + 17] {
+            let bytes: Vec<_> = (0..size).map(|index| (index * 37) as u8).collect();
+            let mut outputs = Vec::new();
+            for mode in [PackageFingerprint::Compute, PackageFingerprint::Omit] {
+                let mut stream = StreamZip::with_fingerprint(Vec::new(), mode);
+                assert_eq!(stream.hash.is_some(), mode == PackageFingerprint::Compute);
+                stream.bytes("meta", &[8, 3]).unwrap();
+                stream.bytes("payload", &bytes).unwrap();
+                stream.bytes("empty", &[]).unwrap();
+                // The omitted mode cannot create the hasher or its worker.
+                assert_eq!(stream.hash.is_some(), mode == PackageFingerprint::Compute);
+                let (output, fingerprint) = stream.finish().unwrap();
+                assert_eq!(
+                    fingerprint,
+                    (mode == PackageFingerprint::Compute)
+                        .then(|| { format!("package:{}", hex::encode(Sha1::digest(&output))) })
+                );
+                let mut archive = zip::ZipArchive::new(Cursor::new(&output)).unwrap();
+                let mut actual = Vec::new();
+                archive
+                    .by_name("payload")
+                    .unwrap()
+                    .read_to_end(&mut actual)
+                    .unwrap();
+                assert_eq!(actual, bytes);
+                outputs.push(output);
+            }
+            assert_eq!(outputs[0], outputs[1]);
+        }
+    }
+
+    #[test]
+    fn optional_fingerprint_preserves_write_failure_and_file_cleanup() {
+        struct FailingFile {
+            file: tempfile::NamedTempFile,
+            remaining: usize,
+        }
+        impl Write for FailingFile {
+            fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+                if self.remaining == 0 {
+                    return Err(io::Error::other("injected destination failure"));
+                }
+                let count = self.file.write(&bytes[..bytes.len().min(self.remaining)])?;
+                self.remaining -= count;
+                Ok(count)
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                self.file.flush()
+            }
+        }
+        for mode in [PackageFingerprint::Compute, PackageFingerprint::Omit] {
+            for limit in [3, 512 * 1024] {
+                let file = tempfile::NamedTempFile::new().unwrap();
+                let path = file.path().to_owned();
+                let mut stream = StreamZip::with_fingerprint(
+                    FailingFile {
+                        file,
+                        remaining: limit,
+                    },
+                    mode,
+                );
+                let result = stream.bytes("large", &vec![9; 2 * 1024 * 1024]);
+                let error = match result {
+                    Ok(()) => stream.finish().err().expect("flush must fail").to_string(),
+                    Err(error) => {
+                        drop(stream);
+                        error.to_string()
+                    }
+                };
+                assert!(error.contains("injected destination failure"), "{error}");
+                assert!(!path.exists(), "failed private output must be removed");
+            }
+        }
+    }
 
     struct ShortWriter {
         bytes: Vec<u8>,
@@ -250,7 +343,7 @@ mod tests {
         let (written, fingerprint) = stream.finish().unwrap();
         assert_eq!(written.bytes, reference.finish().unwrap().into_inner());
         assert_eq!(
-            fingerprint,
+            fingerprint.unwrap(),
             format!("package:{}", hex::encode(Sha1::digest(&written.bytes)))
         );
     }
@@ -295,7 +388,7 @@ mod tests {
         let (bytes, fingerprint) = stream.finish().unwrap();
         assert_eq!(bytes, old.finish().unwrap().into_inner());
         assert_eq!(
-            fingerprint,
+            fingerprint.unwrap(),
             format!("package:{}", hex::encode(Sha1::digest(&bytes)))
         );
     }

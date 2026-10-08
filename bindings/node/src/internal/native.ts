@@ -34,6 +34,12 @@ export interface NativeProject {
     input: string,
   ): Promise<{ snapshot: string; artifact: NativeApkgArtifact }>;
   compare(input: string): Promise<string>;
+  preparePublication(input: string): Promise<NativePreparedPublication>;
+}
+export interface NativePreparedPublication {
+  readonly report: string;
+  publish(): Promise<{ snapshot: string; artifact: NativeApkgArtifact }>;
+  close(): Promise<void>;
 }
 export interface NativeApkgArtifact {
   readonly path: string;
@@ -107,9 +113,9 @@ export function native(): NativeModule {
       throw new Error(
         `Native version ${metadata.bindingVersion} does not match SDK ${VERSION}`,
       );
-    if (metadata.bindingProtocolVersion !== 5)
+    if (metadata.bindingProtocolVersion !== 6)
       throw new Error(
-        `Native protocol ${metadata.bindingProtocolVersion ?? "missing"} does not match SDK protocol 5`,
+        `Native protocol ${metadata.bindingProtocolVersion ?? "missing"} does not match SDK protocol 6`,
       );
     loaded = binding;
     return binding;

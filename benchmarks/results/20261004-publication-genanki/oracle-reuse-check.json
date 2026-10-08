@@ -1,0 +1,13 @@
+{
+  "reference": "benchmarks/results/20260921-readme-genanki/source-snapshot.json",
+  "oracle_sha256": "539b9a01a623d3cf905cdd3a81871630af3565f9a03f08574571f79f1607c1d6",
+  "checker_source_sha256": "bd2cbd5990564bc90b0ddfddb143903a05d35c3f0d9fc1de1ffa29c8e0fb623b",
+  "upstream_revision": "2d44d4d6bc486803f9236033ad840df203c87036",
+  "upstream_patch": "diff --git a/Cargo.toml b/Cargo.toml\nindex 2566a48f1..38ef681ef 100644\n--- a/Cargo.toml\n+++ b/Cargo.toml\n@@ -130,7 +130,7 @@ syn = { version = \"2.0.103\", features = [\"parsing\", \"printing\"] }\n tar = \"0.4.44\"\n tempfile = \"3.20.0\"\n termcolor = \"1.4.1\"\n-tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\"] }\n+tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\", \"io-util\"] }\n tokio-util = { version = \"0.7.15\", features = [\"io\"] }\n tower-http = { version = \"0.6.6\", features = [\"trace\"] }\n tracing = { version = \"0.1.41\", features = [\"max_level_trace\", \"release_max_level_debug\"] }",
+  "upstream_revision_matches": true,
+  "upstream_patch_matches": true,
+  "rebuilt_from_current_source": true,
+  "build_provenance_verified": true,
+  "observation_note": "Fresh locked/offline build for current publication implementation benchmark. Checker source and upstream revision/patch match the historical reference; build provenance verified. No claim of identical historical executable.",
+  "preceding_oracle_sha256": "5488d75f7462fa9981ae0effed2ff6c4182a160df87ec4bebd9c15192019c025"
+}

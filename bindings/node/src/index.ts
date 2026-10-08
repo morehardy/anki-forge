@@ -6,6 +6,7 @@ import {
   type NativeNote,
   type NativeNoteType,
   type NativeProject,
+  type NativePreparedPublication,
 } from "./internal/native";
 import { call, asyncCall } from "./errors";
 import { deepFreeze, string } from "./internal/validation";
@@ -32,6 +33,7 @@ export {
   BuildError,
   PersistError,
   ArtifactClosedError,
+  PreparedPublicationStateError,
 } from "./errors";
 export type * from "./snapshots";
 export type { ErrorSourceDetail, AddTarget, AddContext, AddDetail, AddErrorDetails, MediaUsage, MediaConflictKind } from "./errors";
@@ -435,6 +437,8 @@ export class UpdatePolicy {
 }
 interface BuildData {
   output?: string;
+  outputInput?: string;
+  baselineInput?: string;
   temporary: boolean;
   updateFrom?: string;
   inspectLimits?: InspectLimits;
@@ -450,6 +454,7 @@ export class BuildOptions {
     string(filename, "output");
     return new BuildOptions({
       output: absolutePath(filename),
+      outputInput: filename,
       temporary: false,
     });
   }
@@ -461,6 +466,7 @@ export class BuildOptions {
     return new BuildOptions({
       ...this.#data,
       updateFrom: absolutePath(filename),
+      baselineInput: filename,
     });
   }
   inspectLimits(limits: InspectLimits): BuildOptions {
@@ -473,13 +479,22 @@ export class BuildOptions {
     return new BuildOptions({ ...this.#data, updatePolicy: policy });
   }
   /** @internal */ toJSON(): object {
+    const { outputInput, baselineInput, ...data } = this.#data;
     return {
-      ...this.#data,
+      ...data,
       inspectLimits: this.#data.inspectLimits
         ? JSON.parse(limitsJSON(this.#data.inspectLimits))
         : undefined,
     };
   }
+  /** @internal Anchor raw inputs at preparation invocation, before queueing. */
+  preparationJSON(): object {
+    return { ...this.toJSON(),
+      output: this.#data.outputInput === undefined ? this.#data.output : absolutePath(this.#data.outputInput),
+      updateFrom: this.#data.baselineInput === undefined ? this.#data.updateFrom : absolutePath(this.#data.baselineInput),
+    };
+  }
+
 }
 interface CompareData {
   baseline: string;
@@ -542,6 +557,27 @@ export class BuildOutput {
     makeOutput = (a, s) => new BuildOutput(outputToken, a, s);
   }
 }
+const preparedToken = Symbol("PreparedPublication");
+let makePrepared: (handle: NativePreparedPublication, baseDir: string) => PreparedPublication;
+/** Owns one private, inspected candidate. Reports do not retain its storage. */
+export class PreparedPublication {
+  readonly report: BuildReport;
+  readonly #handle: NativePreparedPublication;
+  readonly #baseDir: string;
+  private constructor(token: symbol, handle: NativePreparedPublication, baseDir: string) {
+    if (token !== preparedToken) throw new TypeError("Use Project.preparePublication");
+    this.#handle = handle;
+    this.#baseDir = baseDir;
+    this.report = new BuildReport(JSON.parse(handle.report));
+    Object.freeze(this);
+  }
+  async publish(): Promise<BuildOutput> {
+    const result = await asyncCall(() => this.#handle.publish());
+    return makeOutput(artifactFromNative(result.artifact, this.#baseDir), JSON.parse(result.snapshot));
+  }
+  async close(): Promise<void> { await asyncCall(() => this.#handle.close()); }
+  static { makePrepared = (h, b) => new PreparedPublication(preparedToken, h, b); }
+}
 export class Project {
   readonly namespace: string;
   #handle: NativeProject;
@@ -584,6 +620,12 @@ export class Project {
       artifactFromNative(result.artifact, baseDir),
       JSON.parse(result.snapshot),
     );
+  }
+  async preparePublication(options: BuildOptions): Promise<PreparedPublication> {
+    if (!(options instanceof BuildOptions)) throw new TypeError("Expected BuildOptions");
+    const baseDir = process.cwd();
+    const handle = await asyncCall(() => this.#handle.preparePublication(JSON.stringify(options.preparationJSON())));
+    return makePrepared(handle, baseDir);
   }
   async compare(options: CompareOptions): Promise<ComparisonReport> {
     if (!(options instanceof CompareOptions))

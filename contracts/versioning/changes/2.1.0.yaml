@@ -1,0 +1,12 @@
+baseline_version: 2.0.0
+bundle_version: 2.1.0
+compatibility_class: additive_compatible
+summary: Add single-use prepared publication ownership and native performance semantics.
+migration_notes: Rebuild Node native protocol 6 and Python binding protocol 1 with bundle 2.1.0. Existing APKG, identity, report and comparison schemas remain unchanged. Native builds no longer fail solely on unused staging manifest I/O; duplicate large bytes cache hits no longer perform redundant snapshot writes.
+changes:
+- path: errors/error-registry.yaml
+  before: blake3:867f5390a97c0d924e4ef51cca78a0e687d2ae78f7c41509444ddcbcb5a52e66
+  after: blake3:e150b812d7097a4def46b52d39ad8b7d51d5e1dca811ee939c927e7d1efbbdbb
+- path: semantics/rust-authoring.md
+  before: blake3:189a6e49b0f84780210677b43bb10177a2b8a383bd25381dd3b9f3fb9a69e9cb
+  after: blake3:34c7559b436cbd03d0a1f0be5a096f5cc47983373f2c842e39f91ae5bb96a9f6

@@ -12,3 +12,5 @@ workflow also verifies the five candidate distributions, preserves hashes,
 and repeats installed-consumer checks with wheels selected from public PyPI.
 Workflow configuration is not a claim that any version has been published or
 that a specific run has passed. See the [Python release runbook](../../docs/python-release-runbook.md).
+
+Prepared publication adapts the same Rust candidate/policy pipeline with single-use publication, idempotent cleanup, independent reports and process ownership. Metadata requires native binding protocol 1.

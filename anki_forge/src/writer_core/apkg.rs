@@ -38,7 +38,7 @@ pub struct ApkgMaterialization {
     pub apkg_ref: String,
     #[cfg(all(test, feature = "internal-tools"))]
     pub apkg_path: PathBuf,
-    pub package_fingerprint: String,
+    pub package_fingerprint: Option<String>,
 }
 
 #[derive(Clone, PartialEq, Message)]
@@ -177,14 +177,14 @@ fn emit_apkg_with_plans(
     let _ = fs::remove_file(&temp_path);
 
     let streamed_fingerprint = if let Some(prepared) = prepared_media {
-        Some(write_sequential_package(
+        write_sequential_package(
             &temp_path,
             normalized_ir,
             notetype_ids,
             guid_assignments,
             artifact_target,
             prepared,
-        )?)
+        )?
     } else {
         let file = File::create(&temp_path)
             .with_context(|| format!("create package {}", temp_path.display()))?;
@@ -222,9 +222,18 @@ fn emit_apkg_with_plans(
         )
     })?;
 
-    let package_fingerprint = match streamed_fingerprint {
-        Some(fingerprint) => fingerprint,
-        None => package_file_fingerprint(&apkg_path)?,
+    let package_fingerprint = match artifact_target.package_fingerprint {
+        super::stream_zip::PackageFingerprint::Compute => Some(match streamed_fingerprint {
+            Some(fingerprint) => fingerprint,
+            None => package_file_fingerprint(&apkg_path)?,
+        }),
+        super::stream_zip::PackageFingerprint::Omit => {
+            anyhow::ensure!(
+                streamed_fingerprint.is_none(),
+                "unexpected package fingerprint"
+            );
+            None
+        }
     };
 
     Ok(ApkgMaterialization {
@@ -242,7 +251,7 @@ fn write_sequential_package(
     guids: &GuidAssignments<'_>,
     target: &BuildArtifactTarget,
     prepared: &crate::prepared_media::PreparedMedia,
-) -> Result<String> {
+) -> Result<Option<String>> {
     let mut zip = prepared.take_archive(normalized)?;
     let collection = create_latest_collection_file(
         &target.root_dir,
@@ -1101,6 +1110,24 @@ mod tests {
         assert_eq!(
             package_file_fingerprint(file.path()).unwrap(),
             package_fingerprint(&bytes)
+        );
+    }
+
+    #[test]
+    fn low_level_default_still_reports_the_actual_package_fingerprint() {
+        let root = tempfile::tempdir().unwrap();
+        let normalized = two_basic_notes();
+        let ids = crate::writer_core::identity::resolve_notetype_ids(&normalized, None).unwrap();
+        let target = BuildArtifactTarget::new(root.path(), "dataflow-low-level");
+        assert_eq!(
+            target.package_fingerprint,
+            super::super::stream_zip::PackageFingerprint::Compute
+        );
+        let emitted = emit_apkg_from_normalized(&normalized, &ids, &target, None).unwrap();
+        let actual = fs::read(root.path().join("package.apkg")).unwrap();
+        assert_eq!(
+            emitted.package_fingerprint,
+            Some(package_fingerprint(&actual))
         );
     }
 

@@ -208,7 +208,11 @@ fn emit_apkg_materializes_basic_package_from_staging_artifact() {
 
     assert_eq!(apkg.apkg_ref, "artifacts/phase3/basic-apkg/package.apkg");
     assert!(apkg.apkg_path.exists());
-    assert!(apkg.package_fingerprint.starts_with("package:"));
+    assert!(apkg
+        .package_fingerprint
+        .as_deref()
+        .expect("low-level builds return a fingerprint")
+        .starts_with("package:"));
 
     let mut archive = open_zip(&apkg.apkg_path);
     let names = archive_names(&mut archive);

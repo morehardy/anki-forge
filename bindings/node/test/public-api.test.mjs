@@ -731,20 +731,54 @@ test("u64 budgets cross native boundary losslessly and unsafe numbers are reject
   );
   assert.throws(() => new sdk.BuildOutput({}, {}), TypeError);
 });
-test("worker teardown safely releases in-flight native operations", async () => {
+test("worker teardown safely releases in-flight native operations", async (t) => {
   const { Worker } = await import("node:worker_threads");
   const url = new URL("../dist/index.mjs", import.meta.url).href;
-  for (let i = 0; i < 3; i++) {
-    const worker = new Worker(
-      `const {parentPort}=require('node:worker_threads');(async()=>{const {Project,Note,BuildOptions}=await import(${JSON.stringify(url)});const p=new Project('worker').add('a',Note.basic('a','b'));const pending=p.build(BuildOptions.temporary());parentPort.postMessage('started');await pending;})()`,
-      { eval: true },
-    );
-    await new Promise((resolve, reject) => {
-      worker.once("message", resolve);
-      worker.once("error", reject);
-    });
-    await worker.terminate();
+  const directory = await temp(t);
+  const previousTmp = process.env.TMPDIR;
+  process.env.TMPDIR = directory;
+  t.after(() => {
+    if (previousTmp === undefined) delete process.env.TMPDIR;
+    else process.env.TMPDIR = previousTmp;
+  });
+  const baseline = await new Project("worker")
+    .add("a", Note.basic("a", "b"))
+    .build(BuildOptions.temporary());
+  t.after(() => baseline.artifact.close());
+  assert.equal(path.dirname(baseline.artifact.path), directory);
+  for (const operation of ["build", "compare", "preparePublication"]) {
+    for (let i = 0; i < 3; i++) {
+      const worker = new Worker(
+        `const { parentPort } = require('node:worker_threads');
+        (async () => {
+          const { Project, Note, BuildOptions, CompareOptions } = await import(${JSON.stringify(url)});
+          const project = new Project('worker');
+          for (let i = 0; i < 1000; i++) project.add(String(i), Note.basic('question ' + i, 'answer'));
+          const operation = ${JSON.stringify(operation)};
+          const options = operation === 'compare'
+            ? CompareOptions.against(${JSON.stringify(baseline.artifact.path)})
+            : BuildOptions.temporary();
+          const pending = project[operation](options);
+          parentPort.postMessage('started');
+          await pending;
+        })()`,
+        { eval: true },
+      );
+      await new Promise((resolve, reject) => {
+        worker.once("message", resolve);
+        worker.once("error", reject);
+      });
+      await worker.terminate();
+    }
   }
+  await baseline.artifact.close();
+  // A terminated JS worker may leave native computation finishing on the pool.
+  // Its completed result must release ownership even without a JS recipient.
+  const deadline = Date.now() + 5000;
+  while ((await fs.readdir(directory)).length && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  assert.deepEqual(await fs.readdir(directory), []);
 });
 test("domain errors retain machine codes, source metadata, location and budgets", async (t) => {
   const d = await temp(t);
@@ -873,4 +907,85 @@ test("structured addition errors retain nested locations and source context", as
     return true;
   });
   assert.equal(typeof project.name, "undefined");
+});
+
+test('prepared publication is private, single-use, and retains reviewed evidence', async (t) => {
+  const directory = await temp(t);
+  const destination = path.join(directory, 'prepared.apkg');
+  const project = new Project('node-prepared').add('one', Note.basic('reviewed', 'answer'));
+  const prepared = await project.preparePublication(BuildOptions.to(destination));
+  await assert.rejects(fs.access(destination));
+  const report = prepared.report;
+  project.add('later', Note.basic('later', 'answer'));
+  const publishing = prepared.publish();
+  await assert.rejects(prepared.publish(), (e) => e instanceof sdk.PreparedPublicationStateError && e.code === 'BUILD.PREPARED_UNAVAILABLE' && e.reason === 'consumed');
+  await prepared.close();
+  const output = await publishing;
+  assert.equal(output.report.counts.notes, 1);
+  assert.equal(report.counts.notes, 1);
+  const expected = new Project('node-prepared').add('one', Note.basic('reviewed', 'answer'));
+  assert.deepEqual((await expected.compare(CompareOptions.against(destination))).findings, []);
+  await output.artifact.close();
+  const closed = await project.preparePublication(BuildOptions.temporary());
+  await closed.close();
+  await closed.close();
+  await assert.rejects(closed.publish(), (e) => e instanceof sdk.PreparedPublicationStateError && e.reason === 'closed');
+  assert.equal(closed.report.counts.notes, 2);
+});
+
+test('build compare and prepare share invocation snapshots across every authoring mutation', async (t) => {
+  const original = new Project('cow-seams').add('one', Note.basic('reviewed', 'answer'));
+  const baseline = await original.build(BuildOptions.temporary());
+  t.after(() => baseline.artifact.close());
+  const asset = await Media.bytes(png(), 'image/png');
+  for (const operation of ['build', 'compare', 'preparePublication']) {
+    const project = original.clone();
+    const options = operation === 'compare'
+      ? CompareOptions.against(baseline.artifact.path)
+      : BuildOptions.temporary().updateFrom(baseline.artifact.path);
+    const pending = project[operation](options);
+    project.defaultDeck('After Review').addAsset(asset).add('later', Note.basic('later', 'value'));
+    assert.throws(() => project.add('one', Note.basic('duplicate', 'rejected')), AddError);
+    const branch = project.clone().defaultDeck('Other Branch').add('branch', Note.basic('branch', 'value'));
+    const result = await pending;
+    if (operation === 'compare') {
+      assert.deepEqual(result.snapshot(), (await original.compare(options)).snapshot());
+    } else {
+      const output = operation === 'build' ? result : await result.publish();
+      t.after(() => output.artifact.close());
+      assert.deepEqual(output.report.comparison.findings, []);
+      assert.equal(output.report.counts.media, 0);
+      assert.equal(inspect(output.artifact.path).notes[0].fields, 'reviewed\x1fanswer');
+    }
+    const after = await project.build(BuildOptions.temporary());
+    const other = await branch.build(BuildOptions.temporary());
+    t.after(() => after.artifact.close());
+    t.after(() => other.artifact.close());
+    assert.equal(after.report.counts.notes, 2);
+    assert.equal(other.report.counts.notes, 3);
+    assert.equal(after.report.counts.media, 1);
+    assert.equal(other.report.counts.media, 1);
+  }
+});
+
+test('prepared relative paths bind at invocation and survive cwd changes', async (t) => {
+  const root = await fs.realpath(await temp(t));
+  const invocation = path.join(root, 'invocation');
+  await fs.mkdir(invocation);
+  const options = BuildOptions.to('prepared.apkg');
+  const original = process.cwd();
+  let prepared;
+  try {
+    process.chdir(invocation);
+    const pending = new Project('prepared-cwd').add('one', Note.basic('q', 'a')).preparePublication(options);
+    process.chdir(root);
+    prepared = await pending;
+    const output = await prepared.publish();
+    assert.equal(output.artifact.path, path.join(invocation, 'prepared.apkg'));
+    await output.artifact.close();
+    await assert.rejects(fs.access(path.join(root, 'prepared.apkg')));
+  } finally {
+    process.chdir(original);
+    await prepared?.close();
+  }
 });

@@ -106,3 +106,8 @@ class BuildError(ForgeError[dict[str, Any]]):
     def report(self) -> Any:
         from .report import BuildReport
         return BuildReport(self.details["snapshot"]["report"])
+
+class PreparedPublicationStateError(ForgeError[dict[str, Any]]):
+    @property
+    def reason(self) -> Literal["closed", "consumed"]:
+        return "consumed" if self.details["reason"] == "consumed" else "closed"

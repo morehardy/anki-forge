@@ -233,3 +233,13 @@ fn failed_block_rotation_preserves_live_segments_and_remains_retryable() {
 fn more_live_spill_blocks_than_descriptor_limit_remain_importable_exportable_and_clean() {
     run("fd-stress", false);
 }
+
+#[test]
+fn cached_large_bytes_skip_unavailable_temp_storage_but_still_validate_each_import() {
+    run("early-duplicate", false);
+}
+
+#[test]
+fn concurrent_large_byte_imports_preserve_exact_content_and_cleanup() {
+    run("concurrent-duplicates", false);
+}

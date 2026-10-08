@@ -48,9 +48,20 @@ pub(crate) struct PreparedMedia {
 }
 
 impl PreparedMedia {
+    #[cfg(test)]
     pub(crate) fn new_in(directory: &Path) -> io::Result<Self> {
+        Self::new_in_with_fingerprint(
+            directory,
+            crate::writer_core::stream_zip::PackageFingerprint::Compute,
+        )
+    }
+
+    pub(crate) fn new_in_with_fingerprint(
+        directory: &Path,
+        fingerprint: crate::writer_core::stream_zip::PackageFingerprint,
+    ) -> io::Result<Self> {
         let file = tempfile::NamedTempFile::new_in(directory)?;
-        let mut archive = StreamZip::new(file);
+        let mut archive = StreamZip::with_fingerprint(file, fingerprint);
         archive.bytes("meta", &[8, 3]).map_err(io::Error::other)?;
         Ok(Self {
             archive: Mutex::new(Some(archive)),
@@ -670,7 +681,7 @@ mod tests {
             let mut bytes = Vec::new();
             file.read_to_end(&mut bytes).unwrap();
             assert_eq!(
-                fingerprint,
+                fingerprint.unwrap(),
                 format!("package:{}", hex::encode(Sha1::digest(&bytes)))
             );
             let mut zip = zip::ZipArchive::new(io::Cursor::new(&bytes)).unwrap();

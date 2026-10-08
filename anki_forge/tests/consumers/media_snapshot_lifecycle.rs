@@ -312,6 +312,64 @@ fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
+fn early_duplicate(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+    let bytes = fs::read(workspace.join("source.wav"))?;
+    let first = Media::bytes(bytes.clone(), "audio/wav")?;
+    let hidden = workspace.join("unavailable-snapshots");
+    fs::rename(temp, &hidden)?;
+    let duplicate = Media::bytes(bytes.clone(), "audio/wav");
+    let limited = Media::bytes_with_limits(bytes.clone(), "audio/wav", ankiforge::media::MediaLimits { max_bytes: 0 });
+    let mismatch = Media::bytes(bytes.clone(), "image/png");
+    let invalid = Media::bytes(bytes.clone(), "not a mime");
+    let unique = Media::bytes(vec![12; bytes.len()], "application/octet-stream");
+    fs::rename(&hidden, temp)?;
+    let duplicate = duplicate?.with_export_name("renamed.wav")?;
+    ensure!(limited.unwrap_err().kind() == ankiforge::media::MediaErrorKind::ResourceLimit);
+    ensure!(mismatch.unwrap_err().kind() == ankiforge::media::MediaErrorKind::MediaTypeMismatch);
+    ensure!(invalid.unwrap_err().kind() == ankiforge::media::MediaErrorKind::InvalidMediaType);
+    ensure!(unique.is_err());
+    one_snapshot(temp, bytes.len() as u64)?;
+    ensure!(first.filename() != duplicate.filename());
+    drop(first);
+    let mut project = Project::new("early-duplicate")?;
+    project.add("one", Note::basic("question", duplicate.sound()))?;
+    let output = project.build(BuildOptions::to(workspace.join("early.apkg")))?;
+    verify_archive(output.artifact().path(), blake3::hash(&bytes))?;
+    drop((output, project, duplicate));
+    ensure!(inventory(temp)?["files"] == 0);
+    let again = Media::bytes(bytes.clone(), "audio/wav")?;
+    one_snapshot(temp, bytes.len() as u64)?;
+    drop(again);
+    emit("early_duplicate_released", temp, json!({}))?;
+    Ok(())
+}
+
+fn concurrent_duplicates(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
+    for length in [2 << 20, 8 << 20] {
+        let bytes = vec![17; length];
+        let barrier = std::sync::Barrier::new(8);
+        let owners = std::thread::scope(|scope| {
+            let handles: Vec<_> = (0..8).map(|_| {
+                let bytes = bytes.clone();
+                let barrier = &barrier;
+                scope.spawn(move || { barrier.wait(); Media::bytes(bytes, "application/octet-stream").unwrap() })
+            }).collect();
+            handles.into_iter().map(|h| h.join().unwrap()).collect::<Vec<_>>()
+        });
+        one_snapshot(temp, length as u64)?;
+        let mut project = Project::new("concurrent-snapshots")?;
+        project.add("one", Note::basic("q", "a"))?;
+        for media in &owners { project.add_asset(media.clone())?; }
+        drop(owners);
+        let output = project.build(BuildOptions::to(workspace.join("concurrent.apkg")))?;
+        verify_archive(output.artifact().path(), blake3::hash(&bytes))?;
+        drop((output, project));
+        ensure!(inventory(temp)?["files"] == 0);
+    }
+    emit("concurrent_duplicates_released", temp, json!({}))?;
+    Ok(())
+}
+
 fn measure(mode: &str, workspace: &Path, temp: &Path, repeats: usize) -> anyhow::Result<()> {
     let source = workspace.join("source.wav");
     let bytes = source.metadata()?.len();
@@ -354,6 +412,8 @@ fn main() -> anyhow::Result<()> {
     );
     ensure!(inventory(&temp)?["files"] == 0);
     match mode.as_str() {
+        "concurrent-duplicates" => concurrent_duplicates(&workspace, &temp),
+        "early-duplicate" => early_duplicate(&workspace, &temp),
         "fd-stress" => {
             let mut owners = Vec::new();
             for index in 0..300_u16 {

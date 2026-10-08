@@ -7,6 +7,7 @@ from .artifact import ApkgArtifact
 from .media import Media
 from .note import Note
 from .options import BuildOptions, CompareOptions
+from .prepared import PreparedPublication
 from .report import BuildOutput, ComparisonReport
 
 class Project:
@@ -34,6 +35,11 @@ class Project:
         base_dir = Path.cwd()
         snapshot, artifact = invoke(self._handle.build, json.dumps(options._payload()))
         return BuildOutput(ApkgArtifact(artifact, base_dir=base_dir), json.loads(snapshot))
+
+    def prepare_publication(self, options: BuildOptions) -> PreparedPublication:
+        base_dir = Path.cwd()
+        handle = invoke(self._handle.prepare_publication, json.dumps(options._payload(prepare=True)))
+        return PreparedPublication._from_native(handle, base_dir)
 
     def compare(self, options: CompareOptions) -> ComparisonReport:
         return ComparisonReport(json.loads(invoke(self._handle.compare, json.dumps(options._payload()))))

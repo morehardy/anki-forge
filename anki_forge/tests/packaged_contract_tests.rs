@@ -16,8 +16,13 @@ fn packaged_crate_creates_compares_and_updates_with_embedded_contracts() {
         .unwrap();
     let report = next.compare(CompareOptions::against(&apkg)).unwrap();
     assert!(report.policy().allows_publication());
-    let updated = next
-        .build(BuildOptions::temporary().update_from(apkg))
+    let prepared = next
+        .prepare_publication(BuildOptions::temporary().update_from(apkg))
         .unwrap();
+    assert_eq!(
+        serde_json::to_value(prepared.report().comparison().unwrap().snapshot()).unwrap(),
+        serde_json::to_value(report.snapshot()).unwrap()
+    );
+    let updated = prepared.publish().unwrap();
     assert_eq!(updated.report().counts().cards, 1);
 }

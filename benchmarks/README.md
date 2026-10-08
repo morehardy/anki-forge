@@ -5,6 +5,22 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Publication implementation and current comparison
+
+The [publication implementation evidence](results/20261003-publication-implementation/README.md)
+covers prepared publication in Rust/Node/Python, Node copy-on-write snapshots,
+native staging omission and early byte-snapshot reuse, on top of the structural
+dataflow changes. P1–P4 timing goals passed locally; confirmed wide-field RSS
+regression and unrun supported-platform CI remain unresolved acceptance gates.
+
+The [October 4 comparison](results/20261004-publication-genanki/report.md)
+uses the exact September 21 fixtures for one complete 20-cell matrix. All 840
+exports and 40 selected Anki checks passed. All 20 Rust timing medians exceeded
+the historical values; at 1,000 notes they were 21–47% higher, with lower RSS in
+all five scenes. Rust remained faster than freshly measured genanki in all cells.
+These are separate sessions and API generations, not isolated code-change effects.
+This standard build matrix does not measure prepared reuse or Node COW benefits.
+
 ## Current Project API comparison: 2026-10-02
 
 The [current-code report](results/20261002-latest-genanki/report.md) compares

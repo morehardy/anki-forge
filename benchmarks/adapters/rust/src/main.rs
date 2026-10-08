@@ -82,9 +82,13 @@ fn main() -> anyhow::Result<()> {
         );
         return Ok(());
     }
-    let [input, output] = args.as_slice() else {
+    let [input, output, rest @ ..] = args.as_slice() else {
         bail!("usage: anki-forge-benchmark INPUT OUTPUT");
     };
+    let mode = rest.first().map(String::as_str).unwrap_or("build");
+    let baseline = rest.get(1).filter(|s| !s.is_empty());
+    let repeats: usize = rest.get(2).map(|s| s.parse()).transpose()?.unwrap_or(1);
+    let input_started = std::time::Instant::now();
     let workload: Workload = serde_json::from_slice(&std::fs::read(input)?)?;
     ensure!(
         matches!(
@@ -97,9 +101,20 @@ fn main() -> anyhow::Result<()> {
     let mut project = Project::new("benchmark.basic-v1")?.default_deck(workload.deck_name);
     let parent = Path::new(input).parent().context("input parent")?;
     let mut media_by_id = BTreeMap::new();
+    let mut retained_media = Vec::new();
     for media in workload.media {
-        let snapshot = OwnedMedia::file(parent.join(&media.path))?
+        let mut snapshot = None;
+        for _ in 0..repeats {
+            let owned = if mode == "bytes" {
+                OwnedMedia::bytes(std::fs::read(parent.join(&media.path))?, "audio/wav")?
+            } else {
+                OwnedMedia::file(parent.join(&media.path))?
+            }
             .with_export_name(&media.filename)?;
+            retained_media.push(owned.clone());
+            snapshot = Some(owned);
+        }
+        let snapshot = snapshot.context("at least one import")?;
         ensure!(
             matches!(media.kind.as_str(), "image" | "audio"),
             "unsupported media kind"
@@ -121,6 +136,60 @@ fn main() -> anyhow::Result<()> {
             ),
         )?;
     }
-    project.build(BuildOptions::to(output))?;
+    let input_ms = input_started.elapsed().as_secs_f64() * 1000.0;
+    let operation_started = std::time::Instant::now();
+    let options = baseline.map_or_else(
+        || BuildOptions::to(output),
+        |p| BuildOptions::to(output).update_from(p),
+    );
+    let mut comparison = None;
+    if matches!(mode, "compare-build" | "compare" | "compare-blocked") {
+        comparison = Some(
+            project
+                .compare(ankiforge::update::CompareOptions::against(
+                    baseline.context("baseline")?,
+                ))?
+                .snapshot(),
+        );
+    }
+    #[allow(unused_mut)]
+    let mut retained_candidate_bytes = 0;
+    let attempt = if matches!(mode, "prepare-publish" | "prepare-blocked") {
+        #[cfg(feature = "prepared-publication")]
+        {
+            let prepared = project.prepare_publication(options)?;
+            comparison = prepared.report().comparison().map(|c| c.snapshot());
+            // The runner gives this process an otherwise empty temporary root.
+            retained_candidate_bytes = std::fs::read_dir(std::env::temp_dir())?
+                .filter_map(Result::ok)
+                .filter_map(|e| e.metadata().ok())
+                .filter(|m| m.is_file())
+                .map(|m| m.len())
+                .sum::<u64>();
+            prepared.publish().map(Some)
+        }
+        #[cfg(not(feature = "prepared-publication"))]
+        {
+            bail!("this benchmark binary predates prepared publication")
+        }
+    } else if mode == "compare" {
+        Ok(None)
+    } else {
+        project.build(options).map(Some)
+    };
+    let (output, failure) = match attempt {
+        Ok(output) => (output, None),
+        Err(error) if mode.ends_with("blocked") && error.code() == "UPDATE.POLICY_BLOCKED" => {
+            (None, Some(error.snapshot()))
+        }
+        Err(error) => return Err(error.into()),
+    };
+    println!(
+        "{}",
+        serde_json::json!({"input_ms":input_ms,
+        "operation_ms": operation_started.elapsed().as_secs_f64() * 1000.0,
+        "comparison":comparison, "report":output.as_ref().map(|o| o.report().snapshot()),
+        "failure":failure, "retained_candidate_bytes":retained_candidate_bytes, "retained_media":retained_media.len()})
+    );
     Ok(())
 }

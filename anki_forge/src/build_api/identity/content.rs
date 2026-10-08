@@ -152,6 +152,7 @@ pub(super) fn note_from_plan(
     model: &NormalizedNotetype,
     model_id: i64,
     decks: &DeckRegistry,
+    planned_cards: &[crate::writer_core::card_plan::PlannedCard],
 ) -> anyhow::Result<String> {
     let fields = model
         .fields
@@ -160,8 +161,8 @@ pub(super) fn note_from_plan(
         .collect::<Vec<_>>()
         .join("\u{1f}");
     let tags = note.tags.join(" ");
-    let mut cards = crate::writer_core::card_plan::plan_cards(note, model)
-        .into_iter()
+    let mut cards = planned_cards
+        .iter()
         .map(|card| {
             let template = &model.templates[card.template_index];
             let name = template

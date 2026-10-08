@@ -34,12 +34,12 @@ impl std::error::Error for NormalizeError {
 }
 
 pub(super) fn normalize(
-    document: &ProductDocument,
+    document: ProductDocument,
     base_dir: &Path,
     media_store_dir: &Path,
     prepared_media: Option<&mut crate::prepared_media::PreparedMedia>,
 ) -> Result<NormalizeOutput, NormalizeError> {
-    let lowering = document.lower().map_err(|error| NormalizeError {
+    let lowering = document.into_lowering().map_err(|error| NormalizeError {
         message: "lower authored content".into(),
         diagnostics: map_product_lowering_error(&error),
         io_cause: None,
