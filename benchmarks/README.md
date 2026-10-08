@@ -5,6 +5,17 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Production defaults and memory digests: 2026-10-08
+
+The [implementation report](results/20261008-defaults-digest-implementation/report.md)
+compares build-time validated defaults and immutable memory-snapshot digest reuse
+with untouched `15bcee6` binaries. In the same session, 100/1,000-note text and
+1,000-note audio medians fall 13.7%/3.1%/6.9%; the other five timing intervals
+cross zero. All eight peak-RSS medians decrease, without raising memory budgets.
+All 416 exports and 32 selected Anki imports pass, alongside Rust/Node/Python
+regressions and an outside-checkout packaged consumer. Sources, raw observations,
+production patch, validation logs and record replay are retained.
+
 ## Production media budgets and batch imports: 2026-10-08
 
 The [production comparison](results/20261008-media-defaults-genanki/report.md)

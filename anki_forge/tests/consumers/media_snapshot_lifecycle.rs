@@ -452,6 +452,9 @@ fn main() -> anyhow::Result<()> {
     );
     ensure!(inventory(&temp)?["files"] == 0);
     match mode.as_str() {
+        "tamper-file" | "tamper-segment" => {
+            tampered_snapshot(&workspace, &temp, mode == "tamper-segment")
+        }
         "concurrent-duplicates" => concurrent_duplicates(&workspace, &temp),
         "early-duplicate" => early_duplicate(&workspace, &temp),
         "fd-stress" => {
@@ -603,4 +606,41 @@ fn main() -> anyhow::Result<()> {
         ),
         _ => anyhow::bail!("unknown mode"),
     }
+}
+
+fn tampered_snapshot(workspace: &Path, temp: &Path, segment: bool) -> anyhow::Result<()> {
+    use std::io::{Seek, SeekFrom};
+
+    let mut owners = Vec::new();
+    let media = if segment {
+        // Fill the shared budget with distinct live snapshots, so the target
+        // uses a shared spill block instead of an individual temporary file.
+        for byte in 0..64 {
+            owners.push(Media::bytes(vec![byte; 1 << 20], "application/octet-stream")?);
+        }
+        ensure!(inventory(temp)?["files"] == 0);
+        Media::bytes(vec![99; 1 << 20], "application/octet-stream")?
+    } else {
+        Media::bytes(vec![99; 2 << 20], "application/octet-stream")?
+    };
+    one_snapshot(temp, if segment { 1 << 20 } else { 2 << 20 })?;
+    let path = fs::read_dir(temp)?.next().context("owned snapshot")??.path();
+    let mut file = fs::OpenOptions::new().write(true).open(path)?;
+    file.seek(SeekFrom::Start(4096))?;
+    file.write_all(b"changed")?;
+    drop(file);
+
+    let mut project = Project::new("snapshot-integrity")?;
+    project.add("one", Note::basic("Question", "Answer"))?;
+    project.add_asset(media.clone())?;
+    let destination = workspace.join("must-not-publish.apkg");
+    let error = project.build(BuildOptions::to(&destination))
+        .expect_err("a changed owned snapshot must be rejected");
+    ensure!(error.report().diagnostics().iter().any(|d| d.code == "MEDIA.SOURCE_CHANGED"),
+        "expected snapshot integrity diagnostic: {error:?}");
+    ensure!(!destination.exists(), "changed content must not be published");
+    drop((error, project, media, owners));
+    ensure!(inventory(temp)?["files"] == 0);
+    emit("changed_snapshot_rejected", temp, json!({"segment":segment}))?;
+    Ok(())
 }

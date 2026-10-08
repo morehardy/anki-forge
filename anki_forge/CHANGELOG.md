@@ -8,6 +8,13 @@ new minor release.
 
 ### Performance
 
+- Validate the embedded contract bundle and generate typed writer defaults at
+  compile time, reducing first-build initialization without a separate resource
+  generation command or runtime dependency on the source checkout.
+- Reuse BLAKE3 digests of private immutable memory snapshots during media
+  preparation. File snapshots and shared spill segments are still rehashed;
+  SHA-1, size checks, encoding and package inspection remain unchanged.
+
 - Add ordered `Media::files` / `files_with_limits` imports with up to four
   workers and matching Node/Python `Media.files` methods. Failed batches join
   their workers and release partial snapshots before returning the first error.

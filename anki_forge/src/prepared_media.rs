@@ -335,7 +335,8 @@ impl PreparedMedia {
             .set_parameter(zstd::zstd_safe::CParameter::CompressionLevel(level))
             .map_err(encode_error)?;
         let mut sha1 = Sha1::new();
-        let mut blake3 = blake3::Hasher::new();
+        let memory_digest = owned.and_then(|media| media.snapshot.immutable_memory_digest());
+        let mut blake3 = memory_digest.is_none().then(blake3::Hasher::new);
         let mut size = 0u64;
         let mut sample = Vec::with_capacity(8192);
         let mut buffer = [0u8; BUFFER_BYTES];
@@ -369,7 +370,9 @@ impl PreparedMedia {
             let sample_count = (8192 - sample.len()).min(count);
             sample.extend_from_slice(&bytes[..sample_count]);
             sha1.update(bytes);
-            blake3.update(bytes);
+            if let Some(blake3) = &mut blake3 {
+                blake3.update(bytes);
+            }
             if limit.is_none_or(|limit| size <= limit) {
                 #[cfg(test)]
                 crate::authoring_core::media_io::io_failure::check(
@@ -380,7 +383,10 @@ impl PreparedMedia {
             }
         }
         let sha1 = hex::encode(sha1.finalize());
-        let blake3 = blake3.finalize().to_hex().to_string();
+        let blake3 = memory_digest
+            .unwrap_or_else(|| blake3.expect("untrusted source was hashed").finalize())
+            .to_hex()
+            .to_string();
         if let Some(media) = owned {
             if blake3 != media.snapshot.digest.to_hex().as_str() || size != media.snapshot.len {
                 return Err(diagnostic(

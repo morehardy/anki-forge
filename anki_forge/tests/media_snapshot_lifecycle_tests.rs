@@ -186,6 +186,16 @@ fn source_deletion_and_last_content_owner_control_snapshot_lifetime() {
 }
 
 #[test]
+fn changed_owned_file_snapshot_is_rejected_before_publication() {
+    run("tamper-file", false);
+}
+
+#[test]
+fn changed_owned_spill_segment_is_rejected_before_publication() {
+    run("tamper-segment", false);
+}
+
+#[test]
 fn same_large_content_from_file_and_bytes_retains_one_spool() {
     run("duplicate", false);
 }

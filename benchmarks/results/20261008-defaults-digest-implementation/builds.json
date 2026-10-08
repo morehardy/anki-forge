@@ -1,0 +1,42 @@
+[
+  {
+    "name": "baseline",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/defaults-digest-production-20261008/baseline-source/benchmarks/adapters/rust/Cargo.toml",
+      "--bin",
+      "anki-forge-benchmark"
+    ],
+    "env": {
+      "CARGO_TARGET_DIR": "/Users/hp/Desktop/2026/anki-forge/target",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "sha256": "d74a7606710822fd1290e558950bae03503c91d7cf5c145d7efb3fb7628dd9fc",
+    "bytes": 10607424
+  },
+  {
+    "name": "candidate",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/defaults-digest-production-20261008/source/benchmarks/adapters/rust/Cargo.toml",
+      "--bin",
+      "anki-forge-benchmark"
+    ],
+    "env": {
+      "CARGO_TARGET_DIR": "/Users/hp/Desktop/2026/anki-forge/target",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "sha256": "faa76640094e63acd183501ac0688c585f395a16170923e55872ef09fc3038e9",
+    "bytes": 6852400
+  }
+]

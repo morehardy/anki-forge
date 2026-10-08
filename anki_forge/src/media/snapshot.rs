@@ -111,6 +111,15 @@ impl SnapshotCache {
 static SNAPSHOTS: SnapshotCache = SnapshotCache::new();
 
 impl Snapshot {
+    /// Only private memory storage is immutable without rereading it. Temporary
+    /// files and shared spill blocks must still be hashed during preparation.
+    pub(crate) fn immutable_memory_digest(&self) -> Option<blake3::Hash> {
+        match &self.storage {
+            Storage::Memory(_) => Some(self.digest),
+            Storage::File(_) | Storage::Segment(_) => None,
+        }
+    }
+
     fn shared(mut self) -> Result<Arc<Self>, MediaError> {
         let Some(mut entries) = SNAPSHOTS.lock(self.process) else {
             self.spill_memory()?;

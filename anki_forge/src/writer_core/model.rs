@@ -1,16 +1,8 @@
+pub use crate::runtime::default_models::{BuildContext, WriterPolicy};
+
 use serde::{Deserialize, Serialize};
 #[cfg(any(test, feature = "internal-tools"))]
 use serde_json::Value;
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WriterPolicy {
-    pub id: String,
-    pub version: String,
-    pub compatibility_target: String,
-    pub stock_notetype_mode: String,
-    pub media_entry_mode: String,
-    pub apkg_version: String,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg(all(test, feature = "internal-tools"))]
@@ -28,17 +20,6 @@ pub struct VerificationGateRule {
     pub minimum_comparison_status: String,
     pub allowed_observation_statuses: Vec<String>,
     pub blocking_severities: Vec<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BuildContext {
-    pub id: String,
-    pub version: String,
-    pub emit_apkg: bool,
-    pub materialize_staging: bool,
-    pub media_resolution_mode: String,
-    pub unresolved_asset_behavior: String,
-    pub fingerprint_mode: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

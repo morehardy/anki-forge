@@ -12,3 +12,5 @@ This directory records contract decisions that need a durable paper trail.
 - [0022: Node artifact ownership and state snapshots](0022-node-artifact-and-state-snapshots.md)
 
 - [0026: Prepared publication and native work reduction](0026-prepared-publication-and-native-work-reduction.md)
+
+- [0027: Build-time defaults and immutable media digests](0027-build-time-defaults-and-immutable-media-digests.md)
