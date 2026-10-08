@@ -46,4 +46,4 @@ see [TypeScript configuration](api.md#typescript).
 - [Compare and update](../updates.md)
 - [Node API](api.md) and [troubleshooting](../troubleshooting.md)
 
-Source builds and local packaging are in [development](../development.md#source-builds).
+Source builds and local packaging are in [source builds](../source-builds.md).

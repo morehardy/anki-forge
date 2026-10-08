@@ -42,4 +42,4 @@ The namespace `spanish` and note key `es:hola` stay stable when you edit the car
 - [Compare and update](updates.md)
 - [Rust API](rust-api.md) and [verified environments](compatibility.md)
 
-For repository examples and source dependencies, use [source development](development.md#source-builds).
+For repository examples and source dependencies, use [source builds](source-builds.md).

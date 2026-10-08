@@ -126,7 +126,7 @@ and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
 ## Batch import from source
 
 **API source commit `1199196`**; not included in public `0.2.0`.
-Follow [source builds](development.md#source-builds) before using these methods.
+Follow [source builds](source-builds.md) before using these methods.
 
 Import a collection with bounded concurrency, keep input order, and retain
 owned media snapshots for later export:

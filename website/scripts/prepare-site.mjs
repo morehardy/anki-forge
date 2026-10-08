@@ -7,7 +7,7 @@ import { importedDocs, rewriteMarkdown } from './content-links.mjs';
 import { siteConfig } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
-import { checkDocumentation, packageVersions } from './documentation.mjs';
+import { checkDocumentation } from './documentation.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
 const root = path.resolve(website, '..');
@@ -16,7 +16,6 @@ const generated = path.join(website, 'src/generated');
 await mkdir(generated, { recursive: true });
 await checkDocumentation();
 await writeFile(path.join(generated, 'benchmark.json'), JSON.stringify(await loadBenchmarkPresentation(), null, 2) + '\n');
-await writeFile(path.join(generated, 'versions.json'), JSON.stringify(await packageVersions(), null, 2) + '\n');
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
 

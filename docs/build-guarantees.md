@@ -81,7 +81,7 @@ playback and update imports with the intended Anki versions and settings. See
 
 ## Prepared publication from source
 
-**API source commit `1199196`**; see [source builds](development.md#source-builds).
+**API source commit `1199196`**; see [source builds](source-builds.md).
 The public `0.2.0` packages do not provide prepared publication.
 
 `prepare_publication` builds, inspects and compares one private candidate;

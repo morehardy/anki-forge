@@ -20,7 +20,7 @@ interpreters and subinterpreters need separate validation. Browser, Electron, Bu
 Alpine/musl and ARM64 Linux/Windows are outside the recorded Node verification scope.
 
 The [batch media](media.md#batch-import-from-source) and [prepared publication](updates.md#build-once-review-then-publish-from-source)
-guides describe source commit `1199196`, not the public `0.2.0` package. Their source installation is in [development](development.md#source-builds).
+guides describe source commit `1199196`, not the public `0.2.0` package. Their source installation is in [source builds](source-builds.md).
 
 ## Anki import and playback
 

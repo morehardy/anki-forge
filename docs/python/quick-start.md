@@ -42,4 +42,4 @@ Keep namespace `spanish` and note key `es:hola` stable for later edits. Exportin
 - [Python API](api.md) and [diagnostics](diagnostics.md)
 - [Move from genanki](genanki-migration.md)
 
-For native source builds, use [development](../development.md#source-builds).
+For native source builds, use [source builds](../source-builds.md).

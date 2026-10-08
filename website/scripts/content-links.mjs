@@ -2,7 +2,7 @@ import path from 'node:path';
 import { repository, withBase } from '../site.config.mjs';
 
 export const importedDocs = [
-  {source: 'docs/development.md', route: '/docs/development/', name: 'development', title: 'Source development', description: 'Build SDKs and examples from a source checkout.'},
+  {source: 'docs/source-builds.md', route: '/docs/development/', name: 'development', title: 'Build SDKs from source', description: 'Build SDKs and examples from a source checkout.'},
   {"source": "docs/rust-guide.md", "route": "/docs/rust-guide/", "name": "rust-guide", "title": "Rust authoring guide", "description": "Projects, validation, media and updates through the supported Rust API."},
   {"source": "docs/template-bundles.md", "route": "/docs/templates/", "name": "templates", "title": "Template bundles", "description": "Import complete reusable Cloze and normal templates, CSS and media."},
   {"source": "anki_forge/README.md", "route": "/docs/api/", "name": "api", "title": "Public API overview", "description": "Rust compatibility boundaries, artifact ownership and supported behavior."},

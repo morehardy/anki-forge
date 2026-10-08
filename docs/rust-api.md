@@ -134,7 +134,7 @@ validation still applies. See [the design](plans/2026-09-28-rust-api-validation-
 
 ## Review once, publish once
 
-**API source commit `1199196`**; not included in public `0.2.0`. See [source builds](development.md#source-builds).
+**API source commit `1199196`**; not included in public `0.2.0`. See [source builds](source-builds.md).
 
 
 ```rust,no_run

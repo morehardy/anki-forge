@@ -7,20 +7,6 @@ import { importedDocs } from './content-links.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = filename => readFile(path.join(root, filename), 'utf8');
 
-export async function packageVersions() {
-  const field = (source, section, key) => {
-    const body = source.split(`[${section}]`)[1]?.split(/\n\[/)[0];
-    const value = body?.match(new RegExp(`^${key} = "([^"]+)"`, 'm'))?.[1];
-    assert.ok(value, `Missing ${section}.${key}`);
-    return value;
-  };
-  return {
-    rust: field(await read('anki_forge/Cargo.toml'), 'package', 'version'),
-    node: JSON.parse(await read('bindings/node/package.json')).version,
-    python: field(await read('bindings/python/pyproject.toml'), 'project', 'version'),
-  };
-}
-
 export async function sourceSnippet(reference) {
   const [filename, region] = reference.split('#');
   assert.ok(!path.isAbsolute(filename) && !filename.split('/').includes('..'), `Use a repository path: ${reference}`);

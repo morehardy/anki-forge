@@ -43,6 +43,6 @@ Open the persistent `spanish.apkg` in Anki. It contains one Basic card in **Span
 - [Image Occlusion](https://ankiforge.dev/docs/image-occlusion/)
 - [Compare and update](https://ankiforge.dev/docs/updates/)
 - [Node API](https://ankiforge.dev/docs/node-api/)
-- [Source development](https://ankiforge.dev/docs/development/)
+- [Build SDKs from source](https://ankiforge.dev/docs/development/)
 
 Use `.mjs` for ESM, or `require('ankiforge')` for CommonJS. TypeScript declarations ship with the package; see the [TypeScript configuration](https://ankiforge.dev/docs/node-api/#typescript).

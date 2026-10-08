@@ -13,7 +13,7 @@ different results.
 | Node cannot load its native package | Run `node -p "process.platform + '/' + process.arch"` and `npm ls ankiforge`; reinstall with `npm install --include=optional ankiforge@0.2.0` |
 | Node reports a native/wrapper mismatch | Use matching package versions; reinstall from the same registry version, or rebuild both from the same checkout |
 | Python cannot load its extension | Run `python -m pip show ankiforge` and `python -m pip debug --verbose`; check interpreter and wheel OS/CPU tags |
-| Python selects a source distribution | Choose a matching wheel/interpreter, or follow [source development](development.md#source-builds) with a compiler |
+| Python selects a source distribution | Choose a matching wheel/interpreter, or follow [source builds](source-builds.md) with a compiler |
 
 See [verified environments](compatibility.md), [Node setup](node/quick-start.md)
 and [Python setup](python/quick-start.md).

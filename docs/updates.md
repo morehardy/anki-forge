@@ -117,7 +117,7 @@ See [build guarantees](build-guarantees.md) for ownership and publication facts.
 ## Build once, review then publish from source
 
 **API source commit `1199196`**; not included in public `0.2.0`.
-Use [source builds](development.md#source-builds).
+Use [source builds](source-builds.md).
 
 Build once, inspect the report, then publish the same candidate file. Reviewing
 and then running a second ordinary build creates another candidate; prepared
@@ -151,7 +151,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 <!-- /source -->
 
-Run with `cargo run --locked -p ankiforge --example docs_publication` from the source checkout.
+From the pinned source checkout, save the complete program above as
+`anki_forge/examples/docs_publication.rs` (this guide adds the example; it is not
+bundled in `1199196`). Then run:
+
+```sh
+cargo run --locked -p ankiforge --example docs_publication
+```
+
+The example writes `spanish-original.apkg` and, when the policy allows publication,
+`spanish-reviewed.apkg` to the repository root.
 Preparation does not publish the destination. Review the findings and test your
 client import before approving distribution; the example automatically publishes
 only this simple content edit when its policy allows it. The benchmark does not

@@ -57,7 +57,7 @@ export default defineConfig({
         { label: 'Help', items: [
           { label: 'Troubleshooting', slug: 'docs/troubleshooting' },
           { label: 'Python diagnostics', slug: 'docs/python-diagnostics' },
-          { label: 'Source development', slug: 'docs/development' },
+          { label: 'Build SDKs from source', slug: 'docs/development' },
         ] },
       ],
     }),

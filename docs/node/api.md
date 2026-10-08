@@ -191,7 +191,7 @@ validation still applies. See [the design](../plans/2026-09-28-rust-api-validati
 
 ## Source API details
 
-These additions describe current source; see [source builds](../development.md). Batch media and prepared publication are available at source commit `1199196`; they are absent from public `0.2.0`.
+These additions describe current source; see [source builds](../source-builds.md). Batch media and prepared publication are available at source commit `1199196`; they are absent from public `0.2.0`.
 
 ### Prepare, review and publish
 
