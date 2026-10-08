@@ -1,5 +1,5 @@
 ---
-import { examples } from '../lib/examples';
+import { examples, showcase } from '../lib/examples';
 import { sitePath } from '../lib/site';
 import CodeBlock from './CodeBlock.astro';
 import CardPreview from './CardPreview.astro';
@@ -11,7 +11,7 @@ const { id = 'examples' } = Astro.props;
     <div class="example-tabs" role="tablist" aria-label="Card type">
       {examples.map((example, index) => <button type="button" role="tab" id={`${id}-tab-${example.id}`} aria-controls={`${id}-panel-${example.id}`} aria-label={example.label} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-tab={example.id}>{example.id === 'occlusion' ? 'Occlusion' : example.label}</button>)}
     </div>
-    <span class="workbench-hint">Rust source → card preview</span>
+    <span class="workbench-hint">Rust source → browser preview</span>
   </div>
   {examples.map((example, index) => <div class="example-panel" role="tabpanel" id={`${id}-panel-${example.id}`} aria-labelledby={`${id}-tab-${example.id}`} data-example={example.id} hidden={index !== 0}>
     <div class="example-source">
@@ -21,5 +21,6 @@ const { id = 'examples' } = Astro.props;
     </div>
     <CardPreview example={example} prefix={`${id}-${example.id}`} />
   </div>)}
+  <p class="no-script-note">Generated from source {showcase.sourceCommit.slice(0, 7)}{showcase.sourceModified ? ' with local edits' : ''}; source checksum <code>{showcase.sourceSha256.slice(0, 12)}</code>. These are browser previews of exported content.</p>
   <noscript><p class="no-script-note">This is the Basic example. <a href={sitePath('/examples/')}>View all card examples</a> and download their decks.</p></noscript>
 </section>

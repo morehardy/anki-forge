@@ -1,4 +1,4 @@
-# Rust Implementation Placeholder
+# Rust implementation
 
-Rust implementation work is intentionally deferred in Phase 1.
-This directory may remain skeletal or empty until a later phase.
+The Rust library lives in [anki_forge](../../anki_forge/). Start with its [README](../../anki_forge/README.md),
+[authoring guide](../../docs/rust-guide.md) or [source development guide](../../docs/development.md).

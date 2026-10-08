@@ -23,7 +23,8 @@ import matplotlib.pyplot as plt
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs/assets/readme"
 PREVIEW = ROOT / "target/readme/preview"
-CSV = ROOT / "benchmarks/results/20261008-latest-commit-genanki/comparison.csv"
+PRESENTATION = json.loads((ROOT / "docs/benchmark-presentation.json").read_text())
+CSV = ROOT / PRESENTATION["dataset"] / "comparison.csv"
 PROFILES = [
     ("basic-mixed-text-v1", "Text only"),
     ("basic-image-unique-v2", "Unique images"),
@@ -115,8 +116,8 @@ def screenshot_pages(cards: list[dict], media: Path) -> None:
     custom = next(card for card in cards if card["notetype"] == "Ear Training")
     assert "[...]</span>" in cloze["question"] and ">frequency</span>" in cloze["answer"]
     code = (ROOT / "anki_forge/examples/target_api_basic.rs").read_text()
-    excerpt = code.split('    let mut deck', 1)[1].split('    Ok(())', 1)[0]
-    excerpt = 'let mut deck' + excerpt
+    excerpt = code.split('    let mut project', 1)[1].split('    Ok(())', 1)[0]
+    excerpt = 'let mut project' + excerpt
     excerpt = '\n'.join(line[4:] if line.startswith('    ') else line for line in excerpt.rstrip().splitlines())
     excerpt = excerpt.replace('?.ensure_success()?;', '?\n    .ensure_success()?;')
     excerpt = html.escape(excerpt)
@@ -154,7 +155,10 @@ def screenshot_pages(cards: list[dict], media: Path) -> None:
 
 def benchmark_charts() -> None:
     with CSV.open() as source:
-        rows = {row["profile"]: row for row in csv.DictReader(source) if row["notes"] == "1000"}
+        rows = {row["profile"]: row for row in csv.DictReader(source) if int(row["notes"]) == PRESENTATION["notes"]}
+    less_time = all(float(rows[profile]["rust_time_ms_median"]) <=
+                    float(rows[profile]["genanki_time_ms_median"]) for profile, _ in PROFILES)
+    chart_title = "Less time exporting." if less_time else "Export times, compared."
     plt.rcParams.update({"font.family": "DejaVu Sans", "svg.fonttype": "path",
                          "svg.hashsalt": "anki-forge-readme-20261008"})
     for theme, colors in PALETTES.items():
@@ -174,11 +178,11 @@ def benchmark_charts() -> None:
                     ax.barh(i + offset, value, height=height, color=color, zorder=3)
                     ax.text(value + 7, i + offset, f"{value:.1f}", va="center", fontsize=13 if mobile else 16,
                             color=colors["ink"])
-            max_value = max(float(row[f"{impl}_time_ms_median"]) for row in rows.values() for impl in ("rust", "genanki"))
+            max_value = max(float(rows[profile][f"{impl}_time_ms_median"]) for profile, _ in PROFILES for impl in ("rust", "genanki"))
             ax.set_xlim(0, math.ceil(max_value / 100) * 100 + 50)
-            ax.set_ylim(4.65, -.57 if mobile else -.5)
+            ax.set_ylim(len(PROFILES) - .35, -.57 if mobile else -.5)
             ax.set_xticks([0, 100, 200, 300, 400])
-            ax.set_yticks([] if mobile else [i + .13 for i in range(5)],
+            ax.set_yticks([] if mobile else [i + .13 for i in range(len(PROFILES))],
                           [] if mobile else [label for _, label in PROFILES])
             ax.tick_params(length=0, labelsize=13 if mobile else 16, colors=colors["muted"], pad=12)
             ax.grid(axis="x", color=colors["line"], linewidth=.6, zorder=0)
@@ -186,9 +190,9 @@ def benchmark_charts() -> None:
                 spine.set_visible(False)
             ax.set_xlabel("Median export time (ms) · lower is better", color=colors["muted"],
                           fontsize=12 if mobile else 15, labelpad=15)
-            fig.text(.07 if mobile else .035, .94 if mobile else .92, "Less time exporting.", fontsize=21 if mobile else 25,
+            fig.text(.07 if mobile else .035, .94 if mobile else .92, chart_title, fontsize=21 if mobile else 25,
                      weight="bold", color=colors["ink"])
-            fig.text(.07 if mobile else .035, .9 if mobile else .86, "1,000 notes per workload · 10 timings each", fontsize=12 if mobile else 16,
+            fig.text(.07 if mobile else .035, .9 if mobile else .86, f"{PRESENTATION['notes']:,} notes per workload · 10 timings each", fontsize=12 if mobile else 16,
                      color=colors["muted"])
             fig.legend([plt.Rectangle((0, 0), 1, 1, color=colors["accent"]),
                         plt.Rectangle((0, 0), 1, 1, color=colors["other"])],
@@ -197,7 +201,7 @@ def benchmark_charts() -> None:
             suffix = f"{theme}{'-mobile' if mobile else ''}"
             svg_path = ASSETS / f"export-times-{suffix}.svg"
             fig.savefig(svg_path, metadata={"Date": None,
-                        "Title": "Rust Project and genanki: five 1,000-note export workloads",
+                        "Title": f"Rust Project and genanki: five {PRESENTATION['notes']:,}-note export workloads",
                         "Description": "M1 Pro, 2026-10-08, commit 1199196. Startup included. Default APKG formats differ."})
             plt.close(fig)
             # Matplotlib emits trailing spaces in multiline SVG path data.

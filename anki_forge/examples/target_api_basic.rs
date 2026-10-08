@@ -1,8 +1,9 @@
 use ankiforge::{BuildOptions, Note, Project};
 
-fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("hola", Note::basic("hola", "hello"))?;
-    project.build(BuildOptions::to("spanish.apkg"))?;
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+    println!("{}", output.artifact().path().display());
     Ok(())
 }

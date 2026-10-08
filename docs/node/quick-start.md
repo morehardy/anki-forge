@@ -1,99 +1,49 @@
-# Your first publication with Node
+# Your first deck with Node
 
-The SDK uses Rust's default public API through a native addon. A Project has an
-explicit namespace; every note has an explicit source key. A successful build
-returns an artifact and observations. See [release status](../compatibility.md)
-before choosing a registry package.
-
-## Build and run from source
-
-Use Node 22.13+ and Rust 1.92+. From the repository root:
+Use Node.js 22.13 or later. In a new application directory:
 
 ```sh
-cd bindings/node
-npm run setup
-npm run build
-npm run example:minimal
+mkdir anki-deck
+cd anki-deck
+npm install --include=optional ankiforge@0.2.0
 ```
 
-The helper selects your rebuilt host binary. This source example creates a
-publication, compares an edited version and builds the update. Its temporary
-artifacts are closed after use:
+This installs the [public npm package](https://www.npmjs.com/package/ankiforge) and the matching native optional dependency.
+See [verified environments](../compatibility.md) for platform coverage.
 
-<!-- source: bindings/node/examples/basic.mjs -->
+## Export a deck
+
+Save this as `main.mjs`:
+
+<!-- source: bindings/node/examples/quickstart.mjs -->
 ```js
-import {
-  Project,
-  Note,
-  Content,
-  BuildOptions,
-  CompareOptions,
-} from "../dist/index.mjs";
-const project = new Project("example").defaultDeck("Learning");
-project.add("hello", Note.basic("Hello <world>", Content.html("<b>你好</b>")));
-const first = await project.build(BuildOptions.temporary());
-try {
-  const next = new Project("example").defaultDeck("Learning");
-  next.add("hello", Note.basic("Hello <world>", "你好，世界"));
-  console.log(
-    (
-      await next.compare(CompareOptions.against(first.artifact.path))
-    ).snapshot(),
-  );
-  const updated = await next.build(
-    BuildOptions.temporary().updateFrom(first.artifact.path),
-  );
-  console.log(updated.snapshot());
-  await updated.artifact.close();
-} finally {
-  await first.artifact.close();
-}
+import { Project, Note, BuildOptions } from 'ankiforge';
+
+const project = new Project('spanish').defaultDeck('Spanish');
+project.add('es:hola', Note.basic('hola', 'hello'));
+const output = await project.build(BuildOptions.to('spanish.apkg'));
+console.log(output.artifact.path);
+await output.artifact.close();
 ```
 <!-- /source -->
 
-To retain an APKG for manual import, choose `BuildOptions.to('example.apkg')`
-instead of temporary output, or call `output.artifact.persistTo(path)` while the
-original owner remains alive. Closing a persistent artifact does not delete it.
-
-## Install a local build
-
-From `bindings/node`, run:
-
 ```sh
-npm run pack:local
+node main.mjs
 ```
 
-Install both actual tarballs printed by that command: the facade and matching
-host-native package. For an unpublished local build, pass their absolute paths
-to `npm install --offline --ignore-scripts --omit=optional`. Installing the
-host-native tarball explicitly avoids fetching a candidate platform version from
-a registry.
+Open the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **Spanish**.
+Keep namespace `spanish` and key `es:hola` stable for later edits. Closing the persistent artifact leaves the file on disk.
+Exporting does not require Anki to be installed.
 
-Application code imports from `ankiforge`; the repository example above
-uses its sibling built `dist` directory. A minimal installed application is:
+## TypeScript and next tasks
 
-```js
-import { Project, Note, BuildOptions } from 'ankiforge';
-const project = new Project('spanish').defaultDeck('Spanish');
-project.add('hola', Note.basic('hola', 'hello'));
-const output = await project.build(BuildOptions.to('spanish.apkg'));
-console.log(output.artifact.path, output.report.counts);
-await output.artifact.close();
-```
+Use `.mjs` for ESM, or `require('ankiforge')` for CommonJS. TypeScript declarations ship with the package;
+see [TypeScript configuration](api.md#typescript).
 
-Use `.mjs` or configure `type: module`. CommonJS can
-`require('ankiforge')`; both formats share the same implementation and
-class identities. TypeScript declarations ship with the package.
+- [Images and audio](../media.md) and [Node media API](api.md#media-and-image-occlusion)
+- [Custom note types](../custom-notetypes.md) and [template bundles](../template-bundles.md)
+- [Image Occlusion](../image-occlusion.md)
+- [Compare and update](../updates.md)
+- [Node API](api.md) and [troubleshooting](../troubleshooting.md)
 
-## Values and asynchronous operations
-
-`add` and completed-model construction are synchronous. Media import, bundle
-loading, comparison, build, artifact persistence and artifact close are
-asynchronous. Await their results. Build and compare capture project state when
-invoked, so later additions cannot alter an in-flight request. Clone a project
-when you want independent future edits.
-
-Strings mean Text for every note kind. Use `Content.html` for intentional HTML.
-Models and media are reusable immutable values; no separate registration step
-is required. Continue with the [Node API](api.md), [core concepts](../concepts.md),
-or [update workflow](../updates.md).
+Source builds and local packaging are in [development](../development.md#source-builds).

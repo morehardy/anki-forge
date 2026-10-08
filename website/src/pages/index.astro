@@ -1,26 +1,31 @@
 ---
-import { getCollection } from 'astro:content';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import HomeShowcase from '../components/HomeShowcase.astro';
 import PerformanceEvidence from '../components/PerformanceEvidence.astro';
 import ExampleWorkbench from '../components/ExampleWorkbench.astro';
 import UpdateDemo from '../components/UpdateDemo.astro';
-import InstallCommand from '../components/InstallCommand.astro';
-import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
 import { sitePath } from '../lib/site';
 import '../styles/home.css';
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+
 ---
-<SiteLayout description="Build Basic, Cloze, Image Occlusion, and custom Anki cards with Rust, Node.js, or Python. Explore runnable examples and archived export benchmarks.">
+<SiteLayout description="Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python. Package media, keep note identities stable and review deck updates.">
   <div class="container">
     <section class="home-hero" aria-labelledby="hero-title">
       <div class="home-hero-copy">
-        <h1 id="hero-title">Build beyond<br /><span>basic flashcards.</span></h1>
-        <p>Basic, Cloze, Media, Image Occlusion. Create Anki decks with Rust, Node.js, or Python.</p>
-        <div class="hero-actions"><a class="button" href={sitePath('/examples/')}>Explore cards <Icon name="arrowRight" /></a><a class="text-link" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a></div>
+        <h1 id="hero-title">Turn your data<br /><span>into Anki decks.</span></h1>
+        <p>Build Basic, Cloze, Image Occlusion and custom cards with Rust, TypeScript or Python. Package your media, keep note identities stable, and review changes before distributing the next deck.</p>
+        <div class="hero-actions"><a class="button" href={sitePath('/docs/languages/')}>Build your first deck <Icon name="arrowRight" /></a><a class="text-link" href={sitePath('/examples/')}>Explore cards <Icon name="arrowRight" /></a></div>
       </div>
       <HomeShowcase />
+    </section>
+    <section class="home-install" aria-labelledby="install-heading">
+      <div><h2 id="install-heading">Choose your language.</h2><p>Export <code>spanish.apkg</code> with the public 0.2.0 package. Normal export needs no Anki installation.</p></div>
+      <div class="home-language-grid">
+        <article><h3>Rust</h3><pre><code>cargo add ankiforge@0.2.0</code></pre><a class="text-link" href={sitePath('/docs/quickstart/')}>Build with Rust <Icon name="arrowRight" /></a></article>
+        <article><h3>Node / TypeScript</h3><pre><code>npm install --include=optional ankiforge@0.2.0</code></pre><a class="text-link" href={sitePath('/docs/node-quickstart/')}>Build with Node <Icon name="arrowRight" /></a></article>
+        <article><h3>Python</h3><pre><code>python -m pip install ankiforge==0.2.0</code></pre><a class="text-link" href={sitePath('/docs/python-quickstart/')}>Build with Python <Icon name="arrowRight" /></a></article>
+      </div>
     </section>
     <PerformanceEvidence />
 
@@ -34,7 +39,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, 
       <div class="section-copy">
         <h2 id="identity-heading">Let your notes evolve.<br />Keep their identity.</h2>
         <p>Correct a definition or add an example. Stable IDs and a previous build help Anki Forge match existing notes when you export again.</p>
-        <a class="text-link" href={sitePath('/docs/rust-guide/#updating-distributed-decks')}>Understand deck updates <Icon name="arrowRight" /></a>
+        <a class="text-link" href={sitePath('/docs/updates/')}>Understand deck updates <Icon name="arrowRight" /></a>
       </div>
       <UpdateDemo />
     </section>
@@ -44,14 +49,5 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, 
       <div class="feature"><Icon name="palette" /><div><h3>Your cards. Your templates.</h3><p>Start with Basic and Cloze, or define your own note types. Keep HTML, CSS, and media in reusable template bundles.</p><a class="text-link" href={sitePath('/docs/templates/')}>Explore templates <Icon name="arrowRight" /></a></div></div>
     </section>
 
-    <section class="section start-section" aria-labelledby="start-heading" data-reveal>
-      <div class="section-copy"><h2 id="start-heading">Your first deck<br />starts here.</h2><p>Run the smallest example from the source checkout, then open <code>spanish.apkg</code> in Anki. Requires Rust 1.92 or later.</p><a class="text-link" href={sitePath('/docs/quickstart/')}>Get started <Icon name="arrowRight" /></a></div>
-      <InstallCommand />
-    </section>
-
-    <section class="blog-section" aria-labelledby="blog-heading" data-reveal>
-      <h2 id="blog-heading">From the project</h2>
-      <div class="post-grid">{posts.map(post => <PostCard post={post} />)}</div>
-    </section>
   </div>
 </SiteLayout>

@@ -78,3 +78,39 @@ or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
 infallible; explicit assets and raw HTML are unaffected. The check uses retained
 import MIME, and does not certify playback. Build's independent MIME/extension
 validation still applies. See [the design](../plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.
+
+## Source API details
+
+These additions describe current source; see [source builds](../development.md). Batch media and prepared publication are available at source commit `1199196`; they are absent from public `0.2.0`.
+
+### Prepare, review and publish
+
+```python
+from ankiforge import Project, Note, BuildOptions, BuildError
+project = Project('review-once').add('one', Note.basic('Question', 'Answer'))
+previous = project.build(BuildOptions.to('previous.apkg'))
+previous.artifact.close()
+prepared = project.prepare_publication(
+    BuildOptions.to('next.apkg').update_from('previous.apkg')
+)
+try:
+    report = prepared.report  # observations; does not own the candidate
+    if report.comparison is None or report.comparison.allows_publication:
+        output = prepared.publish()
+        output.artifact.close()  # persistent next.apkg remains
+except BuildError as error:
+    print(error.snapshot()['result'])  # actual publication/durability facts
+    raise
+finally:
+    prepared.close()  # idempotent; deletes an unused candidate
+```
+
+One publish attempt consumes the owner, including policy or I/O failure. Later
+calls raise `PreparedPublicationStateError` with code `BUILD.PREPARED_UNAVAILABLE`
+and reason `closed` or `consumed`; close does not cancel an already running
+publication. Relative paths bind at preparation invocation, and Project changes
+cannot modify the reviewed APKG. Reports survive close without retaining files.
+Change options or retry by preparing again. Duration excludes review waiting.
+Late errors can mean replacement succeeded with unconfirmed durability; inspect
+publication facts before deciding what to do. Native binding protocol 1 and
+contract bundle 2.1.0 are required; older same-version binaries are rejected.

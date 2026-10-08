@@ -6,6 +6,7 @@ import path from 'node:path';
 import { importedDocs, rewriteMarkdown } from './content-links.mjs';
 import { siteConfig } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
+import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { checkDocumentation, packageVersions } from './documentation.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
@@ -14,6 +15,7 @@ const output = path.join(website, 'public/generated');
 const generated = path.join(website, 'src/generated');
 await mkdir(generated, { recursive: true });
 await checkDocumentation();
+await writeFile(path.join(generated, 'benchmark.json'), JSON.stringify(await loadBenchmarkPresentation(), null, 2) + '\n');
 await writeFile(path.join(generated, 'versions.json'), JSON.stringify(await packageVersions(), null, 2) + '\n');
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
@@ -28,11 +30,18 @@ for (const example of [...data.examples, { id: 'updates' }]) {
   const code = source.split(start)[1].split(end)[0].replace(/^\n/, '').trimEnd().split('\n').map(line => line.replace(/^ {4}/, '')).join('\n');
   await writeFile(path.join(generated, `${example.id}.rs`), code);
 }
+data.update.artifacts = [];
+for (const file of [data.update.previous, data.update.next]) {
+  const bytes = await readFile(path.join(output, file));
+  data.update.artifacts.push({ file, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+}
 for (const example of [...data.examples, data.combined]) {
   const bytes = await readFile(path.join(output, example.file));
   example.bytes = bytes.length;
   example.sha256 = createHash('sha256').update(bytes).digest('hex');
 }
+data.sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+data.sourceModified = execFileSync('git', ['status', '--porcelain', '--', sourcePath], { cwd: root, encoding: 'utf8' }).trim().length > 0;
 data.sourceSha256 = createHash('sha256').update(source).digest('hex');
 await writeFile(path.join(generated, 'showcase.json'), `${JSON.stringify(data, null, 2)}\n`);
 await writeFile(path.join(output, 'showcase.json'), `${JSON.stringify(data, null, 2)}\n`);

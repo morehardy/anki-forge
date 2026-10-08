@@ -17,7 +17,7 @@
     "precheck": "npm run prepare:site",
     "check": "astro check",
     "check:site": "node scripts/check-site.mjs",
-    "test": "node --test scripts/site-config.test.mjs scripts/content-links.test.mjs",
+    "test": "node --test scripts/site-config.test.mjs scripts/content-links.test.mjs scripts/benchmark-presentation.test.mjs",
     "check:docs": "node scripts/documentation.mjs",
     "sync:docs": "node scripts/documentation.mjs --write",
     "check:examples": "node scripts/verify-doc-examples.mjs"

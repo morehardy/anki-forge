@@ -1,194 +1,48 @@
-# ankiforge
+# Anki Forge for Rust
 
-[Website](https://ankiforge.dev/) · [GitHub](https://github.com/morehardy/anki-forge)
+Build Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.
 
-Build Anki packages with owned notes, validated models and media snapshots.
-The crate embeds its contract resources and works outside the repository.
-Rust 1.92.0 or later is required.
+## Install
 
-```rust,no_run
+Rust 1.92+. See [verified environments](https://ankiforge.dev/docs/compatibility/).
+The public package is [`ankiforge` 0.2.0](https://crates.io/crates/ankiforge).
+
+```sh
+cargo new anki-deck
+cd anki-deck
+cargo add ankiforge@0.2.0
+```
+
+## Your first deck
+
+Save this as `src/main.rs`:
+
+<!-- source: anki_forge/examples/target_api_basic.rs -->
+```rust
 use ankiforge::{BuildOptions, Note, Project};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("hola", Note::basic("hola", "hello"))?;
+    project.add("es:hola", Note::basic("hola", "hello"))?;
     let output = project.build(BuildOptions::to("spanish.apkg"))?;
-    assert_eq!(output.report().counts().notes, 1);
+    println!("{}", output.artifact().path().display());
     Ok(())
 }
 ```
+<!-- /source -->
 
-Use a stable project namespace and note key from the first release. Display names,
-content and deck names can change independently. A project can contain several decks;
-set the default with `Project::default_deck` or use `Note::deck` for individual notes.
-
-The common values are available at the crate root. Additional APIs live in
-[`note`], [`schema`], [`media`], [`build`], [`update`] and [`diagnostics`].
-The optional `internal-tools` feature exposes selected repository verification
-operations under `tools`; applications should use the default features.
-
-## Models and content
-
-```rust,no_run
-use ankiforge::{Field, NoteType, Template, Project, Content};
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let model = NoteType::builder("vocabulary")
-        .name("Vocabulary")
-        .field(Field::new("front").name("Question").required())
-        .field(Field::new("back").name("Answer"))
-        .template(Template::new("recognition")
-            .front("{{front}}")
-            .back("{{FrontSide}}<hr>{{back}}"))
-        .build()?;
-    let mut project = Project::new("language-course")?;
-    project.add("hola", model.note()
-        .field("front", "hola")
-        .field("back", Content::html("<b>hello</b>")))?;
-    Ok(())
-}
+```sh
+cargo run
 ```
 
-A completed model is immutable and cheaply cloneable. Notes own their model;
-adding a note automatically collects the model and media. Templates and note field
-assignments refer to stable field keys. Display names are compiled to Anki field
-references during output. Plain strings are escaped text, including in Cloze notes;
-use `Content::html` for explicit markup.
+Open the persistent `spanish.apkg` in Anki. It contains one Basic card in **Spanish**, with **hola → hello**. Keep `spanish` and `es:hola` stable when editing this publication.
 
-## Media
+## Continue
 
-```rust,no_run
-use ankiforge::{BuildOptions, Media, Note, Project};
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let image = Media::file("cell.png")?;
-    let mut project = Project::new("biology")?;
-    project.add("cell", Note::basic(image.image(), "A cell"))?;
-    project.build(BuildOptions::to("biology.apkg"))?;
-    Ok(())
-}
-```
-
-`Media::file` acquires an owned snapshot before returning. Deleting or changing the
-source later does not change this value. `Media::bytes` takes ownership of bytes and
-requires a MIME type. Large snapshots use temporary storage shared between clones;
-the last owner cleans it up. Import budgets are configurable through `MediaLimits`.
-
-Content automatically retains typed image and sound references. Declare files used
-in handwritten HTML, CSS or scripts with `NoteTypeBuilder::asset` or
-`Project::add_asset`. `Media::with_export_name` sets a portable fixed name before
-creating references; names that collide after Unicode normalization and case folding
-are rejected. The `template-bundle-v2` loader returns the same immutable NoteType.
-
-## Updates and comparison
-
-```rust,no_run
-use ankiforge::{BuildOptions, Note, Project};
-use ankiforge::update::CompareOptions;
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut project = Project::new("spanish")?;
-    project.add("hola", Note::basic("hola", "hello"))?;
-    project.build(BuildOptions::to("v1.apkg"))?;
-
-    let mut next = Project::new("spanish")?;
-    next.add("hola", Note::basic("hola", "hello; hi"))?;
-    let comparison = next.compare(CompareOptions::against("v1.apkg"))?;
-    assert!(comparison.policy().allows_publication());
-    next.build(BuildOptions::to("v2.apkg").update_from("v1.apkg"))?;
-    Ok(())
-}
-```
-
-Keep the original distributed APKG as the next baseline. Packages carry complete
-identity evidence; an Anki re-export is not a valid replacement. Update builds preserve
-known note, model and card identities. Both baseline and candidate inspection have
-independent finite resource budgets.
-
-Comparison returns a complete report even when policy would block publication.
-Builds block High and Critical risks by default, before replacing the destination.
-Use typed `UpdatePolicy` and `RiskCode` values to accept specific risk categories;
-evidence and original risk levels remain in the report. Hard validation errors cannot
-be accepted. Configuring update policy on a first-release build is an error.
-
-Anki import behavior also depends on learner edits and import settings. Structural
-changes can require Anki's model merge option; imported packages do not delete omitted
-learner notes or cards. Read comparison evidence before accepting these changes.
-
-## Artifacts, reports and errors
-
-A successful build always returns `BuildOutput` with an `ApkgArtifact` and observations.
-`BuildOptions::temporary()` creates an artifact removed after its last handle drops;
-copying its path or serializing a snapshot does not retain the file. `BuildOptions::to`
-and `ApkgArtifact::persist_to` atomically publish a persistent file.
-
-`BuildReport` contains observations only. Obtain the actual outcome from
-`BuildOutput::snapshot` or `BuildError::snapshot`. Publication failures retain the
-publication stage and any already-published path. Saving JSON is a separate operation;
-it does not affect artifact ownership.
-
-Public errors implement `std::error::Error + Send + Sync + 'static`, expose stable
-`kind` and `code`, and retain underlying causes. Match these instead of display text.
-Owned values may be moved between threads; synchronize mutation of a shared project.
-
-This checkout embeds contract bundle `2.1.0`.
-The crate version and embedded contract version are separate compatibility axes,
-reported by `facade_api_version()` and `embedded_contract_version()`.
-
-Licensed under MIT.
-
-### Addition errors and media categories
-
-`Project` uses a stable namespace and optional default deck; it has no display
-title. `NoteType`, `Field` and `Template` still support display names.
-`Project::add` is atomic. Inspect `AddError::context()` for note/model keys and
-`note::AddTarget` for the original location; `detail()` returns `note::AddDetail`
-for conflicts or incompatible media usage. Match these non-exhaustive enums with
-`..` on data variants and a fallback arm. A field's `content_path` is `None` for
-the field, `Some([])` for its root, or sequence indices for a nested node.
-Separator byte ranges point into the original UTF-8 Text/Html leaf.
-
-`Media::image()` and `sound()` remain infallible. Addition requires `image/*` for
-images and `audio/*` or `video/*` for sound references. Other categories produce
-`NOTE.MEDIA_USAGE_INVALID`. This checks retained MIME, not decoding or playback.
-Raw HTML and explicit assets retain their existing behavior. Export renaming does
-not change MIME: a PNG renamed `wrong.mp3` passes image addition but can still fail
-build's independent sniffing/extension check with `MEDIA.DECLARED_MIME_MISMATCH`.
-
-Tool recipes now require `ankiforge-project-v2` without top-level `name`; v1 is
-rejected. Contract bundle is 2.1.0; package identity stays `ankiforge-identity-v1`.
-
-### Review once, publish once
-
-```rust,no_run
-use ankiforge::{BuildOptions, Project};
-# fn publish(project: &Project) -> Result<(), Box<dyn std::error::Error>> {
-let prepared = project.prepare_publication(
-    BuildOptions::to("next.apkg").update_from("previous.apkg"),
-)?;
-let report = prepared.report().clone(); // observations; owns no file
-if report.comparison().is_some_and(|c| !c.policy().allows_publication()) {
-    drop(prepared); // deletes the unpublished candidate; reprepare with a new policy
-    return Ok(());
-}
-match prepared.publish() { // consumes the owner on every outcome
-    Ok(output) => println!("Published {}", output.artifact().path().display()),
-    Err(error) => {
-        // Replacement may have succeeded even if durability confirmation failed.
-        eprintln!("{:?}", error.publications());
-        return Err(error.into());
-    }
-}
-# Ok(())
-# }
-```
-
-Preparation performs full bounded inspection and comparison. No destination is
-published until `publish`, which uses the same private candidate and rechecks
-baseline aliases. Relative paths bind at preparation invocation. Project edits
-cannot change the candidate. Report duration excludes time spent reviewing.
-Dropping an unpublished owner cleans it; temporary published output follows the
-usual last-artifact-owner cleanup rule. There is no restore-from-JSON or retry on
-an already consumed owner. Native builds omit the unused staging manifest but
-retain embedded identity evidence and media validation. Internal staging tools
-still receive their complete manifest and fingerprint.
+- [Complete quickstart](https://ankiforge.dev/docs/quickstart/)
+- [Images and audio](https://ankiforge.dev/docs/media/)
+- [Custom note types](https://ankiforge.dev/docs/custom-notetypes/) and [template bundles](https://ankiforge.dev/docs/templates/)
+- [Image Occlusion](https://ankiforge.dev/docs/image-occlusion/)
+- [Compare and update](https://ankiforge.dev/docs/updates/)
+- [Rust API](https://ankiforge.dev/docs/rust-api/)
+- [Source development](https://ankiforge.dev/docs/development/)

@@ -1,5 +1,5 @@
 export const repository = 'https://github.com/morehardy/anki-forge';
-export const description = 'Generate and validate Anki decks with Rust. Keep note identities stable as your content evolves.';
+export const description = 'Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python. Package media and review updates.';
 
 export function sitePath(path: string): string {
   if (!path.startsWith('/') || path.startsWith('//')) throw new Error('Expected a site-relative path.');

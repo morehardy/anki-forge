@@ -1,70 +1,45 @@
-# Python quickstart
+# Your first deck with Python
 
-The native Python SDK wraps the Rust public API. Use Python 3.11 or newer and install the platform wheel:
+Create and activate a virtual environment, then install the [public PyPI package](https://pypi.org/project/ankiforge/):
 
 ```sh
-python -m pip install ankiforge
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install ankiforge==0.2.0
 ```
 
-Choose a stable project namespace and stable note keys from your data. Names and content can then change without turning each edit into a new note.
+On Windows, activate with `.venv\Scripts\Activate.ps1`.
+Use an ordinary CPython interpreter and a matching platform wheel; see [verified environments](../compatibility.md).
 
+## Export a deck
+
+Save this as `main.py`:
+
+<!-- source: bindings/python/examples/quickstart.py -->
 ```python
 from ankiforge import Project, Note, BuildOptions
 
-project = Project('biology-course', default_deck='Science::Biology')
-project.add('cell', Note.basic('What is a cell?', 'The basic unit of life'))
-project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
-output = project.build(BuildOptions.to('biology.apkg'))
+project = Project('spanish', default_deck='Spanish')
+project.add('es:hola', Note.basic('hola', 'hello'))
+output = project.build(BuildOptions.to('spanish.apkg'))
 print(output.artifact.path)
-print(output.report.counts.notes)
+```
+<!-- /source -->
+
+```sh
+python main.py
 ```
 
-`Project` is the only container. A note can override its deck with `.deck('Science::Revision')`; no separate Deck object is needed. Note methods return new values, so retain the result of each configuration call.
+Open the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **Spanish**.
+Keep namespace `spanish` and note key `es:hola` stable for later edits. Exporting does not require Anki to be installed.
 
-## Text, HTML and owned media
+## Continue
 
-Strings are always text, including in Cloze notes. Use `Content.html` for explicit HTML. Image and sound content owns media dependencies and adds them to the project automatically.
+- [Images and audio](../media.md) and [Python media API](api.md#media-and-occlusion)
+- [Custom note types](../custom-notetypes.md) and [template bundles](../template-bundles.md)
+- [Image Occlusion](../image-occlusion.md)
+- [Compare and update](../updates.md)
+- [Python API](api.md) and [diagnostics](diagnostics.md)
+- [Move from genanki](genanki-migration.md)
 
-```python
-from ankiforge import Content, Media
-
-image = Media.file('cell.png')
-project.add('cell-picture', Note.basic(
-    Content.sequence(['Identify: ', image.image()]),
-    Content.html('<strong>A cell</strong>'),
-))
-```
-
-`Media.file` snapshots the bytes immediately. The original file may be changed or deleted after this call. Reuse the Media value in any project. `Media.bytes(data, 'image/png')` accepts an owned snapshot with an explicit MIME type. To choose a filename, call `.with_export_name('cell.png')` before creating content references. Assets referenced only in handwritten HTML, CSS or scripts are declared with `project.add_asset(media)`.
-
-## Complete a custom model
-
-```python
-from ankiforge import Field, Template, NoteType
-
-model = (NoteType.builder('vocab').name('词汇')
-    .field(Field('front', name='正面', required=True))
-    .field(Field('back', name='背面'))
-    .template(Template('recognition', '{{front}}', '{{FrontSide}}<hr>{{back}}', name='识别'))
-    .build())
-project.add('word:cell', model.note().field('front', 'cell').field('back', '细胞'))
-```
-
-The builder validates fields, templates and their references. The completed model is immutable. Note fields and template expressions use stable keys; Anki displays the separate names. Adding a note collects its model automatically and atomically. `NoteType.from_bundle(path)` loads the same immutable model from a `template-bundle-v2` bundle.
-
-## Compare and update
-
-```python
-from ankiforge import CompareOptions
-
-next_project = Project('biology-course', default_deck='Science::Biology')
-next_project.add('cell', Note.basic('What is a cell?', 'The basic structural unit of life'))
-next_project.add('dna', Note.cloze('DNA stores {{c1::genetic information}}'))
-comparison = next_project.compare(CompareOptions.against('biology.apkg'))
-print(comparison.findings)
-next_project.build(BuildOptions.to('biology-v2.apkg').update_from('biology.apkg'))
-```
-
-Use the previous original distribution as the baseline. It carries complete identity evidence inside the APKG. A high-risk comparison is a completed analysis; its `allows_publication` may be false. A build using the same blocking policy raises `BuildError` before publishing. See [diagnostics and update policy](diagnostics.md) for explicit risk acceptance and inspection budgets.
-
-For temporary output, use `BuildOptions.temporary()` and retain `output.artifact` for as long as the file is needed. A saved path or JSON snapshot does not retain that file. See the [API reference](api.md) and [complete executable workflow](../../bindings/python/examples/native_workflow.py).
+For native source builds, use [development](../development.md#source-builds).

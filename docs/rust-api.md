@@ -131,3 +131,41 @@ or video/*. Other categories raise `NOTE.MEDIA_USAGE_INVALID`. Constructors stay
 infallible; explicit assets and raw HTML are unaffected. The check uses retained
 import MIME, and does not certify playback. Build's independent MIME/extension
 validation still applies. See [the design](plans/2026-09-28-rust-api-validation-and-errors-design.md) for the complete target/detail table.
+
+## Review once, publish once
+
+**API source commit `1199196`**; not included in public `0.2.0`. See [source builds](development.md#source-builds).
+
+
+```rust,no_run
+use ankiforge::{BuildOptions, Project};
+# fn publish(project: &Project) -> Result<(), Box<dyn std::error::Error>> {
+let prepared = project.prepare_publication(
+    BuildOptions::to("next.apkg").update_from("previous.apkg"),
+)?;
+let report = prepared.report().clone(); // observations; owns no file
+if report.comparison().is_some_and(|c| !c.policy().allows_publication()) {
+    drop(prepared); // deletes the unpublished candidate; reprepare with a new policy
+    return Ok(());
+}
+match prepared.publish() { // consumes the owner on every outcome
+    Ok(output) => println!("Published {}", output.artifact().path().display()),
+    Err(error) => {
+        // Replacement may have succeeded even if durability confirmation failed.
+        eprintln!("{:?}", error.publications());
+        return Err(error.into());
+    }
+}
+# Ok(())
+# }
+```
+
+Preparation performs full bounded inspection and comparison. No destination is
+published until `publish`, which uses the same private candidate and rechecks
+baseline aliases. Relative paths bind at preparation invocation. Project edits
+cannot change the candidate. Report duration excludes time spent reviewing.
+Dropping an unpublished owner cleans it; temporary published output follows the
+usual last-artifact-owner cleanup rule. There is no restore-from-JSON or retry on
+an already consumed owner. Native builds omit the unused staging manifest but
+retain embedded identity evidence and media validation. Internal staging tools
+still receive their complete manifest and fingerprint.

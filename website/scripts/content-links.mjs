@@ -2,6 +2,7 @@ import path from 'node:path';
 import { repository, withBase } from '../site.config.mjs';
 
 export const importedDocs = [
+  {source: 'docs/development.md', route: '/docs/development/', name: 'development', title: 'Source development', description: 'Build SDKs and examples from a source checkout.'},
   {"source": "docs/rust-guide.md", "route": "/docs/rust-guide/", "name": "rust-guide", "title": "Rust authoring guide", "description": "Projects, validation, media and updates through the supported Rust API."},
   {"source": "docs/template-bundles.md", "route": "/docs/templates/", "name": "templates", "title": "Template bundles", "description": "Import complete reusable Cloze and normal templates, CSS and media."},
   {"source": "anki_forge/README.md", "route": "/docs/api/", "name": "api", "title": "Public API overview", "description": "Rust compatibility boundaries, artifact ownership and supported behavior."},
@@ -14,9 +15,9 @@ export const importedDocs = [
   {"source": "docs/updates.md", "route": "/docs/updates/", "name": "updates", "title": "Update and distribute", "description": "Compare and build releases using verified original APKG baselines."},
   {"source": "docs/build-guarantees.md", "route": "/docs/build-guarantees/", "name": "build-guarantees", "title": "Build and output guarantees", "description": "Understand temporary artifacts, path protection and candidate publication."},
   {"source": "docs/troubleshooting.md", "route": "/docs/troubleshooting/", "name": "troubleshooting", "title": "Troubleshooting", "description": "Resolve installation, media, template, identity and output errors."},
-  {"source": "docs/compatibility.md", "route": "/docs/compatibility/", "name": "compatibility", "title": "Compatibility and releases", "description": "Separate source versions, verified platforms and package publication."},
+  {"source": "docs/compatibility.md", "route": "/docs/compatibility/", "name": "compatibility", "title": "Compatibility and releases", "description": "Published packages, verified environments and Anki client conditions."},
   {"source": "docs/rust-api.md", "route": "/docs/rust-api/", "name": "rust-api", "title": "Rust API guide", "description": "Find public authoring methods, build defaults, reports and diagnostic behavior."},
-  {"source": "docs/node/quick-start.md", "route": "/docs/node-quickstart/", "name": "node-quickstart", "title": "Node quickstart", "description": "Build the native Node SDK and export two notes and three cards."},
+  {"source": "docs/node/quick-start.md", "route": "/docs/node-quickstart/", "name": "node-quickstart", "title": "Node quickstart", "description": "Install the public Node package and export your first deck."},
   {"source": "docs/node/api.md", "route": "/docs/node-api/", "name": "node-api", "title": "Node and TypeScript API", "description": "Public methods, async behavior, build options and reports."},
   {"source": "docs/python/quick-start.md", "route": "/docs/python-quickstart/", "name": "python-quickstart", "title": "Python quickstart", "description": "Install the native Python SDK and build real text, image and audio examples."},
   {"source": "docs/python/api.md", "route": "/docs/python-api/", "name": "python-api", "title": "Python API", "description": "Project, media, build options, reports and temporary artifact ownership."},

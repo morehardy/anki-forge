@@ -31,7 +31,7 @@ Existing website snippets use `// website:<region>:start/end` and the reference
 suffix `#website:<region>`. Omit a suffix to include a complete file.
 
 Run `npm run check:docs` from `website` to compare embedded code to its source,
-check repository link targets, and check declared version tables. Use
+check repository link targets, and check versioned public install commands. Use
 `npm run sync:docs` after intentional example edits, then review the diff.
 It updates marked blocks only; it does not prove the program works.
 
@@ -48,8 +48,8 @@ source-to-route map and sidebar aligned. Add the source path to workflow trigger
 when expanding imported content. Shared user guidance lives under `docs/`;
 contributor instructions and implementation history stay outside the user sidebar.
 
-State whether a page follows a source checkout or a released version. Read source
-versions from package metadata and maintain release/verification status separately.
+State whether a page follows a source checkout or a released version. Public installation
+versions are maintained separately from source package metadata.
 An installed-consumer test or successful wheel build does not mean publication.
 
 ## Verification
@@ -62,3 +62,17 @@ Package generation and inspected counts do not prove client playback, review
 history or every upgrade import. Record actual Anki versions and scenarios for
 manual/client verification. Keep generated previews clearly distinguished from
 Anki's own renderer.
+
+## Performance presentation
+
+`docs/benchmark-presentation.json` selects the dataset, measurement commit,
+evidence commit and displayed note count. Both the website and
+`scripts/generate_readme_assets.py` read this selection and the existing CSV.
+`npm test` checks both README numeric alt text, headlines, method tables and
+all four chart variants. `check:site` checks the actual rendered homepage values
+and bar scales. Do not rerun the archived benchmark during a site build.
+
+Before deploying, verify that the pinned evidence commit is publicly reachable.
+The selected `bef4aeb` commit currently exists locally; the 2026-10-08 validation
+found no matching public GitHub commit. Publish the source/evidence history
+through the repository's normal review process before deploying this content.

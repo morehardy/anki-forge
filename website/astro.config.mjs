@@ -12,7 +12,7 @@ export default defineConfig({
     starlight({
       title: 'Anki Forge',
       logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },
-      description: 'Generate and validate Anki decks with Rust. Keep note identities stable as your content evolves.',
+      description: 'Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python.',
       favicon: '/favicon.svg',
       disable404Route: true,
       social: [{ icon: 'github', label: 'GitHub', href: repository }],
@@ -57,7 +57,7 @@ export default defineConfig({
         { label: 'Help', items: [
           { label: 'Troubleshooting', slug: 'docs/troubleshooting' },
           { label: 'Python diagnostics', slug: 'docs/python-diagnostics' },
-          { label: 'Contributing', link: `${repository}/blob/main/docs/development.md` },
+          { label: 'Source development', slug: 'docs/development' },
         ] },
       ],
     }),

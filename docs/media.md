@@ -123,7 +123,23 @@ never changes retained MIME. Build still sniffs staged bytes and validates the
 export extension independently: PNG named `wrong.mp3` can pass image addition
 and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
 
-## Batch file imports
+## Batch import from source
+
+**API source commit `1199196`**; not included in public `0.2.0`.
+Follow [source builds](development.md#source-builds) before using these methods.
+
+Import a collection with bounded concurrency, keep input order, and retain
+owned media snapshots for later export:
+
+```rust
+use ankiforge::Media;
+let images = Media::files(["first.png", "second.png"])?;
+```
+
+Node uses `await Media.files(['first.png', 'second.png'])`;
+Python uses `Media.files(['first.png', 'second.png'])`.
+
+### Batch behavior and budgets
 
 Use `Media::files(paths)` in Rust, `await Media.files(paths)` in Node, or
 `Media.files(paths)` in Python to import files in input order with at most four

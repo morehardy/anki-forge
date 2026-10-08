@@ -113,3 +113,51 @@ promise that newer local edits are overwritten or deleted history is restored.
 Write candidates to a path separate from the archived baseline. After review,
 distribute the accepted package and retain it as the next release's evidence.
 See [build guarantees](build-guarantees.md) for ownership and publication facts.
+
+## Build once, review then publish from source
+
+**API source commit `1199196`**; not included in public `0.2.0`.
+Use [source builds](development.md#source-builds).
+
+Build once, inspect the report, then publish the same candidate file. Reviewing
+and then running a second ordinary build creates another candidate; prepared
+publication keeps the actual APKG tied to the reviewed report.
+
+<!-- source: anki_forge/examples/docs_publication.rs -->
+```rust
+use ankiforge::{BuildOptions, Note, Project};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("spanish-original.apkg"))?;
+
+    let mut next = Project::new("spanish")?.default_deck("Spanish");
+    next.add("es:hola", Note::basic("hola", "hello; hi"))?;
+    let prepared = next.prepare_publication(
+        BuildOptions::to("spanish-reviewed.apkg").update_from("spanish-original.apkg"),
+    )?;
+    println!("{:?}", prepared.report().comparison());
+    if prepared
+        .report()
+        .comparison()
+        .is_some_and(|report| report.policy().allows_publication())
+    {
+        let output = prepared.publish()?;
+        println!("{}", output.artifact().path().display());
+    }
+    Ok(())
+}
+```
+<!-- /source -->
+
+Run with `cargo run --locked -p ankiforge --example docs_publication` from the source checkout.
+Preparation does not publish the destination. Review the findings and test your
+client import before approving distribution; the example automatically publishes
+only this simple content edit when its policy allows it. The benchmark does not
+measure this workflow.
+
+See [build lifecycle](build-guarantees.md#prepared-publication-from-source),
+[Rust API](rust-api.md#review-once-publish-once),
+[Node API](node/api.md#prepare-review-and-publish) and
+[Python API](python/api.md#prepare-review-and-publish).

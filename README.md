@@ -6,10 +6,7 @@
 # anki-forge
 
 [![CI](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml)
-[![Rust CI](https://github.com/morehardy/anki-forge/actions/workflows/rust-crate-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/rust-crate-ci.yml)
-[![Node CI](https://github.com/morehardy/anki-forge/actions/workflows/node-sdk-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/node-sdk-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Website](https://github.com/morehardy/anki-forge/actions/workflows/website.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/website.yml)
 
 English · [简体中文](README.zh-CN.md)
 
@@ -18,15 +15,15 @@ English · [简体中文](README.zh-CN.md)
 
 **Turn your data into Anki decks.**
 
-Create Basic, Cloze, and custom cards with Rust, Node.js, or Python. Bundle
-images, audio, and video into a single `.apkg` file, ready to import into Anki.
+Build Basic, Cloze, Image Occlusion and custom cards with Rust, TypeScript or Python.
+Package your media, keep note identities stable, and review changes before distributing the next deck.
 
 [Performance](#performance-you-can-inspect) · [Quick start](#quick-start) ·
 [Card examples](#more-than-a-text-card) · [Choose your language](#choose-your-language)
 
 ## Why anki-forge?
 
-- **Make the cards your content needs.** Basic, Cloze, custom HTML/CSS templates,
+- **Make the cards your content needs.** Basic, Cloze, Image Occlusion, custom HTML/CSS templates,
   images, audio, and video. [See examples ↓](#more-than-a-text-card)
 - **Spend less time exporting.** A Rust core handles deck generation and media
   packaging. Normal exports need no Anki installation.
@@ -34,6 +31,108 @@ images, audio, and video into a single `.apkg` file, ready to import into Anki.
 - **Build once. Keep improving.** Compare against a previous release, check note
   identity and update risks, and inspect structured build reports.
   [See the update workflow ↓](#build-once-keep-improving)
+
+## Choose your language
+
+| Language | Package | Install | Quickstart |
+| --- | --- | --- | --- |
+| Rust | [ankiforge 0.2.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.2.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | [ankiforge 0.2.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.2.0` | [Node](docs/node/quick-start.md) |
+| Python | [ankiforge 0.2.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.2.0` | [Python](docs/python/quick-start.md) |
+
+## Quick start
+
+Each program writes a persistent `spanish.apkg` containing **hola → hello** in the Spanish deck.
+
+<details>
+<summary>Rust</summary>
+
+```sh
+cargo new anki-deck
+cd anki-deck
+cargo add ankiforge@0.2.0
+```
+
+Save as `src/main.rs`:
+
+<!-- source: anki_forge/examples/target_api_basic.rs -->
+```rust
+use ankiforge::{BuildOptions, Note, Project};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    let output = project.build(BuildOptions::to("spanish.apkg"))?;
+    println!("{}", output.artifact().path().display());
+    Ok(())
+}
+```
+<!-- /source -->
+
+```sh
+cargo run
+```
+
+</details>
+
+<details>
+<summary>Node / TypeScript</summary>
+
+```sh
+mkdir anki-deck
+cd anki-deck
+npm install --include=optional ankiforge@0.2.0
+```
+
+Save as `main.mjs`:
+
+<!-- source: bindings/node/examples/quickstart.mjs -->
+```js
+import { Project, Note, BuildOptions } from 'ankiforge';
+
+const project = new Project('spanish').defaultDeck('Spanish');
+project.add('es:hola', Note.basic('hola', 'hello'));
+const output = await project.build(BuildOptions.to('spanish.apkg'));
+console.log(output.artifact.path);
+await output.artifact.close();
+```
+<!-- /source -->
+
+```sh
+node main.mjs
+```
+
+</details>
+
+<details>
+<summary>Python</summary>
+
+```sh
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install ankiforge==0.2.0
+```
+
+Save as `main.py`:
+
+<!-- source: bindings/python/examples/quickstart.py -->
+```python
+from ankiforge import Project, Note, BuildOptions
+
+project = Project('spanish', default_deck='Spanish')
+project.add('es:hola', Note.basic('hola', 'hello'))
+output = project.build(BuildOptions.to('spanish.apkg'))
+print(output.artifact.path)
+```
+<!-- /source -->
+
+```sh
+python main.py
+```
+
+</details>
+
+Import the file into Anki to study. Normal exports need no Anki installation; see [compatibility](docs/compatibility.md) for environments. On Windows, activate the venv with `.venv\Scripts\Activate.ps1`.
 
 ## Performance you can inspect
 
@@ -50,79 +149,30 @@ Node and Python bindings were not benchmarked.
   <img src="docs/assets/readme/export-times-light.svg" alt="Median export time in milliseconds, Rust / genanki: text 52.7 / 105.0; images 150.7 / 320.2; audio 128.7 / 275.4; mixed unique media 110.5 / 239.5; mixed shared media 61.4 / 112.9. Each workload has 1,000 notes." width="1000">
 </picture>
 
-Median export times from **10 runs per implementation and workload**, measured
-in one session on an **Apple M1 Pro** on **2026-10-08**. Timings include process
-startup through exit.
-The default APKG formats differ. Results describe commit **`1199196`** on this
-host; the [source snapshot](benchmarks/results/20261008-latest-commit-genanki/source-snapshot.json)
-records the measured code and environment.
+Rust Project API · Media::files · commit `1199196` · Apple M1 Pro · 10-run medians · 2026-10-08
 
-**Verification in this benchmark:** all 840 exports passed content checks, and
-all 40 Anki import, content, and representative-render checks passed.
+Some media workloads use more memory; unique images used 92.45 MiB peak RSS versus 35.59 MiB.
 
 <details>
 <summary>Method, memory tradeoffs, and full results</summary>
 
-The complete matrix covers five workloads at 100, 200, 500, and 1,000 notes.
-Both implementations were measured in the same session, with alternating order,
-10 timing samples and 5 separate peak-RSS samples per cell. Desktop background
-load and filesystem cache were uncontrolled.
+Five workloads × 100 / 200 / 500 / 1,000 notes; 10 timings and 5 separate RSS measurements per cell. Startup through exit includes media import, build, inspection and writing.
 
-Memory use varies by workload. At 1,000 unique images, Rust used **92.45 MiB**
-peak RSS versus **35.59 MiB** for genanki. Package-size differences include the
-libraries' different default formats and compression. GUI interaction and
-audible playback were not part of the benchmark checks.
+M1 Pro / 32 GiB / macOS 27 · Rust 1.92 release / default features / System allocator · CPython 3.11 / genanki 0.13.1. Default APKG formats differ; background load and page cache were not isolated.
 
-Read the [full report](benchmarks/results/20261008-latest-commit-genanki/report.md),
-[raw timings](benchmarks/results/20261008-latest-commit-genanki/comparison.csv), and
-[reproduction instructions](benchmarks/results/20261008-latest-commit-genanki/README.md).
-The README chart is generated from that archived CSV; it introduces no new measurements.
+All 840 output-content checks and 40 Anki import, content and representative-render checks passed (20 per implementation). Across the complete 20-cell matrix, Rust medians were lower and Rust Q3 < genanki Q1; this does not certify all clients.
 
-</details>
+This measures committed source, independently of public `0.2.0` packages. Node/Python hosts, prepared publication, repeated in-process builds and media over 1 MiB were not measured. GUI interaction and audible playback were not checked.
 
-## Quick start
+| 1,000 notes | Rust RSS MiB | genanki RSS MiB | Speed ratio |
+| --- | ---: | ---: | ---: |
+| Text | 21.91 | 32.25 | 1.99× |
+| Unique images | 92.45 | 35.59 | 2.12× |
+| Unique audio | 62.66 | 35.97 | 2.14× |
+| Mixed unique | 65.19 | 35.03 | 2.17× |
+| Mixed shared | 29.36 | 32.66 | 1.84× |
 
-The [complete Basic example](anki_forge/examples/target_api_basic.rs) turns one
-word pair — **hola → hello** — into `spanish.apkg`, ready to import into Anki Desktop:
-
-```rust
-use ankiforge::{BuildOptions, Note, Project};
-
-fn main() -> anyhow::Result<()> {
-    let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("hola", Note::basic("hola", "hello"))?;
-    project.build(BuildOptions::to("spanish.apkg"))?;
-    Ok(())
-}
-```
-
-Run it from source with **Rust 1.92.0**:
-
-```sh
-git clone https://github.com/morehardy/anki-forge.git
-cd anki-forge
-cargo run -q -p ankiforge --example target_api_basic
-```
-
-Import `spanish.apkg` from the current directory into Anki to study **hola → hello**.
-The library embeds its default resources; no separate contract files are needed.
-These instructions use the source checkout; see [API status](#choose-your-language)
-for distribution details.
-
-**Using another language?** Start with the [Node.js / TypeScript SDK](bindings/node/README.md)
-or the [Python source setup](bindings/python/README.md#from-a-source-checkout).
-
-<details>
-<summary>Add this checkout to your own Rust application</summary>
-
-Adjust the path to your local checkout. The example uses `anyhow` for error handling:
-
-```sh
-cargo add ankiforge --path ../anki-forge/anki_forge
-cargo add anyhow
-```
-
-Use `Project` for stock and custom notes, owned media, comparison, and updates. Continue with the [Rust authoring guide](docs/rust-guide.md).
+[Full report](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md) · [Raw CSV](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [Source identity](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/measured-source-check.json) · [Reproduce](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/README.md)
 
 </details>
 
@@ -152,7 +202,7 @@ or read the [sample verification and reproduction guide](docs/assets/readme/READ
 | Your own fields, layouts, and card-generation rules | [Custom note types](anki_forge/examples/target_api_custom_notetype.rs) |
 | Pictures, sound, and template media | [Media example](anki_forge/examples/target_api_media.rs) · [troubleshooting](docs/troubleshooting.md) |
 | Reusable templates, CSS, and assets | [Template bundles](docs/template-bundles.md) |
-| Image Occlusion | [Supported mode and limitation](docs/image-occlusion.md) |
+| Image Occlusion | [Create image questions](docs/image-occlusion.md) |
 
 ## Build once. Keep improving.
 
@@ -187,37 +237,7 @@ supported baseline. Anki import settings and newer local edits still govern
 whether fields update. See the [update workflow](docs/updates.md) for policies,
 client limitations, and verified import behavior.
 
-## Choose your language
-
-| Language | Entry point | Setup in this checkout |
-| --- | --- | --- |
-| **Rust** | `Project`, `Note`, owned schemas and media | Rust 1.92+ · [guide](docs/rust-guide.md) |
-| **Node.js / TypeScript** | Native Rust `Project`, `Note` and owned values | Node 22.13+ · [SDK setup and status](bindings/node/README.md) |
-| **Python** | `Project`, `Note`, custom note types, and media through the Rust runtime | CPython 3.11/3.12 · [source setup](bindings/python/README.md#from-a-source-checkout) |
-
-Moving from genanki? See the [Python migration guide](docs/python/genanki-migration.md).
-
-**Release status:** the checkout declares Rust `0.2.0`, Node `0.2.0`, and Python
-`0.2.0`. The [Rust release audit](docs/rust-crate-release-readiness.md) records
-outstanding publication gates. The Node SDK uses the npm name `ankiforge`; its
-[release workflow](bindings/node/RELEASING.md) builds and verifies five packages,
-with npm ownership and the first public release still requiring maintainer setup.
-Python 0.2 has recorded wheel/source verification
-([scope](bindings/python/COVERAGE.md)); this is not a PyPI publication notice.
-Follow the linked source instructions and release documentation before relying
-on registry availability.
-
-## Compatibility and limitations
-
-- Import common types from `ankiforge` and advanced types from `note`, `schema`,
-  `media`, `build`, `update`, or `diagnostics`. The hidden `tools` interface requires
-  `internal-tools` and is reserved for repository tooling.
-- Image Occlusion supports both hide-all-guess-one and hide-one-guess-one, with
-  stable mask keys. See [Image Occlusion](docs/image-occlusion.md).
-- Strings are text for every note kind. Use `Content::html` for trusted markup;
-  typed image and sound content retain their owned assets.
-- Successful builds return `BuildOutput`. Its artifact owns temporary output;
-  keeping a report snapshot alone does not retain files. See [build guarantees](docs/build-guarantees.md).
+See [compatibility](docs/compatibility.md) for runtime and client conditions.
 
 ## Contributing
 
