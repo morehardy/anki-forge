@@ -761,11 +761,12 @@ test("worker teardown safely releases in-flight native operations", async (t) =>
   const directory = await temp(t);
   const source = path.join(await temp(t), "batch-source.bin");
   await fs.writeFile(source, Buffer.alloc(2 << 20, 7));
-  const previousTmp = process.env.TMPDIR;
-  process.env.TMPDIR = directory;
+  const temporaryVariable = process.platform === "win32" ? "TMP" : "TMPDIR";
+  const previousTmp = process.env[temporaryVariable];
+  process.env[temporaryVariable] = directory;
   t.after(() => {
-    if (previousTmp === undefined) delete process.env.TMPDIR;
-    else process.env.TMPDIR = previousTmp;
+    if (previousTmp === undefined) delete process.env[temporaryVariable];
+    else process.env[temporaryVariable] = previousTmp;
   });
   const baseline = await new Project("worker")
     .add("a", Note.basic("a", "b"))
