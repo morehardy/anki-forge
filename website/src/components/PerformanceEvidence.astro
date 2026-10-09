@@ -23,7 +23,7 @@ const advantage = (saved: number) => `${Math.abs(saved).toFixed(1)}% ${saved >= 
         <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
       </div>)}
     </div>
-    <div class="home-benchmark-footnote"><p>Some media workloads use more memory; the unique-image workload used 92.45 MiB peak RSS versus 35.59 MiB. These results measure committed source, independently of the public 0.2.0 packages.</p></div>
+    <div class="home-benchmark-footnote"><p>Some media workloads use more memory; the unique-image workload used 92.45 MiB peak RSS versus 35.59 MiB. These results measure committed source, independently of the public 0.3.0 packages.</p></div>
   </div>
   <details class="benchmark-method"><summary>Method, memory tradeoffs, and full results</summary>
     <p>Five workloads × 100 / 200 / 500 / 1,000 notes; 10 timing runs and 5 independent peak-RSS measurements per cell. Startup-to-exit time includes media import, build, inspection and writing.</p>

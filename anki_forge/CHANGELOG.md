@@ -4,7 +4,7 @@ All notable changes to the Rust Distribution are documented here. The crate
 follows Semantic Versioning; before 1.0, breaking public API changes require a
 new minor release.
 
-## [Unreleased]
+## [0.3.0] - 2026-10-09
 
 ### Performance
 
@@ -227,6 +227,7 @@ provided. Current behavior is documented in the crate README.
 - An explicitly unsupported `internal-tools` feature for the repository's
   unpublished contract tooling and deep conformance tests.
 
-[Unreleased]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.2.0...HEAD
+[Unreleased]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.3.0...HEAD
+[0.3.0]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.2.0...anki-forge-v0.3.0
 [0.2.0]: https://github.com/morehardy/anki-forge/compare/anki-forge-v0.1.0...anki-forge-v0.2.0
 [0.1.0]: https://github.com/morehardy/anki-forge/releases/tag/anki-forge-v0.1.0

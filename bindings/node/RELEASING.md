@@ -102,12 +102,12 @@ contents, and run the local verification above. Sign in with `npm login`, then:
 
 ```sh
 # Example: run in the downloaded candidate directory.
-npm publish ./ankiforge-darwin-arm64-0.2.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
-npm publish ./ankiforge-darwin-x64-0.2.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
-npm publish ./ankiforge-linux-x64-gnu-0.2.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
-npm publish ./ankiforge-win32-x64-msvc-0.2.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
-# Wait for npm view <each-native-name>@0.2.0 dist.integrity to return all four.
-npm publish ./ankiforge-0.2.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
+npm publish ./ankiforge-darwin-arm64-0.3.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
+npm publish ./ankiforge-darwin-x64-0.3.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
+npm publish ./ankiforge-linux-x64-gnu-0.3.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
+npm publish ./ankiforge-win32-x64-msvc-0.3.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
+# Wait for npm view <each-native-name>@0.3.0 dist.integrity to return all four.
+npm publish ./ankiforge-0.3.0.tgz --access public --tag next --ignore-scripts --registry=https://registry.npmjs.org
 ```
 
 Configure the five Trusted Publishers, then approve the waiting GitHub job.

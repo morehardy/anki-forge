@@ -5,12 +5,12 @@ Build Basic, Cloze, Image Occlusion and custom cards, package media, and check u
 ## Install
 
 Node.js 22.13+; a matching native package is installed through optional dependencies. See [verified environments](https://ankiforge.dev/docs/compatibility/).
-The public package is [`ankiforge` 0.2.0](https://www.npmjs.com/package/ankiforge).
+The public package is [`ankiforge` 0.3.0](https://www.npmjs.com/package/ankiforge).
 
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.2.0
+npm install --include=optional ankiforge@0.3.0
 ```
 
 ## Your first deck

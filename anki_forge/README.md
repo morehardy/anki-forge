@@ -5,12 +5,12 @@ Build Basic, Cloze, Image Occlusion and custom cards, package media, and check u
 ## Install
 
 Rust 1.92+. See [verified environments](https://ankiforge.dev/docs/compatibility/).
-The public package is [`ankiforge` 0.2.0](https://crates.io/crates/ankiforge).
+The public package is [`ankiforge` 0.3.0](https://crates.io/crates/ankiforge).
 
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.2.0
+cargo add ankiforge@0.3.0
 ```
 
 ## Your first deck

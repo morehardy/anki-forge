@@ -5,7 +5,7 @@ Use Node.js 22.13 or later. In a new application directory:
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.2.0
+npm install --include=optional ankiforge@0.3.0
 ```
 
 This installs the [public npm package](https://www.npmjs.com/package/ankiforge) and the matching native optional dependency.

@@ -5,12 +5,12 @@ Build Basic, Cloze, Image Occlusion and custom cards, package media, and check u
 ## Install
 
 Use an ordinary CPython interpreter with a matching platform wheel; CPython 3.11/3.12 are verified in the recorded package checks. See [verified environments](https://ankiforge.dev/docs/compatibility/).
-The public package is [`ankiforge` 0.2.0](https://pypi.org/project/ankiforge/).
+The public package is [`ankiforge` 0.3.0](https://pypi.org/project/ankiforge/).
 
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.2.0
+python -m pip install ankiforge==0.3.0
 ```
 
 On Windows, activate the environment with `.venv\Scripts\Activate.ps1`.

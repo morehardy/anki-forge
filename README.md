@@ -36,9 +36,9 @@ Package your media, keep note identities stable, and review changes before distr
 
 | Language | Package | Install | Quickstart |
 | --- | --- | --- | --- |
-| Rust | [ankiforge 0.2.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.2.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | [ankiforge 0.2.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.2.0` | [Node](docs/node/quick-start.md) |
-| Python | [ankiforge 0.2.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.2.0` | [Python](docs/python/quick-start.md) |
+| Rust | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
+| Python | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
 
 ## Quick start
 
@@ -50,7 +50,7 @@ Each program writes a persistent `spanish.apkg` containing **hola → hello** in
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.2.0
+cargo add ankiforge@0.3.0
 ```
 
 Save as `src/main.rs`:
@@ -81,7 +81,7 @@ cargo run
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.2.0
+npm install --include=optional ankiforge@0.3.0
 ```
 
 Save as `main.mjs`:
@@ -110,7 +110,7 @@ node main.mjs
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.2.0
+python -m pip install ankiforge==0.3.0
 ```
 
 Save as `main.py`:
@@ -162,7 +162,7 @@ M1 Pro / 32 GiB / macOS 27 · Rust 1.92 release / default features / System allo
 
 All 840 output-content checks and 40 Anki import, content and representative-render checks passed (20 per implementation). Across the complete 20-cell matrix, Rust medians were lower and Rust Q3 < genanki Q1; this does not certify all clients.
 
-This measures committed source, independently of public `0.2.0` packages. Node/Python hosts, prepared publication, repeated in-process builds and media over 1 MiB were not measured. GUI interaction and audible playback were not checked.
+This measures committed source, independently of public `0.3.0` packages. Node/Python hosts, prepared publication, repeated in-process builds and media over 1 MiB were not measured. GUI interaction and audible playback were not checked.
 
 | 1,000 notes | Rust RSS MiB | genanki RSS MiB | Speed ratio |
 | --- | ---: | ---: | ---: |

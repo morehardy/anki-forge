@@ -34,9 +34,9 @@
 
 | 语言 | 公开包 | 安装命令 | Quickstart |
 | --- | --- | --- | --- |
-| Rust | [ankiforge 0.2.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.2.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | [ankiforge 0.2.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.2.0` | [Node](docs/node/quick-start.md) |
-| Python | [ankiforge 0.2.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.2.0` | [Python](docs/python/quick-start.md) |
+| Rust | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
+| Python | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
 
 ## 快速开始
 
@@ -48,7 +48,7 @@
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.2.0
+cargo add ankiforge@0.3.0
 ```
 
 保存为 `src/main.rs`:
@@ -79,7 +79,7 @@ cargo run
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.2.0
+npm install --include=optional ankiforge@0.3.0
 ```
 
 保存为 `main.mjs`:
@@ -108,7 +108,7 @@ node main.mjs
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.2.0
+python -m pip install ankiforge==0.3.0
 ```
 
 保存为 `main.py`:
@@ -159,7 +159,7 @@ M1 Pro / 32 GiB / macOS 27 · Rust 1.92 release / default features / System allo
 
 全部 840 次输出内容检查和 40 次 Anki 导入、内容与代表性渲染检查通过（每种实现 20 次）。完整 20 格均为 Rust 中位数较低且 Rust Q3 < genanki Q1；不代表所有客户端认证。
 
-本轮测量已提交源码，不代表公开 `0.2.0` 包。Node / Python 宿主、prepared publication、同进程重复构建和单媒体大于 1 MiB 不在范围内，GUI 和实际音频播放未验证。
+本轮测量已提交源码，不代表公开 `0.3.0` 包。Node / Python 宿主、prepared publication、同进程重复构建和单媒体大于 1 MiB 不在范围内，GUI 和实际音频播放未验证。
 
 | 1,000 notes | Rust RSS MiB | genanki RSS MiB | Speed ratio |
 | --- | ---: | ---: | ---: |

@@ -116,8 +116,7 @@ See [build guarantees](build-guarantees.md) for ownership and publication facts.
 
 ## Build once, review then publish from source
 
-**API source commit `1199196`**; not included in public `0.2.0`.
-Use [source builds](source-builds.md).
+This API is included in the public `0.3.0` package.
 
 Build once, inspect the report, then publish the same candidate file. Reviewing
 and then running a second ordinary build creates another candidate; prepared

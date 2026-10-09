@@ -5,7 +5,7 @@ Create and activate a virtual environment, then install the [public PyPI package
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.2.0
+python -m pip install ankiforge==0.3.0
 ```
 
 On Windows, activate with `.venv\Scripts\Activate.ps1`.

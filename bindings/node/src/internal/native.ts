@@ -1,6 +1,6 @@
 import path from "node:path";
 import { NativeLoadError } from "../errors";
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 export interface BindingMetadata {
   readonly bindingVersion: string;
   readonly bindingProtocolVersion: number;

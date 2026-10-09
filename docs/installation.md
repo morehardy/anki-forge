@@ -1,11 +1,11 @@
 # Install and run with Rust
 
-Use Rust 1.92 or later and the [public ankiforge 0.2.0 crate](https://crates.io/crates/ankiforge).
+Use Rust 1.92 or later and the [public ankiforge 0.3.0 crate](https://crates.io/crates/ankiforge).
 
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.2.0
+cargo add ankiforge@0.3.0
 ```
 
 ## Export your first deck
