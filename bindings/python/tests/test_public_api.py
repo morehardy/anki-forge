@@ -19,6 +19,33 @@ from ankiforge import (
     PolicyError, TemplateBundleError, PersistError,
 )
 
+def test_batch_media_preserves_order_snapshots_and_first_error(tmp_path):
+    assert Media.files([]) == []
+    paths = [tmp_path / f'{i}.css' for i in range(20)]
+    for i, path in enumerate(paths):
+        path.write_text('x' * (i + 1))
+    batch = Media.files(iter(paths))
+    assert [len(item) for item in batch] == list(range(1, 21))
+    assert [item.filename for item in batch] == [Media.file(path).filename for path in paths]
+    with pytest.raises(MediaError) as limited:
+        Media.files(paths, limits=MediaLimits(max_bytes=1))
+    assert limited.value.details['path'] == str(paths[1])
+    assert limited.value.details['limit_exceeded']['observed'] == 2
+    paths[3].unlink()
+    paths[17].unlink()
+    with pytest.raises(MediaError) as missing:
+        Media.files(paths)
+    assert missing.value.details['path'] == str(paths[3])
+    for path in paths:
+        path.unlink(missing_ok=True)
+    project = Project('batch-files').add('n', Note.basic('q', 'a'))
+    for item in batch:
+        project.add_asset(item)
+    output = project.build(BuildOptions.temporary())
+    assert output.report.counts.media == 20
+    _, _, assets, _, _ = unpack(output.artifact.path, tmp_path)
+    assert assets == {item.filename: b'x' * (i + 1) for i, item in enumerate(batch)}
+
 @pytest.mark.skipif(os.name != 'posix', reason='Unix byte-path transport')
 def test_non_unicode_error_paths_remain_structured_json(tmp_path):
     path = tmp_path / os.fsdecode(b'missing-\xff')
@@ -630,3 +657,67 @@ def test_structured_addition_errors_retain_nested_locations_and_sources():
     with pytest.raises(TypeError):
         Project('removed-title', name='title')
     assert not hasattr(project, 'name')
+
+
+def test_prepared_publication_is_private_single_use_and_releases_owner(tmp_path):
+    from ankiforge import PreparedPublicationStateError
+    project = Project('python-prepared').add('one', Note.basic('reviewed', 'answer'))
+    destination = tmp_path / 'prepared.apkg'
+    prepared = project.prepare_publication(BuildOptions.to(destination))
+    report = prepared.report
+    assert not destination.exists()
+    project.add('later', Note.basic('later', 'answer'))
+    del project
+    output = prepared.publish()
+    assert output.report.counts.notes == 1
+    assert report.counts.notes == 1
+    with pytest.raises(PreparedPublicationStateError) as error:
+        prepared.publish()
+    assert error.value.code == 'BUILD.PREPARED_UNAVAILABLE'
+    assert error.value.reason == 'consumed'
+    prepared.close()
+    expected = Project('python-prepared').add('one', Note.basic('reviewed', 'answer'))
+    assert not expected.compare(CompareOptions.against(destination)).findings
+    output.artifact.close()
+    closed = expected.prepare_publication(BuildOptions.temporary())
+    closed.close()
+    closed.close()
+    with pytest.raises(PreparedPublicationStateError) as error:
+        closed.publish()
+    assert error.value.reason == 'closed'
+    assert closed.report.counts.notes == 1
+
+
+def test_prepared_paths_bind_at_invocation_and_survive_cwd_changes(tmp_path):
+    original = Path.cwd()
+    invocation = tmp_path / 'invocation'
+    invocation.mkdir()
+    options = BuildOptions.to('prepared.apkg')
+    try:
+        os.chdir(invocation)
+        prepared = Project('prepared-cwd').add('one', Note.basic('q', 'a')).prepare_publication(options)
+        os.chdir(tmp_path)
+        output = prepared.publish()
+        assert output.artifact.path == invocation / 'prepared.apkg'
+        assert not (tmp_path / 'prepared.apkg').exists()
+        output.artifact.close()
+    finally:
+        os.chdir(original)
+
+
+def test_prepared_concurrent_publish_takes_owner_before_releasing_interpreter():
+    from concurrent.futures import ThreadPoolExecutor
+    from ankiforge import PreparedPublicationStateError
+    prepared = Project('concurrent-prepared').add('one', Note.basic('q', 'a')).prepare_publication(BuildOptions.temporary())
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        tasks = [executor.submit(prepared.publish) for _ in range(2)]
+        results = []
+        for task in tasks:
+            try:
+                results.append(task.result(timeout=30))
+            except PreparedPublicationStateError as error:
+                assert error.reason == 'consumed'
+    assert len(results) == 1
+    prepared.close()
+    assert results[0].artifact.path.is_file()
+    results[0].artifact.close()

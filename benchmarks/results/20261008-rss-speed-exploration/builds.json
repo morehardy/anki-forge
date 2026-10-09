@@ -1,0 +1,90 @@
+[
+  {
+    "name": "candidate-tests",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "ankiforge",
+      "--lib",
+      "--features",
+      "internal-tools"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "source_manifest": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/candidate-tests-source.json",
+    "source_manifest_sha256": "17dbfb95f71313e1680ff1444506685d88d69616e764728bae249744e7b4d20f",
+    "started": 1791445891.545279,
+    "returncode": 101,
+    "seconds": 30.935567140579224,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/candidate-tests-155131.log",
+    "log_sha256": "3cd386f3ed48e983aa87f295e2ae70e35b3a9b3cc30aee7370d9d0139c925fb8"
+  },
+  {
+    "name": "candidate-tests",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "ankiforge",
+      "--lib",
+      "--features",
+      "internal-tools"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "source_manifest": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/candidate-tests-155300-source.json",
+    "source_manifest_sha256": "80222727bb9b6288d5cfb6f7507c824b398b5b371916d4ccabbe2d663a6547e5",
+    "started": 1791445980.6551108,
+    "returncode": 0,
+    "seconds": 22.056364059448242,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/candidate-tests-155300.log",
+    "log_sha256": "7279d00df483dc4830fa2e78f1113101e254b3d494827acb47507e0fa1bf522e"
+  },
+  {
+    "name": "baseline",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/baseline-source/benchmarks/adapters/rust/Cargo.toml"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/baseline-source",
+    "source_manifest": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/baseline-155322-source.json",
+    "source_manifest_sha256": "a2899d0b77fc22f48e1b3fa0d4339113f9aafeafaa94164e5fcec06475ace675",
+    "started": 1791446002.808087,
+    "returncode": 0,
+    "seconds": 46.583032846450806,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/baseline-155322.log",
+    "log_sha256": "e8250739a1fcf8c944049819797d9d25b88e201a223ba32c2b3fcc1e3bb10081",
+    "binary": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/binaries/baseline",
+    "binary_sha256": "ddbe27126d9a8e032ceb2d42d219282cc71325cf5718ab44f4b892df2676400c"
+  },
+  {
+    "name": "candidate",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source/benchmarks/adapters/rust/Cargo.toml"
+    ],
+    "cwd": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/source",
+    "source_manifest": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/candidate-155409-source.json",
+    "source_manifest_sha256": "80222727bb9b6288d5cfb6f7507c824b398b5b371916d4ccabbe2d663a6547e5",
+    "started": 1791446049.486026,
+    "returncode": 0,
+    "seconds": 20.55200695991516,
+    "log": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/logs/candidate-155409.log",
+    "log_sha256": "50f896ddf157938b79c7e6d5a2db35a4b16a15d072c76dd1a63e78f73d7a232b",
+    "binary": "/Users/hp/Desktop/2026/anki-forge/benchmarks/.work/rss-speed-20261008/binaries/candidate",
+    "binary_sha256": "0cab9f7d344e500be70da89bc5c48044d69e51c6497ee88a4bab5606525c3b6c"
+  }
+]

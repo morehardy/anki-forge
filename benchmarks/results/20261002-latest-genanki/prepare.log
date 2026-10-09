@@ -1,0 +1,16 @@
+error: Failed to initialize cache at `/Users/hp/.cache/uv`
+  Caused by: failed to open file `/Users/hp/.cache/uv/sdists-v9/.git`: Operation not permitted (os error 1)
+Traceback (most recent call last):
+  File "/Users/hp/Desktop/2026/anki-forge/benchmarks/bench.py", line 543, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/hp/Desktop/2026/anki-forge/benchmarks/bench.py", line 529, in main
+    prepare(args.python, args.with_anki, args.rust_allocator)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hp/Desktop/2026/anki-forge/benchmarks/bench.py", line 500, in prepare
+    subprocess.run(args, cwd=REPO, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['uv', 'pip', 'sync', '/Users/hp/Desktop/2026/anki-forge/benchmarks/requirements.lock', '--python', '/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python', '--require-hashes']' returned non-zero exit status 2.

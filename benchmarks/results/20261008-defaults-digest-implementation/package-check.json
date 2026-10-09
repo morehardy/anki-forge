@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "crate_sha256": "cc118a7d148f5ba79bc90f77d5ce13c9887bde67bcf1b39bc98ae45a964d6e3f",
+  "source_outside_checkout": true,
+  "target_cache_reused": true,
+  "invalid_bundle_blocked_with_prior_generated_output": true,
+  "commands": [
+    {
+      "name": "package",
+      "argv": [
+        "cargo",
+        "package",
+        "-p",
+        "ankiforge",
+        "--allow-dirty",
+        "--offline",
+        "--locked",
+        "--no-verify"
+      ],
+      "cwd": "/Users/hp/Desktop/2026/anki-forge",
+      "returncode": 0,
+      "expected_success": true
+    },
+    {
+      "name": "package-lock",
+      "argv": [
+        "cargo",
+        "generate-lockfile",
+        "--offline"
+      ],
+      "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+      "returncode": 0,
+      "expected_success": true
+    },
+    {
+      "name": "package-consumer",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "--bin",
+        "anki_forge_packaged_consumer"
+      ],
+      "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+      "returncode": 0,
+      "expected_success": true
+    },
+    {
+      "name": "package-invalid-defaults",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "--bin",
+        "anki_forge_packaged_consumer"
+      ],
+      "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+      "returncode": 101,
+      "expected_success": false
+    },
+    {
+      "name": "package-restored",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--locked",
+        "--bin",
+        "anki_forge_packaged_consumer"
+      ],
+      "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+      "returncode": 0,
+      "expected_success": true
+    }
+  ]
+}

@@ -1,15 +1,15 @@
-bundle_version: "2.0.0"
+bundle_version: "2.1.0"
 component_versions:
   schema: "2.0.0"
   fixtures: "1.0.0"
   service_envelope: "0.1.0"
-  error_registry: "2.0.0"
+  error_registry: "2.1.0"
 compatibility:
   public_axis: bundle_version
 assets:
   manifest_schema: schema/manifest.schema.json
   version_policy: versioning/policy.md
-  bundle_change: versioning/changes/2.0.0.yaml
+  bundle_change: versioning/changes/2.1.0.yaml
   identity_policy_schema: schema/identity-policy.schema.json
   risk_policy_schema: schema/risk-policy.schema.json
   compatibility_classes: versioning/compatibility-classes.yaml

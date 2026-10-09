@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from collections.abc import Iterable
 from . import _native
 from ._bridge import invoke
 from .content import Content
@@ -17,6 +18,12 @@ class Media:
     @staticmethod
     def file(path: PathInput, *, limits: MediaLimits = MediaLimits()) -> Media:
         return Media(invoke(_native.NativeMedia.file, absolute_path(path), limits.max_bytes))
+
+    @staticmethod
+    def files(paths: Iterable[PathInput], *, limits: MediaLimits = MediaLimits()) -> list[Media]:
+        """Import in input order with up to four workers; fail without partial results."""
+        handles = invoke(_native.NativeMedia.files, [absolute_path(path) for path in paths], limits.max_bytes)
+        return [Media(handle) for handle in handles]
 
     @staticmethod
     def bytes(data: bytes, media_type: str, *, limits: MediaLimits = MediaLimits()) -> Media:

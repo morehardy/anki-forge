@@ -1,0 +1,13 @@
+{
+  "cpu": "Apple M1 Pro",
+  "physical_cores": 10,
+  "logical_cores": 10,
+  "ram_bytes": 34359738368,
+  "system": "macOS 27.0",
+  "system_build": "26A428",
+  "architecture": "arm64",
+  "queried_utc": "2026-10-02T09:42:42.312383+00:00",
+  "hardware_query": "/usr/sbin/sysctl -n machdep.cpu.brand_string hw.memsize hw.physicalcpu hw.logicalcpu",
+  "system_query": "/usr/bin/sw_vers",
+  "observation_note": "Hardware and system values read again with approved read-only escalation during preparation; AC power guarded before/after every exporter."
+}

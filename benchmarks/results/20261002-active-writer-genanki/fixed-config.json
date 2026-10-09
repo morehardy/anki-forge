@@ -1,0 +1,21 @@
+{
+  "purpose": "Separate uninstrumented controls for private synced candidate publication and streaming collection digest versus frozen round3 binary",
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "modes": {
+    "before": {
+      "binary": "before"
+    },
+    "sync": {
+      "binary": "sync"
+    },
+    "digest": {
+      "binary": "digest"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+   Compiling ankiforge v0.2.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.37s
+     Running tests/media_snapshot_lifecycle_tests.rs (target/debug/deps/media_snapshot_lifecycle_tests-4aabaeea5638bc65)
+
+running 1 test
+test many_small_snapshots_spill_under_a_shared_budget_and_release_it ... FAILED
+
+failures:
+
+---- many_small_snapshots_spill_under_a_shared_budget_and_release_it stdout ----
+
+thread 'many_small_snapshots_spill_under_a_shared_budget_and_release_it' (4358899) panicked at anki_forge/tests/media_snapshot_lifecycle_tests.rs:152:5:
+bounded-small failed:
+
+Error: small snapshots exceeded the shared 4 MiB memory budget
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    many_small_snapshots_spill_under_a_shared_budget_and_release_it
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 9.56s
+
+error: test failed, to rerun pass `-p ankiforge --test media_snapshot_lifecycle_tests`

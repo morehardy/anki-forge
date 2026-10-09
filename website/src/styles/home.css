@@ -77,3 +77,19 @@
 @media (max-width: 374px) {
   .home-benchmark-label strong { font-size: 10px; }
 }
+
+.home-install { padding-block: 14px 40px; }
+.home-install > div > p { margin-top: 10px; color: var(--af-muted); }
+.home-language-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 22px; }
+.home-language-grid article { min-width: 0; padding: 20px; border: 1px solid var(--af-line); border-radius: var(--af-radius); }
+.home-language-grid h3 { font-size: 18px; }
+.home-language-grid pre { max-width: 100%; overflow-x: auto; margin-block: 16px; font: 12px/1.6 var(--af-mono); }
+.benchmark-method { padding-block: 20px; font-size: 13px; }
+.benchmark-method summary { cursor: pointer; font-weight: 600; }
+.benchmark-method p { margin-top: 14px; max-width: 90ch; color: var(--af-muted); }
+.benchmark-method table { display: block; max-width: 100%; overflow-x: auto; margin-top: 16px; border-collapse: collapse; }
+.benchmark-method th, .benchmark-method td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--af-line); }
+.identity-evidence { margin-top: 14px; border-top: 1px solid var(--af-line); padding-top: 14px; font-size: 13px; }
+.identity-evidence p { margin-bottom: 8px; }
+.identity-evidence a { display: inline-block; margin-right: 10px; }
+@media (max-width: 767px) { .home-language-grid { grid-template-columns: 1fr; } }

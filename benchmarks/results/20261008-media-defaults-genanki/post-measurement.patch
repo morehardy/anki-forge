@@ -1,0 +1,83 @@
+--- a/anki_forge/PACKAGE_FILES.txt
++++ b/anki_forge/PACKAGE_FILES.txt
+@@ -46,6 +46,7 @@
+ src/diagnostics_api.rs
+ src/lib.rs
+ src/media/assets.rs
++src/media/batch.rs
+ src/media/error.rs
+ src/media/mod.rs
+ src/media/snapshot/spool.rs
+--- a/bindings/node/native/src/lib.rs
++++ b/bindings/node/native/src/lib.rs
+@@ -103,10 +103,13 @@
+ impl NativeMedia {
+     #[napi]
+     pub fn files<'env>(env: &'env Env, paths: Vec<String>, limits: String) -> Result<Object<'env>> {
+-        tasks::spawn(env, MediaFilesTask {
+-            paths: Some(paths),
+-            limits: options::media_limits(&limits)?,
+-        })
++        tasks::spawn(
++            env,
++            MediaFilesTask {
++                paths: Some(paths),
++                limits: options::media_limits(&limits)?,
++            },
++        )
+     }
+     #[napi]
+     pub fn file<'env>(env: &'env Env, path: String, limits: String) -> Result<Object<'env>> {
+@@ -205,16 +208,28 @@
+     type Output = Vec<Media>;
+     type JsValue = Vec<NativeMedia>;
+     fn compute(&mut self) -> Result<Self::Output> {
+-        Media::files_with_limits(self.paths.take().expect("task runs once"), self.limits)
+-            .map_err(|e| domain("media", e.kind(), e.code(), &e, json!({
+-                "path": e.path().map(PathSnapshot::new),
+-                "limitExceeded": e.limit_exceeded().map(|l| json!({
+-                    "resource": l.resource, "limit": l.limit, "observed": l.observed
+-                }))
+-            })))
++        Media::files_with_limits(self.paths.take().expect("task runs once"), self.limits).map_err(
++            |e| {
++                domain(
++                    "media",
++                    e.kind(),
++                    e.code(),
++                    &e,
++                    json!({
++                        "path": e.path().map(PathSnapshot::new),
++                        "limitExceeded": e.limit_exceeded().map(|l| json!({
++                            "resource": l.resource, "limit": l.limit, "observed": l.observed
++                        }))
++                    }),
++                )
++            },
++        )
+     }
+     fn resolve(&mut self, _env: Env, items: Self::Output) -> Result<Self::JsValue> {
+-        Ok(items.into_iter().map(|inner| NativeMedia { inner }).collect())
++        Ok(items
++            .into_iter()
++            .map(|inner| NativeMedia { inner })
++            .collect())
+     }
+ }
+ struct MediaTask {
+--- a/bindings/python/native/src/lib.rs
++++ b/bindings/python/native/src/lib.rs
+@@ -159,7 +159,12 @@
+         py.detach(|| {
+             Media::files_with_limits(paths, ankiforge::media::MediaLimits { max_bytes })
+                 .map(|items| {
+-                    items.into_iter().map(|inner| Self { inner: inner.into() }).collect()
++                    items
++                        .into_iter()
++                        .map(|inner| Self {
++                            inner: inner.into(),
++                        })
++                        .collect()
+                 })
+                 .map_err(mapped!("media"))
+         })

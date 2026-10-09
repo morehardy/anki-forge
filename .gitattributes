@@ -15,3 +15,8 @@ benchmarks/results/**/*.log -whitespace
 benchmarks/results/**/*.patch -whitespace
 # This already-sealed diagnostic transcript also includes a captured blank line.
 benchmarks/results/20260907-inspection-parallel-hash/implementation.md -whitespace
+
+# CSV generators retain CRLF records; accept CR while checking other whitespace.
+benchmarks/results/**/*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve the sealed generated table, including its recorded final blank line.
+benchmarks/results/20261008-rss-speed-exploration/tables.md -whitespace

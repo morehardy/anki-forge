@@ -1,0 +1,99 @@
+[
+  {
+    "profile": "basic-mixed-text-v1",
+    "historical": {
+      "median_ms": 60.336,
+      "samples_ms": [
+        63.336,
+        60.336,
+        60.114
+      ],
+      "stages": {
+        "inspect.summary": 5.441708,
+        "normalize.core": 1.12525,
+        "old.prepare": 11.734667,
+        "writer.apkg": 15.321208,
+        "writer.staging": 1.897208,
+        "writer.total": 18.281375
+      }
+    },
+    "current": {
+      "median_ms": 88.711,
+      "samples_ms": [
+        88.711,
+        90.229,
+        86.23
+      ],
+      "stages": {
+        "artifact.owned_publish": 7.69125,
+        "artifact.persist_copy": 11.518125,
+        "artifact.retain": 7.795833,
+        "candidate.generate": 38.754791,
+        "identity.bind": 3.137833,
+        "identity.prepare": 0.503209,
+        "inspect.native": 27.130667,
+        "normalize.core": 0.784208,
+        "normalize.total": 3.683167,
+        "project.asset_staging": 4.2e-05,
+        "project.build": 81.874292,
+        "project.document_bridge": 0.989125,
+        "project.prepare": 69.49575,
+        "runtime.writer_defaults": 3.302708,
+        "writer.apkg": 16.991375,
+        "writer.staging": 1.880583,
+        "writer.total": 19.937125
+      }
+    }
+  },
+  {
+    "profile": "basic-image-unique-v2",
+    "historical": {
+      "median_ms": 237.872,
+      "samples_ms": [
+        244.377,
+        237.872,
+        234.339
+      ],
+      "stages": {
+        "inspect.summary": 27.839458,
+        "normalize.core": 57.657125,
+        "old.prepare": 71.246917,
+        "writer.apkg": 18.451,
+        "writer.staging": 5.918625,
+        "writer.total": 26.581292
+      }
+    },
+    "current": {
+      "median_ms": 10428.149,
+      "samples_ms": [
+        10428.149,
+        11221.666,
+        10095.05
+      ],
+      "stages": {
+        "artifact.owned_publish": 7.297334,
+        "artifact.persist_copy": 118.34975,
+        "artifact.retain": 7.480667,
+        "candidate.generate": 9603.985458,
+        "identity.bind": 4.415166,
+        "identity.prepare": 0.492458,
+        "inspect.native": 57.183541,
+        "media.cas_ingest": 18982.884706,
+        "media.cas_sync": 7567.904008,
+        "media.import": 99.042397,
+        "media.staging_copy": 15066.459416,
+        "media.staging_sync": 8434.535673,
+        "normalize.core": 4839.302667,
+        "normalize.total": 4843.42875,
+        "project.asset_staging": 156.729459,
+        "project.build": 10311.179459,
+        "project.document_bridge": 1.205875,
+        "project.prepare": 10189.803584,
+        "runtime.writer_defaults": 3.347625,
+        "writer.apkg": 335.123625,
+        "writer.staging": 4407.133791,
+        "writer.total": 4744.678625
+      }
+    }
+  }
+]

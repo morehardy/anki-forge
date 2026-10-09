@@ -1,0 +1,69 @@
+{
+  "rust_full": {
+    "passed": 540,
+    "ignored": 23
+  },
+  "rust_default_core": {
+    "passed": 169
+  },
+  "rust_media_default": {
+    "passed": 26
+  },
+  "node": {
+    "passed": 30,
+    "skipped": 1
+  },
+  "python": {
+    "passed": 68,
+    "skipped": 1
+  },
+  "python_types": {
+    "files": 14,
+    "status": "passed"
+  },
+  "benchmark_harness": {
+    "passed": 46
+  },
+  "smoke": {
+    "notes": 200,
+    "status": "passed"
+  },
+  "notes": [
+    "Initial Node teardown test mistakenly created its source fixture inside the monitored temp directory; fixture fixed, full suite passed.",
+    "Initial oracle build could not create git dependency checkout under restricted cargo cache. Exact previously validated executable reused after provenance verification.",
+    "No supported-platform CI or Node/Python benchmark run in this session."
+  ],
+  "logs": {
+    "benchmark-tests.log": "37deecc0fa8c229a3f087940cd2affd50a3d01139859c8455ae7314056ba11fe",
+    "core-tests.log": "7111c0aeca3eeb40a02fdaccc99a5ca8a025bae94795910a441812a7f79e00d9",
+    "media-tests.log": "5ecab0f3100bfba39a07dec31fde694a4d2546c36b3fc1ba134b5149cb8171c6",
+    "node-build.log": "514655b17aa6bd6ce577f434b5cdd672edd421bf535a8b9e360602a7939984f5",
+    "node-tests-fixture-failure.log": "8a4494f6ba39f019c376ba8acd7a1e73a05ec4734d8b240b499520b4570b3fd7",
+    "node-tests.log": "812b3250bfd5003502efc4ecfc3ac61a20f4b1972d590a18345cf09bcb67460d",
+    "prepare-initial-failure.log": "8a9f4bde59b05b6253c789666ab537488aca184a17fbce8189c352490464f8c3",
+    "prepare.log": "d06176ac0e07354c03c22af5a13421c2624de678ee7865012c5b505e6054cbbe",
+    "python-build.log": "84b7f987795c8a4695498822aefffa51561a5983bf0e5d6c87725fbcf12cd994",
+    "python-observer-build.log": "24650abe27821c183c8333cece4e5b107f332e6d7e73f7d59e7bcf6a2340bcc8",
+    "python-tests.log": "9e0672a220dcdae822db1f4dde540e6d63486e40dfa0560090e376777299c7a0",
+    "python-types.log": "fe22d95914d7fdd98483ace256b7f2708db4be1255737e5d7cca4d16703ca242",
+    "rust-tests.log": "8fc84f1353ec9e750bd3a44f8c430314a4721d343f8a99a0d8512d4b38d26433",
+    "smoke.log": "91dea939ee38327e65c5a290cf35f3354230c40e9530fdd0873601291208a316",
+    "package-payload.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clippy.log": "40463cf628fffe43611ae086caedd9e1b031d1f5091f8bc863893f00c751acb5",
+    "fmt-check.log": "60c36d041f5243d0bd54ea0d9c2b4f675ba0fe3c3a45b1410f96f805b2bc9381",
+    "fmt-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "crate_payload": {
+    "status": "passed",
+    "after_measurement": true
+  },
+  "clippy": {
+    "status": "passed",
+    "scope": "workspace all targets/all features; -D warnings",
+    "after_measurement": true
+  },
+  "rustfmt": {
+    "status": "passed",
+    "after_measurement": true
+  }
+}

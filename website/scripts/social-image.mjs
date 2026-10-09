@@ -5,15 +5,25 @@ import sharp from 'sharp';
 const escape = value => String(value).replace(/[<>&"']/g, character => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' })[character]);
 
 export async function prepareBrandAssets(website, example) {
-  const icon = await readFile(path.join(website, 'node_modules/@phosphor-icons/core/assets/regular/cards.svg'), 'utf8');
-  const favicon = icon.replaceAll('currentColor', '#116e60');
+  const brandDirectory = path.join(website, '../docs/assets/brand');
+  const icon = await readFile(path.join(brandDirectory, 'ankiforge.svg'), 'utf8');
+  const darkIcon = icon.replace('#116e60', '#91d5c1').replace('#fdfefd', '#121b1a');
+  await writeFile(path.join(brandDirectory, 'ankiforge-dark.svg'), darkIcon);
+  // A self-contained favicon keeps the front card opaque in either browser theme.
+  const favicon = icon.replace('<title>', `<style>
+    @media (prefers-color-scheme: dark) {
+      svg { color: #91d5c1 !important; }
+      path[fill="#fdfefd"] { fill: #121b1a; }
+    }
+  </style><title>`);
   await writeFile(path.join(website, 'public/favicon.svg'), favicon);
   await copyFile(path.join(website, 'node_modules/@phosphor-icons/core/LICENSE'), path.join(website, 'public/generated/phosphor-license.txt'));
   // A share graphic drawn from the same fields as the compiled Basic deck.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
     <rect width="1200" height="630" fill="#f8faf9"/>
     <g font-family="Arial, DejaVu Sans, sans-serif">
-      <text x="64" y="84" fill="#116e60" font-size="30" font-weight="700">ankiforge</text>
+      ${icon.replace('<svg ', '<svg x="64" y="45" width="48" height="48" ').replace('#fdfefd', '#f8faf9')}
+      <text x="124" y="84" fill="#116e60" font-size="30" font-weight="700">ankiforge</text>
       <text x="64" y="245" fill="#142d29" font-size="70" font-weight="700" letter-spacing="-3">Anki decks,</text>
       <text x="64" y="329" fill="#116e60" font-size="70" font-weight="700" letter-spacing="-3">built from code.</text>
       <text x="68" y="412" fill="#536b65" font-size="25">Write notes. Build decks. Keep their identity.</text>

@@ -25,7 +25,7 @@ fn verified(output: &BuildOutput, media: usize) -> anyhow::Result<Value> {
 fn basic(output: &Path) -> anyhow::Result<Value> {
     // website:basic:start
     let (front, back) = ("hola", "hello");
-    let mut project = Project::new("website-spanish")?.default_deck("Spanish");
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
     project.add("es:hola", Note::basic(front, back))?;
     let built = project.build(BuildOptions::to(output.join("spanish.apkg")))?;
     // website:basic:end
@@ -150,7 +150,7 @@ fn combined(output: &Path) -> anyhow::Result<Value> {
 }
 
 fn spanish(back: &str) -> anyhow::Result<Project> {
-    let mut project = Project::new("website-spanish-updates")?.default_deck("Spanish");
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
     project.add("es:hola", Note::basic("hola", back))?;
     Ok(project)
 }
@@ -167,10 +167,16 @@ fn updates(output: &Path) -> anyhow::Result<Value> {
     let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
     // website:updates:end
     let counts = verified(&built, 0)?;
-    ensure!(built.report().comparison().is_some());
+    let report = comparison.snapshot();
+    ensure!(report.baseline_counts.notes == 1 && report.candidate_counts.notes == 1);
+    fs::write(
+        output.join("spanish-update-report.json"),
+        serde_json::to_vec_pretty(&report)?,
+    )?;
     Ok(
         json!({"front":"hola", "before":before, "after":after, "stableId":"es:hola",
-        "previous":"spanish-v1.apkg", "next":"spanish-v2.apkg", "notesPreserved":1, "counts":counts}),
+        "previous":"spanish-v1.apkg", "next":"spanish-v2.apkg", "notesPreserved":report.candidate_counts.notes, "counts":counts,
+        "report":"spanish-update-report.json", "comparison":report}),
     )
 }
 

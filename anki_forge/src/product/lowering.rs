@@ -589,7 +589,7 @@ fn lower_legacy_product_document(
 
 // Project creates this payload solely for lowering. Consume its notes so HTML
 // and note metadata can move into Authoring without changing document APIs.
-#[cfg(test)]
+// Consume the native temporary payload; move HTML and retain diagnostic source paths.
 pub(crate) fn lower_owned_product_v2_document(
     document_id: String,
     mut payload: ProductDocumentV2Payload,

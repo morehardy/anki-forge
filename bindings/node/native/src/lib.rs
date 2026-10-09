@@ -2,6 +2,7 @@
 mod add_errors;
 mod artifact;
 mod options;
+mod prepared;
 mod tasks;
 use ankiforge::build::json::PathSnapshot;
 use ankiforge::note::{Mask, OcclusionMode};
@@ -66,7 +67,7 @@ macro_rules! err {
 }
 #[napi]
 pub fn binding_metadata() -> String {
-    json!({"bindingVersion":env!("CARGO_PKG_VERSION"),"bindingProtocolVersion":5,"target":env!("ANKI_FORGE_NODE_TARGET"),"nodeApiVersion":8}).to_string()
+    json!({"bindingVersion":env!("CARGO_PKG_VERSION"),"bindingProtocolVersion":6,"target":env!("ANKI_FORGE_NODE_TARGET"),"nodeApiVersion":8}).to_string()
 }
 
 #[napi]
@@ -100,6 +101,16 @@ pub struct NativeMedia {
 }
 #[napi]
 impl NativeMedia {
+    #[napi]
+    pub fn files<'env>(env: &'env Env, paths: Vec<String>, limits: String) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            MediaFilesTask {
+                paths: Some(paths),
+                limits: options::media_limits(&limits)?,
+            },
+        )
+    }
     #[napi]
     pub fn file<'env>(env: &'env Env, path: String, limits: String) -> Result<Object<'env>> {
         tasks::spawn(
@@ -188,6 +199,38 @@ impl NativeMedia {
 enum MediaSource {
     File(String),
     Bytes(Vec<u8>, String),
+}
+struct MediaFilesTask {
+    paths: Option<Vec<String>>,
+    limits: ankiforge::media::MediaLimits,
+}
+impl Task for MediaFilesTask {
+    type Output = Vec<Media>;
+    type JsValue = Vec<NativeMedia>;
+    fn compute(&mut self) -> Result<Self::Output> {
+        Media::files_with_limits(self.paths.take().expect("task runs once"), self.limits).map_err(
+            |e| {
+                domain(
+                    "media",
+                    e.kind(),
+                    e.code(),
+                    &e,
+                    json!({
+                        "path": e.path().map(PathSnapshot::new),
+                        "limitExceeded": e.limit_exceeded().map(|l| json!({
+                            "resource": l.resource, "limit": l.limit, "observed": l.observed
+                        }))
+                    }),
+                )
+            },
+        )
+    }
+    fn resolve(&mut self, _env: Env, items: Self::Output) -> Result<Self::JsValue> {
+        Ok(items
+            .into_iter()
+            .map(|inner| NativeMedia { inner })
+            .collect())
+    }
 }
 struct MediaTask {
     source: Option<MediaSource>,
@@ -419,29 +462,36 @@ impl NativeNote {
 }
 #[napi]
 pub struct NativeProject {
-    inner: Project,
+    inner: std::sync::Arc<Project>,
 }
 #[napi]
 impl NativeProject {
     #[napi(constructor)]
     pub fn new(namespace: String) -> Result<Self> {
         Project::new(namespace)
-            .map(|inner| Self { inner })
+            .map(|inner| Self {
+                inner: std::sync::Arc::new(inner),
+            })
             .map_err(|e| err!("schema", e))
     }
     #[napi]
     pub fn default_deck(&mut self, name: String) {
-        self.inner = self.inner.clone().default_deck(name)
+        // The core builder consumes a value. Unwrap the sole owner or copy
+        // only when a task/clone still retains this project version.
+        let empty = Project::new(self.inner.namespace()).expect("validated namespace");
+        let previous = std::mem::replace(&mut self.inner, std::sync::Arc::new(empty));
+        self.inner =
+            std::sync::Arc::new(std::sync::Arc::unwrap_or_clone(previous).default_deck(name))
     }
     #[napi]
     pub fn add(&mut self, key: String, note: &NativeNote) -> Result<()> {
-        self.inner
+        std::sync::Arc::make_mut(&mut self.inner)
             .add(key, note.inner.clone())
             .map_err(|e| err!("add", e))
     }
     #[napi]
     pub fn add_asset(&mut self, media: &NativeMedia) -> Result<()> {
-        self.inner
+        std::sync::Arc::make_mut(&mut self.inner)
             .add_asset(media.inner.clone())
             .map_err(|e| err!("add", e))
     }
@@ -460,7 +510,17 @@ impl NativeProject {
         tasks::spawn(
             env,
             artifact::BuildTask {
-                project: self.inner.clone(),
+                project: Some(self.inner.clone()),
+                options: options::build(&input)?,
+            },
+        )
+    }
+    #[napi]
+    pub fn prepare_publication<'env>(&self, env: &'env Env, input: String) -> Result<Object<'env>> {
+        tasks::spawn(
+            env,
+            prepared::PrepareTask {
+                project: Some(self.inner.clone()),
                 options: options::build(&input)?,
             },
         )
@@ -470,21 +530,21 @@ impl NativeProject {
         tasks::spawn(
             env,
             CompareTask {
-                project: self.inner.clone(),
+                project: Some(self.inner.clone()),
                 options: options::compare(&input)?,
             },
         )
     }
 }
 struct CompareTask {
-    project: Project,
+    project: Option<std::sync::Arc<Project>>,
     options: ankiforge::update::CompareOptions,
 }
 impl Task for CompareTask {
     type Output = String;
     type JsValue = String;
     fn compute(&mut self) -> Result<String> {
-        self.project.compare(self.options.clone()).map(|r|serde_json::to_string(&r.snapshot()).expect("serializable snapshot")).map_err(|e|domain("compare",e.kind(),e.code(),&e,json!({"report":e.report().snapshot(),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"entry":l.entry,"limit":l.limit,"observed":l.observed}))})))
+        self.project.take().expect("compare task owns snapshot").compare(self.options.clone()).map(|r|serde_json::to_string(&r.snapshot()).expect("serializable snapshot")).map_err(|e|domain("compare",e.kind(),e.code(),&e,json!({"report":e.report().snapshot(),"limitExceeded":e.limit_exceeded().map(|l|json!({"resource":l.resource,"entry":l.entry,"limit":l.limit,"observed":l.observed}))})))
     }
     fn resolve(&mut self, _env: Env, output: String) -> Result<String> {
         Ok(output)

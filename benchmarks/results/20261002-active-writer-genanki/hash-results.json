@@ -1,0 +1,5447 @@
+{
+  "status": "completed",
+  "rows": [
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 3369.097,
+      "rss_mib": 40.203125,
+      "artifact_bytes": 35858387,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "05bdcef99d3456656a6ec5f3333b29c860760dd502233446b423f33a045e4e66",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 24.872962
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.408502
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.212335
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.998423
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 19.656158
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.954212
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.301201
+        },
+        "share": {
+          "count": 700,
+          "ms": 34.536881
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 91.104784
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.488623
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 18.574212
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.534591
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 33.98796
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 205.454,
+      "rss_mib": 40.015625,
+      "artifact_bytes": 35858387,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "05bdcef99d3456656a6ec5f3333b29c860760dd502233446b423f33a045e4e66",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.350454
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.372888
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.188993
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.967115
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.154989
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.346883
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.260508
+        },
+        "share": {
+          "count": 700,
+          "ms": 17.634942
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 66.960562
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.416198
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.230111
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.498601
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 17.216042
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 211.474,
+      "rss_mib": 40.890625,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "ffd62fd75fbc90b2161300194040c329d9c7dc39c583d1a9421b7cd2e19cd07a",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.292366
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.496413
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.253035
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.821308
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 23.656492
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.152066
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.365034
+        },
+        "share": {
+          "count": 1000,
+          "ms": 16.355166
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 73.570914
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.594138
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 22.399901
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.361156
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 15.840363
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 212.078,
+      "rss_mib": 40.765625,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "aac062f4fa90cba75a8e3d87261025487ec0de64aee440ee26e2e203b492ab4f",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.395518
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.546909
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.267715
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.875123
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.977127
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.98046
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.365952
+        },
+        "share": {
+          "count": 1000,
+          "ms": 19.45101
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 78.674452
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.585045
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.653944
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.523354
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 18.762545
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 77.218,
+      "rss_mib": 35.203125,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "db9d4d1e72d74aa74c4d90c621be5a329150ce3fdb94a187e6bdf09f1b01ee55",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.50683
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.025712
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013788
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.243335
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.25271
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.414707
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019874
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.025959
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.851333
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.042706
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.17754
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.281121
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 72.197,
+      "rss_mib": 34.90625,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "db9d4d1e72d74aa74c4d90c621be5a329150ce3fdb94a187e6bdf09f1b01ee55",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.498626
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.025915
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.015123
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.247749
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.148417
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.333414
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019378
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.019499
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.55854
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.028036
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.07721
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.232956
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 60.101,
+      "rss_mib": 27.40625,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "274a77a85e9a7f5f8944a4dca82bc692a57d67be37cd78deea720f12fa5b1729",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 56.547,
+      "rss_mib": 26.75,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "3be116b40527166866bf57bfaf1a4f6655c398db53c0da4dd0a37f0b83a4c423",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 269.654,
+      "rss_mib": 40.765625,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "480a19041080933e247629d9066cfc355e9577deeedc9bfdcb3953a8c55da8a8",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 37.962292
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.518758
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.268336
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.434627
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 23.992204
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.261748
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.366688
+        },
+        "share": {
+          "count": 1000,
+          "ms": 22.56771
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 100.935923
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.588504
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 22.695915
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.861313
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 21.912198
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 306.594,
+      "rss_mib": 40.546875,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "2b066bbe44eaf61dd3b354fef09e52c987f829dec0b8d8a5a120ee59b6a5a8d6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.990032
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.587673
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.284075
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.441463
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.79483
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.939952
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.393663
+        },
+        "share": {
+          "count": 1000,
+          "ms": 33.225002
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 117.939071
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.697153
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 26.379577
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.980034
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 32.509292
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 191.965,
+      "rss_mib": 39.828125,
+      "artifact_bytes": 35858387,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "4c81b146dfd4f9a4d3390064ec844211ab6e2c2ee80981412a75c94f14beefb7",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.340004
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.385752
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.187875
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.880928
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.255836
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.256656
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.256342
+        },
+        "share": {
+          "count": 700,
+          "ms": 16.406751
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 65.544825
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.465985
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.325092
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.370221
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 15.980516
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 196.7,
+      "rss_mib": 39.953125,
+      "artifact_bytes": 35858387,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "4c81b146dfd4f9a4d3390064ec844211ab6e2c2ee80981412a75c94f14beefb7",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.419559
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.391548
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.186091
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.979246
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.623423
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.63686
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.260002
+        },
+        "share": {
+          "count": 700,
+          "ms": 16.372005
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 66.892488
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.495111
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.683609
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.455854
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 15.913736
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 66.505,
+      "rss_mib": 26.953125,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7d89e8dbd3f5fcdd7005f77d8276e69233cdb53e3ec971c1bd27e4b529777395",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 63.041,
+      "rss_mib": 27.21875,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7d89e8dbd3f5fcdd7005f77d8276e69233cdb53e3ec971c1bd27e4b529777395",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 73.72,
+      "rss_mib": 35.34375,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "eddeb70fb9dd894af6d11b7ce9c38886cecfedad6a56ead6575dd8eba6095ac1",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.497832
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.03192
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013914
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.270877
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.235916
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.358126
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019581
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.023671
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.734618
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.031958
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.155712
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.252004
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 72.902,
+      "rss_mib": 35.890625,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "47658ce218625b9e7e717918e2d6f9a7a9f42a1b5b1dcb1c45168f891cb67ba7",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.495917
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.026581
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013125
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.239338
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.173832
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.334124
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018958
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.019085
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.611748
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.035664
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.104456
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.239334
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 283.808,
+      "rss_mib": 40.015625,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "70936d2416f058e887fc45a030224c9925554101a966c30a6f3f6b83c8e09554",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 43.223822
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.605859
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.2946
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.546878
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.703331
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 10.189128
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.425084
+        },
+        "share": {
+          "count": 1000,
+          "ms": 29.07358
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 119.83426
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.720542
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 26.231822
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 6.476808
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 28.371839
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 281.544,
+      "rss_mib": 40.6875,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "ff3c87d6dca123e79d23994bf1a429631a5cc7ef7987676d79ce1372de6b094f",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.030556
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.577927
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.268279
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.430913
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.535387
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.189297
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.368575
+        },
+        "share": {
+          "count": 1000,
+          "ms": 28.227555
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 109.236793
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.680888
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.17508
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.846375
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 27.497086
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 215.208,
+      "rss_mib": 40.921875,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "f981d13f1d966ac5bf988402ee6e48363986011423d1d395dc0fadcafad2f0e7",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.398794
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.546711
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.266124
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.844047
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.771366
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.683903
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.36434
+        },
+        "share": {
+          "count": 1000,
+          "ms": 18.661087
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 77.429053
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.623439
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.452317
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.555965
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 17.967384
+        }
+      }
+    },
+    {
+      "role": "warmup",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 225.748,
+      "rss_mib": 40.546875,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "379e3edac4dbaae8e6c21130162d7d5d8749019e62c88a6de7df60e8dc2375d6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.588494
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.598172
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.283328
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.873168
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.051371
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 19.434194
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.378716
+        },
+        "share": {
+          "count": 1000,
+          "ms": 19.871712
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 93.664722
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.781865
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 25.642077
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.688182
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 19.259967
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 70.077,
+      "rss_mib": 27.4375,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "d6b0e7a65c48831b8e158b7da651ab478fc4e4a4a353c5edd8caeaf62af50e61",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 61.823,
+      "rss_mib": 27.5,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "d6b0e7a65c48831b8e158b7da651ab478fc4e4a4a353c5edd8caeaf62af50e61",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 210.269,
+      "rss_mib": 40.53125,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "695059f2e013904ba75ada97927808a6c527f3f5d05f1a03802bb8bf81c3de2c",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.321177
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.553139
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.27047
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.847038
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.331899
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.01157
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.360678
+        },
+        "share": {
+          "count": 1000,
+          "ms": 15.010034
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 73.830686
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.644458
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.006118
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.351722
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 14.47188
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 211.45,
+      "rss_mib": 40.78125,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "2dc55c79f9cb4d248b47a9e7a3344448f745549f79ce9920e3173d50f1c75375",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.176979
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.501372
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.257918
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.885319
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.825631
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.459545
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.360231
+        },
+        "share": {
+          "count": 1000,
+          "ms": 16.545915
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 75.026878
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.599576
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.564538
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.663607
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 16.082207
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 79.15,
+      "rss_mib": 35.890625,
+      "artifact_bytes": 2916192,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "dc3bf86fb6ab8411038a73cb88ba80551a231e5788c95532b4e4e63a5c58ad52",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.488537
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.02925
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.012836
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.230915
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.312832
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.508459
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.01875
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.018461
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.894668
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.031413
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.24129
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.229454
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 73.448,
+      "rss_mib": 35.6875,
+      "artifact_bytes": 2916192,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "dc3bf86fb6ab8411038a73cb88ba80551a231e5788c95532b4e4e63a5c58ad52",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.524331
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.025333
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013248
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.260628
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.255331
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.376958
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019123
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.020501
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.748917
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.029918
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.18662
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.231701
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 271.926,
+      "rss_mib": 40.03125,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "1a7730b8727e537113e35784a5babdebb44ddcfed6df1f3b34db46b429c6c6e9",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.975582
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.592634
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.280327
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.376187
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.919979
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 9.085138
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.380619
+        },
+        "share": {
+          "count": 1000,
+          "ms": 27.673287
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 113.027684
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.724916
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 26.519399
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.944021
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 26.967709
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 275.705,
+      "rss_mib": 39.875,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "5f70f5a8bf11ef2826b35ecbd925d85af4729eb3c14d84ca7ff520ce4ac7abcd",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.011661
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.520666
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.267552
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.420052
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.139907
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.901165
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.36601
+        },
+        "share": {
+          "count": 1000,
+          "ms": 32.850204
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 112.660332
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.609914
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.843664
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.881343
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 32.219796
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 195.207,
+      "rss_mib": 40.15625,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "efa4e7708513531d076fad750920f93a70a26205a3284e0e4d42857cc3adedcd",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.519726
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.3927
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.192951
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.925992
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.995168
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.683511
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.271837
+        },
+        "share": {
+          "count": 700,
+          "ms": 17.883165
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 68.838485
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.487879
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 17.034564
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.432376
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 17.456484
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 0,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 207.709,
+      "rss_mib": 40.453125,
+      "artifact_bytes": 35858387,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "eef9c3eef25cbb7749b718e22751269a84b155173064a2588ac2ac4a077335c0",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": true,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.855352
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 1.576866
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.193866
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.964193
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 21.634205
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.986156
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.267754
+        },
+        "share": {
+          "count": 700,
+          "ms": 16.026416
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 71.077644
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.528865
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 19.488862
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.476461
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 15.600756
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 195.935,
+      "rss_mib": 40.015625,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "076deca63c82784c26ab4d4093429edd1ab11868acc4d5d03d82f83677b8dfd6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.168982
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.401627
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.196829
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.968697
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.95699
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.697834
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.269424
+        },
+        "share": {
+          "count": 700,
+          "ms": 14.822081
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 65.137452
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.482165
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.988908
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.453695
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 14.418916
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 193.304,
+      "rss_mib": 40.296875,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "076deca63c82784c26ab4d4093429edd1ab11868acc4d5d03d82f83677b8dfd6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.429744
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.398918
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.185624
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.994596
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.224954
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.675918
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.267745
+        },
+        "share": {
+          "count": 700,
+          "ms": 14.919587
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 65.032238
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.470993
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.27038
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.418927
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 14.517365
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 213.883,
+      "rss_mib": 40.84375,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "447a7f5dcb18e323b6e130ce350d94a5f6fb6dca97c7d7f6418818cfcd848c53",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.488703
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.545411
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.271196
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.966295
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.755121
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.163754
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.406904
+        },
+        "share": {
+          "count": 1000,
+          "ms": 16.154209
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 76.73895
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.68462
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.389336
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.603567
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 15.607671
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 211.271,
+      "rss_mib": 40.796875,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "07751b6e20e6eb03ca40ecd9d77ba3850a2683a98c6bb457f6b62c306a85ede9",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.244545
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.552072
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.272754
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.903529
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.877424
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.481464
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.36383
+        },
+        "share": {
+          "count": 1000,
+          "ms": 15.735302
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 74.773249
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.657352
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.545783
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.538307
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 15.114495
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 64.912,
+      "rss_mib": 27.59375,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "dcddc019dd328ad79f564d4a348152f2acaf5912cc3c9d42a5c7171f843120c6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 61.882,
+      "rss_mib": 27.078125,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "dcddc019dd328ad79f564d4a348152f2acaf5912cc3c9d42a5c7171f843120c6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 70.6,
+      "rss_mib": 35.9375,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "c18eb45f95d48ced26371dd384daf5c56ad62b286ff78179884fac191a03efd6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.49721
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.025124
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013707
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.236706
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.1625
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.351335
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018585
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.02033
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.699127
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.030086
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.093915
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.347624
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 79.504,
+      "rss_mib": 34.921875,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "c18eb45f95d48ced26371dd384daf5c56ad62b286ff78179884fac191a03efd6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.527701
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.027876
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.01521
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.247295
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.249001
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.411957
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019375
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.03
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.846417
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.037293
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.17537
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.261039
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 260.336,
+      "rss_mib": 40.359375,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "0927afa495447cce3f647ec300e0b85cc81dd718647362309615ab4b32fde710",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.174837
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.515121
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.266452
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.450785
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.366186
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.741417
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.371064
+        },
+        "share": {
+          "count": 1000,
+          "ms": 27.120721
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 106.028523
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.574159
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.067403
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.774464
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 26.410841
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 285.827,
+      "rss_mib": 40.578125,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "ac714bc6aafcf7cdcab24c6534dbe11385108d596771e2a1c6af44e63c23e6ed",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.891962
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.57932
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.28229
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.488944
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.127881
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.753645
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.396044
+        },
+        "share": {
+          "count": 1000,
+          "ms": 31.48591
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 115.733661
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.716463
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 25.719757
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.91785
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 30.44005
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 69.206,
+      "rss_mib": 27.046875,
+      "artifact_bytes": 436477,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "5fde04cdb6e8459c67dab59deade7f0fb41e768ea5c7d96eabfb240d3d0f9db0",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 63.087,
+      "rss_mib": 27.421875,
+      "artifact_bytes": 436477,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "5fde04cdb6e8459c67dab59deade7f0fb41e768ea5c7d96eabfb240d3d0f9db0",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 186.397,
+      "rss_mib": 40.0625,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "c80241139cd885dbb508099f1ed4478fd91502e3d2248e93f2c445aa84dc8d54",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.238422
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.37388
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.18638
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.854664
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.282785
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.129338
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.273207
+        },
+        "share": {
+          "count": 700,
+          "ms": 14.864992
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 63.987901
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.442095
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.346999
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.290222
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 14.511099
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 202.506,
+      "rss_mib": 40.484375,
+      "artifact_bytes": 35858389,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "99b3d81f64575011286f375adc0bad8fde2c3b73f3d93775a79649d4399bcf01",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.141024
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.389171
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.18355
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.856269
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.047546
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.678542
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.255886
+        },
+        "share": {
+          "count": 700,
+          "ms": 16.193263
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 65.224602
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.424511
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.117948
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.316401
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 15.830457
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 83.544,
+      "rss_mib": 35.40625,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7b47742614428a20e861d52cbc876995b6438e460669c11acbcb88178100ec11",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 2.314916
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.030997
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.015878
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.270459
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.443664
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.469833
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.022296
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.024829
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 4.92267
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.042792
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.361956
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.267583
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 82.695,
+      "rss_mib": 35.125,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7b47742614428a20e861d52cbc876995b6438e460669c11acbcb88178100ec11",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.479125
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.026708
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.014372
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.235543
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.273081
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.400126
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018418
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.023168
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.736914
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.035792
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.202666
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.240162
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 207.841,
+      "rss_mib": 40.59375,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "34f212b489725f1994b1bf33b5239fff4dcc5cd6499f52d3aa741922e7cd48b6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.466576
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.543399
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.261968
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.862245
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.382202
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.481262
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.381131
+        },
+        "share": {
+          "count": 1000,
+          "ms": 17.39785
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 75.967341
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.630382
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.051195
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.415386
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 16.880669
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 213.981,
+      "rss_mib": 40.671875,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "ec1abbb60b797f388256a428ef0a129a3b508c370f5562614aa3ecb0a6187b3e",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.322323
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.558658
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.27192
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.954907
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.666669
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.52118
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.365773
+        },
+        "share": {
+          "count": 1000,
+          "ms": 17.86279
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 77.305522
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.602351
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.329798
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.490657
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 17.276883
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 281.534,
+      "rss_mib": 40.15625,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "bff2f06be557e016d2892c75113959f5bee1dda9d94fe6f1a676e9a4c162229c",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 45.457387
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.618534
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.292261
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.470015
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 28.637501
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 10.123014
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.430734
+        },
+        "share": {
+          "count": 1000,
+          "ms": 32.424155
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 126.890362
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.90957
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 27.148518
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 6.347951
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 31.673705
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 282.95,
+      "rss_mib": 40.328125,
+      "artifact_bytes": 64874061,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "77bea72d7965255a8abc2093de35d821054315ffd599147b78e4a5d277bf56f4",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.063517
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.555943
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.268866
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.39746
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.606977
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.134701
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.373923
+        },
+        "share": {
+          "count": 1000,
+          "ms": 29.705319
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 110.207252
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.63075
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.265311
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.841044
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 29.055998
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 228.583,
+      "rss_mib": 40.1875,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "4f9e6fbdfa9836b3a830cb92c986f936fc69ee6e1a412a0743ae6c5caf483093",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 25.878834
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.4302
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.202831
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.979837
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 19.407962
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 8.556966
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.94358
+        },
+        "share": {
+          "count": 700,
+          "ms": 19.595884
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 79.570418
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.474431
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 17.727017
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 4.052641
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 19.01445
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 189.919,
+      "rss_mib": 40.40625,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "d8491aca8a1234e102bae7e3bca3a44ecb51e65367fc1e89d08aaec035a52fe7",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.539292
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.384759
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.185748
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.92186
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.404296
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.373121
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.26175
+        },
+        "share": {
+          "count": 700,
+          "ms": 14.214959
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 64.310713
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.482715
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.464503
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.480098
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 13.784382
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 66.453,
+      "rss_mib": 26.796875,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "e261c6143be0605b190179ef9bf4a1563a6126da4d181bdf671d8332954ffb92",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 62.038,
+      "rss_mib": 27.484375,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "e261c6143be0605b190179ef9bf4a1563a6126da4d181bdf671d8332954ffb92",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 220.181,
+      "rss_mib": 41.46875,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "dd4696db77d6c1309f7da133fe2cc069637630faa14f75033a5cbc4f911c4eb3",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.393156
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.569685
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.272292
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.907907
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.21223
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.314418
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.373159
+        },
+        "share": {
+          "count": 1000,
+          "ms": 15.171023
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 75.935221
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.668175
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.849897
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 4.338983
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 14.568091
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 234.896,
+      "rss_mib": 41.46875,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "e05d8b25d96d87bbe63d5b15f705748f0dcd4500e58869f12f065b5a1493f63b",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.708934
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.580165
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.27834
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.872837
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 26.248587
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 9.33535
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.385583
+        },
+        "share": {
+          "count": 1000,
+          "ms": 21.999507
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 84.971928
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.711265
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.860915
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.734576
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 21.388214
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 82.48,
+      "rss_mib": 35.125,
+      "artifact_bytes": 2916194,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "05c78725e9ceea8be288a73fdeb1930966ff316d4f61b0892d73bf2178529f83",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.512169
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.027376
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013792
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.215331
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.235422
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.392295
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.01925
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.021795
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.694958
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.031421
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.163252
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.238788
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 76.957,
+      "rss_mib": 35.03125,
+      "artifact_bytes": 2916194,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "05c78725e9ceea8be288a73fdeb1930966ff316d4f61b0892d73bf2178529f83",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.513585
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.03004
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013708
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.221629
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.31366
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.437455
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.019293
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.023082
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.867167
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.035544
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.239118
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.246252
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 283.91,
+      "rss_mib": 40.0625,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "318ab5f9e50f0670c4d15fd700ea61f34ad1a51ba67666310a02c486363bb79b",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.164034
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.547207
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.272998
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.418683
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.672866
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.858625
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.393008
+        },
+        "share": {
+          "count": 1000,
+          "ms": 28.135252
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 107.579343
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.597859
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.317594
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.912199
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 27.398484
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 3,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 361.28,
+      "rss_mib": 39.234375,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "b71219cb33dede1fa68fdbf545effe9491d184111410e241741ddf85708d3ffe",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 39.876517
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.572573
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.289953
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.417475
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 27.542699
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.419226
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 1.822269
+        },
+        "share": {
+          "count": 1000,
+          "ms": 62.758006
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 147.994803
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.686414
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.709923
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.972339
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 62.00666
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 79.481,
+      "rss_mib": 35.734375,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "706c1f2e9d7150523d4d2d11755b592b674fb2c7c43f74efa2bc5c753073e716",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.488709
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.027749
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.014294
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.246543
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.268046
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.395166
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018789
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.024206
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.836502
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.03246
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.195748
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.301334
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 75.742,
+      "rss_mib": 35.65625,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "0dfe6a2e3c77502f005668be2248bcf0de9591dcbc741e0fe004e305b5f38529",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.502044
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.030411
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.013877
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.276004
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.309
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.467748
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018916
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.020124
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.904748
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.034539
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.234289
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.245209
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 217.254,
+      "rss_mib": 40.6875,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "eaf3fa5a8601e37ab16213fd56d10eaddd3fb3d360e2b21a189ede5e549c2330",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.640899
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.558878
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.276204
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.935909
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.172461
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.84653
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.368748
+        },
+        "share": {
+          "count": 1000,
+          "ms": 16.341994
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 76.808428
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.723217
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.822324
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.788002
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 15.639131
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 226.512,
+      "rss_mib": 41.359375,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "209520ff13dac472e55a9b766ee194cdcb8bcfe5d120a70fe3912f37996b0e82",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.303106
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.535378
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.26109
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.837832
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 23.873745
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.292615
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.365337
+        },
+        "share": {
+          "count": 1000,
+          "ms": 13.451523
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 70.774198
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.609535
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 22.567854
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.520218
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 12.807227
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 188.209,
+      "rss_mib": 41.09375,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "3bd92179277e9d850b41205bfd3a31d613f5f1d8c6b97eea066169c3daa05f59",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.289875
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.384466
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.191713
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.938831
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.396924
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.499452
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.261756
+        },
+        "share": {
+          "count": 700,
+          "ms": 14.31449
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 64.471588
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.46016
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.458702
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.662927
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 13.840457
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 205.757,
+      "rss_mib": 39.859375,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "1ce4bcbf6f1c2f4c6acd9ee942425d23f3a24f061795d6243b04c2ea7d6acbfd",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.491237
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.368874
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.179381
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.877889
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 16.690608
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.091996
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.254793
+        },
+        "share": {
+          "count": 700,
+          "ms": 12.755879
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 61.428317
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.480413
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 15.781915
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.461359
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 12.405755
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 311.806,
+      "rss_mib": 39.75,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "645b77d8de53a872b5a6099a7cc2c723cc898d76295b0ab40d52bc5d545a9182",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 37.700379
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.556051
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.274369
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.397167
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.491585
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.679161
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.365744
+        },
+        "share": {
+          "count": 1000,
+          "ms": 25.571427
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 104.727069
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.631031
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.151338
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.93717
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 24.831066
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 356.471,
+      "rss_mib": 40.734375,
+      "artifact_bytes": 64874059,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "19c78c58e905205a06ca9132c95c1a2e6e1a2362006c29e034661f2712b2ddc1",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 37.982646
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.561383
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.274047
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.448092
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 25.370466
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.640086
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.367416
+        },
+        "share": {
+          "count": 1000,
+          "ms": 31.586965
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 112.48264
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.631333
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 24.020999
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.938572
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 30.917836
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 71.474,
+      "rss_mib": 27.3125,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "9bc65ef2e928554e2f8b34abb35372bba501f268be17f78c140c1f7137af5222",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 4,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 62.893,
+      "rss_mib": 27.53125,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "9bc65ef2e928554e2f8b34abb35372bba501f268be17f78c140c1f7137af5222",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "direct",
+      "elapsed_ms": 75.365,
+      "rss_mib": 34.8125,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "96ee4a83b320a60daa648a6607523bc236d78f813a69ebcbbf09921d44f4f1e6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.525331
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.030128
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.014128
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.276459
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.301876
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.372376
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.021169
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.023668
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.851587
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.039499
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.224456
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.255919
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-shared-v2",
+      "mode": "streaming",
+      "elapsed_ms": 72.98,
+      "rss_mib": 35.609375,
+      "artifact_bytes": 2916193,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "96ee4a83b320a60daa648a6607523bc236d78f813a69ebcbbf09921d44f4f1e6",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 49,
+          "ms": 1.511705
+        },
+        "descriptor_stat": {
+          "count": 49,
+          "ms": 0.02666
+        },
+        "get_flags": {
+          "count": 49,
+          "ms": 0.012918
+        },
+        "memory_copy": {
+          "count": 49,
+          "ms": 0.210292
+        },
+        "open_source": {
+          "count": 49,
+          "ms": 1.173039
+        },
+        "preflight": {
+          "count": 49,
+          "ms": 0.343378
+        },
+        "set_flags": {
+          "count": 49,
+          "ms": 0.018831
+        },
+        "share": {
+          "count": 49,
+          "ms": 0.018164
+        },
+        "snapshot_file": {
+          "count": 49,
+          "ms": 3.59475
+        },
+        "source_close": {
+          "count": 49,
+          "ms": 0.032213
+        },
+        "source_open": {
+          "count": 49,
+          "ms": 1.104083
+        },
+        "source_read": {
+          "count": 98,
+          "ms": 0.230712
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 186.875,
+      "rss_mib": 40.375,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "e7fcd4132984a81ba480db0378ae3c14b89f48ff44db77b18bcdb4e2d0389913",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.334546
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.412248
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.195666
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.982892
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 18.40418
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 5.686238
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.264206
+        },
+        "share": {
+          "count": 700,
+          "ms": 15.58536
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 66.676841
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.496318
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 17.428615
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.584692
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 15.128137
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 263.881,
+      "rss_mib": 40.578125,
+      "artifact_bytes": 35858388,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7fe32b36f7a259b8eeda3b091a29f44c7dd888029e51fe449f3af972d0fba049",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 700,
+          "ms": 21.794161
+        },
+        "descriptor_stat": {
+          "count": 700,
+          "ms": 0.41458
+        },
+        "get_flags": {
+          "count": 700,
+          "ms": 0.195255
+        },
+        "memory_copy": {
+          "count": 700,
+          "ms": 0.95693
+        },
+        "open_source": {
+          "count": 700,
+          "ms": 17.726792
+        },
+        "preflight": {
+          "count": 700,
+          "ms": 6.071365
+        },
+        "set_flags": {
+          "count": 700,
+          "ms": 0.267292
+        },
+        "share": {
+          "count": 700,
+          "ms": 43.816447
+        },
+        "snapshot_file": {
+          "count": 700,
+          "ms": 95.192298
+        },
+        "source_close": {
+          "count": 700,
+          "ms": 0.50017
+        },
+        "source_open": {
+          "count": 700,
+          "ms": 16.746558
+        },
+        "source_read": {
+          "count": 1400,
+          "ms": 3.413949
+        },
+        "spool_store": {
+          "count": 618,
+          "ms": 43.397253
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-text-v1",
+      "mode": "direct",
+      "elapsed_ms": 69.795,
+      "rss_mib": 27.421875,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "d30616fc5ddb0ed78af3669fdd6d936f11da74193e9eab28f9c28b529495fed5",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-mixed-text-v1",
+      "mode": "streaming",
+      "elapsed_ms": 62.838,
+      "rss_mib": 27.359375,
+      "artifact_bytes": 436478,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "d30616fc5ddb0ed78af3669fdd6d936f11da74193e9eab28f9c28b529495fed5",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "descriptor_stat": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "get_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "memory_copy": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "open_source": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "preflight": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "set_flags": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "share": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "snapshot_file": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_close": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_open": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "source_read": {
+          "count": 0,
+          "ms": 0.0
+        },
+        "spool_store": {
+          "count": 0,
+          "ms": 0.0
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-audio-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 223.946,
+      "rss_mib": 40.984375,
+      "artifact_bytes": 32597929,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "70435b971a3fce2dc2c0db4374464fa9240d05bc1d812825c9dea92fa5c8a94d",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.851751
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.61325
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.280961
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.93128
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 30.127606
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 8.539729
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.407877
+        },
+        "share": {
+          "count": 1000,
+          "ms": 17.826417
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 86.272299
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.728616
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 28.678816
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 6.352571
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 17.258288
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-audio-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 228.526,
+      "rss_mib": 40.953125,
+      "artifact_bytes": 32597928,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "9b1149cbbee5b104bc77de42c6470e04ad9c401a637461f73b5563166fc6ed7e",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 20.378911
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.548744
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.252924
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 0.8361
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.219227
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.854122
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.36016
+        },
+        "share": {
+          "count": 1000,
+          "ms": 15.996058
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 74.621768
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.634083
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 22.915618
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 3.37514
+        },
+        "spool_store": {
+          "count": 870,
+          "ms": 15.476669
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-image-unique-v2",
+      "mode": "direct",
+      "elapsed_ms": 309.445,
+      "rss_mib": 40.703125,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "7dc157675b58cd396f4ac5e4d7a5764d79ebb495b86fbc23514bc1eb1028e6f5",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 37.906726
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.559922
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.273882
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.427657
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.35358
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.523196
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.37173
+        },
+        "share": {
+          "count": 1000,
+          "ms": 27.884459
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 106.353029
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.568875
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.005594
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.849553
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 27.249927
+        }
+      }
+    },
+    {
+      "role": "timing",
+      "repeat": 5,
+      "profile": "basic-image-unique-v2",
+      "mode": "streaming",
+      "elapsed_ms": 353.687,
+      "rss_mib": 39.90625,
+      "artifact_bytes": 64874060,
+      "logical_sha256": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+      "artifact_sha256": "babe39838daa3eab129da6eb4f3c2f4a53913c0e5287188c3aeb4ee497a678f9",
+      "power_before": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "power_after": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=25034851)\t100%; finishing charge; 0:00 remaining present: true",
+      "oracle_passed": false,
+      "stages": {
+        "blake3": {
+          "count": 1000,
+          "ms": 38.36202
+        },
+        "descriptor_stat": {
+          "count": 1000,
+          "ms": 0.55481
+        },
+        "get_flags": {
+          "count": 1000,
+          "ms": 0.27057
+        },
+        "memory_copy": {
+          "count": 1000,
+          "ms": 1.318022
+        },
+        "open_source": {
+          "count": 1000,
+          "ms": 24.722755
+        },
+        "preflight": {
+          "count": 1000,
+          "ms": 7.801044
+        },
+        "set_flags": {
+          "count": 1000,
+          "ms": 0.373936
+        },
+        "share": {
+          "count": 1000,
+          "ms": 47.931381
+        },
+        "snapshot_file": {
+          "count": 1000,
+          "ms": 127.860679
+        },
+        "source_close": {
+          "count": 1000,
+          "ms": 0.608733
+        },
+        "source_open": {
+          "count": 1000,
+          "ms": 23.37891
+        },
+        "source_read": {
+          "count": 2000,
+          "ms": 5.844403
+        },
+        "spool_store": {
+          "count": 935,
+          "ms": 47.251393
+        }
+      }
+    }
+  ],
+  "identity_unchanged": true,
+  "completed_utc": "2026-10-02T13:48:52.306626+00:00"
+}

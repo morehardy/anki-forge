@@ -1,0 +1,139 @@
+{
+  "scope": "offline schedule, raw observations, saved verification status, statistics and report equality; no APKG export or Anki import",
+  "batches": {
+    "controls-native-batch1": {
+      "samples": 240,
+      "status": "verified",
+      "regression_flags": [
+        "reuse-compare-control/wide1k"
+      ]
+    },
+    "controls-native-batch2": {
+      "samples": 240,
+      "status": "verified",
+      "regression_flags": [
+        "reuse-compare-control/wide1k"
+      ]
+    },
+    "controls-node-batch1": {
+      "samples": 90,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "controls-node-batch2": {
+      "samples": 90,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "controls-python-batch1": {
+      "samples": 90,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "controls-python-batch2": {
+      "samples": 90,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "core-batch1": {
+      "samples": 930,
+      "status": "verified",
+      "regression_flags": [
+        "combined/wide1k",
+        "combined-reuse/wide1k",
+        "manifest/wide1k",
+        "prepared-control/wide1k",
+        "reuse/wide1k"
+      ]
+    },
+    "core-batch2": {
+      "samples": 930,
+      "status": "verified",
+      "regression_flags": [
+        "combined/wide1k",
+        "combined-reuse/wide1k",
+        "manifest/wide1k"
+      ]
+    },
+    "node-batch1": {
+      "samples": 270,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "node-batch2": {
+      "samples": 270,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "node-operations-batch1": {
+      "samples": 270,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "node-operations-batch2": {
+      "samples": 270,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-controls-native": {
+      "samples": 16,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-controls-node": {
+      "samples": 6,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-controls-python": {
+      "samples": 6,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-core": {
+      "samples": 46,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-final": {
+      "samples": 62,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-final-collector-core": {
+      "samples": 6,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-final-collector-node": {
+      "samples": 18,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-node-fixed": {
+      "samples": 18,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-node-operations-fixed": {
+      "samples": 18,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "smoke-standard": {
+      "samples": 40,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "standard-batch1": {
+      "samples": 600,
+      "status": "verified",
+      "regression_flags": []
+    },
+    "standard-batch2": {
+      "samples": 600,
+      "status": "verified",
+      "regression_flags": []
+    }
+  }
+}

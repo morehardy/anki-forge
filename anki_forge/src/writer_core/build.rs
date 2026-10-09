@@ -78,6 +78,7 @@ pub fn build_with_guid_plan(
 
 /// Product builds retain staging artifacts but keep the APKG private until
 /// comparison and policy evaluation have succeeded.
+#[cfg(feature = "internal-tools")]
 pub(crate) fn build_with_identity_plan(
     normalized_ir: &NormalizedIr,
     writer_policy: &WriterPolicy,
@@ -136,44 +137,48 @@ pub(crate) fn build_with_prepared_media(
     };
 
     let diagnostics = package.diagnostics().to_vec();
-    let materialized =
-        match package.materialize_with_prepared_media(artifact_target, prepared_media) {
-            Ok(materialized) => materialized,
-            Err(cause) => {
-                let result = if let Some(media_err) =
-                    cause.downcast_ref::<crate::writer_core::media::MediaWriterError>()
-                {
-                    error_result_with_domain(
-                        writer_policy,
-                        build_context,
-                        ErrorResultDetails {
-                            code: media_err.diagnostic_code().into(),
-                            summary: cause.to_string(),
-                            domain: "media".into(),
-                            stage: "materialize_staging".into(),
-                            operation: "write_media".into(),
-                            path: media_err.diagnostic_path(),
-                        },
-                    )
-                } else {
-                    error_result(
+    let materialized = match package
+        .materialize_with_prepared_media(artifact_target, prepared_media)
+    {
+        Ok(materialized) => materialized,
+        Err(cause) => {
+            let result = if let Some(media_err) =
+                cause.downcast_ref::<crate::writer_core::media::MediaWriterError>()
+            {
+                error_result_with_domain(
+                    writer_policy,
+                    build_context,
+                    ErrorResultDetails {
+                        code: media_err.diagnostic_code().into(),
+                        summary: cause.to_string(),
+                        domain: "media".into(),
+                        stage: "materialize_staging".into(),
+                        operation: "write_media".into(),
+                        path: media_err.diagnostic_path(),
+                    },
+                )
+            } else {
+                error_result(
                         writer_policy,
                         build_context,
                         "PHASE3.STAGING_MATERIALIZATION_FAILED",
                         cause.to_string(),
                         "materialize_staging",
-                        "write_manifest",
-                        Some(
-                            artifact_target
-                                .staging_manifest_path()
-                                .display()
-                                .to_string(),
-                        ),
+                        if artifact_target.staging_output == super::staging::StagingOutput::Complete {
+                            "write_manifest"
+                        } else {
+                            "prepare_staging"
+                        },
+                        Some(if artifact_target.staging_output == super::staging::StagingOutput::Complete {
+                            artifact_target.staging_manifest_path()
+                        } else {
+                            artifact_target.staging_dir()
+                        }.display().to_string()),
                     )
-                };
-                return Ok(failed_attempt(result, diagnostics, cause));
-            }
-        };
+            };
+            return Ok(failed_attempt(result, diagnostics, cause));
+        }
+    };
 
     let apkg = if build_context.emit_apkg {
         match crate::writer_core::apkg::emit_apkg_with_prepared_media(
@@ -223,7 +228,7 @@ pub(crate) fn build_with_prepared_media(
     let mut result = success_result(writer_policy, build_context, materialized, diagnostics);
     if let Some(apkg) = apkg {
         result.apkg_ref = Some(apkg.apkg_ref);
-        result.package_fingerprint = Some(apkg.package_fingerprint);
+        result.package_fingerprint = apkg.package_fingerprint;
     }
 
     Ok(result.into())

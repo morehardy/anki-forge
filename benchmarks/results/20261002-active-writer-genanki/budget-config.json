@@ -1,0 +1,33 @@
+{
+  "purpose": "Active writer resident budget tradeoff; 4/12/16 MiB, additional source hash/copy/close spans; all groups close source after completing its read",
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "modes": {
+    "writer4": {
+      "binary": "budget",
+      "env": {
+        "ANKIFORGE_ROUND4_WRITER": "1",
+        "ANKIFORGE_ROUND4_BUDGET_MIB": "4"
+      }
+    },
+    "writer12": {
+      "binary": "budget",
+      "env": {
+        "ANKIFORGE_ROUND4_WRITER": "1",
+        "ANKIFORGE_ROUND4_BUDGET_MIB": "12"
+      }
+    },
+    "writer16": {
+      "binary": "budget",
+      "env": {
+        "ANKIFORGE_ROUND4_WRITER": "1",
+        "ANKIFORGE_ROUND4_BUDGET_MIB": "16"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "reference": "benchmarks/results/20260921-readme-genanki/source-snapshot.json",
+  "oracle_sha256": "3a689f2bb83eb5ed51ffc97367902c94f07d7536d07a14225c1823ed672f2217",
+  "binary_matches_reference": false,
+  "source_files": {
+    "scripts/roundtrip_oracle/.DS_Store": true,
+    "scripts/roundtrip_oracle/.gitignore": true,
+    "scripts/roundtrip_oracle/Cargo.lock": false,
+    "scripts/roundtrip_oracle/Cargo.toml": false,
+    "scripts/roundtrip_oracle/src/bin/benchmark_oracle.rs": true,
+    "scripts/roundtrip_oracle/src/main.rs": false
+  },
+  "upstream_revision": "2d44d4d6bc486803f9236033ad840df203c87036",
+  "upstream_patch": "diff --git a/Cargo.toml b/Cargo.toml\nindex 2566a48f1..38ef681ef 100644\n--- a/Cargo.toml\n+++ b/Cargo.toml\n@@ -130,7 +130,7 @@ syn = { version = \"2.0.103\", features = [\"parsing\", \"printing\"] }\n tar = \"0.4.44\"\n tempfile = \"3.20.0\"\n termcolor = \"1.4.1\"\n-tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\"] }\n+tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\", \"io-util\"] }\n tokio-util = { version = \"0.7.15\", features = [\"io\"] }\n tower-http = { version = \"0.6.6\", features = [\"trace\"] }\n tracing = { version = \"0.1.41\", features = [\"max_level_trace\", \"release_max_level_debug\"] }",
+  "upstream_revision_matches": true,
+  "upstream_patch_matches": true,
+  "rebuilt_from_current_source": true,
+  "build_provenance_verified": true,
+  "observation_note": "The benchmark oracle executable was rebuilt with the current Cargo.toml and Cargo.lock; benchmark_oracle.rs and pinned upstream Anki revision/patch match the archived baseline."
+}

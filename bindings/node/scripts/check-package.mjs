@@ -42,7 +42,7 @@ for (const target of targets) {
     assert.equal(metadata.bindingVersion, manifest.version);
     assert.equal(metadata.target, target.target);
     assert.equal(metadata.nodeApiVersion, 8);
-    assert.equal(metadata.bindingProtocolVersion, 5);
+    assert.equal(metadata.bindingProtocolVersion, 6);
   }
   assert.equal(platform.scripts, undefined);
   assert.ok(platform.files.includes("THIRD_PARTY_NOTICES.md"));

@@ -1,0 +1,92 @@
+{
+  "rustc": {
+    "argv": [
+      "rustc",
+      "-Vv"
+    ],
+    "exit_code": 0,
+    "stdout": "rustc 1.92.0 (ded5c06cf 2025-12-08)\nbinary: rustc\ncommit-hash: ded5c06cf21d2b93bffd5d884aa6e96934ee4234\ncommit-date: 2025-12-08\nhost: aarch64-apple-darwin\nrelease: 1.92.0\nLLVM version: 21.1.3\n",
+    "stderr": ""
+  },
+  "cargo": {
+    "argv": [
+      "cargo",
+      "-V"
+    ],
+    "exit_code": 0,
+    "stdout": "cargo 1.92.0 (344c4567c 2025-10-21)\n",
+    "stderr": ""
+  },
+  "python": {
+    "argv": [
+      "/Users/hp/Desktop/2026/anki-forge/benchmarks/.venv/bin/python",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Python 3.11.0\n",
+    "stderr": ""
+  },
+  "macos": {
+    "argv": [
+      "sw_vers"
+    ],
+    "exit_code": 0,
+    "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t27.0\nBuildVersion:\t\t26A428\n",
+    "stderr": ""
+  },
+  "machine": {
+    "argv": [
+      "sysctl",
+      "-n",
+      "machdep.cpu.brand_string"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "sysctl: sysctl fmt -1 1024 1: Operation not permitted\n"
+  },
+  "cpus": {
+    "argv": [
+      "sysctl",
+      "-n",
+      "hw.ncpu"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "sysctl: sysctl fmt -1 1024 1: Operation not permitted\n"
+  },
+  "memory": {
+    "argv": [
+      "sysctl",
+      "-n",
+      "hw.memsize"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "sysctl: sysctl fmt -1 1024 1: Operation not permitted\n"
+  },
+  "head": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "b81fb49e46c7e276e2bbeb2da1d3dcd255ae5244\n",
+    "stderr": ""
+  },
+  "hardware_filtered": {
+    "chip_type": "Apple M1 Pro",
+    "number_processors": "proc 10:0:8:2",
+    "physical_memory": "32 GB",
+    "machine_name": "MacBook Pro",
+    "machine_model": "MacBookPro18,3"
+  },
+  "measurement_environment": "AC Power and power settings saved per group/sample. macOS thermal API unavailable; desktop load and file cache uncontrolled. Version queries captured after experiments.",
+  "test_evidence": {
+    "core_default": "logs/candidate-tests-155300.log: 407 passed",
+    "core_text_enabled": "logs/text-enabled-tests.log: 407 passed; ROWS_MIB=64 ROW_WORKERS=4 RENDER_WORKERS=4; cargo test --locked --offline -p ankiforge --lib --features internal-tools",
+    "harness": "logs/harness.log: 46 passed",
+    "text_integration": "logs/text-integration.log: 9 + 13 + 6 passed",
+    "codec_owned": "bulk-owned and pledged-owned: 1 test each; see checks.json"
+  }
+}

@@ -85,13 +85,17 @@ impl IdentityEnvelope {
         Ok(())
     }
 
-    pub(crate) fn validate(&self, collection: &std::path::Path) -> anyhow::Result<()> {
+    pub(crate) fn validate(
+        &self,
+        collection: &std::path::Path,
+        collection_digest: &blake3::Hash,
+    ) -> anyhow::Result<()> {
         ensure!(
             self.format_version == "ankiforge-identity-v1",
             "unsupported identity format"
         );
         ensure!(
-            self.collection_blake3 == super::file_hash(collection)?,
+            self.collection_blake3 == collection_digest.to_hex().as_str(),
             "collection digest does not match identity evidence"
         );
         let actual = super::identity_checksum(&self.identity)?;
@@ -233,7 +237,8 @@ impl IdentityEnvelope {
             ensure!(model.active, "active note refers to a retired model");
             active.insert(note.guid.as_str(), note);
         }
-        let mut statement = db.prepare("SELECT id, guid, mid, mod FROM notes")?;
+        let mut content = super::content::NoteReader::new(&db)?;
+        let mut statement = db.prepare("SELECT id, guid, mid, mod, flds, tags FROM notes")?;
         let mut rows = statement.query([])?;
         let mut seen = BTreeSet::new();
         while let Some(row) = rows.next()? {
@@ -255,15 +260,14 @@ impl IdentityEnvelope {
                 mid == model.id && mtime == note.mtime_secs,
                 "note mapping disagrees with collection"
             );
+            let fields: String = row.get(4)?;
+            let tags: String = row.get(5)?;
+            let (fingerprint, actual) =
+                content.read(id, mid, model.kind == "cloze", &fields, &tags)?;
             ensure!(
-                note.content_hash
-                    == super::content::note_from_collection(&db, id, mid, model.kind == "cloze")?,
+                note.content_hash == fingerprint,
                 "note content fingerprint disagrees with collection"
             );
-            let actual = db
-                .prepare("SELECT ord FROM cards WHERE nid = ?1")?
-                .query_map([id], |row| row.get::<_, u32>(0))?
-                .collect::<Result<Vec<_>, _>>()?;
             let expected: BTreeSet<_> = note.cards.values().copied().collect();
             ensure!(
                 actual.len() == expected.len()

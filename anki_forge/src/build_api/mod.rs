@@ -2,17 +2,21 @@
 
 mod artifact;
 mod candidate;
+#[cfg(test)]
+mod dataflow_tests;
 mod error;
 pub(crate) mod identity;
 pub mod json;
 mod limits;
 mod normalize;
 mod pipeline;
+mod prepared;
 mod report;
 
 pub use artifact::ApkgArtifact;
 pub use error::{BuildError, BuildErrorKind, PersistError, PersistErrorKind};
 pub use limits::{InspectLimitExceeded, InspectLimits};
+pub use prepared::PreparedPublication;
 pub use report::{BuildCounts, BuildOutput, BuildReport};
 
 use std::path::PathBuf;

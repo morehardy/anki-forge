@@ -78,3 +78,23 @@ while a separate consumer still needs its path is an application lifetime error.
 Package inspection cannot establish every client-side behavior. Test rendering,
 playback and update imports with the intended Anki versions and settings. See
 [updates](updates.md) for scheduling and schema-change limits.
+
+## Prepared publication from source
+
+**API source commit `1199196`**; see [source builds](source-builds.md).
+The public `0.2.0` packages do not provide prepared publication.
+
+`prepare_publication` builds, inspects and compares one private candidate;
+`publish` uses that same file. Options and relative destinations bind at
+preparation. Project edits cannot alter the candidate. Preparation alone does
+not replace the destination; dropping or closing an unpublished owner removes it.
+
+Every publish attempt consumes the owner, including policy or I/O failure.
+Reprepare to retry or change the policy/destination. Reports remain readable and
+own no files. Node/Python expose idempotent `close()` and an unavailable error
+with `closed` or `consumed` reason; closing after publication starts does not
+cancel it. Duration excludes review waiting. A late durability failure can
+follow successful replacement, so inspect the actual publication facts.
+
+Follow the [complete example](updates.md#build-once-review-then-publish-from-source)
+and the language API references for typed errors and worker behavior.

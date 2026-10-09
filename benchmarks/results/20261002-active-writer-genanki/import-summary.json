@@ -1,0 +1,857 @@
+[
+  {
+    "profile": "basic-mixed-text-v1",
+    "default": {
+      "n": 6,
+      "samples_ms": [
+        64.398,
+        60.245,
+        60.607,
+        73.674,
+        59.465,
+        69.214
+      ],
+      "median_ms": 62.5025,
+      "rss_mib": 27.3828125,
+      "artifact_bytes": 436478.0,
+      "stages": {
+        "source_open": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_read": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "preflight": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "share": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "snapshot_file": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    },
+    "writer": {
+      "n": 6,
+      "samples_ms": [
+        60.86,
+        74.609,
+        60.882,
+        62.967,
+        68.413,
+        58.304
+      ],
+      "median_ms": 61.924499999999995,
+      "rss_mib": 27.5625,
+      "artifact_bytes": 436478.0,
+      "stages": {
+        "source_open": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_read": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "preflight": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "share": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "snapshot_file": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    },
+    "nonblock": {
+      "n": 6,
+      "samples_ms": [
+        66.837,
+        66.305,
+        71.23,
+        63.906,
+        57.704,
+        63.816
+      ],
+      "median_ms": 65.1055,
+      "rss_mib": 27.7265625,
+      "artifact_bytes": 436478.0,
+      "stages": {
+        "source_open": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "source_read": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "preflight": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "share": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "snapshot_file": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-image-unique-v2",
+    "default": {
+      "n": 6,
+      "samples_ms": [
+        325.723,
+        384.214,
+        382.129,
+        368.685,
+        386.002,
+        326.163
+      ],
+      "median_ms": 375.40700000000004,
+      "rss_mib": 40.6328125,
+      "artifact_bytes": 64874061.0,
+      "stages": {
+        "source_open": {
+          "ms": 24.0229415,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 5.8788975,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.278345,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.3715195,
+          "count": 1000.0
+        },
+        "open_source": {
+          "ms": 25.392039500000003,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 8.101667,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5685825,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 58.545727,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 139.3934705,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 57.727275000000006,
+          "count": 935.0
+        }
+      }
+    },
+    "writer": {
+      "n": 6,
+      "samples_ms": [
+        369.177,
+        299.575,
+        339.741,
+        400.621,
+        334.514,
+        284.34
+      ],
+      "median_ms": 337.1275,
+      "rss_mib": 40.515625,
+      "artifact_bytes": 64874061.0,
+      "stages": {
+        "source_open": {
+          "ms": 23.721563500000002,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 5.9434355,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.2731175,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.372494,
+          "count": 1000.0
+        },
+        "open_source": {
+          "ms": 25.063368,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.8152875,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5499765000000001,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 32.751316,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 113.596059,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 32.047365,
+          "count": 935.0
+        }
+      }
+    },
+    "nonblock": {
+      "n": 6,
+      "samples_ms": [
+        321.581,
+        374.917,
+        386.757,
+        944.812,
+        320.76,
+        331.756
+      ],
+      "median_ms": 353.3365,
+      "rss_mib": 40.9296875,
+      "artifact_bytes": 64874061.0,
+      "stages": {
+        "source_open": {
+          "ms": 23.8557255,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 5.9823335,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 24.496347,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.8873215000000005,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5474505000000001,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 59.5494465,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 138.789553,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 58.760026499999995,
+          "count": 935.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-audio-unique-v2",
+    "default": {
+      "n": 6,
+      "samples_ms": [
+        257.064,
+        234.332,
+        307.416,
+        244.088,
+        252.861,
+        270.092
+      ],
+      "median_ms": 254.9625,
+      "rss_mib": 41.046875,
+      "artifact_bytes": 32597929.0,
+      "stages": {
+        "source_open": {
+          "ms": 23.5493585,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 3.8185935000000004,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.280887,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.370609,
+          "count": 1000.0
+        },
+        "open_source": {
+          "ms": 24.892322999999998,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.878622,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5644885,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 46.3325575,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 106.7447875,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 45.629684499999996,
+          "count": 870.0
+        }
+      }
+    },
+    "writer": {
+      "n": 6,
+      "samples_ms": [
+        247.106,
+        208.61,
+        205.096,
+        268.987,
+        215.033,
+        218.82
+      ],
+      "median_ms": 216.92649999999998,
+      "rss_mib": 41.0,
+      "artifact_bytes": 32597929.0,
+      "stages": {
+        "source_open": {
+          "ms": 22.971386000000003,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 3.4991060000000003,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.262005,
+          "count": 1000.0
+        },
+        "set_flags": {
+          "ms": 0.369434,
+          "count": 1000.0
+        },
+        "open_source": {
+          "ms": 24.271253,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 7.3955415,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5286925,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 14.9298705,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 73.75642350000001,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 14.27204,
+          "count": 870.0
+        }
+      }
+    },
+    "nonblock": {
+      "n": 6,
+      "samples_ms": [
+        245.842,
+        267.442,
+        241.98,
+        256.216,
+        298.22,
+        259.073
+      ],
+      "median_ms": 257.6445,
+      "rss_mib": 41.5546875,
+      "artifact_bytes": 32597929.0,
+      "stages": {
+        "source_open": {
+          "ms": 23.7131045,
+          "count": 1000.0
+        },
+        "source_read": {
+          "ms": 3.7027805,
+          "count": 2000.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 24.350056000000002,
+          "count": 1000.0
+        },
+        "preflight": {
+          "ms": 8.135912999999999,
+          "count": 1000.0
+        },
+        "descriptor_stat": {
+          "ms": 0.5721575,
+          "count": 1000.0
+        },
+        "share": {
+          "ms": 51.8528785,
+          "count": 1000.0
+        },
+        "snapshot_file": {
+          "ms": 110.7868265,
+          "count": 1000.0
+        },
+        "spool_store": {
+          "ms": 51.101745,
+          "count": 870.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-unique-v2",
+    "default": {
+      "n": 6,
+      "samples_ms": [
+        371.49,
+        223.106,
+        262.637,
+        218.328,
+        212.914,
+        249.834
+      ],
+      "median_ms": 236.47,
+      "rss_mib": 40.640625,
+      "artifact_bytes": 35858389.0,
+      "stages": {
+        "source_open": {
+          "ms": 16.8234555,
+          "count": 700.0
+        },
+        "source_read": {
+          "ms": 3.52385,
+          "count": 1400.0
+        },
+        "get_flags": {
+          "ms": 0.1946695,
+          "count": 700.0
+        },
+        "set_flags": {
+          "ms": 0.2616265,
+          "count": 700.0
+        },
+        "open_source": {
+          "ms": 17.791163500000003,
+          "count": 700.0
+        },
+        "preflight": {
+          "ms": 5.798978,
+          "count": 700.0
+        },
+        "descriptor_stat": {
+          "ms": 0.400296,
+          "count": 700.0
+        },
+        "share": {
+          "ms": 39.0275195,
+          "count": 700.0
+        },
+        "snapshot_file": {
+          "ms": 90.3300635,
+          "count": 700.0
+        },
+        "spool_store": {
+          "ms": 38.5112935,
+          "count": 618.0
+        }
+      }
+    },
+    "writer": {
+      "n": 6,
+      "samples_ms": [
+        219.517,
+        204.566,
+        200.105,
+        227.325,
+        231.132,
+        197.713
+      ],
+      "median_ms": 212.04149999999998,
+      "rss_mib": 40.3125,
+      "artifact_bytes": 35858389.0,
+      "stages": {
+        "source_open": {
+          "ms": 16.681603000000003,
+          "count": 700.0
+        },
+        "source_read": {
+          "ms": 3.45247,
+          "count": 1400.0
+        },
+        "get_flags": {
+          "ms": 0.187604,
+          "count": 700.0
+        },
+        "set_flags": {
+          "ms": 0.2732295,
+          "count": 700.0
+        },
+        "open_source": {
+          "ms": 17.615326,
+          "count": 700.0
+        },
+        "preflight": {
+          "ms": 5.663939,
+          "count": 700.0
+        },
+        "descriptor_stat": {
+          "ms": 0.384042,
+          "count": 700.0
+        },
+        "share": {
+          "ms": 13.7945765,
+          "count": 700.0
+        },
+        "snapshot_file": {
+          "ms": 63.9724975,
+          "count": 700.0
+        },
+        "spool_store": {
+          "ms": 13.379916000000001,
+          "count": 618.0
+        }
+      }
+    },
+    "nonblock": {
+      "n": 6,
+      "samples_ms": [
+        233.235,
+        213.556,
+        215.543,
+        204.412,
+        213.843,
+        220.279
+      ],
+      "median_ms": 214.69299999999998,
+      "rss_mib": 40.1328125,
+      "artifact_bytes": 35858389.0,
+      "stages": {
+        "source_open": {
+          "ms": 16.5894565,
+          "count": 700.0
+        },
+        "source_read": {
+          "ms": 3.473717,
+          "count": 1400.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 17.029453500000002,
+          "count": 700.0
+        },
+        "preflight": {
+          "ms": 5.5176324999999995,
+          "count": 700.0
+        },
+        "descriptor_stat": {
+          "ms": 0.39016399999999996,
+          "count": 700.0
+        },
+        "share": {
+          "ms": 35.6643005,
+          "count": 700.0
+        },
+        "snapshot_file": {
+          "ms": 84.80605750000001,
+          "count": 700.0
+        },
+        "spool_store": {
+          "ms": 35.165645,
+          "count": 618.0
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-shared-v2",
+    "default": {
+      "n": 6,
+      "samples_ms": [
+        86.872,
+        73.57,
+        75.163,
+        82.671,
+        74.237,
+        70.95
+      ],
+      "median_ms": 74.69999999999999,
+      "rss_mib": 35.75,
+      "artifact_bytes": 2916193.5,
+      "stages": {
+        "source_open": {
+          "ms": 1.1175625,
+          "count": 49.0
+        },
+        "source_read": {
+          "ms": 0.2431235,
+          "count": 98.0
+        },
+        "get_flags": {
+          "ms": 0.013314,
+          "count": 49.0
+        },
+        "set_flags": {
+          "ms": 0.018416000000000002,
+          "count": 49.0
+        },
+        "open_source": {
+          "ms": 1.1864785,
+          "count": 49.0
+        },
+        "preflight": {
+          "ms": 0.3770205,
+          "count": 49.0
+        },
+        "descriptor_stat": {
+          "ms": 0.026457500000000002,
+          "count": 49.0
+        },
+        "share": {
+          "ms": 0.019878,
+          "count": 49.0
+        },
+        "snapshot_file": {
+          "ms": 3.6356859999999998,
+          "count": 49.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    },
+    "writer": {
+      "n": 6,
+      "samples_ms": [
+        70.883,
+        74.997,
+        73.852,
+        77.405,
+        85.397,
+        82.756
+      ],
+      "median_ms": 76.201,
+      "rss_mib": 35.5234375,
+      "artifact_bytes": 2916194.0,
+      "stages": {
+        "source_open": {
+          "ms": 1.1390820000000001,
+          "count": 49.0
+        },
+        "source_read": {
+          "ms": 0.2427535,
+          "count": 98.0
+        },
+        "get_flags": {
+          "ms": 0.012958999999999998,
+          "count": 49.0
+        },
+        "set_flags": {
+          "ms": 0.018896,
+          "count": 49.0
+        },
+        "open_source": {
+          "ms": 1.2059585,
+          "count": 49.0
+        },
+        "preflight": {
+          "ms": 0.357355,
+          "count": 49.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0257495,
+          "count": 49.0
+        },
+        "share": {
+          "ms": 0.020353,
+          "count": 49.0
+        },
+        "snapshot_file": {
+          "ms": 3.7021465,
+          "count": 49.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    },
+    "nonblock": {
+      "n": 6,
+      "samples_ms": [
+        78.076,
+        77.404,
+        81.38,
+        77.137,
+        72.882,
+        72.113
+      ],
+      "median_ms": 77.2705,
+      "rss_mib": 36.0234375,
+      "artifact_bytes": 2916194.0,
+      "stages": {
+        "source_open": {
+          "ms": 1.1732905,
+          "count": 49.0
+        },
+        "source_read": {
+          "ms": 0.251292,
+          "count": 98.0
+        },
+        "get_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "set_flags": {
+          "ms": 0.0,
+          "count": 0.0
+        },
+        "open_source": {
+          "ms": 1.2081455,
+          "count": 49.0
+        },
+        "preflight": {
+          "ms": 0.382768,
+          "count": 49.0
+        },
+        "descriptor_stat": {
+          "ms": 0.0276435,
+          "count": 49.0
+        },
+        "share": {
+          "ms": 0.0205815,
+          "count": 49.0
+        },
+        "snapshot_file": {
+          "ms": 3.7022055,
+          "count": 49.0
+        },
+        "spool_store": {
+          "ms": 0.0,
+          "count": 0.0
+        }
+      }
+    }
+  }
+]

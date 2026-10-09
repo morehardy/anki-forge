@@ -1,69 +1,45 @@
-# Install and run
+# Install and run with Rust
 
-These guides describe the current source checkout. See
-[compatibility and release status](compatibility.md) before selecting a published
-package. A source version is not evidence that the same version is available in
-a public registry.
+Use Rust 1.92 or later and the [public ankiforge 0.2.0 crate](https://crates.io/crates/ankiforge).
 
-## Requirements
-
-- Rust 1.92 or later for the Rust library and source builds.
-- Node.js 22.13 or later for the native Node SDK.
-- Ordinary CPython 3.11/3.12 for the declared Python verification matrix.
-
-A compiler is needed to build native packages from source. Applications using a
-matching prebuilt native package do not invoke Cargo at runtime.
-
-## Rust application from a checkout
-
-Create a small binary application. In its `Cargo.toml`, point `ankiforge` at the
-checkout's `anki_forge` directory; replace the path with your actual checkout.
-`anyhow` is an application choice for concise error propagation, and `serde_json`
-is used by the reporting examples.
-
-```toml
-[dependencies]
-ankiforge = { path = "/absolute/path/to/anki-forge/anki_forge" }
-anyhow = "1"
-serde_json = "1"
+```sh
+cargo new anki-deck
+cd anki-deck
+cargo add ankiforge@0.2.0
 ```
 
-Save this as `src/main.rs`, then run `cargo run`:
+## Export your first deck
 
+Save this as `src/main.rs`:
+
+<!-- source: anki_forge/examples/target_api_basic.rs -->
 ```rust
 use ankiforge::{BuildOptions, Note, Project};
 
-fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("hola", Note::basic("hola", "hello"))?;
+    project.add("es:hola", Note::basic("hola", "hello"))?;
     let output = project.build(BuildOptions::to("spanish.apkg"))?;
     println!("{}", output.artifact().path().display());
     Ok(())
 }
 ```
-
-Open `spanish.apkg` with Anki. The namespace `spanish` and key `hola` identify the
-publication and note; the deck name is a display destination. Continue with
-[the Rust guide](rust-guide.md) or [Basic and Cloze cards](cards.md).
-
-## Run repository examples
-
-From the repository root:
+<!-- /source -->
 
 ```sh
-cargo run --locked -p ankiforge --example target_api_basic
-cargo run --locked -p ankiforge --example target_api_custom_notetype
-cargo run --locked -p ankiforge --example target_api_media
-cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
+cargo run
 ```
 
-The workflow example uses repository fixtures for bundle, image and audio
-coverage and creates its output directory. No network media download is needed.
+Open the persistent `spanish.apkg` in Anki and study **hola → hello** in **Spanish**. Exporting does not require Anki to be installed.
+The namespace `spanish` and note key `es:hola` stay stable when you edit the card.
 
-## Node and Python
+## Continue
 
-Use [the Node quick start](node/quick-start.md) or
-[the Python quick start](python/quick-start.md) for native builds and local package
-installation. Keep each facade and native binary at matching versions. Supported
-host packages are platform-specific; an executable for another operating system
-or CPU cannot be substituted.
+- [Basic and Cloze cards](cards.md)
+- [Images and audio](media.md)
+- [Custom note types](custom-notetypes.md) and [template bundles](template-bundles.md)
+- [Image Occlusion](image-occlusion.md)
+- [Compare and update](updates.md)
+- [Rust API](rust-api.md) and [verified environments](compatibility.md)
+
+For repository examples and source dependencies, use [source builds](source-builds.md).

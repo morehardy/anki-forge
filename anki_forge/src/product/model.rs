@@ -340,21 +340,34 @@ impl From<ProductDocumentV3> for ProductDocument {
 }
 
 impl ProductDocument {
-    pub(crate) fn from_authored_payload(
+    /// Private native builds consume only the authoritative payload. Transport
+    /// document constructors still populate their legacy observation views.
+    pub(crate) fn from_native_payload(
         document_id: String,
         default_deck_name: Option<String>,
         payload: ProductDocumentV2Payload,
     ) -> Self {
         let mut document = Self::new(document_id);
         document.default_deck_name = default_deck_name;
-        document.note_types = payload
-            .note_types
-            .iter()
-            .filter_map(convert_note_type_v2)
-            .collect();
-        document.notes = payload.notes.iter().filter_map(convert_note_v2).collect();
         document.product_v2 = Some(payload);
         document
+    }
+
+    pub(crate) fn into_lowering(
+        mut self,
+    ) -> Result<super::lowering::LoweringPlan, super::diagnostics::ProductLoweringError> {
+        if let Some(payload) = self.product_v2.take() {
+            let document_id = std::mem::take(&mut self.document_id);
+            // The native temporary document is now consumed. Release its legacy
+            // observation mirrors before moving the authoritative payload.
+            drop(self);
+            Ok(super::lowering::lower_owned_product_v2_document(
+                document_id,
+                payload,
+            ))
+        } else {
+            self.lower()
+        }
     }
 }
 

@@ -1,14 +1,20 @@
+#[cfg(any(test, feature = "internal-tools"))]
 pub mod assets;
 #[cfg(feature = "internal-tools")]
 pub mod build;
+pub(crate) mod default_models;
 pub mod defaults;
 #[cfg(feature = "internal-tools")]
 pub mod diff;
 #[cfg(any(test, feature = "internal-tools"))]
 pub mod discovery;
 pub mod embedded;
+#[cfg(test)]
+mod embedded_bundle;
 #[cfg(feature = "internal-tools")]
 pub mod inspect;
+#[cfg(any(test, feature = "internal-tools"))]
+mod manifest;
 #[cfg(feature = "internal-tools")]
 pub mod normalize;
 #[cfg(any(test, feature = "internal-tools"))]

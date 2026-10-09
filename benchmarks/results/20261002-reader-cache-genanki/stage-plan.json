@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "official": {},
+    "default": {}
+  },
+  "warmup_repeats": 1,
+  "timing_repeats": 5,
+  "expected_exports": 60,
+  "expected_anki_checks": 10,
+  "schedule_seed": 20261003,
+  "binary_sha256": {
+    "official": "3c9588a104bddcf114a5be389d542b6bd9899cd52e1c1c2e1b21d5004919b864",
+    "probe": "901692b32806362c270dec4990663db5f2fbfbc13bf225704f0a5a580d002db6"
+  },
+  "purpose": "Locate residual cost. Instrumented diagnostic stages alter only one variable from default; official assesses instrumentation overhead. No production changes."
+}

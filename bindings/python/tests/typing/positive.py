@@ -23,3 +23,8 @@ def read_add_error(error: AddError) -> str | None:
     if detail is not None and detail['type'] == 'media_usage':
         return detail['media_type']
     return context['note_key']
+
+from ankiforge import PreparedPublication, BuildReport
+prepared: PreparedPublication = project.prepare_publication(BuildOptions.temporary())
+reviewed: BuildReport = prepared.report
+prepared.close()

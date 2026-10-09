@@ -1,0 +1,16 @@
+   Compiling ankiforge v0.2.0 (/Users/hp/Desktop/2026/anki-forge/anki_forge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.10s
+     Running tests/media_snapshot_lifecycle_tests.rs (target/debug/deps/media_snapshot_lifecycle_tests-4aabaeea5638bc65)
+
+running 8 tests
+test failed_shared_budget_spill_cleans_partial_storage_and_releases_memory ... ok
+test failed_partial_spool_write_is_cleaned_and_other_owners_survive ... ok
+test same_large_content_from_file_and_bytes_retains_one_spool ... ok
+test many_small_snapshots_spill_under_a_shared_budget_and_release_it ... ok
+test relative_temp_directory_keeps_byte_snapshots_owned_across_chdir ... ok
+test relative_temp_directory_keeps_file_snapshots_owned_across_chdir ... ok
+test source_deletion_and_last_content_owner_control_snapshot_lifetime ... ok
+test rejected_values_clean_their_snapshot_without_removing_existing_owners ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.20s
+

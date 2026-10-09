@@ -58,7 +58,7 @@ tempfile = "3"
   cargo(['generate-lockfile', '--offline']);
   cargo(['build', '--offline', '--locked', '--quiet', '--bin', inspectorName]);
 
-  for (const example of ['target_api_basic', 'target_api_custom_notetype', 'target_api_media', 'docs_workflow']) {
+  for (const example of ['target_api_basic', 'target_api_custom_notetype', 'target_api_media', 'docs_workflow', 'docs_publication']) {
     const work = await workspace(example);
     const args = ['run', '--offline', '--locked', '--quiet', '--manifest-path', path.join(root, 'Cargo.toml'), '-p', 'ankiforge', '--no-default-features', '--example', example];
     if (example === 'docs_workflow') args.push('--', work);

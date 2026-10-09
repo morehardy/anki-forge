@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "counts": {
+    "exports": 416,
+    "anki_imports": 32,
+    "timing": 320,
+    "rss": 48,
+    "warmup": 32,
+    "smoke": 16,
+    "trace": 0
+  },
+  "groups": [
+    {
+      "name": "production-formal",
+      "exports": 400,
+      "status": "passed"
+    },
+    {
+      "name": "production-smoke",
+      "exports": 16,
+      "status": "passed"
+    }
+  ],
+  "source_files_verified": 491,
+  "production_files_verified": 491,
+  "logical_sha256_by_profile": {
+    "text10k": "4882f746c46765316bcbc32fde14bfe833fa9d9b960dcbeac42b48c778946060",
+    "shared1k": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+    "audio1k": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+    "large2m": "325792e192b649060b29bb3e56441980f577de353fe26d15b10772a540c0798e",
+    "text1k": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8",
+    "wide1k": "c90bf417ed5b9902ebc0cd46306033d8475723280f70d68f39beda20d6d85516",
+    "text100": "325792e192b649060b29bb3e56441980f577de353fe26d15b10772a540c0798e",
+    "image1k": "5337eb6524c728af2b0c57459b582cf101bdf1afe04e1e9207b375fe800a91d8"
+  },
+  "scope": "Reconciles recorded per-process measurements, verification/oracle outputs, frozen live source/input/tool hashes and empty temporary ownership. Export files were verified during measurement, then hashed and deleted."
+}

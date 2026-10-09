@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, error::Error, fs::File, time::Instant};
+use std::{collections::BTreeMap, error::Error, time::Instant};
 
 use super::{BuildError, BuildErrorKind as Kind, BuildOptions, BuildOutput, OutputTarget};
 use crate::{
@@ -16,7 +16,9 @@ impl Project {
     /// output always owns an artifact; a report alone never represents success.
     pub fn build(&self, options: BuildOptions) -> Result<BuildOutput, BuildError> {
         let started = Instant::now();
-        let mut result = self.build_and_publish(options);
+        let mut result = self
+            .prepare_publication(options)
+            .and_then(super::PreparedPublication::publish);
         let elapsed = started.elapsed();
         match &mut result {
             Ok(output) => output.report.duration = elapsed,
@@ -25,39 +27,19 @@ impl Project {
         result
     }
 
-    fn build_and_publish(&self, options: BuildOptions) -> Result<BuildOutput, BuildError> {
-        let (candidate, report) = self.prepare_candidate(&options)?;
-        if report
-            .comparison
-            .as_ref()
-            .is_some_and(|c| !c.policy().allows_publication())
-        {
-            let mut error = BuildError::new(
-                Kind::PolicyBlocked,
-                "UPDATE.POLICY_BLOCKED",
-                "completed comparison contains unaccepted blocking risks",
-            );
-            error.report = Box::new(report);
-            return Err(error);
-        }
-        let artifact = match options.output {
-            OutputTarget::Temporary => candidate,
-            OutputTarget::Persistent(path) => candidate.persist_to(path).map_err(|cause| {
-                let publication = cause.publication().clone();
-                let mut error = BuildError::new(Kind::Publication, cause.code(), "publish APKG")
-                    .caused_by(cause);
-                error.report = Box::new(report.clone());
-                error.publications.push(publication);
-                error
-            })?,
-        };
-        Ok(BuildOutput { artifact, report })
+    /// Generates and fully inspects a private candidate for one later publication.
+    /// Policy-blocked comparisons remain readable; `publish` enforces the policy.
+    pub fn prepare_publication(
+        &self,
+        options: BuildOptions,
+    ) -> Result<super::PreparedPublication, BuildError> {
+        super::PreparedPublication::prepare(self, options)
     }
 
     pub(crate) fn prepare_candidate(
         &self,
         options: &BuildOptions,
-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
+    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
         let started = Instant::now();
         let mut result = self.prepare_candidate_inner(options);
         let elapsed = started.elapsed();
@@ -71,7 +53,7 @@ impl Project {
     fn prepare_candidate_inner(
         &self,
         options: &BuildOptions,
-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
+    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
         crate::project::validate_deck(&self.default_deck).map_err(|cause| {
             BuildError::new(Kind::Configuration, cause.code(), "invalid default deck")
                 .caused_by(cause)
@@ -158,7 +140,7 @@ impl Project {
             crate::writer_core::inspect::ApkgInspectSummary,
             super::identity::IdentityEnvelope,
         )>,
-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
+    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
         let identity = super::identity::PackageIdentity::prepare(
             self,
             baseline.as_ref().map(|(_, envelope)| &envelope.identity),
@@ -174,37 +156,8 @@ impl Project {
                 )
                 .caused_by(cause)
             })?;
-        let assets_dir = inputs.path().join("assets");
-        std::fs::create_dir(&assets_dir).map_err(|cause| {
-            BuildError::new(
-                Kind::Io,
-                "BUILD.MEDIA_STAGING_FAILED",
-                "create asset input directory",
-            )
-            .caused_by(cause)
-        })?;
         let mut media = Vec::new();
         for asset in self.assets.values() {
-            let mut input = asset.snapshot.reader().map_err(|cause| {
-                BuildError::new(Kind::Io, cause.code(), "read owned media").caused_by(cause)
-            })?;
-            let path = assets_dir.join(asset.filename());
-            let mut output = File::create(&path).map_err(|cause| {
-                BuildError::new(
-                    Kind::Io,
-                    "BUILD.MEDIA_STAGING_FAILED",
-                    "create private media input",
-                )
-                .caused_by(cause)
-            })?;
-            std::io::copy(&mut input, &mut output).map_err(|cause| {
-                BuildError::new(
-                    Kind::Io,
-                    "BUILD.MEDIA_STAGING_FAILED",
-                    "stage owned media bytes",
-                )
-                .caused_by(cause)
-            })?;
             media.push(ProductMediaV2 {
                 id: asset.filename().to_owned(),
                 source: ProductMediaSourceV2::File {
@@ -325,7 +278,7 @@ impl Project {
                 })
             })
             .collect();
-        let document = ProductDocument::from_authored_payload(
+        let document = ProductDocument::from_native_payload(
             self.namespace.clone(),
             Some(self.default_deck.clone()),
             ProductDocumentV2Payload {
@@ -337,7 +290,7 @@ impl Project {
             },
         );
         let (candidate, mut report) =
-            super::candidate::generate(self, &document, inputs.path(), identity)?;
+            super::candidate::generate(self, document, inputs.path(), identity)?;
         let (inspected, envelope) = crate::writer_core::inspect::inspect_native_package(
             candidate.path(),
             &options.inspect_limits,

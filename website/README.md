@@ -35,7 +35,7 @@ Astro runs the preview server in the background. Use `npm run preview:stop` when
 
 - `src/pages/index.astro`: homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
 - `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One timeline keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
-- `src/components/PerformanceEvidence.astro`: export metrics from the archived benchmark CSV, with links to its methodology and limitations.
+- `src/components/PerformanceEvidence.astro`: export metrics selected by `docs/benchmark-presentation.json`, with links to its methodology and limitations.
 - `src/pages/examples/index.astro`: all examples and package downloads.
 - `src/content/blog/`: Markdown or MDX posts, each with `title`, `description`, `date`, `category` (`Tutorial` or `Engineering`), and optional `draft: true`.
 - `src/content/docs/docs/`: introductory site docs. Task guides, language guides and references are generated from the repository sources listed in `scripts/content-links.mjs`. Edit those source files; each generated page links to its editable source.
@@ -49,9 +49,15 @@ Generated content, packages, favicon, and social image are ignored by Git and re
 
 Documentation code blocks marked with `<!-- source: ... -->` are compared to their executable source at build time. `npm run sync:docs` updates these blocks after intentional source changes. The documentation workflow also verifies Basic/Cloze counts, custom Cloze bundles, Image Occlusion and both APKG/lockfile update paths. `check:examples` runs complete Rust examples and creates a separate path-dependency consumer. Website CI additionally runs Python documentation programs and Node's installed-package/example checks. See [documentation maintenance](../docs/documentation.md).
 
-Source SDK versions on the language page are generated from package metadata. Version statements in the compatibility table and root READMEs are checked against those values; release status remains a separately maintained claim.
+Public installation versions are maintained independently of source package metadata. Executable quickstart snippets are shared across READMEs and guides. Benchmark selection is shared with README chart generation; site checks compare rendered values against the CSV.
 
-Icons come from Phosphor. Its MIT license is included in the generated assets.
+The brand mark is maintained in `../docs/assets/brand/ankiforge.svg`. The header,
+documentation title, favicon, social image, and both root READMEs use this design.
+The build creates its dark variant in `../docs/assets/brand/ankiforge-dark.svg` and
+regenerates the favicon and social image. The front card has an opaque fill to
+cover the overlapping rear outline in both themes.
+
+Interface icons come from Phosphor. Its MIT license is included in the generated assets.
 
 ## GitHub Pages
 

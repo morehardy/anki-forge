@@ -1,0 +1,720 @@
+--- a/anki_forge/src/build_api/candidate.rs
++++ b/anki_forge/src/build_api/candidate.rs
+@@ -95,8 +95,8 @@
+         error.report = Box::new(report);
+         return Err(error);
+     }
+-    identity
+-        .bind(project, &mut normalized.normalized_ir)
++    let prepared_rows = identity
++        .bind_with_prepared(project, &mut normalized.normalized_ir)
+         .map_err(|mut error| {
+             error.report = Box::new(report.clone());
+             error
+@@ -115,6 +115,7 @@
+     let ids = identity.model_ids();
+     let guids = identity.guid_plan();
+     target.native_identity = Some(std::sync::Arc::new(identity));
++    if !prepared_rows.is_empty() {target.experimental_rows=Some(std::sync::Arc::new(prepared_rows));}
+     target.package_fingerprint = fingerprint;
+     target.staging_output = crate::writer_core::staging::StagingOutput::NativeOnly;
+     let attempt = crate::writer_core::build::build_with_prepared_media(
+--- a/anki_forge/src/build_api/identity/content.rs
++++ b/anki_forge/src/build_api/identity/content.rs
+@@ -161,6 +161,14 @@
+         .collect::<Vec<_>>()
+         .join("\u{1f}");
+     let tags = note.tags.join(" ");
++    note_from_prepared(note, model, model_id, decks, planned_cards, &fields, &tags)
++}
++
++pub(super) fn note_from_prepared(
++    note: &NormalizedNote, model: &NormalizedNotetype, model_id: i64,
++    decks: &DeckRegistry, planned_cards: &[crate::writer_core::card_plan::PlannedCard],
++    fields: &str, tags: &str,
++) -> anyhow::Result<String> {
+     let mut cards = planned_cards
+         .iter()
+         .map(|card| {
+--- a/anki_forge/src/build_api/identity.rs
++++ b/anki_forge/src/build_api/identity.rs
+@@ -189,6 +189,12 @@
+         project: &Project,
+         normalized: &mut NormalizedIr,
+     ) -> Result<(), BuildError> {
++        self.bind_with_prepared(project,normalized).map(|_|())
++    }
++    pub(crate) fn bind_with_prepared(
++        &mut self, project: &Project, normalized: &mut NormalizedIr,
++    ) -> Result<crate::writer_core::apkg::PreparedRows,BuildError> {
++        let _span=crate::experiment::Span::new("identity_bind_ns");
+         let decks = crate::writer_core::staging::resolve_deck_registry(normalized);
+         for model in &mut normalized.notetypes {
+             let key = model.id.strip_prefix("model:").ok_or_else(invalid_plan)?;
+@@ -249,12 +255,19 @@
+             .iter()
+             .map(|model| (&model.id, model))
+             .collect();
++        let prepared_rows=crate::writer_core::apkg::prepare_experimental_rows(normalized, |note,model,row| {
++            content::note_from_prepared(note,model,self.models[&self.notes[&note.id].model].id,&decks,&row.cards,&row.storage.flds,&row.tags)
++        }).map_err(content_error)?;
+         for note in &mut normalized.notes {
+             let identity = self.notes.get_mut(&note.id).ok_or_else(invalid_plan)?;
+             let model = models[&note.notetype_id];
+             let symbols = &self.models[&identity.model].templates;
+             let has_active_masks = identity.has_active_masks();
+-            let planned_cards = crate::writer_core::card_plan::plan_cards(note, model);
++            let cached=prepared_rows.get(&note.id);
++            let fallback_cards;
++            let planned_cards=if let Some(row)=cached {row.cards.as_slice()} else {
++                fallback_cards=crate::writer_core::card_plan::plan_cards(note,model); &fallback_cards
++            };
+             identity.cards = planned_cards
+                 .iter()
+                 .map(|card| {
+@@ -288,14 +301,14 @@
+                     Ok((key, card.card_ord))
+                 })
+                 .collect::<Result<_, BuildError>>()?;
+-            let hash = content::note_from_plan(
++            let hash = if let Some(row)=cached { row.content_hash.clone() } else {content::note_from_plan(
+                 note,
+                 model,
+                 self.models[&identity.model].id,
+                 &decks,
+                 &planned_cards,
+             )
+-            .map_err(content_error)?;
++            .map_err(content_error)?};
+             reconcile::advance_revision(
+                 &mut identity.content_hash,
+                 &mut identity.mtime_secs,
+@@ -303,7 +316,7 @@
+             )?;
+             note.mtime_secs = Some(identity.mtime_secs);
+         }
+-        Ok(())
++        Ok(prepared_rows)
+     }
+ 
+     pub(crate) fn bound_card_count(&self, normalized: &NormalizedIr) -> usize {
+--- a/anki_forge/src/build_api/pipeline.rs
++++ b/anki_forge/src/build_api/pipeline.rs
+@@ -238,10 +238,8 @@
+                 })
+             })
+             .collect();
+-        let notes = self
+-            .notes
+-            .iter()
+-            .map(|(key, note)| {
++        let render_span=crate::experiment::Span::new("render_notes_ns");
++        let render_note = |(key, note): (&String, &crate::Note)| {
+                 let mut fields: BTreeMap<_, _> = note
+                     .fields
+                     .iter()
+@@ -276,8 +274,14 @@
+                     tags: note.tags.clone(),
+                     source_path: Some(format!("project.notes[{key:?}]")),
+                 })
+-            })
+-            .collect();
++            };
++        let notes = if crate::experiment::config().render_workers == 1 {
++            self.notes.iter().map(render_note).collect()
++        } else {
++            let inputs=self.notes.iter().collect::<Vec<_>>();
++            crate::experiment::ordered(inputs.len(),crate::experiment::config().render_workers,|i|render_note(inputs[i]))
++        };
++        drop(render_span);
+         let document = ProductDocument::from_native_payload(
+             self.namespace.clone(),
+             Some(self.default_deck.clone()),
+--- a/anki_forge/src/experiment.rs
++++ b/anki_forge/src/experiment.rs
+@@ -0,0 +1,43 @@
++
++//! Isolated RSS/speed experiment controls; not a production API.
++use std::{collections::BTreeMap, sync::{Mutex, OnceLock}, time::Instant};
++pub(crate) fn number(name: &str, default: usize) -> usize {
++    std::env::var(format!("ANKIFORGE_RSS_{name}")).ok().map(|s| s.parse().expect("numeric experiment setting")).unwrap_or(default)
++}
++pub(crate) struct Config {
++    pub snapshot_bytes: usize, pub threshold: usize, pub payload_bytes: usize,
++    pub codec: String, pub rows_bytes: usize, pub row_workers: usize,
++    pub render_workers: usize, pub trace: bool,
++}
++pub(crate) fn config() -> &'static Config {
++    static CONFIG: OnceLock<Config> = OnceLock::new();
++    CONFIG.get_or_init(|| Config {
++        snapshot_bytes: number("SNAPSHOT_MIB",4)*1024*1024,
++        threshold: number("THRESHOLD_MIB",1)*1024*1024,
++        payload_bytes: number("PAYLOAD_KIB",4608)*1024,
++        codec: std::env::var("ANKIFORGE_RSS_CODEC").unwrap_or_else(|_|"stream".into()),
++        rows_bytes: number("ROWS_MIB",0)*1024*1024,
++        row_workers: number("ROW_WORKERS",1).clamp(1,4),
++        render_workers: number("RENDER_WORKERS",1).clamp(1,4),
++        trace: number("TRACE",0)!=0,
++    })
++}
++static VALUES: Mutex<BTreeMap<&'static str,u64>> = Mutex::new(BTreeMap::new());
++pub(crate) fn add(key: &'static str, value: u64) {
++    if config().trace { *VALUES.lock().unwrap().entry(key).or_default() += value; }
++}
++pub(crate) struct Span { name: &'static str, start: Option<Instant> }
++impl Span { pub(crate) fn new(name: &'static str) -> Self { Self{name,start:config().trace.then(Instant::now)} } }
++impl Drop for Span { fn drop(&mut self) {if let Some(start)=self.start {add(self.name,start.elapsed().as_nanos() as u64)}} }
++pub(crate) fn observations() -> serde_json::Value { serde_json::to_value(&*VALUES.lock().unwrap()).unwrap() }
++pub(crate) fn ordered<T:Send>(count:usize,workers:usize,f:impl Fn(usize)->T+Sync)->Vec<T> {
++    if workers==1 || count<32 {return (0..count).map(f).collect();}
++    std::thread::scope(|scope| {
++        let chunk=count.div_ceil(workers);
++        let handles=(0..workers).filter_map(|w| {
++            let start=w*chunk; let end=(start+chunk).min(count); let f=&f;
++            (start<end).then(||scope.spawn(move ||(start..end).map(f).collect::<Vec<_>>()))
++        }).collect::<Vec<_>>();
++        handles.into_iter().flat_map(|h|h.join().expect("experiment worker panic")).collect()
++    })
++}
+--- a/anki_forge/src/lib.rs
++++ b/anki_forge/src/lib.rs
+@@ -7,6 +7,11 @@
+ #[path = "diagnostics/mod.rs"]
+ mod diagnostics_backend;
+ mod parallel_io;
++mod experiment;
++/// Metrics for this isolated benchmark executable only.
++#[doc(hidden)]
++pub fn experimental_observations() -> serde_json::Value { experiment::observations() }
++
+ mod path_alias;
+ mod prepared_media;
+ #[allow(missing_docs)]
+--- a/anki_forge/src/media/snapshot.rs
++++ b/anki_forge/src/media/snapshot.rs
+@@ -110,18 +110,22 @@
+ 
+ impl Snapshot {
+     fn shared(mut self) -> Result<Arc<Self>, MediaError> {
++        let _whole = crate::experiment::Span::new("snapshot_share_ns");
++        let wait = crate::experiment::Span::new("snapshot_lock_wait_ns");
+         let Some(mut entries) = SNAPSHOTS.lock(self.process) else {
+             self.spill_memory()?;
+             return Ok(Arc::new(self));
+         };
++        drop(wait);
+         let cache = entries.as_mut().expect("process cache is initialized");
+         let key = (self.digest, self.len);
+         if let Some(existing) = cache.snapshots.get(&key).and_then(Weak::upgrade) {
+             return Ok(existing);
+         }
+         let used = SNAPSHOTS.memory_bytes.load(Ordering::Relaxed);
+-        if used.saturating_add(self.memory_bytes()) > MEMORY_BUDGET {
++        if used.saturating_add(self.memory_bytes()) > crate::experiment::config().snapshot_bytes {
+             if let Storage::Memory(bytes) = &self.storage {
++                crate::experiment::add("snapshot_spool_bytes", bytes.len() as u64);
+                 self.storage = Storage::Segment(
+                     cache
+                         .spool
+@@ -166,7 +170,7 @@
+         // Every caller has already validated its own budget and MIME. Hash
+         // outside the lock, then acquire a strong owner before any redundant
+         // disk work. shared() still arbitrates concurrent misses on registration.
+-        if bytes.len() > MEMORY_THRESHOLD {
++        if bytes.len() > crate::experiment::config().threshold {
+             if let Some(mut entries) = SNAPSHOTS.lock(std::process::id()) {
+                 if let Some(existing) = entries
+                     .as_mut()
+@@ -179,7 +183,7 @@
+                 }
+             }
+         }
+-        let storage = if bytes.len() > MEMORY_THRESHOLD {
++        let storage = if bytes.len() > crate::experiment::config().threshold {
+             let mut file = tempfile::NamedTempFile::new()
+                 .map_err(|e| MediaError::io("create media snapshot", e))?;
+             file.write_all(&bytes)
+@@ -210,6 +214,7 @@
+             return Err(not_regular());
+         }
+         check_limit(metadata.len(), limits)?;
++        let _span = crate::experiment::Span::new("snapshot_file_ns");
+         let mut source = open_source(path, limits)?;
+         let mut memory = Vec::new();
+         let mut spool = None::<tempfile::NamedTempFile>;
+@@ -231,7 +236,7 @@
+             digest.update(&buffer[..count]);
+             let sample_count = count.min(SAMPLE_BYTES - sample.len());
+             sample.extend_from_slice(&buffer[..sample_count]);
+-            if spool.is_none() && memory.len() + count > MEMORY_THRESHOLD {
++            if spool.is_none() && memory.len() + count > crate::experiment::config().threshold {
+                 let mut file = tempfile::NamedTempFile::new()
+                     .map_err(|e| MediaError::io("create media snapshot", e))?;
+                 file.write_all(&memory)
+--- a/anki_forge/src/prepared_media/payload.rs
++++ b/anki_forge/src/prepared_media/payload.rs
+@@ -17,7 +17,7 @@
+ 
+ impl PayloadPool {
+     pub(super) fn new() -> Self {
+-        Self::with_blocks(MEMORY_BYTES / BLOCK_BYTES)
++        Self::with_blocks(crate::experiment::config().payload_bytes / BLOCK_BYTES)
+     }
+ 
+     fn with_blocks(limit: usize) -> Self {
+@@ -109,6 +109,8 @@
+     }
+ 
+     fn spill(&mut self) -> io::Result<()> {
++        crate::experiment::add("encoded_spill_count",1);
++        crate::experiment::add("encoded_spill_initial_bytes",self.size);
+         let mut file = tempfile::tempfile()?;
+         if let Storage::Memory(blocks) = &self.storage {
+             for block in blocks {
+--- a/anki_forge/src/prepared_media.rs
++++ b/anki_forge/src/prepared_media.rs
+@@ -25,6 +25,9 @@
+ const BUFFER_BYTES: usize = 64 * 1024;
+ const MAX_WORKERS: usize = 4;
+ 
++#[derive(Default)]
++struct BulkBuffers { input: Vec<u8>, output: Vec<u8>, compressor: Option<zstd::bulk::Compressor<'static>> }
++
+ type CandidateArchive = StreamZip<tempfile::NamedTempFile>;
+ 
+ #[cfg(test)]
+@@ -93,6 +96,7 @@
+         items: &[AuthoringMedia],
+         options: &NormalizeOptions,
+     ) -> Vec<Option<Result<IngestedMediaBytes, MediaIngestError>>> {
++        let _span = crate::experiment::Span::new("prepare_media_ns");
+         let mut seen = BTreeSet::new();
+         let mut jobs = items
+             .iter()
+@@ -165,10 +169,11 @@
+         if workers == 1 {
+             let mut context = zstd::zstd_safe::CCtx::create();
+             let mut readers = crate::media::ReaderCache::default();
++            let mut bulk_buffers = BulkBuffers::default();
+             for &(index, item) in &jobs {
+                 accept(
+                     index,
+-                    self.prepare_one(item, options, &mut context, &pool, &mut readers),
++                    self.prepare_one(item, options, &mut context, &pool, &mut readers, &mut bulk_buffers),
+                 );
+             }
+         } else {
+@@ -192,6 +197,7 @@
+                             .spawn_scoped(scope, move || {
+                                 let mut context = zstd::zstd_safe::CCtx::create();
+                                 let mut readers = crate::media::ReaderCache::default();
++            let mut bulk_buffers = BulkBuffers::default();
+                                 loop {
+                                     let job = receiver.lock().expect("media job queue lock").recv();
+                                     let Ok((position, reply)) = job else { break };
+@@ -202,6 +208,7 @@
+                                             &mut context,
+                                             pool,
+                                             &mut readers,
++                                            &mut bulk_buffers,
+                                         ))
+                                         .is_err()
+                                     {
+@@ -260,6 +267,7 @@
+         context: &mut zstd::zstd_safe::CCtx<'static>,
+         pool: &PayloadPool,
+         readers: &mut crate::media::ReaderCache,
++        bulk_buffers: &mut BulkBuffers,
+     ) -> Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError> {
+         let owned = self.owned.get(&item.id);
+         let source = if owned.is_some() {
+@@ -318,9 +326,11 @@
+                 PreparedMediaSource::InlineBytes(bytes) => Box::new(io::Cursor::new(bytes)),
+             }
+         };
+-        let sink = pool.payload();
++        let bulk = crate::experiment::config().codec == "bulk" && owned.is_some() && known_size <= 8*1024*1024;
++        bulk_buffers.input.clear();
++        let mut sink = Some(pool.payload());
+         let encode_error = |error: io::Error| io_diagnostic(item, "MEDIA.CAS_WRITE_FAILED", error);
+-        let mut encoder = zstd::stream::Encoder::with_context(sink, context);
++        let mut encoder = if bulk { None } else { Some(zstd::stream::Encoder::with_context(sink.take().unwrap(), context)) };
+         // PNG pixels are already compressed. A fast outer frame avoids spending
+         // another full compression search on that stream. Reset the level for
+         // every job because this worker's context is reused across media types.
+@@ -331,9 +341,12 @@
+         } else {
+             3
+         };
+-        encoder
+-            .set_parameter(zstd::zstd_safe::CParameter::CompressionLevel(level))
+-            .map_err(encode_error)?;
++        if let Some(encoder) = &mut encoder {
++            encoder.set_parameter(zstd::zstd_safe::CParameter::CompressionLevel(level)).map_err(encode_error)?;
++            if crate::experiment::config().codec == "pledged" && owned.is_some() {
++                encoder.set_pledged_src_size(Some(known_size)).map_err(encode_error)?;
++            }
++        }
+         let mut sha1 = Sha1::new();
+         let mut blake3 = blake3::Hasher::new();
+         let mut size = 0u64;
+@@ -376,7 +389,11 @@
+                     crate::authoring_core::media_io::io_failure::Point::Write,
+                 )
+                 .map_err(encode_error)?;
+-                encoder.write_all(bytes).map_err(encode_error)?;
++                if let Some(encoder) = &mut encoder { encoder.write_all(bytes).map_err(encode_error)?; }
++                else {
++                    if size > known_size { return Err(diagnostic(item,"MEDIA.SOURCE_CHANGED","owned media snapshot grew".into())); }
++                    bulk_buffers.input.extend_from_slice(bytes);
++                }
+             }
+         }
+         let sha1 = hex::encode(sha1.finalize());
+@@ -413,7 +430,15 @@
+                 "source exceeds max_media_object_bytes".into(),
+             ));
+         }
+-        let sink = encoder.finish().map_err(encode_error)?;
++        let sink = if let Some(encoder)=encoder {encoder.finish().map_err(encode_error)?} else {
++            if bulk_buffers.compressor.is_none() { bulk_buffers.compressor=Some(zstd::bulk::Compressor::new(level).map_err(encode_error)?); }
++            let compressor=bulk_buffers.compressor.as_mut().unwrap();
++            compressor.set_compression_level(level).map_err(encode_error)?;
++            bulk_buffers.output.resize(zstd::zstd_safe::compress_bound(bulk_buffers.input.len()),0);
++            let n=compressor.compress_to_buffer(&bulk_buffers.input,&mut bulk_buffers.output[..]).map_err(encode_error)?;
++            let mut sink=sink.take().unwrap(); sink.write_all(&bulk_buffers.output[..n]).map_err(encode_error)?;
++            crate::experiment::add("bulk_input_bytes",size); sink
++        };
+         Ok((
+             IngestedMediaBytes {
+                 blake3,
+--- a/anki_forge/src/writer_core/apkg.rs
++++ b/anki_forge/src/writer_core/apkg.rs
+@@ -191,12 +191,13 @@
+         let mut zip = ZipWriter::new(file);
+ 
+         write_meta(&mut zip)?;
+-        let latest_collection = create_latest_collection_file(
++        let latest_collection = create_latest_collection_file_with_rows(
+             &artifact_target.root_dir,
+             normalized_ir,
+             guid_assignments,
+             notetype_ids,
+             artifact_target.native_identity.as_deref(),
++            artifact_target.experimental_rows.as_deref(),
+         )?;
+         write_zstd_collection_entry(&mut zip, latest_collection.path())?;
+         if let Some(identity) = artifact_target.native_identity.as_deref() {
+@@ -253,12 +254,13 @@
+     prepared: &crate::prepared_media::PreparedMedia,
+ ) -> Result<Option<String>> {
+     let mut zip = prepared.take_archive(normalized)?;
+-    let collection = create_latest_collection_file(
++    let collection = create_latest_collection_file_with_rows(
+         &target.root_dir,
+         normalized,
+         guids,
+         notetype_ids,
+         target.native_identity.as_deref(),
++        target.experimental_rows.as_deref(),
+     )?;
+     if let Some(identity) = target.native_identity.as_deref() {
+         zip.bytes(
+@@ -478,12 +480,24 @@
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+     identity: Option<&crate::build::identity::PackageIdentity>,
+ ) -> Result<tempfile::NamedTempFile> {
+-    let source = create_collection_source(
++    create_latest_collection_file_with_rows(root_dir, normalized_ir, guid_assignments, notetype_ids, identity, None)
++}
++
++fn create_latest_collection_file_with_rows(
++    root_dir: &Path,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    identity: Option<&crate::build::identity::PackageIdentity>,
++    rows: Option<&PreparedRows>,
++) -> Result<tempfile::NamedTempFile> {
++    let source = create_collection_source_with_rows(
+         root_dir,
+         normalized_ir,
+         guid_assignments,
+         notetype_ids,
+         COLLECTION_MEMORY_MAX_PAGES,
++        rows,
+     )?;
+     if let Some(identity) = identity {
+         let transaction = source.connection.unchecked_transaction()?;
+@@ -544,6 +558,17 @@
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+     max_memory_pages: usize,
+ ) -> Result<CollectionSource> {
++    create_collection_source_with_rows(root_dir, normalized_ir, guid_assignments, notetype_ids, max_memory_pages, None)
++}
++
++fn create_collection_source_with_rows(
++    root_dir: &Path,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    max_memory_pages: usize,
++    rows: Option<&PreparedRows>,
++) -> Result<CollectionSource> {
+     let max_memory_bytes = max_memory_pages.saturating_mul(COLLECTION_PAGE_SIZE);
+     // Include room for ordinary identity metadata, cards and indexes so large
+     // short-note exports do not first fill memory and then rebuild on disk.
+@@ -560,7 +585,7 @@
+         let connection = Connection::open_in_memory().context("open memory collection database")?;
+         connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
+         connection.pragma_update(None, "max_page_count", max_memory_pages)?;
+-        match initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids) {
++        match initialize_collection_with_rows(&connection, normalized_ir, guid_assignments, notetype_ids, rows) {
+             Ok(()) => {
+                 return Ok(CollectionSource {
+                     connection,
+@@ -586,7 +611,7 @@
+     let connection = Connection::open(file.path())
+         .with_context(|| format!("open collection database {}", file.path().display()))?;
+     connection.pragma_update(None, "page_size", COLLECTION_PAGE_SIZE)?;
+-    initialize_collection(&connection, normalized_ir, guid_assignments, notetype_ids)?;
++    initialize_collection_with_rows(&connection, normalized_ir, guid_assignments, notetype_ids, rows)?;
+     Ok(CollectionSource {
+         connection,
+         _file: Some(file),
+@@ -599,6 +624,16 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<()> {
++    initialize_collection_with_rows(conn, normalized_ir, guid_assignments, notetype_ids, None)
++}
++
++fn initialize_collection_with_rows(
++    conn: &Connection,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    rows: Option<&PreparedRows>,
++) -> Result<()> {
+     {
+         let transaction = conn.unchecked_transaction()?;
+         execute_source_schema(&transaction, SCHEMA11_SQL)?;
+@@ -609,7 +644,7 @@
+         execute_source_schema(&transaction, SCHEMA18_UPGRADE_SQL)?;
+         transaction.commit()?;
+     }
+-    populate_latest_collection(conn, normalized_ir, guid_assignments, notetype_ids)
++    populate_latest_collection_with_rows(conn, normalized_ir, guid_assignments, notetype_ids, rows)
+ }
+ 
+ // The upgrade notice is independent of the exported notes. The regeneration
+@@ -649,8 +684,18 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<()> {
++    populate_latest_collection_with_rows(conn, normalized_ir, guid_assignments, notetype_ids, None)
++}
++
++fn populate_latest_collection_with_rows(
++    conn: &Connection,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    rows: Option<&PreparedRows>,
++) -> Result<()> {
+     let transaction = conn.unchecked_transaction()?;
+-    populate_latest_collection_rows(&transaction, normalized_ir, guid_assignments, notetype_ids)?;
++    populate_latest_collection_rows_with_rows(&transaction, normalized_ir, guid_assignments, notetype_ids, rows)?;
+     transaction.commit()?;
+     Ok(())
+ }
+@@ -660,6 +705,16 @@
+     normalized_ir: &NormalizedIr,
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
++) -> Result<()> {
++    populate_latest_collection_rows_with_rows(conn, normalized_ir, guid_assignments, notetype_ids, None)
++}
++
++fn populate_latest_collection_rows_with_rows(
++    conn: &Connection,
++    normalized_ir: &NormalizedIr,
++    guid_assignments: &GuidAssignments<'_>,
++    notetype_ids: &std::collections::BTreeMap<String, i64>,
++    rows: Option<&PreparedRows>,
+ ) -> Result<()> {
+     let default_deck_config_id = 1_i64;
+     let deck_registry = resolve_deck_registry(normalized_ir);
+@@ -756,7 +811,13 @@
+             .expect("normalized note should reference a known notetype");
+         let notetype = prepared.notetype;
+         let mut stripped_fields = StrippedNoteFields::new(note);
+-        let storage = note_storage_values(note, prepared, &mut stripped_fields)?;
++        let cached=rows.and_then(|rows|rows.get(&note.id));
++        let fallback_storage;
++        let storage=if let Some(row)=cached { &row.storage } else {
++            fallback_storage=note_storage_values(note,prepared,&mut stripped_fields)?; &fallback_storage
++        };
++        let fallback_tags;
++        let tags=if let Some(row)=cached {row.tags.as_str()} else {fallback_tags=note.tags.join(" "); &fallback_tags};
+         let note_row = note_row_id;
+         let guid = guid_assignments
+             .get(note.id.as_str())
+@@ -766,8 +827,8 @@
+             note_row,
+             guid,
+             ntid,
+-            storage.mtime_secs,
+-            note.tags.join(" "),
++            note.mtime_secs.unwrap_or(super::note_revision::INITIAL_MTIME_SECS),
++            tags,
+             storage.flds,
+             storage.sfld,
+             storage.csum,
+@@ -779,7 +840,9 @@
+         for tag in &note.tags {
+             normalized_tags.insert(tag.clone());
+         }
+-        for planned_card in plan_cards(note, notetype) {
++        let fallback_cards;
++        let planned_cards=if let Some(row)=cached {row.cards.as_slice()} else {fallback_cards=plan_cards(note,notetype); &fallback_cards};
++        for planned_card in planned_cards {
+             let template = &notetype.templates[planned_card.template_index];
+             let target_deck_id = resolve_card_deck_id(note, template, &deck_registry);
+             insert_card.execute(rusqlite::params![
+@@ -926,13 +989,62 @@
+     "This package requires a newer version of Anki."
+ }
+ 
+-struct NoteStorageValues {
+-    flds: String,
++#[derive(Debug)]
++pub(crate) struct NoteStorageValues {
++    pub(crate) flds: String,
+     sfld: String,
+     csum: u32,
+     mtime_secs: i64,
+ }
+ 
++
++pub(crate) type PreparedRows = std::collections::BTreeMap<String,PreparedRow>;
++#[derive(Debug)]
++pub(crate) struct PreparedRow {
++    pub(crate) storage: NoteStorageValues, pub(crate) tags: String,
++    pub(crate) cards: Vec<super::card_plan::PlannedCard>, pub(crate) content_hash: String,
++}
++pub(crate) fn prepare_experimental_rows(
++    normalized:&NormalizedIr,
++    hash:impl Fn(&NormalizedNote,&NormalizedNotetype,&PreparedRow)->Result<String>+Sync,
++) -> Result<PreparedRows> {
++    let budget=crate::experiment::config().rows_bytes;
++    if budget==0 {return Ok(Default::default());}
++    let _span=crate::experiment::Span::new("prepare_rows_ns");
++    let models=normalized.notetypes.iter().map(|m|(m.id.as_str(),PreparedNotetype::new(m))).collect::<std::collections::BTreeMap<_,_>>();
++    // Include strings, planned cards, keys and map overhead in the retained budget.
++    let mut used=0usize; let mut cache=PreparedRows::new();
++    let workers=crate::experiment::config().row_workers;
++    // Larger batches amortize thread creation but have an independent 8 MiB byte window.
++    let mut first=0;
++    while first<normalized.notes.len() && used<budget {
++        let mut last=first; let mut estimated=0usize;
++        while last<normalized.notes.len() {
++            let n=&normalized.notes[last];
++            let size=n.fields.values().map(String::len).sum::<usize>().saturating_mul(2)+n.tags.iter().map(String::len).sum::<usize>()+1024;
++            if last>first && estimated.saturating_add(size)>8*1024*1024 {break;}
++            estimated=estimated.saturating_add(size);last+=1;
++            if estimated>budget-used {break;}
++        }
++        let results=crate::experiment::ordered(last-first,workers,|offset| -> Result<_> {
++            let n=&normalized.notes[first+offset];let prepared=&models[n.notetype_id.as_str()];
++            let mut stripped=StrippedNoteFields::new(n);
++            let mut row=PreparedRow {storage:note_storage_values(n,prepared,&mut stripped)?,tags:n.tags.join(" "),cards:plan_cards(n,prepared.notetype),content_hash:String::new()};
++            row.content_hash=hash(n,prepared.notetype,&row)?;Ok(row)
++        });
++        for (offset,row) in results.into_iter().enumerate() {
++            let row=row?; let key=&normalized.notes[first+offset].id;
++            let size=row.storage.flds.capacity()+row.storage.sfld.capacity()+row.tags.capacity()+row.cards.capacity()*std::mem::size_of::<super::card_plan::PlannedCard>()+row.content_hash.capacity()+key.len()+256;
++            if used.saturating_add(size)>budget {return Ok(cache);}
++            used+=size;cache.insert(key.clone(),row);
++        }
++        first=last;
++    }
++    crate::experiment::add("retained_rows",cache.len() as u64);
++    crate::experiment::add("retained_row_bytes",used as u64);
++    Ok(cache)
++}
++
+ struct PreparedNotetype<'a> {
+     notetype: &'a NormalizedNotetype,
+     fields: Vec<&'a crate::authoring_core::NormalizedField>,
+--- a/anki_forge/src/writer_core/staging.rs
++++ b/anki_forge/src/writer_core/staging.rs
+@@ -36,6 +36,7 @@
+     pub stable_ref_prefix: String,
+     pub media_store_dir: PathBuf,
+     pub(crate) native_identity: Option<std::sync::Arc<crate::build::identity::PackageIdentity>>,
++    pub(crate) experimental_rows: Option<std::sync::Arc<super::apkg::PreparedRows>>,
+     pub(crate) staging_output: StagingOutput,
+     pub(crate) package_fingerprint: super::stream_zip::PackageFingerprint,
+ }
+@@ -48,6 +49,7 @@
+             root_dir,
+             stable_ref_prefix: stable_ref_prefix.into(),
+             native_identity: None,
++            experimental_rows: None,
+             staging_output: StagingOutput::Complete,
+             package_fingerprint: super::stream_zip::PackageFingerprint::Compute,
+         }
+--- a/benchmarks/adapters/rust/src/main.rs
++++ b/benchmarks/adapters/rust/src/main.rs
+@@ -102,13 +102,32 @@
+     let parent = Path::new(input).parent().context("input parent")?;
+     let mut media_by_id = BTreeMap::new();
+     let mut retained_media = Vec::new();
++    let imports_started=std::time::Instant::now();
++    let import_workers: usize=std::env::var("ANKIFORGE_RSS_IMPORT_WORKERS").ok().map(|s|s.parse().unwrap()).unwrap_or(1);
++    let preimported = if import_workers > 1 {
++        use std::sync::atomic::{AtomicUsize, Ordering};
++        let next=AtomicUsize::new(0);
++        let results=std::sync::Mutex::new((0..workload.media.len()).map(|_|None).collect::<Vec<_>>());
++        std::thread::scope(|scope| {
++            for _ in 0..import_workers.min(4) {
++                let media=&workload.media; let next=&next; let results=&results;
++                scope.spawn(move || loop {
++                    let i=next.fetch_add(1,Ordering::Relaxed); if i>=media.len() {break;}
++                    let result=OwnedMedia::file(parent.join(&media[i].path));
++                    results.lock().unwrap()[i]=Some(result);
++                });
++            }
++        });
++        Some(results.into_inner().unwrap().into_iter().map(Option::unwrap).collect::<Vec<_>>())
++    } else {None};
++    let mut imported=preimported.map(Vec::into_iter);
+     for media in workload.media {
+         let mut snapshot = None;
+         for _ in 0..repeats {
+             let owned = if mode == "bytes" {
+                 OwnedMedia::bytes(std::fs::read(parent.join(&media.path))?, "audio/wav")?
+             } else {
+-                OwnedMedia::file(parent.join(&media.path))?
++                if let Some(imported)=&mut imported {imported.next().unwrap()?} else {OwnedMedia::file(parent.join(&media.path))?}
+             }
+             .with_export_name(&media.filename)?;
+             retained_media.push(owned.clone());
+@@ -125,6 +144,7 @@
+             "duplicate media id"
+         );
+     }
++    let import_ms=imports_started.elapsed().as_secs_f64()*1000.0;
+     for (index, note) in workload.notes.into_iter().enumerate() {
+         // Both adapters render the same escaped text and media markup inside
+         // the measured process; the native API makes the HTML intent explicit.
+@@ -186,7 +206,7 @@
+     };
+     println!(
+         "{}",
+-        serde_json::json!({"input_ms":input_ms,
++        serde_json::json!({"input_ms":input_ms, "import_ms":import_ms, "observations":ankiforge::experimental_observations(),
+         "operation_ms": operation_started.elapsed().as_secs_f64() * 1000.0,
+         "comparison":comparison, "report":output.as_ref().map(|o| o.report().snapshot()),
+         "failure":failure, "retained_candidate_bytes":retained_candidate_bytes, "retained_media":retained_media.len()})

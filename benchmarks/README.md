@@ -5,6 +5,112 @@ An independent, unpublished suite in this repository. The text suite compares th
 The active adapter uses the clean-slate API as of 2026-09-24. Historical reports
 retain their original source snapshots and do not measure this adapter.
 
+## Latest committed code versus September 21: 2026-10-08
+
+The [latest full comparison](results/20261008-latest-commit-genanki/report.md)
+measures commit `1199196` with the exact September 21 inputs. Timing medians
+decrease in 15/20 cells and increase in five. At 1,000 notes, text/images/audio/
+mixed unique/shared media take 2.2%/36.8%/26.7%/31.0%/11.2% less time; unique-media
+RSS is higher, reaching 92.45 MiB for images. All 840 exports and 40 actual Anki
+imports pass. These are separate sessions/API generations, so the differences
+do not isolate the last commit. Complete distributions, package sizes, fresh
+genanki measurements and offline record replay are retained.
+
+## Production defaults and memory digests: 2026-10-08
+
+The [implementation report](results/20261008-defaults-digest-implementation/report.md)
+compares build-time validated defaults and immutable memory-snapshot digest reuse
+with untouched `15bcee6` binaries. In the same session, 100/1,000-note text and
+1,000-note audio medians fall 13.7%/3.1%/6.9%; the other five timing intervals
+cross zero. All eight peak-RSS medians decrease, without raising memory budgets.
+All 416 exports and 32 selected Anki imports pass, alongside Rust/Node/Python
+regressions and an outside-checkout packaged consumer. Sources, raw observations,
+production patch, validation logs and record replay are retained.
+
+## Production media budgets and batch imports: 2026-10-08
+
+The [production comparison](results/20261008-media-defaults-genanki/report.md)
+uses the exact September 21 fixtures for one full 20-cell Rust/genanki matrix.
+The Rust adapter now calls public `Media::files`, with up to four import workers;
+the shared live-snapshot budget is 64 MiB and the encoded pool is 16 MiB.
+Rust, Node and Python expose the batch method. Existing single-file callers
+must adopt it to gain import concurrency. The archived report retains all
+timing/RSS samples, checks and cross-session limitations.
+
+## RSS / speed exploration: 2026-10-08
+
+The [RSS / speed experiments](results/20261008-rss-speed-exploration/report.md)
+test bounded media imports, cached text derivations, snapshot/encoded-payload
+budgets and zstd alternatives in isolated source copies. Independent confirmation
+favours four import workers and a 16 MiB encoded pool: combined large-media
+exports take 26–32% less time with roughly 4 MiB additional peak RSS. Text gains
+are smaller and wide-field gains did not reliably reproduce. All 1,826 exports
+and 185 selected Anki checks passed; that exploration left production unchanged.
+Raw evidence, controls, unsuccessful alternatives and statistics replay are retained.
+
+## Publication implementation and current comparison
+
+The [publication implementation evidence](results/20261003-publication-implementation/README.md)
+covers prepared publication in Rust/Node/Python, Node copy-on-write snapshots,
+native staging omission and early byte-snapshot reuse, on top of the structural
+dataflow changes. P1–P4 timing goals passed locally; confirmed wide-field RSS
+regression and unrun supported-platform CI remain unresolved acceptance gates.
+
+The [October 4 comparison](results/20261004-publication-genanki/report.md)
+uses the exact September 21 fixtures for one complete 20-cell matrix. All 840
+exports and 40 selected Anki checks passed. All 20 Rust timing medians exceeded
+the historical values; at 1,000 notes they were 21–47% higher, with lower RSS in
+all five scenes. Rust remained faster than freshly measured genanki in all cells.
+These are separate sessions and API generations, not isolated code-change effects.
+This standard build matrix does not measure prepared reuse or Node COW benefits.
+
+## Current Project API comparison: 2026-10-02
+
+The [current-code report](results/20261002-latest-genanki/report.md) compares
+commit `4265fc4` with the archived 2026-09-21 Deck API using identical inputs.
+All 840 exports and 40 selected Anki checks passed. All 20 Rust timing medians
+increased; the report retains RSS, package sizes, independently remeasured
+genanki, quartiles and exact environment/source evidence. API paths and desktop
+conditions differ between dates; these are descriptive results, not an isolated
+root-cause diagnosis. See the [evidence index](results/20261002-latest-genanki/README.md).
+
+The subsequent [diagnosis](results/20261002-performance-diagnosis/report.md)
+includes repeated sync ablations and same-host rebuilt historical-source tests.
+It identifies the lost PreparedMedia path, intermediate CAS/staging sync costs,
+and additional native identity-validation work. Its probes are separate source
+copies; they are diagnostic evidence, not a production repair.
+
+The [optimized rerun](results/20261002-optimized-genanki/report.md) measures
+owned-snapshot streaming, a shared snapshot memory budget, reused identity
+queries and exclusive candidate publication against both archived baselines.
+Its frozen working-tree patch, full 20-cell matrix, original output validation
+and Anki checks are retained separately from the pre-optimization evidence.
+
+The [residual-cost diagnosis](results/20261002-residual-performance-diagnosis/report.md)
+uses unchanged optimized runtime sources, repeated same-host historical
+comparisons and isolated single-variable probes. It locates the per-object
+snapshot spill/cleanup cost, separates identity-validation stages and retains
+the higher RSS of an increased snapshot budget. All 216 exports and 36 selected
+Anki checks passed; these diagnostic samples do not replace the full matrix.
+
+The [shared-spool rerun](results/20261002-spool-genanki/report.md) compares the
+subsequent bounded snapshot-block and portable-name optimizations primarily with
+the 2026-09-21 archive, and also with the preceding optimized Project runtime.
+Its complete matrix retains fresh genanki measurements, independent RSS,
+package sizes, ownership/failure regression evidence and frozen source hashes.
+
+The [reader-cache and codec investigation](results/20261002-reader-cache-genanki/report.md)
+tests remaining costs against the current shared-spool runtime and the September
+21 archive. It covers bounded per-worker snapshot readers, canonical identity
+checksum serialization and a fast outer zstd frame for PNG. The report retains
+single-variable controls, rejected alternatives and the final full matrix.
+
+The [active-writer follow-up](results/20261002-active-writer-genanki/report.md)
+measures reuse of the active snapshot writer, publication of an already-synced
+private candidate and collection hashing during inspection. It retains separate
+controls for source opening, snapshot budgets and hashing, plus bounded-FD,
+failure, ownership and publication regression evidence.
+
 ## Archived Rust/genanki comparison: 2026-09-21
 
 The [archived report](results/20260921-readme-genanki/report.md) measures the

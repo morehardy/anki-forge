@@ -1,0 +1,1200 @@
+--- a/anki_forge/src/media/snapshot/spool.rs
++++ b/anki_forge/src/media/snapshot/spool.rs
+@@ -2,7 +2,7 @@
+ use std::{
+     fs::File,
+     io::{self, Read, Seek, SeekFrom, Write},
+-    sync::{Arc, Weak},
++    sync::{Arc, Mutex, Weak},
+ };
+ 
+ const BLOCK_BYTES: u64 = 4 * 1024 * 1024;
+@@ -15,6 +15,8 @@
+ 
+ #[derive(Debug)]
+ struct Block {
++    // Drop the writer before its path, including on Windows.
++    writer: Mutex<Option<File>>,
+     path: Option<tempfile::TempPath>,
+     process: u32,
+ }
+@@ -28,6 +30,9 @@
+ impl Drop for Block {
+     fn drop(&mut self) {
+         // Arc counts are copied at fork. A child must never unlink parent storage.
++        // Field destruction closes an inherited writer without waiting on its
++        // potentially inherited mutex. If copied Arc counts prevent this Drop,
++        // the inherited descriptor remains until the child process exits.
+         if self.process != std::process::id() {
+             if let Some(path) = self.path.take() {
+                 std::mem::forget(path);
+@@ -44,39 +49,52 @@
+ }
+ 
+ impl Pool {
+-    // The process-local snapshot cache serializes append operations. No file
+-    // descriptor or strong storage owner remains in the cache between calls.
++    // The process-local snapshot cache serializes append operations and retains
++    // only a Weak owner. The active block owns one writer; rotation, failure and
++    // its final snapshot owner close it. Completed blocks retain no writer.
+     pub(super) fn store(&mut self, bytes: &[u8]) -> io::Result<Segment> {
+-        let existing = self
+-            .current
+-            .upgrade()
+-            .filter(|_| self.length + bytes.len() as u64 <= BLOCK_BYTES);
+-        let (block, mut file, offset) = match existing {
+-            Some(block) => {
+-                let file = File::options().write(true).open(block.path())?;
+-                (block, file, self.length)
+-            }
+-            None => {
++        let previous = self.current.upgrade();
++        let (block, offset) = match previous {
++            Some(block) if self.length + bytes.len() as u64 <= BLOCK_BYTES => (block, self.length),
++            previous => {
++                // A failed replacement must not leave a closed writer reusable.
++                self.current = Weak::new();
++                self.length = 0;
++                if let Some(block) = previous {
++                    block
++                        .writer
++                        .lock()
++                        .unwrap_or_else(|error| error.into_inner())
++                        .take();
++                }
+                 let (file, path) = tempfile::NamedTempFile::new()?.into_parts();
+                 (
+                     Arc::new(Block {
++                        writer: Mutex::new(Some(file)),
+                         path: Some(path),
+                         process: std::process::id(),
+                     }),
+-                    file,
+                     0,
+                 )
+             }
+         };
+-        file.seek(SeekFrom::Start(offset))?;
++        let mut writer = block
++            .writer
++            .lock()
++            .unwrap_or_else(|error| error.into_inner());
++        // Readers use independent descriptors. Only serialized appends advance
++        // this writer's cursor, so a successful append needs no seek.
++        let file = writer.as_mut().expect("active spill block has a writer");
+         if let Err(error) = file.write_all(bytes) {
+             // Roll back a partial append while preserving the original I/O cause.
+             // Even if truncation fails, never reuse the failed block's tail.
+             let _ = file.set_len(offset);
++            writer.take();
+             self.current = Weak::new();
+             self.length = 0;
+             return Err(error);
+         }
++        drop(writer);
+         self.length = offset + bytes.len() as u64;
+         self.current = Arc::downgrade(&block);
+         Ok(Segment {
+@@ -254,6 +272,14 @@
+         assert!(b.seek(SeekFrom::Start(20)).is_ok());
+         assert_eq!(b.read(&mut [0; 10]).unwrap(), 0);
+         assert!(b.seek(SeekFrom::End(-7)).is_err());
++        let third = pool.store(b"third").unwrap();
++        bytes.clear();
++        third.reader().unwrap().read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, b"third", "reader seeks must not move the writer");
++        bytes.clear();
++        first.reader().unwrap().read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, b"first", "later appends must preserve live segments");
++        drop(third);
+         drop((a, b, first));
+         assert!(path.exists(), "another segment still owns the shared block");
+         drop(second);
+@@ -266,6 +292,11 @@
+         let first = pool.store(&vec![1; BLOCK_BYTES as usize]).unwrap();
+         let second = pool.store(b"next block").unwrap();
+         assert!(!Arc::ptr_eq(&first.block, &second.block));
++        assert!(first.block.writer.lock().unwrap().is_none());
++        assert!(second.block.writer.lock().unwrap().is_some());
++        let mut bytes = Vec::new();
++        first.reader().unwrap().read_to_end(&mut bytes).unwrap();
++        assert_eq!(bytes, vec![1; BLOCK_BYTES as usize]);
+         let first_path = first.block.path().to_owned();
+         let second_path = second.block.path().to_owned();
+         drop(first);
+@@ -281,11 +312,53 @@
+     fn inherited_block_cleanup_preserves_parent_path() {
+         let file = tempfile::NamedTempFile::new().unwrap();
+         let path = file.path().to_owned();
++        let (writer, owned_path) = file.into_parts();
+         drop(Block {
+-            path: Some(file.into_temp_path()),
++            writer: Mutex::new(Some(writer)),
++            path: Some(owned_path),
+             process: std::process::id().wrapping_add(1),
+         });
+         assert!(path.exists());
+         std::fs::remove_file(path).unwrap();
+     }
+-}
++
++    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
++    #[test]
++    fn inherited_writer_closes_without_waiting_on_its_mutex() {
++        use std::{sync::mpsc, time::Duration};
++
++        let (mut writer, owned_path) = tempfile::NamedTempFile::new().unwrap().into_parts();
++        let path = owned_path.to_path_buf();
++        writer.write_all(b"parent snapshot").unwrap();
++        writer.lock().unwrap();
++        let observer = File::open(&path).unwrap();
++        assert!(matches!(
++            observer.try_lock(),
++            Err(std::fs::TryLockError::WouldBlock)
++        ));
++        let block = Block {
++            writer: Mutex::new(Some(writer)),
++            path: Some(owned_path),
++            process: std::process::id().wrapping_add(1),
++        };
++        let (finished, received) = mpsc::channel();
++        let dropper = std::thread::spawn(move || {
++            // Model a mutex left locked by a different thread at fork. There is
++            // no live borrower after forgetting the guard, and Drop must not
++            // try to acquire it in order to close its file.
++            std::mem::forget(block.writer.lock().unwrap());
++            drop(block);
++            finished.send(()).unwrap();
++        });
++        received
++            .recv_timeout(Duration::from_secs(5))
++            .expect("inherited block destructor waited on its mutex");
++        dropper.join().unwrap();
++        assert_eq!(std::fs::read(&path).unwrap(), b"parent snapshot");
++        observer
++            .try_lock()
++            .expect("inherited writer descriptor was not closed");
++        drop(observer);
++        std::fs::remove_file(path).unwrap();
++    }
++}
+--- a/anki_forge/src/build_api/artifact.rs
++++ b/anki_forge/src/build_api/artifact.rs
+@@ -1,5 +1,5 @@
+ #![deny(missing_docs)]
+-//! Ownership of published APKG files. Candidate files never enter this type.
++//! Private candidate handoff and ownership of published APKG files.
+ use crate::build::{
+     json::{Durability, PublicationSnapshot, PublicationStage},
+     PersistError, PersistErrorKind,
+@@ -39,23 +39,43 @@
+     storage: Arc<ArtifactStorage>,
+ }
+ 
+-impl ApkgArtifact {
+-    pub(crate) fn persistent(path: PathBuf) -> Self {
+-        Self {
+-            storage: Arc::new(ArtifactStorage::Persistent(path)),
+-        }
+-    }
+-
+-    pub(crate) fn temporary_from_candidate(candidate: &Path) -> io::Result<Self> {
++/// A synced private file that has not been exposed through the public API.
++/// Inspection reads it without mutation; consuming this non-cloneable owner
++/// either exposes a temporary artifact or publishes the already-synced inode.
++#[derive(Debug)]
++pub(crate) struct PrivateCandidate(ApkgArtifact);
++
++impl PrivateCandidate {
++    pub(crate) fn retain(candidate: &Path) -> io::Result<Self> {
+         let file = tempfile::Builder::new()
+             .prefix("anki-forge-artifact-")
+             .suffix(".apkg")
+             .tempfile()?;
+         let path = file.into_temp_path();
+         publish_owned_candidate(candidate, &path)?;
+-        Ok(Self {
++        Ok(Self(ApkgArtifact {
+             storage: Arc::new(ArtifactStorage::Temporary(path)),
+-        })
++        }))
++    }
++
++    pub(crate) fn path(&self) -> &Path {
++        self.0.path()
++    }
++
++    pub(crate) fn into_artifact(self) -> ApkgArtifact {
++        self.0
++    }
++
++    pub(crate) fn publish_to(self, path: impl AsRef<Path>) -> Result<ApkgArtifact, PersistError> {
++        self.0.persist(path.as_ref(), true)
++    }
++}
++
++impl ApkgArtifact {
++    pub(crate) fn persistent(path: PathBuf) -> Self {
++        Self {
++            storage: Arc::new(ArtifactStorage::Persistent(path)),
++        }
+     }
+ 
+     /// Borrow the absolute path while keeping an artifact handle alive.
+@@ -78,14 +98,10 @@
+         self.persist(path.as_ref(), false)
+     }
+ 
+-    // Only the private, inspected candidate is consumed by build publication.
+-    // Public persist_to always retains the source for every existing handle.
+-    pub(crate) fn publish_to(self, path: impl AsRef<Path>) -> Result<Self, PersistError> {
+-        let move_source = self.is_temporary() && Arc::strong_count(&self.storage) == 1;
+-        self.persist(path.as_ref(), move_source)
+-    }
+-
+-    fn persist(&self, path: &Path, move_source: bool) -> Result<Self, PersistError> {
++    // Only PrivateCandidate may request moving an already-synced source.
++    // A public artifact's path can be modified by its caller, even with one
++    // owner, so public persistence always copies and syncs the fresh copy.
++    fn persist(&self, path: &Path, move_synced_source: bool) -> Result<Self, PersistError> {
+         let mut publication = publication(path);
+         if path.as_os_str().is_empty() {
+             return Err(PersistError::new(
+@@ -123,7 +139,7 @@
+                 }
+             };
+         }
+-        persist_file(self.path(), &path, move_source)?;
++        persist_file(self.path(), &path, move_synced_source)?;
+         Ok(Self::persistent(path))
+     }
+ 
+@@ -147,12 +163,13 @@
+     if let Some(parent) = target.parent().filter(|path| !path.as_os_str().is_empty()) {
+         std::fs::create_dir_all(parent)?;
+     }
+-    std::fs::OpenOptions::new()
++    let file = std::fs::OpenOptions::new()
+         .read(true)
+         .write(true)
+-        .open(candidate)?
+-        .sync_all()?;
+-    match std::fs::rename(candidate, target) {
++        .open(candidate)?;
++    sync_file(&file, candidate)?;
++    drop(file);
++    match rename_candidate(candidate, target) {
+         Ok(()) => Ok(()),
+         Err(error) if error.kind() == io::ErrorKind::CrossesDevices => {
+             replace_output_atomically(candidate, target)
+@@ -183,7 +200,7 @@
+ fn persist_file(
+     source: &Path,
+     target: &Path,
+-    move_source: bool,
++    move_synced_source: bool,
+ ) -> Result<PublicationSnapshot, PersistError> {
+     let mut facts = publication(target);
+     if target.as_os_str().is_empty() {
+@@ -201,13 +218,8 @@
+         #[cfg(unix)]
+         let directories = directories_to_sync(parent)?;
+         std::fs::create_dir_all(parent)?;
+-        let moved = if move_source {
+-            std::fs::OpenOptions::new()
+-                .read(true)
+-                .write(true)
+-                .open(source)?
+-                .sync_all()?;
+-            match std::fs::rename(source, target) {
++        let moved = if move_synced_source {
++            match rename_candidate(source, target) {
+                 Ok(()) => true,
+                 Err(error) if error.kind() == io::ErrorKind::CrossesDevices => false,
+                 Err(error) => return Err(error),
+@@ -221,7 +233,7 @@
+                 .suffix(".tmp")
+                 .tempfile_in(parent)?;
+             io::copy(&mut std::fs::File::open(source)?, temporary.as_file_mut())?;
+-            temporary.as_file_mut().sync_all()?;
++            sync_file(temporary.as_file(), temporary.path())?;
+             temporary.persist(target).map_err(|error| error.error)?;
+         }
+         facts.stage = PublicationStage::Published;
+@@ -240,6 +252,18 @@
+         Ok(()) => Ok(facts),
+         Err(cause) => Err(PersistError::new(PersistErrorKind::Io, cause, facts)),
+     }
++}
++
++fn sync_file(file: &std::fs::File, _path: &Path) -> io::Result<()> {
++    #[cfg(all(test, unix))]
++    file_publication::before_sync(_path)?;
++    file.sync_all()
++}
++
++fn rename_candidate(source: &Path, target: &Path) -> io::Result<()> {
++    #[cfg(all(test, unix))]
++    file_publication::before_rename(source, target)?;
++    std::fs::rename(source, target)
+ }
+ 
+ #[cfg(unix)]
+@@ -274,6 +298,96 @@
+ }
+ 
+ #[cfg(all(test, unix))]
++mod file_publication {
++    use std::{
++        cell::RefCell,
++        io,
++        path::{Path, PathBuf},
++    };
++
++    #[derive(Debug)]
++    pub(super) enum Operation {
++        Sync(PathBuf),
++        Rename { source: PathBuf, target: PathBuf },
++    }
++
++    struct Observation {
++        fail_sync_at: Option<usize>,
++        cross_device_target: Option<PathBuf>,
++        syncs: usize,
++        operations: Vec<Operation>,
++    }
++
++    thread_local! {
++        static ACTIVE: RefCell<Option<Observation>> = const { RefCell::new(None) };
++    }
++
++    pub(super) fn before_sync(path: &Path) -> io::Result<()> {
++        let fail = ACTIVE.with(|active| {
++            let mut active = active.borrow_mut();
++            let Some(observation) = active.as_mut() else {
++                return false;
++            };
++            let index = observation.syncs;
++            observation.syncs += 1;
++            observation
++                .operations
++                .push(Operation::Sync(path.to_owned()));
++            observation.fail_sync_at == Some(index)
++        });
++        if fail {
++            Err(io::Error::from_raw_os_error(5))
++        } else {
++            Ok(())
++        }
++    }
++
++    pub(super) fn before_rename(source: &Path, target: &Path) -> io::Result<()> {
++        let cross_device = ACTIVE.with(|active| {
++            let mut active = active.borrow_mut();
++            let Some(observation) = active.as_mut() else {
++                return false;
++            };
++            observation.operations.push(Operation::Rename {
++                source: source.to_owned(),
++                target: target.to_owned(),
++            });
++            observation.cross_device_target.as_deref() == Some(target)
++        });
++        if cross_device {
++            Err(io::Error::from(io::ErrorKind::CrossesDevices))
++        } else {
++            Ok(())
++        }
++    }
++
++    pub(super) fn observe<T>(
++        fail_sync_at: Option<usize>,
++        cross_device_target: Option<&Path>,
++        operation: impl FnOnce() -> T,
++    ) -> (T, Vec<Operation>) {
++        struct Reset(Option<Observation>);
++        impl Drop for Reset {
++            fn drop(&mut self) {
++                ACTIVE.with(|active| *active.borrow_mut() = self.0.take());
++            }
++        }
++        let _reset = Reset(ACTIVE.with(|active| {
++            active.borrow_mut().replace(Observation {
++                fail_sync_at,
++                cross_device_target: cross_device_target.map(Path::to_owned),
++                syncs: 0,
++                operations: Vec::new(),
++            })
++        }));
++        let result = operation();
++        let operations = ACTIVE
++            .with(|active| std::mem::take(&mut active.borrow_mut().as_mut().unwrap().operations));
++        (result, operations)
++    }
++}
++
++#[cfg(all(test, unix))]
+ mod directory_sync_failure {
+     use std::{
+         cell::RefCell,
+@@ -355,33 +469,262 @@
+     fn exclusive_build_publication_moves_the_owned_file() {
+         use std::os::unix::fs::MetadataExt;
+         let root = tempfile::tempdir().unwrap();
+-        let artifact = project()
+-            .build(BuildOptions::temporary())
+-            .unwrap()
+-            .artifact()
+-            .clone();
+-        let original = artifact.path().to_owned();
++        let (candidate, _) = project()
++            .prepare_candidate(&BuildOptions::temporary())
++            .unwrap();
++        let original = candidate.path().to_owned();
+         let inode = original.metadata().unwrap().ino();
+-        let saved = artifact.publish_to(root.path().join("saved.apkg")).unwrap();
++        let (saved, operations) = file_publication::observe(None, None, || {
++            candidate.publish_to(root.path().join("saved.apkg"))
++        });
++        let saved = saved.unwrap();
+         assert_eq!(saved.path().metadata().unwrap().ino(), inode);
+         assert!(!original.exists());
+-    }
+-
+-    #[test]
+-    fn shared_build_publication_keeps_the_original_handle_usable() {
++        assert!(matches!(
++            operations.as_slice(),
++            [file_publication::Operation::Rename { .. }]
++        ));
++    }
++
++    #[test]
++    fn public_persistence_keeps_the_original_handle_usable() {
+         let root = tempfile::tempdir().unwrap();
+         let output = project().build(BuildOptions::temporary()).unwrap();
+         let original = output.artifact();
+-        let saved = original
+-            .clone()
+-            .publish_to(root.path().join("saved.apkg"))
+-            .unwrap();
++        let saved = original.persist_to(root.path().join("saved.apkg")).unwrap();
+         assert_eq!(
+             std::fs::read(original.path()).unwrap(),
+             std::fs::read(saved.path()).unwrap()
+         );
+         drop(output);
+         assert!(saved.path().is_file());
++    }
++
++    #[test]
++    fn temporary_and_persistent_builds_sync_the_candidate_once_before_any_rename() {
++        use file_publication::Operation;
++        let root = tempfile::tempdir().unwrap();
++        for options in [
++            BuildOptions::temporary(),
++            BuildOptions::to(root.path().join("saved.apkg")),
++        ] {
++            let (result, operations) =
++                file_publication::observe(None, None, || project().build(options));
++            let output = result.unwrap();
++            let expected_renames = if output.artifact().is_temporary() {
++                1
++            } else {
++                2
++            };
++            assert_eq!(operations.len(), 1 + expected_renames);
++            let Operation::Sync(source) = &operations[0] else {
++                panic!("candidate must be synchronized before it is retained: {operations:?}");
++            };
++            assert!(matches!(
++                &operations[1], Operation::Rename { source: renamed, .. } if renamed == source
++            ));
++            assert!(operations[1..]
++                .iter()
++                .all(|operation| matches!(operation, Operation::Rename { .. })));
++            assert_eq!(
++                crate::writer_core::inspect_apkg(output.artifact().path())
++                    .unwrap()
++                    .observation_status,
++                "complete"
++            );
++        }
++    }
++
++    #[test]
++    fn initial_sync_failure_keeps_its_classification_and_precedes_inspection() {
++        let root = tempfile::tempdir().unwrap();
++        let destination = root.path().join("saved.apkg");
++        std::fs::write(&destination, b"previous destination").unwrap();
++        for options in [BuildOptions::temporary(), BuildOptions::to(&destination)] {
++            let limits = super::super::InspectLimits {
++                max_archive_bytes: 1,
++                ..Default::default()
++            };
++            let (result, operations) = file_publication::observe(Some(0), None, || {
++                project().build(options.inspect_limits(limits))
++            });
++            let error = result.unwrap_err();
++            assert_eq!(error.kind(), BuildErrorKind::Io);
++            assert_eq!(error.code(), "BUILD.WORKSPACE_FAILED");
++            assert!(error.publications().is_empty());
++            assert_eq!(error.report().counts().notes, 1);
++            assert_eq!(
++                error
++                    .source()
++                    .unwrap()
++                    .downcast_ref::<io::Error>()
++                    .unwrap()
++                    .raw_os_error(),
++                Some(5)
++            );
++            assert!(matches!(
++                operations.as_slice(),
++                [file_publication::Operation::Sync(_)]
++            ));
++            assert_eq!(
++                std::fs::read(&destination).unwrap(),
++                b"previous destination"
++            );
++        }
++    }
++
++    #[test]
++    fn comparison_and_blocked_build_release_the_private_candidate() {
++        use file_publication::Operation;
++        let mut baseline = project();
++        baseline
++            .add("removed", Note::basic("old", "answer"))
++            .unwrap();
++        let baseline = baseline.build(BuildOptions::temporary()).unwrap();
++        let baseline = baseline.artifact().path();
++        let (result, operations) = file_publication::observe(None, None, || {
++            project().compare(crate::update::CompareOptions::against(baseline))
++        });
++        assert!(!result.unwrap().policy().allows_publication());
++        let [Operation::Sync(_), Operation::Rename { target, .. }] = operations.as_slice() else {
++            panic!("comparison must only retain its private candidate: {operations:?}");
++        };
++        assert!(!target.exists());
++
++        let root = tempfile::tempdir().unwrap();
++        let destination = root.path().join("saved.apkg");
++        std::fs::write(&destination, b"previous destination").unwrap();
++        let (result, operations) = file_publication::observe(None, None, || {
++            project().build(BuildOptions::to(&destination).update_from(baseline))
++        });
++        let error = result.unwrap_err();
++        assert_eq!(error.kind(), BuildErrorKind::PolicyBlocked);
++        assert_eq!(error.code(), "UPDATE.POLICY_BLOCKED");
++        assert!(error.publications().is_empty());
++        let [Operation::Sync(_), Operation::Rename { target, .. }] = operations.as_slice() else {
++            panic!("blocked build must only retain its private candidate: {operations:?}");
++        };
++        assert!(!target.exists());
++        assert_eq!(
++            std::fs::read(&destination).unwrap(),
++            b"previous destination"
++        );
++    }
++
++    #[test]
++    fn cross_device_publication_syncs_the_new_copy_before_replacing_the_target() {
++        use file_publication::Operation;
++        let root = tempfile::tempdir().unwrap();
++        let destination = root.path().join("saved.apkg");
++        std::fs::write(&destination, b"previous destination").unwrap();
++        let (result, operations) = file_publication::observe(None, Some(&destination), || {
++            project().build(BuildOptions::to(&destination))
++        });
++        let output = result.unwrap();
++        let [Operation::Sync(_), Operation::Rename { .. }, Operation::Rename { source, target }, Operation::Sync(copy)] =
++            operations.as_slice()
++        else {
++            panic!("cross-device publication must sync its new copy: {operations:?}");
++        };
++        assert_eq!(target, &destination);
++        assert_eq!(copy.parent(), destination.parent());
++        assert!(
++            !source.exists(),
++            "private source must be released after copying"
++        );
++        assert!(
++            !copy.exists(),
++            "copy scratch path must be consumed by replacement"
++        );
++        assert_eq!(output.artifact().path(), destination);
++        assert_eq!(
++            crate::writer_core::inspect_apkg(&destination)
++                .unwrap()
++                .observation_status,
++            "complete"
++        );
++    }
++
++    #[test]
++    fn cross_device_copy_sync_failure_preserves_target_and_publication_facts() {
++        let root = tempfile::tempdir().unwrap();
++        let destination = root.path().join("saved.apkg");
++        std::fs::write(&destination, b"previous destination").unwrap();
++        let (result, operations) = file_publication::observe(Some(1), Some(&destination), || {
++            project().build(BuildOptions::to(&destination))
++        });
++        let error = result.unwrap_err();
++        assert_eq!(error.kind(), BuildErrorKind::Publication);
++        assert_eq!(error.code(), "PERSIST.IO_FAILED");
++        assert_eq!(error.report().counts().notes, 1);
++        assert_eq!(
++            error.publications()[0].stage,
++            PublicationStage::NotPublished
++        );
++        assert_eq!(error.publications()[0].durability, Durability::Unconfirmed);
++        let cause = error
++            .source()
++            .unwrap()
++            .downcast_ref::<PersistError>()
++            .unwrap();
++        assert_eq!(
++            cause
++                .source()
++                .unwrap()
++                .downcast_ref::<io::Error>()
++                .unwrap()
++                .raw_os_error(),
++            Some(5)
++        );
++        assert_eq!(
++            std::fs::read(&destination).unwrap(),
++            b"previous destination"
++        );
++        for operation in operations {
++            match operation {
++                file_publication::Operation::Sync(path) => assert!(!path.exists()),
++                file_publication::Operation::Rename { source, .. } => assert!(!source.exists()),
++            }
++        }
++        assert_eq!(std::fs::read_dir(root.path()).unwrap().count(), 1);
++    }
++
++    #[test]
++    fn public_persistence_syncs_a_fresh_copy_even_after_the_caller_changes_the_source() {
++        let root = tempfile::tempdir().unwrap();
++        let destination = root.path().join("saved.apkg");
++        std::fs::write(&destination, b"previous destination").unwrap();
++        let output = project().build(BuildOptions::temporary()).unwrap();
++        let retained = output.artifact().clone();
++        std::fs::write(retained.path(), b"caller changed the source").unwrap();
++        let (result, operations) =
++            file_publication::observe(Some(0), None, || retained.persist_to(&destination));
++        let error = result.unwrap_err();
++        assert_eq!(error.publication().stage, PublicationStage::NotPublished);
++        assert_eq!(
++            std::fs::read(&destination).unwrap(),
++            b"previous destination"
++        );
++        assert!(matches!(
++            operations.as_slice(),
++            [file_publication::Operation::Sync(_)]
++        ));
++        let (result, operations) =
++            file_publication::observe(None, None, || retained.persist_to(&destination));
++        let saved = result.unwrap();
++        assert!(matches!(
++            operations.as_slice(),
++            [file_publication::Operation::Sync(_)]
++        ));
++        assert_eq!(
++            std::fs::read(saved.path()).unwrap(),
++            b"caller changed the source"
++        );
++        drop(output);
++        assert_eq!(
++            std::fs::read(retained.path()).unwrap(),
++            b"caller changed the source"
++        );
+     }
+ 
+     #[test]
+--- a/anki_forge/src/build_api/candidate.rs
++++ b/anki_forge/src/build_api/candidate.rs
+@@ -1,7 +1,8 @@
+ use std::path::Path;
+ 
+ use super::{
+-    identity::PackageIdentity, ApkgArtifact, BuildError, BuildErrorKind as Kind, BuildReport,
++    artifact::PrivateCandidate, identity::PackageIdentity, BuildError, BuildErrorKind as Kind,
++    BuildReport,
+ };
+ use crate::{
+     diagnostics::{Diagnostic, Severity},
+@@ -16,7 +17,7 @@
+     document: &ProductDocument,
+     inputs: &Path,
+     mut identity: PackageIdentity,
+-) -> Result<(ApkgArtifact, BuildReport), BuildError> {
++) -> Result<(PrivateCandidate, BuildReport), BuildError> {
+     let media_store = inputs.join("media-store");
+     let mut prepared_media = if project.assets.values().next().is_some() {
+         let mut prepared =
+@@ -167,7 +168,7 @@
+     })?;
+     let path = crate::writer_core::artifact_path_from_ref(&target, path)
+         .map_err(|cause| generation_error("BUILD.ARTIFACT_MISSING", cause, &report))?;
+-    let artifact = ApkgArtifact::temporary_from_candidate(&path).map_err(|cause| {
++    let artifact = PrivateCandidate::retain(&path).map_err(|cause| {
+         let mut error = BuildError::new(
+             Kind::Io,
+             "BUILD.WORKSPACE_FAILED",
+--- a/anki_forge/src/build_api/pipeline.rs
++++ b/anki_forge/src/build_api/pipeline.rs
+@@ -41,7 +41,7 @@
+             return Err(error);
+         }
+         let artifact = match options.output {
+-            OutputTarget::Temporary => candidate,
++            OutputTarget::Temporary => candidate.into_artifact(),
+             OutputTarget::Persistent(path) => candidate.publish_to(path).map_err(|cause| {
+                 let publication = cause.publication().clone();
+                 let mut error = BuildError::new(Kind::Publication, cause.code(), "publish APKG")
+@@ -57,7 +57,7 @@
+     pub(crate) fn prepare_candidate(
+         &self,
+         options: &BuildOptions,
+-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
++    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
+         let started = Instant::now();
+         let mut result = self.prepare_candidate_inner(options);
+         let elapsed = started.elapsed();
+@@ -71,7 +71,7 @@
+     fn prepare_candidate_inner(
+         &self,
+         options: &BuildOptions,
+-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
++    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
+         crate::project::validate_deck(&self.default_deck).map_err(|cause| {
+             BuildError::new(Kind::Configuration, cause.code(), "invalid default deck")
+                 .caused_by(cause)
+@@ -158,7 +158,7 @@
+             crate::writer_core::inspect::ApkgInspectSummary,
+             super::identity::IdentityEnvelope,
+         )>,
+-    ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
++    ) -> Result<(super::artifact::PrivateCandidate, super::BuildReport), BuildError> {
+         let identity = super::identity::PackageIdentity::prepare(
+             self,
+             baseline.as_ref().map(|(_, envelope)| &envelope.identity),
+--- a/anki_forge/src/build_api/identity/validation.rs
++++ b/anki_forge/src/build_api/identity/validation.rs
+@@ -85,13 +85,17 @@
+         Ok(())
+     }
+ 
+-    pub(crate) fn validate(&self, collection: &std::path::Path) -> anyhow::Result<()> {
++    pub(crate) fn validate(
++        &self,
++        collection: &std::path::Path,
++        collection_digest: &blake3::Hash,
++    ) -> anyhow::Result<()> {
+         ensure!(
+             self.format_version == "ankiforge-identity-v1",
+             "unsupported identity format"
+         );
+         ensure!(
+-            self.collection_blake3 == super::file_hash(collection)?,
++            self.collection_blake3 == collection_digest.to_hex().as_str(),
+             "collection digest does not match identity evidence"
+         );
+         let actual = super::identity_checksum(&self.identity)?;
+--- a/anki_forge/src/writer_core/inspect.rs
++++ b/anki_forge/src/writer_core/inspect.rs
+@@ -336,6 +336,41 @@
+     }
+ }
+ 
++// Hash exactly the decoded bytes accepted by the collection file. The archive
++// reader still owns CRC checks and every ZIP/decoded/window budget; this sink
++// merely avoids reopening and rereading the private file for native evidence.
++struct CollectionWriter<W> {
++    inner: W,
++    hash: Option<blake3::Hasher>,
++}
++
++impl<W> CollectionWriter<W> {
++    fn new(inner: W, hash_collection: bool) -> Self {
++        Self {
++            inner,
++            hash: hash_collection.then(blake3::Hasher::new),
++        }
++    }
++
++    fn digest(&self) -> Option<blake3::Hash> {
++        self.hash.as_ref().map(blake3::Hasher::finalize)
++    }
++}
++
++impl<W: Write> Write for CollectionWriter<W> {
++    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
++        let count = self.inner.write(bytes)?;
++        if let Some(hash) = &mut self.hash {
++            hash.update(&bytes[..count]);
++        }
++        Ok(count)
++    }
++
++    fn flush(&mut self) -> std::io::Result<()> {
++        self.inner.flush()
++    }
++}
++
+ // Both projections perform the same bounded archive reads, SQLite column
+ // decoding and model validation. Only retained observations differ.
+ fn read_apkg_facts(
+@@ -411,7 +446,8 @@
+ 
+     let collection_root = tempfile::tempdir().context("create inspect collection directory")?;
+     let collection_path = collection_root.path().join("collection.sqlite");
+-    let mut collection_file = std::fs::File::create(&collection_path)?;
++    let mut collection_file =
++        CollectionWriter::new(std::fs::File::create(&collection_path)?, identity.is_some());
+     if archive
+         .copy(
+             version.expected_collection_filename(),
+@@ -422,10 +458,14 @@
+         )?
+         .is_some()
+     {
++        let collection_digest = collection_file.digest();
+         drop(collection_file);
+         if let Some(identity) = &identity {
+             identity
+-                .validate(&collection_path)
++                .validate(
++                    &collection_path,
++                    &collection_digest.expect("native collection bytes were hashed"),
++                )
+                 .map_err(crate::build::identity::EvidenceError::invalid)?;
+             let actual: BTreeMap<_, _> = media
+                 .iter()
+--- a/anki_forge/src/writer_core/inspect_summary_tests.rs
++++ b/anki_forge/src/writer_core/inspect_summary_tests.rs
+@@ -3,6 +3,198 @@
+ 
+ use crate::{BuildOptions, Note, Project};
+ use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
++
++#[test]
++fn collection_hash_tracks_accepted_short_writes_and_preserves_io_failures() {
++    struct ShortWriter {
++        bytes: Vec<u8>,
++        fail_after: usize,
++    }
++    impl Write for ShortWriter {
++        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
++            if self.bytes.len() == self.fail_after {
++                return Err(std::io::Error::new(
++                    std::io::ErrorKind::PermissionDenied,
++                    "collection write failed",
++                ));
++            }
++            let count = bytes.len().min(37).min(self.fail_after - self.bytes.len());
++            self.bytes.extend_from_slice(&bytes[..count]);
++            Ok(count)
++        }
++
++        fn flush(&mut self) -> std::io::Result<()> {
++            Err(std::io::Error::other("collection flush failed"))
++        }
++    }
++
++    for size in [0, 1, 65535, 65536, 65537, 3 * 65536 + 19] {
++        let bytes: Vec<u8> = (0..size).map(|index| (index * 31) as u8).collect();
++        let mut writer = CollectionWriter::new(
++            ShortWriter {
++                bytes: Vec::new(),
++                fail_after: usize::MAX,
++            },
++            true,
++        );
++        for chunk in bytes.chunks(777) {
++            writer.write_all(chunk).unwrap();
++        }
++        assert_eq!(writer.inner.bytes, bytes);
++        assert_eq!(writer.digest(), Some(blake3::hash(&bytes)));
++    }
++
++    let mut writer = CollectionWriter::new(
++        ShortWriter {
++            bytes: Vec::new(),
++            fail_after: 101,
++        },
++        true,
++    );
++    let error = writer.write_all(&[7; 200]).unwrap_err();
++    assert_eq!(error.kind(), std::io::ErrorKind::PermissionDenied);
++    assert_eq!(error.to_string(), "collection write failed");
++    assert_eq!(writer.inner.bytes, vec![7; 101]);
++    assert_eq!(writer.digest(), Some(blake3::hash(&[7; 101])));
++    assert_eq!(
++        writer.flush().unwrap_err().to_string(),
++        "collection flush failed"
++    );
++
++    let mut unneeded = CollectionWriter::new(Vec::new(), false);
++    unneeded.write_all(b"ordinary observations").unwrap();
++    assert_eq!(unneeded.inner, b"ordinary observations");
++    assert_eq!(unneeded.digest(), None);
++}
++
++#[test]
++fn native_collection_hash_covers_all_frames_with_unchanged_decoded_budgets() {
++    let root = tempfile::tempdir().unwrap();
++    let path = root.path().join("native-frames.apkg");
++    let mut project = Project::new("native-collection-frames").unwrap();
++    project
++        .add("note", Note::basic("q".repeat(90000), "answer"))
++        .unwrap();
++    project.build(BuildOptions::to(&path)).unwrap();
++    let original = entries(&path);
++    let entry = |name: &str| {
++        original
++            .iter()
++            .find(|(candidate, _)| candidate == name)
++            .unwrap()
++            .1
++            .as_slice()
++    };
++    let sqlite = zstd::decode_all(entry("collection.anki21b")).unwrap();
++    let sqlite_path = root.path().join("reference.sqlite");
++    fs::write(&sqlite_path, &sqlite).unwrap();
++    let expected_digest = crate::build::identity::file_hash(&sqlite_path).unwrap();
++    let total = (entry("ankiforge-identity.json").len()
++        + entry("meta").len()
++        + zstd::decode_all(entry("media")).unwrap().len()
++        + sqlite.len()) as u64;
++    let (first, second) = sqlite.split_at(sqlite.len() / 2);
++    let first = zstd::encode_all(first, 0).unwrap();
++    let second = zstd::encode_all(second, 0).unwrap();
++    let mut skippable = 0x184d_2a50_u32.to_le_bytes().to_vec();
++    skippable.extend_from_slice(&7_u32.to_le_bytes());
++    skippable.extend_from_slice(b"skipped");
++    for encoded in [
++        entry("collection.anki21b").to_vec(),
++        [first.as_slice(), second.as_slice()].concat(),
++        [first.as_slice(), skippable.as_slice(), second.as_slice()].concat(),
++    ] {
++        replace_entry(&path, "collection.anki21b", Some(encoded));
++        let exact = InspectLimits {
++            max_collection_bytes: sqlite.len() as u64,
++            max_decoded_total_bytes: total,
++            ..InspectLimits::default()
++        };
++        let (summary, identity) = inspect_native_package(&path, &exact).unwrap();
++        assert_eq!((summary.notes, summary.cards), (1, 1));
++        assert_eq!(identity.collection_blake3, expected_digest);
++        for (limits, resource) in [
++            (
++                InspectLimits {
++                    max_collection_bytes: exact.max_collection_bytes - 1,
++                    ..exact.clone()
++                },
++                "collection_bytes",
++            ),
++            (
++                InspectLimits {
++                    max_decoded_total_bytes: total - 1,
++                    ..exact.clone()
++                },
++                "decoded_total_bytes",
++            ),
++        ] {
++            let error = inspect_native_package(&path, &limits).unwrap_err();
++            let limit = error.limit_exceeded().unwrap();
++            assert_eq!(limit.resource, resource);
++            assert_eq!(limit.entry.as_deref(), Some("collection.anki21b"));
++        }
++    }
++}
++
++#[test]
++fn native_collection_hash_keeps_archive_and_identity_error_precedence() {
++    let root = tempfile::tempdir().unwrap();
++    let path = root.path().join("native-priority.apkg");
++    let mut project = Project::new("native-collection-priority").unwrap();
++    project
++        .add("note", Note::basic("question", "answer"))
++        .unwrap();
++    project.build(BuildOptions::to(&path)).unwrap();
++    let original = entries(&path);
++    let identity_bytes = &original
++        .iter()
++        .find(|(name, _)| name == "ankiforge-identity.json")
++        .unwrap()
++        .1;
++    let collection = &original
++        .iter()
++        .find(|(name, _)| name == "collection.anki21b")
++        .unwrap()
++        .1;
++    let mut identity: Value = serde_json::from_slice(identity_bytes).unwrap();
++    identity["format_version"] = "future-format".into();
++    identity["collection_blake3"] = "0".repeat(64).into();
++    identity["identity_blake3"] = "0".repeat(64).into();
++    replace_entry(
++        &path,
++        "ankiforge-identity.json",
++        Some(serde_json::to_vec(&identity).unwrap()),
++    );
++    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
++    assert!(error.to_string().contains("unsupported identity format"));
++
++    let error = inspect_native_package(
++        &path,
++        &InspectLimits {
++            max_collection_bytes: 0,
++            ..InspectLimits::default()
++        },
++    )
++    .unwrap_err();
++    assert_eq!(error.limit_exceeded().unwrap().resource, "collection_bytes");
++
++    replace_entry(&path, "collection.anki21b", Some(b"not zstd".to_vec()));
++    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
++    assert!(error.to_string().contains("invalid zstd frame magic"));
++
++    replace_entry(&path, "collection.anki21b", Some(collection.clone()));
++    identity["format_version"] = "ankiforge-identity-v1".into();
++    replace_entry(
++        &path,
++        "ankiforge-identity.json",
++        Some(serde_json::to_vec(&identity).unwrap()),
++    );
++    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
++    assert!(error
++        .to_string()
++        .contains("collection digest does not match identity evidence"));
++}
+ 
+ #[test]
+ fn media_hash_streams_bounded_blocks_and_resets_between_files() {
+--- a/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
++++ b/anki_forge/tests/consumers/media_snapshot_lifecycle.rs
+@@ -272,6 +272,46 @@
+     Ok(())
+ }
+ 
++fn rotation_failure(workspace: &Path, temp: &Path) -> anyhow::Result<()> {
++    let mut owners = Vec::new();
++    for index in 0..8_u8 {
++        owners.push(Media::bytes(vec![index; 1024 * 1024], "application/octet-stream")?);
++    }
++    let before = inventory(temp)?;
++    ensure!(before["files"] == 1 && before["logical_bytes"] == 4 * 1024 * 1024);
++
++    // The active block is full. Temporarily remove the configured directory so
++    // creating its replacement fails after the old writer has been closed.
++    let hidden = workspace.join("unavailable-snapshots");
++    fs::rename(temp, &hidden)?;
++    let failed = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream");
++    fs::rename(&hidden, temp)?;
++    let error = failed.unwrap_err();
++    ensure!(error.kind() == ankiforge::media::MediaErrorKind::Io);
++    let cause = std::error::Error::source(&error)
++        .and_then(|error| error.downcast_ref::<std::io::Error>())
++        .context("replacement failure must retain its I/O source")?;
++    ensure!(cause.kind() == std::io::ErrorKind::NotFound);
++    ensure!(inventory(temp)? == before, "failed rotation changed the old block");
++
++    let retry = Media::bytes(vec![8; 1024 * 1024], "application/octet-stream")?;
++    let after = inventory(temp)?;
++    ensure!(after["files"] == 2 && after["logical_bytes"] == 5 * 1024 * 1024);
++    let mut project = Project::new("retry-failed-spill-rotation")?;
++    project.add("one", Note::basic("Question", "Answer"))?;
++    for media in owners.iter().chain(std::iter::once(&retry)) {
++        project.add_asset(media.clone())?;
++    }
++    let output = project.build(BuildOptions::to(workspace.join("rotation-retry.apkg")))?;
++    ensure!(output.report().counts().media == 9);
++    drop((output, project, owners));
++    one_snapshot(temp, 1024 * 1024)?;
++    drop(retry);
++    ensure!(inventory(temp)?["files"] == 0);
++    emit("failed_rotation_retried_and_exported", temp, json!({}))?;
++    Ok(())
++}
++
+ fn measure(mode: &str, workspace: &Path, temp: &Path, repeats: usize) -> anyhow::Result<()> {
+     let source = workspace.join("source.wav");
+     let bytes = source.metadata()?.len();
+@@ -336,7 +376,22 @@
+             ensure!(inventory(&temp)?["files"] == 1, "only the final live block remains");
+             drop(last);
+             ensure!(inventory(&temp)?["files"] == 0);
+-            emit("many_blocks_keep_only_active_writer", &temp, json!({}))?;
++
++            // Keep the resident budget occupied, then repeatedly release the
++            // final owner of an active block. A leaked writer descriptor would
++            // exhaust the same 64-FD limit even though all its paths vanished.
++            let mut resident = Vec::new();
++            for index in 0..4_u8 {
++                resident.push(Media::bytes(vec![250 + index; 1024 * 1024], "application/octet-stream")?);
++            }
++            for index in 0..96_u8 {
++                let media = Media::bytes(vec![index; 64 * 1024], "application/octet-stream")?;
++                one_snapshot(&temp, 64 * 1024)?;
++                drop(media);
++                ensure!(inventory(&temp)?["files"] == 0, "final owner retained an active block");
++            }
++            drop(resident);
++            emit("many_blocks_keep_only_active_writer", &temp, json!({"released_active_blocks":96}))?;
+             Ok(())
+         }
+         "append-failure" => {
+@@ -357,7 +412,22 @@
+             let duplicate = Media::bytes(vec![254; 4096], "application/octet-stream")?;
+             ensure!(duplicate == retained && inventory(&temp)? == before);
+             drop(duplicate);
++
++            // A failed writer must be sealed even when truncation succeeded.
++            // The next distinct small import needs a new block at offset zero.
++            let retry = Media::bytes(vec![253; 4096], "application/octet-stream")?;
++            let after = inventory(&temp)?;
++            ensure!(after["files"] == 2 && after["logical_bytes"] == 8192,
++                "retry reused the failed block instead of creating a fresh one");
++            let mut payloads = fs::read_dir(&temp)?
++                .map(|entry| fs::read(entry?.path()))
++                .collect::<std::io::Result<Vec<_>>>()?;
++            payloads.sort();
++            ensure!(payloads == vec![vec![253; 4096], vec![254; 4096]],
++                "retry changed the preserved prefix or started at a stale offset");
+             drop(retained);
++            one_snapshot(&temp, 4096)?;
++            drop(retry);
+             drop(owners);
+             ensure!(inventory(&temp)?["files"] == 0);
+             emit("failed_append_preserved_existing_segment", &temp, json!({}))?;
+@@ -418,6 +488,7 @@
+         "duplicate" => duplicate(&workspace, &temp),
+         "relative-temp-file" | "relative-temp-bytes" => relative_temp(&mode, &workspace, &temp),
+         "validation-failure" => validation_failure(&workspace, &temp),
++        "rotation-failure" => rotation_failure(&workspace, &temp),
+         "write-failure" => write_failure(&workspace, &temp),
+         "measure-file" | "measure-bytes" => measure(
+             &mode,
+--- a/anki_forge/tests/media_snapshot_lifecycle_tests.rs
++++ b/anki_forge/tests/media_snapshot_lifecycle_tests.rs
+@@ -219,8 +219,14 @@
+ 
+ #[cfg(unix)]
+ #[test]
+-fn failed_append_preserves_live_segments_and_cleans_only_its_partial_tail() {
++fn failed_append_preserves_live_segments_and_retries_in_a_new_block() {
+     run("append-failure", true);
++}
++
++#[cfg(unix)]
++#[test]
++fn failed_block_rotation_preserves_live_segments_and_remains_retryable() {
++    run("rotation-failure", false);
+ }
+ 
+ #[test]

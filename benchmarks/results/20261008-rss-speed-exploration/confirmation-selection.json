@@ -1,0 +1,72 @@
+{
+  "rationale": "Retain both untouched production and same-executable controls. Confirm import4; expose the incremental cost of 64 MiB snapshots; confirm parallel row preparation and test the rendering combination; compare the stronger encoded-pool candidate against bulk and their combination, plus the independently successful import4 mechanism on large files. This is a new complete batch, not replacement scores.",
+  "groups": {
+    "confirm-media": {
+      "profiles": [
+        "image1k",
+        "audio1k",
+        "shared1k"
+      ],
+      "modes": {
+        "stock": {},
+        "original": {},
+        "import4": {
+          "ANKIFORGE_RSS_IMPORT_WORKERS": "4"
+        },
+        "import4-m64": {
+          "ANKIFORGE_RSS_IMPORT_WORKERS": "4",
+          "ANKIFORGE_RSS_SNAPSHOT_MIB": "64"
+        }
+      }
+    },
+    "confirm-text": {
+      "profiles": [
+        "text1k",
+        "text10k",
+        "wide1k"
+      ],
+      "modes": {
+        "stock": {},
+        "original": {},
+        "cache16-w4": {
+          "ANKIFORGE_RSS_ROWS_MIB": "16",
+          "ANKIFORGE_RSS_ROW_WORKERS": "4"
+        },
+        "cache64-w4": {
+          "ANKIFORGE_RSS_ROWS_MIB": "64",
+          "ANKIFORGE_RSS_ROW_WORKERS": "4"
+        },
+        "cache16-render4": {
+          "ANKIFORGE_RSS_ROWS_MIB": "16",
+          "ANKIFORGE_RSS_ROW_WORKERS": "4",
+          "ANKIFORGE_RSS_RENDER_WORKERS": "4"
+        }
+      }
+    },
+    "confirm-large": {
+      "profiles": [
+        "large2m",
+        "large8m"
+      ],
+      "modes": {
+        "stock": {},
+        "original": {},
+        "pool16": {
+          "ANKIFORGE_RSS_PAYLOAD_KIB": "16384"
+        },
+        "bulk": {
+          "ANKIFORGE_RSS_CODEC": "bulk"
+        },
+        "bulk-pool16": {
+          "ANKIFORGE_RSS_CODEC": "bulk",
+          "ANKIFORGE_RSS_PAYLOAD_KIB": "16384"
+        },
+        "import4-pool16": {
+          "ANKIFORGE_RSS_IMPORT_WORKERS": "4",
+          "ANKIFORGE_RSS_PAYLOAD_KIB": "16384"
+        }
+      }
+    }
+  },
+  "protocol": "2 warmups, 10 cyclic-order timings, 3 independent RSS per mode/profile; all cases retained."
+}

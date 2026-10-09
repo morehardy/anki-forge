@@ -6,6 +6,41 @@ new minor release.
 
 ## [Unreleased]
 
+### Performance
+
+- Validate the embedded contract bundle and generate typed writer defaults at
+  compile time, reducing first-build initialization without a separate resource
+  generation command or runtime dependency on the source checkout.
+- Reuse BLAKE3 digests of private immutable memory snapshots during media
+  preparation. File snapshots and shared spill segments are still rehashed;
+  SHA-1, size checks, encoding and package inspection remain unchanged.
+
+- Add ordered `Media::files` / `files_with_limits` imports with up to four
+  workers and matching Node/Python `Media.files` methods. Failed batches join
+  their workers and release partial snapshots before returning the first error.
+- Raise the shared live-snapshot budget from 4 to 64 MiB and the lazy encoded
+  media pool from 4.5 to 16 MiB. Assets over 1 MiB still stream to disk; these
+  budgets do not bound total process RSS.
+- Consume temporary native authoring content without building unused legacy
+  mirrors, and reuse bound card plans for note fingerprints and report counts.
+- Omit the unused whole-package SHA-1 in native builds while retaining complete
+  package inspection, media verification, identity evidence and publication
+  durability. Low-level writer results still include their package fingerprint.
+
+- Add `Project::prepare_publication` and consuming `PreparedPublication::publish`
+  with full comparison evidence, bound paths/policy, private candidate ownership,
+  delayed baseline-alias checks and truthful publication failures. Node and Python
+  expose matching closeable owners; native protocols are Node 6 and Python 1.
+- Node task submission and clones share immutable Project versions. The first
+  mutation while a snapshot remains live may copy the project.
+- Native builds omit unused staging manifest serialization/SHA-1/writes while
+  preserving validation and full Internal Tools Interface staging artifacts.
+- Large bytes imports reuse live storage before redundant temporary writes, after
+  per-call MIME/limit validation. Weak caching, fork and cleanup rules remain.
+- Bundle 2.1.0 registers the additive prepared-owner error and semantic contracts;
+  APKG identity and existing report/comparison schemas are unchanged. Redundant
+  manifest/cache-hit-only I/O failure points no longer occur in native paths.
+
 ## [0.2.0] - 2026-09-28
 
 ### Clean-slate authoring

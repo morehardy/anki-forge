@@ -39,6 +39,11 @@ media = Media.file(source).with_export_name("theme.css")
 source.unlink()
 project.add_asset(media)
 assert project.build(BuildOptions.temporary()).report.counts.media == 1
+prepared = project.prepare_publication(BuildOptions.temporary())
+published = prepared.publish()
+assert published.report.counts.media == 1
+published.artifact.close()
+prepared.close()
 print("Installed native wheel: explicit keys, media snapshot and artifact lifetime passed")
 '''
 

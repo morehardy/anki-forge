@@ -11,7 +11,11 @@ pub(crate) struct Assets(BTreeMap<UniCase<String>, Media>);
 
 /// The same portable filename identity governs collection and update history.
 pub(crate) fn filename_identity(name: &str) -> UniCase<String> {
-    UniCase::unicode(name.nfc().collect::<String>())
+    if name.is_ascii() {
+        UniCase::ascii(name.to_owned())
+    } else {
+        UniCase::new(name.nfc().collect::<String>())
+    }
 }
 
 /// Why two assets cannot occupy the same portable filename space.
@@ -98,5 +102,49 @@ impl Assets {
 
     pub(crate) fn into_values(self) -> Vec<Media> {
         self.0.into_values().collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{
+        collections::hash_map::DefaultHasher,
+        hash::{Hash, Hasher},
+    };
+
+    #[test]
+    fn portable_identity_keeps_unicode_ordering_and_hashes_across_ascii_keys() {
+        let names = [
+            "Logo.bin",
+            "logo.bin",
+            "Straße.bin",
+            "STRASSE.bin",
+            "K.bin",
+            "K.bin",
+            "café.bin",
+            "cafe\u{301}.bin",
+            "中.bin",
+            "a.bin",
+            "Z.bin",
+            "ß.bin",
+            "ss.bin",
+        ];
+        let hash = |key: &UniCase<String>| {
+            let mut h = DefaultHasher::new();
+            key.hash(&mut h);
+            h.finish()
+        };
+        for a in names {
+            let key = filename_identity(a);
+            let original = UniCase::unicode(a.nfc().collect::<String>());
+            assert_eq!(hash(&key), hash(&original));
+            for b in names {
+                let other = filename_identity(b);
+                let original_other = UniCase::unicode(b.nfc().collect::<String>());
+                assert_eq!(key == other, original == original_other);
+                assert_eq!(key.cmp(&other), original.cmp(&original_other));
+            }
+        }
     }
 }

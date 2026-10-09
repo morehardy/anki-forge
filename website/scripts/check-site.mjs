@@ -4,6 +4,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
+import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { siteConfig, withBase } from '../site.config.mjs';
 
 const dist = process.argv[2] ? path.resolve(process.argv[2]) : fileURLToPath(new URL('../dist/', import.meta.url));
@@ -82,7 +83,8 @@ await stat(path.join(dist, 'pagefind/pagefind.js'));
 const manifest = JSON.parse(await readFile(path.join(dist, 'generated/showcase.json'), 'utf8'));
 assert.equal(manifest.schemaVersion, 2);
 assert.deepEqual(manifest.examples.map(example => example.id), ['basic', 'cloze', 'media', 'occlusion']);
-for (const example of [...manifest.examples, manifest.combined]) {
+assert.deepEqual(manifest.update.artifacts.map(artifact => artifact.file), [manifest.update.previous, manifest.update.next]);
+for (const example of [...manifest.examples, manifest.combined, ...manifest.update.artifacts]) {
   const bytes = await readFile(path.join(dist, 'generated', example.file));
   record(createHash('sha256').update(bytes).digest('hex') === example.sha256, `${example.file}: download hash does not match preview manifest`);
   record(bytes.length === example.bytes, `${example.file}: download size does not match preview manifest`);
@@ -90,9 +92,28 @@ for (const example of [...manifest.examples, manifest.combined]) {
 for (const example of manifest.examples) record(example.counts.notes === 1 && example.counts.cards === 1, `${example.file}: unexpected verified counts`);
 const combined = manifest.combined;
 record(combined.counts.notes === 4 && combined.counts.cards === 4 && combined.counts.media === 3, `${combined.file}: unexpected verified counts`);
-record(manifest.update.notesPreserved === 1, 'Update example did not preserve note identity');
+const comparison = JSON.parse(await readFile(path.join(dist, 'generated', manifest.update.report), 'utf8'));
+assert.deepEqual(comparison, manifest.update.comparison, 'Update report does not match displayed evidence');
+record(comparison.policy.allows_publication && comparison.findings.some(finding => finding.code === 'RISK.NOTE_CHANGED'), 'Update report must describe the demonstrated content change');
+record(!comparison.findings.some(finding => ['RISK.NOTE_ADDED', 'RISK.NOTE_REMOVED'].includes(finding.code)), 'Update unexpectedly changed note identity');
+
 for (const file of [manifest.update.previous, manifest.update.next]) await stat(path.join(dist, 'generated', file));
 if (siteConfig.customDomain) assert.equal((await readFile(path.join(dist, 'CNAME'), 'utf8')).trim(), siteConfig.customDomain);
+
+const benchmark = await loadBenchmarkPresentation();
+const home = pages.get(path.join(dist, 'index.html'));
+for (const result of benchmark.results) {
+  const row = home.$(`[data-profile="${result.profile}"]`);
+  record(row.length === 1, `Missing benchmark workload ${result.profile}`);
+  record(row.find('p').text() === `${result.rust.toFixed(1)} ms / ${result.genanki.toFixed(1)} ms`, `Incorrect benchmark times ${result.profile}`);
+  record(row.find('strong').text() === `${Math.abs(result.saved).toFixed(1)}% ${result.saved >= 0 ? 'less' : 'more'} time`, `Incorrect benchmark advantage ${result.profile}`);
+  for (const implementation of ['rust', 'genanki']) {
+    record(row.attr('style').includes(`--${implementation}-width: ${result[implementation] / benchmark.maxTime * 100}%`), `Incorrect chart scale ${result.profile}/${implementation}`);
+  }
+}
+const metrics = home.$('.home-performance-metric').text();
+record(metrics.includes(benchmark.results[0].rust.toFixed(1)), 'Incorrect text export headline');
+if (benchmark.minimumSaved >= 0) record(metrics.includes(`${benchmark.minimumSaved.toFixed(1)}–${benchmark.maximumSaved.toFixed(1)}`), 'Incorrect time advantage headline');
 
 if (errors.size) {
   console.error([...errors].join('\n'));

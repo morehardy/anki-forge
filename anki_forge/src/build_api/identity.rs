@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use super::{BuildError, BuildErrorKind as Kind};
 use crate::{authoring_core::NormalizedIr, Project};
 
+mod canonical;
 mod content;
 mod reconcile;
 mod validation;
@@ -253,7 +254,8 @@ impl PackageIdentity {
             let model = models[&note.notetype_id];
             let symbols = &self.models[&identity.model].templates;
             let has_active_masks = identity.has_active_masks();
-            identity.cards = crate::writer_core::card_plan::plan_cards(note, model)
+            let planned_cards = crate::writer_core::card_plan::plan_cards(note, model);
+            identity.cards = planned_cards
                 .iter()
                 .map(|card| {
                     if model.kind == "cloze" && card.card_ord >= 500 {
@@ -286,9 +288,14 @@ impl PackageIdentity {
                     Ok((key, card.card_ord))
                 })
                 .collect::<Result<_, BuildError>>()?;
-            let hash =
-                content::note_from_plan(note, model, self.models[&identity.model].id, &decks)
-                    .map_err(content_error)?;
+            let hash = content::note_from_plan(
+                note,
+                model,
+                self.models[&identity.model].id,
+                &decks,
+                &planned_cards,
+            )
+            .map_err(content_error)?;
             reconcile::advance_revision(
                 &mut identity.content_hash,
                 &mut identity.mtime_secs,
@@ -297,6 +304,18 @@ impl PackageIdentity {
             note.mtime_secs = Some(identity.mtime_secs);
         }
         Ok(())
+    }
+
+    pub(crate) fn bound_card_count(&self, normalized: &NormalizedIr) -> usize {
+        normalized
+            .notes
+            .iter()
+            .map(|note| {
+                let identity = &self.notes[&note.id];
+                debug_assert!(identity.active);
+                identity.cards.len()
+            })
+            .sum()
     }
 
     pub(crate) fn model_ids(&self) -> BTreeMap<String, i64> {
@@ -382,8 +401,9 @@ impl PackageIdentity {
 }
 
 pub(crate) fn identity_checksum(identity: &PackageIdentity) -> anyhow::Result<String> {
-    let json = crate::writer_core::canonical_json::to_canonical_json(identity)?;
-    Ok(blake3::hash(json.as_bytes()).to_hex().to_string())
+    Ok(blake3::hash(&canonical::bytes(identity)?)
+        .to_hex()
+        .to_string())
 }
 
 fn symbols<'a>(
@@ -445,6 +465,10 @@ fn content_error(cause: anyhow::Error) -> BuildError {
 }
 
 fn timestamp() -> Result<i64, BuildError> {
+    #[cfg(test)]
+    if let Some(timestamp) = super::dataflow_tests::timestamp() {
+        return Ok(timestamp);
+    }
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs().min(i64::MAX as u64) as i64)

@@ -1,63 +1,30 @@
 ---
 title: Choose your language
-description: Compare Rust, Node and Python source versions, installation paths and verified platform scope.
+description: Install the public Rust, Node or Python package and export your first Anki deck.
 ---
 
-import { repository, sitePath } from '../../../lib/site';
-import versions from '../../../generated/versions.json';
+import { sitePath } from '../../../lib/site';
 
-All three interfaces build through the Rust core. Choose the language of your
-application. Their packages and verification scopes develop independently.
-These versions are read from this checkout's package metadata; they do not imply
-that a release is available in a public registry.
+Use Rust, Node / TypeScript or Python to connect Anki deck generation to your data.
+All three can export a persistent `spanish.apkg` without installing Anki.
 
-Anki Forge's language packages share the same <a href={repository}>GitHub repository</a>.
-The package names and source directories are linked below.
+| Language | Public package | Install | Complete first deck |
+| --- | --- | --- | --- |
+| Rust | [ankiforge 0.2.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.2.0` | <a href={sitePath('/docs/quickstart/')}>Rust quickstart</a> |
+| Node / TypeScript | [ankiforge 0.2.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.2.0` | <a href={sitePath('/docs/node-quickstart/')}>Node quickstart</a> |
+| Python | [ankiforge 0.2.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.2.0` | <a href={sitePath('/docs/python-quickstart/')}>Python quickstart</a> |
 
-<table>
-  <thead><tr><th>Language</th><th>Source version</th><th>Environment</th><th>Start here</th></tr></thead>
-  <tbody>
-    <tr><td>Rust</td><td>{versions.rust}</td><td>Rust 1.92+</td><td><a href={sitePath('/docs/installation/')}>Add to your application</a></td></tr>
-    <tr><td>Node / TypeScript</td><td>{versions.node}</td><td>Node 22.13+</td><td><a href={sitePath('/docs/node-quickstart/')}>Source setup and first deck</a></td></tr>
-    <tr><td>Python</td><td>{versions.python}</td><td>Verified on CPython 3.11/3.12</td><td><a href={sitePath('/docs/python-quickstart/')}>Native installation and first deck</a></td></tr>
-  </tbody>
-</table>
+Rust needs Rust 1.92+. Node needs Node 22.13+ and a matching native optional dependency.
+Python uses a native wheel for an ordinary CPython interpreter; CPython 3.11/3.12
+are verified in recorded package checks. See <a href={sitePath('/docs/compatibility/')}>verified environments</a>.
 
-## Rust
+## Next tasks
 
-Package: <a href={`${repository}/tree/main/anki_forge`}><code>ankiforge</code></a>.
+Add <a href={sitePath('/docs/media/')}>images and audio</a>,
+create <a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or
+<a href={sitePath('/docs/updates/')}>compare and update a distributed deck</a>.
 
-Use the core authoring API directly for Project, notes, custom note types, media,
-validation and update baselines. The source setup uses a local path dependency;
-default contract resources are bundled with the crate.
-
-Read the <a href={sitePath('/docs/rust-api/')}>Rust API guide</a> for common methods
-and compiler-generated documentation instructions.
-
-## Node and TypeScript
-
-Package: <a href={`${repository}/tree/main/bindings/node`}><code>ankiforge</code></a>.
-
-The native SDK owns Rust objects and provides asynchronous media/build operations,
-ESM/CommonJS entry points and TypeScript declarations. Await operations on each
-Project and its owned values. The quickstart builds the host binary and can package it for a
-separate local application.
-
-## Python
-
-Package: <a href={`${repository}/tree/main/bindings/python`}><code>ankiforge</code></a>;
-import it as <code>ankiforge</code>.
-
-Python 0.2 uses a native extension built with Maturin. Source consumers must build
-the extension; a matching installed wheel does not need Cargo or contract tools.
-The repository records wheel checks for four platforms on CPython 3.11 and 3.12.
-
-Existing users should read <a href={sitePath('/docs/python-migration/')}>Python 0.1 to 0.2</a>.
-For genanki users, the <a href={sitePath('/docs/genanki-migration/')}>migration guide</a>
-explains fields, templates, HTML and media differences.
-
-## Verify the release you intend to use
-
-The <a href={sitePath('/docs/compatibility/')}>compatibility and release status</a>
-page separates platform evidence, known limitations and publication. Check it
-before adopting a registry dependency or committing to a platform.
+For TypeScript, use the <a href={sitePath('/docs/node-api/#typescript')}>compiler configuration</a>.
+For genanki, read the <a href={sitePath('/docs/genanki-migration/')}>migration guide</a>.
+Repository development and source-only capabilities have their own
+<a href={sitePath('/docs/development/#source-builds')}>source build instructions</a>.

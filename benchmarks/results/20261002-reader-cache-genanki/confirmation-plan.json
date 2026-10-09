@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "before": {},
+    "after": {}
+  },
+  "warmup_repeats": 3,
+  "timing_repeats": 10,
+  "expected_exports": 130,
+  "expected_anki_checks": 10,
+  "schedule_seed": 20261003,
+  "binary_sha256": {
+    "before": "3c9588a104bddcf114a5be389d542b6bd9899cd52e1c1c2e1b21d5004919b864",
+    "after": "330e2f24a2481afafaad4a3e3105c8e4b20f68f3806829a6f5f007c54cf55ba5"
+  },
+  "purpose": "Predeclared 1,000-note same-host confirmation of preceding shared-spool versus bounded-reader-cache and canonical-checksum runtime; 3 warmups/10 timings, 5 before-first and 5 after-first pairs per profile; retained separately from the full matrix."
+}

@@ -1,0 +1,22 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "before": {},
+    "after": {}
+  },
+  "warmup_repeats": 1,
+  "timing_repeats": 3,
+  "expected_exports": 24,
+  "expected_anki_checks": 6,
+  "schedule_seed": 20261003,
+  "binary_sha256": {
+    "before": "3c9588a104bddcf114a5be389d542b6bd9899cd52e1c1c2e1b21d5004919b864",
+    "after": "0aba3a05b0200ff6a8e3249dba4c68f4cf60a4639386881d7fe72dd9358f8f98"
+  },
+  "purpose": "Single-variable production spool comparison: reopening writer per append versus retaining only active block writer; text negative control; 3 descriptive timings each."
+}

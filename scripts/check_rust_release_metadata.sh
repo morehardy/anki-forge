@@ -37,8 +37,13 @@ grep -Fq "## [$crate_version]" "$changelog" || {
   exit 1
 }
 
-grep -Fq "bundle \`$bundle_version\`" "$repo_root/anki_forge/README.md" || {
-  echo "crate README does not record embedded bundle $bundle_version" >&2
+# Validate the resource's own metadata instead of user-facing README prose.
+# The build script additionally validates the full inventory and writer defaults.
+asset_version="$(tar -xOf "$bundle_asset" contracts/manifest.yaml | awk '
+  /^bundle_version:/ { gsub(/bundle_version: |"/, ""); print; exit }
+')"
+[[ "$asset_version" == "$bundle_version" ]] || {
+  echo "embedded bundle metadata mismatch: expected $bundle_version, got $asset_version" >&2
   exit 1
 }
 

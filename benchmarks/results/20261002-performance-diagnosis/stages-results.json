@@ -1,0 +1,425 @@
+{
+  "binary_sha256": "f181168fcf9e6976c9501cdfa5d24440b73f7aebc6dcf9b287084ce90afdd651",
+  "rows": [
+    {
+      "repeat": 0,
+      "profile": "basic-mixed-text-v1",
+      "elapsed_ms": 1035.129,
+      "rss_mib": 28.875,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 47.959334
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.083375
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.656833
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.086209
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 1.389125
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 5.079833
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.3e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 89.465958
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.05525
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 78.002792
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 18.962875
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.142666
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 22.356625
+        }
+      }
+    },
+    {
+      "repeat": 0,
+      "profile": "basic-image-unique-v2",
+      "elapsed_ms": 9034.516,
+      "rss_mib": 98.96875,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 7907.310291
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 5.026625
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.609792
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.218083
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 15966.661294
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8247.608713
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 289.023747
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 11796.40117
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8656.323208
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4051.378917
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4055.675958
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 208.659125
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 8726.609583
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.40625
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 8548.631167
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 399.957
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3431.579875
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3833.610167
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "profile": "basic-mixed-text-v1",
+      "elapsed_ms": 95.861,
+      "rss_mib": 28.828125,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 46.621584
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.416708
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.494708
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 27.782417
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.787875
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.711875
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 8.3e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 88.6655
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 0.990583
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 77.087083
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 18.618833
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 1.849459
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 21.583958
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "profile": "basic-image-unique-v2",
+      "elapsed_ms": 8609.729,
+      "rss_mib": 98.53125,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 7752.624
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 4.437083
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.490958
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.841291
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 16154.201521
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 7894.866911
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 103.171657
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 11300.173844
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8359.070959
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4089.672792
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4093.822375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 155.968625
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 8487.789583
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.183875
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 8343.508375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 374.001083
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3260.157125
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3636.246208
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "profile": "basic-mixed-text-v1",
+      "elapsed_ms": 102.726,
+      "rss_mib": 29.3125,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 51.103417
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 3.424458
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.561708
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 29.804292
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 0.856916
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 3.959375
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 4.2e-05
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 93.653166
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.109042
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 83.975375
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 19.739583
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 2.506292
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 23.492292
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "profile": "basic-image-unique-v2",
+      "elapsed_ms": 9415.055,
+      "rss_mib": 84.9375,
+      "stages": {
+        "candidate.generate": {
+          "count": 1,
+          "ms": 8336.89175
+        },
+        "identity.bind": {
+          "count": 1,
+          "ms": 6.505541
+        },
+        "identity.prepare": {
+          "count": 1,
+          "ms": 0.496416
+        },
+        "inspect.native": {
+          "count": 1,
+          "ms": 63.474459
+        },
+        "media.cas_ingest": {
+          "count": 1000,
+          "ms": 17438.57994
+        },
+        "media.cas_sync": {
+          "count": 1000,
+          "ms": 8757.131254
+        },
+        "media.import": {
+          "count": 1000,
+          "ms": 103.744121
+        },
+        "media.staging_copy": {
+          "count": 1000,
+          "ms": 12025.17805
+        },
+        "media.staging_sync": {
+          "count": 1000,
+          "ms": 8840.656207
+        },
+        "normalize.core": {
+          "count": 1,
+          "ms": 4438.044584
+        },
+        "normalize.total": {
+          "count": 1,
+          "ms": 4442.442791
+        },
+        "project.asset_staging": {
+          "count": 1,
+          "ms": 347.081084
+        },
+        "project.build": {
+          "count": 1,
+          "ms": 9290.012125
+        },
+        "project.document_bridge": {
+          "count": 1,
+          "ms": 1.545333
+        },
+        "project.prepare": {
+          "count": 1,
+          "ms": 9139.303875
+        },
+        "writer.apkg": {
+          "count": 1,
+          "ms": 352.446041
+        },
+        "writer.staging": {
+          "count": 1,
+          "ms": 3518.163208
+        },
+        "writer.total": {
+          "count": 1,
+          "ms": 3872.902708
+        }
+      }
+    }
+  ]
+}

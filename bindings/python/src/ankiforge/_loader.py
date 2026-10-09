@@ -7,7 +7,7 @@ import json
 
 __version__ = "0.2.0"
 _CORE_API_VERSION = "0.2.0"
-_CONTRACT_VERSION = "2.0.0"
+_CONTRACT_VERSION = "2.1.0"
 
 
 @dataclass(frozen=True)
@@ -28,6 +28,8 @@ def _load() -> Versions:
         ) from error
     try:
         value = json.loads(native.binding_metadata())
+        if value.pop("binding_protocol_version", None) != 1:
+            raise ValueError("expected native binding protocol 1 with prepared publication support")
         metadata = Versions(**value)
         if metadata.binding_version != __version__ or metadata.core_version != _CORE_API_VERSION:
             raise ValueError(f"expected binding {__version__}, core {_CORE_API_VERSION}; found {metadata}")

@@ -3,6 +3,7 @@ mod artifacts;
 mod authoring;
 mod options;
 mod owned;
+mod prepared;
 mod state;
 
 use ankiforge::build::json::PathSnapshot;
@@ -153,6 +154,21 @@ struct NativeMedia {
 }
 #[pymethods]
 impl NativeMedia {
+    #[staticmethod]
+    fn files(py: Python<'_>, paths: Vec<PathBuf>, max_bytes: u64) -> PyResult<Vec<Self>> {
+        py.detach(|| {
+            Media::files_with_limits(paths, ankiforge::media::MediaLimits { max_bytes })
+                .map(|items| {
+                    items
+                        .into_iter()
+                        .map(|inner| Self {
+                            inner: inner.into(),
+                        })
+                        .collect()
+                })
+                .map_err(mapped!("media"))
+        })
+    }
     #[staticmethod]
     fn file(py: Python<'_>, path: PathBuf, max_bytes: u64) -> PyResult<Self> {
         py.detach(|| {
@@ -387,6 +403,18 @@ impl NativeProject {
             Err(e) => Err(core_error("build", e.kind(), e.code(), &e)),
         })
     }
+    fn prepare_publication(
+        &self,
+        py: Python<'_>,
+        input: &str,
+    ) -> PyResult<prepared::NativePreparedPublication> {
+        let request = parse::<options::BuildInput>(input)?.options()?;
+        self.state.run(py, |p| {
+            p.prepare_publication(request)
+                .map(prepared::NativePreparedPublication::from)
+                .map_err(|e| core_error("build", e.kind(), e.code(), &e))
+        })
+    }
     fn compare(&self, py: Python<'_>, input: &str) -> PyResult<String> {
         let request = parse::<options::CompareInput>(input)?.options()?;
         self.state.run(py, |p| {
@@ -401,7 +429,7 @@ fn parse<T: serde::de::DeserializeOwned>(input: &str) -> PyResult<T> {
 }
 #[pyfunction]
 fn binding_metadata() -> String {
-    json!({"binding_version":env!("CARGO_PKG_VERSION"),"core_version":ankiforge::facade_api_version(),"contract_version":ankiforge::embedded_contract_version()}).to_string()
+    json!({"binding_version":env!("CARGO_PKG_VERSION"),"core_version":ankiforge::facade_api_version(),"contract_version":ankiforge::embedded_contract_version(),"binding_protocol_version":1}).to_string()
 }
 #[pyfunction]
 fn validate_risk_code(code: &str) -> PyResult<()> {
@@ -417,6 +445,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<NativeNote>()?;
     module.add_class::<NativeNoteType>()?;
     module.add_class::<NativeArtifact>()?;
+    module.add_class::<prepared::NativePreparedPublication>()?;
     module.add("OperationError", module.py().get_type::<OperationError>())?;
     module.add_function(wrap_pyfunction!(binding_metadata, module)?)?;
     module.add_function(wrap_pyfunction!(validate_risk_code, module)?)?;

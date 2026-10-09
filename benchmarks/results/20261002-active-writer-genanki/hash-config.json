@@ -1,0 +1,25 @@
+{
+  "purpose": "All-at-once BLAKE3 for snapshots already retained in memory, with streaming promotion for larger files; fixed 4 MiB budget and active writer",
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "modes": {
+    "streaming": {
+      "binary": "hash",
+      "env": {
+        "ANKIFORGE_ROUND4_WRITER": "1"
+      }
+    },
+    "direct": {
+      "binary": "hash",
+      "env": {
+        "ANKIFORGE_ROUND4_WRITER": "1",
+        "ANKIFORGE_ROUND4_DIRECT_HASH": "1"
+      }
+    }
+  }
+}

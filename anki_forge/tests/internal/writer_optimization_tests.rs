@@ -128,7 +128,11 @@ fn typed_and_materialized_writers_preserve_staging_and_package_bytes() {
         );
         assert_eq!(
             typed.package_fingerprint.as_deref(),
-            Some(disk.package_fingerprint.as_str())
+            Some(
+                disk.package_fingerprint
+                    .as_deref()
+                    .expect("low-level builds return a fingerprint")
+            )
         );
         assert_eq!(
             fs::read(typed_target.staging_manifest_path()).unwrap(),

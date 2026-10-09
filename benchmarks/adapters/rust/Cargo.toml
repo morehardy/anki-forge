@@ -9,6 +9,8 @@ publish = false
 
 [features]
 default = []
+prepared-publication = []
+controls = ["ankiforge/internal-tools", "dep:serde_yaml"]
 mimalloc = ["dep:mimalloc"]
 
 [dependencies]
@@ -16,5 +18,11 @@ ankiforge = { path = "../../../anki_forge" }
 anyhow = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+serde_yaml = { version = "0.9", optional = true }
 html-escape = "=0.2.15"
 mimalloc = { version = "=0.1.52", optional = true, default-features = false }
+
+[[bin]]
+name = "publication-control"
+path = "src/control.rs"
+required-features = ["controls"]

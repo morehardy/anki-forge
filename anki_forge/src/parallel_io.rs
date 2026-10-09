@@ -1,5 +1,6 @@
 //! Scoped I/O jobs with at most four active operations and ordered results.
-//! Results must be metadata or owned temporary files, not buffered payloads.
+//! Results may own snapshots or encoded payloads only through their shared
+//! memory budgets; jobs must not retain unbounded independent buffers.
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Mutex;

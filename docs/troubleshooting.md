@@ -9,15 +9,14 @@ different results.
 
 | Symptom | Check |
 | --- | --- |
-| Rust build rejects the toolchain | Use Rust 1.92+ and the checkout's locked dependencies |
-| Node cannot load its native package | Enable optional dependencies and install the matching OS/CPU binary |
-| Node rejects a same-version native module | Rebuild it; protocol 3 is required by the new facade |
-| Local package install tries an unavailable registry version | Install the actual facade and host-native tarballs together |
-| Python cannot load its extension | Check interpreter/architecture against the declared wheel matrix |
+| Rust rejects the toolchain | Run `rustc --version`; use Rust 1.92+ and check `cargo tree -i ankiforge` for the installed version |
+| Node cannot load its native package | Run `node -p "process.platform + '/' + process.arch"` and `npm ls ankiforge`; reinstall with `npm install --include=optional ankiforge@0.2.0` |
+| Node reports a native/wrapper mismatch | Use matching package versions; reinstall from the same registry version, or rebuild both from the same checkout |
+| Python cannot load its extension | Run `python -m pip show ankiforge` and `python -m pip debug --verbose`; check interpreter and wheel OS/CPU tags |
+| Python selects a source distribution | Choose a matching wheel/interpreter, or follow [source builds](source-builds.md) with a compiler |
 
-Public registry availability is separate from a source version. See
-[release status](compatibility.md), [Node setup](node/quick-start.md) and
-[Python setup](python/quick-start.md).
+See [verified environments](compatibility.md), [Node setup](node/quick-start.md)
+and [Python setup](python/quick-start.md).
 
 ## Models and notes
 

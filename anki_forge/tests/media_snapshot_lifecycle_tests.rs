@@ -122,13 +122,19 @@ fn run(mode: &str, cap_file_size: bool) {
     fs::create_dir(&temp).unwrap();
     wave(&workspace.path().join("source.wav"), 8 << 20);
     wave(&workspace.path().join("sentinel.wav"), 1536 << 10);
-    let mut command = if cap_file_size {
+    let mut command = if cap_file_size || matches!(mode, "bounded-small" | "fd-stress") {
         // POSIX shell limits affect only the exec'd consumer. Ignoring SIGXFSZ
         // makes write(2) return EFBIG after a real partial spool write.
         let mut command = Command::new("sh");
         command.args([
             "-c",
-            "trap '' XFSZ; ulimit -f 4096; exec \"$1\" \"$2\" \"$3\"",
+            if matches!(mode, "bounded-small" | "fd-stress") {
+                "ulimit -n 64; exec \"$1\" \"$2\" \"$3\""
+            } else if matches!(mode, "budget-failure" | "append-failure") {
+                "trap '' XFSZ; ulimit -f 16; exec \"$1\" \"$2\" \"$3\""
+            } else {
+                "trap '' XFSZ; ulimit -f 4096; exec \"$1\" \"$2\" \"$3\""
+            },
             "snapshot-limit",
         ]);
         command.arg(executable).arg(mode).arg(workspace.path());
@@ -170,8 +176,23 @@ fn run(mode: &str, cap_file_size: bool) {
 }
 
 #[test]
+fn many_small_snapshots_spill_under_a_shared_budget_and_release_it() {
+    run("bounded-small", false);
+}
+
+#[test]
 fn source_deletion_and_last_content_owner_control_snapshot_lifetime() {
     run("lifecycle", false);
+}
+
+#[test]
+fn changed_owned_file_snapshot_is_rejected_before_publication() {
+    run("tamper-file", false);
+}
+
+#[test]
+fn changed_owned_spill_segment_is_rejected_before_publication() {
+    run("tamper-segment", false);
 }
 
 #[test]
@@ -196,6 +217,44 @@ fn relative_temp_directory_keeps_byte_snapshots_owned_across_chdir() {
 
 #[cfg(unix)]
 #[test]
+fn failed_shared_budget_spill_cleans_partial_storage_and_releases_memory() {
+    run("budget-failure", true);
+}
+
+#[cfg(unix)]
+#[test]
 fn failed_partial_spool_write_is_cleaned_and_other_owners_survive() {
     run("write-failure", true);
+}
+
+#[cfg(unix)]
+#[test]
+fn failed_append_preserves_live_segments_and_retries_in_a_new_block() {
+    run("append-failure", true);
+}
+
+#[cfg(unix)]
+#[test]
+fn failed_block_rotation_preserves_live_segments_and_remains_retryable() {
+    run("rotation-failure", false);
+}
+
+#[test]
+fn more_live_spill_blocks_than_descriptor_limit_remain_importable_exportable_and_clean() {
+    run("fd-stress", false);
+}
+
+#[test]
+fn cached_large_bytes_skip_unavailable_temp_storage_but_still_validate_each_import() {
+    run("early-duplicate", false);
+}
+
+#[test]
+fn concurrent_large_byte_imports_preserve_exact_content_and_cleanup() {
+    run("concurrent-duplicates", false);
+}
+
+#[test]
+fn batch_files_preserve_order_limits_ownership_and_clean_up_before_returning_errors() {
+    run("batch-files", false);
 }

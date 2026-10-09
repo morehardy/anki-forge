@@ -1,0 +1,3713 @@
+[
+  {
+    "profile": "basic-mixed-text-v1",
+    "default": {
+      "n": 5,
+      "median_ms": 69.554,
+      "samples_ms": [
+        78.692,
+        65.838,
+        79.987,
+        69.554,
+        64.705
+      ],
+      "rss_mib": 28.359375,
+      "stages": {
+        "adapter.parse": {
+          "ms": 0.707334,
+          "count": 1
+        },
+        "normalize.core": {
+          "ms": 0.594959,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.665333,
+          "count": 1
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.925459,
+          "count": 1
+        },
+        "identity.note_content": {
+          "ms": 2.438995,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.38975,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.202584,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 12.016959,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.000542,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.323125,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.459408,
+          "count": 1000
+        },
+        "candidate.generate": {
+          "ms": 40.13925,
+          "count": 1
+        },
+        "inspect.facts": {
+          "ms": 12.015209,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 0.000167,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 0.011333,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 63.615083,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.327291,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.000417,
+          "count": 1
+        },
+        "inspect.collection": {
+          "ms": 2.498958,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.482292,
+          "count": 1
+        },
+        "artifact.retain_sync": {
+          "ms": 11.584667,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 11.87775,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 2.981958,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.654459,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 5.409208,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.501417,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.293417,
+          "count": 2
+        },
+        "writer.apkg": {
+          "ms": 14.905333,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.556166,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.744542,
+          "count": 1
+        },
+        "writer.staging": {
+          "ms": 1.667167,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.220917,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 53.781,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.145833,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 17.216833,
+          "count": 1
+        }
+      }
+    },
+    "reader_cache": {
+      "n": 5,
+      "median_ms": 63.727,
+      "samples_ms": [
+        76.623,
+        68.266,
+        63.727,
+        61.967,
+        62.724
+      ],
+      "rss_mib": 28.5,
+      "stages": {
+        "adapter.parse": {
+          "ms": 0.735875,
+          "count": 1
+        },
+        "normalize.core": {
+          "ms": 0.615292,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.586,
+          "count": 1
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.77675,
+          "count": 1
+        },
+        "identity.note_content": {
+          "ms": 2.423026,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.414583,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.1985,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 12.4575,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.000708,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.263625,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.492747,
+          "count": 1000
+        },
+        "candidate.generate": {
+          "ms": 34.002458,
+          "count": 1
+        },
+        "inspect.facts": {
+          "ms": 12.455209,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 0.000167,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 0.01175,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 57.154709,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.7365,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.0005,
+          "count": 1
+        },
+        "inspect.collection": {
+          "ms": 2.452084,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.524458,
+          "count": 1
+        },
+        "artifact.retain_sync": {
+          "ms": 7.986,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 8.379458,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 3.067541,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.688458,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.607208,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.750167,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.244292,
+          "count": 2
+        },
+        "writer.apkg": {
+          "ms": 14.641208,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 8.474458,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.809125,
+          "count": 1
+        },
+        "writer.staging": {
+          "ms": 1.625125,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.163958,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 48.220792,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.111584,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 17.205666,
+          "count": 1
+        }
+      }
+    },
+    "canonical": {
+      "n": 5,
+      "median_ms": 67.702,
+      "samples_ms": [
+        67.702,
+        69.491,
+        65.702,
+        63.534,
+        75.642
+      ],
+      "rss_mib": 27.03125,
+      "stages": {
+        "adapter.parse": {
+          "ms": 0.734167,
+          "count": 1
+        },
+        "normalize.core": {
+          "ms": 0.631708,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 1.798958,
+          "count": 1
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.903084,
+          "count": 1
+        },
+        "identity.note_content": {
+          "ms": 2.444693,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.407208,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.177833,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 11.42425,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.000542,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 6.548708,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.477807,
+          "count": 1000
+        },
+        "candidate.generate": {
+          "ms": 37.607375,
+          "count": 1
+        },
+        "inspect.facts": {
+          "ms": 11.423041,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 0.000166,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 0.011916,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 61.504541,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.113583,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.001334,
+          "count": 1
+        },
+        "inspect.collection": {
+          "ms": 2.396959,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.517459,
+          "count": 1
+        },
+        "artifact.retain_sync": {
+          "ms": 9.785959,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 10.128292,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 3.025458,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.687958,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.4745,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.643917,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 0.694667,
+          "count": 2
+        },
+        "writer.apkg": {
+          "ms": 13.820959,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 10.389084,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.787166,
+          "count": 1
+        },
+        "writer.staging": {
+          "ms": 1.530834,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.216083,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 50.5585,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.385834,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 16.079,
+          "count": 1
+        }
+      }
+    },
+    "skip_retain": {
+      "n": 5,
+      "median_ms": 61.288,
+      "samples_ms": [
+        65.581,
+        59.496,
+        61.288,
+        66.72,
+        59.035
+      ],
+      "rss_mib": 28.515625,
+      "stages": {
+        "adapter.parse": {
+          "ms": 0.705125,
+          "count": 1
+        },
+        "normalize.core": {
+          "ms": 0.592375,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.652667,
+          "count": 1
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.799541,
+          "count": 1
+        },
+        "identity.note_content": {
+          "ms": 2.407316,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.392125,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.181584,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 12.3565,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.00075,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.524,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.458651,
+          "count": 1000
+        },
+        "candidate.generate": {
+          "ms": 26.164667,
+          "count": 1
+        },
+        "inspect.facts": {
+          "ms": 12.354375,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 0.000167,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 0.010917,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 55.54075,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.651583,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.000417,
+          "count": 1
+        },
+        "inspect.collection": {
+          "ms": 2.391292,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.448125,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 14.434416,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 0.260375,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 2.900583,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.643417,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 7.30625,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.530084,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.257459,
+          "count": 2
+        },
+        "artifact.publish": {
+          "ms": 16.627625,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.749167,
+          "count": 1
+        },
+        "writer.staging": {
+          "ms": 1.543709,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.1755,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 40.577458,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.072792,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 17.04575,
+          "count": 1
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-image-unique-v2",
+    "default": {
+      "n": 5,
+      "median_ms": 336.347,
+      "samples_ms": [
+        371.98,
+        353.358,
+        334.957,
+        336.347,
+        291.331
+      ],
+      "rss_mib": 42.84375,
+      "stages": {
+        "normalize.core": {
+          "ms": 82.798542,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.839458,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 145.786911,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.466294,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 55.162682,
+          "count": 935
+        },
+        "media.import": {
+          "ms": 131.8269,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 130.64676,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.396125,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.955084,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 36.057209,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.742917,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.790458,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 137.259625,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 185.574,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 10.218,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.478958,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.761041,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 22.359958,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 86.021792,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 3.385417,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 79.238,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 10.137625,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.326542,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 176.902916,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 5.120125,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 29.012833,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.077,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 58.990815,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.954584,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 22.932701,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.457801,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 36.0355,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 133.410083,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 19.167167,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.020209,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 56.012453,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 16.53475,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 16.830292,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.767042,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.085791,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 5.050084,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 1.002042,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 9.000208,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.895428,
+          "count": 1000
+        }
+      }
+    },
+    "reader_cache": {
+      "n": 5,
+      "median_ms": 319.234,
+      "samples_ms": [
+        319.234,
+        288.092,
+        305.974,
+        319.961,
+        325.641
+      ],
+      "rss_mib": 43.25,
+      "stages": {
+        "normalize.core": {
+          "ms": 75.445834,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.841041,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 120.430002,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.441387,
+          "count": 1000
+        },
+        "snapshot.reader_cache_open": {
+          "ms": 0.0,
+          "count": 60
+        },
+        "spool.store": {
+          "ms": 49.658184,
+          "count": 935
+        },
+        "media.import": {
+          "ms": 127.647568,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 126.434444,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.400041,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.971459,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 34.686625,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.727458,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.626708,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 126.38825,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 173.095875,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 10.021667,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.522125,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.808666,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 20.237584,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 78.685125,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 3.3575,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 71.824875,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.361625,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.851,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 164.240166,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 5.124417,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 26.804833,
+          "count": 1
+        },
+        "snapshot.cached_reader": {
+          "ms": 3.426122,
+          "count": 1000
+        },
+        "adapter.parse": {
+          "ms": 1.090334,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 58.342364,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.691042,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.463737,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 34.6655,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 129.322208,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 18.501875,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.00925,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 50.521168,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 14.2955,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 14.591,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.697834,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.080209,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.91825,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.966,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 7.23175,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.892609,
+          "count": 1000
+        }
+      }
+    },
+    "canonical": {
+      "n": 5,
+      "median_ms": 309.112,
+      "samples_ms": [
+        303.8,
+        293.62,
+        312.06,
+        317.768,
+        309.112
+      ],
+      "rss_mib": 40.90625,
+      "stages": {
+        "normalize.core": {
+          "ms": 61.157458,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.598458,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 145.622656,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.510753,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 51.875723,
+          "count": 935
+        },
+        "media.import": {
+          "ms": 130.909666,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 129.733885,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.387083,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 1.002375,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 32.871042,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.755541,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.957416,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 113.72775,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 159.318125,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 10.670083,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.446209,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.800375,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 19.978583,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 64.40025,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 3.432708,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 57.488542,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 10.12125,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.458375,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 148.908958,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 5.30875,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 27.33,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.097166,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 37.613119,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.812375,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 23.42873,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.47817,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 32.851959,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 132.523333,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 17.630208,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.033916,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 52.707806,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 13.417709,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 13.7035,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.624416,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 0.916541,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 5.143834,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.96825,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 7.372792,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.907695,
+          "count": 1000
+        }
+      }
+    },
+    "skip_retain": {
+      "n": 5,
+      "median_ms": 309.637,
+      "samples_ms": [
+        340.359,
+        291.065,
+        294.621,
+        319.714,
+        309.637
+      ],
+      "rss_mib": 43.046875,
+      "stages": {
+        "normalize.core": {
+          "ms": 63.791583,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.7985,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 148.65607,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.480708,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 50.506927,
+          "count": 935
+        },
+        "media.import": {
+          "ms": 128.569286,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 127.327013,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.394292,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.955875,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 35.496042,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.729542,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.761209,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 102.702709,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 165.498,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 11.056125,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.441916,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.825709,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 24.681375,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 67.103708,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 3.402166,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 60.317917,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 13.401916,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 7.426708,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 140.570666,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 5.048333,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 31.080542,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.116583,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 41.000159,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 6.7645,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 23.207259,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.460648,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 35.473292,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 130.277625,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 18.401625,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.010792,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 51.360125,
+          "count": 1000
+        },
+        "artifact.retain": {
+          "ms": 0.216,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.686833,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.120291,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 5.202875,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.944625,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 7.884584,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.940871,
+          "count": 1000
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-audio-unique-v2",
+    "default": {
+      "n": 5,
+      "median_ms": 257.66,
+      "samples_ms": [
+        257.66,
+        273.161,
+        269.359,
+        238.882,
+        254.573
+      ],
+      "rss_mib": 42.53125,
+      "stages": {
+        "normalize.core": {
+          "ms": 33.284625,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.788917,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 98.443978,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.493333,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 40.843137,
+          "count": 870
+        },
+        "media.import": {
+          "ms": 99.616314,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 98.4172,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.402709,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 1.01675,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 35.884167,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.766792,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.813333,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 91.093333,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 140.979292,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.216916,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.388125,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.857458,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 20.007375,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 36.717458,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.514166,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 29.231292,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.254458,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.746084,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 131.861833,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.127083,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 26.664542,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.134667,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 13.629534,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.907375,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 24.885546,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.468918,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 35.862375,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 101.155833,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 19.915125,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.008334,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 41.533228,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 17.087167,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 17.44,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.547333,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.112583,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.786875,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 1.020375,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 7.844458,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.86312,
+          "count": 1000
+        }
+      }
+    },
+    "reader_cache": {
+      "n": 5,
+      "median_ms": 241.216,
+      "samples_ms": [
+        230.687,
+        267.32,
+        232.187,
+        241.216,
+        248.831
+      ],
+      "rss_mib": 42.625,
+      "stages": {
+        "normalize.core": {
+          "ms": 25.467875,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.882833,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 69.504836,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.440361,
+          "count": 1000
+        },
+        "snapshot.reader_cache_open": {
+          "ms": 0.0,
+          "count": 28
+        },
+        "spool.store": {
+          "ms": 39.860819,
+          "count": 870
+        },
+        "media.import": {
+          "ms": 95.349434,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 94.195582,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.395458,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 1.040291,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 35.141625,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.787041,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.785583,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 81.478542,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 136.046,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.938208,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.660667,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.826291,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 18.962,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 28.685208,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.496583,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 21.350875,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 10.145208,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.352,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 119.119,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.37875,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 25.834791,
+          "count": 1
+        },
+        "snapshot.cached_reader": {
+          "ms": 2.284201,
+          "count": 1000
+        },
+        "adapter.parse": {
+          "ms": 1.121458,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 11.648242,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.913917,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.459781,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 35.1205,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 96.896541,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 19.520791,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.036166,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 40.511127,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 14.328125,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 14.700292,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.560708,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.076667,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 5.101041,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.951792,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 6.459666,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.858739,
+          "count": 1000
+        }
+      }
+    },
+    "canonical": {
+      "n": 5,
+      "median_ms": 231.857,
+      "samples_ms": [
+        264.534,
+        237.043,
+        231.857,
+        228.615,
+        229.405
+      ],
+      "rss_mib": 40.453125,
+      "stages": {
+        "normalize.core": {
+          "ms": 31.990417,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.655208,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 95.104943,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.442909,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 40.393472,
+          "count": 870
+        },
+        "media.import": {
+          "ms": 97.56494,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 96.357204,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.386709,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 1.013292,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 33.761417,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.764416,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.728667,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 77.170625,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 121.954042,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.644417,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.432083,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.803833,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 15.588,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 35.257959,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.477041,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 27.900417,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 8.63325,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.295,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 112.873709,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.159958,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 22.005709,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.087083,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 12.116878,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.89975,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 24.507244,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.466028,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 33.74175,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 99.08475,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 19.398333,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.019,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 41.137448,
+          "count": 1000
+        },
+        "artifact.retain_sync": {
+          "ms": 12.921,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 13.177,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.589,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 0.913083,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.71875,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.97875,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 5.836459,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.855724,
+          "count": 1000
+        }
+      }
+    },
+    "skip_retain": {
+      "n": 5,
+      "median_ms": 230.516,
+      "samples_ms": [
+        240.504,
+        230.516,
+        270.585,
+        218.338,
+        220.488
+      ],
+      "rss_mib": 42.1875,
+      "stages": {
+        "normalize.core": {
+          "ms": 32.138333,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.814959,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 95.603616,
+          "count": 1000
+        },
+        "identity.note_content": {
+          "ms": 2.472208,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 37.988059,
+          "count": 870
+        },
+        "media.import": {
+          "ms": 94.200209,
+          "count": 1000
+        },
+        "snapshot.file": {
+          "ms": 92.927282,
+          "count": 1000
+        },
+        "identity.prepare": {
+          "ms": 0.397625,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 1.03675,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 34.406292,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.784666,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.730375,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 65.506958,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 117.737709,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.987583,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.5085,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.809083,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 17.285333,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 35.344083,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.476292,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 28.07475,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 14.785416,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 9.786792,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 102.701458,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.229666,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 23.770791,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.115125,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 12.074494,
+          "count": 1000
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.796458,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 24.642181,
+          "count": 1000
+        },
+        "project.add_note": {
+          "ms": 0.456326,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 34.384291,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 95.83925,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 18.577709,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 1.014,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 38.768913,
+          "count": 1000
+        },
+        "artifact.retain": {
+          "ms": 0.211458,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.533916,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 3.091708,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.849375,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.996125,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 3.184333,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.876791,
+          "count": 1000
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-unique-v2",
+    "default": {
+      "n": 5,
+      "median_ms": 207.694,
+      "samples_ms": [
+        202.314,
+        230.957,
+        207.143,
+        218.942,
+        207.694
+      ],
+      "rss_mib": 41.109375,
+      "stages": {
+        "normalize.core": {
+          "ms": 29.740959,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.430334,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 86.949878,
+          "count": 700
+        },
+        "identity.note_content": {
+          "ms": 2.437974,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 31.643368,
+          "count": 618
+        },
+        "media.import": {
+          "ms": 79.49789,
+          "count": 700
+        },
+        "snapshot.file": {
+          "ms": 78.658895,
+          "count": 700
+        },
+        "identity.prepare": {
+          "ms": 0.403833,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.68275,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 27.345959,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.499417,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.444,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 74.847459,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 114.279709,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.188958,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.488959,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.783625,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 16.630833,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 32.723041,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.82625,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 26.866,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 8.81375,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.915208,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 104.354041,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.4995,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 22.08075,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.00475,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 14.255535,
+          "count": 700
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.751375,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 16.280599,
+          "count": 700
+        },
+        "project.add_note": {
+          "ms": 0.475405,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 27.331125,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 80.562666,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 13.016042,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.646375,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 32.209738,
+          "count": 700
+        },
+        "artifact.retain_sync": {
+          "ms": 13.216333,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 13.490625,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.553958,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.828708,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 3.95225,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.966459,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 5.725542,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.545699,
+          "count": 700
+        }
+      }
+    },
+    "reader_cache": {
+      "n": 5,
+      "median_ms": 216.553,
+      "samples_ms": [
+        229.596,
+        216.553,
+        230.283,
+        213.439,
+        194.131
+      ],
+      "rss_mib": 41.625,
+      "stages": {
+        "normalize.core": {
+          "ms": 35.115917,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.48375,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 70.977995,
+          "count": 700
+        },
+        "identity.note_content": {
+          "ms": 2.454508,
+          "count": 1000
+        },
+        "snapshot.reader_cache_open": {
+          "ms": 0.0,
+          "count": 64
+        },
+        "spool.store": {
+          "ms": 31.175829,
+          "count": 618
+        },
+        "media.import": {
+          "ms": 79.23737,
+          "count": 700
+        },
+        "snapshot.file": {
+          "ms": 78.337976,
+          "count": 700
+        },
+        "identity.prepare": {
+          "ms": 0.384917,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.683459,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 27.554292,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.4995,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.238584,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 83.648667,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 124.622667,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 8.986292,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.510083,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.760167,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 17.137625,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 38.047333,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.855792,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 32.176166,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 10.557,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 5.650917,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 113.589209,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.469792,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 22.476625,
+          "count": 1
+        },
+        "snapshot.cached_reader": {
+          "ms": 2.839222,
+          "count": 700
+        },
+        "adapter.parse": {
+          "ms": 0.98425,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 22.534872,
+          "count": 700
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.777334,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.4606,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 27.540042,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 80.285541,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 13.207291,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.63675,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 31.747037,
+          "count": 700
+        },
+        "artifact.retain_sync": {
+          "ms": 16.186666,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 16.516291,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.558625,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.835958,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.029,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.919375,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 9.311625,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.549922,
+          "count": 700
+        }
+      }
+    },
+    "canonical": {
+      "n": 5,
+      "median_ms": 209.765,
+      "samples_ms": [
+        269.685,
+        209.765,
+        209.144,
+        205.448,
+        239.666
+      ],
+      "rss_mib": 39.34375,
+      "stages": {
+        "normalize.core": {
+          "ms": 30.604417,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.358084,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 88.735958,
+          "count": 700
+        },
+        "identity.note_content": {
+          "ms": 2.490135,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 35.472788,
+          "count": 618
+        },
+        "media.import": {
+          "ms": 84.083904,
+          "count": 700
+        },
+        "snapshot.file": {
+          "ms": 83.216659,
+          "count": 700
+        },
+        "identity.prepare": {
+          "ms": 0.385375,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.721542,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 27.578291,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.510375,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.499625,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 74.769666,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 114.428792,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.35,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.664084,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.725958,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 15.400542,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 33.569416,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.869833,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 27.749916,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.735208,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 5.316916,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 104.473792,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.627208,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 20.684541,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.020625,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 15.270627,
+          "count": 700
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.74175,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 16.646768,
+          "count": 700
+        },
+        "project.add_note": {
+          "ms": 0.462077,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 27.563667,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 85.131375,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 13.608,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.648833,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 36.014454,
+          "count": 700
+        },
+        "artifact.retain_sync": {
+          "ms": 11.612291,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 11.976833,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.599792,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 0.850041,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.0545,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.952959,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 5.996208,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.595379,
+          "count": 700
+        }
+      }
+    },
+    "skip_retain": {
+      "n": 5,
+      "median_ms": 205.151,
+      "samples_ms": [
+        205.151,
+        207.241,
+        253.492,
+        193.898,
+        202.375
+      ],
+      "rss_mib": 41.484375,
+      "stages": {
+        "normalize.core": {
+          "ms": 30.81375,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 3.440334,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 85.769323,
+          "count": 700
+        },
+        "identity.note_content": {
+          "ms": 2.415859,
+          "count": 1000
+        },
+        "spool.store": {
+          "ms": 31.254257,
+          "count": 618
+        },
+        "media.import": {
+          "ms": 80.131244,
+          "count": 700
+        },
+        "snapshot.file": {
+          "ms": 79.229327,
+          "count": 700
+        },
+        "identity.prepare": {
+          "ms": 0.392625,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.731459,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 27.838042,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.503083,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 8.142625,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 63.488667,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 113.042667,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.4115,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.645209,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.758416,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 16.799625,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 33.743167,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.960959,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 27.728625,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 18.514,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 12.636083,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 94.086875,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.421833,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 22.287917,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 1.029459,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 14.513196,
+          "count": 700
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.74025,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 16.187662,
+          "count": 700
+        },
+        "project.add_note": {
+          "ms": 0.476293,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 27.821541,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 81.22875,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 12.790917,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.638042,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 31.86147,
+          "count": 700
+        },
+        "artifact.retain": {
+          "ms": 0.224042,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.578458,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.838376,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 4.038667,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.978791,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 3.578875,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.561745,
+          "count": 700
+        }
+      }
+    }
+  },
+  {
+    "profile": "basic-mixed-shared-v2",
+    "default": {
+      "n": 5,
+      "median_ms": 76.397,
+      "samples_ms": [
+        72.985,
+        71.744,
+        76.397,
+        81.992,
+        79.582
+      ],
+      "rss_mib": 36.234375,
+      "stages": {
+        "normalize.core": {
+          "ms": 3.695458,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.747833,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 5.470536,
+          "count": 49
+        },
+        "identity.note_content": {
+          "ms": 2.432501,
+          "count": 1000
+        },
+        "media.import": {
+          "ms": 3.653082,
+          "count": 49
+        },
+        "snapshot.file": {
+          "ms": 3.57046,
+          "count": 49
+        },
+        "identity.prepare": {
+          "ms": 0.417125,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.295708,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 13.516667,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.053,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.368333,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 41.347875,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 66.292209,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.074583,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.445292,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.741916,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 15.431083,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 6.099,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.957583,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 1.778084,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 8.498125,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.39175,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 57.31875,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.485292,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 19.047333,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 0.842417,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 0.983253,
+          "count": 49
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.836208,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 0.002249,
+          "count": 49
+        },
+        "project.add_note": {
+          "ms": 0.483732,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 13.514166,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 3.725,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 1.334875,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.035,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 0.022209,
+          "count": 49
+        },
+        "artifact.retain_sync": {
+          "ms": 8.515958,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 9.439208,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.750667,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.312958,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 2.6335,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.912833,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.235375,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.028668,
+          "count": 49
+        }
+      }
+    },
+    "reader_cache": {
+      "n": 5,
+      "median_ms": 76.071,
+      "samples_ms": [
+        76.071,
+        85.321,
+        73.79,
+        76.802,
+        73.891
+      ],
+      "rss_mib": 36.359375,
+      "stages": {
+        "normalize.core": {
+          "ms": 3.736208,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.7995,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 5.303246,
+          "count": 49
+        },
+        "identity.note_content": {
+          "ms": 2.442087,
+          "count": 1000
+        },
+        "media.import": {
+          "ms": 3.430502,
+          "count": 49
+        },
+        "snapshot.file": {
+          "ms": 3.354834,
+          "count": 49
+        },
+        "identity.prepare": {
+          "ms": 0.392625,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.249917,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 13.416,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.051333,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.339958,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 40.26925,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 66.316,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.210291,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.504917,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.734666,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 15.406583,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 6.397708,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.873042,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 1.751417,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.752125,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 5.09275,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 56.015167,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.665542,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 18.819042,
+          "count": 1
+        },
+        "snapshot.cached_reader": {
+          "ms": 0.003916,
+          "count": 49
+        },
+        "adapter.parse": {
+          "ms": 0.821291,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 0.906417,
+          "count": 49
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.567958,
+          "count": 1
+        },
+        "project.add_note": {
+          "ms": 0.472608,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 13.412875,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 3.494875,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 1.260833,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.038209,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 0.020795,
+          "count": 49
+        },
+        "artifact.retain_sync": {
+          "ms": 9.002375,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 9.297458,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.594375,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.412167,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 2.491417,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.785542,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.227959,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.027205,
+          "count": 49
+        }
+      }
+    },
+    "canonical": {
+      "n": 5,
+      "median_ms": 80.872,
+      "samples_ms": [
+        80.872,
+        71.06,
+        75.878,
+        84.727,
+        82.538
+      ],
+      "rss_mib": 34.8125,
+      "stages": {
+        "normalize.core": {
+          "ms": 3.702458,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 1.91325,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 5.434749,
+          "count": 49
+        },
+        "identity.note_content": {
+          "ms": 2.498609,
+          "count": 1000
+        },
+        "media.import": {
+          "ms": 3.487463,
+          "count": 49
+        },
+        "snapshot.file": {
+          "ms": 3.414547,
+          "count": 49
+        },
+        "identity.prepare": {
+          "ms": 0.389709,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.241792,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 12.87975,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.051708,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 6.712375,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 45.178334,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 70.242333,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.175333,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.476583,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.634458,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 14.559584,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 6.16075,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.881375,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 1.782708,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 9.101916,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 4.591209,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 60.859042,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.440792,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 18.283042,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 0.825667,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 1.0125,
+          "count": 49
+        },
+        "artifact.final_directory_sync": {
+          "ms": 3.800083,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 0.002207,
+          "count": 49
+        },
+        "project.add_note": {
+          "ms": 0.457012,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 12.876792,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 3.557167,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 1.235417,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.0365,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 0.020164,
+          "count": 49
+        },
+        "artifact.retain_sync": {
+          "ms": 12.540875,
+          "count": 1
+        },
+        "artifact.retain": {
+          "ms": 12.846167,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.579084,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 0.709292,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 2.763208,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.815041,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.275958,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.027498,
+          "count": 49
+        }
+      }
+    },
+    "skip_retain": {
+      "n": 5,
+      "median_ms": 73.391,
+      "samples_ms": [
+        70.346,
+        70.369,
+        73.391,
+        74.987,
+        75.012
+      ],
+      "rss_mib": 36.28125,
+      "stages": {
+        "normalize.core": {
+          "ms": 3.714833,
+          "count": 1
+        },
+        "identity.envelope": {
+          "ms": 2.711875,
+          "count": 1
+        },
+        "media.prepare_one": {
+          "ms": 5.349337,
+          "count": 49
+        },
+        "identity.note_content": {
+          "ms": 2.412083,
+          "count": 1000
+        },
+        "media.import": {
+          "ms": 3.509498,
+          "count": 49
+        },
+        "snapshot.file": {
+          "ms": 3.430835,
+          "count": 49
+        },
+        "identity.prepare": {
+          "ms": 0.397959,
+          "count": 1
+        },
+        "writer.preflight": {
+          "ms": 0.259417,
+          "count": 1
+        },
+        "inspect.native": {
+          "ms": 13.440333,
+          "count": 1
+        },
+        "writer.media_invariants": {
+          "ms": 0.052875,
+          "count": 1
+        },
+        "identity.validate": {
+          "ms": 7.290875,
+          "count": 1
+        },
+        "candidate.generate": {
+          "ms": 31.959875,
+          "count": 1
+        },
+        "project.build": {
+          "ms": 60.402125,
+          "count": 1
+        },
+        "writer.collection": {
+          "ms": 9.407167,
+          "count": 1
+        },
+        "media.preparation_workers": {
+          "ms": 0.0,
+          "count": 4
+        },
+        "inspect.collection": {
+          "ms": 2.529333,
+          "count": 1
+        },
+        "adapter.notes": {
+          "ms": 1.673625,
+          "count": 1
+        },
+        "writer.apkg": {
+          "ms": 15.675959,
+          "count": 1
+        },
+        "normalize.total": {
+          "ms": 6.186292,
+          "count": 1
+        },
+        "identity.bind": {
+          "ms": 2.907625,
+          "count": 1
+        },
+        "media.prepare_all": {
+          "ms": 1.712125,
+          "count": 1
+        },
+        "artifact.publish": {
+          "ms": 13.722959,
+          "count": 1
+        },
+        "artifact.final_file_sync": {
+          "ms": 7.311542,
+          "count": 1
+        },
+        "project.prepare": {
+          "ms": 47.634375,
+          "count": 1
+        },
+        "writer.populate_collection": {
+          "ms": 4.621958,
+          "count": 1
+        },
+        "writer.total": {
+          "ms": 19.106958,
+          "count": 1
+        },
+        "adapter.parse": {
+          "ms": 0.825875,
+          "count": 1
+        },
+        "media.archive_append": {
+          "ms": 0.886503,
+          "count": 49
+        },
+        "artifact.final_directory_sync": {
+          "ms": 4.990042,
+          "count": 1
+        },
+        "snapshot.reader": {
+          "ms": 0.002581,
+          "count": 49
+        },
+        "project.add_note": {
+          "ms": 0.460264,
+          "count": 1000
+        },
+        "inspect.facts": {
+          "ms": 13.436583,
+          "count": 1
+        },
+        "adapter.assets": {
+          "ms": 3.573583,
+          "count": 1
+        },
+        "inspect.media": {
+          "ms": 1.318,
+          "count": 1
+        },
+        "identity.media_history": {
+          "ms": 0.034792,
+          "count": 1
+        },
+        "snapshot.shared": {
+          "ms": 0.019541,
+          "count": 49
+        },
+        "artifact.retain": {
+          "ms": 0.236708,
+          "count": 1
+        },
+        "runtime.defaults": {
+          "ms": 2.632916,
+          "count": 1
+        },
+        "identity.checksum": {
+          "ms": 2.329125,
+          "count": 2
+        },
+        "writer.staging": {
+          "ms": 2.476167,
+          "count": 1
+        },
+        "project.document_bridge": {
+          "ms": 0.7945,
+          "count": 1
+        },
+        "adapter.cleanup": {
+          "ms": 0.204291,
+          "count": 1
+        },
+        "project.add_asset": {
+          "ms": 0.026878,
+          "count": 49
+        }
+      }
+    }
+  }
+]

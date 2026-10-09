@@ -1,42 +1,45 @@
 ---
 title: Your first Anki deck
-description: Build a Spanish flashcard from the Anki Forge source checkout, export an APKG file, and open it in Anki.
+description: Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.
 ---
 
 import CodeBlock from '../../../components/CodeBlock.astro';
 import { quickstartSource } from '../../../lib/examples';
 import { sitePath } from '../../../lib/site';
 
-This guide runs the repository’s minimal Rust example. You need Git, Rust 1.92 or later, and Anki to review the result.
+Use Rust 1.92 or later. For another language, choose
+<a href={sitePath('/docs/languages/')}>Node / TypeScript or Python</a>.
 
-## Run the example
+## Install
 
-```bash
-git clone https://github.com/morehardy/anki-forge.git
-cd anki-forge
-cargo run -q -p ankiforge --example target_api_basic
+```sh
+cargo new anki-deck
+cd anki-deck
+cargo add ankiforge@0.2.0
 ```
 
-The first run compiles the project and its dependencies. It writes `spanish.apkg` in the repository root. The following source is taken directly from `anki_forge/examples/target_api_basic.rs`:
+## Export your first deck
+
+Save this complete program as `src/main.rs`:
 
 <CodeBlock code={quickstartSource} />
 
-## Open the deck
+```sh
+cargo run
+```
 
-Open `spanish.apkg` with Anki, confirm the import, and open the **Spanish** deck. The card asks **hola**; reveal the answer to see **hello**.
+The program writes a persistent `spanish.apkg`. Open it in Anki, import it and
+study **hola → hello** in the **Spanish** deck. Exporting needs no Anki installation.
 
-You can also <a href={sitePath('/generated/spanish.apkg')}>download the website’s Basic example</a> to try the result before compiling.
+The namespace `spanish` and stable key `es:hola` identify this note through later
+content changes. You can also <a href={sitePath('/generated/spanish.apkg')}>download the website's Basic example</a>.
 
-## Read the code
+## Continue
 
-`Project::new("spanish")` creates a publication namespace; `default_deck("Spanish")` selects its display deck. `Note::basic` creates front and back fields, and `project.add("hola", note)` assigns a stable note key independent of wording.
-
-`project.build(BuildOptions::to(...))` returns a successful output with an artifact or a typed error. The `?` operator propagates failures. See <a href={sitePath('/docs/build-guarantees/')}>build and output guarantees</a> for reports and ownership.
-
-## Make it yours
-
-To use the library outside this checkout, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>. The <a href={sitePath('/docs/concepts/')}>core concepts</a> explain projects, notes, cards and owned resources.
-
-Add another note with a different stable ID, change the deck name, or try a <a href={sitePath('/examples/#cloze')}>Cloze example</a>. For custom fields and media, use the project API and <a href={sitePath('/docs/templates/')}>template bundles</a>.
-
-Before updating a deck that you have already distributed, keep a copy of the previous package. The <a href={sitePath('/docs/updates/')}>update guide</a> explains comparisons and updates from the original distributed APKG.
+Add <a href={sitePath('/docs/media/')}>images and audio</a>,
+<a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or
+<a href={sitePath('/docs/image-occlusion/')}>Image Occlusion</a>.
+Keep the original distribution APKG before
+<a href={sitePath('/docs/updates/')}>comparing and publishing an update</a>.
+Read the <a href={sitePath('/docs/rust-api/')}>Rust API</a> or
+<a href={sitePath('/docs/compatibility/')}>verified environments</a> for details.

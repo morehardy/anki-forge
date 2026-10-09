@@ -1,0 +1,9 @@
+{
+  "purpose": "Single-variable controls of active spool writer and snapshot-only nonblocking regular-file descriptor; default 4 MiB resident budget; frozen round3 source plus diagnostic spans.",
+  "profiles": ["basic-mixed-text-v1", "basic-image-unique-v2", "basic-audio-unique-v2", "basic-mixed-unique-v2", "basic-mixed-shared-v2"],
+  "modes": {
+    "default": {"binary": "import-probe"},
+    "writer": {"binary": "import-probe", "env": {"ANKIFORGE_ROUND4_WRITER": "1"}},
+    "nonblock": {"binary": "import-probe", "env": {"ANKIFORGE_ROUND4_NONBLOCK": "1"}}
+  }
+}

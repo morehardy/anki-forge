@@ -5,6 +5,198 @@ use crate::{BuildOptions, Note, Project};
 use zip::{write::SimpleFileOptions, ZipArchive, ZipWriter};
 
 #[test]
+fn collection_hash_tracks_accepted_short_writes_and_preserves_io_failures() {
+    struct ShortWriter {
+        bytes: Vec<u8>,
+        fail_after: usize,
+    }
+    impl Write for ShortWriter {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            if self.bytes.len() == self.fail_after {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::PermissionDenied,
+                    "collection write failed",
+                ));
+            }
+            let count = bytes.len().min(37).min(self.fail_after - self.bytes.len());
+            self.bytes.extend_from_slice(&bytes[..count]);
+            Ok(count)
+        }
+
+        fn flush(&mut self) -> std::io::Result<()> {
+            Err(std::io::Error::other("collection flush failed"))
+        }
+    }
+
+    for size in [0, 1, 65535, 65536, 65537, 3 * 65536 + 19] {
+        let bytes: Vec<u8> = (0..size).map(|index| (index * 31) as u8).collect();
+        let mut writer = CollectionWriter::new(
+            ShortWriter {
+                bytes: Vec::new(),
+                fail_after: usize::MAX,
+            },
+            true,
+        );
+        for chunk in bytes.chunks(777) {
+            writer.write_all(chunk).unwrap();
+        }
+        assert_eq!(writer.inner.bytes, bytes);
+        assert_eq!(writer.digest(), Some(blake3::hash(&bytes)));
+    }
+
+    let mut writer = CollectionWriter::new(
+        ShortWriter {
+            bytes: Vec::new(),
+            fail_after: 101,
+        },
+        true,
+    );
+    let error = writer.write_all(&[7; 200]).unwrap_err();
+    assert_eq!(error.kind(), std::io::ErrorKind::PermissionDenied);
+    assert_eq!(error.to_string(), "collection write failed");
+    assert_eq!(writer.inner.bytes, vec![7; 101]);
+    assert_eq!(writer.digest(), Some(blake3::hash(&[7; 101])));
+    assert_eq!(
+        writer.flush().unwrap_err().to_string(),
+        "collection flush failed"
+    );
+
+    let mut unneeded = CollectionWriter::new(Vec::new(), false);
+    unneeded.write_all(b"ordinary observations").unwrap();
+    assert_eq!(unneeded.inner, b"ordinary observations");
+    assert_eq!(unneeded.digest(), None);
+}
+
+#[test]
+fn native_collection_hash_covers_all_frames_with_unchanged_decoded_budgets() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("native-frames.apkg");
+    let mut project = Project::new("native-collection-frames").unwrap();
+    project
+        .add("note", Note::basic("q".repeat(90000), "answer"))
+        .unwrap();
+    project.build(BuildOptions::to(&path)).unwrap();
+    let original = entries(&path);
+    let entry = |name: &str| {
+        original
+            .iter()
+            .find(|(candidate, _)| candidate == name)
+            .unwrap()
+            .1
+            .as_slice()
+    };
+    let sqlite = zstd::decode_all(entry("collection.anki21b")).unwrap();
+    let sqlite_path = root.path().join("reference.sqlite");
+    fs::write(&sqlite_path, &sqlite).unwrap();
+    let expected_digest = crate::build::identity::file_hash(&sqlite_path).unwrap();
+    let total = (entry("ankiforge-identity.json").len()
+        + entry("meta").len()
+        + zstd::decode_all(entry("media")).unwrap().len()
+        + sqlite.len()) as u64;
+    let (first, second) = sqlite.split_at(sqlite.len() / 2);
+    let first = zstd::encode_all(first, 0).unwrap();
+    let second = zstd::encode_all(second, 0).unwrap();
+    let mut skippable = 0x184d_2a50_u32.to_le_bytes().to_vec();
+    skippable.extend_from_slice(&7_u32.to_le_bytes());
+    skippable.extend_from_slice(b"skipped");
+    for encoded in [
+        entry("collection.anki21b").to_vec(),
+        [first.as_slice(), second.as_slice()].concat(),
+        [first.as_slice(), skippable.as_slice(), second.as_slice()].concat(),
+    ] {
+        replace_entry(&path, "collection.anki21b", Some(encoded));
+        let exact = InspectLimits {
+            max_collection_bytes: sqlite.len() as u64,
+            max_decoded_total_bytes: total,
+            ..InspectLimits::default()
+        };
+        let (summary, identity) = inspect_native_package(&path, &exact).unwrap();
+        assert_eq!((summary.notes, summary.cards), (1, 1));
+        assert_eq!(identity.collection_blake3, expected_digest);
+        for (limits, resource) in [
+            (
+                InspectLimits {
+                    max_collection_bytes: exact.max_collection_bytes - 1,
+                    ..exact.clone()
+                },
+                "collection_bytes",
+            ),
+            (
+                InspectLimits {
+                    max_decoded_total_bytes: total - 1,
+                    ..exact.clone()
+                },
+                "decoded_total_bytes",
+            ),
+        ] {
+            let error = inspect_native_package(&path, &limits).unwrap_err();
+            let limit = error.limit_exceeded().unwrap();
+            assert_eq!(limit.resource, resource);
+            assert_eq!(limit.entry.as_deref(), Some("collection.anki21b"));
+        }
+    }
+}
+
+#[test]
+fn native_collection_hash_keeps_archive_and_identity_error_precedence() {
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("native-priority.apkg");
+    let mut project = Project::new("native-collection-priority").unwrap();
+    project
+        .add("note", Note::basic("question", "answer"))
+        .unwrap();
+    project.build(BuildOptions::to(&path)).unwrap();
+    let original = entries(&path);
+    let identity_bytes = &original
+        .iter()
+        .find(|(name, _)| name == "ankiforge-identity.json")
+        .unwrap()
+        .1;
+    let collection = &original
+        .iter()
+        .find(|(name, _)| name == "collection.anki21b")
+        .unwrap()
+        .1;
+    let mut identity: Value = serde_json::from_slice(identity_bytes).unwrap();
+    identity["format_version"] = "future-format".into();
+    identity["collection_blake3"] = "0".repeat(64).into();
+    identity["identity_blake3"] = "0".repeat(64).into();
+    replace_entry(
+        &path,
+        "ankiforge-identity.json",
+        Some(serde_json::to_vec(&identity).unwrap()),
+    );
+    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
+    assert!(error.to_string().contains("unsupported identity format"));
+
+    let error = inspect_native_package(
+        &path,
+        &InspectLimits {
+            max_collection_bytes: 0,
+            ..InspectLimits::default()
+        },
+    )
+    .unwrap_err();
+    assert_eq!(error.limit_exceeded().unwrap().resource, "collection_bytes");
+
+    replace_entry(&path, "collection.anki21b", Some(b"not zstd".to_vec()));
+    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
+    assert!(error.to_string().contains("invalid zstd frame magic"));
+
+    replace_entry(&path, "collection.anki21b", Some(collection.clone()));
+    identity["format_version"] = "ankiforge-identity-v1".into();
+    replace_entry(
+        &path,
+        "ankiforge-identity.json",
+        Some(serde_json::to_vec(&identity).unwrap()),
+    );
+    let error = inspect_native_package(&path, &InspectLimits::default()).unwrap_err();
+    assert!(error
+        .to_string()
+        .contains("collection digest does not match identity evidence"));
+}
+
+#[test]
 fn media_hash_streams_bounded_blocks_and_resets_between_files() {
     let (sender, jobs) = std::sync::mpsc::sync_channel(1);
     let (done, receiver) = std::sync::mpsc::sync_channel(1);

@@ -129,10 +129,10 @@ Main outputs:
 
 ## Node and Python development
 
-See the [Node SDK development commands](../bindings/node/README.md#develop-and-verify)
+See the [Node SDK development commands](../bindings/node/RELEASING.md)
 for building the native addon and testing installed packages.
 
-The [Python setup guide](../bindings/python/README.md#from-a-source-checkout)
+The [Python setup guide](#source-builds)
 builds the native extension with Maturin. Use a CPython 3.11/3.12 virtual
 environment; PYTHONPATH alone does not build the extension.
 
@@ -175,7 +175,7 @@ on `PATH`:
 | Failure | Action |
 | --- | --- |
 | Cannot discover `contracts/manifest.yaml` | Run repository tools from this checkout, with an explicit manifest. The normal Rust API embeds its contracts. |
-| Python native extension unavailable | Install a matching native wheel or run `maturin develop` in a venv. See [Python setup](../bindings/python/README.md#from-a-source-checkout). |
+| Python native extension unavailable | Install a matching native wheel or run `maturin develop` in a venv. See [Python setup](#source-builds). |
 | Missing upstream Anki crate | Provide the local Anki source checkout for the roundtrip oracle. |
 | `protoc is required on PATH` | Install `protoc` before running the roundtrip oracle. |
 
@@ -187,3 +187,7 @@ on `PATH`:
   [release runbook](rust-release-runbook.md)
 - [Node release procedure](../bindings/node/RELEASING.md)
 - [Benchmark methodology and reproduction](../benchmarks/README.md)
+
+## Source builds
+
+For consuming the SDKs from a pinned checkout, see [Build SDKs from source](source-builds.md).

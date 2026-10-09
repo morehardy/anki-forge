@@ -1,0 +1,72 @@
+diff --git a/benchmarks/.gitignore b/benchmarks/.gitignore
+index a6453d0..7ac16b1 100644
+--- a/benchmarks/.gitignore
++++ b/benchmarks/.gitignore
+@@ -21,6 +21,11 @@ results/*
+ !results/20261002-spool-genanki/
+ !results/20261002-reader-cache-genanki/
+ !results/20261002-active-writer-genanki/
++!results/20261003-post-commit-diagnosis/
++!results/20261003-optimization-paths/
+ adapters/rust/target/
+ __pycache__/
++!results/20261003-structural-dataflow/
++!results/20261003-structural-genanki/
++!results/20261003-next-directions/
+ !results/20261003-publication-implementation/
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index e6d2705..68a8d02 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -52,6 +52,51 @@ private candidate and collection hashing during inspection. It retains separate
+ controls for source opening, snapshot budgets and hashing, plus bounded-FD,
+ failure, ownership and publication regression evidence.
+ 
++The [post-commit diagnosis](results/20261003-post-commit-diagnosis/report.md)
++examines the committed runtime with fresh stage measurements, an inspection
++hashing control and a borrowed identity-serialization candidate. All 330 exports
++and 35 selected Anki checks passed. Serial inspection was slower; the identity
++candidate remains experimental because its overall timing and RSS evidence did
++not establish a reliable benefit. Production code remains at `eb4b463`.
++
++The [optimization-path exploration](results/20261003-optimization-paths/report.md)
++isolates nine candidates and tests a combined identity/SQLite candidate. All
++690 diagnostic exports and 74 selected Anki checks passed; separate duplicate-byte
++and ID microbenchmarks are retained with their narrower scope. Borrowed identity,
++ID derivation and SQLite connection reuse reduce local work, but combined export
++timing remains inconclusive. Thread, PNG and memory-digest controls did not show
++a reliable general improvement. Production code and the formal matrix are unchanged.
++
++The [structural dataflow experiments](results/20261003-structural-dataflow/report.md)
++remove an unused native legacy mirror, move temporary HTML ownership, reuse local
++card plans and omit an unconsumed native package fingerprint. All 460 exports and
++49 selected Anki checks passed; a separate 16-export Cloze workload passed raw and
++semantic checks without Anki. Uninstrumented confirmation shows about 2.2–4.4 MiB
++paired RSS savings on standard profiles and 43.3 MiB on wide text. Standard timing
++intervals still cross zero; wide text shows a roughly 36.2 ms paired saving.
++Candidates remain experimental; production and the historical matrix are unchanged.
++
++The [production structural rerun](results/20261003-structural-genanki/report.md)
++implements those four dataflow changes with no public API changes or experimental
++switches. Its single complete matrix retains 840 validated exports, 40 actual Anki
++checks and 10 timings/5 independent RSS samples per implementation/cell. All 20
++Rust timing medians remain above Sep 21; at 1,000 notes they are 7.3–19.9% higher.
++Independent RSS at 1,000 notes is 8.1–9.7% lower than the preceding implementation's
++archive. These are separate sessions; the report does not attribute their full
++differences to code. Sources, the uncommitted patch, regression evidence and offline
++replay are retained.
++
++The [five-direction exploration](results/20261003-next-directions/report.md)
++tests isolated staging omission, collection-to-ZIP streaming, Node project COW,
++prepared candidate reuse and early duplicate-byte lookup against same-executable
++controls. All 576 formal artifacts and 44 selected Anki checks passed, with 433
++Rust library tests. No-change compare-then-publish reuse reduced total medians
++36.3–46.6%; Node improved synchronous submission latency, wide fields benefited
++from staging omission, and repeated large bytes benefited from early lookup.
++Collection-only ZIP streaming had no established speed benefit. The report keeps
++paired uncertainty, independent RSS regressions, preparation failures, complete
++sources and replayable records. These candidates remain isolated from production.
++
+ ## Archived Rust/genanki comparison: 2026-09-21
+ 
+ The [archived report](results/20260921-readme-genanki/report.md) measures the

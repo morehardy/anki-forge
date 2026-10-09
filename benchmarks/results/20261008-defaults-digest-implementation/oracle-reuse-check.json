@@ -1,0 +1,31 @@
+{
+  "reference": "benchmarks/results/20261008-media-defaults-genanki/oracle-reuse-check.json",
+  "verified_prior_provenance": {
+    "reference": "benchmarks/results/20260921-readme-genanki/source-snapshot.json",
+    "oracle_sha256": "539b9a01a623d3cf905cdd3a81871630af3565f9a03f08574571f79f1607c1d6",
+    "checker_source_sha256": "bd2cbd5990564bc90b0ddfddb143903a05d35c3f0d9fc1de1ffa29c8e0fb623b",
+    "upstream_revision": "2d44d4d6bc486803f9236033ad840df203c87036",
+    "upstream_patch": "diff --git a/Cargo.toml b/Cargo.toml\nindex 2566a48f1..38ef681ef 100644\n--- a/Cargo.toml\n+++ b/Cargo.toml\n@@ -130,7 +130,7 @@ syn = { version = \"2.0.103\", features = [\"parsing\", \"printing\"] }\n tar = \"0.4.44\"\n tempfile = \"3.20.0\"\n termcolor = \"1.4.1\"\n-tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\"] }\n+tokio = { version = \"1.45\", features = [\"fs\", \"rt-multi-thread\", \"macros\", \"signal\", \"io-util\"] }\n tokio-util = { version = \"0.7.15\", features = [\"io\"] }\n tower-http = { version = \"0.6.6\", features = [\"trace\"] }\n tracing = { version = \"0.1.41\", features = [\"max_level_trace\", \"release_max_level_debug\"] }",
+    "upstream_revision_matches": true,
+    "upstream_patch_matches": true,
+    "rebuilt_from_current_source": false,
+    "build_provenance_verified": true,
+    "observation_note": "Reused the exact Oct 04 Anki oracle executable after checking SHA, every recorded checker source/lock file and upstream revision/patch. Initial offline rebuild could not write a missing git dependency checkout in the sandbox; failure retained in prepare-initial-failure.log. Other tools freshly rebuilt; existing oracle build provenance verified.",
+    "preceding_oracle_sha256": "5488d75f7462fa9981ae0effed2ff6c4182a160df87ec4bebd9c15192019c025",
+    "checker_files_verified": {
+      "scripts/roundtrip_oracle/.DS_Store": "5a70ab92a1db8c7ded16196ae5cab7f6788c91dce31a11f1418371df5edd733e",
+      "scripts/roundtrip_oracle/.gitignore": "306fd52e74fca6746e12acc750f232de15e71da917756a1270d74c91f5eb7368",
+      "scripts/roundtrip_oracle/Cargo.lock": "56937233759aeab18d3472d321d640a5b7cff7885fa167befed6202c45073b49",
+      "scripts/roundtrip_oracle/Cargo.toml": "3708395cf2ef12a4509b6cb7b0115d3a5635c547016913e7ee6cf70e965ac014",
+      "scripts/roundtrip_oracle/README.md": "dc80c8bf1c25cf0977deae73646aefadc8b0261fc796c6c05cc1d59cda282450",
+      "scripts/roundtrip_oracle/RESULTS.md": "c4b3772056b23c18ff7511d70f73d0b6bbc8daa57feab40ccce001a1cd2c0cb9",
+      "scripts/roundtrip_oracle/src/bin/benchmark_oracle.rs": "bd2cbd5990564bc90b0ddfddb143903a05d35c3f0d9fc1de1ffa29c8e0fb623b",
+      "scripts/roundtrip_oracle/src/bin/readme_render.rs": "ef445cab8d6002dff53b8ebd4f5a1ae8e37a9d9ca8cff95bf0942f93f004dea5",
+      "scripts/roundtrip_oracle/src/main.rs": "ad3b3f02db92c8493962f58598f5b4e2c08cd241819ae8d403d6721a415e68a7"
+    },
+    "reused_verified_executable": true
+  },
+  "binary_sha256": "539b9a01a623d3cf905cdd3a81871630af3565f9a03f08574571f79f1607c1d6",
+  "all_recorded_checker_files_match": true,
+  "rebuilt": false
+}

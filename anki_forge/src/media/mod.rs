@@ -5,6 +5,7 @@
 //! final owner. Construct an export name before placing media in content.
 
 pub(crate) mod assets;
+mod batch;
 mod error;
 mod snapshot;
 mod usage;
@@ -19,6 +20,7 @@ use crate::authoring_core::{
     media::mime_type_subtype_compatible,
     media_io::{sniff_mime, MediaSniffConfidence},
 };
+pub(crate) use snapshot::ReaderCache;
 use snapshot::Snapshot;
 use std::{path::Path, sync::Arc};
 

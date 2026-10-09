@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    "basic-mixed-text-v1",
+    "basic-image-unique-v2",
+    "basic-audio-unique-v2",
+    "basic-mixed-unique-v2",
+    "basic-mixed-shared-v2"
+  ],
+  "notes": 1000,
+  "modes": {
+    "before": {},
+    "after": {}
+  },
+  "warmup_repeats": 3,
+  "timing_repeats": 10,
+  "expected_exports": 130,
+  "expected_anki_checks": 10,
+  "schedule_seed": 20261003,
+  "binary_sha256": {
+    "before": "bce3b8e5317583d931188fd46c8f48f3e19760ac1cfb97f5ad3f443c932aad58",
+    "after": "3c9588a104bddcf114a5be389d542b6bd9899cd52e1c1c2e1b21d5004919b864"
+  },
+  "purpose": "Predeclared 1,000-note same-host confirmation of preceding optimized versus final shared-spool runtime; 3 warmups/10 timings, 5 before-first and 5 after-first pairs per profile; retained separately from the full matrix."
+}

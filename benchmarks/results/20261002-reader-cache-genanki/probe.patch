@@ -1,0 +1,452 @@
+Only in /Users/hp/Desktop/2026/anki-forge/anki_forge/src: .DS_Store
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/authoring_core/normalize.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/authoring_core/normalize.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/authoring_core/normalize.rs	2026-09-24 20:55:23
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/authoring_core/normalize.rs	2026-10-02 20:41:23
+@@ -71,6 +71,7 @@
+     prepared: Option<&mut crate::prepared_media::PreparedMedia>,
+     io_cause: &mut Option<std::io::Error>,
+ ) -> NormalizationResult {
++ let _diagnostic_scope=crate::diag::Scope::new("normalize.core");
+     let risk_policy_ref = request
+         .comparison_context
+         .as_ref()
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/artifact.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/artifact.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/artifact.rs	2026-10-02 17:38:07
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/artifact.rs	2026-10-02 20:41:23
+@@ -47,6 +47,7 @@
+     }
+ 
+     pub(crate) fn temporary_from_candidate(candidate: &Path) -> io::Result<Self> {
++ let _diagnostic_scope=crate::diag::Scope::new("artifact.retain");
+         let file = tempfile::Builder::new()
+             .prefix("anki-forge-artifact-")
+             .suffix(".apkg")
+@@ -147,11 +148,14 @@
+     if let Some(parent) = target.parent().filter(|path| !path.as_os_str().is_empty()) {
+         std::fs::create_dir_all(parent)?;
+     }
++    if std::env::var_os("ANKIFORGE_DIAG_SKIP_RETAIN_SYNC").is_none() {
++        let _sync_scope=crate::diag::Scope::new("artifact.retain_sync");
+     std::fs::OpenOptions::new()
+         .read(true)
+         .write(true)
+         .open(candidate)?
+         .sync_all()?;
++    }
+     match std::fs::rename(candidate, target) {
+         Ok(()) => Ok(()),
+         Err(error) if error.kind() == io::ErrorKind::CrossesDevices => {
+@@ -185,6 +189,7 @@
+     target: &Path,
+     move_source: bool,
+ ) -> Result<PublicationSnapshot, PersistError> {
++ let _diagnostic_scope=crate::diag::Scope::new("artifact.publish");
+     let mut facts = publication(target);
+     if target.as_os_str().is_empty() {
+         return Err(PersistError::new(
+@@ -202,11 +207,10 @@
+         let directories = directories_to_sync(parent)?;
+         std::fs::create_dir_all(parent)?;
+         let moved = if move_source {
+-            std::fs::OpenOptions::new()
+-                .read(true)
+-                .write(true)
+-                .open(source)?
+-                .sync_all()?;
++            {
++                let _sync_scope=crate::diag::Scope::new("artifact.final_file_sync");
++                std::fs::OpenOptions::new().read(true).write(true).open(source)?.sync_all()?;
++            }
+             match std::fs::rename(source, target) {
+                 Ok(()) => true,
+                 Err(error) if error.kind() == io::ErrorKind::CrossesDevices => false,
+@@ -230,6 +234,7 @@
+             for directory in directories {
+                 #[cfg(test)]
+                 directory_sync_failure::check(&directory)?;
++                let _sync_scope=crate::diag::Scope::new("artifact.final_directory_sync");
+                 std::fs::File::open(directory)?.sync_all()?;
+             }
+             facts.durability = Durability::Confirmed;
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/candidate.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/candidate.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/candidate.rs	2026-10-02 17:34:24
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/candidate.rs	2026-10-02 20:41:23
+@@ -17,6 +17,7 @@
+     inputs: &Path,
+     mut identity: PackageIdentity,
+ ) -> Result<(ApkgArtifact, BuildReport), BuildError> {
++ let _diagnostic_scope=crate::diag::Scope::new("candidate.generate");
+     let media_store = inputs.join("media-store");
+     let mut prepared_media = if project.assets.values().next().is_some() {
+         let mut prepared =
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/content.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/content.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/content.rs	2026-10-02 17:33:17
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/content.rs	2026-10-02 20:41:23
+@@ -207,6 +207,7 @@
+         fields: &str,
+         tags: &str,
+     ) -> anyhow::Result<(String, Vec<u32>)> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.note_content");
+         if let std::collections::btree_map::Entry::Vacant(entry) = self.template_decks.entry(model)
+         {
+             entry.insert(
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/reconcile.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/reconcile.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/reconcile.rs	2026-09-27 13:54:11
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/reconcile.rs	2026-10-02 20:41:23
+@@ -5,6 +5,7 @@
+         project: &Project,
+         baseline: Option<&PackageIdentity>,
+     ) -> Result<Self, BuildError> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.prepare");
+         let fresh = Self::create(project)?;
+         let Some(baseline) = baseline else {
+             return Ok(fresh);
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/validation.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/validation.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity/validation.rs	2026-10-02 17:33:17
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity/validation.rs	2026-10-02 20:41:23
+@@ -44,6 +44,7 @@
+ 
+ impl IdentityEnvelope {
+     fn validate_media_history(&self) -> anyhow::Result<()> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.media_history");
+         use crate::media::{assets::filename_identity, validate_name};
+ 
+         // Retired payloads cannot be re-read from this archive. Their intrinsic
+@@ -86,6 +87,7 @@
+     }
+ 
+     pub(crate) fn validate(&self, collection: &std::path::Path) -> anyhow::Result<()> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.validate");
+         ensure!(
+             self.format_version == "ankiforge-identity-v1",
+             "unsupported identity format"
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/identity.rs	2026-09-27 13:54:11
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/identity.rs	2026-10-02 20:41:23
+@@ -188,6 +188,7 @@
+         project: &Project,
+         normalized: &mut NormalizedIr,
+     ) -> Result<(), BuildError> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.bind");
+         let decks = crate::writer_core::staging::resolve_deck_registry(normalized);
+         for model in &mut normalized.notetypes {
+             let key = model.id.strip_prefix("model:").ok_or_else(invalid_plan)?;
+@@ -334,6 +335,7 @@
+         collection: &Path,
+         normalized: &NormalizedIr,
+     ) -> anyhow::Result<Vec<u8>> {
++ let _diagnostic_scope=crate::diag::Scope::new("identity.envelope");
+         let objects: BTreeMap<_, _> = normalized
+             .media_objects
+             .iter()
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/normalize.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/normalize.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/normalize.rs	2026-10-02 17:32:46
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/normalize.rs	2026-10-02 20:41:23
+@@ -39,6 +39,7 @@
+     media_store_dir: &Path,
+     prepared_media: Option<&mut crate::prepared_media::PreparedMedia>,
+ ) -> Result<NormalizeOutput, NormalizeError> {
++ let _diagnostic_scope=crate::diag::Scope::new("normalize.total");
+     let lowering = document.lower().map_err(|error| NormalizeError {
+         message: "lower authored content".into(),
+         diagnostics: map_product_lowering_error(&error),
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/pipeline.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/pipeline.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/build_api/pipeline.rs	2026-10-02 17:32:46
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/build_api/pipeline.rs	2026-10-02 20:41:23
+@@ -15,6 +15,7 @@
+     /// Builds and inspects an APKG using the explicit output request. Successful
+     /// output always owns an artifact; a report alone never represents success.
+     pub fn build(&self, options: BuildOptions) -> Result<BuildOutput, BuildError> {
++ let _diagnostic_scope=crate::diag::Scope::new("project.build");
+         let started = Instant::now();
+         let mut result = self.build_and_publish(options);
+         let elapsed = started.elapsed();
+@@ -159,6 +160,7 @@
+             super::identity::IdentityEnvelope,
+         )>,
+     ) -> Result<(super::ApkgArtifact, super::BuildReport), BuildError> {
++ let _diagnostic_scope=crate::diag::Scope::new("project.prepare");
+         let identity = super::identity::PackageIdentity::prepare(
+             self,
+             baseline.as_ref().map(|(_, envelope)| &envelope.identity),
+@@ -174,6 +176,7 @@
+                 )
+                 .caused_by(cause)
+             })?;
++        let _bridge_scope=crate::diag::Scope::new("project.document_bridge");
+         let mut media = Vec::new();
+         for asset in self.assets.values() {
+             media.push(ProductMediaV2 {
+@@ -307,6 +310,7 @@
+                 transport_diagnostics: Vec::new(),
+             },
+         );
++        drop(_bridge_scope);
+         let (candidate, mut report) =
+             super::candidate::generate(self, &document, inputs.path(), identity)?;
+         let (inspected, envelope) = crate::writer_core::inspect::inspect_native_package(
+Only in /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src: diag.rs
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/lib.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/lib.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/lib.rs	2026-09-27 13:54:11
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/lib.rs	2026-10-02 20:41:23
+@@ -53,3 +53,6 @@
+ #[cfg(all(test, feature = "internal-tools"))]
+ #[path = "../tests/internal/mod.rs"]
+ mod internal_tests;
++
++#[allow(missing_docs)]
++pub mod diag;
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/mod.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/mod.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/mod.rs	2026-09-28 13:54:25
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/mod.rs	2026-10-02 20:41:23
+@@ -76,6 +76,7 @@
+         path: impl AsRef<Path>,
+         limits: MediaLimits,
+     ) -> Result<Self, MediaError> {
++ let _diagnostic_scope=crate::diag::Scope::new("media.import");
+         let path = path.as_ref();
+         let (snapshot, sample) =
+             Snapshot::file(path, limits).map_err(|error| error.at_path(path))?;
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/snapshot/spool.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/snapshot/spool.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/snapshot/spool.rs	2026-10-02 19:09:00
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/snapshot/spool.rs	2026-10-02 20:41:23
+@@ -47,6 +47,7 @@
+     // The process-local snapshot cache serializes append operations. No file
+     // descriptor or strong storage owner remains in the cache between calls.
+     pub(super) fn store(&mut self, bytes: &[u8]) -> io::Result<Segment> {
++ let _diagnostic_scope=crate::diag::Scope::new("spool.store");
+         let existing = self
+             .current
+             .upgrade()
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/snapshot.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/snapshot.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/media/snapshot.rs	2026-10-02 18:54:12
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/media/snapshot.rs	2026-10-02 20:41:23
+@@ -14,7 +14,6 @@
+ mod spool;
+ 
+ const MEMORY_THRESHOLD: usize = 1024 * 1024;
+-const MEMORY_BUDGET: usize = 4 * MEMORY_THRESHOLD;
+ const BUFFER_BYTES: usize = 64 * 1024;
+ pub(super) const SAMPLE_BYTES: usize = 8192;
+ 
+@@ -109,6 +108,7 @@
+ 
+ impl Snapshot {
+     fn shared(mut self) -> Result<Arc<Self>, MediaError> {
++ let _diagnostic_scope=crate::diag::Scope::new("snapshot.shared");
+         let Some(mut entries) = SNAPSHOTS.lock(self.process) else {
+             self.spill_memory()?;
+             return Ok(Arc::new(self));
+@@ -119,7 +119,7 @@
+             return Ok(existing);
+         }
+         let used = SNAPSHOTS.memory_bytes.load(Ordering::Relaxed);
+-        if used.saturating_add(self.memory_bytes()) > MEMORY_BUDGET {
++        if used.saturating_add(self.memory_bytes()) > crate::diag::snapshot_budget() {
+             if let Storage::Memory(bytes) = &self.storage {
+                 self.storage = Storage::Segment(
+                     cache
+@@ -146,12 +146,15 @@
+     }
+ 
+     fn spill_memory(&mut self) -> Result<(), MediaError> {
++ let _diagnostic_scope=crate::diag::Scope::new("snapshot.spill");
+         if let Storage::Memory(bytes) = &self.storage {
+             if !bytes.is_empty() {
+                 let mut file = tempfile::NamedTempFile::new()
+                     .map_err(|error| MediaError::io("create media snapshot", error))?;
+                 file.write_all(bytes)
+                     .map_err(|error| MediaError::io("write media snapshot", error))?;
++                crate::diag::count("snapshot.spilled_files",1);
++                crate::diag::count("snapshot.spilled_bytes",bytes.len() as u64);
+                 self.storage = Storage::File(file.into_temp_path());
+             }
+         }
+@@ -185,6 +188,7 @@
+         path: &Path,
+         limits: MediaLimits,
+     ) -> Result<(Arc<Self>, Vec<u8>), MediaError> {
++ let _diagnostic_scope=crate::diag::Scope::new("snapshot.file");
+         // Reject invalid inputs early. open_source also checks the descriptor
+         // and prevents a replacement FIFO from blocking between these steps.
+         let metadata =
+@@ -247,6 +251,7 @@
+     }
+ 
+     pub(crate) fn reader(&self) -> Result<impl Read + Seek + Send + '_, MediaError> {
++ let _diagnostic_scope=crate::diag::Scope::new("snapshot.reader");
+         match &self.storage {
+             Storage::Memory(bytes) => Ok(Reader::Memory(Cursor::new(bytes.as_slice()))),
+             Storage::Segment(segment) => segment
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/prepared_media.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/prepared_media.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/prepared_media.rs	2026-10-02 17:34:24
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/prepared_media.rs	2026-10-02 20:41:23
+@@ -82,6 +82,7 @@
+         items: &[AuthoringMedia],
+         options: &NormalizeOptions,
+     ) -> Vec<Option<Result<IngestedMediaBytes, MediaIngestError>>> {
++ let _diagnostic_scope=crate::diag::Scope::new("media.prepare_all");
+         let mut seen = BTreeSet::new();
+         let mut jobs = items
+             .iter()
+@@ -104,13 +105,14 @@
+             return ingested;
+         }
+         let pool = PayloadPool::new();
+-        let workers = if jobs.len() < 16 {
++        let workers = if std::env::var_os("ANKIFORGE_DIAG_SERIAL_MEDIA").is_some() || jobs.len() < 16 {
+             1
+         } else {
+             std::thread::available_parallelism()
+                 .map_or(1, usize::from)
+                 .min(MAX_WORKERS)
+         };
++        crate::diag::count("media.preparation_workers",workers as u64);
+         let mut archive = self
+             .archive
+             .get_mut()
+@@ -125,6 +127,7 @@
+              result: Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError>| {
+                 let item = &items[index];
+                 ingested[index] = Some(result.and_then(|(metadata, payload)| {
++ let _append_scope=crate::diag::Scope::new("media.archive_append");
+                     if names.insert(item.desired_filename.clone()) {
+                         archive
+                             .entry(
+@@ -243,6 +246,7 @@
+         context: &mut zstd::zstd_safe::CCtx<'static>,
+         pool: &PayloadPool,
+     ) -> Result<(IngestedMediaBytes, EncodedPayload), MediaIngestError> {
++ let _diagnostic_scope=crate::diag::Scope::new("media.prepare_one");
+         let owned = self.owned.get(&item.id);
+         let source = if owned.is_some() {
+             None
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/project.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/project.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/project.rs	2026-09-28 14:10:53
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/project.rs	2026-10-02 20:41:23
+@@ -58,6 +58,7 @@
+     /// Typed image content requires image/* MIME; sound accepts audio/* or video/*.
+     /// Errors identify the original note, field/content path and conflict facts.
+     pub fn add(&mut self, key: impl Into<String>, note: Note) -> Result<(), AddError> {
++ let _diagnostic_scope=crate::diag::Scope::new("project.add_note");
+         let key = key.into();
+         let context = |target| AddContext::note(&key, note.model.key(), target);
+         let error = |kind, code, message: String, target| {
+@@ -263,6 +264,7 @@
+     /// Includes an asset used by raw HTML, CSS or scripts. Identical name/content
+     /// pairs are idempotent; conflicts fail without changing project state.
+     pub fn add_asset(&mut self, media: Media) -> Result<(), AddError> {
++ let _diagnostic_scope=crate::diag::Scope::new("project.add_asset");
+         self.assets.add(media).map_err(|error| {
+             let context = AddContext::asset(&error.incoming_name);
+             media_conflict(error, context)
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/runtime/defaults.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/runtime/defaults.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/runtime/defaults.rs	2026-09-24 16:58:15
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/runtime/defaults.rs	2026-10-02 20:41:23
+@@ -1,5 +1,6 @@
+ use crate::writer_core::{BuildContext, WriterPolicy};
+ 
+ pub(crate) fn load_embedded_writer_defaults() -> anyhow::Result<(WriterPolicy, BuildContext)> {
++ let _diagnostic_scope=crate::diag::Scope::new("runtime.defaults");
+     super::embedded::load_writer_defaults()
+ }
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/apkg.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/apkg.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/apkg.rs	2026-09-24 17:07:56
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/apkg.rs	2026-10-02 20:41:23
+@@ -165,6 +165,7 @@
+     artifact_target: &BuildArtifactTarget,
+     prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+ ) -> Result<ApkgMaterialization> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.apkg");
+     fs::create_dir_all(&artifact_target.root_dir).with_context(|| {
+         format!(
+             "create artifact root {}",
+@@ -469,6 +470,7 @@
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+     identity: Option<&crate::build::identity::PackageIdentity>,
+ ) -> Result<tempfile::NamedTempFile> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.collection");
+     let source = create_collection_source(
+         root_dir,
+         normalized_ir,
+@@ -652,6 +654,7 @@
+     guid_assignments: &GuidAssignments<'_>,
+     notetype_ids: &std::collections::BTreeMap<String, i64>,
+ ) -> Result<()> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.populate_collection");
+     let default_deck_config_id = 1_i64;
+     let deck_registry = resolve_deck_registry(normalized_ir);
+ 
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/build.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/build.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/build.rs	2026-10-02 17:34:24
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/build.rs	2026-10-02 20:41:23
+@@ -111,6 +111,7 @@
+     notetype_ids: Option<&std::collections::BTreeMap<String, i64>>,
+     prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+ ) -> Result<BuildAttempt> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.total");
+     if !build_context.materialize_staging {
+         return Ok(error_result(
+             writer_policy,
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/inspect.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/inspect.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/inspect.rs	2026-09-27 13:54:11
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/inspect.rs	2026-10-02 20:41:23
+@@ -300,6 +300,7 @@
+     limits: &InspectLimits,
+ ) -> std::result::Result<(ApkgInspectSummary, crate::build::identity::IdentityEnvelope), InspectError>
+ {
++ let _diagnostic_scope=crate::diag::Scope::new("inspect.native");
+     let facts = read_apkg_facts(path, limits, ReadProjection::Summary, true)
+         .map_err(InspectError::from_anyhow)?;
+     let summary = facts.summary();
+@@ -344,6 +345,7 @@
+     projection: ReadProjection,
+     require_identity: bool,
+ ) -> Result<ApkgFacts> {
++ let _diagnostic_scope=crate::diag::Scope::new("inspect.facts");
+     let mut archive = ApkgReader::open(path, limits)?;
+ 
+     let identity: Option<crate::build::identity::IdentityEnvelope> = if require_identity {
+@@ -1206,6 +1208,7 @@
+     archive: &mut ApkgReader<'_>,
+     version: PackageVersion,
+ ) -> Result<Vec<ResolvedMedia>> {
++ let _diagnostic_scope=crate::diag::Scope::new("inspect.media");
+     let decoded = archive
+         .bytes(
+             "media",
+@@ -1481,6 +1484,7 @@
+ }
+ 
+ fn read_collection_data(path: &Path, projection: ReadProjection) -> Result<CollectionData> {
++ let _diagnostic_scope=crate::diag::Scope::new("inspect.collection");
+     with_readonly_sqlite(path, |conn| {
+         let mut deck_rows = conn.prepare("select id, name from decks order by id")?;
+         let deck_values = deck_rows
+diff -ru /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/staging.rs /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/staging.rs
+--- /Users/hp/Desktop/2026/anki-forge/anki_forge/src/writer_core/staging.rs	2026-09-27 13:54:11
++++ /Users/hp/Desktop/2026/anki-forge/benchmarks/.work/further-20261002/probe-source/anki_forge/src/writer_core/staging.rs	2026-10-02 20:41:23
+@@ -335,6 +335,7 @@
+         target: &BuildArtifactTarget,
+         prepared_media: Option<&crate::prepared_media::PreparedMedia>,
+     ) -> Result<MaterializedStaging> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.staging");
+         let staging_dir = target.staging_dir();
+         fs::create_dir_all(&staging_dir)
+             .with_context(|| format!("create staging directory {}", staging_dir.display()))?;
+@@ -541,6 +542,7 @@
+ }
+ 
+ fn validate_media_invariants(normalized_ir: &NormalizedIr) -> Vec<BuildDiagnosticItem> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.media_invariants");
+     let mut diagnostics = Vec::new();
+     let mut object_ids = BTreeSet::new();
+     for (index, object) in normalized_ir.media_objects.iter().enumerate() {
+@@ -699,6 +701,7 @@
+     normalized_ir: &NormalizedIr,
+     build_context: &BuildContext,
+ ) -> Vec<BuildDiagnosticItem> {
++ let _diagnostic_scope=crate::diag::Scope::new("writer.preflight");
+     let notetype_map: BTreeMap<_, _> = normalized_ir
+         .notetypes
+         .iter()

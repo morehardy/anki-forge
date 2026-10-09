@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "exports": 570,
+  "anki_checks": 65,
+  "learning_content_equal": true,
+  "summaries_recomputed": true,
+  "predeclared_order_verified": true,
+  "raw_measurements_and_traces_verified": true,
+  "probe_source_hashes_verified": {
+    "budget": 478,
+    "digest": 477,
+    "hash": 478,
+    "import-probe": 478,
+    "sync": 477
+  },
+  "retained_binary_hashes_verified": [
+    "after",
+    "before",
+    "budget",
+    "digest",
+    "hash",
+    "import-probe",
+    "sync"
+  ],
+  "binaries_not_archived": [],
+  "groups": {
+    "budget": {
+      "status": "passed",
+      "exports": 120,
+      "anki_checks": 15,
+      "role_counts": {
+        "warmup": 30,
+        "timing": 90
+      }
+    },
+    "confirmation": {
+      "status": "passed",
+      "exports": 130,
+      "anki_checks": 10,
+      "role_counts": {
+        "warmup": 30,
+        "timing": 100
+      }
+    },
+    "fixed": {
+      "status": "passed",
+      "exports": 120,
+      "anki_checks": 15,
+      "role_counts": {
+        "warmup": 30,
+        "timing": 90
+      }
+    },
+    "hash": {
+      "status": "passed",
+      "exports": 80,
+      "anki_checks": 10,
+      "role_counts": {
+        "warmup": 20,
+        "timing": 60
+      }
+    },
+    "import": {
+      "status": "passed",
+      "exports": 120,
+      "anki_checks": 15,
+      "role_counts": {
+        "warmup": 30,
+        "timing": 90
+      }
+    }
+  },
+  "incomplete_groups_not_audited": {},
+  "scope": "Offline reconciliation of retained measurements and validation records; does not rerun deleted APKG or Anki imports."
+}

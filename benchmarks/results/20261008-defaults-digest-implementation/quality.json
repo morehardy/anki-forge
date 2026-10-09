@@ -1,0 +1,114 @@
+{
+  "status": "passed",
+  "rust": {
+    "default_core": 170,
+    "all_features_core": 408,
+    "workspace_all_features": "passed",
+    "public_consumer_tests": "passed including 2 new tampering cases",
+    "clippy": "workspace all targets/all features -D warnings passed",
+    "rustfmt": "passed",
+    "doctests": "passed",
+    "rustdoc": "all features no deps -D warnings passed",
+    "bundle_check": "passed",
+    "crate_payload": "passed after inventory ordering correction",
+    "release_metadata": "passed",
+    "dependency_exceptions": "passed"
+  },
+  "node": {
+    "passed": 30,
+    "skipped": 1,
+    "native_rebuilt": true
+  },
+  "python": {
+    "passed": 68,
+    "skipped": 1,
+    "native_rebuilt": true,
+    "mypy_files": 14
+  },
+  "package": {
+    "status": "passed",
+    "crate_sha256": "cc118a7d148f5ba79bc90f77d5ce13c9887bde67bcf1b39bc98ae45a964d6e3f",
+    "source_outside_checkout": true,
+    "target_cache_reused": true,
+    "invalid_bundle_blocked_with_prior_generated_output": true,
+    "commands": [
+      {
+        "name": "package",
+        "argv": [
+          "cargo",
+          "package",
+          "-p",
+          "ankiforge",
+          "--allow-dirty",
+          "--offline",
+          "--locked",
+          "--no-verify"
+        ],
+        "cwd": "/Users/hp/Desktop/2026/anki-forge",
+        "returncode": 0,
+        "expected_success": true
+      },
+      {
+        "name": "package-lock",
+        "argv": [
+          "cargo",
+          "generate-lockfile",
+          "--offline"
+        ],
+        "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+        "returncode": 0,
+        "expected_success": true
+      },
+      {
+        "name": "package-consumer",
+        "argv": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--bin",
+          "anki_forge_packaged_consumer"
+        ],
+        "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+        "returncode": 0,
+        "expected_success": true
+      },
+      {
+        "name": "package-invalid-defaults",
+        "argv": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--bin",
+          "anki_forge_packaged_consumer"
+        ],
+        "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+        "returncode": 101,
+        "expected_success": false
+      },
+      {
+        "name": "package-restored",
+        "argv": [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--bin",
+          "anki_forge_packaged_consumer"
+        ],
+        "cwd": "/tmp/ankiforge-defaults-package-yyhty9jn/consumer",
+        "returncode": 0,
+        "expected_success": true
+      }
+    ]
+  },
+  "limitations": [
+    "Local macOS arm64 checks only; supported-platform CI not run.",
+    "Node and Python tests run against rebuilt local native libraries; no binding performance claim."
+  ],
+  "initial_failures": [
+    "Rust quality script stopped only at Cargo payload ordering; regenerated inventory then passed remaining checks. Earlier test, clippy and doc phases passed.",
+    "Temporary package verification script used a tarfile API unavailable on Python 3.11.0; adjusted only verifier and reran successfully."
+  ]
+}

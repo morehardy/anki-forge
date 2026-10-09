@@ -336,6 +336,41 @@ impl ApkgFacts {
     }
 }
 
+// Hash exactly the decoded bytes accepted by the collection file. The archive
+// reader still owns CRC checks and every ZIP/decoded/window budget; this sink
+// merely avoids reopening and rereading the private file for native evidence.
+struct CollectionWriter<W> {
+    inner: W,
+    hash: Option<blake3::Hasher>,
+}
+
+impl<W> CollectionWriter<W> {
+    fn new(inner: W, hash_collection: bool) -> Self {
+        Self {
+            inner,
+            hash: hash_collection.then(blake3::Hasher::new),
+        }
+    }
+
+    fn digest(&self) -> Option<blake3::Hash> {
+        self.hash.as_ref().map(blake3::Hasher::finalize)
+    }
+}
+
+impl<W: Write> Write for CollectionWriter<W> {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let count = self.inner.write(bytes)?;
+        if let Some(hash) = &mut self.hash {
+            hash.update(&bytes[..count]);
+        }
+        Ok(count)
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.inner.flush()
+    }
+}
+
 // Both projections perform the same bounded archive reads, SQLite column
 // decoding and model validation. Only retained observations differ.
 fn read_apkg_facts(
@@ -411,7 +446,8 @@ fn read_apkg_facts(
 
     let collection_root = tempfile::tempdir().context("create inspect collection directory")?;
     let collection_path = collection_root.path().join("collection.sqlite");
-    let mut collection_file = std::fs::File::create(&collection_path)?;
+    let mut collection_file =
+        CollectionWriter::new(std::fs::File::create(&collection_path)?, identity.is_some());
     if archive
         .copy(
             version.expected_collection_filename(),
@@ -422,10 +458,14 @@ fn read_apkg_facts(
         )?
         .is_some()
     {
+        let collection_digest = collection_file.digest();
         drop(collection_file);
         if let Some(identity) = &identity {
             identity
-                .validate(&collection_path)
+                .validate(
+                    &collection_path,
+                    &collection_digest.expect("native collection bytes were hashed"),
+                )
                 .map_err(crate::build::identity::EvidenceError::invalid)?;
             let actual: BTreeMap<_, _> = media
                 .iter()

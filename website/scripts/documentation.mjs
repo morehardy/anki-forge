@@ -7,20 +7,6 @@ import { importedDocs } from './content-links.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const read = filename => readFile(path.join(root, filename), 'utf8');
 
-export async function packageVersions() {
-  const field = (source, section, key) => {
-    const body = source.split(`[${section}]`)[1]?.split(/\n\[/)[0];
-    const value = body?.match(new RegExp(`^${key} = "([^"]+)"`, 'm'))?.[1];
-    assert.ok(value, `Missing ${section}.${key}`);
-    return value;
-  };
-  return {
-    rust: field(await read('anki_forge/Cargo.toml'), 'package', 'version'),
-    node: JSON.parse(await read('bindings/node/package.json')).version,
-    python: field(await read('bindings/python/pyproject.toml'), 'project', 'version'),
-  };
-}
-
 export async function sourceSnippet(reference) {
   const [filename, region] = reference.split('#');
   assert.ok(!path.isAbsolute(filename) && !filename.split('/').includes('..'), `Use a repository path: ${reference}`);
@@ -41,7 +27,7 @@ export async function sourceSnippet(reference) {
 }
 
 export async function checkDocumentation({ sync = false } = {}) {
-  const sources = new Set(importedDocs.map(doc => doc.source));
+  const sources = new Set(['README.md', 'README.zh-CN.md', 'bindings/node/README.md', 'bindings/python/README.md', ...importedDocs.map(doc => doc.source)]);
   let count = 0;
   for (const filename of sources) {
     let markdown = await read(filename);
@@ -61,18 +47,11 @@ export async function checkDocumentation({ sync = false } = {}) {
       await stat(target).catch(() => assert.fail(`${filename}: missing repository link ${link}`));
     }
   }
-  const versions = await packageVersions();
-  const compatibility = await read('docs/compatibility.md');
-  for (const [label, key] of [['Rust', 'rust'], ['Node / TypeScript', 'node'], ['Python', 'python']]) {
-    assert.ok(compatibility.includes(`| ${label} | ${versions[key]} |`), `Compatibility table has stale ${label} version`);
+  // Registry installations are maintained independently of source manifest versions.
+  for (const filename of ['docs/installation.md', 'docs/node/quick-start.md', 'docs/python/quick-start.md']) {
+    assert.match(await read(filename), /ankiforge(?:@|==)\d+\.\d+\.\d+/, `${filename}: missing versioned public install`);
   }
-  for (const filename of ['README.md', 'README.zh-CN.md']) {
-    const content = (await read(filename)).replace(/\s+/g, ' ');
-    for (const [label, key] of [['Rust', 'rust'], ['Node', 'node'], ['Python', 'python']]) {
-      assert.ok(content.includes(`${label} \`${versions[key]}\``), `${filename}: stale ${label} source version`);
-    }
-  }
-  console.log(`Checked ${sources.size} source documents, ${count} source excerpts, repository links and SDK versions.`);
+  console.log(`Checked ${sources.size} source documents, ${count} source excerpts, repository links and versioned public installations.`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
