@@ -1,5 +1,8 @@
 # Anki Forge for Node and TypeScript
 
+[![npm](https://img.shields.io/npm/v/ankiforge?logo=npm)](https://www.npmjs.com/package/ankiforge)
+[![Tests passing](https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/node-sdk-ci.yml?branch=main&label=tests%20passing)](https://github.com/morehardy/anki-forge/actions/workflows/node-sdk-ci.yml)
+
 Build Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.
 
 ## Install

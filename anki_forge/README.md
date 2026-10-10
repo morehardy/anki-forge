@@ -1,5 +1,8 @@
 # Anki Forge for Rust
 
+[![crates.io](https://img.shields.io/crates/v/ankiforge?logo=rust)](https://crates.io/crates/ankiforge)
+[![Tests passing](https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/rust-crate-ci.yml?branch=main&label=tests%20passing)](https://github.com/morehardy/anki-forge/actions/workflows/rust-crate-ci.yml)
+
 Build Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.
 
 ## Install

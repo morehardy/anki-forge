@@ -1,12 +1,20 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/ankiforge-dark.svg">
-  <img src="docs/assets/brand/ankiforge.svg" alt="Anki Forge 标志：带折角和双卡回环的堆叠卡片" width="96" height="96">
-</picture>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/ankiforge-dark.svg">
+    <img src="docs/assets/brand/ankiforge.svg" alt="Anki Forge 标志：带折角和双卡回环的堆叠卡片" width="96" height="96">
+  </picture>
+</p>
 
-# anki-forge
+<h1 align="center">anki-forge</h1>
 
-[![CI](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml/badge.svg?branch=main&event=push)](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+<p align="center">
+  <a href="https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/contract-ci.yml?branch=main&label=tests%20passing" alt="Tests passing"></a>
+  <a href="https://crates.io/crates/ankiforge"><img src="https://img.shields.io/crates/v/ankiforge?logo=rust" alt="crates.io 版本"></a>
+  <a href="https://www.npmjs.com/package/ankiforge"><img src="https://img.shields.io/npm/v/ankiforge?logo=npm" alt="npm 版本"></a>
+  <a href="https://pypi.org/project/ankiforge/"><img src="https://img.shields.io/pypi/v/ankiforge?logo=pypi" alt="PyPI 版本"></a>
+  <a href="https://ankiforge.dev/docs/"><img src="https://img.shields.io/badge/docs-ankiforge.dev-blue" alt="使用文档"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
 
 [English](README.md) · 简体中文
 
@@ -19,7 +27,8 @@
 一起打包模板和媒体，并在分发新版前检查身份与内容变化。
 
 [性能对比](#可核验的性能表现) · [快速开始](#快速开始) ·
-[卡片示例](#丰富的卡片形式) · [选择开发语言](#选择你的开发语言)
+[卡片示例](#丰富的卡片形式) · [更新流程](#持续改进已发布的牌组) ·
+[选择开发语言](#选择你的开发语言)
 
 ## 为什么选择 anki-forge？
 
@@ -30,13 +39,40 @@
 - **发布之后，持续完善。** 与上一版牌组对比，检查笔记身份与更新风险，
   并查看结构化构建报告。[了解更新流程 ↓](#持续改进已发布的牌组)
 
-## 选择你的开发语言
+## 可核验的性能表现
 
-| 语言 | 公开包 | 安装命令 | Quickstart |
-| --- | --- | --- | --- |
-| Rust | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
-| Python | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
+**1,000 条文本笔记 52.7 ms 完成导出**，genanki 为 105.0 ms，**耗时减少 49.8%**。
+在五种 1,000 条笔记场景中，Rust 导出耗时均少 **45.7–53.9%**。数据对比 Rust
+`Project` API（使用 `Media::files`）和 genanki 0.13.1；Node 与 Python 绑定未参与测试。
+
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
+  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 52.7 / 105.0；图片 150.7 / 320.2；音频 128.7 / 275.4；混合独立媒体 110.5 / 239.5；混合共享媒体 61.4 / 112.9。每种场景均为 1,000 条笔记。" width="1000">
+</picture>
+
+本次基准测试通过了 840 次输出内容检查和 40 次 Anki 导入、内容与代表性渲染检查。
+部分媒体场景占用更多内存：独立图片场景峰值 RSS 为 92.45 MiB，genanki 为 35.59 MiB。
+
+<details>
+<summary>测试方法与完整结果</summary>
+
+五种场景覆盖 100、200、500 和 1,000 条笔记，每格包含 10 次计时和 5 次 RSS 测量。
+计时从进程启动到退出，包含媒体导入、构建、检查和写入；后台负载、页缓存及不同的默认 APKG
+格式未隔离。完整数据和复现步骤见下方报告。
+
+| 1,000 条笔记 | Rust 峰值 RSS（MiB） | genanki 峰值 RSS（MiB） | 速度比 |
+| --- | ---: | ---: | ---: |
+| 文本 | 21.91 | 32.25 | 1.99× |
+| 独立图片 | 92.45 | 35.59 | 2.12× |
+| 独立音频 | 62.66 | 35.97 | 2.14× |
+| 混合独立媒体 | 65.19 | 35.03 | 2.17× |
+| 混合共享媒体 | 29.36 | 32.66 | 1.84× |
+
+[完整报告](benchmarks/results/20261008-latest-commit-genanki/report.md) · [原始 CSV](benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [复现说明](benchmarks/results/20261008-latest-commit-genanki/README.md)
+
+</details>
 
 ## 快速开始
 
@@ -132,47 +168,6 @@ python main.py
 
 将文件导入 Anki 开始学习。常规导出无需安装 Anki；环境要求见[兼容性](docs/compatibility.md)。Windows 虚拟环境使用 `.venv\Scripts\Activate.ps1` 激活。
 
-## 可核验的性能表现
-
-**1,000 条文本笔记，52.7 ms 完成导出**，genanki 耗时 105.0 ms，**导出耗时减少了 49.8%**。
-在每组 1,000 条笔记的五种测试场景中，Rust 实测导出耗时均比 genanki **少 45.7–53.9%**。
-下图对比当前 Rust `Project` API 与 genanki 0.13.1，媒体通过 `Media::files` 批量导入。
-Node 和 Python 绑定未参与这次测试。
-
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="docs/assets/readme/export-times-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/export-times-dark.svg">
-  <img src="docs/assets/readme/export-times-light.svg" alt="导出耗时中位数，单位毫秒，Rust / genanki：文本 52.7 / 105.0；图片 150.7 / 320.2；音频 128.7 / 275.4；混合独立媒体 110.5 / 239.5；混合共享媒体 61.4 / 112.9。每种场景均为 1,000 条笔记。" width="1000">
-</picture>
-
-Rust Project API · Media::files · commit `1199196` · Apple M1 Pro · 10-run medians · 2026-10-08
-
-部分媒体场景占用更多内存：独立图片场景的峰值 RSS 为 92.45 MiB，genanki 为 35.59 MiB。
-
-<details>
-<summary>测试方法、内存取舍与完整结果</summary>
-
-五种场景 × 100 / 200 / 500 / 1,000 条笔记，每组 10 次计时和 5 次独立 RSS 测量。启动至退出包含媒体导入、构建、检查与写入。
-
-M1 Pro / 32 GiB / macOS 27 · Rust 1.92 release / default features / System allocator · CPython 3.11 / genanki 0.13.1. 默认 APKG 格式不同；后台负载和页缓存未隔离。
-
-全部 840 次输出内容检查和 40 次 Anki 导入、内容与代表性渲染检查通过（每种实现 20 次）。完整 20 格均为 Rust 中位数较低且 Rust Q3 < genanki Q1；不代表所有客户端认证。
-
-本轮测量已提交源码，不代表公开 `0.3.0` 包。Node / Python 宿主、prepared publication、同进程重复构建和单媒体大于 1 MiB 不在范围内，GUI 和实际音频播放未验证。
-
-| 1,000 notes | Rust RSS MiB | genanki RSS MiB | Speed ratio |
-| --- | ---: | ---: | ---: |
-| Text | 21.91 | 32.25 | 1.99× |
-| Unique images | 92.45 | 35.59 | 2.12× |
-| Unique audio | 62.66 | 35.97 | 2.14× |
-| Mixed unique | 65.19 | 35.03 | 2.17× |
-| Mixed shared | 29.36 | 32.66 | 1.84× |
-
-[Full report](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md) · [Raw CSV](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [Source identity](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/measured-source-check.json) · [Reproduce](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/README.md)
-
-</details>
-
 ## 丰富的卡片形式
 
 将内容、模板和媒体放在一起管理。同一份牌组可以组合使用：
@@ -228,7 +223,15 @@ namespace 和 note key 标识笔记。每个生成的 APKG 都携带完整身份
 字段是否更新仍取决于客户端导入设置和本地修改时间。风险策略、实际导入验证
 与客户端限制见[完整更新流程](docs/updates.md)。
 
-环境和客户端条件见[兼容性](docs/compatibility.md)。
+## 选择你的开发语言
+
+运行时要求以及客户端和平台限制见[兼容性](docs/compatibility.md)。
+
+| 语言 | 运行时 | 公开包 | 安装命令 | 指南 |
+| --- | --- | --- | --- | --- |
+| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
+| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
 
 ## 参与贡献
 
