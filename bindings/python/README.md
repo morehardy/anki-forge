@@ -1,7 +1,20 @@
-# Anki Forge for Python
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge-dark.svg">
+    <img src="https://raw.githubusercontent.com/morehardy/anki-forge/main/docs/assets/brand/ankiforge.svg" alt="Anki Forge logo: stacked cards with a folded corner and card loop" width="96" height="96">
+  </picture>
+</p>
 
-[![PyPI](https://img.shields.io/pypi/v/ankiforge?logo=pypi)](https://pypi.org/project/ankiforge/)
-[![Tests passing](https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/contract-ci.yml?branch=main&label=tests%20passing)](https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml)
+<h1 align="center">anki-forge</h1>
+
+<p align="center">
+  <a href="https://github.com/morehardy/anki-forge/actions/workflows/contract-ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/morehardy/anki-forge/contract-ci.yml?branch=main&label=tests%20passing" alt="Tests passing"></a>
+  <a href="https://pypi.org/project/ankiforge/"><img src="https://img.shields.io/pypi/v/ankiforge?logo=pypi" alt="PyPI version"></a>
+  <a href="https://ankiforge.dev/docs/"><img src="https://img.shields.io/badge/docs-ankiforge.dev-blue" alt="Documentation"></a>
+  <a href="https://github.com/morehardy/anki-forge/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center">Python SDK</p>
 
 Build Basic, Cloze, Image Occlusion and custom cards, package media, and check updates before distributing a new deck.
 
