@@ -2,9 +2,18 @@ name: node-npm-release
 
 on:
   push:
-    tags: ["npm-v*"]
+    tags: ["npm-v*", "!npm-v*-auth-check"]
   # A manual run builds and tests a candidate; it cannot publish or move tags.
   workflow_dispatch:
+    inputs:
+      diagnose-auth:
+        description: "Check OIDC authentication without publishing an existing candidate"
+        type: boolean
+        default: false
+      candidate-run-id:
+        description: "Original node-npm-release run containing node-npm-candidate"
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -15,6 +24,7 @@ concurrency:
 
 jobs:
   preflight:
+    if: github.event_name != 'workflow_dispatch' || !inputs.diagnose-auth
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +49,35 @@ jobs:
           else
             python bindings/node/scripts/npm_release.py metadata
           fi
+
+  auth-diagnostic:
+    if: github.event_name == 'workflow_dispatch' && inputs.diagnose-auth
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    environment: npm
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: npm install --global npm@11.21.0 --ignore-scripts --registry=https://registry.npmjs.org
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-npm-candidate
+          path: release-candidate
+          run-id: ${{ inputs.candidate-run-id }}
+          github-token: ${{ github.token }}
+      - name: Verify candidate and diagnose OIDC with publish dry-runs
+        env:
+          CANDIDATE_RUN_ID: ${{ inputs.candidate-run-id }}
+        run: python bindings/node/scripts/diagnose_npm_auth.py --directory release-candidate --run-id "$CANDIDATE_RUN_ID"
 
   candidate:
     needs: preflight
