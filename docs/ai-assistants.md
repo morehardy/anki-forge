@@ -6,11 +6,10 @@ generated program and verification steps. The website assembles text locally;
 it does not call an AI API or store your request. A chat without project access
 can provide files and commands for you to run.
 
-This entry targets public package version 0.3.0. On 2026-10-12, the official npm
-registry listed only 0.2.0 for `ankiforge`; the Node 0.3.0 installation could not
-be executed. Publish the matching Node wrapper and native packages before
-deploying its 0.3.0 brief. Rust and Python 0.3.0 consumers were available for
-local validation. See [official npm metadata](https://registry.npmjs.org/ankiforge).
+The briefs and Skill target public package version `0.3.1` for Rust, Node /
+TypeScript and Python. The release checks verify the published package bytes
+and exercise fresh installations on the supported platforms. See
+[compatibility and release evidence](compatibility.md) for the verified runtimes.
 
 ## Load the Skill
 

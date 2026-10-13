@@ -2,25 +2,28 @@
 
 ## Packages and verified environments
 
-Public Rust, npm and PyPI packages are `0.3.0` as checked on 2026-10-09.
+Public Rust, npm and PyPI packages are `0.3.1` as checked on 2026-10-13.
 Start with [Rust](installation.md), [Node / TypeScript](node/quick-start.md) or [Python](python/quick-start.md).
 
 | Interface | Package | Runtime and verification |
 | --- | --- | --- |
-| Rust | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | Rust 1.92+; packaged consumers and the Rust source checks |
-| Node / TypeScript | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | Node 22.13+; installed ESM/CJS and TypeScript checks, plus the macOS arm64 consumer in this documentation validation |
-| Python | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | Ordinary CPython 3.11/3.12 in recorded wheel checks; macOS arm64 public consumer in this documentation validation |
+| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 and current stable; packaged consumers on all four supported platforms, plus a fresh public crates.io consumer |
+| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0, current 22, 24 and 26; 16 public npm installation, ESM/CJS and TypeScript checks |
+| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | Ordinary CPython 3.11–3.14; 16 isolated public PyPI wheel installation checks |
 
 Published native packages cover macOS arm64/x64, Linux x64 GNU/glibc and Windows x64.
 Package availability alone is not a successful runtime test on every host.
 The [Node coverage](../bindings/node/COVERAGE.md), [Python coverage](../bindings/python/COVERAGE.md)
-and release evidence record the exact checks. Workflow matrices describe intended tests;
-they do not establish that a particular run passed. Other Python versions, free-threaded
-interpreters and subinterpreters need separate validation. Browser, Electron, Bun,
+and release evidence record the exact checks. The successful `0.3.1` release runs are
+[Rust](https://github.com/morehardy/anki-forge/actions/runs/38371221696),
+[npm](https://github.com/morehardy/anki-forge/actions/runs/38371222114) and
+[PyPI](https://github.com/morehardy/anki-forge/actions/runs/38371222047).
+Other Python implementations, free-threaded interpreters and subinterpreters need
+separate validation. Browser, Electron, Bun,
 Alpine/musl and ARM64 Linux/Windows are outside the recorded Node verification scope.
 
 The [batch media](media.md#batch-import-from-source) and [prepared publication](updates.md#build-once-review-then-publish-from-source)
-guides are available in the public `0.3.0` packages.
+guides are available in the public `0.3.1` packages.
 
 ## Anki import and playback
 

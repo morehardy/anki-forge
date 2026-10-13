@@ -1,4 +1,4 @@
-# Troubleshooting public Anki Forge 0.3.0
+# Troubleshooting public Anki Forge 0.3.1
 
 Use the operation's structured error code, source chain and observations.
 Do not guess numeric protocol values or substitute undocumented methods.
@@ -6,7 +6,7 @@ Do not guess numeric protocol values or substitute undocumented methods.
 | Symptom | Executable check or correction |
 | --- | --- |
 | Rust toolchain/version failure | `rustc --version`; use Rust 1.92+, inspect `cargo tree -i ankiforge` |
-| Node cannot load native package | `node -p "process.platform + '/' + process.arch"`; `npm ls ankiforge`; reinstall with `npm install --include=optional ankiforge@0.3.0` |
+| Node cannot load native package | `node -p "process.platform + '/' + process.arch"`; `npm ls ankiforge`; reinstall with `npm install --include=optional ankiforge@0.3.1` |
 | Node wrapper/native mismatch | Check lockfile and installed native package versions match the public wrapper |
 | Python extension/wheel failure | `python --version`; `python -m pip show ankiforge`; `python -m pip debug --verbose`; compare interpreter/OS/CPU tags to compatibility docs |
 | Missing persistent output | Check working directory, `BuildOptions.to` destination and whether output was temporary; retain temporary owners until readers finish |

@@ -1,4 +1,4 @@
-# Node / TypeScript: public Anki Forge 0.3.0
+# Node / TypeScript: public Anki Forge 0.3.1
 
 Requires Node.js 22.13+. Inspect `package.json` and its lockfile first.
 For a new application:
@@ -6,7 +6,7 @@ For a new application:
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.3.0
+npm install --include=optional ankiforge@0.3.1
 ```
 
 Keep optional dependencies enabled: they contain the matching native package.

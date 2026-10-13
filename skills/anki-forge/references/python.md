@@ -1,4 +1,4 @@
-# Python: public Anki Forge 0.3.0
+# Python: public Anki Forge 0.3.1
 
 Requires ordinary CPython 3.11+ and a matching native wheel. Inspect the project's
 Python dependency files and environment first. For a new application:
@@ -6,7 +6,7 @@ Python dependency files and environment first. For a new application:
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.3.0
+python -m pip install ankiforge==0.3.1
 ```
 
 Windows activation: `.venv\Scripts\Activate.ps1`. Check

@@ -81,7 +81,7 @@ validation still applies. See [the design](../plans/2026-09-28-rust-api-validati
 
 ## Source API details
 
-Batch media and prepared publication are included in the public `0.3.0` package.
+Batch media and prepared publication are included in the public `0.3.1` package.
 
 ### Prepare, review and publish
 

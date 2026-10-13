@@ -125,7 +125,7 @@ and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
 
 ## Batch import from source
 
-These methods are included in the public `0.3.0` package.
+These methods are included in the public `0.3.1` package.
 
 Import a collection with bounded concurrency, keep input order, and retain
 owned media snapshots for later export:

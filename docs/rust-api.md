@@ -134,7 +134,7 @@ validation still applies. See [the design](plans/2026-09-28-rust-api-validation-
 
 ## Review once, publish once
 
-The prepared publication API is included in the public `0.3.0` package.
+The prepared publication API is included in the public `0.3.1` package.
 
 
 ```rust,no_run

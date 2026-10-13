@@ -116,7 +116,7 @@ See [build guarantees](build-guarantees.md) for ownership and publication facts.
 
 ## Build once, review then publish from source
 
-This API is included in the public `0.3.0` package.
+This API is included in the public `0.3.1` package.
 
 Build once, inspect the report, then publish the same candidate file. Reviewing
 and then running a second ordinary build creates another candidate; prepared

@@ -80,9 +80,9 @@
 
 | 语言 | 运行时 | 公开包 | 安装命令 | 指南 |
 | --- | --- | --- | --- | --- |
-| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
-| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
+| Rust | Rust 1.92+ | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.1` | [Rust](docs/installation.md) |
+| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | [Node](docs/node/quick-start.md) |
+| Python | CPython 3.11+ | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | [Python](docs/python/quick-start.md) |
 
 <!-- ai-quickstart:start -->
 ## 与 AI 编码助手一起使用
@@ -92,7 +92,7 @@
 替换需求占位符后粘贴给 AI。
 
 ```text
-请帮助我在 Rust 项目中使用 Anki Forge 0.3.0。
+请帮助我在 Rust 项目中使用 Anki Forge 0.3.1。
 运行时要求：Rust 1.92+
 
 只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path
@@ -103,7 +103,7 @@
 
 请按以下要求完成：
 1. 先检查现有项目，再决定需要新增或修改哪些文件。
-2. 给出准确的安装命令：cargo add ankiforge@0.3.0
+2. 给出准确的安装命令：cargo add ankiforge@0.3.1
 3. 生成最小但完整、可以直接运行的程序，列出新增或修改的文件。
 4. 输出持久化的 `.apkg`，并使用稳定的 namespace 和 note key。
 5. 给出运行命令、预期输出和验证步骤。
@@ -131,7 +131,7 @@
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.3.0
+cargo add ankiforge@0.3.1
 ```
 
 保存为 `src/main.rs`:
@@ -162,7 +162,7 @@ cargo run
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.3.0
+npm install --include=optional ankiforge@0.3.1
 ```
 
 保存为 `main.mjs`:
@@ -191,7 +191,7 @@ node main.mjs
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.3.0
+python -m pip install ankiforge==0.3.1
 ```
 
 保存为 `main.py`:

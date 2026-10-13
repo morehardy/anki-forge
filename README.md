@@ -83,9 +83,9 @@ Runtime requirements and client/platform limitations are summarized in [compatib
 
 | Language | Runtime | Package | Install | Guide |
 | --- | --- | --- | --- | --- |
-| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
-| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
+| Rust | Rust 1.92+ | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.1` | [Rust](docs/installation.md) |
+| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | [Node](docs/node/quick-start.md) |
+| Python | CPython 3.11+ | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | [Python](docs/python/quick-start.md) |
 
 <!-- ai-quickstart:start -->
 ## Use with an AI coding assistant
@@ -95,7 +95,7 @@ This template uses Rust; use the website to generate a Node / TypeScript or Pyth
 Replace the request placeholder before pasting it into your assistant.
 
 ```text
-You are helping me use Anki Forge 0.3.0 in a Rust application.
+You are helping me use Anki Forge 0.3.1 in a Rust application.
 Runtime requirement: Rust 1.92+
 
 Use the published `ankiforge` package and only the public API documented for
@@ -107,7 +107,7 @@ My goal:
 
 Please:
 1. Inspect the existing project before changing files.
-2. Give the exact setup and installation command: cargo add ankiforge@0.3.0
+2. Give the exact setup and installation command: cargo add ankiforge@0.3.1
 3. Create the smallest complete runnable program and name every file to add or edit.
 4. Produce a persistent `.apkg` file and use stable namespace and note keys.
 5. Include the run command, expected output, and a verification step.
@@ -137,7 +137,7 @@ Each program writes a persistent `spanish.apkg` containing **hola → hello** in
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.3.0
+cargo add ankiforge@0.3.1
 ```
 
 Save as `src/main.rs`:
@@ -168,7 +168,7 @@ cargo run
 ```sh
 mkdir anki-deck
 cd anki-deck
-npm install --include=optional ankiforge@0.3.0
+npm install --include=optional ankiforge@0.3.1
 ```
 
 Save as `main.mjs`:
@@ -197,7 +197,7 @@ node main.mjs
 ```sh
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install ankiforge==0.3.0
+python -m pip install ankiforge==0.3.1
 ```
 
 Save as `main.py`:

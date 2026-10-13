@@ -1,4 +1,4 @@
-# Task workflows for public Anki Forge 0.3.0
+# Task workflows for public Anki Forge 0.3.1
 
 Read the user's language reference and only the relevant sections here. Linked
 task guides illustrate Rust; use the matching [Node API](https://ankiforge.dev/docs/node-api/)

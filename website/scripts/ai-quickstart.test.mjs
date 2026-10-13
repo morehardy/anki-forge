@@ -60,7 +60,7 @@ test('check catches stale README, guide versions and Skill programs; sync change
   assert.equal(await readFile(filename, 'utf8'), original);
   const guide = path.join(directory, 'docs/node/quick-start.md');
   const canonical = await readFile(guide, 'utf8');
-  await writeFile(guide, canonical.replace('ankiforge@0.3.0', 'ankiforge@0.2.0'));
+  await writeFile(guide, canonical.replace(/ankiforge@\d+\.\d+\.\d+/, 'ankiforge@0.0.0'));
   await assert.rejects(checkAiQuickstart({ directory }), /public installation drift/);
   await writeFile(guide, canonical);
   const reference = path.join(directory, 'skills/anki-forge/references/python.md');

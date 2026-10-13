@@ -1,11 +1,11 @@
 ---
 name: anki-forge
-description: Build and maintain Anki decks with the public Anki Forge 0.3.0 Rust, Node/TypeScript, or Python APIs. Use when a user mentions Anki Forge or ankiforge, or asks to use this library for APKG generation, Basic/Cloze cards, media packaging, custom note types, Image Occlusion, stable note IDs, or deck updates.
+description: Build and maintain Anki decks with the public Anki Forge 0.3.1 Rust, Node/TypeScript, or Python APIs. Use when a user mentions Anki Forge or ankiforge, or asks to use this library for APKG generation, Basic/Cloze cards, media packaging, custom note types, Image Occlusion, stable note IDs, or deck updates.
 ---
 
 # Anki Forge
 
-Use the published Anki Forge 0.3.0 package to create runnable deck-building
+Use the published Anki Forge 0.3.1 package to create runnable deck-building
 applications. This Skill provides guidance; it does not call an AI service.
 
 ## Start with the application's language
@@ -23,7 +23,7 @@ shape, output behavior, or stable identity cannot be inferred.
 
 ## Public API and identity rules
 
-- Use public APIs documented for 0.3.0. Do not invent methods or silently switch
+- Use public APIs documented for 0.3.1. Do not invent methods or silently switch
   to git/path dependencies, internal tools, source-only APIs, or unreleased features.
   If an existing dependency uses another version, explain the mismatch before
   choosing a documented migration or a version-specific reference.

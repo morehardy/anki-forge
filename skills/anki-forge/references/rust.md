@@ -1,4 +1,4 @@
-# Rust: public Anki Forge 0.3.0
+# Rust: public Anki Forge 0.3.1
 
 Requires Rust 1.92+. Inspect `Cargo.toml` and `Cargo.lock` in an existing application.
 For a new application:
@@ -6,7 +6,7 @@ For a new application:
 ```sh
 cargo new anki-deck
 cd anki-deck
-cargo add ankiforge@0.3.0
+cargo add ankiforge@0.3.1
 ```
 
 Save as `src/main.rs`. This is the same complete program as the public quickstart:

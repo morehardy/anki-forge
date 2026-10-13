@@ -1,7 +1,7 @@
 # Build SDKs from source
 
 Use this guide for repository development and unreleased changes.
-For the published `0.3.0` packages, use the [Rust](installation.md),
+For the published `0.3.1` packages, use the [Rust](installation.md),
 [Node](node/quick-start.md) or [Python](python/quick-start.md) installation guide.
 
 Requirements: Git, Rust 1.92.0 with Cargo, and Node.js 22.13+ with npm or
