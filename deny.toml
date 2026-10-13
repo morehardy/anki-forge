@@ -10,7 +10,13 @@ targets = [
 [advisories]
 version = 2
 yanked = "deny"
-ignore = []
+ignore = [
+    # Informational unmaintained notice issued 2026-10-12; no patched version.
+    # Retain the existing YAML backend for the 0.3.1 compatibility release.
+    # release-maintainers own the exception until 2026-11-12; the policy checker
+    # enforces expiry and unsafe-libyaml 0.2.11 in Cargo.lock.
+    "RUSTSEC-2024-0449",
+]
 
 [licenses]
 version = 2

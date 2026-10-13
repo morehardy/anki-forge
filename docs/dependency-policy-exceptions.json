@@ -1,5 +1,13 @@
 [
   {
+    "crate": "unsafe-libyaml",
+    "version": "0.2.11",
+    "advisory": "RUSTSEC-2024-0449",
+    "owner": "release-maintainers",
+    "reason": "Informational unmaintained advisory issued 2026-10-12, with no patched version. serde_yaml and its compatible forks retain this backend; replacing YAML parsing requires separate compatibility and deterministic-bundle validation. Retain the previously validated backend for the 0.3.1 patch release while that migration is reviewed.",
+    "expires": "2026-11-12"
+  },
+  {
     "crate": "getrandom",
     "version": "0.2.15",
     "owner": "release-maintainers",

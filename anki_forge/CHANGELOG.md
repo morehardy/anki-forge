@@ -15,6 +15,9 @@ new minor release.
   patch packages. Public authoring APIs and embedded contract bundle 2.1.0 are
   unchanged from 0.3.0.
 - Refresh Python native dependency notices from the locked dependency graph.
+- Record the newly issued informational unsafe-libyaml maintenance advisory as
+  a version-pinned exception owned by release-maintainers, expiring 2026-11-12.
+  Release evidence includes the exception; policy checks reject expiry or drift.
 
 ## [0.3.0] - 2026-10-09
 

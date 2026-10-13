@@ -32,5 +32,27 @@ fi
 
 sed -n 's/.*{ name = "\([^"]*\)", version = "\([^"]*\)" }.*/\1 \2/p' \
   "$repo_root/deny.toml" | sort >"$work_root/deny.txt"
-jq -r '.[] | "\(.crate) \(.version)"' "$policy" | sort >"$work_root/policy.txt"
+jq -r '.[] | select(.advisory == null) | "\(.crate) \(.version)"' "$policy" | sort >"$work_root/policy.txt"
 diff -u "$work_root/deny.txt" "$work_root/policy.txt"
+
+python3 - "$repo_root" "$policy" <<'PY'
+import json
+from pathlib import Path
+import sys
+import tomllib
+
+root = Path(sys.argv[1])
+policy = json.loads(Path(sys.argv[2]).read_text())
+configuration = tomllib.loads((root / "deny.toml").read_text())
+ignored = configuration.get("advisories", {}).get("ignore", [])
+actual = {entry if isinstance(entry, str) else entry["id"] for entry in ignored}
+records = [entry for entry in policy if entry.get("advisory")]
+expected = {entry["advisory"] for entry in records}
+if actual != expected:
+    raise SystemExit("ignored advisories must exactly match documented policy exceptions")
+locked = tomllib.loads((root / "Cargo.lock").read_text())["package"]
+for entry in records:
+    versions = {package["version"] for package in locked if package["name"] == entry["crate"]}
+    if versions != {entry["version"]}:
+        raise SystemExit(f"advisory exception version differs from Cargo.lock: {entry['crate']}")
+PY
