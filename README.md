@@ -77,6 +77,56 @@ and reproduction steps.
 
 </details>
 
+## Choose your language
+
+Runtime requirements and client/platform limitations are summarized in [compatibility](docs/compatibility.md).
+
+| Language | Runtime | Package | Install | Guide |
+| --- | --- | --- | --- | --- |
+| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
+| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
+
+<!-- ai-quickstart:start -->
+## Use with an AI coding assistant
+
+Copy this brief into ChatGPT, Cursor, Claude Code, or another coding assistant.
+This template uses Rust; use the website to generate a Node / TypeScript or Python brief.
+Replace the request placeholder before pasting it into your assistant.
+
+```text
+You are helping me use Anki Forge 0.3.0 in a Rust application.
+Runtime requirement: Rust 1.92+
+
+Use the published `ankiforge` package and only the public API documented for
+this version. Do not use git/path dependencies, internal tools, source-only
+APIs, unreleased methods, or invented methods.
+
+My goal:
+<describe your task>
+
+Please:
+1. Inspect the existing project before changing files.
+2. Give the exact setup and installation command: cargo add ankiforge@0.3.0
+3. Create the smallest complete runnable program and name every file to add or edit.
+4. Produce a persistent `.apkg` file and use stable namespace and note keys.
+5. Include the run command, expected output, and a verification step.
+6. If media, custom templates, Image Occlusion, or updates are needed, use the
+   documented workflow instead of approximating the API. For updates, keep the
+   previous original distribution APKG as the baseline; do not use an Anki re-export.
+7. Ask only the questions required to resolve an unknown language, input shape,
+   output path, or identity rule.
+
+Quickstart reference: https://ankiforge.dev/docs/quickstart/
+```
+
+[Open the interactive prompt builder](https://ankiforge.dev/#ai-quickstart)
+
+Coding assistants that support Skills can load language-specific setup, public API rules, task workflows, and verification guidance:
+
+[Open the Anki Forge Skill](skills/anki-forge/SKILL.md) · [Skill setup instructions](docs/ai-assistants.md)
+<!-- ai-quickstart:end -->
+
 ## Quick start
 
 Each program writes a persistent `spanish.apkg` containing **hola → hello** in the Spanish deck.
@@ -231,16 +281,6 @@ and use `update_from` when producing its successor. An Anki re-export is not a
 supported baseline. Anki import settings and newer local edits still govern
 whether fields update. See the [update workflow](docs/updates.md) for policies,
 client limitations, and verified import behavior.
-
-## Choose your language
-
-Runtime requirements and client/platform limitations are summarized in [compatibility](docs/compatibility.md).
-
-| Language | Runtime | Package | Install | Guide |
-| --- | --- | --- | --- | --- |
-| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
-| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
 
 ## Contributing
 

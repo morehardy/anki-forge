@@ -42,3 +42,11 @@ export function rewriteMarkdown(markdown, source, base) {
     .replace(/^(\[[^\]\n]+\]:\s*)(\S+)/gm, (_, start, target) => `${start}${rewriteTarget(target, source, base)}`)
   ).join('');
 }
+
+// Starlight supplies the page title; the crate README uses an HTML title on GitHub.
+export function stripDocumentTitle(markdown) {
+  const content = markdown.replace(/^# .+\r?\n+/, '');
+  const boundary = content.search(/^```|^~~~|^## /m);
+  const end = boundary < 0 ? content.length : boundary;
+  return content.slice(0, end).replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, '') + content.slice(end);
+}

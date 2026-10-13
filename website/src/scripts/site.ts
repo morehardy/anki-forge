@@ -1,3 +1,6 @@
+import aiQuickstart from '../generated/ai-quickstart.json';
+import { renderPrompt } from '../lib/ai-quickstart.mjs';
+
 const root = document.documentElement;
 const darkPreference = window.matchMedia('(prefers-color-scheme: dark)');
 const themePicker = document.querySelector<HTMLSelectElement>('[data-theme-picker]');
@@ -83,24 +86,102 @@ document.querySelectorAll<HTMLElement>('[data-update-demo]').forEach(demo => {
   });
 });
 
+const copyListeners = new AbortController();
+const copyTimers = new Set<ReturnType<typeof setTimeout>>();
+document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder => {
+  const tabs = [...builder.querySelectorAll<HTMLButtonElement>('[data-ai-language]')];
+  const panels = [...builder.querySelectorAll<HTMLElement>('[data-ai-panel]')];
+  const request = builder.querySelector<HTMLTextAreaElement>('[data-ai-request]');
+  if (!tabs.length || !request) return;
+  function selectLanguage(button: HTMLButtonElement, focus = false) {
+    tabs.forEach(tab => {
+      const selected = tab === button;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach(panel => { panel.hidden = panel.dataset.aiPanel !== button.dataset.aiLanguage; });
+    if (focus) button.focus();
+  }
+  tabs.forEach((button, index) => {
+    button.addEventListener('click', () => selectLanguage(button), { signal: copyListeners.signal });
+    button.addEventListener('keydown', event => {
+      let next: number | undefined;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== undefined) {
+        event.preventDefault();
+        selectLanguage(tabs[next]!, true);
+      }
+    }, { signal: copyListeners.signal });
+  });
+  panels.forEach(panel => {
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', `ai-tab-${panel.dataset.aiPanel}`);
+  });
+  request.addEventListener('input', () => {
+    panels.forEach(panel => {
+      const prompt = panel.querySelector<HTMLElement>('[data-ai-prompt]');
+      if (prompt) prompt.textContent = renderPrompt(aiQuickstart, panel.dataset.aiPanel!, request.value);
+      panel.querySelectorAll<HTMLElement>('[data-copy-status]').forEach(status => { status.textContent = ''; });
+    });
+  }, { signal: copyListeners.signal });
+  selectLanguage(tabs[0]!);
+  builder.classList.add('is-interactive');
+  builder.querySelectorAll<HTMLElement>('[data-ai-enhancement]').forEach(element => { element.hidden = false; });
+});
+
 document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
   const button = block.querySelector<HTMLButtonElement>('[data-copy]');
   const content = block.querySelector<HTMLElement>('[data-copy-content]');
   const status = block.querySelector<HTMLElement>('[data-copy-status]');
   if (!button || !content || !status) return;
+  button.disabled = false;
+  const label = button.querySelector<HTMLElement>('[data-copy-label]');
+  const originalLabel = label?.textContent || '';
+  const copyIcon = button.querySelector<HTMLElement>('[data-copy-icon]');
+  const checkIcon = button.querySelector<HTMLElement>('[data-copy-check]');
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  function reset() {
+    if (label) label.textContent = originalLabel;
+    if (copyIcon) copyIcon.hidden = false;
+    if (checkIcon) checkIcon.hidden = true;
+  }
   button.addEventListener('click', async () => {
+    if (timer) { clearTimeout(timer); copyTimers.delete(timer); }
+    reset();
+    status.textContent = '';
+    button.disabled = true;
     try {
       await navigator.clipboard.writeText(content.textContent || '');
-      status.textContent = 'Command copied.';
+      if (copyListeners.signal.aborted) return;
+      status.textContent = block.dataset.copySuccess || 'Command copied.';
+      if (label) label.textContent = 'Copied';
+      if (copyIcon) copyIcon.hidden = true;
+      if (checkIcon) checkIcon.hidden = false;
+      timer = setTimeout(() => { reset(); if (timer) copyTimers.delete(timer); }, 2000);
+      copyTimers.add(timer);
     } catch {
+      if (copyListeners.signal.aborted) return;
       const selection = window.getSelection();
       const range = document.createRange();
       range.selectNodeContents(content);
       selection?.removeAllRanges();
       selection?.addRange(range);
-      status.textContent = 'Command selected. Copy it with your keyboard.';
+      status.textContent = block.dataset.copyFallback || 'Command selected. Copy it with your keyboard.';
+    } finally {
+      button.disabled = false;
     }
-  });
+  }, { signal: copyListeners.signal });
+});
+
+window.addEventListener('pagehide', event => {
+  // A page restored from the back/forward cache still needs its handlers.
+  if (event.persisted) return;
+  copyListeners.abort();
+  copyTimers.forEach(timer => clearTimeout(timer));
+  copyTimers.clear();
 });
 
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {

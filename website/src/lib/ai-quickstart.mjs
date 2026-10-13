@@ -1,0 +1,26 @@
+/** @typedef {{label: string, runtime: string, install: string, quickstart: string}} Language */
+/** @typedef {{publicVersion: string, languages: Record<string, Language>, prompts: Record<string, string>}} AiQuickstart */
+
+/**
+ * Render once so README, server previews, and clipboard text share a contract.
+ * Replacement values are never interpreted as markup or template syntax.
+ * @param {AiQuickstart} data
+ * @param {string} language
+ * @param {string} [request]
+ * @param {string} [locale]
+ */
+export function renderPrompt(data, language, request = '', locale = 'en') {
+  const selected = data.languages[language];
+  const template = data.prompts[locale];
+  if (!selected || !template) throw new Error('Unknown AI quickstart language or locale.');
+  const values = {
+    version: data.publicVersion,
+    language: selected.label,
+    runtime: selected.runtime,
+    install: selected.install,
+    quickstart: selected.quickstart,
+    request: request.trim() ? request : locale === 'zh-CN' ? '<描述你的需求>' : '<describe your task>',
+  };
+  return template.replace(/\{(version|language|runtime|install|quickstart|request)\}/g,
+    (_, key) => values[/** @type {keyof typeof values} */ (key)]);
+}

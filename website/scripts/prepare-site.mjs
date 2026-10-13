@@ -3,11 +3,12 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { importedDocs, rewriteMarkdown } from './content-links.mjs';
+import { importedDocs, rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
 import { siteConfig } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { checkDocumentation } from './documentation.mjs';
+import { checkAiQuickstart, generateAiQuickstart } from './ai-quickstart.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
 const root = path.resolve(website, '..');
@@ -15,6 +16,7 @@ const output = path.join(website, 'public/generated');
 const generated = path.join(website, 'src/generated');
 await mkdir(generated, { recursive: true });
 await checkDocumentation();
+await generateAiQuickstart(await checkAiQuickstart());
 await writeFile(path.join(generated, 'benchmark.json'), JSON.stringify(await loadBenchmarkPresentation(), null, 2) + '\n');
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
@@ -50,7 +52,7 @@ await prepareBrandAssets(website, data.examples[0]);
 await mkdir(path.join(website, 'src/content/docs/docs'), { recursive: true });
 for (const entry of importedDocs) {
   const original = await readFile(path.join(root, entry.source), 'utf8');
-  const content = rewriteMarkdown(original.replace(/^# .+\r?\n+/, '').replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
+  const content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
   const frontmatter = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n---\n\n`;
   await writeFile(path.join(website, `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
 }

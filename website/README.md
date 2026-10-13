@@ -19,6 +19,7 @@ The predev and prebuild commands compile and execute the Rust showcase. A first 
 
 ```sh
 npm test
+npm run check:ai
 npm run check:docs
 npm run check:examples
 npm run check
@@ -36,6 +37,7 @@ Astro runs the preview server in the background. Use `npm run preview:stop` when
 - `src/pages/index.astro`: homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
 - `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One timeline keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
 - `src/components/PerformanceEvidence.astro`: export metrics selected by `docs/benchmark-presentation.json`, with links to its methodology and limitations.
+- `src/components/AiQuickstart.astro`: language tabs, a local task input, plain-text AI briefs and installation copying, with complete no-script templates.
 - `src/pages/examples/index.astro`: all examples and package downloads.
 - `src/content/blog/`: Markdown or MDX posts, each with `title`, `description`, `date`, `category` (`Tutorial` or `Engineering`), and optional `draft: true`.
 - `src/content/docs/docs/`: introductory site docs. Task guides, language guides and references are generated from the repository sources listed in `scripts/content-links.mjs`. Edit those source files; each generated page links to its editable source.
@@ -50,6 +52,12 @@ Generated content, packages, favicon, and social image are ignored by Git and re
 Documentation code blocks marked with `<!-- source: ... -->` are compared to their executable source at build time. `npm run sync:docs` updates these blocks after intentional source changes. The documentation workflow also verifies Basic/Cloze counts, custom Cloze bundles, Image Occlusion and both APKG/lockfile update paths. `check:examples` runs complete Rust examples and creates a separate path-dependency consumer. Website CI additionally runs Python documentation programs and Node's installed-package/example checks. See [documentation maintenance](../docs/documentation.md).
 
 Public installation versions are maintained independently of source package metadata. Executable quickstart snippets are shared across READMEs and guides. Benchmark selection is shared with README chart generation; site checks compare rendered values against the CSV.
+
+AI briefs and installation commands come from `../docs/ai-quickstart.json`.
+After editing that data, run `npm run sync:ai` and review the marked README
+blocks. `check:ai` also checks Skill references and public installation guides;
+site preparation regenerates ignored site data without rewriting the READMEs.
+See [AI assistant setup](../docs/ai-assistants.md) for loading paths and release prerequisites.
 
 The brand mark is maintained in `../docs/assets/brand/ankiforge.svg`. The header,
 documentation title, favicon, social image, and both root READMEs use this design.

@@ -74,6 +74,53 @@
 
 </details>
 
+## 选择你的开发语言
+
+运行时要求以及客户端和平台限制见[兼容性](docs/compatibility.md)。
+
+| 语言 | 运行时 | 公开包 | 安装命令 | 指南 |
+| --- | --- | --- | --- | --- |
+| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
+| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
+| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
+
+<!-- ai-quickstart:start -->
+## 与 AI 编码助手一起使用
+
+将下方提示复制到 ChatGPT、Cursor、Claude Code 或其他编码助手。
+这是 Rust 模板；选择 Node / TypeScript 或 Python 时，请使用官网生成对应语言的提示。
+替换需求占位符后粘贴给 AI。
+
+```text
+请帮助我在 Rust 项目中使用 Anki Forge 0.3.0。
+运行时要求：Rust 1.92+
+
+只使用该版本公开文档中的 `ankiforge` 包和公开 API。不要使用 git/path
+依赖、internal tools、仅源码可用的 API、未发布方法或猜测出来的方法。
+
+我的目标：
+<描述你的需求>
+
+请按以下要求完成：
+1. 先检查现有项目，再决定需要新增或修改哪些文件。
+2. 给出准确的安装命令：cargo add ankiforge@0.3.0
+3. 生成最小但完整、可以直接运行的程序，列出新增或修改的文件。
+4. 输出持久化的 `.apkg`，并使用稳定的 namespace 和 note key。
+5. 给出运行命令、预期输出和验证步骤。
+6. 如果涉及媒体、自定义模板、图片遮挡或牌组更新，请遵循文档中的流程，
+   不要自行猜测 API。更新时保留上一份原始分发 APKG 作为基线，不使用 Anki 重新导出的包。
+7. 只有在语言、输入格式、输出路径或身份规则无法判断时才提问。
+
+快速开始文档：https://ankiforge.dev/docs/quickstart/
+```
+
+[打开交互式提示生成器](https://ankiforge.dev/#ai-quickstart)
+
+支持 Skill 的编码助手可按需加载语言安装、公开 API 规则、任务流程和验证指南：
+
+[查看 Anki Forge Skill](skills/anki-forge/SKILL.md) · [Skill 加载说明](docs/ai-assistants.md)
+<!-- ai-quickstart:end -->
+
 ## 快速开始
 
 三种语言都生成持久文件 `spanish.apkg`，包含 Spanish 牌组中的 **hola → hello**。
@@ -222,16 +269,6 @@ namespace 和 note key 标识笔记。每个生成的 APKG 都携带完整身份
 保留原始分发包，并用 `update_from` 生成下一版本。Anki 重新导出的包不作为基线。
 字段是否更新仍取决于客户端导入设置和本地修改时间。风险策略、实际导入验证
 与客户端限制见[完整更新流程](docs/updates.md)。
-
-## 选择你的开发语言
-
-运行时要求以及客户端和平台限制见[兼容性](docs/compatibility.md)。
-
-| 语言 | 运行时 | 公开包 | 安装命令 | 指南 |
-| --- | --- | --- | --- | --- |
-| Rust | Rust 1.92+ | [ankiforge 0.3.0](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.0` | [Rust](docs/installation.md) |
-| Node / TypeScript | Node 22.13+ | [ankiforge 0.3.0](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.0` | [Node](docs/node/quick-start.md) |
-| Python | CPython 3.11+ | [ankiforge 0.3.0](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.0` | [Python](docs/python/quick-start.md) |
 
 ## 参与贡献
 

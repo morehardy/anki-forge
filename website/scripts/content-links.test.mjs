@@ -1,11 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { rewriteMarkdown, rewriteTarget } from './content-links.mjs';
+import { rewriteMarkdown, rewriteTarget, stripDocumentTitle } from './content-links.mjs';
 
 test('imported guide links point to the deployed documentation', () => {
   assert.equal(rewriteTarget('template-bundles.md#fields', 'docs/rust-guide.md', '/anki-forge'), '/anki-forge/docs/templates/#fields');
   assert.equal(rewriteTarget('../anki_forge/README.md#stable-note-identity', 'docs/rust-guide.md', '/'), '/docs/api/#stable-note-identity');
   assert.equal(rewriteTarget('../anki_forge/examples/target_api_basic.rs', 'docs/rust-guide.md', '/'), 'https://github.com/morehardy/anki-forge/blob/main/anki_forge/examples/target_api_basic.rs');
+});
+
+test('imported Markdown and branded HTML titles defer to the page title without changing code', () => {
+  assert.equal(stripDocumentTitle('# Guide\n\nBody\n'), 'Body\n');
+  assert.equal(stripDocumentTitle('<p>Logo</p>\n<h1 align="center">anki-forge</h1>\n\n## API\n'), '<p>Logo</p>\n## API\n');
+  const code = '# Guide\n\n```html\n<h1>Card template</h1>\n```\n';
+  assert.equal(stripDocumentTitle(code), '```html\n<h1>Card template</h1>\n```\n');
 });
 
 test('anchors and external links are preserved', () => {

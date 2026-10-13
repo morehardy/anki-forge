@@ -52,6 +52,33 @@ State whether a page follows a source checkout or a released version. Public ins
 versions are maintained separately from source package metadata.
 An installed-consumer test or successful wheel build does not mean publication.
 
+## AI quickstart and Skill maintenance
+
+`docs/ai-quickstart.json` defines the public package version, language/runtime
+labels, exact installation commands, public documentation URLs and English/Chinese
+brief templates. The version remains independent of source package manifests.
+`website/src/lib/ai-quickstart.mjs` renders README briefs, server previews and
+clipboard content with the same plain-text substitution rules.
+
+From `website`, run `npm run sync:ai` after changing the shared data; review the
+marked blocks in both READMEs. It also regenerates ignored
+`src/generated/ai-quickstart.json`. `npm run check:ai` checks README drift, public
+installation guides, prompt requirements, Skill metadata and complete examples.
+The site preparation checks this contract and regenerates site data without
+rewriting tracked READMEs. CI runs the content check when Skill files change.
+
+Keep language examples in `skills/anki-forge/references` identical to the marked
+public quickstarts. Update references and Skill version together with a public
+release. Run `node skills/anki-forge/scripts/verify_quickstart.mjs` from the root
+for the standalone contributor check. Links and text checks do not replace
+actual SDK consumers or APKG inspection. Tool loading locations and official
+sources are recorded in [AI assistant setup](ai-assistants.md).
+
+When validating generated AI work, use isolated application directories for
+Basic, media, custom models and an answer-only update from an archived original
+APKG. Record actual source, commands, results and inspected contents; copying a
+brief successfully does not establish that the AI's program works.
+
 ## Verification
 
 From `website`, run `npm test`, `npm run check`, `npm run build`, and

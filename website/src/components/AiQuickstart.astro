@@ -1,0 +1,39 @@
+---
+import CopyBlock from './CopyBlock.astro';
+import InstallCommand from './InstallCommand.astro';
+import Icon from './Icon.astro';
+import data from '../generated/ai-quickstart.json';
+import { renderPrompt } from '../lib/ai-quickstart.mjs';
+import { repository } from '../lib/site';
+---
+<section id="ai-quickstart" class="ai-quickstart" data-ai-quickstart aria-labelledby="ai-heading">
+  <div class="ai-intro">
+    <h2 id="ai-heading">Use Anki Forge with AI.</h2>
+    <p>Choose a language, describe your task, then paste the brief into your AI coding assistant.</p>
+    <div class="ai-request" data-ai-enhancement hidden>
+      <label for="ai-request">What should the deck do?</label>
+      <textarea id="ai-request" data-ai-request rows="5" placeholder="Create a Spanish vocabulary deck with audio." aria-describedby="ai-request-hint"></textarea>
+      <p id="ai-request-hint">Optional. Your request is kept only in this page.</p>
+    </div>
+    <p class="ai-skill-link">Your coding assistant supports Skills?<br />
+      <a class="text-link" href={`${repository}/tree/main/skills/anki-forge/`}>Open the Anki Forge Skill <Icon name="arrowUpRight" /></a>
+    </p>
+    <noscript><p class="ai-noscript">Copy a language template below and replace the task placeholder. The installation commands and Skill are also available without JavaScript.</p></noscript>
+  </div>
+  <div class="ai-builder">
+    <div class="example-tabs ai-tabs" role="tablist" aria-label="Application language" data-ai-enhancement hidden>
+      {Object.entries(data.languages).map(([key, language], index) => (
+        <button type="button" id={`ai-tab-${key}`} role="tab" data-ai-language={key} aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`ai-panel-${key}`} tabindex={index === 0 ? 0 : -1}>{language.label}</button>
+      ))}
+    </div>
+    {Object.entries(data.languages).map(([key, language]) => (
+      <div id={`ai-panel-${key}`} data-ai-panel={key} class="ai-panel">
+        <h3 class="ai-language-label">{language.label}</h3>
+        <CopyBlock label={`AI brief · Anki Forge ${data.publicVersion}`} text={renderPrompt(data, key)} aiPrompt
+          buttonLabel="Copy prompt for AI" success="Prompt copied. Paste it into your AI coding assistant."
+          fallback="Prompt selected. Copy it with your keyboard, then paste it into your AI coding assistant." />
+        <InstallCommand command={language.install} runtime={language.runtime} buttonLabel="Copy install command" />
+      </div>
+    ))}
+  </div>
+</section>

@@ -4,6 +4,18 @@ All notable changes to the Rust Distribution are documented here. The crate
 follows Semantic Versioning; before 1.0, breaking public API changes require a
 new minor release.
 
+## [0.3.1] - 2026-10-13
+
+### Documentation and distribution
+
+- Add language-specific AI Skill references and a website prompt builder for
+  complete runnable programs, persistent APKG output, stable identity and
+  verification.
+- Synchronize public setup guidance and publish matching Rust, Node and Python
+  patch packages. Public authoring APIs and embedded contract bundle 2.1.0 are
+  unchanged from 0.3.0.
+- Refresh Python native dependency notices from the locked dependency graph.
+
 ## [0.3.0] - 2026-10-09
 
 ### Performance

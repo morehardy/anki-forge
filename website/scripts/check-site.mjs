@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { siteConfig, withBase } from '../site.config.mjs';
+import { loadAiQuickstart } from './ai-quickstart.mjs';
+import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 
 const dist = process.argv[2] ? path.resolve(process.argv[2]) : fileURLToPath(new URL('../dist/', import.meta.url));
 const errors = new Set();
@@ -102,6 +104,16 @@ if (siteConfig.customDomain) assert.equal((await readFile(path.join(dist, 'CNAME
 
 const benchmark = await loadBenchmarkPresentation();
 const home = pages.get(path.join(dist, 'index.html'));
+const ai = await loadAiQuickstart();
+record(home.$('#ai-quickstart[data-ai-quickstart]').length === 1, 'Missing AI quickstart anchor');
+for (const [key, language] of Object.entries(ai.languages)) {
+  const panel = home.$(`[data-ai-panel="${key}"]`);
+  record(panel.length === 1 && panel.attr('hidden') === undefined, `${key}: missing no-script AI template`);
+  record(panel.find('[data-ai-prompt]').text() === renderPrompt(ai, key), `${key}: rendered prompt drift`);
+  record(panel.find('[data-copy-content]').last().text() === language.install, `${key}: rendered installation drift`);
+  record(panel.find('[data-copy-status][aria-live="polite"]').length === 2, `${key}: missing copy announcements`);
+  record(home.$(`#ai-tab-${key}`).attr('aria-controls') === `ai-panel-${key}`, `${key}: incorrect tab target`);
+}
 for (const result of benchmark.results) {
   const row = home.$(`[data-profile="${result.profile}"]`);
   record(row.length === 1, `Missing benchmark workload ${result.profile}`);
