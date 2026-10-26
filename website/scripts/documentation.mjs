@@ -47,6 +47,8 @@ export async function checkDocumentation({ sync = false } = {}) {
     const prose = markdown.replace(/```[\s\S]*?```/g, '');
     for (const [, link] of prose.matchAll(/\]\(([^\s)]+)\)/g)) {
       if (/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(link)) continue;
+      // Site-relative links are checked against the actual build, including anchors.
+      if (link.startsWith('/')) continue;
       const target = path.resolve(root, path.dirname(filename), decodeURIComponent(link.split(/[?#]/)[0]));
       assert.ok(target.startsWith(root), `${filename}: link leaves repository ${link}`);
       await stat(target).catch(() => assert.fail(`${filename}: missing repository link ${link}`));

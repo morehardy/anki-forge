@@ -1,5 +1,8 @@
 ---
 import Icon from './Icon.astro';
+import { createTranslator } from '../i18n/messages.mjs';
+import { localeFromPath } from '../../site-model.mjs';
+const t = createTranslator(localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL));
 interface Props {
   label: string;
   text: string;
@@ -9,8 +12,8 @@ interface Props {
   aiPrompt?: boolean;
 }
 const {
-  label, text, buttonLabel = 'Copy', success = 'Command copied.',
-  fallback = 'Command selected. Copy it with your keyboard.', aiPrompt = false,
+  label, text, buttonLabel = t('copy.code'), success = t('copy.success'),
+  fallback = t('copy.fallback'), aiPrompt = false,
 } = Astro.props;
 ---
 <div class="install-command" data-copy-block data-copy-success={success} data-copy-fallback={fallback}>

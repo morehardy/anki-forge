@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pagePath } from '../site-model.mjs';
 import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { importedDocs } from './content-links.mjs';
 import { verifySkill } from '../../skills/anki-forge/scripts/verify_quickstart.mjs';
@@ -48,7 +49,7 @@ export async function loadAiQuickstart(directory = root) {
         ? [/published/, /public API/, /persistent/, /stable namespace and note keys/, /run command/, /verification/, /original distribution APKG/]
         : [/公开 API/, /持久化/, /namespace 和 note key/, /运行命令/, /验证步骤/, /原始分发 APKG/];
       for (const requirement of requirements) assert.match(prompt, requirement, `${language}/${locale}: incomplete prompt contract`);
-      assert.ok(prompt.includes(data.languages[language].install) && prompt.includes(data.languages[language].quickstart));
+      assert.ok(prompt.includes(data.languages[language].install) && prompt.includes(new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), data.languages[language].quickstart).href));
       assert.ok(locale === 'en' ? prompt.split(/\s+/).length <= 500 : prompt.length <= 700, `${language}/${locale}: prompt too long`);
     }
   }
@@ -66,7 +67,7 @@ export function renderReadme(data, locale) {
   const description = chinese
     ? '支持 Skill 的编码助手可按需加载语言安装、公开 API 规则、任务流程和验证指南：'
     : 'Coding assistants that support Skills can load language-specific setup, public API rules, task workflows, and verification guidance:';
-  return `${start}\n${intro}\n\n\`\`\`text\n${renderPrompt(data, 'rust', '', locale)}\n\`\`\`\n\n[${builder}](${data.sitePromptUrl})\n\n${description}\n\n[${skill}](skills/anki-forge/SKILL.md) · [${setup}](docs/ai-assistants.md)\n${end}`;
+  return `${start}\n${intro}\n\n\`\`\`text\n${renderPrompt(data, 'rust', '', locale)}\n\`\`\`\n\n[${builder}](${chinese ? data.sitePromptUrl.replace('/#', '/zh-cn/#') : data.sitePromptUrl})\n\n${description}\n\n[${skill}](skills/anki-forge/SKILL.md) · [${setup}](docs/ai-assistants.md)\n${end}`;
 }
 
 function replaceBlock(markdown, expected, filename) {

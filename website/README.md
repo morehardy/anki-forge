@@ -32,28 +32,63 @@ Production preview runs at `http://127.0.0.1:4321/anki-forge/` by default. Starl
 
 Astro runs the preview server in the background. Use `npm run preview:stop` when finished.
 
-## Core translations and registry verification
+## English and Chinese content
 
-Seven topic pairs in `scripts/core-pages.mjs` define English/Chinese alternates.
-Chinese Markdown is authored under `../docs/zh-cn/`, prepared into `coreGuides`,
-and served by six explicit routes plus the Chinese homepage. Do not enable
-Starlight locale fallback: untranslated Chinese references must remain 404s.
+`site-model.mjs` owns stable topic IDs, routes, locale metadata, navigation order,
+document groups, authoritative sources and required capabilities. Each public page
+type has one component; route wrappers only choose the language and content.
+All documentation uses native Starlight locales and Pagefind. Missing translations
+are build errors; English fallback cannot satisfy the translation contract.
+
+The model currently contains 32 topics in both languages. This is an inventory,
+not a permanent count: source and artifact checks independently discover new,
+missing or unregistered content. Chinese documentation is authored in
+`../docs/zh-cn/`; `prepare:site` generates ignored Starlight files. Edit links point
+to the authored source. Blog posts require a matching `translationKey`, `locale`,
+date and category in both language directories.
+
+Short UI messages, including clipboard failures, screen-reader feedback, social
+image text and search failures, live in `src/i18n/{en,zh-CN}.json`. Starlight and
+Pagefind overrides live in `src/content/i18n/`. Both catalogs enforce identical
+keys and interpolation parameters. Shared SDK commands, executable examples,
+APKGs and benchmark values remain independent of translated prose.
+
+After changing a long-form source, review its paired translation for technical
+facts, steps, code, tables, limitations and next actions. Record the two current
+SHA-256 hashes, `status: reviewed` and the review date in `content-reviews.json`.
+Do not refresh hashes before doing the review: stale or pending records block
+builds. `legacy-sections.json` preserves previously public Chinese anchors;
+preparation also adds shared English section aliases. Language switches check
+the real target before carrying a query and mapped fragment across languages.
+
+Useful checks:
+
+```sh
+npm run check:content
+npm run check:gates       # controlled failures against the current dist/
+npx playwright install chromium
+npm run test:browser      # serves the real built files over local HTTP
+```
+
+To use a local Chrome installation, set `CHROME_EXECUTABLE` to its executable.
+Browser checks cover real Pagefind, clipboard permission denial/recovery,
+keyboard actions, media, themes, responsive layouts and JavaScript-disabled
+content. Screenshots are written under `../target/website-i18n-62/`.
 
 `npm run check:public-recipe` installs public packages in temporary apps, runs the
 shared JSON/media/update recipe and saves evidence in `../target/geo-public-consumers/`.
 It requires Node, Rust, Python/venv and network access. CI runs this on Linux x64
 separately from source-package checks and gates deployment on success.
-`npm run check:live` independently checks production metadata and routes after deployment.
 
 ## Content and examples
 
-- `src/pages/index.astro`: homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
+- `src/components/HomePage.astro`: shared homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
 - `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One ten-second loop keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
 - `src/components/PerformanceEvidence.astro`: export metrics selected by `docs/benchmark-presentation.json`, with links to its methodology and limitations.
 - `src/components/AiQuickstart.astro`: language tabs, a local task input, plain-text AI briefs and installation copying, with complete no-script templates.
-- `src/pages/examples/index.astro`: all examples and package downloads.
-- `src/content/blog/`: Markdown or MDX posts, each with `title`, `description`, `date`, `category` (`Tutorial` or `Engineering`), and optional `draft: true`.
-- `src/content/docs/docs/`: introductory site docs. Task guides, language guides and references are generated from the repository sources listed in `scripts/content-links.mjs`. Edit those source files; each generated page links to its editable source.
+- `src/components/ExamplesPage.astro`: all examples and package downloads.
+- `src/content/blog/`: Markdown or MDX posts, each with `title`, `description`, `date`, `category` (`Tutorial` or `Engineering`), `locale`, `translationKey`, and optional `draft: true`.
+- `src/content/docs/docs/`: introductory site docs. Task guides, language guides and references are generated from the repository sources listed in `site-model.mjs`. Edit those source files; each generated page links to its editable source.
 - `src/styles/tokens.css`: the shared light/dark palette; `global.css` styles the public pages, `home.css` and `showcase.css` style the homepage, and `docs.css` adapts Starlight.
 
 `scripts/prepare-site.mjs` runs `anki_forge/examples/website_showcase.rs`. The Rust program builds Basic, Cloze, media, Image Occlusion, a combined four-card showcase deck, and two-version update packages. It checks inspected counts and verifies preserved identity in the update report. The preparation script extracts displayed source regions from that same file and records package hashes in `generated/showcase.json`.
@@ -85,6 +120,21 @@ Interface icons come from Phosphor. Its MIT license is included in the generated
 The production URL is `https://ankiforge.dev/`; local builds default to the GitHub project prefix for base-path verification. The workflow in `.github/workflows/website.yml` checks pull requests and deploys successful builds from `main`.
 
 Before the first deployment, set the repository’s **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. A pushed workflow or manual workflow run can then publish the static output. The local implementation does not change repository settings automatically.
+
+CI builds and checks both `/anki-forge/` and the production root, including
+browser tests and deliberate contract violations. `build` writes
+`dist/generated/site-manifest.json` from actual output with the source commit,
+input fingerprint, routes, observed capabilities and file hashes. The manifest
+is uploaded separately from the Pages artifact. After deployment, `check:live`
+requires that verified manifest, checks every normal URL and resource against it,
+and independently checks metadata, search, sitemap and genuine unknown URLs.
+The deploy job also runs live browser checks. A local pass is not evidence that
+production has been updated.
+
+GitHub Pages serves one static `404.html` for all unknown paths. With JavaScript,
+that document selects the requested language and recovery links. Without
+JavaScript it deliberately displays both languages. This is not server-side
+localized error routing; Pages cannot provide that per-path capability here.
 
 The configuration keeps page links, assets, canonical URLs, RSS, the sitemap, and the social image under the same base. `check:site` walks the built HTML to catch missing local targets, broken anchors, duplicate IDs, incorrect metadata, and mismatched deck downloads.
 

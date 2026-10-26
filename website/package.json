@@ -11,20 +11,23 @@
     "predev": "npm run prepare:site",
     "dev": "astro dev --host 127.0.0.1",
     "prebuild": "npm run prepare:site",
-    "build": "astro build",
+    "build": "astro build && node scripts/site-manifest.mjs",
     "preview": "astro preview --host 127.0.0.1",
     "preview:stop": "astro preview stop",
     "precheck": "npm run prepare:site",
     "check": "astro check",
     "check:site": "node scripts/check-site.mjs",
-    "test": "node --test scripts/site-config.test.mjs scripts/content-links.test.mjs scripts/benchmark-presentation.test.mjs scripts/ai-quickstart.test.mjs",
+    "test": "node --test scripts/site-config.test.mjs scripts/content-links.test.mjs scripts/benchmark-presentation.test.mjs scripts/ai-quickstart.test.mjs scripts/content-contract.test.mjs",
     "check:ai": "node scripts/ai-quickstart.mjs",
     "sync:ai": "node scripts/ai-quickstart.mjs --write",
     "check:docs": "node scripts/documentation.mjs",
     "sync:docs": "node scripts/documentation.mjs --write",
     "check:examples": "node scripts/verify-doc-examples.mjs",
     "check:public-recipe": "node scripts/verify-public-recipe.mjs",
-    "check:live": "node scripts/check-live-site.mjs"
+    "check:live": "node scripts/check-live-site.mjs",
+    "test:browser": "node --test scripts/browser.test.mjs",
+    "check:content": "node scripts/check-content.mjs",
+    "check:gates": "node --test scripts/site-gates.test.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
@@ -36,6 +39,8 @@
     "@astrojs/check": "0.9.10",
     "@types/node": "24.13.6",
     "cheerio": "1.2.0",
+    "github-slugger": "2.0.0",
+    "playwright": "1.62.1",
     "sharp": "0.35.4",
     "typescript": "6.0.3"
   }

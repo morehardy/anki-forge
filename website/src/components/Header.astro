@@ -1,34 +1,32 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
-interface Props { locale?: 'en' | 'zh-CN' }
-const { locale = 'en' } = Astro.props;
-const chinese = locale === 'zh-CN';
 import Icon from './Icon.astro';
 import BrandMark from './BrandMark.astro';
+import ThemeControl from './ThemeControl.astro';
 import { repository, sitePath } from '../lib/site';
-const links = chinese ? [
-  { label: '指南', path: '/zh-cn/docs/languages/' },
-] : [
-  { label: 'Guide', path: '/docs/' },
-  { label: 'Examples', path: '/examples/' },
-  { label: 'Blog', path: '/blog/' },
-];
+import { navigation, pagePath, pagePair } from '../../site-model.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+interface Props { locale?: 'en' | 'zh-CN' }
+const { locale = 'en' } = Astro.props;
+const t = createTranslator(locale);
+const section = pagePair(Astro.url.pathname, import.meta.env.BASE_URL)?.section;
 ---
 <header class="site-header container">
-  <a class="wordmark" href={sitePath(chinese ? '/zh-cn/' : '/')} aria-label={chinese ? "Anki Forge 首页" : "Anki Forge home"}><BrandMark />ankiforge</a>
-  <nav class="desktop-nav" aria-label={chinese ? '主导航' : 'Main navigation'}>
-    {links.map(link => <a href={sitePath(link.path)} aria-current={Astro.url.pathname.startsWith(sitePath(link.path)) ? 'page' : undefined}>{link.label}</a>)}
-    <a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a>
+  <a class="wordmark" href={sitePath(pagePath('home', locale))} aria-label={t('nav.home')}><BrandMark /><span>ankiforge</span></a>
+  <nav class="desktop-nav" aria-label={t('nav.main')}>
+    {navigation.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label[locale]}</a>)}
+    <a class="github-link" href={repository} aria-label={t('nav.repository')} title="GitHub"><Icon name="githubLogo" /></a>
   </nav>
   <div class="header-tools">
     <LanguageSwitcher />
-    <label class="theme-label"><span class="sr-only">{chinese ? '配色' : 'Color theme'}</span><select data-theme-picker aria-label={chinese ? '配色' : 'Color theme'}><option value="auto">{chinese ? '跟随系统' : 'System'}</option><option value="light">{chinese ? '浅色' : 'Light'}</option><option value="dark">{chinese ? '深色' : 'Dark'}</option></select></label>
+    <ThemeControl locale={locale} />
     <details class="mobile-menu">
-      <summary>{chinese ? '菜单' : 'Menu'}</summary>
-      <nav aria-label={chinese ? '移动导航' : 'Mobile navigation'}>
-        {links.map(link => <a href={sitePath(link.path)}>{link.label}</a>)}
-        <a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a>
+      <summary>{t('nav.menu')}</summary>
+      <nav aria-label={t('nav.mobile')}>
+        {navigation.map(link => <a data-section={link.id} href={sitePath(pagePath(link.id, locale))} aria-current={section === link.id ? 'page' : undefined}>{link.label[locale]}</a>)}
+        <a class="github-link" href={repository} aria-label={t('nav.repository')} title="GitHub"><Icon name="githubLogo" /></a>
       </nav>
     </details>
   </div>
+  <slot />
 </header>

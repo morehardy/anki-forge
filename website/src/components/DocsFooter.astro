@@ -1,0 +1,7 @@
+---
+import StarlightFooter from '@astrojs/starlight/components/Footer.astro';
+import Footer from './Footer.astro';
+const locale = Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-CN' : 'en';
+---
+<StarlightFooter />
+<Footer locale={locale} />

@@ -1,17 +1,12 @@
 # 用 JSON 数据生成并更新 Anki 牌组
 
-从 JSON 读取三道生物题，为它们加入同一张图片和一段音频，先生成原始 APKG，
-再检查一条答案的修改并发布更新。每份牌组应有 **3 条笔记、3 张卡片、2 个媒体文件**。
-下方三种语言任选一种，每份程序都能独立运行。生成 APKG 不需要安装 Anki。
+从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改答案的更新。每个版本应包含 **3 条笔记、3 张卡片和 2 个媒体文件**。选择下方任一 SDK，每份都是完整程序。普通导出不需要安装 Anki。
 
-Anki Forge 维护者撰写，2026-10-25 复核。
+由 Anki Forge 维护者维护 · 2026-10-25 复核。
 
-## 准备共同输入
+## 共享输入
 
-下载 [v1.json](../recipes/json-to-anki/v1.json)、[v2.json](../recipes/json-to-anki/v2.json)、
-[cell.png](../recipes/json-to-anki/cell.png) 和 [tone.wav](../recipes/json-to-anki/tone.wav)。
-图片是一张细胞结构图，音频是短提示音，不是单词发音。
-在每个新建的项目目录中，把这四个文件放进 `recipe/`：
+下载 [v1.json](../recipes/json-to-anki/v1.json)、[v2.json](../recipes/json-to-anki/v2.json)、[cell.png](../recipes/json-to-anki/cell.png) 和 [tone.wav](../recipes/json-to-anki/tone.wav)。图片是细胞示意图；音频是短合成音，并非词汇朗读。在每个新应用目录中，将这四个文件放入 `recipe/`：
 
 ```text
 json-deck/
@@ -22,13 +17,11 @@ json-deck/
     tone.wav
 ```
 
-两份 JSON 都包含 `namespace`、`deck` 和三条 `notes`；每条笔记有固定的业务 `id`、
-问题 `front` 和答案 `back`。v2 只修改第一条答案。JSON 由调用方解析，
-Anki Forge 负责笔记创作和 APKG 生成。接收不可信数据时，应先验证业务数据的格式。
+两份 JSON 都包含 `namespace`、`deck` 和三条 `notes`，每条有持久 `id`、`front` 与 `back`。v2 只改变第一个答案。JSON 由调用方解析；Anki Forge 负责内容编写和 APKG 生成。对于不可信输入，创建笔记前应校验应用自己的 schema。
 
-<h2 id="rust">Rust</h2>
+## Rust
 
-使用 Rust 1.92 或更新版本；JSON 由 `serde` 和 `serde_json` 解析。 安装公开版本 Anki Forge 0.3.1：
+Rust 1.92+。JSON 解析使用 `serde` 与 `serde_json`。使用公开 Anki Forge 0.3.1。
 
 ```sh
 cargo new json-deck
@@ -38,7 +31,7 @@ cargo add serde --features derive
 cargo add serde_json
 ```
 
-保存为 `src/main.rs`，并将 `recipe/` 放在项目根目录：
+保存为 `src/main.rs`（在 `Cargo.toml` 同级创建 `recipe/`）：
 
 <!-- source: anki_forge/examples/json_to_anki.rs -->
 ```rust
@@ -116,9 +109,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 cargo run -- recipe output/rust
 ```
 
-<h2 id="python">Python</h2>
+## Python
 
-使用普通 CPython 3.11 或更新版本及对应平台的 wheel；发布检查覆盖 3.11–3.14。Windows 下用 `.venv\Scripts\Activate.ps1` 激活环境。 安装公开版本 Anki Forge 0.3.1：
+普通 CPython 3.11+ 及匹配平台 wheel；发布检查覆盖 3.11–3.14。Windows 使用 `.venv\Scripts\Activate.ps1` 激活。使用公开 Anki Forge 0.3.1。
 
 ```sh
 mkdir json-deck
@@ -128,7 +121,7 @@ python -m venv .venv
 python -m pip install ankiforge==0.3.1
 ```
 
-保存为 `main.py`，并将 `recipe/` 放在项目根目录：
+保存为 `main.py`（在 `main.py` 同级创建 `recipe/`）：
 
 <!-- source: bindings/python/examples/json_to_anki.py -->
 ```python
@@ -181,9 +174,9 @@ finally:
 python main.py recipe output/python
 ```
 
-<h2 id="node">Node.js / TypeScript</h2>
+## Node
 
-使用 Node.js 22.13 或更新版本，安装时保留对应平台的原生可选依赖。程序先编译为 JavaScript，再由 Node.js 执行。 安装公开版本 Anki Forge 0.3.1：
+Node.js 22.13+ 及匹配原生可选依赖。程序将 TypeScript 编译为 JavaScript，再在 Node.js 上运行。使用公开 Anki Forge 0.3.1。
 
 ```sh
 mkdir json-deck
@@ -193,7 +186,7 @@ npm install --include=optional ankiforge@0.3.1
 npm install --save-dev typescript@6.0.3 @types/node@24.13.6
 ```
 
-保存为 `main.mts`，并将 `recipe/` 放在项目根目录：
+保存为 `main.mts`（在 `main.mts` 同级创建 `recipe/`）：
 
 <!-- source: bindings/node/examples/json_to_anki.mts -->
 ```typescript
@@ -259,22 +252,12 @@ npx tsc main.mts --target ES2022 --module NodeNext --moduleResolution NodeNext -
 node dist/main.mjs recipe output/node
 ```
 
-## 检查结果并导入 Anki
+## 检查并导入结果
 
-程序会打印 `output/<language>/v2.apkg` 的路径。请同时保留 `v1.apkg`。
-`comparison.json` 和 `review.json` 应包含 `RISK.NOTE_CHANGED`，没有新增或删除笔记，
-本例的 `policy.allows_publication` 为 `true`。程序会再次检查待发布包的策略结果，
-确认允许后才写出 v2。输出目录已有任一版本时，程序会停止，避免覆盖历史版本。
+所选程序输出 `output/<language>/v2.apkg`。将 `v1.apkg` 保留在旁边；`comparison.json` 和 `review.json` 记录 `RISK.NOTE_CHANGED`，没有新增或移除笔记，且对这次仅修改答案的编辑给出 `policy.allows_publication: true`。发布前，程序在预备候选包上再次检查策略。它拒绝复用已包含任一版本的输出目录。
 
-先把 `v1.apkg` 导入 Anki：Biology 牌组应有三张 Basic 卡片，可以显示细胞图并播放提示音。
-再导入 `v2.apkg`，检查第一条答案变为 “The basic structural and functional unit of life”，
-笔记总数仍为三条。namespace `biology-json` 标识这个发布项目，每个业务 ID 是一条笔记固定的 note key；
-Anki Forge 据此生成 Anki 使用的 GUID。后续修改时，保持 namespace 和这三个键不变。
+将 `v1.apkg` 导入 Anki，应看到 Biology 牌组的三张 Basic 卡片、细胞图片与合成音。再导入 `v2.apkg`，检查第一个答案变成“The basic structural and functional unit of life”，且仍有三条笔记。命名空间 `biology-json` 标识该发布项目。每个业务 ID 是稳定笔记键；Anki Forge 根据该身份派生 Anki 使用的 GUID。保持命名空间和这三个键不变。
 
-更新基线必须是上次**原始分发的 APKG**，不能用 Anki 重新导出的包代替。
-能否匹配已有笔记、如何处理本地修改与复习进度，取决于 Anki 版本、笔记类型和导入设置；
-发布前应在目标客户端验证。从后续包中省略一条笔记，并不会删除学习者已有的笔记。
-比较和生成成功，也不代表所有客户端的复习状态都得到保证。
+更新基线必须是**原始分发** v1 APKG，不能使用 Anki 重新导出的文件。客户端导入匹配、本地编辑和调度取决于 Anki 版本、笔记类型与导入设置；发布前验证目标客户端。导入包不会删除后续包中省略的笔记。比较或构建成功不保证每位学习者的复习状态。
 
-继续阅读[更新条件（英文）](../updates.md)、[媒体用法（英文）](../media.md)、
-[API 参考（英文）](../api-overview.md)或[选型比较](anki-forge-vs-genanki.md)。
+参见[更新条件](../updates.md)、[媒体](../media.md)、[API 导航](../api-overview.md)和[选库指南](../anki-forge-vs-genanki.md)。

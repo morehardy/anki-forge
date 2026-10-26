@@ -1,0 +1,19 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { formatDate, sitePath } from '../lib/site';
+import { pagePath } from '../../site-model.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const locale = post.data.locale;
+const t = createTranslator(locale);
+const { Content } = await render(post);
+---
+<SiteLayout locale={locale} title={post.data.title} description={post.data.description} article publishedAt={post.data.date}>
+  <article class="article container">
+    <header class="article-header"><a class="text-link" href={sitePath(pagePath('blog', locale))}>{t('blog.all')}</a><h1>{post.data.title}</h1><p class="lede">{post.data.description}</p><div class="post-meta"><span>{t(`blog.${post.data.category}`)}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, locale)}</time></div></header>
+    <div class="prose"><Content /></div>
+    <footer class="article-footer"><a class="text-link" href={sitePath(pagePath('docs', locale))}>{t('blog.continue')}</a></footer>
+  </article>
+</SiteLayout>

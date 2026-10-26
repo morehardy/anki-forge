@@ -229,3 +229,17 @@ code { font-size: 0.86em; }
   .identity-controls p { max-width: none; }
   .card-preview { padding-inline: 18px; }
 }
+
+/* Keep all shared tools operable at 320px and at increased text sizes. */
+.site-header { flex-wrap: wrap; min-height: 76px; height: auto; padding-block: 12px; }
+.header-tools { margin-left: auto; flex-shrink: 0; }
+.mobile-menu summary, .mobile-menu nav a { white-space: nowrap; }
+@media (max-width: 767px) {
+  .site-header { column-gap: 10px; row-gap: 8px; }
+  .header-tools { gap: 8px; }
+  .theme-label select { max-width: 88px; }
+}
+@media (max-width: 420px) {
+  .site-header .wordmark > span:last-child { display: none; }
+  .site-header .wordmark { gap: 0; }
+}

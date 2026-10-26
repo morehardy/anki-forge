@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PostCard from './PostCard.astro';
+import { sitePath } from '../lib/site';
+import { locales } from '../../site-model.mjs';
+import { createTranslator } from '../i18n/messages.mjs';
+interface Props { locale: 'en' | 'zh-CN' }
+const { locale } = Astro.props;
+const t = createTranslator(locale);
+const posts = (await getCollection('blog', ({ data }) => !data.draft && data.locale === locale)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<SiteLayout locale={locale} title={t('blog.title')} description={t('blog.description')}>
+  <div class="container">
+    <header class="page-intro"><h1>{t('blog.heading')}</h1><p>{t('blog.description')}</p><a class="text-link" href={sitePath(`${locales[locale].prefix}/rss.xml`)}>{t('blog.rss')}</a></header>
+    <div class="post-grid blog-list">{posts.map(post => <PostCard post={post} />)}</div>
+  </div>
+</SiteLayout>

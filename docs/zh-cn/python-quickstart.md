@@ -1,10 +1,6 @@
-# 用 Python 生成第一个 Anki 牌组
+# 用 Python 生成 Anki APKG
 
-使用普通 CPython 3.11 或更新版本及对应平台的 wheel；发布检查覆盖 3.11–3.14。Windows 下用 `.venv\Scripts\Activate.ps1` 激活环境。
-
-## 安装
-
-在新的项目目录中安装公开版本 0.3.1：
+创建并激活虚拟环境，然后安装[公开 PyPI 包](https://pypi.org/project/ankiforge/)：
 
 ```sh
 python -m venv .venv
@@ -12,11 +8,11 @@ python -m venv .venv
 python -m pip install ankiforge==0.3.1
 ```
 
-具体平台范围见[兼容性说明（英文）](../compatibility.md)。
+Windows 使用 `.venv\Scripts\Activate.ps1` 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见[已验证环境](../compatibility.md)。
 
-## 生成 APKG
+## 导出牌组
 
-将下面的完整程序保存为 `main.py`：
+将以下程序保存为 `main.py`：
 
 <!-- source: bindings/python/examples/quickstart.py -->
 ```python
@@ -29,18 +25,21 @@ print(output.artifact.path)
 ```
 <!-- /source -->
 
-运行：
-
 ```sh
 python main.py
 ```
 
-程序会写出持久保存的 `spanish.apkg`。在 Anki 中导入后，可以在 Spanish 牌组学习 **hola → hello**。
-生成 APKG 不需要安装 Anki。后续修改答案时，保持 namespace `spanish` 和 note key `es:hola` 不变。
+在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和笔记键 `es:hola` 不变。导出不需要安装 Anki。
 
-## 继续完成实际任务
+## 继续学习
 
-[JSON 教程](json-to-anki.md#python)包含图片、音频和更新流程。
-发布更新时请保留上一份原始分发 APKG，不能用 Anki 重新导出的文件代替。
-查看[更新条件（英文）](../updates.md)、[API 参考（英文）](../api-overview.md)，
-或[选择其他开发语言](languages.md)。
+完整媒体与更新任务见 [JSON 到 Anki](../json-to-anki.md#python)。
+
+- [图片与音频](../media.md)及 [Python 媒体 API](../python/api.md#media-and-occlusion)
+- [自定义笔记类型](../custom-notetypes.md)和[模板包](../template-bundles.md)
+- [图片遮挡](../image-occlusion.md)
+- [比较与更新](../updates.md)
+- [Python API](../python/api.md)及[诊断](../python/diagnostics.md)
+- [从 genanki 迁移](../python/genanki-migration.md)
+
+原生源码编译见[源码构建](../source-builds.md)。

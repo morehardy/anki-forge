@@ -14,7 +14,7 @@ test('every language and locale renders the public setup and an empty task place
       const prompt = renderPrompt(data, language, ' \n ', locale);
       assert.ok(prompt.includes(data.languages[language].install));
       assert.ok(prompt.includes(data.languages[language].runtime));
-      assert.ok(prompt.includes(data.languages[language].quickstart));
+      assert.ok(prompt.includes(locale === 'en' ? data.languages[language].quickstart : data.languages[language].quickstart.replace('/docs/', '/zh-cn/docs/')));
       assert.ok(prompt.includes(locale === 'en' ? '<describe your task>' : '<描述你的需求>'));
       assert.doesNotMatch(prompt, /\{(?:version|language|install|request)\}/);
     }

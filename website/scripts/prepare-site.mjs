@@ -4,10 +4,13 @@ import { cp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { importedDocs, rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
-import { translatedDocs } from './core-pages.mjs';
+import { translatedDocs, docPages, pages } from '../site-model.mjs';
+import { sectionMap, addSectionAliases } from './content-sections.mjs';
+import legacySections from '../legacy-sections.json' with { type: 'json' };
 import { siteConfig } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
+import { checkContent } from './check-content.mjs';
 import { checkDocumentation } from './documentation.mjs';
 import { checkAiQuickstart, generateAiQuickstart } from './ai-quickstart.mjs';
 
@@ -16,6 +19,7 @@ const root = path.resolve(website, '..');
 const output = path.join(website, 'public/generated');
 const generated = path.join(website, 'src/generated');
 await mkdir(generated, { recursive: true });
+await checkContent();
 await checkDocumentation();
 await generateAiQuickstart(await checkAiQuickstart());
 await writeFile(path.join(generated, 'benchmark.json'), JSON.stringify(await loadBenchmarkPresentation(), null, 2) + '\n');
@@ -58,12 +62,24 @@ await copyFile(path.join(root, sourcePath), path.join(output, 'website_showcase.
 await prepareBrandAssets(website, data.examples[0]);
 
 await mkdir(path.join(website, 'src/content/docs/docs'), { recursive: true });
-await mkdir(path.join(generated, 'zh-cn'), { recursive: true });
+await mkdir(path.join(website, 'src/content/docs/zh-cn/docs'), { recursive: true });
+const sections = {};
+for (const page of pages.filter(page => page.type === 'docs' || page.type === 'article')) {
+  sections[page.id] = sectionMap(await readFile(path.join(root, page.sources.en), 'utf8'), await readFile(path.join(root, page.sources['zh-CN']), 'utf8'), legacySections[page.id]);
+}
+await writeFile(path.join(generated, 'sections.json'), JSON.stringify(sections, null, 2));
 for (const entry of [...importedDocs, ...translatedDocs]) {
   const original = await readFile(path.join(root, entry.source), 'utf8');
-  const content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
+  let content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
+  if (translatedDocs.includes(entry)) {
+    const page = docPages.find(page => page.sources['zh-CN'] === entry.source);
+    content = addSectionAliases(content, sections[page.id]);
+    for (const [alias, target] of Object.entries(legacySections[page.id] ?? {})) {
+      if (target === '_top') content = `<span id="${alias}" data-section-alias="_top"></span>\n\n` + content;
+    }
+  }
   const frontmatter = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n---\n\n`;
-  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/generated/zh-cn/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
+  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/content/docs/zh-cn/docs/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
 }
 
 const cname = path.join(website, 'public/CNAME');

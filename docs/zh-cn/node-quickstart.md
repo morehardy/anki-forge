@@ -1,10 +1,6 @@
-# 用 Node.js 生成第一个 Anki 牌组
+# 用 Node.js 生成 Anki APKG
 
-使用 Node.js 22.13 或更新版本，安装时保留对应平台的原生可选依赖。本页使用 JavaScript，可以直接由 Node.js 执行。
-
-## 安装
-
-在新的项目目录中安装公开版本 0.3.1：
+使用 Node.js 22.13 或更高版本。在新的应用目录中运行：
 
 ```sh
 mkdir anki-deck
@@ -12,11 +8,11 @@ cd anki-deck
 npm install --include=optional ankiforge@0.3.1
 ```
 
-具体平台范围见[兼容性说明（英文）](../compatibility.md)。
+这会安装[公开 npm 包](https://www.npmjs.com/package/ankiforge)及匹配的原生可选依赖。平台覆盖范围见[已验证环境](../compatibility.md)。
 
-## 生成 APKG
+## 导出牌组
 
-将下面的完整程序保存为 `main.mjs`：
+将以下程序保存为 `main.mjs`：
 
 <!-- source: bindings/node/examples/quickstart.mjs -->
 ```js
@@ -30,18 +26,22 @@ await output.artifact.close();
 ```
 <!-- /source -->
 
-运行：
-
 ```sh
 node main.mjs
 ```
 
-程序会写出持久保存的 `spanish.apkg`。在 Anki 中导入后，可以在 Spanish 牌组学习 **hola → hello**。
-生成 APKG 不需要安装 Anki。后续修改答案时，保持 namespace `spanish` 和 note key `es:hola` 不变。
+在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和键 `es:hola` 不变。关闭持久产物对象后，文件仍留在磁盘上。导出不需要安装 Anki。
 
-## 继续完成实际任务
+## TypeScript 与下一步任务
 
-[JSON 教程](json-to-anki.md#node)包含图片、音频和更新流程，以及完整的 TypeScript 编译运行命令。
-发布更新时请保留上一份原始分发 APKG，不能用 Anki 重新导出的文件代替。
-查看[更新条件（英文）](../updates.md)、[API 参考（英文）](../api-overview.md)，
-或[选择其他开发语言](languages.md)。
+[JSON 到 Anki 示例](../json-to-anki.md#node)包含完整的 TypeScript 编译与运行流程。
+
+ESM 使用 `.mjs`，CommonJS 使用 `require('ankiforge')`。包中附带 TypeScript 声明；参见 [TypeScript 配置](../node/api.md#typescript)。
+
+- [图片与音频](../media.md)及 [Node 媒体 API](../node/api.md#media-and-image-occlusion)
+- [自定义笔记类型](../custom-notetypes.md)和[模板包](../template-bundles.md)
+- [图片遮挡](../image-occlusion.md)
+- [比较与更新](../updates.md)
+- [Node API](../node/api.md)及[排查问题](../troubleshooting.md)
+
+源码编译与本地打包见[源码构建](../source-builds.md)。

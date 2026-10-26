@@ -1,0 +1,43 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro';
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-CN' : 'en');
+---
+<Search />
+<template data-search-feedback><p role="status" aria-live="polite" data-search-feedback data-loading={t('search.loading')} data-error={t('search.error')}></p></template>
+<script>
+  const search = document.querySelector('site-search');
+  const dialog = search?.querySelector('dialog');
+  const template = document.querySelector<HTMLTemplateElement>('template[data-search-feedback]');
+  if (dialog && template) {
+    const status = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+    dialog.querySelector('.dialog-frame')?.append(status);
+    let returnFocus: HTMLElement | null = null;
+    const showError = () => { status.textContent = status.dataset.error || ''; };
+    const observer = new MutationObserver(async () => {
+      if (!dialog.open) return;
+      returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      status.textContent = status.dataset.loading || '';
+      try {
+        const response = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind/pagefind-entry.json`);
+        if (!response.ok) throw new Error('Search index unavailable');
+        await response.json();
+        status.textContent = '';
+        dialog.querySelector<HTMLInputElement>('input')?.focus();
+      } catch { showError(); }
+    });
+    observer.observe(dialog, { attributes: true, attributeFilter: ['open'] });
+    dialog.addEventListener('close', () => {
+      // Search shortcuts and the explicit close button return focus to the opener.
+      (returnFocus && !dialog.contains(returnFocus) ? returnFocus : search?.querySelector<HTMLButtonElement>('[data-open-modal]'))?.focus();
+    });
+    window.addEventListener('unhandledrejection', event => {
+      if (/pagefind|fetch|import/i.test(String(event.reason?.stack ?? event.reason))) showError();
+    });
+  }
+</script>
+<style is:global>
+  site-search [data-close-modal] { display: flex !important; }
+  site-search [data-search-feedback] { margin: .75rem; }
+  site-search [data-search-feedback]:empty { display: none; }
+</style>

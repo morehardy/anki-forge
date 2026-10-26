@@ -1,23 +1,25 @@
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(document.documentElement.lang === 'zh-CN' ? 'zh-CN' : 'en');
 import aiQuickstart from '../generated/ai-quickstart.json';
 import { renderPrompt } from '../lib/ai-quickstart.mjs';
 
 const root = document.documentElement;
 const darkPreference = window.matchMedia('(prefers-color-scheme: dark)');
-const themePicker = document.querySelector<HTMLSelectElement>('[data-theme-picker]');
+const themePickers = [...document.querySelectorAll<HTMLSelectElement>('[data-theme-picker]')];
 let theme = 'auto';
 try { theme = localStorage.getItem('starlight-theme') || 'auto'; } catch { /* Storage is optional. */ }
 if (!['light', 'dark', 'auto'].includes(theme)) theme = 'auto';
 function applyTheme() {
   root.dataset.theme = theme === 'dark' || (theme === 'auto' && darkPreference.matches) ? 'dark' : 'light';
-  if (themePicker) themePicker.value = theme;
+  themePickers.forEach(picker => { picker.value = theme; picker.disabled = false; });
 }
 applyTheme();
 darkPreference.addEventListener('change', applyTheme);
-themePicker?.addEventListener('change', () => {
+themePickers.forEach(themePicker => themePicker.addEventListener('change', () => {
   theme = themePicker.value;
-  try { localStorage.setItem('starlight-theme', theme); } catch { /* Respect storage restrictions. */ }
+  try { localStorage.setItem('starlight-theme', theme === 'auto' ? '' : theme); } catch { /* Respect storage restrictions. */ }
   applyTheme();
-});
+}));
 
 document.querySelectorAll<HTMLElement>('[data-workbench]').forEach(workbench => {
   const tabs = [...workbench.querySelectorAll<HTMLButtonElement>('[data-tab]')];
@@ -65,8 +67,8 @@ document.querySelectorAll<HTMLElement>('[data-card-preview]').forEach(preview =>
     front.setAttribute('aria-hidden', String(flipped));
     back.setAttribute('aria-hidden', String(!flipped));
     const label = button.querySelector('span:last-child');
-    if (label) label.textContent = flipped ? 'Show question' : 'Show answer';
-    status.textContent = flipped ? `Answer: ${back.textContent?.trim()}` : 'Question shown.';
+    if (label) label.textContent = flipped ? t('card.showQuestion') : t('card.showAnswer');
+    status.textContent = flipped ? t('card.answer', { answer: back.textContent?.trim() }) : t('card.questionShown');
   });
 });
 
@@ -81,8 +83,8 @@ document.querySelectorAll<HTMLElement>('[data-update-demo]').forEach(demo => {
     value.textContent = (updated ? demo.dataset.after : demo.dataset.before) || '';
     value.classList.toggle('is-updated', updated);
     const label = button.querySelector('span:first-child');
-    if (label) label.textContent = updated ? 'Reset example' : 'Update the answer';
-    status.textContent = updated ? 'Content changed. Same note ID.' : 'Try a content change.';
+    if (label) label.textContent = updated ? t('update.reset') : t('update.change');
+    status.textContent = updated ? t('update.changed') : t('update.try');
   });
 });
 
@@ -156,8 +158,8 @@ document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
     try {
       await navigator.clipboard.writeText(content.textContent || '');
       if (copyListeners.signal.aborted) return;
-      status.textContent = block.dataset.copySuccess || 'Command copied.';
-      if (label) label.textContent = document.documentElement.lang === 'zh-CN' ? '已复制' : 'Copied';
+      status.textContent = block.dataset.copySuccess || t('copy.success');
+      if (label) label.textContent = t('copy.copied');
       if (copyIcon) copyIcon.hidden = true;
       if (checkIcon) checkIcon.hidden = false;
       timer = setTimeout(() => { reset(); if (timer) copyTimers.delete(timer); }, 2000);
@@ -169,7 +171,7 @@ document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
       range.selectNodeContents(content);
       selection?.removeAllRanges();
       selection?.addRange(range);
-      status.textContent = block.dataset.copyFallback || 'Command selected. Copy it with your keyboard.';
+      status.textContent = block.dataset.copyFallback || t('copy.fallback');
     } finally {
       button.disabled = false;
     }

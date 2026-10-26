@@ -1,27 +1,29 @@
 ---
 interface Props { locale?: 'en' | 'zh-CN' }
 const { locale = 'en' } = Astro.props;
-const chinese = locale === 'zh-CN';
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(locale);
 import benchmark from '../generated/benchmark.json';
 const { results, maxTime, minimumSaved, maximumSaved } = benchmark;
-const advantage = (saved: number) => chinese ? `耗时${saved >= 0 ? '低' : '高'} ${Math.abs(saved).toFixed(1)}%` : `${Math.abs(saved).toFixed(1)}% ${saved >= 0 ? 'less' : 'more'} time`;
+const advantage = (saved: number) => t(saved >= 0 ? 'performance.less' : 'performance.more', { value: Math.abs(saved).toFixed(1) });
 ---
-<section class="home-performance" aria-labelledby="performance-heading">
+<section data-module="performance" class="home-performance" aria-labelledby="performance-heading">
   <div class="home-performance-summary">
-    <div class="home-performance-title"><h2 id="performance-heading">{chinese ? 'Rust 导出耗时实测' : 'The export, measured.'}</h2><p>Rust Project API / genanki 0.13.1 · {chinese ? '每组 1,000 条 Basic 笔记' : '1,000 Basic notes per workload'}</p></div>
-    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>{chinese ? `${benchmark.notes.toLocaleString('en-US')} 条纯文本笔记导出` : `Export ${benchmark.notes.toLocaleString('en-US')} text-only notes`}</span></div>
-    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>{chinese ? '五个实测工作负载的耗时降幅' : 'Less export time across five measured workloads'}</span></div>}
+    <div class="home-performance-title"><h2 id="performance-heading">{t('performance.title')}</h2><p>Rust Project API / genanki 0.13.1 · {t('performance.workload')}</p></div>
+    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>{t('performance.export', { notes: benchmark.notes.toLocaleString(locale) })}</span></div>
+    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>{t('performance.range')}</span></div>}
   </div>
-  <p class="home-performance-context">Rust Project API · Apple M1 Pro · {chinese ? '10 次运行中位数' : '10-run medians'}</p>
+  <p class="home-performance-context">Rust Project API · Apple M1 Pro · {t('performance.medians')}</p>
   <div class="home-benchmark" data-reveal>
-    <div class="home-benchmark-intro"><h3>{chinese ? '文本、图片、音频，' : 'Text, images, audio.'}<br />{chinese ? '五种场景都更快。' : 'Faster in all five tests.'}</h3><p>{chinese ? `每组 ${benchmark.notes.toLocaleString('en-US')} 条 Basic 笔记，覆盖纯文本、独立媒体和共享混合媒体。Rust 导出耗时比 genanki 低 ${minimumSaved.toFixed(1)}–${maximumSaved.toFixed(1)}%。` : `Each workload contains ${benchmark.notes.toLocaleString('en-US')} Basic notes, covering text-only, unique media and shared mixed media. Rust used ${minimumSaved.toFixed(1)}–${maximumSaved.toFixed(1)}% less export time than genanki.`}</p></div>
-    <div class="home-benchmark-chart" aria-label={chinese ? "导出耗时中位数，单位为毫秒" : "Median export times in milliseconds"}>
+    <div class="home-benchmark-intro"><h3>{t('performance.media')}<br />{t('performance.faster')}</h3><p>{t('performance.description', { notes: benchmark.notes.toLocaleString(locale), minimum: minimumSaved.toFixed(1), maximum: maximumSaved.toFixed(1) })}</p></div>
+    <div class="home-benchmark-chart" aria-label={t('performance.chart')}>
       <div class="home-benchmark-key"><span><i class="home-key-rust"></i>Anki Forge Rust</span><span><i class="home-key-genanki"></i>genanki</span></div>
       {results.map(result => <div class="home-benchmark-row" data-profile={result.profile} style={`--rust-width: ${result.rust / maxTime * 100}%; --genanki-width: ${result.genanki / maxTime * 100}%`}>
-        <div class="home-benchmark-label"><span>{chinese ? ({ 'basic-mixed-text-v1': '纯文本', 'basic-image-unique-v2': '不重复图片', 'basic-audio-unique-v2': '不重复音频', 'basic-mixed-unique-v2': '不重复混合媒体', 'basic-mixed-shared-v2': '共享混合媒体' })[result.profile] : result.label}</span><strong>{advantage(result.saved)}</strong></div>
+        <div class="home-benchmark-label"><span>{t(`performance.${result.profile}`)}</span><strong>{advantage(result.saved)}</strong></div>
         <div class="home-benchmark-bars" aria-hidden="true"><span class="home-rust-bar"></span><span class="home-genanki-bar"></span></div>
         <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
       </div>)}
     </div>
   </div>
+  <p class="example-footnote">{t('performance.limitations')} <a href={`https://github.com/morehardy/anki-forge/tree/${benchmark.evidenceCommit}/${benchmark.dataset}`}>{t('performance.method')}</a></p>
 </section>

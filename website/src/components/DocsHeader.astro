@@ -1,0 +1,24 @@
+---
+import Header from './Header.astro';
+import Search from './DocsSearch.astro';
+import '../styles/global.css';
+const locale = Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-CN' : 'en';
+---
+<div class="docs-header"><Header locale={locale}><div class="docs-search"><Search /></div></Header></div>
+<script src="../scripts/site.ts"></script>
+<style is:global>
+  .docs-header .site-header { min-height: 0; width: 100%; padding: 0; border: 0; gap: 16px; }
+  .docs-header .docs-search { order: 2; }
+  .docs-header .header-tools { order: 3; }
+  @media (max-width: 1100px) { .docs-header .desktop-nav { display: none; } .docs-header .mobile-menu { display: block; } }
+  @media (max-width: 799px) {
+    :root { --sl-nav-height: 7rem; }
+    .docs-header .site-header { gap: 8px; padding-right: 0; }
+    .docs-header .header-tools { order: 0; }
+    .docs-header .docs-search { width: 100%; }
+    .docs-header .wordmark > span:last-child { display: none; }
+    .docs-header .wordmark svg { width: 24px; }
+    .docs-header .header-tools { gap: 6px; }
+    .docs-header .theme-label select { max-width: 80px; }
+  }
+</style>

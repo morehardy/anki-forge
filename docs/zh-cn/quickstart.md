@@ -1,10 +1,6 @@
-# 用 Rust 生成第一个 Anki 牌组
-
-使用 Rust 1.92 或更新版本。
+使用 Rust 1.92 或更高版本。其他语言可选择 [Node / TypeScript 或 Python](/docs/languages/)。
 
 ## 安装
-
-在新的项目目录中安装公开版本 0.3.1：
 
 ```sh
 cargo new anki-deck
@@ -12,11 +8,9 @@ cd anki-deck
 cargo add ankiforge@0.3.1
 ```
 
-具体平台范围见[兼容性说明（英文）](../compatibility.md)。
+## 导出第一个牌组
 
-## 生成 APKG
-
-将下面的完整程序保存为 `src/main.rs`：
+将这份完整程序保存为 `src/main.rs`：
 
 <!-- source: anki_forge/examples/target_api_basic.rs -->
 ```rust
@@ -32,18 +26,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 <!-- /source -->
 
-运行：
-
 ```sh
 cargo run
 ```
 
-程序会写出持久保存的 `spanish.apkg`。在 Anki 中导入后，可以在 Spanish 牌组学习 **hola → hello**。
-生成 APKG 不需要安装 Anki。后续修改答案时，保持 namespace `spanish` 和 note key `es:hola` 不变。
+程序写出持久保存的 `spanish.apkg`。在 Anki 中打开并导入后，可在 **Spanish** 牌组中学习 **hola → hello**。导出不需要安装 Anki。
 
-## 继续完成实际任务
+命名空间 `spanish` 和稳定键 `es:hola` 在之后的内容修改中标识这条笔记。也可以[下载本站 Basic 示例](/generated/spanish.apkg)。
 
-[JSON 教程](json-to-anki.md#rust)包含图片、音频和更新流程。
-发布更新时请保留上一份原始分发 APKG，不能用 Anki 重新导出的文件代替。
-查看[更新条件（英文）](../updates.md)、[API 参考（英文）](../api-overview.md)，
-或[选择其他开发语言](languages.md)。
+## 继续学习
+
+[JSON 到 Anki 示例](/docs/json-to-anki/#rust)提供完整的媒体与更新任务。
+
+添加[图片与音频](/docs/media/)、[自定义笔记类型](/docs/custom-notetypes/)或[图片遮挡](/docs/image-occlusion/)。[比较并发布更新](/docs/updates/)前，请保留原始分发 APKG。详情见 [Rust API](/docs/rust-api/)和[已验证环境](/docs/compatibility/)。

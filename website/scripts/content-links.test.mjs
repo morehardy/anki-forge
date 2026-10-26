@@ -32,5 +32,5 @@ test('documentation import rewrites prose and references without changing fenced
 
 test('translated core guides keep their topic and deployment base', () => {
   assert.equal(rewriteTarget('json-to-anki.md#python', 'docs/zh-cn/languages.md', '/anki-forge'), '/anki-forge/zh-cn/docs/json-to-anki/#python');
-  assert.equal(rewriteTarget('../python/api.md', 'docs/zh-cn/python-quickstart.md', '/'), '/docs/python-api/');
+  assert.equal(rewriteTarget('../python/api.md', 'docs/zh-cn/python-quickstart.md', '/'), '/zh-cn/docs/python-api/');
 });

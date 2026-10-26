@@ -1,8 +1,8 @@
 ---
 interface Props { locale?: 'en' | 'zh-CN' }
 const { locale = 'en' } = Astro.props;
-const chinese = locale === 'zh-CN';
-const t = (en: string, zh: string) => chinese ? zh : en;
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(locale);
 import CopyBlock from './CopyBlock.astro';
 import InstallCommand from './InstallCommand.astro';
 import Icon from './Icon.astro';
@@ -10,33 +10,33 @@ import data from '../generated/ai-quickstart.json';
 import { renderPrompt } from '../lib/ai-quickstart.mjs';
 import { repository } from '../lib/site';
 ---
-<section id="ai-quickstart" class="ai-quickstart" data-ai-quickstart data-ai-locale={locale} aria-labelledby="ai-heading">
+<section data-module="ai-quickstart" id="ai-quickstart" class="ai-quickstart" data-ai-quickstart data-ai-locale={locale} aria-labelledby="ai-heading">
   <div class="ai-intro">
-    <h2 id="ai-heading">{t('Use Anki Forge with AI.', '让 AI 帮你编写牌组程序')}</h2>
-    <p>{t('Choose a language, describe your task, then paste the brief into your AI coding assistant.', '选择开发语言、描述任务，再把提示复制给 AI 编码助手。')}</p>
+    <h2 id="ai-heading">{t('ai.title')}</h2>
+    <p>{t('ai.description')}</p>
     <div class="ai-request" data-ai-enhancement hidden>
-      <label for="ai-request">{t('What should the deck do?', '你想生成什么牌组？')}</label>
-      <textarea id="ai-request" data-ai-request rows="5" placeholder={t("Create a Spanish vocabulary deck with audio.", "生成一个带音频的西班牙语词汇牌组。")} aria-describedby="ai-request-hint"></textarea>
-      <p id="ai-request-hint">{t('Optional. Your request is kept only in this page.', '可选填写，内容只保留在本页。')}</p>
+      <label for="ai-request">{t('ai.request')}</label>
+      <textarea id="ai-request" data-ai-request rows="5" placeholder={t('ai.placeholder')} aria-describedby="ai-request-hint"></textarea>
+      <p id="ai-request-hint">{t('ai.privacy')}</p>
     </div>
-    <p class="ai-skill-link">{t('Your coding assistant supports Skills?', '编码助手支持 Skill？')}<br />
-      <a class="text-link" href={`${repository}/tree/main/skills/anki-forge/`}>{t("Open the Anki Forge Skill", "查看 Anki Forge Skill")} <Icon name="arrowUpRight" /></a>
+    <p class="ai-skill-link">{t('ai.skillQuestion')}<br />
+      <a class="text-link" href={`${repository}/tree/main/skills/anki-forge/`}>{t('ai.skillLink')} <Icon name="arrowUpRight" /></a>
     </p>
-    <noscript><p class="ai-noscript">{t('Copy a language template below and replace the task placeholder. The installation commands and Skill are also available without JavaScript.', '复制下方对应语言的模板，并替换任务占位符。安装命令和 Skill 也可以直接使用。')}</p></noscript>
+    <noscript><p class="ai-noscript">{t('ai.noScript')}</p></noscript>
   </div>
   <div class="ai-builder">
-    <div class="example-tabs ai-tabs" role="tablist" aria-label={t("Application language", "开发语言")} data-ai-enhancement hidden>
-      {Object.entries(data.languages).map(([key, language], index) => (
+    <div class="example-tabs ai-tabs" role="tablist" aria-label={t('ai.language')} data-ai-enhancement hidden>
+      {(['rust', 'node', 'python'] as const).map(key => [key, data.languages[key]] as const).map(([key, language], index) => (
         <button type="button" id={`ai-tab-${key}`} role="tab" data-ai-language={key} aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`ai-panel-${key}`} tabindex={index === 0 ? 0 : -1}>{language.label}</button>
       ))}
     </div>
-    {Object.entries(data.languages).map(([key, language]) => (
+    {(['rust', 'node', 'python'] as const).map(key => [key, data.languages[key]] as const).map(([key, language]) => (
       <div id={`ai-panel-${key}`} data-ai-panel={key} class="ai-panel">
         <h3 class="ai-language-label">{language.label}</h3>
-        <CopyBlock label={`${t("AI brief", "AI 提示")} · Anki Forge ${data.publicVersion}`} text={renderPrompt(data, key, '', locale)} aiPrompt
-          buttonLabel={t("Copy prompt for AI", "复制 AI 提示")} success={t("Prompt copied. Paste it into your AI coding assistant.", "提示已复制，可以粘贴给 AI 编码助手。")}
-          fallback={t("Prompt selected. Copy it with your keyboard, then paste it into your AI coding assistant.", "提示已选中，请用键盘复制，再粘贴给 AI 编码助手。")} />
-        <InstallCommand command={language.install} runtime={language.runtime} buttonLabel={t("Copy install command", "复制安装命令")} locale={locale} />
+        <CopyBlock label={`${t('ai.brief')} · Anki Forge ${data.publicVersion}`} text={renderPrompt(data, key, '', locale)} aiPrompt
+          buttonLabel={t('ai.copy')} success={t('ai.copied')}
+          fallback={t('ai.fallback')} />
+        <InstallCommand command={language.install} runtime={language.runtime} buttonLabel={t('ai.install')} locale={locale} />
       </div>
     ))}
   </div>

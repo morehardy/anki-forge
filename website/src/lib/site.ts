@@ -6,6 +6,6 @@ export function sitePath(path: string): string {
   return `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
 }
 
-export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(date);
+export function formatDate(date: Date, locale = 'en'): string {
+  return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(date);
 }

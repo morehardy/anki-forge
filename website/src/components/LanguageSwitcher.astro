@@ -1,8 +1,32 @@
 ---
 import { pagePair } from '../../scripts/core-pages.mjs';
 import { sitePath } from '../lib/site';
+import sections from '../generated/sections.json';
 const pair = pagePair(Astro.url.pathname, import.meta.env.BASE_URL.replace(/\/$/, '') || '/');
 const chinese = Astro.url.pathname.includes('/zh-cn/');
 ---
-{pair && <a class="language-switch" data-language-switch href={sitePath(chinese ? pair.en : pair.zh)} hreflang={chinese ? 'en' : 'zh-CN'} lang={chinese ? 'en' : 'zh-CN'}>{chinese ? 'English' : '简体中文'}</a>}
+{pair && <a class="language-switch" data-language-switch data-section-map={JSON.stringify(sections[pair.id as keyof typeof sections] ?? {})} href={sitePath(chinese ? pair.en : pair.zh)} hreflang={chinese ? 'en' : 'zh-CN'} lang={chinese ? 'en' : 'zh-CN'}>{chinese ? 'English' : '简体中文'}</a>}
 <style>.language-switch { white-space: nowrap; font-size: 0.875rem; }</style>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {
+    const target = new URL(link.href);
+    const mapping: Record<string, string> = JSON.parse(link.dataset.sectionMap || '{}');
+    let targetIds: Set<string> | undefined;
+    function update() {
+      target.search = location.search;
+      let id = '';
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed fragments. */ }
+      const mapped = mapping[id] ?? id;
+      target.hash = targetIds?.has(mapped) ? mapped : '';
+      link.href = target.href;
+    }
+    update();
+    // Verify the real destination before carrying over a fragment, including legacy aliases.
+    fetch(target.pathname).then(response => response.ok ? response.text() : '').then(html => {
+      const page = new DOMParser().parseFromString(html, 'text/html');
+      targetIds = new Set([...page.querySelectorAll('[id]')].map(element => element.id));
+      update();
+    }).catch(() => { /* The topic link remains usable when prefetch is unavailable. */ });
+    window.addEventListener('hashchange', update);
+  });
+</script>

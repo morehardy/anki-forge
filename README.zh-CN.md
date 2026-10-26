@@ -112,10 +112,10 @@ Anki Forge 是开源的 Anki APKG 生成库，以 Rust 为核心，提供 Rust�
    不要自行猜测 API。更新时保留上一份原始分发 APKG 作为基线，不使用 Anki 重新导出的包。
 7. 只有在语言、输入格式、输出路径或身份规则无法判断时才提问。
 
-快速开始文档：https://ankiforge.dev/docs/quickstart/
+快速开始文档：https://ankiforge.dev/zh-cn/docs/quickstart/
 ```
 
-[打开交互式提示生成器](https://ankiforge.dev/#ai-quickstart)
+[打开交互式提示生成器](https://ankiforge.dev/zh-cn/#ai-quickstart)
 
 支持 Skill 的编码助手可按需加载语言安装、公开 API 规则、任务流程和验证指南：
 

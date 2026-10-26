@@ -1,17 +1,24 @@
 ---
+import { createTranslator } from '../i18n/messages.mjs';
+import { pagePath } from '../../site-model.mjs';
+interface Props { locale?: 'en' | 'zh-CN' }
+const { locale = 'en' } = Astro.props;
 import { updateExample } from '../lib/examples';
 import Icon from './Icon.astro';
 import { sitePath } from '../lib/site';
+const t = createTranslator(locale);
 ---
 <div class="identity-example" data-update-demo data-before={updateExample.before} data-after={updateExample.after}>
-  <div class="identity-label"><span>Stable note ID</span><code>{updateExample.stableId}</code></div>
-  <div class="identity-fields"><div><span>Front</span><p>{updateExample.front}</p></div><div><span>Back</span><p data-update-value>{updateExample.before}</p></div></div>
-  <div class="identity-controls"><p data-update-status aria-live="polite">Try a content change.</p><button type="button" class="text-button" data-update><span>Update the answer</span><Icon name="arrowRight" /></button></div>
+  <div class="identity-label"><span>{t('update.id')}</span><code>{updateExample.stableId}</code></div>
+  <div class="identity-fields"><div><span>{t('update.front')}</span><p>{updateExample.front}</p></div><div><span>{t('update.back')}</span><p data-update-value>{updateExample.before}</p></div></div>
+  <div class="identity-controls"><p data-update-status aria-live="polite">{t('update.try')}</p><button type="button" class="text-button" data-update><span>{t('update.change')}</span><Icon name="arrowRight" /></button></div>
   <div class="identity-evidence">
-    <p>Actual comparison: {updateExample.comparison.findings.map(finding => `${finding.code} (${finding.level})`).join(', ') || 'No findings'}. Publication policy: {updateExample.comparison.policy.allows_publication ? 'allows this change' : 'blocks this change'}.</p>
-    <a href={sitePath(`/generated/${updateExample.previous}`)} download>Download v1</a>
-    <a href={sitePath(`/generated/${updateExample.next}`)} download>Download v2</a>
-    <a href={sitePath(`/generated/${updateExample.report}`)}>Comparison report</a>
-    <p>Keep the original distribution APKG. Import settings and newer local edits affect updates. <a href={sitePath('/docs/updates/')}>Update guide</a></p>
+    <p>{t('update.comparison')}: {updateExample.comparison.findings.map(finding => `${finding.code} (${finding.level})`).join(', ') || t('update.none')}. {t('update.policy')}: {updateExample.comparison.policy.allows_publication ? t('update.allowed') : t('update.blocked')}.</p>
+    <a href={sitePath(`/generated/${updateExample.previous}`)} download>{t('update.v1')}</a>
+    <a href={sitePath(`/generated/${updateExample.next}`)} download>{t('update.v2')}</a>
+    <a href={sitePath(`/generated/${updateExample.report}`)}>{t('update.report')}</a>
+    <p>{t('update.warning')} <a href={sitePath(pagePath('updates', locale))}>{t('update.guide')}</a></p>
   </div>
 </div>
+
+<noscript><style>[data-update] { display: none; }</style></noscript>

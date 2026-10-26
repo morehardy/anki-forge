@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { docGroups, docPages } from './site-model.mjs';
 import { repository, siteConfig, withBase } from './site.config.mjs';
 
 export default defineConfig({
@@ -11,8 +12,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Anki Forge',
+      locales: { root: { label: 'English', lang: 'en' }, 'zh-cn': { label: '简体中文', lang: 'zh-CN' } },
+      defaultLocale: 'root',
       routeMiddleware: './src/route-middleware.ts',
-      components: { LanguageSelect: './src/components/LanguageSwitcher.astro' },
+      components: { Header: './src/components/DocsHeader.astro', Footer: './src/components/DocsFooter.astro', LanguageSelect: './src/components/LanguageSwitcher.astro', ThemeSelect: './src/components/ThemeControl.astro' },
       logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },
       description: 'Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python.',
       favicon: '/favicon.svg',
@@ -33,45 +36,13 @@ export default defineConfig({
           },
         },
       ],
-      sidebar: [
-        { label: 'Start here', items: [
-          { label: 'Introduction', slug: 'docs' },
-          { label: 'Choose your language', slug: 'docs/languages' },
-          { label: 'First Rust deck', slug: 'docs/quickstart' },
-          { label: 'Add to your application', slug: 'docs/installation' },
-          { label: 'Core concepts', slug: 'docs/concepts' },
-          { label: 'Anki Forge vs genanki', slug: 'docs/anki-forge-vs-genanki' },
-        ] },
-        { label: 'Guides', items: [
-          { label: 'JSON to Anki and updates', slug: 'docs/json-to-anki' },
-          { label: 'Basic and Cloze', slug: 'docs/cards' },
-          { label: 'Images and audio', slug: 'docs/media' },
-          { label: 'Custom note types', slug: 'docs/custom-notetypes' },
-          { label: 'Template bundles', slug: 'docs/templates' },
-          { label: 'Image Occlusion', slug: 'docs/image-occlusion' },
-          { label: 'Update and distribute', slug: 'docs/updates' },
-        ] },
-        { label: 'Language guides', items: [
-          { label: 'Rust authoring', slug: 'docs/rust-guide' },
-          { label: 'Node quickstart', slug: 'docs/node-quickstart' },
-          { label: 'Python quickstart', slug: 'docs/python-quickstart' },
-          { label: 'Python API transition', slug: 'docs/python-migration' },
-          { label: 'Move from genanki', slug: 'docs/genanki-migration' },
-        ] },
-        { label: 'Reference', collapsed: true, items: [
-          { label: 'Public API overview', slug: 'docs/api' },
-          { label: 'Rust API guide', slug: 'docs/rust-api' },
-          { label: 'Node / TypeScript API', slug: 'docs/node-api' },
-          { label: 'Python API', slug: 'docs/python-api' },
-          { label: 'Build and output guarantees', slug: 'docs/build-guarantees' },
-          { label: 'Compatibility and releases', slug: 'docs/compatibility' },
-        ] },
-        { label: 'Help', items: [
-          { label: 'Troubleshooting', slug: 'docs/troubleshooting' },
-          { label: 'Python diagnostics', slug: 'docs/python-diagnostics' },
-          { label: 'Build SDKs from source', slug: 'docs/development' },
-        ] },
-      ],
+      sidebar: docGroups.map(group => ({
+        label: group.label, translations: { 'zh-CN': group.zh }, collapsed: group.collapsed ?? false,
+        items: group.ids.map(id => {
+          const page = docPages.find(page => page.id === id);
+          return { slug: page.en.slice(1, -1), label: page.title.en, translations: { 'zh-CN': page.title['zh-CN'] } };
+        }),
+      })),
     }),
   ],
 });

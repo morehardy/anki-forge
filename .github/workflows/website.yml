@@ -67,13 +67,41 @@ jobs:
       - name: Fetch locked dependencies for offline documentation consumers
         run: cargo fetch --locked --manifest-path ../Cargo.toml
       - run: npm ci
+      - name: Install browser and Chinese social-image fonts
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
       - run: npm run check:ai
       - run: node ../skills/anki-forge/scripts/verify_quickstart.mjs
       - run: npm test
       - run: npm run check:examples
       - run: npm run check
-      - run: npm run build
-      - run: npm run check:site
+      - name: Verify project-prefix deployment
+        env:
+          SITE_URL: https://morehardy.github.io
+          SITE_BASE: /anki-forge
+          SITE_CUSTOM_DOMAIN: ''
+          SITE_DEPLOYMENT: preview
+        run: |
+          npm run build
+          npm run check:site
+          npm run check:gates
+          npm run test:browser
+      - name: Verify root deployment and prepare the release artifact
+        run: |
+          npm run build
+          npm run check:site
+          npm run check:gates
+          npm run test:browser
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-verified-manifest
+          path: website/dist/generated/site-manifest.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-browser-evidence
+          path: target/website-i18n-62/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: website/dist
@@ -157,5 +185,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Independently verify the deployed production URLs
-        run: node website/scripts/check-live-site.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          name: website-verified-manifest
+          path: website/verified
+      - run: npm ci --prefix website
+      - name: Independently verify the deployed production URLs and artifact identity
+        run: node website/scripts/check-live-site.mjs website/verified/site-manifest.json
+      - name: Verify live search and interactive capabilities
+        env:
+          BROWSER_SITE: https://ankiforge.dev
+        run: |
+          cd website
+          npx playwright install --with-deps chromium
+          node --test --test-name-pattern='all built|card tabs|docs search' scripts/browser.test.mjs

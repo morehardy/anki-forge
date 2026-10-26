@@ -1,3 +1,4 @@
+import { pagePath } from '../../site-model.mjs';
 /** @typedef {{label: string, runtime: string, install: string, quickstart: string}} Language */
 /** @typedef {{publicVersion: string, languages: Record<string, Language>, prompts: Record<string, string>}} AiQuickstart */
 
@@ -18,7 +19,7 @@ export function renderPrompt(data, language, request = '', locale = 'en') {
     language: selected.label,
     runtime: selected.runtime,
     install: selected.install,
-    quickstart: selected.quickstart,
+    quickstart: new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), selected.quickstart).href,
     request: request.trim() ? request : locale === 'zh-CN' ? '<描述你的需求>' : '<describe your task>',
   };
   return template.replace(/\{(version|language|runtime|install|quickstart|request)\}/g,

@@ -1,7 +1,7 @@
 # Maintaining user documentation
 
 User guides are imported into the static website from repository Markdown.
-The import list in `website/scripts/content-links.mjs` defines routes, titles,
+The topic model in `website/site-model.mjs` defines routes, titles,
 descriptions and each page's editable source. Generated pages are ignored by Git.
 Edit the source document, not the generated copy.
 
@@ -106,14 +106,33 @@ archived reports and experiment tools are available at the pinned evidence
 commit. They are not required by website builds. Verify public reachability
 before publishing; never reconstruct measurements or re-run them during a build.
 
-## Core translations and public recipe
+## Full-site translations and public recipe
 
-`website/scripts/core-pages.mjs` is the seven-topic English/Chinese pair list.
-Chinese source Markdown lives in `docs/zh-cn/` and is prepared into a separate
-`coreGuides` collection, outside Starlight docs routing. Six explicit guide routes
-use `CoreGuide`/`SiteLayout`; do not enable full-site locale fallback. Keep links
-to untranslated references marked “（英文）”. Check actual HTML lang, self canonicals,
-bidirectional hreflang, topic switches, sitemap and the exact Chinese page set.
+`website/site-model.mjs` registers every normal topic in English and Chinese,
+including homepage, examples, blog, guides and API references. Native Starlight
+locales share one documentation layout and search experience. Chinese source
+Markdown lives in `docs/zh-cn/`; generated content is never an editable source.
+All internal content links must resolve to the current language. Shared downloads,
+registries and external source links keep their common targets.
+
+Add both authoritative sources and metadata when registering a topic. Add paired
+blog posts with the same stable `translationKey`, date and category. Preserve the
+same task sections, tables, technical limitations, code and next actions; do not
+substitute an English fallback. After reviewing both texts, update their hashes
+and reviewed status in `website/content-reviews.json`. Changes to either source
+invalidate that review until a maintainer checks the pair again. Preserve old
+anchors in `website/legacy-sections.json`; preparation supplies stable section
+aliases for language switching. UI messages and dynamic/accessibility feedback
+belong in the paired catalogs under `website/src/i18n/`.
+
+`check:content` independently discovers authored sources, rejects missing or
+unregistered translations, validates catalogs and checks review records.
+`check:site` discovers the real built page set, navigation, actions, downloads,
+metadata and links. `check:gates` and the content contract tests deliberately
+remove translations, actions, anchors and messages to prove that these checks
+fail. Browser tests use real HTTP output, Pagefind and browser clipboard APIs.
+CI repeats build, artifact and browser checks at the root and a project prefix.
+See [website maintenance](../website/README.md) for commands and adding content.
 
 The paired source blocks share programs and fixtures in `docs/recipes/json-to-anki/`.
 `npm run check:public-recipe` installs exact registry packages into temporary apps,
@@ -127,6 +146,11 @@ checks still need separate evidence.
 
 `SITE_DEPLOYMENT=production` requires the formal origin, root base and matching
 CNAME. Previews can use other configurations. After deployment run `npm run check:live`;
-its production origin is deliberately independent of build configuration.
+its production origin is deliberately independent of build configuration, and
+it requires the verified `site-manifest.json` artifact. It compares production
+against that artifact and source commit, rather than accepting a previous release
+with working English pages. Unknown URLs must return genuine 404 responses.
+GitHub Pages has one static error document: JavaScript selects the path language,
+while the no-script fallback presents both languages with working recovery links.
 Measurement and independent-adoption records live under `docs/plans/`, outside
 product copy. Never label prepared protocols as completed observations.
