@@ -99,7 +99,34 @@ evidence commit and displayed note count. Both the website and
 all four chart variants. `check:site` checks the actual rendered homepage values
 and bar scales. Do not rerun the archived benchmark during a site build.
 
-Before deploying, verify that the pinned evidence commit is publicly reachable.
-The selected `bef4aeb` commit currently exists locally; the 2026-10-08 validation
-found no matching public GitHub commit. Publish the source/evidence history
-through the repository's normal review process before deploying this content.
+The CSV snapshot lives in `docs/performance/20261008/`; its checksum and original
+path are recorded in `docs/benchmark-presentation.json`. `dataFile` is the local
+input; `dataset` remains the historical evidence path for public links. The
+archived reports and experiment tools are available at the pinned evidence
+commit. They are not required by website builds. Verify public reachability
+before publishing; never reconstruct measurements or re-run them during a build.
+
+## Core translations and public recipe
+
+`website/scripts/core-pages.mjs` is the seven-topic English/Chinese pair list.
+Chinese source Markdown lives in `docs/zh-cn/` and is prepared into a separate
+`coreGuides` collection, outside Starlight docs routing. Six explicit guide routes
+use `CoreGuide`/`SiteLayout`; do not enable full-site locale fallback. Keep links
+to untranslated references marked “（英文）”. Check actual HTML lang, self canonicals,
+bidirectional hreflang, topic switches, sitemap and the exact Chinese page set.
+
+The paired source blocks share programs and fixtures in `docs/recipes/json-to-anki/`.
+`npm run check:public-recipe` installs exact registry packages into temporary apps,
+compiles TypeScript, independently reads ZIP/SQLite/media, compares identities and
+answers, checks policy and verifies that repeat runs preserve v1. It needs network,
+Rust, Node and Python with venv support. Linux x64 is the CI release gate; source
+example checks remain separate. Evidence is saved under `target/geo-public-consumers/`.
+The optional `json_recipe_oracle` binary in `scripts/roundtrip_oracle` observes real
+Anki backend imports and scheduling in isolated collections; GUI and playback
+checks still need separate evidence.
+
+`SITE_DEPLOYMENT=production` requires the formal origin, root base and matching
+CNAME. Previews can use other configurations. After deployment run `npm run check:live`;
+its production origin is deliberately independent of build configuration.
+Measurement and independent-adoption records live under `docs/plans/`, outside
+product copy. Never label prepared protocols as completed observations.

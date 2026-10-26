@@ -3,6 +3,7 @@ import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/pr
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { translatedDocs } from './core-pages.mjs';
 import { importedDocs } from './content-links.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -22,6 +23,7 @@ async function workspace(name) {
   const work = path.join(directory, name);
   await mkdir(work, { recursive: true });
   await cp(fixtures, path.join(work, 'fixtures'), { recursive: true });
+  await cp(path.join(root, 'docs/recipes/json-to-anki'), path.join(work, 'recipe'), { recursive: true });
   // The crate README uses the shorter source-relative spelling.
   await cp(path.join(fixtures, 'pixel.png'), path.join(work, 'cell.png'));
   return work;
@@ -44,6 +46,7 @@ rust-version = "1.92"
 [workspace]
 [dependencies]
 ankiforge = { path = ${JSON.stringify(path.join(root, 'anki_forge'))}, default-features = false }
+serde = { version = "1", features = ["derive"] }
 anyhow = "1"
 serde_json = "1"
 prost = "0.13"
@@ -68,7 +71,7 @@ tempfile = "3"
   }
 
   const programs = new Map();
-  const sources = [...new Set(['README.md', 'README.zh-CN.md', ...importedDocs.map(entry => entry.source)])];
+  const sources = [...new Set(['README.md', 'README.zh-CN.md', ...[...importedDocs, ...translatedDocs].map(entry => entry.source)])];
   for (const filename of sources) {
     const markdown = await readFile(path.join(root, filename), 'utf8');
     for (const [, source] of markdown.matchAll(/```rust(?:,[^\n]+)?\n([\s\S]*?)\n```/g)) {
@@ -86,6 +89,12 @@ tempfile = "3"
     const work = await workspace(`program-${executions}`);
     execFileSync(executable(consumerName), [], { cwd: work, stdio: 'inherit' });
     await inspect(work);
+    // Recipe outputs are nested so each SDK keeps its own release history.
+    if (origins.some(origin => origin.endsWith('json-to-anki.md'))) {
+      const recipeOutput = path.join(work, 'output/rust');
+      for (const name of ['v1.apkg', 'v2.apkg']) await readFile(path.join(recipeOutput, name));
+      await inspect(recipeOutput);
+    }
     console.log(`Executed complete Rust main from ${origins.join(', ')}`);
     executions += 1;
   }

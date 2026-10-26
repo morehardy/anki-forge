@@ -114,7 +114,9 @@ Write candidates to a path separate from the archived baseline. After review,
 distribute the accepted package and retain it as the next release's evidence.
 See [build guarantees](build-guarantees.md) for ownership and publication facts.
 
-## Build once, review then publish from source
+<a id="build-once-review-then-publish-from-source"></a>
+
+## Build once, review then publish
 
 This API is included in the public `0.3.1` package.
 

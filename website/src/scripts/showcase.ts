@@ -9,7 +9,8 @@ export function animateShowcase(studio: HTMLElement) {
   const packSpeed = 2;
   // Compress the packing cues together so every folding layer stays in sync.
   const playbackTime = (at: number) => at <= packAt ? at : packAt + (at - packAt) / packSpeed;
-  const playbackDuration = playbackTime(duration);
+  const timelineDuration = playbackTime(duration);
+  const cycleDurationMs = 10_000;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const ease = 'cubic-bezier(.22, .72, .24, 1)';
   const travel = 'cubic-bezier(.45, 0, .25, 1)';
@@ -25,8 +26,8 @@ export function animateShowcase(studio: HTMLElement) {
     if (!element) return;
     animations.push(element.animate(cues.map(({ at, ...frame }) => ({
       ...frame,
-      offset: playbackTime(at) / playbackDuration,
-    })), { duration: playbackDuration * 1000, iterations: Infinity, fill: 'both' }));
+      offset: playbackTime(at) / timelineDuration,
+    })), { duration: cycleDurationMs, iterations: Infinity, fill: 'both' }));
   };
 
   const updatePlayback = () => {

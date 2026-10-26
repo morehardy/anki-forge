@@ -15,7 +15,7 @@ export async function verifySkill({ directory = root, data } = {}) {
   assert.ok(main.split('\n').length <= 100, 'Keep SKILL.md below 100 lines');
   assert.match(main, /^---\nname: anki-forge\ndescription: /);
   assert.ok(main.includes(`Anki Forge ${data.publicVersion}`), 'Skill metadata version drift');
-  const guides = { rust: 'docs/installation.md', node: 'docs/node/quick-start.md', python: 'docs/python/quick-start.md' };
+  const guides = { rust: 'anki_forge/examples/target_api_basic.rs', node: 'docs/node/quick-start.md', python: 'docs/python/quick-start.md' };
   for (const [key, guide] of Object.entries(guides)) {
     const reference = await read(`${skill}/references/${key}.md`);
     assert.ok(reference.includes(data.publicVersion) && reference.includes(data.languages[key].install), `${key}: Skill installation drift`);
@@ -23,7 +23,7 @@ export async function verifySkill({ directory = root, data } = {}) {
     assert.ok(reference.includes(data.languages[key].quickstart), `${key}: Skill quickstart URL drift`);
     const pattern = /<!-- source: ([^\n]+) -->\n```[^\n]+\n([\s\S]*?)\n```\n<!-- \/source -->/;
     const example = reference.match(pattern);
-    const canonical = (await read(guide)).match(pattern);
+    const canonical = key === 'rust' ? [undefined, guide, (await read(guide)).trimEnd()] : (await read(guide)).match(pattern);
     assert.ok(example && canonical, `${key}: missing checked complete program`);
     assert.equal(example[1], canonical[1], `${key}: incorrect quickstart source`);
     assert.equal(example[2], canonical[2], `${key}: quickstart differs from public guide`);

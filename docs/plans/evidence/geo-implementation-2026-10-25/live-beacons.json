@@ -1,0 +1,32 @@
+[
+  {
+    "route": "/",
+    "url": "https://ankiforge.dev/",
+    "beacons": 1,
+    "reports": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js",
+        "status": 200
+      },
+      {
+        "url": "https://cloudflareinsights.com/cdn-cgi/rum",
+        "status": 204
+      }
+    ]
+  },
+  {
+    "route": "/docs/quickstart/",
+    "url": "https://ankiforge.dev/docs/quickstart/",
+    "beacons": 1,
+    "reports": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js",
+        "status": 200
+      },
+      {
+        "url": "https://cloudflareinsights.com/cdn-cgi/rum",
+        "status": 204
+      }
+    ]
+  }
+]

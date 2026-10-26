@@ -1,9 +1,10 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { importedDocs, rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
+import { translatedDocs } from './core-pages.mjs';
 import { siteConfig } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
@@ -20,6 +21,13 @@ await generateAiQuickstart(await checkAiQuickstart());
 await writeFile(path.join(generated, 'benchmark.json'), JSON.stringify(await loadBenchmarkPresentation(), null, 2) + '\n');
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'docs_workflow', '--', path.join(root, 'target/docs-examples')], { cwd: root, stdio: 'inherit' });
 execFileSync('cargo', ['run', '--locked', '--quiet', '-p', 'ankiforge', '--example', 'website_showcase', '--', output], { cwd: root, stdio: 'inherit' });
+
+const recipe = path.join(output, 'recipes/json-to-anki');
+await mkdir(recipe, { recursive: true });
+await cp(path.join(root, 'docs/recipes/json-to-anki'), recipe, { recursive: true });
+for (const source of ['anki_forge/examples/json_to_anki.rs', 'bindings/python/examples/json_to_anki.py', 'bindings/node/examples/json_to_anki.mts']) {
+  await copyFile(path.join(root, source), path.join(recipe, path.basename(source)));
+}
 
 const sourcePath = 'anki_forge/examples/website_showcase.rs';
 const source = await readFile(path.join(root, sourcePath), 'utf8');
@@ -50,11 +58,12 @@ await copyFile(path.join(root, sourcePath), path.join(output, 'website_showcase.
 await prepareBrandAssets(website, data.examples[0]);
 
 await mkdir(path.join(website, 'src/content/docs/docs'), { recursive: true });
-for (const entry of importedDocs) {
+await mkdir(path.join(generated, 'zh-cn'), { recursive: true });
+for (const entry of [...importedDocs, ...translatedDocs]) {
   const original = await readFile(path.join(root, entry.source), 'utf8');
   const content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
   const frontmatter = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n---\n\n`;
-  await writeFile(path.join(website, `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
+  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/generated/zh-cn/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
 }
 
 const cname = path.join(website, 'public/CNAME');

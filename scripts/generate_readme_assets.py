@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate README charts and screenshot pages from Anki-rendered card HTML.
 
-Requires matplotlib (already pinned by benchmarks/requirements.lock).
+Requires matplotlib 3.10.1; see docs/assets/readme/README.md.
 Screenshot the generated pages at their declared width; see the asset README.
 """
 from __future__ import annotations
@@ -24,7 +24,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs/assets/readme"
 PREVIEW = ROOT / "target/readme/preview"
 PRESENTATION = json.loads((ROOT / "docs/benchmark-presentation.json").read_text())
-CSV = ROOT / PRESENTATION["dataset"] / "comparison.csv"
+CSV = ROOT / PRESENTATION["dataFile"]
+assert hashlib.sha256(CSV.read_bytes()).hexdigest() == PRESENTATION["sha256"]
 PROFILES = [
     ("basic-mixed-text-v1", "Text only"),
     ("basic-image-unique-v2", "Unique images"),

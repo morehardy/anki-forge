@@ -25,3 +25,14 @@ test('configuration rejects URL paths, credentials, and unsafe base paths', () =
   }
   assert.throws(() => withBase('//example.org', '/anki-forge'));
 });
+
+
+test('production deployment requires the formal origin, root base and CNAME', () => {
+  for (const environment of [
+    { SITE_DEPLOYMENT: 'production' },
+    { SITE_DEPLOYMENT: 'production', SITE_URL: 'https://preview.example', SITE_BASE: '/' },
+    { SITE_DEPLOYMENT: 'production', SITE_URL: 'https://ankiforge.dev', SITE_BASE: '/' },
+  ]) assert.throws(() => resolveSiteConfig(environment), /Production/);
+  assert.deepEqual(resolveSiteConfig({ SITE_DEPLOYMENT: 'production', SITE_URL: 'https://ankiforge.dev', SITE_BASE: '/', SITE_CUSTOM_DOMAIN: 'ankiforge.dev' }),
+    { site: 'https://ankiforge.dev', base: '/', customDomain: 'ankiforge.dev' });
+});

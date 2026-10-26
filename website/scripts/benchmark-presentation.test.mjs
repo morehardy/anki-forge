@@ -18,7 +18,8 @@ test('the presentation selects the five specified 1,000-note measurements', asyn
 
 test('a slower Rust measurement scales both bars and reverses the time advantage', async () => {
   const { readFile } = await import('node:fs/promises');
-  const csv = await readFile(new URL('../../benchmarks/results/20261008-latest-commit-genanki/comparison.csv', import.meta.url), 'utf8');
+  const { dataFile } = await loadBenchmarkPresentation();
+  const csv = await readFile(new URL(`../../${dataFile}`, import.meta.url), 'utf8');
   const [header, ...rows] = csv.trim().split('\n').map(row => row.split(','));
   const record = rows.find(row => row[0] === 'basic-mixed-text-v1' && row[1] === '1000');
   record[header.indexOf('rust_time_ms_median')] = '1000';

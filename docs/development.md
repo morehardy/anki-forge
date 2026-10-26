@@ -186,7 +186,7 @@ on `PATH`:
 - [Rust release readiness](rust-crate-release-readiness.md) and
   [release runbook](rust-release-runbook.md)
 - [Node release procedure](../bindings/node/RELEASING.md)
-- [Benchmark methodology and reproduction](../benchmarks/README.md)
+- [Benchmark methodology and reproduction](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/README.md)
 
 ## Source builds
 

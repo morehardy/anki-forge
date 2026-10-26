@@ -1,45 +1,39 @@
-# Install and run with Rust
+# Integrate Anki Forge into a Rust application
 
-Use Rust 1.92 or later and the [public ankiforge 0.3.1 crate](https://crates.io/crates/ankiforge).
+Use Rust 1.92 or later. In your existing Cargo application, install the public crate:
 
 ```sh
-cargo new anki-deck
-cd anki-deck
 cargo add ankiforge@0.3.1
 ```
 
-## Export your first deck
+Normal APKG export needs no Anki installation. For a complete first program and
+`cargo run` instructions, follow the [Rust quickstart](https://ankiforge.dev/docs/quickstart/).
 
-Save this as `src/main.rs`:
+## Cargo dependencies
 
-<!-- source: anki_forge/examples/target_api_basic.rs -->
-```rust
-use ankiforge::{BuildOptions, Note, Project};
+The public `ankiforge` crate includes Basic, Cloze, custom note types, owned media,
+Image Occlusion, comparison and prepared publication. Default features are empty;
+normal application code does not need repository-only features.
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut project = Project::new("spanish")?.default_deck("Spanish");
-    project.add("es:hola", Note::basic("hola", "hello"))?;
-    let output = project.build(BuildOptions::to("spanish.apkg"))?;
-    println!("{}", output.artifact().path().display());
-    Ok(())
-}
-```
-<!-- /source -->
+The crate is a native Rust library. Install your platform's Rust linker and build
+tools as required by your Rust toolchain. See [verified environments](compatibility.md)
+when choosing a deployment host. Rust 1.92 is the minimum requirement; a platform
+being listed does not guarantee every target or third-party toolchain configuration.
+
+For JSON input, add caller-side parsing explicitly:
 
 ```sh
-cargo run
+cargo add serde --features derive
+cargo add serde_json
 ```
 
-Open the persistent `spanish.apkg` in Anki and study **hola → hello** in **Spanish**. Exporting does not require Anki to be installed.
-The namespace `spanish` and note key `es:hola` stay stable when you edit the card.
+The [JSON to APKG recipe](json-to-anki.md#rust) includes the complete parser, media
+and update workflow. The SDK does not provide a generic JSON or CSV converter.
 
-## Continue
+## Choose the next guide
 
-- [Basic and Cloze cards](cards.md)
-- [Images and audio](media.md)
-- [Custom note types](custom-notetypes.md) and [template bundles](template-bundles.md)
-- [Image Occlusion](image-occlusion.md)
-- [Compare and update](updates.md)
-- [Rust API](rust-api.md) and [verified environments](compatibility.md)
-
-For repository examples and source dependencies, use [source builds](source-builds.md).
+- [Rust authoring guide](rust-guide.md) for project and model design
+- [Rust API](rust-api.md) for methods, reports and errors
+- [Media](media.md) for owned images and audio
+- [Update and distribute](updates.md) for baseline and publication conditions
+- [Source builds](source-builds.md) for repository development

@@ -68,6 +68,16 @@ test('check catches stale README, guide versions and Skill programs; sync change
   await assert.rejects(checkAiQuickstart({ directory }), /quickstart differs/);
 });
 
+test('Rust Skill cannot replace the canonical quickstart with an identical different source', async t => {
+  const directory = await fixture(t);
+  const canonical = 'anki_forge/examples/target_api_basic.rs';
+  const alternate = 'anki_forge/examples/alternate.rs';
+  await cp(path.join(directory, canonical), path.join(directory, alternate));
+  const reference = path.join(directory, 'skills/anki-forge/references/rust.md');
+  await writeFile(reference, (await readFile(reference, 'utf8')).replace(`source: ${canonical}`, `source: ${alternate}`));
+  await assert.rejects(checkAiQuickstart({ directory }), /incorrect quickstart source/);
+});
+
 test('invalid installs, URLs and missing prompt requirements fail before generation', async t => {
   const directory = await fixture(t);
   const filename = path.join(directory, 'docs/ai-quickstart.json');

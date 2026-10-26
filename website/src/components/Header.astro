@@ -1,24 +1,32 @@
 ---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+interface Props { locale?: 'en' | 'zh-CN' }
+const { locale = 'en' } = Astro.props;
+const chinese = locale === 'zh-CN';
 import Icon from './Icon.astro';
 import BrandMark from './BrandMark.astro';
 import { repository, sitePath } from '../lib/site';
-const links = [
+const links = chinese ? [
+  { label: '指南', path: '/zh-cn/docs/languages/' },
+  { label: 'JSON 转牌组', path: '/zh-cn/docs/json-to-anki/' },
+] : [
   { label: 'Guide', path: '/docs/' },
   { label: 'Examples', path: '/examples/' },
   { label: 'Blog', path: '/blog/' },
 ];
 ---
 <header class="site-header container">
-  <a class="wordmark" href={sitePath('/')} aria-label="ankiforge home"><BrandMark />ankiforge</a>
-  <nav class="desktop-nav" aria-label="Main navigation">
+  <a class="wordmark" href={sitePath(chinese ? '/zh-cn/' : '/')} aria-label={chinese ? "Anki Forge 首页" : "Anki Forge home"}><BrandMark />ankiforge</a>
+  <nav class="desktop-nav" aria-label={chinese ? '主导航' : 'Main navigation'}>
     {links.map(link => <a href={sitePath(link.path)} aria-current={Astro.url.pathname.startsWith(sitePath(link.path)) ? 'page' : undefined}>{link.label}</a>)}
     <a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a>
   </nav>
   <div class="header-tools">
-    <label class="theme-label"><span class="sr-only">Color theme</span><select data-theme-picker aria-label="Color theme"><option value="auto">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    <LanguageSwitcher />
+    <label class="theme-label"><span class="sr-only">{chinese ? '配色' : 'Color theme'}</span><select data-theme-picker aria-label={chinese ? '配色' : 'Color theme'}><option value="auto">{chinese ? '跟随系统' : 'System'}</option><option value="light">{chinese ? '浅色' : 'Light'}</option><option value="dark">{chinese ? '深色' : 'Dark'}</option></select></label>
     <details class="mobile-menu">
-      <summary>Menu</summary>
-      <nav aria-label="Mobile navigation">
+      <summary>{chinese ? '菜单' : 'Menu'}</summary>
+      <nav aria-label={chinese ? '移动导航' : 'Mobile navigation'}>
         {links.map(link => <a href={sitePath(link.path)}>{link.label}</a>)}
         <a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a>
       </nav>

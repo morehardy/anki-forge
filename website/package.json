@@ -22,7 +22,9 @@
     "sync:ai": "node scripts/ai-quickstart.mjs --write",
     "check:docs": "node scripts/documentation.mjs",
     "sync:docs": "node scripts/documentation.mjs --write",
-    "check:examples": "node scripts/verify-doc-examples.mjs"
+    "check:examples": "node scripts/verify-doc-examples.mjs",
+    "check:public-recipe": "node scripts/verify-public-recipe.mjs",
+    "check:live": "node scripts/check-live-site.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",

@@ -4,6 +4,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
+import { corePages } from './core-pages.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { siteConfig, withBase } from '../site.config.mjs';
 import { loadAiQuickstart } from './ai-quickstart.mjs';
@@ -74,6 +75,32 @@ for (const page of pages.values()) {
   }
   await checkURL($('meta[property="og:image"]').attr('content'), page);
 }
+
+// Validate the actual output set, not just routes derived from the build config.
+const chinese = [...pages.values()].filter(page => page.relative.startsWith('zh-cn/'));
+assert.deepEqual(chinese.map(page => '/' + page.relative.replace(/index\.html$/, '')).sort(), corePages.map(pair => pair.zh).sort(), 'Only the seven translated Chinese pages may be published');
+for (const pair of corePages) {
+  for (const [locale, route] of [['en', pair.en], ['zh-CN', pair.zh]]) {
+    const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
+    assert.ok(page, `Missing core page ${route}`);
+    record(page.$('html').attr('lang') === locale, `${route}: wrong HTML language`);
+    record(page.$('script[src="https://static.cloudflareinsights.com/beacon.min.js"]').length === 1, `${route}: expected one analytics beacon`);
+    record(page.$('[data-language-switch]').attr('href') === withBase(locale === 'en' ? pair.zh : pair.en, siteConfig.base), `${route}: switch must retain the topic`);
+    for (const [language, target] of [['en', pair.en], ['zh-CN', pair.zh]]) {
+      const alternate = page.$(`link[rel="alternate"][hreflang="${language}"]`);
+      record(alternate.length === 1 && alternate.attr('href') === new URL(withBase(target, siteConfig.base), siteConfig.site).href, `${route}: incorrect ${language} hreflang`);
+    }
+  }
+}
+for (const route of ['/docs/json-to-anki/', '/zh-cn/docs/json-to-anki/']) {
+  const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
+  for (const id of ['rust', 'python', 'node']) {
+    record(page.$(`#${id}`).length === 1, `${route}: missing SDK anchor ${id}`);
+  }
+  for (const expected of ['prepare_publication', 'preparePublication', 'Content.sequence']) record(page.$.html().includes(expected), `${route}: SDK program missing from static HTML`);
+}
+const sitemapOutput = await readFile(path.join(dist, 'sitemap-0.xml'), 'utf8');
+for (const pair of corePages) for (const route of [pair.en, pair.zh]) record(sitemapOutput.includes(new URL(withBase(route, siteConfig.base), siteConfig.site).href), `Missing core sitemap URL ${route}`);
 
 for (const name of ['sitemap-index.xml', 'sitemap-0.xml', 'rss.xml']) {
   const $ = load(await readFile(path.join(dist, name), 'utf8'), { xml: true });

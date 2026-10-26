@@ -19,13 +19,13 @@ This is the repository’s minimal Rust example:
 
 <CodeBlock code={quickstartSource} />
 
-`Project::new("spanish")` creates the namespace. `Note::basic("hola", "hello")` creates a Basic note, `project.add("hola", note)` assigns its stable key, and `build(BuildOptions::to(...))` writes the package.
+`Project::new("spanish")` creates the namespace. `Note::basic("hola", "hello")` creates a Basic note, `project.add("es:hola", note)` assigns its stable key, and `build(BuildOptions::to(...))` writes the package.
 
 `build` returns `BuildOutput` only after success. The `?` operator propagates a typed failure so scripts can exit with an error.
 
-## Run it from source
+## Install and run
 
-Follow the <a href={sitePath('/docs/quickstart/')}>current quickstart</a> for prerequisites and the source-checkout command. To use the same program in your own project, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>.
+Follow the <a href={sitePath('/docs/quickstart/')}>current quickstart</a> for the public package installation and run command. To use the same program in your own project, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>.
 
 After exporting, import `spanish.apkg` into Anki and reveal the answer to your first card.
 
@@ -33,7 +33,7 @@ The <a href={sitePath('/examples/#basic')}>Basic example on this site</a> also h
 
 ## Give the note an identity
 
-The string `hola` is an explicit stable note key within the `spanish` namespace. It describes which note this is, independently of how you phrase the answer. You could later expand “hello” to “hello; hi” and keep the same ID.
+The string `es:hola` is an explicit stable note key within the `spanish` namespace. It describes which note this is, independently of how you phrase the answer. You could later expand “hello” to “hello; hi” and keep the same ID.
 
 Use a distinct ID for each logical note. If your source already has a durable key, such as a vocabulary entry ID, that is a useful starting point. Avoid deriving identity solely from text that you expect to edit.
 

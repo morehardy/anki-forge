@@ -11,6 +11,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Anki Forge',
+      routeMiddleware: './src/route-middleware.ts',
+      components: { LanguageSelect: './src/components/LanguageSwitcher.astro' },
       logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },
       description: 'Build Basic, Cloze, Image Occlusion and custom Anki cards with Rust, TypeScript or Python.',
       favicon: '/favicon.svg',
@@ -38,8 +40,10 @@ export default defineConfig({
           { label: 'First Rust deck', slug: 'docs/quickstart' },
           { label: 'Add to your application', slug: 'docs/installation' },
           { label: 'Core concepts', slug: 'docs/concepts' },
+          { label: 'Anki Forge vs genanki', slug: 'docs/anki-forge-vs-genanki' },
         ] },
         { label: 'Guides', items: [
+          { label: 'JSON to Anki and updates', slug: 'docs/json-to-anki' },
           { label: 'Basic and Cloze', slug: 'docs/cards' },
           { label: 'Images and audio', slug: 'docs/media' },
           { label: 'Custom note types', slug: 'docs/custom-notetypes' },
@@ -51,7 +55,7 @@ export default defineConfig({
           { label: 'Rust authoring', slug: 'docs/rust-guide' },
           { label: 'Node quickstart', slug: 'docs/node-quickstart' },
           { label: 'Python quickstart', slug: 'docs/python-quickstart' },
-          { label: 'Python 0.1 to 0.2', slug: 'docs/python-migration' },
+          { label: 'Python API transition', slug: 'docs/python-migration' },
           { label: 'Move from genanki', slug: 'docs/genanki-migration' },
         ] },
         { label: 'Reference', collapsed: true, items: [

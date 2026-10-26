@@ -1,4 +1,4 @@
-# Your first deck with Python
+# Generate an Anki APKG with Python
 
 Create and activate a virtual environment, then install the [public PyPI package](https://pypi.org/project/ankiforge/):
 
@@ -9,7 +9,7 @@ python -m pip install ankiforge==0.3.1
 ```
 
 On Windows, activate with `.venv\Scripts\Activate.ps1`.
-Use an ordinary CPython interpreter and a matching platform wheel; see [verified environments](../compatibility.md).
+Use ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see [verified environments](../compatibility.md).
 
 ## Export a deck
 
@@ -34,6 +34,8 @@ Open the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **
 Keep namespace `spanish` and note key `es:hola` stable for later edits. Exporting does not require Anki to be installed.
 
 ## Continue
+
+For a complete media and update task, follow [JSON to Anki](../json-to-anki.md#python).
 
 - [Images and audio](../media.md) and [Python media API](api.md#media-and-occlusion)
 - [Custom note types](../custom-notetypes.md) and [template bundles](../template-bundles.md)

@@ -7,6 +7,10 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 export const collections = {
   docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
   i18n: defineCollection({ loader: i18nLoader(), schema: i18nSchema() }),
+  coreGuides: defineCollection({
+    loader: glob({ pattern: '*.md', base: './src/generated/zh-cn' }),
+    schema: z.object({ title: z.string(), description: z.string() }),
+  }),
   blog: defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
     schema: z.object({

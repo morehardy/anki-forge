@@ -92,13 +92,10 @@
 .forge-box-shadow { position: absolute; z-index: 0; left: 30cqw; top: 44cqw; width: 44cqw; height: 5cqw; border-radius: 50%; background: var(--forge-shadow); filter: blur(1.2cqw); opacity: 0; }
 .forge-caption { display: flex; align-items: center; justify-content: center; gap: 2.5cqw; min-height: 44px; margin-top: 8px; color: var(--af-muted); text-decoration: none; font-size: 12px; }
 .forge-caption strong { color: var(--af-ink); font-weight: 550; }
-.forge-caption-action { display: inline-flex; align-items: center; gap: 6px; color: var(--af-accent); font-size: 11px; }
-.forge-caption:hover .forge-caption-action { text-decoration: underline; text-underline-offset: 4px; }
 
 @media (max-width: 767px) {
   .forge-studio { width: min(100%, 520px); margin-inline: auto; }
   .forge-caption { font-size: 11px; gap: 12px; }
-  .forge-caption-action { font-size: 10px; }
 }
 @media (max-width: 374px) {
   .forge-caption { flex-wrap: wrap; gap: 0 12px; line-height: 1.5; }

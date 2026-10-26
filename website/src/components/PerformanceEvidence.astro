@@ -1,36 +1,27 @@
 ---
+interface Props { locale?: 'en' | 'zh-CN' }
+const { locale = 'en' } = Astro.props;
+const chinese = locale === 'zh-CN';
 import benchmark from '../generated/benchmark.json';
-import Icon from './Icon.astro';
-import { repository } from '../lib/site';
 const { results, maxTime, minimumSaved, maximumSaved } = benchmark;
-const evidence = `${repository}/blob/${benchmark.evidenceCommit}/${benchmark.dataset}`;
-const advantage = (saved: number) => `${Math.abs(saved).toFixed(1)}% ${saved >= 0 ? 'less' : 'more'} time`;
+const advantage = (saved: number) => chinese ? `耗时${saved >= 0 ? '低' : '高'} ${Math.abs(saved).toFixed(1)}%` : `${Math.abs(saved).toFixed(1)}% ${saved >= 0 ? 'less' : 'more'} time`;
 ---
 <section class="home-performance" aria-labelledby="performance-heading">
   <div class="home-performance-summary">
-    <div class="home-performance-title"><h2 id="performance-heading">The export, measured.</h2><p>Rust Project API versus genanki 0.13.1 · {benchmark.notes.toLocaleString('en-US')} Basic notes per workload</p></div>
-    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>Text-only export</span></div>
-    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>Less export time across five measured workloads</span></div>}
+    <div class="home-performance-title"><h2 id="performance-heading">{chinese ? 'Rust 导出耗时实测' : 'The export, measured.'}</h2><p>Rust Project API / genanki 0.13.1 · {chinese ? '每组 1,000 条 Basic 笔记' : '1,000 Basic notes per workload'}</p></div>
+    <div class="home-performance-metric"><strong>{results[0].rust.toFixed(1)}<span> ms</span></strong><span>{chinese ? `${benchmark.notes.toLocaleString('en-US')} 条纯文本笔记导出` : `Export ${benchmark.notes.toLocaleString('en-US')} text-only notes`}</span></div>
+    {minimumSaved >= 0 && <div class="home-performance-metric"><strong>{minimumSaved.toFixed(1)}–{maximumSaved.toFixed(1)}<span>%</span></strong><span>{chinese ? '五个实测工作负载的耗时降幅' : 'Less export time across five measured workloads'}</span></div>}
   </div>
-  <p class="home-performance-context">Rust Project API · Media::files · commit {benchmark.measurementCommit.slice(0, 7)} · Apple M1 Pro · 10-run medians · 2026-10-08</p>
+  <p class="home-performance-context">Rust Project API · Apple M1 Pro · {chinese ? '10 次运行中位数' : '10-run medians'}</p>
   <div class="home-benchmark" data-reveal>
-    <div class="home-benchmark-intro"><h3>Five kinds of input.<br />One reproducible comparison.</h3><p>Export times include process startup through exit. Every row contains {benchmark.notes.toLocaleString('en-US')} Basic notes; media content changes by workload.</p></div>
-    <div class="home-benchmark-chart" aria-label="Median export times in milliseconds">
+    <div class="home-benchmark-intro"><h3>{chinese ? '文本、图片、音频，' : 'Text, images, audio.'}<br />{chinese ? '五种场景都更快。' : 'Faster in all five tests.'}</h3><p>{chinese ? `每组 ${benchmark.notes.toLocaleString('en-US')} 条 Basic 笔记，覆盖纯文本、独立媒体和共享混合媒体。Rust 导出耗时比 genanki 低 ${minimumSaved.toFixed(1)}–${maximumSaved.toFixed(1)}%。` : `Each workload contains ${benchmark.notes.toLocaleString('en-US')} Basic notes, covering text-only, unique media and shared mixed media. Rust used ${minimumSaved.toFixed(1)}–${maximumSaved.toFixed(1)}% less export time than genanki.`}</p></div>
+    <div class="home-benchmark-chart" aria-label={chinese ? "导出耗时中位数，单位为毫秒" : "Median export times in milliseconds"}>
       <div class="home-benchmark-key"><span><i class="home-key-rust"></i>Anki Forge Rust</span><span><i class="home-key-genanki"></i>genanki</span></div>
       {results.map(result => <div class="home-benchmark-row" data-profile={result.profile} style={`--rust-width: ${result.rust / maxTime * 100}%; --genanki-width: ${result.genanki / maxTime * 100}%`}>
-        <div class="home-benchmark-label"><span>{result.label}</span><strong>{advantage(result.saved)}</strong></div>
+        <div class="home-benchmark-label"><span>{chinese ? ({ 'basic-mixed-text-v1': '纯文本', 'basic-image-unique-v2': '不重复图片', 'basic-audio-unique-v2': '不重复音频', 'basic-mixed-unique-v2': '不重复混合媒体', 'basic-mixed-shared-v2': '共享混合媒体' })[result.profile] : result.label}</span><strong>{advantage(result.saved)}</strong></div>
         <div class="home-benchmark-bars" aria-hidden="true"><span class="home-rust-bar"></span><span class="home-genanki-bar"></span></div>
         <p>{result.rust.toFixed(1)} ms <span>/ {result.genanki.toFixed(1)} ms</span></p>
       </div>)}
     </div>
-    <div class="home-benchmark-footnote"><p>Some media workloads use more memory; the unique-image workload used 92.45 MiB peak RSS versus 35.59 MiB. These results measure committed source, independently of published packages.</p></div>
   </div>
-  <details class="benchmark-method"><summary>Method, memory tradeoffs, and full results</summary>
-    <p>Five workloads × 100 / 200 / 500 / 1,000 notes; 10 timing runs and 5 independent peak-RSS measurements per cell. Startup-to-exit time includes media import, build, inspection and writing.</p>
-    <p>Apple M1 Pro / 32 GiB / macOS 27; Rust 1.92 release, default features, System allocator; CPython 3.11 / genanki 0.13.1. Default APKG formats differ. Background load and page cache were not isolated.</p>
-    <table><caption>Peak RSS medians at {benchmark.notes.toLocaleString('en-US')} notes (MiB)</caption><thead><tr><th>Workload</th><th>Rust</th><th>genanki</th><th>Speed ratio</th></tr></thead><tbody>{results.map(result => <tr><th scope="row">{result.label}</th><td>{result.rustRSS.toFixed(2)}</td><td>{result.genankiRSS.toFixed(2)}</td><td>{result.speedup.toFixed(2)}×</td></tr>)}</tbody></table>
-    <p>All 840 output-content checks and 40 Anki import, content and representative-render checks passed (20 imports per implementation). Across the full 20-cell matrix, Rust medians were lower and Rust Q3 was below genanki Q1. This does not certify every client.</p>
-    <p>Node/Python hosts, prepared publication, repeated builds within one process and individual media over 1 MiB were not measured. GUI interaction and audible playback were not checked.</p>
-    <p><a href={`${evidence}/report.md`}>Full time and RSS report <Icon name="arrowUpRight" /></a> · <a href={`${evidence}/comparison.csv`}>Raw CSV</a> · <a href={`${evidence}/measured-source-check.json`}>Measured source</a> · <a href={`${evidence}/README.md`}>Reproduce</a></p>
-  </details>
 </section>

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { translatedDocs } from './core-pages.mjs';
 import { importedDocs } from './content-links.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -27,7 +28,8 @@ export async function sourceSnippet(reference) {
 }
 
 export async function checkDocumentation({ sync = false } = {}) {
-  const sources = new Set(['README.md', 'README.zh-CN.md', 'bindings/node/README.md', 'bindings/python/README.md', ...importedDocs.map(doc => doc.source)]);
+  const sources = new Set(['README.md', 'README.zh-CN.md', 'bindings/node/README.md', 'bindings/python/README.md', ...[...importedDocs, ...translatedDocs].map(doc => doc.source)]);
+  const publicData = JSON.parse(await read('docs/ai-quickstart.json'));
   let count = 0;
   for (const filename of sources) {
     let markdown = await read(filename);
@@ -37,6 +39,9 @@ export async function checkDocumentation({ sync = false } = {}) {
       if (sync) markdown = markdown.replace(match[0], `<!-- source: ${match[1]} -->\n\`\`\`${match[2]}\n${expected}\n\`\`\`\n<!-- /source -->`);
       else assert.equal(match[3], expected, `${filename}: stale example ${match[1]}; run npm run sync:docs`);
       count++;
+    }
+    for (const [, version] of markdown.matchAll(/ankiforge(?:@|==)(\d+\.\d+\.\d+)/g)) {
+      assert.equal(version, publicData.publicVersion, `${filename}: public installation version drift`);
     }
     if (sync) await writeFile(path.join(root, filename), markdown);
     const prose = markdown.replace(/```[\s\S]*?```/g, '');

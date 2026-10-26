@@ -123,7 +123,9 @@ never changes retained MIME. Build still sniffs staged bytes and validates the
 export extension independently: PNG named `wrong.mp3` can pass image addition
 and fail build with `MEDIA.DECLARED_MIME_MISMATCH`.
 
-## Batch import from source
+<a id="batch-import-from-source"></a>
+
+## Batch media import
 
 These methods are included in the public `0.3.1` package.
 

@@ -21,6 +21,9 @@ export function resolveSiteConfig(environment = process.env) {
   if (customDomain && (customDomain !== site.hostname || base !== '/')) {
     throw new Error('SITE_CUSTOM_DOMAIN must match SITE_URL, and a custom domain requires SITE_BASE=/.');
   }
+  if (environment.SITE_DEPLOYMENT === 'production' && (site.origin !== 'https://ankiforge.dev' || base !== '/' || customDomain !== 'ankiforge.dev')) {
+    throw new Error('Production deployment requires SITE_URL=https://ankiforge.dev, SITE_BASE=/ and SITE_CUSTOM_DOMAIN=ankiforge.dev.');
+  }
   return { site: site.origin, base, customDomain };
 }
 

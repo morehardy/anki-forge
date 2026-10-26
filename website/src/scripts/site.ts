@@ -123,7 +123,7 @@ document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder =
   request.addEventListener('input', () => {
     panels.forEach(panel => {
       const prompt = panel.querySelector<HTMLElement>('[data-ai-prompt]');
-      if (prompt) prompt.textContent = renderPrompt(aiQuickstart, panel.dataset.aiPanel!, request.value);
+      if (prompt) prompt.textContent = renderPrompt(aiQuickstart, panel.dataset.aiPanel!, request.value, builder.dataset.aiLocale || 'en');
       panel.querySelectorAll<HTMLElement>('[data-copy-status]').forEach(status => { status.textContent = ''; });
     });
   }, { signal: copyListeners.signal });
@@ -157,7 +157,7 @@ document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
       await navigator.clipboard.writeText(content.textContent || '');
       if (copyListeners.signal.aborted) return;
       status.textContent = block.dataset.copySuccess || 'Command copied.';
-      if (label) label.textContent = 'Copied';
+      if (label) label.textContent = document.documentElement.lang === 'zh-CN' ? '已复制' : 'Copied';
       if (copyIcon) copyIcon.hidden = true;
       if (checkIcon) checkIcon.hidden = false;
       timer = setTimeout(() => { reset(); if (timer) copyTimers.delete(timer); }, 2000);

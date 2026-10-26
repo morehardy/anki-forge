@@ -1,4 +1,4 @@
-# Your first deck with Node
+# Generate an Anki APKG with Node.js
 
 Use Node.js 22.13 or later. In a new application directory:
 
@@ -36,6 +36,8 @@ Keep namespace `spanish` and key `es:hola` stable for later edits. Closing the p
 Exporting does not require Anki to be installed.
 
 ## TypeScript and next tasks
+
+The [JSON to Anki recipe](../json-to-anki.md#node) includes a complete TypeScript compile-and-run path.
 
 Use `.mjs` for ESM, or `require('ankiforge')` for CommonJS. TypeScript declarations ship with the package;
 see [TypeScript configuration](api.md#typescript).

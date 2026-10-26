@@ -1,5 +1,7 @@
 # Moving from genanki concepts
 
+Still choosing a library? Read [Anki Forge vs genanki](../anki-forge-vs-genanki.md).
+
 AnkiForge uses stable data keys, validated immutable models, owned media snapshots and explicit build/update operations. This is a new authoring model; it does not emulate genanki objects or the removed AnkiForge Deck/lockfile interfaces.
 
 | genanki concept | AnkiForge equivalent |
@@ -10,7 +12,7 @@ AnkiForge uses stable data keys, validated immutable models, owned media snapsho
 | Deck as a note container | Project with a default deck; optional note-level `.deck(name)` |
 | Package media file paths | Owned `Media.file(path)` values, automatically collected through typed content |
 | Package write | `project.build(BuildOptions.to(path))` |
-| GUID derived from field contents | Explicit stable namespace and note key |
+| Default GUID derived from fields, or a custom GUID rule | Explicit stable namespace and note key |
 
 ```python
 from ankiforge import Project, NoteType, Field, Template, BuildOptions

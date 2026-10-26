@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
 const root = new URL('../../', import.meta.url);
@@ -34,5 +35,8 @@ export async function loadBenchmarkPresentation() {
   assert.match(config.dataset, /^benchmarks\/results\/[\w-]+$/);
   for (const key of ['measurementCommit', 'evidenceCommit']) assert.match(config[key], /^[a-f0-9]{40}$/);
   assert.ok(Number.isInteger(config.notes) && config.notes > 0);
-  return { ...config, ...presentComparison(await readFile(new URL(`${config.dataset}/comparison.csv`, root), 'utf8'), config.notes) };
+  assert.match(config.dataFile, /^docs\/performance\/\d{8}\/comparison\.csv$/);
+  const csv = await readFile(new URL(config.dataFile, root), 'utf8');
+  assert.equal(createHash('sha256').update(csv).digest('hex'), config.sha256, 'Historical CSV checksum mismatch');
+  return { ...config, ...presentComparison(csv, config.notes) };
 }

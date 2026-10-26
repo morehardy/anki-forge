@@ -23,7 +23,8 @@
 
 **把代码和数据，变成可持续维护的 Anki 牌组。**
 
-使用 Rust、TypeScript 或 Python 制作基础问答、填空、图片遮挡与自定义卡片。
+Anki Forge 是开源的 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python、Node.js 接口。
+使用公开的 `ankiforge` 包制作基础问答、填空、图片遮挡与自定义卡片，按 MIT 许可证分发。
 一起打包模板和媒体，并在分发新版前检查身份与内容变化。
 
 [性能对比](#可核验的性能表现) · [快速开始](#快速开始) ·
@@ -70,7 +71,7 @@
 | 混合独立媒体 | 65.19 | 35.03 | 2.17× |
 | 混合共享媒体 | 29.36 | 32.66 | 1.84× |
 
-[完整报告](benchmarks/results/20261008-latest-commit-genanki/report.md) · [原始 CSV](benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [复现说明](benchmarks/results/20261008-latest-commit-genanki/README.md)
+[完整报告](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md) · [原始 CSV](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [复现说明](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/README.md)
 
 </details>
 

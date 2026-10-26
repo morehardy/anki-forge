@@ -1,0 +1,42 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import HomeShowcase from '../../components/HomeShowcase.astro';
+import PerformanceEvidence from '../../components/PerformanceEvidence.astro';
+import AiQuickstart from '../../components/AiQuickstart.astro';
+import InstallCommand from '../../components/InstallCommand.astro';
+import Icon from '../../components/Icon.astro';
+import data from '../../generated/ai-quickstart.json';
+import { sitePath } from '../../lib/site';
+import '../../styles/home.css';
+---
+<SiteLayout locale="zh-CN" title="用代码生成 Anki 牌组" description="Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python、Node.js 接口，支持媒体、自定义模板和发布前更新检查。">
+  <div class="container">
+    <section class="home-hero" aria-labelledby="hero-title">
+      <div class="home-hero-copy">
+        <h1 id="hero-title">把你的数据<br /><span>变成 Anki 牌组。</span></h1>
+        <p>Anki Forge 是开源的 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。打包图片与音频，使用自定义模板，在发布新版前检查变更。</p>
+        <div class="hero-actions"><a class="button" href={sitePath('/zh-cn/docs/languages/')}>生成第一个牌组 <Icon name="arrowRight" /></a><a class="text-link" href={sitePath('/zh-cn/docs/json-to-anki/')}>从 JSON 开始 <Icon name="arrowRight" /></a></div>
+      </div>
+      <HomeShowcase locale="zh-CN" />
+    </section>
+    <section class="home-install" aria-labelledby="install-heading">
+      <div><h2 id="install-heading">选择开发语言</h2><p>使用公开版本 {data.publicVersion} 生成持久保存的 APKG。生成过程不需要安装 Anki。</p></div>
+      <div class="home-language-grid">
+        {Object.entries(data.languages).map(([key, language]) => (
+          <article>
+            <h3>{language.label}</h3>
+            <InstallCommand command={language.install} runtime={language.runtime} buttonLabel="复制安装命令" locale="zh-CN" />
+            <a class="text-link" href={sitePath(`/zh-cn${new URL(language.quickstart).pathname}`)}>用 {key === 'node' ? 'Node.js' : language.label} 开始 <Icon name="arrowRight" /></a>
+          </article>
+        ))}
+      </div>
+    </section>
+    <AiQuickstart locale="zh-CN" />
+    <PerformanceEvidence locale="zh-CN" />
+    <section class="section" aria-labelledby="workflow-heading">
+      <h2 id="workflow-heading">从第一份牌组到下一次更新</h2>
+      <p>用同一份 JSON、图片和音频生成三张卡片。保持业务 ID 不变，修改答案，再基于原始 APKG 检查变更并发布新版。</p>
+      <div class="hero-actions"><a class="button" href={sitePath('/zh-cn/docs/json-to-anki/')}>生成并更新牌组 <Icon name="arrowRight" /></a><a class="text-link" href={sitePath('/zh-cn/docs/anki-forge-vs-genanki/')}>与 genanki 比较 <Icon name="arrowRight" /></a></div>
+    </section>
+  </div>
+</SiteLayout>

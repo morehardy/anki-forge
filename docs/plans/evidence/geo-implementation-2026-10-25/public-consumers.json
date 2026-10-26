@@ -1,0 +1,173 @@
+{
+  "geo-public-consumers": {
+    "rust": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "source": {
+        "registry": "crates.io",
+        "package": "ankiforge",
+        "version": "0.3.1",
+        "resolution": "name = \"ankiforge\"\nversion = \"0.3.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"53e28963050169fe9f3661c02546fd9a0a9c645e33e0dcae09fa80ae73e9c609\"\ndependencies = [\n \"anyhow\",\n \"base64\",\n \"blake3\",\n \"crc32fast\",\n \"flate2\",\n \"hex\",\n \"html-escape\",\n \"image\",\n \"imagesize\",\n \"jsonschema\",\n \"mime\",\n \"prost\",\n \"rand\",\n \"rusqlite\",\n \"rustix\",\n \"same-file\",\n \"serde\",\n \"serde_json\",\n \"serde_yaml\",\n \"sha1\",\n \"tar\",\n \"tempfile\",\n \"unicase\",\n \"unicode-normalization\",\n \"url\",\n \"zip\",\n \"zstd\",\n]"
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "66a87dec17cdeefb99d28734d4c5e9b28a2c725c04873abcb2fe611220f18266",
+        "v2.apkg": "2bcdde21d46e580a5ca79598657a564701cfaf2a81a2c5db7e272a360d095477",
+        "comparison.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+        "review.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      }
+    },
+    "python": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "source": {
+        "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+        "version": "0.3.1"
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "c771ac9a3e959c6d0b646aef37c32277fa4e01bd122c06ed55b42b4d1bb336ec",
+        "v2.apkg": "0293f07439c5f4509176a9d228f8844c70a624508f2364e0db2e7fd536eb6090",
+        "comparison.json": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f",
+        "review.json": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      }
+    },
+    "node": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "source": {
+        "version": "0.3.1",
+        "resolved": "https://registry.npmjs.org/ankiforge/-/ankiforge-0.3.1.tgz",
+        "integrity": "sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA==",
+        "license": "MIT",
+        "engines": {
+          "node": ">=22.13.0"
+        },
+        "optionalDependencies": {
+          "ankiforge-darwin-arm64": "0.3.1",
+          "ankiforge-darwin-x64": "0.3.1",
+          "ankiforge-linux-x64-gnu": "0.3.1",
+          "ankiforge-win32-x64-msvc": "0.3.1"
+        },
+        "native": [
+          [
+            "node_modules/ankiforge-darwin-arm64",
+            {
+              "version": "0.3.1",
+              "resolved": "https://registry.npmjs.org/ankiforge-darwin-arm64/-/ankiforge-darwin-arm64-0.3.1.tgz",
+              "integrity": "sha512-Hu8MIKtw4qZA0Z/4xLJInLUiYlEa/Q/rtE9UPkvuUklGowrU18kGRwtachCwWOBj7ZzvCDAYkvWbpU+DSl0bIg==",
+              "cpu": [
+                "arm64"
+              ],
+              "license": "MIT",
+              "optional": true,
+              "os": [
+                "darwin"
+              ],
+              "engines": {
+                "node": ">=22.13.0"
+              }
+            }
+          ]
+        ]
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "97acc6075aa9b41acb45e19a54c6a0d4659fb98d684e3cac5b5091e5d889de9a",
+        "v2.apkg": "5a48d41ad946094abf12d141a964469439e69642e14979737aa07f0bb5ef749d",
+        "comparison.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+        "review.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      }
+    }
+  },
+  "geo-public-linux": {
+    "rust": {
+      "platform": "linux",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "source": {
+        "registry": "crates.io",
+        "package": "ankiforge",
+        "version": "0.3.1",
+        "resolution": "name = \"ankiforge\"\nversion = \"0.3.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"53e28963050169fe9f3661c02546fd9a0a9c645e33e0dcae09fa80ae73e9c609\"\ndependencies = [\n \"anyhow\",\n \"base64\",\n \"blake3\",\n \"crc32fast\",\n \"flate2\",\n \"hex\",\n \"html-escape\",\n \"image\",\n \"imagesize\",\n \"jsonschema\",\n \"mime\",\n \"prost\",\n \"rand\",\n \"rusqlite\",\n \"rustix\",\n \"same-file\",\n \"serde\",\n \"serde_json\",\n \"serde_yaml\",\n \"sha1\",\n \"tar\",\n \"tempfile\",\n \"unicase\",\n \"unicode-normalization\",\n \"url\",\n \"zip\",\n \"zstd\",\n]"
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "c5caa41c7c90ebdc4ea5c90bfd0c8090470d6c6851dfe1a20060e9b97cae6911",
+        "v2.apkg": "8ed32f08b7b78c5efe888500048cf0dbbffa681cf8938712792f5c2142df89e4",
+        "comparison.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+        "review.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      }
+    },
+    "python": {
+      "platform": "linux",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "source": {
+        "url": "https://files.pythonhosted.org/packages/9d/ac/a08a062cd79f1e19633a407f5c7c860b876100aa0dccbb7503f67c70a6ec/ankiforge-0.3.1-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "version": "0.3.1"
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "4d7dea354f5fadff722f3ce0c994b031f0e6cf46b482e7180add19bdadb0fb6b",
+        "v2.apkg": "10496de6ba21e508b228fa4343c2c951f7187bd83159fa23e7a81a2f69b3da45",
+        "comparison.json": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f",
+        "review.json": "bcacebe58c013f2169424830ca99c4081f77b6488b42e467723f6b595dff167f"
+      }
+    },
+    "node": {
+      "platform": "linux",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "source": {
+        "version": "0.3.1",
+        "resolved": "https://registry.npmjs.org/ankiforge/-/ankiforge-0.3.1.tgz",
+        "integrity": "sha512-kOqS5BGp4rc0JOeWQjtWI5SQ+EodyGa0eR13HE8+s9CNIxzytlTBqToLBQODzJnw0gVyaXU2Bw3bX4b0n+mOWA==",
+        "license": "MIT",
+        "engines": {
+          "node": ">=22.13.0"
+        },
+        "optionalDependencies": {
+          "ankiforge-darwin-arm64": "0.3.1",
+          "ankiforge-darwin-x64": "0.3.1",
+          "ankiforge-linux-x64-gnu": "0.3.1",
+          "ankiforge-win32-x64-msvc": "0.3.1"
+        },
+        "native": [
+          [
+            "node_modules/ankiforge-linux-x64-gnu",
+            {
+              "version": "0.3.1",
+              "resolved": "https://registry.npmjs.org/ankiforge-linux-x64-gnu/-/ankiforge-linux-x64-gnu-0.3.1.tgz",
+              "integrity": "sha512-2dZvWAQh1McYnjnXUWZEpa9TK05npWPriqiAiQ/ay60ifR+IdOsdb1MBvZWEOY8q+YuWDUWsF/ckIrj+LRrr+g==",
+              "cpu": [
+                "x64"
+              ],
+              "libc": [
+                "glibc"
+              ],
+              "license": "MIT",
+              "optional": true,
+              "os": [
+                "linux"
+              ],
+              "engines": {
+                "node": ">=22.13.0"
+              }
+            }
+          ]
+        ]
+      },
+      "contract": "3 notes / 3 cards / 2 exact media; stable identity; one answer changed; compare + review policy allowed; v1 preserved",
+      "sha256": {
+        "v1.apkg": "40de7e8c6924551100f66c8c9bedd3fc83357680f15161a87a8af547b8b0b5b0",
+        "v2.apkg": "50d98450447f9b96519655982ba9cadd6de4d06616bdaaaec8b5bbb17267ae28",
+        "comparison.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278",
+        "review.json": "1e4ff786ab1d245d9d49be1597cc35aa0a04e5f1beb58e780a13e20b074c2278"
+      }
+    }
+  }
+}

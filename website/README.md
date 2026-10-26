@@ -32,10 +32,23 @@ Production preview runs at `http://127.0.0.1:4321/anki-forge/` by default. Starl
 
 Astro runs the preview server in the background. Use `npm run preview:stop` when finished.
 
+## Core translations and registry verification
+
+Seven topic pairs in `scripts/core-pages.mjs` define English/Chinese alternates.
+Chinese Markdown is authored under `../docs/zh-cn/`, prepared into `coreGuides`,
+and served by six explicit routes plus the Chinese homepage. Do not enable
+Starlight locale fallback: untranslated Chinese references must remain 404s.
+
+`npm run check:public-recipe` installs public packages in temporary apps, runs the
+shared JSON/media/update recipe and saves evidence in `../target/geo-public-consumers/`.
+It requires Node, Rust, Python/venv and network access. CI runs this on Linux x64
+separately from source-package checks and gates deployment on success.
+`npm run check:live` independently checks production metadata and routes after deployment.
+
 ## Content and examples
 
 - `src/pages/index.astro`: homepage, with a card animation, export benchmarks, and an interactive code-to-card workbench.
-- `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One timeline keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
+- `src/components/HomeShowcase.astro` and `src/scripts/showcase.ts`: the four-card stacking and APKG packing sequence. One ten-second loop keeps the layers in sync, doubles packing speed, pauses outside the viewport, and respects reduced motion.
 - `src/components/PerformanceEvidence.astro`: export metrics selected by `docs/benchmark-presentation.json`, with links to its methodology and limitations.
 - `src/components/AiQuickstart.astro`: language tabs, a local task input, plain-text AI briefs and installation copying, with complete no-script templates.
 - `src/pages/examples/index.astro`: all examples and package downloads.
@@ -69,7 +82,7 @@ Interface icons come from Phosphor. Its MIT license is included in the generated
 
 ## GitHub Pages
 
-The default public URL is `https://morehardy.github.io/anki-forge/`. The workflow in `.github/workflows/website.yml` checks pull requests and deploys successful builds from `main`.
+The production URL is `https://ankiforge.dev/`; local builds default to the GitHub project prefix for base-path verification. The workflow in `.github/workflows/website.yml` checks pull requests and deploys successful builds from `main`.
 
 Before the first deployment, set the repository’s **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. A pushed workflow or manual workflow run can then publish the static output. The local implementation does not change repository settings automatically.
 
@@ -77,15 +90,15 @@ The configuration keeps page links, assets, canonical URLs, RSS, the sitemap, an
 
 ## Custom domain
 
-After purchasing and configuring a domain, set these repository **Actions variables** together:
+Production uses these repository **Actions variables** (and matching workflow defaults):
 
 | Variable | Example value |
 | --- | --- |
-| `SITE_URL` | `https://your-domain.example` |
+| `SITE_URL` | `https://ankiforge.dev` |
 | `SITE_BASE` | `/` |
-| `SITE_CUSTOM_DOMAIN` | `your-domain.example` |
+| `SITE_CUSTOM_DOMAIN` | `ankiforge.dev` |
 
-`SITE_URL` is an origin without a path. `SITE_BASE` is the deployment path. `SITE_CUSTOM_DOMAIN` must match the hostname and generates `CNAME`. Configure the same custom domain and DNS records in GitHub Pages, then rebuild and deploy. The placeholder above is not a registered project domain.
+`SITE_URL` is an origin without a path. `SITE_BASE` is the deployment path. `SITE_CUSTOM_DOMAIN` must match the hostname and generates `CNAME`. Configure the same custom domain and DNS records in GitHub Pages, then rebuild and deploy. `SITE_DEPLOYMENT=production` rejects another origin, a non-root base or a missing CNAME; local/preview builds retain flexible configuration.
 
 For a local domain-configuration check, copy `.env.example` to `.env`, fill in these values, and run `npm run build` followed by `npm run check:site`. Shell environment variables take precedence over `.env`. Restart the development server after changing the configuration.
 

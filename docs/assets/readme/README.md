@@ -16,12 +16,12 @@ The Basic fields match the [quickstart](../../../anki_forge/examples/target_api_
 ## Validate and regenerate
 
 From the repository root, with Rust 1.92 and the local Anki source/protoc
-required by the [oracle setup](../../../benchmarks/README.md):
+required by the [oracle setup](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/README.md):
 
 ```sh
 cargo run --locked -p ankiforge --example readme_showcase -- target/readme/showcase.apkg
 cargo run --locked --manifest-path scripts/roundtrip_oracle/Cargo.toml --bin readme_render -- target/readme/rendered target/readme/showcase.apkg
-MPLCONFIGDIR=target/readme/matplotlib benchmarks/.venv/bin/python scripts/generate_readme_assets.py --cards target/readme/rendered/cards.json --package target/readme/showcase.apkg
+MPLCONFIGDIR=target/readme/matplotlib python3 scripts/generate_readme_assets.py --cards target/readme/rendered/cards.json --package target/readme/showcase.apkg
 ```
 
 To reuse the retained rendering, run the Python command without `--cards` and
@@ -34,12 +34,12 @@ using the matching PNG filename. Check image/audio loading and full bounds.
 [benchmark-presentation.json](../../benchmark-presentation.json) selects the same
 CSV as the website: five 1,000-note rows from 2026-10-08, Rust Project API at
 `1199196` versus genanki 0.13.1. The four chart variants share a zero-based linear
-axis and identical values. [Full report](../../../benchmarks/results/20261008-latest-commit-genanki/report.md).
+axis and identical values. [Full report](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md).
 
 Regenerate only the charts, without rerunning the benchmark:
 
 ```sh
-MPLCONFIGDIR=target/readme/matplotlib benchmarks/.venv/bin/python scripts/generate_readme_assets.py --charts-only
+MPLCONFIGDIR=target/readme/matplotlib python3 scripts/generate_readme_assets.py --charts-only
 ```
 
 `cd website && npm test` checks README alt text, headlines, RSS tables and all
@@ -53,3 +53,6 @@ cargo run --locked --manifest-path scripts/roundtrip_oracle/Cargo.toml --bin rea
 ```
 
 The resulting `cards.json` should contain one card with `["hola", "hello; hi"]`.
+
+For chart regeneration, install `matplotlib==3.10.1` in a virtual environment.
+The small CSV and its provenance live in `docs/performance/20261008/`.

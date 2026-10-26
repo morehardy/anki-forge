@@ -1,0 +1,164 @@
+{
+  "protocolDate": "2026-10-25",
+  "status": "prepared; platform access and settings must be frozen before sampling",
+  "platforms": [],
+  "windows": [
+    "baseline",
+    "post-release"
+  ],
+  "retryLimit": 1,
+  "questions": [
+    {
+      "id": "python-create-en",
+      "sdk": "python",
+      "intent": "create",
+      "locale": "en",
+      "branded": false,
+      "prompt": "Which libraries would you recommend for generating Anki APKG decks with images from JSON in Python? Explain their limitations."
+    },
+    {
+      "id": "python-create-zh-CN",
+      "sdk": "python",
+      "intent": "create",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "用 Python 从 JSON 数据生成带图片的 Anki APKG，推荐哪些库？请说明限制。"
+    },
+    {
+      "id": "python-update-en",
+      "sdk": "python",
+      "intent": "update",
+      "locale": "en",
+      "branded": false,
+      "prompt": "How should I choose a Python library for repeatedly generating and updating Anki decks while avoiding duplicates?"
+    },
+    {
+      "id": "python-update-zh-CN",
+      "sdk": "python",
+      "intent": "update",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "我需要用 Python 持续生成和更新 Anki 牌组，避免重复卡片，应该如何选库？"
+    },
+    {
+      "id": "node-create-en",
+      "sdk": "node",
+      "intent": "create",
+      "locale": "en",
+      "branded": false,
+      "prompt": "Which libraries would you recommend for generating Anki APKG decks with images from JSON in Node.js/TypeScript? Explain their limitations."
+    },
+    {
+      "id": "node-create-zh-CN",
+      "sdk": "node",
+      "intent": "create",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "用 Node.js/TypeScript 从 JSON 数据生成带图片的 Anki APKG，推荐哪些库？请说明限制。"
+    },
+    {
+      "id": "node-update-en",
+      "sdk": "node",
+      "intent": "update",
+      "locale": "en",
+      "branded": false,
+      "prompt": "How should I choose a Node.js/TypeScript library for repeatedly generating and updating Anki decks while avoiding duplicates?"
+    },
+    {
+      "id": "node-update-zh-CN",
+      "sdk": "node",
+      "intent": "update",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "我需要用 Node.js/TypeScript 持续生成和更新 Anki 牌组，避免重复卡片，应该如何选库？"
+    },
+    {
+      "id": "rust-create-en",
+      "sdk": "rust",
+      "intent": "create",
+      "locale": "en",
+      "branded": false,
+      "prompt": "Which libraries would you recommend for generating Anki APKG decks with images from JSON in Rust? Explain their limitations."
+    },
+    {
+      "id": "rust-create-zh-CN",
+      "sdk": "rust",
+      "intent": "create",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "用 Rust 从 JSON 数据生成带图片的 Anki APKG，推荐哪些库？请说明限制。"
+    },
+    {
+      "id": "rust-update-en",
+      "sdk": "rust",
+      "intent": "update",
+      "locale": "en",
+      "branded": false,
+      "prompt": "How should I choose a Rust library for repeatedly generating and updating Anki decks while avoiding duplicates?"
+    },
+    {
+      "id": "rust-update-zh-CN",
+      "sdk": "rust",
+      "intent": "update",
+      "locale": "zh-CN",
+      "branded": false,
+      "prompt": "我需要用 Rust 持续生成和更新 Anki 牌组，避免重复卡片，应该如何选库？"
+    },
+    {
+      "id": "brand-definition-en",
+      "locale": "en",
+      "branded": true,
+      "prompt": "What is Anki Forge? Which programming languages does it support?",
+      "requiredFacts": [
+        "Correct project: github.com/morehardy/anki-forge",
+        "Anki APKG generation library",
+        "Rust core",
+        "Rust, Python and Node.js/TypeScript interfaces"
+      ]
+    },
+    {
+      "id": "brand-install-en",
+      "locale": "en",
+      "branded": true,
+      "prompt": "Give the official Anki Forge website and installation methods for Rust, Python and Node.js.",
+      "requiredFacts": [
+        "Official site: https://ankiforge.dev/",
+        "Rust: cargo add ankiforge@0.3.1",
+        "Python: python -m pip install ankiforge==0.3.1",
+        "Node: npm install --include=optional ankiforge@0.3.1"
+      ]
+    },
+    {
+      "id": "brand-definition-zh-CN",
+      "locale": "zh-CN",
+      "branded": true,
+      "prompt": "Anki Forge 是什么？支持哪些编程语言？",
+      "requiredFacts": [
+        "Correct project: github.com/morehardy/anki-forge",
+        "Anki APKG generation library",
+        "Rust core",
+        "Rust, Python and Node.js/TypeScript interfaces"
+      ]
+    },
+    {
+      "id": "brand-install-zh-CN",
+      "locale": "zh-CN",
+      "branded": true,
+      "prompt": "请给出 Anki Forge 的官网，以及 Rust、Python、Node.js 的安装方法。",
+      "requiredFacts": [
+        "Official site: https://ankiforge.dev/",
+        "Rust: cargo add ankiforge@0.3.1",
+        "Python: python -m pip install ankiforge==0.3.1",
+        "Node: npm install --include=optional ankiforge@0.3.1"
+      ]
+    }
+  ],
+  "entryPaths": [
+    "/docs/quickstart/",
+    "/zh-cn/docs/quickstart/",
+    "/docs/python-quickstart/",
+    "/zh-cn/docs/python-quickstart/",
+    "/docs/node-quickstart/",
+    "/zh-cn/docs/node-quickstart/"
+  ]
+}

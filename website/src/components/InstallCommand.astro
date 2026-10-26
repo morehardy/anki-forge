@@ -1,6 +1,6 @@
 ---
 import CopyBlock from './CopyBlock.astro';
-interface Props { command: string; runtime: string; buttonLabel?: string }
-const { command, runtime, buttonLabel } = Astro.props;
+interface Props { command: string; runtime: string; buttonLabel?: string; locale?: 'en' | 'zh-CN' }
+const { command, runtime, buttonLabel, locale = 'en' } = Astro.props;
 ---
-<CopyBlock label={runtime} text={command} buttonLabel={buttonLabel} />
+<CopyBlock label={runtime} text={command} buttonLabel={buttonLabel} success={locale === 'zh-CN' ? '命令已复制。' : undefined} fallback={locale === 'zh-CN' ? '命令已选中，请用键盘复制。' : undefined} />

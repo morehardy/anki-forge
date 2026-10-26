@@ -1,8 +1,11 @@
 ---
+interface Props { locale?: 'en' | 'zh-CN' }
+const { locale = 'en' } = Astro.props;
+const chinese = locale === 'zh-CN';
 import Icon from './Icon.astro';
 import { repository, sitePath } from '../lib/site';
 ---
 <footer class="site-footer container">
-  <p>Anki Forge. Open source, built with Rust.</p>
-  <nav aria-label="Footer"><a href={sitePath('/blog/')}>Articles</a><a href={sitePath('/rss.xml')}>RSS</a><a href={`${repository}/blob/main/LICENSE`}>MIT license</a><a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a></nav>
+  <p>{chinese ? 'Anki Forge：以 Rust 为核心的开源 Anki 牌组生成库。' : 'Anki Forge. Open source Anki APKG generation, powered by Rust.'}</p>
+  <nav aria-label={chinese ? "页脚导航" : "Footer"}><a href={sitePath('/blog/')}>{chinese ? '文章（英文）' : 'Articles'}</a><a href={sitePath('/rss.xml')}>RSS</a><a href={`${repository}/blob/main/LICENSE`}>{chinese ? 'MIT 许可证' : 'MIT license'}</a><a class="github-link" href={repository} aria-label="GitHub repository" title="GitHub"><Icon name="githubLogo" /></a></nav>
 </footer>

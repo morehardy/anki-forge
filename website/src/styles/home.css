@@ -13,8 +13,6 @@
 .home-performance-metric strong span { font-size: .47em; letter-spacing: -.02em; }
 .home-performance-metric > span { color: var(--af-muted); font-size: 12px; }
 .home-performance-context { padding-bottom: 22px; color: var(--af-muted); font-size: 11px; line-height: 1.6; }
-.home-performance-context a { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
-.home-performance-context .icon { width: .95em; }
 .home-benchmark { display: grid; grid-template-columns: .75fr 1.25fr; gap: 24px 54px; padding: 36px 38px 28px; border: 1px solid var(--af-line); border-radius: var(--af-radius); background: var(--af-paper); }
 .home-benchmark-intro h3 { font-size: clamp(26px, 3vw, 37px); letter-spacing: -.04em; }
 .home-benchmark-intro p { max-width: 34ch; margin-top: 17px; color: var(--af-muted); font-size: 14px; }
@@ -33,9 +31,6 @@
 .home-genanki-bar { width: var(--genanki-width); background: var(--af-line); }
 .home-benchmark-row p { margin-top: 3px; color: var(--af-ink); font: 11px/1.4 var(--af-mono); }
 .home-benchmark-row p span { color: var(--af-muted); }
-.home-benchmark-footnote { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: end; gap: 25px; padding-top: 16px; border-top: 1px solid var(--af-line); }
-.home-benchmark-footnote p { max-width: 72ch; color: var(--af-muted); font-size: 11px; line-height: 1.6; }
-.home-benchmark-footnote a { white-space: nowrap; }
 
 .home-examples { padding-top: 86px; }
 .home-examples-heading { margin-bottom: 26px; }
@@ -70,8 +65,6 @@
   .home-benchmark-intro h3 { font-size: 27px; }
   .home-benchmark-intro p { margin-top: 9px; }
   .home-benchmark-key { justify-content: flex-start; }
-  .home-benchmark-footnote { display: block; }
-  .home-benchmark-footnote a { margin-top: 10px; }
   .home-examples { padding-top: 62px; }
 }
 @media (max-width: 374px) {

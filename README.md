@@ -23,7 +23,8 @@ English · [简体中文](README.zh-CN.md)
 
 **Turn your data into Anki decks.**
 
-Build Basic, Cloze, Image Occlusion and custom cards with Rust, TypeScript or Python.
+Anki Forge is an open-source Anki APKG generation library with a Rust core and Rust, Python and Node.js interfaces.
+Build Basic, Cloze, Image Occlusion and custom cards with the public `ankiforge` package (MIT).
 Package your media, keep note identities stable, and review changes before distributing the next deck.
 
 [Performance](#performance-you-can-inspect) · [Quick start](#quick-start) ·
@@ -73,7 +74,7 @@ and reproduction steps.
 | Mixed unique | 65.19 | 35.03 | 2.17× |
 | Mixed shared | 29.36 | 32.66 | 1.84× |
 
-[Full report](benchmarks/results/20261008-latest-commit-genanki/report.md) · [Raw CSV](benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [Reproduce](benchmarks/results/20261008-latest-commit-genanki/README.md)
+[Full report](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md) · [Raw CSV](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/comparison.csv) · [Reproduce](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/README.md)
 
 </details>
 

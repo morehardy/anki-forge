@@ -11,7 +11,7 @@ on:
       - 'Cargo.lock'
       - 'docs/**'
       - 'scripts/generate_readme_assets.py'
-      - 'benchmarks/results/20261008-latest-commit-genanki/**'
+      - 'scripts/packaged_consumer/**'
       - 'bindings/**'
       - 'README.md'
       - 'README.zh-CN.md'
@@ -27,7 +27,7 @@ on:
       - 'Cargo.lock'
       - 'docs/**'
       - 'scripts/generate_readme_assets.py'
-      - 'benchmarks/results/20261008-latest-commit-genanki/**'
+      - 'scripts/packaged_consumer/**'
       - 'bindings/**'
       - 'README.md'
       - 'README.zh-CN.md'
@@ -42,9 +42,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SITE_URL: ${{ vars.SITE_URL || 'https://morehardy.github.io' }}
-  SITE_BASE: ${{ vars.SITE_BASE || '/anki-forge' }}
-  SITE_CUSTOM_DOMAIN: ${{ vars.SITE_CUSTOM_DOMAIN }}
+  SITE_URL: ${{ vars.SITE_URL || 'https://ankiforge.dev' }}
+  SITE_BASE: ${{ vars.SITE_BASE || '/' }}
+  SITE_CUSTOM_DOMAIN: ${{ vars.SITE_CUSTOM_DOMAIN || 'ankiforge.dev' }}
+  SITE_DEPLOYMENT: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
 
 jobs:
   build:
@@ -117,9 +118,30 @@ jobs:
       - run: npm run example:minimal
       - run: npm run test:installed
 
+  public-recipe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.92.0'
+      - name: Install public packages and verify the shared generation/update contract
+        run: node website/scripts/verify-public-recipe.mjs all
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-json-recipe-evidence
+          path: target/geo-public-consumers/
+
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: [build, python-examples, node-examples]
+    needs: [build, python-examples, node-examples, public-recipe]
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -131,3 +153,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Independently verify the deployed production URLs
+        run: node website/scripts/check-live-site.mjs
