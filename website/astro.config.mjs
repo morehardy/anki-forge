@@ -22,6 +22,14 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image', content: new URL(withBase('/generated/og.png', siteConfig.base), siteConfig.site).href } },
         { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Anki Forge. Anki decks, built from code.' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        {
+          tag: 'script',
+          attrs: {
+            type: 'module',
+            src: 'https://static.cloudflareinsights.com/beacon.min.js',
+            'data-cf-beacon': JSON.stringify({ token: 'ab8936f615cc40e7a31bb7db4366b73b' }),
+          },
+        },
       ],
       sidebar: [
         { label: 'Start here', items: [

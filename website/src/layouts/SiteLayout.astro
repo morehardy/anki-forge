@@ -47,5 +47,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <main id="main" data-pagefind-body><slot /></main>
     <Footer />
     <script src="../scripts/site.ts"></script>
+    <!-- Cloudflare Web Analytics -->
+    <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ab8936f615cc40e7a31bb7db4366b73b"}'></script>
+    <!-- End Cloudflare Web Analytics -->
   </body>
 </html>
