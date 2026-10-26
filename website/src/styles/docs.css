@@ -27,3 +27,6 @@
 .sl-markdown-content a { text-underline-offset: 3px; }
 .sl-markdown-content .code-block { margin-block: 1.5rem; border: 1px solid var(--af-line); border-radius: 8px; overflow: clip; background: var(--af-paper); }
 :focus-visible { outline-offset: 4px; }
+
+.expressive-code > [data-copy-status] { margin: .5rem 0; font-family: var(--af-font); color: var(--af-muted); }
+.expressive-code > [data-copy-status]:empty { display: none; }

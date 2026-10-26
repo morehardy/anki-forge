@@ -23,3 +23,15 @@ for (const [name, mutate, expected] of [
   await writeFile(file, changed);
   assert.throws(() => execFileSync(process.execPath, [checker, directory], { encoding: 'utf8', stdio: 'pipe' }), expected);
 });
+
+test('built-site gate rejects an incomplete search artifact manifest', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-search-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await cp(dist, directory, { recursive: true });
+  const file = path.join(directory, 'generated/site-manifest.json');
+  const manifest = JSON.parse(await readFile(file, 'utf8'));
+  assert.ok(manifest.resources.some(resource => resource.route.includes('/pagefind/')));
+  manifest.resources = manifest.resources.filter(resource => !resource.route.includes('/pagefind/'));
+  await writeFile(file, JSON.stringify(manifest));
+  assert.throws(() => execFileSync(process.execPath, [checker, directory], { encoding: 'utf8', stdio: 'pipe' }), /complete search index/);
+});

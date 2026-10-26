@@ -134,6 +134,25 @@ document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder =
   builder.querySelectorAll<HTMLElement>('[data-ai-enhancement]').forEach(element => { element.hidden = false; });
 });
 
+// Keep native Starlight rendering, but give every copy action the same visible
+// success/failure contract. Capture prevents the native legacy-copy handler from
+// clearing the manual selection when clipboard permission has been denied.
+document.querySelectorAll<HTMLElement>('.expressive-code').forEach(block => {
+  const button = block.querySelector<HTMLButtonElement>('.copy button');
+  const content = block.querySelector('pre');
+  if (!button || !content) return;
+  block.dataset.copyBlock = '';
+  block.dataset.copySuccess = t('copy.codeSuccess');
+  block.dataset.copyFallback = t('copy.codeFallback');
+  button.dataset.copy = '';
+  content.dataset.copyContent = '';
+  const status = document.createElement('p');
+  status.dataset.copyStatus = '';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  block.append(status);
+});
+
 document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
   const button = block.querySelector<HTMLButtonElement>('[data-copy]');
   const content = block.querySelector<HTMLElement>('[data-copy-content]');
@@ -150,13 +169,16 @@ document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
     if (copyIcon) copyIcon.hidden = false;
     if (checkIcon) checkIcon.hidden = true;
   }
-  button.addEventListener('click', async () => {
+  button.addEventListener('click', async event => {
+    event.stopImmediatePropagation();
     if (timer) { clearTimeout(timer); copyTimers.delete(timer); }
     reset();
     status.textContent = '';
     button.disabled = true;
     try {
-      await navigator.clipboard.writeText(content.textContent || '');
+      // Expressive Code serializes newlines as DEL in its public data-code attribute.
+      const text = button.dataset.code?.replace(/\u007f/g, '\n') ?? content.textContent ?? '';
+      await navigator.clipboard.writeText(text);
       if (copyListeners.signal.aborted) return;
       status.textContent = block.dataset.copySuccess || t('copy.success');
       if (label) label.textContent = t('copy.copied');
@@ -175,7 +197,7 @@ document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach(block => {
     } finally {
       button.disabled = false;
     }
-  }, { signal: copyListeners.signal });
+  }, { signal: copyListeners.signal, capture: true });
 });
 
 window.addEventListener('pagehide', event => {

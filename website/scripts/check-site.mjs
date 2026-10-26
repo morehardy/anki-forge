@@ -23,6 +23,16 @@ async function walk(directory) {
 }
 
 const files = await walk(dist);
+const release = JSON.parse(await readFile(path.join(dist, 'generated/site-manifest.json'), 'utf8'));
+const resourceFiles = files.filter(file => {
+  const relative = path.relative(dist, file).split(path.sep).join('/');
+  return !relative.endsWith('.html') && relative !== 'generated/site-manifest.json' && relative !== 'CNAME' && !relative.startsWith('.');
+});
+assert.deepEqual(release.resources.map(resource => resource.route).sort(), resourceFiles.map(file => withBase('/' + path.relative(dist, file).split(path.sep).join('/'), siteConfig.base)).sort(), 'Release manifest must include every resource, including the complete search index');
+for (const resource of release.resources) {
+  const filename = stripBase(resource.route, siteConfig.base).slice(1);
+  record(createHash('sha256').update(await readFile(path.join(dist, filename))).digest('hex') === resource.sha256, `${filename}: resource differs from verified manifest`);
+}
 for (const file of files.filter(file => file.endsWith('.html'))) {
   const relative = path.relative(dist, file).split(path.sep).join('/');
   const route = `/${relative.replace(/index\.html$/, '')}`;
@@ -112,6 +122,12 @@ for (const name of ['sitemap-index.xml', 'sitemap-0.xml', 'rss.xml', 'zh-cn/rss.
   for (const node of $(selector).toArray()) await checkURL($(node).text(), from);
 }
 await stat(path.join(dist, 'pagefind/pagefind.js'));
+const searchIndex = JSON.parse(await readFile(path.join(dist, 'pagefind/pagefind-entry.json'), 'utf8'));
+for (const locale of ['en', 'zh-CN']) {
+  const contentCount = [...pages.values()].filter(page => page.relative !== '404.html' && page.$('html').attr('lang') === locale).length;
+  record(searchIndex.languages[locale.toLowerCase()]?.page_count === contentCount, `${locale}: search index must include every content page and exclude the error page`);
+}
+record(pages.get(path.join(dist, '404.html')).$('[data-pagefind-ignore]').length > 0, '404 content must be excluded from Pagefind');
 const manifest = JSON.parse(await readFile(path.join(dist, 'generated/showcase.json'), 'utf8'));
 assert.equal(manifest.schemaVersion, 2);
 assert.deepEqual(manifest.examples.map(example => example.id), ['basic', 'cloze', 'media', 'occlusion']);

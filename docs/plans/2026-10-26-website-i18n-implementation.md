@@ -43,6 +43,9 @@ for both configurations. Browser screenshots are generated in
 
 The focused regressions caught and corrected compact-header brand hiding,
 pre-initialization theme input, native clipboard coverage and search focus timing.
+The independent standards/spec reviews also prompted native code-copy failure
+recovery, preservation of the old homepage deep link and complete Pagefind
+resource hashing in deployment verification.
 `check:examples` executed 14 complete Rust programs and independently inspected
 23 APKG outputs. The complete website unit suite passed 22 tests. Existing CI
 jobs additionally validate native Python/Node consumers and the public recipe.

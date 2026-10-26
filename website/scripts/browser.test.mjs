@@ -23,6 +23,7 @@ async function session(t, options = {}) {
   return { context, page: await context.newPage() };
 }
 const visible = locator => locator.waitFor({ state: 'visible' });
+const follow = async (page, link) => { await link.click(); await page.waitForLoadState('domcontentloaded'); };
 const eventually = async (operation, message) => {
   for (let attempt = 0; attempt < 60; attempt++) {
     if (await operation()) return;
@@ -46,6 +47,7 @@ for (const locale of localeIds) {
   test(`${locale}: card tabs, keyboard, flip, audio, updates and downloads`, async t => {
     const { page } = await session(t);
     await page.goto(route('home'));
+    assert.equal(await page.locator('[data-forge-studio]').evaluate(element => element.getAnimations({ subtree: true }).length), 0, 'Hero ignores reduced motion');
     const tabs = page.locator('[data-workbench] [role="tab"]');
     await tabs.first().focus();
     await page.keyboard.press('End');
@@ -138,7 +140,7 @@ for (const locale of localeIds) {
     await page.keyboard.press('Escape');
     await eventually(() => page.locator('site-search [data-open-modal]').evaluate(element => element === document.activeElement), 'Search did not restore focus');
     assert.equal(await page.locator('site-search dialog').evaluate(dialog => dialog.open), false);
-    const customCode = page.locator('[data-copy-block]').first();
+    const customCode = page.locator('.code-block[data-copy-block]').first();
     if (await customCode.count()) {
       await customCode.locator('[data-copy]').click();
       await eventually(async () => (await page.evaluate(() => navigator.clipboard.readText())) === (await customCode.locator('[data-copy-content]').textContent()), 'Documentation code was not copied');
@@ -149,34 +151,57 @@ for (const locale of localeIds) {
     await page.locator('.site-header [data-theme-picker]').selectOption('dark');
     await page.goto(route('quickstart') + '?ref=parity#export-your-first-deck');
     await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).includes('#export-your-first-deck'), 'Language switch did not preserve the valid section');
-    await page.locator('.site-header [data-language-switch]').click();
+    await follow(page, page.locator('.site-header [data-language-switch]'));
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
     assert.equal(new URL(page.url()).search, '?ref=parity');
-    assert.equal(await page.locator('[id="export-your-first-deck"]').count(), 1);
-    await page.locator('.site-header [data-language-switch]').click();
+    await page.locator('[id="export-your-first-deck"]').waitFor({ state: 'attached' });
+    await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).includes('#export-your-first-deck'), 'Return language switch lost the section');
+    await follow(page, page.locator('.site-header [data-language-switch]'));
     assert.equal(await page.locator('html').getAttribute('lang'), locale);
+    assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
     await page.goto(route('quickstart') + '#nonexistent-section-62');
     await page.waitForTimeout(150);
     assert.equal(new URL(await page.locator('.site-header [data-language-switch]').getAttribute('href'), page.url()).hash, '');
   });
 
+  test(`${locale}: native documentation code-copy denial and recovery`, async t => {
+    const { page, context } = await session(t, { permissions: ['clipboard-read', 'clipboard-write'] });
+    await page.goto(route('node-quickstart'));
+    const block = page.locator('.expressive-code').filter({ hasText: 'import {' }).first();
+    const button = block.locator('.copy button');
+    await button.click();
+    const code = (await button.getAttribute('data-code')).replace(/\u007f/g, '\n');
+    await eventually(async () => (await page.evaluate(() => navigator.clipboard.readText())) === code, 'Native complete program was not copied');
+    const cdp = await context.newCDPSession(page);
+    const { targetInfo } = await cdp.send('Target.getTargetInfo');
+    const permission = { name: 'clipboard-write', allowWithoutSanitization: false };
+    await cdp.send('Browser.setPermission', { permission, setting: 'denied', origin: server.origin, browserContextId: targetInfo.browserContextId });
+    await button.click();
+    await eventually(async () => (await block.locator('[data-copy-status]').textContent()) === tr('copy.codeFallback'), 'Native copy failure has no localized manual recovery');
+    assert.equal((await page.evaluate(() => getSelection().toString())).trim(), code.trim());
+    await cdp.send('Browser.setPermission', { permission, setting: 'granted', origin: server.origin, browserContextId: targetInfo.browserContextId });
+    await button.click();
+    await eventually(async () => (await block.locator('[data-copy-status]').textContent()) === tr('copy.codeSuccess'), 'Native copy did not recover after permission returned');
+  });
+
   test(`${locale}: mobile navigation, native sidebar, system theme and legacy sections`, async t => {
     const { page } = await session(t, { viewport: { width: 390, height: 844 }, colorScheme: 'dark' });
-    await page.goto(route('home'));
+    await page.goto(route('home') + '#workflow-heading');
+    assert.equal(await page.locator('#workflow-heading').count(), 1);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
     await page.locator('.mobile-menu summary').click();
-    await page.locator('.mobile-menu [data-section="examples"]').click();
+    await follow(page, page.locator('.mobile-menu [data-section="examples"]'));
     assert.equal(new URL(page.url()).pathname, new URL(route('examples')).pathname);
     await page.locator('.site-header [data-theme-picker]').selectOption('light');
     await page.locator('.mobile-menu summary').click();
-    await page.locator('.mobile-menu [data-section="docs"]').click();
+    await follow(page, page.locator('.mobile-menu [data-section="docs"]'));
     assert.equal(new URL(page.url()).pathname, new URL(route('docs')).pathname);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
     const menu = page.locator('button[popovertarget="starlight__sidebar"]');
     await menu.click();
     await visible(page.locator('#starlight__sidebar'));
-    await page.locator('#starlight__sidebar a').filter({ hasText: locale === 'en' ? 'Core concepts' : '核心概念' }).click();
+    await follow(page, page.locator('#starlight__sidebar a').filter({ hasText: locale === 'en' ? 'Core concepts' : '核心概念' }));
     assert.equal(new URL(page.url()).pathname, new URL(route('concepts')).pathname);
     await page.locator('.site-header [data-theme-picker]').selectOption('auto');
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
@@ -184,7 +209,7 @@ for (const locale of localeIds) {
     await eventually(async () => (await page.locator('html').getAttribute('data-theme')) === 'light', 'System theme changes were ignored');
     await page.goto(server.url(pagePath('quickstart', 'zh-CN')) + '#生成-apkg');
     await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).endsWith('#export-your-first-deck'), 'Legacy Chinese section was not mapped');
-    await page.locator('.site-header [data-language-switch]').click();
+    await follow(page, page.locator('.site-header [data-language-switch]'));
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
   });
 

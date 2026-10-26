@@ -53,9 +53,11 @@ for (const pair of pages) for (const locale of localeIds) {
   for (const [capability, selector] of Object.entries(selectors)) assert.equal($(selector).length, artifact.capabilities[capability], `${route}: missing ${capability}`);
   console.log(`Verified ${locale} ${route}`);
 }
-for (const resource of expected.resources) {
-  const bytes = await get(resource.route);
-  assert.equal(sha256(bytes), resource.sha256, `${resource.route}: deployed resource differs from verified artifact`);
+for (let offset = 0; offset < expected.resources.length; offset += 8) {
+  await Promise.all(expected.resources.slice(offset, offset + 8).map(async resource => {
+    const bytes = await get(resource.route);
+    assert.equal(sha256(bytes), resource.sha256, `${resource.route}: deployed resource differs from verified artifact`);
+  }));
 }
 const xml = load((await get('/sitemap-0.xml')).toString(), { xml: true });
 assert.deepEqual(xml('loc').toArray().map(node => xml(node).text()).sort(), normal.map(page => origin + page.route).sort(), 'Production sitemap set differs from verified content');

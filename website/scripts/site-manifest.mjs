@@ -39,7 +39,7 @@ export async function writeSiteManifest() {
         downloads: $('[download]').length, search: $('site-search').length, codeCopy: $('[data-copy], .expressive-code .copy button').length,
         flips: $('[data-flip]').length, audio: $('audio').length, updates: $('[data-update]').length,
       } });
-    } else if (!relative.startsWith('pagefind/') && relative !== 'CNAME' && !relative.startsWith('.')) resources.push(entry);
+    } else if (relative !== 'CNAME' && !relative.startsWith('.')) resources.push(entry);
   }
   const manifest = { schemaVersion: 1, commit: git(['rev-parse', 'HEAD']), inputSha256: sha256(JSON.stringify(fingerprints)), configuration: siteConfig, pages, resources };
   await writeFile(path.join(dist, 'generated/site-manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

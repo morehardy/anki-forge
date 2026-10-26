@@ -64,6 +64,7 @@ const href = (id: string, section = '') => sitePath(pagePath(id, locale, section
     </section>
 
     <section class="section" data-module="next" aria-labelledby="next-heading">
+      <span id="workflow-heading" data-section-alias="next-heading"></span>
       <h2 id="next-heading">{t('home.nextTitle')}</h2><p>{t('home.nextDescription')}</p>
       <div class="hero-actions">{nextTasks.map(task => <a class={task.primary ? 'button' : 'text-link'} href={href(task.pageId)}>{t(task.label)} <Icon name="arrowRight" /></a>)}</div>
     </section>
