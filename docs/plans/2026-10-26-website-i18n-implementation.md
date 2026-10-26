@@ -64,3 +64,10 @@ This is an explicit host limitation, not a claim of server-side localized 404s.
 No hosting migration or edge routing change is included. The browser suite verifies
 both responses through real unknown URLs. Analytics beacon count is checked;
 delivery to the analytics dashboard is not claimed.
+
+The first release run, `40337178616`, was canceled after its dependency step
+stalled for ten minutes. Logs show timeouts fetching small font packages from
+`http://azure.archive.ubuntu.com`; Chromium download had not started. CI browser
+setup now selects Ubuntu's official HTTPS archive and has a bounded step timeout.
+The dependency set and acceptance tests are unchanged. The subsequent workflow
+run is the verification seam for this runner-specific installation failure.

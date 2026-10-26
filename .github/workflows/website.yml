@@ -68,9 +68,8 @@ jobs:
         run: cargo fetch --locked --manifest-path ../Cargo.toml
       - run: npm ci
       - name: Install browser and Chinese social-image fonts
-        run: |
-          npx playwright install --with-deps chromium
-          sudo apt-get install -y fonts-noto-cjk
+        timeout-minutes: 10
+        run: bash scripts/setup-browser-ci.sh
       - run: npm run check:ai
       - run: node ../skills/anki-forge/scripts/verify_quickstart.mjs
       - run: npm test
@@ -193,9 +192,10 @@ jobs:
       - name: Independently verify the deployed production URLs and artifact identity
         run: node website/scripts/check-live-site.mjs website/verified/site-manifest.json
       - name: Verify live search and interactive capabilities
+        timeout-minutes: 10
         env:
           BROWSER_SITE: https://ankiforge.dev
         run: |
           cd website
-          npx playwright install --with-deps chromium
+          bash scripts/setup-browser-ci.sh
           node --test --test-name-pattern='all built|card tabs|docs search' scripts/browser.test.mjs
