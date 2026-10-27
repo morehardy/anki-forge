@@ -70,8 +70,9 @@ tar = "0.4.45"
 unicase = "=2.6.0"
 unicode-normalization = "0.1"
 url = "2.5.4"
-zip = { version = "2.2.0", default-features = false, features = ["deflate"] }
-zstd = "0.13"
+# Keep the existing flate2 Rust backend and Zopfli support for Deflate.
+zip = { version = "9.1.2", default-features = false, features = ["deflate-flate2", "deflate-zopfli"] }
+zstd = "0.14.3"
 image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
 
 [target.'cfg(unix)'.dependencies]

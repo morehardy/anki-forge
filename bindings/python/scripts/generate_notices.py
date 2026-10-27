@@ -61,11 +61,14 @@ def main() -> None:
             else:
                 missing.append(package["name"])
     destination = root / f"bindings/{args.binding}/THIRD_PARTY_NOTICES.md"
+    # Upstream license files may contain trailing spaces; keep the generated
+    # notices reproducible and compatible with the repository whitespace gate.
+    rendered = "\n".join(line.rstrip() for line in "".join(output).splitlines()) + "\n"
     if args.check:
-        if destination.read_text(encoding="utf-8") != "".join(output):
+        if destination.read_text(encoding="utf-8") != rendered:
             raise SystemExit(f"stale {destination}: regenerate notices for {args.binding}")
     else:
-        destination.write_text("".join(output), encoding="utf-8")
+        destination.write_text(rendered, encoding="utf-8")
     print(f"Wrote {destination.name}: {destination.stat().st_size} bytes; missing local license texts: {missing}")
     if missing:
         raise SystemExit("resolve missing notices before distributing")

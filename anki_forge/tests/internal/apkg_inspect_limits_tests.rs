@@ -499,7 +499,7 @@ fn zip64_footer_uses_validated_64_bit_counts() {
 }
 
 #[test]
-fn actual_zip_output_is_bounded_even_with_forged_small_sizes() {
+fn forged_small_zip_sizes_cannot_bypass_limits_or_produce_media_evidence() {
     let root = tempfile::tempdir().unwrap();
     for version in [1, 3] {
         let path = root.path().join(format!("forged-{version}.apkg"));
@@ -511,6 +511,11 @@ fn actual_zip_output_is_bounded_even_with_forged_small_sizes() {
             CompressionMethod::Deflated,
             version == 3,
         );
+        let limits = InspectLimits {
+            max_zip_entry_bytes: 64,
+            ..InspectLimits::default()
+        };
+        assert_limit(&path, &limits, "zip_entry_bytes");
         let mut bytes = std::fs::read(&path).unwrap();
         let central = bytes
             .windows(4)
@@ -524,11 +529,16 @@ fn actual_zip_output_is_bounded_even_with_forged_small_sizes() {
         bytes[central + 24..central + 28].copy_from_slice(&1u32.to_le_bytes());
         bytes[local + 22..local + 26].copy_from_slice(&1u32.to_le_bytes());
         std::fs::write(&path, bytes).unwrap();
-        let limits = InspectLimits {
-            max_zip_entry_bytes: 64,
-            ..InspectLimits::default()
-        };
-        assert_limit(&path, &limits, "zip_entry_bytes");
+        // zip 9 rejects output beyond the forged declaration before the
+        // outer resource counter can see it. The malformed package must not
+        // become accepted media evidence or a successful partial decode.
+        let report = inspect_apkg_with_limits(&path, &limits).unwrap();
+        assert_eq!(report.observation_status, "unavailable");
+        assert!(report.observations.media.is_empty());
+        assert!(report
+            .degradation_reasons
+            .iter()
+            .any(|reason| reason.contains("larger than its declared uncompressed size")));
     }
 }
 

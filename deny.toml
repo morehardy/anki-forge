@@ -36,6 +36,11 @@ exceptions = [
     # PyO3's target detection build dependency uses Apache-2.0 with the LLVM
     # exception. Both texts are included in the Python SDK's third-party notices.
     { name = "target-lexicon", version = "=0.13.5", allow = ["Apache-2.0 WITH LLVM-exception"] },
+    # Patched zstd releases use BSD-3-Clause; the full texts are included in
+    # the generated Python and Node SDK third-party notices.
+    { name = "zstd", version = "=0.14.3", allow = ["BSD-3-Clause"] },
+    { name = "zstd-safe", version = "=8.2.0", allow = ["BSD-3-Clause"] },
+    { name = "zstd-sys", version = "=2.1.2", allow = ["BSD-3-Clause"] },
 ]
 
 [bans]
@@ -47,8 +52,12 @@ deny = []
 # release-blocking and requires its own reviewed entry.
 skip = [
     { name = "getrandom", version = "0.2.15" },
+    # zip 9 uses 0.4; tempfile, jobserver and proptest still require 0.3.
+    { name = "getrandom", version = "0.3.4" },
     { name = "hashbrown", version = "0.14.5" },
     { name = "linux-raw-sys", version = "0.4.15" },
+    # png still uses 0.8 while the updated flate2 Rust backend uses 0.9.
+    { name = "miniz_oxide", version = "0.8.9" },
     # rusty-fork (proptest's dev-only process isolation) still needs quick-error 1;
     # image-webp uses the incompatible version 2 API for production decoding.
     { name = "quick-error", version = "1.2.3" },

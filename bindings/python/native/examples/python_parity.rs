@@ -9,7 +9,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::fs::create_dir_all(destination)?;
         for index in 0..archive.len() {
             let mut entry = archive.by_index(index)?;
-            let name = entry.name().to_owned();
+            let name = entry.name()?.into_owned();
             if name != "collection.anki21b"
                 && name != "media"
                 && !name.chars().all(|c| c.is_ascii_digit())

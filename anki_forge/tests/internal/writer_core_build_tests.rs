@@ -2250,7 +2250,14 @@ fn open_zip(path: &Path) -> zip::ZipArchive<File> {
 
 fn archive_names(archive: &mut zip::ZipArchive<File>) -> std::collections::BTreeSet<String> {
     (0..archive.len())
-        .map(|index| archive.by_index(index).unwrap().name().to_string())
+        .map(|index| {
+            archive
+                .by_index(index)
+                .unwrap()
+                .name()
+                .unwrap()
+                .into_owned()
+        })
         .collect()
 }
 
