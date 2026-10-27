@@ -7,7 +7,7 @@ pub fn entries(path: &Path) -> std::collections::BTreeMap<String, Vec<u8>> {
     (0..zip.len())
         .map(|i| {
             let mut entry = zip.by_index(i).unwrap();
-            let name = entry.name().to_owned();
+            let name = entry.name().unwrap().into_owned();
             let mut bytes = Vec::new();
             entry.read_to_end(&mut bytes).unwrap();
             (name, bytes)

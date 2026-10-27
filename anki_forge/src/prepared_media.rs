@@ -576,6 +576,65 @@ mod tests {
     }
 
     #[test]
+    fn abandoned_media_stream_does_not_leak_into_next_payload() {
+        use crate::authoring_core::media::AuthoringMediaSource;
+
+        let root = tempfile::tempdir().unwrap();
+        let options = NormalizeOptions {
+            base_dir: root.path().into(),
+            media_store_dir: root.path().join("unused-cas"),
+            media_policy: crate::authoring_core::media::MediaPolicy::default_strict(),
+        };
+        let rejected = b"private media from the rejected source".repeat(1000);
+        let accepted = b"public media".repeat(1000);
+        let mut items = Vec::new();
+        for (name, bytes) in [
+            ("000-rejected.bin", &rejected),
+            ("001-accepted.bin", &accepted),
+        ] {
+            std::fs::write(root.path().join(name), bytes).unwrap();
+            items.push(AuthoringMedia {
+                id: name.into(),
+                desired_filename: name.into(),
+                source: AuthoringMediaSource::Path { path: name.into() },
+                declared_mime: None,
+            });
+        }
+        let mut prepared = PreparedMedia::new_in(root.path()).unwrap();
+        // Reject the changed source after its bytes have entered the encoder,
+        // then process the next item on the same worker and codec context.
+        prepared.register_source(
+            items[0].id.clone(),
+            root.path().join("000-rejected.bin"),
+            RegisteredFingerprint::Sha1(hex::encode(Sha1::digest(b"registered content"))),
+        );
+        let results = prepared.prepare_all(&items, &options);
+        assert_eq!(
+            results[0]
+                .as_ref()
+                .unwrap()
+                .as_ref()
+                .unwrap_err()
+                .diagnostics[0]
+                .code,
+            "MEDIA.SOURCE_CHANGED"
+        );
+        assert!(results[1].as_ref().unwrap().is_ok());
+        assert_eq!(prepared.export_order, ["001-accepted.bin"]);
+        let archive = prepared.archive.get_mut().unwrap().take().unwrap();
+        let (mut file, _) = archive.finish().unwrap();
+        file.rewind().unwrap();
+        let mut zip = zip::ZipArchive::new(file).unwrap();
+        let decoded = zstd::stream::decode_all(zip.by_name("0").unwrap()).unwrap();
+        assert_eq!(
+            decoded.len(),
+            accepted.len(),
+            "rejected media leaked into the next payload"
+        );
+        assert_eq!(decoded, accepted);
+    }
+
+    #[test]
     fn one_large_encoded_payload_uses_available_build_memory() {
         let pool = PayloadPool::new();
         let mut payload = pool.payload();

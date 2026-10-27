@@ -241,7 +241,7 @@ fn rewrite_media_map_with_legacy_zip_filename(source: &Path, target: &Path) {
 
     for index in 0..archive.len() {
         let mut file = archive.by_index(index).unwrap();
-        let name = file.name().to_string();
+        let name = file.name().unwrap().into_owned();
         let mut bytes = Vec::new();
         file.read_to_end(&mut bytes).unwrap();
 
@@ -260,7 +260,7 @@ fn rewrite_media_map_with_legacy_zip_filename(source: &Path, target: &Path) {
         writer
             .start_file(
                 name,
-                zip::write::FileOptions::<'static, ()>::default()
+                zip::write::SimpleFileOptions::default()
                     .compression_method(zip::CompressionMethod::Stored),
             )
             .unwrap();

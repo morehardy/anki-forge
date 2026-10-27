@@ -21,8 +21,9 @@ fn copy_with(input: &Path, output: &str, mut edit: impl FnMut(&str, Vec<u8>) -> 
     for i in 0..source.len() {
         let mut entry = source.by_index(i).unwrap();
         let mut data = Vec::new(); entry.read_to_end(&mut data).unwrap();
-        if let Some(data) = edit(entry.name(), data) {
-            target.start_file(entry.name(), zip::write::SimpleFileOptions::default().compression_method(zip::CompressionMethod::Stored)).unwrap();
+        let name = entry.name().unwrap().into_owned();
+        if let Some(data) = edit(&name, data) {
+            target.start_file(name, zip::write::SimpleFileOptions::default().compression_method(zip::CompressionMethod::Stored)).unwrap();
             target.write_all(&data).unwrap();
         }
     }

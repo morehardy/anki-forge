@@ -58,7 +58,7 @@ fn verify_archive(path: &Path, expected: blake3::Hash) -> anyhow::Result<()> {
     let mut payloads = 0;
     for index in 0..archive.len() {
         let entry = archive.by_index(index)?;
-        if entry.name().parse::<usize>().is_ok() {
+        if entry.name()?.parse::<usize>().is_ok() {
             let reader = zstd::stream::read::Decoder::new(entry)?;
             ensure!(
                 digest(reader)? == expected,

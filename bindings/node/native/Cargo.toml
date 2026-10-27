@@ -28,6 +28,6 @@ unsafe_code = "deny"
 [dev-dependencies]
 anyhow = "1"
 tempfile = "3"
-zip = { version = "2", default-features = false, features = ["deflate"] }
+zip = { version = "9.1.2", default-features = false, features = ["deflate-flate2", "deflate-zopfli"] }
 rusqlite = { version = "0.32", features = ["bundled"] }
-zstd = "0.13"
+zstd = "0.14.3"

@@ -18,7 +18,7 @@ use anyhow::{Context, Result};
 use prost::Message;
 use rusqlite::Connection;
 use sha1::{Digest, Sha1};
-use zip::write::FileOptions;
+use zip::write::SimpleFileOptions;
 use zip::{CompressionMethod, ZipWriter};
 
 use crate::writer_core::anki_proto::{
@@ -432,7 +432,7 @@ fn apkg_media_size(size_bytes: u64, object_id: &str) -> Result<u32> {
 fn write_stored_entry(zip: &mut ZipWriter<File>, name: &str, bytes: &[u8]) -> Result<()> {
     zip.start_file(
         name,
-        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+        SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
     )?;
     zip.write_all(bytes)?;
     Ok(())
@@ -442,7 +442,7 @@ fn write_zstd_collection_entry(zip: &mut ZipWriter<File>, path: &Path) -> Result
     let input = File::open(path).with_context(|| format!("read collection {}", path.display()))?;
     zip.start_file(
         "collection.anki21b",
-        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+        SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
     )?;
     // encode_all used this same encoder with an unknown source size. Do not
     // pledge the file length: that changes the frame header and compression.
@@ -458,7 +458,7 @@ fn write_zstd_file_entry(
 ) -> Result<()> {
     zip.start_file(
         name,
-        FileOptions::<'static, ()>::default().compression_method(CompressionMethod::Stored),
+        SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
     )?;
     let mut input =
         File::open(path).with_context(|| format!("open media object {}", path.display()))?;
@@ -1074,8 +1074,7 @@ mod tests {
             fresh
                 .start_file(
                     &name,
-                    FileOptions::<'static, ()>::default()
-                        .compression_method(CompressionMethod::Stored),
+                    SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
                 )
                 .unwrap();
             let mut encoder = zstd::stream::Encoder::new(&mut fresh, 0).unwrap();
@@ -1160,7 +1159,14 @@ mod tests {
 
         let mut archive = zip::ZipArchive::new(std::io::Cursor::new(&archives[1])).unwrap();
         let names = (0..archive.len())
-            .map(|index| archive.by_index(index).unwrap().name().to_owned())
+            .map(|index| {
+                archive
+                    .by_index(index)
+                    .unwrap()
+                    .name()
+                    .unwrap()
+                    .into_owned()
+            })
             .collect::<Vec<_>>();
         assert_eq!(
             names,

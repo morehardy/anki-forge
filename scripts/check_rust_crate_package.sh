@@ -52,8 +52,8 @@ anyhow = "1"
 serde_json = "1"
 prost = "0.13"
 rusqlite = { version = "0.32", features = ["bundled"] }
-zip = { version = "2", default-features = false, features = ["deflate"] }
-zstd = "0.13"
+zip = { version = "9.1.2", default-features = false, features = ["deflate-flate2", "deflate-zopfli"] }
+zstd = "0.14.3"
 tempfile = "3"
 EOF
 

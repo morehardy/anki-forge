@@ -36,8 +36,8 @@ fn main() -> anyhow::Result<()> {
             let mut media = Vec::new();
             for n in 0..zip.len() {
                 let mut entry = zip.by_index(n)?;
-                if entry.name().parse::<usize>().is_ok() {
-                    let name = entry.name().to_owned();
+                let name = entry.name()?.into_owned();
+                if name.parse::<usize>().is_ok() {
                     let mut b = Vec::new();
                     entry.read_to_end(&mut b)?;
                     let decoded = zstd::stream::decode_all(b.as_slice())?;

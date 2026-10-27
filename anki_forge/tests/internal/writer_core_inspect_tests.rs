@@ -986,7 +986,7 @@ fn strip_zip_entry(source: &Path, target: &Path, missing_entry: &str) {
 
     for index in 0..archive.len() {
         let mut file = archive.by_index(index).unwrap();
-        if file.name() == missing_entry {
+        if file.name().unwrap() == missing_entry {
             continue;
         }
 
@@ -994,8 +994,8 @@ fn strip_zip_entry(source: &Path, target: &Path, missing_entry: &str) {
         file.read_to_end(&mut bytes).unwrap();
         writer
             .start_file(
-                file.name(),
-                zip::write::FileOptions::<'static, ()>::default()
+                file.name().unwrap().into_owned(),
+                zip::write::SimpleFileOptions::default()
                     .compression_method(zip::CompressionMethod::Stored),
             )
             .unwrap();
