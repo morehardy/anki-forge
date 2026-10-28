@@ -2,6 +2,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import { createTranslator } from '../src/i18n/messages.mjs';
+import { localeIds, socialImagePath } from '../locale-model.mjs';
 
 const escape = value => String(value).replace(/[<>&"']/g, character => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' })[character]);
 
@@ -20,7 +21,7 @@ export async function prepareBrandAssets(website, example) {
   await writeFile(path.join(website, 'public/favicon.svg'), favicon);
   await copyFile(path.join(website, 'node_modules/@phosphor-icons/core/LICENSE'), path.join(website, 'public/generated/phosphor-license.txt'));
   // A share graphic drawn from the same fields as the compiled Basic deck.
-  for (const locale of ['en', 'zh-CN']) {
+  for (const locale of localeIds) {
   const t = createTranslator(locale);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
     <rect width="1200" height="630" fill="#f8faf9"/>
@@ -39,6 +40,6 @@ export async function prepareBrandAssets(website, example) {
       <text x="68" y="576" fill="#536b65" font-size="19">${t('social.footer')}</text>
     </g>
   </svg>`;
-  await sharp(Buffer.from(svg)).png().toFile(path.join(website, locale === 'zh-CN' ? 'public/generated/og-zh-cn.png' : 'public/generated/og.png'));
+  await sharp(Buffer.from(svg)).png().toFile(path.join(website, `public${socialImagePath(locale)}`));
   }
 }

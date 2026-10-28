@@ -1,0 +1,52 @@
+---
+interface Props { locale?: string }
+const { locale = 'en' } = Astro.props;
+import { createTranslator } from '../i18n/messages.mjs';
+const t = createTranslator(locale);
+import CopyBlock from './CopyBlock.astro';
+import InstallCommand from './InstallCommand.astro';
+import Icon from './Icon.astro';
+import data from '../generated/ai-quickstart.json';
+import { renderPrompt } from '../lib/ai-quickstart.mjs';
+import { repository } from '../lib/site';
+import { serializeClientMessages } from '../i18n/client-messages.mjs';
+const requestMarker = '__ANKI_FORGE_TASK_INPUT__';
+const clientTemplates = Object.fromEntries(Object.keys(data.languages).map(sdk => {
+  const prompt = renderPrompt(data, sdk, requestMarker, locale);
+  const split = prompt.split(requestMarker);
+  if (split.length !== 2) throw new Error(`Expected one request placeholder: ${sdk}/${locale}`);
+  return [sdk, { before: split[0], after: split[1], empty: renderPrompt(data, sdk, '', locale) }];
+}));
+---
+<section data-module="ai-quickstart" id="ai-quickstart" class="ai-quickstart" data-ai-quickstart data-ai-locale={locale} aria-labelledby="ai-heading">
+  <script is:inline type="application/json" data-ai-templates set:html={serializeClientMessages(clientTemplates)} />
+  <div class="ai-intro">
+    <h2 id="ai-heading">{t('ai.title')}</h2>
+    <p>{t('ai.description')}</p>
+    <div class="ai-request" data-ai-enhancement hidden>
+      <label for="ai-request">{t('ai.request')}</label>
+      <textarea id="ai-request" data-ai-request rows="5" placeholder={t('ai.placeholder')} aria-describedby="ai-request-hint"></textarea>
+      <p id="ai-request-hint">{t('ai.privacy')}</p>
+    </div>
+    <p class="ai-skill-link">{t('ai.skillQuestion')}<br />
+      <a class="text-link" href={`${repository}/tree/main/skills/anki-forge/`}>{t('ai.skillLink')} <Icon name="arrowUpRight" /></a>
+    </p>
+    <noscript><p class="ai-noscript">{t('ai.noScript')}</p></noscript>
+  </div>
+  <div class="ai-builder">
+    <div class="example-tabs ai-tabs" role="tablist" aria-label={t('ai.language')} data-ai-enhancement hidden>
+      {(['rust', 'node', 'python'] as const).map(key => [key, data.languages[key]] as const).map(([key, language], index) => (
+        <button type="button" id={`ai-tab-${key}`} role="tab" data-ai-language={key} aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`ai-panel-${key}`} tabindex={index === 0 ? 0 : -1}>{language.label}</button>
+      ))}
+    </div>
+    {(['rust', 'node', 'python'] as const).map(key => [key, data.languages[key]] as const).map(([key, language]) => (
+      <div id={`ai-panel-${key}`} data-ai-panel={key} class="ai-panel">
+        <h3 class="ai-language-label">{language.label}</h3>
+        <CopyBlock label={`${t('ai.brief')} · Anki Forge ${data.publicVersion}`} text={renderPrompt(data, key, '', locale)} aiPrompt
+          buttonLabel={t('ai.copy')} success={t('ai.copied')}
+          fallback={t('ai.fallback')} />
+        <InstallCommand command={language.install} runtime={language.runtime} buttonLabel={t('ai.install')} locale={locale} />
+      </div>
+    ))}
+  </div>
+</section>

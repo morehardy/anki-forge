@@ -5,6 +5,10 @@ import { localeIds, pagePath } from '../site-model.mjs';
 import { sha256 } from './site-manifest.mjs';
 import { publishedPages } from './published-pages.mjs';
 import { checkMachineHttp } from './machine-http.mjs';
+import { llmsPath } from '../src/lib/machine-urls.mjs';
+import { localePath } from '../locale-model.mjs';
+import { assertIndexable } from './indexability.mjs';
+import { assertCrawlable } from './robots-policy.mjs';
 
 // Deliberately independent of build configuration: a self-consistent wrong
 // origin must not pass production acceptance. Require the verified CI artifact.
@@ -21,6 +25,7 @@ async function get(route, status = 200) {
   assert.equal(response.url, url, `${route}: unexpected redirect`);
   const bytes = Buffer.from(await response.arrayBuffer());
   if (status === 200 && (route.endsWith('/index.md') || route.endsWith('/llms.txt'))) checkMachineHttp(route, response, bytes);
+  if (status === 200 && route.endsWith('/')) assertIndexable(load(bytes.toString()), { route, headers: response.headers });
   return bytes;
 }
 // Pages/CDN publication may take a few seconds. Only the exact verified manifest
@@ -36,7 +41,8 @@ for (let attempt = 0; ; attempt++) {
 }
 const normal = expected.pages.filter(page => page.id !== '404');
 assert.deepEqual(normal.map(page => page.route).sort(), pages.flatMap(page => localeIds.map(locale => pagePath(page.id, locale))).sort(), 'Artifact topic set differs from the reviewed registry');
-const machineRoutes = pages.filter(page => ['docs', 'article'].includes(page.type)).flatMap(page => localeIds.map(locale => `${pagePath(page.id, locale)}index.md`)).concat('/llms.txt', '/zh-cn/llms.txt').sort();
+assert.deepEqual(expected.releaseLocales, localeIds, 'Artifact language snapshot differs from reviewed release target');
+const machineRoutes = pages.filter(page => ['docs', 'article'].includes(page.type)).flatMap(page => localeIds.map(locale => `${pagePath(page.id, locale)}index.md`)).concat(localeIds.map(locale => llmsPath(locale))).sort();
 const recordedMachineRoutes = expected.resources.map(resource => resource.route).filter(route => route.endsWith('/index.md') || route.endsWith('/llms.txt')).sort();
 assert.deepEqual(recordedMachineRoutes, machineRoutes, 'Verified manifest must contain exactly the published machine resources');
 
@@ -55,8 +61,10 @@ for (const pair of pages) for (const locale of localeIds) {
     assert.equal(link.length, 1, `${route}: alternate count`);
     assert.equal(link.attr('href'), origin + pagePath(pair.id, alternate));
   }
+  assert.equal($('link[rel="alternate"][hreflang="x-default"]').attr('href'), origin + pagePath(pair.id, 'en'), `${route}: x-default`);
   assert.equal($('h1').length, 1);
-  assert.equal($('link[rel="describedby"]').attr('href'), origin + (locale === 'en' ? '/llms.txt' : '/zh-cn/llms.txt'));
+  assert.equal($('link[rel="describedby"]').length, 1);
+  assert.equal($('link[rel="describedby"]').attr('href'), origin + llmsPath(locale));
   const markdown = $('link[rel="alternate"][type="text/markdown"]');
   assert.equal(markdown.length, ['docs', 'article'].includes(pair.type) ? 1 : 0, `${route}: Markdown discovery`);
   if (markdown.length) assert.equal(markdown.attr('href'), `${origin}${route}index.md`);
@@ -77,12 +85,14 @@ for (let offset = 0; offset < expected.resources.length; offset += 8) {
 }
 const xml = load((await get('/sitemap-0.xml')).toString(), { xml: true });
 assert.deepEqual(xml('loc').toArray().map(node => xml(node).text()).sort(), normal.map(page => origin + page.route).sort(), 'Production sitemap set differs from verified content');
-assert.match((await get('/robots.txt')).toString(), /Sitemap: https:\/\/ankiforge\.dev\/sitemap-index\.xml/);
+const robots = (await get('/robots.txt')).toString();
+assert.match(robots, /Sitemap: https:\/\/ankiforge\.dev\/sitemap-index\.xml/);
+assertCrawlable(robots, normal.map(page => page.route));
 await get('/pagefind/pagefind.js');
-for (const route of ['/nonexistent-topic-62/', '/zh-cn/nonexistent-topic-62/', '/docs/nonexistent-machine-62/index.md', '/zh-cn/docs/nonexistent-machine-62/index.md', '/nonexistent-llms-62.txt']) {
+for (const route of [...localeIds.flatMap(locale => [localePath('/nonexistent-topic-62/', locale), localePath('/docs/nonexistent-machine-62/index.md', locale), localePath('/nonexistent-llms-62.txt', locale)])]) {
   const $ = load((await get(route, 404)).toString());
   assert.equal($('meta[name="robots"]').attr('content'), 'noindex');
   // GitHub Pages has one static error document, with bilingual no-script recovery.
-  for (const href of ['/', '/docs/', '/zh-cn/', '/zh-cn/docs/']) assert.ok($(`a[href="${href}"]`).length, `${route}: missing recovery ${href}`);
+  for (const href of localeIds.flatMap(locale => [pagePath('home', locale), pagePath('docs', locale)])) assert.ok($(`a[href="${href}"]`).length, `${route}: missing recovery ${href}`);
 }
 console.log(`Production matches verified commit ${expected.commit}: ${normal.length} content URLs, capabilities, resources, feeds, sitemap and real 404s. Analytics dashboard delivery is outside this check.`);

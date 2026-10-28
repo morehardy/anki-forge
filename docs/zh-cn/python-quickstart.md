@@ -33,6 +33,9 @@ python main.py
 
 ## 继续学习
 
+已有词汇表时，参考 [CSV 转 Anki](csv-to-anki.md)。需要根据原始笔记起草卡片时，
+可从 [AI 辅助制卡](ai-anki-cards.md)开始。
+
 完整媒体与更新任务见 [JSON 到 Anki](../json-to-anki.md#python)。
 
 - [图片与音频](../media.md)及 [Python 媒体 API](../python/api.md#media-and-occlusion)

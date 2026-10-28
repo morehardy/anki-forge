@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-28T07:21:43.892Z",
+  "status": "passed-with-documented-minor-findings",
+  "scope": "Local SEO/content implementation and artifact acceptance. No deployment, search ranking change, indexation or AI recommendation outcome is claimed.",
+  "snapshotRoot": "/tmp/anki-seo-validated-20261028",
+  "buildInputSha256": "bbab11014509239802abb7cdaba37264bde12304210a47b832940527542c7756",
+  "workspaceMatchesSnapshot": true,
+  "review": {
+    "report": "independent-content-review-final-input-closure-delta.json",
+    "sha256": "b951a293775c3f0cc77a8022ca8edef8fccaabd7f282f0198bceef9247560dcd",
+    "pageLocales": 68,
+    "minorIssues": 24,
+    "criticalOrMajorIssues": 0
+  },
+  "builds": {
+    "root": {
+      "manifest": "root-site-manifest.json",
+      "sha256": "d4ef074dcc04b958d00357012e6bb9700d5cfdc29c6cf622f8dd1c39908b0408",
+      "configuration": {
+        "site": "https://ankiforge.dev",
+        "base": "/",
+        "customDomain": "ankiforge.dev"
+      },
+      "pages": 69,
+      "resources": 204,
+      "siteChecks": "passed",
+      "surfaceChecks": "passed"
+    },
+    "prefix": {
+      "manifest": "prefix-site-manifest.json",
+      "sha256": "4878dd3121bd9dc38fea9418423af160d6700e304fdb5c921f6c7245cd1fc7b9",
+      "configuration": {
+        "site": "https://morehardy.github.io",
+        "base": "/anki-forge",
+        "customDomain": ""
+      },
+      "pages": 69,
+      "resources": 204,
+      "siteChecks": "passed",
+      "surfaceChecks": "passed"
+    }
+  },
+  "checks": {
+    "unit": {
+      "tests": 117,
+      "passed": 117,
+      "failed": 0,
+      "skipped": 0
+    },
+    "rootGates": {
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    },
+    "prefixGates": {
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "tests": 16,
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "astro": {
+      "files": 118,
+      "errors": 0,
+      "warnings": 0
+    },
+    "python": {
+      "command": "python bindings/python/tests/test_csv_recipe.py",
+      "tests": 5,
+      "passed": 5,
+      "invalidInputSubcases": 9
+    },
+    "newLandingPageLayouts": 18,
+    "newQueries": {
+      "pagefind": 6,
+      "ui": 6,
+      "status": "all passed"
+    },
+    "escapeFocusCases": 12,
+    "fullSiteSearch": {
+      "status": "passed",
+      "summaries": {
+        "en": {
+          "core": 12,
+          "positive": 25,
+          "negative": 5
+        },
+        "zh-CN": {
+          "core": 12,
+          "positive": 24,
+          "negative": 5
+        }
+      },
+      "unmatchedQueries": [
+        {
+          "id": "zh-CN-variant-03",
+          "query": "示意图 遮名称 复习题",
+          "expectedPageIds": [
+            "image-occlusion"
+          ],
+          "actualTop3": [
+            "media",
+            "concepts",
+            "custom-notetypes"
+          ]
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "The Chinese query 示意图 遮名称 复习题 still misses Image Occlusion in the top three; all core and boundary query thresholds pass.",
+    "No production deployment was performed.",
+    "No Search Console or Bing account metrics were available; keyword volume gaps remain explicit.",
+    "The CSV package was inspected independently, but no new Anki client import was performed."
+  ]
+}

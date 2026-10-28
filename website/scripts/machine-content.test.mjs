@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { load } from 'cheerio';
 import { micromark } from 'micromark';
 import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
-import { extractDocument, renderMarkdown } from './machine-content.mjs';
+import { extractDocument, renderMarkdown, renderLlms } from './machine-content.mjs';
 
 const page = { id: 'quickstart', type: 'docs', locale: 'en', canonical: 'https://example.org/project/docs/quickstart/', title: 'A guide', description: 'A description', htmlPath: 'docs/quickstart/index.html' };
 
@@ -17,6 +17,39 @@ test('rendered highlighted code and links survive Markdown export', () => {
   assert.ok(markdown.includes('demo.rs'));
   assert.ok(markdown.includes('````rust\n中文 <x>  \n\n```\n````'));
   assert.ok(!markdown.includes('Copy'));
+});
+
+const indexContext = (overrides = {}) => ({
+  siteConfig: { site: 'https://example.org', base: '/project', customDomain: '' },
+  repository: 'https://github.com/example/project',
+  publicInstall: { publicVersion: '1.2.3', languages: { python: { label: 'Python', install: 'pip install example', runtime: 'Python 3.11+' } } },
+  buildLocales: ['en', 'zh-CN', 'es'],
+  translator: (key, values = {}) => key === 'machine.optional' ? 'Optional' : `${key} ${values.version || values.language || ''}`,
+  ...overrides,
+});
+
+test('a third-language index enumerates only the other build languages and keeps fixed protocol labels', () => {
+  const output = renderLlms('es', [], indexContext());
+  assert.ok(output.includes('[English](https://example.org/project/llms.txt)'));
+  assert.ok(output.includes('[简体中文](https://example.org/project/zh-cn/llms.txt)'));
+  assert.ok(!output.includes('https://example.org/project/es/llms.txt'));
+  assert.ok(!output.includes('/fr/llms.txt'));
+  assert.match(output, /\n## Optional\n/);
+  assert.throws(() => renderLlms('es', [], indexContext({ translator: () => 'Opcional' })), /Optional protocol/);
+  assert.throws(() => renderLlms('fr', [], indexContext()), /outside the build/);
+  const markdown = renderMarkdown(extractDocument('<div class="sl-markdown-content"><p>Contenido.</p></div>', { ...page, locale: 'es', title: 'Título' }));
+  for (const label of ['Canonical page:', 'Language: es', 'Description:']) assert.ok(markdown.includes(label));
+});
+
+test('the index limit counts UTF-8 bytes rather than translated character count', () => {
+  const normal = indexContext();
+  const large = indexContext({ translator: (key, values) => key === 'machine.intro' ? '日'.repeat(9000) : normal.translator(key, values) });
+  assert.throws(() => renderLlms('es', [], large), /24 KiB/);
+  const empty = renderLlms('es', [], indexContext({ translator: (key, values) => key === 'machine.intro' ? '' : normal.translator(key, values) }));
+  const budget = 24 * 1024 - Buffer.byteLength(empty, 'utf8');
+  const exact = indexContext({ translator: (key, values) => key === 'machine.intro' ? 'a'.repeat(budget) : normal.translator(key, values) });
+  assert.equal(Buffer.byteLength(renderLlms('es', [], exact), 'utf8'), 24 * 1024);
+  assert.throws(() => renderLlms('es', [], indexContext({ translator: (key, values) => key === 'machine.intro' ? 'a'.repeat(budget + 1) : normal.translator(key, values) })), /24 KiB/);
 });
 
 test('missing, duplicated and unsupported content fails with page context', () => {

@@ -11,17 +11,19 @@ export function frontmatter(source) {
 }
 
 // The same frontmatter consumed by Astro determines whether a registered topic is public.
-export async function publishedPages(directory = root, registry = pages) {
+export async function publishedPages(directory = root, registry = pages, buildLocales = localeIds) {
+  if (!buildLocales.length || new Set(buildLocales).size !== buildLocales.length) throw new Error('Build locales must be nonempty and unique');
   const published = [];
   for (const page of registry) {
     if (!['docs', 'article'].includes(page.type)) { published.push(page); continue; }
     const draft = [];
-    for (const locale of localeIds) {
+    for (const locale of buildLocales) {
+      if (!page.sources?.[locale]) throw new Error(`${page.id}/${locale}: missing published source`);
       const source = await readFile(path.join(directory, page.sources[locale]), 'utf8');
       const data = frontmatter(source);
       draft.push(data?.draft === true);
     }
-    if (draft[0] !== draft[1]) throw new Error(`${page.id}: draft status must match for both languages`);
+    if (draft.some(value => value !== draft[0])) throw new Error(`${page.id}: draft status must match for all build languages`);
     if (!draft[0]) published.push(page);
   }
   return published;

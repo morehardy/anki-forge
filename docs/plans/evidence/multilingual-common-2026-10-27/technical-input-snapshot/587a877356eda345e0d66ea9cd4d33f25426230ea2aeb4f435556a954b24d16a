@@ -1,0 +1,84 @@
+---
+import { createTranslator } from '../i18n/messages.mjs';
+import { searchOptions } from '../../search.config.mjs';
+import { searchIndexPath, searchEnginePath } from '../lib/search-terms.mjs';
+import { sitePath } from '../lib/site';
+const locale = Astro.locals.starlightRoute.lang || 'en';
+const t = createTranslator(locale);
+const framework = Astro.locals.t.all();
+const labels = {
+  placeholder: Astro.locals.t('search.label'),
+  cancel: Astro.locals.t('search.cancelLabel'),
+  clear: framework['pagefind.clear_search'],
+  zero_results: framework['pagefind.zero_results'],
+  one_result: framework['pagefind.one_result'],
+  many_results: framework['pagefind.many_results'],
+  searching: framework['pagefind.searching'],
+  loading: t('search.loading'),
+  error: t('search.error'),
+};
+---
+<site-search data-locale={locale} data-search-index={sitePath(searchIndexPath(locale))} data-search-engine={sitePath(searchEnginePath)} data-pagefind={sitePath('/pagefind/pagefind.js')} data-search-options={JSON.stringify(searchOptions)} data-translations={JSON.stringify(labels)}>
+  <button data-open-modal disabled aria-label={labels.placeholder} aria-keyshortcuts="Control+K">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+    <span class="sl-hidden md:sl-block" aria-hidden="true">{labels.placeholder}</span>
+    <kbd class="sl-hidden md:sl-flex"><kbd data-platform-key>{Astro.locals.t('search.ctrlKey')}</kbd><kbd>K</kbd></kbd>
+  </button>
+  <dialog aria-label={labels.placeholder}>
+    <div class="dialog-frame sl-flex">
+      <button data-close-modal class="sl-flex">{labels.cancel}</button>
+      <div class="search-container">
+        <div id="starlight__search" class="pagefind-ui">
+          <form class="pagefind-ui__form" role="search">
+            <label class="sr-only" for="site-search-input">{labels.placeholder}</label>
+            <input id="site-search-input" class="pagefind-ui__search-input" type="search" placeholder={labels.placeholder} autocomplete="off" autocapitalize="off" spellcheck="false" aria-controls="site-search-results" />
+            <button type="button" class="pagefind-ui__search-clear" hidden>{labels.clear}</button>
+          </form>
+          <div class="pagefind-ui__results-area">
+            <p class="pagefind-ui__message" role="status" aria-live="polite"></p>
+            <ul id="site-search-results" class="pagefind-ui__results"></ul>
+          </div>
+        </div>
+      </div>
+      <p role="status" aria-live="polite" data-search-feedback></p>
+    </div>
+  </dialog>
+</site-search>
+<script src="../scripts/docs-search.ts"></script>
+<style is:global>
+  @import url('@pagefind/default-ui/css/ui.css') layer(starlight.core);
+  [data-search-modal-open] { overflow: hidden; }
+  site-search { display: contents; }
+  site-search [data-open-modal] { display: flex; align-items: center; gap: .5rem; height: 2.5rem; border: 0; background: transparent; color: var(--sl-color-gray-1); cursor: pointer; font-size: var(--sl-text-xl); }
+  site-search [data-open-modal]:disabled { cursor: default; }
+  site-search [data-open-modal] > kbd { margin-inline-start: auto; gap: .25em; border-radius: .25rem; padding-inline: .375rem; background: var(--sl-color-gray-6); font-size: var(--sl-text-2xs); font-family: var(--__sl-font); }
+  site-search dialog { padding: 0; margin: 0; width: 100%; max-width: 100%; height: 100%; max-height: 100%; border: 1px solid var(--sl-color-gray-5); background: var(--sl-color-gray-6); color: var(--sl-color-text); box-shadow: var(--sl-shadow-lg); }
+  site-search dialog[open] { display: flex; }
+  site-search dialog::backdrop { background: var(--sl-color-backdrop-overlay); backdrop-filter: blur(.25rem); }
+  site-search .dialog-frame { position: relative; overflow: auto; flex-direction: column; flex-grow: 1; gap: 1rem; padding: 1rem; }
+  site-search [data-close-modal] { display: flex; align-self: flex-end; flex-shrink: 0; padding: .25rem; border: 0; background: transparent; color: var(--sl-color-text-accent); cursor: pointer; }
+  site-search [data-search-feedback] { margin: .75rem; }
+  site-search [data-search-feedback]:empty { display: none; }
+  #starlight__search { --pagefind-ui-primary: var(--sl-color-text); --pagefind-ui-text: var(--sl-color-gray-2); --pagefind-ui-font: var(--__sl-font); --pagefind-ui-background: var(--sl-color-black); --pagefind-ui-border: var(--sl-color-gray-5); --pagefind-ui-border-width: 1px; --pagefind-ui-border-radius: .5rem; color: var(--pagefind-ui-text); font-family: var(--pagefind-ui-font); width: 100%; }
+  #starlight__search .pagefind-ui__form { position: relative; }
+  #starlight__search .pagefind-ui__search-input { width: 100%; min-width: 0; height: 3.5rem; padding: .75rem 4.5rem .75rem 1rem; border: 1px solid var(--pagefind-ui-border); border-radius: .5rem; background: var(--pagefind-ui-background); color: var(--sl-color-white); font: inherit; font-size: 1.2rem; appearance: none; box-sizing: border-box; }
+  #starlight__search .pagefind-ui__search-input:focus { outline: 1px solid var(--sl-color-accent); outline-offset: -1px; }
+  #starlight__search .pagefind-ui__search-clear { position: absolute; inset-block: .25rem; inset-inline-end: .5rem; padding: .25rem; border: 0; background: transparent; color: var(--sl-color-text-accent); cursor: pointer; }
+  #starlight__search .pagefind-ui__search-clear[hidden] { display: none; }
+  #starlight__search .pagefind-ui__message { margin: 1rem 0; font-size: 1rem; font-weight: 600; overflow-wrap: anywhere; }
+  #starlight__search .pagefind-ui__message:empty { display: none; }
+  #starlight__search .pagefind-ui__results { margin: 0; padding: 0; list-style: none; }
+  #starlight__search .pagefind-ui__result { padding: 1rem; background: var(--sl-color-black); border-radius: .3125rem; overflow-wrap: anywhere; }
+  #starlight__search .pagefind-ui__result + .pagefind-ui__result { margin-top: 1rem; }
+  #starlight__search .pagefind-ui__result-title { margin: 0; font-size: 1.1rem; font-weight: 600; }
+  #starlight__search .pagefind-ui__result-link, #starlight__search .pagefind-ui__subresult-link { color: var(--sl-color-white); text-decoration: none; }
+  #starlight__search .pagefind-ui__result-link:hover, #starlight__search .pagefind-ui__subresult-link:hover { text-decoration: underline; }
+  #starlight__search .pagefind-ui__result-excerpt { margin: .5rem 0 0; font-size: 1rem; }
+  #starlight__search .pagefind-ui__result-nested { margin-top: .5rem; padding-inline-start: 1rem; border-inline-start: 1px solid var(--sl-color-gray-5); font-size: .9rem; }
+  @media (min-width: 50rem) {
+    site-search [data-open-modal] { width: 100%; max-width: 22rem; padding-inline: .75rem .5rem; border: 1px solid var(--sl-color-gray-5); border-radius: .5rem; background: var(--sl-color-black); color: var(--sl-color-gray-2); font-size: var(--sl-text-sm); }
+    site-search [data-open-modal]:hover { border-color: var(--sl-color-gray-2); color: var(--sl-color-white); }
+    site-search dialog { margin: 4rem auto auto; width: 90%; max-width: 40rem; height: max-content; min-height: 15rem; max-height: calc(100% - 8rem); border-radius: .5rem; }
+    site-search .dialog-frame { padding: 1.5rem; }
+  }
+</style>

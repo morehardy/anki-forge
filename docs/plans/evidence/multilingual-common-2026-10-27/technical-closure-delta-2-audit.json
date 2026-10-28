@@ -1,0 +1,1082 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2",
+  "reviewedAt": "2026-10-28T06:00:42.780Z",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-delta-2.json",
+    "sha256": "d8b4d90a1a496ef0a69307994f0374d4eebeec99923d6b27e393211aa09059f4"
+  },
+  "priorSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot.json",
+    "sha256": "5302050c5ae8ad28070f64f2cacd985d0631d08f365139d36db899ef708a2038",
+    "scope": "Content-addressed exact bytes of final reviewed inputs and selected technical sources. Four corrected entries use source-review-delta-1.json; original hashes and defects retained in per-entry technicalReviewHistory."
+  },
+  "method": "Independent source inspection of every newly included file plus exact-byte comparison of all previously reviewed inputs. No content score or automatic approval inference; manual technical judgments are recorded per entry. No SDK, browser, build or deployment execution in this review.",
+  "entries": [
+    {
+      "pageId": "home",
+      "locale": "en",
+      "addedInputFiles": [
+        "docs/benchmark-presentation.json",
+        "docs/performance/20261008/comparison.csv",
+        "website/scripts/benchmark-presentation.mjs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/CodeBlock.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "home",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "docs/benchmark-presentation.json",
+        "docs/performance/20261008/comparison.csv",
+        "website/scripts/benchmark-presentation.mjs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/CodeBlock.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "examples",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "examples",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "docs",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "docs",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "languages",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "languages",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "en",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_basic.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_basic.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "development",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "development",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "templates",
+      "locale": "en",
+      "addedInputFiles": [
+        "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "api",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "api",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "installation",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "installation",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "concepts",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "concepts",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "cards",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "en",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_custom_notetype.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_custom_notetype.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "media",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "updates",
+      "locale": "en",
+      "addedInputFiles": [
+        "anki_forge/examples/docs_publication.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "anki_forge/examples/docs_publication.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "en",
+      "addedInputFiles": [
+        "bindings/node/examples/quickstart.mjs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "bindings/node/examples/quickstart.mjs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "en",
+      "addedInputFiles": [
+        "bindings/python/examples/quickstart.py",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "bindings/python/examples/quickstart.py",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro",
+        "website/src/content/i18n/en.json",
+        "website/src/content/i18n/zh-CN.json"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "en",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_basic.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "anki_forge/examples/target_api_basic.rs",
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "addedInputFiles": [
+        "website/site-model.mjs",
+        "website/src/components/BrandMark.astro",
+        "website/src/components/Icon.astro",
+        "website/src/components/LanguageSwitcher.astro",
+        "website/src/components/ThemeControl.astro"
+      ],
+      "removedInputFiles": [],
+      "previouslyReviewedInputBytesUnchanged": true,
+      "technicalStatus": "reviewed",
+      "reviewerRun": "/root/independent_technical_source_review/2026-10-28/source-pass-1/delta-2"
+    }
+  ],
+  "changedPriorFiles": []
+}

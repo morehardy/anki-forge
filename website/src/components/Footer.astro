@@ -5,7 +5,7 @@ import { footerNavigation, pagePath, locales } from '../../site-model.mjs';
 import { createTranslator } from '../i18n/messages.mjs';
 import { llmsUrl } from '../lib/machine-urls.mjs';
 import { siteConfig } from '../../site.config.mjs';
-interface Props { locale?: 'en' | 'zh-CN'; showAiIndex?: boolean }
+interface Props { locale?: string; showAiIndex?: boolean }
 const { locale = 'en', showAiIndex = true } = Astro.props;
 const t = createTranslator(locale);
 const resources: Record<string, string> = { feed: sitePath(`${locales[locale].prefix}/rss.xml`), license: `${repository}/blob/main/LICENSE`, repository };

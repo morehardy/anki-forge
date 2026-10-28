@@ -1,0 +1,7 @@
+---
+import ExamplesPage from '../../../components/ExamplesPage.astro';
+import { translatedPagePaths } from '../../../lib/localized-routes.mjs';
+export const getStaticPaths = () => translatedPagePaths();
+const { locale } = Astro.props;
+---
+<ExamplesPage locale={locale} />

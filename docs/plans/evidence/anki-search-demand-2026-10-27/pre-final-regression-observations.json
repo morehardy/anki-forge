@@ -1,0 +1,274 @@
+{
+  "observedAt": "2026-10-28T07:01:45.812Z",
+  "sourceRoot": "/tmp/anki-seo-verified-snapshot-20261027",
+  "search": {
+    "manifestSha256": "8a3eb019bc84a2f56dc4a07c19b3e5291931c67b7edbe47f3ee21155eebea0cf",
+    "summaries": {
+      "en": {
+        "core": 12,
+        "positive": 25,
+        "negative": 5
+      },
+      "zh-CN": {
+        "core": 11,
+        "positive": 22,
+        "negative": 5
+      }
+    },
+    "failedQueries": [
+      {
+        "id": "zh-CN-core-10",
+        "query": "自定义卡片 正反面 字段",
+        "top3": [
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+            "score": 9.337036327892116,
+            "matchedTerms": [
+              "正反面",
+              "正反",
+              "反面"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/zh-cn/docs/cards/",
+            "title": "生成 Anki 问答卡片与 Cloze 填空卡片",
+            "excerpt": "运行完整 Rust 示例，用两个笔记生成三张卡片。",
+            "score": 9.337036327892116,
+            "matchedTerms": [
+              "正反面",
+              "正反",
+              "反面"
+            ],
+            "pageId": "cards"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 3.3548689066885675,
+            "matchedTerms": [
+              "定义"
+            ],
+            "pageId": "concepts"
+          }
+        ],
+        "kind": "core",
+        "intentId": "custom-card-template",
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-terminology-03",
+        "query": "一条笔记 多张卡片",
+        "top3": [
+          {
+            "url": "/zh-cn/blog/your-first-anki-deck/",
+            "title": "用 Rust 构建第一个 Anki 牌组",
+            "excerpt": "从一段简短的 Rust 程序，到可以在 Anki 中打开的西班牙语卡片。",
+            "score": 13.913070235834802,
+            "matchedTerms": [
+              "一条",
+              "笔记",
+              "卡片"
+            ],
+            "pageId": "blog:your-first-anki-deck"
+          },
+          {
+            "url": "/zh-cn/docs/ai-anki-cards/",
+            "title": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+            "excerpt": "让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。",
+            "score": 3.8218513878800358,
+            "matchedTerms": [
+              "笔记",
+              "卡片"
+            ],
+            "pageId": "ai-anki-cards"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 3.0871564520485215,
+            "matchedTerms": [
+              "笔记",
+              "卡片"
+            ],
+            "pageId": "custom-notetypes"
+          }
+        ],
+        "kind": "terminology",
+        "intentId": "term-card",
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "passed": false
+      },
+      {
+        "id": "zh-CN-variant-03",
+        "query": "示意图 遮名称 复习题",
+        "top3": [
+          {
+            "url": "/zh-cn/docs/media/",
+            "title": "为 Anki 卡片添加图片与音频",
+            "excerpt": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。",
+            "score": 3.9963915202524363,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "media"
+          },
+          {
+            "url": "/zh-cn/docs/concepts/",
+            "title": "核心概念",
+            "excerpt": "理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。",
+            "score": 3.3303262668770297,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "concepts"
+          },
+          {
+            "url": "/zh-cn/docs/custom-notetypes/",
+            "title": "自定义笔记类型",
+            "excerpt": "为自己的内容定义字段、卡片模板与生成规则。",
+            "score": 3.3303262668770297,
+            "matchedTerms": [
+              "名称"
+            ],
+            "pageId": "custom-notetypes"
+          }
+        ],
+        "kind": "variant",
+        "intentId": "variant-cover-diagram",
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "passed": false
+      }
+    ]
+  },
+  "browser": {
+    "tests": 16,
+    "passed": 14,
+    "failed": 2,
+    "failedCase": "docs search, section navigation, copy and theme continuity: Search did not restore focus",
+    "cause": "Native search input consumes Escape to clear a nonempty value, leaving its parent dialog open.",
+    "minimalProbe": [
+      {
+        "locale": "en",
+        "origin": "default",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "BUTTON",
+        "triggerFocused": true
+      },
+      {
+        "locale": "en",
+        "origin": "default",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      },
+      {
+        "locale": "en",
+        "origin": "trigger",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "BUTTON",
+        "triggerFocused": true
+      },
+      {
+        "locale": "en",
+        "origin": "trigger",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      },
+      {
+        "locale": "en",
+        "origin": "link",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "A",
+        "triggerFocused": false
+      },
+      {
+        "locale": "en",
+        "origin": "link",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "default",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "BUTTON",
+        "triggerFocused": true
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "default",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "trigger",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "BUTTON",
+        "triggerFocused": true
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "trigger",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "link",
+        "query": "",
+        "dialogOpenAfterEscape": false,
+        "inputAfterEscape": "",
+        "focusedTag": "A",
+        "triggerFocused": false
+      },
+      {
+        "locale": "zh-CN",
+        "origin": "link",
+        "query": "zzzznonexistentterm62zzzz",
+        "dialogOpenAfterEscape": true,
+        "inputAfterEscape": "",
+        "focusedTag": "INPUT",
+        "triggerFocused": false
+      }
+    ]
+  }
+}

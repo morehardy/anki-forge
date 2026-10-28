@@ -57,4 +57,4 @@ cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
 
 `Media::image()` 和 `sound()` 保持不会失败。添加时，图片要求 `image/*`，声音引用要求 `audio/*` 或 `video/*`。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。这检查保留的 MIME，并非解码或播放。原始 HTML 和显式资源保持原有行为。导出重命名不会改变 MIME：PNG 改名为 `wrong.mp3` 后可以通过图片添加，但构建的独立探测或扩展名检查仍可能返回 `MEDIA.DECLARED_MIME_MISMATCH`。
 
-工具输入现在要求 `ankiforge-project-v2`，且没有顶层 `name`；v1 被拒绝。契约包为 2.0.0；包身份格式仍为 `ankiforge-identity-v1`。
+工具输入现在要求 `ankiforge-project-v2`，且没有顶层 `name`；v1 被拒绝。契约包为 2.1.0；包身份格式仍为 `ankiforge-identity-v1`。

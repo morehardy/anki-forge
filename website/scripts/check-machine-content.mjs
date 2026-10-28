@@ -6,6 +6,7 @@ import { load } from 'cheerio';
 import { micromark } from 'micromark';
 import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
 import { localeIds, pagePath } from '../site-model.mjs';
+import { configuredLocales } from '../locale-model.mjs';
 import { repository, siteConfig, withBase } from '../site.config.mjs';
 import { machineGroups } from '../machine-content.config.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
@@ -26,8 +27,14 @@ async function walk(directory) {
 }
 const files = await walk(dist);
 const expectedMd = topics.filter(page => ['docs', 'article'].includes(page.type)).flatMap(page => localeIds.map(locale => relative(mdRoute(page.id, locale)))).sort();
-const actualMd = files.map(file => path.relative(dist, file).split(path.sep).join('/')).filter(file => /^(?:zh-cn\/)?(?:docs|blog)\/(?:.*\/)?index\.md$/.test(file)).sort();
+// Discover output independently of the generator, including stale candidates.
+const prefixes = Object.values(configuredLocales).map(locale => locale.prefix.slice(1));
+const machineLocal = relative => prefixes.map(prefix => prefix ? relative.startsWith(`${prefix}/`) ? relative.slice(prefix.length + 1) : null : relative).filter(value => value !== null);
+const relativeFiles = files.map(file => path.relative(dist, file).split(path.sep).join('/'));
+const actualMd = relativeFiles.filter(file => machineLocal(file).some(local => /^(?:docs|blog)\/(?:[^/]+\/)*index\.md$/.test(local))).sort();
 assert.deepEqual(actualMd, expectedMd, 'Markdown coverage differs from published topics');
+const llmsRoute = locale => `${configuredLocales[locale].prefix}/llms.txt`;
+assert.deepEqual(relativeFiles.filter(file => machineLocal(file).includes('llms.txt')).sort(), localeIds.map(locale => relative(llmsRoute(locale))).sort(), 'AI index coverage differs from build languages');
 const details = new Map();
 
 async function localTarget(value, from) {
@@ -71,7 +78,7 @@ for (const topic of topics) for (const locale of localeIds) {
   const label = `${topic.id}/${locale}`;
   const $ = load(await readFile(path.join(dist, relative(route), 'index.html'), 'utf8'));
   const links = $('link[rel="describedby"]');
-  const llms = abs(locale === 'en' ? '/llms.txt' : '/zh-cn/llms.txt');
+  const llms = abs(llmsRoute(locale));
   assert.equal(links.length, 1, `${label}: discovery link count`);
   assert.equal(links.attr('href'), llms, `${label}: wrong index discovery`);
   assert.ok($('footer a[href]').toArray().some(node => $(node).attr('href') === llms), `${label}: missing visible index link`);
@@ -113,12 +120,14 @@ for (const topic of topics) for (const locale of localeIds) {
 
 for (const locale of localeIds) {
   const t = createTranslator(locale);
-  const filename = locale === 'en' ? 'llms.txt' : 'zh-cn/llms.txt';
+  const filename = relative(llmsRoute(locale));
   const bytes = await readFile(path.join(dist, filename));
   const content = text(bytes);
   assert.ok(bytes.length <= 24 * 1024 && content.endsWith('\n') && !content.endsWith('\n\n') && !content.includes('\r'), `${filename}: invalid size or newlines`);
   assert.equal((content.match(/^# /gm) || []).length, 1);
   assert.deepEqual([...content.matchAll(/^## (.+)$/gm)].map(match => match[1]), machineGroups.map(group => t(group.label)), `${filename}: group order`);
+  assert.equal(t('machine.optional'), 'Optional', `${filename}: Optional protocol heading must not be translated`);
+  assert.ok(content.includes('\n## Optional\n'), `${filename}: fixed Optional heading missing`);
   assert.ok(content.includes(install.publicVersion), `${filename}: public version missing`);
   assert.ok(content.includes(t('machine.intro')) && content.includes(t('machine.constraints')), `${filename}: introduction or constraints missing`);
   for (const language of Object.values(install.languages)) assert.ok(content.includes(language.install) && content.includes(language.runtime), `${filename}: installation missing`);
@@ -129,7 +138,7 @@ for (const locale of localeIds) {
     ...group.ids.filter(id => topics.some(topic => topic.id === id)).map(id => abs(mdRoute(id, locale))),
     ...(group.articles ? topics.filter(topic => topic.type === 'article').map(topic => abs(mdRoute(topic.id, locale))) : []),
     ...(group.repository ? [repository] : []),
-    ...(group.otherLanguage ? [abs(locale === 'en' ? '/zh-cn/llms.txt' : '/llms.txt')] : []),
+    ...(group.otherLanguages ? localeIds.filter(id => id !== locale).map(other => abs(llmsRoute(other))) : []),
   ]);
   assert.deepEqual(links, expected, `${filename}: curated links or order differ`);
   for (const { title, href, description } of entries) {
@@ -144,4 +153,4 @@ for (const locale of localeIds) {
 }
 const errorPage = load(await readFile(path.join(dist, '404.html'), 'utf8'));
 assert.equal(errorPage('link[rel="describedby"], link[type="text/markdown"]').length, 0, '404 has machine discovery links');
-console.log(`Verified ${expectedMd.length} Markdown pages, code fixtures, links and bilingual AI indexes.`);
+console.log(`Verified ${expectedMd.length} Markdown pages, code fixtures, links and ${localeIds.length} AI indexes.`);

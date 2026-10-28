@@ -3,7 +3,7 @@ export const machineGroups = [
   { label: 'machine.start', ids: ['docs', 'languages', 'compatibility'] },
   { label: 'machine.quickstarts', ids: ['quickstart', 'node-quickstart', 'python-quickstart'] },
   { label: 'machine.api', ids: ['api', 'rust-api', 'node-api', 'python-api'] },
-  { label: 'machine.tasks', ids: ['json-to-anki', 'cards', 'media', 'templates', 'image-occlusion', 'updates'] },
+  { label: 'machine.tasks', ids: ['csv-to-anki', 'json-to-anki', 'ai-anki-cards', 'cards', 'media', 'templates', 'image-occlusion', 'updates'] },
   { label: 'machine.constraintsGroup', ids: ['build-guarantees', 'troubleshooting'] },
-  { label: 'machine.optional', ids: ['anki-forge-vs-genanki', 'genanki-migration', 'development'], articles: true, repository: true, otherLanguage: true },
+  { label: 'machine.optional', ids: ['anki-forge-vs-genanki', 'genanki-migration', 'development'], articles: true, repository: true, otherLanguages: true },
 ];

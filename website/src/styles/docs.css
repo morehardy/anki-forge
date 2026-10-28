@@ -25,6 +25,8 @@
 .site-title img { width: 29px; height: 29px; }
 .sl-markdown-content h1, .sl-markdown-content h2, .sl-markdown-content h3 { letter-spacing: -0.025em; }
 .sl-markdown-content a { text-underline-offset: 3px; }
+/* Preserve the selected page label when shared site link styles are loaded. */
+#starlight__sidebar a[aria-current='page'] { color: var(--sl-color-text-invert); }
 .sl-markdown-content .code-block { margin-block: 1.5rem; border: 1px solid var(--af-line); border-radius: 8px; overflow: clip; background: var(--af-paper); }
 :focus-visible { outline-offset: 4px; }
 

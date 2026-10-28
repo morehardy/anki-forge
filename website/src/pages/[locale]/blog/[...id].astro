@@ -1,0 +1,11 @@
+---
+import { getCollection } from 'astro:content';
+import ArticlePage from '../../../components/ArticlePage.astro';
+import { locales } from '../../../../locale-model.mjs';
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft && data.locale !== 'en' && Object.hasOwn(locales, data.locale));
+  return posts.map(post => ({ params: { locale: locales[post.data.locale].prefix.slice(1), id: post.data.translationKey }, props: { post } }));
+}
+const { post } = Astro.props;
+---
+<ArticlePage post={post} />

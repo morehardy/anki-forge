@@ -1,7 +1,6 @@
-import { createTranslator } from '../i18n/messages.mjs';
-const t = createTranslator(document.documentElement.lang === 'zh-CN' ? 'zh-CN' : 'en');
-import aiQuickstart from '../generated/ai-quickstart.json';
-import { renderPrompt } from '../lib/ai-quickstart.mjs';
+import { translatorFor } from '../i18n/format-message.mjs';
+const clientMessages = document.querySelector<HTMLScriptElement>('script[data-anki-forge-messages]');
+const t = translatorFor(JSON.parse(clientMessages?.textContent || '{}'), document.documentElement.lang);
 
 const root = document.documentElement;
 const darkPreference = window.matchMedia('(prefers-color-scheme: dark)');
@@ -93,6 +92,7 @@ document.querySelectorAll<HTMLElement>('[data-update-demo]').forEach(demo => {
 const copyListeners = new AbortController();
 const copyTimers = new Set<ReturnType<typeof setTimeout>>();
 document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder => {
+  const templates: Record<string, { before: string; after: string; empty: string }> = JSON.parse(builder.querySelector<HTMLScriptElement>('script[data-ai-templates]')?.textContent || '{}');
   const tabs = [...builder.querySelectorAll<HTMLButtonElement>('[data-ai-language]')];
   const panels = [...builder.querySelectorAll<HTMLElement>('[data-ai-panel]')];
   const request = builder.querySelector<HTMLTextAreaElement>('[data-ai-request]');
@@ -127,7 +127,8 @@ document.querySelectorAll<HTMLElement>('[data-ai-quickstart]').forEach(builder =
   request.addEventListener('input', () => {
     panels.forEach(panel => {
       const prompt = panel.querySelector<HTMLElement>('[data-ai-prompt]');
-      if (prompt) prompt.textContent = renderPrompt(aiQuickstart, panel.dataset.aiPanel!, request.value, builder.dataset.aiLocale || 'en');
+      const template = templates[panel.dataset.aiPanel!];
+      if (prompt && template) prompt.textContent = request.value.trim() ? `${template.before}${request.value}${template.after}` : template.empty;
       panel.querySelectorAll<HTMLElement>('[data-copy-status]').forEach(status => { status.textContent = ''; });
     });
   }, { signal: copyListeners.signal });

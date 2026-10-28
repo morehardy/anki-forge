@@ -1,0 +1,29 @@
+---
+import { createTranslator } from '../i18n/messages.mjs';
+import { pagePath } from '../../site-model.mjs';
+import { examples } from '../lib/examples';
+import { sitePath } from '../lib/site';
+import CodeBlock from './CodeBlock.astro';
+import CardPreview from './CardPreview.astro';
+interface Props { id?: string; locale?: string }
+const { id = 'examples', locale = 'en' } = Astro.props;
+const t = createTranslator(locale);
+---
+<section class="example-workbench" id={id} data-workbench aria-label={t('workbench.label')}>
+  <div class="workbench-bar">
+    <div class="example-tabs" role="tablist" aria-label={t('workbench.tabs')}>
+      {examples.map((example, index) => <button type="button" role="tab" id={`${id}-tab-${example.id}`} aria-controls={`${id}-panel-${example.id}`} aria-label={t(`card.${example.id}`)} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-tab={example.id}>{t(`card.${example.id}`)}</button>)}
+    </div>
+    <span class="workbench-hint">{t('workbench.hint')}</span>
+  </div>
+  {examples.map((example, index) => <div class="example-panel" role="tabpanel" id={`${id}-panel-${example.id}`} aria-labelledby={`${id}-tab-${example.id}`} data-example={example.id} hidden={index !== 0}>
+    <div class="example-source">
+      <div class="source-label"><span>{example.id}.rs</span><a href={sitePath('/generated/website_showcase.rs')}>{t('workbench.source')}</a></div>
+      <CodeBlock code={example.source} locale={locale} />
+      <div class="source-output"><span>{t('workbench.output')}</span><a href={sitePath(`/generated/${example.file}`)} download>{example.file} ↓</a></div>
+    </div>
+    <CardPreview locale={locale} example={example} prefix={`${id}-${example.id}`} />
+  </div>)}
+  <p class="no-script-note">{t('workbench.note')}</p>
+  <noscript><style>[data-workbench] [data-example][hidden] { display: grid !important; } [data-workbench] [role="tablist"] { display: none; }</style><p class="no-script-note"><a href={sitePath(pagePath('examples', locale))}>{t('workbench.noScript')}</a></p></noscript>
+</section>

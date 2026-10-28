@@ -1,11 +1,14 @@
 import { canonicalUrl, entityIds, markdownUrl } from './machine-urls.mjs';
+import { localeIds } from '../../locale-model.mjs';
 
 export function buildStructuredData(page, context) {
   const { siteConfig, repository, publicInstall, homeDescription } = context;
+  const buildLocales = context.buildLocales ?? localeIds;
+  if (!buildLocales.includes(page.locale)) throw new Error(`Page locale is outside the build: ${page.locale}`);
   const ids = entityIds(page, siteConfig);
   const root = ids.website.slice(0, -'#website'.length);
   const software = { '@id': ids.software, '@type': 'SoftwareApplication', name: 'Anki Forge' };
-  const website = { '@id': ids.website, '@type': 'WebSite', name: 'Anki Forge', url: root, inLanguage: ['en', 'zh-CN'] };
+  const website = { '@id': ids.website, '@type': 'WebSite', name: 'Anki Forge', url: root, inLanguage: [...buildLocales] };
   const collection = page.type === 'blog-list' || page.type === 'examples' || (page.type === 'docs' && page.id === 'docs');
   const webpage = {
     '@id': ids.webpage, '@type': collection ? 'CollectionPage' : 'WebPage', name: page.title,
@@ -18,7 +21,7 @@ export function buildStructuredData(page, context) {
     webpage.mainEntity = { '@id': ids.software };
     Object.assign(software, {
       url: root, applicationCategory: 'DeveloperApplication', softwareVersion: publicInstall.publicVersion,
-      license: `${repository}/blob/main/LICENSE`, softwareHelp: canonicalUrl('docs', page.locale, siteConfig),
+      license: `${repository}/blob/main/LICENSE`, softwareHelp: canonicalUrl('docs', page.locale, siteConfig, buildLocales),
       description: homeDescription,
     });
     graph.push(software, { '@id': ids.source, '@type': 'SoftwareSourceCode', name: 'Anki Forge', codeRepository: repository, license: `${repository}/blob/main/LICENSE`, targetProduct: { '@id': ids.software } });

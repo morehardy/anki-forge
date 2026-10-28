@@ -1,7 +1,7 @@
 ---
 import { createTranslator } from '../i18n/messages.mjs';
 import CopyBlock from './CopyBlock.astro';
-interface Props { command: string; runtime: string; buttonLabel?: string; locale?: 'en' | 'zh-CN' }
+interface Props { command: string; runtime: string; buttonLabel?: string; locale?: string }
 const { command, runtime, buttonLabel, locale = 'en' } = Astro.props;
 const t = createTranslator(locale);
 ---

@@ -1,0 +1,2620 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3",
+  "method": "Independently read all 58 per-page term lists and their page context from the prior full-text review. No query fixture, search result, author explanation or search execution was used to justify vocabulary. Read the entire helper, SiteLayout, route middleware and the input-binding change.",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-delta-3.json",
+    "sha256": "01525f8ca3a51dd1fe8f52635cbfb958252ca33368f3fb29f8a08b9e4e4acd85"
+  },
+  "files": {
+    "website/search-terms.json": {
+      "sha256": "5510c509324a268ab09a80d25fcf90d3ddb234593a6f1cbeb9d611b1eb3fdf3f",
+      "text": "{\n  \"schemaVersion\": 1,\n  \"locales\": {\n    \"en\": {\n      \"docs\": [\n        \"documentation overview\",\n        \"authoring workflow\",\n        \"documentation navigation\",\n        \"getting started guide\",\n        \"structured learning content\",\n        \"repeatable deck publishing\",\n        \"note fields and card templates\",\n        \"Anki deck generation library\"\n      ],\n      \"languages\": [\n        \"choose a programming language\",\n        \"SDK selection\",\n        \"language bindings\",\n        \"Rust crate or Python wheel\",\n        \"Node.js or Python\",\n        \"published package entry points\",\n        \"native runtime prerequisites\",\n        \"offline APKG export\"\n      ],\n      \"quickstart\": [\n        \"Rust quick start\",\n        \"Rust getting started\",\n        \"first Rust Anki deck\",\n        \"Rust flashcard generator\",\n        \"cargo new anki-deck\",\n        \"cargo run\",\n        \"Rust APKG export\",\n        \"src/main.rs\",\n        \"persistent Spanish deck\",\n        \"stable key es:hola\"\n      ],\n      \"json-to-anki\": [\n        \"JSON to Anki\",\n        \"JSON flashcard generation\",\n        \"JSON to APKG\",\n        \"structured data to flashcards\",\n        \"JSON.parse\",\n        \"json.loads\",\n        \"serde_json\",\n        \"TypeScript JSON deck\",\n        \"JavaScript JSON deck on Node.js\",\n        \"batch note creation\",\n        \"JSON image and audio recipe\",\n        \"answer-only update\",\n        \"comparison.json and review.json\",\n        \"durable business IDs\"\n      ],\n      \"anki-forge-vs-genanki\": [\n        \"Anki Forge versus genanki\",\n        \"genanki alternative\",\n        \"Anki library comparison\",\n        \"choose an APKG library\",\n        \"Python flashcard libraries\",\n        \"publishing workflow comparison\",\n        \"native dependency tradeoffs\",\n        \"genanki migration cost\",\n        \"GUID identity comparison\",\n        \"historical Rust export benchmark\",\n        \"export time and peak memory\"\n      ],\n      \"development\": [\n        \"build SDK from source\",\n        \"source checkout\",\n        \"repository development\",\n        \"local native addon\",\n        \"npm run pack:local\",\n        \"facade and native tarballs\",\n        \"offline local npm install\",\n        \"Maturin native extension\",\n        \"maturin develop\",\n        \"Cargo path dependency\",\n        \"pinned Rust toolchain\",\n        \"rebuild wrapper and native binary\"\n      ],\n      \"rust-guide\": [\n        \"Rust authoring workflow\",\n        \"Rust Project lifecycle\",\n        \"atomic note addition\",\n        \"owned model reuse\",\n        \"Content::sequence\",\n        \"Rust structured errors\",\n        \"AddError::context\",\n        \"stable source-record keys\",\n        \"temporary artifact ownership\",\n        \"Rust update_from workflow\",\n        \"AddTarget and AddDetail\",\n        \"ankiforge-project-v2\"\n      ],\n      \"templates\": [\n        \"template bundle import\",\n        \"reusable Anki templates\",\n        \"anki-template.yaml\",\n        \"template-bundle-v2\",\n        \"NoteType::from_bundle\",\n        \"YAML note type manifest\",\n        \"front.html and back.html\",\n        \"CSS file and font assets\",\n        \"browser card templates\",\n        \"key-based template references\",\n        \"bundle path traversal\",\n        \"explicit asset export_as\",\n        \"template text budget\",\n        \"custom Cloze bundle\"\n      ],\n      \"api\": [\n        \"public API overview\",\n        \"SDK API navigation\",\n        \"Rust Python Node interfaces\",\n        \"Anki APKG library API\",\n        \"authoring and build operations\",\n        \"media API entry points\",\n        \"diagnostics API entry points\",\n        \"comparison and publication API\"\n      ],\n      \"installation\": [\n        \"Rust installation\",\n        \"add ankiforge to Cargo\",\n        \"cargo add ankiforge\",\n        \"Cargo.toml dependency\",\n        \"Rust application integration\",\n        \"Rust minimum version\",\n        \"Rust linker prerequisites\",\n        \"empty default features\",\n        \"serde derive dependency\",\n        \"serde_json dependency\",\n        \"public crate installation\"\n      ],\n      \"concepts\": [\n        \"Anki note versus card versus deck\",\n        \"Project and deck relationship\",\n        \"publication namespace\",\n        \"note type model\",\n        \"stable keys versus display names\",\n        \"field and template keys\",\n        \"Text versus HTML\",\n        \"HTML escaping\",\n        \"typed content and media dependencies\",\n        \"owned media snapshots\",\n        \"report versus artifact\",\n        \"update identity evidence\"\n      ],\n      \"cards\": [\n        \"Basic question and answer\",\n        \"front and back flashcards\",\n        \"Cloze deletion\",\n        \"fill-in-the-blank cards\",\n        \"cloze hint syntax\",\n        \"multiple cloze numbers\",\n        \"{{c1::answer}}\",\n        \"{{c1::answer::hint}}\",\n        \"back_extra\",\n        \"two notes three cards\",\n        \"Note::basic\",\n        \"Note::cloze\",\n        \"cloze card identity\"\n      ],\n      \"custom-notetypes\": [\n        \"custom note types\",\n        \"custom Anki model\",\n        \"define note fields\",\n        \"custom card templates\",\n        \"NoteType::builder\",\n        \"Field::required\",\n        \"Field::sort\",\n        \"GenerationRule::all\",\n        \"GenerationRule::any\",\n        \"conditional card generation\",\n        \"custom Cloze field\",\n        \"field keys and display names\",\n        \"{{FrontSide}}\",\n        \"model definition conflict\"\n      ],\n      \"media\": [\n        \"add images to flashcards\",\n        \"attach audio to cards\",\n        \"package sound files\",\n        \"typed image and sound content\",\n        \"Media::file\",\n        \"Media::bytes\",\n        \"Content::sequence\",\n        \"with_export_name\",\n        \"MIME type validation\",\n        \"export filename collisions\",\n        \"CSS font assets\",\n        \"media import limits\",\n        \"batch media import\",\n        \"Media::files\",\n        \"owned media snapshots\",\n        \"media snapshot memory budget\"\n      ],\n      \"image-occlusion\": [\n        \"image occlusion\",\n        \"image masking flashcards\",\n        \"diagram region questions\",\n        \"hide labels on an image\",\n        \"rectangle masks\",\n        \"Mask::rect\",\n        \"HideAllGuessOne\",\n        \"HideOneGuessOne\",\n        \"stable mask keys\",\n        \"pixel coordinates\",\n        \"EXIF image orientation\",\n        \"decoded image budget\",\n        \"mask card ordinals\",\n        \"Note::image_occlusion\"\n      ],\n      \"updates\": [\n        \"update a distributed deck\",\n        \"update existing notes\",\n        \"answer-only deck update\",\n        \"original distribution APKG\",\n        \"compare before publishing\",\n        \"CompareOptions::against\",\n        \"BuildOptions::update_from\",\n        \"UpdatePolicy\",\n        \"RISK.NOTE_REMOVED\",\n        \"stable note GUIDs\",\n        \"revision evidence\",\n        \"Anki re-export baseline\",\n        \"local edits and scheduling\",\n        \"prepare_publication\",\n        \"review then publish\",\n        \"removed notes and deletion behavior\"\n      ],\n      \"build-guarantees\": [\n        \"build output guarantees\",\n        \"temporary APKG lifetime\",\n        \"persistent artifact\",\n        \"last artifact owner\",\n        \"artifact.persist_to\",\n        \"atomic APKG replacement\",\n        \"publication stage\",\n        \"durability confirmation\",\n        \"late publication failure\",\n        \"report versus output snapshot\",\n        \"native path serialization\",\n        \"inspection budgets\",\n        \"prepared candidate lifetime\",\n        \"consumed publication owner\",\n        \"relative artifact paths\"\n      ],\n      \"troubleshooting\": [\n        \"troubleshooting errors\",\n        \"native package load failure\",\n        \"native wrapper version mismatch\",\n        \"wheel OS CPU tags\",\n        \"NOTE.KEY_DUPLICATE\",\n        \"NOTE.FIELD_UNKNOWN\",\n        \"NOTE.FIELD_REQUIRED\",\n        \"NOTE.MODEL_CONFLICT\",\n        \"HTML displayed literally\",\n        \"missing Cloze cards\",\n        \"MIME content mismatch\",\n        \"export-name conflict\",\n        \"missing CSS resource\",\n        \"bundle load failure\",\n        \"inspection limit exceeded\",\n        \"temporary APKG disappeared\",\n        \"invalid update baseline\"\n      ],\n      \"compatibility\": [\n        \"supported platforms\",\n        \"verified runtimes\",\n        \"minimum Rust version\",\n        \"Node.js runtime support\",\n        \"CPython wheel support\",\n        \"macOS arm64 x64\",\n        \"Linux GNU glibc\",\n        \"Windows x64\",\n        \"Alpine musl verification scope\",\n        \"Bun browser Electron verification scope\",\n        \"Anki client compatibility\",\n        \"import and codec playback\",\n        \"release verification evidence\",\n        \"review history client conditions\"\n      ],\n      \"rust-api\": [\n        \"Rust API reference\",\n        \"Rust public domain modules\",\n        \"Project::new\",\n        \"Project::add\",\n        \"BuildOptions::temporary\",\n        \"InspectLimits\",\n        \"FieldKey and TemplateKey\",\n        \"BuildOutput::artifact\",\n        \"BuildReport::snapshot\",\n        \"PathSnapshot::into_path_buf\",\n        \"std::error::Error\",\n        \"AddError::context\",\n        \"AddTarget and AddDetail\",\n        \"UpdatePolicy::fail_on\",\n        \"Project::prepare_publication\"\n      ],\n      \"node-quickstart\": [\n        \"Node.js quick start\",\n        \"JavaScript Anki deck generation\",\n        \"Node flashcard generator\",\n        \"TypeScript getting started\",\n        \"npm install ankiforge\",\n        \"native optional dependency\",\n        \"main.mjs\",\n        \"node main.mjs\",\n        \"ES modules ESM\",\n        \"CommonJS require\",\n        \"first Node APKG export\",\n        \"persistent artifact close\"\n      ],\n      \"node-api\": [\n        \"Node.js API reference\",\n        \"JavaScript SDK API\",\n        \"TypeScript declarations\",\n        \"tsconfig.json NodeNext\",\n        \"npx tsc\",\n        \"async build and compare\",\n        \"Promise worker tasks\",\n        \"immutable Project snapshots\",\n        \"Uint8Array media bytes\",\n        \"Content.sequence\",\n        \"NoteType.fromBundle\",\n        \"BuildOptions.updateFrom\",\n        \"preparePublication\",\n        \"ArtifactClosedError\",\n        \"NativeLoadError\",\n        \"PreparedPublicationStateError\",\n        \"camelCase reports and snake_case snapshots\",\n        \"artifact.persistTo\"\n      ],\n      \"python-quickstart\": [\n        \"Python quick start\",\n        \"Python flashcard generator\",\n        \"Python Anki deck script\",\n        \"pip install ankiforge\",\n        \"python -m venv\",\n        \"virtual environment activation\",\n        \"Windows Activate.ps1\",\n        \"CPython platform wheel\",\n        \"main.py\",\n        \"python main.py\",\n        \"first Python APKG export\",\n        \"from ankiforge import\"\n      ],\n      \"python-api\": [\n        \"Python SDK reference\",\n        \"Python type hints py.typed\",\n        \"immutable note values\",\n        \"NoteType.builder\",\n        \"Content.sequence\",\n        \"Media.bytes\",\n        \"MediaLimits\",\n        \"max_identity_bytes\",\n        \"ApkgArtifact context manager\",\n        \"copy.copy artifact owner\",\n        \"GIL release\",\n        \"BINDING.PROJECT_BUSY\",\n        \"BINDING.FORKED_OBJECT\",\n        \"project.prepare_publication\",\n        \"PreparedPublicationStateError\",\n        \"Python native exception chaining\"\n      ],\n      \"python-diagnostics\": [\n        \"Python error diagnosis\",\n        \"BuildError.snapshot\",\n        \"CompareError.report\",\n        \"source_details\",\n        \"causes and __cause__\",\n        \"details limit_exceeded\",\n        \"comparison.allows_publication\",\n        \"Python update risk policy\",\n        \"RISK.NOTE_REMOVED\",\n        \"PersistError publication facts\",\n        \"surrogateescape native paths\",\n        \"BINDING.EXTENSION_UNAVAILABLE\",\n        \"BINDING.VERSION_MISMATCH\",\n        \"Python inspection budgets\"\n      ],\n      \"python-migration\": [\n        \"Python API migration\",\n        \"clean-slate Python API\",\n        \"anki-forge distribution rename\",\n        \"anki_forge import rename\",\n        \"removed Deck API\",\n        \"add_note to add stable key\",\n        \"removed model registry\",\n        \"owned-value SDK transition\",\n        \"implicit HTML migration\",\n        \"removed lockfile workflow\",\n        \"runtime subprocess replacement\",\n        \"PyO3 native binding\",\n        \"legacy compatibility boundary\"\n      ],\n      \"genanki-migration\": [\n        \"migrate from genanki\",\n        \"genanki Model to NoteType\",\n        \"genanki Deck to Project\",\n        \"genanki Package write replacement\",\n        \"numeric model ID mapping\",\n        \"GUID migration boundary\",\n        \"persistent business keys\",\n        \"field names versus field keys\",\n        \"genanki media file paths\",\n        \"plain text versus Content.html\",\n        \"owned media migration\",\n        \"first new-model distribution\"\n      ],\n      \"blog:your-first-anki-deck\": [\n        \"first Rust flashcard walkthrough\",\n        \"one-word vocabulary deck\",\n        \"Spanish greeting example\",\n        \"repeatable authoring in Git\",\n        \"Basic note front and back\",\n        \"Project::new spanish\",\n        \"stable vocabulary entry ID\",\n        \"typed failure propagation\",\n        \"grow from one note\"\n      ],\n      \"blog:stable-ids-and-deck-updates\": [\n        \"identity outlives wording\",\n        \"stable note ID rationale\",\n        \"editing an answer with the same ID\",\n        \"namespace across releases\",\n        \"update baseline rationale\",\n        \"archive original distribution package\",\n        \"separate baseline and candidate paths\",\n        \"identity and revision evidence\",\n        \"local edit import conditions\",\n        \"stable ID versus review state\"\n      ]\n    },\n    \"zh-CN\": {\n      \"docs\": [\n        \"文档总览\",\n        \"内容编写流程\",\n        \"文档导航\",\n        \"入门指南\",\n        \"结构化学习内容\",\n        \"可重复的牌组发布\",\n        \"笔记字段与卡片模板\",\n        \"Anki 牌组生成库\"\n      ],\n      \"languages\": [\n        \"选择开发语言\",\n        \"SDK 选型\",\n        \"语言绑定\",\n        \"Rust crate 与 Python wheel\",\n        \"Node.js 或 Python\",\n        \"公开包入门入口\",\n        \"原生运行环境要求\",\n        \"离线导出 APKG\"\n      ],\n      \"quickstart\": [\n        \"Rust 快速开始\",\n        \"Rust 入门教程\",\n        \"第一个 Rust Anki 牌组\",\n        \"用 Rust 制作记忆卡片\",\n        \"cargo new anki-deck\",\n        \"cargo run\",\n        \"Rust 导出 APKG\",\n        \"src/main.rs\",\n        \"保存西班牙语牌组\",\n        \"稳定键 es:hola\"\n      ],\n      \"json-to-anki\": [\n        \"JSON 转 Anki\",\n        \"JSON 生成记忆卡片\",\n        \"JSON 转 APKG\",\n        \"结构化数据制作牌组\",\n        \"JSON.parse\",\n        \"json.loads\",\n        \"serde_json\",\n        \"TypeScript 读取 JSON 制卡\",\n        \"Node.js 读取 JSON 制卡\",\n        \"批量创建笔记\",\n        \"JSON 图片音频示例\",\n        \"只修改答案的更新\",\n        \"comparison.json 与 review.json\",\n        \"持久业务 ID\"\n      ],\n      \"anki-forge-vs-genanki\": [\n        \"Anki Forge 与 genanki 对比\",\n        \"genanki 替代方案\",\n        \"Anki 制卡库比较\",\n        \"选择 APKG 生成库\",\n        \"Python 记忆卡片库\",\n        \"发布流程比较\",\n        \"原生依赖取舍\",\n        \"genanki 迁移成本\",\n        \"GUID 身份比较\",\n        \"历史 Rust 导出基准\",\n        \"导出耗时与峰值内存\"\n      ],\n      \"development\": [\n        \"从源码构建 SDK\",\n        \"源码目录\",\n        \"仓库开发\",\n        \"本地原生 addon\",\n        \"npm run pack:local\",\n        \"包装层与原生 tarball\",\n        \"离线安装本地 npm 包\",\n        \"Maturin 原生扩展\",\n        \"maturin develop\",\n        \"Cargo 路径依赖\",\n        \"固定 Rust 工具链\",\n        \"重建包装层与原生二进制\"\n      ],\n      \"rust-guide\": [\n        \"Rust 内容编写流程\",\n        \"Rust Project 生命周期\",\n        \"原子添加笔记\",\n        \"复用拥有所有权的模型\",\n        \"Content::sequence\",\n        \"Rust 结构化错误\",\n        \"AddError::context\",\n        \"稳定源记录键\",\n        \"临时产物所有权\",\n        \"Rust update_from 流程\",\n        \"AddTarget 与 AddDetail\",\n        \"ankiforge-project-v2\"\n      ],\n      \"templates\": [\n        \"导入模板包\",\n        \"复用 Anki 模板\",\n        \"anki-template.yaml\",\n        \"template-bundle-v2\",\n        \"NoteType::from_bundle\",\n        \"YAML 笔记类型清单\",\n        \"front.html 与 back.html\",\n        \"CSS 文件与字体资源\",\n        \"浏览器卡片模板\",\n        \"按字段键引用模板\",\n        \"模板包目录穿越\",\n        \"显式资源 export_as\",\n        \"模板文本预算\",\n        \"自定义 Cloze 模板包\"\n      ],\n      \"api\": [\n        \"公开 API 总览\",\n        \"SDK API 导航\",\n        \"Rust Python Node 接口\",\n        \"Anki APKG 库 API\",\n        \"内容编写与构建操作\",\n        \"媒体 API 入口\",\n        \"诊断 API 入口\",\n        \"比较与发布 API\"\n      ],\n      \"installation\": [\n        \"Rust 安装\",\n        \"Cargo 添加 ankiforge\",\n        \"cargo add ankiforge\",\n        \"Cargo.toml 依赖\",\n        \"集成 Rust 应用\",\n        \"Rust 最低版本\",\n        \"Rust 链接器要求\",\n        \"空的默认 feature\",\n        \"serde derive 依赖\",\n        \"serde_json 依赖\",\n        \"安装公开 crate\"\n      ],\n      \"concepts\": [\n        \"笔记、卡片与牌组的区别\",\n        \"Project 与牌组的关系\",\n        \"发布命名空间\",\n        \"笔记类型模型\",\n        \"稳定键与显示名称\",\n        \"字段键与模板键\",\n        \"Text 与 HTML\",\n        \"HTML 转义\",\n        \"类型化内容与媒体依赖\",\n        \"媒体快照所有权\",\n        \"报告与产物的区别\",\n        \"更新身份证据\",\n        \"卡组与牌组\"\n      ],\n      \"cards\": [\n        \"Basic 问答卡片\",\n        \"正反面记忆卡片\",\n        \"Cloze 填空\",\n        \"挖空卡片\",\n        \"完形填空卡片\",\n        \"填空提示语法\",\n        \"多个填空编号\",\n        \"{{c1::answer}}\",\n        \"{{c1::answer::hint}}\",\n        \"back_extra\",\n        \"两条笔记三张卡片\",\n        \"Note::basic\",\n        \"Note::cloze\",\n        \"填空卡片身份\"\n      ],\n      \"custom-notetypes\": [\n        \"自定义笔记类型\",\n        \"自定义 Anki 模型\",\n        \"定义笔记字段\",\n        \"自定义卡片模板\",\n        \"NoteType::builder\",\n        \"Field::required\",\n        \"Field::sort\",\n        \"GenerationRule::all\",\n        \"GenerationRule::any\",\n        \"按条件生成卡片\",\n        \"自定义 Cloze 字段\",\n        \"字段键与显示名称\",\n        \"{{FrontSide}}\",\n        \"模型定义冲突\"\n      ],\n      \"media\": [\n        \"给记忆卡片加图片\",\n        \"给卡片加音频\",\n        \"打包声音文件\",\n        \"类型化图片与声音内容\",\n        \"Media::file\",\n        \"Media::bytes\",\n        \"Content::sequence\",\n        \"with_export_name\",\n        \"MIME 类型校验\",\n        \"导出文件名冲突\",\n        \"CSS 字体资源\",\n        \"媒体导入限制\",\n        \"批量媒体导入\",\n        \"Media::files\",\n        \"媒体快照所有权\",\n        \"媒体快照内存预算\",\n        \"配图与音频\"\n      ],\n      \"image-occlusion\": [\n        \"图片遮挡\",\n        \"图像遮挡\",\n        \"图片挖空\",\n        \"遮住图片标签\",\n        \"图表区域制卡\",\n        \"矩形遮罩\",\n        \"Mask::rect\",\n        \"HideAllGuessOne\",\n        \"HideOneGuessOne\",\n        \"稳定遮罩键\",\n        \"像素坐标\",\n        \"EXIF 图片方向\",\n        \"图片解码预算\",\n        \"遮罩卡片序号\",\n        \"Note::image_occlusion\"\n      ],\n      \"updates\": [\n        \"更新已分发牌组\",\n        \"修改已有笔记\",\n        \"只改答案的牌组更新\",\n        \"原始分发 APKG\",\n        \"发布前比较\",\n        \"CompareOptions::against\",\n        \"BuildOptions::update_from\",\n        \"UpdatePolicy\",\n        \"RISK.NOTE_REMOVED\",\n        \"稳定笔记 GUID\",\n        \"修订证据\",\n        \"Anki 重新导出基线限制\",\n        \"本地修改与复习进度\",\n        \"prepare_publication\",\n        \"审阅后发布\",\n        \"移除笔记与删除行为\"\n      ],\n      \"build-guarantees\": [\n        \"构建输出保证\",\n        \"临时 APKG 生命周期\",\n        \"持久产物\",\n        \"最后一个产物所有者\",\n        \"artifact.persist_to\",\n        \"APKG 原子替换\",\n        \"发布阶段\",\n        \"持久性确认\",\n        \"发布后的晚期失败\",\n        \"报告与输出快照\",\n        \"原生路径序列化\",\n        \"检查预算\",\n        \"预备候选包寿命\",\n        \"发布所有者已消耗\",\n        \"相对产物路径\"\n      ],\n      \"troubleshooting\": [\n        \"排查报错\",\n        \"原生包加载失败\",\n        \"原生层包装层版本不匹配\",\n        \"wheel 系统架构标签\",\n        \"NOTE.KEY_DUPLICATE\",\n        \"NOTE.FIELD_UNKNOWN\",\n        \"NOTE.FIELD_REQUIRED\",\n        \"NOTE.MODEL_CONFLICT\",\n        \"HTML 显示为原文\",\n        \"填空卡片没有生成\",\n        \"MIME 内容不匹配\",\n        \"导出名称冲突\",\n        \"缺失 CSS 资源\",\n        \"模板包加载失败\",\n        \"检查预算超限\",\n        \"临时 APKG 消失\",\n        \"无效更新基线\",\n        \"重复笔记键\"\n      ],\n      \"compatibility\": [\n        \"支持的平台\",\n        \"已验证运行环境\",\n        \"Rust 最低版本\",\n        \"Node.js 运行环境支持\",\n        \"CPython wheel 支持\",\n        \"macOS arm64 x64\",\n        \"Linux GNU glibc\",\n        \"Windows x64\",\n        \"Alpine musl 验证范围\",\n        \"Bun 浏览器 Electron 验证范围\",\n        \"Anki 客户端兼容性\",\n        \"导入与编解码播放\",\n        \"发布验证证据\",\n        \"复习历史的客户端条件\"\n      ],\n      \"rust-api\": [\n        \"Rust API 参考\",\n        \"Rust 公开领域模块\",\n        \"Project::new\",\n        \"Project::add\",\n        \"BuildOptions::temporary\",\n        \"InspectLimits\",\n        \"FieldKey 与 TemplateKey\",\n        \"BuildOutput::artifact\",\n        \"BuildReport::snapshot\",\n        \"PathSnapshot::into_path_buf\",\n        \"std::error::Error\",\n        \"AddError::context\",\n        \"AddTarget 与 AddDetail\",\n        \"UpdatePolicy::fail_on\",\n        \"Project::prepare_publication\"\n      ],\n      \"node-quickstart\": [\n        \"Node.js 快速开始\",\n        \"JavaScript 生成 Anki 牌组\",\n        \"Node 记忆卡片生成\",\n        \"TypeScript 入门\",\n        \"npm install ankiforge\",\n        \"原生可选依赖\",\n        \"main.mjs\",\n        \"node main.mjs\",\n        \"ES 模块 ESM\",\n        \"CommonJS require\",\n        \"首次 Node 导出 APKG\",\n        \"关闭持久产物句柄\"\n      ],\n      \"node-api\": [\n        \"Node.js API 参考\",\n        \"JavaScript SDK API\",\n        \"TypeScript 类型声明\",\n        \"tsconfig.json NodeNext\",\n        \"npx tsc\",\n        \"异步构建与比较\",\n        \"Promise 工作线程任务\",\n        \"不可变 Project 快照\",\n        \"Uint8Array 媒体字节\",\n        \"Content.sequence\",\n        \"NoteType.fromBundle\",\n        \"BuildOptions.updateFrom\",\n        \"preparePublication\",\n        \"ArtifactClosedError\",\n        \"NativeLoadError\",\n        \"PreparedPublicationStateError\",\n        \"camelCase 报告与 snake_case 快照\",\n        \"artifact.persistTo\"\n      ],\n      \"python-quickstart\": [\n        \"Python 快速开始\",\n        \"Python 记忆卡片生成\",\n        \"Python Anki 牌组脚本\",\n        \"pip install ankiforge\",\n        \"python -m venv\",\n        \"激活虚拟环境\",\n        \"Windows Activate.ps1\",\n        \"CPython 平台 wheel\",\n        \"main.py\",\n        \"python main.py\",\n        \"首次 Python 导出 APKG\",\n        \"from ankiforge import\"\n      ],\n      \"python-api\": [\n        \"Python SDK 参考\",\n        \"Python 类型提示 py.typed\",\n        \"不可变笔记值\",\n        \"NoteType.builder\",\n        \"Content.sequence\",\n        \"Media.bytes\",\n        \"MediaLimits\",\n        \"max_identity_bytes\",\n        \"ApkgArtifact 上下文管理器\",\n        \"copy.copy 产物所有者\",\n        \"释放 GIL\",\n        \"BINDING.PROJECT_BUSY\",\n        \"BINDING.FORKED_OBJECT\",\n        \"project.prepare_publication\",\n        \"PreparedPublicationStateError\",\n        \"Python 原生异常链\"\n      ],\n      \"python-diagnostics\": [\n        \"Python 错误诊断\",\n        \"BuildError.snapshot\",\n        \"CompareError.report\",\n        \"source_details\",\n        \"causes 与 __cause__\",\n        \"details limit_exceeded\",\n        \"comparison.allows_publication\",\n        \"Python 更新风险策略\",\n        \"RISK.NOTE_REMOVED\",\n        \"PersistError 发布事实\",\n        \"surrogateescape 原生路径\",\n        \"BINDING.EXTENSION_UNAVAILABLE\",\n        \"BINDING.VERSION_MISMATCH\",\n        \"Python 检查预算\"\n      ],\n      \"python-migration\": [\n        \"Python API 迁移\",\n        \"全新 Python API\",\n        \"anki-forge 发行名更改\",\n        \"anki_forge 导入名更改\",\n        \"已移除 Deck API\",\n        \"add_note 改为 add 稳定键\",\n        \"已移除模型注册表\",\n        \"迁移到拥有值所有权的 SDK\",\n        \"隐式 HTML 迁移\",\n        \"已移除 lockfile 流程\",\n        \"替换 runtime 子进程\",\n        \"PyO3 原生绑定\",\n        \"旧 API 兼容边界\"\n      ],\n      \"genanki-migration\": [\n        \"从 genanki 迁移\",\n        \"genanki Model 改为 NoteType\",\n        \"genanki Deck 改为 Project\",\n        \"替换 genanki Package 写出\",\n        \"数字模型 ID 映射\",\n        \"GUID 迁移边界\",\n        \"持久业务键\",\n        \"字段名称与字段键\",\n        \"替换 genanki 媒体文件路径\",\n        \"纯文本与 Content.html\",\n        \"媒体所有权迁移\",\n        \"新模型首次分发\"\n      ],\n      \"blog:your-first-anki-deck\": [\n        \"首张 Rust 记忆卡片讲解\",\n        \"单词词汇牌组\",\n        \"西班牙语问候示例\",\n        \"在 Git 中重复编写\",\n        \"Basic 笔记正反面\",\n        \"Project::new spanish\",\n        \"稳定词汇条目 ID\",\n        \"传播类型化失败\",\n        \"从一条笔记扩展\"\n      ],\n      \"blog:stable-ids-and-deck-updates\": [\n        \"身份比措辞更持久\",\n        \"稳定笔记 ID 的原因\",\n        \"修改答案保留相同 ID\",\n        \"跨版本命名空间\",\n        \"更新基线的作用\",\n        \"归档原始分发包\",\n        \"基线与候选包独立路径\",\n        \"身份与修订证据\",\n        \"本地编辑的导入条件\",\n        \"稳定 ID 与复习状态\"\n      ]\n    }\n  }\n}\n"
+    },
+    "website/src/lib/search-terms.mjs": {
+      "sha256": "725cb3c14a3a41842b090275d11a52d174bc79b3e8f73b5abed7fdc7e3c4e1b4",
+      "text": "import vocabulary from '../../search-terms.json' with { type: 'json' };\n\n/** Search concepts describe the page; they never rewrite visible copy or queries. */\nexport function searchTermsFor(page, locale, collection = vocabulary) {\n  if (!['docs', 'article'].includes(page.type)) return '';\n  const terms = collection.locales?.[locale]?.[page.id];\n  if (!Array.isArray(terms) || !terms.length || terms.some(term => typeof term !== 'string' || !term.trim())) throw new Error(`Missing local search vocabulary: ${page.id}/${locale}`);\n  return terms.join(' ');\n}\n"
+    },
+    "website/src/layouts/SiteLayout.astro": {
+      "sha256": "04c73e6602a4a5010efd8a4601072daf43f70508a21ebe1da5a73bdf0c0360c3",
+      "text": "---\nimport { pagePair } from '../../scripts/core-pages.mjs';\nimport { locales, localeIds } from '../../site-model.mjs';\nimport { createTranslator, createClientMessages } from '../i18n/messages.mjs';\nimport { searchTermsFor } from '../lib/search-terms.mjs';\nimport { serializeClientMessages } from '../i18n/client-messages.mjs';\nimport Header from '../components/Header.astro';\nimport Footer from '../components/Footer.astro';\nimport { description as defaultDescription, sitePath } from '../lib/site';\nimport { siteConfig, repository } from '../../site.config.mjs';\nimport { createPageMetadata, metadataLinks, socialImageUrl } from '../lib/page-metadata.mjs';\nimport { buildStructuredData, serializeJsonLd } from '../lib/structured-data.mjs';\nimport publicInstall from '../generated/ai-quickstart.json';\nimport '../styles/global.css';\ninterface Props { title?: string; description?: string; article?: boolean; publishedAt?: Date; category?: string; noindex?: boolean; locale?: string }\nconst { title, description = defaultDescription, article = false, publishedAt, category, noindex = false, locale = 'en' } = Astro.props;\nconst t = createTranslator(locale);\nconst pageTitle = title ? `${title} | Anki Forge` : t('site.title');\nconst pair = pagePair(Astro.url.pathname, import.meta.env.BASE_URL.replace(/\\/$/, '') || '/');\nconst metadata = pair && !noindex ? createPageMetadata(pair, locale, siteConfig, { title: title || t('site.title'), description, publishedAt: publishedAt?.toISOString(), category }) : null;\nconst links = metadata ? metadataLinks(metadata, siteConfig) : [];\nconst searchTerms = metadata ? searchTermsFor(pair, locale) : '';\nconst schema = metadata && serializeJsonLd(buildStructuredData(metadata, { siteConfig, repository, publicInstall, homeDescription: t('home.intro'), buildLocales: localeIds }));\n---\n<!doctype html>\n<html lang={locale} data-theme=\"light\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>{pageTitle}</title>\n    {pair && <meta name=\"anki-forge:page-id\" content={pair.id} />}\n    <meta name=\"description\" content={description} />\n    {searchTerms && <meta name=\"anki-forge:search-terms\" data-pagefind-meta=\"search_terms[content]\" content={searchTerms} />}\n    <meta name=\"color-scheme\" content=\"light dark\" />\n    {links.map(attributes => <link {...attributes} />)}\n    {schema && <script is:inline type=\"application/ld+json\" data-anki-forge-schema set:html={schema} />}\n    <script is:inline type=\"application/json\" data-anki-forge-messages set:html={serializeClientMessages(createClientMessages(locale))} />\n    <link rel=\"icon\" href={sitePath('/favicon.svg')} type=\"image/svg+xml\" />\n    <link rel=\"alternate\" type=\"application/rss+xml\" title={t('blog.feedTitle')} href={sitePath(`${locales[locale].prefix}/rss.xml`)} />\n    <link rel=\"sitemap\" href={sitePath('/sitemap-index.xml')} />\n    {noindex && <meta name=\"robots\" content=\"noindex\" />}\n    <meta property=\"og:type\" content={article ? 'article' : 'website'} />\n    <meta property=\"og:site_name\" content=\"Anki Forge\" />\n    <meta property=\"og:title\" content={pageTitle} />\n    <meta property=\"og:description\" content={description} />\n    {metadata && <meta property=\"og:url\" content={metadata.canonical} />}\n    <meta property=\"og:locale\" content={locales[locale].og} />\n    <meta property=\"og:image\" content={socialImageUrl(locale, siteConfig)} />\n    <meta property=\"og:image:width\" content=\"1200\" />\n    <meta property=\"og:image:height\" content=\"630\" />\n    <meta property=\"og:image:alt\" content={t('site.socialAlt')} />\n    <meta name=\"twitter:card\" content=\"summary_large_image\" />\n    {publishedAt && <meta property=\"article:published_time\" content={publishedAt.toISOString()} />}\n    <script is:inline>\n      (() => {\n        let preference = 'auto';\n        try { preference = localStorage.getItem('starlight-theme') || 'auto'; } catch {}\n        document.documentElement.dataset.theme = preference === 'dark' || (preference !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';\n      })();\n    </script>\n  </head>\n  <body>\n    <a class=\"skip-link\" href=\"#main\">{t('nav.skip')}</a>\n    {noindex ? localeIds.map(language => <div data-error-language={language}><Header locale={language} /></div>) : <Header locale={locale} />}\n    <main id=\"main\" data-pagefind-body={!noindex || undefined} data-pagefind-ignore={noindex || undefined}><slot /></main>\n    {noindex ? localeIds.map(language => <div data-error-language={language}><Footer locale={language} showAiIndex={false} /></div>) : <Footer locale={locale} />}\n    <script src=\"../scripts/site.ts\"></script>\n    <!-- Cloudflare Web Analytics -->\n    <script is:inline type=\"module\" src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"ab8936f615cc40e7a31bb7db4366b73b\"}'></script>\n    <!-- End Cloudflare Web Analytics -->\n  </body>\n</html>\n"
+    },
+    "website/src/route-middleware.ts": {
+      "sha256": "2f27fd73b1381f2ccba6822be4da01be19d38a7b753756f8c4d30e7a642f657d",
+      "text": "import { createTranslator, createClientMessages } from './i18n/messages.mjs';\nimport { searchTermsFor } from './lib/search-terms.mjs';\nimport { serializeClientMessages } from './i18n/client-messages.mjs';\nimport { defineRouteMiddleware } from '@astrojs/starlight/route-data';\nimport { resolvePage, locales, localeIds } from '../site-model.mjs';\nimport { siteConfig, withBase } from '../site.config.mjs';\nimport { repository } from '../site.config.mjs';\nimport { createPageMetadata, metadataLinks, mergeMetadataHead, socialImageUrl } from './lib/page-metadata.mjs';\nimport { buildStructuredData, serializeJsonLd } from './lib/structured-data.mjs';\nimport publicInstall from './generated/ai-quickstart.json';\n\nexport const onRequest = defineRouteMiddleware(context => {\n  const route = context.locals.starlightRoute;\n  if (route.isFallback) throw new Error(`Untranslated documentation: ${route.id}`);\n  const resolved = resolvePage(context.url.pathname, siteConfig.base);\n  if (!resolved || resolved.locale !== route.lang) throw new Error(`Unregistered or mismatched documentation: ${route.id}/${route.lang}`);\n  const { page, locale } = resolved;\n  const t = createTranslator(locale);\n  const metadata = createPageMetadata(page, locale, siteConfig, { title: route.entry.data.title, description: route.entry.data.description || page.description?.[locale] || '' });\n  const noindex = route.head.some(item => item.tag === 'meta' && item.attrs?.name === 'robots' && /\\bnoindex\\b/i.test(String(item.attrs?.content || '')));\n  const additions: typeof route.head = [\n    ...(!noindex ? metadataLinks(metadata, siteConfig).map(attrs => ({ tag: 'link' as const, attrs })) : []),\n    { tag: 'meta', attrs: { property: 'og:locale', content: locales[locale].og } },\n    { tag: 'meta', attrs: { property: 'og:image', content: socialImageUrl(locale, siteConfig) } },\n    { tag: 'meta', attrs: { property: 'og:image:alt', content: t('site.socialAlt') } },\n    { tag: 'meta', attrs: { name: 'anki-forge:page-id', content: page.id } },\n    { tag: 'meta', attrs: { name: 'anki-forge:content-source', content: page.sources[locale] } },\n    { tag: 'meta', attrs: { name: 'anki-forge:search-terms', 'data-pagefind-meta': 'search_terms[content]', content: searchTermsFor(page, locale) } },\n    { tag: 'link', attrs: { rel: 'alternate', type: 'application/rss+xml', title: t('blog.feedTitle'), href: withBase(`${locales[locale].prefix}/rss.xml`, siteConfig.base) } },\n    { tag: 'script', attrs: { type: 'application/json', 'data-anki-forge-messages': '' }, content: serializeClientMessages(createClientMessages(locale)) },\n  ];\n  if (!noindex) additions.push({ tag: 'script', attrs: { type: 'application/ld+json', 'data-anki-forge-schema': '' }, content: serializeJsonLd(buildStructuredData(metadata, { siteConfig, repository, publicInstall, homeDescription: t('home.intro'), buildLocales: localeIds })) });\n  route.head = mergeMetadataHead(route.head, additions);\n});\n"
+    },
+    "website/scripts/content-review-inputs.mjs": {
+      "sha256": "62687dc45aebf3a50a9faa13dcafd0a40c7dba3659507f0125a86208349c9c13",
+      "text": "import { createHash } from 'node:crypto';\nimport { readFile } from 'node:fs/promises';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\n\nexport const digest = value => createHash('sha256').update(value).digest('hex');\nexport const rubricVersion = 'anki-forge-language-quality-v1';\nexport const glossaryVersion = 'anki-forge-technical-terms-v1';\nconst templates = {\n  home: ['HomePage', 'HomeShowcase', 'AiQuickstart', 'InstallCommand', 'PerformanceEvidence', 'ExampleWorkbench', 'CardPreview', 'UpdateDemo', 'CopyBlock'],\n  examples: ['ExamplesPage', 'CardPreview', 'CodeBlock', 'UpdateDemo'],\n  'blog-list': ['BlogPage', 'PostCard'],\n  article: ['ArticlePage', 'CodeBlock'],\n  docs: ['DocsHeader', 'DocsFooter', 'DocsSearch', 'CodeBlock', 'CopyBlock'],\n};\nconst technicalFiles = ['docs/ai-quickstart.json', 'anki_forge/examples/website_showcase.rs', 'anki_forge/examples/docs_workflow.rs', 'anki_forge/examples/json_to_anki.rs', 'bindings/python/examples/json_to_anki.py', 'bindings/node/examples/json_to_anki.mts'];\nconst renderFiles = ['website/src/i18n/messages.mjs', 'website/src/i18n/format-message.mjs', 'website/src/i18n/client-messages.mjs', 'website/src/lib/ai-quickstart.mjs', 'website/src/lib/examples.ts', 'website/src/lib/search-terms.mjs', 'website/src/scripts/site.ts'];\nconst repository = fileURLToPath(new URL('../../', import.meta.url));\n\nfunction repositoryReference(value) {\n  const filename = value.split('#')[0];\n  if (path.isAbsolute(filename) || filename.split('/').includes('..') || !filename) throw new Error(`Review input must be a repository file: ${value}`);\n  return filename;\n}\n\nfunction sourceReferences(source) {\n  const references = [];\n  let fence;\n  for (const line of source.split(/\\r?\\n/)) {\n    const delimiter = line.match(/^ {0,3}(`{3,}|~{3,})/);\n    if (delimiter) {\n      if (!fence) fence = delimiter[1];\n      else if (delimiter[1][0] === fence[0] && delimiter[1].length >= fence.length && /^ {0,3}(?:`+|~+)\\s*$/.test(line)) fence = undefined;\n      continue;\n    }\n    if (!fence) {\n      const directive = line.match(/^\\s*<!-- source: ([^\\s]+) -->\\s*$/);\n      if (directive) references.push(repositoryReference(directive[1]));\n    }\n  }\n  return references;\n}\n\nasync function astroClosure(initial, root) {\n  const seen = new Set();\n  async function visit(filename) {\n    if (seen.has(filename)) return;\n    seen.add(filename);\n    const source = await readFile(path.join(root, filename), 'utf8');\n    for (const match of source.matchAll(/\\bimport\\s+(?:[^;\\n]+?\\s+from\\s+)?['\"]([^'\"]+\\.astro)['\"]/g)) {\n      if (!match[1].startsWith('.')) continue;\n      const target = path.posix.normalize(path.posix.join(path.posix.dirname(filename), match[1]));\n      repositoryReference(target);\n      await visit(target);\n    }\n  }\n  for (const filename of initial) await visit(filename);\n  return [...seen];\n}\n\nexport async function reviewInputFiles(page, locale, root = repository) {\n  const sources = [...new Set([page.sources.en, page.sources[locale]])];\n  const references = (await Promise.all(sources.map(async filename => sourceReferences(await readFile(path.join(root, filename), 'utf8'))))).flat();\n  const templateFiles = await astroClosure([\n    'website/src/layouts/SiteLayout.astro', 'website/src/components/Header.astro', 'website/src/components/Footer.astro',\n    ...(templates[page.type] || []).map(name => `website/src/components/${name}.astro`),\n  ], root);\n  const targetedTechnical = [];\n  if (['quickstart', 'blog:your-first-anki-deck'].includes(page.id)) targetedTechnical.push('anki_forge/examples/target_api_basic.rs');\n  if (page.type === 'home') {\n    const benchmark = JSON.parse(await readFile(path.join(root, 'docs/benchmark-presentation.json'), 'utf8'));\n    if (!/^docs\\/performance\\/\\d{8}\\/comparison\\.csv$/.test(benchmark.dataFile)) throw new Error('Invalid benchmark review data file');\n    targetedTechnical.push('docs/benchmark-presentation.json', benchmark.dataFile, 'website/scripts/benchmark-presentation.mjs');\n  }\n  return [...new Set([\n    ...sources, 'website/src/i18n/en.json', `website/src/i18n/${locale}.json`,\n    'website/site-model.mjs', 'website/search-terms.json', 'website/section-contracts.json', 'website/legacy-sections.json', 'website/language-briefs.json',\n    ...templateFiles,\n    ...(page.type === 'docs' ? ['website/src/route-middleware.ts', 'website/src/content/i18n/en.json', `website/src/content/i18n/${locale}.json`] : []),\n    ...technicalFiles, ...renderFiles, ...targetedTechnical, ...references,\n  ])].sort();\n}\n\n// Source review hashes intentionally exclude review records and build outputs.\n// Artifact-specific search/browser/machine evidence is attached after building.\nexport async function reviewInputs(page, locale, root) {\n  const read = name => readFile(path.join(root, name), 'utf8');\n  const files = Object.fromEntries(await Promise.all((await reviewInputFiles(page, locale, root)).map(async name => [name, await read(name)])));\n  const sections = JSON.parse(files['website/section-contracts.json']).entries[page.id] || null;\n  const metadata = language => ({ id: page.id, type: page.type, route: page.route, title: page.title?.[language], description: page.description?.[language] });\n  const searchTerms = JSON.parse(files['website/search-terms.json']);\n  const sourceHash = digest(JSON.stringify({ source: files[page.sources.en], metadata: metadata('en'), catalog: files['website/src/i18n/en.json'], frameworkCatalog: files['website/src/content/i18n/en.json'], searchTerms: searchTerms.locales.en?.[page.id] }));\n  const targetHash = digest(JSON.stringify({ source: files[page.sources[locale]], metadata: metadata(locale), catalog: files[`website/src/i18n/${locale}.json`], frameworkCatalog: files[`website/src/content/i18n/${locale}.json`], searchTerms: searchTerms.locales[locale]?.[page.id], templates: Object.entries(files).filter(([name]) => name.endsWith('.astro') || name.endsWith('route-middleware.ts') || renderFiles.includes(name)) }));\n  const briefs = JSON.parse(files['website/language-briefs.json']);\n  if (!briefs[locale] || briefs.version !== glossaryVersion) throw new Error(`${locale}: missing or stale language brief`);\n  const references = new Set([...sourceReferences(files[page.sources.en]), ...sourceReferences(files[page.sources[locale]])]);\n  const technicalInputs = Object.keys(files).filter(name => technicalFiles.includes(name) || name === 'anki_forge/examples/target_api_basic.rs' || name === 'docs/benchmark-presentation.json' || name === 'website/scripts/benchmark-presentation.mjs' || /^docs\\/performance\\//.test(name) || references.has(name));\n  const technicalDependencyHash = digest(JSON.stringify({ sections, legacy: JSON.parse(files['website/legacy-sections.json'])[page.id] || null, brief: briefs[locale], technical: technicalInputs.map(name => [name, digest(files[name])]) }));\n  return { sourceHash, targetHash, technicalDependencyHash };\n}\n"
+    }
+  },
+  "entries": {
+    "docs": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "documentation overview",
+          "authoring workflow",
+          "documentation navigation",
+          "getting started guide",
+          "structured learning content",
+          "repeatable deck publishing",
+          "note fields and card templates",
+          "Anki deck generation library"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 5,
+          "span": [
+            "documentation overview",
+            "authoring workflow",
+            "documentation navigation",
+            "getting started guide",
+            "structured learning content",
+            "repeatable deck publishing",
+            "note fields and card templates",
+            "Anki deck generation library"
+          ],
+          "judgement": "Documentation overview/navigation/getting-started are natural entry concepts; note fields/card templates preserve the entity distinction and repeatable publishing matches the overview task.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "文档总览",
+          "内容编写流程",
+          "文档导航",
+          "入门指南",
+          "结构化学习内容",
+          "可重复的牌组发布",
+          "笔记字段与卡片模板",
+          "Anki 牌组生成库"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 435,
+          "span": [
+            "文档总览",
+            "内容编写流程",
+            "文档导航",
+            "入门指南",
+            "结构化学习内容",
+            "可重复的牌组发布",
+            "笔记字段与卡片模板",
+            "Anki 牌组生成库"
+          ],
+          "judgement": "“文档总览/文档导航/入门指南”自然，字段、卡片模板、牌组生成分别指正文入口和实体；“可重复的牌组发布”符合发布工作流，不是重复创建同一笔记。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "languages": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "choose a programming language",
+          "SDK selection",
+          "language bindings",
+          "Rust crate or Python wheel",
+          "Node.js or Python",
+          "published package entry points",
+          "native runtime prerequisites",
+          "offline APKG export"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 15,
+          "span": [
+            "choose a programming language",
+            "SDK selection",
+            "language bindings",
+            "Rust crate or Python wheel",
+            "Node.js or Python",
+            "published package entry points",
+            "native runtime prerequisites",
+            "offline APKG export"
+          ],
+          "judgement": "Programming-language/SDK selection and bindings correctly refer to Rust/Node/Python APIs, not website language; native prerequisites and offline APKG export match the documented scope.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "选择开发语言",
+          "SDK 选型",
+          "语言绑定",
+          "Rust crate 与 Python wheel",
+          "Node.js 或 Python",
+          "公开包入门入口",
+          "原生运行环境要求",
+          "离线导出 APKG"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 445,
+          "span": [
+            "选择开发语言",
+            "SDK 选型",
+            "语言绑定",
+            "Rust crate 与 Python wheel",
+            "Node.js 或 Python",
+            "公开包入门入口",
+            "原生运行环境要求",
+            "离线导出 APKG"
+          ],
+          "judgement": "“选择开发语言/SDK选型/语言绑定”对应Rust/Node/Python接口选择，不指网站语言；公开包、原生环境和离线APKG均有正文依据。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "quickstart": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Rust quick start",
+          "Rust getting started",
+          "first Rust Anki deck",
+          "Rust flashcard generator",
+          "cargo new anki-deck",
+          "cargo run",
+          "Rust APKG export",
+          "src/main.rs",
+          "persistent Spanish deck",
+          "stable key es:hola"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 25,
+          "span": [
+            "Rust quick start",
+            "Rust getting started",
+            "first Rust Anki deck",
+            "Rust flashcard generator",
+            "cargo new anki-deck",
+            "cargo run",
+            "Rust APKG export",
+            "src/main.rs",
+            "persistent Spanish deck",
+            "stable key es:hola"
+          ],
+          "judgement": "Rust quick start/getting started/first deck are natural task phrases; exact Cargo commands, filename and stable note key stay unchanged. Persistent Spanish deck refers to the saved APKG.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Rust 快速开始",
+          "Rust 入门教程",
+          "第一个 Rust Anki 牌组",
+          "用 Rust 制作记忆卡片",
+          "cargo new anki-deck",
+          "cargo run",
+          "Rust 导出 APKG",
+          "src/main.rs",
+          "保存西班牙语牌组",
+          "稳定键 es:hola"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 455,
+          "span": [
+            "Rust 快速开始",
+            "Rust 入门教程",
+            "第一个 Rust Anki 牌组",
+            "用 Rust 制作记忆卡片",
+            "cargo new anki-deck",
+            "cargo run",
+            "Rust 导出 APKG",
+            "src/main.rs",
+            "保存西班牙语牌组",
+            "稳定键 es:hola"
+          ],
+          "judgement": "“Rust快速开始/入门教程/第一个Rust Anki牌组”是自然任务表达；cargo命令、src/main.rs和es:hola保持共享字面值，持久保存含义一致。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "json-to-anki": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "JSON to Anki",
+          "JSON flashcard generation",
+          "JSON to APKG",
+          "structured data to flashcards",
+          "JSON.parse",
+          "json.loads",
+          "serde_json",
+          "TypeScript JSON deck",
+          "JavaScript JSON deck on Node.js",
+          "batch note creation",
+          "JSON image and audio recipe",
+          "answer-only update",
+          "comparison.json and review.json",
+          "durable business IDs"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 37,
+          "span": [
+            "JSON to Anki",
+            "JSON flashcard generation",
+            "JSON to APKG",
+            "structured data to flashcards",
+            "JSON.parse",
+            "json.loads",
+            "serde_json",
+            "TypeScript JSON deck",
+            "JavaScript JSON deck on Node.js",
+            "batch note creation",
+            "JSON image and audio recipe",
+            "answer-only update",
+            "comparison.json and review.json",
+            "durable business IDs"
+          ],
+          "judgement": "JSON-to-Anki/APKG and structured-data flashcards are accurate task synonyms; JavaScript JSON deck explicitly says on Node.js. Batch note creation describes the loop, not a new bulk API. Answer-only update matches the recipe.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "JSON 转 Anki",
+          "JSON 生成记忆卡片",
+          "JSON 转 APKG",
+          "结构化数据制作牌组",
+          "JSON.parse",
+          "json.loads",
+          "serde_json",
+          "TypeScript 读取 JSON 制卡",
+          "Node.js 读取 JSON 制卡",
+          "批量创建笔记",
+          "JSON 图片音频示例",
+          "只修改答案的更新",
+          "comparison.json 与 review.json",
+          "持久业务 ID"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 467,
+          "span": [
+            "JSON 转 Anki",
+            "JSON 生成记忆卡片",
+            "JSON 转 APKG",
+            "结构化数据制作牌组",
+            "JSON.parse",
+            "json.loads",
+            "serde_json",
+            "TypeScript 读取 JSON 制卡",
+            "Node.js 读取 JSON 制卡",
+            "批量创建笔记",
+            "JSON 图片音频示例",
+            "只修改答案的更新",
+            "comparison.json 与 review.json",
+            "持久业务 ID"
+          ],
+          "judgement": "“JSON转Anki/结构化数据制作牌组/批量创建笔记”自然且与调用方解析、逐条add相符；Node.js限定JavaScript运行环境，更新词明确只改答案。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "anki-forge-vs-genanki": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Anki Forge versus genanki",
+          "genanki alternative",
+          "Anki library comparison",
+          "choose an APKG library",
+          "Python flashcard libraries",
+          "publishing workflow comparison",
+          "native dependency tradeoffs",
+          "genanki migration cost",
+          "GUID identity comparison",
+          "historical Rust export benchmark",
+          "export time and peak memory"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 53,
+          "span": [
+            "Anki Forge versus genanki",
+            "genanki alternative",
+            "Anki library comparison",
+            "choose an APKG library",
+            "Python flashcard libraries",
+            "publishing workflow comparison",
+            "native dependency tradeoffs",
+            "genanki migration cost",
+            "GUID identity comparison",
+            "historical Rust export benchmark",
+            "export time and peak memory"
+          ],
+          "judgement": "Alternative/library-comparison/migration-cost/tradeoff phrases match balanced selection guidance. Historical Rust export benchmark and peak memory do not imply a current Node/Python speed guarantee.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Anki Forge 与 genanki 对比",
+          "genanki 替代方案",
+          "Anki 制卡库比较",
+          "选择 APKG 生成库",
+          "Python 记忆卡片库",
+          "发布流程比较",
+          "原生依赖取舍",
+          "genanki 迁移成本",
+          "GUID 身份比较",
+          "历史 Rust 导出基准",
+          "导出耗时与峰值内存"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 483,
+          "span": [
+            "Anki Forge 与 genanki 对比",
+            "genanki 替代方案",
+            "Anki 制卡库比较",
+            "选择 APKG 生成库",
+            "Python 记忆卡片库",
+            "发布流程比较",
+            "原生依赖取舍",
+            "genanki 迁移成本",
+            "GUID 身份比较",
+            "历史 Rust 导出基准",
+            "导出耗时与峰值内存"
+          ],
+          "judgement": "“替代方案/库比较/迁移成本/原生依赖取舍”是选库表达，不声称genanki缺稳定身份；历史Rust基准和峰值内存保留实测范围。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "development": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "build SDK from source",
+          "source checkout",
+          "repository development",
+          "local native addon",
+          "npm run pack:local",
+          "facade and native tarballs",
+          "offline local npm install",
+          "Maturin native extension",
+          "maturin develop",
+          "Cargo path dependency",
+          "pinned Rust toolchain",
+          "rebuild wrapper and native binary"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 66,
+          "span": [
+            "build SDK from source",
+            "source checkout",
+            "repository development",
+            "local native addon",
+            "npm run pack:local",
+            "facade and native tarballs",
+            "offline local npm install",
+            "Maturin native extension",
+            "maturin develop",
+            "Cargo path dependency",
+            "pinned Rust toolchain",
+            "rebuild wrapper and native binary"
+          ],
+          "judgement": "Source checkout, Cargo path dependency, native addon/tarballs and Maturin naturally identify repository development, not published registry installation. Rebuilding wrapper/native together matches the boundary.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "从源码构建 SDK",
+          "源码目录",
+          "仓库开发",
+          "本地原生 addon",
+          "npm run pack:local",
+          "包装层与原生 tarball",
+          "离线安装本地 npm 包",
+          "Maturin 原生扩展",
+          "maturin develop",
+          "Cargo 路径依赖",
+          "固定 Rust 工具链",
+          "重建包装层与原生二进制"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 496,
+          "span": [
+            "从源码构建 SDK",
+            "源码目录",
+            "仓库开发",
+            "本地原生 addon",
+            "npm run pack:local",
+            "包装层与原生 tarball",
+            "离线安装本地 npm 包",
+            "Maturin 原生扩展",
+            "maturin develop",
+            "Cargo 路径依赖",
+            "固定 Rust 工具链",
+            "重建包装层与原生二进制"
+          ],
+          "judgement": "源码、Cargo路径依赖、本地tarball、Maturin扩展等词指明仓库开发，与公开registry安装分开；addon/tarball为可辨技术保留词。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "rust-guide": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Rust authoring workflow",
+          "Rust Project lifecycle",
+          "atomic note addition",
+          "owned model reuse",
+          "Content::sequence",
+          "Rust structured errors",
+          "AddError::context",
+          "stable source-record keys",
+          "temporary artifact ownership",
+          "Rust update_from workflow",
+          "AddTarget and AddDetail",
+          "ankiforge-project-v2"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 80,
+          "span": [
+            "Rust authoring workflow",
+            "Rust Project lifecycle",
+            "atomic note addition",
+            "owned model reuse",
+            "Content::sequence",
+            "Rust structured errors",
+            "AddError::context",
+            "stable source-record keys",
+            "temporary artifact ownership",
+            "Rust update_from workflow",
+            "AddTarget and AddDetail",
+            "ankiforge-project-v2"
+          ],
+          "judgement": "Atomic note addition, owned model reuse, stable source-record keys and temporary artifact ownership match the guide’s concepts; AddTarget/AddDetail and v2 format are exact technical identifiers.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Rust 内容编写流程",
+          "Rust Project 生命周期",
+          "原子添加笔记",
+          "复用拥有所有权的模型",
+          "Content::sequence",
+          "Rust 结构化错误",
+          "AddError::context",
+          "稳定源记录键",
+          "临时产物所有权",
+          "Rust update_from 流程",
+          "AddTarget 与 AddDetail",
+          "ankiforge-project-v2"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 510,
+          "span": [
+            "Rust 内容编写流程",
+            "Rust Project 生命周期",
+            "原子添加笔记",
+            "复用拥有所有权的模型",
+            "Content::sequence",
+            "Rust 结构化错误",
+            "AddError::context",
+            "稳定源记录键",
+            "临时产物所有权",
+            "Rust update_from 流程",
+            "AddTarget 与 AddDetail",
+            "ankiforge-project-v2"
+          ],
+          "judgement": "“原子添加笔记/稳定源记录键/临时产物所有权”对应Project、add和句柄寿命；“复用拥有所有权的模型”略冗余但仍是资源持有语义，无版权含义。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "templates": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "template bundle import",
+          "reusable Anki templates",
+          "anki-template.yaml",
+          "template-bundle-v2",
+          "NoteType::from_bundle",
+          "YAML note type manifest",
+          "front.html and back.html",
+          "CSS file and font assets",
+          "browser card templates",
+          "key-based template references",
+          "bundle path traversal",
+          "explicit asset export_as",
+          "template text budget",
+          "custom Cloze bundle"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 94,
+          "span": [
+            "template bundle import",
+            "reusable Anki templates",
+            "anki-template.yaml",
+            "template-bundle-v2",
+            "NoteType::from_bundle",
+            "YAML note type manifest",
+            "front.html and back.html",
+            "CSS file and font assets",
+            "browser card templates",
+            "key-based template references",
+            "bundle path traversal",
+            "explicit asset export_as",
+            "template text budget",
+            "custom Cloze bundle"
+          ],
+          "judgement": "Template-bundle/YAML manifest/CSS-font assets/path traversal/text budget match the page. Key-based template references means references inside templates, with actual API/schema/file tokens preserved.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "导入模板包",
+          "复用 Anki 模板",
+          "anki-template.yaml",
+          "template-bundle-v2",
+          "NoteType::from_bundle",
+          "YAML 笔记类型清单",
+          "front.html 与 back.html",
+          "CSS 文件与字体资源",
+          "浏览器卡片模板",
+          "按字段键引用模板",
+          "模板包目录穿越",
+          "显式资源 export_as",
+          "模板文本预算",
+          "自定义 Cloze 模板包"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 524,
+          "span": [
+            "导入模板包",
+            "复用 Anki 模板",
+            "anki-template.yaml",
+            "template-bundle-v2",
+            "NoteType::from_bundle",
+            "YAML 笔记类型清单",
+            "front.html 与 back.html",
+            "CSS 文件与字体资源",
+            "浏览器卡片模板",
+            "按字段键引用模板",
+            "模板包目录穿越",
+            "显式资源 export_as",
+            "模板文本预算",
+            "自定义 Cloze 模板包"
+          ],
+          "judgement": "YAML清单、CSS/字体资源、路径穿越和文本预算均与模板包正文相符。“按字段键引用模板”引用方向略有歧义，宜“模板中的字段键引用”，为minor；其余词自然。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": [
+          {
+            "id": "L011-zh-templates",
+            "pageId": "templates",
+            "locale": "zh-CN",
+            "sectionId": "search-terms",
+            "file": "website/search-terms.json",
+            "line": 534,
+            "span": "按字段键引用模板",
+            "category": "terminology/reference-direction",
+            "severity": "minor",
+            "explanation": "“模板引用字段键”的方向应更清楚；当前短语可能被读作通过字段键引用整个模板。",
+            "proposedFix": "模板中的字段键引用",
+            "evidence": [
+              "website/search-terms.json"
+            ],
+            "resolution": "unresolved",
+            "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+          }
+        ]
+      }
+    },
+    "api": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "public API overview",
+          "SDK API navigation",
+          "Rust Python Node interfaces",
+          "Anki APKG library API",
+          "authoring and build operations",
+          "media API entry points",
+          "diagnostics API entry points",
+          "comparison and publication API"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 110,
+          "span": [
+            "public API overview",
+            "SDK API navigation",
+            "Rust Python Node interfaces",
+            "Anki APKG library API",
+            "authoring and build operations",
+            "media API entry points",
+            "diagnostics API entry points",
+            "comparison and publication API"
+          ],
+          "judgement": "Public API overview, SDK API navigation, authoring/build/media/diagnostics/comparison entry points are natural reference phrases, with no new API promises.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "公开 API 总览",
+          "SDK API 导航",
+          "Rust Python Node 接口",
+          "Anki APKG 库 API",
+          "内容编写与构建操作",
+          "媒体 API 入口",
+          "诊断 API 入口",
+          "比较与发布 API"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 540,
+          "span": [
+            "公开 API 总览",
+            "SDK API 导航",
+            "Rust Python Node 接口",
+            "Anki APKG 库 API",
+            "内容编写与构建操作",
+            "媒体 API 入口",
+            "诊断 API 入口",
+            "比较与发布 API"
+          ],
+          "judgement": "“公开API总览/接口/API导航/比较与发布API”指公开Rust/Node/Python入口，未把仓库工具扩充为公开能力，短语简洁自然。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "installation": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Rust installation",
+          "add ankiforge to Cargo",
+          "cargo add ankiforge",
+          "Cargo.toml dependency",
+          "Rust application integration",
+          "Rust minimum version",
+          "Rust linker prerequisites",
+          "empty default features",
+          "serde derive dependency",
+          "serde_json dependency",
+          "public crate installation"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 120,
+          "span": [
+            "Rust installation",
+            "add ankiforge to Cargo",
+            "cargo add ankiforge",
+            "Cargo.toml dependency",
+            "Rust application integration",
+            "Rust minimum version",
+            "Rust linker prerequisites",
+            "empty default features",
+            "serde derive dependency",
+            "serde_json dependency",
+            "public crate installation"
+          ],
+          "judgement": "Rust installation/Cargo dependency/application integration/linker and parsing prerequisites match the page. Empty default features describes actual configuration rather than missing functionality.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Rust 安装",
+          "Cargo 添加 ankiforge",
+          "cargo add ankiforge",
+          "Cargo.toml 依赖",
+          "集成 Rust 应用",
+          "Rust 最低版本",
+          "Rust 链接器要求",
+          "空的默认 feature",
+          "serde derive 依赖",
+          "serde_json 依赖",
+          "安装公开 crate"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 550,
+          "span": [
+            "Rust 安装",
+            "Cargo 添加 ankiforge",
+            "cargo add ankiforge",
+            "Cargo.toml 依赖",
+            "集成 Rust 应用",
+            "Rust 最低版本",
+            "Rust 链接器要求",
+            "空的默认 feature",
+            "serde derive 依赖",
+            "serde_json 依赖",
+            "安装公开 crate"
+          ],
+          "judgement": "Rust安装、Cargo依赖、最低版本、链接器要求和serde解析依赖与正文相符；“空的默认feature”为开发者可辨的精确配置描述。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "concepts": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Anki note versus card versus deck",
+          "Project and deck relationship",
+          "publication namespace",
+          "note type model",
+          "stable keys versus display names",
+          "field and template keys",
+          "Text versus HTML",
+          "HTML escaping",
+          "typed content and media dependencies",
+          "owned media snapshots",
+          "report versus artifact",
+          "update identity evidence"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 133,
+          "span": [
+            "Anki note versus card versus deck",
+            "Project and deck relationship",
+            "publication namespace",
+            "note type model",
+            "stable keys versus display names",
+            "field and template keys",
+            "Text versus HTML",
+            "HTML escaping",
+            "typed content and media dependencies",
+            "owned media snapshots",
+            "report versus artifact",
+            "update identity evidence"
+          ],
+          "judgement": "Note versus card versus deck, stable keys/display names, Text/HTML and report/artifact distinctions are accurate. Typed content means structured typed values, not typing an answer in Anki.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "笔记、卡片与牌组的区别",
+          "Project 与牌组的关系",
+          "发布命名空间",
+          "笔记类型模型",
+          "稳定键与显示名称",
+          "字段键与模板键",
+          "Text 与 HTML",
+          "HTML 转义",
+          "类型化内容与媒体依赖",
+          "媒体快照所有权",
+          "报告与产物的区别",
+          "更新身份证据",
+          "卡组与牌组"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 563,
+          "span": [
+            "笔记、卡片与牌组的区别",
+            "Project 与牌组的关系",
+            "发布命名空间",
+            "笔记类型模型",
+            "稳定键与显示名称",
+            "字段键与模板键",
+            "Text 与 HTML",
+            "HTML 转义",
+            "类型化内容与媒体依赖",
+            "媒体快照所有权",
+            "报告与产物的区别",
+            "更新身份证据",
+            "卡组与牌组"
+          ],
+          "judgement": "“笔记、卡片与牌组的区别/字段键与模板键/报告与产物”实体区分明确；“卡组”作为牌组的检索同义词自然。类型化内容不是在卡片中键入答案。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "cards": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Basic question and answer",
+          "front and back flashcards",
+          "Cloze deletion",
+          "fill-in-the-blank cards",
+          "cloze hint syntax",
+          "multiple cloze numbers",
+          "{{c1::answer}}",
+          "{{c1::answer::hint}}",
+          "back_extra",
+          "two notes three cards",
+          "Note::basic",
+          "Note::cloze",
+          "cloze card identity"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 147,
+          "span": [
+            "Basic question and answer",
+            "front and back flashcards",
+            "Cloze deletion",
+            "fill-in-the-blank cards",
+            "cloze hint syntax",
+            "multiple cloze numbers",
+            "{{c1::answer}}",
+            "{{c1::answer::hint}}",
+            "back_extra",
+            "two notes three cards",
+            "Note::basic",
+            "Note::cloze",
+            "cloze card identity"
+          ],
+          "judgement": "Cloze deletion/fill-in-the-blank/hint syntax and multiple deletion numbers are accurate synonyms; Basic front/back and two-notes-three-cards preserve the entity distinction. No typed-answer feature is implied.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Basic 问答卡片",
+          "正反面记忆卡片",
+          "Cloze 填空",
+          "挖空卡片",
+          "完形填空卡片",
+          "填空提示语法",
+          "多个填空编号",
+          "{{c1::answer}}",
+          "{{c1::answer::hint}}",
+          "back_extra",
+          "两条笔记三张卡片",
+          "Note::basic",
+          "Note::cloze",
+          "填空卡片身份"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 578,
+          "span": [
+            "Basic 问答卡片",
+            "正反面记忆卡片",
+            "Cloze 填空",
+            "挖空卡片",
+            "完形填空卡片",
+            "填空提示语法",
+            "多个填空编号",
+            "{{c1::answer}}",
+            "{{c1::answer::hint}}",
+            "back_extra",
+            "两条笔记三张卡片",
+            "Note::basic",
+            "Note::cloze",
+            "填空卡片身份"
+          ],
+          "judgement": "“挖空/完形填空/填空提示/多个填空编号”是Cloze的自然检索表达；“两条笔记三张卡片”没有混用实体，语法/API字面值保持原样。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "custom-notetypes": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "custom note types",
+          "custom Anki model",
+          "define note fields",
+          "custom card templates",
+          "NoteType::builder",
+          "Field::required",
+          "Field::sort",
+          "GenerationRule::all",
+          "GenerationRule::any",
+          "conditional card generation",
+          "custom Cloze field",
+          "field keys and display names",
+          "{{FrontSide}}",
+          "model definition conflict"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 162,
+          "span": [
+            "custom note types",
+            "custom Anki model",
+            "define note fields",
+            "custom card templates",
+            "NoteType::builder",
+            "Field::required",
+            "Field::sort",
+            "GenerationRule::all",
+            "GenerationRule::any",
+            "conditional card generation",
+            "custom Cloze field",
+            "field keys and display names",
+            "{{FrontSide}}",
+            "model definition conflict"
+          ],
+          "judgement": "Custom models/fields/templates, conditional generation, Cloze field and model conflicts are documented concepts; exact Field/GenerationRule/FrontSide identifiers stay intact.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "自定义笔记类型",
+          "自定义 Anki 模型",
+          "定义笔记字段",
+          "自定义卡片模板",
+          "NoteType::builder",
+          "Field::required",
+          "Field::sort",
+          "GenerationRule::all",
+          "GenerationRule::any",
+          "按条件生成卡片",
+          "自定义 Cloze 字段",
+          "字段键与显示名称",
+          "{{FrontSide}}",
+          "模型定义冲突"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 594,
+          "span": [
+            "自定义笔记类型",
+            "自定义 Anki 模型",
+            "定义笔记字段",
+            "自定义卡片模板",
+            "NoteType::builder",
+            "Field::required",
+            "Field::sort",
+            "GenerationRule::all",
+            "GenerationRule::any",
+            "按条件生成卡片",
+            "自定义 Cloze 字段",
+            "字段键与显示名称",
+            "{{FrontSide}}",
+            "模型定义冲突"
+          ],
+          "judgement": "自定义模型、字段、模板、条件生成和显示名称都是正文概念；字段必填/排序和生成规则标识不翻译，没有额外笔记类型承诺。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "media": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "add images to flashcards",
+          "attach audio to cards",
+          "package sound files",
+          "typed image and sound content",
+          "Media::file",
+          "Media::bytes",
+          "Content::sequence",
+          "with_export_name",
+          "MIME type validation",
+          "export filename collisions",
+          "CSS font assets",
+          "media import limits",
+          "batch media import",
+          "Media::files",
+          "owned media snapshots",
+          "media snapshot memory budget"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 178,
+          "span": [
+            "add images to flashcards",
+            "attach audio to cards",
+            "package sound files",
+            "typed image and sound content",
+            "Media::file",
+            "Media::bytes",
+            "Content::sequence",
+            "with_export_name",
+            "MIME type validation",
+            "export filename collisions",
+            "CSS font assets",
+            "media import limits",
+            "batch media import",
+            "Media::files",
+            "owned media snapshots",
+            "media snapshot memory budget"
+          ],
+          "judgement": "Adding images/audio, packaging sound, typed content, export names/MIME/collisions and batch imports reflect actual operations. Typed means resource-bearing values, and snapshot memory budget does not promise an RSS cap.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "给记忆卡片加图片",
+          "给卡片加音频",
+          "打包声音文件",
+          "类型化图片与声音内容",
+          "Media::file",
+          "Media::bytes",
+          "Content::sequence",
+          "with_export_name",
+          "MIME 类型校验",
+          "导出文件名冲突",
+          "CSS 字体资源",
+          "媒体导入限制",
+          "批量媒体导入",
+          "Media::files",
+          "媒体快照所有权",
+          "媒体快照内存预算",
+          "配图与音频"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 610,
+          "span": [
+            "给记忆卡片加图片",
+            "给卡片加音频",
+            "打包声音文件",
+            "类型化图片与声音内容",
+            "Media::file",
+            "Media::bytes",
+            "Content::sequence",
+            "with_export_name",
+            "MIME 类型校验",
+            "导出文件名冲突",
+            "CSS 字体资源",
+            "媒体导入限制",
+            "批量媒体导入",
+            "Media::files",
+            "媒体快照所有权",
+            "媒体快照内存预算",
+            "配图与音频"
+          ],
+          "judgement": "“给记忆卡片加图片/加音频/配图与音频”自然；类型化图片/声音指资源依赖节点，不指用户输入。MIME、文件名冲突、导入和内存预算与正文限制一致。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "image-occlusion": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "image occlusion",
+          "image masking flashcards",
+          "diagram region questions",
+          "hide labels on an image",
+          "rectangle masks",
+          "Mask::rect",
+          "HideAllGuessOne",
+          "HideOneGuessOne",
+          "stable mask keys",
+          "pixel coordinates",
+          "EXIF image orientation",
+          "decoded image budget",
+          "mask card ordinals",
+          "Note::image_occlusion"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 196,
+          "span": [
+            "image occlusion",
+            "image masking flashcards",
+            "diagram region questions",
+            "hide labels on an image",
+            "rectangle masks",
+            "Mask::rect",
+            "HideAllGuessOne",
+            "HideOneGuessOne",
+            "stable mask keys",
+            "pixel coordinates",
+            "EXIF image orientation",
+            "decoded image budget",
+            "mask card ordinals",
+            "Note::image_occlusion"
+          ],
+          "judgement": "Image occlusion/masking/diagram-region questions are natural synonyms. Rectangle masks, stable keys, EXIF orientation, budgets and ordinals retain the documented shape and limits.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "图片遮挡",
+          "图像遮挡",
+          "图片挖空",
+          "遮住图片标签",
+          "图表区域制卡",
+          "矩形遮罩",
+          "Mask::rect",
+          "HideAllGuessOne",
+          "HideOneGuessOne",
+          "稳定遮罩键",
+          "像素坐标",
+          "EXIF 图片方向",
+          "图片解码预算",
+          "遮罩卡片序号",
+          "Note::image_occlusion"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 629,
+          "span": [
+            "图片遮挡",
+            "图像遮挡",
+            "图片挖空",
+            "遮住图片标签",
+            "图表区域制卡",
+            "矩形遮罩",
+            "Mask::rect",
+            "HideAllGuessOne",
+            "HideOneGuessOne",
+            "稳定遮罩键",
+            "像素坐标",
+            "EXIF 图片方向",
+            "图片解码预算",
+            "遮罩卡片序号",
+            "Note::image_occlusion"
+          ],
+          "judgement": "“图片遮挡/图像遮挡/图片挖空/遮住标签”是自然近义任务；矩形遮罩、稳定键、EXIF方向、解码预算和序号均保持正文定义，未承诺任意多边形。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "updates": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "update a distributed deck",
+          "update existing notes",
+          "answer-only deck update",
+          "original distribution APKG",
+          "compare before publishing",
+          "CompareOptions::against",
+          "BuildOptions::update_from",
+          "UpdatePolicy",
+          "RISK.NOTE_REMOVED",
+          "stable note GUIDs",
+          "revision evidence",
+          "Anki re-export baseline",
+          "local edits and scheduling",
+          "prepare_publication",
+          "review then publish",
+          "removed notes and deletion behavior"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 212,
+          "span": [
+            "update a distributed deck",
+            "update existing notes",
+            "answer-only deck update",
+            "original distribution APKG",
+            "compare before publishing",
+            "CompareOptions::against",
+            "BuildOptions::update_from",
+            "UpdatePolicy",
+            "RISK.NOTE_REMOVED",
+            "stable note GUIDs",
+            "revision evidence",
+            "Anki re-export baseline",
+            "local edits and scheduling",
+            "prepare_publication",
+            "review then publish",
+            "removed notes and deletion behavior"
+          ],
+          "judgement": "Updating notes, answer-only changes, original distribution APKG, policy and revision evidence are accurate concepts. “Anki re-export baseline” is an ambiguous topic label: adding “invalid”/“limitations” would clarify the documented rejection; this label alone is not a capability claim.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": [
+          {
+            "id": "L014-en-reexport",
+            "pageId": "updates",
+            "locale": "en",
+            "sectionId": "search-terms",
+            "file": "website/search-terms.json",
+            "line": 224,
+            "span": "Anki re-export baseline",
+            "category": "context/qualifier",
+            "severity": "minor",
+            "explanation": "As a retrieval topic it names the rejected baseline case, but it is clearer with the documented restriction explicit. The page and other terms already require an original distribution APKG.",
+            "proposedFix": "invalid Anki re-export baseline",
+            "evidence": [
+              "website/search-terms.json"
+            ],
+            "resolution": "unresolved",
+            "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+          }
+        ]
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "更新已分发牌组",
+          "修改已有笔记",
+          "只改答案的牌组更新",
+          "原始分发 APKG",
+          "发布前比较",
+          "CompareOptions::against",
+          "BuildOptions::update_from",
+          "UpdatePolicy",
+          "RISK.NOTE_REMOVED",
+          "稳定笔记 GUID",
+          "修订证据",
+          "Anki 重新导出基线限制",
+          "本地修改与复习进度",
+          "prepare_publication",
+          "审阅后发布",
+          "移除笔记与删除行为"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 646,
+          "span": [
+            "更新已分发牌组",
+            "修改已有笔记",
+            "只改答案的牌组更新",
+            "原始分发 APKG",
+            "发布前比较",
+            "CompareOptions::against",
+            "BuildOptions::update_from",
+            "UpdatePolicy",
+            "RISK.NOTE_REMOVED",
+            "稳定笔记 GUID",
+            "修订证据",
+            "Anki 重新导出基线限制",
+            "本地修改与复习进度",
+            "prepare_publication",
+            "审阅后发布",
+            "移除笔记与删除行为"
+          ],
+          "judgement": "“修改已有笔记/只改答案/原始分发APKG/重新导出基线限制”清楚区分更新内容与合法基线；本地修改和复习进度为客户端条件，不是保留保证。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "build-guarantees": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "build output guarantees",
+          "temporary APKG lifetime",
+          "persistent artifact",
+          "last artifact owner",
+          "artifact.persist_to",
+          "atomic APKG replacement",
+          "publication stage",
+          "durability confirmation",
+          "late publication failure",
+          "report versus output snapshot",
+          "native path serialization",
+          "inspection budgets",
+          "prepared candidate lifetime",
+          "consumed publication owner",
+          "relative artifact paths"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 230,
+          "span": [
+            "build output guarantees",
+            "temporary APKG lifetime",
+            "persistent artifact",
+            "last artifact owner",
+            "artifact.persist_to",
+            "atomic APKG replacement",
+            "publication stage",
+            "durability confirmation",
+            "late publication failure",
+            "report versus output snapshot",
+            "native path serialization",
+            "inspection budgets",
+            "prepared candidate lifetime",
+            "consumed publication owner",
+            "relative artifact paths"
+          ],
+          "judgement": "Temporary lifetime, persistent artifacts, atomic replacement, durability, late failure and consumed owner are accurate lifecycle concepts; owner refers to the prepared/artifact object, not the learner.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "构建输出保证",
+          "临时 APKG 生命周期",
+          "持久产物",
+          "最后一个产物所有者",
+          "artifact.persist_to",
+          "APKG 原子替换",
+          "发布阶段",
+          "持久性确认",
+          "发布后的晚期失败",
+          "报告与输出快照",
+          "原生路径序列化",
+          "检查预算",
+          "预备候选包寿命",
+          "发布所有者已消耗",
+          "相对产物路径"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 664,
+          "span": [
+            "构建输出保证",
+            "临时 APKG 生命周期",
+            "持久产物",
+            "最后一个产物所有者",
+            "artifact.persist_to",
+            "APKG 原子替换",
+            "发布阶段",
+            "持久性确认",
+            "发布后的晚期失败",
+            "报告与输出快照",
+            "原生路径序列化",
+            "检查预算",
+            "预备候选包寿命",
+            "发布所有者已消耗",
+            "相对产物路径"
+          ],
+          "judgement": "临时APKG寿命、持久产物、原子替换、持久性确认和晚期失败相互区分；“发布所有者已消耗”略生硬但可从prepared owner上下文理解，不是删除学习者数据。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "troubleshooting": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "troubleshooting errors",
+          "native package load failure",
+          "native wrapper version mismatch",
+          "wheel OS CPU tags",
+          "NOTE.KEY_DUPLICATE",
+          "NOTE.FIELD_UNKNOWN",
+          "NOTE.FIELD_REQUIRED",
+          "NOTE.MODEL_CONFLICT",
+          "HTML displayed literally",
+          "missing Cloze cards",
+          "MIME content mismatch",
+          "export-name conflict",
+          "missing CSS resource",
+          "bundle load failure",
+          "inspection limit exceeded",
+          "temporary APKG disappeared",
+          "invalid update baseline"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 247,
+          "span": [
+            "troubleshooting errors",
+            "native package load failure",
+            "native wrapper version mismatch",
+            "wheel OS CPU tags",
+            "NOTE.KEY_DUPLICATE",
+            "NOTE.FIELD_UNKNOWN",
+            "NOTE.FIELD_REQUIRED",
+            "NOTE.MODEL_CONFLICT",
+            "HTML displayed literally",
+            "missing Cloze cards",
+            "MIME content mismatch",
+            "export-name conflict",
+            "missing CSS resource",
+            "bundle load failure",
+            "inspection limit exceeded",
+            "temporary APKG disappeared",
+            "invalid update baseline"
+          ],
+          "judgement": "Native load/mismatch, wheel tags, literal HTML, missing Cloze, MIME/name/resource limits, disappeared temporary APKG and invalid baseline are appropriate troubleshooting concepts; exact error codes remain unchanged.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "排查报错",
+          "原生包加载失败",
+          "原生层包装层版本不匹配",
+          "wheel 系统架构标签",
+          "NOTE.KEY_DUPLICATE",
+          "NOTE.FIELD_UNKNOWN",
+          "NOTE.FIELD_REQUIRED",
+          "NOTE.MODEL_CONFLICT",
+          "HTML 显示为原文",
+          "填空卡片没有生成",
+          "MIME 内容不匹配",
+          "导出名称冲突",
+          "缺失 CSS 资源",
+          "模板包加载失败",
+          "检查预算超限",
+          "临时 APKG 消失",
+          "无效更新基线",
+          "重复笔记键"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 681,
+          "span": [
+            "排查报错",
+            "原生包加载失败",
+            "原生层包装层版本不匹配",
+            "wheel 系统架构标签",
+            "NOTE.KEY_DUPLICATE",
+            "NOTE.FIELD_UNKNOWN",
+            "NOTE.FIELD_REQUIRED",
+            "NOTE.MODEL_CONFLICT",
+            "HTML 显示为原文",
+            "填空卡片没有生成",
+            "MIME 内容不匹配",
+            "导出名称冲突",
+            "缺失 CSS 资源",
+            "模板包加载失败",
+            "检查预算超限",
+            "临时 APKG 消失",
+            "无效更新基线",
+            "重复笔记键"
+          ],
+          "judgement": "“排查报错/原生包加载失败/版本不匹配/临时APKG消失/无效更新基线”自然且有对应排错步骤；错误码不翻译，HTML原文与Cloze缺失不是新功能。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "compatibility": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "supported platforms",
+          "verified runtimes",
+          "minimum Rust version",
+          "Node.js runtime support",
+          "CPython wheel support",
+          "macOS arm64 x64",
+          "Linux GNU glibc",
+          "Windows x64",
+          "Alpine musl verification scope",
+          "Bun browser Electron verification scope",
+          "Anki client compatibility",
+          "import and codec playback",
+          "release verification evidence",
+          "review history client conditions"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 266,
+          "span": [
+            "supported platforms",
+            "verified runtimes",
+            "minimum Rust version",
+            "Node.js runtime support",
+            "CPython wheel support",
+            "macOS arm64 x64",
+            "Linux GNU glibc",
+            "Windows x64",
+            "Alpine musl verification scope",
+            "Bun browser Electron verification scope",
+            "Anki client compatibility",
+            "import and codec playback",
+            "release verification evidence",
+            "review history client conditions"
+          ],
+          "judgement": "Supported-platform/runtime/wheel concepts refer to documented package availability and verified checks. Alpine/musl and Bun/browser/Electron explicitly say verification scope; these are not browser/Bun support promises. Playback and review history remain client-conditional.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "支持的平台",
+          "已验证运行环境",
+          "Rust 最低版本",
+          "Node.js 运行环境支持",
+          "CPython wheel 支持",
+          "macOS arm64 x64",
+          "Linux GNU glibc",
+          "Windows x64",
+          "Alpine musl 验证范围",
+          "Bun 浏览器 Electron 验证范围",
+          "Anki 客户端兼容性",
+          "导入与编解码播放",
+          "发布验证证据",
+          "复习历史的客户端条件"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 701,
+          "span": [
+            "支持的平台",
+            "已验证运行环境",
+            "Rust 最低版本",
+            "Node.js 运行环境支持",
+            "CPython wheel 支持",
+            "macOS arm64 x64",
+            "Linux GNU glibc",
+            "Windows x64",
+            "Alpine musl 验证范围",
+            "Bun 浏览器 Electron 验证范围",
+            "Anki 客户端兼容性",
+            "导入与编解码播放",
+            "发布验证证据",
+            "复习历史的客户端条件"
+          ],
+          "judgement": "“支持的平台/已验证运行环境”指正文列明的包平台和验证范围；Alpine/musl、Bun/浏览器/Electron明确带“验证范围”，不承诺支持这些运行环境。导入/编解码/复习历史保留客户端条件。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "rust-api": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Rust API reference",
+          "Rust public domain modules",
+          "Project::new",
+          "Project::add",
+          "BuildOptions::temporary",
+          "InspectLimits",
+          "FieldKey and TemplateKey",
+          "BuildOutput::artifact",
+          "BuildReport::snapshot",
+          "PathSnapshot::into_path_buf",
+          "std::error::Error",
+          "AddError::context",
+          "AddTarget and AddDetail",
+          "UpdatePolicy::fail_on",
+          "Project::prepare_publication"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 282,
+          "span": [
+            "Rust API reference",
+            "Rust public domain modules",
+            "Project::new",
+            "Project::add",
+            "BuildOptions::temporary",
+            "InspectLimits",
+            "FieldKey and TemplateKey",
+            "BuildOutput::artifact",
+            "BuildReport::snapshot",
+            "PathSnapshot::into_path_buf",
+            "std::error::Error",
+            "AddError::context",
+            "AddTarget and AddDetail",
+            "UpdatePolicy::fail_on",
+            "Project::prepare_publication"
+          ],
+          "judgement": "Rust API reference, key types, options, snapshots, structured errors and preparation map to actual APIs. “public domain modules” is slightly ambiguous with legal public-domain terminology but is clear in the Rust module context.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Rust API 参考",
+          "Rust 公开领域模块",
+          "Project::new",
+          "Project::add",
+          "BuildOptions::temporary",
+          "InspectLimits",
+          "FieldKey 与 TemplateKey",
+          "BuildOutput::artifact",
+          "BuildReport::snapshot",
+          "PathSnapshot::into_path_buf",
+          "std::error::Error",
+          "AddError::context",
+          "AddTarget 与 AddDetail",
+          "UpdatePolicy::fail_on",
+          "Project::prepare_publication"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 717,
+          "span": [
+            "Rust API 参考",
+            "Rust 公开领域模块",
+            "Project::new",
+            "Project::add",
+            "BuildOptions::temporary",
+            "InspectLimits",
+            "FieldKey 与 TemplateKey",
+            "BuildOutput::artifact",
+            "BuildReport::snapshot",
+            "PathSnapshot::into_path_buf",
+            "std::error::Error",
+            "AddError::context",
+            "AddTarget 与 AddDetail",
+            "UpdatePolicy::fail_on",
+            "Project::prepare_publication"
+          ],
+          "judgement": "RustAPI、领域模块、键类型、错误、快照和预备发布都是正文公开接口；“公开领域模块”仍略密集但不会把API理解成公有领域版权。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "node-quickstart": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Node.js quick start",
+          "JavaScript Anki deck generation",
+          "Node flashcard generator",
+          "TypeScript getting started",
+          "npm install ankiforge",
+          "native optional dependency",
+          "main.mjs",
+          "node main.mjs",
+          "ES modules ESM",
+          "CommonJS require",
+          "first Node APKG export",
+          "persistent artifact close"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 299,
+          "span": [
+            "Node.js quick start",
+            "JavaScript Anki deck generation",
+            "Node flashcard generator",
+            "TypeScript getting started",
+            "npm install ankiforge",
+            "native optional dependency",
+            "main.mjs",
+            "node main.mjs",
+            "ES modules ESM",
+            "CommonJS require",
+            "first Node APKG export",
+            "persistent artifact close"
+          ],
+          "judgement": "JavaScript/TypeScript getting-started phrases are anchored to Node.js, mjs/node commands and native dependencies; they do not imply browser execution. Persistent artifact close matches the saved-file lifecycle.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Node.js 快速开始",
+          "JavaScript 生成 Anki 牌组",
+          "Node 记忆卡片生成",
+          "TypeScript 入门",
+          "npm install ankiforge",
+          "原生可选依赖",
+          "main.mjs",
+          "node main.mjs",
+          "ES 模块 ESM",
+          "CommonJS require",
+          "首次 Node 导出 APKG",
+          "关闭持久产物句柄"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 734,
+          "span": [
+            "Node.js 快速开始",
+            "JavaScript 生成 Anki 牌组",
+            "Node 记忆卡片生成",
+            "TypeScript 入门",
+            "npm install ankiforge",
+            "原生可选依赖",
+            "main.mjs",
+            "node main.mjs",
+            "ES 模块 ESM",
+            "CommonJS require",
+            "首次 Node 导出 APKG",
+            "关闭持久产物句柄"
+          ],
+          "judgement": "JavaScript制卡与TypeScript入门都处在Node.js快速开始范围；main.mjs/node/原生可选依赖明示服务端原生运行，不暗示浏览器。关闭持久句柄不等于删除文件。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "node-api": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Node.js API reference",
+          "JavaScript SDK API",
+          "TypeScript declarations",
+          "tsconfig.json NodeNext",
+          "npx tsc",
+          "async build and compare",
+          "Promise worker tasks",
+          "immutable Project snapshots",
+          "Uint8Array media bytes",
+          "Content.sequence",
+          "NoteType.fromBundle",
+          "BuildOptions.updateFrom",
+          "preparePublication",
+          "ArtifactClosedError",
+          "NativeLoadError",
+          "PreparedPublicationStateError",
+          "camelCase reports and snake_case snapshots",
+          "artifact.persistTo"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 313,
+          "span": [
+            "Node.js API reference",
+            "JavaScript SDK API",
+            "TypeScript declarations",
+            "tsconfig.json NodeNext",
+            "npx tsc",
+            "async build and compare",
+            "Promise worker tasks",
+            "immutable Project snapshots",
+            "Uint8Array media bytes",
+            "Content.sequence",
+            "NoteType.fromBundle",
+            "BuildOptions.updateFrom",
+            "preparePublication",
+            "ArtifactClosedError",
+            "NativeLoadError",
+            "PreparedPublicationStateError",
+            "camelCase reports and snake_case snapshots",
+            "artifact.persistTo"
+          ],
+          "judgement": "Async/Promise workers, immutable snapshots, TypeScript declarations, typed media bytes and report casing match Node APIs. JavaScript SDK is scoped to this Node reference rather than browser execution.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Node.js API 参考",
+          "JavaScript SDK API",
+          "TypeScript 类型声明",
+          "tsconfig.json NodeNext",
+          "npx tsc",
+          "异步构建与比较",
+          "Promise 工作线程任务",
+          "不可变 Project 快照",
+          "Uint8Array 媒体字节",
+          "Content.sequence",
+          "NoteType.fromBundle",
+          "BuildOptions.updateFrom",
+          "preparePublication",
+          "ArtifactClosedError",
+          "NativeLoadError",
+          "PreparedPublicationStateError",
+          "camelCase 报告与 snake_case 快照",
+          "artifact.persistTo"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 748,
+          "span": [
+            "Node.js API 参考",
+            "JavaScript SDK API",
+            "TypeScript 类型声明",
+            "tsconfig.json NodeNext",
+            "npx tsc",
+            "异步构建与比较",
+            "Promise 工作线程任务",
+            "不可变 Project 快照",
+            "Uint8Array 媒体字节",
+            "Content.sequence",
+            "NoteType.fromBundle",
+            "BuildOptions.updateFrom",
+            "preparePublication",
+            "ArtifactClosedError",
+            "NativeLoadError",
+            "PreparedPublicationStateError",
+            "camelCase 报告与 snake_case 快照",
+            "artifact.persistTo"
+          ],
+          "judgement": "异步构建、Promise工作线程、不可变快照、类型声明和camelCase/snake_case是Node正文概念；JavaScriptSDK在NodeAPI条目中，不隐含浏览器/Bun。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "python-quickstart": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Python quick start",
+          "Python flashcard generator",
+          "Python Anki deck script",
+          "pip install ankiforge",
+          "python -m venv",
+          "virtual environment activation",
+          "Windows Activate.ps1",
+          "CPython platform wheel",
+          "main.py",
+          "python main.py",
+          "first Python APKG export",
+          "from ankiforge import"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 333,
+          "span": [
+            "Python quick start",
+            "Python flashcard generator",
+            "Python Anki deck script",
+            "pip install ankiforge",
+            "python -m venv",
+            "virtual environment activation",
+            "Windows Activate.ps1",
+            "CPython platform wheel",
+            "main.py",
+            "python main.py",
+            "first Python APKG export",
+            "from ankiforge import"
+          ],
+          "judgement": "Python script, pip/venv/activation, CPython platform wheel and first APKG are natural setup phrases. They preserve the CPython/native-wheel scope rather than promising every interpreter.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Python 快速开始",
+          "Python 记忆卡片生成",
+          "Python Anki 牌组脚本",
+          "pip install ankiforge",
+          "python -m venv",
+          "激活虚拟环境",
+          "Windows Activate.ps1",
+          "CPython 平台 wheel",
+          "main.py",
+          "python main.py",
+          "首次 Python 导出 APKG",
+          "from ankiforge import"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 768,
+          "span": [
+            "Python 快速开始",
+            "Python 记忆卡片生成",
+            "Python Anki 牌组脚本",
+            "pip install ankiforge",
+            "python -m venv",
+            "激活虚拟环境",
+            "Windows Activate.ps1",
+            "CPython 平台 wheel",
+            "main.py",
+            "python main.py",
+            "首次 Python 导出 APKG",
+            "from ankiforge import"
+          ],
+          "judgement": "Python脚本、pip、虚拟环境、Windows激活、CPython平台wheel及首个APKG对应可运行入门路径，未泛化支持PyPy或任意Python解释器。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "python-api": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Python SDK reference",
+          "Python type hints py.typed",
+          "immutable note values",
+          "NoteType.builder",
+          "Content.sequence",
+          "Media.bytes",
+          "MediaLimits",
+          "max_identity_bytes",
+          "ApkgArtifact context manager",
+          "copy.copy artifact owner",
+          "GIL release",
+          "BINDING.PROJECT_BUSY",
+          "BINDING.FORKED_OBJECT",
+          "project.prepare_publication",
+          "PreparedPublicationStateError",
+          "Python native exception chaining"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 347,
+          "span": [
+            "Python SDK reference",
+            "Python type hints py.typed",
+            "immutable note values",
+            "NoteType.builder",
+            "Content.sequence",
+            "Media.bytes",
+            "MediaLimits",
+            "max_identity_bytes",
+            "ApkgArtifact context manager",
+            "copy.copy artifact owner",
+            "GIL release",
+            "BINDING.PROJECT_BUSY",
+            "BINDING.FORKED_OBJECT",
+            "project.prepare_publication",
+            "PreparedPublicationStateError",
+            "Python native exception chaining"
+          ],
+          "judgement": "Type hints/py.typed, immutable note values, artifact context managers, GIL/fork and native exception chaining are documented Python API concepts. Typed/type hints concern program values, not typed-in card answers.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Python SDK 参考",
+          "Python 类型提示 py.typed",
+          "不可变笔记值",
+          "NoteType.builder",
+          "Content.sequence",
+          "Media.bytes",
+          "MediaLimits",
+          "max_identity_bytes",
+          "ApkgArtifact 上下文管理器",
+          "copy.copy 产物所有者",
+          "释放 GIL",
+          "BINDING.PROJECT_BUSY",
+          "BINDING.FORKED_OBJECT",
+          "project.prepare_publication",
+          "PreparedPublicationStateError",
+          "Python 原生异常链"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 782,
+          "span": [
+            "Python SDK 参考",
+            "Python 类型提示 py.typed",
+            "不可变笔记值",
+            "NoteType.builder",
+            "Content.sequence",
+            "Media.bytes",
+            "MediaLimits",
+            "max_identity_bytes",
+            "ApkgArtifact 上下文管理器",
+            "copy.copy 产物所有者",
+            "释放 GIL",
+            "BINDING.PROJECT_BUSY",
+            "BINDING.FORKED_OBJECT",
+            "project.prepare_publication",
+            "PreparedPublicationStateError",
+            "Python 原生异常链"
+          ],
+          "judgement": "类型提示py.typed、不可变笔记值、上下文管理器、GIL和fork错误都是公开PythonAPI主题；typed指Python类型信息，不是卡片答题输入。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "python-diagnostics": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Python error diagnosis",
+          "BuildError.snapshot",
+          "CompareError.report",
+          "source_details",
+          "causes and __cause__",
+          "details limit_exceeded",
+          "comparison.allows_publication",
+          "Python update risk policy",
+          "RISK.NOTE_REMOVED",
+          "PersistError publication facts",
+          "surrogateescape native paths",
+          "BINDING.EXTENSION_UNAVAILABLE",
+          "BINDING.VERSION_MISMATCH",
+          "Python inspection budgets"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 365,
+          "span": [
+            "Python error diagnosis",
+            "BuildError.snapshot",
+            "CompareError.report",
+            "source_details",
+            "causes and __cause__",
+            "details limit_exceeded",
+            "comparison.allows_publication",
+            "Python update risk policy",
+            "RISK.NOTE_REMOVED",
+            "PersistError publication facts",
+            "surrogateescape native paths",
+            "BINDING.EXTENSION_UNAVAILABLE",
+            "BINDING.VERSION_MISMATCH",
+            "Python inspection budgets"
+          ],
+          "judgement": "Error snapshots, causes/source details, update policy, persist publication facts and native paths match diagnostics. Allowing a category is distinct from a successful publication or restoration of cards.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Python 错误诊断",
+          "BuildError.snapshot",
+          "CompareError.report",
+          "source_details",
+          "causes 与 __cause__",
+          "details limit_exceeded",
+          "comparison.allows_publication",
+          "Python 更新风险策略",
+          "RISK.NOTE_REMOVED",
+          "PersistError 发布事实",
+          "surrogateescape 原生路径",
+          "BINDING.EXTENSION_UNAVAILABLE",
+          "BINDING.VERSION_MISMATCH",
+          "Python 检查预算"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 800,
+          "span": [
+            "Python 错误诊断",
+            "BuildError.snapshot",
+            "CompareError.report",
+            "source_details",
+            "causes 与 __cause__",
+            "details limit_exceeded",
+            "comparison.allows_publication",
+            "Python 更新风险策略",
+            "RISK.NOTE_REMOVED",
+            "PersistError 发布事实",
+            "surrogateescape 原生路径",
+            "BINDING.EXTENSION_UNAVAILABLE",
+            "BINDING.VERSION_MISMATCH",
+            "Python 检查预算"
+          ],
+          "judgement": "错误诊断、异常链、风险策略、持久化发布事实和路径编码均对应正文；code/字段名保留原样，风险类别放行不表示恢复被删卡片。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "python-migration": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "Python API migration",
+          "clean-slate Python API",
+          "anki-forge distribution rename",
+          "anki_forge import rename",
+          "removed Deck API",
+          "add_note to add stable key",
+          "removed model registry",
+          "owned-value SDK transition",
+          "implicit HTML migration",
+          "removed lockfile workflow",
+          "runtime subprocess replacement",
+          "PyO3 native binding",
+          "legacy compatibility boundary"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 381,
+          "span": [
+            "Python API migration",
+            "clean-slate Python API",
+            "anki-forge distribution rename",
+            "anki_forge import rename",
+            "removed Deck API",
+            "add_note to add stable key",
+            "removed model registry",
+            "owned-value SDK transition",
+            "implicit HTML migration",
+            "removed lockfile workflow",
+            "runtime subprocess replacement",
+            "PyO3 native binding",
+            "legacy compatibility boundary"
+          ],
+          "judgement": "Distribution/import rename, removed Deck/registry/lockfile/runtime APIs and PyO3 binding describe the clean-slate boundary. “owned-value SDK” does not promise old compatibility aliases.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "Python API 迁移",
+          "全新 Python API",
+          "anki-forge 发行名更改",
+          "anki_forge 导入名更改",
+          "已移除 Deck API",
+          "add_note 改为 add 稳定键",
+          "已移除模型注册表",
+          "迁移到拥有值所有权的 SDK",
+          "隐式 HTML 迁移",
+          "已移除 lockfile 流程",
+          "替换 runtime 子进程",
+          "PyO3 原生绑定",
+          "旧 API 兼容边界"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 816,
+          "span": [
+            "Python API 迁移",
+            "全新 Python API",
+            "anki-forge 发行名更改",
+            "anki_forge 导入名更改",
+            "已移除 Deck API",
+            "add_note 改为 add 稳定键",
+            "已移除模型注册表",
+            "迁移到拥有值所有权的 SDK",
+            "隐式 HTML 迁移",
+            "已移除 lockfile 流程",
+            "替换 runtime 子进程",
+            "PyO3 原生绑定",
+            "旧 API 兼容边界"
+          ],
+          "judgement": "发行名/导入名更改、已移除Deck/注册表/lockfile、PyO3与兼容边界均来自正文；“拥有值所有权”稍冗余但正确指新值模型，不暗示保留旧兼容层。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "genanki-migration": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "migrate from genanki",
+          "genanki Model to NoteType",
+          "genanki Deck to Project",
+          "genanki Package write replacement",
+          "numeric model ID mapping",
+          "GUID migration boundary",
+          "persistent business keys",
+          "field names versus field keys",
+          "genanki media file paths",
+          "plain text versus Content.html",
+          "owned media migration",
+          "first new-model distribution"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 396,
+          "span": [
+            "migrate from genanki",
+            "genanki Model to NoteType",
+            "genanki Deck to Project",
+            "genanki Package write replacement",
+            "numeric model ID mapping",
+            "GUID migration boundary",
+            "persistent business keys",
+            "field names versus field keys",
+            "genanki media file paths",
+            "plain text versus Content.html",
+            "owned media migration",
+            "first new-model distribution"
+          ],
+          "judgement": "Model-to-NoteType, Deck-to-Project, package write, numeric IDs/GUID boundary and owned media are accurate migration concepts. ID mapping is a migration concern, not a promise of automatic conversion.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "从 genanki 迁移",
+          "genanki Model 改为 NoteType",
+          "genanki Deck 改为 Project",
+          "替换 genanki Package 写出",
+          "数字模型 ID 映射",
+          "GUID 迁移边界",
+          "持久业务键",
+          "字段名称与字段键",
+          "替换 genanki 媒体文件路径",
+          "纯文本与 Content.html",
+          "媒体所有权迁移",
+          "新模型首次分发"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 831,
+          "span": [
+            "从 genanki 迁移",
+            "genanki Model 改为 NoteType",
+            "genanki Deck 改为 Project",
+            "替换 genanki Package 写出",
+            "数字模型 ID 映射",
+            "GUID 迁移边界",
+            "持久业务键",
+            "字段名称与字段键",
+            "替换 genanki 媒体文件路径",
+            "纯文本与 Content.html",
+            "媒体所有权迁移",
+            "新模型首次分发"
+          ],
+          "judgement": "Model→NoteType、Deck→Project、数字ID映射和GUID迁移边界是准确概念对照；“映射”是须显式验证的任务，不是自动转换保证。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    },
+    "blog:your-first-anki-deck": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "first Rust flashcard walkthrough",
+          "one-word vocabulary deck",
+          "Spanish greeting example",
+          "repeatable authoring in Git",
+          "Basic note front and back",
+          "Project::new spanish",
+          "stable vocabulary entry ID",
+          "typed failure propagation",
+          "grow from one note"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 410,
+          "span": [
+            "first Rust flashcard walkthrough",
+            "one-word vocabulary deck",
+            "Spanish greeting example",
+            "repeatable authoring in Git",
+            "Basic note front and back",
+            "Project::new spanish",
+            "stable vocabulary entry ID",
+            "typed failure propagation",
+            "grow from one note"
+          ],
+          "judgement": "First Rust flashcard, one-word greeting, Git authoring, stable vocabulary ID and typed failure propagation match the article. Typed failure means a Rust error propagated by ?, not typing a card answer.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "首张 Rust 记忆卡片讲解",
+          "单词词汇牌组",
+          "西班牙语问候示例",
+          "在 Git 中重复编写",
+          "Basic 笔记正反面",
+          "Project::new spanish",
+          "稳定词汇条目 ID",
+          "传播类型化失败",
+          "从一条笔记扩展"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 845,
+          "span": [
+            "首张 Rust 记忆卡片讲解",
+            "单词词汇牌组",
+            "西班牙语问候示例",
+            "在 Git 中重复编写",
+            "Basic 笔记正反面",
+            "Project::new spanish",
+            "稳定词汇条目 ID",
+            "传播类型化失败",
+            "从一条笔记扩展"
+          ],
+          "judgement": "首张Rust卡片、西班牙语问候、稳定词条ID对应文章。“在Git中重复编写”“传播类型化失败”有翻译腔，宜“用Git管理可重复构建流程”“传播带类型的错误”；仍可理解，属minor。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": [
+          {
+            "id": "L012-zh-first-git",
+            "pageId": "blog:your-first-anki-deck",
+            "locale": "zh-CN",
+            "sectionId": "search-terms",
+            "file": "website/search-terms.json",
+            "line": 849,
+            "span": "在 Git 中重复编写",
+            "category": "fluency/register",
+            "severity": "minor",
+            "explanation": "“重复编写”是重复劳动，不能自然表达可重复的编写/构建流程。",
+            "proposedFix": "用 Git 管理可重复构建流程",
+            "evidence": [
+              "website/search-terms.json"
+            ],
+            "resolution": "unresolved",
+            "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+          },
+          {
+            "id": "L013-zh-first-errors",
+            "pageId": "blog:your-first-anki-deck",
+            "locale": "zh-CN",
+            "sectionId": "search-terms",
+            "file": "website/search-terms.json",
+            "line": 853,
+            "span": "传播类型化失败",
+            "category": "fluency/register",
+            "severity": "minor",
+            "explanation": "传播失败可以理解，但中文Rust文体通常直接说传播带类型的错误；typed不是键入答案。",
+            "proposedFix": "传播带类型的错误",
+            "evidence": [
+              "website/search-terms.json"
+            ],
+            "resolution": "unresolved",
+            "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+          }
+        ]
+      }
+    },
+    "blog:stable-ids-and-deck-updates": {
+      "en": {
+        "status": "reviewed",
+        "terms": [
+          "identity outlives wording",
+          "stable note ID rationale",
+          "editing an answer with the same ID",
+          "namespace across releases",
+          "update baseline rationale",
+          "archive original distribution package",
+          "separate baseline and candidate paths",
+          "identity and revision evidence",
+          "local edit import conditions",
+          "stable ID versus review state"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 421,
+          "span": [
+            "identity outlives wording",
+            "stable note ID rationale",
+            "editing an answer with the same ID",
+            "namespace across releases",
+            "update baseline rationale",
+            "archive original distribution package",
+            "separate baseline and candidate paths",
+            "identity and revision evidence",
+            "local edit import conditions",
+            "stable ID versus review state"
+          ],
+          "judgement": "Identity outliving wording, namespace across releases, archived original distribution package and separate candidate paths match the rationale. Local edit/review-state terms describe conditions, not guaranteed preservation.",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      },
+      "zh-CN": {
+        "status": "reviewed",
+        "terms": [
+          "身份比措辞更持久",
+          "稳定笔记 ID 的原因",
+          "修改答案保留相同 ID",
+          "跨版本命名空间",
+          "更新基线的作用",
+          "归档原始分发包",
+          "基线与候选包独立路径",
+          "身份与修订证据",
+          "本地编辑的导入条件",
+          "稳定 ID 与复习状态"
+        ],
+        "evidence": {
+          "criterion": "search-vocabulary/terminology-register",
+          "file": "website/search-terms.json",
+          "line": 856,
+          "span": [
+            "身份比措辞更持久",
+            "稳定笔记 ID 的原因",
+            "修改答案保留相同 ID",
+            "跨版本命名空间",
+            "更新基线的作用",
+            "归档原始分发包",
+            "基线与候选包独立路径",
+            "身份与修订证据",
+            "本地编辑的导入条件",
+            "稳定 ID 与复习状态"
+          ],
+          "judgement": "身份、措辞、跨版本命名空间、归档原包和独立候选路径均准确；“稳定ID与复习状态/本地编辑导入条件”保持文章对客户端结果的限定。",
+          "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+        },
+        "openIssues": []
+      }
+    }
+  },
+  "renderReview": {
+    "helper": {
+      "file": "website/src/lib/search-terms.mjs",
+      "line": 5,
+      "span": "if (!['docs', 'article'].includes(page.type)) return '';",
+      "judgement": "Only docs/article return concept terms. Home/examples/blog list return empty text; absent/malformed local vocabulary raises a developer error instead of falling back to English."
+    },
+    "siteLayout": {
+      "file": "website/src/layouts/SiteLayout.astro",
+      "line": 33,
+      "span": "data-pagefind-meta=\"search_terms[content]\"",
+      "judgement": "Actual diff adds only the Pagefind search-terms meta and helper import/value. Visible title, description, body, OG description, canonical and schema call retain the previously read copy."
+    },
+    "routeMiddleware": {
+      "file": "website/src/route-middleware.ts",
+      "line": 28,
+      "span": "'data-pagefind-meta': 'search_terms[content]'",
+      "judgement": "Actual middleware diff adds only the same search metadata to docs. It does not rewrite the route title/description or body. No claim here about runtime ranking, search acceptance or exported Markdown fidelity."
+    }
+  },
+  "openIssues": [
+    {
+      "id": "L011-zh-templates",
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 534,
+      "span": "按字段键引用模板",
+      "category": "terminology/reference-direction",
+      "severity": "minor",
+      "explanation": "“模板引用字段键”的方向应更清楚；当前短语可能被读作通过字段键引用整个模板。",
+      "proposedFix": "模板中的字段键引用",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L012-zh-first-git",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 849,
+      "span": "在 Git 中重复编写",
+      "category": "fluency/register",
+      "severity": "minor",
+      "explanation": "“重复编写”是重复劳动，不能自然表达可重复的编写/构建流程。",
+      "proposedFix": "用 Git 管理可重复构建流程",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L013-zh-first-errors",
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 853,
+      "span": "传播类型化失败",
+      "category": "fluency/register",
+      "severity": "minor",
+      "explanation": "传播失败可以理解，但中文Rust文体通常直接说传播带类型的错误；typed不是键入答案。",
+      "proposedFix": "传播带类型的错误",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    },
+    {
+      "id": "L014-en-reexport",
+      "pageId": "updates",
+      "locale": "en",
+      "sectionId": "search-terms",
+      "file": "website/search-terms.json",
+      "line": 224,
+      "span": "Anki re-export baseline",
+      "category": "context/qualifier",
+      "severity": "minor",
+      "explanation": "As a retrieval topic it names the rejected baseline case, but it is clearer with the documented restriction explicit. The page and other terms already require an original distribution APKG.",
+      "proposedFix": "invalid Anki re-export baseline",
+      "evidence": [
+        "website/search-terms.json"
+      ],
+      "resolution": "unresolved",
+      "verifierRun": "/root/independent_linguistic_source_review/2026-10-28/search-vocabulary-delta-3"
+    }
+  ]
+}

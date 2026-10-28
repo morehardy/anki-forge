@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/dependency-review-2",
+  "method": "Actual complete read of these newly declared dependencies after the initial independent full-text review. This is a source linguistic review, not runtime/search/performance execution.",
+  "files": {
+    "website/src/content/i18n/en.json": {
+      "sha256": "52ac3f26f729435f0682de9b384c1c740cf275c6dd9cd8539eb4fb8c56605187",
+      "text": "{\n  \"heading.anchorLabel\": \"Section titled “{{title}}”\",\n  \"pagefind.clear_search\": \"Clear\",\n  \"pagefind.load_more\": \"Load more results\",\n  \"pagefind.search_label\": \"Search this site\",\n  \"pagefind.filters_label\": \"Filters\",\n  \"pagefind.zero_results\": \"No results for [SEARCH_TERM]\",\n  \"pagefind.many_results\": \"[COUNT] results for [SEARCH_TERM]\",\n  \"pagefind.one_result\": \"[COUNT] result for [SEARCH_TERM]\",\n  \"pagefind.alt_search\": \"No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead\",\n  \"pagefind.search_suggestion\": \"No results for [SEARCH_TERM]. Try one of the following searches:\",\n  \"pagefind.searching\": \"Searching for [SEARCH_TERM]...\"\n}\n"
+    },
+    "website/src/content/i18n/zh-CN.json": {
+      "sha256": "44e533587105bc7fafc6d8eb13d42c4153c67a6c6fa32c24193b7a3d75cec4e8",
+      "text": "{\n  \"heading.anchorLabel\": \"章节：{{title}}\",\n  \"pagefind.clear_search\": \"清除\",\n  \"pagefind.load_more\": \"加载更多结果\",\n  \"pagefind.search_label\": \"搜索本站\",\n  \"pagefind.filters_label\": \"筛选条件\",\n  \"pagefind.zero_results\": \"没有找到“[SEARCH_TERM]”的结果\",\n  \"pagefind.many_results\": \"找到 [COUNT] 条“[SEARCH_TERM]”的结果\",\n  \"pagefind.one_result\": \"找到 [COUNT] 条“[SEARCH_TERM]”的结果\",\n  \"pagefind.alt_search\": \"没有找到“[SEARCH_TERM]”的结果，改为显示“[DIFFERENT_TERM]”的结果\",\n  \"pagefind.search_suggestion\": \"没有找到“[SEARCH_TERM]”的结果。请尝试以下搜索：\",\n  \"pagefind.searching\": \"正在搜索“[SEARCH_TERM]”…\"\n}\n"
+    },
+    "anki_forge/examples/target_api_basic.rs": {
+      "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "text": "use ankiforge::{BuildOptions, Note, Project};\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\");\n    project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?;\n    let output = project.build(BuildOptions::to(\"spanish.apkg\"))?;\n    println!(\"{}\", output.artifact().path().display());\n    Ok(())\n}\n"
+    },
+    "website/scripts/benchmark-presentation.mjs": {
+      "sha256": "0b0d7bdd3fbab28b50881b57a74859c508c21380459b37313cedd3c290fb05c1",
+      "text": "import assert from 'node:assert/strict';\nimport { createHash } from 'node:crypto';\nimport { readFile } from 'node:fs/promises';\n\nconst root = new URL('../../', import.meta.url);\nconst workloads = [\n  ['basic-mixed-text-v1', 'Text only'],\n  ['basic-image-unique-v2', 'Unique images'],\n  ['basic-audio-unique-v2', 'Unique audio'],\n  ['basic-mixed-unique-v2', 'Mixed, unique media'],\n  ['basic-mixed-shared-v2', 'Mixed, shared media'],\n];\n\nexport function presentComparison(csv, notes) {\n  const [header, ...records] = csv.trim().split(/\\r?\\n/).map(row => row.split(','));\n  const results = workloads.map(([profile, label]) => {\n    const matches = records.filter(row => row[header.indexOf('profile')] === profile && Number(row[header.indexOf('notes')]) === notes);\n    assert.equal(matches.length, 1, `Expected one benchmark row: ${profile}/${notes}`);\n    const value = name => {\n      const number = Number(matches[0][header.indexOf(name)]);\n      assert.ok(Number.isFinite(number) && number > 0, `Invalid ${name} for ${profile}`);\n      return number;\n    };\n    const rust = value('rust_time_ms_median');\n    const genanki = value('genanki_time_ms_median');\n    return { profile, label, rust, genanki, saved: 100 * (1 - rust / genanki), speedup: genanki / rust,\n      rustRSS: value('rust_rss_mib_median'), genankiRSS: value('genanki_rss_mib_median') };\n  });\n  return { results, maxTime: Math.max(...results.flatMap(row => [row.rust, row.genanki])),\n    minimumSaved: Math.min(...results.map(row => row.saved)), maximumSaved: Math.max(...results.map(row => row.saved)) };\n}\n\nexport async function loadBenchmarkPresentation() {\n  const config = JSON.parse(await readFile(new URL('docs/benchmark-presentation.json', root), 'utf8'));\n  assert.match(config.dataset, /^benchmarks\\/results\\/[\\w-]+$/);\n  for (const key of ['measurementCommit', 'evidenceCommit']) assert.match(config[key], /^[a-f0-9]{40}$/);\n  assert.ok(Number.isInteger(config.notes) && config.notes > 0);\n  assert.match(config.dataFile, /^docs\\/performance\\/\\d{8}\\/comparison\\.csv$/);\n  const csv = await readFile(new URL(config.dataFile, root), 'utf8');\n  assert.equal(createHash('sha256').update(csv).digest('hex'), config.sha256, 'Historical CSV checksum mismatch');\n  return { ...config, ...presentComparison(csv, config.notes) };\n}\n"
+    },
+    "docs/benchmark-presentation.json": {
+      "sha256": "487cd8b66ad3974db552949d8f15723bee5f2fc64cea027626fed187aa869074",
+      "text": "{\n  \"dataset\": \"benchmarks/results/20261008-latest-commit-genanki\",\n  \"measurementCommit\": \"11991964b06896b2e07ba09cbb3e6465f7585099\",\n  \"evidenceCommit\": \"bef4aeb653fc875f216614e73d8a617be039b9cf\",\n  \"notes\": 1000,\n  \"dataFile\": \"docs/performance/20261008/comparison.csv\",\n  \"sha256\": \"252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999\",\n  \"measuredAt\": \"2026-10-08\"\n}\n"
+    },
+    "docs/performance/20261008/comparison.csv": {
+      "sha256": "252eae6c6f7f947b84b7430b62a6401d8af93840595b56abb0e79b7697668999",
+      "text": "profile,notes,media_files,media_bytes,time_saved_pct,time_saved_ms,genanki_over_rust,rust_time_ms_n,rust_time_ms_median,rust_time_ms_q1,rust_time_ms_q3,rust_time_ms_min,rust_time_ms_max,rust_rss_mib_n,rust_rss_mib_median,rust_rss_mib_q1,rust_rss_mib_q3,rust_rss_mib_min,rust_rss_mib_max,rust_apkg_bytes_n,rust_apkg_bytes_median,rust_apkg_bytes_q1,rust_apkg_bytes_q3,rust_apkg_bytes_min,rust_apkg_bytes_max,genanki_time_ms_n,genanki_time_ms_median,genanki_time_ms_q1,genanki_time_ms_q3,genanki_time_ms_min,genanki_time_ms_max,genanki_rss_mib_n,genanki_rss_mib_median,genanki_rss_mib_q1,genanki_rss_mib_q3,genanki_rss_mib_min,genanki_rss_mib_max,genanki_apkg_bytes_n,genanki_apkg_bytes_median,genanki_apkg_bytes_q1,genanki_apkg_bytes_q3,genanki_apkg_bytes_min,genanki_apkg_bytes_max\nbasic-mixed-text-v1,100,0,0,72.23888722541307,66.346,3.6021610809326767,10,25.4965,23.342,27.7625,19.891,30.108,5,10.515625,10.484375,10.515625,10.40625,10.5625,10,96384.0,96384.0,96384.0,96383,96384,10,91.8425,86.37875,94.73975,84.25,104.77,5,27.765625,27.5,27.9375,27.46875,28.40625,10,135386.0,135386.0,135386.0,135386,135386\nbasic-mixed-text-v1,200,0,0,70.55367131609668,63.759,3.396009094154563,10,26.610500000000002,25.9825,28.32775,24.554,30.7,5,11.765625,11.734375,11.828125,11.71875,11.90625,10,134363.5,134362.0,134364.0,134362,134364,10,90.3695,88.986,95.9975,86.169,122.759,5,28.0,27.75,28.015625,27.546875,28.4375,10,209114.0,209114.0,209114.0,209114,209114\nbasic-mixed-text-v1,500,0,0,61.869501153156236,57.944500000000005,2.6225725606597314,10,35.7115,35.25375,39.48725,34.309,40.568,5,15.234375,15.203125,15.265625,15.171875,15.265625,10,247736.0,247736.0,247736.0,247735,247737,10,93.656,92.86274999999999,95.0335,89.268,99.559,5,29.890625,29.3125,30.140625,29.125,30.40625,10,475354.0,475354.0,475354.0,475354,475354\nbasic-mixed-text-v1,1000,0,0,49.83052138477358,52.33599999999999,1.993243756167919,10,52.692,48.1795,54.135,47.654,57.091,5,21.90625,21.875,21.96875,21.5625,22.375,10,436478.0,436478.0,436478.0,436478,436479,10,105.02799999999999,103.718,109.39925000000001,99.547,122.197,5,32.25,32.03125,32.484375,31.375,32.875,10,868570.0,868570.0,868570.0,868570,868570\nbasic-image-unique-v2,100,100,6415200,67.87263197405969,75.041,3.1126110274348617,10,35.5205,33.3125,35.9355,32.052,42.668,5,19.890625,19.796875,19.953125,19.71875,20.03125,10,6539949.0,6539948.25,6539949.0,6539948,6539950,10,110.5615,110.01325,113.72025,105.74,119.348,5,28.390625,27.921875,28.578125,27.65625,28.609375,10,6565050.0,6565050.0,6565050.0,6565050,6565050\nbasic-image-unique-v2,200,200,12830400,63.43565647881897,85.59500000000001,2.734904838153921,10,49.337,48.094500000000004,51.09325,40.909,56.37,5,28.03125,28.03125,28.171875,27.96875,28.234375,10,13021880.0,13021879.0,13021880.0,13021878,13021880,10,134.93200000000002,132.89350000000002,139.69650000000001,127.918,147.556,5,29.046875,28.96875,29.046875,28.546875,29.21875,10,13068774.0,13068774.0,13068774.0,13068774,13068774\nbasic-image-unique-v2,500,500,32076000,58.83955244282512,118.374,2.429516828287464,10,82.80699999999999,81.4505,85.44,80.063,96.355,5,52.265625,52.09375,52.34375,52.0,52.578125,10,32466414.0,32466414.0,32466414.0,32466413,32466414,10,201.18099999999998,199.15875,203.54874999999998,196.967,211.22,5,31.609375,31.4375,31.703125,31.25,32.09375,10,32633194.0,32633194.0,32633194.0,32633194,32633194\nbasic-image-unique-v2,1000,1000,64152000,52.92092087715079,169.43849999999998,2.1240857268906583,10,150.73450000000003,139.37625000000003,162.718,136.749,168.562,5,92.453125,92.21875,92.515625,91.953125,92.578125,10,64874061.0,64874061.0,64874061.0,64874060,64874061,10,320.173,313.24075,336.21299999999997,306.034,382.83,5,35.59375,35.421875,36.0,35.359375,36.0625,10,65192774.0,65192774.0,65192774.0,65192774,65192774\nbasic-audio-unique-v2,100,100,3204400,67.35896690343336,72.97299999999998,3.0636285225457063,10,35.3615,32.856750000000005,38.04275,31.559,41.139,5,17.875,17.859375,17.921875,17.796875,18.125,10,3299762.0,3299762.0,3299762.0,3299762,3299764,10,108.33449999999999,105.35825,111.198,102.586,120.112,5,27.828125,27.703125,27.84375,27.5,27.859375,10,3354250.0,3354250.0,3354250.0,3354250,3354250\nbasic-audio-unique-v2,200,200,6408800,65.89956990448529,82.586,2.9325143325143324,10,42.735,41.035000000000004,45.7165,38.812,60.265,5,23.171875,23.15625,23.328125,23.03125,23.46875,10,6560738.0,6560737.25,6560738.0,6560736,6560739,10,125.321,124.2695,127.3925,120.309,129.514,5,28.90625,28.828125,28.921875,28.140625,29.375,10,6643078.0,6643078.0,6643078.0,6643078,6643078\nbasic-audio-unique-v2,500,500,16022000,58.868924530289334,106.186,2.4312517690825035,10,74.191,71.9305,76.21775,69.701,77.856,5,38.0,37.828125,38.09375,37.796875,38.15625,10,16325984.0,16325984.0,16325984.75,16325984,16325986,10,180.377,179.8265,183.615,178.164,186.506,5,31.4375,31.40625,31.5,31.109375,31.625,10,16562810.0,16562810.0,16562810.0,16562810,16562810\nbasic-audio-unique-v2,1000,1000,32044000,53.29065119605587,146.78750000000002,2.1408990397133523,10,128.65949999999998,124.79875,134.75275,116.542,151.412,5,62.65625,62.609375,63.109375,62.5625,63.390625,10,32597929.5,32597929.0,32597930.0,32597861,32597932,10,275.447,271.70300000000003,279.95775000000003,269.117,346.824,5,35.96875,35.96875,36.1875,35.96875,36.34375,10,33043814.0,33043814.0,33043814.0,33043814,33043814\nbasic-mixed-unique-v2,100,70,3527400,67.34484946360595,70.05749999999999,3.0623040579326175,10,33.9705,30.162499999999998,36.845,28.883,38.791,5,19.15625,19.125,19.21875,19.015625,19.21875,10,3636124.0,3636124.0,3636124.75,3636123,3636125,10,104.02799999999999,102.0025,108.73425,96.595,111.757,5,27.890625,27.734375,28.0,27.3125,28.140625,10,3674130.0,3674130.0,3674130.0,3674130,3674130\nbasic-mixed-unique-v2,200,140,7054800,67.1068590246971,81.611,3.0401474907818264,10,40.0025,38.8165,41.2695,37.504,49.232,5,24.28125,24.234375,24.421875,24.078125,24.421875,10,7218534.0,7218534.0,7218534.0,7218533,7218534,10,121.6135,117.05475,125.57249999999999,110.848,130.498,5,28.640625,28.578125,28.796875,28.453125,29.25,10,7282658.0,7282658.0,7282658.0,7282658,7282658\nbasic-mixed-unique-v2,500,350,17637000,60.013161111932845,99.40549999999999,2.5008228402331127,10,66.23400000000001,63.78575,69.2055,63.215,73.03,5,39.609375,39.609375,39.734375,39.515625,39.9375,10,17959346.0,17959346.0,17959346.0,17959345,17959347,10,165.6395,159.479,168.31324999999998,155.626,170.201,5,30.96875,30.953125,31.0625,30.796875,31.09375,10,18161760.0,18161760.0,18161760.0,18161760,18161760\nbasic-mixed-unique-v2,1000,700,35274000,53.871078189850266,129.018,2.167837358340273,10,110.476,109.43175,113.43674999999999,107.874,118.552,5,65.1875,65.1875,65.203125,64.703125,65.8125,10,35858389.0,35858389.0,35858389.0,35858387,35858389,10,239.494,237.47925,245.25625,233.729,256.396,5,35.03125,34.71875,35.109375,34.171875,35.453125,10,36249906.0,36249906.0,36249906.0,36249906,36249906\nbasic-mixed-shared-v2,100,49,2469180,67.92877264198691,66.434,3.1180596515279526,10,31.3655,30.2425,32.77375,28.463,37.336,5,17.8125,17.78125,17.9375,17.765625,17.953125,10,2572092.0,2572092.0,2572092.75,2572090,2572093,10,97.7995,95.69725,99.236,93.782,112.905,5,27.78125,27.765625,27.78125,27.671875,27.90625,10,2613726.0,2613726.0,2613726.0,2613726,2613726\nbasic-mixed-shared-v2,200,49,2469180,66.83882668348842,67.81200000000001,3.0155748424681965,10,33.644,33.43125,35.148,32.536,36.801,5,18.96875,18.921875,19.046875,18.890625,19.125,10,2610637.0,2610636.0,2610637.0,2610635,2610638,10,101.456,100.01625,104.28725,96.89,111.906,5,28.328125,28.203125,28.671875,28.0625,28.890625,10,2687454.0,2687454.0,2687454.0,2687454,2687454\nbasic-mixed-shared-v2,500,49,2469180,56.54849598120211,60.646000000000015,2.301416309012876,10,46.599999999999994,43.730000000000004,46.9125,40.651,49.19,5,22.890625,22.8125,22.90625,22.5,22.96875,10,2725255.0,2725255.0,2725255.0,2725255,2725255,10,107.24600000000001,106.581,109.63874999999999,103.754,113.568,5,29.953125,29.734375,29.96875,29.71875,30.265625,10,2961886.0,2961886.0,2961886.0,2961886,2961886\nbasic-mixed-shared-v2,1000,49,2469180,45.66496769593886,51.56100000000001,1.840433248302785,10,61.3505,60.36175,63.253750000000004,55.53,69.649,5,29.359375,29.1875,29.53125,29.0625,29.875,10,2916193.0,2916193.0,2916193.0,2916193,2916193,10,112.9115,110.1085,114.86574999999999,109.604,127.318,5,32.65625,32.546875,32.78125,32.375,33.03125,10,3375582.0,3375582.0,3375582.0,3375582,3375582\n"
+    },
+    "anki_forge/examples/docs_publication.rs": {
+      "sha256": "65e6404ee7381d73709dca0ada96cdb7923650ddd1cc330447884864d552a85b",
+      "text": "use ankiforge::{BuildOptions, Note, Project};\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let mut project = Project::new(\"spanish\")?.default_deck(\"Spanish\");\n    project.add(\"es:hola\", Note::basic(\"hola\", \"hello\"))?;\n    project.build(BuildOptions::to(\"spanish-original.apkg\"))?;\n\n    let mut next = Project::new(\"spanish\")?.default_deck(\"Spanish\");\n    next.add(\"es:hola\", Note::basic(\"hola\", \"hello; hi\"))?;\n    let prepared = next.prepare_publication(\n        BuildOptions::to(\"spanish-reviewed.apkg\").update_from(\"spanish-original.apkg\"),\n    )?;\n    println!(\"{:?}\", prepared.report().comparison());\n    if prepared\n        .report()\n        .comparison()\n        .is_some_and(|report| report.policy().allows_publication())\n    {\n        let output = prepared.publish()?;\n        println!(\"{}\", output.artifact().path().display());\n    }\n    Ok(())\n}\n"
+    },
+    "anki_forge/examples/target_api_custom_notetype.rs": {
+      "sha256": "2951c058e9c3376fbe115b199a010830445c5765c923f9f66f6406a724d9cd13",
+      "text": "use ankiforge::schema::GenerationRule;\nuse ankiforge::{BuildOptions, Field, NoteType, Project, Template};\n\nfn main() -> anyhow::Result<()> {\n    let vocab = NoteType::builder(\"jp-vocab\")\n        .name(\"Japanese Vocabulary\")\n        .field(Field::new(\"expr\").name(\"Expression\").sort().required())\n        .field(Field::new(\"meaning\").name(\"Meaning\").required())\n        .template(\n            Template::new(\"recognition\")\n                .name(\"Recognition\")\n                .front(\"{{expr}}\")\n                .back(\"{{FrontSide}}<hr id=\\\"answer\\\">{{meaning}}\")\n                .generate_when(GenerationRule::all([\"expr\"])),\n        )\n        .build()?;\n    let mut project = Project::new(\"jp-core\")?.default_deck(\"Japanese::Core\");\n    project.add(\n        \"taberu\",\n        vocab\n            .note()\n            .field(\"expr\", \"食べる\")\n            .field(\"meaning\", \"to eat\"),\n    )?;\n    project.build(BuildOptions::to(\"jp-core.apkg\"))?;\n    Ok(())\n}\n"
+    },
+    "bindings/node/examples/quickstart.mjs": {
+      "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "text": "import { Project, Note, BuildOptions } from 'ankiforge';\n\nconst project = new Project('spanish').defaultDeck('Spanish');\nproject.add('es:hola', Note.basic('hola', 'hello'));\nconst output = await project.build(BuildOptions.to('spanish.apkg'));\nconsole.log(output.artifact.path);\nawait output.artifact.close();\n"
+    },
+    "bindings/python/examples/quickstart.py": {
+      "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "text": "from ankiforge import Project, Note, BuildOptions\n\nproject = Project('spanish', default_deck='Spanish')\nproject.add('es:hola', Note.basic('hola', 'hello'))\noutput = project.build(BuildOptions.to('spanish.apkg'))\nprint(output.artifact.path)\n"
+    },
+    "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml": {
+      "sha256": "842f7a6ed07474f768a2f7a2f0d252993d6652c762c740a592df584ed5d24c34",
+      "text": "format_version: template-bundle-v2\nnote_type:\n  key: language-cloze\n  name: Language Cloze\n  cloze_field: text\n  fields:\n    - key: text\n      name: Sentence\n      sort: true\n      required: true\n    - key: extra\n      name: Extra\n  templates:\n    - key: cloze\n      name: Cloze\n      front_file: front.html\n      back_file: back.html\n      browser_front_file: browser-front.html\n      target_deck: Languages::Cloze\ncss_file: style.css\n"
+    },
+    "website/locale-model.mjs": {
+      "sha256": "e357763d9ba16adc611f8f49ce6742fc37e783f2fbbbcada934f5990ab4fa8c7",
+      "text": "import release from './release-locales.json' with { type: 'json' };\n\n// Configuration is deliberately separate from the set selected for a release.\nexport const configuredLocales = {\n  en: { prefix: '', lang: 'en', og: 'en_US', label: 'English', format: 'en-US', starlightKey: 'root', dir: 'ltr' },\n  'zh-CN': { prefix: '/zh-cn', lang: 'zh-CN', og: 'zh_CN', label: '简体中文', format: 'zh-CN', starlightKey: 'zh-cn', dir: 'ltr' },\n  es: { prefix: '/es', lang: 'es', og: 'es_ES', label: 'Español', format: 'es', starlightKey: 'es', dir: 'ltr' },\n  'pt-BR': { prefix: '/pt-br', lang: 'pt-BR', og: 'pt_BR', label: 'Português do Brasil', format: 'pt-BR', starlightKey: 'pt-br', dir: 'ltr' },\n  ja: { prefix: '/ja', lang: 'ja', og: 'ja_JP', label: '日本語', format: 'ja-JP', starlightKey: 'ja', dir: 'ltr' },\n  de: { prefix: '/de', lang: 'de', og: 'de_DE', label: 'Deutsch', format: 'de-DE', starlightKey: 'de', dir: 'ltr' },\n  fr: { prefix: '/fr', lang: 'fr', og: 'fr_FR', label: 'Français', format: 'fr', starlightKey: 'fr', dir: 'ltr' },\n  ru: { prefix: '/ru', lang: 'ru', og: 'ru_RU', label: 'Русский', format: 'ru-RU', starlightKey: 'ru', dir: 'ltr' },\n};\n\nexport function validateReleaseLocales(snapshot, registry = configuredLocales, published = []) {\n  if (snapshot?.schemaVersion !== 1 || !Array.isArray(snapshot.locales) || snapshot.locales[0] !== 'en') throw new Error('Release locales must use schemaVersion 1 and start with en');\n  if (new Set(snapshot.locales).size !== snapshot.locales.length) throw new Error('Duplicate release locale');\n  for (const id of snapshot.locales) if (!Object.hasOwn(registry, id)) throw new Error(`Unknown release locale: ${id}`);\n  for (const id of published) if (!snapshot.locales.includes(id)) throw new Error(`Release cannot remove published locale: ${id}`);\n  return Object.freeze([...snapshot.locales]);\n}\n\nexport const releaseLocales = validateReleaseLocales(release);\nexport const localeIds = releaseLocales;\nexport const locales = Object.freeze(Object.fromEntries(releaseLocales.map(id => [id, configuredLocales[id]])));\nexport const starlightLocales = Object.fromEntries(releaseLocales.map(id => [configuredLocales[id].starlightKey, { label: configuredLocales[id].label, lang: id }]));\n\nexport function localePath(route, locale, registry = configuredLocales) {\n  if (!Object.hasOwn(registry, locale)) throw new Error(`Unknown locale: ${locale}`);\n  if (!route.startsWith('/') || route.startsWith('//')) throw new Error(`Expected site-relative route: ${route}`);\n  return `${registry[locale].prefix}${route}`;\n}\n\nexport function stripBase(pathname, base = '/') {\n  const prefix = base.replace(/\\/$/, '');\n  if (!prefix) return pathname;\n  if (pathname === prefix) return '/';\n  return pathname.startsWith(`${prefix}/`) ? pathname.slice(prefix.length) : null;\n}\n\nexport function resolveLocalePath(pathname, base = '/', active = releaseLocales, registry = configuredLocales) {\n  const route = stripBase(pathname, base);\n  if (route === null) return null;\n  const translated = Object.entries(registry).find(([, locale]) => locale.prefix && (route === locale.prefix || route.startsWith(`${locale.prefix}/`)));\n  if (translated) {\n    const [locale, config] = translated;\n    if (!active.includes(locale)) return null;\n    return { locale, route: route.slice(config.prefix.length) || '/' };\n  }\n  return active.includes('en') ? { locale: 'en', route } : null;\n}\n\nexport function socialImagePath(locale) {\n  if (!Object.hasOwn(locales, locale)) throw new Error(`Unknown release locale: ${locale}`);\n  return `/generated/og${configuredLocales[locale].prefix.replaceAll('/', '-')}.png`;\n}\n"
+    },
+    "website/site-model.mjs": {
+      "sha256": "0c1b14ade11260a3d28f5fc67f6ae341ce6ea2e78f3aa619a9ad150f54a9ceb6",
+      "text": "import { catalogs } from './src/i18n/messages.mjs';\n\nimport { configuredLocales, locales, localeIds, localePath, resolveLocalePath } from './locale-model.mjs';\nexport { configuredLocales, locales, localeIds, releaseLocales, stripBase } from './locale-model.mjs';\n\n// Public topic identities are independent of translated titles and URL prefixes.\nconst documents = [\n  {\n    \"name\": \"docs\",\n    \"source\": \"website/src/content/docs/docs/index.mdx\",\n    \"route\": \"/docs/\",\n    \"title\": \"Build Anki decks from code\",\n    \"description\": \"Choose a language, build your first deck, and learn how to add media, templates and repeatable updates.\",\n    \"zhTitle\": \"用代码生成 Anki 牌组\",\n    \"zhDescription\": \"选择开发语言，生成第一个牌组，再添加媒体、模板和可重复的更新。\"\n  },\n  {\n    \"name\": \"languages\",\n    \"source\": \"website/src/content/docs/docs/languages.mdx\",\n    \"route\": \"/docs/languages/\",\n    \"title\": \"Choose your language\",\n    \"description\": \"Install the public Rust, Node or Python package and export your first Anki deck.\",\n    \"zhTitle\": \"选择开发语言\",\n    \"zhDescription\": \"安装公开 Rust、Node 或 Python 包，导出第一个 Anki 牌组。\"\n  },\n  {\n    \"name\": \"quickstart\",\n    \"source\": \"website/src/content/docs/docs/quickstart.mdx\",\n    \"route\": \"/docs/quickstart/\",\n    \"title\": \"Generate an Anki APKG with Rust\",\n    \"description\": \"Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.\",\n    \"zhTitle\": \"用 Rust 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。\"\n  },\n  {\n    \"source\": \"docs/json-to-anki.md\",\n    \"route\": \"/docs/json-to-anki/\",\n    \"name\": \"json-to-anki\",\n    \"title\": \"Generate and update Anki decks from JSON\",\n    \"description\": \"Read JSON with Rust, Python or TypeScript, package images and audio, then review an answer-only APKG update.\",\n    \"zhTitle\": \"用 JSON 数据生成并更新 Anki 牌组\",\n    \"zhDescription\": \"用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。\"\n  },\n  {\n    \"source\": \"docs/anki-forge-vs-genanki.md\",\n    \"route\": \"/docs/anki-forge-vs-genanki/\",\n    \"name\": \"anki-forge-vs-genanki\",\n    \"title\": \"Anki Forge vs genanki: choose for your workflow\",\n    \"description\": \"Compare Anki APKG authoring workflows, runtime requirements, update review and migration costs.\",\n    \"zhTitle\": \"Anki Forge 与 genanki：如何选择\",\n    \"zhDescription\": \"比较 Anki APKG 编写流程、运行环境、更新检查和迁移成本。\"\n  },\n  {\n    \"source\": \"docs/source-builds.md\",\n    \"route\": \"/docs/development/\",\n    \"name\": \"development\",\n    \"title\": \"Build SDKs from source\",\n    \"description\": \"Build SDKs and examples from a source checkout.\",\n    \"zhTitle\": \"从源码构建 SDK\",\n    \"zhDescription\": \"从仓库源码构建 SDK，运行示例并区分公开包与源码功能。\"\n  },\n  {\n    \"source\": \"docs/rust-guide.md\",\n    \"route\": \"/docs/rust-guide/\",\n    \"name\": \"rust-guide\",\n    \"title\": \"Rust authoring guide\",\n    \"description\": \"Projects, validation, media and updates through the supported Rust API.\",\n    \"zhTitle\": \"Rust 编写指南\",\n    \"zhDescription\": \"通过受支持的 Rust API 创建 Project、校验内容、处理媒体与更新。\"\n  },\n  {\n    \"source\": \"docs/template-bundles.md\",\n    \"route\": \"/docs/templates/\",\n    \"name\": \"templates\",\n    \"title\": \"Template bundles\",\n    \"description\": \"Import complete reusable Cloze and normal templates, CSS and media.\",\n    \"zhTitle\": \"模板包\",\n    \"zhDescription\": \"导入完整的普通与 Cloze 模板、CSS 和媒体。\"\n  },\n  {\n    \"source\": \"docs/api-overview.md\",\n    \"route\": \"/docs/api/\",\n    \"name\": \"api\",\n    \"title\": \"Public API overview\",\n    \"description\": \"Find Rust, Python and Node APIs for authoring, media, diagnostics and updates.\",\n    \"zhTitle\": \"公开 API 总览\",\n    \"zhDescription\": \"查找 Rust、Node 和 Python 的内容编写、媒体、诊断与更新 API。\"\n  },\n  {\n    \"source\": \"docs/installation.md\",\n    \"route\": \"/docs/installation/\",\n    \"name\": \"installation\",\n    \"title\": \"Add to your application\",\n    \"description\": \"Integrate the Rust crate, configure Cargo dependencies and choose the next guide.\",\n    \"zhTitle\": \"集成到应用\",\n    \"zhDescription\": \"安装公开 Rust 包，配置 Cargo 依赖并选择下一步指南。\"\n  },\n  {\n    \"source\": \"docs/concepts.md\",\n    \"route\": \"/docs/concepts/\",\n    \"name\": \"concepts\",\n    \"title\": \"Core concepts\",\n    \"description\": \"Projects, owned notes and media, stable keys, text and update identity.\",\n    \"zhTitle\": \"核心概念\",\n    \"zhDescription\": \"理解 Project、拥有所有权的笔记与媒体、稳定键、文本和更新身份。\"\n  },\n  {\n    \"source\": \"docs/cards.md\",\n    \"route\": \"/docs/cards/\",\n    \"name\": \"cards\",\n    \"title\": \"Basic and Cloze cards\",\n    \"description\": \"Build two notes and three cards with a complete verified Rust example.\",\n    \"zhTitle\": \"Basic 与 Cloze 卡片\",\n    \"zhDescription\": \"运行完整 Rust 示例，用两个笔记生成三张卡片。\"\n  },\n  {\n    \"source\": \"docs/custom-notetypes.md\",\n    \"route\": \"/docs/custom-notetypes/\",\n    \"name\": \"custom-notetypes\",\n    \"title\": \"Custom note types\",\n    \"description\": \"Declare fields, card templates and generation rules for your own content.\",\n    \"zhTitle\": \"自定义笔记类型\",\n    \"zhDescription\": \"为自己的内容定义字段、卡片模板与生成规则。\"\n  },\n  {\n    \"source\": \"docs/media.md\",\n    \"route\": \"/docs/media/\",\n    \"name\": \"media\",\n    \"title\": \"Images and audio\",\n    \"description\": \"Import images and audio, compose typed content, and manage export names, MIME types and media budgets.\",\n    \"zhTitle\": \"图片与音频\",\n    \"zhDescription\": \"导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。\"\n  },\n  {\n    \"source\": \"docs/image-occlusion.md\",\n    \"route\": \"/docs/image-occlusion/\",\n    \"name\": \"image-occlusion\",\n    \"title\": \"Image Occlusion\",\n    \"description\": \"Create rectangle-based image questions in both occlusion modes.\",\n    \"zhTitle\": \"图片遮挡\",\n    \"zhDescription\": \"用矩形区域创建图像问题，了解两种遮挡模式。\"\n  },\n  {\n    \"source\": \"docs/updates.md\",\n    \"route\": \"/docs/updates/\",\n    \"name\": \"updates\",\n    \"title\": \"Update and distribute\",\n    \"description\": \"Compare and build releases using verified original APKG baselines.\",\n    \"zhTitle\": \"更新与分发\",\n    \"zhDescription\": \"以原始 APKG 为基线比较并构建新版本。\"\n  },\n  {\n    \"source\": \"docs/build-guarantees.md\",\n    \"route\": \"/docs/build-guarantees/\",\n    \"name\": \"build-guarantees\",\n    \"title\": \"Build and output guarantees\",\n    \"description\": \"Understand temporary artifacts, path protection and candidate publication.\",\n    \"zhTitle\": \"构建与输出保证\",\n    \"zhDescription\": \"理解临时产物、路径保护和候选版本发布。\"\n  },\n  {\n    \"source\": \"docs/troubleshooting.md\",\n    \"route\": \"/docs/troubleshooting/\",\n    \"name\": \"troubleshooting\",\n    \"title\": \"Troubleshooting\",\n    \"description\": \"Resolve installation, media, template, identity and output errors.\",\n    \"zhTitle\": \"排查问题\",\n    \"zhDescription\": \"解决安装、媒体、模板、身份与输出错误。\"\n  },\n  {\n    \"source\": \"docs/compatibility.md\",\n    \"route\": \"/docs/compatibility/\",\n    \"name\": \"compatibility\",\n    \"title\": \"Compatibility and releases\",\n    \"description\": \"Published packages, verified environments and Anki client conditions.\",\n    \"zhTitle\": \"兼容性与发布\",\n    \"zhDescription\": \"查看公开包、已验证运行环境和 Anki 客户端条件。\"\n  },\n  {\n    \"source\": \"docs/rust-api.md\",\n    \"route\": \"/docs/rust-api/\",\n    \"name\": \"rust-api\",\n    \"title\": \"Rust API guide\",\n    \"description\": \"Find public authoring methods, build defaults, reports and diagnostic behavior.\",\n    \"zhTitle\": \"Rust API 指南\",\n    \"zhDescription\": \"查找内容编写方法、构建默认值、报告和诊断行为。\"\n  },\n  {\n    \"source\": \"docs/node/quick-start.md\",\n    \"route\": \"/docs/node-quickstart/\",\n    \"name\": \"node-quickstart\",\n    \"title\": \"Generate an Anki APKG with Node.js\",\n    \"description\": \"Install the public Node package and export your first deck.\",\n    \"zhTitle\": \"用 Node.js 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Node 包并导出第一个牌组。\"\n  },\n  {\n    \"source\": \"docs/node/api.md\",\n    \"route\": \"/docs/node-api/\",\n    \"name\": \"node-api\",\n    \"title\": \"Node and TypeScript API\",\n    \"description\": \"Public methods, async behavior, build options and reports.\",\n    \"zhTitle\": \"Node 与 TypeScript API\",\n    \"zhDescription\": \"公开方法、异步行为、构建选项和报告。\"\n  },\n  {\n    \"source\": \"docs/python/quick-start.md\",\n    \"route\": \"/docs/python-quickstart/\",\n    \"name\": \"python-quickstart\",\n    \"title\": \"Generate an Anki APKG with Python\",\n    \"description\": \"Install the public Python wheel and generate your first Anki APKG.\",\n    \"zhTitle\": \"用 Python 生成 Anki APKG\",\n    \"zhDescription\": \"安装公开 Python wheel 并生成第一个 Anki APKG。\"\n  },\n  {\n    \"source\": \"docs/python/api.md\",\n    \"route\": \"/docs/python-api/\",\n    \"name\": \"python-api\",\n    \"title\": \"Python API\",\n    \"description\": \"Project, media, build options, reports and temporary artifact ownership.\",\n    \"zhTitle\": \"Python API\",\n    \"zhDescription\": \"Project、媒体、构建选项、报告和临时产物的所有权。\"\n  },\n  {\n    \"source\": \"docs/python/diagnostics.md\",\n    \"route\": \"/docs/python-diagnostics/\",\n    \"name\": \"python-diagnostics\",\n    \"title\": \"Python diagnostics\",\n    \"description\": \"Understand native authoring errors, build reports and update evidence.\",\n    \"zhTitle\": \"Python 诊断\",\n    \"zhDescription\": \"理解原生内容编写错误、构建报告和更新证据。\"\n  },\n  {\n    \"source\": \"bindings/python/MIGRATION.md\",\n    \"route\": \"/docs/python-migration/\",\n    \"name\": \"python-migration\",\n    \"title\": \"Python API transition\",\n    \"description\": \"Use the current owned-value SDK and understand the clean-slate boundary.\",\n    \"zhTitle\": \"Python API 迁移\",\n    \"zhDescription\": \"使用当前拥有值所有权的 SDK，理解新版 API 的迁移边界。\"\n  },\n  {\n    \"source\": \"docs/python/genanki-migration.md\",\n    \"route\": \"/docs/genanki-migration/\",\n    \"name\": \"genanki-migration\",\n    \"title\": \"Move from genanki\",\n    \"description\": \"Understand content, template and media behavior when moving to Anki Forge.\",\n    \"zhTitle\": \"从 genanki 迁移\",\n    \"zhDescription\": \"了解迁入 Anki Forge 时内容、模板与媒体行为的变化。\"\n  }\n];\n\nexport const docGroups = [\n  { label: 'Start here', zh: '从这里开始', ids: ['docs', 'languages', 'quickstart', 'installation', 'concepts', 'anki-forge-vs-genanki'] },\n  { label: 'Guides', zh: '使用指南', ids: ['json-to-anki', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },\n  { label: 'Language guides', zh: '开发语言指南', ids: ['rust-guide', 'node-quickstart', 'python-quickstart', 'python-migration', 'genanki-migration'] },\n  { label: 'Reference', zh: '参考', collapsed: true, ids: ['api', 'rust-api', 'node-api', 'python-api', 'build-guarantees', 'compatibility'] },\n  { label: 'Help', zh: '帮助', ids: ['troubleshooting', 'python-diagnostics', 'development'] },\n].map(group => ({ ...group, labels: { en: group.label, 'zh-CN': group.zh } }));\n/** @type {{ id: string, label: Record<string, string> }[]} */\nexport const navigation = [\n  { id: 'docs', label: { en: 'Guide', 'zh-CN': '指南' } },\n  { id: 'examples', label: { en: 'Examples', 'zh-CN': '示例' } },\n  { id: 'blog', label: { en: 'Blog', 'zh-CN': '博客' } },\n];\nexport const footerNavigation = [\n  { id: 'articles', pageId: 'blog', resource: '', label: 'footer.articles' },\n  { id: 'feed', pageId: '', resource: 'feed', label: 'footer.rss' },\n  { id: 'license', pageId: '', resource: 'license', label: 'footer.license' },\n  { id: 'repository', pageId: '', resource: 'repository', label: 'nav.repository' },\n];\nexport const nextTasks = [\n  { pageId: 'json-to-anki', label: 'home.json', primary: true },\n  { pageId: 'anki-forge-vs-genanki', label: 'home.compare', primary: false },\n];\nexport const homepageModules = ['hero', 'install', 'ai-quickstart', 'performance', 'examples', 'updates', 'features', 'next'];\nconst common = [\n  { id: 'home', route: '/', type: 'home', section: 'home', source: 'website/src/components/HomePage.astro', capabilities: homepageModules },\n  { id: 'examples', route: '/examples/', type: 'examples', section: 'examples', source: 'website/src/components/ExamplesPage.astro', capabilities: ['gallery', 'updates'] },\n  { id: 'blog', route: '/blog/', type: 'blog-list', section: 'blog', source: 'website/src/components/BlogPage.astro', capabilities: ['articles', 'feed'] },\n];\nconst articles = ['your-first-anki-deck', 'stable-ids-and-deck-updates'].map(id => ({\n  id: `blog:${id}`, route: `/blog/${id}/`, type: 'article', section: 'blog',\n  sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, `website/src/content/blog/${config.prefix ? config.prefix.slice(1) + '/' : ''}${id}.mdx`])),\n  capabilities: ['article', 'date'], metadata: { source: 'frontmatter', title: 'title', description: 'description' },\n}));\nexport const pages = [\n  ...common,\n  ...documents.map(doc => ({\n    id: doc.name, route: doc.route, type: 'docs', section: 'docs', sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, locale === 'en' ? doc.source : `docs${config.prefix}/${doc.name === 'docs' ? 'index' : doc.name}.md`])),\n    title: { en: doc.title, 'zh-CN': doc.zhTitle },\n    description: { en: doc.description, 'zh-CN': doc.zhDescription },\n    capabilities: ['sidebar', 'search', 'toc', 'pagination', 'edit', 'code-copy'],\n  })),\n  ...articles,\n].map((page, order) => {\n  const title = ['home', 'examples', 'blog'].includes(page.id)\n    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.title`]])) : page.title;\n  const description = ['home', 'examples', 'blog'].includes(page.id)\n    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.description`]])) : page.description;\n  const sources = page.sources ?? Object.fromEntries(localeIds.map(locale => [locale, page.source]));\n  return {\n    ...page, title, description, sources, order,\n    // Kept as compatibility views for downstream consumers during migration.\n    source: sources.en, en: page.route, zh: localePath(page.route, 'zh-CN'),\n    metadata: Object.fromEntries(localeIds.map(locale => [locale, { title: title?.[locale], description: description?.[locale] }])),\n  };\n});\nexport const docPages = pages.filter(page => page.type === 'docs');\n\nexport function pagePath(id, locale = 'en', section = '') {\n  const page = pages.find(page => page.id === id);\n  if (!page || !Object.hasOwn(locales, locale)) throw new Error(`Unknown page or release locale: ${id}/${locale}`);\n  return `${localePath(page.route, locale)}${section ? `#${section}` : ''}`;\n}\nexport function resolvePage(pathname, base = '/') {\n  const resolved = resolveLocalePath(pathname, base);\n  if (!resolved) return null;\n  const page = pages.find(page => page.route === resolved.route);\n  return page ? { page, locale: resolved.locale, path: localePath(page.route, resolved.locale) } : null;\n}\nexport function pagePair(pathname, base = '/') {\n  return resolvePage(pathname, base)?.page;\n}\nexport function localeFromPath(pathname, base = '/') {\n  return resolveLocalePath(pathname, base)?.locale ?? 'en';\n}\nexport function documentationEntries(active = localeIds) {\n  return docPages.flatMap(page => active.filter(locale => !page.sources[locale]?.startsWith('website/')).map(locale => ({\n    id: page.id, name: page.id === 'docs' ? 'index' : page.id, locale,\n    source: page.sources[locale], route: pagePath(page.id, locale),\n    title: page.title[locale], description: page.description[locale],\n    output: `src/content/docs${locales[locale].prefix}/docs/${page.id === 'docs' ? 'index' : page.id}.md`,\n  })));\n}\nexport const importedDocs = documentationEntries().filter(entry => entry.locale === 'en');\n// This compatibility name now covers every non-English release locale.\nexport const translatedDocs = documentationEntries().filter(entry => entry.locale !== 'en');\n"
+    },
+    "website/src/components/BrandMark.astro": {
+      "sha256": "6cb4983d7143f2d240868ebffae9bae8bf179f074bf3abb13b092b8f667407c0",
+      "text": "---\nimport mark from '../../../docs/assets/brand/ankiforge.svg?raw';\nconst themedMark = mark.replace('style=\"color:#116e60\"', '').replace('fill=\"#fdfefd\"', 'fill=\"var(--af-bg)\"');\n---\n<span class=\"brand-mark\" aria-hidden=\"true\" set:html={themedMark} />\n<style>\n  .brand-mark { display: inline-flex; width: 29px; height: 29px; flex-shrink: 0; color: var(--af-accent); }\n  .brand-mark :global(svg) { width: 100%; height: 100%; }\n</style>\n"
+    },
+    "website/src/components/CodeBlock.astro": {
+      "sha256": "9a26a31b6a637d60d56f97d1e8a6eef17446bded2212c4b0551ace29f6c9ddec",
+      "text": "---\nimport { Code } from 'astro:components';\nimport { createTranslator } from '../i18n/messages.mjs';\nimport { localeFromPath } from '../../site-model.mjs';\ninterface Props { code: string; lang?: 'rust' | 'bash' | 'json' | 'text'; locale?: string }\nconst { code, lang = 'rust', locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;\nconst t = createTranslator(locale);\n---\n<div class=\"code-block\" data-language={lang} data-copy-block data-copy-success={t('copy.codeSuccess')} data-copy-fallback={t('copy.codeFallback')}>\n  <button class=\"text-button\" type=\"button\" data-copy disabled><span data-copy-label>{t('copy.code')}</span></button>\n  <div data-copy-content><Code code={code} lang={lang} themes={{ light: 'github-light', dark: 'github-dark' }} wrap={true} tabindex=\"0\" aria-label={t('copy.codeLabel', { language: lang })} /></div>\n  <p data-copy-status role=\"status\" aria-live=\"polite\"></p>\n</div>\n<style>.code-block > button, .code-block > p { margin: .5rem 1rem; } .code-block > p:empty { display: none; }</style>\n"
+    },
+    "website/src/components/Icon.astro": {
+      "sha256": "37eb6e14469523e5d6aa4c588c3e230c8366972caee5b12c1e70d9f0179384ee",
+      "text": "---\nimport arrowRight from '@phosphor-icons/core/assets/regular/arrow-right.svg?raw';\nimport arrowUpRight from '@phosphor-icons/core/assets/regular/arrow-up-right.svg?raw';\nimport cards from '@phosphor-icons/core/assets/regular/cards.svg?raw';\nimport copy from '@phosphor-icons/core/assets/regular/copy.svg?raw';\nimport scan from '@phosphor-icons/core/assets/regular/scan.svg?raw';\nimport palette from '@phosphor-icons/core/assets/regular/palette.svg?raw';\nimport arrowsClockwise from '@phosphor-icons/core/assets/regular/arrows-clockwise.svg?raw';\nimport textAa from '@phosphor-icons/core/assets/regular/text-aa.svg?raw';\nimport bracketsCurly from '@phosphor-icons/core/assets/regular/brackets-curly.svg?raw';\nimport waveform from '@phosphor-icons/core/assets/regular/waveform.svg?raw';\nimport speakerHigh from '@phosphor-icons/core/assets/regular/speaker-high.svg?raw';\nimport check from '@phosphor-icons/core/assets/regular/check.svg?raw';\nimport sun from '@phosphor-icons/core/assets/regular/sun.svg?raw';\nimport moon from '@phosphor-icons/core/assets/regular/moon.svg?raw';\nimport desktop from '@phosphor-icons/core/assets/regular/desktop.svg?raw';\nimport githubLogo from '../assets/github-logo.svg?raw';\nconst icons = { arrowRight, arrowUpRight, cards, copy, scan, palette, arrowsClockwise, textAa, bracketsCurly, waveform, speakerHigh, check, sun, moon, desktop, githubLogo };\ninterface Props { name: keyof typeof icons; class?: string }\nconst { name, class: className = '' } = Astro.props;\n---\n<span class:list={['icon', className]} aria-hidden=\"true\" set:html={icons[name]} />\n<style>\n  .icon { display: inline-flex; width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: -.15em; }\n  .icon :global(svg) { width: 100%; height: 100%; fill: currentColor; }\n</style>\n"
+    },
+    "website/src/components/LanguageSwitcher.astro": {
+      "sha256": "9d3c5658fc3c42fe5162f5f1883dde73f6aa23a11a4adcc2ca7955a1a1050c57",
+      "text": "---\nimport { resolvePage, pagePath } from '../../site-model.mjs';\nimport { localeIds, locales } from '../../locale-model.mjs';\nimport { sitePath } from '../lib/site';\nimport sections from '../generated/sections.json';\nconst resolved = resolvePage(Astro.url.pathname, import.meta.env.BASE_URL);\nconst page = resolved?.page;\nconst current = resolved?.locale ?? 'en';\nconst sectionMaps = sections as Record<string, Record<string, Record<string, string>>>;\nconst sourceMap = page ? sectionMaps[page.id]?.[current] ?? {} : {};\nconst targets = localeIds.filter(locale => locale !== current).map(locale => ({\n  locale, label: locales[locale].label,\n  href: page ? sitePath(pagePath(page.id, locale)) : '',\n  mapping: sourceMap,\n  targetIds: Object.entries(page ? sectionMaps[page.id]?.[locale] ?? {} : {}).flat(),\n}));\nconst common = page && !['docs', 'article'].includes(page.type);\n---\n{page && (targets.length === 1 ? targets.map(target => <a class=\"language-switch\" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a>) : <details class=\"language-menu\">\n  <summary lang={current}>{locales[current].label}</summary>\n  <ul>{targets.map(target => <li><a class=\"language-switch\" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a></li>)}</ul>\n</details>)}\n<style>\n  .language-switch { white-space: nowrap; font-size: 0.875rem; }\n  .language-menu { position: relative; font-size: 0.875rem; }\n  .language-menu summary { cursor: pointer; white-space: nowrap; }\n  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: max-content; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }\n  .language-menu li + li { margin-top: 8px; }\n</style>\n<script>\n  document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {\n    const target = new URL(link.href);\n    const mapping: Record<string, string> = JSON.parse(link.dataset.sectionMap || '{}');\n    const targetIds = new Set<string>(JSON.parse(link.dataset.sectionIds || '[]'));\n    function update() {\n      target.search = location.search;\n      let id = '';\n      try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed fragments. */ }\n      const mapped = mapping[id] ?? id;\n      const shared = link.hasAttribute('data-common-sections') && !!document.getElementById(id);\n      target.hash = mapped !== '_top' && (targetIds.has(mapped) || shared) ? mapped : '';\n      link.href = target.href;\n    }\n    // Preparation validates the section inventory; switching does not fetch every translation.\n    update();\n    window.addEventListener('hashchange', update);\n  });\n</script>\n"
+    },
+    "website/src/components/ThemeControl.astro": {
+      "sha256": "6778d9bcf865afd557d59fd9f69e0298bfe0924b53b7746bfbdcc62ea7a2c875",
+      "text": "---\nimport { createTranslator } from '../i18n/messages.mjs';\nimport { localeFromPath } from '../../site-model.mjs';\nimport Icon from './Icon.astro';\ninterface Props { locale?: string }\nconst { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;\nconst t = createTranslator(locale);\nconst name = `theme-${crypto.randomUUID()}`;\nconst options = [\n  { value: 'light', icon: 'sun', label: t('nav.light') },\n  { value: 'dark', icon: 'moon', label: t('nav.dark') },\n  { value: 'auto', icon: 'desktop', label: t('nav.auto') },\n] as const;\n---\n<div class=\"theme-control\" role=\"radiogroup\" aria-label={t('nav.theme')} data-theme-control data-theme-choice=\"auto\">\n  {options.map(option => (\n    <label class=\"theme-option\">\n      <input class=\"sr-only\" type=\"radio\" name={name} value={option.value} aria-label={option.label} data-theme-option checked={option.value === 'auto'} disabled />\n      <span class=\"theme-option-face\"><Icon name={option.icon} /></span>\n      <span class=\"theme-tooltip\" aria-hidden=\"true\">{option.label}</span>\n    </label>\n  ))}\n</div>\n\n<style>\n  .theme-control {\n    --theme-option-size: 32px;\n    --theme-position: 2;\n    position: relative;\n    isolation: isolate;\n    display: grid;\n    grid-template-columns: repeat(3, var(--theme-option-size));\n    flex-shrink: 0;\n    padding: 4px;\n    border: 1px solid var(--af-line);\n    border-radius: 999px;\n    background: var(--af-soft);\n  }\n  .theme-control[data-theme-choice='light'] { --theme-position: 0; }\n  .theme-control[data-theme-choice='dark'] { --theme-position: 1; }\n  .theme-control::before {\n    content: '';\n    position: absolute;\n    inset: 4px auto auto 4px;\n    width: var(--theme-option-size);\n    height: var(--theme-option-size);\n    border-radius: 50%;\n    background: var(--af-paper);\n    box-shadow: 0 1px 4px #142d2914, inset 0 0 0 1px var(--af-line);\n    transform: translateX(calc(var(--theme-position) * 100%));\n    transition: transform 220ms cubic-bezier(.22, 1, .36, 1);\n    pointer-events: none;\n  }\n  .theme-option { position: relative; cursor: pointer; }\n  .theme-option-face {\n    position: relative;\n    display: grid;\n    place-items: center;\n    width: var(--theme-option-size);\n    height: var(--theme-option-size);\n    border-radius: 50%;\n    color: var(--af-muted);\n    font-size: 17px;\n    transition: color 160ms ease;\n  }\n  .theme-option:hover .theme-option-face,\n  input:checked + .theme-option-face { color: var(--af-accent); }\n  input:focus-visible + .theme-option-face { outline: 2px solid var(--af-accent); outline-offset: 2px; }\n  input:disabled + .theme-option-face { opacity: .5; cursor: default; }\n  .theme-tooltip {\n    position: absolute;\n    z-index: 1;\n    top: calc(100% + 12px);\n    left: 50%;\n    transform: translate(-50%, -3px);\n    padding: 5px 9px;\n    border: 1px solid var(--af-line);\n    border-radius: 6px;\n    background: var(--af-paper);\n    color: var(--af-ink);\n    box-shadow: 0 3px 12px #142d2910;\n    font: 12px/1.5 var(--af-font);\n    white-space: nowrap;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    transition: opacity 120ms ease, transform 120ms ease, visibility 120ms;\n  }\n  .theme-option:last-child .theme-tooltip { left: auto; right: -4px; transform: translateY(-3px); }\n  input:focus-visible ~ .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }\n  .theme-option:last-child input:focus-visible ~ .theme-tooltip { transform: translateY(0); }\n  @media (hover: hover) {\n    .theme-option:hover .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }\n    .theme-option:last-child:hover .theme-tooltip { transform: translateY(0); }\n  }\n  @media (pointer: coarse) { .theme-control { --theme-option-size: 40px; } }\n  @media (prefers-reduced-motion: reduce) {\n    .theme-control::before, .theme-option-face, .theme-tooltip { transition: none; }\n  }\n</style>\n"
+    }
+  },
+  "observations": {
+    "zh-CN": [
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 2,
+        "key": "heading.anchorLabel",
+        "span": "章节：{{title}}",
+        "judgement": "“章节：”简短自然；{{title}}是原样插值，不改为单花括号。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 3,
+        "key": "pagefind.clear_search",
+        "span": "清除",
+        "judgement": "在搜索框内“清除”动作明确，无需重复宾语。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 4,
+        "key": "pagefind.load_more",
+        "span": "加载更多结果",
+        "judgement": "“加载更多结果”指明动作和对象，不误成翻页。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 5,
+        "key": "pagefind.search_label",
+        "span": "搜索本站",
+        "judgement": "“搜索本站”既说明范围又适合输入框标签。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 6,
+        "key": "pagefind.filters_label",
+        "span": "筛选条件",
+        "judgement": "“筛选条件”适合筛选分组，不把标题译成执行按钮。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 7,
+        "key": "pagefind.zero_results",
+        "span": "没有找到“[SEARCH_TERM]”的结果",
+        "judgement": "完整空态句，查询词带引号；[SEARCH_TERM]保持原协议。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 8,
+        "key": "pagefind.many_results",
+        "span": "找到 [COUNT] 条“[SEARCH_TERM]”的结果",
+        "judgement": "“条…结果”数量表达自然；[COUNT]和[SEARCH_TERM]不翻译。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 9,
+        "key": "pagefind.one_result",
+        "span": "找到 [COUNT] 条“[SEARCH_TERM]”的结果",
+        "judgement": "中文无单复数变化，“1条”成立，和多结果分支语体一致。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 10,
+        "key": "pagefind.alt_search",
+        "span": "没有找到“[SEARCH_TERM]”的结果，改为显示“[DIFFERENT_TERM]”的结果",
+        "judgement": "清楚区分原查询与替代查询；两个不同占位符和引号帮助读者识别替换。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 11,
+        "key": "pagefind.search_suggestion",
+        "span": "没有找到“[SEARCH_TERM]”的结果。请尝试以下搜索：",
+        "judgement": "无结果后给出具体下一步“请尝试以下搜索”，冒号引出建议。"
+      },
+      {
+        "file": "website/src/content/i18n/zh-CN.json",
+        "line": 12,
+        "key": "pagefind.searching",
+        "span": "正在搜索“[SEARCH_TERM]”…",
+        "judgement": "进行态“正在搜索”与省略号自然，查询词有明确对象。"
+      }
+    ],
+    "en": [
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 2,
+        "key": "heading.anchorLabel",
+        "span": "Section titled “{{title}}”",
+        "judgement": "Names the section via its actual title; curly-brace placeholder is preserved."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 3,
+        "key": "pagefind.clear_search",
+        "span": "Clear",
+        "judgement": "Clear is natural in the search-field context."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 4,
+        "key": "pagefind.load_more",
+        "span": "Load more results",
+        "judgement": "Load more results describes incremental loading directly."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 5,
+        "key": "pagefind.search_label",
+        "span": "Search this site",
+        "judgement": "Search this site makes scope explicit and fits an input label."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 6,
+        "key": "pagefind.filters_label",
+        "span": "Filters",
+        "judgement": "Filters is a natural concise group label."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 7,
+        "key": "pagefind.zero_results",
+        "span": "No results for [SEARCH_TERM]",
+        "judgement": "Natural empty-state statement names the queried term; placeholder is preserved."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 8,
+        "key": "pagefind.many_results",
+        "span": "[COUNT] results for [SEARCH_TERM]",
+        "judgement": "Plural results agrees with the many-results branch; both placeholders remain intact."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 9,
+        "key": "pagefind.one_result",
+        "span": "[COUNT] result for [SEARCH_TERM]",
+        "judgement": "Singular result agrees with the one-result branch and retains [COUNT]."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 10,
+        "key": "pagefind.alt_search",
+        "span": "No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead",
+        "judgement": "Two clauses distinguish the failed query from the replacement; distinct term placeholders preserve the action."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 11,
+        "key": "pagefind.search_suggestion",
+        "span": "No results for [SEARCH_TERM]. Try one of the following searches:",
+        "judgement": "Gives an explicit next step and colon for the following suggestions."
+      },
+      {
+        "file": "website/src/content/i18n/en.json",
+        "line": 12,
+        "key": "pagefind.searching",
+        "span": "Searching for [SEARCH_TERM]...",
+        "judgement": "Searching for … naturally announces an ongoing task, not a completed result."
+      }
+    ],
+    "basic-program": {
+      "file": "anki_forge/examples/target_api_basic.rs",
+      "line": 4,
+      "span": "Project::new(\"spanish\")?.default_deck(\"Spanish\")",
+      "judgement": "完整阅读该程序：namespace spanish、笔记键es:hola、hola→hello和持久spanish.apkg与两语Rust快速开始/首牌组文章的术语和预期结果一致。代码/API/输出身份保留原字面值，不作本地化。"
+    },
+    "benchmark-presentation": {
+      "file": "website/scripts/benchmark-presentation.mjs",
+      "line": 6,
+      "span": "Text only / Unique images / Unique audio / Mixed, unique media / Mixed, shared media",
+      "judgement": "完整阅读展示函数及其JSON/CSV来源。五个profile是机器标识，显示标签与两语catalog的纯文本/独立媒体/共享混合媒体对应。来源notes=1000，time median样本数10，45.7–53.9%是五场景Rust导出时间降幅；原文performance限制未承诺Node/Python加速、Anki导入/复习速度或全部内存降低。数据原值不本地化，展示文案无需语言改写；数值执行正确性仍归technical轴。"
+    },
+    "recursive-components": [
+      {
+        "file": "website/src/components/ThemeControl.astro",
+        "line": 10,
+        "span": "label: t('nav.light') / t('nav.dark') / t('nav.auto')",
+        "judgement": "实际通读全部组件；使用先前已审的浅色/深色/跟随系统与Light/Dark/System，radiogroup和每个radio的aria-label与图标和选项一致，无新增未审自然语言。"
+      },
+      {
+        "file": "website/src/components/LanguageSwitcher.astro",
+        "line": 12,
+        "span": "locale, label: locales[locale].label",
+        "judgement": "实际通读全部组件及locale-model上下文；当前发布English/简体中文为准确自然的自称。切换器只显示语言名，保留lang/hreflang/locale与section ID等协议；未新增未审的句子。"
+      },
+      {
+        "file": "website/src/components/CodeBlock.astro",
+        "line": 9,
+        "span": "t('copy.codeSuccess') / t('copy.codeFallback') / t('copy.codeLabel')",
+        "judgement": "新增到home闭包的组件本身已在docs/examples类读过；复制动作、成功/键盘回退、aria代码语言标签均来自先前全文审读的catalog。"
+      },
+      {
+        "file": "website/src/components/BrandMark.astro",
+        "line": 5,
+        "span": "aria-hidden=\"true\"",
+        "judgement": "实际通读；装饰logo对辅助技术隐藏，不引入可见/朗读的语言文案。"
+      },
+      {
+        "file": "website/src/components/Icon.astro",
+        "line": 23,
+        "span": "aria-hidden=\"true\"",
+        "judgement": "实际通读；图标组件无自然语言字符串，实际动作说明来自调用方已审catalog。"
+      }
+    ],
+    "source-directive-context": [
+      {
+        "file": "anki_forge/examples/docs_publication.rs",
+        "line": 9,
+        "span": "Note::basic(\"hola\", \"hello; hi\")",
+        "judgement": "已阅读源文件完整程序，与两语updates中引用相同。原始包→相同命名空间/笔记键→答案变化→预备比较→发布对象的称谓和动作一致；API与示例数据不翻译。"
+      },
+      {
+        "file": "anki_forge/examples/target_api_custom_notetype.rs",
+        "line": 6,
+        "span": "NoteType::builder(\"jp-vocab\")",
+        "judgement": "已阅读源文件完整程序；字段/模板稳定键和显示名分开，Japanese Vocabulary/Expression/Meaning/食べる/to eat是共享示例数据，保持原文合理，未发现新增未审叙述。"
+      },
+      {
+        "file": "bindings/node/examples/quickstart.mjs",
+        "line": 3,
+        "span": "new Project('spanish').defaultDeck('Spanish')",
+        "judgement": "已通读，与Node快速开始内联程序一致；持久输出和关闭artifact的解释与实际动作名称一致。"
+      },
+      {
+        "file": "bindings/python/examples/quickstart.py",
+        "line": 3,
+        "span": "Project('spanish', default_deck='Spanish')",
+        "judgement": "已通读，与Python快速开始内联程序一致；输出路径与稳定笔记键示例保留原值。"
+      },
+      {
+        "file": "contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml",
+        "line": 1,
+        "span": "format_version: template-bundle-v2",
+        "judgement": "已通读全部manifest，与两语模板包页引用一致。Language Cloze/Sentence/Extra/模板目标是共享示例配置，非漏译UI；键、文件名和格式协议保持原字面值。"
+      }
+    ]
+  },
+  "closureDelta": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-delta-2.json",
+    "sha256": "d8b4d90a1a496ef0a69307994f0374d4eebeec99923d6b27e393211aa09059f4"
+  },
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review-after-delta-1.json",
+    "sha256": "e2f919d8bbc6a35c9ab17cd0a5a894f16fa2d90d254b0773706fb8c6cec7dbc3"
+  }
+}

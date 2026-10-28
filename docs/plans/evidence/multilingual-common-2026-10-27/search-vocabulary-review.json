@@ -1,0 +1,2950 @@
+{
+  "schemaVersion": 1,
+  "artifact": "website/search-terms.json",
+  "authoredAt": "2026-10-27",
+  "role": "concept-vocabulary author; independent review required",
+  "method": {
+    "basis": [
+      "现有27个 docs 页的实际中英技术正文",
+      "现有2篇中英文章正文",
+      "website/language-briefs.json 中的语言风格、术语与禁用误解"
+    ],
+    "excludedInputs": [
+      "website/search-queries.json",
+      "检索题集",
+      "搜索结果"
+    ],
+    "retrievalExecuted": false,
+    "scope": "27 docs + 2 articles; home/examples/blog-list receive no aliases",
+    "aliasPrinciple": "根据页面能实际解释的任务导出有限概念词与同义表达，限制性词项用范围/边界/失败等限定，避免把导航链接当作详细教程。",
+    "sourceSpanFormat": "startLine/endLine are inclusive source section bounds; excerpt is verbatim representative prose from that section. Sections include the complete supporting task and its adjacent limits.",
+    "languageBriefSource": {
+      "source": "website/language-briefs.json",
+      "terms": "note=笔记; card=卡片; deck=牌组; namespace=命名空间; originalApkg=原始分发 APKG",
+      "limits": [
+        "不混淆 note/card",
+        "不接受 Anki 重导出作为原始更新基线",
+        "不把源码专用能力说成公开包能力",
+        "owned 仅指值和媒体所有权"
+      ]
+    }
+  },
+  "counts": {
+    "pages": 29,
+    "locales": 2,
+    "terms": {
+      "en": 370,
+      "zh-CN": 375
+    }
+  },
+  "authorConcerns": [
+    "检索作者尚未查看或运行检索测试；不能据此声称召回率、排序或零结果率通过。",
+    "typed content/类型化内容描述强类型媒体与 Content 值，不添加 type answer/输入答案 或 typed cards 的不明确别名。",
+    "JavaScript 只映射到 Node.js 宿主与其 JSON 配方，不表示浏览器、Bun 或 Electron 已支持。",
+    "卡组是牌组的常见口语表达，仅在 concepts 解释页补充；没有把笔记、卡片和牌组互作同义词。",
+    "兼容性页中未验证环境只以 verification scope/验证范围 表述，需要独立审阅确认搜索展示不会把限制误读成能力。",
+    "两个文章与对应教程有概念重叠；文章词条聚焦解释与理由，未据搜索排名作调整。"
+  ],
+  "independentReview": {
+    "status": "pending",
+    "required": true,
+    "authorCannotApproveOwnVocabulary": true
+  },
+  "pages": [
+    {
+      "pageId": "docs",
+      "selectedTerms": {
+        "en": [
+          "documentation overview",
+          "authoring workflow",
+          "documentation navigation",
+          "getting started guide",
+          "structured learning content",
+          "repeatable deck publishing",
+          "note fields and card templates",
+          "Anki deck generation library"
+        ],
+        "zh-CN": [
+          "文档总览",
+          "内容编写流程",
+          "文档导航",
+          "入门指南",
+          "结构化学习内容",
+          "可重复的牌组发布",
+          "笔记字段与卡片模板",
+          "Anki 牌组生成库"
+        ]
+      },
+      "selectionRationale": "入口页仅补充文档导航和整体编写流程表达；功能教程链接不作为该页的专门能力词。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "只解释导航及笔记、卡片、牌组关系；不把页面上的每个教程链接扩展成首页关键词。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "website/src/content/docs/docs/index.mdx",
+            "startLine": 8,
+            "endLine": 11,
+            "excerpt": "Anki Forge turns notes, templates and media into Anki `.apkg` files. Use it when\nyour learning content lives in code or structured data and you want to rebuild\nand distribute decks repeatedly."
+          },
+          {
+            "source": "website/src/content/docs/docs/index.mdx",
+            "startLine": 12,
+            "endLine": 24,
+            "excerpt": "## Start with your language\nInstall a public package and export your first deck; <a href={sitePath('/docs/languages/')}>choose your entry point</a>.\n| Language | First result | Continue |\n| --- | --- | --- |\n| Rust | <a href={sitePath('/docs/quickstart/')}>Run the first-deck example</a> | <a href={sitePath('/docs/installation/')}>Add to your application</a> |\n| Node / TypeScript | <a href={sitePath('/docs/node-quickstart/')}>Install and build your first deck</a> | <a href={sitePath('/docs/node-api/')}>API and async behavior</a> |"
+          },
+          {
+            "source": "website/src/content/docs/docs/index.mdx",
+            "startLine": 25,
+            "endLine": 30,
+            "excerpt": "## Understand the pieces\nA note holds fields; a note type and its templates turn those fields into cards.\nDecks group the resulting cards in Anki. The <a href={sitePath('/docs/concepts/')}>core concepts</a>\nexplain these relationships, owned Project values, and stable identity."
+          },
+          {
+            "source": "website/src/content/docs/docs/index.mdx",
+            "startLine": 31,
+            "endLine": 41,
+            "excerpt": "## Build your next feature\n- <a href={sitePath('/docs/cards/')}>Basic and Cloze</a>: create question/answer and fill-in-the-blank cards.\n- <a href={sitePath('/docs/media/')}>Images and audio</a>: register real assets and attach them to cards.\n- <a href={sitePath('/docs/custom-notetypes/')}>Custom note types</a> and <a href={sitePath('/docs/templates/')}>template bundles</a>: define fields, layouts and CSS.\n- <a href={sitePath('/docs/image-occlusion/')}>Image Occlusion</a>: create questions from regions of an image."
+          },
+          {
+            "source": "website/src/content/docs/docs/index.mdx",
+            "startLine": 42,
+            "endLine": 50,
+            "excerpt": "## Find answers and contribute\nUse <a href={sitePath('/docs/troubleshooting/')}>troubleshooting</a> when an operation\nfails, and <a href={sitePath('/docs/compatibility/')}>verified environments</a>\nfor runtime support and client import conditions.\nAnki Forge is licensed under <a href={`${repository}/blob/main/LICENSE`}>MIT</a>.\nReport reproducible issues on <a href={`${repository}/issues`}>GitHub</a>, or read\nthe <a href={`${repository}/blob/main/docs/development.md`}>contributor guide</a>."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/index.md",
+            "startLine": 1,
+            "endLine": 2,
+            "excerpt": "Anki Forge 将笔记、模板与媒体生成 Anki `.apkg` 文件。当学习内容保存在代码或结构化数据中，需要反复构建并分发牌组时，可以使用它。"
+          },
+          {
+            "source": "docs/zh-cn/index.md",
+            "startLine": 3,
+            "endLine": 14,
+            "excerpt": "## 从你的开发语言开始\n安装公开包，导出第一个牌组；[选择入门方式](/docs/languages/)。\n| 开发语言 | 第一个结果 | 继续学习 |\n| --- | --- | --- |\n| Rust | [运行首个牌组示例](/docs/quickstart/) | [集成到应用](/docs/installation/) |\n| Node / TypeScript | [安装并构建第一个牌组](/docs/node-quickstart/) | [API 与异步行为](/docs/node-api/) |\n| Python | [安装并导出牌组](/docs/python-quickstart/) | [API 与输出所有权](/docs/python-api/) |\n想先看结果？[探索卡片示例](/examples/)，并下载生成的包。"
+          },
+          {
+            "source": "docs/zh-cn/index.md",
+            "startLine": 15,
+            "endLine": 18,
+            "excerpt": "## 理解各个部分\n笔记保存字段；笔记类型及其模板把字段转换成卡片。牌组在 Anki 中组织生成的卡片。[核心概念](/docs/concepts/)说明这些关系、Project 的值所有权和稳定身份。"
+          },
+          {
+            "source": "docs/zh-cn/index.md",
+            "startLine": 19,
+            "endLine": 28,
+            "excerpt": "## 构建下一项功能\n- [Basic 与 Cloze](/docs/cards/)：创建问答和填空卡片。\n- [图片与音频](/docs/media/)：注册真实资源并附加到卡片。\n- [自定义笔记类型](/docs/custom-notetypes/)与[模板包](/docs/templates/)：定义字段、布局与 CSS。\n- [图片遮挡](/docs/image-occlusion/)：根据图像区域创建问题。\n- [更新与分发](/docs/updates/)：在版本之间传递身份和修订证据。\n任务指南使用可运行的 Rust 示例。Node 和 Python API 页面说明相应接口及其差异。"
+          },
+          {
+            "source": "docs/zh-cn/index.md",
+            "startLine": 29,
+            "endLine": 33,
+            "excerpt": "## 查找答案与参与贡献\n操作失败时参考[排查问题](/docs/troubleshooting/)，运行环境支持和客户端导入条件见[已验证环境](/docs/compatibility/)。\nAnki Forge 采用 [MIT](https://github.com/morehardy/anki-forge/blob/main/LICENSE) 许可证。可在 [GitHub](https://github.com/morehardy/anki-forge/issues) 提交可复现的问题，或阅读[贡献者指南](https://github.com/morehardy/anki-forge/blob/main/docs/development.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "languages",
+      "selectedTerms": {
+        "en": [
+          "choose a programming language",
+          "SDK selection",
+          "language bindings",
+          "Rust crate or Python wheel",
+          "Node.js or Python",
+          "published package entry points",
+          "native runtime prerequisites",
+          "offline APKG export"
+        ],
+        "zh-CN": [
+          "选择开发语言",
+          "SDK 选型",
+          "语言绑定",
+          "Rust crate 与 Python wheel",
+          "Node.js 或 Python",
+          "公开包入门入口",
+          "原生运行环境要求",
+          "离线导出 APKG"
+        ]
+      },
+      "selectionRationale": "使用读者比较语言和包入口时的自然表达；保留有限的跨语言词用于真正的选择页。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "各语言的完整编译步骤仍属于对应入门页；无浏览器运行承诺。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "website/src/content/docs/docs/languages.mdx",
+            "startLine": 8,
+            "endLine": 20,
+            "excerpt": "Use Rust, Node / TypeScript or Python to connect Anki deck generation to your data.\nAll three can export a persistent `spanish.apkg` without installing Anki.\n| Language | Public package | Install | Complete first deck |\n| --- | --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.1` | <a href={sitePath('/docs/quickstart/')}>Rust quickstart</a> |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | <a href={sitePath('/docs/node-quickstart/')}>Node quickstart</a> |"
+          },
+          {
+            "source": "website/src/content/docs/docs/languages.mdx",
+            "startLine": 21,
+            "endLine": 32,
+            "excerpt": "## Next tasks\nGenerate and update a deck from <a href={sitePath('/docs/json-to-anki/')}>shared JSON, image and audio inputs</a>, or compare <a href={sitePath('/docs/anki-forge-vs-genanki/')}>Anki Forge and genanki</a> for your workflow.\nAdd <a href={sitePath('/docs/media/')}>images and audio</a>,\ncreate <a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or\n<a href={sitePath('/docs/updates/')}>compare and update a distributed deck</a>.\nFor TypeScript, use the <a href={sitePath('/docs/node-api/#typescript')}>compiler configuration</a>."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/languages.md",
+            "startLine": 1,
+            "endLine": 10,
+            "excerpt": "使用 Rust、Node / TypeScript 或 Python，将 Anki 牌组生成接入你的数据。三者都能导出持久保存的 `spanish.apkg`，不需要安装 Anki。\n| 开发语言 | 公开包 | 安装 | 完整首个牌组 |\n| --- | --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | `cargo add ankiforge@0.3.1` | [Rust 入门](/docs/quickstart/) |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | [Node 入门](/docs/node-quickstart/) |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | [Python 入门](/docs/python-quickstart/) |"
+          },
+          {
+            "source": "docs/zh-cn/languages.md",
+            "startLine": 11,
+            "endLine": 17,
+            "excerpt": "## 下一步任务\n使用[共享 JSON、图片和音频输入](/docs/json-to-anki/)生成并更新牌组，或按自己的工作流程比较 [Anki Forge 与 genanki](/docs/anki-forge-vs-genanki/)。\n添加[图片与音频](/docs/media/)、创建[自定义笔记类型](/docs/custom-notetypes/)，或[比较并更新已分发的牌组](/docs/updates/)。\nTypeScript 请使用[编译器配置](/docs/node-api/#typescript)。从 genanki 迁移请阅读[迁移指南](/docs/genanki-migration/)。仓库开发和仅源码可用的能力另有[源码构建说明](/docs/development/#source-builds)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "quickstart",
+      "selectedTerms": {
+        "en": [
+          "Rust quick start",
+          "Rust getting started",
+          "first Rust Anki deck",
+          "Rust flashcard generator",
+          "cargo new anki-deck",
+          "cargo run",
+          "Rust APKG export",
+          "src/main.rs",
+          "persistent Spanish deck",
+          "stable key es:hola"
+        ],
+        "zh-CN": [
+          "Rust 快速开始",
+          "Rust 入门教程",
+          "第一个 Rust Anki 牌组",
+          "用 Rust 制作记忆卡片",
+          "cargo new anki-deck",
+          "cargo run",
+          "Rust 导出 APKG",
+          "src/main.rs",
+          "保存西班牙语牌组",
+          "稳定键 es:hola"
+        ]
+      },
+      "selectionRationale": "把 quick start、getting started 与首次导出表达归到完整 Rust 入门程序；保留实际可运行命令。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "只索引直接示范的 Basic 导出；不把 Continue 的媒体和图片遮挡链接当作本页教程。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "startLine": 10,
+            "endLine": 12,
+            "excerpt": "Use Rust 1.92 or later. For another language, choose\n<a href={sitePath('/docs/languages/')}>Node / TypeScript or Python</a>."
+          },
+          {
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "startLine": 13,
+            "endLine": 20,
+            "excerpt": "## Install"
+          },
+          {
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "startLine": 21,
+            "endLine": 36,
+            "excerpt": "## Export your first deck\nSave this complete program as `src/main.rs`:\nThe program writes a persistent `spanish.apkg`. Open it in Anki, import it and\nstudy **hola → hello** in the **Spanish** deck. Exporting needs no Anki installation.\nThe namespace `spanish` and stable key `es:hola` identify this note through later\ncontent changes. You can also <a href={sitePath('/generated/spanish.apkg')}>download the website's Basic example</a>."
+          },
+          {
+            "source": "website/src/content/docs/docs/quickstart.mdx",
+            "startLine": 37,
+            "endLine": 47,
+            "excerpt": "## Continue\nFollow the <a href={sitePath('/docs/json-to-anki/#rust')}>JSON to Anki recipe</a> for a complete media and update task.\nAdd <a href={sitePath('/docs/media/')}>images and audio</a>,\n<a href={sitePath('/docs/custom-notetypes/')}>custom note types</a>, or\n<a href={sitePath('/docs/image-occlusion/')}>Image Occlusion</a>.\nKeep the original distribution APKG before\n<a href={sitePath('/docs/updates/')}>comparing and publishing an update</a>.\nRead the <a href={sitePath('/docs/rust-api/')}>Rust API</a> or"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/quickstart.md",
+            "startLine": 1,
+            "endLine": 2,
+            "excerpt": "使用 Rust 1.92 或更高版本。其他语言可选择 [Node / TypeScript 或 Python](/docs/languages/)。"
+          },
+          {
+            "source": "docs/zh-cn/quickstart.md",
+            "startLine": 3,
+            "endLine": 10,
+            "excerpt": "## 安装"
+          },
+          {
+            "source": "docs/zh-cn/quickstart.md",
+            "startLine": 11,
+            "endLine": 36,
+            "excerpt": "## 导出第一个牌组\n将这份完整程序保存为 `src/main.rs`：\n程序写出持久保存的 `spanish.apkg`。在 Anki 中打开并导入后，可在 **Spanish** 牌组中学习 **hola → hello**。导出不需要安装 Anki。\n命名空间 `spanish` 和稳定键 `es:hola` 在之后的内容修改中标识这条笔记。也可以[下载本站 Basic 示例](/generated/spanish.apkg)。"
+          },
+          {
+            "source": "docs/zh-cn/quickstart.md",
+            "startLine": 37,
+            "endLine": 41,
+            "excerpt": "## 继续学习\n[JSON 到 Anki 示例](/docs/json-to-anki/#rust)提供完整的媒体与更新任务。\n添加[图片与音频](/docs/media/)、[自定义笔记类型](/docs/custom-notetypes/)或[图片遮挡](/docs/image-occlusion/)。[比较并发布更新](/docs/updates/)前，请保留原始分发 APKG。详情见 [Rust API](/docs/rust-api/)和[已验证环境](/docs/compatibility/)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "json-to-anki",
+      "selectedTerms": {
+        "en": [
+          "JSON to Anki",
+          "JSON flashcard generation",
+          "JSON to APKG",
+          "structured data to flashcards",
+          "JSON.parse",
+          "json.loads",
+          "serde_json",
+          "TypeScript JSON deck",
+          "JavaScript JSON deck on Node.js",
+          "batch note creation",
+          "JSON image and audio recipe",
+          "answer-only update",
+          "comparison.json and review.json",
+          "durable business IDs"
+        ],
+        "zh-CN": [
+          "JSON 转 Anki",
+          "JSON 生成记忆卡片",
+          "JSON 转 APKG",
+          "结构化数据制作牌组",
+          "JSON.parse",
+          "json.loads",
+          "serde_json",
+          "TypeScript 读取 JSON 制卡",
+          "Node.js 读取 JSON 制卡",
+          "批量创建笔记",
+          "JSON 图片音频示例",
+          "只修改答案的更新",
+          "comparison.json 与 review.json",
+          "持久业务 ID"
+        ]
+      },
+      "selectionRationale": "数据驱动制卡的常见转、生成、批量表达均由读取 notes 数组的完整程序支撑；JavaScript 明确绑定 Node.js。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "调用方解析和校验 JSON，SDK 负责 APKG 编写；不宣称通用 JSON/CSV 转换、网络抓取或语音合成。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 3,
+            "endLine": 9,
+            "excerpt": "Read three biology questions from JSON, add a shared image and audio clip, and\nexport an original APKG plus a reviewed answer-only update. Each release should\ncontain **3 notes, 3 cards and 2 media files**. Choose one SDK below; each is a\ncomplete program. Normal export needs no Anki installation.\nMaintained by Anki Forge maintainers · reviewed 2026-10-25."
+          },
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 10,
+            "endLine": 30,
+            "excerpt": "## Shared inputs\nDownload [v1.json](recipes/json-to-anki/v1.json), [v2.json](recipes/json-to-anki/v2.json),\n[cell.png](recipes/json-to-anki/cell.png) and [tone.wav](recipes/json-to-anki/tone.wav).\nThe image is a cell diagram; the audio is a short generated tone, not spoken vocabulary.\nIn each new application directory, put these four files in `recipe/`:\nBoth JSON files contain `namespace`, `deck` and three `notes` with durable `id`,\n`front` and `back` values. v2 changes only the first answer. The caller parses JSON;"
+          },
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 31,
+            "endLine": 120,
+            "excerpt": "## Rust\nRust 1.92+. JSON parsing uses `serde` and `serde_json`. Use public Anki Forge 0.3.1.\nSave as `src/main.rs` (create `recipe/` alongside `Cargo.toml`):"
+          },
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 121,
+            "endLine": 185,
+            "excerpt": "## Python\nOrdinary CPython 3.11+ with a platform wheel; 3.11–3.14 is covered by release checks. On Windows, activate with `.venv\\Scripts\\Activate.ps1`. Use public Anki Forge 0.3.1.\nSave as `main.py` (create `recipe/` alongside `main.py`):"
+          },
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 186,
+            "endLine": 263,
+            "excerpt": "## Node\nNode.js 22.13+ and a matching native optional dependency. This program compiles TypeScript to JavaScript and runs on Node.js. Use public Anki Forge 0.3.1.\nSave as `main.mts` (create `recipe/` alongside `main.mts`):"
+          },
+          {
+            "source": "docs/json-to-anki.md",
+            "startLine": 264,
+            "endLine": 286,
+            "excerpt": "## Check and import the result\nThe selected program prints `output/<language>/v2.apkg`. Keep `v1.apkg` alongside\nit; `comparison.json` and `review.json` record `RISK.NOTE_CHANGED`, no added or\nremoved notes, and `policy.allows_publication: true` for this answer-only edit.\nThe program checks the policy again on the prepared candidate before publishing.\nIt refuses to reuse an output directory containing either release.\nImport `v1.apkg` into Anki: expect the Biology deck with three Basic cards, the"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "从 JSON 读取三个生物学问题，添加共享图片与音频，导出原始 APKG 和经过检查的仅修改答案的更新。每个版本应包含 **3 条笔记、3 张卡片和 2 个媒体文件**。选择下方任一 SDK，每份都是完整程序。普通导出不需要安装 Anki。\n由 Anki Forge 维护者维护 · 2026-10-25 复核。"
+          },
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 7,
+            "endLine": 21,
+            "excerpt": "## 共享输入\n下载 [v1.json](../recipes/json-to-anki/v1.json)、[v2.json](../recipes/json-to-anki/v2.json)、[cell.png](../recipes/json-to-anki/cell.png) 和 [tone.wav](../recipes/json-to-anki/tone.wav)。图片是细胞示意图；音频是短合成音，并非词汇朗读。在每个新应用目录中，将这四个文件放入 `recipe/`：\n两份 JSON 都包含 `namespace`、`deck` 和三条 `notes`，每条有持久 `id`、`front` 与 `back`。v2 只改变第一个答案。JSON 由调用方解析；Anki Forge 负责内容编写和 APKG 生成。对于不可信输入，创建笔记前应校验应用自己的 schema。"
+          },
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 22,
+            "endLine": 111,
+            "excerpt": "## Rust\nRust 1.92+。JSON 解析使用 `serde` 与 `serde_json`。使用公开 Anki Forge 0.3.1。\n保存为 `src/main.rs`（在 `Cargo.toml` 同级创建 `recipe/`）："
+          },
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 112,
+            "endLine": 176,
+            "excerpt": "## Python\n普通 CPython 3.11+ 及匹配平台 wheel；发布检查覆盖 3.11–3.14。Windows 使用 `.venv\\Scripts\\Activate.ps1` 激活。使用公开 Anki Forge 0.3.1。\n保存为 `main.py`（在 `main.py` 同级创建 `recipe/`）："
+          },
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 177,
+            "endLine": 254,
+            "excerpt": "## Node\nNode.js 22.13+ 及匹配原生可选依赖。程序将 TypeScript 编译为 JavaScript，再在 Node.js 上运行。使用公开 Anki Forge 0.3.1。\n保存为 `main.mts`（在 `main.mts` 同级创建 `recipe/`）："
+          },
+          {
+            "source": "docs/zh-cn/json-to-anki.md",
+            "startLine": 255,
+            "endLine": 263,
+            "excerpt": "## 检查并导入结果\n所选程序输出 `output/<language>/v2.apkg`。将 `v1.apkg` 保留在旁边；`comparison.json` 和 `review.json` 记录 `RISK.NOTE_CHANGED`，没有新增或移除笔记，且对这次仅修改答案的编辑给出 `policy.allows_publication: true`。发布前，程序在预备候选包上再次检查策略。它拒绝复用已包含任一版本的输出目录。\n将 `v1.apkg` 导入 Anki，应看到 Biology 牌组的三张 Basic 卡片、细胞图片与合成音。再导入 `v2.apkg`，检查第一个答案变成“The basic structural and functional unit of life”，且仍有三条笔记。命名空间 `biology-json` 标识该发布项目。每个业务 ID 是稳定笔记键；Anki Forge 根据该身份派生 Anki 使用的 GUID。保持命名空间和这三个键不变。\n更新基线必须是**原始分发** v1 APKG，不能使用 Anki 重新导出的文件。客户端导入匹配、本地编辑和调度取决于 Anki 版本、笔记类型与导入设置；发布前验证目标客户端。导入包不会删除后续包中省略的笔记。比较或构建成功不保证每位学习者的复习状态。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "selectedTerms": {
+        "en": [
+          "Anki Forge versus genanki",
+          "genanki alternative",
+          "Anki library comparison",
+          "choose an APKG library",
+          "Python flashcard libraries",
+          "publishing workflow comparison",
+          "native dependency tradeoffs",
+          "genanki migration cost",
+          "GUID identity comparison",
+          "historical Rust export benchmark",
+          "export time and peak memory"
+        ],
+        "zh-CN": [
+          "Anki Forge 与 genanki 对比",
+          "genanki 替代方案",
+          "Anki 制卡库比较",
+          "选择 APKG 生成库",
+          "Python 记忆卡片库",
+          "发布流程比较",
+          "原生依赖取舍",
+          "genanki 迁移成本",
+          "GUID 身份比较",
+          "历史 Rust 导出基准",
+          "导出耗时与峰值内存"
+        ]
+      },
+      "selectionRationale": "选库时的 alternative、versus、对比、替代方案均是自然决策词；性能只索引正文限定的历史证据。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "genanki 也支持更新和稳定 GUID；历史 Rust 测量不代表当前 Node/Python 速度，也不保证无损迁移。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/anki-forge-vs-genanki.md",
+            "startLine": 3,
+            "endLine": 18,
+            "excerpt": "Consider Anki Forge when you are designing a repeatable publishing workflow and\nneed owned media, structured diagnostics, comparison and policy review before\nreleasing updates. Keep a proven genanki workflow when its Python scripts,\ntemplates and media already meet your needs and migration adds more cost than value.\n| Decision | Anki Forge | genanki |\n| --- | --- | --- |\n| Authoring language | Rust core; Rust, Python and Node / TypeScript interfaces | Python |\n| Shared basics | Basic, Cloze, custom templates, media and offline APKG generation | Basic, Cloze, custom templates, media and offline APKG generation |"
+          },
+          {
+            "source": "docs/anki-forge-vs-genanki.md",
+            "startLine": 19,
+            "endLine": 28,
+            "excerpt": "## The same small task\nTo turn three JSON questions into a deck with one image and sound, both libraries\nlet Python parse the JSON and author notes. With genanki, choose the model and deck\nIDs, assign field values and GUID rules, add media files to the package, then write\nthe APKG. With Anki Forge, choose a namespace and durable business keys, compose\nowned media into notes, build v1, then compare and prepare v2 against the original\nv1 APKG before publication. The [complete JSON recipe](json-to-anki.md) includes"
+          },
+          {
+            "source": "docs/anki-forge-vs-genanki.md",
+            "startLine": 29,
+            "endLine": 41,
+            "excerpt": "## Existing genanki decks\n[genanki supports custom GUIDs](https://github.com/kerrickstaley/genanki#note-guids),\nmedia and updates on re-import. It is incorrect to treat stable identity as an\nexclusive Anki Forge capability. The default GUID rule can depend on fields;\nchoose a deliberate GUID rule when fields will change.\nAnki Forge does not automatically recover arbitrary genanki numeric IDs or GUIDs.\nWithout a separately validated mapping, treat your first Anki Forge distribution\nas an identity boundary. Neither this comparison nor a successful APKG build"
+          },
+          {
+            "source": "docs/anki-forge-vs-genanki.md",
+            "startLine": 42,
+            "endLine": 54,
+            "excerpt": "## Historical performance evidence\nThe 2026-10-08 comparison measured the Rust Project API against genanki 0.13.1 on\nan Apple M1 Pro. At 1,000 Basic notes, the five measured Rust workloads used\n45.7–53.9% less export time; some media workloads used more peak memory.\n[Method, raw results and limitations](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md).\nIt did not measure current Python or Node host performance and gives no equivalent"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/anki-forge-vs-genanki.md",
+            "startLine": 3,
+            "endLine": 15,
+            "excerpt": "如果正在设计可重复的发布流程，需要拥有所有权的媒体、结构化诊断，以及发布更新前的比较与策略检查，可以考虑 Anki Forge。如果已有 genanki 的 Python 脚本、模板和媒体满足需求，迁移成本高于收益，则应保留经过验证的流程。\n| 决策点 | Anki Forge | genanki |\n| --- | --- | --- |\n| 编写语言 | Rust 核心；Rust、Python 和 Node / TypeScript 接口 | Python |\n| 共同基础能力 | Basic、Cloze、自定义模板、媒体与离线 APKG 生成 | Basic、Cloze、自定义模板、媒体与离线 APKG 生成 |\n| 身份 | 显式命名空间和笔记键；更新需保留原始 APKG | 可配置 GUID 和数字模型/牌组 ID；支持重新导入更新 |\n| 发布前 | 比较发现项、风险策略和已检查的预备候选包 | 由自己的脚本和测试定义发布检查 |\n| 媒体所有权 | 类型化图片/声音携带拥有所有权的快照 | 脚本提供包媒体文件和引用 |\n| 编程式图片遮挡 | 通过公开 API 使用带键矩形遮罩 | 按流程评估合适模型或扩展 |"
+          },
+          {
+            "source": "docs/zh-cn/anki-forge-vs-genanki.md",
+            "startLine": 16,
+            "endLine": 19,
+            "excerpt": "## 同一个小任务\n将三个 JSON 问题生成带图片和声音的牌组时，两种库都由 Python 解析 JSON 并编写笔记。genanki 需要选择模型和牌组 ID、设置字段值与 GUID 规则、将媒体文件加入包，再写出 APKG。Anki Forge 需要选择命名空间和持久业务键，将拥有所有权的媒体组合进笔记，构建 v1，再基于原始 v1 APKG 比较和预备 v2，最后发布。[完整 JSON 示例](../json-to-anki.md)提供 Rust、Python 和 TypeScript 实现及运行命令。"
+          },
+          {
+            "source": "docs/zh-cn/anki-forge-vs-genanki.md",
+            "startLine": 20,
+            "endLine": 25,
+            "excerpt": "## 已有 genanki 牌组\n[genanki 支持自定义 GUID](https://github.com/kerrickstaley/genanki#note-guids)、媒体和重新导入更新。不能将稳定身份视为 Anki Forge 独有能力。默认 GUID 规则可能依赖字段；字段会变化时，应有意选择 GUID 规则。\nAnki Forge 不会自动恢复任意 genanki 数字 ID 或 GUID。没有单独验证的映射时，应将首次 Anki Forge 分发视为身份边界。此比较及成功 APKG 构建均不承诺无损迁移或保留全部复习历史。迁移已有牌组前阅读[迁移指南](../python/genanki-migration.md)。"
+          },
+          {
+            "source": "docs/zh-cn/anki-forge-vs-genanki.md",
+            "startLine": 26,
+            "endLine": 30,
+            "excerpt": "## 历史性能证据\n2026-10-08 的比较在 Apple M1 Pro 上测量 Rust Project API 与 genanki 0.13.1。每组 1,000 条 Basic 笔记时，五个实测 Rust 工作负载的导出耗时低 45.7–53.9%；部分媒体场景的峰值内存更高。[方法、原始结果与限制](https://github.com/morehardy/anki-forge/blob/bef4aeb653fc875f216614e73d8a617be039b9cf/benchmarks/results/20261008-latest-commit-genanki/report.md)。该实验未测量当前 Python 或 Node 宿主性能，也不保证这些 SDK 或其他工作负载获得相同加速。\nAnki Forge 维护者 · 2026-10-25 根据公开 Anki Forge 0.3.1 API、[genanki 文档](https://github.com/kerrickstaley/genanki)和归档测量复核。开始新任务前，查看[运行环境兼容性](../compatibility.md)并[选择开发语言](https://ankiforge.dev/docs/languages/)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "development",
+      "selectedTerms": {
+        "en": [
+          "build SDK from source",
+          "source checkout",
+          "repository development",
+          "local native addon",
+          "npm run pack:local",
+          "facade and native tarballs",
+          "offline local npm install",
+          "Maturin native extension",
+          "maturin develop",
+          "Cargo path dependency",
+          "pinned Rust toolchain",
+          "rebuild wrapper and native binary"
+        ],
+        "zh-CN": [
+          "从源码构建 SDK",
+          "源码目录",
+          "仓库开发",
+          "本地原生 addon",
+          "npm run pack:local",
+          "包装层与原生 tarball",
+          "离线安装本地 npm 包",
+          "Maturin 原生扩展",
+          "maturin develop",
+          "Cargo 路径依赖",
+          "固定 Rust 工具链",
+          "重建包装层与原生二进制"
+        ]
+      },
+      "selectionRationale": "源码构建、开发、本地打包与原生扩展重建来自实际命令；不把 registry 安装混入源码构建标签。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "需要编译环境；公开 wheel 使用时无需 Cargo。源码与旧 registry 二进制不可混用。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/source-builds.md",
+            "startLine": 3,
+            "endLine": 10,
+            "excerpt": "Use this guide for repository development and unreleased changes.\nFor the published `0.3.1` packages, use the [Rust](installation.md),\n[Node](node/quick-start.md) or [Python](python/quick-start.md) installation guide.\nRequirements: Git, Rust 1.92.0 with Cargo, and Node.js 22.13+ with npm or\nCPython 3.11/3.12 for the corresponding SDK. The checkout pins the Rust toolchain;\ninstall it with `rustup toolchain install 1.92.0` if needed."
+          },
+          {
+            "source": "docs/source-builds.md",
+            "startLine": 11,
+            "endLine": 44,
+            "excerpt": "## Source builds\nTo build the current source checkout:\nRust consumers can use `ankiforge = { path = \"/absolute/path/to/anki-forge/anki_forge\" }`\nin their application manifest. Run examples with `cargo run --locked -p ankiforge --example target_api_basic`.\nBuild the Node addon from this checkout:\nInstall both actual facade and host-native tarballs printed by `pack:local` into a separate application using\n`npm install --offline --ignore-scripts --omit=optional /absolute/path/facade.tgz /absolute/path/native.tgz`."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/development.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "本指南用于仓库开发和未发布的更改。已发布的 `0.3.1` 包请参考 [Rust](../installation.md)、[Node](../node/quick-start.md) 或 [Python](../python/quick-start.md) 安装指南。\n要求：Git、带 Cargo 的 Rust 1.92.0，以及对应 SDK 所需的 Node.js 22.13+ 与 npm，或 CPython 3.11/3.12。仓库固定了 Rust 工具链；必要时通过 `rustup toolchain install 1.92.0` 安装。"
+          },
+          {
+            "source": "docs/zh-cn/development.md",
+            "startLine": 7,
+            "endLine": 36,
+            "excerpt": "## 源码构建\n构建当前源码目录：\nRust 应用可在 manifest 中使用 `ankiforge = { path = \"/absolute/path/to/anki-forge/anki_forge\" }`。通过 `cargo run --locked -p ankiforge --example target_api_basic` 运行示例。\n从当前源码构建 Node addon：\n将 `pack:local` 实际输出的 facade 与主机原生 tarball 一起安装到单独的应用中：`npm install --offline --ignore-scripts --omit=optional /absolute/path/facade.tgz /absolute/path/native.tgz`。这些是源码构建，并非 registry 安装。TypeScript 配置见 [Node API](../node/api.md#typescript)。\nPython 请激活 CPython 3.11/3.12 虚拟环境、安装 Maturin，再从仓库根目录运行："
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "rust-guide",
+      "selectedTerms": {
+        "en": [
+          "Rust authoring workflow",
+          "Rust Project lifecycle",
+          "atomic note addition",
+          "owned model reuse",
+          "Content::sequence",
+          "Rust structured errors",
+          "AddError::context",
+          "stable source-record keys",
+          "temporary artifact ownership",
+          "Rust update_from workflow",
+          "AddTarget and AddDetail",
+          "ankiforge-project-v2"
+        ],
+        "zh-CN": [
+          "Rust 内容编写流程",
+          "Rust Project 生命周期",
+          "原子添加笔记",
+          "复用拥有所有权的模型",
+          "Content::sequence",
+          "Rust 结构化错误",
+          "AddError::context",
+          "稳定源记录键",
+          "临时产物所有权",
+          "Rust update_from 流程",
+          "AddTarget 与 AddDetail",
+          "ankiforge-project-v2"
+        ]
+      },
+      "selectionRationale": "本页按项目、校验、资源和所有权串联 Rust 使用流程，适合工作流与生命周期表达。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "owned 指值与文件寿命，不是版权或权限；媒体类型检查不认证播放，项目不提供独立显示标题。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "One `Project` describes a publication. Create it with a stable namespace, add\nnotes under stable keys, and build an APKG. Common types are imported directly\nfrom `ankiforge`; advanced options live in the public domain modules."
+          },
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 7,
+            "endLine": 39,
+            "excerpt": "## Projects and diagnostics\nA successful build returns `BuildOutput` with a guaranteed artifact.\n`BuildReport` contains observations: counts, diagnostics, elapsed time and any\ncompleted comparison. It contains no outcome or artifact ownership. Warnings do\nnot turn a successful output into a failure.\nSchema errors are checked when a model is completed. `Project::add` checks the\nnote's key, field references, required fields, deck, tags, and dependency\nconflicts atomically. Failure leaves the project unchanged. The build performs"
+          },
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 40,
+            "endLine": 52,
+            "excerpt": "## Models and assets\nA completed `NoteType` is immutable and shareable. Call `model.note()`, assign\nfields by stable key, and add the result to a project. The note holds its model;\nadding it collects the model and media automatically. Use\n[custom note types](custom-notetypes.md) for declarations and template rules.\n`Media::file` and `Media::bytes` acquire owned snapshots. Source files need not\nremain available after import succeeds. `image.image()` and `audio.sound()`\nproduce structured content; `Content::sequence` combines them with text or HTML."
+          },
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 53,
+            "endLine": 60,
+            "excerpt": "## Output ownership\nChoose `BuildOptions::to(path)` for a persistent output or\n`BuildOptions::temporary()` for an owned temporary file. Retain the output or a\nclone of `output.artifact()` while accessing a temporary path. Its last owner\nremoves the file. `persist_to(path)` returns a persistent artifact; on failure the\noriginal owner remains usable. JSON snapshots contain paths but do not own files."
+          },
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 61,
+            "endLine": 68,
+            "excerpt": "## Stable note identity\nUse a durable source-record key with `project.add(key, note)`. The project\nnamespace, model key, field keys and template keys are independent of display\nnames. Content changes do not create a new logical note. Duplicate keys fail\ninstead of overwriting. Save and reuse your chosen keys when source records are\nreordered or edited."
+          },
+          {
+            "source": "docs/rust-guide.md",
+            "startLine": 69,
+            "endLine": 105,
+            "excerpt": "## Updating distributed decks\nUse the previous original distribution APKG with `update_from`. Its complete\nembedded evidence preserves identity and revision mappings. Independent\n`project.compare(CompareOptions::against(path))` analyzes the candidate and\nreports whether policy would permit publication. See the [two-version workflow](updates.md)\nfor high-risk changes, client import limitations and explicit allowances.\nFrom a checkout, these examples execute the same public API:\n### Addition errors and media categories"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "一个 `Project` 描述一次发布。用稳定命名空间创建项目，以稳定键添加笔记，再构建 APKG。常用类型直接从 `ankiforge` 导入；高级选项位于公开的领域模块。"
+          },
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 5,
+            "endLine": 26,
+            "excerpt": "## 项目与诊断\n成功构建返回包含确定产物的 `BuildOutput`。`BuildReport` 仅含观察结果：数量、诊断、耗时和已完成的比较。它不包含操作结果，也不拥有产物。警告不会把成功输出变为失败。\n模型完成时检查 schema 错误。`Project::add` 原子地检查笔记键、字段引用、必填字段、牌组、标签与依赖冲突。失败不改变项目。构建执行剩余的卡片、包和更新检查。没有独立可变注册表，也不要求额外的校验检查点。\n错误提供固有的 `kind()` 和 `code()` 方法，并实现 `std::error::Error`。请使用机器码，不要解析显示消息。`BuildError::snapshot()` 包含真实失败、观察结果、来源链文本和发布事实。标准错误包装器可以将原始错误保留为来源。"
+          },
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 27,
+            "endLine": 32,
+            "excerpt": "## 模型与资源\n完成的 `NoteType` 不可变且可共享。调用 `model.note()`，按稳定键赋值，再把结果加入项目。笔记持有模型；添加时自动收集模型和媒体。声明与模板规则见[自定义笔记类型](../custom-notetypes.md)。\n`Media::file` 与 `Media::bytes` 获取拥有所有权的快照。导入成功后不再需要保留源文件。`image.image()` 和 `audio.sound()` 生成结构化内容；`Content::sequence` 将它们与文本或 HTML 组合。原始 HTML、CSS 或脚本资源必须通过 `builder.asset` 或 `project.add_asset` 显式包含。参见[媒体](../media.md)和[模板包](../template-bundles.md)。"
+          },
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 33,
+            "endLine": 36,
+            "excerpt": "## 输出所有权\n持久输出选择 `BuildOptions::to(path)`，拥有所有权的临时文件选择 `BuildOptions::temporary()`。访问临时路径时保留输出对象或 `output.artifact()` 的克隆。最后一个所有者会删除文件。`persist_to(path)` 返回持久产物；失败时原所有者仍可用。JSON 快照包含路径，但不拥有文件。"
+          },
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 37,
+            "endLine": 40,
+            "excerpt": "## 稳定笔记身份\n为 `project.add(key, note)` 使用持久的源记录键。项目命名空间、模型键、字段键和模板键独立于显示名称。内容变化不会创建新逻辑笔记。重复键会失败，而非覆盖。源记录重新排序或编辑时，保存并复用所选键。"
+          },
+          {
+            "source": "docs/zh-cn/rust-guide.md",
+            "startLine": 41,
+            "endLine": 60,
+            "excerpt": "## 更新已分发的牌组\n向 `update_from` 提供上一次原始分发 APKG。完整的内嵌证据保留身份和修订映射。独立的 `project.compare(CompareOptions::against(path))` 分析候选包，并报告策略是否允许发布。高风险变更、客户端导入限制和显式放行见[双版本流程](../updates.md)。\n从源码目录运行以下示例，它们执行相同的公开 API：\n### 添加错误与媒体类别\n`Project` 使用稳定命名空间和可选默认牌组，没有显示标题。`NoteType`、`Field` 与 `Template` 仍支持显示名称。`Project::add` 是原子操作。通过 `AddError::context()` 查看笔记或模型键，通过 `note::AddTarget` 查看原始位置；`detail()` 返回 `note::AddDetail`，说明冲突或不兼容媒体用法。匹配这些非穷尽枚举时，对数据变体使用 `..`，并提供兜底分支。字段的 `content_path` 为 `None` 时指字段本身，`Some([])` 指其根，序列下标则指嵌套节点。分隔符字节范围指向原始 UTF-8 Text/Html 叶节点。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "templates",
+      "selectedTerms": {
+        "en": [
+          "template bundle import",
+          "reusable Anki templates",
+          "anki-template.yaml",
+          "template-bundle-v2",
+          "NoteType::from_bundle",
+          "YAML note type manifest",
+          "front.html and back.html",
+          "CSS file and font assets",
+          "browser card templates",
+          "key-based template references",
+          "bundle path traversal",
+          "explicit asset export_as",
+          "template text budget",
+          "custom Cloze bundle"
+        ],
+        "zh-CN": [
+          "导入模板包",
+          "复用 Anki 模板",
+          "anki-template.yaml",
+          "template-bundle-v2",
+          "NoteType::from_bundle",
+          "YAML 笔记类型清单",
+          "front.html 与 back.html",
+          "CSS 文件与字体资源",
+          "浏览器卡片模板",
+          "按字段键引用模板",
+          "模板包目录穿越",
+          "显式资源 export_as",
+          "模板文本预算",
+          "自定义 Cloze 模板包"
+        ]
+      },
+      "selectionRationale": "文件式模板、YAML 清单、CSS 字体与导入复用，和内联自定义模型页区分；路径限制来自实际加载器说明。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "只接受 bundle-v2；不从任意 HTML/CSS/脚本自动发现资源；schema 通过并不保证加载成功。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/template-bundles.md",
+            "startLine": 3,
+            "endLine": 7,
+            "excerpt": "A bundle is a reusable model declaration, template text, CSS and explicit media\nclosure. `NoteType::from_bundle(directory)` validates the complete bundle and\ntakes owned snapshots before returning the same immutable `NoteType` used by\ninline authoring. It does not partially modify a project."
+          },
+          {
+            "source": "docs/template-bundles.md",
+            "startLine": 8,
+            "endLine": 17,
+            "excerpt": "## Run the bundled example\nThe workflow loads the [custom Cloze fixture](../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)\nand writes `target/docs-examples/template.apkg`. Its template targets\n**Languages::Cloze**. One note generates two cards."
+          },
+          {
+            "source": "docs/template-bundles.md",
+            "startLine": 18,
+            "endLine": 56,
+            "excerpt": "## Manifest and template references\nThe manifest filename is `anki-template.yaml`. Only the new format is accepted:\n`note_type.key`, field keys and template keys are required stable identifiers.\n`name` is optional and defaults to the corresponding key. `cloze_field` selects\na Cloze model; no separate kind declaration is needed. A field without\n`required: true` may be omitted. Unknown manifest properties are rejected.\nEvery template uses **field keys**, including front, back and browser variants:"
+          },
+          {
+            "source": "docs/template-bundles.md",
+            "startLine": 57,
+            "endLine": 99,
+            "excerpt": "## Load and reuse a model\nFor an independent application, this full example expects the same bundle copied\nto `fixtures/template-bundle`:\nThe returned model is independent of the source directory. It can be shared with\nanother project or used after that directory is removed. A load failure returns\nno partial model and cleans up its unshared snapshots."
+          },
+          {
+            "source": "docs/template-bundles.md",
+            "startLine": 100,
+            "endLine": 132,
+            "excerpt": "## Assets and budgets\nDeclare every raw template/CSS/script asset explicitly. Each `assets` entry uses\na path relative to the bundle and a fixed export name:\nThen templates may use `<img src=\"badge.png\">` and CSS may use\n`url('labels.woff')`. The `css_file` property supplies the CSS source file; assets\nare not inferred from arbitrary HTML/CSS/JavaScript. Declared assets remain in the\nAPKG even if no static reference is detected. Export names obey the same\nportable-name and Unicode/case collision rules as [Media](media.md)."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/templates.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "模板包是一组可复用的模型声明、模板文本、CSS 和显式媒体依赖闭包。`NoteType::from_bundle(directory)` 校验完整模板包并取得拥有所有权的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。"
+          },
+          {
+            "source": "docs/zh-cn/templates.md",
+            "startLine": 5,
+            "endLine": 12,
+            "excerpt": "## 运行模板包示例\n该流程加载[自定义 Cloze 测试模板](../../contracts/fixtures/template-bundle/custom-cloze/anki-template.yaml)，写出 `target/docs-examples/template.apkg`。模板目标为 **Languages::Cloze**，一条笔记生成两张卡片。"
+          },
+          {
+            "source": "docs/zh-cn/templates.md",
+            "startLine": 13,
+            "endLine": 45,
+            "excerpt": "## Manifest 与模板引用\nManifest 文件名为 `anki-template.yaml`。只接受新版格式：\n`note_type.key`、字段键和模板键是必填稳定标识符。`name` 可选，默认为对应键。`cloze_field` 选择 Cloze 模型，不需要单独声明 kind。未设置 `required: true` 的字段可以省略。未知 manifest 属性会被拒绝。\n所有模板都使用**字段键**，包括正面、背面和浏览器变体：`{{cloze:text}}`、`{{extra}}` 以及 `{{#extra}}` 等条件区块。Sentence 和 Extra 等显示名称在绑定完成后为 Anki 生成。加载器在错误中保留原始文件路径和模板字节范围。"
+          },
+          {
+            "source": "docs/zh-cn/templates.md",
+            "startLine": 46,
+            "endLine": 85,
+            "excerpt": "## 加载与复用模型\n在独立应用中，以下完整示例要求把同一模板包复制到 `fixtures/template-bundle`：\n返回的模型不依赖源目录。可以与另一项目共享，也可在源目录删除后继续使用。加载失败不会返回部分模型，并会清理未共享的快照。"
+          },
+          {
+            "source": "docs/zh-cn/templates.md",
+            "startLine": 86,
+            "endLine": 102,
+            "excerpt": "## 资源与预算\n显式声明所有原始模板、CSS 和脚本资源。每个 `assets` 条目使用相对于模板包的路径和固定导出名称：\n然后模板可使用 `<img src=\"badge.png\">`，CSS 可使用 `url('labels.woff')`。`css_file` 指定 CSS 源文件；资源不会从任意 HTML、CSS 或 JavaScript 中自动推断。声明的资源即使没有检测到静态引用也保留在 APKG 中。导出名称遵守与[媒体](../media.md)相同的可移植名称及 Unicode/大小写冲突规则。包括扩展名在内的完整导出名称最多为 255 个 UTF-8 字节。JSON Schema 检查语法和字符数；`NoteType::from_bundle` 还会在返回已校验模型前执行字节预算、文件内容与引用检查。仅通过 schema 检查并不能保证加载成功。\n绝对路径、目录穿越和指向模板包外部的符号链接会被拒绝。Manifest 上限为 256 KiB；每个模板或 CSS 文本文件上限为 2 MiB，且必须为 UTF-8。资源快照使用默认媒体预算，也可由调用方通过 `NoteType::from_bundle_with_limits` 提供 `MediaLimits`。预检长度和实际读取字节数都会检查。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "api",
+      "selectedTerms": {
+        "en": [
+          "public API overview",
+          "SDK API navigation",
+          "Rust Python Node interfaces",
+          "Anki APKG library API",
+          "authoring and build operations",
+          "media API entry points",
+          "diagnostics API entry points",
+          "comparison and publication API"
+        ],
+        "zh-CN": [
+          "公开 API 总览",
+          "SDK API 导航",
+          "Rust Python Node 接口",
+          "Anki APKG 库 API",
+          "内容编写与构建操作",
+          "媒体 API 入口",
+          "诊断 API 入口",
+          "比较与发布 API"
+        ]
+      },
+      "selectionRationale": "API 目录只使用总览、导航和任务入口表达，避免用全部底层标识抢占专门参考页。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "本页是公开 API 导航，不是所有语言方法签名的完整参考。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/api-overview.md",
+            "startLine": 3,
+            "endLine": 13,
+            "excerpt": "Anki Forge is an open-source Anki APKG generation library with a Rust core and\nRust, Python and Node.js interfaces. Use the public `ankiforge` package to author\nnotes, package media and inspect updates before distributing a new deck. MIT licensed.\n| Task | Rust | Python | Node / TypeScript |\n| --- | --- | --- | --- |\n| Author notes and models | [Rust API](rust-api.md) | [Python API](python/api.md) | [Node API](node/api.md) |\n| Images, audio and occlusion | [Media](media.md) | [Owned media](python/api.md#media-and-occlusion) | [Owned media](node/api.md#media-and-image-occlusion) |"
+          },
+          {
+            "source": "docs/api-overview.md",
+            "startLine": 14,
+            "endLine": 19,
+            "excerpt": "## Stable note identity\nKeep a stable project namespace and note key for each logical note. Updating an\nexisting release also requires its original distribution APKG. An Anki re-export\nis not a substitute for the complete identity evidence in that original package."
+          },
+          {
+            "source": "docs/api-overview.md",
+            "startLine": 20,
+            "endLine": 24,
+            "excerpt": "## Start with a task\n[Choose your language](https://ankiforge.dev/docs/languages/) or follow the complete\n[JSON generation and update recipe](json-to-anki.md). See [compatibility](compatibility.md)\nfor published runtimes and [output guarantees](build-guarantees.md) for file ownership."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/api.md",
+            "startLine": 3,
+            "endLine": 11,
+            "excerpt": "Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。使用公开的 `ankiforge` 包编写笔记、打包媒体，并在分发新版牌组前检查更新。采用 MIT 许可证。\n| 任务 | Rust | Python | Node / TypeScript |\n| --- | --- | --- | --- |\n| 编写笔记与模型 | [Rust API](../rust-api.md) | [Python API](../python/api.md) | [Node API](../node/api.md) |\n| 图片、音频与遮挡 | [媒体](../media.md) | [拥有所有权的媒体](../python/api.md#media-and-occlusion) | [拥有所有权的媒体](../node/api.md#media-and-image-occlusion) |\n| 诊断失败 | [排查问题](../troubleshooting.md) | [诊断](../python/diagnostics.md) | [错误](../node/api.md#errors) |"
+          },
+          {
+            "source": "docs/zh-cn/api.md",
+            "startLine": 12,
+            "endLine": 15,
+            "excerpt": "## 稳定笔记身份\n为每条逻辑笔记保留稳定的项目命名空间和笔记键。更新已有版本还需要原始分发 APKG。Anki 重新导出的文件不能替代原包内的完整身份证据。"
+          },
+          {
+            "source": "docs/zh-cn/api.md",
+            "startLine": 16,
+            "endLine": 18,
+            "excerpt": "## 从一个任务开始\n[选择开发语言](https://ankiforge.dev/docs/languages/)，或完成[从 JSON 生成并更新牌组的示例](../json-to-anki.md)。公开运行环境见[兼容性](../compatibility.md)，文件所有权见[输出保证](../build-guarantees.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "installation",
+      "selectedTerms": {
+        "en": [
+          "Rust installation",
+          "add ankiforge to Cargo",
+          "cargo add ankiforge",
+          "Cargo.toml dependency",
+          "Rust application integration",
+          "Rust minimum version",
+          "Rust linker prerequisites",
+          "empty default features",
+          "serde derive dependency",
+          "serde_json dependency",
+          "public crate installation"
+        ],
+        "zh-CN": [
+          "Rust 安装",
+          "Cargo 添加 ankiforge",
+          "cargo add ankiforge",
+          "Cargo.toml 依赖",
+          "集成 Rust 应用",
+          "Rust 最低版本",
+          "Rust 链接器要求",
+          "空的默认 feature",
+          "serde derive 依赖",
+          "serde_json 依赖",
+          "安装公开 crate"
+        ]
+      },
+      "selectionRationale": "已有应用依赖配置与工具链安装是本页的直接任务；JSON 仅增加调用方解析依赖词。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "这是 Rust 集成页；不声称安装其他语言包或内置通用 JSON/CSV 转换。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/installation.md",
+            "startLine": 3,
+            "endLine": 11,
+            "excerpt": "Use Rust 1.92 or later. In your existing Cargo application, install the public crate:\nNormal APKG export needs no Anki installation. For a complete first program and\n`cargo run` instructions, follow the [Rust quickstart](https://ankiforge.dev/docs/quickstart/)."
+          },
+          {
+            "source": "docs/installation.md",
+            "startLine": 12,
+            "endLine": 32,
+            "excerpt": "## Cargo dependencies\nThe public `ankiforge` crate includes Basic, Cloze, custom note types, owned media,\nImage Occlusion, comparison and prepared publication. Default features are empty;\nnormal application code does not need repository-only features.\nThe crate is a native Rust library. Install your platform's Rust linker and build\ntools as required by your Rust toolchain. See [verified environments](compatibility.md)\nwhen choosing a deployment host. Rust 1.92 is the minimum requirement; a platform"
+          },
+          {
+            "source": "docs/installation.md",
+            "startLine": 33,
+            "endLine": 39,
+            "excerpt": "## Choose the next guide\n- [Rust authoring guide](rust-guide.md) for project and model design\n- [Rust API](rust-api.md) for methods, reports and errors\n- [Media](media.md) for owned images and audio\n- [Update and distribute](updates.md) for baseline and publication conditions\n- [Source builds](source-builds.md) for repository development"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/installation.md",
+            "startLine": 3,
+            "endLine": 10,
+            "excerpt": "使用 Rust 1.92 或更高版本。在现有 Cargo 应用中安装公开 crate：\n普通 APKG 导出不需要安装 Anki。完整的第一个程序和 `cargo run` 操作见 [Rust 入门](https://ankiforge.dev/docs/quickstart/)。"
+          },
+          {
+            "source": "docs/zh-cn/installation.md",
+            "startLine": 11,
+            "endLine": 25,
+            "excerpt": "## Cargo 依赖\n公开的 `ankiforge` crate 包含 Basic、Cloze、自定义笔记类型、拥有所有权的媒体、图片遮挡、比较与预备发布。默认 feature 为空；普通应用代码不需要仓库专用 feature。\n这是原生 Rust 库。请按 Rust 工具链要求安装平台的链接器和构建工具。选择部署主机时参考[已验证环境](../compatibility.md)。Rust 1.92 是最低要求；列出某个平台并不代表保证支持所有目标或第三方工具链配置。\n需要 JSON 输入时，显式添加调用方解析依赖：\n[JSON 到 APKG 示例](../json-to-anki.md#rust) 包含完整解析器、媒体与更新流程。SDK 不提供通用 JSON 或 CSV 转换器。"
+          },
+          {
+            "source": "docs/zh-cn/installation.md",
+            "startLine": 26,
+            "endLine": 32,
+            "excerpt": "## 选择下一篇指南\n- [Rust 编写指南](../rust-guide.md)：Project 与模型设计\n- [Rust API](../rust-api.md)：方法、报告与错误\n- [媒体](../media.md)：拥有所有权的图片与音频\n- [更新与分发](../updates.md)：基线与发布条件\n- [源码构建](../source-builds.md)：仓库开发"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "concepts",
+      "selectedTerms": {
+        "en": [
+          "Anki note versus card versus deck",
+          "Project and deck relationship",
+          "publication namespace",
+          "note type model",
+          "stable keys versus display names",
+          "field and template keys",
+          "Text versus HTML",
+          "HTML escaping",
+          "typed content and media dependencies",
+          "owned media snapshots",
+          "report versus artifact",
+          "update identity evidence"
+        ],
+        "zh-CN": [
+          "笔记、卡片与牌组的区别",
+          "Project 与牌组的关系",
+          "发布命名空间",
+          "笔记类型模型",
+          "稳定键与显示名称",
+          "字段键与模板键",
+          "Text 与 HTML",
+          "HTML 转义",
+          "类型化内容与媒体依赖",
+          "媒体快照所有权",
+          "报告与产物的区别",
+          "更新身份证据",
+          "卡组与牌组"
+        ]
+      },
+      "selectionRationale": "对概念用区别、关系等说明性短语；卡组作为牌组的常见口语同义词，仅附在概念解释页。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "笔记保存内容，卡片由模型生成，牌组是目的地；所有权非版权，普通字符串非可信 HTML。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/concepts.md",
+            "startLine": 3,
+            "endLine": 14,
+            "excerpt": "## Project and note\nA `Project` is one publication with a stable namespace. It can place notes in several Anki decks: `default_deck` supplies the\nfallback and `Note::deck` overrides it. A deck is a destination, not a second\ncontainer for authoring, media or builds.\nA `Note` carries its model and content. `project.add(key, note)` assigns a\nrequired stable source key and atomically collects dependencies. Duplicate keys,\nunknown fields, conflicting models or media fail without partially adding state."
+          },
+          {
+            "source": "docs/concepts.md",
+            "startLine": 15,
+            "endLine": 26,
+            "excerpt": "## Models, fields and templates\n`NoteType::builder(key)` accumulates declarations; `.build()` validates and\nreturns a shareable immutable model. `model.note()` creates a note holding it.\nBuilt-in Basic, Cloze and Image Occlusion notes carry their own models.\nFields and templates have stable keys and optional display names. Author\ntemplates with field keys, for example `{{front}}`, even when the Anki display\nname is `正面`. Completion validates and compiles references, including sections,"
+          },
+          {
+            "source": "docs/concepts.md",
+            "startLine": 27,
+            "endLine": 37,
+            "excerpt": "## Text and HTML\nOrdinary strings always mean Text, across Basic, Cloze and custom notes. Text\nescapes HTML; `Content::html` intentionally includes markup. Cloze syntax such as\n`{{c1::answer}}` is preserved in Text without making embedded HTML trusted.\n`Content::sequence` combines text, HTML, images and sounds into one field.\nTyped image and sound content retain media dependencies until export. Do not\nrender media to strings before adding it unless you also declare the asset\nexplicitly for your hand-written HTML/CSS/script."
+          },
+          {
+            "source": "docs/concepts.md",
+            "startLine": 38,
+            "endLine": 49,
+            "excerpt": "## Media ownership\n`Media` is an owned snapshot with a deterministic content-derived filename.\nImport succeeds only after reading and validating the input under its budget.\nThe source file may then change or disappear. Clones share storage and can be\nused in multiple projects. `with_export_name` selects a fixed portable filename\nwithout changing existing clones or content nodes.\nTyped references collect media automatically. Explicit assets on a model or\nproject are included even if static analysis cannot identify their use. The"
+          },
+          {
+            "source": "docs/concepts.md",
+            "startLine": 50,
+            "endLine": 60,
+            "excerpt": "## Build and update\nA successful build returns an output with a guaranteed APKG. A report contains\nobservations; a snapshot is JSON data and owns no files. Temporary artifacts\nremain alive only while at least one artifact owner remains.\nAn update uses complete evidence embedded in the previous original distribution\nAPKG. Independent comparison separates findings from a publication policy.\nHigh-risk findings block updates by default; hard errors cannot be allowed.\nAnki import settings, local edits and card scheduling still require client"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/concepts.md",
+            "startLine": 3,
+            "endLine": 8,
+            "excerpt": "## Project 与笔记\n一个 `Project` 表示一次具有稳定命名空间的发布。它可以把笔记放入多个 Anki 牌组：`default_deck` 提供默认目标，`Note::deck` 覆盖该目标。牌组是输出的去处，并非另一层内容编写、媒体或构建容器。\n`Note` 携带其模型和内容。`project.add(key, note)` 分配必填的稳定源记录键，并原子地收集依赖。重复键、未知字段、模型或媒体冲突会使操作失败，不会留下部分添加的状态。项目命名空间和记录键必须在编辑及源数据重新排序后保持不变。显示名称和文本不是身份键。"
+          },
+          {
+            "source": "docs/zh-cn/concepts.md",
+            "startLine": 9,
+            "endLine": 14,
+            "excerpt": "## 模型、字段与模板\n`NoteType::builder(key)` 收集声明；`.build()` 校验后返回可共享的不可变模型。`model.note()` 创建持有该模型的笔记。内置 Basic、Cloze 和图片遮挡笔记自带模型。\n字段和模板有稳定键与可选的显示名称。编写模板时使用字段键，例如 `{{front}}`，即使 Anki 显示名称为 `正面`。模型完成时会校验并编译引用，包括条件区块、过滤器、Cloze 和浏览器模板。赋值也使用键，不会猜测键或回退到显示名称。"
+          },
+          {
+            "source": "docs/zh-cn/concepts.md",
+            "startLine": 15,
+            "endLine": 20,
+            "excerpt": "## 文本与 HTML\n在 Basic、Cloze 和自定义笔记中，普通字符串始终表示 Text。Text 会转义 HTML；`Content::html` 用于有意加入标记。`{{c1::answer}}` 等 Cloze 语法在 Text 中保留，但这不会使嵌入 HTML 自动成为可信标记。`Content::sequence` 把文本、HTML、图片和声音组合成一个字段。\n类型化的图片与声音内容会保留媒体依赖直至导出。添加内容前不要把媒体渲染成字符串，除非也为手写的 HTML、CSS 或脚本显式声明了该资源。"
+          },
+          {
+            "source": "docs/zh-cn/concepts.md",
+            "startLine": 21,
+            "endLine": 26,
+            "excerpt": "## 媒体所有权\n`Media` 是拥有所有权的快照，文件名由内容确定。只有在预算范围内完成读取与校验后，导入才会成功；之后源文件可以改变或消失。克隆共享存储，可用于多个项目。`with_export_name` 选择固定且可移植的文件名，不会改变已有克隆或内容节点。\n类型化引用自动收集媒体。模型或项目上显式声明的资源，即使静态分析无法识别用途，也会被包含。库不会从任意 HTML 或脚本中自动发现文件内容。"
+          },
+          {
+            "source": "docs/zh-cn/concepts.md",
+            "startLine": 27,
+            "endLine": 31,
+            "excerpt": "## 构建与更新\n成功构建返回保证包含 APKG 的输出对象。报告只包含观察结果；快照是 JSON 数据，不拥有文件。临时产物只有在至少一个产物所有者仍存在时才保持有效。\n更新使用上一次原始分发 APKG 内嵌的完整证据。独立比较将发现项与发布策略分开。高风险发现项默认阻止更新；硬错误不能被放行。Anki 导入设置、本地编辑和卡片调度仍需客户端验证。参见[更新](../updates.md)和[构建保证](../build-guarantees.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "cards",
+      "selectedTerms": {
+        "en": [
+          "Basic question and answer",
+          "front and back flashcards",
+          "Cloze deletion",
+          "fill-in-the-blank cards",
+          "cloze hint syntax",
+          "multiple cloze numbers",
+          "{{c1::answer}}",
+          "{{c1::answer::hint}}",
+          "back_extra",
+          "two notes three cards",
+          "Note::basic",
+          "Note::cloze",
+          "cloze card identity"
+        ],
+        "zh-CN": [
+          "Basic 问答卡片",
+          "正反面记忆卡片",
+          "Cloze 填空",
+          "挖空卡片",
+          "完形填空卡片",
+          "填空提示语法",
+          "多个填空编号",
+          "{{c1::answer}}",
+          "{{c1::answer::hint}}",
+          "back_extra",
+          "两条笔记三张卡片",
+          "Note::basic",
+          "Note::cloze",
+          "填空卡片身份"
+        ]
+      },
+      "selectionRationale": "填空、挖空、完形填空是 Cloze 的自然中文叫法；正反面用于 Basic，不混淆笔记数和卡片数。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "编号范围1–500；没有 Cloze 标记的普通句子不会生成问题。不把类型化内容误称为输入答案题型。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/cards.md",
+            "startLine": 3,
+            "endLine": 14,
+            "excerpt": "A Basic note has a front and back. A Cloze note generates one card for each\nsupported deletion number. This example creates two notes and three cards.\nFrom the repository root:\nOpen `target/docs-examples/cards.apkg` in Anki. The Basic question is **hola**;\nthe Cloze cards separately hide **Madrid** and **Spain**."
+          },
+          {
+            "source": "docs/cards.md",
+            "startLine": 15,
+            "endLine": 41,
+            "excerpt": "## Author the notes\nThis function is extracted from the [complete executable](../anki_forge/examples/docs_workflow.rs).\nIts `verify` helper checks the successful output's note/card/media counts.\nThe first argument to `Project::new` is a stable namespace. Each `add` call needs\na stable source-record key. Reusing one key for another note fails; no automatic\ncontent-based key is assigned. A changed answer under the same key remains the\nsame logical note when building an update from its previous distribution."
+          },
+          {
+            "source": "docs/cards.md",
+            "startLine": 42,
+            "endLine": 54,
+            "excerpt": "## Text, fields and card identity\nBoth Basic and Cloze strings are Text. Use `Content::html` for intentional HTML;\nCloze deletion syntax is still recognized inside Text. `back_extra` is the\nbuilt-in Cloze extra field key. Use the same `Note::field` method for text, HTML,\nimages and sounds.\nUse `{{c1::answer}}` or `{{c1::answer::hint}}`. A plain sentence supplies no\nCloze question. Supported deletion numbers are 1–500; changing numbers can alter\ncard identities. Review such changes through [comparison and update policy](updates.md)."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/cards.md",
+            "startLine": 3,
+            "endLine": 12,
+            "excerpt": "Basic 笔记有正面和背面。Cloze 笔记针对每个受支持的填空编号生成一张卡片。本例创建两条笔记和三张卡片。\n在仓库根目录运行：\n在 Anki 中打开 `target/docs-examples/cards.apkg`。Basic 的问题为 **hola**；两张 Cloze 卡片分别隐藏 **Madrid** 和 **Spain**。"
+          },
+          {
+            "source": "docs/zh-cn/cards.md",
+            "startLine": 13,
+            "endLine": 35,
+            "excerpt": "## 编写笔记\n此函数摘自[完整可执行程序](../../anki_forge/examples/docs_workflow.rs)。其中的 `verify` 辅助函数检查成功输出的笔记、卡片与媒体数量。\n`Project::new` 的第一个参数是稳定命名空间。每次 `add` 都需要稳定的源记录键。把同一个键用于另一条笔记会失败；库不会根据内容自动分配键。基于之前分发的包构建更新时，在同一键下修改答案仍表示同一条逻辑笔记。"
+          },
+          {
+            "source": "docs/zh-cn/cards.md",
+            "startLine": 36,
+            "endLine": 42,
+            "excerpt": "## 文本、字段与卡片身份\nBasic 和 Cloze 的字符串均为 Text。有意使用 HTML 时，调用 `Content::html`；Text 内仍会识别 Cloze 填空语法。`back_extra` 是内置 Cloze 附加字段键。文本、HTML、图片与声音都使用同一个 `Note::field` 方法。\n使用 `{{c1::answer}}` 或 `{{c1::answer::hint}}`。普通句子不会提供 Cloze 问题。支持的填空编号为 1–500；修改编号可能改变卡片身份。应通过[比较和更新策略](../updates.md)检查此类更改。\n接下来可以添加[媒体](../media.md)、[自定义模型](../custom-notetypes.md)或[图片遮挡](../image-occlusion.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "custom-notetypes",
+      "selectedTerms": {
+        "en": [
+          "custom note types",
+          "custom Anki model",
+          "define note fields",
+          "custom card templates",
+          "NoteType::builder",
+          "Field::required",
+          "Field::sort",
+          "GenerationRule::all",
+          "GenerationRule::any",
+          "conditional card generation",
+          "custom Cloze field",
+          "field keys and display names",
+          "{{FrontSide}}",
+          "model definition conflict"
+        ],
+        "zh-CN": [
+          "自定义笔记类型",
+          "自定义 Anki 模型",
+          "定义笔记字段",
+          "自定义卡片模板",
+          "NoteType::builder",
+          "Field::required",
+          "Field::sort",
+          "GenerationRule::all",
+          "GenerationRule::any",
+          "按条件生成卡片",
+          "自定义 Cloze 字段",
+          "字段键与显示名称",
+          "{{FrontSide}}",
+          "模型定义冲突"
+        ]
+      },
+      "selectionRationale": "自定义字段、正反面模板和生成规则是内联模型直接支持的任务；模型与笔记类型作为同义表达。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "模型完成后不可变；字段赋值只接受键。源码中的普通模板不等于自带输入答案比较或评分功能。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/custom-notetypes.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "Complete a model once, then create notes from it. The returned `NoteType` is\nimmutable and can be reused in functions or multiple projects. A note holds its\nmodel, so it cannot accidentally refer to an unregistered model name."
+          },
+          {
+            "source": "docs/custom-notetypes.md",
+            "startLine": 7,
+            "endLine": 47,
+            "excerpt": "## Executable example\nThe example defines separate stable keys and display names, assigns by key,\nand uses those same keys inside templates.\nRun from the checkout with\n`cargo run --locked -p ankiforge --example target_api_custom_notetype`.\nOpen `jp-core.apkg` in Anki."
+          },
+          {
+            "source": "docs/custom-notetypes.md",
+            "startLine": 48,
+            "endLine": 59,
+            "excerpt": "## Keys and names\n`Field::new` and `Template::new` take stable keys. `.name` supplies a display name;\notherwise the name equals the key. No slug is derived from a name. Empty,\nwhitespace and conflicting/reserved keys fail model completion. Names can be\nChinese or other Unicode text without changing identity keys.\nTemplates bind keys and compile to Anki field names. This covers front/back,\nbrowser templates, condition sections, filters and Cloze. Other HTML, whitespace\nand script text are preserved. Unknown references fail with a source byte range."
+          },
+          {
+            "source": "docs/custom-notetypes.md",
+            "startLine": 60,
+            "endLine": 77,
+            "excerpt": "## Validation and generation\n`required()` rejects missing or empty note content. Fields without it may be\nomitted and render empty. `sort()` selects the sort field; at most one field can\nselect it. Generation uses Anki's default rule unless an explicit\n`GenerationRule::all` or `any` is set on a template. These rules reference field\nkeys. `builder.cloze_field(key)` selects Cloze semantics for a custom model.\n`builder.asset(media)` declares an owned CSS/font/script/raw-HTML dependency."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/custom-notetypes.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "先完成模型，再从模型创建笔记。返回的 `NoteType` 不可变，可在函数或多个项目中复用。笔记持有自己的模型，因此不会意外引用尚未注册的模型名称。"
+          },
+          {
+            "source": "docs/zh-cn/custom-notetypes.md",
+            "startLine": 5,
+            "endLine": 42,
+            "excerpt": "## 可执行示例\n本例分别定义稳定键和显示名称，按键赋值，并在模板中使用相同的键。\n在源码目录运行 `cargo run --locked -p ankiforge --example target_api_custom_notetype`，然后在 Anki 中打开 `jp-core.apkg`。"
+          },
+          {
+            "source": "docs/zh-cn/custom-notetypes.md",
+            "startLine": 43,
+            "endLine": 48,
+            "excerpt": "## 键与名称\n`Field::new` 和 `Template::new` 接收稳定键。`.name` 提供显示名称；未设置时名称等于键。不会从名称派生 slug。空键、空白键以及冲突或保留键会使模型完成失败。名称可以包含中文或其他 Unicode 文本，不影响身份键。\n模板绑定键，并编译成 Anki 字段名称。该过程涵盖正反面、浏览器模板、条件区块、过滤器和 Cloze。其他 HTML、空白和脚本文本保持不变。未知引用会返回包含源字节范围的错误。字段赋值只接受键，不会静默去除空白或忽略大小写。"
+          },
+          {
+            "source": "docs/zh-cn/custom-notetypes.md",
+            "startLine": 49,
+            "endLine": 57,
+            "excerpt": "## 校验与生成\n`required()` 拒绝缺失或空的笔记内容。未设置它的字段可以省略，并渲染为空。`sort()` 选择排序字段；最多只能有一个。模板未显式设置 `GenerationRule::all` 或 `any` 时，使用 Anki 的默认生成规则。这些规则引用字段键。`builder.cloze_field(key)` 为自定义模型选择 Cloze 语义。\n`builder.asset(media)` 声明拥有所有权的 CSS、字体、脚本或原始 HTML 依赖。笔记的类型化图片与声音内容自动收集资源。即使没有发现静态引用，显式资源仍保留在输出中。\n同一项目中复用模型键时，定义必须相同。添加笔记时，冲突的定义会原子地失败。后续版本中更改显示名称、字段或模板，即使稳定键不变，也需要进行[更新分析](../updates.md)。\n需要复用文件和资源时，使用[模板包](../template-bundles.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "media",
+      "selectedTerms": {
+        "en": [
+          "add images to flashcards",
+          "attach audio to cards",
+          "package sound files",
+          "typed image and sound content",
+          "Media::file",
+          "Media::bytes",
+          "Content::sequence",
+          "with_export_name",
+          "MIME type validation",
+          "export filename collisions",
+          "CSS font assets",
+          "media import limits",
+          "batch media import",
+          "Media::files",
+          "owned media snapshots",
+          "media snapshot memory budget"
+        ],
+        "zh-CN": [
+          "给记忆卡片加图片",
+          "给卡片加音频",
+          "打包声音文件",
+          "类型化图片与声音内容",
+          "Media::file",
+          "Media::bytes",
+          "Content::sequence",
+          "with_export_name",
+          "MIME 类型校验",
+          "导出文件名冲突",
+          "CSS 字体资源",
+          "媒体导入限制",
+          "批量媒体导入",
+          "Media::files",
+          "媒体快照所有权",
+          "媒体快照内存预算",
+          "配图与音频"
+        ]
+      },
+      "selectionRationale": "图片、配图、声音、音频是自然媒体表达；typed 明确指携带依赖的 Content 值。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "只打包已提供的媒体，不合成语音、不抓取远程资源；手写 HTML/CSS 需显式声明资源，预算不是 RSS 上限。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/media.md",
+            "startLine": 3,
+            "endLine": 7,
+            "excerpt": "A `Media` value owns an immutable snapshot. Import files with `Media::file` or\nnative bytes with an explicit MIME type via `Media::bytes`. After successful\nimport, modifying or deleting the source file cannot change the asset. Clones\nshare storage and can be used across projects."
+          },
+          {
+            "source": "docs/media.md",
+            "startLine": 8,
+            "endLine": 37,
+            "excerpt": "## Execute the media workflow\nFrom the repository root:\nThe workflow uses repository PNG/WAV fixtures and writes `media.apkg` with one\nnote, one card and three assets. The second example generates its own tiny image\nand audio, includes CSS-linked and explicit media, and writes `spanish-media.apkg`."
+          },
+          {
+            "source": "docs/media.md",
+            "startLine": 38,
+            "endLine": 80,
+            "excerpt": "## Compose content and explicit assets\nThis complete program uses `fixtures/pixel.png`, `fixtures/silence.wav`, and\n`fixtures/labels.woff`. In your application, pass your own source paths. The\nfixture font is the repository's redistributable test font.\nTyped `image()` and `sound()` values retain dependencies until export. Manual\nHTML/CSS/script references need `builder.asset(media)` or `project.add_asset(media)`;\nthe library does not infer file contents from arbitrary strings. An explicit"
+          },
+          {
+            "source": "docs/media.md",
+            "startLine": 81,
+            "endLine": 127,
+            "excerpt": "## Names, MIME and budgets\nDefault export names are content-derived and independent of the source path.\nUse `with_export_name` before creating references when a fixed filename is\nneeded. Renaming a clone does not rename earlier clones or content nodes.\nNames cannot contain paths, controls or nonportable reserved names. Conflict\nchecks use Unicode NFC plus case folding: case-only or normalization-only\nvariants also conflict. Exactly identical name/content pairs are idempotent;\ndifferent contents under one name fail without partial registration."
+          },
+          {
+            "source": "docs/media.md",
+            "startLine": 128,
+            "endLine": 159,
+            "excerpt": "## Batch media import\nThese methods are included in the public `0.3.1` package.\nImport a collection with bounded concurrency, keep input order, and retain\nowned media snapshots for later export:\nNode uses `await Media.files(['first.png', 'second.png'])`;\nPython uses `Media.files(['first.png', 'second.png'])`.\n### Batch behavior and budgets\nUse `Media::files(paths)` in Rust, `await Media.files(paths)` in Node, or\n`Media.files(paths)` in Python to import files in input order with at most four"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/media.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "`Media` 值拥有不可变快照。使用 `Media::file` 导入文件，或通过带显式 MIME 类型的 `Media::bytes` 导入原生字节。成功导入后，修改或删除源文件都不会改变该资源。克隆共享存储，可跨项目使用。"
+          },
+          {
+            "source": "docs/zh-cn/media.md",
+            "startLine": 5,
+            "endLine": 32,
+            "excerpt": "## 运行媒体流程\n在仓库根目录运行：\n该流程使用仓库 PNG/WAV 测试素材，写出包含一条笔记、一张卡片和三个资源的 `media.apkg`。第二个示例自行生成小图像和音频，包含 CSS 引用及显式声明的媒体，并写出 `spanish-media.apkg`。"
+          },
+          {
+            "source": "docs/zh-cn/media.md",
+            "startLine": 33,
+            "endLine": 67,
+            "excerpt": "## 组合内容与显式资源\n这份完整程序使用 `fixtures/pixel.png`、`fixtures/silence.wav` 和 `fixtures/labels.woff`。在应用中请传入自己的源路径。测试字体是仓库中允许再分发的测试用字体。\n类型化的 `image()` 和 `sound()` 值会保留依赖直至导出。手写 HTML、CSS 或脚本引用需要 `builder.asset(media)` 或 `project.add_asset(media)`；库不会从任意字符串推断文件内容。即使没有可被静态识别的引用，显式资源仍会被包含。\n向 `with_export_name` 传入原始文件名。类型化声音引用在渲染时会转义 HTML 实体，因此 `tone&copy;.mp3` 仍引用该原名资源。不要预先转义文件名。声音文件名中的百分号和片段字符保持字面含义，并不是 URL 路径。"
+          },
+          {
+            "source": "docs/zh-cn/media.md",
+            "startLine": 68,
+            "endLine": 87,
+            "excerpt": "## 名称、MIME 与预算\n默认导出名称由内容决定，与源路径无关。需要固定文件名时，应在创建引用前使用 `with_export_name`。重命名某个克隆不会改变之前的克隆或内容节点。\n名称不能包含路径、控制字符或不可移植的保留名称。冲突检查使用 Unicode NFC 加大小写折叠：仅大小写或规范化形式不同也会冲突。名称与内容完全相同的重复操作具有幂等性；同名不同内容会失败，不留下部分注册状态。\n包括扩展名在内的完整导出文件名最多为 255 个 UTF-8 字节。Project 与模板包的 JSON Schema 检查文件名语法和字符数；加载器还检查字节预算。例如，重复 128 次的 `é` 能通过 schema 字符限制，却占 256 字节，加载时返回 `MEDIA.EXPORT_NAME_INVALID`。构建前通过 `tools::load_project` 或 `NoteType::from_bundle` 校验完整输入。\nMIME 语法必须与可识别的内容一致。原生字节没有 64 KiB 的内联限制。默认导入预算为每个资源 256 MiB；`file_with_limits` 和 `bytes_with_limits` 在读取前接收 `MediaLimits { max_bytes }`。大快照可能写入临时存储，并在最后一个所有者消失后清理。快照所有权不保证在源文件同时被修改的导入过程中获得原子的文件系统视图。"
+          },
+          {
+            "source": "docs/zh-cn/media.md",
+            "startLine": 88,
+            "endLine": 105,
+            "excerpt": "## 批量媒体导入\n这些方法已包含在公开 `0.3.1` 包中。\n以受限并发导入一组文件，保持输入顺序，并保留拥有所有权的媒体快照供之后导出：\nNode 使用 `await Media.files(['first.png', 'second.png'])`；Python 使用 `Media.files(['first.png', 'second.png'])`。\n### 批量行为与预算\nRust 使用 `Media::files(paths)`，Node 使用 `await Media.files(paths)`，Python 使用 `Media.files(paths)`，按输入顺序导入文件，每次调用最多四个工作线程。少于 16 个文件时串行运行。Rust 还提供 `files_with_limits`；Node 和 Python 接受与 `file` 相同的限制。限制按每个资源计算。若某项导入失败，调用会等待已启动的工作完成、释放此批次的快照，并返回输入顺序中的第一个错误。已有媒体所有者继续有效。Python 在导入期间释放 GIL；Node 在事件循环之外执行工作。单文件导入仍立即产生拥有所有权的快照；调用方必须选择批量方法才能获得导入并发。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "image-occlusion",
+      "selectedTerms": {
+        "en": [
+          "image occlusion",
+          "image masking flashcards",
+          "diagram region questions",
+          "hide labels on an image",
+          "rectangle masks",
+          "Mask::rect",
+          "HideAllGuessOne",
+          "HideOneGuessOne",
+          "stable mask keys",
+          "pixel coordinates",
+          "EXIF image orientation",
+          "decoded image budget",
+          "mask card ordinals",
+          "Note::image_occlusion"
+        ],
+        "zh-CN": [
+          "图片遮挡",
+          "图像遮挡",
+          "图片挖空",
+          "遮住图片标签",
+          "图表区域制卡",
+          "矩形遮罩",
+          "Mask::rect",
+          "HideAllGuessOne",
+          "HideOneGuessOne",
+          "稳定遮罩键",
+          "像素坐标",
+          "EXIF 图片方向",
+          "图片解码预算",
+          "遮罩卡片序号",
+          "Note::image_occlusion"
+        ]
+      },
+      "selectionRationale": "图片/图像遮挡、图片挖空和遮标签对应从指定图像矩形区域出题；使用实际模式名便于精确查找。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "只支持正文的带键矩形与两种模式；不暗示自动识别文字、OCR、任意多边形或自动检测遮挡区域。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/image-occlusion.md",
+            "startLine": 3,
+            "endLine": 7,
+            "excerpt": "Create a structured image-occlusion note from an owned image and rectangles.\nEach mask needs a stable key that continues to identify the same region through\nlater versions. The note joins a project through the ordinary `add(key, note)`\npath."
+          },
+          {
+            "source": "docs/image-occlusion.md",
+            "startLine": 8,
+            "endLine": 32,
+            "excerpt": "## Run the example\nOpen `target/docs-examples/diagram.apkg` in Anki. The complete executable loads\nthe repository's occlusion image and checks one note, one card and one asset."
+          },
+          {
+            "source": "docs/image-occlusion.md",
+            "startLine": 33,
+            "endLine": 74,
+            "excerpt": "## Multiple masks and modes\nThis standalone example expects `fixtures/occlusion.png`, a decoded image at\nleast 80×80 pixels:\n`HideAllGuessOne` is the default; `HideOneGuessOne` is also supported. Each keyed\nmask produces its own cloze card. Coordinates are finite pixel values on the\ndisplayed image, after EXIF orientation. The library fully decodes PNG, JPEG,\nGIF, WebP and BMP; the decoded buffer budget is 256 MiB, independent of the\ncompressed media import budget. Rectangles must have positive dimensions, lie"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/image-occlusion.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "使用拥有所有权的图像与矩形创建结构化图片遮挡笔记。每个遮罩需要稳定键，在后续版本中继续标识同一区域。笔记通过普通 `add(key, note)` 加入项目。"
+          },
+          {
+            "source": "docs/zh-cn/image-occlusion.md",
+            "startLine": 5,
+            "endLine": 28,
+            "excerpt": "## 运行示例\n在 Anki 中打开 `target/docs-examples/diagram.apkg`。完整可执行程序加载仓库的遮挡图像，并检查一条笔记、一张卡片和一个资源。"
+          },
+          {
+            "source": "docs/zh-cn/image-occlusion.md",
+            "startLine": 29,
+            "endLine": 57,
+            "excerpt": "## 多个遮罩与模式\n此独立示例需要 `fixtures/occlusion.png`，解码后的图像至少为 80×80 像素：\n默认模式为 `HideAllGuessOne`，也支持 `HideOneGuessOne`。每个带键遮罩生成自己的 Cloze 卡片。坐标是应用 EXIF 方向后的显示图像上的有限像素值。库完整解码 PNG、JPEG、GIF、WebP 和 BMP；解码缓冲预算为 256 MiB，与压缩媒体的导入预算独立。矩形尺寸必须为正、位于图像内，并使用唯一的非空键。\n构建器在返回 `Note` 前校验图像和遮罩。使用普通 `field` 为 `header`、`back_extra` 和 `comments` 赋值；自动生成的 `image` 和 `occlusion` 字段为保留字段，不能覆盖。\n基于之前分发的包更新时，遮罩键会在顺序改变后保留卡片序号。已移除遮罩的序号仍被保留；恢复相同键会复用原序号。新键不会继承其他遮罩的身份。支持的分配范围为 1–500，用尽时明确失败。删除或添加遮罩会出现在[更新风险分析](../updates.md)中；APKG 中省略卡片不会删除学习者已有的卡片。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "updates",
+      "selectedTerms": {
+        "en": [
+          "update a distributed deck",
+          "update existing notes",
+          "answer-only deck update",
+          "original distribution APKG",
+          "compare before publishing",
+          "CompareOptions::against",
+          "BuildOptions::update_from",
+          "UpdatePolicy",
+          "RISK.NOTE_REMOVED",
+          "stable note GUIDs",
+          "revision evidence",
+          "Anki re-export baseline",
+          "local edits and scheduling",
+          "prepare_publication",
+          "review then publish",
+          "removed notes and deletion behavior"
+        ],
+        "zh-CN": [
+          "更新已分发牌组",
+          "修改已有笔记",
+          "只改答案的牌组更新",
+          "原始分发 APKG",
+          "发布前比较",
+          "CompareOptions::against",
+          "BuildOptions::update_from",
+          "UpdatePolicy",
+          "RISK.NOTE_REMOVED",
+          "稳定笔记 GUID",
+          "修订证据",
+          "Anki 重新导出基线限制",
+          "本地修改与复习进度",
+          "prepare_publication",
+          "审阅后发布",
+          "移除笔记与删除行为"
+        ]
+      },
+      "selectionRationale": "编辑答案、更新已有笔记、发布前比较与复习进度都是正文讨论的用户任务；保留风险和基线约束。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "必须使用原始分发包；不保证复习进度或本地修改总被保留/覆盖；省略内容不等于删除同步，硬错误不可放行。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/updates.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "Keep the project namespace and note/model/field/template keys stable. Build each\nnew release from the previous **original distribution APKG**, which carries\ncomplete versioned identity evidence. Save that package with its source revision."
+          },
+          {
+            "source": "docs/updates.md",
+            "startLine": 7,
+            "endLine": 43,
+            "excerpt": "## Run two versions and compare\nThis writes `spanish-v1.apkg` and `spanish-v2.apkg`, compares the changed answer,\nand checks the updated package counts. The executable source is:\n`compare` completes successfully even when findings would block publication.\nRead `comparison.policy().allows_publication()` separately from the original\nrisk level and evidence. `build(...update_from(...))` runs the same analysis and\nreturns `BuildError` if its policy blocks the candidate, before publication."
+          },
+          {
+            "source": "docs/updates.md",
+            "startLine": 44,
+            "endLine": 85,
+            "excerpt": "## Policy and inspection limits\nThis full program selects a stricter threshold and uses the same configuration\nfor comparison and update:\nThe default policy blocks High and Critical findings. After reviewing a specific\ncategory, a caller can deliberately choose\n`UpdatePolicy::default().allow(RiskCode::NoteRemoved)`. It accepts **all findings\nin that category**, retaining their original level and evidence. It does not\nclaim to approve selected notes individually. An allowance with no matching"
+          },
+          {
+            "source": "docs/updates.md",
+            "startLine": 86,
+            "endLine": 99,
+            "excerpt": "## Evidence and identity\nThe package includes `ankiforge-identity.json` with the\n`ankiforge-identity-v1` format. It binds model/config IDs, note GUIDs, historical\nfield/template slots, card/mask ordinals, revisions and media to the actual\ncollection and payloads. Anki re-export does not preserve this evidence and is\nnot a usable update baseline. Missing evidence is never silently reconstructed.\nDisplay-name and content edits preserve identity keys. Unchanged content keeps\nits baseline revision; changed content advances it. Reordering fields/templates"
+          },
+          {
+            "source": "docs/updates.md",
+            "startLine": 100,
+            "endLine": 118,
+            "excerpt": "## Client import behavior and release review\nAn APKG is a distribution package, not deletion synchronization. Omitting notes,\nfields, templates or masks does not delete existing learner data. Field/template\nschema changes and sort-field changes are high-risk because Anki merge and import\nsettings affect their behavior. Schema changes can copy models or update target\nnote timestamps before note-content comparison.\nTest first import and updates into an existing collection on the clients you"
+          },
+          {
+            "source": "docs/updates.md",
+            "startLine": 119,
+            "endLine": 173,
+            "excerpt": "## Build once, review then publish\nThis API is included in the public `0.3.1` package.\nBuild once, inspect the report, then publish the same candidate file. Reviewing\nand then running a second ordinary build creates another candidate; prepared\npublication keeps the actual APKG tied to the reviewed report.\nFrom the pinned source checkout, save the complete program above as\n`anki_forge/examples/docs_publication.rs` (this guide adds the example; it is not\nbundled in `1199196`). Then run:"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "保持项目命名空间和笔记、模型、字段、模板键稳定。每次新版本基于之前的**原始分发 APKG** 构建，该包携带完整、带版本的身份证据。将包和源代码修订一起保存。"
+          },
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 5,
+            "endLine": 37,
+            "excerpt": "## 运行两个版本并比较\n这会写出 `spanish-v1.apkg` 和 `spanish-v2.apkg`，比较修改后的答案，并检查更新包的数量。可执行源码如下：\n即使发现项会阻止发布，`compare` 也可以成功完成。请分别读取 `comparison.policy().allows_publication()`、原始风险级别和证据。`build(...update_from(...))` 执行相同分析；若策略阻止候选包，则在发布前返回 `BuildError`。"
+          },
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 38,
+            "endLine": 68,
+            "excerpt": "## 策略与检查限制\n这份完整程序选择更严格的阈值，并对比较和更新使用相同配置：\n默认策略阻止 High 和 Critical 发现项。审阅特定类别后，调用方可有意选择 `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`。它放行**该类别中的所有发现项**，同时保留原级别和证据；并不表示逐条批准指定笔记。没有匹配发现项的放行会产生警告；未知风险码被拒绝。不要自动放行比较返回的每一个码。\n缺失或损坏的证据、命名空间不匹配、无效候选数据和检查限制都是硬错误，不是可放行的风险类别。分析无法完成时，比较返回错误及已完成的观察结果。对没有 `update_from` 的新建请求显式设置策略属于配置错误，与 setter 调用顺序无关。"
+          },
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 69,
+            "endLine": 74,
+            "excerpt": "## 证据与身份\n包内包含 `ankiforge-identity.json`，格式为 `ankiforge-identity-v1`。它将模型或配置 ID、笔记 GUID、历史字段或模板槽位、卡片或遮罩序号、修订和媒体绑定到实际集合与载荷。Anki 重新导出不保留该证据，不能作为更新基线。缺失证据绝不会被静默重建。\n显示名称和内容编辑保留身份键。内容未变时保留基线修订；内容改变时推进修订。字段或模板重排保留历史映射。退役身份继续保留，恢复相同键时可复用。笔记键不能移到另一模型，模型键也不能在普通与 Cloze 类型间改变。"
+          },
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 75,
+            "endLine": 84,
+            "excerpt": "## 客户端导入行为与发布检查\nAPKG 是分发包，不是删除同步。省略笔记、字段、模板或遮罩，不会删除学习者已有数据。字段或模板 schema 和排序字段变化属于高风险，因为 Anki 合并与导入设置会影响行为。Schema 变化可能复制模型，或在笔记内容比较前更新目标笔记的时间戳。\n在支持的客户端测试首次导入以及导入已有集合的更新。使用目标合并与笔记更新设置，检查字段、GUID、卡片集合、本地编辑和已有调度。仅稳定身份不保证较新本地编辑被覆盖，也不保证已删除的历史被恢复。\n将候选包写到与归档基线不同的路径。审阅后分发被接受的包，并将它保留为下一次发布的证据。所有权和发布事实见[构建保证](../build-guarantees.md)。"
+          },
+          {
+            "source": "docs/zh-cn/updates.md",
+            "startLine": 85,
+            "endLine": 127,
+            "excerpt": "## 构建一次，审阅后发布\n此 API 已包含在公开 `0.3.1` 包中。\n构建一次，检查报告，然后发布同一个候选文件。审阅后再运行一次普通构建会创建另一个候选包；预备发布使实际 APKG 始终与已审阅报告对应。\n在固定修订的源码目录中，把上面的完整程序保存为 `anki_forge/examples/docs_publication.rs`（本指南新增该示例；`1199196` 中未包含它），然后运行：\n示例在仓库根目录写出 `spanish-original.apkg`，并在策略允许发布时写出 `spanish-reviewed.apkg`。预备阶段不发布到目标。批准分发前，应审阅发现项并测试客户端导入；此示例只在策略允许时自动发布这次简单内容编辑。基准测试未测量该流程。\n参见[构建生命周期](../build-guarantees.md#prepared-publication-from-source)、[Rust API](../rust-api.md#review-once-publish-once)、[Node API](../node/api.md#prepare-review-and-publish)和 [Python API](../python/api.md#prepare-review-and-publish)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "build-guarantees",
+      "selectedTerms": {
+        "en": [
+          "build output guarantees",
+          "temporary APKG lifetime",
+          "persistent artifact",
+          "last artifact owner",
+          "artifact.persist_to",
+          "atomic APKG replacement",
+          "publication stage",
+          "durability confirmation",
+          "late publication failure",
+          "report versus output snapshot",
+          "native path serialization",
+          "inspection budgets",
+          "prepared candidate lifetime",
+          "consumed publication owner",
+          "relative artifact paths"
+        ],
+        "zh-CN": [
+          "构建输出保证",
+          "临时 APKG 生命周期",
+          "持久产物",
+          "最后一个产物所有者",
+          "artifact.persist_to",
+          "APKG 原子替换",
+          "发布阶段",
+          "持久性确认",
+          "发布后的晚期失败",
+          "报告与输出快照",
+          "原生路径序列化",
+          "检查预算",
+          "预备候选包寿命",
+          "发布所有者已消耗",
+          "相对产物路径"
+        ]
+      },
+      "selectionRationale": "寿命、持久保存、原子替换和晚期失败是输出生命周期的直接内容；保留精准操作标识。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "报告不拥有文件；单文件原子替换不等于多文件事务或崩溃持久性，准备发布不会立刻替换目标。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 3,
+            "endLine": 6,
+            "excerpt": "`Project::build` returns `BuildOutput` only after a successful operation, with a\nguaranteed APKG artifact. A failed operation returns `BuildError` with structured\nkind/code, observations, underlying causes and actual publication facts."
+          },
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 7,
+            "endLine": 31,
+            "excerpt": "## Temporary and persistent artifacts\nChoose the ownership model explicitly:\n| Request | Ownership |\n| --- | --- |\n| `BuildOptions::to(path)` | Persistent destination; survives handle cleanup |\n| `BuildOptions::temporary()` | Temporary file; deleted with its last artifact owner |\n| `artifact.persist_to(path)` | New persistent owner; original owner remains usable |\nKeep the `BuildOutput` or a cloned artifact alive while reading a temporary\npath. A report or JSON snapshot does not extend file lifetime. Rust drops owners"
+          },
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 32,
+            "endLine": 61,
+            "excerpt": "## Baselines and publication\nFor updates, retain the previous original distribution APKG as an immutable\nbaseline and choose a separate output destination. Baseline evidence and\ncandidate content are checked before publication. Policy rejection does not\nreplace the output. Missing or corrupt evidence and exhausted inspection budgets\nare hard failures.\nPublication uses atomic replacement of the APKG. This is a per-file guarantee;\nwriting an application's separate JSON report is a separate operation. The"
+          },
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 62,
+            "endLine": 69,
+            "excerpt": "## Inspection limits\nFinite archive, entry-count, expansion, decoded collection/media and zstd-window\nbudgets apply independently to baseline and candidate. Start with\n`InspectLimits::default()` and deliberately raise a relevant limit when needed.\nA limit of zero is not unlimited. These counters are not a process-wide memory\nor CPU sandbox; media imports have a separate earlier per-asset budget."
+          },
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 70,
+            "endLine": 81,
+            "excerpt": "## Concurrent work\nRust builds borrow immutable project state. Owned models and media can be shared\nacross projects. The Node binding captures a project snapshot when build or\ncompare is invoked, so later additions do not change that request. Retain the\nartifact owner until all readers have finished; closing the last temporary owner\nwhile a separate consumer still needs its path is an application lifetime error.\nPackage inspection cannot establish every client-side behavior. Test rendering,"
+          },
+          {
+            "source": "docs/build-guarantees.md",
+            "startLine": 82,
+            "endLine": 99,
+            "excerpt": "## Prepared publication from source\nPrepared publication is included in the public `0.3.1` packages.\n`prepare_publication` builds, inspects and compares one private candidate;\n`publish` uses that same file. Options and relative destinations bind at\npreparation. Project edits cannot alter the candidate. Preparation alone does\nnot replace the destination; dropping or closing an unpublished owner removes it.\nEvery publish attempt consumes the owner, including policy or I/O failure.\nReprepare to retry or change the policy/destination. Reports remain readable and"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "`Project::build` 只在操作成功后返回 `BuildOutput`，并保证其中有 APKG 产物。失败时返回 `BuildError`，包含结构化 kind/code、观察结果、底层原因和实际发布事实。"
+          },
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 5,
+            "endLine": 20,
+            "excerpt": "## 临时与持久产物\n显式选择所有权模型：\n| 请求 | 所有权 |\n| --- | --- |\n| `BuildOptions::to(path)` | 持久目标；句柄清理后仍保留 |\n| `BuildOptions::temporary()` | 临时文件；随最后一个产物所有者删除 |\n| `artifact.persist_to(path)` | 新的持久所有者；原所有者仍可使用 |\n读取临时路径时，保持 `BuildOutput` 或克隆的产物存活。报告或 JSON 快照不会延长文件寿命。Rust 正常释放所有者；Node 提供 `artifact.close()` 以确定性释放。把路径复制到应用状态中不会创建所有者。\nRust 产物句柄保留绝对路径，即使构建或 `persist_to` 使用相对目标。之后改变进程工作目录不会重定向从已有句柄进行的读取或复制。每个新 `persist_to` 目标均相对于调用时的目录解析。\n`BuildReport::snapshot()` 只有观察结果。`BuildOutput::snapshot()` 和 `BuildError::snapshot()` 还说明真实结果。成功快照中也可能有警告。不要从诊断严重程度、路径是否存在或报告是否包含比较发现项来推断结果。"
+          },
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 21,
+            "endLine": 30,
+            "excerpt": "## 基线与发布\n更新时保留之前的原始分发 APKG 作为不可变基线，并选择独立输出目标。发布前检查基线证据和候选内容。策略拒绝不会替换输出。缺失或损坏的证据、检查预算耗尽均为硬失败。\n发布通过原子替换 APKG 完成。这是单文件保证；写入应用自己的独立 JSON 报告属于另一次操作。普通构建不写额外身份文件：完整的带版本证据嵌入分发包。\n发布后仍可能发生晚期错误，例如确认持久性时出错。因此错误快照记录 `PublicationSnapshot` 事实：`path`、`stage`（`not_published` 或 `published`）、`temporary`，以及持久性（`confirmed` 或 `unconfirmed`）。重试或声称没有写入文件前，应检查这些事实。`PersistError` 同样保留发布事实和实际 I/O 源。仅原子替换并不能证明崩溃后的持久性。\n快照序列化保留原生路径，不访问文件系统。Unicode 路径仍为 JSON 字符串。非 UTF-8 Unix 路径使用 `{\"encoding\":\"unix_bytes\",\"bytes\":[...]}`；含未配对 UTF-16 代理项的 Windows 路径使用 `{\"encoding\":\"windows_wide\",\"units\":[...]}`。数组保存精确的原生字节或代码单元。成功产物路径、失败发布路径和绑定错误路径详情均使用此表示。它们描述路径，但不保留产物所有权。文件系统可能拒绝特定原生路径，但其发布失败事实仍可序列化。"
+          },
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 31,
+            "endLine": 34,
+            "excerpt": "## 检查限制\n有限的归档大小、条目数量、展开大小、解码集合或媒体及 zstd 窗口预算，分别独立应用于基线与候选包。从 `InspectLimits::default()` 开始，确有需要时再有意提高相关限制。零不是无限制。这些计数器并非进程级内存或 CPU 沙箱；媒体导入另有更早执行的单资源预算。"
+          },
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 35,
+            "endLine": 40,
+            "excerpt": "## 并发工作\nRust 构建借用不可变项目状态。拥有所有权的模型和媒体可跨项目共享。Node 绑定在调用 build 或 compare 时捕获项目快照，之后的添加不会改变该请求。保持产物所有者存活，直到全部读取者结束；另一个消费者仍需路径时关闭最后一个临时所有者，是应用的生命周期错误。\n包检查不能证明所有客户端行为。请使用目标 Anki 版本和设置测试渲染、播放与更新导入。调度与 schema 更改限制见[更新](../updates.md)。"
+          },
+          {
+            "source": "docs/zh-cn/build-guarantees.md",
+            "startLine": 41,
+            "endLine": 49,
+            "excerpt": "## 源码中的预备发布\n预备发布已包含在公开 `0.3.1` 包中。\n`prepare_publication` 构建、检查并比较一个私有候选包；`publish` 使用同一文件。选项和相对目标在预备阶段绑定。项目编辑不会改变候选包。仅预备不会替换目标；释放或关闭未发布的所有者会移除候选包。\n每次发布尝试都会消耗所有者，包括策略或 I/O 失败。重试或改变策略、目标需要重新预备。报告仍可读取，但不拥有文件。Node/Python 提供幂等 `close()`，以及原因是 `closed` 或 `consumed` 的不可用错误；发布开始后关闭不会取消它。耗时不包含等待审阅的时间。成功替换后仍可能发生晚期持久性失败，因此要检查实际发布事实。\n完整操作见[示例](../updates.md#build-once-review-then-publish-from-source)，类型化错误和工作线程行为见各语言 API 参考。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "troubleshooting",
+      "selectedTerms": {
+        "en": [
+          "troubleshooting errors",
+          "native package load failure",
+          "native wrapper version mismatch",
+          "wheel OS CPU tags",
+          "NOTE.KEY_DUPLICATE",
+          "NOTE.FIELD_UNKNOWN",
+          "NOTE.FIELD_REQUIRED",
+          "NOTE.MODEL_CONFLICT",
+          "HTML displayed literally",
+          "missing Cloze cards",
+          "MIME content mismatch",
+          "export-name conflict",
+          "missing CSS resource",
+          "bundle load failure",
+          "inspection limit exceeded",
+          "temporary APKG disappeared",
+          "invalid update baseline"
+        ],
+        "zh-CN": [
+          "排查报错",
+          "原生包加载失败",
+          "原生层包装层版本不匹配",
+          "wheel 系统架构标签",
+          "NOTE.KEY_DUPLICATE",
+          "NOTE.FIELD_UNKNOWN",
+          "NOTE.FIELD_REQUIRED",
+          "NOTE.MODEL_CONFLICT",
+          "HTML 显示为原文",
+          "填空卡片没有生成",
+          "MIME 内容不匹配",
+          "导出名称冲突",
+          "缺失 CSS 资源",
+          "模板包加载失败",
+          "检查预算超限",
+          "临时 APKG 消失",
+          "无效更新基线",
+          "重复笔记键"
+        ]
+      },
+      "selectionRationale": "直接采用问题现象、错误码和修正对象，避免泛化为任意安装或客户端使用问题。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "词条描述失败现象并指向修正，不暗示所有平台受支持、所有 MIME 可播放或可修复丢失身份证据。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/troubleshooting.md",
+            "startLine": 3,
+            "endLine": 7,
+            "excerpt": "Use the structured `kind` and `code` from the failing operation, plus its source\nchain and observations. Display text is for humans and may change. A failed\noperation and a completed comparison whose policy blocks publication are\ndifferent results."
+          },
+          {
+            "source": "docs/troubleshooting.md",
+            "startLine": 8,
+            "endLine": 20,
+            "excerpt": "## Installation\n| Symptom | Check |\n| --- | --- |\n| Rust rejects the toolchain | Run `rustc --version`; use Rust 1.92+ and check `cargo tree -i ankiforge` for the installed version |\n| Node cannot load its native package | Run `node -p \"process.platform + '/' + process.arch\"` and `npm ls ankiforge`; reinstall with `npm install --include=optional ankiforge@0.3.1` |\n| Node reports a native/wrapper mismatch | Use matching package versions; reinstall from the same registry version, or rebuild both from the same checkout |"
+          },
+          {
+            "source": "docs/troubleshooting.md",
+            "startLine": 21,
+            "endLine": 37,
+            "excerpt": "## Models and notes\n| Symptom | Correction |\n| --- | --- |\n| Invalid or empty key | Supply an explicit stable key; display names are separate |\n| `NOTE.KEY_DUPLICATE` | Give each logical source record one unique key |\n| `NOTE.FIELD_UNKNOWN` | Assign the field's key, not its display name |\n| `NOTE.FIELD_REQUIRED` | Fill fields declared `required()` before adding |\n| `NOTE.MODEL_CONFLICT` | Reuse the same completed model for one model key |\n| Template reference error | Use declared keys in templates; inspect the original source byte range |"
+          },
+          {
+            "source": "docs/troubleshooting.md",
+            "startLine": 38,
+            "endLine": 54,
+            "excerpt": "## Media and templates\n| Symptom | Correction |\n| --- | --- |\n| File import fails | Check the source at `Media::file` time; later source deletion is supported |\n| MIME/content mismatch | Pass the actual MIME type to the bytes constructor |\n| Export-name conflict | Choose unique portable names; case and Unicode normalization variants conflict |\n| Missing raw HTML/CSS/script resource | Declare it with model `asset` or project `add_asset` |\n| Media import exceeds a limit | Explicitly raise `MediaLimits.max_bytes` before importing |"
+          },
+          {
+            "source": "docs/troubleshooting.md",
+            "startLine": 55,
+            "endLine": 71,
+            "excerpt": "## Updates and outputs\nUse an original distribution APKG containing complete identity evidence as the\nbaseline. Anki re-exported packages do not retain that evidence. A namespace\nmismatch or corrupt evidence cannot be accepted by an update policy.\nA completed comparison can have `allows_publication == false`. Inspect original\nfindings and evidence before selecting an explicit risk-category allowance.\nDo not blanket-allow every result. The same policy must be passed to the actual\nupdate build if you want the same decision. A policy on a create-only request"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/troubleshooting.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "使用失败操作的结构化 `kind` 和 `code`，结合来源链与观察结果进行排查。显示文本面向人类，可能变化。操作失败与比较已完成但策略阻止发布，是不同的结果。"
+          },
+          {
+            "source": "docs/zh-cn/troubleshooting.md",
+            "startLine": 5,
+            "endLine": 16,
+            "excerpt": "## 安装\n| 现象 | 检查 |\n| --- | --- |\n| Rust 拒绝工具链 | 运行 `rustc --version`；使用 Rust 1.92+，并以 `cargo tree -i ankiforge` 检查安装版本 |\n| Node 无法加载原生包 | 运行 `node -p \"process.platform + '/' + process.arch\"` 和 `npm ls ankiforge`；用 `npm install --include=optional ankiforge@0.3.1` 重装 |\n| Node 报告原生层与包装层不匹配 | 使用匹配版本；从相同 registry 版本重装，或从同一源码目录重建两者 |\n| Python 无法加载扩展 | 运行 `python -m pip show ankiforge` 和 `python -m pip debug --verbose`；检查解释器以及 wheel 的 OS/CPU 标签 |\n| Python 选择源码发行包 | 选择匹配 wheel/解释器，或按[源码构建](../source-builds.md)配置编译器 |"
+          },
+          {
+            "source": "docs/zh-cn/troubleshooting.md",
+            "startLine": 17,
+            "endLine": 31,
+            "excerpt": "## 模型与笔记\n| 现象 | 修正 |\n| --- | --- |\n| 无效或空键 | 显式提供稳定键；显示名称另行设置 |\n| `NOTE.KEY_DUPLICATE` | 每条逻辑源记录使用唯一键 |\n| `NOTE.FIELD_UNKNOWN` | 按字段键赋值，不使用显示名称 |\n| `NOTE.FIELD_REQUIRED` | 添加前填写声明了 `required()` 的字段 |\n| `NOTE.MODEL_CONFLICT` | 同一模型键复用相同的已完成模型 |\n| 模板引用错误 | 使用已声明键；检查原始源码字节范围 |\n| HTML 显示为原文 | 仅对有意加入的标记使用 `Content::html` |\n| 缺少 Cloze 卡片 | 使用 `{{c1::answer}}` 语法，支持编号 1–500 |\n添加失败是原子的。修正笔记或模型后重试，不需要撤销部分模型或媒体注册。模型构建器必须先完成 `.build()`，才能创建自定义笔记。"
+          },
+          {
+            "source": "docs/zh-cn/troubleshooting.md",
+            "startLine": 32,
+            "endLine": 46,
+            "excerpt": "## 媒体与模板\n| 现象 | 修正 |\n| --- | --- |\n| 文件导入失败 | 检查调用 `Media::file` 时的源文件；之后删除源文件是支持的 |\n| MIME 与内容不匹配 | 向字节构造函数传入实际 MIME 类型 |\n| 导出名称冲突 | 选择唯一可移植名称；大小写与 Unicode 规范化变体也冲突 |\n| 缺失原始 HTML/CSS/脚本资源 | 使用模型 `asset` 或项目 `add_asset` 声明 |\n| 媒体导入超限 | 导入前显式提高 `MediaLimits.max_bytes` |\n| 构建检查超限 | 为本次操作调整相关 `InspectLimits` 计数器 |\n| 模板包加载失败 | 使用 bundle-v2、显式键、按键模板以及包内路径 |\n| IO 矩形失败 | 检查解码后显示尺寸、有限坐标和唯一遮罩键 |\n所有笔记类型的文本默认行为一致。媒体节点收集依赖；手写文件名不会导入其字节。即使包有效，仍需对计划使用的编解码器和字体进行客户端播放检查。"
+          },
+          {
+            "source": "docs/zh-cn/troubleshooting.md",
+            "startLine": 47,
+            "endLine": 53,
+            "excerpt": "## 更新与输出\n基线应为含完整身份证据的原始分发 APKG。Anki 重新导出的包不保留该证据。更新策略不能放行命名空间不匹配或证据损坏。\n完成的比较可以有 `allows_publication == false`。选择显式风险类别放行前，检查原始发现项和证据。不要全部放行。若希望得到相同决策，必须向实际更新构建传入相同策略。在仅新建请求上设置策略会报错。\n临时路径消失时，应将输出或产物所有者保留到全部读取者结束。报告和 JSON 快照不是所有者。持久化失败时，检查错误的发布阶段和持久性：目标已发布后也可能返回错误。参见[输出保证](../build-guarantees.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "compatibility",
+      "selectedTerms": {
+        "en": [
+          "supported platforms",
+          "verified runtimes",
+          "minimum Rust version",
+          "Node.js runtime support",
+          "CPython wheel support",
+          "macOS arm64 x64",
+          "Linux GNU glibc",
+          "Windows x64",
+          "Alpine musl verification scope",
+          "Bun browser Electron verification scope",
+          "Anki client compatibility",
+          "import and codec playback",
+          "release verification evidence",
+          "review history client conditions"
+        ],
+        "zh-CN": [
+          "支持的平台",
+          "已验证运行环境",
+          "Rust 最低版本",
+          "Node.js 运行环境支持",
+          "CPython wheel 支持",
+          "macOS arm64 x64",
+          "Linux GNU glibc",
+          "Windows x64",
+          "Alpine musl 验证范围",
+          "Bun 浏览器 Electron 验证范围",
+          "Anki 客户端兼容性",
+          "导入与编解码播放",
+          "发布验证证据",
+          "复习历史的客户端条件"
+        ]
+      },
+      "selectionRationale": "用支持、验证范围和客户端条件描述环境决策；未覆盖的运行时仅以验证范围表达，帮助定位明确限制。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "浏览器/Electron/Bun、Alpine/musl、ARM64 Linux/Windows 不在现有 Node 验证范围；不承诺所有客户端和媒体行为。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/compatibility.md",
+            "startLine": 3,
+            "endLine": 27,
+            "excerpt": "## Packages and verified environments\nPublic Rust, npm and PyPI packages are `0.3.1` as checked on 2026-10-13.\nStart with [Rust](installation.md), [Node / TypeScript](node/quick-start.md) or [Python](python/quick-start.md).\n| Interface | Package | Runtime and verification |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 and current stable; packaged consumers on all four supported platforms, plus a fresh public crates.io consumer |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0, current 22, 24 and 26; 16 public npm installation, ESM/CJS and TypeScript checks |"
+          },
+          {
+            "source": "docs/compatibility.md",
+            "startLine": 28,
+            "endLine": 43,
+            "excerpt": "## Anki import and playback\nNormal export needs no Anki installation. Importing, rendering and playing media\nstill depends on the target client's version, codecs and import settings.\nThe 2026-10-08 benchmark passed 40 Anki import/content/representative-render checks\n(20 per implementation), not every client or GUI/audio behavior.\nFor updates, retain the previous original distribution APKG. Anki re-exports do\nnot retain the required identity evidence. Omitting a note from a package does"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/compatibility.md",
+            "startLine": 3,
+            "endLine": 16,
+            "excerpt": "## 公开包与已验证环境\n截至 2026-10-13，公开 Rust、npm 和 PyPI 包均为 `0.3.1`。从 [Rust](../installation.md)、[Node / TypeScript](../node/quick-start.md) 或 [Python](../python/quick-start.md) 开始。\n| 接口 | 包 | 运行环境与验证 |\n| --- | --- | --- |\n| Rust | [ankiforge 0.3.1](https://crates.io/crates/ankiforge) | Rust 1.92.0 与当前稳定版；四个支持平台的打包消费者，以及全新的公开 crates.io 消费者 |\n| Node / TypeScript | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | Node 22.13.0、当前 22、24 和 26；16 项公开 npm 安装、ESM/CJS 和 TypeScript 检查 |\n| Python | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | 普通 CPython 3.11–3.14；16 项隔离的公开 PyPI wheel 安装检查 |"
+          },
+          {
+            "source": "docs/zh-cn/compatibility.md",
+            "startLine": 17,
+            "endLine": 23,
+            "excerpt": "## Anki 导入与播放\n普通导出不需要安装 Anki。导入、渲染和播放媒体仍取决于目标客户端版本、编解码器和导入设置。2026-10-08 的基准测试通过了 40 项 Anki 导入、内容和代表性渲染检查（每个实现 20 项），并未覆盖所有客户端或 GUI/音频行为。\n更新时保留之前的原始分发 APKG。Anki 重新导出的文件不保留所需身份证据。包中不再包含某条笔记，并不会将其从学习者的集合中删除。字段或模板变化、排序字段、本地编辑和复习历史需要针对客户端测试。\n使用[手动客户端场景](../manual-validation/anki-desktop-v1/TEMPLATE.md)及各 oracle 记录的具体 Anki 版本和设置评估自己的分发。客户端条件与单文件发布行为见[更新](../updates.md)和[构建保证](../build-guarantees.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "rust-api",
+      "selectedTerms": {
+        "en": [
+          "Rust API reference",
+          "Rust public domain modules",
+          "Project::new",
+          "Project::add",
+          "BuildOptions::temporary",
+          "InspectLimits",
+          "FieldKey and TemplateKey",
+          "BuildOutput::artifact",
+          "BuildReport::snapshot",
+          "PathSnapshot::into_path_buf",
+          "std::error::Error",
+          "AddError::context",
+          "AddTarget and AddDetail",
+          "UpdatePolicy::fail_on",
+          "Project::prepare_publication"
+        ],
+        "zh-CN": [
+          "Rust API 参考",
+          "Rust 公开领域模块",
+          "Project::new",
+          "Project::add",
+          "BuildOptions::temporary",
+          "InspectLimits",
+          "FieldKey 与 TemplateKey",
+          "BuildOutput::artifact",
+          "BuildReport::snapshot",
+          "PathSnapshot::into_path_buf",
+          "std::error::Error",
+          "AddError::context",
+          "AddTarget 与 AddDetail",
+          "UpdatePolicy::fail_on",
+          "Project::prepare_publication"
+        ]
+      },
+      "selectionRationale": "参考页优先公开 Rust 类型和方法标识，并覆盖有独立说明的类型键、原生路径和错误上下文。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "不把 feature-gated 仓库工具列为普通消费者 API；JSON 快照不保留产物所有权或恢复已消耗发布者。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 3,
+            "endLine": 8,
+            "excerpt": "Common values are available at the crate root: `Project`, `Note`, `NoteType`,\n`Field`, `Template`, `Content`, `Media`, `BuildOptions`, and `BuildOutput`.\nThe public domain modules are `note`, `schema`, `media`, `build`, `update`, and\n`diagnostics`. Repository tools are a separate, feature-gated surface; consumer\napplications do not need them."
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 9,
+            "endLine": 33,
+            "excerpt": "## Authoring\n| Entry | Responsibility |\n| --- | --- |\n| `Project::new(namespace)` | Validate a stable publication namespace |\n| `project.default_deck(name)` | Set the default destination |\n| `project.add(key, note)` | Atomically collect the note, model and media |\n| `project.add_asset(media)` | Include an explicit raw HTML/CSS/script asset |\n| `Note::basic(front, back)` / `Note::cloze(text)` | Create a note carrying its built-in model |\n| `model.note().field(key, content)` | Create a custom note carrying its immutable model |"
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 34,
+            "endLine": 51,
+            "excerpt": "## Content and media\nAll ordinary strings become `Content::text`. HTML requires `Content::html`.\n`Content::sequence` combines semantic values until rendering at build time.\n`Media::file(path)` and `Media::bytes(bytes, mime)` own snapshots; their\n`with_limits` variants apply a `media::MediaLimits { max_bytes }` budget before\nreading. The default is 256 MiB per asset. `with_export_name(name)` returns a\nrenamed value sharing the same snapshot; existing clones retain their names.\n`media.image()` and `media.sound()` keep resource dependencies. Fixed filenames"
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 52,
+            "endLine": 78,
+            "excerpt": "## Build options\n`project.build(BuildOptions::to(path))` publishes a persistent APKG.\n`BuildOptions::temporary()` returns owned temporary output. Both accept\n`.update_from(previous_apkg)`, `.inspect_limits(limits)` and\n`.update_policy(policy)`. A policy without a baseline is a configuration error.\nSetter order does not affect this rule.\n`build::InspectLimits::default()` gives finite budgets; its public fields can be\nmodified. All values are `u64`; zero means zero, not unlimited.\n| Field | Default |"
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 79,
+            "endLine": 92,
+            "excerpt": "## Build, compare and output\n`BuildOutput::artifact()` returns an owned `build::ApkgArtifact` reference.\n`BuildOutput::report()` returns observations. Artifact clones share temporary-file\nlifetime; `persist_to` returns a persistent owner or `build::PersistError` with\npublication facts and the underlying I/O source.\n`project.compare(update::CompareOptions::against(path))` returns a completed\n`ComparisonReport` even if high-risk findings block its policy. It exposes\n`findings()`, `highest_risk()`, `policy()`, `diagnostics()` and `snapshot()`."
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 93,
+            "endLine": 116,
+            "excerpt": "## Reports and errors\n`BuildReport::snapshot()` returns `build::json::ReportSnapshot`, observations\nwithout success/failure or file ownership. `BuildOutput::snapshot()` and\n`BuildError::snapshot()` return `build::json::BuildSnapshot`, including the actual\noutcome and report. `update::json::ComparisonSnapshot` separates original findings\nfrom policy evaluation. All snapshot DTOs implement `serde::Serialize` and own no\nfiles. No extension trait is required.\nSnapshot path fields retain their native `PathBuf` values in Rust. Their JSON"
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 117,
+            "endLine": 134,
+            "excerpt": "## Addition context\nFailed additions leave the project unchanged. Structured context records the\noriginal note/model keys and the target, with optional conflict or media usage\ndetails. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through\n`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed\ncontext/detail. Node fields use camelCase and are deeply frozen; Python uses\nsnake_case TypedDicts. Tags retain their insertion index; field locations retain\noriginal sequence indices (null/None for the field, [] for its root) and optional"
+          },
+          {
+            "source": "docs/rust-api.md",
+            "startLine": 135,
+            "endLine": 171,
+            "excerpt": "## Review once, publish once\nThe prepared publication API is included in the public `0.3.1` package.\nPreparation performs full bounded inspection and comparison. No destination is\npublished until `publish`, which uses the same private candidate and rechecks\nbaseline aliases. Relative paths bind at preparation invocation. Project edits\ncannot change the candidate. Report duration excludes time spent reviewing.\nDropping an unpublished owner cleans it; temporary published output follows the"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "crate 根提供常用值：`Project`、`Note`、`NoteType`、`Field`、`Template`、`Content`、`Media`、`BuildOptions` 和 `BuildOutput`。公开领域模块为 `note`、`schema`、`media`、`build`、`update` 与 `diagnostics`。仓库工具是独立且由 feature 控制的接口；消费者应用不需要它们。"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 5,
+            "endLine": 22,
+            "excerpt": "## 内容编写\n| 入口 | 职责 |\n| --- | --- |\n| `Project::new(namespace)` | 校验稳定发布命名空间 |\n| `project.default_deck(name)` | 设置默认目标牌组 |\n| `project.add(key, note)` | 原子收集笔记、模型和媒体 |\n| `project.add_asset(media)` | 包含显式原始 HTML/CSS/脚本资源 |\n| `Note::basic(front, back)` / `Note::cloze(text)` | 创建持有内置模型的笔记 |\n| `model.note().field(key, content)` | 创建持有不可变模型的自定义笔记 |\n| `note.deck(name).tag(tag)` / `.tags(iterable)` | 添加前配置笔记 |\n| `NoteType::builder(key)...build()` | 校验并完成不可变模型 |\n| `NoteType::from_bundle(path)` | 从 bundle-v2 加载模型及其拥有所有权的资源 |"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 23,
+            "endLine": 30,
+            "excerpt": "## 内容与媒体\n普通字符串均转换为 `Content::text`。HTML 要求 `Content::html`。`Content::sequence` 组合语义值，直到构建时才渲染。`Media::file(path)` 与 `Media::bytes(bytes, mime)` 拥有快照；对应 `with_limits` 变体在读取前应用 `media::MediaLimits { max_bytes }` 预算，默认为每个资源 256 MiB。`with_export_name(name)` 返回共享同一快照的重命名值；已有克隆保留自己的名称。\n`media.image()` 和 `media.sound()` 保留资源依赖。固定文件名必须可移植且无冲突。显式资源即使没有静态可见引用也会被包含。参见[媒体](../media.md)。\n`Note::image_occlusion(media)` 返回 `note::ImageOcclusionBuilder`。`.mask(Mask::rect(key, x, y, width, height)).mode(mode).build()` 校验解码图像尺寸、矩形和唯一稳定键。支持 `HideAllGuessOne` 与 `HideOneGuessOne`，参见[图片遮挡](../image-occlusion.md)。"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 31,
+            "endLine": 49,
+            "excerpt": "## 构建选项\n`project.build(BuildOptions::to(path))` 发布持久 APKG。`BuildOptions::temporary()` 返回拥有所有权的临时输出。两者均接受 `.update_from(previous_apkg)`、`.inspect_limits(limits)` 和 `.update_policy(policy)`。没有基线却设置策略属于配置错误；setter 顺序不影响此规则。\n`build::InspectLimits::default()` 提供有限预算，可修改其公开字段。值均为 `u64`；零就是零，并非无限制。\n| 字段 | 默认值 |\n| --- | --- |\n| `max_archive_bytes` | 2 GiB |\n| `max_entries` | 100,000 |\n| `max_central_directory_bytes` | 16 MiB |\n| `max_zip_entry_bytes` / `max_zip_total_bytes` | 1 GiB / 4 GiB |\n| `max_meta_bytes` / `max_media_map_bytes` | 64 KiB / 16 MiB |"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 50,
+            "endLine": 55,
+            "excerpt": "## 构建、比较与输出\n`BuildOutput::artifact()` 返回拥有所有权的 `build::ApkgArtifact` 引用。`BuildOutput::report()` 返回观察结果。产物克隆共享临时文件寿命；`persist_to` 返回持久所有者，或返回带发布事实与底层 I/O 来源的 `build::PersistError`。\n`project.compare(update::CompareOptions::against(path))` 返回完成的 `ComparisonReport`，即使高风险发现项阻止其策略。它提供 `findings()`、`highest_risk()`、`policy()`、`diagnostics()` 和 `snapshot()`。`UpdatePolicy::default()` 阻止 High/Critical；`.fail_on(level)` 改变阈值，`.allow(RiskCode)` 接受整个已注册风险类别。它不能接受身份证据缺失或损坏等硬错误。"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 56,
+            "endLine": 63,
+            "excerpt": "## 报告与错误\n`BuildReport::snapshot()` 返回 `build::json::ReportSnapshot`，只有观察结果，没有成功/失败或文件所有权。`BuildOutput::snapshot()` 与 `BuildError::snapshot()` 返回 `build::json::BuildSnapshot`，包含实际结果和报告。`update::json::ComparisonSnapshot` 将原始发现项与策略评估分开。所有快照 DTO 实现 `serde::Serialize`，且不拥有文件。不需要扩展 trait。\nRust 中的快照路径字段保留原生 `PathBuf` 值。JSON 对有效 Unicode 使用字符串，否则使用无损原生编码：非 UTF-8 Unix 名称为 `{\"encoding\":\"unix_bytes\",\"bytes\":[...]}`，含未配对 UTF-16 代理项的 Windows 名称为 `{\"encoding\":\"windows_wide\",\"units\":[...]}`。成功产物路径和失败发布路径均适用。在原平台恢复 JSON 路径时，反序列化为 `build::json::PathSnapshot`，再调用 `into_path_buf()`；来自不同平台的编码路径会被拒绝。自行序列化错误中的原生路径时，`PathSnapshot::new(path)` 提供相同表示。"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 64,
+            "endLine": 69,
+            "excerpt": "## 添加上下文\n添加失败不会改变项目。结构化上下文记录原始笔记或模型键和目标，并可附带冲突或媒体用法详情。Rust 通过 `AddError::context()` / `detail()` 提供 `note::{AddContext, AddTarget, AddDetail}`；SDK 通过 `AddError.details` 提供类型化 context/detail。Node 字段使用 camelCase 且深度冻结；Python 使用 snake_case TypedDict。标签保留插入下标；字段位置保留原始序列下标（null/None 指字段，[] 指其根）以及可选 UTF-8 字节范围。构建产生的默认牌组错误不带笔记或模型键，仍可从来源链读取。\n添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。"
+          },
+          {
+            "source": "docs/zh-cn/rust-api.md",
+            "startLine": 70,
+            "endLine": 98,
+            "excerpt": "## 审阅一次，发布一次\n预备发布 API 已包含在公开 `0.3.1` 包中。\n预备阶段执行完整的受限检查与比较。直到 `publish` 才发布目标；它使用同一私有候选包并复查基线别名。相对路径在预备调用时绑定。项目编辑不能改变候选包。报告耗时不含审阅等待。释放未发布所有者会清理它；已发布临时输出遵循通常的最后产物所有者清理规则。不能从 JSON 恢复所有者，也不能对已消耗所有者重试。原生构建省略未使用的暂存 manifest，但保留内嵌身份证据与媒体验证。内部暂存工具仍接收完整 manifest 和指纹。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "node-quickstart",
+      "selectedTerms": {
+        "en": [
+          "Node.js quick start",
+          "JavaScript Anki deck generation",
+          "Node flashcard generator",
+          "TypeScript getting started",
+          "npm install ankiforge",
+          "native optional dependency",
+          "main.mjs",
+          "node main.mjs",
+          "ES modules ESM",
+          "CommonJS require",
+          "first Node APKG export",
+          "persistent artifact close"
+        ],
+        "zh-CN": [
+          "Node.js 快速开始",
+          "JavaScript 生成 Anki 牌组",
+          "Node 记忆卡片生成",
+          "TypeScript 入门",
+          "npm install ankiforge",
+          "原生可选依赖",
+          "main.mjs",
+          "node main.mjs",
+          "ES 模块 ESM",
+          "CommonJS require",
+          "首次 Node 导出 APKG",
+          "关闭持久产物句柄"
+        ]
+      },
+      "selectionRationale": "JavaScript 是 Node 教程的自然语言入口；保留 ESM/CommonJS 和实际安装、运行步骤。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "JavaScript 词条仅指 Node 原生包；TypeScript 完整编译配置在所链接的 API/JSON 配方中，不承诺浏览器/Bun 支持。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/node/quick-start.md",
+            "startLine": 3,
+            "endLine": 13,
+            "excerpt": "Use Node.js 22.13 or later. In a new application directory:\nThis installs the [public npm package](https://www.npmjs.com/package/ankiforge) and the matching native optional dependency.\nSee [verified environments](../compatibility.md) for platform coverage."
+          },
+          {
+            "source": "docs/node/quick-start.md",
+            "startLine": 14,
+            "endLine": 37,
+            "excerpt": "## Export a deck\nSave this as `main.mjs`:\nOpen the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **Spanish**.\nKeep namespace `spanish` and key `es:hola` stable for later edits. Closing the persistent artifact leaves the file on disk.\nExporting does not require Anki to be installed."
+          },
+          {
+            "source": "docs/node/quick-start.md",
+            "startLine": 38,
+            "endLine": 51,
+            "excerpt": "## TypeScript and next tasks\nThe [JSON to Anki recipe](../json-to-anki.md#node) includes a complete TypeScript compile-and-run path.\nUse `.mjs` for ESM, or `require('ankiforge')` for CommonJS. TypeScript declarations ship with the package;\nsee [TypeScript configuration](api.md#typescript).\n- [Images and audio](../media.md) and [Node media API](api.md#media-and-image-occlusion)\n- [Custom note types](../custom-notetypes.md) and [template bundles](../template-bundles.md)\n- [Image Occlusion](../image-occlusion.md)"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/node-quickstart.md",
+            "startLine": 3,
+            "endLine": 12,
+            "excerpt": "使用 Node.js 22.13 或更高版本。在新的应用目录中运行：\n这会安装[公开 npm 包](https://www.npmjs.com/package/ankiforge)及匹配的原生可选依赖。平台覆盖范围见[已验证环境](../compatibility.md)。"
+          },
+          {
+            "source": "docs/zh-cn/node-quickstart.md",
+            "startLine": 13,
+            "endLine": 34,
+            "excerpt": "## 导出牌组\n将以下程序保存为 `main.mjs`：\n在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和键 `es:hola` 不变。关闭持久产物对象后，文件仍留在磁盘上。导出不需要安装 Anki。"
+          },
+          {
+            "source": "docs/zh-cn/node-quickstart.md",
+            "startLine": 35,
+            "endLine": 47,
+            "excerpt": "## TypeScript 与下一步任务\n[JSON 到 Anki 示例](../json-to-anki.md#node)包含完整的 TypeScript 编译与运行流程。\nESM 使用 `.mjs`，CommonJS 使用 `require('ankiforge')`。包中附带 TypeScript 声明；参见 [TypeScript 配置](../node/api.md#typescript)。\n- [图片与音频](../media.md)及 [Node 媒体 API](../node/api.md#media-and-image-occlusion)\n- [自定义笔记类型](../custom-notetypes.md)和[模板包](../template-bundles.md)\n- [图片遮挡](../image-occlusion.md)\n- [比较与更新](../updates.md)\n- [Node API](../node/api.md)及[排查问题](../troubleshooting.md)\n源码编译与本地打包见[源码构建](../source-builds.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "node-api",
+      "selectedTerms": {
+        "en": [
+          "Node.js API reference",
+          "JavaScript SDK API",
+          "TypeScript declarations",
+          "tsconfig.json NodeNext",
+          "npx tsc",
+          "async build and compare",
+          "Promise worker tasks",
+          "immutable Project snapshots",
+          "Uint8Array media bytes",
+          "Content.sequence",
+          "NoteType.fromBundle",
+          "BuildOptions.updateFrom",
+          "preparePublication",
+          "ArtifactClosedError",
+          "NativeLoadError",
+          "PreparedPublicationStateError",
+          "camelCase reports and snake_case snapshots",
+          "artifact.persistTo"
+        ],
+        "zh-CN": [
+          "Node.js API 参考",
+          "JavaScript SDK API",
+          "TypeScript 类型声明",
+          "tsconfig.json NodeNext",
+          "npx tsc",
+          "异步构建与比较",
+          "Promise 工作线程任务",
+          "不可变 Project 快照",
+          "Uint8Array 媒体字节",
+          "Content.sequence",
+          "NoteType.fromBundle",
+          "BuildOptions.updateFrom",
+          "preparePublication",
+          "ArtifactClosedError",
+          "NativeLoadError",
+          "PreparedPublicationStateError",
+          "camelCase 报告与 snake_case 快照",
+          "artifact.persistTo"
+        ]
+      },
+      "selectionRationale": "Node、JavaScript、TypeScript 是同一宿主 SDK 的相关表达；以异步、类型配置和特有方法区分于语言无关指南。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "本页的异步调用捕获不可变项目快照；类型化内容不是输入答案卡，Node authoring 路径仍接受字符串。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/node/api.md",
+            "startLine": 3,
+            "endLine": 8,
+            "excerpt": "The `ankiforge` entry point exposes the sole Project authoring model.\nTypes are defined in [the public source](../../bindings/node/src/index.ts),\n[report classes](../../bindings/node/src/report.ts), and\n[JSON snapshot declarations](../../bindings/node/src/snapshots.ts). Start with\n[the quick start](quick-start.md)."
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 9,
+            "endLine": 26,
+            "excerpt": "## Project and notes\n| API | Behavior |\n| --- | --- |\n| `new Project(namespace)` | Validate a stable publication namespace |\n| `.defaultDeck(name)` | Set the default destination; returns the project |\n| `.add(key, note)` | Atomically collect note/model/media; duplicate keys fail |\n| `.addAsset(media)` | Include an explicit raw HTML/CSS/script resource |\n| `.clone()` | Independent editable project sharing immutable values |\n| `.length` | Registered note count |\n| `Note.basic(front, back)` / `Note.cloze(text)` | Immutable note holding its built-in model |"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 27,
+            "endLine": 56,
+            "excerpt": "## Immutable models\nBuilders return new values. A completed model has no field/template mutation\nmethods. `builder.clozeField(key)` selects custom Cloze semantics; `builder.css`\nand `builder.asset` supply styling and explicit dependencies. Templates also\naccept `name`, `browserFront`, `browserBack` and `targetDeck`. Template references\nand generation conditions use field keys; display names are compiled for Anki.\n`GenerationRule.ankiDefault()` selects Anki's default behavior; `all` and `any`"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 57,
+            "endLine": 84,
+            "excerpt": "## Media and Image Occlusion\n`await Media.file(path, limits?)` and\n`await Media.bytes(Uint8Array, mime, limits?)` return owned snapshots. Source files\ncan change or disappear after the await succeeds. `withExportName(name)` returns\na renamed value without changing earlier clones or content. Read `filename`,\n`mediaType` and `byteLength` as properties.\n`media.image()` and `.sound()` return typed Content that automatically brings its\nasset into a project. Explicit `project.addAsset` and model `builder.asset` cover"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 85,
+            "endLine": 120,
+            "excerpt": "## Build, compare and output\n| API | Result |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | BuildOutput owning persistent artifact |\n| `await project.build(BuildOptions.temporary())` | BuildOutput owning temporary artifact |\n| `await project.compare(CompareOptions.against(path))` | Completed ComparisonReport, including blocked policy |\n| `options.updateFrom(path)` | Configure update from complete original distribution evidence |\n| `options.inspectLimits(limits)` | Override independent inspection counters |"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 121,
+            "endLine": 153,
+            "excerpt": "## Artifact lifetime and concurrency\nJSON snapshot paths use the exported `PathSnapshot` type. Unicode paths are\nstrings; non-Unicode native paths use `{ encoding: \"unix_bytes\", bytes: number[] }`\nor `{ encoding: \"windows_wide\", units: number[] }`. The arrays preserve the exact\nUnix bytes or Windows UTF-16 code units. This includes artifact paths in build\nsnapshots, publication paths in failures, and structured error-path details.\nDecode an encoded path only for its original platform; on Unix,"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 154,
+            "endLine": 173,
+            "excerpt": "## Errors\n`SchemaError`, `AddError`, `MediaError`, `TemplateBundleError`,\n`ImageOcclusionError`, `PolicyError`, `ConfigurationError`, `CompareError`,\n`BuildError`, and `PersistError` extend `ForgeError`. They expose `kind`, `code`,\n`domain`, native source-chain text in `causes`, structured `sourceDetails` for recognized\nI/O/schema/media/limit causes, and operation `details`.\nThe original native exception is retained as the JS `cause`.\n`BuildError.snapshot()` preserves failure and publication facts;"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 174,
+            "endLine": 193,
+            "excerpt": "## Addition context\nFailed additions leave the project unchanged. Structured context records the\noriginal note/model keys and the target, with optional conflict or media usage\ndetails. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through\n`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed\ncontext/detail. Node fields use camelCase and are deeply frozen; Python uses\nsnake_case TypedDicts. Tags retain their insertion index; field locations retain\noriginal sequence indices (null/None for the field, [] for its root) and optional"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 194,
+            "endLine": 238,
+            "excerpt": "## Batch media and prepared publication\nBatch media and prepared publication are included in the public `0.3.1` package.\n### Prepare, review and publish\n`publish()` takes the native owner immediately and performs one worker task.\nEvery attempt consumes it, including policy and I/O rejection. Repeated calls\nreject with `PreparedPublicationStateError`, code `BUILD.PREPARED_UNAVAILABLE`,\nand `reason` `consumed` or `closed`. Closing after publish begins does not cancel\nit. Reports remain readable after close. Options bind at preparation invocation;"
+          },
+          {
+            "source": "docs/node/api.md",
+            "startLine": 239,
+            "endLine": 256,
+            "excerpt": "## TypeScript\nInstall `typescript` and `@types/node` in your application. Use `main.mts` or\n`\"type\": \"module\"` and this `tsconfig.json`:\nCompile with `npx tsc`, then run `node dist/main.mjs` for an `.mts` entry."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "`ankiforge` 入口提供唯一的 Project 内容编写模型。类型定义位于[公开源码](../../bindings/node/src/index.ts)、[报告类](../../bindings/node/src/report.ts)及 [JSON 快照声明](../../bindings/node/src/snapshots.ts)。从[入门](../node/quick-start.md)开始。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 5,
+            "endLine": 20,
+            "excerpt": "## Project 与笔记\n| API | 行为 |\n| --- | --- |\n| `new Project(namespace)` | 校验稳定发布命名空间 |\n| `.defaultDeck(name)` | 设置默认目标；返回项目 |\n| `.add(key, note)` | 原子收集笔记、模型和媒体；重复键失败 |\n| `.addAsset(media)` | 包含显式原始 HTML/CSS/脚本资源 |\n| `.clone()` | 独立可编辑项目，共享不可变值 |\n| `.length` | 已注册笔记数 |\n| `Note.basic(front, back)` / `Note.cloze(text)` | 持有内置模型的不可变笔记 |\n| `model.note().field(key, content)` | 持有模型的不可变自定义笔记 |\n| `note.deck(name).tag(tag).tags(iterable)` | 返回重新配置的笔记 |\n字符串始终成为 Text，包括 Cloze 字符串。显式标记使用 `Content.html`。`Content.sequence(iterable)` 组合文本、HTML 与类型化媒体。使用显式业务键；内容和显示名称都不会派生身份。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 21,
+            "endLine": 41,
+            "excerpt": "## 不可变模型\n构建器返回新值。完成的模型没有修改字段或模板的方法。`builder.clozeField(key)` 选择自定义 Cloze 语义；`builder.css` 与 `builder.asset` 提供样式和显式依赖。模板还接受 `name`、`browserFront`、`browserBack` 和 `targetDeck`。模板引用及生成条件使用字段键，显示名称编译后供 Anki 使用。`GenerationRule.ankiDefault()` 选择 Anki 默认行为；`all` 和 `any` 选择显式条件。\n`await NoteType.fromBundle(path, mediaLimits?)` 从 `template-bundle-v2` 返回相同的不可变模型。成功后导入文本和资源不再依赖源目录。模型可跨项目复用；同一模型键下不兼容的定义会原子地失败。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 42,
+            "endLine": 59,
+            "excerpt": "## 媒体与图片遮挡\n`await Media.file(path, limits?)` 和 `await Media.bytes(Uint8Array, mime, limits?)` 返回拥有所有权的快照。await 成功后源文件可改变或消失。`withExportName(name)` 返回重命名值，不改变之前的克隆或内容。通过属性读取 `filename`、`mediaType` 和 `byteLength`。\n`media.image()` 与 `.sound()` 返回自动将资源带入项目的类型化 Content。显式 `project.addAsset` 与模型 `builder.asset` 处理原始 HTML/CSS/脚本引用。媒体限制接受 `{ maxBytes }`，默认为 256 MiB；原生字节没有 64 KiB 内联限制。\n默认模式为 `hide_all_guess_one`；两种模式都为带键遮罩生成独立卡片。`.build()` 校验解码尺寸、有限矩形和唯一键。`image` 与 `occlusion` 是保留的生成字段。解码与更新限制见[图片遮挡](../image-occlusion.md)。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 60,
+            "endLine": 76,
+            "excerpt": "## 构建、比较与输出\n| API | 结果 |\n| --- | --- |\n| `await project.build(BuildOptions.to(path))` | 拥有持久产物的 BuildOutput |\n| `await project.build(BuildOptions.temporary())` | 拥有临时产物的 BuildOutput |\n| `await project.compare(CompareOptions.against(path))` | 完成的 ComparisonReport，包括被阻止的策略 |\n| `options.updateFrom(path)` | 配置基于完整原始分发证据的更新 |\n| `options.inspectLimits(limits)` | 覆盖独立检查计数器 |\n| `options.updatePolicy(policy)` | 配置更新/比较风险策略 |\n成功输出提供 `.artifact`、`.report` 与 `.snapshot()`。`BuildReport` 提供 `.counts`、`.baselineCounts`、`.durationMs`、`.diagnostics`、`.comparison` 和 `.snapshot()`；没有结果或文件所有权。`.comparison` 是 `ComparisonReport` 或 `null`，与 `project.compare()` 使用同一类。比较对象提供 `.findings`、`.highestRisk`、`.policy`、`.diagnostics` 和 `.snapshot()`。快照字段名对应 Rust JSON，包括 `allows_publication` 与 `schema_version`，并非原生报告的 camelCase 副本。检查非 `null` 后，在比较对象上使用 `report.comparison.highestRisk`，在 JSON 快照中使用 `report.snapshot().compa"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 77,
+            "endLine": 88,
+            "excerpt": "## 产物寿命与并发\nJSON 快照路径使用导出的 `PathSnapshot` 类型。Unicode 路径为字符串；非 Unicode 原生路径使用 `{ encoding: \"unix_bytes\", bytes: number[] }` 或 `{ encoding: \"windows_wide\", units: number[] }`。数组保留精确的 Unix 字节或 Windows UTF-16 代码单元，适用于构建快照中的产物路径、失败发布路径及结构化错误路径详情。只在原平台解码路径；Unix 中 `Buffer.from(value.bytes)` 为 Node 文件系统函数保留字节路径。Node 内容编写方法仍接受字符串路径。\n相对媒体和模板包路径在调用读取时锚定；构建目标和基线在构建选项时锚定。POSIX 中，符号链接后接 `..` 保留文件系统遍历语义。`persistTo` 将相对目标锚定到原构建捕获的工作目录，包括克隆和持久化句柄。之后的工作目录变化不会重定向这些路径。\n消费 `.path` 时保持产物所有者存活。`.clone()` 创建独立所有者；`await .close()` 释放该所有者。最后一个临时所有者删除文件。`await .persistTo(path)` 返回持久产物，失败时原所有者也仍可用。保留所有者期间，标准 Node 文件流可以读取产物。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 89,
+            "endLine": 94,
+            "excerpt": "## 错误\n`SchemaError`、`AddError`、`MediaError`、`TemplateBundleError`、`ImageOcclusionError`、`PolicyError`、`ConfigurationError`、`CompareError`、`BuildError` 和 `PersistError` 继承 `ForgeError`。它们提供 `kind`、`code`、`domain`、`causes` 中的原生来源链文本、用于已识别 I/O/schema/媒体/限制原因的结构化 `sourceDetails`，以及操作 `details`。原始原生异常保留为 JS `cause`。\n`BuildError.snapshot()` 保留失败与发布事实。`BuildError.report` 和 `CompareError.report` 与 `BuildOutput.report` 一样返回 `BuildReport`。报告使用 `.baselineCounts` 和 `.comparison`；snake_case JSON 字段通过 `.snapshot()` 访问。失败比较可能只有部分观察结果，且 comparison 为 `null`。`PersistError.publication` 记录目标是否已发布、持久性是否确认。媒体或检查错误保留限制详情。请使用机器字段，不解析错误消息。`ArtifactClosedError` 表示使用已关闭所有者；`NativeLoadError` 表示原生包缺失、不兼容或陈旧。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 95,
+            "endLine": 102,
+            "excerpt": "## 添加上下文\n添加失败不会改变项目。结构化上下文记录原始笔记或模型键和目标，并可附带冲突或媒体用法详情。Rust 通过 `AddError::context()` / `detail()` 提供 `note::{AddContext, AddTarget, AddDetail}`；SDK 通过 `AddError.details` 提供类型化 context/detail。Node 字段使用 camelCase 且深度冻结；Python 使用 snake_case TypedDict。标签保留插入下标；字段位置保留原始序列下标（null/None 指字段，[] 指其根）以及可选 UTF-8 字节范围。构建产生的默认牌组错误不带笔记或模型键，仍可从来源链读取。\n添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 103,
+            "endLine": 136,
+            "excerpt": "## 批量媒体与预备发布\n批量媒体与预备发布已包含在公开 `0.3.1` 包中。\n### 预备、审阅与发布\n`publish()` 立即取得原生所有者并执行一个工作线程任务。每次尝试都会消耗它，包括策略或 I/O 拒绝。重复调用以 `PreparedPublicationStateError` 拒绝，码为 `BUILD.PREPARED_UNAVAILABLE`，`reason` 为 `consumed` 或 `closed`。发布开始后关闭不会取消它。关闭后报告仍可读。选项在预备调用时绑定；改变策略或目标需要重新预备。耗时不含审阅等待。报告和 JSON 都不能转换回所有者。\n构建、比较、预备和克隆共享不可变原生 Project 版本。内容编写更改仍同步且隔离。当另一快照存活时，第一次更改可能复制 Project；之后独占更改不会。这将复制移出 Promise 提交阶段，但不承诺首次编辑更快、最差定时器延迟更好或 RSS 更低。JavaScript 字节输入仍在提交工作线程前复制。此包装层使用协议 6 二进制。"
+          },
+          {
+            "source": "docs/zh-cn/node-api.md",
+            "startLine": 137,
+            "endLine": 153,
+            "excerpt": "## TypeScript\n在应用中安装 `typescript` 和 `@types/node`。使用 `main.mts` 或 `\"type\": \"module\"`，以及以下 `tsconfig.json`：\n使用 `npx tsc` 编译；`.mts` 入口随后运行 `node dist/main.mjs`。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "python-quickstart",
+      "selectedTerms": {
+        "en": [
+          "Python quick start",
+          "Python flashcard generator",
+          "Python Anki deck script",
+          "pip install ankiforge",
+          "python -m venv",
+          "virtual environment activation",
+          "Windows Activate.ps1",
+          "CPython platform wheel",
+          "main.py",
+          "python main.py",
+          "first Python APKG export",
+          "from ankiforge import"
+        ],
+        "zh-CN": [
+          "Python 快速开始",
+          "Python 记忆卡片生成",
+          "Python Anki 牌组脚本",
+          "pip install ankiforge",
+          "python -m venv",
+          "激活虚拟环境",
+          "Windows Activate.ps1",
+          "CPython 平台 wheel",
+          "main.py",
+          "python main.py",
+          "首次 Python 导出 APKG",
+          "from ankiforge import"
+        ]
+      },
+      "selectionRationale": "Python 脚本制卡与虚拟环境是直接示范任务；保留 Windows 激活方式而不假定读者都用 Unix。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "使用匹配的普通 CPython wheel；生成 APKG 无需安装 Anki，但导入和学习依赖客户端。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/python/quick-start.md",
+            "startLine": 3,
+            "endLine": 13,
+            "excerpt": "Create and activate a virtual environment, then install the [public PyPI package](https://pypi.org/project/ankiforge/):\nOn Windows, activate with `.venv\\Scripts\\Activate.ps1`.\nUse ordinary CPython 3.11 or later and a matching platform wheel; CPython 3.11–3.14 is covered by recorded release checks; see [verified environments](../compatibility.md)."
+          },
+          {
+            "source": "docs/python/quick-start.md",
+            "startLine": 14,
+            "endLine": 35,
+            "excerpt": "## Export a deck\nSave this as `main.py`:\nOpen the persistent `spanish.apkg` in Anki. It contains **hola → hello** in **Spanish**.\nKeep namespace `spanish` and note key `es:hola` stable for later edits. Exporting does not require Anki to be installed."
+          },
+          {
+            "source": "docs/python/quick-start.md",
+            "startLine": 36,
+            "endLine": 47,
+            "excerpt": "## Continue\nFor a complete media and update task, follow [JSON to Anki](../json-to-anki.md#python).\n- [Images and audio](../media.md) and [Python media API](api.md#media-and-occlusion)\n- [Custom note types](../custom-notetypes.md) and [template bundles](../template-bundles.md)\n- [Image Occlusion](../image-occlusion.md)\n- [Compare and update](../updates.md)\n- [Python API](api.md) and [diagnostics](diagnostics.md)\n- [Move from genanki](genanki-migration.md)\nFor native source builds, use [source builds](../source-builds.md)."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/python-quickstart.md",
+            "startLine": 3,
+            "endLine": 12,
+            "excerpt": "创建并激活虚拟环境，然后安装[公开 PyPI 包](https://pypi.org/project/ankiforge/)：\nWindows 使用 `.venv\\Scripts\\Activate.ps1` 激活。使用普通 CPython 3.11 或更高版本及匹配的平台 wheel；已有发布检查覆盖 CPython 3.11–3.14，参见[已验证环境](../compatibility.md)。"
+          },
+          {
+            "source": "docs/zh-cn/python-quickstart.md",
+            "startLine": 13,
+            "endLine": 33,
+            "excerpt": "## 导出牌组\n将以下程序保存为 `main.py`：\n在 Anki 中打开持久保存的 `spanish.apkg`，其中 **Spanish** 牌组包含 **hola → hello**。后续编辑时保持命名空间 `spanish` 和笔记键 `es:hola` 不变。导出不需要安装 Anki。"
+          },
+          {
+            "source": "docs/zh-cn/python-quickstart.md",
+            "startLine": 34,
+            "endLine": 45,
+            "excerpt": "## 继续学习\n完整媒体与更新任务见 [JSON 到 Anki](../json-to-anki.md#python)。\n- [图片与音频](../media.md)及 [Python 媒体 API](../python/api.md#media-and-occlusion)\n- [自定义笔记类型](../custom-notetypes.md)和[模板包](../template-bundles.md)\n- [图片遮挡](../image-occlusion.md)\n- [比较与更新](../updates.md)\n- [Python API](../python/api.md)及[诊断](../python/diagnostics.md)\n- [从 genanki 迁移](../python/genanki-migration.md)\n原生源码编译见[源码构建](../source-builds.md)。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "python-api",
+      "selectedTerms": {
+        "en": [
+          "Python SDK reference",
+          "Python type hints py.typed",
+          "immutable note values",
+          "NoteType.builder",
+          "Content.sequence",
+          "Media.bytes",
+          "MediaLimits",
+          "max_identity_bytes",
+          "ApkgArtifact context manager",
+          "copy.copy artifact owner",
+          "GIL release",
+          "BINDING.PROJECT_BUSY",
+          "BINDING.FORKED_OBJECT",
+          "project.prepare_publication",
+          "PreparedPublicationStateError",
+          "Python native exception chaining"
+        ],
+        "zh-CN": [
+          "Python SDK 参考",
+          "Python 类型提示 py.typed",
+          "不可变笔记值",
+          "NoteType.builder",
+          "Content.sequence",
+          "Media.bytes",
+          "MediaLimits",
+          "max_identity_bytes",
+          "ApkgArtifact 上下文管理器",
+          "copy.copy 产物所有者",
+          "释放 GIL",
+          "BINDING.PROJECT_BUSY",
+          "BINDING.FORKED_OBJECT",
+          "project.prepare_publication",
+          "PreparedPublicationStateError",
+          "Python 原生异常链"
+        ]
+      },
+      "selectionRationale": "Python 专有类型提示、上下文管理器、GIL 和 fork 限制均有正文依据；以真实 API 标识补充自然任务词。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "同一 Project 同时操作会拒绝；fork 后必须新建原生值，不能把独立项目可并发误说为同一对象任意并发。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/python/api.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "The SDK calls the default Rust public API through a native extension. It includes `py.typed` and checked public signatures. Start with the [quickstart](quick-start.md)."
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 5,
+            "endLine": 20,
+            "excerpt": "## Project and note values\n| Entry | Behavior |\n| --- | --- |\n| `Project(namespace, *, default_deck=None)` | Validates the explicit stable namespace and configures the default deck |\n| `project.add(key, note)` | Atomically collects the note, model and owned media; duplicate note keys fail |\n| `project.add_asset(media)` | Includes an explicit raw HTML/CSS/script dependency |\n| `len(project)` | Number of successfully added notes |\n| `Note.basic(front, back)` | Built-in Basic model; strings mean Text |"
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 21,
+            "endLine": 26,
+            "excerpt": "## Models and templates\n`NoteType.builder(key)` returns an immutable builder. Its `.name`, `.field`, `.template`, `.css`, `.cloze_field` and `.asset` methods return updated builders. `.build()` validates the complete definition and returns an immutable NoteType. `model.note()` creates a note owning that model. `NoteType.from_bundle(path, limits=MediaLimits())` loads the same model and its assets from the current bundle format; the optional budget applies separately to each asset before reading."
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 27,
+            "endLine": 40,
+            "excerpt": "## Media and occlusion\n| Entry | Behavior |\n| --- | --- |\n| `Media.file(path, *, limits=MediaLimits())` | Reads an owned snapshot immediately |\n| `Media.bytes(data, media_type, *, limits=MediaLimits())` | Owns bytes with an explicit MIME type |\n| `media.with_export_name(name)` | Returns a new filename value sharing the snapshot; previous references retain their names |\n| `media.filename`, `media.media_type`, `len(media)` | Read-only snapshot metadata |\n| `media.image()` / `.sound()` | Typed content that retains the snapshot |"
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 41,
+            "endLine": 57,
+            "excerpt": "## Operations and results\n| Entry | Result |\n| --- | --- |\n| `project.build(BuildOptions.to(path))` | BuildOutput with a guaranteed persistent artifact |\n| `project.build(BuildOptions.temporary())` | BuildOutput with an owned temporary artifact |\n| `options.update_from(path)` | Returns options for updating from complete baseline evidence |\n| `project.compare(CompareOptions.against(path))` | Completed ComparisonReport, including a separate publication policy decision |\n| `options.update_policy(policy)` | Applies explicit risk policy to Update/Compare; invalid for Create |"
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 58,
+            "endLine": 63,
+            "excerpt": "## Errors and concurrency\nFailures raise SchemaError, AddError, MediaError, ImageOcclusionError, TemplateBundleError, CompareError, PolicyError, BuildError or PersistError. Each exposes `kind`, `code`, `details`, structured observations in `source_details`, and source-chain text in `causes`, and retains the native exception as `__cause__`. I/O causes retain a chained OSError where available. BuildError provides `.report` and `.snapshot()`; CompareError provides partial `.report`; PersistError details include actual publication facts."
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 64,
+            "endLine": 81,
+            "excerpt": "## Addition context\nFailed additions leave the project unchanged. Structured context records the\noriginal note/model keys and the target, with optional conflict or media usage\ndetails. Rust exposes `note::{AddContext, AddTarget, AddDetail}` through\n`AddError::context()` / `detail()`; SDKs expose `AddError.details` with typed\ncontext/detail. Node fields use camelCase and are deeply frozen; Python uses\nsnake_case TypedDicts. Tags retain their insertion index; field locations retain\noriginal sequence indices (null/None for the field, [] for its root) and optional"
+          },
+          {
+            "source": "docs/python/api.md",
+            "startLine": 82,
+            "endLine": 116,
+            "excerpt": "## Source API details\nBatch media and prepared publication are included in the public `0.3.1` package.\n### Prepare, review and publish\nOne publish attempt consumes the owner, including policy or I/O failure. Later\ncalls raise `PreparedPublicationStateError` with code `BUILD.PREPARED_UNAVAILABLE`\nand reason `closed` or `consumed`; close does not cancel an already running\npublication. Relative paths bind at preparation invocation, and Project changes\ncannot modify the reviewed APKG. Reports survive close without retaining files."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 3,
+            "endLine": 4,
+            "excerpt": "SDK 通过原生扩展调用默认 Rust 公开 API，包含 `py.typed` 和经过检查的公开签名。从[入门](../python/quick-start.md)开始。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 5,
+            "endLine": 20,
+            "excerpt": "## Project 与笔记值\n| 入口 | 行为 |\n| --- | --- |\n| `Project(namespace, *, default_deck=None)` | 校验显式稳定命名空间并配置默认牌组 |\n| `project.add(key, note)` | 原子收集笔记、模型及拥有所有权的媒体；重复笔记键失败 |\n| `project.add_asset(media)` | 包含显式原始 HTML/CSS/脚本依赖 |\n| `len(project)` | 成功添加的笔记数 |\n| `Note.basic(front, back)` | 内置 Basic 模型；字符串表示 Text |\n| `Note.cloze(text)` | 内置 Cloze 模型；字符串表示 Text 并保留填空语法 |\n| `note.field(key, content)` | 返回已赋值的新笔记；添加时校验键 |\n| `note.deck(name)` / `.tag(tag)` / `.tags(tags)` | 返回配置后的笔记 |\n| `note.note_type` | 拥有所有权的不可变模型 |"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 21,
+            "endLine": 26,
+            "excerpt": "## 模型与模板\n`NoteType.builder(key)` 返回不可变构建器。`.name`、`.field`、`.template`、`.css`、`.cloze_field` 与 `.asset` 返回更新的构建器。`.build()` 校验完整定义并返回不可变 NoteType。`model.note()` 创建拥有该模型的笔记。`NoteType.from_bundle(path, limits=MediaLimits())` 从当前模板包格式加载相同模型及资源；可选预算在读取前分别应用于每个资源。\n`Field(key, name=None, required=False, sort=False)` 分离稳定键与显示名称。`Template(key, front, back, name=None, browser_front=None, browser_back=None, target_deck=None, generation=GenerationRule())` 的每个源字符串使用字段键。`GenerationRule.all(keys)` 和 `.any(keys)` 配置卡片生成，默认推断 Anki 的字段存在条件。构建器的 `.cloze_field(key)` 声明自定义填空生成。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 27,
+            "endLine": 40,
+            "excerpt": "## 媒体与遮挡\n| 入口 | 行为 |\n| --- | --- |\n| `Media.file(path, *, limits=MediaLimits())` | 立即读取拥有所有权的快照 |\n| `Media.bytes(data, media_type, *, limits=MediaLimits())` | 拥有带显式 MIME 类型的字节 |\n| `media.with_export_name(name)` | 返回共享快照的新文件名值；之前的引用保留原名 |\n| `media.filename`, `media.media_type`, `len(media)` | 只读快照元数据 |\n| `media.image()` / `.sound()` | 保留快照的类型化内容 |\n`MediaLimits(max_bytes=256 << 20)` 在创建快照前控制每次导入。大媒体可写入拥有所有权的临时存储。名称冲突在全部显式与自动收集资源间校验。\n`Note.image_occlusion(media)` 返回 ImageOcclusionBuilder。链式调用 `.mask(Mask.rect(key, x, y, width, height))`、可选 `.mode(OcclusionMode.HIDE_ONE_GUESS_ONE)`，再调用 `.build()`。默认模式为 `HIDE_ALL_GUESS_ONE`。完成时解码图像，并校验稳定遮罩键和有限、位于图内的像素坐标。在返回的 Note 上可正常设置 `header`、`back_extra` 或 `comments`。生成的 `image` 与 `occlusion` 字段不能手动赋值。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 41,
+            "endLine": 57,
+            "excerpt": "## 操作与结果\n| 入口 | 结果 |\n| --- | --- |\n| `project.build(BuildOptions.to(path))` | 保证有持久产物的 BuildOutput |\n| `project.build(BuildOptions.temporary())` | 拥有临时产物的 BuildOutput |\n| `options.update_from(path)` | 返回基于完整基线证据更新的选项 |\n| `project.compare(CompareOptions.against(path))` | 完成的 ComparisonReport，含独立发布策略决定 |\n| `options.update_policy(policy)` | 为 Update/Compare 应用显式风险策略；Create 不适用 |\n| `options.inspect_limits(limits)` | 为基线与候选包分别应用有限限制 |\nBuildOutput 提供 `.artifact`、`.report` 和 `.snapshot()`。BuildReport 提供 `.counts`（含 notes/cards/media 的 BuildCounts）、`.diagnostics`、`.comparison` 和 `.snapshot()`。报告没有操作结果或文件所有者。ComparisonReport 提供 `.findings`、`.policy`、`.allows_publication` 与 `.snapshot()`。快照是普通可 JSON 序列化字典，不含产物所有权。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 58,
+            "endLine": 63,
+            "excerpt": "## 错误与并发\n失败抛出 SchemaError、AddError、MediaError、ImageOcclusionError、TemplateBundleError、CompareError、PolicyError、BuildError 或 PersistError。它们提供 `kind`、`code`、`details`、`source_details` 中的结构化观察结果和 `causes` 中的来源链文本，并将原生异常保留为 `__cause__`。可用时 I/O 原因保留链接的 OSError。BuildError 提供 `.report` 和 `.snapshot()`；CompareError 提供部分 `.report`；PersistError 详情包含实际发布事实。\n原生 Project 操作释放 GIL，并以 `BINDING.PROJECT_BUSY` 拒绝同时使用同一对象；独立项目可并发运行。进程 fork 后重新创建全部原生值与句柄。继承的句柄以 `BINDING.FORKED_OBJECT` 拒绝操作，其清理不能删除父进程拥有的文件。子进程创建的值可正常操作和清理。参见[诊断](../python/diagnostics.md)。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 64,
+            "endLine": 69,
+            "excerpt": "## 添加上下文\n添加失败不会改变项目。结构化上下文记录原始笔记或模型键和目标，并可附带冲突或媒体用法详情。Rust 通过 `AddError::context()` / `detail()` 提供 `note::{AddContext, AddTarget, AddDetail}`；SDK 通过 `AddError.details` 提供类型化 context/detail。Node 字段使用 camelCase 且深度冻结；Python 使用 snake_case TypedDict。标签保留插入下标；字段位置保留原始序列下标（null/None 指字段，[] 指其根）以及可选 UTF-8 字节范围。构建产生的默认牌组错误不带笔记或模型键，仍可从来源链读取。\n添加时，类型化图片要求 image/* MIME，声音引用接受 audio/* 或 video/*。其他类别产生 `NOTE.MEDIA_USAGE_INVALID`。构造函数保持不会失败；显式资源和原始 HTML 不受影响。检查使用导入时保留的 MIME，不认证播放能力。构建的独立 MIME/扩展名校验仍然适用。完整 target/detail 表见[设计](../plans/2026-09-28-rust-api-validation-and-errors-design.md)。"
+          },
+          {
+            "source": "docs/zh-cn/python-api.md",
+            "startLine": 70,
+            "endLine": 96,
+            "excerpt": "## 源码 API 详情\n批量媒体与预备发布已包含在公开 `0.3.1` 包中。\n### 预备、审阅与发布\n一次发布尝试消耗所有者，包括策略或 I/O 失败。之后调用抛出 `PreparedPublicationStateError`，码为 `BUILD.PREPARED_UNAVAILABLE`，原因是 `closed` 或 `consumed`；close 不取消已经运行的发布。相对路径在预备调用时绑定，Project 更改不能修改已审阅 APKG。报告关闭后仍可读，但不保留文件。改变选项或重试需重新预备。耗时不含审阅等待。晚期错误可能表示替换成功但持久性未确认；决定下一步前检查发布事实。要求原生绑定协议 1 和契约包 2.1.0；更旧的同版本二进制会被拒绝。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "python-diagnostics",
+      "selectedTerms": {
+        "en": [
+          "Python error diagnosis",
+          "BuildError.snapshot",
+          "CompareError.report",
+          "source_details",
+          "causes and __cause__",
+          "details limit_exceeded",
+          "comparison.allows_publication",
+          "Python update risk policy",
+          "RISK.NOTE_REMOVED",
+          "PersistError publication facts",
+          "surrogateescape native paths",
+          "BINDING.EXTENSION_UNAVAILABLE",
+          "BINDING.VERSION_MISMATCH",
+          "Python inspection budgets"
+        ],
+        "zh-CN": [
+          "Python 错误诊断",
+          "BuildError.snapshot",
+          "CompareError.report",
+          "source_details",
+          "causes 与 __cause__",
+          "details limit_exceeded",
+          "comparison.allows_publication",
+          "Python 更新风险策略",
+          "RISK.NOTE_REMOVED",
+          "PersistError 发布事实",
+          "surrogateescape 原生路径",
+          "BINDING.EXTENSION_UNAVAILABLE",
+          "BINDING.VERSION_MISMATCH",
+          "Python 检查预算"
+        ]
+      },
+      "selectionRationale": "错误分析、嵌套原因、预算测量与发布事实是本页主线；保留 Python 错误码用于从异常定位文档。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "诊断本身不决定成败；完成比较但策略阻止和 CompareError 不同；类别放行不能越过硬错误。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/python/diagnostics.md",
+            "startLine": 3,
+            "endLine": 23,
+            "excerpt": "A successful build returns BuildOutput with a guaranteed artifact. A failed build raises BuildError with observations and publication facts. Diagnostics alone never determine success.\nUse machine `kind` and `code` for decisions, not message parsing. All public domain exceptions retain source-chain text in `causes` and chain their native exception. `details` carries operation-specific evidence: template source locations, media paths and budget measurements, incomplete comparison observations, or publication facts. An I/O source becomes a chained OSError where available. `source_details` preserves typed nested errors: bundle text-budget causes include `limit` and `observed`, while media causes include their `code`, `path` and `limit_exceeded`."
+          },
+          {
+            "source": "docs/python/diagnostics.md",
+            "startLine": 24,
+            "endLine": 48,
+            "excerpt": "## Compare before publication\nA completed comparison returns normally even if it discovers High risk. Check `comparison.allows_publication` to see the policy decision. An unreadable baseline, missing complete identity evidence, invalid candidate or exceeded budget raises CompareError; its `.report` contains observations completed before failure.\nDefault policy blocks High and Critical findings. After reviewing a specific risk category, acceptance is explicit:\nAcceptance covers every finding in the named category. The findings keep their original risk and evidence. Unmatched allowances produce warnings; warnings do not turn successful publication into failure. Unknown codes, missing evidence and other hard errors cannot be accepted. Do not automatically accept every category returned by a comparison."
+          },
+          {
+            "source": "docs/python/diagnostics.md",
+            "startLine": 49,
+            "endLine": 72,
+            "excerpt": "## Budgets and artifact ownership\nBudgets apply separately to each inspected baseline and candidate. Media import has its own earlier MediaLimits budget. Budget failures preserve resource, limit and observed values under `details['limit_exceeded']`; increase the relevant limit deliberately and retry. For bundles, pass `NoteType.from_bundle(path, limits=MediaLimits(...))` to adjust each asset’s read budget; manifest and template text retain their separate fixed limits. Required inspections cannot be disabled."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/python-diagnostics.md",
+            "startLine": 3,
+            "endLine": 23,
+            "excerpt": "成功构建返回保证包含产物的 BuildOutput。失败构建抛出 BuildError，其中含观察结果和发布事实。不能仅凭诊断判定成功。\n根据机器 `kind` 和 `code` 作决策，不解析消息。所有公开领域异常在 `causes` 中保留来源链文本，并链接原生异常。`details` 携带操作相关证据：模板源位置、媒体路径与预算测量、不完整比较的观察结果，或发布事实。可用时，I/O 来源会成为链接的 OSError。`source_details` 保留类型化嵌套错误：模板包文本预算原因含 `limit` 和 `observed`，媒体原因含 `code`、`path` 和 `limit_exceeded`。\nBuildReport 只有观察结果。其快照含数量、诊断、耗时和已完成的比较。Output 与 BuildError 快照包含实际 Success/Failure 结果。失败快照区分目标从未发布与已发布后持久性失败。JSON 路径不拥有文件，也不延长临时产物寿命。"
+          },
+          {
+            "source": "docs/zh-cn/python-diagnostics.md",
+            "startLine": 24,
+            "endLine": 48,
+            "excerpt": "## 发布前比较\n完成的比较即使发现 High 风险也正常返回。通过 `comparison.allows_publication` 查看策略决定。无法读取的基线、缺失完整身份证据、无效候选包或预算超限会抛出 CompareError；`.report` 包含失败前完成的观察结果。\n默认策略阻止 High 和 Critical 发现项。审阅特定风险类别后，可显式接受：\n接受范围是指定类别中的全部发现项。发现项保留原风险与证据。未匹配的放行产生警告；警告不会把成功发布变为失败。未知码、缺失证据和其他硬错误不能被接受。不要自动接受比较返回的每个类别。\n`update_from` 要求上一次原始分发包及其完整内嵌证据。Anki 重新导出不保留该证据。APKG 中省略笔记或卡片，不会自动从学习者的集合中删除它们。请结合目标 Anki 导入设置检查结构变化。"
+          },
+          {
+            "source": "docs/zh-cn/python-diagnostics.md",
+            "startLine": 49,
+            "endLine": 64,
+            "excerpt": "## 预算与产物所有权\n预算分别应用于每个被检查的基线和候选包。媒体导入有自己的、更早执行的 MediaLimits 预算。预算失败在 `details['limit_exceeded']` 下保留资源、限制和观察值；有意提高相关限制后再重试。模板包可用 `NoteType.from_bundle(path, limits=MediaLimits(...))` 调整每个资源的读取预算；manifest 与模板文本仍保留独立固定限制。必需检查不能禁用。\n不需要持久路径时使用 `BuildOptions.temporary()`。消费文件时保留输出或产物句柄；`artifact.persist_to(path)` 创建持久副本。持久化失败时，PersistError 详情记录目标发布阶段，原句柄仍可用。\n快照和错误详情中的路径，在有效 Unicode 时为字符串。Python 以 `surrogateescape` 表示的 Unix 字节名称，在 JSON 中为 `{\"encoding\": \"unix_bytes\", \"bytes\": [...]}`；可用 `Path(os.fsdecode(bytes(value[\"bytes\"])))` 恢复。包含未配对 UTF-16 代理项的 Windows 名称使用 `{\"encoding\": \"windows_wide\", \"units\": [...]}`，每个数组元素保存原始 16 位代码单元。编码路径描述其原平台。运行时 `artifact.path` 仍是 `pathlib.Path`，`BuildOptions.to`、`update_from` 和 `CompareOptions.against` 通过绑定保留原生路径值。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "python-migration",
+      "selectedTerms": {
+        "en": [
+          "Python API migration",
+          "clean-slate Python API",
+          "anki-forge distribution rename",
+          "anki_forge import rename",
+          "removed Deck API",
+          "add_note to add stable key",
+          "removed model registry",
+          "owned-value SDK transition",
+          "implicit HTML migration",
+          "removed lockfile workflow",
+          "runtime subprocess replacement",
+          "PyO3 native binding",
+          "legacy compatibility boundary"
+        ],
+        "zh-CN": [
+          "Python API 迁移",
+          "全新 Python API",
+          "anki-forge 发行名更改",
+          "anki_forge 导入名更改",
+          "已移除 Deck API",
+          "add_note 改为 add 稳定键",
+          "已移除模型注册表",
+          "迁移到拥有值所有权的 SDK",
+          "隐式 HTML 迁移",
+          "已移除 lockfile 流程",
+          "替换 runtime 子进程",
+          "PyO3 原生绑定",
+          "旧 API 兼容边界"
+        ]
+      },
+      "selectionRationale": "保留旧发行名、导入名和方法名，仅用于读者从旧 API 迁移到当前接口，所有旧功能以移除/迁移限定。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "旧名称不是兼容别名；不声称自动恢复旧包证据、旧模板包或提供旧 Deck/lockfile 兼容层。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "bindings/python/MIGRATION.md",
+            "startLine": 3,
+            "endLine": 25,
+            "excerpt": "Use `python -m pip install ankiforge` and `from ankiforge import ...`.\nThe former `anki-forge` distribution and `anki_forge` import name are not\ncompatibility aliases. For a source checkout, rebuild the native extension\nwith Maturin after changing names. See the [setup guide](README.md).\nNo legacy compatibility layer is retained. Replace the old Deck/registry/runtime APIs with the owned public model:\n| Previous workflow | Current workflow |\n| --- | --- |\n| Deck or Project with optional stable ID | `Project(namespace, default_deck=...)` |"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/python-migration.md",
+            "startLine": 3,
+            "endLine": 22,
+            "excerpt": "使用 `python -m pip install ankiforge` 和 `from ankiforge import ...`。旧 `anki-forge` 发行名和 `anki_forge` 导入名不是兼容别名。源码目录在修改名称后需用 Maturin 重建原生扩展。参见[安装指南](../../bindings/python/README.md)。\n不保留旧兼容层。将旧 Deck、注册表和 runtime API 替换为拥有值所有权的公开模型：\n| 旧流程 | 当前流程 |\n| --- | --- |\n| 可选稳定 ID 的 Deck 或 Project | `Project(namespace, default_deck=...)` |\n| `add_note(note)` 与基于内容的身份 | `add(stable_key, note)` |\n| 可变 NoteType 与 add_notetype | `NoteType.builder(key)...build()`，再调用 `model.note()` |\n| 字符串模型引用 | 笔记持有已校验模型 |"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "genanki-migration",
+      "selectedTerms": {
+        "en": [
+          "migrate from genanki",
+          "genanki Model to NoteType",
+          "genanki Deck to Project",
+          "genanki Package write replacement",
+          "numeric model ID mapping",
+          "GUID migration boundary",
+          "persistent business keys",
+          "field names versus field keys",
+          "genanki media file paths",
+          "plain text versus Content.html",
+          "owned media migration",
+          "first new-model distribution"
+        ],
+        "zh-CN": [
+          "从 genanki 迁移",
+          "genanki Model 改为 NoteType",
+          "genanki Deck 改为 Project",
+          "替换 genanki Package 写出",
+          "数字模型 ID 映射",
+          "GUID 迁移边界",
+          "持久业务键",
+          "字段名称与字段键",
+          "替换 genanki 媒体文件路径",
+          "纯文本与 Content.html",
+          "媒体所有权迁移",
+          "新模型首次分发"
+        ]
+      },
+      "selectionRationale": "按 genanki 用户已有 Model/Deck/Package/媒体路径心智提供概念映射，术语限定为迁移任务。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "不模拟 genanki 对象，不自动转换既有数字 ID/GUID；首次新模型分发需视为身份边界或另行验证映射。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "docs/python/genanki-migration.md",
+            "startLine": 3,
+            "endLine": 38,
+            "excerpt": "Still choosing a library? Read [Anki Forge vs genanki](../anki-forge-vs-genanki.md).\nAnkiForge uses stable data keys, validated immutable models, owned media snapshots and explicit build/update operations. This is a new authoring model; it does not emulate genanki objects or the removed AnkiForge Deck/lockfile interfaces.\n| genanki concept | AnkiForge equivalent |\n| --- | --- |\n| Model with numeric ID | `NoteType.builder(stable_key)...build()` |\n| Field names used as identifiers | Stable Field keys plus separate display names |"
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "docs/zh-cn/genanki-migration.md",
+            "startLine": 3,
+            "endLine": 38,
+            "excerpt": "还在选库？阅读 [Anki Forge 与 genanki](../anki-forge-vs-genanki.md)。\nAnkiForge 使用稳定数据键、已校验的不可变模型、拥有所有权的媒体快照以及显式构建和更新操作。这是一套新的内容编写模型，不模拟 genanki 对象，也不模拟已移除的 AnkiForge Deck/lockfile 接口。\n| genanki 概念 | AnkiForge 对应方式 |\n| --- | --- |\n| 带数字 ID 的 Model | `NoteType.builder(stable_key)...build()` |\n| 字段名用作标识符 | 稳定 Field 键与独立显示名称 |\n| 携带字段字符串的 Note | 持有模型的 `model.note().field(key, content)` |\n| Deck 作为笔记容器 | 带默认牌组的 Project；可选笔记级 `.deck(name)` |\n| Package 的媒体文件路径 | 拥有所有权的 `Media.file(path)` 值，经类型化内容自动收集 |"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "selectedTerms": {
+        "en": [
+          "first Rust flashcard walkthrough",
+          "one-word vocabulary deck",
+          "Spanish greeting example",
+          "repeatable authoring in Git",
+          "Basic note front and back",
+          "Project::new spanish",
+          "stable vocabulary entry ID",
+          "typed failure propagation",
+          "grow from one note"
+        ],
+        "zh-CN": [
+          "首张 Rust 记忆卡片讲解",
+          "单词词汇牌组",
+          "西班牙语问候示例",
+          "在 Git 中重复编写",
+          "Basic 笔记正反面",
+          "Project::new spanish",
+          "稳定词汇条目 ID",
+          "传播类型化失败",
+          "从一条笔记扩展"
+        ]
+      },
+      "selectionRationale": "文章用单词示例解释首次编写与稳定身份；walkthrough、讲解对应文章形式，不添加未展开的高级任务。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "完整安装步骤由当前 quickstart 提供；末尾媒体/填空导航不是本篇的完整教程。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "website/src/content/blog/your-first-anki-deck.mdx",
+            "startLine": 14,
+            "endLine": 17,
+            "excerpt": "When your notes already live in a script, a dataset, or a collection of files, generating an Anki deck can make the authoring process easier to repeat. Your source stays reviewable in Git, and each export becomes a step you can run again.\nStart with one word: **hola**. We want a card that shows the Spanish greeting on the front and its English meaning on the back."
+          },
+          {
+            "source": "website/src/content/blog/your-first-anki-deck.mdx",
+            "startLine": 18,
+            "endLine": 27,
+            "excerpt": "## A complete program\nThis is the repository’s minimal Rust example:\n`Project::new(\"spanish\")` creates the namespace. `Note::basic(\"hola\", \"hello\")` creates a Basic note, `project.add(\"es:hola\", note)` assigns its stable key, and `build(BuildOptions::to(...))` writes the package.\n`build` returns `BuildOutput` only after success. The `?` operator propagates a typed failure so scripts can exit with an error."
+          },
+          {
+            "source": "website/src/content/blog/your-first-anki-deck.mdx",
+            "startLine": 28,
+            "endLine": 35,
+            "excerpt": "## Install and run\nFollow the <a href={sitePath('/docs/quickstart/')}>current quickstart</a> for the public package installation and run command. To use the same program in your own project, follow <a href={sitePath('/docs/installation/')}>Add to your application</a>.\nAfter exporting, import `spanish.apkg` into Anki and reveal the answer to your first card.\nThe <a href={sitePath('/examples/#basic')}>Basic example on this site</a> also has a downloadable package if you want to inspect the result first."
+          },
+          {
+            "source": "website/src/content/blog/your-first-anki-deck.mdx",
+            "startLine": 36,
+            "endLine": 43,
+            "excerpt": "## Give the note an identity\nThe string `es:hola` is an explicit stable note key within the `spanish` namespace. It describes which note this is, independently of how you phrase the answer. You could later expand “hello” to “hello; hi” and keep the same ID.\nUse a distinct ID for each logical note. If your source already has a durable key, such as a vocabulary entry ID, that is a useful starting point. Avoid deriving identity solely from text that you expect to edit.\nUpdating a distributed deck also needs release history. Keep the original previous package and follow the <a href={sitePath('/docs/updates/')}>documented update workflow</a>."
+          },
+          {
+            "source": "website/src/content/blog/your-first-anki-deck.mdx",
+            "startLine": 44,
+            "endLine": 48,
+            "excerpt": "## Grow from one note\nFor another greeting, create another Basic note and add it with a new key. For a missing word in a sentence, use a <a href={sitePath('/examples/#cloze')}>Cloze note</a>. For richer cards, define your fields and templates with the project API and package images or audio with the notes.\nThe <a href={sitePath('/docs/rust-guide/')}>Rust authoring guide</a> takes the next step through diagnostics, media, and repeatable builds. The <a href={`${repository}/tree/main/anki_forge/examples`}>repository examples</a> provide runnable programs to build on."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+            "startLine": 14,
+            "endLine": 19,
+            "excerpt": "当笔记已经保存在脚本、数据集或一组文件中时，生成 Anki 牌组可以让内容编写过程更容易重复。源文件可以在 Git 中审阅，每次导出都是可再次执行的一步。\n从一个单词开始：**hola**。我们希望卡片正面显示西班牙语问候语，背面显示其英语含义。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+            "startLine": 20,
+            "endLine": 31,
+            "excerpt": "## 完整程序\n这是仓库中的最小 Rust 示例：\n`Project::new(\"spanish\")` 创建命名空间，`Note::basic(\"hola\", \"hello\")` 创建 Basic 笔记，`project.add(\"es:hola\", note)` 分配稳定键，`build(BuildOptions::to(...))` 写出包。\n`build` 只在成功后返回 `BuildOutput`。`?` 运算符传播类型化失败，让脚本能够以错误退出。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+            "startLine": 32,
+            "endLine": 41,
+            "excerpt": "## 安装与运行\n按<a href={sitePath('/zh-cn/docs/quickstart/')}>当前入门指南</a>安装公开包并执行运行命令。若要在自己的项目中使用同一程序，参考<a href={sitePath('/zh-cn/docs/installation/')}>集成到应用</a>。\n导出后，将 `spanish.apkg` 导入 Anki，显示第一张卡片的答案。\n如果想先检查结果，本站的<a href={sitePath('/zh-cn/examples/#basic')}>Basic 示例</a>也提供可下载包。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+            "startLine": 42,
+            "endLine": 51,
+            "excerpt": "## 为笔记指定身份\n字符串 `es:hola` 是 `spanish` 命名空间内显式的稳定笔记键。它标识是哪条笔记，与答案的措辞无关。之后可以把“hello”扩展为“hello; hi”，同时保持相同 ID。\n每条逻辑笔记使用不同 ID。如果源数据已有词汇条目 ID 等持久键，就可以从它开始。不要仅根据将来可能编辑的文本派生身份。\n更新已分发牌组还需要发布历史。保留原始旧包，并遵循<a href={sitePath('/zh-cn/docs/updates/')}>文档中的更新流程</a>。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/your-first-anki-deck.mdx",
+            "startLine": 52,
+            "endLine": 56,
+            "excerpt": "## 从一条笔记扩展\n另一句问候语可以创建为另一条 Basic 笔记，并使用新键添加。句子中的缺失单词可以使用<a href={sitePath('/zh-cn/examples/#cloze')}>Cloze 笔记</a>。更丰富的卡片可通过项目 API 定义字段和模板，并将图片或音频与笔记一起打包。\n<a href={sitePath('/zh-cn/docs/rust-guide/')}>Rust 编写指南</a>继续介绍诊断、媒体和可重复构建。<a href={`${repository}/tree/main/anki_forge/examples`}>仓库示例</a>提供可以继续扩展的可运行程序。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "selectedTerms": {
+        "en": [
+          "identity outlives wording",
+          "stable note ID rationale",
+          "editing an answer with the same ID",
+          "namespace across releases",
+          "update baseline rationale",
+          "archive original distribution package",
+          "separate baseline and candidate paths",
+          "identity and revision evidence",
+          "local edit import conditions",
+          "stable ID versus review state"
+        ],
+        "zh-CN": [
+          "身份比措辞更持久",
+          "稳定笔记 ID 的原因",
+          "修改答案保留相同 ID",
+          "跨版本命名空间",
+          "更新基线的作用",
+          "归档原始分发包",
+          "基线与候选包独立路径",
+          "身份与修订证据",
+          "本地编辑的导入条件",
+          "稳定 ID 与复习状态"
+        ]
+      },
+      "selectionRationale": "解释稳定身份的设计理由和一处答案编辑，适合原因、作用、跨版本等文章概念词。",
+      "naturalness": {
+        "en": "有限的任务短语、常见同义表达与正文中的 API 标识；不包含完整提问句。",
+        "zh-CN": "沿用语言 brief 的笔记/卡片/牌组区分；在正文技术语义范围内补充自然口语同义表达。"
+      },
+      "technicalBoundary": "稳定 ID 帮助匹配，但不覆盖 Anki 导入设置或承诺保留全部本地状态；Anki 重导出不能作基线。",
+      "sourceSpans": {
+        "en": [
+          {
+            "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+            "startLine": 14,
+            "endLine": 25,
+            "excerpt": "A generated deck is rarely finished after its first export. Definitions improve, examples become clearer, and mistakes get corrected. The next build needs to know which notes are the same notes with better content.\nConsider this small edit:\n| Field | First version | Next version |\n| --- | --- | --- |\n| Front | hola | hola |\n| Back | hello | hello; hi |\n| Stable ID | es:hola | es:hola |\nThe meaning has expanded. The logical note is still the same."
+          },
+          {
+            "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+            "startLine": 26,
+            "endLine": 31,
+            "excerpt": "## Separate identity from content\nAn explicit stable ID gives a note a durable key. Keep that ID when you edit the note, and choose a new ID when you create a different logical note.\nIdentity also has a project context. Keep the project’s namespace consistent across releases of the same deck. A note ID on its own is only one part of a repeatable update workflow."
+          },
+          {
+            "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+            "startLine": 32,
+            "endLine": 41,
+            "excerpt": "## Give the next build a baseline\nA previous package tells Anki Forge what was exported before. Use it when building the revised project:\nIn this excerpt, `project` contains the revised note, `previous` points to version 1, and `next` is a separate path for version 2. The <a href={sitePath('/generated/website_showcase.rs')}>full example</a> includes both project definitions and verifies that one note identity is preserved.\nKeep the input package and output package at different paths. Overwriting the baseline removes evidence you need to understand and verify the release."
+          },
+          {
+            "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+            "startLine": 42,
+            "endLine": 51,
+            "excerpt": "## Keep the original distributed package\nEvery generated package carries complete identity and revision evidence. The next\nbuild validates that evidence against the actual database and media before\nreusing identities. Preserve the original package you distributed; an Anki\nre-export is not a supported baseline.\nThe <a href={sitePath('/docs/updates/')}>authoring guide</a> describes strict\nupdates, risk policies and client import limitations."
+          },
+          {
+            "source": "website/src/content/blog/stable-ids-and-deck-updates.mdx",
+            "startLine": 52,
+            "endLine": 58,
+            "excerpt": "## Inspect the build and the import\nCheck the build report and its update-safety diagnostics before distributing a package. If the build cannot reconcile a note’s identity, investigate the source and baseline instead of treating an output file as proof that the update is correct.\nAnki then applies its own import behavior. Import settings, existing note content, local edits, and the Anki version can influence the result. Stable identity helps match the note; it does not override those choices or promise that every import preserves every aspect of local state."
+          }
+        ],
+        "zh-CN": [
+          {
+            "source": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+            "startLine": 14,
+            "endLine": 27,
+            "excerpt": "生成的牌组很少在首次导出后就不再改变。定义会完善，例子会更清楚，错误会被修正。下一次构建需要知道哪些笔记仍是原来的笔记，只是内容有所改善。\n考虑这个小改动：\n| 字段 | 第一版 | 下一版 |\n| --- | --- | --- |\n| 正面 | hola | hola |\n| 背面 | hello | hello; hi |\n| 稳定 ID | es:hola | es:hola |\n含义扩展了，逻辑笔记仍是同一条。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+            "startLine": 28,
+            "endLine": 35,
+            "excerpt": "## 将身份与内容分开\n显式稳定 ID 为笔记提供持久键。编辑笔记时保留该 ID，创建另一条逻辑笔记时选择新 ID。\n身份还具有项目上下文。同一牌组的各次发布应保持项目命名空间一致。仅笔记 ID 本身只是可重复更新流程的一部分。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+            "startLine": 36,
+            "endLine": 47,
+            "excerpt": "## 为下一次构建提供基线\n之前的包告诉 Anki Forge 上次导出了什么。构建修订后的项目时使用它：\n此片段中，`project` 包含修订后的笔记，`previous` 指向版本 1，`next` 是版本 2 的独立路径。<a href={sitePath('/generated/website_showcase.rs')}>完整示例</a>包含两个项目的定义，并验证保留了一条笔记的身份。\n输入包与输出包应使用不同路径。覆盖基线会丢失理解和验证发布所需的证据。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+            "startLine": 48,
+            "endLine": 55,
+            "excerpt": "## 保留原始分发包\n每个生成包都携带完整的身份和修订证据。下一次构建会将证据与实际数据库和媒体核对后，才复用身份。保留实际分发的原始包；Anki 重新导出的包不是受支持的基线。\n<a href={sitePath('/zh-cn/docs/updates/')}>编写指南</a>说明严格更新、风险策略和客户端导入限制。"
+          },
+          {
+            "source": "website/src/content/blog/zh-cn/stable-ids-and-deck-updates.mdx",
+            "startLine": 56,
+            "endLine": 62,
+            "excerpt": "## 检查构建与导入\n分发前检查构建报告及其更新安全诊断。如果构建无法协调某条笔记的身份，应调查源数据和基线，不能仅把存在输出文件当作更新正确的证据。\n之后 Anki 会应用自己的导入行为。导入设置、已有笔记内容、本地编辑和 Anki 版本都可能影响结果。稳定身份帮助匹配笔记，但不会覆盖这些选择，也不承诺每次导入都保留本地状态的每一个方面。\n<a href={sitePath('/zh-cn/examples/#updates')}>双版本示例</a>提供两个包，可以先尝试一次小而可检查的更新，再设计自己的发布流程。"
+          }
+        ]
+      },
+      "independentReviewStatus": "pending"
+    }
+  ]
+}

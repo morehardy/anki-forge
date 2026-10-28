@@ -70,10 +70,10 @@ and MIME types other than `text/plain` for llms and `text/markdown` or
 `text/plain` for Markdown. A local preview's headers do not establish GitHub
 Pages' headers; a hosting MIME failure leaves publication unverified.
 
-For the manual reading acceptance, give a reader only the deployed llms URL and
+For independent AI reading acceptance, give the reviewing agent only the llms URL and
 ask them to locate Python installation, the Node API, JSON updates and
 compatibility constraints. Record each question, the URLs actually read, the
-answer, and the human review against the same manifest. Local reading is useful
+answer, and the independent technical review against the same manifest. Local reading is useful
 for development but does not replace this post-deployment check.
 
 ## English and Chinese content
@@ -97,13 +97,49 @@ Pagefind overrides live in `src/content/i18n/`. Both catalogs enforce identical
 keys and interpolation parameters. Shared SDK commands, executable examples,
 APKGs and benchmark values remain independent of translated prose.
 
-After changing a long-form source, review its paired translation for technical
-facts, steps, code, tables, limitations and next actions. Record the two current
-SHA-256 hashes, `status: reviewed` and the review date in `content-reviews.json`.
-Do not refresh hashes before doing the review: stale or pending records block
-builds. `legacy-sections.json` preserves previously public Chinese anchors;
-preparation also adds shared English section aliases. Language switches check
-the real target before carrying a query and mapped fragment across languages.
+`locale-model.mjs` separates configured languages from `release-locales.json`.
+Only the latter drives the next complete artifact. Configuring a language does
+not read or publish incomplete sources. Historic published languages and routes
+are protected independently by `check:surface`; CI reads the base revision's
+contracts, with pinned independent captures for this first migration.
+
+Source review is per topic and locale in `content-reviews.json` schema 2. Generate
+a pending evidence candidate with `scripts/content-review-candidates.mjs`, have
+independent AI reviewers read the actual prose, UI, metadata and dependency
+snapshots, then import the completed reports with `record-content-review.mjs`.
+Technical and linguistic axes require concrete evidence; never refresh hashes to
+pretend a review happened. Search and task coverage is a contract before build;
+actual results are attached to the artifact afterward. `section-contracts.json`
+maps stable tasks explicitly and `legacy-sections.json` retains historic anchors.
+Translations may change heading depth, order and table presentation when facts
+and task dependencies remain complete. Switching uses a build-validated target
+section inventory without fetching every translated page.
+
+`CONTENT_REVIEW_MODE=preview` permits isolated editorial rendering. It cannot
+produce a release manifest or authorize deployment. A release uses normal strict
+source checks and freezes its locale snapshot before building.
+
+## Search and release evidence
+
+`search-terms.json` contains independently authored, source-backed terms per page
+and locale. They are emitted as Pagefind metadata. `generate:search` derives a
+small current-language directory from actual built HTML and copies the shared
+browser retrieval engine; Pagefind retains the complete body index. The search
+dialog loads only its current locale and preserves native keyboard, focus,
+loading and recovery behavior. Concept normalization and metadata ranking handle
+local expressions; `search-queries.json` is a separate frozen acceptance set,
+not a production query routing table or measured search-volume data.
+
+After a strict build, use `npm run verify:release`, followed by
+`npm run check:release` immediately before artifact upload. The first command
+actually executes source, site, historic surface, machine, schema, fault
+injection, browser and search checks. Reports and logs stay under
+`../target/website-localization/{root,prefix}`; they bind the manifest, current
+inputs and all artifact bytes without changing them. The second command rejects
+changed source, resources, manifest or evidence. CI runs this sequence for both
+deployment bases and uploads the evidence separately. Passing it establishes
+artifact engineering acceptance; production identity and HTTP behavior still
+require `check:live` against the independently uploaded manifest after deployment.
 
 Useful checks:
 

@@ -18,3 +18,16 @@ test('draft translations are excluded together and mismatched status fails', asy
   await writeFile(path.join(directory, 'zh.mdx'), '---\ndraft: false\n---\nPublished\n');
   await assert.rejects(publishedPages(directory, registry), /draft status must match/);
 });
+
+test('the third build language participates in draft checks while planned sources stay unread', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-three-locales-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const registry = [{ id: 'example', type: 'docs', sources: { en: 'en.md', 'zh-CN': 'zh.md', es: 'es.md', fr: 'not-authored.md' } }];
+  for (const file of ['en.md', 'zh.md', 'es.md']) await writeFile(path.join(directory, file), '---\ndraft: false\n---\nPublished\n');
+  assert.equal((await publishedPages(directory, registry, ['en', 'zh-CN', 'es'])).length, 1);
+  await writeFile(path.join(directory, 'es.md'), '---\ndraft: true\n---\nDraft\n');
+  await assert.rejects(publishedPages(directory, registry, ['en', 'zh-CN', 'es']), /draft status must match/);
+  await assert.rejects(publishedPages(directory, registry, ['en', 'de']), /example\/de: missing published source/);
+  await assert.rejects(publishedPages(directory, registry, []), /nonempty/);
+  await assert.rejects(publishedPages(directory, registry, ['en', 'en']), /unique/);
+});

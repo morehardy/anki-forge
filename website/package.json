@@ -11,7 +11,8 @@
     "predev": "npm run prepare:site",
     "dev": "astro dev --host 127.0.0.1",
     "prebuild": "npm run prepare:site",
-    "build": "astro build && npm run generate:machine && npm run check:machine && npm run check:schema && node scripts/site-manifest.mjs",
+    "build": "astro build && npm run generate:search && npm run generate:machine && npm run check:machine && npm run check:schema && node scripts/site-manifest.mjs",
+    "generate:search": "node scripts/search-documents.mjs",
     "generate:machine": "node scripts/machine-content.mjs",
     "check:machine": "node scripts/check-machine-content.mjs",
     "check:schema": "node scripts/check-structured-data.mjs",
@@ -20,7 +21,11 @@
     "precheck": "npm run prepare:site",
     "check": "astro check",
     "check:site": "node scripts/check-site.mjs",
-    "test": "node --test scripts/site-config.test.mjs scripts/content-links.test.mjs scripts/benchmark-presentation.test.mjs scripts/ai-quickstart.test.mjs scripts/content-contract.test.mjs scripts/machine-urls.test.mjs scripts/machine-content.test.mjs scripts/structured-data.test.mjs scripts/machine-http.test.mjs scripts/published-pages.test.mjs",
+    "check:surface": "node scripts/check-public-surface.mjs",
+    "check:search": "node scripts/check-search.mjs",
+    "verify:release": "node scripts/release-evidence.mjs run",
+    "check:release": "node scripts/release-evidence.mjs check",
+    "test": "node --test scripts/site-config.test.mjs scripts/locale-model.test.mjs scripts/content-links.test.mjs scripts/content-sections.test.mjs scripts/messages.test.mjs scripts/benchmark-presentation.test.mjs scripts/ai-quickstart.test.mjs scripts/content-contract.test.mjs scripts/machine-urls.test.mjs scripts/page-metadata.test.mjs scripts/machine-content.test.mjs scripts/structured-data.test.mjs scripts/machine-http.test.mjs scripts/published-pages.test.mjs scripts/indexability.test.mjs scripts/public-surface.test.mjs scripts/trusted-surface.test.mjs scripts/site-manifest.test.mjs scripts/robots-policy.test.mjs scripts/release-evidence.test.mjs scripts/post-build-reviews.test.mjs scripts/search-ranking.test.mjs scripts/heading-migrations.test.mjs",
     "check:ai": "node scripts/ai-quickstart.mjs",
     "sync:ai": "node scripts/ai-quickstart.mjs --write",
     "check:docs": "node scripts/documentation.mjs",
@@ -50,6 +55,7 @@
     "sharp": "0.35.4",
     "turndown": "7.2.2",
     "turndown-plugin-gfm": "1.0.2",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "@pagefind/default-ui": "1.5.2"
   }
 }

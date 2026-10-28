@@ -6,8 +6,9 @@ import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
 import { machineGroups } from '../machine-content.config.mjs';
 import { localeIds, pagePath, pages } from '../site-model.mjs';
+import { configuredLocales } from '../locale-model.mjs';
 import { repository, siteConfig, withBase } from '../site.config.mjs';
-import { canonicalUrl, llmsUrl, markdownUrl } from '../src/lib/machine-urls.mjs';
+import { canonicalUrl, llmsPath, llmsUrl, markdownUrl, machineResourceKind } from '../src/lib/machine-urls.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
 import { loadAiQuickstart } from './ai-quickstart.mjs';
 import { publishedPages } from './published-pages.mjs';
@@ -153,9 +154,12 @@ export function renderMarkdown(document) {
 
 export function renderLlms(locale, documents, context) {
   const t = context.translator;
+  const buildLocales = context.buildLocales ?? localeIds;
+  if (!buildLocales.includes(locale)) throw new Error(`Index locale is outside the build: ${locale}`);
   const lines = ['# Anki Forge', '', `> ${t('machine.intro')}`, '', `${t('machine.version', { version: context.publicInstall.publicVersion })} ${t('machine.constraints')}`, ''];
   for (const language of Object.values(context.publicInstall.languages)) lines.push(`- ${language.label}: \`${language.install}\` (${language.runtime})`);
   for (const group of machineGroups) {
+    if (group.label === 'machine.optional' && t(group.label) !== 'Optional') throw new Error(`${locale}: the Optional protocol heading must not be translated`);
     lines.push('', `## ${t(group.label)}`, '');
     for (const id of group.ids) {
       const document = documents.find(item => item.id === id && item.locale === locale);
@@ -170,7 +174,11 @@ export function renderLlms(locale, documents, context) {
       lines.push(`- [${plainText(document.title)}](${document.markdown}): ${t('machine.history', { date: document.publishedAt.slice(0, 10) })} ${plainText(document.description)}`);
     }
     if (group.repository) lines.push(`- [GitHub](${context.repository}): ${t('machine.repository')}`);
-    if (group.otherLanguage) lines.push(`- [${locale === 'en' ? '简体中文' : 'English'}](${llmsUrl(locale === 'en' ? 'zh-CN' : 'en', context.siteConfig)}): ${t('machine.otherLanguage')}`);
+    if (group.otherLanguages) for (const other of buildLocales.filter(id => id !== locale)) {
+      const language = configuredLocales[other]?.label;
+      if (!language) throw new Error(`Unknown index locale: ${other}`);
+      lines.push(`- [${plainText(language)}](${llmsUrl(other, context.siteConfig)}): ${plainText(t('machine.otherLanguage', { language }))}`);
+    }
   }
   const output = `${lines.join('\n')}\n`;
   if (Buffer.byteLength(output, 'utf8') > 24 * 1024) throw new Error(`${locale}: llms.txt exceeds 24 KiB`);
@@ -181,7 +189,6 @@ async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   return (await Promise.all(entries.map(entry => entry.isDirectory() ? walk(path.join(directory, entry.name)) : [path.join(directory, entry.name)]))).flat();
 }
-const reserved = relative => /^(?:zh-cn\/)?(?:docs|blog)\/(?:.*\/)?index\.md$/.test(relative) || /^(?:zh-cn\/)?llms\.txt$/.test(relative);
 function distPath(dist, route) {
   const target = path.resolve(dist, `.${route}`);
   if (!target.startsWith(path.resolve(dist) + path.sep)) throw new Error(`Unsafe output path: ${route}`);
@@ -207,14 +214,14 @@ async function validateTarget(value, from, dist, planned) {
 }
 
 export async function generateMachineContent(dist = defaultDist) {
-  const registry = await publishedPages();
+  const registry = await publishedPages(undefined, pages, localeIds);
   const expected = new Set(registry.flatMap(page => localeIds.map(locale => pagePath(page.id, locale))));
   const htmlFiles = (await walk(dist)).filter(file => file.endsWith('.html') && path.basename(file) === 'index.html');
   const actual = htmlFiles.map(file => '/' + path.relative(dist, path.dirname(file)).split(path.sep).filter(part => part !== '.').join('/') + (path.dirname(file) === dist ? '' : '/'));
   if (expected.size !== actual.length || actual.some(route => !expected.has(route))) throw new Error('Published registry and actual HTML page sets differ');
   for (const file of await walk(path.join(website, 'public'))) {
     const relative = path.relative(path.join(website, 'public'), file).split(path.sep).join('/');
-    if (reserved(relative)) throw new Error(`Manual resource occupies reserved machine namespace: ${relative}`);
+    if (machineResourceKind(relative)) throw new Error(`Manual resource occupies reserved machine namespace: ${relative}`);
   }
 
   const documents = [];
@@ -235,8 +242,8 @@ export async function generateMachineContent(dist = defaultDist) {
   const publicInstall = await loadAiQuickstart();
   const outputs = documents.map(document => ({ file: distPath(dist, `${pagePath(document.id, document.locale)}index.md`), data: document.output }));
   for (const locale of localeIds) {
-    const route = locale === 'en' ? '/llms.txt' : '/zh-cn/llms.txt';
-    outputs.push({ file: distPath(dist, route), data: renderLlms(locale, documents, { siteConfig, repository, publicInstall, translator: createTranslator(locale) }) });
+    const route = llmsPath(locale);
+    outputs.push({ file: distPath(dist, route), data: renderLlms(locale, documents, { siteConfig, repository, publicInstall, buildLocales: localeIds, translator: createTranslator(locale) }) });
   }
   const planned = new Set(outputs.map(output => path.resolve(output.file)));
   for (const document of documents) for (const target of document.targets) await validateTarget(target, `${document.id}/${document.locale}`, dist, planned);
@@ -246,7 +253,7 @@ export async function generateMachineContent(dist = defaultDist) {
   // Nothing is removed or written until every page has been extracted successfully.
   for (const file of await walk(dist)) {
     const relative = path.relative(dist, file).split(path.sep).join('/');
-    if (reserved(relative)) await rm(file);
+    if (machineResourceKind(relative)) await rm(file);
   }
   for (const output of outputs) { await mkdir(path.dirname(output.file), { recursive: true }); await writeFile(output.file, output.data, 'utf8'); }
   console.log(`Generated ${documents.length} Markdown pages and ${localeIds.length} AI indexes.`);

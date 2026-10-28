@@ -62,7 +62,7 @@ for (const topic of topics) for (const locale of localeIds) {
     : ['WebSite', 'CollectionPage', 'SoftwareApplication'];
   assert.deepEqual(graph.map(node => node['@type']), type, `${label}: graph types`);
   const nodes = Object.fromEntries(graph.map(node => [node['@type'], node]));
-  assert.deepEqual(nodes.WebSite, { '@id': `${siteRoot}#website`, '@type': 'WebSite', name: 'Anki Forge', url: siteRoot, inLanguage: ['en', 'zh-CN'] }, `${label}: website entity`);
+  assert.deepEqual(nodes.WebSite, { '@id': `${siteRoot}#website`, '@type': 'WebSite', name: 'Anki Forge', url: siteRoot, inLanguage: localeIds }, `${label}: website entity`);
   const web = nodes.WebPage || nodes.CollectionPage;
   assert.equal(web['@id'], `${canonical}#webpage`, `${label}: webpage identity`);
   assert.equal(web.name, ['docs', 'article'].includes(topic.type) ? $('h1').text().trim() : topic.title[locale], `${label}: webpage name`);

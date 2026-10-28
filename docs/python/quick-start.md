@@ -35,6 +35,9 @@ Keep namespace `spanish` and note key `es:hola` stable for later edits. Exportin
 
 ## Continue
 
+For a vocabulary spreadsheet, follow [CSV to Anki](../csv-to-anki.md). To draft
+cards from source notes, start with [AI-assisted card generation](../ai-anki-cards.md).
+
 For a complete media and update task, follow [JSON to Anki](../json-to-anki.md#python).
 
 - [Images and audio](../media.md) and [Python media API](api.md#media-and-occlusion)

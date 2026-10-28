@@ -1,0 +1,48 @@
+import assert from 'node:assert/strict';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { load } from 'cheerio';
+import { pagePath, localeIds } from '../site-model.mjs';
+import { configuredLocales } from '../locale-model.mjs';
+import { siteConfig, withBase } from '../site.config.mjs';
+import { publishedPages } from './published-pages.mjs';
+import vocabulary from '../search-terms.json' with { type: 'json' };
+import { searchIndexPath, searchEnginePath, searchTermsFor } from '../src/lib/search-terms.mjs';
+
+const website = fileURLToPath(new URL('../', import.meta.url));
+const defaultDist = path.join(website, 'dist');
+
+/** A small, current-language metadata directory; Pagefind still owns body indexing. */
+export async function generateSearchDocuments(dist = defaultDist) {
+  const concepts = JSON.parse(await readFile(path.join(website, 'search-concepts.json'), 'utf8'));
+  assert.equal(concepts.schemaVersion, 1);
+  const topics = (await publishedPages()).filter(page => ['docs', 'article'].includes(page.type));
+  const outputs = [];
+  for (const locale of localeIds) {
+    assert.ok(concepts.locales[locale], `${locale}: missing search concepts`);
+    const documents = [];
+    for (const page of topics) {
+      const route = pagePath(page.id, locale);
+      const $ = load(await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8'));
+      const canonical = new URL(withBase(route, siteConfig.base), siteConfig.site).href;
+      assert.equal($('html').attr('lang'), locale, `${route}: search language mismatch`);
+      assert.equal($('link[rel="canonical"]').attr('href'), canonical, `${route}: search canonical mismatch`);
+      assert.equal($('meta[name="anki-forge:search-terms"]').attr('content'), searchTermsFor(page, locale), `${route}: search vocabulary differs from rendered HTML`);
+      assert.equal($('h1').length, 1, `${route}: search title is not unique`);
+      const title = $('h1').text().trim();
+      const description = $('meta[name="description"]').attr('content');
+      assert.ok(title && description, `${route}: missing search metadata`);
+      documents.push({ id: page.id, type: page.type, url: new URL(canonical).pathname, title, description, terms: vocabulary.locales[locale][page.id] });
+    }
+    outputs.push({ filename: path.join(dist, searchIndexPath(locale).slice(1)), bytes: JSON.stringify({ schemaVersion: 1, locale, documents, concepts: concepts.locales[locale] }) + '\n' });
+  }
+  // The UI and acceptance runner load these exact same engine bytes.
+  outputs.push({ filename: path.join(dist, searchEnginePath.slice(1)), bytes: await readFile(path.join(website, 'src/lib/search.mjs')) });
+  await mkdir(path.join(dist, 'generated'), { recursive: true });
+  const owned = new Set(Object.keys(configuredLocales).map(locale => path.basename(searchIndexPath(locale))));
+  for (const name of await readdir(path.join(dist, 'generated'))) if (owned.has(name) && !outputs.some(output => path.basename(output.filename) === name)) await rm(path.join(dist, 'generated', name));
+  for (const output of outputs) await writeFile(output.filename, output.bytes);
+  console.log(`Generated ${localeIds.length} current-language search directories and the shared search engine from actual HTML.`);
+}
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await generateSearchDocuments(process.argv[2] ? path.resolve(process.argv[2]) : defaultDist);

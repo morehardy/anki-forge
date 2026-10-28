@@ -1,8 +1,8 @@
 {
-  "home.title": "用代码生成 Anki 牌组",
-  "home.description": "用 Rust、TypeScript 或 Python 生成 Basic、Cloze、图片遮挡和自定义 Anki 卡片。打包媒体、保持笔记身份稳定，并检查牌组更新。",
-  "home.hero1": "把你的数据",
-  "home.hero2": "变成 Anki 牌组。",
+  "home.title": "开源 Anki 卡片生成工具：用代码批量制卡",
+  "home.description": "用 Python、Node.js 或 Rust 批量生成 Anki 卡片并导出 APKG。开源生成库提供 CSV、JSON 和 AI 辅助制卡流程，支持媒体与牌组更新。",
+  "home.hero1": "从你的数据",
+  "home.hero2": "批量生成 Anki 卡片。",
   "home.intro": "Anki Forge 是开源 Anki APKG 生成库，以 Rust 为核心，提供 Rust、Python 和 Node.js 接口。打包媒体、使用自定义模板，并在分发前检查更新。",
   "home.first": "生成第一个牌组",
   "home.json": "从 JSON 开始",
@@ -27,7 +27,7 @@
   "home.templateDescription": "从 Basic 和 Cloze 开始，或定义自己的笔记类型。把 HTML、CSS 和媒体放入可复用的模板包。",
   "home.templateLink": "了解模板",
   "home.nextTitle": "从第一个牌组到下一次更新",
-  "home.nextDescription": "用同一份 JSON、图片和音频生成三张卡片。保持业务 ID，修改答案，再基于原始 APKG 检查更新。",
+  "home.nextDescription": "从 CSV 表格、JSON 数据或 AI 起草的卡片开始，按完整教程导出牌组，再添加媒体并检查更新。",
   "home.compare": "与 genanki 比较",
   "nav.home": "Anki Forge 首页",
   "nav.main": "主导航",
@@ -100,7 +100,7 @@
   "copy.codeLabel": "{language} 代码",
   "blog.title": "博客",
   "blog.description": "Anki Forge 的实用指南与工程决策。",
-  "blog.heading": "关于制作笔记的笔记。",
+  "blog.heading": "Anki 牌组制作与开发实践。",
   "blog.rss": "通过 RSS 订阅 ↗",
   "blog.all": "← 全部文章",
   "blog.continue": "继续阅读指南 →",
@@ -124,7 +124,7 @@
   "examples.fullSource": "阅读完整源码",
   "examples.excerpt": "Rust 代码片段",
   "examples.download": "下载 {file}",
-  "examples.counts": "{notes} 条笔记 · {cards} 张卡片 · {media} 个媒体文件",
+  "examples.counts": "{notes} · {cards} · {media}",
   "examples.updateTitle": "一条笔记，两个版本。",
   "examples.updateDescription": "第二次构建把答案从“hello”改为“hello; hi”，与第一个包比较并检查笔记身份是否保留。",
   "examples.workflow": "阅读更新流程",
@@ -202,5 +202,29 @@
   "machine.sourceBuild": "开发/源码环境。",
   "machine.history": "历史文章，发布于 {date}。",
   "machine.repository": "源码仓库与开发资源。",
-  "machine.otherLanguage": "英文 AI 文档索引。"
+  "machine.otherLanguage": "{language} AI 文档索引。",
+  "hero.counts": "{cards} / {media}",
+  "count.notes": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "other": "{count} 条笔记"
+    }
+  },
+  "count.cards": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "other": "{count} 张卡片"
+    }
+  },
+  "count.media": {
+    "type": "plural",
+    "variable": "count",
+    "forms": {
+      "other": "{count} 个媒体文件"
+    }
+  },
+  "home.csv": "CSV 批量制卡",
+  "home.aiCards": "AI 辅助生成卡片"
 }

@@ -1,0 +1,882 @@
+{
+  "schemaVersion": 1,
+  "provenanceNote": "AI-authored concise phrase acceptance fixtures derived from reader tasks and language briefs before viewing tested page titles or bodies or running search. Original question-form seeds are retained in docs/plans/evidence/multilingual-common-2026-10-27/search-question-seeds.json for GEO and later agent use. They are not observed user queries, search-volume data or evidence of market demand.",
+  "locales": {
+    "en": [
+      {
+        "id": "en-core-01",
+        "kind": "core",
+        "query": "Rust apkg export",
+        "locale": "en",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-02",
+        "kind": "core",
+        "query": "TypeScript create Anki deck",
+        "locale": "en",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-03",
+        "kind": "core",
+        "query": "Python questions to apkg",
+        "locale": "en",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-04",
+        "kind": "core",
+        "query": "JSON deck images audio",
+        "locale": "en",
+        "intentId": "json-with-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-05",
+        "kind": "core",
+        "query": "update deck original apkg",
+        "locale": "en",
+        "intentId": "update-original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-06",
+        "kind": "core",
+        "query": "Anki Forge genanki comparison",
+        "locale": "en",
+        "intentId": "compare-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-07",
+        "kind": "core",
+        "query": "migrate genanki preserve note identity",
+        "locale": "en",
+        "intentId": "migrate-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-08",
+        "kind": "core",
+        "query": "card image pronunciation audio",
+        "locale": "en",
+        "intentId": "attach-image-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-09",
+        "kind": "core",
+        "query": "sentence multiple cloze deletions",
+        "locale": "en",
+        "intentId": "create-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-10",
+        "kind": "core",
+        "query": "custom card front back fields",
+        "locale": "en",
+        "intentId": "custom-card-template",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-11",
+        "kind": "core",
+        "query": "hide anatomy diagram labels",
+        "locale": "en",
+        "intentId": "create-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-core-12",
+        "kind": "core",
+        "query": "deck generation error fix",
+        "locale": "en",
+        "intentId": "repair-generation-error",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-01",
+        "kind": "terminology",
+        "query": "deck grouping notes",
+        "locale": "en",
+        "intentId": "term-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-02",
+        "kind": "terminology",
+        "query": "note fields versus cards",
+        "locale": "en",
+        "intentId": "term-note",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-03",
+        "kind": "terminology",
+        "query": "one note multiple cards",
+        "locale": "en",
+        "intentId": "term-card",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-04",
+        "kind": "terminology",
+        "query": "APKG package contents",
+        "locale": "en",
+        "intentId": "term-apkg",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-05",
+        "kind": "terminology",
+        "query": "genanki migration compatibility",
+        "locale": "en",
+        "intentId": "term-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-06",
+        "kind": "terminology",
+        "query": "Image Occlusion diagram masks",
+        "locale": "en",
+        "intentId": "term-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-07",
+        "kind": "terminology",
+        "query": "namespace stable note key",
+        "locale": "en",
+        "intentId": "term-namespace-note-key",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-terminology-08",
+        "kind": "terminology",
+        "query": "Cloze c1 c2",
+        "locale": "en",
+        "intentId": "term-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-01",
+        "kind": "variant",
+        "query": "json deck sound files",
+        "locale": "en",
+        "intentId": "variant-json-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-02",
+        "kind": "variant",
+        "query": "change answer same note",
+        "locale": "en",
+        "intentId": "variant-answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-03",
+        "kind": "variant",
+        "query": "hide diagram labels",
+        "locale": "en",
+        "intentId": "variant-cover-diagram",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-04",
+        "kind": "variant",
+        "query": "switch genanki to ankiforge",
+        "locale": "en",
+        "intentId": "variant-switch-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-variant-05",
+        "kind": "variant",
+        "query": "imported deck missing picture",
+        "locale": "en",
+        "intentId": "variant-missing-picture",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "en-negative-01",
+        "kind": "negative",
+        "query": "zxqvnj 847261 qqqrzz",
+        "locale": "en",
+        "intentId": "negative-gibberish",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Meaningless input has no supported task or expected page. An empty result is allowed; the interface must remain usable and offer a way to revise the query."
+      },
+      {
+        "id": "en-negative-02",
+        "kind": "negative",
+        "query": "ankiforge-project-v1 unchanged input",
+        "locale": "en",
+        "intentId": "negative-old-schema",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "The public 0.3.1 tool requires ankiforge-project-v2 and rejects v1. A result may explain that the input must be converted; it must not present unchanged v1 as accepted input. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-03",
+        "kind": "negative",
+        "query": "Anki re-export update baseline",
+        "locale": "en",
+        "intentId": "negative-reexport-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Updates require the previous original distribution APKG. An Anki re-export is not a valid replacement baseline; a result may explain this requirement. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-04",
+        "kind": "negative",
+        "query": "PNG renamed wrong.mp3 audio",
+        "locale": "en",
+        "intentId": "negative-mime-rename",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "Renaming a file does not convert its bytes or retained media MIME. A PNG renamed wrong.mp3 can fail the independent build sniff or extension check. Results must direct the reader to correct media input or actual conversion, not promise conversion by renaming. Empty results are allowed."
+      },
+      {
+        "id": "en-negative-05",
+        "kind": "negative",
+        "query": "directly reset Anki review history",
+        "locale": "en",
+        "intentId": "negative-edit-study-progress",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "The library generates APKGs and does not directly modify an installed Anki collection or study progress. A result may explain the package and client import boundary; it must not promise direct review-history edits. Empty results are allowed."
+      }
+    ],
+    "zh-CN": [
+      {
+        "id": "zh-CN-core-01",
+        "kind": "core",
+        "query": "Rust 导出 apkg",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-02",
+        "kind": "core",
+        "query": "TypeScript 创建 Anki 牌组",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-03",
+        "kind": "core",
+        "query": "Python 问答 生成牌组",
+        "locale": "zh-CN",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-04",
+        "kind": "core",
+        "query": "JSON 牌组 图片 音频",
+        "locale": "zh-CN",
+        "intentId": "json-with-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-05",
+        "kind": "core",
+        "query": "更新牌组 原始 apkg",
+        "locale": "zh-CN",
+        "intentId": "update-original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-06",
+        "kind": "core",
+        "query": "Anki Forge genanki 选型",
+        "locale": "zh-CN",
+        "intentId": "compare-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-07",
+        "kind": "core",
+        "query": "genanki 迁移 保持笔记身份",
+        "locale": "zh-CN",
+        "intentId": "migrate-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-08",
+        "kind": "core",
+        "query": "卡片 图片 发音音频",
+        "locale": "zh-CN",
+        "intentId": "attach-image-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-09",
+        "kind": "core",
+        "query": "句子 多处挖空",
+        "locale": "zh-CN",
+        "intentId": "create-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-10",
+        "kind": "core",
+        "query": "自定义卡片 正反面 字段",
+        "locale": "zh-CN",
+        "intentId": "custom-card-template",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates",
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-11",
+        "kind": "core",
+        "query": "解剖图 遮住标注",
+        "locale": "zh-CN",
+        "intentId": "create-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-core-12",
+        "kind": "core",
+        "query": "生成牌组 报错修复",
+        "locale": "zh-CN",
+        "intentId": "repair-generation-error",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-01",
+        "kind": "terminology",
+        "query": "牌组 笔记 分组",
+        "locale": "zh-CN",
+        "intentId": "term-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-02",
+        "kind": "terminology",
+        "query": "笔记 字段 卡片 区别",
+        "locale": "zh-CN",
+        "intentId": "term-note",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-03",
+        "kind": "terminology",
+        "query": "一条笔记 多张卡片",
+        "locale": "zh-CN",
+        "intentId": "term-card",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-04",
+        "kind": "terminology",
+        "query": "APKG 包含内容",
+        "locale": "zh-CN",
+        "intentId": "term-apkg",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts",
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-05",
+        "kind": "terminology",
+        "query": "genanki 迁移 兼容性",
+        "locale": "zh-CN",
+        "intentId": "term-genanki",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki",
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-06",
+        "kind": "terminology",
+        "query": "图片遮挡 Image Occlusion 遮罩",
+        "locale": "zh-CN",
+        "intentId": "term-image-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-07",
+        "kind": "terminology",
+        "query": "命名空间 稳定笔记键",
+        "locale": "zh-CN",
+        "intentId": "term-namespace-note-key",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-terminology-08",
+        "kind": "terminology",
+        "query": "Cloze c1 c2 挖空",
+        "locale": "zh-CN",
+        "intentId": "term-cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-01",
+        "kind": "variant",
+        "query": "JSON 做牌组 打包 mp3",
+        "locale": "zh-CN",
+        "intentId": "variant-json-audio",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-02",
+        "kind": "variant",
+        "query": "改答案 保持 note key",
+        "locale": "zh-CN",
+        "intentId": "variant-answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-03",
+        "kind": "variant",
+        "query": "示意图 遮名称 复习题",
+        "locale": "zh-CN",
+        "intentId": "variant-cover-diagram",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-04",
+        "kind": "variant",
+        "query": "genanki 脚本 换 ankiforge",
+        "locale": "zh-CN",
+        "intentId": "variant-switch-genanki",
+        "sdk": "python",
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-variant-05",
+        "kind": "variant",
+        "query": "导入 Anki 图片不显示",
+        "locale": "zh-CN",
+        "intentId": "variant-missing-picture",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "zh-CN-negative-01",
+        "kind": "negative",
+        "query": "zxqvnj 847261 qqqrzz",
+        "locale": "zh-CN",
+        "intentId": "negative-gibberish",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "无意义输入没有对应任务或预期页面。允许无结果；搜索界面应保持可用，并允许修改查询。"
+      },
+      {
+        "id": "zh-CN-negative-02",
+        "kind": "negative",
+        "query": "ankiforge-project-v1 原样输入",
+        "locale": "zh-CN",
+        "intentId": "negative-old-schema",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki",
+          "troubleshooting",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "公开 0.3.1 工具要求 ankiforge-project-v2，拒绝 v1。结果可以说明需要转换输入，不能声称原样接受 v1。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-03",
+        "kind": "negative",
+        "query": "Anki 重导出 更新基线",
+        "locale": "zh-CN",
+        "intentId": "negative-reexport-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates",
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "更新要求保留上一份原始分发 APKG；Anki 重导出包不能替代有效基线。结果可以解释这一要求。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-04",
+        "kind": "negative",
+        "query": "PNG 改名 wrong.mp3 音频",
+        "locale": "zh-CN",
+        "intentId": "negative-mime-rename",
+        "sdk": null,
+        "expectedPageIds": [
+          "media",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "改文件名不会转换实际字节或媒体保留的 MIME；PNG 改名 wrong.mp3 可能在独立构建的内容嗅探或扩展名检查中失败。结果应指向正确媒体输入或实际转换，不能承诺改名即可转换。允许无结果。"
+      },
+      {
+        "id": "zh-CN-negative-05",
+        "kind": "negative",
+        "query": "直接重置 Anki 复习记录",
+        "locale": "zh-CN",
+        "intentId": "negative-edit-study-progress",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility",
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "该库生成 APKG，不直接修改已安装 Anki 的集合或学习进度。结果可以解释生成包与客户端导入的边界，不能承诺直接编辑复习记录。允许无结果。"
+      }
+    ]
+  }
+}

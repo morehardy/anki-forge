@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { pages, localeIds } from '../site-model.mjs';
+import { reviewInputs, digest, rubricVersion, glossaryVersion } from './content-review-inputs.mjs';
+
+const root = fileURLToPath(new URL('../../', import.meta.url));
+const filename = process.argv[2];
+assert.ok(filename, 'Provide an independently completed AI review report; this tool never creates passing results');
+const reportPath = path.relative(root, path.resolve(filename)).split(path.sep).join('/');
+assert.ok(reportPath.startsWith('docs/plans/evidence/'), 'Keep source review evidence under docs/plans/evidence/');
+const bytes = await readFile(path.join(root, reportPath));
+const report = JSON.parse(bytes);
+assert.equal(report.schemaVersion, 1);
+assert.equal(report.reviewerType, 'ai');
+assert.ok(typeof report.reviewerRun === 'string' && report.reviewerRun.trim());
+assert.equal(report.rubricVersion, rubricVersion);
+assert.equal(report.glossaryVersion, glossaryVersion);
+const records = JSON.parse(await readFile(path.join(root, 'website/content-reviews.json'), 'utf8'));
+assert.equal(records.schemaVersion, 2);
+for (const [id, translations] of Object.entries(report.entries)) {
+  const page = pages.find(page => page.id === id);
+  assert.ok(page, `Unknown review topic: ${id}`);
+  for (const [locale, entry] of Object.entries(translations)) {
+    assert.ok(localeIds.includes(locale), `Unknown release locale: ${locale}`);
+    const inputs = await reviewInputs(page, locale, root);
+    for (const [key, expected] of Object.entries(inputs)) assert.equal(entry[key], expected, `${id}/${locale}: stale ${key}`);
+    const completedAxes = [];
+    for (const axis of ['technical', 'linguistic']) {
+      const result = entry[axis];
+      if (!result || result.status === 'pending') continue;
+      assert.equal(result?.status, 'reviewed', `${id}/${locale}: ${axis} review incomplete`);
+      assert.ok(Array.isArray(result.evidence) && result.evidence.length, `${id}/${locale}: concrete ${axis} evidence required`);
+      assert.ok(Array.isArray(result.openIssues));
+      assert.ok(!result.openIssues.some(issue => ['critical', 'major'].includes(issue.severity)), `${id}/${locale}: unresolved ${axis} issues`);
+      if (axis === 'linguistic') for (const key of ['terminology', 'syntax', 'register', 'usability']) assert.ok(result.score?.[key] >= 4 && result.score[key] <= 5, `${id}/${locale}: language score ${key}`);
+      completedAxes.push(axis);
+    }
+    assert.ok(completedAxes.length, `${id}/${locale}: no completed independent review axis`);
+    records.entries[id][locale] = { ...records.entries[id]?.[locale], ...inputs, rubricVersion, glossaryVersion,
+      ...Object.fromEntries(completedAxes.map(axis => [axis, { ...entry[axis], reviewerType: 'ai', reviewerRun: report.reviewerRun, evidence: { path: reportPath, sha256: digest(bytes), entry: `${id}/${locale}/${axis}` } }])),
+    };
+  }
+}
+await writeFile(path.join(root, 'website/content-reviews.json'), JSON.stringify(records, null, 2) + '\n');
+console.log(`Recorded independently completed source reviews from ${reportPath}; no artifact pass status was changed.`);

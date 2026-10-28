@@ -1,0 +1,8 @@
+---
+import { createTranslator } from '../i18n/messages.mjs';
+import CopyBlock from './CopyBlock.astro';
+interface Props { command: string; runtime: string; buttonLabel?: string; locale?: string }
+const { command, runtime, buttonLabel, locale = 'en' } = Astro.props;
+const t = createTranslator(locale);
+---
+<CopyBlock label={runtime} text={command} buttonLabel={buttonLabel ?? t('copy.install')} success={t('copy.success')} fallback={t('copy.fallback')} />

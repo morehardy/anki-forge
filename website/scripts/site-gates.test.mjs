@@ -39,6 +39,30 @@ test('built-site gate rejects an incomplete search artifact manifest', async t =
   assert.throws(() => execFileSync(process.execPath, [checker, directory], { encoding: 'utf8', stdio: 'pipe' }), /complete search index/);
 });
 
+test('built-site gate checks the mobile language switch as well as the header', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-mobile-language-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await cp(dist, directory, { recursive: true });
+  const file = path.join(directory, 'docs/index.html');
+  const original = await readFile(file, 'utf8');
+  const changed = original.replace(/(<div class="mobile-preferences[\s\S]*?data-language-switch[^>]*?href=")[^"]+/, `$1${withBase('/zh-cn/docs/cards/', siteConfig.base)}`);
+  assert.notEqual(changed, original, 'Mutation must change the mobile control');
+  await writeFile(file, changed);
+  assert.throws(() => execFileSync(process.execPath, [checker, directory], { encoding: 'utf8', stdio: 'pipe' }), /switches must retain topic and release languages/);
+});
+
+test('built-site gate rejects an external footer destination on a different host', async t => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'anki-forge-footer-host-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await cp(dist, directory, { recursive: true });
+  const file = path.join(directory, 'zh-cn/index.html');
+  const original = await readFile(file, 'utf8');
+  const changed = original.replace(/(<footer\b[\s\S]*?href=")https:\/\/github\.com\//, '$1https://example.invalid/');
+  assert.notEqual(changed, original, 'Mutation must change the external footer host');
+  await writeFile(file, changed);
+  assert.throws(() => execFileSync(process.execPath, [checker, directory], { encoding: 'utf8', stdio: 'pipe' }), /footer destinations differ/);
+});
+
 const machineChecker = fileURLToPath(new URL('./check-machine-content.mjs', import.meta.url));
 const schemaChecker = fileURLToPath(new URL('./check-structured-data.mjs', import.meta.url));
 const topics = await publishedPages();

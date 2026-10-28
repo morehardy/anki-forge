@@ -23,6 +23,16 @@ test('article graph relates the localized page, article and shared software', ()
   assert.deepEqual(Object.keys(byType.SoftwareApplication).sort(), ['@id', '@type', 'name']);
 });
 
+test('third-language graphs use the exact build set and retain shared entity identity', () => {
+  const buildLocales = ['en', 'zh-CN', 'es'];
+  const page = { id: 'quickstart', type: 'docs', locale: 'es', canonical: 'https://example.org/project/es/docs/quickstart/', title: 'Primera baraja', description: 'Crea una baraja.' };
+  const nodes = buildStructuredData(page, { ...context, buildLocales })['@graph'];
+  assert.deepEqual(nodes.find(node => node['@type'] === 'WebSite').inLanguage, buildLocales);
+  assert.equal(nodes.find(node => node['@type'] === 'SoftwareApplication')['@id'], 'https://example.org/project/#software');
+  assert.equal(nodes.find(node => node['@type'] === 'TechArticle')['@id'], `${page.canonical}#article`);
+  assert.throws(() => buildStructuredData(page, context), /outside the build/);
+});
+
 test('JSON-LD serialization cannot close its script element and round trips Unicode', () => {
   const original = { '@context': 'https://schema.org', '@graph': [{ headline: '中文 "x" </script><script>bad()</script>\u2028\u2029' }] };
   const encoded = serializeJsonLd(original);

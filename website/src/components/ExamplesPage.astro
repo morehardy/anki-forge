@@ -1,5 +1,5 @@
 ---
-import { createTranslator } from '../i18n/messages.mjs';
+import { createTranslator, formatCounts } from '../i18n/messages.mjs';
 import { pagePath } from '../../site-model.mjs';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import CardPreview from './CardPreview.astro';
@@ -8,7 +8,7 @@ import UpdateDemo from './UpdateDemo.astro';
 import Icon from './Icon.astro';
 import { examples, showcase, updateExample } from '../lib/examples';
 import { sitePath } from '../lib/site';
-interface Props { locale?: 'en' | 'zh-CN' }
+interface Props { locale?: string }
 const { locale = 'en' } = Astro.props;
 const t = createTranslator(locale);
 const href = (id: string, section = '') => sitePath(pagePath(id, locale, section));
@@ -21,7 +21,7 @@ const href = (id: string, section = '') => sitePath(pagePath(id, locale, section
         <h2 id={`${example.id}-heading`}>{t(`card.${example.id}`)}</h2>
         <p>{t(`examples.${example.id}`)}</p>
         <div class="example-panel"><div class="example-source"><div class="source-label"><span>{example.id}.rs</span><span>{t('examples.excerpt')}</span></div><CodeBlock locale={locale} code={example.source} /></div><CardPreview locale={locale} example={example} prefix={`gallery-${example.id}`} /></div>
-        <div class="example-downloads"><a class="text-link" href={sitePath(`/generated/${example.file}`)} download>{t('examples.download', { file: example.file })} <Icon name="arrowRight" /></a><span>{t('examples.counts', example.counts)}</span></div>
+        <div class="example-downloads"><a class="text-link" href={sitePath(`/generated/${example.file}`)} download>{t('examples.download', { file: example.file })} <Icon name="arrowRight" /></a><span>{t('examples.counts', formatCounts(locale, example.counts))}</span></div>
       </section>)}
       <section class="example-detail" id="updates" aria-labelledby="updates-heading">
         <h2 id="updates-heading">{t('examples.updateTitle')}</h2>

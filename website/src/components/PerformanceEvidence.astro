@@ -1,5 +1,5 @@
 ---
-interface Props { locale?: 'en' | 'zh-CN' }
+interface Props { locale?: string }
 const { locale = 'en' } = Astro.props;
 import { createTranslator } from '../i18n/messages.mjs';
 const t = createTranslator(locale);

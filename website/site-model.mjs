@@ -1,11 +1,9 @@
 import { catalogs } from './src/i18n/messages.mjs';
 
+import { configuredLocales, locales, localeIds, localePath, resolveLocalePath } from './locale-model.mjs';
+export { configuredLocales, locales, localeIds, releaseLocales, stripBase } from './locale-model.mjs';
+
 // Public topic identities are independent of translated titles and URL prefixes.
-export const locales = {
-  en: { prefix: '', lang: 'en', og: 'en_US', label: 'English', format: 'en-US' },
-  'zh-CN': { prefix: '/zh-cn', lang: 'zh-CN', og: 'zh_CN', label: '简体中文', format: 'zh-CN' },
-};
-export const localeIds = Object.keys(locales);
 const documents = [
   {
     "name": "docs",
@@ -44,6 +42,24 @@ const documents = [
     "zhDescription": "用 Rust、Node 或 Python 读取 JSON，打包图片和音频，再检查仅修改答案的更新。"
   },
   {
+    "source": "docs/csv-to-anki.md",
+    "route": "/docs/csv-to-anki/",
+    "name": "csv-to-anki",
+    "title": "CSV to Anki: generate flashcards with Python",
+    "description": "Convert a UTF-8 vocabulary spreadsheet to an Anki APKG with a complete Python script, sample CSV, stable note IDs and import checks.",
+    "zhTitle": "CSV 转 Anki：用 Python 批量生成卡片",
+    "zhDescription": "用完整 Python 脚本将 UTF-8 CSV 词汇表转换为 Anki APKG，包含示例数据、稳定笔记 ID 和导入检查步骤。"
+  },
+  {
+    "source": "docs/ai-anki-cards.md",
+    "route": "/docs/ai-anki-cards/",
+    "name": "ai-anki-cards",
+    "title": "AI-assisted Anki flashcards: from notes to APKG",
+    "description": "Draft Anki cards with an AI assistant, review the answers, then export an APKG using Anki Forge. Follow a CSV workflow or use a coding-assistant brief.",
+    "zhTitle": "AI 辅助生成 Anki 卡片：从笔记到 APKG",
+    "zhDescription": "让 AI 助手根据笔记起草卡片，核对答案后用 Anki Forge 导出 APKG。提供 CSV 制卡流程和编程助手任务说明入口。"
+  },
+  {
     "source": "docs/anki-forge-vs-genanki.md",
     "route": "/docs/anki-forge-vs-genanki/",
     "name": "anki-forge-vs-genanki",
@@ -74,9 +90,9 @@ const documents = [
     "source": "docs/template-bundles.md",
     "route": "/docs/templates/",
     "name": "templates",
-    "title": "Template bundles",
+    "title": "Reusable Anki card templates, CSS and media",
     "description": "Import complete reusable Cloze and normal templates, CSS and media.",
-    "zhTitle": "模板包",
+    "zhTitle": "复用 Anki 卡片模板、CSS 与媒体",
     "zhDescription": "导入完整的普通与 Cloze 模板、CSS 和媒体。"
   },
   {
@@ -110,9 +126,9 @@ const documents = [
     "source": "docs/cards.md",
     "route": "/docs/cards/",
     "name": "cards",
-    "title": "Basic and Cloze cards",
+    "title": "Generate Anki Basic and Cloze flashcards",
     "description": "Build two notes and three cards with a complete verified Rust example.",
-    "zhTitle": "Basic 与 Cloze 卡片",
+    "zhTitle": "生成 Anki 问答卡片与 Cloze 填空卡片",
     "zhDescription": "运行完整 Rust 示例，用两个笔记生成三张卡片。"
   },
   {
@@ -128,27 +144,27 @@ const documents = [
     "source": "docs/media.md",
     "route": "/docs/media/",
     "name": "media",
-    "title": "Images and audio",
-    "description": "Generate and package a real waveform image and a one-second audio tone.",
-    "zhTitle": "图片与音频",
-    "zhDescription": "生成并打包真实波形图和一秒钟的音频。"
+    "title": "Add images and audio to Anki cards",
+    "description": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.",
+    "zhTitle": "为 Anki 卡片添加图片与音频",
+    "zhDescription": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。"
   },
   {
     "source": "docs/image-occlusion.md",
     "route": "/docs/image-occlusion/",
     "name": "image-occlusion",
-    "title": "Image Occlusion",
+    "title": "Generate Anki Image Occlusion cards",
     "description": "Create rectangle-based image questions in both occlusion modes.",
-    "zhTitle": "图片遮挡",
+    "zhTitle": "生成 Anki 图片遮挡卡片",
     "zhDescription": "用矩形区域创建图像问题，了解两种遮挡模式。"
   },
   {
     "source": "docs/updates.md",
     "route": "/docs/updates/",
     "name": "updates",
-    "title": "Update and distribute",
+    "title": "Update Anki decks with stable note IDs",
     "description": "Compare and build releases using verified original APKG baselines.",
-    "zhTitle": "更新与分发",
+    "zhTitle": "用稳定笔记 ID 更新 Anki 牌组",
     "zhDescription": "以原始 APKG 为基线比较并构建新版本。"
   },
   {
@@ -254,11 +270,12 @@ const documents = [
 
 export const docGroups = [
   { label: 'Start here', zh: '从这里开始', ids: ['docs', 'languages', 'quickstart', 'installation', 'concepts', 'anki-forge-vs-genanki'] },
-  { label: 'Guides', zh: '使用指南', ids: ['json-to-anki', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },
+  { label: 'Guides', zh: '使用指南', ids: ['csv-to-anki', 'json-to-anki', 'ai-anki-cards', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },
   { label: 'Language guides', zh: '开发语言指南', ids: ['rust-guide', 'node-quickstart', 'python-quickstart', 'python-migration', 'genanki-migration'] },
   { label: 'Reference', zh: '参考', collapsed: true, ids: ['api', 'rust-api', 'node-api', 'python-api', 'build-guarantees', 'compatibility'] },
   { label: 'Help', zh: '帮助', ids: ['troubleshooting', 'python-diagnostics', 'development'] },
-];
+].map(group => ({ ...group, labels: { en: group.label, 'zh-CN': group.zh } }));
+/** @type {{ id: string, label: Record<string, string> }[]} */
 export const navigation = [
   { id: 'docs', label: { en: 'Guide', 'zh-CN': '指南' } },
   { id: 'examples', label: { en: 'Examples', 'zh-CN': '示例' } },
@@ -272,6 +289,8 @@ export const footerNavigation = [
 ];
 export const nextTasks = [
   { pageId: 'json-to-anki', label: 'home.json', primary: true },
+  { pageId: 'csv-to-anki', label: 'home.csv', primary: false },
+  { pageId: 'ai-anki-cards', label: 'home.aiCards', primary: false },
   { pageId: 'anki-forge-vs-genanki', label: 'home.compare', primary: false },
 ];
 export const homepageModules = ['hero', 'install', 'ai-quickstart', 'performance', 'examples', 'updates', 'features', 'next'];
@@ -282,50 +301,58 @@ const common = [
 ];
 const articles = ['your-first-anki-deck', 'stable-ids-and-deck-updates'].map(id => ({
   id: `blog:${id}`, route: `/blog/${id}/`, type: 'article', section: 'blog',
-  source: `website/src/content/blog/${id}.mdx`, zhSource: `website/src/content/blog/zh-cn/${id}.mdx`,
+  sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, `website/src/content/blog/${config.prefix ? config.prefix.slice(1) + '/' : ''}${id}.mdx`])),
   capabilities: ['article', 'date'], metadata: { source: 'frontmatter', title: 'title', description: 'description' },
 }));
 export const pages = [
   ...common,
   ...documents.map(doc => ({
-    id: doc.name, route: doc.route, type: 'docs', section: 'docs', source: doc.source,
-    zhSource: `docs/zh-cn/${doc.name === 'docs' ? 'index' : doc.name}.md`,
+    id: doc.name, route: doc.route, type: 'docs', section: 'docs', sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, locale === 'en' ? doc.source : `docs${config.prefix}/${doc.name === 'docs' ? 'index' : doc.name}.md`])),
     title: { en: doc.title, 'zh-CN': doc.zhTitle },
     description: { en: doc.description, 'zh-CN': doc.zhDescription },
     capabilities: ['sidebar', 'search', 'toc', 'pagination', 'edit', 'code-copy'],
   })),
   ...articles,
-].map((page, order) => ({
-  ...page,
-  ...(['home', 'examples', 'blog'].includes(page.id) ? {
-    title: Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale][`${page.id}.title`]])),
-    description: Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale][`${page.id}.description`]])),
-  } : {}),
-  order, en: page.route, zh: `/zh-cn${page.route}`,
-  sources: { en: page.source, 'zh-CN': 'zhSource' in page ? String(page.zhSource) : page.source },
-}));
+].map((page, order) => {
+  const title = ['home', 'examples', 'blog'].includes(page.id)
+    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.title`]])) : page.title;
+  const description = ['home', 'examples', 'blog'].includes(page.id)
+    ? Object.fromEntries(localeIds.map(locale => [locale, catalogs[locale]?.[`${page.id}.description`]])) : page.description;
+  const sources = page.sources ?? Object.fromEntries(localeIds.map(locale => [locale, page.source]));
+  return {
+    ...page, title, description, sources, order,
+    // Kept as compatibility views for downstream consumers during migration.
+    source: sources.en, en: page.route, zh: localePath(page.route, 'zh-CN'),
+    metadata: Object.fromEntries(localeIds.map(locale => [locale, { title: title?.[locale], description: description?.[locale] }])),
+  };
+});
 export const docPages = pages.filter(page => page.type === 'docs');
 
 export function pagePath(id, locale = 'en', section = '') {
   const page = pages.find(page => page.id === id);
-  if (!page || !locales[locale]) throw new Error(`Unknown page or locale: ${id}/${locale}`);
-  return `${locales[locale].prefix}${page.route}${section ? `#${section}` : ''}`;
+  if (!page || !Object.hasOwn(locales, locale)) throw new Error(`Unknown page or release locale: ${id}/${locale}`);
+  return `${localePath(page.route, locale)}${section ? `#${section}` : ''}`;
 }
-export function stripBase(pathname, base = '/') {
-  const prefix = base.replace(/\/$/, '');
-  return prefix && pathname.startsWith(`${prefix}/`) ? pathname.slice(prefix.length) : pathname;
+export function resolvePage(pathname, base = '/') {
+  const resolved = resolveLocalePath(pathname, base);
+  if (!resolved) return null;
+  const page = pages.find(page => page.route === resolved.route);
+  return page ? { page, locale: resolved.locale, path: localePath(page.route, resolved.locale) } : null;
 }
 export function pagePair(pathname, base = '/') {
-  const route = stripBase(pathname, base);
-  return pages.find(page => page.en === route || page.zh === route);
+  return resolvePage(pathname, base)?.page;
 }
 export function localeFromPath(pathname, base = '/') {
-  return stripBase(pathname, base).startsWith('/zh-cn/') ? 'zh-CN' : 'en';
+  return resolveLocalePath(pathname, base)?.locale ?? 'en';
 }
-export const importedDocs = docPages.filter(page => !page.sources.en.startsWith('website/')).map(page => ({
-  name: page.id, source: page.sources.en, route: page.en, title: page.title.en, description: page.description.en,
-}));
-export const translatedDocs = docPages.map(page => ({
-  name: page.id === 'docs' ? 'index' : page.id, source: page.sources['zh-CN'], route: page.zh,
-  title: page.title['zh-CN'], description: page.description['zh-CN'],
-}));
+export function documentationEntries(active = localeIds) {
+  return docPages.flatMap(page => active.filter(locale => !page.sources[locale]?.startsWith('website/')).map(locale => ({
+    id: page.id, name: page.id === 'docs' ? 'index' : page.id, locale,
+    source: page.sources[locale], route: pagePath(page.id, locale),
+    title: page.title[locale], description: page.description[locale],
+    output: `src/content/docs${locales[locale].prefix}/docs/${page.id === 'docs' ? 'index' : page.id}.md`,
+  })));
+}
+export const importedDocs = documentationEntries().filter(entry => entry.locale === 'en');
+// This compatibility name now covers every non-English release locale.
+export const translatedDocs = documentationEntries().filter(entry => entry.locale !== 'en');

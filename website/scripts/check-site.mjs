@@ -4,7 +4,10 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
-import { homepageModules, pagePair, stripBase } from '../site-model.mjs';
+import { homepageModules, stripBase, pagePath, resolvePage, localeIds, locales } from '../site-model.mjs';
+import { socialImagePath, localePath } from '../locale-model.mjs';
+import { assertIndexable } from './indexability.mjs';
+import { assertCrawlable } from './robots-policy.mjs';
 import { publishedPages } from './published-pages.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { siteConfig, withBase } from '../site.config.mjs';
@@ -76,7 +79,10 @@ for (const page of pages.values()) {
   record($('h1').length === 1, `${relative}: expected one h1`);
   record($('title').text().trim().length > 0, `${relative}: missing title`);
   record(($('meta[name="description"]').attr('content') || '').length > 0, `${relative}: missing description`);
-  if (relative !== '404.html') record($('link[rel="canonical"]').attr('href') === url.href, `${relative}: canonical does not match ${url.href}`);
+  if (relative !== '404.html') {
+    record($('link[rel="canonical"]').length === 1 && $('link[rel="canonical"]').attr('href') === url.href, `${relative}: canonical does not match ${url.href}`);
+    try { assertIndexable($, { route: relative }); } catch (error) { errors.add(error.message); }
+  }
   record($('meta[property="og:image"]').length === 1, `${relative}: expected one social image`);
   record($('meta[name="twitter:card"]').length === 1, `${relative}: expected one Twitter card setting`);
   if (relative === '404.html') record($('meta[name="robots"]').attr('content') === 'noindex', '404 page must be excluded from indexing');
@@ -90,24 +96,42 @@ for (const page of pages.values()) {
 }
 
 // Validate the actual output set, not just routes derived from the build config.
-const chinese = [...pages.values()].filter(page => page.relative.startsWith('zh-cn/'));
-const englishRoutes = [...pages.values()].filter(page => !page.relative.startsWith('zh-cn/') && page.relative !== '404.html').map(page => '/zh-cn/' + page.relative.replace(/index\.html$/, ''));
-assert.deepEqual(chinese.map(page => '/' + page.relative.replace(/index\.html$/, '')).sort(), englishRoutes.sort(), 'English and Chinese built content sets must match');
-assert.deepEqual(chinese.map(page => '/' + page.relative.replace(/index\.html$/, '')).sort(), corePages.map(pair => pair.zh).sort(), 'Registered and actually built Chinese topic sets must match');
+const normalRoutes = [...pages.values()].filter(page => page.relative !== '404.html').map(page => '/' + page.relative.replace(/index\.html$/, '')).sort();
+assertCrawlable(await readFile(path.join(dist, 'robots.txt'), 'utf8'), normalRoutes.map(route => withBase(route, siteConfig.base)));
+assert.deepEqual(normalRoutes, corePages.flatMap(page => localeIds.map(locale => pagePath(page.id, locale))).sort(), 'Registered and actually built topic and release-language sets must match');
 for (const pair of corePages) {
-  for (const [locale, route] of [['en', pair.en], ['zh-CN', pair.zh]]) {
+  for (const locale of localeIds) {
+    const route = pagePath(pair.id, locale);
     const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
     assert.ok(page, `Missing core page ${route}`);
     record(page.$('html').attr('lang') === locale, `${route}: wrong HTML language`);
     record(page.$('script[src="https://static.cloudflareinsights.com/beacon.min.js"]').length === 1, `${route}: expected one analytics beacon`);
-    record(page.$('[data-language-switch]').attr('href') === withBase(locale === 'en' ? pair.zh : pair.en, siteConfig.base), `${route}: switch must retain the topic`);
-    for (const [language, target] of [['en', pair.en], ['zh-CN', pair.zh]]) {
+    // Starlight renders controls in both the header and mobile preferences.
+    // Every target language must be available; each control is validated below.
+    const languageTargets = new Set(page.$('[data-language-switch]').toArray().map(node => page.$(node).attr('href')));
+    assert.deepEqual([...languageTargets].sort(), localeIds.filter(id => id !== locale).map(id => withBase(pagePath(pair.id, id), siteConfig.base)).sort(), `${route}: switches must retain topic and release languages`);
+    for (const node of page.$('[data-language-switch]').toArray()) {
+      const link = page.$(node);
+      const targetLocale = link.attr('hreflang');
+      assert.equal(link.attr('href'), withBase(pagePath(pair.id, targetLocale), siteConfig.base), `${route}: language switch must match its hreflang and topic`);
+      const target = pages.get(path.join(dist, pagePath(pair.id, targetLocale).slice(1), 'index.html'));
+      const ids = new Set(target.$('[id]').toArray().map(element => target.$(element).attr('id')));
+      for (const id of JSON.parse(link.attr('data-section-ids') || '[]')) {
+        if (id !== '_top') record(ids.has(id), `${route}: language switch inventory points to missing ${targetLocale} anchor ${id}`);
+      }
+      for (const id of Object.values(JSON.parse(link.attr('data-section-map') || '{}'))) {
+        if (id !== '_top') record(ids.has(id), `${route}: language switch mapping points to missing ${targetLocale} task ${id}`);
+      }
+    }
+    for (const language of localeIds) {
+      const target = pagePath(pair.id, language);
       const alternate = page.$(`link[rel="alternate"][hreflang="${language}"]`);
       record(alternate.length === 1 && alternate.attr('href') === new URL(withBase(target, siteConfig.base), siteConfig.site).href, `${route}: incorrect ${language} hreflang`);
     }
+    record(page.$('link[rel="alternate"][hreflang="x-default"]').attr('href') === new URL(withBase(pagePath(pair.id, 'en'), siteConfig.base), siteConfig.site).href, `${route}: incorrect x-default`);
   }
 }
-for (const route of corePages.some(page => page.id === 'json-to-anki') ? ['/docs/json-to-anki/', '/zh-cn/docs/json-to-anki/'] : []) {
+for (const route of corePages.some(page => page.id === 'json-to-anki') ? localeIds.map(locale => pagePath('json-to-anki', locale)) : []) {
   const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
   for (const id of ['rust', 'python', 'node']) {
     record(page.$(`#${id}`).length === 1, `${route}: missing SDK anchor ${id}`);
@@ -115,9 +139,10 @@ for (const route of corePages.some(page => page.id === 'json-to-anki') ? ['/docs
   for (const expected of ['prepare_publication', 'preparePublication', 'Content.sequence']) record(page.$.html().includes(expected), `${route}: SDK program missing from static HTML`);
 }
 const sitemapOutput = await readFile(path.join(dist, 'sitemap-0.xml'), 'utf8');
-for (const pair of corePages) for (const route of [pair.en, pair.zh]) record(sitemapOutput.includes(new URL(withBase(route, siteConfig.base), siteConfig.site).href), `Missing core sitemap URL ${route}`);
+const sitemap = load(sitemapOutput, { xml: true });
+assert.deepEqual(sitemap('url > loc').toArray().map(node => sitemap(node).text()).sort(), normalRoutes.map(route => new URL(withBase(route, siteConfig.base), siteConfig.site).href).sort(), 'Sitemap must include exactly normal HTML release pages');
 
-for (const name of ['sitemap-index.xml', 'sitemap-0.xml', 'rss.xml', 'zh-cn/rss.xml']) {
+for (const name of ['sitemap-index.xml', 'sitemap-0.xml', ...localeIds.map(locale => localePath('/rss.xml', locale).slice(1))]) {
   const $ = load(await readFile(path.join(dist, name), 'utf8'), { xml: true });
   const from = { relative: name, url: new URL(withBase(`/${name}`, siteConfig.base), siteConfig.site) };
   const selector = name.endsWith('rss.xml') ? 'channel > link, item > link' : 'loc';
@@ -125,7 +150,7 @@ for (const name of ['sitemap-index.xml', 'sitemap-0.xml', 'rss.xml', 'zh-cn/rss.
 }
 await stat(path.join(dist, 'pagefind/pagefind.js'));
 const searchIndex = JSON.parse(await readFile(path.join(dist, 'pagefind/pagefind-entry.json'), 'utf8'));
-for (const locale of ['en', 'zh-CN']) {
+for (const locale of localeIds) {
   const contentCount = [...pages.values()].filter(page => page.relative !== '404.html' && page.$('html').attr('lang') === locale).length;
   record(searchIndex.languages[locale.toLowerCase()]?.page_count === contentCount, `${locale}: search index must include every content page and exclude the error page`);
 }
@@ -152,8 +177,8 @@ if (siteConfig.customDomain) assert.equal((await readFile(path.join(dist, 'CNAME
 
 const benchmark = await loadBenchmarkPresentation();
 const ai = await loadAiQuickstart();
-for (const locale of ['en', 'zh-CN']) {
-const home = pages.get(path.join(dist, locale === 'en' ? 'index.html' : 'zh-cn/index.html'));
+for (const locale of localeIds) {
+const home = pages.get(path.join(dist, pagePath('home', locale).slice(1), 'index.html'));
 const t = createTranslator(locale);
 record(home.$('#ai-quickstart[data-ai-quickstart]').length === 1, 'Missing AI quickstart anchor');
 for (const [key, language] of Object.entries(ai.languages)) {
@@ -182,54 +207,59 @@ if (benchmark.minimumSaved >= 0) record(metrics.includes(`${benchmark.minimumSav
 }
 
 // Compare observed capabilities and destinations, not HTML strings or a fixed page count.
-const normalized = value => stripBase(new URL(value, siteConfig.site).pathname, siteConfig.base).replace(/^\/zh-cn(?=\/)/, '');
+const normalized = value => {
+  const url = new URL(value, siteConfig.site);
+  if (url.origin !== siteConfig.site) return url.href;
+  const pathname = stripBase(url.pathname, siteConfig.base);
+  assert.ok(pathname !== null, `${value}: local destination lost the configured base`);
+  const prefix = Object.values(locales).find(locale => locale.prefix && (pathname === locale.prefix || pathname.startsWith(locale.prefix + '/')))?.prefix;
+  return prefix ? pathname.slice(prefix.length) || '/' : pathname;
+};
 const hrefs = (page, selector) => page.$(selector).toArray().map(element => page.$(element).attr('href')).filter(Boolean).map(normalized);
 for (const pair of corePages) {
-  const en = pages.get(path.join(dist, pair.en.slice(1), 'index.html'));
-  const zh = pages.get(path.join(dist, pair.zh.slice(1), 'index.html'));
-  for (const [locale, page] of [['en', en], ['zh-CN', zh]]) {
+  const reference = pages.get(path.join(dist, pagePath(pair.id, 'en').slice(1), 'index.html'));
+  for (const locale of localeIds) {
+    const page = pages.get(path.join(dist, pagePath(pair.id, locale).slice(1), 'index.html'));
     const $ = page.$;
     record($('meta[name="anki-forge:page-id"]').attr('content') === pair.id, `${page.relative}: missing topic identity`);
-    record($('meta[property="og:locale"]').attr('content') === (locale === 'en' ? 'en_US' : 'zh_CN'), `${page.relative}: incorrect OG locale`);
-    record($('meta[property="og:image"]').attr('content').endsWith(locale === 'en' ? '/generated/og.png' : '/generated/og-zh-cn.png'), `${page.relative}: wrong social image language`);
+    record($('meta[property="og:locale"]').attr('content') === locales[locale].og, `${page.relative}: incorrect OG locale`);
+    record($('meta[property="og:image"]').attr('content').endsWith(socialImagePath(locale)), `${page.relative}: wrong social image language`);
     for (const nav of ['.desktop-nav', '.mobile-menu nav']) {
       assert.deepEqual(hrefs(page, `${nav} [data-section]`), ['/docs/', '/examples/', '/blog/'], `${page.relative}: complete shared navigation required`);
       record($(`${nav} [aria-current="page"]`).attr('data-section') === (pair.section === 'home' ? undefined : pair.section), `${page.relative}: wrong current section`);
     }
     const feed = $('link[rel="alternate"][type="application/rss+xml"]');
-    record(feed.attr('href') === withBase(locale === 'en' ? '/rss.xml' : '/zh-cn/rss.xml', siteConfig.base), `${page.relative}: feed changed language`);
+    record(feed.length === 1 && feed.attr('href') === withBase(localePath('/rss.xml', locale), siteConfig.base), `${page.relative}: feed changed language`);
     for (const node of $('a[href]').toArray()) {
       const link = $(node);
       if (link.is('[data-language-switch]') || link.attr('href').startsWith('#')) continue;
       const url = new URL(link.attr('href'), page.url);
       if (url.origin !== siteConfig.site) continue;
-      const linked = pagePair(url.pathname, siteConfig.base);
-      if (linked) record(stripBase(url.pathname, siteConfig.base) === (locale === 'en' ? linked.en : linked.zh), `${page.relative}: unexpected cross-language link ${link.attr('href')}`);
+      const linked = resolvePage(url.pathname, siteConfig.base);
+      if (linked) record(linked.locale === locale, `${page.relative}: unexpected cross-language link ${link.attr('href')}`);
     }
-    if (locale === 'zh-CN') record(/[\u3400-\u9fff]/.test($('main').text()), `${page.relative}: untranslated body`);
     if (pair.type === 'docs') {
       record($('site-search [data-open-modal]').length === 1, `${page.relative}: missing search action`);
       record($('starlight-toc').length >= 1, `${page.relative}: missing table of contents`);
       record($('a[href="https://github.com/morehardy/anki-forge/edit/main/' + pair.sources[locale] + '"]').length === 1, `${page.relative}: edit link must reach the authoritative translation`);
       record($('meta[name="anki-forge:content-source"]').attr('content') === pair.sources[locale], `${page.relative}: fallback or wrong content source`);
       record($('pre').length === $('.expressive-code .copy button, [data-copy-block] [data-copy]').length, `${page.relative}: every code block must be copyable`);
+      assert.deepEqual(hrefs(page, '#starlight__sidebar a'), hrefs(reference, '#starlight__sidebar a'), `${pair.id}/${locale}: sidebar topics or order differ`);
+      assert.deepEqual(hrefs(page, '.pagination-links a'), hrefs(reference, '.pagination-links a'), `${pair.id}/${locale}: reading order differs`);
+      // Cross-language data integrity belongs to semantic content contracts;
+      // natural translations need not keep the English table shape.
     }
-  }
-  assert.deepEqual(hrefs(zh, '.site-footer nav a'), hrefs(en, '.site-footer nav a'), `${pair.id}: footer destinations differ`);
-  if (pair.type === 'docs') {
-    assert.deepEqual(hrefs(zh, '#starlight__sidebar a'), hrefs(en, '#starlight__sidebar a'), `${pair.id}: sidebar topics or order differ`);
-    assert.deepEqual(hrefs(zh, '.pagination-links a'), hrefs(en, '.pagination-links a'), `${pair.id}: reading order differs`);
-    const tables = page => page.$('main table').toArray().map(table => page.$(table).find('tr').toArray().map(row => page.$(row).find('th,td').length));
-    assert.deepEqual(tables(zh), tables(en), `${pair.id}: table structure differs`);
-  }
-  if (['home', 'examples'].includes(pair.type)) {
-    for (const selector of ['[download]', '[data-workbench]', '[data-card-preview]', '[data-flip]', 'audio', '[data-update]', '[data-profile]', '[data-ai-panel]', '[data-copy]']) {
-      record(en.$(selector).length === zh.$(selector).length, `${pair.id}: missing translated capability ${selector}`);
+    assert.deepEqual(hrefs(page, '.site-footer nav a'), hrefs(reference, '.site-footer nav a'), `${pair.id}/${locale}: footer destinations differ`);
+    if (['home', 'examples'].includes(pair.type)) {
+      for (const selector of ['[download]', '[data-workbench]', '[data-card-preview]', '[data-flip]', 'audio', '[data-update]', '[data-profile]', '[data-ai-panel]', '[data-copy]']) {
+        record(reference.$(selector).length === $(selector).length, `${pair.id}/${locale}: missing translated capability ${selector}`);
+      }
+      assert.deepEqual(hrefs(page, '[download]'), hrefs(reference, '[download]'), `${pair.id}/${locale}: download resources differ`);
     }
-    assert.deepEqual(hrefs(zh, '[download]'), hrefs(en, '[download]'), `${pair.id}: download resources differ`);
   }
 }
-for (const route of ['/', '/zh-cn/']) {
+for (const locale of localeIds) {
+  const route = pagePath('home', locale);
   const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
   assert.deepEqual(page.$('[data-module]').toArray().map(element => page.$(element).attr('data-module')), homepageModules, `${route}: homepage module order differs`);
   record(page.$('[data-workbench] [role="tab"]').length === 4, `${route}: all four examples required`);
@@ -238,12 +268,10 @@ for (const route of ['/', '/zh-cn/']) {
   for (const id of ['basic', 'cloze', 'media', 'occlusion']) record(page.$(`[data-example="${id}"] [data-flip]`).length === 1, `${route}: ${id} flip action required`);
   record(page.$('[data-update-demo] [data-update]').length === 1, `${route}: update/reset action required`);
   record(page.$('[data-example="media"] audio[controls]').length === 1, `${route}: audio playback required`);
-}
-for (const locale of ['en', 'zh-CN']) {
-  const filename = locale === 'en' ? 'rss.xml' : 'zh-cn/rss.xml';
+  const filename = localePath('/rss.xml', locale).slice(1);
   const $ = load(await readFile(path.join(dist, filename), 'utf8'), { xml: true });
   record($('channel > language').text() === locale, `${filename}: wrong feed language`);
-  assert.deepEqual($('item > link').toArray().map(node => new URL($(node).text()).pathname).sort(), corePages.filter(page => page.type === 'article').map(page => withBase(locale === 'en' ? page.en : page.zh, siteConfig.base)).sort(), `${filename}: feed topic set differs`);
+  assert.deepEqual($('item > link').toArray().map(node => new URL($(node).text()).pathname).sort(), corePages.filter(page => page.type === 'article').map(page => withBase(pagePath(page.id, locale), siteConfig.base)).sort(), `${filename}: feed topic set differs`);
 }
 
 if (errors.size) {

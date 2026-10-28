@@ -3,6 +3,8 @@ import starlight from '@astrojs/starlight';
 import { docGroups, docPages } from './site-model.mjs';
 import { repository, siteConfig, withBase } from './site.config.mjs';
 import { publishedPages } from './scripts/published-pages.mjs';
+import { searchOptions } from './search.config.mjs';
+import { starlightLocales, localeIds } from './locale-model.mjs';
 
 const publicTopics = new Set((await publishedPages()).map(page => page.id));
 
@@ -15,8 +17,9 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Anki Forge',
-      locales: { root: { label: 'English', lang: 'en' }, 'zh-cn': { label: '简体中文', lang: 'zh-CN' } },
+      locales: starlightLocales,
       defaultLocale: 'root',
+      pagefind: searchOptions,
       routeMiddleware: './src/route-middleware.ts',
       components: { Header: './src/components/DocsHeader.astro', Footer: './src/components/DocsFooter.astro', LanguageSelect: './src/components/LanguageSwitcher.astro', ThemeSelect: './src/components/ThemeControl.astro' },
       logo: { light: '../docs/assets/brand/ankiforge.svg', dark: '../docs/assets/brand/ankiforge-dark.svg', alt: '', replacesTitle: false },
@@ -40,10 +43,10 @@ export default defineConfig({
         },
       ],
       sidebar: docGroups.map(group => ({
-        label: group.label, translations: { 'zh-CN': group.zh }, collapsed: group.collapsed ?? false,
+        label: group.label, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, group.labels[locale]])), collapsed: group.collapsed ?? false,
         items: group.ids.filter(id => publicTopics.has(id)).map(id => {
           const page = docPages.find(page => page.id === id);
-          return { slug: page.en.slice(1, -1), label: page.title.en, translations: { 'zh-CN': page.title['zh-CN'] } };
+          return { slug: page.route.slice(1, -1), label: page.title.en, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, page.title[locale]])) };
         }),
       })),
     }),

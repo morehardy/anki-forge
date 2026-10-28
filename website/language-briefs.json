@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "version": "anki-forge-technical-terms-v1",
+  "en": {
+    "audience": "Developers integrating the public Rust, Node.js or Python package to generate and update Anki APKGs.",
+    "register": "Direct technical instructions. Name prerequisites near the affected step; distinguish supported public APIs from source builds and historical examples.",
+    "terms": { "note": "note", "card": "card", "deck": "deck", "noteType": "note type", "namespace": "namespace", "stableKey": "stable note key", "originalApkg": "original distribution APKG", "imageOcclusion": "Image Occlusion" },
+    "protected": ["Anki Forge", "ankiforge", "genanki", "APKG", "API", "JSON", "Rust", "Node.js", "Python", "Basic", "Cloze"],
+    "avoid": ["Treating note and card as interchangeable", "Claiming an Anki re-export is an accepted original update baseline", "Describing source-only APIs as published package capabilities"]
+  },
+  "zh-CN": {
+    "audience": "在应用中集成公开 Rust、Node.js 或 Python 包的开发者，使用简体中文技术说明。",
+    "register": "直接、自然地说明任务和操作。优先省略不必要的称谓；必要前提紧随受影响的步骤，限制贴近结论。不要照搬英文双关或机械名词堆叠。",
+    "terms": { "note": "笔记", "card": "卡片", "deck": "牌组", "noteType": "笔记类型", "namespace": "命名空间", "stableKey": "稳定笔记键", "originalApkg": "原始分发 APKG", "imageOcclusion": "图片遮挡" },
+    "protected": ["Anki Forge", "ankiforge", "genanki", "APKG", "API", "JSON", "Rust", "Node.js", "Python", "Basic", "Cloze"],
+    "avoid": ["把 note 与 card 都译作卡片", "把 Anki 重新导出的包写成有效的原始更新基线", "把仅源码可用的 API 写成公开包能力", "把英文双关 Notes on making notes 逐词译成关于制作笔记的笔记"],
+    "ownership": "根据上下文说明 Project 或某个值持有内容与媒体的所有权；不要把 Rust 所有权语义误说成版权或 Anki 用户权限。"
+  }
+}

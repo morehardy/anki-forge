@@ -1,0 +1,33 @@
+---
+import { createTranslator } from '../i18n/messages.mjs';
+import type { CardExample } from '../lib/examples';
+import { sitePath } from '../lib/site';
+import Icon from './Icon.astro';
+interface Props { example: CardExample; prefix: string; locale?: string }
+const { example, prefix, locale = 'en' } = Astro.props;
+const { clozeParts: cloze } = example;
+const t = createTranslator(locale);
+---
+<div class="card-preview" data-card-preview>
+  <div class="preview-label"><span>{example.deck}</span><Icon name="cards" /></div>
+  <div class="flashcard" data-flashcard>
+    <div class="flashcard-inner">
+      <div class="flashcard-face" data-side="front">
+        {example.id === 'basic' && <><span class="card-caption">{t('card.direction')}</span><p class="card-word">{example.front}</p><span class="card-caption">{t('card.meaning')}</span></>}
+        {example.id === 'cloze' && cloze && <><span class="card-caption">{t('card.sentence')}</span><p class="card-sentence">{cloze[1]}<span class="cloze">[…]</span>{cloze[3]}</p></>}
+        {example.id === 'media' && <><span class="card-caption">{t('card.ear')}</span><p class="card-prompt">{example.front}</p><img class="waveform" src={sitePath(`/generated/${example.image}`)} width="320" height="104" alt={t('card.waveform')} /></>}
+        {example.id === 'occlusion' && <><span class="card-caption">{t('card.cell')}</span><p class="card-prompt">{example.front}</p><div class="occlusion-diagram"><img src={sitePath(`/generated/${example.image}`)} width={example.imageWidth} height={example.imageHeight} alt={t('card.hiddenCell')} /><span class="occlusion-cover" style={example.maskStyle} aria-hidden="true">?</span></div></>}
+      </div>
+      <div class="flashcard-face flashcard-back" data-side="back" aria-hidden="true">
+        {example.id === 'basic' && <><span class="card-caption">{example.front}</span><p class="card-answer">{example.back}</p><span class="card-caption">{t('card.greeting')}</span></>}
+        {example.id === 'cloze' && cloze && <><span class="card-caption">{t('card.sentence')}</span><p class="card-sentence">{cloze[1]}<span class="cloze">{cloze[2]}</span>{cloze[3]}</p><span class="card-caption">{example.back}</span></>}
+        {example.id === 'media' && <><span class="card-caption">{t('card.sine')}</span><p class="card-answer">{example.back}</p><span class="card-caption">{t('card.concert')}</span></>}
+        {example.id === 'occlusion' && <><span class="card-caption">{t('card.cell')}</span><p class="card-answer">{example.back}</p><div class="occlusion-diagram"><img src={sitePath(`/generated/${example.image}`)} width={example.imageWidth} height={example.imageHeight} alt={t('card.revealedCell')} /></div></>}
+      </div>
+    </div>
+  </div>
+  {example.id === 'media' && <audio controls preload="none" src={sitePath(`/generated/${example.audio}`)} aria-label={t('card.play')}>{t('card.audioFallback')} <a href={sitePath(`/generated/${example.audio}`)}>{t('card.downloadTone')}</a></audio>}
+  <button class="text-button flip-button" type="button" data-flip aria-pressed="false" aria-describedby={`${prefix}-card-status`}><Icon name="arrowsClockwise" /><span>{t('card.showAnswer')}</span></button>
+  <p class="sr-only" id={`${prefix}-card-status`} data-card-status aria-live="polite">{t('card.questionShown')}</p>
+  <noscript><style>[data-flip] { display: none; }</style><p class="no-script-note">{t('card.answer', { answer: cloze ? cloze[2] : example.back })}</p></noscript>
+</div>

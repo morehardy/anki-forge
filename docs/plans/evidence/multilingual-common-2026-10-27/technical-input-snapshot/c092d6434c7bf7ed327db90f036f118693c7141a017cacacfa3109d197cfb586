@@ -1,0 +1,603 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "2c07690",
+  "note": "Explicit migration snapshot of existing section correspondences; changes require semantic review. Runtime matching never uses heading position.",
+  "entries": {
+    "docs": {
+      "requiredSections": [
+        "start-with-your-language",
+        "understand-the-pieces",
+        "build-your-next-feature",
+        "find-answers-and-contribute"
+      ],
+      "locales": {
+        "en": {
+          "start-with-your-language": "start-with-your-language",
+          "understand-the-pieces": "understand-the-pieces",
+          "build-your-next-feature": "build-your-next-feature",
+          "find-answers-and-contribute": "find-answers-and-contribute"
+        },
+        "zh-CN": {
+          "从你的开发语言开始": "start-with-your-language",
+          "理解各个部分": "understand-the-pieces",
+          "构建下一项功能": "build-your-next-feature",
+          "查找答案与参与贡献": "find-answers-and-contribute"
+        }
+      }
+    },
+    "languages": {
+      "requiredSections": [
+        "next-tasks"
+      ],
+      "locales": {
+        "en": {
+          "next-tasks": "next-tasks"
+        },
+        "zh-CN": {
+          "下一步任务": "next-tasks"
+        }
+      }
+    },
+    "quickstart": {
+      "requiredSections": [
+        "install",
+        "export-your-first-deck",
+        "continue"
+      ],
+      "locales": {
+        "en": {
+          "install": "install",
+          "export-your-first-deck": "export-your-first-deck",
+          "continue": "continue"
+        },
+        "zh-CN": {
+          "安装": "install",
+          "导出第一个牌组": "export-your-first-deck",
+          "继续学习": "continue"
+        }
+      }
+    },
+    "json-to-anki": {
+      "requiredSections": [
+        "shared-inputs",
+        "rust",
+        "python",
+        "node",
+        "check-and-import-the-result"
+      ],
+      "locales": {
+        "en": {
+          "shared-inputs": "shared-inputs",
+          "rust": "rust",
+          "python": "python",
+          "node": "node",
+          "check-and-import-the-result": "check-and-import-the-result"
+        },
+        "zh-CN": {
+          "共享输入": "shared-inputs",
+          "rust": "rust",
+          "python": "python",
+          "node": "node",
+          "检查并导入结果": "check-and-import-the-result"
+        }
+      }
+    },
+    "anki-forge-vs-genanki": {
+      "requiredSections": [
+        "the-same-small-task",
+        "existing-genanki-decks",
+        "historical-performance-evidence"
+      ],
+      "locales": {
+        "en": {
+          "the-same-small-task": "the-same-small-task",
+          "existing-genanki-decks": "existing-genanki-decks",
+          "historical-performance-evidence": "historical-performance-evidence"
+        },
+        "zh-CN": {
+          "同一个小任务": "the-same-small-task",
+          "已有-genanki-牌组": "existing-genanki-decks",
+          "历史性能证据": "historical-performance-evidence"
+        }
+      }
+    },
+    "development": {
+      "requiredSections": [
+        "source-builds"
+      ],
+      "locales": {
+        "en": {
+          "source-builds": "source-builds"
+        },
+        "zh-CN": {
+          "源码构建": "source-builds"
+        }
+      }
+    },
+    "rust-guide": {
+      "requiredSections": [
+        "projects-and-diagnostics",
+        "models-and-assets",
+        "output-ownership",
+        "stable-note-identity",
+        "updating-distributed-decks",
+        "addition-errors-and-media-categories"
+      ],
+      "locales": {
+        "en": {
+          "projects-and-diagnostics": "projects-and-diagnostics",
+          "models-and-assets": "models-and-assets",
+          "output-ownership": "output-ownership",
+          "stable-note-identity": "stable-note-identity",
+          "updating-distributed-decks": "updating-distributed-decks",
+          "addition-errors-and-media-categories": "addition-errors-and-media-categories"
+        },
+        "zh-CN": {
+          "项目与诊断": "projects-and-diagnostics",
+          "模型与资源": "models-and-assets",
+          "输出所有权": "output-ownership",
+          "稳定笔记身份": "stable-note-identity",
+          "更新已分发的牌组": "updating-distributed-decks",
+          "添加错误与媒体类别": "addition-errors-and-media-categories"
+        }
+      }
+    },
+    "templates": {
+      "requiredSections": [
+        "run-the-bundled-example",
+        "manifest-and-template-references",
+        "load-and-reuse-a-model",
+        "assets-and-budgets"
+      ],
+      "locales": {
+        "en": {
+          "run-the-bundled-example": "run-the-bundled-example",
+          "manifest-and-template-references": "manifest-and-template-references",
+          "load-and-reuse-a-model": "load-and-reuse-a-model",
+          "assets-and-budgets": "assets-and-budgets"
+        },
+        "zh-CN": {
+          "运行模板包示例": "run-the-bundled-example",
+          "manifest-与模板引用": "manifest-and-template-references",
+          "加载与复用模型": "load-and-reuse-a-model",
+          "资源与预算": "assets-and-budgets"
+        }
+      }
+    },
+    "api": {
+      "requiredSections": [
+        "stable-note-identity",
+        "start-with-a-task"
+      ],
+      "locales": {
+        "en": {
+          "stable-note-identity": "stable-note-identity",
+          "start-with-a-task": "start-with-a-task"
+        },
+        "zh-CN": {
+          "稳定笔记身份": "stable-note-identity",
+          "从一个任务开始": "start-with-a-task"
+        }
+      }
+    },
+    "installation": {
+      "requiredSections": [
+        "cargo-dependencies",
+        "choose-the-next-guide"
+      ],
+      "locales": {
+        "en": {
+          "cargo-dependencies": "cargo-dependencies",
+          "choose-the-next-guide": "choose-the-next-guide"
+        },
+        "zh-CN": {
+          "cargo-依赖": "cargo-dependencies",
+          "选择下一篇指南": "choose-the-next-guide"
+        }
+      }
+    },
+    "concepts": {
+      "requiredSections": [
+        "project-and-note",
+        "models-fields-and-templates",
+        "text-and-html",
+        "media-ownership",
+        "build-and-update"
+      ],
+      "locales": {
+        "en": {
+          "project-and-note": "project-and-note",
+          "models-fields-and-templates": "models-fields-and-templates",
+          "text-and-html": "text-and-html",
+          "media-ownership": "media-ownership",
+          "build-and-update": "build-and-update"
+        },
+        "zh-CN": {
+          "project-与笔记": "project-and-note",
+          "模型字段与模板": "models-fields-and-templates",
+          "文本与-html": "text-and-html",
+          "媒体所有权": "media-ownership",
+          "构建与更新": "build-and-update"
+        }
+      }
+    },
+    "cards": {
+      "requiredSections": [
+        "author-the-notes",
+        "text-fields-and-card-identity"
+      ],
+      "locales": {
+        "en": {
+          "author-the-notes": "author-the-notes",
+          "text-fields-and-card-identity": "text-fields-and-card-identity"
+        },
+        "zh-CN": {
+          "编写笔记": "author-the-notes",
+          "文本字段与卡片身份": "text-fields-and-card-identity"
+        }
+      }
+    },
+    "custom-notetypes": {
+      "requiredSections": [
+        "executable-example",
+        "keys-and-names",
+        "validation-and-generation"
+      ],
+      "locales": {
+        "en": {
+          "executable-example": "executable-example",
+          "keys-and-names": "keys-and-names",
+          "validation-and-generation": "validation-and-generation"
+        },
+        "zh-CN": {
+          "可执行示例": "executable-example",
+          "键与名称": "keys-and-names",
+          "校验与生成": "validation-and-generation"
+        }
+      }
+    },
+    "media": {
+      "requiredSections": [
+        "execute-the-media-workflow",
+        "compose-content-and-explicit-assets",
+        "names-mime-and-budgets",
+        "typed-image-and-sound-usage",
+        "batch-media-import",
+        "batch-behavior-and-budgets"
+      ],
+      "locales": {
+        "en": {
+          "execute-the-media-workflow": "execute-the-media-workflow",
+          "compose-content-and-explicit-assets": "compose-content-and-explicit-assets",
+          "names-mime-and-budgets": "names-mime-and-budgets",
+          "typed-image-and-sound-usage": "typed-image-and-sound-usage",
+          "batch-media-import": "batch-media-import",
+          "batch-behavior-and-budgets": "batch-behavior-and-budgets"
+        },
+        "zh-CN": {
+          "运行媒体流程": "execute-the-media-workflow",
+          "组合内容与显式资源": "compose-content-and-explicit-assets",
+          "名称mime-与预算": "names-mime-and-budgets",
+          "类型化图片与声音的使用": "typed-image-and-sound-usage",
+          "批量媒体导入": "batch-media-import",
+          "批量行为与预算": "batch-behavior-and-budgets"
+        }
+      }
+    },
+    "image-occlusion": {
+      "requiredSections": [
+        "run-the-example",
+        "multiple-masks-and-modes"
+      ],
+      "locales": {
+        "en": {
+          "run-the-example": "run-the-example",
+          "multiple-masks-and-modes": "multiple-masks-and-modes"
+        },
+        "zh-CN": {
+          "运行示例": "run-the-example",
+          "多个遮罩与模式": "multiple-masks-and-modes"
+        }
+      }
+    },
+    "updates": {
+      "requiredSections": [
+        "run-two-versions-and-compare",
+        "policy-and-inspection-limits",
+        "evidence-and-identity",
+        "client-import-behavior-and-release-review",
+        "build-once-review-then-publish"
+      ],
+      "locales": {
+        "en": {
+          "run-two-versions-and-compare": "run-two-versions-and-compare",
+          "policy-and-inspection-limits": "policy-and-inspection-limits",
+          "evidence-and-identity": "evidence-and-identity",
+          "client-import-behavior-and-release-review": "client-import-behavior-and-release-review",
+          "build-once-review-then-publish": "build-once-review-then-publish"
+        },
+        "zh-CN": {
+          "运行两个版本并比较": "run-two-versions-and-compare",
+          "策略与检查限制": "policy-and-inspection-limits",
+          "证据与身份": "evidence-and-identity",
+          "客户端导入行为与发布检查": "client-import-behavior-and-release-review",
+          "构建一次审阅后发布": "build-once-review-then-publish"
+        }
+      }
+    },
+    "build-guarantees": {
+      "requiredSections": [
+        "temporary-and-persistent-artifacts",
+        "baselines-and-publication",
+        "inspection-limits",
+        "concurrent-work",
+        "prepared-publication-from-source"
+      ],
+      "locales": {
+        "en": {
+          "temporary-and-persistent-artifacts": "temporary-and-persistent-artifacts",
+          "baselines-and-publication": "baselines-and-publication",
+          "inspection-limits": "inspection-limits",
+          "concurrent-work": "concurrent-work",
+          "prepared-publication-from-source": "prepared-publication-from-source"
+        },
+        "zh-CN": {
+          "临时与持久产物": "temporary-and-persistent-artifacts",
+          "基线与发布": "baselines-and-publication",
+          "检查限制": "inspection-limits",
+          "并发工作": "concurrent-work",
+          "源码中的预备发布": "prepared-publication-from-source"
+        }
+      }
+    },
+    "troubleshooting": {
+      "requiredSections": [
+        "installation",
+        "models-and-notes",
+        "media-and-templates",
+        "updates-and-outputs"
+      ],
+      "locales": {
+        "en": {
+          "installation": "installation",
+          "models-and-notes": "models-and-notes",
+          "media-and-templates": "media-and-templates",
+          "updates-and-outputs": "updates-and-outputs"
+        },
+        "zh-CN": {
+          "安装": "installation",
+          "模型与笔记": "models-and-notes",
+          "媒体与模板": "media-and-templates",
+          "更新与输出": "updates-and-outputs"
+        }
+      }
+    },
+    "compatibility": {
+      "requiredSections": [
+        "packages-and-verified-environments",
+        "anki-import-and-playback"
+      ],
+      "locales": {
+        "en": {
+          "packages-and-verified-environments": "packages-and-verified-environments",
+          "anki-import-and-playback": "anki-import-and-playback"
+        },
+        "zh-CN": {
+          "公开包与已验证环境": "packages-and-verified-environments",
+          "anki-导入与播放": "anki-import-and-playback"
+        }
+      }
+    },
+    "rust-api": {
+      "requiredSections": [
+        "authoring",
+        "content-and-media",
+        "build-options",
+        "build-compare-and-output",
+        "reports-and-errors",
+        "addition-context",
+        "review-once-publish-once"
+      ],
+      "locales": {
+        "en": {
+          "authoring": "authoring",
+          "content-and-media": "content-and-media",
+          "build-options": "build-options",
+          "build-compare-and-output": "build-compare-and-output",
+          "reports-and-errors": "reports-and-errors",
+          "addition-context": "addition-context",
+          "review-once-publish-once": "review-once-publish-once"
+        },
+        "zh-CN": {
+          "内容编写": "authoring",
+          "内容与媒体": "content-and-media",
+          "构建选项": "build-options",
+          "构建比较与输出": "build-compare-and-output",
+          "报告与错误": "reports-and-errors",
+          "添加上下文": "addition-context",
+          "审阅一次发布一次": "review-once-publish-once"
+        }
+      }
+    },
+    "node-quickstart": {
+      "requiredSections": [
+        "export-a-deck",
+        "typescript-and-next-tasks"
+      ],
+      "locales": {
+        "en": {
+          "export-a-deck": "export-a-deck",
+          "typescript-and-next-tasks": "typescript-and-next-tasks"
+        },
+        "zh-CN": {
+          "导出牌组": "export-a-deck",
+          "typescript-与下一步任务": "typescript-and-next-tasks"
+        }
+      }
+    },
+    "node-api": {
+      "requiredSections": [
+        "project-and-notes",
+        "immutable-models",
+        "media-and-image-occlusion",
+        "build-compare-and-output",
+        "artifact-lifetime-and-concurrency",
+        "errors",
+        "addition-context",
+        "batch-media-and-prepared-publication",
+        "prepare-review-and-publish",
+        "typescript"
+      ],
+      "locales": {
+        "en": {
+          "project-and-notes": "project-and-notes",
+          "immutable-models": "immutable-models",
+          "media-and-image-occlusion": "media-and-image-occlusion",
+          "build-compare-and-output": "build-compare-and-output",
+          "artifact-lifetime-and-concurrency": "artifact-lifetime-and-concurrency",
+          "errors": "errors",
+          "addition-context": "addition-context",
+          "batch-media-and-prepared-publication": "batch-media-and-prepared-publication",
+          "prepare-review-and-publish": "prepare-review-and-publish",
+          "typescript": "typescript"
+        },
+        "zh-CN": {
+          "project-与笔记": "project-and-notes",
+          "不可变模型": "immutable-models",
+          "媒体与图片遮挡": "media-and-image-occlusion",
+          "构建比较与输出": "build-compare-and-output",
+          "产物寿命与并发": "artifact-lifetime-and-concurrency",
+          "错误": "errors",
+          "添加上下文": "addition-context",
+          "批量媒体与预备发布": "batch-media-and-prepared-publication",
+          "预备审阅与发布": "prepare-review-and-publish",
+          "typescript": "typescript"
+        }
+      }
+    },
+    "python-quickstart": {
+      "requiredSections": [
+        "export-a-deck",
+        "continue"
+      ],
+      "locales": {
+        "en": {
+          "export-a-deck": "export-a-deck",
+          "continue": "continue"
+        },
+        "zh-CN": {
+          "导出牌组": "export-a-deck",
+          "继续学习": "continue"
+        }
+      }
+    },
+    "python-api": {
+      "requiredSections": [
+        "project-and-note-values",
+        "models-and-templates",
+        "media-and-occlusion",
+        "operations-and-results",
+        "errors-and-concurrency",
+        "addition-context",
+        "source-api-details",
+        "prepare-review-and-publish"
+      ],
+      "locales": {
+        "en": {
+          "project-and-note-values": "project-and-note-values",
+          "models-and-templates": "models-and-templates",
+          "media-and-occlusion": "media-and-occlusion",
+          "operations-and-results": "operations-and-results",
+          "errors-and-concurrency": "errors-and-concurrency",
+          "addition-context": "addition-context",
+          "source-api-details": "source-api-details",
+          "prepare-review-and-publish": "prepare-review-and-publish"
+        },
+        "zh-CN": {
+          "project-与笔记值": "project-and-note-values",
+          "模型与模板": "models-and-templates",
+          "媒体与遮挡": "media-and-occlusion",
+          "操作与结果": "operations-and-results",
+          "错误与并发": "errors-and-concurrency",
+          "添加上下文": "addition-context",
+          "源码-api-详情": "source-api-details",
+          "预备审阅与发布": "prepare-review-and-publish"
+        }
+      }
+    },
+    "python-diagnostics": {
+      "requiredSections": [
+        "compare-before-publication",
+        "budgets-and-artifact-ownership"
+      ],
+      "locales": {
+        "en": {
+          "compare-before-publication": "compare-before-publication",
+          "budgets-and-artifact-ownership": "budgets-and-artifact-ownership"
+        },
+        "zh-CN": {
+          "发布前比较": "compare-before-publication",
+          "预算与产物所有权": "budgets-and-artifact-ownership"
+        }
+      }
+    },
+    "python-migration": {
+      "requiredSections": [],
+      "locales": {
+        "en": {},
+        "zh-CN": {}
+      }
+    },
+    "genanki-migration": {
+      "requiredSections": [],
+      "locales": {
+        "en": {},
+        "zh-CN": {}
+      }
+    },
+    "blog:your-first-anki-deck": {
+      "requiredSections": [
+        "a-complete-program",
+        "install-and-run",
+        "give-the-note-an-identity",
+        "grow-from-one-note"
+      ],
+      "locales": {
+        "en": {
+          "a-complete-program": "a-complete-program",
+          "install-and-run": "install-and-run",
+          "give-the-note-an-identity": "give-the-note-an-identity",
+          "grow-from-one-note": "grow-from-one-note"
+        },
+        "zh-CN": {
+          "完整程序": "a-complete-program",
+          "安装与运行": "install-and-run",
+          "为笔记指定身份": "give-the-note-an-identity",
+          "从一条笔记扩展": "grow-from-one-note"
+        }
+      }
+    },
+    "blog:stable-ids-and-deck-updates": {
+      "requiredSections": [
+        "separate-identity-from-content",
+        "give-the-next-build-a-baseline",
+        "keep-the-original-distributed-package",
+        "inspect-the-build-and-the-import"
+      ],
+      "locales": {
+        "en": {
+          "separate-identity-from-content": "separate-identity-from-content",
+          "give-the-next-build-a-baseline": "give-the-next-build-a-baseline",
+          "keep-the-original-distributed-package": "keep-the-original-distributed-package",
+          "inspect-the-build-and-the-import": "inspect-the-build-and-the-import"
+        },
+        "zh-CN": {
+          "将身份与内容分开": "separate-identity-from-content",
+          "为下一次构建提供基线": "give-the-next-build-a-baseline",
+          "保留原始分发包": "keep-the-original-distributed-package",
+          "检查构建与导入": "inspect-the-build-and-the-import"
+        }
+      }
+    }
+  }
+}

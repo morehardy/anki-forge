@@ -102,4 +102,4 @@ not change MIME: a PNG renamed `wrong.mp3` passes image addition but can still f
 build's independent sniffing/extension check with `MEDIA.DECLARED_MIME_MISMATCH`.
 
 Tool recipes now require `ankiforge-project-v2` without top-level `name`; v1 is
-rejected. Contract bundle is 2.0.0; package identity stays `ankiforge-identity-v1`.
+rejected. Contract bundle is 2.1.0; package identity stays `ankiforge-identity-v1`.
