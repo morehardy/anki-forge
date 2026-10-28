@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+export { withBase } from './site-paths.mjs';
 
 const localEnvironment = new URL('./.env', import.meta.url);
 if (existsSync(localEnvironment)) process.loadEnvFile(fileURLToPath(localEnvironment));
@@ -25,11 +26,6 @@ export function resolveSiteConfig(environment = process.env) {
     throw new Error('Production deployment requires SITE_URL=https://ankiforge.dev, SITE_BASE=/ and SITE_CUSTOM_DOMAIN=ankiforge.dev.');
   }
   return { site: site.origin, base, customDomain };
-}
-
-export function withBase(path, base) {
-  if (!path.startsWith('/') || path.startsWith('//')) throw new Error('Expected a site-relative path.');
-  return `${base === '/' ? '' : base}${path}`;
 }
 
 export const siteConfig = resolveSiteConfig();

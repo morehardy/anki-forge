@@ -13,6 +13,7 @@ import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { checkContent } from './check-content.mjs';
 import { checkDocumentation } from './documentation.mjs';
 import { checkAiQuickstart, generateAiQuickstart } from './ai-quickstart.mjs';
+import { frontmatter } from './published-pages.mjs';
 
 const website = fileURLToPath(new URL('../', import.meta.url));
 const root = path.resolve(website, '..');
@@ -70,7 +71,9 @@ for (const page of pages.filter(page => page.type === 'docs' || page.type === 'a
 await writeFile(path.join(generated, 'sections.json'), JSON.stringify(sections, null, 2));
 for (const entry of [...importedDocs, ...translatedDocs]) {
   const original = await readFile(path.join(root, entry.source), 'utf8');
-  let content = rewriteMarkdown(stripDocumentTitle(original).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
+  const draft = frontmatter(original).draft === true;
+  const withoutFrontmatter = original.replace(/^---\s*\n[\s\S]*?\n---(?:\n|$)/, '');
+  let content = rewriteMarkdown(stripDocumentTitle(withoutFrontmatter).replace(/^```rust,[^\n]+$/gm, '```rust'), entry.source, siteConfig.base);
   if (translatedDocs.includes(entry)) {
     const page = docPages.find(page => page.sources['zh-CN'] === entry.source);
     content = addSectionAliases(content, sections[page.id]);
@@ -78,8 +81,8 @@ for (const entry of [...importedDocs, ...translatedDocs]) {
       if (target === '_top') content = `<span id="${alias}" data-section-alias="_top"></span>\n\n` + content;
     }
   }
-  const frontmatter = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n---\n\n`;
-  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/content/docs/zh-cn/docs/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), frontmatter + content);
+  const header = `---\ntitle: ${JSON.stringify(entry.title)}\ndescription: ${JSON.stringify(entry.description)}\neditUrl: https://github.com/morehardy/anki-forge/edit/main/${entry.source}\n${draft ? 'draft: true\n' : ''}---\n\n`;
+  await writeFile(path.join(website, translatedDocs.includes(entry) ? `src/content/docs/zh-cn/docs/${entry.name}.md` : `src/content/docs/docs/${entry.name}.md`), header + content);
 }
 
 const cname = path.join(website, 'public/CNAME');

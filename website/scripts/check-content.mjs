@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { pages, docPages, localeIds, docGroups, navigation, footerNavigation, nextTasks } from '../site-model.mjs';
 import { validateMessages } from '../src/i18n/messages.mjs';
 import { headings } from './content-sections.mjs';
+import { frontmatter } from './published-pages.mjs';
 
 const repository = fileURLToPath(new URL('../../', import.meta.url));
 export const digest = value => createHash('sha256').update(value).digest('hex');
@@ -28,12 +29,21 @@ export async function checkContent(root = repository) {
     if (typeof item.label === 'string') for (const locale of localeIds) assert.ok(catalogs[locale][item.label], `${locale}: missing action message ${item.label}`);
   }
   const reviews = JSON.parse(await read('website/content-reviews.json'));
-  const docs = await files(path.join(root, 'docs/zh-cn'));
+  async function publishedOrRegistered(input, registered) {
+    const registeredSet = new Set(registered);
+    const result = [];
+    for (const file of input) {
+      const name = path.relative(root, file);
+      if (registeredSet.has(name) || frontmatter(await readFile(file, 'utf8')).draft !== true) result.push(file);
+    }
+    return result;
+  }
+  const docs = await publishedOrRegistered(await files(path.join(root, 'docs/zh-cn')), docPages.map(page => page.sources['zh-CN']));
   assert.deepEqual(sorted(docs.map(file => path.relative(root, file))), sorted(docPages.map(page => page.sources['zh-CN'])), 'Unregistered or missing Chinese documentation');
-  const blogs = (await files(path.join(root, 'website/src/content/blog'))).filter(file => /\.mdx?$/.test(file));
+  const blogs = await publishedOrRegistered((await files(path.join(root, 'website/src/content/blog'))).filter(file => /\.mdx?$/.test(file)), pages.filter(page => page.type === 'article').flatMap(page => Object.values(page.sources)));
   assert.deepEqual(sorted(blogs.map(file => path.relative(root, file))), sorted(pages.filter(page => page.type === 'article').flatMap(page => Object.values(page.sources))), 'Unregistered or missing blog translation');
   // Authored Starlight entry pages are independently discovered; imported pages are generated .md.
-  const entries = (await files(path.join(root, 'website/src/content/docs/docs'))).filter(file => file.endsWith('.mdx'));
+  const entries = await publishedOrRegistered((await files(path.join(root, 'website/src/content/docs/docs'))).filter(file => file.endsWith('.mdx')), docPages.map(page => page.sources.en).filter(source => source.startsWith('website/')));
   assert.deepEqual(sorted(entries.map(file => path.relative(root, file))), sorted(docPages.map(page => page.sources.en).filter(source => source.startsWith('website/'))), 'Unregistered documentation entry');
   for (const page of pages) {
     for (const source of Object.values(page.sources)) await stat(path.join(root, source));

@@ -6,7 +6,7 @@ import { siteConfig, withBase } from '../site.config.mjs';
 
 export async function serveBuiltSite() {
   const dist = fileURLToPath(new URL('../dist/', import.meta.url));
-  const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.svg': 'image/svg+xml', '.png': 'image/png', '.wav': 'audio/wav', '.woff2': 'font/woff2', '.xml': 'application/xml' };
+  const types = { '.html': 'text/html', '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.svg': 'image/svg+xml', '.png': 'image/png', '.wav': 'audio/wav', '.woff2': 'font/woff2', '.xml': 'application/xml' };
   const server = createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://localhost');

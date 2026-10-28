@@ -4,9 +4,12 @@ import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { serveBuiltSite } from './serve-built-site.mjs';
 import { siteConfig } from '../site.config.mjs';
-import { pages, pagePath, localeIds } from '../site-model.mjs';
+import { pagePath, localeIds } from '../site-model.mjs';
+import { publishedPages } from './published-pages.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
 
+const publicTopics = await publishedPages();
+const hasTopic = id => publicTopics.some(page => page.id === id);
 let server, browser;
 before(async () => {
   server = process.env.BROWSER_SITE ? { origin: process.env.BROWSER_SITE, url: route => new URL(route, process.env.BROWSER_SITE).href, close: async () => {} } : await serveBuiltSite();
@@ -33,12 +36,38 @@ const eventually = async (operation, message) => {
 };
 
 test('all built content URLs and assets are reachable over HTTP', async () => {
-  for (const topic of pages) for (const locale of localeIds) {
+  for (const topic of publicTopics) for (const locale of localeIds) {
     const response = await fetch(server.url(pagePath(topic.id, locale)));
     assert.equal(response.status, 200);
     assert.match(await response.text(), new RegExp(`<html[^>]+lang="${locale}"`));
   }
   for (const route of ['/missing-topic-62/', '/zh-cn/missing-topic-62/']) assert.equal((await fetch(server.url(route))).status, 404);
+});
+
+test('machine links and structured data work without JavaScript', async t => {
+  const { page } = await session(t, { javaScriptEnabled: false });
+  const examples = [publicTopics.find(topic => topic.type === 'docs'), publicTopics.find(topic => topic.type === 'article')].filter(Boolean);
+  for (const locale of localeIds) for (const { id } of examples) {
+    const route = pagePath(id, locale);
+    await page.goto(server.url(route));
+    assert.equal(await page.locator('h1').count(), 1);
+    assert.equal(await page.locator('link[rel="describedby"]').count(), 1);
+    assert.equal(await page.locator('script[type="application/ld+json"][data-anki-forge-schema]').count(), 1);
+    const markdown = await page.locator('link[rel="alternate"][type="text/markdown"]').getAttribute('href');
+    assert.equal(await page.locator(`a[href="${markdown}"]`).count(), 1);
+    if (!process.env.BROWSER_SITE) {
+      const response = await fetch(server.url(`${route}index.md`), { redirect: 'manual' });
+      assert.equal(response.status, 200);
+      assert.match(response.headers.get('content-type'), /^text\/(?:plain|markdown)/);
+      assert.match(await response.text(), /^# /);
+    }
+  }
+  if (!process.env.BROWSER_SITE) {
+    const index = await fetch(server.url('/llms.txt'), { redirect: 'manual' });
+    assert.equal(index.status, 200);
+    assert.match(index.headers.get('content-type'), /^text\/plain/);
+    for (const route of ['/docs/missing-machine-62/index.md', '/zh-cn/missing-llms-62.txt']) assert.equal((await fetch(server.url(route), { redirect: 'manual' })).status, 404);
+  }
 });
 
 for (const locale of localeIds) {
@@ -114,7 +143,7 @@ for (const locale of localeIds) {
     assert.equal(await page.locator('[data-ai-request]').inputValue(), '');
   });
 
-  test(`${locale}: docs search, section navigation, copy and theme continuity`, async t => {
+  test(`${locale}: docs search, section navigation, copy and theme continuity`, { skip: !hasTopic('quickstart') }, async t => {
     const { page } = await session(t, { permissions: ['clipboard-read', 'clipboard-write'] });
     await page.goto(route('quickstart'));
     assert.equal(await page.locator('a[href*="/edit/main/"]').count(), 1);
@@ -165,7 +194,7 @@ for (const locale of localeIds) {
     assert.equal(new URL(await page.locator('.site-header [data-language-switch]').getAttribute('href'), page.url()).hash, '');
   });
 
-  test(`${locale}: native documentation code-copy denial and recovery`, async t => {
+  test(`${locale}: native documentation code-copy denial and recovery`, { skip: !hasTopic('node-quickstart') }, async t => {
     const { page, context } = await session(t, { permissions: ['clipboard-read', 'clipboard-write'] });
     await page.goto(route('node-quickstart'));
     const block = page.locator('.expressive-code').filter({ hasText: 'import {' }).first();
@@ -185,7 +214,7 @@ for (const locale of localeIds) {
     await eventually(async () => (await block.locator('[data-copy-status]').textContent()) === tr('copy.codeSuccess'), 'Native copy did not recover after permission returned');
   });
 
-  test(`${locale}: mobile navigation, native sidebar, system theme and legacy sections`, async t => {
+  test(`${locale}: mobile navigation, native sidebar, system theme and legacy sections`, { skip: !hasTopic('quickstart') || !hasTopic('concepts') }, async t => {
     const { page } = await session(t, { viewport: { width: 390, height: 844 }, colorScheme: 'dark' });
     await page.goto(route('home') + '#workflow-heading');
     assert.equal(await page.locator('#workflow-heading').count(), 1);
@@ -222,7 +251,7 @@ for (const locale of localeIds) {
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
   });
 
-  test(`${locale}: search loading failure has localized feedback and a close action`, async t => {
+  test(`${locale}: search loading failure has localized feedback and a close action`, { skip: !hasTopic('quickstart') }, async t => {
     const { page, context } = await session(t);
     await context.route('**/pagefind/**', route => route.abort());
     await page.goto(route('quickstart'));
@@ -240,7 +269,7 @@ for (const locale of localeIds) {
     await mkdir(output, { recursive: true });
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const id of ['home', 'examples', 'blog', 'blog:your-first-anki-deck', 'quickstart']) {
+      for (const id of ['home', 'examples', 'blog', 'blog:your-first-anki-deck', 'quickstart'].filter(hasTopic)) {
         await page.goto(route(id));
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         assert.ok(overflow <= 1, `${locale}/${id} overflows ${overflow}px at ${width}px`);
@@ -252,7 +281,7 @@ for (const locale of localeIds) {
       }
     }
     await page.setViewportSize({ width: 768, height: 900 });
-    await page.goto(route('quickstart'));
+    await page.goto(route(hasTopic('quickstart') ? 'quickstart' : 'docs'));
     await page.evaluate(() => document.documentElement.style.fontSize = '200%');
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Text zoom caused page overflow');
     const { page: plain } = await session(t, { javaScriptEnabled: false });

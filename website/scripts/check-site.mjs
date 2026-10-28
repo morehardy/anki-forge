@@ -4,7 +4,8 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
-import { pages as corePages, homepageModules, pagePair, stripBase } from '../site-model.mjs';
+import { homepageModules, pagePair, stripBase } from '../site-model.mjs';
+import { publishedPages } from './published-pages.mjs';
 import { loadBenchmarkPresentation } from './benchmark-presentation.mjs';
 import { siteConfig, withBase } from '../site.config.mjs';
 import { loadAiQuickstart } from './ai-quickstart.mjs';
@@ -12,6 +13,7 @@ import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
 
 const dist = process.argv[2] ? path.resolve(process.argv[2]) : fileURLToPath(new URL('../dist/', import.meta.url));
+const corePages = await publishedPages();
 const errors = new Set();
 const pages = new Map();
 const record = (condition, message) => { if (!condition) errors.add(message); };
@@ -105,7 +107,7 @@ for (const pair of corePages) {
     }
   }
 }
-for (const route of ['/docs/json-to-anki/', '/zh-cn/docs/json-to-anki/']) {
+for (const route of corePages.some(page => page.id === 'json-to-anki') ? ['/docs/json-to-anki/', '/zh-cn/docs/json-to-anki/'] : []) {
   const page = pages.get(path.join(dist, route.slice(1), 'index.html'));
   for (const id of ['rust', 'python', 'node']) {
     record(page.$(`#${id}`).length === 1, `${route}: missing SDK anchor ${id}`);

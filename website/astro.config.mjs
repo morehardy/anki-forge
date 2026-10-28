@@ -2,6 +2,9 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import { docGroups, docPages } from './site-model.mjs';
 import { repository, siteConfig, withBase } from './site.config.mjs';
+import { publishedPages } from './scripts/published-pages.mjs';
+
+const publicTopics = new Set((await publishedPages()).map(page => page.id));
 
 export default defineConfig({
   site: siteConfig.site,
@@ -38,7 +41,7 @@ export default defineConfig({
       ],
       sidebar: docGroups.map(group => ({
         label: group.label, translations: { 'zh-CN': group.zh }, collapsed: group.collapsed ?? false,
-        items: group.ids.map(id => {
+        items: group.ids.filter(id => publicTopics.has(id)).map(id => {
           const page = docPages.find(page => page.id === id);
           return { slug: page.en.slice(1, -1), label: page.title.en, translations: { 'zh-CN': page.title['zh-CN'] } };
         }),

@@ -129,7 +129,7 @@ code { font-size: 0.86em; }
 .post-card h3 a:hover { color: var(--af-accent); }
 .post-card p { color: var(--af-muted); font-size: 15px; margin: 13px 0 17px; }
 .site-footer { padding: 28px 0 32px; border-top: 1px solid var(--af-line); display: flex; justify-content: space-between; align-items: center; gap: 30px; color: var(--af-muted); font-size: 12px; }
-.site-footer nav { display: flex; align-items: center; gap: 24px; }
+.site-footer nav { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; max-width: 100%; }
 .site-footer a { color: var(--af-muted); text-decoration: none; }
 .page-intro { padding-block: 65px 48px; max-width: 750px; }
 .page-intro h1, .article-header h1 { font-size: clamp(39px, 4.7vw, 57px); line-height: 1.12; }

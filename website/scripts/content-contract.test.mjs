@@ -27,6 +27,13 @@ test('the content gate rejects missing translations and unregistered sources', a
   await writeFile(path.join(directory, 'docs/zh-cn/extra-topic.md'), '# 额外主题\n');
   assert.throws(() => run(directory), /Unregistered or missing Chinese documentation/);
 });
+test('unregistered drafts are not treated as public topics', async t => {
+  const directory = await fixture(t);
+  await writeFile(path.join(directory, 'website/src/content/blog/future.mdx'), '---\ndraft: true\n---\nA draft.\n');
+  await writeFile(path.join(directory, 'website/src/content/docs/docs/future.mdx'), '---\ndraft: true\n---\nA draft.\n');
+  await writeFile(path.join(directory, 'docs/zh-cn/future.md'), '---\ndraft: true\n---\n草稿。\n');
+  assert.match(run(directory), /paired topics/);
+});
 test('the content gate rejects incomplete messages and mismatched interpolation', async t => {
   const directory = await fixture(t);
   const file = path.join(directory, 'website/src/i18n/zh-CN.json');

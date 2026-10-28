@@ -5,13 +5,20 @@ import { createTranslator } from '../i18n/messages.mjs';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { description as defaultDescription, sitePath } from '../lib/site';
+import { siteConfig, repository } from '../../site.config.mjs';
+import { llmsUrl, markdownUrl } from '../lib/machine-urls.mjs';
+import { buildStructuredData, serializeJsonLd } from '../lib/structured-data.mjs';
+import publicInstall from '../generated/ai-quickstart.json';
 import '../styles/global.css';
-interface Props { title?: string; description?: string; article?: boolean; publishedAt?: Date; noindex?: boolean; locale?: 'en' | 'zh-CN' }
-const { title, description = defaultDescription, article = false, publishedAt, noindex = false, locale = 'en' } = Astro.props;
+interface Props { title?: string; description?: string; article?: boolean; publishedAt?: Date; category?: string; noindex?: boolean; locale?: 'en' | 'zh-CN' }
+const { title, description = defaultDescription, article = false, publishedAt, category, noindex = false, locale = 'en' } = Astro.props;
 const t = createTranslator(locale);
 const pageTitle = title ? `${title} | Anki Forge` : t('site.title');
 const pair = pagePair(Astro.url.pathname, import.meta.env.BASE_URL.replace(/\/$/, '') || '/');
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const metadata = pair && !noindex ? { id: pair.id, type: pair.type, locale, canonical: canonical.href, title: title || t('site.title'), description, publishedAt: publishedAt?.toISOString(), category } : null;
+const schema = metadata && serializeJsonLd(buildStructuredData(metadata, { siteConfig, repository, publicInstall, homeDescription: t('home.intro') }));
+const markdown = metadata && markdownUrl(metadata);
 ---
 <!doctype html>
 <html lang={locale} data-theme="light">
@@ -23,6 +30,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     {!noindex && <link rel="canonical" href={canonical} />}
+    {metadata && <link rel="describedby" href={llmsUrl(locale, siteConfig)} />}
+    {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
+    {schema && <script is:inline type="application/ld+json" data-anki-forge-schema set:html={schema} />}
     {pair && <>
       <link rel="alternate" hreflang="en" href={new URL(sitePath(pair.en), Astro.site)} />
       <link rel="alternate" hreflang="zh-CN" href={new URL(sitePath(pair.zh), Astro.site)} />
@@ -55,7 +65,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="skip-link" href="#main">{t('nav.skip')}</a>
     {noindex ? (['en', 'zh-CN'] as const).map(language => <div data-error-language={language}><Header locale={language} /></div>) : <Header locale={locale} />}
     <main id="main" data-pagefind-body={!noindex || undefined} data-pagefind-ignore={noindex || undefined}><slot /></main>
-    {noindex ? (['en', 'zh-CN'] as const).map(language => <div data-error-language={language}><Footer locale={language} /></div>) : <Footer locale={locale} />}
+    {noindex ? (['en', 'zh-CN'] as const).map(language => <div data-error-language={language}><Footer locale={language} showAiIndex={false} /></div>) : <Footer locale={locale} />}
     <script src="../scripts/site.ts"></script>
     <!-- Cloudflare Web Analytics -->
     <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ab8936f615cc40e7a31bb7db4366b73b"}'></script>
