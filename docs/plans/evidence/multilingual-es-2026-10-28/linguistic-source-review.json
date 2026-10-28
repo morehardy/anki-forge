@@ -3,7 +3,7 @@
   "rubricVersion": "anki-forge-language-quality-v1",
   "glossaryVersion": "anki-forge-technical-terms-v1",
   "reviewerType": "ai",
-  "reviewerRun": "/root/independent_linguistic_source_review/es-final-102-2026-10-28",
+  "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28",
   "entries": {
     "home": {
       "en": {
@@ -44122,7 +44122,7 @@
       },
       "es": {
         "sourceHash": "a0f14ecf21e428105981dc14f82468902a8db58654fb10c0acf769e9b9d4a281",
-        "targetHash": "ac417d3ebf6e586453e5a55af62204060534f26b12f961eec846d61073406c3a",
+        "targetHash": "b516bb5f33baa6334cdfff27c974f7fac9ff22a7fb7c12e28e70fa414c39bece",
         "technicalDependencyHash": "31b03d8c7b87402d36fec7d7da9005cda156af3c55148f8e100b99def1dd6f20",
         "inputFiles": [
           "anki_forge/examples/docs_workflow.rs",
@@ -44169,7 +44169,7 @@
         "linguistic": {
           "status": "reviewed",
           "reviewerType": "ai",
-          "reviewerRun": "/root/independent_linguistic_source_review/es-final-102-2026-10-28",
+          "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28",
           "score": {
             "terminology": 5,
             "syntax": 5,
@@ -44343,6 +44343,38 @@
               },
               "judgement": "Actually read Guía/Ejemplos/Blog, current-language menus and sidebar labels in Header/Footer/LanguageSwitcher/DocsSearch contexts. Buscar/Cancelar/Ctrl from installed Starlight es and 11 local framework overrides are natural; exact placeholders remain protocol. Loading/error use the reviewed es catalog.",
               "reviewerRun": "/root/independent_linguistic_source_review/es-final-102-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/your-first-anki-deck.mdx",
+              "line": 18,
+              "span": "<span id=\"a-complete-program\" data-section-alias=\"a-complete-program\"></span>\n\n{/* section: a-complete-program */}\n## Un programa completo",
+              "judgement": "Un programa completo identifies the runnable-program section and shared Rust example. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/your-first-anki-deck.mdx",
+              "line": 31,
+              "span": "<span id=\"install-and-run\" data-section-alias=\"install-and-run\"></span>\n\n{/* section: install-and-run */}\n## Instalar y ejecutar",
+              "judgement": "Instalar y ejecutar identifies package setup, integration and importing the first APKG. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/your-first-anki-deck.mdx",
+              "line": 42,
+              "span": "<span id=\"give-the-note-an-identity\" data-section-alias=\"give-the-note-an-identity\"></span>\n\n{/* section: give-the-note-an-identity */}\n## Dar una identidad a la nota",
+              "judgement": "Dar una identidad a la nota identifies stable source key/namespace, separate from editable answer text. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/your-first-anki-deck.mdx",
+              "line": 53,
+              "span": "<span id=\"grow-from-one-note\" data-section-alias=\"grow-from-one-note\"></span>\n\n{/* section: grow-from-one-note */}\n## Ampliar el ejemplo",
+              "judgement": "Ampliar el ejemplo identifies adding notes, Cloze/custom templates/media and next Rust guide. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
             }
           ],
           "openIssues": []
@@ -45079,7 +45111,7 @@
       },
       "es": {
         "sourceHash": "6611d0c716ada50bd660b1ae7adcbb2d348e021e7d559fd67d9d2ec04751c04d",
-        "targetHash": "ad82ae9c1b719d33e16423eb8b067f3350807c1294a1212ec46e42392d402938",
+        "targetHash": "b2d2ab0daaec48b3c6dbce3234b761aaad1d1ad5e1f330b0e5496561abdb5a5f",
         "technicalDependencyHash": "e176a9e5ebb203d43915aead8bfcab2865857b01ae43c0a4ee5a293a5f0cd865",
         "inputFiles": [
           "anki_forge/examples/docs_workflow.rs",
@@ -45125,7 +45157,7 @@
         "linguistic": {
           "status": "reviewed",
           "reviewerType": "ai",
-          "reviewerRun": "/root/independent_linguistic_source_review/es-final-102-2026-10-28",
+          "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28",
           "score": {
             "terminology": 5,
             "syntax": 4,
@@ -45311,6 +45343,38 @@
               },
               "judgement": "Actually read Guía/Ejemplos/Blog, current-language menus and sidebar labels in Header/Footer/LanguageSwitcher/DocsSearch contexts. Buscar/Cancelar/Ctrl from installed Starlight es and 11 local framework overrides are natural; exact placeholders remain protocol. Loading/error use the reviewed es catalog.",
               "reviewerRun": "/root/independent_linguistic_source_review/es-final-102-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+              "line": 26,
+              "span": "<span id=\"separate-identity-from-content\" data-section-alias=\"separate-identity-from-content\"></span>\n\n{/* section: separate-identity-from-content */}\n## Separar la identidad del contenido",
+              "judgement": "Separar la identidad del contenido identifies durable note ID and unchanged project namespace. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+              "line": 35,
+              "span": "<span id=\"give-the-next-build-a-baseline\" data-section-alias=\"give-the-next-build-a-baseline\"></span>\n\n{/* section: give-the-next-build-a-baseline */}\n## Dar un paquete de referencia a la siguiente generación",
+              "judgement": "Dar un paquete de referencia a la siguiente generación identifies previous/next packages and distinct paths. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+              "line": 48,
+              "span": "<span id=\"keep-the-original-distributed-package\" data-section-alias=\"keep-the-original-distributed-package\"></span>\n\n{/* section: keep-the-original-distributed-package */}\n## Conservar el paquete original distribuido",
+              "judgement": "Conservar el paquete original distribuido identifies full embedded evidence and rejection of Anki reexport as baseline. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
+            },
+            {
+              "criterion": "targeted/stable-task-anchor",
+              "file": "website/src/content/blog/es/stable-ids-and-deck-updates.mdx",
+              "line": 57,
+              "span": "<span id=\"inspect-the-build-and-the-import\" data-section-alias=\"inspect-the-build-and-the-import\"></span>\n\n{/* section: inspect-the-build-and-the-import */}\n## Revisar la generación y la importación",
+              "judgement": "Revisar la generación y la importación identifies diagnostic review and client/local state limitations. The empty span preserves the protocol task ID and adds no visible phrase; unchanged prose/code and all four prior language scores explicitly reused. Source-only targeted review, not artifact acceptance.",
+              "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28"
             }
           ],
           "openIssues": []
@@ -45349,11 +45413,39 @@
       "sha256": "9a7783145b07f6e602e2e31b5c52cec8d12fe0d5a828d030e7fc8f05825d409f"
     },
     "sourceCandidate": {
-      "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-closed.json",
-      "sha256": "f8ae1627113acb36cbcce3a391e05efdda70474bd6cf7a349ff6b21d935bd1ff"
+      "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-article-aliases.json",
+      "sha256": "9d04c153a91ee98f0f43fd6952db7464a800ddd5826c34cf9eb37e492f53ae32"
     },
     "independence": "Independent of all Spanish authors and product source changes. No search query/results read, no source edits, no build, no approval import.",
-    "technical": "pending"
+    "technical": "pending",
+    "articleAliasTargetedDelta": {
+      "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28",
+      "candidate": {
+        "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-article-aliases.json",
+        "sha256": "9d04c153a91ee98f0f43fd6952db7464a800ddd5826c34cf9eb37e492f53ae32"
+      },
+      "evidence": {
+        "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-article-alias-review.json",
+        "sha256": "1d2b21147b1a94adfa00c8ad2478ecf5b1d614a6b1a25d435bf8ebf711e357b8"
+      },
+      "prior102Review": {
+        "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-source-review-before-article-aliases.json",
+        "sha256": "01f1a55e87db74d22ba9e3b8e02a54a82d09f5fae0d8cef790f6cff078a032b0"
+      },
+      "scope": "Only two es article targetHash values rebound after actual empty-anchor/task-context review. Other100 records unchanged; all prior scores and source/technical hashes/file lists retained. No newly rebuilt artifact acceptance."
+    },
+    "currentInputCapture": {
+      "base": {
+        "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-final-input-snapshot-102.json",
+        "sha256": "9a7783145b07f6e602e2e31b5c52cec8d12fe0d5a828d030e7fc8f05825d409f"
+      },
+      "targetedDeltas": [
+        {
+          "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-article-alias-input-snapshot.json",
+          "sha256": "40eaf94db32d35687afea6579032cbe7e2e197f72a69dcce19e65df9edf91b53"
+        }
+      ]
+    }
   },
   "sharedMessageReview": {
     "legacy": {

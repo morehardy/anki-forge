@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/es-article-stable-alias-delta-2026-10-28",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-article-aliases.json",
+    "sha256": "9d04c153a91ee98f0f43fd6952db7464a800ddd5826c34cf9eb37e492f53ae32"
+  },
+  "prior102Review": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-source-review-before-article-aliases.json",
+    "sha256": "01f1a55e87db74d22ba9e3b8e02a54a82d09f5fae0d8cef790f6cff078a032b0"
+  },
+  "priorClosedCandidate": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/source-review-candidate-102-closed.json",
+    "sha256": "f8ae1627113acb36cbcce3a391e05efdda70474bd6cf7a349ff6b21d935bd1ff"
+  },
+  "inputSnapshot": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/linguistic-article-alias-input-snapshot.json",
+    "sha256": "40eaf94db32d35687afea6579032cbe7e2e197f72a69dcce19e65df9edf91b53"
+  },
+  "priorFailureLog": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/article-anchor-regression/02-check-site.log",
+    "sha256": "c65bc3b91a44dd8042f080266ddddbc9844ac6f7ff7318bc3abb339a95a9cbe0"
+  },
+  "scope": "Actual source delta reading of two articles, eight empty stable aliases and adjacent semantic marker/Spanish heading/prose context; not a new complete 102-document reread.",
+  "failureObservation": "Read original check:site log: both en and zh language-switch inventories/mappings pointed to eight missing es task anchors across the two articles. These are real previously failing artifact checks; their failure is retained.",
+  "observations": {
+    "blog:your-first-anki-deck": {
+      "mappingsActuallyRead": [
+        {
+          "stableId": "a-complete-program",
+          "markerId": "a-complete-program",
+          "spanLine": 18,
+          "heading": "Un programa completo",
+          "assessment": "Un programa completo identifies the runnable-program section and shared Rust example.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "install-and-run",
+          "markerId": "install-and-run",
+          "spanLine": 31,
+          "heading": "Instalar y ejecutar",
+          "assessment": "Instalar y ejecutar identifies package setup, integration and importing the first APKG.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "give-the-note-an-identity",
+          "markerId": "give-the-note-an-identity",
+          "spanLine": 42,
+          "heading": "Dar una identidad a la nota",
+          "assessment": "Dar una identidad a la nota identifies stable source key/namespace, separate from editable answer text.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "grow-from-one-note",
+          "markerId": "grow-from-one-note",
+          "spanLine": 53,
+          "heading": "Ampliar el ejemplo",
+          "assessment": "Ampliar el ejemplo identifies adding notes, Cloze/custom templates/media and next Rust guide.",
+          "visibleTextAdded": false
+        }
+      ],
+      "esSectionInventory": {
+        "un-programa-completo": "a-complete-program",
+        "instalar-y-ejecutar": "install-and-run",
+        "dar-una-identidad-a-la-nota": "give-the-note-an-identity",
+        "ampliar-el-ejemplo": "grow-from-one-note"
+      },
+      "sourceDiff": "--- reviewed-before/website/src/content/blog/es/your-first-anki-deck.mdx\n+++ alias-current/website/src/content/blog/es/your-first-anki-deck.mdx\n@@ -15,6 +15,8 @@\n \n Empieza con una palabra: **hola**. Queremos una tarjeta con el saludo en español en el anverso y su significado en inglés en el reverso.\n \n+<span id=\"a-complete-program\" data-section-alias=\"a-complete-program\"></span>\n+\n {/* section: a-complete-program */}\n ## Un programa completo\n \n@@ -26,6 +28,8 @@\n \n `build` solo devuelve `BuildOutput` cuando termina correctamente. El operador `?` propaga un fallo tipado para que los scripts puedan terminar con un error.\n \n+<span id=\"install-and-run\" data-section-alias=\"install-and-run\"></span>\n+\n {/* section: install-and-run */}\n ## Instalar y ejecutar\n \n@@ -34,6 +38,8 @@\n Después de exportar, importa `spanish.apkg` en Anki y muestra la respuesta de tu primera tarjeta.\n \n El <a href={sitePath('/es/examples/#basic')}>ejemplo Basic de este sitio</a> también incluye un paquete descargable si prefieres examinar primero el resultado.\n+\n+<span id=\"give-the-note-an-identity\" data-section-alias=\"give-the-note-an-identity\"></span>\n \n {/* section: give-the-note-an-identity */}\n ## Dar una identidad a la nota\n@@ -44,6 +50,8 @@\n \n Actualizar un mazo distribuido también requiere el historial de publicaciones. Conserva el paquete anterior original y sigue el <a href={sitePath('/es/docs/updates/')}>flujo de actualización documentado</a>.\n \n+<span id=\"grow-from-one-note\" data-section-alias=\"grow-from-one-note\"></span>\n+\n {/* section: grow-from-one-note */}\n ## Ampliar el ejemplo\n \n",
+      "nonemptyProseCodeLinesUnchangedAfterRemovingOnlyNewEmptySpans": true,
+      "fencedCodeUnchanged": true,
+      "scoresUnchanged": {
+        "terminology": 5,
+        "syntax": 5,
+        "register": 5,
+        "usability": 5
+      }
+    },
+    "blog:stable-ids-and-deck-updates": {
+      "mappingsActuallyRead": [
+        {
+          "stableId": "separate-identity-from-content",
+          "markerId": "separate-identity-from-content",
+          "spanLine": 26,
+          "heading": "Separar la identidad del contenido",
+          "assessment": "Separar la identidad del contenido identifies durable note ID and unchanged project namespace.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "give-the-next-build-a-baseline",
+          "markerId": "give-the-next-build-a-baseline",
+          "spanLine": 35,
+          "heading": "Dar un paquete de referencia a la siguiente generación",
+          "assessment": "Dar un paquete de referencia a la siguiente generación identifies previous/next packages and distinct paths.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "keep-the-original-distributed-package",
+          "markerId": "keep-the-original-distributed-package",
+          "spanLine": 48,
+          "heading": "Conservar el paquete original distribuido",
+          "assessment": "Conservar el paquete original distribuido identifies full embedded evidence and rejection of Anki reexport as baseline.",
+          "visibleTextAdded": false
+        },
+        {
+          "stableId": "inspect-the-build-and-the-import",
+          "markerId": "inspect-the-build-and-the-import",
+          "spanLine": 57,
+          "heading": "Revisar la generación y la importación",
+          "assessment": "Revisar la generación y la importación identifies diagnostic review and client/local state limitations.",
+          "visibleTextAdded": false
+        }
+      ],
+      "esSectionInventory": {
+        "separar-la-identidad-del-contenido": "separate-identity-from-content",
+        "dar-un-paquete-de-referencia-a-la-siguiente-generación": "give-the-next-build-a-baseline",
+        "conservar-el-paquete-original-distribuido": "keep-the-original-distributed-package",
+        "revisar-la-generación-y-la-importación": "inspect-the-build-and-the-import"
+      },
+      "sourceDiff": "--- reviewed-before/website/src/content/blog/es/stable-ids-and-deck-updates.mdx\n+++ alias-current/website/src/content/blog/es/stable-ids-and-deck-updates.mdx\n@@ -23,12 +23,16 @@\n \n El significado se ha ampliado. La nota lógica sigue siendo la misma.\n \n+<span id=\"separate-identity-from-content\" data-section-alias=\"separate-identity-from-content\"></span>\n+\n {/* section: separate-identity-from-content */}\n ## Separar la identidad del contenido\n \n Un ID estable explícito proporciona a la nota una clave duradera. Conserva ese ID cuando edites la nota y elige uno nuevo cuando crees una nota lógica diferente.\n \n La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.\n+\n+<span id=\"give-the-next-build-a-baseline\" data-section-alias=\"give-the-next-build-a-baseline\"></span>\n \n {/* section: give-the-next-build-a-baseline */}\n ## Dar un paquete de referencia a la siguiente generación\n@@ -41,12 +45,16 @@\n \n Mantén el paquete de entrada y el de salida en rutas diferentes. Sobrescribir el paquete de referencia elimina las pruebas que necesitas para entender y verificar la publicación.\n \n+<span id=\"keep-the-original-distributed-package\" data-section-alias=\"keep-the-original-distributed-package\"></span>\n+\n {/* section: keep-the-original-distributed-package */}\n ## Conservar el paquete original distribuido\n \n Cada paquete generado contiene pruebas completas de identidad y revisión. La siguiente generación valida esas pruebas frente a la base de datos y los recursos multimedia reales antes de reutilizar identidades. Conserva el paquete original que distribuiste; una reexportación desde Anki no sirve como paquete de referencia compatible.\n \n La <a href={sitePath('/es/docs/updates/')}>guía de actualización</a> describe las actualizaciones estrictas, las políticas de riesgo y las limitaciones de importación del cliente.\n+\n+<span id=\"inspect-the-build-and-the-import\" data-section-alias=\"inspect-the-build-and-the-import\"></span>\n \n {/* section: inspect-the-build-and-the-import */}\n ## Revisar la generación y la importación\n",
+      "nonemptyProseCodeLinesUnchangedAfterRemovingOnlyNewEmptySpans": true,
+      "fencedCodeUnchanged": true,
+      "scoresUnchanged": {
+        "terminology": 5,
+        "syntax": 4,
+        "register": 5,
+        "usability": 5
+      }
+    }
+  },
+  "unchangedRecordsExplicitlyReused": [
+    "home/en",
+    "home/zh-CN",
+    "home/es",
+    "examples/en",
+    "examples/zh-CN",
+    "examples/es",
+    "blog/en",
+    "blog/zh-CN",
+    "blog/es",
+    "docs/en",
+    "docs/zh-CN",
+    "docs/es",
+    "languages/en",
+    "languages/zh-CN",
+    "languages/es",
+    "quickstart/en",
+    "quickstart/zh-CN",
+    "quickstart/es",
+    "json-to-anki/en",
+    "json-to-anki/zh-CN",
+    "json-to-anki/es",
+    "csv-to-anki/en",
+    "csv-to-anki/zh-CN",
+    "csv-to-anki/es",
+    "ai-anki-cards/en",
+    "ai-anki-cards/zh-CN",
+    "ai-anki-cards/es",
+    "anki-forge-vs-genanki/en",
+    "anki-forge-vs-genanki/zh-CN",
+    "anki-forge-vs-genanki/es",
+    "development/en",
+    "development/zh-CN",
+    "development/es",
+    "rust-guide/en",
+    "rust-guide/zh-CN",
+    "rust-guide/es",
+    "templates/en",
+    "templates/zh-CN",
+    "templates/es",
+    "api/en",
+    "api/zh-CN",
+    "api/es",
+    "installation/en",
+    "installation/zh-CN",
+    "installation/es",
+    "concepts/en",
+    "concepts/zh-CN",
+    "concepts/es",
+    "cards/en",
+    "cards/zh-CN",
+    "cards/es",
+    "custom-notetypes/en",
+    "custom-notetypes/zh-CN",
+    "custom-notetypes/es",
+    "media/en",
+    "media/zh-CN",
+    "media/es",
+    "image-occlusion/en",
+    "image-occlusion/zh-CN",
+    "image-occlusion/es",
+    "updates/en",
+    "updates/zh-CN",
+    "updates/es",
+    "build-guarantees/en",
+    "build-guarantees/zh-CN",
+    "build-guarantees/es",
+    "troubleshooting/en",
+    "troubleshooting/zh-CN",
+    "troubleshooting/es",
+    "compatibility/en",
+    "compatibility/zh-CN",
+    "compatibility/es",
+    "rust-api/en",
+    "rust-api/zh-CN",
+    "rust-api/es",
+    "node-quickstart/en",
+    "node-quickstart/zh-CN",
+    "node-quickstart/es",
+    "node-api/en",
+    "node-api/zh-CN",
+    "node-api/es",
+    "python-quickstart/en",
+    "python-quickstart/zh-CN",
+    "python-quickstart/es",
+    "python-api/en",
+    "python-api/zh-CN",
+    "python-api/es",
+    "python-diagnostics/en",
+    "python-diagnostics/zh-CN",
+    "python-diagnostics/es",
+    "python-migration/en",
+    "python-migration/zh-CN",
+    "python-migration/es",
+    "genanki-migration/en",
+    "genanki-migration/zh-CN",
+    "genanki-migration/es",
+    "blog:your-first-anki-deck/en",
+    "blog:your-first-anki-deck/zh-CN",
+    "blog:stable-ids-and-deck-updates/en",
+    "blog:stable-ids-and-deck-updates/zh-CN"
+  ],
+  "unchangedRecordCount": 100,
+  "onlyHashChanges": [
+    [
+      "blog:your-first-anki-deck",
+      "es",
+      "targetHash"
+    ],
+    [
+      "blog:stable-ids-and-deck-updates",
+      "es",
+      "targetHash"
+    ]
+  ],
+  "allSourceHashesTechnicalDependencyHashesInputFilesAndLanguageScoresUnchanged": true,
+  "unchangedSnapshotFileCount": 160,
+  "noNewVisibleTextOrUntranslatedNarrative": true,
+  "openLinguisticIssues": [],
+  "technicalStatus": "pending",
+  "artifactVerification": "Not performed by this reviewer. Empty source aliases correspond to the right Spanish tasks, but a subsequent real HTML/build check must establish the published artifact anchors. No claim that the original check:site failure has passed.",
+  "noProductEditsOrApprovalImport": true
+}

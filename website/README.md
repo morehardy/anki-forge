@@ -113,7 +113,7 @@ actual results are attached to the artifact afterward. `section-contracts.json`
 maps stable tasks explicitly and `legacy-sections.json` retains historic anchors.
 Translations may change heading depth, order and table presentation when facts
 and task dependencies remain complete. Switching uses a build-validated target
-section inventory without fetching every translated page.
+section inventory without fetching every translated page. Article MDX sources also carry explicit stable alias spans before their semantic markers, as in the existing Chinese articles; markers alone do not emit HTML anchors. `check:site` verifies the actual rendered targets for every language switch.
 
 `CONTENT_REVIEW_MODE=preview` permits isolated editorial rendering. It cannot
 produce a release manifest or authorize deployment. A release uses normal strict

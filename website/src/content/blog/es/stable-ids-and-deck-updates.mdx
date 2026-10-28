@@ -23,12 +23,16 @@ Considera este pequeño cambio:
 
 El significado se ha ampliado. La nota lógica sigue siendo la misma.
 
+<span id="separate-identity-from-content" data-section-alias="separate-identity-from-content"></span>
+
 {/* section: separate-identity-from-content */}
 ## Separar la identidad del contenido
 
 Un ID estable explícito proporciona a la nota una clave duradera. Conserva ese ID cuando edites la nota y elige uno nuevo cuando crees una nota lógica diferente.
 
 La identidad también tiene un contexto de proyecto. Mantén el mismo espacio de nombres del proyecto entre las versiones de un mazo. Un ID de nota por sí solo es únicamente una parte de un flujo de actualización repetible.
+
+<span id="give-the-next-build-a-baseline" data-section-alias="give-the-next-build-a-baseline"></span>
 
 {/* section: give-the-next-build-a-baseline */}
 ## Dar un paquete de referencia a la siguiente generación
@@ -41,12 +45,16 @@ En este fragmento, `project` contiene la nota revisada, `previous` apunta a la v
 
 Mantén el paquete de entrada y el de salida en rutas diferentes. Sobrescribir el paquete de referencia elimina las pruebas que necesitas para entender y verificar la publicación.
 
+<span id="keep-the-original-distributed-package" data-section-alias="keep-the-original-distributed-package"></span>
+
 {/* section: keep-the-original-distributed-package */}
 ## Conservar el paquete original distribuido
 
 Cada paquete generado contiene pruebas completas de identidad y revisión. La siguiente generación valida esas pruebas frente a la base de datos y los recursos multimedia reales antes de reutilizar identidades. Conserva el paquete original que distribuiste; una reexportación desde Anki no sirve como paquete de referencia compatible.
 
 La <a href={sitePath('/es/docs/updates/')}>guía de actualización</a> describe las actualizaciones estrictas, las políticas de riesgo y las limitaciones de importación del cliente.
+
+<span id="inspect-the-build-and-the-import" data-section-alias="inspect-the-build-and-the-import"></span>
 
 {/* section: inspect-the-build-and-the-import */}
 ## Revisar la generación y la importación
