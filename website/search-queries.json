@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "provenanceNote": "AI-authored concise phrase acceptance fixtures derived from reader tasks and language briefs before viewing tested page titles or bodies or running search. Original question-form seeds are retained in docs/plans/evidence/multilingual-common-2026-10-27/search-question-seeds.json for GEO and later agent use. They are not observed user queries, search-volume data or evidence of market demand.",
+  "provenanceNote": "English and Chinese baseline acceptance fixtures were independently authored before their tested titles/bodies and retrieval results were inspected; original question-form seeds remain in the common evidence batch. Spanish cases were authored from the task inventory during content preparation and frozen before any Spanish retrieval run or blind vocabulary proposal inspection. The Spanish query author was separate from the blind vocabulary author, but was not blind to translation planning. All are AI-authored acceptance cases, not observed user queries, measured demand or search-volume data. Expected page sets remain unchanged through retrieval fixes.",
   "locales": {
     "en": [
       {
@@ -876,6 +876,430 @@
         "sourceUrl": null,
         "observedAt": null,
         "expectedBoundary": "该库生成 APKG，不直接修改已安装 Anki 的集合或学习进度。结果可以解释生成包与客户端导入的边界，不能承诺直接编辑复习记录。允许无结果。"
+      }
+    ],
+    "es": [
+      {
+        "id": "es-core-01",
+        "kind": "core",
+        "query": "crear primer mazo Rust",
+        "locale": "es",
+        "intentId": "first-apkg-rust",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-02",
+        "kind": "core",
+        "query": "crear tarjetas Python",
+        "locale": "es",
+        "intentId": "first-apkg-python",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-03",
+        "kind": "core",
+        "query": "generar APKG Node.js",
+        "locale": "es",
+        "intentId": "first-apkg-node",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-04",
+        "kind": "core",
+        "query": "JSON a Anki con imagen y audio",
+        "locale": "es",
+        "intentId": "json-media",
+        "sdk": null,
+        "expectedPageIds": [
+          "json-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-05",
+        "kind": "core",
+        "query": "añadir imágenes y sonido",
+        "locale": "es",
+        "intentId": "media",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-06",
+        "kind": "core",
+        "query": "crear tarjetas Cloze",
+        "locale": "es",
+        "intentId": "cloze",
+        "sdk": null,
+        "expectedPageIds": [
+          "cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-07",
+        "kind": "core",
+        "query": "ocultar etiquetas de una imagen",
+        "locale": "es",
+        "intentId": "occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-08",
+        "kind": "core",
+        "query": "actualizar respuestas sin cambiar identificadores",
+        "locale": "es",
+        "intentId": "answer-update",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-09",
+        "kind": "core",
+        "query": "APKG original o reexportado de Anki",
+        "locale": "es",
+        "intentId": "original-baseline",
+        "sdk": null,
+        "expectedPageIds": [
+          "updates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-10",
+        "kind": "core",
+        "query": "alternativa a genanki",
+        "locale": "es",
+        "intentId": "library-choice",
+        "sdk": null,
+        "expectedPageIds": [
+          "anki-forge-vs-genanki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-11",
+        "kind": "core",
+        "query": "migrar desde genanki",
+        "locale": "es",
+        "intentId": "genanki-migration",
+        "sdk": null,
+        "expectedPageIds": [
+          "genanki-migration"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-core-12",
+        "kind": "core",
+        "query": "error clave de nota duplicada",
+        "locale": "es",
+        "intentId": "diagnostics",
+        "sdk": null,
+        "expectedPageIds": [
+          "troubleshooting",
+          "python-diagnostics"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-01",
+        "kind": "terminology",
+        "query": "espacio de nombres y claves estables",
+        "locale": "es",
+        "intentId": "stable-identity",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-02",
+        "kind": "terminology",
+        "query": "diferencia entre nota tarjeta y mazo",
+        "locale": "es",
+        "intentId": "note-card-deck",
+        "sdk": null,
+        "expectedPageIds": [
+          "concepts"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-03",
+        "kind": "terminology",
+        "query": "BuildOptions Python",
+        "locale": "es",
+        "intentId": "python-api",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-api"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-04",
+        "kind": "terminology",
+        "query": "TypeScript tipos declaraciones",
+        "locale": "es",
+        "intentId": "node-api",
+        "sdk": "node",
+        "expectedPageIds": [
+          "node-api"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-05",
+        "kind": "terminology",
+        "query": "plantillas CSS fuentes",
+        "locale": "es",
+        "intentId": "template-bundles",
+        "sdk": null,
+        "expectedPageIds": [
+          "templates"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-06",
+        "kind": "terminology",
+        "query": "modelos y campos personalizados",
+        "locale": "es",
+        "intentId": "custom-note-types",
+        "sdk": null,
+        "expectedPageIds": [
+          "custom-notetypes"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-07",
+        "kind": "terminology",
+        "query": "versiones plataformas compatibles",
+        "locale": "es",
+        "intentId": "compatibility",
+        "sdk": null,
+        "expectedPageIds": [
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-terminology-08",
+        "kind": "terminology",
+        "query": "CSV Excel a APKG",
+        "locale": "es",
+        "intentId": "csv-recipe",
+        "sdk": null,
+        "expectedPageIds": [
+          "csv-to-anki"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-variant-01",
+        "kind": "variant",
+        "query": "instalacion de python",
+        "locale": "es",
+        "intentId": "accent-install",
+        "sdk": "python",
+        "expectedPageIds": [
+          "python-quickstart"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-variant-02",
+        "kind": "variant",
+        "query": "oclusion imagenes",
+        "locale": "es",
+        "intentId": "accent-occlusion",
+        "sdk": null,
+        "expectedPageIds": [
+          "image-occlusion"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-variant-03",
+        "kind": "variant",
+        "query": "flashcards desde apuntes con IA",
+        "locale": "es",
+        "intentId": "ai-drafting",
+        "sdk": null,
+        "expectedPageIds": [
+          "ai-anki-cards"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-variant-04",
+        "kind": "variant",
+        "query": "exportar mazo Rust código",
+        "locale": "es",
+        "intentId": "export-synonym",
+        "sdk": "rust",
+        "expectedPageIds": [
+          "quickstart",
+          "rust-guide"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-variant-05",
+        "kind": "variant",
+        "query": "audio mp3 wav en tarjetas",
+        "locale": "es",
+        "intentId": "audio-formats",
+        "sdk": null,
+        "expectedPageIds": [
+          "media"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null
+      },
+      {
+        "id": "es-negative-01",
+        "kind": "negative",
+        "query": "zxqvplmnrrt",
+        "locale": "es",
+        "intentId": "nonsense",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "No results for unrelated or meaningless input."
+      },
+      {
+        "id": "es-negative-02",
+        "kind": "negative",
+        "query": "998877665544332211",
+        "locale": "es",
+        "intentId": "numeric",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "No results for unrelated or meaningless input."
+      },
+      {
+        "id": "es-negative-03",
+        "kind": "negative",
+        "query": "desfragmentar fotones cuánticos",
+        "locale": "es",
+        "intentId": "unrelated",
+        "sdk": null,
+        "expectedPageIds": [],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "No results for unrelated or meaningless input."
+      },
+      {
+        "id": "es-negative-04",
+        "kind": "negative",
+        "query": "usar Node en navegador sin servidor",
+        "locale": "es",
+        "intentId": "browser-runtime",
+        "sdk": "node",
+        "expectedPageIds": [
+          "compatibility"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "No results, or a matching page explicitly describing the verified runtime boundary; never a promise of unsupported browser/Alpine operation."
+      },
+      {
+        "id": "es-negative-05",
+        "kind": "negative",
+        "query": "instalar Node en Alpine musl",
+        "locale": "es",
+        "intentId": "unverified-platform",
+        "sdk": "node",
+        "expectedPageIds": [
+          "compatibility",
+          "troubleshooting"
+        ],
+        "provenance": "ai-seed",
+        "sourceUrl": null,
+        "observedAt": null,
+        "expectedBoundary": "No results, or a matching page explicitly describing the verified runtime boundary; never a promise of unsupported browser/Alpine operation."
       }
     ]
   }

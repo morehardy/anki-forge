@@ -1,0 +1,21 @@
+en: core 12/12, positives 25/25, negatives 5/5
+zh-CN: core 12/12, positives 24/25, negatives 5/5
+  FAIL zh-CN-variant-03: 示意图 遮名称 复习题 → media, concepts, custom-notetypes
+es: core 11/12, positives 24/25, negatives 4/5
+  FAIL es-core-02: crear tarjetas Python → python-api, home, ai-anki-cards
+  FAIL es-negative-04: usar Node en navegador sin servidor → node-quickstart, node-api, home
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Independent local-language search fixtures did not meet the release threshold; inspect search-results.json
+    at file:///Users/hp/.codex/worktrees/multilingual-spanish/anki-forge/website/scripts/check-search.mjs:89:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

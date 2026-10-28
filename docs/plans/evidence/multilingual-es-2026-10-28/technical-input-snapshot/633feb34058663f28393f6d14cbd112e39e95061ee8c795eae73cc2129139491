@@ -1,0 +1,104 @@
+# API de Rust
+
+Los valores habituales están disponibles en la raíz del crate: `Project`, `Note`, `NoteType`, `Field`, `Template`, `Content`, `Media`, `BuildOptions` y `BuildOutput`. Los módulos públicos de dominio son `note`, `schema`, `media`, `build`, `update` y `diagnostics`. Las herramientas del repositorio forman una interfaz separada, habilitada mediante features; las aplicaciones consumidoras no las necesitan.
+
+<!-- section: authoring -->
+## Crear contenido
+
+| Entrada | Responsabilidad |
+| --- | --- |
+| `Project::new(namespace)` | Validar un espacio de nombres estable para la publicación |
+| `project.default_deck(name)` | Definir el destino predeterminado |
+| `project.add(key, note)` | Recopilar de forma atómica la nota, el modelo y los recursos multimedia |
+| `project.add_asset(media)` | Incluir un recurso explícito para HTML, CSS o scripts sin procesar |
+| `Note::basic(front, back)` / `Note::cloze(text)` | Crear una nota que conserva su modelo integrado |
+| `model.note().field(key, content)` | Crear una nota personalizada que conserva su modelo inmutable |
+| `note.deck(name).tag(tag)` / `.tags(iterable)` | Configurar una nota antes de añadirla |
+| `NoteType::builder(key)...build()` | Validar y completar un modelo inmutable |
+| `NoteType::from_bundle(path)` | Cargar un modelo y los recursos que gestiona desde bundle-v2 |
+
+`Field::new(key).name(display)` y `Template::new(key).name(display)` separan la identidad de la presentación. Las plantillas se vinculan a las claves de los campos, también en filtros, secciones condicionales y plantillas del explorador. `Field::required()` comprueba que el contenido no esté vacío; `Field::sort()` elige el campo de ordenación. `schema::GenerationRule::all` y `any` reciben claves de campos. `builder.cloze_field(key)` declara un modelo Cloze.
+
+`schema::FieldKey` y `TemplateKey` son tipos distintos. Se pueden combinar literales de cadena, cadenas propias o prestadas, `Cow<str>` y claves prestadas o propias. Las conversiones conservan el valor original; la validación de claves se realiza al completar el esquema. Una clave de plantilla no se acepta implícitamente como clave de campo.
+
+<!-- section: content-and-media -->
+## Contenido y recursos multimedia
+
+Todas las cadenas ordinarias se convierten en `Content::text`. El HTML requiere `Content::html`. `Content::sequence` combina valores semánticos hasta que se renderizan durante la generación. `Media::file(path)` y `Media::bytes(bytes, mime)` mantienen la propiedad de sus instantáneas; sus variantes `with_limits` aplican un límite de `media::MediaLimits { max_bytes }` antes de leer. El valor predeterminado es 256 MiB por recurso. `with_export_name(name)` devuelve un valor renombrado que comparte la misma instantánea; los clones existentes conservan sus nombres.
+
+`media.image()` y `media.sound()` conservan las dependencias de recursos. Los nombres de archivo fijos deben ser portables y no entrar en conflicto. Los recursos explícitos se incluyen aunque no haya una referencia visible estáticamente. Consulta [recursos multimedia](/docs/media/).
+
+`Note::image_occlusion(media)` devuelve `note::ImageOcclusionBuilder`. `.mask(Mask::rect(key, x, y, width, height)).mode(mode).build()` valida las dimensiones de la imagen decodificada, los rectángulos y las claves estables únicas. Se admiten tanto `HideAllGuessOne` como `HideOneGuessOne`. Consulta [oclusión de imágenes](/docs/image-occlusion/).
+
+<!-- section: build-options -->
+## Opciones de generación
+
+`project.build(BuildOptions::to(path))` publica un APKG persistente. `BuildOptions::temporary()` devuelve una salida temporal gestionada por su propietario. Ambas opciones aceptan `.update_from(previous_apkg)`, `.inspect_limits(limits)` y `.update_policy(policy)`. Una política sin paquete de referencia es un error de configuración. El orden de los métodos de configuración no altera esta regla.
+
+`build::InspectLimits::default()` proporciona límites finitos; sus campos públicos pueden modificarse. Todos los valores son `u64`; cero significa cero, no ausencia de límite.
+
+| Campo | Valor predeterminado |
+| --- | --- |
+| `max_archive_bytes` | 2 GiB |
+| `max_entries` | 100 000 |
+| `max_central_directory_bytes` | 16 MiB |
+| `max_zip_entry_bytes` / `max_zip_total_bytes` | 1 GiB / 4 GiB |
+| `max_meta_bytes` / `max_media_map_bytes` | 64 KiB / 16 MiB |
+| `max_identity_bytes` | 64 MiB |
+| `max_collection_bytes` / `max_media_bytes` | 512 MiB / 256 MiB |
+| `max_decoded_total_bytes` / `max_zstd_window_bytes` | 4 GiB / 64 MiB |
+
+Los límites se aplican por separado a la inspección del paquete de referencia y de la versión candidata. Si una comprobación falla, informa del recurso, el límite, la cantidad observada y, cuando está disponible, la entrada relacionada. Elevar un límite es una decisión explícita de quien llama a la API; la importación multimedia tiene su propio límite anterior.
+
+<!-- section: build-compare-and-output -->
+## Generación, comparación y salida
+
+`BuildOutput::artifact()` devuelve una referencia a `build::ApkgArtifact` que mantiene la propiedad del archivo. `BuildOutput::report()` devuelve observaciones. Los clones del objeto que gestiona el archivo comparten la vida útil del archivo temporal; `persist_to` devuelve un propietario persistente o un `build::PersistError` con datos sobre la publicación y el error de E/S subyacente.
+
+`project.compare(update::CompareOptions::against(path))` devuelve un `ComparisonReport` completado aunque los hallazgos de alto riesgo bloqueen su política. Expone `findings()`, `highest_risk()`, `policy()`, `diagnostics()` y `snapshot()`. `UpdatePolicy::default()` bloquea High/Critical; `.fail_on(level)` modifica el umbral y `.allow(RiskCode)` acepta una categoría de riesgo registrada completa. No puede aceptar pruebas de identidad ausentes o dañadas ni otros errores que impiden continuar.
+
+<!-- section: reports-and-errors -->
+## Informes y errores
+
+`BuildReport::snapshot()` devuelve `build::json::ReportSnapshot`: observaciones sin resultado de éxito o fallo ni propiedad de archivos. `BuildOutput::snapshot()` y `BuildError::snapshot()` devuelven `build::json::BuildSnapshot`, con el resultado real y el informe. `update::json::ComparisonSnapshot` separa los hallazgos originales de la evaluación de la política. Todos los DTO de instantáneas implementan `serde::Serialize` y no mantienen vivos archivos. No se necesita ningún trait de extensión.
+
+Los campos de ruta de las instantáneas conservan sus valores nativos `PathBuf` en Rust. Su representación JSON es una cadena si el Unicode es válido o una codificación nativa sin pérdida: `{"encoding":"unix_bytes","bytes":[...]}` para nombres Unix que no son UTF-8, y `{"encoding":"windows_wide","units":[...]}` para nombres Windows con sustitutos UTF-16 no emparejados. Esto se aplica tanto a las rutas de archivos de salida correctos como a las rutas de publicación de los fallos. Para restaurar una ruta JSON en su plataforma original, deserialízala como `build::json::PathSnapshot` y llama a `into_path_buf()`; las rutas codificadas de otra plataforma se rechazan. `PathSnapshot::new(path)` proporciona la misma representación si serializas por tu cuenta la ruta nativa de un error.
+
+Los errores se encuentran junto a sus operaciones: errores de esquema y paquetes de plantillas en `schema`, errores al añadir notas y de oclusión de imágenes en `note`, errores multimedia en `media`, errores de generación y persistencia en `build`, y errores de comparación y políticas en `update`. Todos proporcionan `kind()` y `code()`, implementan `std::error::Error + Send + Sync + 'static` y conservan los errores de origen reales.
+
+<!-- section: addition-context -->
+## Contexto al añadir notas
+
+Si una operación de adición falla, el proyecto queda sin cambios. El contexto estructurado registra las claves originales de nota y modelo y el destino, con detalles opcionales sobre el conflicto o el uso multimedia. Rust expone `note::{AddContext, AddTarget, AddDetail}` mediante `AddError::context()` / `detail()`; los SDK exponen `AddError.details` con contexto y detalles tipados. Los campos de Node usan camelCase y son inmutables en todos sus niveles; Python usa TypedDicts con snake_case. Las etiquetas conservan su índice de inserción; las ubicaciones de los campos conservan los índices originales de la secuencia (`null`/`None` para el campo, `[]` para su raíz) y rangos opcionales de bytes UTF-8. Los errores de mazo predeterminado durante la generación no tienen claves de nota o modelo y siguen disponibles en la cadena de errores de origen.
+
+Las imágenes tipadas requieren MIME image/* al añadirlas; las referencias de sonido aceptan audio/* o video/*. Otras categorías provocan `NOTE.MEDIA_USAGE_INVALID`. Los constructores siguen siendo infalibles; los recursos explícitos y el HTML sin procesar no cambian. La comprobación utiliza el MIME conservado al importar y no certifica la reproducción. La validación independiente de MIME y extensión durante la generación sigue aplicándose. Consulta [el diseño](https://github.com/morehardy/anki-forge/blob/main/docs/plans/2026-09-28-rust-api-validation-and-errors-design.md) para ver la tabla completa de destinos y detalles.
+
+<!-- section: review-once-publish-once -->
+## Revisa una vez y publica una vez
+
+La API de publicación preparada está incluida en el paquete público `0.3.1`.
+
+```rust,no_run
+use ankiforge::{BuildOptions, Project};
+# fn publish(project: &Project) -> Result<(), Box<dyn std::error::Error>> {
+let prepared = project.prepare_publication(
+    BuildOptions::to("next.apkg").update_from("previous.apkg"),
+)?;
+let report = prepared.report().clone(); // observations; owns no file
+if report.comparison().is_some_and(|c| !c.policy().allows_publication()) {
+    drop(prepared); // deletes the unpublished candidate; reprepare with a new policy
+    return Ok(());
+}
+match prepared.publish() { // consumes the owner on every outcome
+    Ok(output) => println!("Published {}", output.artifact().path().display()),
+    Err(error) => {
+        // Replacement may have succeeded even if durability confirmation failed.
+        eprintln!("{:?}", error.publications());
+        return Err(error.into());
+    }
+}
+# Ok(())
+# }
+```
+
+La preparación realiza la inspección completa con límites y la comparación. No se publica ningún destino hasta llamar a `publish`, que utiliza la misma versión candidata privada y vuelve a comprobar los alias del paquete de referencia. Las rutas relativas se fijan al invocar la preparación. Las modificaciones del proyecto no pueden cambiar la versión candidata. La duración del informe excluye el tiempo dedicado a la revisión. Liberar un propietario no publicado lo limpia; la salida temporal publicada sigue la regla habitual de limpieza al liberarse el último propietario del archivo. No se puede restaurar desde JSON ni reintentar con un propietario ya consumido. Las compilaciones nativas omiten el manifiesto de preparación no utilizado, pero conservan las pruebas integradas de identidad y la validación multimedia. Las herramientas internas de preparación siguen recibiendo su manifiesto completo y su huella.

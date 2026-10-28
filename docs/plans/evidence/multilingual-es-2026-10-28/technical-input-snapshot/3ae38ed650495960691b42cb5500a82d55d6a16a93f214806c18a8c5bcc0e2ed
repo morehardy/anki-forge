@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "locales": {
+    "es": {
+      "docs": {
+        "title": "Crea mazos de Anki con código",
+        "description": "Elige un lenguaje, crea tu primer mazo de Anki y aprende a añadir imágenes, audio, plantillas y actualizaciones reproducibles."
+      },
+      "languages": {
+        "title": "Elige tu lenguaje de programación",
+        "description": "Instala el paquete publicado de Rust, Node.js o Python y exporta tu primer mazo de Anki."
+      },
+      "quickstart": {
+        "title": "Genera un APKG de Anki con Rust",
+        "description": "Instala el paquete de Rust, crea una tarjeta de vocabulario y exporta un archivo APKG persistente con un programa completo."
+      },
+      "json-to-anki": {
+        "title": "Genera y actualiza mazos de Anki desde JSON",
+        "description": "Lee JSON con Rust, Python o TypeScript, incluye imágenes y audio y revisa una actualización de APKG que solo cambia una respuesta."
+      },
+      "csv-to-anki": {
+        "title": "CSV a Anki: crea tarjetas con Python",
+        "description": "Convierte una hoja de vocabulario CSV UTF-8 en un APKG con un script completo de Python, ID de nota estables y comprobaciones de importación."
+      },
+      "ai-anki-cards": {
+        "title": "Crea tarjetas de Anki con ayuda de IA",
+        "description": "Prepara tarjetas a partir de tus apuntes con un asistente de IA, revisa las respuestas y exporta un APKG con Anki Forge mediante CSV o código."
+      },
+      "anki-forge-vs-genanki": {
+        "title": "Anki Forge frente a genanki: cuál elegir",
+        "description": "Compara la creación de APKG, los entornos de ejecución, la revisión de actualizaciones y los costes de migración de Anki Forge y genanki."
+      },
+      "development": {
+        "title": "Compila los SDK desde el código fuente",
+        "description": "Compila los SDK y ejecuta los ejemplos desde el repositorio. Distingue estas compilaciones de los paquetes publicados."
+      },
+      "installation": {
+        "title": "Integra Anki Forge en tu aplicación de Rust",
+        "description": "Instala el crate publicado, configura las dependencias de Cargo y elige cómo añadir recursos multimedia y actualizaciones."
+      },
+      "node-quickstart": {
+        "title": "Genera un APKG de Anki con Node.js",
+        "description": "Instala el paquete publicado de Node.js y exporta tu primer mazo con un programa completo. Continúa con TypeScript, imágenes y actualizaciones."
+      },
+      "python-quickstart": {
+        "title": "Genera un APKG de Anki con Python",
+        "description": "Instala el wheel publicado de Python y crea tu primer archivo APKG de Anki con un programa completo y claves de nota estables."
+      },
+      "concepts": {
+        "title": "Conceptos fundamentales de Anki Forge",
+        "description": "Entiende proyectos, notas, mazos, claves estables, recursos multimedia y la identidad de las actualizaciones."
+      },
+      "cards": {
+        "title": "Crea tarjetas Basic y Cloze de Anki",
+        "description": "Genera dos notas y tres tarjetas con un ejemplo completo de Rust, y conserva la identidad de tus tarjetas."
+      },
+      "custom-notetypes": {
+        "title": "Crea tipos de nota personalizados para Anki",
+        "description": "Define campos, plantillas y reglas de generación con claves estables y modelos inmutables reutilizables."
+      },
+      "media": {
+        "title": "Añade imágenes y audio a tus tarjetas Anki",
+        "description": "Importa recursos multimedia, combina contenido tipado y controla los nombres, tipos MIME y límites de importación."
+      },
+      "image-occlusion": {
+        "title": "Genera tarjetas Anki con oclusión de imágenes",
+        "description": "Crea preguntas sobre imágenes con máscaras rectangulares y conserva su identidad al actualizar el mazo."
+      },
+      "templates": {
+        "title": "Reutiliza plantillas de Anki, CSS y recursos multimedia",
+        "description": "Carga paquetes de plantillas normales o Cloze con campos, CSS y recursos explícitos validados antes de exportar."
+      },
+      "updates": {
+        "title": "Actualiza mazos de Anki con ID de nota estables",
+        "description": "Compara versiones y genera actualizaciones desde un APKG original de distribución con pruebas de identidad verificadas."
+      },
+      "build-guarantees": {
+        "title": "Garantías de generación y de los archivos APKG",
+        "description": "Comprende la vida útil de los archivos, los límites de inspección y la publicación de una versión candidata revisada."
+      },
+      "troubleshooting": {
+        "title": "Soluciona errores de Anki Forge",
+        "description": "Diagnostica errores de instalación, notas, recursos multimedia, plantillas, identidad y publicación de archivos."
+      },
+      "compatibility": {
+        "title": "Compatibilidad de Anki Forge y entornos verificados",
+        "description": "Consulta los paquetes públicos, los entornos probados y las condiciones de importación y reproducción en Anki."
+      },
+      "rust-guide": {
+        "title": "Guía de desarrollo con Rust",
+        "description": "Crea proyectos, valida notas, gestiona recursos multimedia y actualiza mazos con la API pública de Rust."
+      },
+      "api": {
+        "title": "Resumen de la API pública",
+        "description": "Encuentra las API de Rust, Python y Node para crear notas, añadir recursos multimedia, diagnosticar errores y revisar actualizaciones."
+      },
+      "rust-api": {
+        "title": "Referencia de la API de Rust",
+        "description": "Consulta los métodos de creación de contenido, las opciones de generación, los informes y los errores públicos de Rust."
+      },
+      "node-api": {
+        "title": "API de Node y TypeScript",
+        "description": "Métodos públicos de Node, operaciones asíncronas, opciones de generación, gestión de archivos de salida e informes."
+      },
+      "python-api": {
+        "title": "API de Python",
+        "description": "Project, recursos multimedia, opciones de generación, informes y gestión de la vida útil de los archivos temporales."
+      },
+      "python-diagnostics": {
+        "title": "Diagnósticos de Python",
+        "description": "Interpreta los errores nativos, los informes de generación y las pruebas y políticas de actualización de Anki Forge."
+      },
+      "python-migration": {
+        "title": "Transición a la nueva API de Python",
+        "description": "Adapta tu código al SDK actual de Python y conoce los límites de compatibilidad con la API anterior."
+      },
+      "genanki-migration": {
+        "title": "Pasar de genanki a Anki Forge",
+        "description": "Adapta notas, modelos, plantillas y recursos multimedia de genanki al modelo de Anki Forge y sus claves estables."
+      }
+    }
+  }
+}

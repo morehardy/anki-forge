@@ -1,9 +1,10 @@
 import en from './en.json' with { type: 'json' };
 import zh from './zh-CN.json' with { type: 'json' };
+import es from './es.json' with { type: 'json' };
 import { messageParameters, translatorFor } from './format-message.mjs';
 import { clientMessageKeys } from './client-messages.mjs';
 
-export const catalogs = { en, 'zh-CN': zh };
+export const catalogs = { en, 'zh-CN': zh, es };
 function forms(message, locale, key) {
   if (typeof message === 'string' && message.trim()) return [message];
   if (!message || message.type !== 'plural' || typeof message.variable !== 'string' || !message.forms) throw new Error(`${locale}: empty or invalid message ${key}`);

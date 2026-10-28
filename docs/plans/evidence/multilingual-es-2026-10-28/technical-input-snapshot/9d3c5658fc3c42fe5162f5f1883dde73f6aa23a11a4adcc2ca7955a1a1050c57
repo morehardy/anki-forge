@@ -1,0 +1,48 @@
+---
+import { resolvePage, pagePath } from '../../site-model.mjs';
+import { localeIds, locales } from '../../locale-model.mjs';
+import { sitePath } from '../lib/site';
+import sections from '../generated/sections.json';
+const resolved = resolvePage(Astro.url.pathname, import.meta.env.BASE_URL);
+const page = resolved?.page;
+const current = resolved?.locale ?? 'en';
+const sectionMaps = sections as Record<string, Record<string, Record<string, string>>>;
+const sourceMap = page ? sectionMaps[page.id]?.[current] ?? {} : {};
+const targets = localeIds.filter(locale => locale !== current).map(locale => ({
+  locale, label: locales[locale].label,
+  href: page ? sitePath(pagePath(page.id, locale)) : '',
+  mapping: sourceMap,
+  targetIds: Object.entries(page ? sectionMaps[page.id]?.[locale] ?? {} : {}).flat(),
+}));
+const common = page && !['docs', 'article'].includes(page.type);
+---
+{page && (targets.length === 1 ? targets.map(target => <a class="language-switch" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a>) : <details class="language-menu">
+  <summary lang={current}>{locales[current].label}</summary>
+  <ul>{targets.map(target => <li><a class="language-switch" data-language-switch data-section-map={JSON.stringify(target.mapping)} data-section-ids={JSON.stringify(target.targetIds)} data-common-sections={common || undefined} href={target.href} hreflang={target.locale} lang={target.locale}>{target.label}</a></li>)}</ul>
+</details>)}
+<style>
+  .language-switch { white-space: nowrap; font-size: 0.875rem; }
+  .language-menu { position: relative; font-size: 0.875rem; }
+  .language-menu summary { cursor: pointer; white-space: nowrap; }
+  .language-menu ul { position: absolute; top: 100%; right: 0; z-index: 20; min-width: max-content; margin: 8px 0 0; padding: 8px 12px; list-style: none; border: 1px solid var(--af-line); border-radius: 8px; background: var(--af-paper); }
+  .language-menu li + li { margin-top: 8px; }
+</style>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach(link => {
+    const target = new URL(link.href);
+    const mapping: Record<string, string> = JSON.parse(link.dataset.sectionMap || '{}');
+    const targetIds = new Set<string>(JSON.parse(link.dataset.sectionIds || '[]'));
+    function update() {
+      target.search = location.search;
+      let id = '';
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed fragments. */ }
+      const mapped = mapping[id] ?? id;
+      const shared = link.hasAttribute('data-common-sections') && !!document.getElementById(id);
+      target.hash = mapped !== '_top' && (targetIds.has(mapped) || shared) ? mapped : '';
+      link.href = target.href;
+    }
+    // Preparation validates the section inventory; switching does not fetch every translation.
+    update();
+    window.addEventListener('hashchange', update);
+  });
+</script>

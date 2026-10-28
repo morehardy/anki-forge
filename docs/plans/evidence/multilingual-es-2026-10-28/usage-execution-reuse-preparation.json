@@ -1,0 +1,436 @@
+{
+  "schemaVersion": 1,
+  "kind": "execution-reuse-audit",
+  "scope": "Pre-artifact SDK execution equivalence only; no release or localized task approval.",
+  "reviewerType": "ai",
+  "reviewerRun": "/root/final_standards_review/independent-es-reuse-preparation-2026-10-28",
+  "observedAt": "2026-10-28T09:21:46.568Z",
+  "reuseEligible": true,
+  "sdkExecutionsRerun": false,
+  "browserTasksApproved": false,
+  "originalExecutionSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/executions/execution-inputs.json",
+    "sha256": "1b3af9565cc0896d99214acc1f2bf31ffb191eacc2e7782ed1bd6b78d81a7449",
+    "count": 20
+  },
+  "rawSnapshotComparison": {
+    "unchanged": 19,
+    "changed": 1,
+    "entries": [
+      {
+        "path": "Cargo.lock",
+        "originalSha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8",
+        "currentSha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8",
+        "identical": true
+      },
+      {
+        "path": "Cargo.toml",
+        "originalSha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2",
+        "currentSha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2",
+        "identical": true
+      },
+      {
+        "path": "anki_forge/examples/json_to_anki.rs",
+        "originalSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+        "currentSha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287",
+        "identical": true
+      },
+      {
+        "path": "anki_forge/examples/target_api_basic.rs",
+        "originalSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+        "currentSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+        "identical": true
+      },
+      {
+        "path": "bindings/node/examples/json_to_anki.mts",
+        "originalSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+        "currentSha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a",
+        "identical": true
+      },
+      {
+        "path": "bindings/node/examples/quickstart.mjs",
+        "originalSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+        "currentSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+        "identical": true
+      },
+      {
+        "path": "bindings/node/package.json",
+        "originalSha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4",
+        "currentSha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4",
+        "identical": true
+      },
+      {
+        "path": "bindings/python/examples/json_to_anki.py",
+        "originalSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+        "currentSha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962",
+        "identical": true
+      },
+      {
+        "path": "bindings/python/examples/quickstart.py",
+        "originalSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+        "currentSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+        "identical": true
+      },
+      {
+        "path": "bindings/python/pyproject.toml",
+        "originalSha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84",
+        "currentSha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84",
+        "identical": true
+      },
+      {
+        "path": "docs/ai-quickstart.json",
+        "originalSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+        "currentSha256": "e7b9a6c4751d7551a1cda2f2a4eacda14c5914b9dd2b0b85305f2d5678951588",
+        "identical": false
+      },
+      {
+        "path": "docs/recipes/json-to-anki/cell.png",
+        "originalSha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "currentSha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+        "identical": true
+      },
+      {
+        "path": "docs/recipes/json-to-anki/tone.wav",
+        "originalSha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+        "currentSha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+        "identical": true
+      },
+      {
+        "path": "docs/recipes/json-to-anki/v1.json",
+        "originalSha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+        "currentSha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+        "identical": true
+      },
+      {
+        "path": "docs/recipes/json-to-anki/v2.json",
+        "originalSha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+        "currentSha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+        "identical": true
+      },
+      {
+        "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+        "originalSha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3",
+        "currentSha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3",
+        "identical": true
+      },
+      {
+        "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+        "originalSha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11",
+        "currentSha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11",
+        "identical": true
+      },
+      {
+        "path": "scripts/packaged_consumer/src/inspection.rs",
+        "originalSha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82",
+        "currentSha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82",
+        "identical": true
+      },
+      {
+        "path": "website/scripts/verify-doc-examples.mjs",
+        "originalSha256": "70af42b9fbf42480c36a54cf1993e9e9db1fbe1a822a0a670146f0095f7658c2",
+        "currentSha256": "70af42b9fbf42480c36a54cf1993e9e9db1fbe1a822a0a670146f0095f7658c2",
+        "identical": true
+      },
+      {
+        "path": "website/scripts/verify-public-recipe.mjs",
+        "originalSha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739",
+        "currentSha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739",
+        "identical": true
+      }
+    ]
+  },
+  "controlJson": {
+    "sourcePath": "docs/ai-quickstart.json",
+    "originalArchive": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-input-snapshot/c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+      "sha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5"
+    },
+    "originalSha256": "c5a14089ea49b3aaadd6a6966e34237c737afa853fe0fcebcae5854a954606c5",
+    "currentSha256": "e7b9a6c4751d7551a1cda2f2a4eacda14c5914b9dd2b0b85305f2d5678951588",
+    "rawBytesIdentical": false,
+    "changedTopLevelFields": [
+      "prompts",
+      "requestPlaceholders"
+    ],
+    "addedPromptLocales": [
+      "es"
+    ],
+    "changedExistingPromptLocales": [],
+    "executionRelevantProjection": {
+      "original": {
+        "publicVersion": "0.3.1",
+        "languages": {
+          "rust": {
+            "label": "Rust",
+            "runtime": "Rust 1.92+",
+            "install": "cargo add ankiforge@0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/quickstart/"
+          },
+          "node": {
+            "label": "Node / TypeScript",
+            "runtime": "Node.js 22.13+",
+            "install": "npm install --include=optional ankiforge@0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/node-quickstart/"
+          },
+          "python": {
+            "label": "Python",
+            "runtime": "CPython 3.11+",
+            "install": "python -m pip install ankiforge==0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/python-quickstart/"
+          }
+        },
+        "sitePromptUrl": "https://ankiforge.dev/#ai-quickstart"
+      },
+      "current": {
+        "publicVersion": "0.3.1",
+        "languages": {
+          "rust": {
+            "label": "Rust",
+            "runtime": "Rust 1.92+",
+            "install": "cargo add ankiforge@0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/quickstart/"
+          },
+          "node": {
+            "label": "Node / TypeScript",
+            "runtime": "Node.js 22.13+",
+            "install": "npm install --include=optional ankiforge@0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/node-quickstart/"
+          },
+          "python": {
+            "label": "Python",
+            "runtime": "CPython 3.11+",
+            "install": "python -m pip install ankiforge==0.3.1",
+            "quickstart": "https://ankiforge.dev/docs/python-quickstart/"
+          }
+        },
+        "sitePromptUrl": "https://ankiforge.dev/#ai-quickstart"
+      },
+      "equivalent": true
+    },
+    "conclusion": "The complete control JSON changed and is not an unchanged execution dependency. Only publicVersion, SDK language installation/runtime/entry metadata, and sitePromptUrl are relevant to these retained SDK executions; those projections were compared independently with the original archived bytes."
+  },
+  "englishInstallationInputs": [
+    {
+      "path": "docs/installation.md",
+      "originalCommit": "fff473910afea60b6d653ca525cd4dc6ef07c289",
+      "originalSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "currentSha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81",
+      "identical": true
+    },
+    {
+      "path": "docs/node/quick-start.md",
+      "originalCommit": "fff473910afea60b6d653ca525cd4dc6ef07c289",
+      "originalSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "currentSha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8",
+      "identical": true
+    },
+    {
+      "path": "docs/python/quick-start.md",
+      "originalCommit": "fff473910afea60b6d653ca525cd4dc6ef07c289",
+      "originalSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "currentSha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55",
+      "identical": true
+    },
+    {
+      "path": "website/src/content/docs/docs/quickstart.mdx",
+      "originalCommit": "fff473910afea60b6d653ca525cd4dc6ef07c289",
+      "originalSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "currentSha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6",
+      "identical": true
+    },
+    {
+      "path": "docs/json-to-anki.md",
+      "originalCommit": "fff473910afea60b6d653ca525cd4dc6ef07c289",
+      "originalSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "currentSha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021",
+      "identical": true
+    }
+  ],
+  "basicPrograms": [
+    {
+      "source": "anki_forge/examples/target_api_basic.rs",
+      "actualExecutedCopy": "docs/plans/evidence/multilingual-common-2026-10-27/executions/basic/rust/main.rs",
+      "sourceSha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "actualExecutedCopySha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866",
+      "identical": true
+    },
+    {
+      "source": "bindings/python/examples/quickstart.py",
+      "actualExecutedCopy": "docs/plans/evidence/multilingual-common-2026-10-27/executions/basic/python/main.py",
+      "sourceSha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "actualExecutedCopySha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714",
+      "identical": true
+    },
+    {
+      "source": "bindings/node/examples/quickstart.mjs",
+      "actualExecutedCopy": "docs/plans/evidence/multilingual-common-2026-10-27/executions/basic/node/main.mjs",
+      "sourceSha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "actualExecutedCopySha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e",
+      "identical": true
+    }
+  ],
+  "sdkImplementationInventory": {
+    "path": "docs/plans/evidence/multilingual-es-2026-10-28/technical-sdk-dependency-identity.json",
+    "sha256": "4fe5e34834ae49dd54ccc9ed58fc93ef934a0caf69c17d8a48357ab457651df7",
+    "compared": 185,
+    "identical": 185,
+    "changed": []
+  },
+  "originalManifestReference": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-28-stable-rebuild/root-origin-manifest.json",
+    "sha256": "104f6f429d6b42ea2425d85f942d2ed8339e81b1a3b7608af8d0503deaa59eea",
+    "commit": "fff473910afea60b6d653ca525cd4dc6ef07c289"
+  },
+  "originalInstallations": [
+    {
+      "sdk": "rust",
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/executions/public-json/rust/installation.json",
+      "sha256": "6319370840be24beae953c3fc3e233ac75a5cded0e6a8e542aeb2b8ca9507c61",
+      "checkedAt": "2026-10-28T06:57:38.062Z",
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "actualPublicVersion": "0.3.1",
+      "matchesCurrentPublicVersion": true
+    },
+    {
+      "sdk": "python",
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/executions/public-json/python/installation.json",
+      "sha256": "75fa3e3c52e2946612015d8b6ca71d6ea95c7910acaa17b96eb5b2972a137abd",
+      "checkedAt": "2026-10-28T06:57:44.013Z",
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "actualPublicVersion": "0.3.1",
+      "matchesCurrentPublicVersion": true
+    },
+    {
+      "sdk": "node",
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/executions/public-json/node/installation.json",
+      "sha256": "299af1f88c963156fd10b58bf068852b216dde7d3262bda6dc8ec850d88404fa",
+      "checkedAt": "2026-10-28T06:59:14.792Z",
+      "platform": "darwin",
+      "arch": "arm64",
+      "node": "v24.19.0",
+      "actualPublicVersion": "0.3.1",
+      "matchesCurrentPublicVersion": true
+    }
+  ],
+  "currentObservationRuntime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "futureDependencyBindingPolicy": {
+    "unchangedVersionInstallSources": [
+      {
+        "path": "docs/installation.md",
+        "sha256": "ffb4f6689ad566aedbff3c338437ad13a20b75f689ab6be293bfd5e73ecfbe81"
+      },
+      {
+        "path": "docs/node/quick-start.md",
+        "sha256": "1538750a51685097fd4dad38f8612b4bcb717ca44bbac76ccadaca30ce72a3e8"
+      },
+      {
+        "path": "docs/python/quick-start.md",
+        "sha256": "482dc6d2277c0ff5d8574dc0a88dd1cb301dcfff733ae6a97f1367a7d99c7f55"
+      },
+      {
+        "path": "website/src/content/docs/docs/quickstart.mdx",
+        "sha256": "678a5696fb13166a8f5a3232d737efac8da5169bdbb55c148f9807d235a02cd6"
+      },
+      {
+        "path": "docs/json-to-anki.md",
+        "sha256": "4e3dda0107dbe9de5806f0503eed57583961f884b0c519b076b17f257616a021"
+      }
+    ],
+    "unchangedExecutionInputs": [
+      {
+        "path": "Cargo.lock",
+        "sha256": "56df9a817622b976893fede63750171b09b2472c6c4d38cecf0862888c0566e8"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "76bc7f9681854a30882ff2df23894a60f5d81552fb645447bab2e6b9066a5ad2"
+      },
+      {
+        "path": "anki_forge/examples/json_to_anki.rs",
+        "sha256": "5ae5e7d6c7d14f17ed88321c0c288c79b8d0c52c85b2e4a721927eb2da7ce287"
+      },
+      {
+        "path": "anki_forge/examples/target_api_basic.rs",
+        "sha256": "c915295c5a0ff998a30b6a2744c6091b87b87914c02f30d0075bbfd227084866"
+      },
+      {
+        "path": "bindings/node/examples/json_to_anki.mts",
+        "sha256": "e136083209667d810089835a1ffd23ea1265c0b09afd1e598dd69d34e5ecd66a"
+      },
+      {
+        "path": "bindings/node/examples/quickstart.mjs",
+        "sha256": "b5aa70d2376c503254f0b4573601e7319b0a05435599107df6b2beaeaeee380e"
+      },
+      {
+        "path": "bindings/node/package.json",
+        "sha256": "dc8826bac407edfefb55c7f9198c434991db506b699aa906e09c228a0d972ed4"
+      },
+      {
+        "path": "bindings/python/examples/json_to_anki.py",
+        "sha256": "a2434f1501828dd89bd29bf7f323d66ca091a30193d9a9e676b80525f9ba2962"
+      },
+      {
+        "path": "bindings/python/examples/quickstart.py",
+        "sha256": "636b6e773ae27a3b0b9199e897814de49323b4444783c4c4079cabf158614714"
+      },
+      {
+        "path": "bindings/python/pyproject.toml",
+        "sha256": "b4fac4f720604998ee1d7137033c595e2cc1bbb6ad2e20a5527a274390cd6f84"
+      },
+      {
+        "path": "docs/recipes/json-to-anki/cell.png",
+        "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459"
+      },
+      {
+        "path": "docs/recipes/json-to-anki/tone.wav",
+        "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff"
+      },
+      {
+        "path": "docs/recipes/json-to-anki/v1.json",
+        "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87"
+      },
+      {
+        "path": "docs/recipes/json-to-anki/v2.json",
+        "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0"
+      },
+      {
+        "path": "scripts/packaged_consumer/src/bin/verify_apkg.rs",
+        "sha256": "2444cacc9924441a30bcf46d25a04ebbb9ef5e42e366c1a38be11b74b3dc9cf3"
+      },
+      {
+        "path": "scripts/packaged_consumer/src/bin/verify_json_recipe.rs",
+        "sha256": "8a64cdbab5635c8a944fb4ea5f4832d2941afe46b44809b5803762a7101e6e11"
+      },
+      {
+        "path": "scripts/packaged_consumer/src/inspection.rs",
+        "sha256": "d79d12d655d163a23cd1bb4991192b9691b6c777da38ac87c52eb123cd321e82"
+      },
+      {
+        "path": "website/scripts/verify-doc-examples.mjs",
+        "sha256": "70af42b9fbf42480c36a54cf1993e9e9db1fbe1a822a0a670146f0095f7658c2"
+      },
+      {
+        "path": "website/scripts/verify-public-recipe.mjs",
+        "sha256": "68d9d8107e91326185ba7da0d467caa86da6d063f787ecdc39ca40fcec4af739"
+      }
+    ],
+    "excludeWholeFileAsAnUnchangedDependency": [
+      "docs/ai-quickstart.json"
+    ],
+    "requirement": "Formal artifact usage review must repeat real localized reading/navigation/copy/download for en/zh-CN/es and recheck this execution-relevant projection plus unchanged executable/dependency bytes. Bind real programs, fixtures, version/install documentation, manifest/lock/verifier inputs. Cite this audit for the changed control JSON rather than refreshing its whole-file hash and claiming all 20 original execution inputs were identical."
+  },
+  "limitations": [
+    "No SDK installation, compilation, execution, package regeneration or Anki GUI import was performed for this preparation audit.",
+    "19/20 or another exact raw count describes comparison with the original execution-input snapshot, not a new execution pass.",
+    "A new Spanish prompt and localized placeholders require their own source/UI review; equivalence of SDK execution requirements does not approve their wording or behavior.",
+    "No formal artifact was read or approved by this audit. Run the three-language helper against the frozen strict release artifacts when provided."
+  ]
+}

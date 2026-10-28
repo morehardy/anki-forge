@@ -1,4 +1,5 @@
 import { catalogs } from './src/i18n/messages.mjs';
+import localeMetadata from './locale-metadata.json' with { type: 'json' };
 
 import { configuredLocales, locales, localeIds, localePath, resolveLocalePath } from './locale-model.mjs';
 export { configuredLocales, locales, localeIds, releaseLocales, stripBase } from './locale-model.mjs';
@@ -269,17 +270,17 @@ const documents = [
 ];
 
 export const docGroups = [
-  { label: 'Start here', zh: '从这里开始', ids: ['docs', 'languages', 'quickstart', 'installation', 'concepts', 'anki-forge-vs-genanki'] },
-  { label: 'Guides', zh: '使用指南', ids: ['csv-to-anki', 'json-to-anki', 'ai-anki-cards', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },
-  { label: 'Language guides', zh: '开发语言指南', ids: ['rust-guide', 'node-quickstart', 'python-quickstart', 'python-migration', 'genanki-migration'] },
-  { label: 'Reference', zh: '参考', collapsed: true, ids: ['api', 'rust-api', 'node-api', 'python-api', 'build-guarantees', 'compatibility'] },
-  { label: 'Help', zh: '帮助', ids: ['troubleshooting', 'python-diagnostics', 'development'] },
-].map(group => ({ ...group, labels: { en: group.label, 'zh-CN': group.zh } }));
+  { label: 'Start here', zh: '从这里开始', es: 'Empieza aquí', ids: ['docs', 'languages', 'quickstart', 'installation', 'concepts', 'anki-forge-vs-genanki'] },
+  { label: 'Guides', zh: '使用指南', es: 'Guías', ids: ['csv-to-anki', 'json-to-anki', 'ai-anki-cards', 'cards', 'media', 'custom-notetypes', 'templates', 'image-occlusion', 'updates'] },
+  { label: 'Language guides', zh: '开发语言指南', es: 'Guías por lenguaje', ids: ['rust-guide', 'node-quickstart', 'python-quickstart', 'python-migration', 'genanki-migration'] },
+  { label: 'Reference', zh: '参考', es: 'Referencia', collapsed: true, ids: ['api', 'rust-api', 'node-api', 'python-api', 'build-guarantees', 'compatibility'] },
+  { label: 'Help', zh: '帮助', es: 'Ayuda', ids: ['troubleshooting', 'python-diagnostics', 'development'] },
+].map(group => ({ ...group, labels: { en: group.label, 'zh-CN': group.zh, es: group.es } }));
 /** @type {{ id: string, label: Record<string, string> }[]} */
 export const navigation = [
-  { id: 'docs', label: { en: 'Guide', 'zh-CN': '指南' } },
-  { id: 'examples', label: { en: 'Examples', 'zh-CN': '示例' } },
-  { id: 'blog', label: { en: 'Blog', 'zh-CN': '博客' } },
+  { id: 'docs', label: { en: 'Guide', 'zh-CN': '指南', es: 'Guía' } },
+  { id: 'examples', label: { en: 'Examples', 'zh-CN': '示例', es: 'Ejemplos' } },
+  { id: 'blog', label: { en: 'Blog', 'zh-CN': '博客', es: 'Blog' } },
 ];
 export const footerNavigation = [
   { id: 'articles', pageId: 'blog', resource: '', label: 'footer.articles' },
@@ -308,8 +309,8 @@ export const pages = [
   ...common,
   ...documents.map(doc => ({
     id: doc.name, route: doc.route, type: 'docs', section: 'docs', sources: Object.fromEntries(Object.entries(configuredLocales).map(([locale, config]) => [locale, locale === 'en' ? doc.source : `docs${config.prefix}/${doc.name === 'docs' ? 'index' : doc.name}.md`])),
-    title: { en: doc.title, 'zh-CN': doc.zhTitle },
-    description: { en: doc.description, 'zh-CN': doc.zhDescription },
+    title: { en: doc.title, 'zh-CN': doc.zhTitle, ...Object.fromEntries(localeIds.filter(locale => !['en', 'zh-CN'].includes(locale)).map(locale => [locale, localeMetadata.locales[locale]?.[doc.name]?.title])) },
+    description: { en: doc.description, 'zh-CN': doc.zhDescription, ...Object.fromEntries(localeIds.filter(locale => !['en', 'zh-CN'].includes(locale)).map(locale => [locale, localeMetadata.locales[locale]?.[doc.name]?.description])) },
     capabilities: ['sidebar', 'search', 'toc', 'pagination', 'edit', 'code-copy'],
   })),
   ...articles,

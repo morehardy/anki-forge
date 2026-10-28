@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "status": "implemented-awaiting-actual-retest-and-independent-review",
+  "notAnApproval": true,
+  "change": "General Spanish use verbs join existing execution/runtime context; no query or page routing rule.",
+  "before": {
+    "terms": [
+      "navegador",
+      "navegadores",
+      "browser",
+      "browsers",
+      "web"
+    ],
+    "requiresAll": [
+      [
+        "Node.js",
+        "Node",
+        "JavaScript",
+        "TypeScript",
+        "npm",
+        "JS"
+      ],
+      [
+        "ejecutar",
+        "ejecución",
+        "funcionar",
+        "funciona",
+        "funcionan",
+        "correr",
+        "soporte",
+        "compatible",
+        "compatibilidad",
+        "nativo",
+        "nativa",
+        "dependencia",
+        "paquete"
+      ]
+    ],
+    "roles": [
+      "compatibility"
+    ],
+    "intent": true
+  },
+  "after": {
+    "terms": [
+      "navegador",
+      "navegadores",
+      "browser",
+      "browsers",
+      "web"
+    ],
+    "requiresAll": [
+      [
+        "Node.js",
+        "Node",
+        "JavaScript",
+        "TypeScript",
+        "npm",
+        "JS"
+      ],
+      [
+        "ejecutar",
+        "ejecución",
+        "funcionar",
+        "funciona",
+        "funcionan",
+        "correr",
+        "soporte",
+        "compatible",
+        "compatibilidad",
+        "nativo",
+        "nativa",
+        "dependencia",
+        "paquete",
+        "usar",
+        "utilizar",
+        "uso"
+      ]
+    ],
+    "roles": [
+      "compatibility"
+    ],
+    "intent": true
+  },
+  "sourceSupport": [
+    {
+      "path": "docs/es/compatibility.md",
+      "observation": "Node browsers are outside recorded verification; this is runtime scope, not an assertion that browser card previews are unsupported."
+    },
+    {
+      "path": "docs/es/node-quickstart.md",
+      "observation": "Node/ESM/native package setup describes a Node application, while website card previews remain browser UI."
+    }
+  ],
+  "frozenQueriesUnchanged": true,
+  "engineUnchanged": true
+}

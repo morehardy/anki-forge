@@ -1,10 +1,12 @@
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { serveBuiltSite } from './serve-built-site.mjs';
 import { siteConfig } from '../site.config.mjs';
-import { pagePath, localeIds } from '../site-model.mjs';
+import { pagePath, resolvePage, localeIds } from '../site-model.mjs';
+import { locales, localePath } from '../locale-model.mjs';
+import searchQueries from '../search-queries.json' with { type: 'json' };
 import { publishedPages } from './published-pages.mjs';
 import { createTranslator } from '../src/i18n/messages.mjs';
 
@@ -26,6 +28,35 @@ async function session(t, options = {}) {
   return { context, page: await context.newPage() };
 }
 const visible = locator => locator.waitFor({ state: 'visible' });
+async function languageSwitch(page, targetLocale, { keyboard = false } = {}) {
+  const header = page.locator('.site-header');
+  const currentLocale = await page.locator('html').getAttribute('lang');
+  const links = header.locator('[data-language-switch]');
+  assert.deepEqual((await links.evaluateAll(anchors => anchors.map(anchor => anchor.hreflang))).sort(), localeIds.filter(id => id !== currentLocale).sort(), 'Language choices must be the other release languages');
+  const menu = header.locator('details.language-menu');
+  assert.equal(await menu.count(), localeIds.length > 2 ? 1 : 0, 'Three or more languages must use the language menu');
+  const link = header.locator(`[data-language-switch][hreflang="${targetLocale}"]`);
+  assert.equal(await link.count(), 1, `Missing explicit language target ${targetLocale}`);
+  assert.equal(await link.getAttribute('lang'), targetLocale);
+  assert.equal((await link.textContent()).trim(), locales[targetLocale].label);
+  if (await menu.count()) {
+    const summary = menu.locator('summary');
+    if (!await menu.evaluate(element => element.open)) {
+      if (keyboard) { await summary.focus(); await page.keyboard.press('Enter'); }
+      else await summary.click();
+    }
+    if (keyboard) {
+      await summary.focus();
+      for (let step = 0; step < localeIds.length; step++) {
+        await page.keyboard.press('Tab');
+        if (await link.evaluate(element => element === document.activeElement)) break;
+      }
+      assert.equal(await link.evaluate(element => element === document.activeElement), true, 'Target language must be reachable by Tab from the menu summary');
+    }
+  } else if (keyboard) await link.focus();
+  await visible(link);
+  return link;
+}
 const follow = async (page, link) => { await link.click(); await page.waitForLoadState('domcontentloaded'); };
 const eventually = async (operation, message) => {
   for (let attempt = 0; attempt < 60; attempt++) {
@@ -41,7 +72,7 @@ test('all built content URLs and assets are reachable over HTTP', async () => {
     assert.equal(response.status, 200);
     assert.match(await response.text(), new RegExp(`<html[^>]+lang="${locale}"`));
   }
-  for (const route of ['/missing-topic-62/', '/zh-cn/missing-topic-62/']) assert.equal((await fetch(server.url(route))).status, 404);
+  for (const route of localeIds.map(locale => localePath('/missing-topic-62/', locale))) assert.equal((await fetch(server.url(route))).status, 404);
 });
 
 test('machine links and structured data work without JavaScript', async t => {
@@ -63,15 +94,21 @@ test('machine links and structured data work without JavaScript', async t => {
     }
   }
   if (!process.env.BROWSER_SITE) {
-    const index = await fetch(server.url('/llms.txt'), { redirect: 'manual' });
-    assert.equal(index.status, 200);
-    assert.match(index.headers.get('content-type'), /^text\/plain/);
-    for (const route of ['/docs/missing-machine-62/index.md', '/zh-cn/missing-llms-62.txt']) assert.equal((await fetch(server.url(route), { redirect: 'manual' })).status, 404);
+    for (const locale of localeIds) {
+      const index = await fetch(server.url(localePath('/llms.txt', locale)), { redirect: 'manual' });
+      assert.equal(index.status, 200);
+      assert.match(index.headers.get('content-type'), /^text\/plain/);
+      for (const route of ['/docs/missing-machine-62/index.md', '/missing-llms-62.txt']) assert.equal((await fetch(server.url(localePath(route, locale)), { redirect: 'manual' })).status, 404);
+    }
   }
 });
 
 for (const locale of localeIds) {
   const tr = createTranslator(locale);
+  const framework = JSON.parse(await readFile(new URL(`../src/content/i18n/${locale}.json`, import.meta.url), 'utf8'));
+  const targetLocale = localeIds.find(other => other !== locale);
+  const mediaQuery = searchQueries.locales[locale]?.find(query => query.kind === 'core' && query.expectedPageIds.includes('media'))?.query;
+  assert.ok(targetLocale && mediaQuery, `${locale}: another language and an existing frozen media search fixture are required`);
   const route = (id, section) => server.url(pagePath(id, locale, section));
   test(`${locale}: card tabs, keyboard, flip, audio, updates and downloads`, async t => {
     const { page } = await session(t);
@@ -86,7 +123,7 @@ for (const locale of localeIds) {
     assert.equal(await tabs.nth(1).getAttribute('aria-selected'), 'true');
     const cloze = page.locator('[data-example="cloze"]');
     await cloze.locator('[data-flip]').click();
-    assert.match(await cloze.locator('[data-card-status]').textContent(), locale === 'en' ? /Answer:/ : /答案：/);
+    assert.equal(await cloze.locator('[data-card-status]').textContent(), tr('card.answer', { answer: (await cloze.locator('[data-side="back"]').textContent()).trim() }));
     await cloze.locator('[data-flip]').click();
     assert.equal(await cloze.locator('[data-card-status]').textContent(), tr('card.questionShown'));
     await tabs.nth(2).click();
@@ -124,7 +161,7 @@ for (const locale of localeIds) {
       assert.ok(prompt.includes('Learn biology <script>local only</script>'));
       assert.ok(prompt.includes(pagePath(sdk === 'rust' ? 'quickstart' : `${sdk}-quickstart`, locale)));
       await panel.locator('[data-copy]').first().click();
-      await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()).includes(locale === 'en' ? 'copied' : '已复制'), 'Clipboard success was not announced');
+      await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()) === tr('ai.copied'), 'Clipboard success was not announced');
       assert.equal(await page.evaluate(() => navigator.clipboard.readText()), prompt);
     }
     // Deny at the browser permission boundary rather than replacing writeText with a mock.
@@ -134,11 +171,11 @@ for (const locale of localeIds) {
     await cdp.send('Browser.setPermission', { permission, setting: 'denied', origin: server.origin, browserContextId: targetInfo.browserContextId });
     const panel = page.locator('[data-ai-panel="python"]');
     await panel.locator('[data-copy]').first().click();
-    await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()).includes(locale === 'en' ? 'selected' : '已选中'), 'Clipboard denial did not select the prompt');
+    await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()) === tr('ai.fallback'), 'Clipboard denial did not select the prompt');
     assert.equal(await page.evaluate(() => getSelection().toString()), await panel.locator('[data-ai-prompt]').textContent());
     await cdp.send('Browser.setPermission', { permission, setting: 'granted', origin: server.origin, browserContextId: targetInfo.browserContextId });
     await panel.locator('[data-copy]').first().click();
-    await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()).includes(locale === 'en' ? 'copied' : '已复制'), 'Clipboard did not recover');
+    await eventually(async () => (await panel.locator('[data-copy-status]').first().textContent()) === tr('ai.copied'), 'Clipboard did not recover');
     await page.reload();
     assert.equal(await page.locator('[data-ai-request]').inputValue(), '');
   });
@@ -150,13 +187,13 @@ for (const locale of localeIds) {
     await page.keyboard.press('Control+k');
     await visible(page.locator('site-search dialog'));
     const input = page.locator('.pagefind-ui__search-input');
-    await input.fill(locale === 'en' ? 'media' : '媒体');
+    await input.fill(mediaQuery);
     const results = page.locator('.pagefind-ui__result-link');
     await visible(results.first());
     const links = await results.evaluateAll(links => links.map(link => link.href));
     assert.ok(links.length);
     for (const href of links) {
-      assert.equal(new URL(href).pathname.includes('/zh-cn/'), locale === 'zh-CN');
+      assert.equal(resolvePage(new URL(href).pathname, siteConfig.base)?.locale, locale, `Search result must belong to ${locale}: ${href}`);
       const response = await fetch(href);
       assert.equal(response.status, 200);
       const html = await response.text();
@@ -164,8 +201,9 @@ for (const locale of localeIds) {
       if (fragment) assert.ok(html.includes(`id="${fragment}"`), `Search result section missing: ${href}`);
       assert.ok(!href.includes('404'), 'Error page entered search results');
     }
-    await input.fill('zzzznonexistentterm62zzzz');
-    await eventually(async () => await results.count() === 0 && (await page.locator('.pagefind-ui__message').textContent()).includes(locale === 'en' ? 'No results' : '没有'), 'Localized empty search missing');
+    const noMatch = 'zzzznonexistentterm62zzzz';
+    await input.fill(noMatch);
+    await eventually(async () => await results.count() === 0 && (await page.locator('.pagefind-ui__message').textContent()) === framework['pagefind.zero_results'].replaceAll('[SEARCH_TERM]', () => noMatch), 'Localized empty search missing');
     await page.keyboard.press('Escape');
     await eventually(() => page.locator('site-search [data-open-modal]').evaluate(element => element === document.activeElement), 'Search did not restore focus');
     assert.equal(await page.locator('site-search dialog').evaluate(dialog => dialog.open), false);
@@ -179,19 +217,26 @@ for (const locale of localeIds) {
     await eventually(async () => (await page.evaluate(() => navigator.clipboard.readText())).trim() === (await nativeCode.locator('pre').innerText()).trim(), 'Native documentation code was not copied');
     await page.locator('.site-header .theme-option:has([value="dark"])').click();
     await page.goto(route('quickstart') + '?ref=parity#export-your-first-deck');
-    await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).includes('#export-your-first-deck'), 'Language switch did not preserve the valid section');
-    await follow(page, page.locator('.site-header [data-language-switch]'));
+    const outward = await languageSwitch(page, targetLocale, { keyboard: true });
+    await eventually(async () => (await outward.getAttribute('href')).includes('#export-your-first-deck'), 'Language switch did not preserve the valid section');
+    await outward.press('Enter');
+    await page.waitForLoadState('domcontentloaded');
+    assert.equal(await page.locator('html').getAttribute('lang'), targetLocale);
+    assert.equal(new URL(page.url()).pathname, new URL(server.url(pagePath('quickstart', targetLocale))).pathname);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
     assert.equal(new URL(page.url()).search, '?ref=parity');
     await page.locator('[id="export-your-first-deck"]').waitFor({ state: 'attached' });
-    await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).includes('#export-your-first-deck'), 'Return language switch lost the section');
-    await follow(page, page.locator('.site-header [data-language-switch]'));
+    const returning = await languageSwitch(page, locale, { keyboard: true });
+    await eventually(async () => (await returning.getAttribute('href')).includes('#export-your-first-deck'), 'Return language switch lost the section');
+    await returning.press('Enter');
+    await page.waitForLoadState('domcontentloaded');
     assert.equal(await page.locator('html').getAttribute('lang'), locale);
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
+    assert.equal(new URL(page.url()).search, '?ref=parity');
     await page.goto(route('quickstart') + '#nonexistent-section-62');
     await page.waitForTimeout(150);
-    assert.equal(new URL(await page.locator('.site-header [data-language-switch]').getAttribute('href'), page.url()).hash, '');
+    for (const href of await page.locator('.site-header [data-language-switch]').evaluateAll(links => links.map(link => link.href))) assert.equal(new URL(href).hash, '', 'Unknown fragment must not leak to any language');
   });
 
   test(`${locale}: native documentation code-copy denial and recovery`, { skip: !hasTopic('node-quickstart') }, async t => {
@@ -253,7 +298,9 @@ for (const locale of localeIds) {
     const menu = page.locator('button[popovertarget="starlight__sidebar"]');
     await menu.click();
     await visible(page.locator('#starlight__sidebar'));
-    await follow(page, page.locator('#starlight__sidebar a').filter({ hasText: locale === 'en' ? 'Core concepts' : '核心概念' }));
+    const concepts = page.locator(`#starlight__sidebar a[href="${new URL(route('concepts')).pathname}"]`);
+    assert.equal((await concepts.textContent()).trim(), publicTopics.find(topic => topic.id === 'concepts').title[locale]);
+    await follow(page, concepts);
     assert.equal(new URL(page.url()).pathname, new URL(route('concepts')).pathname);
     await page.locator('.site-header .theme-option:has([value="auto"])').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
@@ -261,8 +308,9 @@ for (const locale of localeIds) {
     await page.emulateMedia({ colorScheme: 'light' });
     await eventually(async () => (await page.locator('html').getAttribute('data-theme')) === 'light', 'System theme changes were ignored');
     await page.goto(server.url(pagePath('quickstart', 'zh-CN')) + '#生成-apkg');
-    await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).endsWith('#export-your-first-deck'), 'Legacy Chinese section was not mapped');
-    await follow(page, page.locator('.site-header [data-language-switch]'));
+    const legacyTarget = await languageSwitch(page, 'en');
+    await eventually(async () => (await legacyTarget.getAttribute('href')).endsWith('#export-your-first-deck'), 'Legacy Chinese section was not mapped');
+    await follow(page, legacyTarget);
     assert.equal(new URL(page.url()).hash, '#export-your-first-deck');
   });
 
@@ -271,7 +319,7 @@ for (const locale of localeIds) {
     await context.route('**/pagefind/**', route => route.abort());
     await page.goto(route('quickstart'));
     await page.locator('site-search [data-open-modal]').click();
-    await eventually(async () => (await page.locator('site-search [data-search-feedback]').textContent()).includes(locale === 'en' ? 'could not load' : '无法加载'), 'Search failure was not localized');
+    await eventually(async () => (await page.locator('site-search [data-search-feedback]').textContent()) === tr('search.error'), 'Search failure was not localized');
     await page.locator('site-search [data-close-modal]').click();
     assert.equal(await page.locator('site-search dialog').evaluate(dialog => dialog.open), false);
     await eventually(() => page.locator('site-search [data-open-modal]').evaluate(element => element === document.activeElement), 'Search did not restore focus');
@@ -304,13 +352,19 @@ for (const locale of localeIds) {
     assert.equal(await plain.locator('[data-ai-panel]:visible').count(), 3);
     assert.equal(await plain.locator('[download]:visible').count(), 6);
     assert.ok(await plain.locator('noscript').count() > 0);
-    const missing = await page.goto(server.url(locale === 'en' ? '/missing-topic-62/' : '/zh-cn/missing-topic-62/'));
+    const noScriptLanguage = await languageSwitch(plain, targetLocale, { keyboard: true });
+    assert.equal(new URL(await noScriptLanguage.getAttribute('href'), plain.url()).pathname, new URL(server.url(pagePath('home', targetLocale))).pathname);
+    await noScriptLanguage.press('Enter');
+    await plain.waitForLoadState('domcontentloaded');
+    assert.equal(await plain.locator('html').getAttribute('lang'), targetLocale, 'Native language menu must navigate without JavaScript');
+    await plain.goto(route(hasTopic('quickstart') ? 'quickstart' : 'docs'));
+    assert.equal(await plain.locator('site-search [data-open-modal]').isDisabled(), true, 'Search stays disabled without JavaScript');
+    const missing = await page.goto(server.url(localePath('/missing-topic-62/', locale)));
     assert.equal(missing.status(), 404);
     assert.equal(await page.locator('html').getAttribute('lang'), locale);
     await visible(page.getByRole('link', { name: tr('error.home'), exact: true }));
-    await plain.goto(server.url('/zh-cn/missing-topic-62/'));
-    // GitHub Pages serves one static 404 document: the honest no-script fallback is bilingual.
-    await visible(plain.getByRole('link', { name: '返回首页', exact: true }));
-    await visible(plain.getByRole('link', { name: 'Back home', exact: true }));
+    await plain.goto(server.url(localePath('/missing-topic-62/', locale)));
+    // GitHub Pages serves one static 404 document; every release language has a no-script recovery link.
+    for (const recoveryLocale of localeIds) await visible(plain.getByRole('link', { name: createTranslator(recoveryLocale)('error.home'), exact: true }));
   });
 }

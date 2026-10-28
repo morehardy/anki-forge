@@ -29,6 +29,10 @@ export async function checkContent(root = repository, { requireReviews = process
     if (item.pageId) assert.ok(pages.some(page => page.id === item.pageId), `Unregistered action: ${item.pageId}`);
     if (typeof item.label === 'string') for (const locale of localeIds) assert.ok(catalogs[locale][item.label], `${locale}: missing action message ${item.label}`);
   }
+  const localizedMetadata = JSON.parse(await read('website/locale-metadata.json'));
+  assert.equal(localizedMetadata.schemaVersion, 1, 'Unsupported localized metadata schema');
+  for (const locale of Object.keys(localizedMetadata.locales)) assert.ok(configuredLocales[locale], `${locale}: unknown metadata locale`);
+  for (const locale of localeIds.filter(locale => !['en', 'zh-CN'].includes(locale))) assert.deepEqual(sorted(Object.keys(localizedMetadata.locales[locale] || {})), sorted(docPages.map(page => page.id)), `${locale}: incomplete document metadata`);
   const reviews = JSON.parse(await read('website/content-reviews.json'));
   const sections = JSON.parse(await read('website/section-contracts.json'));
   const legacy = JSON.parse(await read('website/legacy-sections.json'));

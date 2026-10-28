@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { pagePath } from '../site-model.mjs';
+import { pagePath, localeIds, configuredLocales } from '../site-model.mjs';
 import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { importedDocs } from './content-links.mjs';
 import { verifySkill } from '../../skills/anki-forge/scripts/verify_quickstart.mjs';
@@ -17,7 +17,12 @@ export async function loadAiQuickstart(directory = root) {
   assert.equal(data.schemaVersion, 1, 'Unsupported AI quickstart schema');
   assert.match(data.publicVersion, /^\d+\.\d+\.\d+$/, 'Use a public package version');
   assert.deepEqual(Object.keys(data.languages), ['rust', 'node', 'python']);
-  assert.deepEqual(Object.keys(data.prompts), ['en', 'zh-CN']);
+  for (const locale of Object.keys(data.prompts)) assert.ok(configuredLocales[locale], `${locale}: unknown AI prompt locale`);
+  for (const locale of localeIds) {
+    assert.ok(typeof data.prompts[locale] === 'string' && data.prompts[locale].trim(), `${locale}: missing published AI prompt`);
+    assert.ok(typeof data.requestPlaceholders?.[locale] === 'string' && data.requestPlaceholders[locale].trim(), `${locale}: missing localized task placeholder`);
+  }
+  const briefs = JSON.parse(await read('website/language-briefs.json', directory));
   const origin = new URL(data.sitePromptUrl);
   assert.equal(origin.protocol, 'https:');
   assert.equal(origin.hash, '#ai-quickstart');
@@ -38,19 +43,19 @@ export async function loadAiQuickstart(directory = root) {
     const doc = importedDocs.find(entry => entry.route === route);
     await stat(path.join(directory, doc ? doc.source : `website/src/content/docs${route.replace(/\/$/, '')}.mdx`));
   }
-  for (const [locale, template] of Object.entries(data.prompts)) {
+  for (const locale of localeIds) {
+    const template = data.prompts[locale];
     const tokens = [...template.matchAll(/\{([^{}]+)\}/g)].map(match => match[1]);
     assert.deepEqual([...new Set(tokens)].sort(), ['install', 'language', 'quickstart', 'request', 'runtime', 'version']);
     assert.equal(tokens.filter(token => token === 'request').length, 1, 'Render the request once');
     assert.doesNotMatch(template, /<\/?[a-z][^>]*>|sk-[A-Za-z0-9]+|Copy prompt for AI|Copied|maturin develop|internal-tools/, 'Unsafe prompt template: markup, credentials or UI text');
     for (const language of Object.keys(data.languages)) {
       const prompt = renderPrompt(data, language, '', locale);
-      const requirements = locale === 'en'
-        ? [/published/, /public API/, /persistent/, /stable namespace and note keys/, /run command/, /verification/, /original distribution APKG/]
-        : [/公开 API/, /持久化/, /namespace 和 note key/, /运行命令/, /验证步骤/, /原始分发 APKG/];
-      for (const requirement of requirements) assert.match(prompt, requirement, `${language}/${locale}: incomplete prompt contract`);
+      const requirements = briefs[locale]?.aiPromptContract;
+      assert.deepEqual(Object.keys(requirements || {}).sort(), ['baseline', 'identity', 'persistent', 'publicApi', 'publicPackage', 'run', 'verification'], `${locale}: missing AI prompt requirements`);
+      for (const requirement of Object.values(requirements)) assert.ok(typeof requirement === 'string' && requirement.trim() && prompt.includes(requirement), `${language}/${locale}: incomplete prompt contract`);
       assert.ok(prompt.includes(data.languages[language].install) && prompt.includes(new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), data.languages[language].quickstart).href));
-      assert.ok(locale === 'en' ? prompt.split(/\s+/).length <= 500 : prompt.length <= 700, `${language}/${locale}: prompt too long`);
+      assert.ok([...new Intl.Segmenter(locale, { granularity: 'word' }).segment(prompt)].filter(part => part.isWordLike).length <= 500 && Buffer.byteLength(prompt, 'utf8') <= 8192, `${language}/${locale}: prompt too long`);
     }
   }
   return data;

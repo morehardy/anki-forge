@@ -1,0 +1,127 @@
+# 更新与分发
+
+保持项目命名空间和笔记、模型、字段、模板键稳定。每次新版本基于之前的**原始分发 APKG** 构建，该包携带完整、带版本的身份证据。将包和源代码修订一起保存。
+
+## 运行两个版本并比较
+
+```sh
+cargo run --locked -p ankiforge --example docs_workflow -- target/docs-examples
+```
+
+这会写出 `spanish-v1.apkg` 和 `spanish-v2.apkg`，比较修改后的答案，并检查更新包的数量。可执行源码如下：
+
+<!-- source: anki_forge/examples/docs_workflow.rs#updates -->
+```rust
+fn vocabulary(answer: &str) -> anyhow::Result<Project> {
+    let mut project = Project::new("docs-spanish-updates")?.default_deck("Spanish");
+    project.add("hola", Note::basic("hola", answer))?;
+    Ok(project)
+}
+
+fn updates(output: &Path) -> anyhow::Result<()> {
+    let previous = output.join("spanish-v1.apkg");
+    let next = output.join("spanish-v2.apkg");
+    vocabulary("hello")?.build(BuildOptions::to(&previous))?;
+    let project = vocabulary("hello; hi")?;
+    let comparison = project.compare(CompareOptions::against(&previous))?;
+    ensure!(comparison.policy().allows_publication());
+    let built = project.build(BuildOptions::to(&next).update_from(&previous))?;
+    verify(&built, 1, 1, 0)?;
+    ensure!(built.report().comparison().is_some());
+    Ok(())
+}
+```
+<!-- /source -->
+
+即使发现项会阻止发布，`compare` 也可以成功完成。请分别读取 `comparison.policy().allows_publication()`、原始风险级别和证据。`build(...update_from(...))` 执行相同分析；若策略阻止候选包，则在发布前返回 `BuildError`。
+
+## 策略与检查限制
+
+这份完整程序选择更严格的阈值，并对比较和更新使用相同配置：
+
+```rust
+use ankiforge::{BuildOptions, Note, Project};
+use ankiforge::build::InspectLimits;
+use ankiforge::update::{CompareOptions, RiskLevel, UpdatePolicy};
+
+fn main() -> anyhow::Result<()> {
+    let mut first = Project::new("policy-example")?;
+    first.add("cell", Note::basic("Cell?", "Unit of life"))?;
+    first.build(BuildOptions::to("policy-v1.apkg"))?;
+    let mut next = Project::new("policy-example")?;
+    next.add("cell", Note::basic("Cell?", "The basic unit of life"))?;
+    let mut limits = InspectLimits::default();
+    limits.max_collection_bytes = 1 << 30;
+    let policy = UpdatePolicy::default().fail_on(RiskLevel::Medium);
+    let comparison = next.compare(CompareOptions::against("policy-v1.apkg")
+        .inspect_limits(limits.clone()).update_policy(policy.clone()))?;
+    assert!(comparison.policy().allows_publication());
+    next.build(BuildOptions::to("policy-v2.apkg").update_from("policy-v1.apkg")
+        .inspect_limits(limits).update_policy(policy))?;
+    Ok(())
+}
+```
+
+默认策略阻止 High 和 Critical 发现项。审阅特定类别后，调用方可有意选择 `UpdatePolicy::default().allow(RiskCode::NoteRemoved)`。它放行**该类别中的所有发现项**，同时保留原级别和证据；并不表示逐条批准指定笔记。没有匹配发现项的放行会产生警告；未知风险码被拒绝。不要自动放行比较返回的每一个码。
+
+缺失或损坏的证据、命名空间不匹配、无效候选数据和检查限制都是硬错误，不是可放行的风险类别。分析无法完成时，比较返回错误及已完成的观察结果。对没有 `update_from` 的新建请求显式设置策略属于配置错误，与 setter 调用顺序无关。
+
+## 证据与身份
+
+包内包含 `ankiforge-identity.json`，格式为 `ankiforge-identity-v1`。它将模型或配置 ID、笔记 GUID、历史字段或模板槽位、卡片或遮罩序号、修订和媒体绑定到实际集合与载荷。Anki 重新导出不保留该证据，不能作为更新基线。缺失证据绝不会被静默重建。
+
+显示名称和内容编辑保留身份键。内容未变时保留基线修订；内容改变时推进修订。字段或模板重排保留历史映射。退役身份继续保留，恢复相同键时可复用。笔记键不能移到另一模型，模型键也不能在普通与 Cloze 类型间改变。
+
+## 客户端导入行为与发布检查
+
+APKG 是分发包，不是删除同步。省略笔记、字段、模板或遮罩，不会删除学习者已有数据。字段或模板 schema 和排序字段变化属于高风险，因为 Anki 合并与导入设置会影响行为。Schema 变化可能复制模型，或在笔记内容比较前更新目标笔记的时间戳。
+
+在支持的客户端测试首次导入以及导入已有集合的更新。使用目标合并与笔记更新设置，检查字段、GUID、卡片集合、本地编辑和已有调度。仅稳定身份不保证较新本地编辑被覆盖，也不保证已删除的历史被恢复。
+
+将候选包写到与归档基线不同的路径。审阅后分发被接受的包，并将它保留为下一次发布的证据。所有权和发布事实见[构建保证](../build-guarantees.md)。
+
+<a id="build-once-review-then-publish-from-source"></a>
+
+## 构建一次，审阅后发布
+
+此 API 已包含在公开 `0.3.1` 包中。
+
+构建一次，检查报告，然后发布同一个候选文件。审阅后再运行一次普通构建会创建另一个候选包；预备发布使实际 APKG 始终与已审阅报告对应。
+
+<!-- source: anki_forge/examples/docs_publication.rs -->
+```rust
+use ankiforge::{BuildOptions, Note, Project};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut project = Project::new("spanish")?.default_deck("Spanish");
+    project.add("es:hola", Note::basic("hola", "hello"))?;
+    project.build(BuildOptions::to("spanish-original.apkg"))?;
+
+    let mut next = Project::new("spanish")?.default_deck("Spanish");
+    next.add("es:hola", Note::basic("hola", "hello; hi"))?;
+    let prepared = next.prepare_publication(
+        BuildOptions::to("spanish-reviewed.apkg").update_from("spanish-original.apkg"),
+    )?;
+    println!("{:?}", prepared.report().comparison());
+    if prepared
+        .report()
+        .comparison()
+        .is_some_and(|report| report.policy().allows_publication())
+    {
+        let output = prepared.publish()?;
+        println!("{}", output.artifact().path().display());
+    }
+    Ok(())
+}
+```
+<!-- /source -->
+
+在固定修订的源码目录中，把上面的完整程序保存为 `anki_forge/examples/docs_publication.rs`（本指南新增该示例；`1199196` 中未包含它），然后运行：
+
+```sh
+cargo run --locked -p ankiforge --example docs_publication
+```
+
+示例在仓库根目录写出 `spanish-original.apkg`，并在策略允许发布时写出 `spanish-reviewed.apkg`。预备阶段不发布到目标。批准分发前，应审阅发现项并测试客户端导入；此示例只在策略允许时自动发布这次简单内容编辑。基准测试未测量该流程。
+
+参见[构建生命周期](../build-guarantees.md#prepared-publication-from-source)、[Rust API](../rust-api.md#review-once-publish-once)、[Node API](../node/api.md#prepare-review-and-publish)和 [Python API](../python/api.md#prepare-review-and-publish)。

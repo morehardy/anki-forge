@@ -21,7 +21,8 @@ test('configured third-language paths and ownership do not overwrite the Chinese
   assert.equal(llmsPath('es'), '/es/llms.txt');
   assert.equal(llmsUrl('pt-BR', config), 'https://example.org/project/pt-br/llms.txt');
   assert.equal(canonicalUrl('quickstart', 'es', config, ['en', 'zh-CN', 'es']), 'https://example.org/project/es/docs/quickstart/');
-  assert.throws(() => canonicalUrl('quickstart', 'es', config), /inactive/);
+  assert.equal(canonicalUrl('quickstart', 'es', config), 'https://example.org/project/es/docs/quickstart/');
+  assert.throws(() => canonicalUrl('quickstart', 'fr', config), /inactive/);
   assert.throws(() => llmsPath('unknown'), /locale/i);
   for (const file of ['llms.txt', 'zh-cn/llms.txt', 'es/llms.txt', 'pt-br/llms.txt']) assert.equal(machineResourceKind(file), 'index');
   for (const file of ['docs/index.md', 'zh-cn/docs/quickstart/index.md', 'es/docs/quickstart/index.md', 'pt-br/blog/example/index.md']) assert.equal(machineResourceKind(file), 'markdown');

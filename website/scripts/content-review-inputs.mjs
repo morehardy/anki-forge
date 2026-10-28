@@ -93,9 +93,10 @@ function renderedModelInputs(files, page, locale) {
   const ownDocument = documents.find(document => document.name === page.id);
   const ownCommon = common.find(item => item.id === page.id);
   const catalog = JSON.parse(files[`website/src/i18n/${locale}.json`]);
+  const translatedMetadata = JSON.parse(files['website/locale-metadata.json']).locales;
   const localized = (document, field) => locale === 'en' ? document[field]
     : locale === 'zh-CN' ? document[`zh${field[0].toUpperCase()}${field.slice(1)}`]
-      : document[`${field}s`]?.[locale];
+      : translatedMetadata[locale]?.[document.name]?.[field];
   const result = {
     implementation: {
       site: modelImplementation(files['website/site-model.mjs'], 'site-model.mjs', ['documents', 'common', 'navigation', 'footerNavigation', 'nextTasks', 'docGroups', 'articles']),
@@ -125,7 +126,7 @@ function renderedModelInputs(files, page, locale) {
       items: group.ids.map(id => {
         const document = documents.find(item => item.name === id);
         if (!document) throw new Error(`Unknown review sidebar document: ${id}`);
-        return { ...destination(id), label: locale === 'en' ? document.title : locale === 'zh-CN' ? document.zhTitle : document.titles?.[locale] };
+        return { ...destination(id), label: localized(document, 'title') };
       }),
     })) };
   }
@@ -189,7 +190,7 @@ export async function reviewInputFiles(page, locale, root = repository) {
   }
   return [...new Set([
     ...sources, 'website/src/i18n/en.json', `website/src/i18n/${locale}.json`,
-    'website/site-model.mjs', 'website/locale-model.mjs', 'website/release-locales.json', 'website/search-terms.json', 'website/section-contracts.json', 'website/legacy-sections.json', 'website/language-briefs.json',
+    'website/site-model.mjs', 'website/locale-model.mjs', 'website/release-locales.json', 'website/locale-metadata.json', 'website/search-terms.json', 'website/section-contracts.json', 'website/legacy-sections.json', 'website/language-briefs.json',
     ...templateFiles,
     ...(page.type === 'docs' ? ['website/src/route-middleware.ts', 'website/src/content/i18n/en.json', `website/src/content/i18n/${locale}.json`, 'website/search-concepts.json', ...searchFiles] : []),
     ...technicalFiles, ...renderFiles, ...targetedTechnical, ...references,

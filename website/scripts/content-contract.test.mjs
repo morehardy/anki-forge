@@ -243,7 +243,7 @@ test('release language menus fingerprint active locale data without reading plan
     const after = await modelSamples(directory);
     for (const key of Object.keys(before)) assert.notEqual(after[key].targetHash, before[key].targetHash, `${from}: ${key}`);
   }
-  await writeFile(model, original.replace("label: 'Español'", "label: 'Español revisado'").replace("  es: {", "  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\n  es: {") + '\n// No planned-language source files exist in this fixture.\n');
+  await writeFile(model, original.replace("label: 'Français'", "label: 'Français révisé'").replace("  es: {", "  it: { prefix: '/it', lang: 'it', label: 'Italiano', dir: 'ltr' },\n  es: {") + '\n// No planned-language source files exist in this fixture.\n');
   assert.deepEqual(await modelSamples(directory), before, 'inactive locale records do not change selected-language review inputs');
 });
 
@@ -271,4 +271,46 @@ test('review model rejects untracked transformations and top-level data mutation
   const registry = path.join(directory, 'website/locale-model.mjs');
   await writeFile(registry, (await readFile(registry, 'utf8')) + '\nconfiguredLocales.en.label = "Unreviewed";\n');
   await assert.rejects(reviewInputs(home, 'en', directory), /must not mutate/);
+});
+
+test('localized document metadata fingerprints its actual rendered page and sidebar from the supplied root', { skip: !localeIds.includes('es') }, async t => {
+  const directory = await fixture(t);
+  const file = path.join(directory, 'website/locale-metadata.json');
+  const original = JSON.parse(await readFile(file, 'utf8'));
+  const before = await modelSamples(directory);
+  const description = structuredClone(original);
+  description.locales.es.concepts.description += ' Descripción revisada en esta raíz de prueba.';
+  await writeFile(file, JSON.stringify(description));
+  const afterDescription = await modelSamples(directory);
+  for (const key of Object.keys(before)) {
+    if (key === 'concepts/es') assert.notEqual(afterDescription[key].targetHash, before[key].targetHash, key);
+    else assert.equal(afterDescription[key].targetHash, before[key].targetHash, `unrendered description: ${key}`);
+    assert.equal(afterDescription[key].sourceHash, before[key].sourceHash, `English source metadata: ${key}`);
+    assert.equal(afterDescription[key].technicalDependencyHash, before[key].technicalDependencyHash, key);
+  }
+  assert.throws(() => run(directory), /concepts\/es: targetHash changed; independent source review required/);
+  const title = structuredClone(original);
+  title.locales.es.languages.title += ' — rótulo revisado';
+  await writeFile(file, JSON.stringify(title));
+  const afterTitle = await modelSamples(directory);
+  for (const key of Object.keys(before)) {
+    if (key === 'concepts/es') assert.notEqual(afterTitle[key].targetHash, before[key].targetHash, 'Spanish docs render the changed sidebar label');
+    else assert.equal(afterTitle[key].targetHash, before[key].targetHash, `unrendered sidebar: ${key}`);
+    assert.equal(afterTitle[key].sourceHash, before[key].sourceHash, key);
+  }
+});
+
+test('planned metadata and unrendered foreign descriptions do not invalidate selected-language reviews', async t => {
+  const directory = await fixture(t);
+  const file = path.join(directory, 'website/locale-metadata.json');
+  const metadata = JSON.parse(await readFile(file, 'utf8'));
+  const before = await modelSamples(directory);
+  metadata.locales['pt-BR'] = { concepts: { title: 'Título ainda não publicado', description: 'Tradução planeada sem ficheiros de conteúdo.' } };
+  await writeFile(file, JSON.stringify(metadata));
+  assert.deepEqual(await modelSamples(directory), before, 'unselected metadata must stay outside all selected-language review inputs');
+  assert.match(run(directory), /paired topics/);
+  metadata.locales.es.languages.description += ' Descripción no mostrada en las páginas de esta prueba.';
+  await writeFile(file, JSON.stringify(metadata));
+  assert.deepEqual(await modelSamples(directory), before, 'another document description is not a rendered sidebar dependency');
+  if (localeIds.includes('es')) assert.throws(() => run(directory), /languages\/es: targetHash changed; independent source review required/);
 });

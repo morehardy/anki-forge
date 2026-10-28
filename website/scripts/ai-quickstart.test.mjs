@@ -6,16 +6,17 @@ import { test } from 'node:test';
 import { checkAiQuickstart, generateAiQuickstart, loadAiQuickstart, renderReadme, root } from './ai-quickstart.mjs';
 import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { importedDocs } from './content-links.mjs';
+import { localeIds, pagePath } from '../site-model.mjs';
 
 test('every language and locale renders the public setup and an empty task placeholder', async () => {
   const data = await loadAiQuickstart();
   for (const language of Object.keys(data.languages)) {
-    for (const locale of Object.keys(data.prompts)) {
+    for (const locale of localeIds) {
       const prompt = renderPrompt(data, language, ' \n ', locale);
       assert.ok(prompt.includes(data.languages[language].install));
       assert.ok(prompt.includes(data.languages[language].runtime));
-      assert.ok(prompt.includes(locale === 'en' ? data.languages[language].quickstart : data.languages[language].quickstart.replace('/docs/', '/zh-cn/docs/')));
-      assert.ok(prompt.includes(locale === 'en' ? '<describe your task>' : '<描述你的需求>'));
+      assert.ok(prompt.includes(new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), data.languages[language].quickstart).href));
+      assert.ok(prompt.includes(data.requestPlaceholders[locale]));
       assert.doesNotMatch(prompt, /\{(?:version|language|install|request)\}/);
     }
   }
@@ -35,7 +36,7 @@ async function fixture(t) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'ankiforge-ai-contract-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const files = ['README.md', 'README.zh-CN.md', 'docs/ai-quickstart.json', 'docs/ai-assistants.md',
-    'docs/installation.md', 'docs/compatibility.md', 'docs/media.md', 'docs/troubleshooting.md',
+    'website/language-briefs.json', 'docs/installation.md', 'docs/compatibility.md', 'docs/media.md', 'docs/troubleshooting.md',
     'docs/node/quick-start.md', 'docs/python/quick-start.md',
     'website/src/content/docs/docs/quickstart.mdx', 'anki_forge/examples/target_api_basic.rs',
     'bindings/node/examples/quickstart.mjs', 'bindings/python/examples/quickstart.py',
@@ -105,4 +106,37 @@ test('site data generation leaves tracked README untouched and uses the same ren
   const generated = JSON.parse(await readFile(path.join(directory, 'website/src/generated/ai-quickstart.json'), 'utf8'));
   assert.deepEqual(generated, data);
   assert.ok(renderReadme(data, 'en').includes(renderPrompt(generated, 'rust')));
+});
+
+test('published Spanish AI prompts and empty task placeholders cannot silently fall back', { skip: !localeIds.includes('es') }, async t => {
+  const directory = await fixture(t);
+  const filename = path.join(directory, 'docs/ai-quickstart.json');
+  const original = JSON.parse(await readFile(filename, 'utf8'));
+  for (const [field, expected] of [['prompts', /es: missing published AI prompt/], ['requestPlaceholders', /es: missing localized task placeholder/]]) {
+    const changed = structuredClone(original);
+    delete changed[field].es;
+    await writeFile(filename, JSON.stringify(changed));
+    await assert.rejects(loadAiQuickstart(directory), expected);
+    assert.throws(() => renderPrompt(changed, 'python', '', 'es'), /Unknown AI quickstart language or locale/);
+  }
+});
+
+test('every independently specified Spanish AI requirement is enforced before generation', { skip: !localeIds.includes('es') }, async t => {
+  const directory = await fixture(t);
+  const filename = path.join(directory, 'docs/ai-quickstart.json');
+  const original = JSON.parse(await readFile(filename, 'utf8'));
+  const briefFile = path.join(directory, 'website/language-briefs.json');
+  const briefs = JSON.parse(await readFile(briefFile, 'utf8'));
+  for (const [requirement, phrase] of Object.entries(briefs.es.aiPromptContract)) {
+    assert.ok(original.prompts.es.includes(phrase), `${requirement}: mutation must remove a real Spanish requirement`);
+    const changed = structuredClone(original);
+    changed.prompts.es = changed.prompts.es.replaceAll(phrase, '[requisito omitido]');
+    await writeFile(filename, JSON.stringify(changed));
+    await assert.rejects(loadAiQuickstart(directory), /rust\/es: incomplete prompt contract/, requirement);
+  }
+  await writeFile(filename, JSON.stringify(original));
+  const missing = structuredClone(briefs);
+  delete missing.es.aiPromptContract.baseline;
+  await writeFile(briefFile, JSON.stringify(missing));
+  await assert.rejects(loadAiQuickstart(directory), /es: missing AI prompt requirements/);
 });
