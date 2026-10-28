@@ -236,6 +236,20 @@ for (const locale of localeIds) {
     await follow(page, page.locator('.mobile-menu [data-section="docs"]'));
     assert.equal(new URL(page.url()).pathname, new URL(route('docs')).pathname);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
+    const checkThemeGroups = async value => {
+      const groups = await page.locator('[data-theme-control]').evaluateAll(controls => controls.map(control => {
+        const inputs = [...control.querySelectorAll('input[type="radio"]')];
+        return { names: [...new Set(inputs.map(input => input.name))], selected: inputs.filter(input => input.checked).map(input => input.value), size: inputs.length };
+      }));
+      assert.equal(groups.length, 2, 'Documentation must retain both header and native theme controls');
+      assert.equal(new Set(groups.flatMap(group => group.names)).size, groups.length, 'Separate controls must not share a native radio group');
+      for (const group of groups) {
+        assert.equal(group.names.length, 1);
+        assert.equal(group.size, 3);
+        assert.deepEqual(group.selected, [value], 'Every theme control retains its own checked option');
+      }
+    };
+    await checkThemeGroups('light');
     const menu = page.locator('button[popovertarget="starlight__sidebar"]');
     await menu.click();
     await visible(page.locator('#starlight__sidebar'));
@@ -243,6 +257,7 @@ for (const locale of localeIds) {
     assert.equal(new URL(page.url()).pathname, new URL(route('concepts')).pathname);
     await page.locator('.site-header .theme-option:has([value="auto"])').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+    await checkThemeGroups('auto');
     await page.emulateMedia({ colorScheme: 'light' });
     await eventually(async () => (await page.locator('html').getAttribute('data-theme')) === 'light', 'System theme changes were ignored');
     await page.goto(server.url(pagePath('quickstart', 'zh-CN')) + '#生成-apkg');

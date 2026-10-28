@@ -1,0 +1,1015 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-28/stable-theme-scopes-34",
+  "reviewedAt": "2026-10-28T08:13:54.001Z",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-stable-theme-scopes-34.json",
+    "sha256": "9721a0315c63a7c60eb1066884ba16ce739bb758ee0188ef2704bdb8c28d1a84"
+  },
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-before-stable-theme-scopes.json",
+    "sha256": "48a8ee53094bf794f240753906a530c9c74cde90976bba5984890f9a1dcdc724"
+  },
+  "priorSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-rendered-model-34-closed.json",
+    "sha256": "33785a036a68592f9d74323080f0a0c50a4430ff068476b55292b0efb65274f0",
+    "scope": "Closed rendered-model source set; unchanged actual content/model data reused, implementation changes fingerprinted; parser author disclosure retained."
+  },
+  "scope": "Only stable contextual ThemeControl names and Header scope prop reviewed as new changes; unchanged prior full content evidence reused with exact-byte proof.",
+  "rejectedIntermediate": {
+    "candidate": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-stable-theme-34.json",
+    "status": "not-approved",
+    "reason": "theme-${locale} aliases header and Starlight sidebar controls on docs pages; corrected scopes required."
+  },
+  "authorshipDisclosure": "This reviewer did not author the website prose, model labels/routes, templates or SDK examples. During this delta the reviewer was explicitly assigned and authored the supplied-root current-page metadata and home-wordmark dependency fixes in content-review-inputs.mjs plus their negative tests. Accordingly this record is independent content/model-data review, not independent approval of that parser implementation. Parser code cross-review is assigned separately by the coordinator; do not cite this record as its independent code approval.",
+  "evidence": [
+    "Actually read current ThemeControl.astro lines5-8: scope?: header|docs, default docs, name = `theme-${scope}-${locale}`; Header.astro line27 passes scope=\"header\". This replaces the old crypto.randomUUID name with stable distinct contextual groups. The intermediate theme-${locale} candidate is NOT approved: docs have two controls and one same-name group would make their checked states compete.",
+    "Actually read astro.config.mjs components Header=DocsHeader and ThemeSelect=ThemeControl; DocsHeader includes Header with its locale. Also read installed @astrojs/starlight0.42.2 dist/components/Sidebar.astro and MobileMenuFooter.astro: sidebar includes MobileMenuFooter and its ThemeSelect with no scope prop. Therefore current docs render header and docs scopes; normal SiteLayout pages use only Header. The bilingual error layout maps one Header per active locale, which also produces distinct names. No assertion of a single ThemeControl per docs page is retained.",
+    "Actually read site.ts lines7-22: controls/options selected by data attributes, never by generated name; applyTheme updates all controls’ dataset.themeChoice and checks every option whose value matches theme, enables them, applies OS preference for auto; each option change stores shared starlight-theme and re-runs applyTheme. Separate header/docs names permit both groups to have one checked option; localized labels/light/dark/auto values and CSS are unchanged.",
+    "Executed the actual TypeScript-transpiled site.ts theme prefix in Node24 vm with a minimal radio-group DOM double. Both locales, four initial storage states, all six option changes and OS preference change yielded64 successful state checks. This is a synthetic script-level probe, NOT browser/HTML/build execution or a repeated-build determinism result. Those are separate coordinator evidence.",
+    "Compared all130 files in the prior closed-rendered-model immutable snapshot: only Header.astro and ThemeControl.astro differ. Exact inverse patch recovers both prior bytes. All longform prose, localized catalogs, structured model labels/routes, SDK/CSV programs, search implementation and machine-content sources remain byte-identical. This targeted delta reuses their prior complete reviews explicitly; it does not claim a new full reading. Deterministic names contain only contextual scope/current locale, with no random or time input.",
+    "This reviewer did not author the website prose, model labels/routes, templates or SDK examples. During this delta the reviewer was explicitly assigned and authored the supplied-root current-page metadata and home-wordmark dependency fixes in content-review-inputs.mjs plus their negative tests. Accordingly this record is independent content/model-data review, not independent approval of that parser implementation. Parser code cross-review is assigned separately by the coordinator; do not cite this record as its independent code approval."
+  ],
+  "verification": {
+    "executed": true,
+    "environment": "Node vm with minimal radio-group DOM double; not browser/build/HTML execution",
+    "actualSitePrefixExecuted": true,
+    "checks": 64,
+    "passed": true,
+    "script": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-stable-theme-scopes-probe.mjs",
+      "sha256": "e4ad774a1c217c97aade285184f14e39d7225f3dd312821dd545976127f52821"
+    }
+  },
+  "changedPriorFiles": [
+    {
+      "path": "website/src/components/Header.astro",
+      "previousSha256": "d960ef3f5e55f89625b45d4fcffb8770bb84154aeb053b6599f3dc541ca45ea3",
+      "currentSha256": "274b6257bbc39d36ec2e4f53e8f60955b93d2aaa141617a0eab2d26613f2ccd6"
+    },
+    {
+      "path": "website/src/components/ThemeControl.astro",
+      "previousSha256": "6778d9bcf865afd557d59fd9f69e0298bfe0924b53b7746bfbdcc62ea7a2c875",
+      "currentSha256": "724d65736240a3271f9e65511437d09e4f01034dc1882853a4556cb0021903cd"
+    }
+  ],
+  "inputSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-stable-theme-scopes-34.json",
+    "sha256": "102ae86a3242300fb64c025245102831637560b6e2e32ca041c456d8dbe32622"
+  },
+  "entries": [
+    {
+      "pageId": "home",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7450ccc09c99d38ec3c4c329149a9798bcfb8ef2205803e7d0125d70969f5246",
+        "targetHash": "258d4c5cd3fc8a6b92ce441a1f049ce90e42491b6973f2f7bc509604d23f1965",
+        "technicalDependencyHash": "1a92405a30d4e9171f0cac017d8bb3ce5746b1e2b1554cdf4603577e1e82a0b3"
+      },
+      "sourceHash": "7450ccc09c99d38ec3c4c329149a9798bcfb8ef2205803e7d0125d70969f5246",
+      "targetHash": "4426ca8e13d152f56bc47cb7f5a87a5a787eebe73e7d6f97135bbe9d1fc2e357",
+      "technicalDependencyHash": "1a92405a30d4e9171f0cac017d8bb3ce5746b1e2b1554cdf4603577e1e82a0b3",
+      "openIssues": []
+    },
+    {
+      "pageId": "home",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7450ccc09c99d38ec3c4c329149a9798bcfb8ef2205803e7d0125d70969f5246",
+        "targetHash": "1b1196ae6850c7ee8650a9a1f1ecdadde1128a4825f70aa9a656ffee74874b15",
+        "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a"
+      },
+      "sourceHash": "7450ccc09c99d38ec3c4c329149a9798bcfb8ef2205803e7d0125d70969f5246",
+      "targetHash": "a25c8df05e7b6666ba693bba9fe441bf9550c099426624ebe7a0ef7004d2177b",
+      "technicalDependencyHash": "8116212e7f738d452b7e3b703eddd83c3e465c6dabcc488195d8460202dbcc6a",
+      "openIssues": []
+    },
+    {
+      "pageId": "examples",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "4cdd71770c849767114f629a61833bb58d85c9d5c8a55db95bc42e3c9cb29890",
+        "targetHash": "e7d27ab4271def3e1446cbb393924fa9dedb81e7df39d42fc0044d20523e84dd",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "sourceHash": "4cdd71770c849767114f629a61833bb58d85c9d5c8a55db95bc42e3c9cb29890",
+      "targetHash": "f9bfd159c3bded34e353dd292ac4aea80af377865bb67f369a4e48adec059ddb",
+      "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a",
+      "openIssues": []
+    },
+    {
+      "pageId": "examples",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "4cdd71770c849767114f629a61833bb58d85c9d5c8a55db95bc42e3c9cb29890",
+        "targetHash": "21b0921ad5e00ef442c20828b71209618ef0826a7b0d3ca5c1dc9b5e06e39f26",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "sourceHash": "4cdd71770c849767114f629a61833bb58d85c9d5c8a55db95bc42e3c9cb29890",
+      "targetHash": "f8d10653b2bec4c5d46844a5c33aac9b9eb70413fbe784c68ded2d561e253580",
+      "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0108f17c82c51ed6dfa24f8684f143e32b6040e1a5877301531b71726ef133b5",
+        "targetHash": "ec2219880580dca14581d4016907527c56eaf39b93effd80012026c64b0d0567",
+        "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a"
+      },
+      "sourceHash": "0108f17c82c51ed6dfa24f8684f143e32b6040e1a5877301531b71726ef133b5",
+      "targetHash": "1f14fc7a0103b338241107c27c4c31da09b6dc849780851d1fe9e022398b7982",
+      "technicalDependencyHash": "2909f0891b0eefa5045cbbe52296c527ea57a0557025de8ab72ecdcab88c954a",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0108f17c82c51ed6dfa24f8684f143e32b6040e1a5877301531b71726ef133b5",
+        "targetHash": "c2b6afa6c677855694662d7107137efc7b360f4a4c4032ad6ae0c60f58b72d51",
+        "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e"
+      },
+      "sourceHash": "0108f17c82c51ed6dfa24f8684f143e32b6040e1a5877301531b71726ef133b5",
+      "targetHash": "513100e7afc22f2f3cd132cb262df1b69b4f83e638844c4882931edfea60da04",
+      "technicalDependencyHash": "26ca13a693607535b33115aa54c7befc5d4b589f742b62d0fb1f5c7607dd972e",
+      "openIssues": []
+    },
+    {
+      "pageId": "docs",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "88fefc753b1848c7e1394999b440ece697bd8b7a48f69aa19bc172a344cb985d",
+        "targetHash": "dfc48353ffc4c7c45bf0da977891580daf90742a2ff4a5ecaec4d9ef8fe9f892",
+        "technicalDependencyHash": "354cafacc69ac62e19d77f7d13347b7d1f4f3280dc65890412a994371d5f8468"
+      },
+      "sourceHash": "88fefc753b1848c7e1394999b440ece697bd8b7a48f69aa19bc172a344cb985d",
+      "targetHash": "8c502b9087400c8d73c62b58310d903716d15940d3248ab485c350d1b6d8ce50",
+      "technicalDependencyHash": "354cafacc69ac62e19d77f7d13347b7d1f4f3280dc65890412a994371d5f8468",
+      "openIssues": []
+    },
+    {
+      "pageId": "docs",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "88fefc753b1848c7e1394999b440ece697bd8b7a48f69aa19bc172a344cb985d",
+        "targetHash": "f02cfd206e666c7642ffc8b525c6d23394a0973e33acd61b23d7619ea10c9e15",
+        "technicalDependencyHash": "2660cd8256bb9142e92c324bc77c10fa1651a4a90f942f021ca8b6f655e8b3c3"
+      },
+      "sourceHash": "88fefc753b1848c7e1394999b440ece697bd8b7a48f69aa19bc172a344cb985d",
+      "targetHash": "b861950c00bc60b9db0b3139e46dfc5a0f6bce885037133b402ca06049a52e1d",
+      "technicalDependencyHash": "2660cd8256bb9142e92c324bc77c10fa1651a4a90f942f021ca8b6f655e8b3c3",
+      "openIssues": []
+    },
+    {
+      "pageId": "languages",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "49c1f95f083fb8e31202a4769ee3ddcfe7443fa484948a461119b9fa9b3fd316",
+        "targetHash": "208a2c217a8230a0d5166d18a265ec1a58163d67027194236020b19396295a10",
+        "technicalDependencyHash": "4131ee6ebde54bd54cd3520e9a856ae2415bd1c2e0d230abd56a892380ebf13b"
+      },
+      "sourceHash": "49c1f95f083fb8e31202a4769ee3ddcfe7443fa484948a461119b9fa9b3fd316",
+      "targetHash": "46311e1f3b59efe48269a21776b20d218428569ea30452cd0617826248dac773",
+      "technicalDependencyHash": "4131ee6ebde54bd54cd3520e9a856ae2415bd1c2e0d230abd56a892380ebf13b",
+      "openIssues": []
+    },
+    {
+      "pageId": "languages",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "49c1f95f083fb8e31202a4769ee3ddcfe7443fa484948a461119b9fa9b3fd316",
+        "targetHash": "215f8dc7b1b4ba2d566111f961ac5b21be745d71ec8795cc5ccffeb618c9d2ed",
+        "technicalDependencyHash": "590857a06b20813c78441bf7773e9e58183fa6b6509224a8b6201a78d3f8ffb2"
+      },
+      "sourceHash": "49c1f95f083fb8e31202a4769ee3ddcfe7443fa484948a461119b9fa9b3fd316",
+      "targetHash": "8a25fabbfcd999d5006bf293ebf3e5d0689c3258d02009cb1fe7e4774b452134",
+      "technicalDependencyHash": "590857a06b20813c78441bf7773e9e58183fa6b6509224a8b6201a78d3f8ffb2",
+      "openIssues": []
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2656185e3933aa37b027e9b79ed111e83c3e625dcbc9d2f0f181934d1d4b0c3b",
+        "targetHash": "03a5f052f764e71d0ff06e1d69719a99b7087c117fb0c7cc11732a1b9ca6a2e0",
+        "technicalDependencyHash": "1fc86f055aa464588c7740c7aeeddb68814b1945ba2aea322a31a6a606588b83"
+      },
+      "sourceHash": "2656185e3933aa37b027e9b79ed111e83c3e625dcbc9d2f0f181934d1d4b0c3b",
+      "targetHash": "0bbe32aeb37b56c50baa14fd8485423a948115f5f3d818ba04a5956fba3a1024",
+      "technicalDependencyHash": "1fc86f055aa464588c7740c7aeeddb68814b1945ba2aea322a31a6a606588b83",
+      "openIssues": []
+    },
+    {
+      "pageId": "quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "2656185e3933aa37b027e9b79ed111e83c3e625dcbc9d2f0f181934d1d4b0c3b",
+        "targetHash": "f69c7b9c64936afa08acddfdaa25bf6e112e7a80c0ed6c2cf8a14a2e3f25cbf1",
+        "technicalDependencyHash": "b1d67ce9335e7748528f82fc75e10164a670a9c2b8f08ab71195bc88236f801a"
+      },
+      "sourceHash": "2656185e3933aa37b027e9b79ed111e83c3e625dcbc9d2f0f181934d1d4b0c3b",
+      "targetHash": "17f05c548169260eb55af7c4991385613d0489efbba5368455b2dab94227d12b",
+      "technicalDependencyHash": "b1d67ce9335e7748528f82fc75e10164a670a9c2b8f08ab71195bc88236f801a",
+      "openIssues": []
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0d72a60a123af14051c9a38991fcc3aa961b725c01c3033e1a5c400fd214314d",
+        "targetHash": "222ae9b34a48257d5b6ca2eeae7573dca5f92491c81a68695eacd70aa43d4db3",
+        "technicalDependencyHash": "0bbca62544385b97badf39ef4e839d90d08a4baa8ae6e44dd036852fc74f31da"
+      },
+      "sourceHash": "0d72a60a123af14051c9a38991fcc3aa961b725c01c3033e1a5c400fd214314d",
+      "targetHash": "7ba7458dd534135b700f7952c2ae870716180a275ef2f9b1d44b24d3932e11b5",
+      "technicalDependencyHash": "0bbca62544385b97badf39ef4e839d90d08a4baa8ae6e44dd036852fc74f31da",
+      "openIssues": []
+    },
+    {
+      "pageId": "json-to-anki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0d72a60a123af14051c9a38991fcc3aa961b725c01c3033e1a5c400fd214314d",
+        "targetHash": "1af65d9bdb4029e9beb06babad297296f4aa8dc347ddd727487f9e9dae99827d",
+        "technicalDependencyHash": "058ec04dd23998172dc1b803a4dd5a9aadc03e2a6e43e19b99f6438f4fa95c38"
+      },
+      "sourceHash": "0d72a60a123af14051c9a38991fcc3aa961b725c01c3033e1a5c400fd214314d",
+      "targetHash": "1f19eb1c96bb078d00fa2e82dbb498f4287080bbed86562475d420652b2bd54e",
+      "technicalDependencyHash": "058ec04dd23998172dc1b803a4dd5a9aadc03e2a6e43e19b99f6438f4fa95c38",
+      "openIssues": []
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "db0c2fc48551c0c230e7380330d8a81214e9920ce7bb0fb8847107b1f0264b61",
+        "targetHash": "450c7fb004577db57886055e75d961a08bcbc02f1afbee5ba3c39ebef49f461e",
+        "technicalDependencyHash": "c54446180497da8341a60846cb5374719a6e2de090c718cb7d78a98c3d36f554"
+      },
+      "sourceHash": "db0c2fc48551c0c230e7380330d8a81214e9920ce7bb0fb8847107b1f0264b61",
+      "targetHash": "6f404cf96ecfdbd0e85e6eb3559c198a597562d048eb5fa48227e38acd68f754",
+      "technicalDependencyHash": "c54446180497da8341a60846cb5374719a6e2de090c718cb7d78a98c3d36f554",
+      "openIssues": []
+    },
+    {
+      "pageId": "csv-to-anki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "db0c2fc48551c0c230e7380330d8a81214e9920ce7bb0fb8847107b1f0264b61",
+        "targetHash": "615d2fc91afde20517345962ccc64474641288647f49395cfe88a9263a714a1d",
+        "technicalDependencyHash": "12387ff19213c7bf02cb5d5f85f22baf69b628e07a2b41b0b192a66749eb08d5"
+      },
+      "sourceHash": "db0c2fc48551c0c230e7380330d8a81214e9920ce7bb0fb8847107b1f0264b61",
+      "targetHash": "28c3ca53b0c9bee3e6edbe982e92ee60f0f03ea3c0bfa5597b99c818656714d7",
+      "technicalDependencyHash": "12387ff19213c7bf02cb5d5f85f22baf69b628e07a2b41b0b192a66749eb08d5",
+      "openIssues": []
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "043c0efa86dfc63e21bb8a6878fdf537179d549ed5f25bfc9bcea9c42a3e09b7",
+        "targetHash": "66ffa74317f6146aac13d3e684cee716f70195e57f69916cdb0a3ea7cfbb7e41",
+        "technicalDependencyHash": "b06682f5840ed82311af003b387d967ca56ac914fa3ffcd10a7530d0d2381de1"
+      },
+      "sourceHash": "043c0efa86dfc63e21bb8a6878fdf537179d549ed5f25bfc9bcea9c42a3e09b7",
+      "targetHash": "34dc2b5d5d783438e59f805d312544b50882724ecd938ee5c3ef50ffb57a362c",
+      "technicalDependencyHash": "b06682f5840ed82311af003b387d967ca56ac914fa3ffcd10a7530d0d2381de1",
+      "openIssues": []
+    },
+    {
+      "pageId": "ai-anki-cards",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "043c0efa86dfc63e21bb8a6878fdf537179d549ed5f25bfc9bcea9c42a3e09b7",
+        "targetHash": "35b290daf6a9507c63983e5eb133783800aebbd027cbe8e6015f4a32f0320fb9",
+        "technicalDependencyHash": "4bff6938d413c24f2a699b8ac61b1f8a7a0832bf815636aeefd1e50076eac0e4"
+      },
+      "sourceHash": "043c0efa86dfc63e21bb8a6878fdf537179d549ed5f25bfc9bcea9c42a3e09b7",
+      "targetHash": "6ae0dbcaaf1e4384b7cc87b45f87a3495978dfb3073df506ecf998aaad2f7046",
+      "technicalDependencyHash": "4bff6938d413c24f2a699b8ac61b1f8a7a0832bf815636aeefd1e50076eac0e4",
+      "openIssues": []
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "a06784508ba9f1d51b6ec9add19691deef217724423332bb54ce8a3b794f7e17",
+        "targetHash": "c96f0a58df2d25081fa5cf9d4485d94d49e568d3777a3174b132ef68507771dd",
+        "technicalDependencyHash": "773700daaa175981ac0b2d29c48b8f9244495cc2e8636931b0d2b1ddf5292e7f"
+      },
+      "sourceHash": "a06784508ba9f1d51b6ec9add19691deef217724423332bb54ce8a3b794f7e17",
+      "targetHash": "4f70b2dd228f8dbfa49b2c1f96767b64b946851ad25c65d6296908ec8fb0214f",
+      "technicalDependencyHash": "773700daaa175981ac0b2d29c48b8f9244495cc2e8636931b0d2b1ddf5292e7f",
+      "openIssues": []
+    },
+    {
+      "pageId": "anki-forge-vs-genanki",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "a06784508ba9f1d51b6ec9add19691deef217724423332bb54ce8a3b794f7e17",
+        "targetHash": "62063942c0530f96531fd4d3391abadfe47fb173933cd74635f7baf97b357c50",
+        "technicalDependencyHash": "d4547ff8da4b37646a01287db2fda0c1a787da0923a72513bb85117ba36ee9a8"
+      },
+      "sourceHash": "a06784508ba9f1d51b6ec9add19691deef217724423332bb54ce8a3b794f7e17",
+      "targetHash": "323f22247b2c970ddeeaabd5453dd93d562b6beb89cb565d8aeee9517e6c7108",
+      "technicalDependencyHash": "d4547ff8da4b37646a01287db2fda0c1a787da0923a72513bb85117ba36ee9a8",
+      "openIssues": []
+    },
+    {
+      "pageId": "development",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "5844886b45b7f234a534634395fc1abef62d22e8ce7c927dd50fce666d868e40",
+        "targetHash": "081f86e7a461236ff97d54834111efa777b1d343169a8235e649a826cbc2c64d",
+        "technicalDependencyHash": "1f076fb993f4032a135625d42463ab176905f8a352b58f6459d9c25c45aa0ce5"
+      },
+      "sourceHash": "5844886b45b7f234a534634395fc1abef62d22e8ce7c927dd50fce666d868e40",
+      "targetHash": "b5ad35752dd2814f76a6701a37fba7ac1d966a6e884b2dba617d65fb0c795455",
+      "technicalDependencyHash": "1f076fb993f4032a135625d42463ab176905f8a352b58f6459d9c25c45aa0ce5",
+      "openIssues": []
+    },
+    {
+      "pageId": "development",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "5844886b45b7f234a534634395fc1abef62d22e8ce7c927dd50fce666d868e40",
+        "targetHash": "ba0da0ff630bf0eb16416ff090e34f10a52f6f29d9121b0d6af88dbddae38762",
+        "technicalDependencyHash": "2c3c4c7d2d0060e2d44c9d9c5361be7c6dfd4839210339500c076c22102e0fca"
+      },
+      "sourceHash": "5844886b45b7f234a534634395fc1abef62d22e8ce7c927dd50fce666d868e40",
+      "targetHash": "6e8dc4e9cc231e52d534176c0cd35e028cf129caeb03ca75f92fcf97b36d4a87",
+      "technicalDependencyHash": "2c3c4c7d2d0060e2d44c9d9c5361be7c6dfd4839210339500c076c22102e0fca",
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "20d900221daccfc05ea34ca9ea55f02de5f255834463fc8cf359d63bdf1d7fc9",
+        "targetHash": "78266f7e10c93a17c1eb7d1b06cf389813e364610199ee797dcfe117a1aa1ad3",
+        "technicalDependencyHash": "03328afd686f4e5255540fec38ab7ce768ac15e4ae0f0912c8723a63b5245012"
+      },
+      "sourceHash": "20d900221daccfc05ea34ca9ea55f02de5f255834463fc8cf359d63bdf1d7fc9",
+      "targetHash": "177fc78f658b45d5bbfa46cdaa10a486a0c80feff9f64075aefeeb5d78486e04",
+      "technicalDependencyHash": "03328afd686f4e5255540fec38ab7ce768ac15e4ae0f0912c8723a63b5245012",
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-guide",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "20d900221daccfc05ea34ca9ea55f02de5f255834463fc8cf359d63bdf1d7fc9",
+        "targetHash": "1bf4be88d548f2a3c06d5291156cdc4c5401d5c59fb3ee68d10fd1ce9ba4ed71",
+        "technicalDependencyHash": "78b9bf3feb0bbc77dc2403b7b834f748be0c11457b0077067bcb7ce8a2ab1d17"
+      },
+      "sourceHash": "20d900221daccfc05ea34ca9ea55f02de5f255834463fc8cf359d63bdf1d7fc9",
+      "targetHash": "9870b7889ad1f1721af4840b57784daed68d17bba1c7859d90ca561b16bc3566",
+      "technicalDependencyHash": "78b9bf3feb0bbc77dc2403b7b834f748be0c11457b0077067bcb7ce8a2ab1d17",
+      "openIssues": []
+    },
+    {
+      "pageId": "templates",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "e1aa1b0ee57c05aadd166230ac449e3d1f7d0f001bfc3ef26a497408644be2f3",
+        "targetHash": "d7de9a72d84f803e24e98b4972ab93dff8a212888d5ded4413777bca0d8f9a1b",
+        "technicalDependencyHash": "e530b7ad90db489ffa75d11cff9a64a03089ffb8772d981c3cf7b2c165a032a1"
+      },
+      "sourceHash": "e1aa1b0ee57c05aadd166230ac449e3d1f7d0f001bfc3ef26a497408644be2f3",
+      "targetHash": "11461e477b99af1070494caa540fbe5f09dd915a5a997161f18ceb77e842e942",
+      "technicalDependencyHash": "e530b7ad90db489ffa75d11cff9a64a03089ffb8772d981c3cf7b2c165a032a1",
+      "openIssues": []
+    },
+    {
+      "pageId": "templates",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "e1aa1b0ee57c05aadd166230ac449e3d1f7d0f001bfc3ef26a497408644be2f3",
+        "targetHash": "474c5cf3064be1410fb91cea0de291f46c6ef2fc87b28652bef829d9058a5f84",
+        "technicalDependencyHash": "ae9e3e97b929da87b4865ac2ab46b4142f67c63c98a60210530cc4bf3a6496a4"
+      },
+      "sourceHash": "e1aa1b0ee57c05aadd166230ac449e3d1f7d0f001bfc3ef26a497408644be2f3",
+      "targetHash": "34119e185f2bb3a3046aa03debb0f6fff5aa8454255d9f03075c5b61c73d0945",
+      "technicalDependencyHash": "ae9e3e97b929da87b4865ac2ab46b4142f67c63c98a60210530cc4bf3a6496a4",
+      "openIssues": []
+    },
+    {
+      "pageId": "api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "e3b9a4aa66a20842fc4ac95e8a59b00337bd286cd1bde24672d3754685216de0",
+        "targetHash": "36b5dbb6396aa3f16773449244bd57c376517e2b662be65785d1ea0a4001ce25",
+        "technicalDependencyHash": "ca3735a1ab15640530e9949b8d5a8897f329fa2412d5cc200c9b8fa7ddd44fcd"
+      },
+      "sourceHash": "e3b9a4aa66a20842fc4ac95e8a59b00337bd286cd1bde24672d3754685216de0",
+      "targetHash": "d3d8abf9c3f2e4e1393fab08650891959d575ca0d7d2249a10c6b832d53f2db8",
+      "technicalDependencyHash": "ca3735a1ab15640530e9949b8d5a8897f329fa2412d5cc200c9b8fa7ddd44fcd",
+      "openIssues": []
+    },
+    {
+      "pageId": "api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "e3b9a4aa66a20842fc4ac95e8a59b00337bd286cd1bde24672d3754685216de0",
+        "targetHash": "a7d54bad8967828ee5e666750740e79bc87ea49c699790e73c4789b3cf00ca85",
+        "technicalDependencyHash": "f0b1230b6781e796cc1bb16995dd715b36a9ce5c559a90f8aba751ea42e40990"
+      },
+      "sourceHash": "e3b9a4aa66a20842fc4ac95e8a59b00337bd286cd1bde24672d3754685216de0",
+      "targetHash": "6c3c3e33573277be0148bd60e52a0aadefe7540e416d72df7327f6e305c19858",
+      "technicalDependencyHash": "f0b1230b6781e796cc1bb16995dd715b36a9ce5c559a90f8aba751ea42e40990",
+      "openIssues": []
+    },
+    {
+      "pageId": "installation",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "f21c79cb6d35a1379bb52d49eb48e14d0317382e0d0217545e42c6ae99fc248c",
+        "targetHash": "a85b18cd125dc7fe5be48f6f1dc5f005a168e80711c09c2f9190ed445b9fd6b6",
+        "technicalDependencyHash": "19c57eb213f1c26ca37f96f28acde4b10914d657c1a26378269ae5436055fa97"
+      },
+      "sourceHash": "f21c79cb6d35a1379bb52d49eb48e14d0317382e0d0217545e42c6ae99fc248c",
+      "targetHash": "26111e88ba8d05580ec43649eb7dce8a6455913450ffb83071b009444458ee45",
+      "technicalDependencyHash": "19c57eb213f1c26ca37f96f28acde4b10914d657c1a26378269ae5436055fa97",
+      "openIssues": []
+    },
+    {
+      "pageId": "installation",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "f21c79cb6d35a1379bb52d49eb48e14d0317382e0d0217545e42c6ae99fc248c",
+        "targetHash": "2e399af4fe61287d10027ae03a589ebfbb74a53f59506fc06c60fec6b664feac",
+        "technicalDependencyHash": "ca33f80c148a9b7c2d359d5cd0e3e98847901ed154e463d91cf15eeac66ea3be"
+      },
+      "sourceHash": "f21c79cb6d35a1379bb52d49eb48e14d0317382e0d0217545e42c6ae99fc248c",
+      "targetHash": "7e4161fd858a3c6c10d56bbe48f3b0b72e56a95078c303119a75c5f5ee422d2e",
+      "technicalDependencyHash": "ca33f80c148a9b7c2d359d5cd0e3e98847901ed154e463d91cf15eeac66ea3be",
+      "openIssues": []
+    },
+    {
+      "pageId": "concepts",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "cec801428d3b2ebd0d827ae4ca95ceb44fdc2605d376319999542a12c61fd559",
+        "targetHash": "d9417d22cf36596e8ec55e7bfb65ae433244e0f0df10175d5550e398256a98f8",
+        "technicalDependencyHash": "76f2a6f9a54c03b6d88db45444f40d998d7b6469982d695bcc497813a76dc4ca"
+      },
+      "sourceHash": "cec801428d3b2ebd0d827ae4ca95ceb44fdc2605d376319999542a12c61fd559",
+      "targetHash": "3b8f8ed6f3d1644978f6e2fe133ed388cbfa00a245eea06ce81953f7869d377f",
+      "technicalDependencyHash": "76f2a6f9a54c03b6d88db45444f40d998d7b6469982d695bcc497813a76dc4ca",
+      "openIssues": []
+    },
+    {
+      "pageId": "concepts",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "cec801428d3b2ebd0d827ae4ca95ceb44fdc2605d376319999542a12c61fd559",
+        "targetHash": "a1f5c66c3e77f79da8b96ce2435dc6617dd9f98f670da1584cb2db84a32cff16",
+        "technicalDependencyHash": "b08f1ae7d12d033cd7198410dff22791c3881712fb84353cf3934891f42e4373"
+      },
+      "sourceHash": "cec801428d3b2ebd0d827ae4ca95ceb44fdc2605d376319999542a12c61fd559",
+      "targetHash": "82db417afef0406abaaebe40933c22a2a1d4bc12a83bfbba62ad57b0ec7eb72a",
+      "technicalDependencyHash": "b08f1ae7d12d033cd7198410dff22791c3881712fb84353cf3934891f42e4373",
+      "openIssues": []
+    },
+    {
+      "pageId": "cards",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ab0282be92cc10afa369f99ffabfa693efb4c06149a71a4d6dbe017c758860d2",
+        "targetHash": "5e7870677e6d41998d4844f62c38f2cc3ba81c89ae7d0f505b26e634ac897bf2",
+        "technicalDependencyHash": "ae870f3a188244eb905fb4ba563cee96ed5d3e823af2a24bf6fde6937c43d8a5"
+      },
+      "sourceHash": "ab0282be92cc10afa369f99ffabfa693efb4c06149a71a4d6dbe017c758860d2",
+      "targetHash": "38c38b8a18ce4717d139109c682a081cc8331c647ec3daa3cb21da7cdc35bf0d",
+      "technicalDependencyHash": "ae870f3a188244eb905fb4ba563cee96ed5d3e823af2a24bf6fde6937c43d8a5",
+      "openIssues": []
+    },
+    {
+      "pageId": "cards",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ab0282be92cc10afa369f99ffabfa693efb4c06149a71a4d6dbe017c758860d2",
+        "targetHash": "92a6b61d8ae2424c575bd511ece3d9d40c5047293dcc618a129d219042a2793c",
+        "technicalDependencyHash": "f7a327cc1a217e7c2ffb02da31d55d1d7b3ccf51a68304da3b9d55ae14e95eac"
+      },
+      "sourceHash": "ab0282be92cc10afa369f99ffabfa693efb4c06149a71a4d6dbe017c758860d2",
+      "targetHash": "3e71dbcf09158c3d4340121198d063d39750aaa6ded07e5b5b62407f4ca789b1",
+      "technicalDependencyHash": "f7a327cc1a217e7c2ffb02da31d55d1d7b3ccf51a68304da3b9d55ae14e95eac",
+      "openIssues": []
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c3cc45c50a6fa17d143478b24fa2a82af223a6259e8832a21c2e3f9a03501e58",
+        "targetHash": "508b7572b4f212d30210e87fc11a8bbce945a5e1b219b790322517ef63f3906f",
+        "technicalDependencyHash": "636954125a477835514e3922ab80b78dc73d378c1e2cbf926bc42784d4a7fd1a"
+      },
+      "sourceHash": "c3cc45c50a6fa17d143478b24fa2a82af223a6259e8832a21c2e3f9a03501e58",
+      "targetHash": "7ffc6fde539e994d70eba9c750aa00be6be2908b447e37ea6725856837e69966",
+      "technicalDependencyHash": "636954125a477835514e3922ab80b78dc73d378c1e2cbf926bc42784d4a7fd1a",
+      "openIssues": []
+    },
+    {
+      "pageId": "custom-notetypes",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c3cc45c50a6fa17d143478b24fa2a82af223a6259e8832a21c2e3f9a03501e58",
+        "targetHash": "603a11d70fa1c761fa1ba1b4a91731881ea3b3776f5f087c1d28aad53f7063b8",
+        "technicalDependencyHash": "b83fbf2a5e1232b72091acf467cf861d3e82a30acfaa9617d0f05267b7417f10"
+      },
+      "sourceHash": "c3cc45c50a6fa17d143478b24fa2a82af223a6259e8832a21c2e3f9a03501e58",
+      "targetHash": "38aa2f1c3e68001f5b49848e3057308cd319f2cf4dcc8bf691f1317ac9590453",
+      "technicalDependencyHash": "b83fbf2a5e1232b72091acf467cf861d3e82a30acfaa9617d0f05267b7417f10",
+      "openIssues": []
+    },
+    {
+      "pageId": "media",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "41ea1b80904b5a435bcc34a340c8e26bd8c19c7bda0b947884489caedeb12841",
+        "targetHash": "ab930b070dff4ec824a38ebc52273f234c3cd1ed4949db458c27b5ecb152b72f",
+        "technicalDependencyHash": "5f24116437e3237ace7bcdcb572e07c822a48d117fa6e3836ad604972b6e8b26"
+      },
+      "sourceHash": "41ea1b80904b5a435bcc34a340c8e26bd8c19c7bda0b947884489caedeb12841",
+      "targetHash": "d8cc31edb2ae1873dad003390a2a37385e532b778776fa7ba48bebb8b5f506f8",
+      "technicalDependencyHash": "5f24116437e3237ace7bcdcb572e07c822a48d117fa6e3836ad604972b6e8b26",
+      "openIssues": []
+    },
+    {
+      "pageId": "media",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "41ea1b80904b5a435bcc34a340c8e26bd8c19c7bda0b947884489caedeb12841",
+        "targetHash": "b3b575ffd9f9c4675a0b149e52b17ea9b47f63efe61e2327f14c507a6710461e",
+        "technicalDependencyHash": "72fb2d7a5c3f9c9d46983f29fd4779909e051fbf1c7b37d17c32454037ce655d"
+      },
+      "sourceHash": "41ea1b80904b5a435bcc34a340c8e26bd8c19c7bda0b947884489caedeb12841",
+      "targetHash": "8b85166c193c527e9e7977aed14937ed52682b7316f094eb3fe0bed90f4d83d7",
+      "technicalDependencyHash": "72fb2d7a5c3f9c9d46983f29fd4779909e051fbf1c7b37d17c32454037ce655d",
+      "openIssues": []
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d272a3eb57191f819701082174e6d64e33692e40396ba9d37de44d1c4d1ea32a",
+        "targetHash": "08717a3ca82f99a41edd5503ef4f16f44e2ba1ee9cfe91528e3e29d8a2295b67",
+        "technicalDependencyHash": "31fffda216fe1f8e17239b24f28e776b47eb9d4935c9c9ea1cc2a075595b2628"
+      },
+      "sourceHash": "d272a3eb57191f819701082174e6d64e33692e40396ba9d37de44d1c4d1ea32a",
+      "targetHash": "c98e1030b31e8c093f076d85039f076feb4c3f6dbb61bf6168f0b9b67f6c210e",
+      "technicalDependencyHash": "31fffda216fe1f8e17239b24f28e776b47eb9d4935c9c9ea1cc2a075595b2628",
+      "openIssues": []
+    },
+    {
+      "pageId": "image-occlusion",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "d272a3eb57191f819701082174e6d64e33692e40396ba9d37de44d1c4d1ea32a",
+        "targetHash": "dc7d7b3bd5be22eafa267137d05c3e960a8010b2382f63bb78bb6ea74763b394",
+        "technicalDependencyHash": "26807fe9e8fa66b17a2271fe44ad8408f3a32d4ec377f0aa571dd677ed799216"
+      },
+      "sourceHash": "d272a3eb57191f819701082174e6d64e33692e40396ba9d37de44d1c4d1ea32a",
+      "targetHash": "623037ef50c83e24dd5820b8019bae6ad0ba036a43338a69fd7e93691cea590a",
+      "technicalDependencyHash": "26807fe9e8fa66b17a2271fe44ad8408f3a32d4ec377f0aa571dd677ed799216",
+      "openIssues": []
+    },
+    {
+      "pageId": "updates",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "13f838e1e0ac856ce780a57b2bf940d04bde5330a11bbe151b88204a53a6d9c6",
+        "targetHash": "73471761a6787beaa91665ff9756b725f254418626e6b6d154f6d2ed5ce95bda",
+        "technicalDependencyHash": "487b2a03867333696524e1d5107d85dd03e216cdeee9b90b2cb6a5b2c80aec08"
+      },
+      "sourceHash": "13f838e1e0ac856ce780a57b2bf940d04bde5330a11bbe151b88204a53a6d9c6",
+      "targetHash": "22665a560caa99b867a37b9271d754b32e34886d3f03517c96b4c5b9a049454b",
+      "technicalDependencyHash": "487b2a03867333696524e1d5107d85dd03e216cdeee9b90b2cb6a5b2c80aec08",
+      "openIssues": []
+    },
+    {
+      "pageId": "updates",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "13f838e1e0ac856ce780a57b2bf940d04bde5330a11bbe151b88204a53a6d9c6",
+        "targetHash": "68c64176a207f9db2c66c78a82c7bb59869843272d8f7368b3b214d6cda7e46e",
+        "technicalDependencyHash": "e0265a12365afffcc7485c3de73dbd2e0539480e2adea567b9c4310d54edc1f5"
+      },
+      "sourceHash": "13f838e1e0ac856ce780a57b2bf940d04bde5330a11bbe151b88204a53a6d9c6",
+      "targetHash": "ca92987601f7b31d3fb801b7f3291c007f8bb0c7f71b06b3b1e7fa86e046bfe9",
+      "technicalDependencyHash": "e0265a12365afffcc7485c3de73dbd2e0539480e2adea567b9c4310d54edc1f5",
+      "openIssues": []
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "00b70c5794ecffd007056a2252416386c540feab21672ec2ff525ef594d79e0d",
+        "targetHash": "5dd73a4e5473df312608da2b68695d1d61a0ccc17df53d9ac5c1fc9960fbd7e6",
+        "technicalDependencyHash": "784ebac278153cb8e17a9a372711893f8d161ebc3fa7a2a641c3c3663c3e7f0a"
+      },
+      "sourceHash": "00b70c5794ecffd007056a2252416386c540feab21672ec2ff525ef594d79e0d",
+      "targetHash": "a4f027e08c5f5c28a5e75d7dff1847a0212b29ee7f8993ec0241728b2fad6362",
+      "technicalDependencyHash": "784ebac278153cb8e17a9a372711893f8d161ebc3fa7a2a641c3c3663c3e7f0a",
+      "openIssues": []
+    },
+    {
+      "pageId": "build-guarantees",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "00b70c5794ecffd007056a2252416386c540feab21672ec2ff525ef594d79e0d",
+        "targetHash": "3d4b8cf6425978e5ccf0a552bfb5f2c92a47e7e39111ac3215cbf0e4b7f9a991",
+        "technicalDependencyHash": "2457304ac503edb4bd66085710b65cbb2d9be3fe7e92694ee95f08627094dca7"
+      },
+      "sourceHash": "00b70c5794ecffd007056a2252416386c540feab21672ec2ff525ef594d79e0d",
+      "targetHash": "5c00923d256617b00234977048da8cd72b116183b5604d312a2ef7e51ba9c941",
+      "technicalDependencyHash": "2457304ac503edb4bd66085710b65cbb2d9be3fe7e92694ee95f08627094dca7",
+      "openIssues": []
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "69cfd78a6a274917c60c7e6a5369488a9ba310c26c225cfccd2b8f7fd669e911",
+        "targetHash": "0a8ae16a6b8daf968eecebdcec4603bb0f148994c859dffff8c6fb51ccae9439",
+        "technicalDependencyHash": "071ada282b21e5303e9671ce7c32330d56416ee1827ac68a7f5f3e779cf7b987"
+      },
+      "sourceHash": "69cfd78a6a274917c60c7e6a5369488a9ba310c26c225cfccd2b8f7fd669e911",
+      "targetHash": "1a265876e368b314c8d60096a05b72d4a081455be8462fd4915c0bbfa5da1d9b",
+      "technicalDependencyHash": "071ada282b21e5303e9671ce7c32330d56416ee1827ac68a7f5f3e779cf7b987",
+      "openIssues": []
+    },
+    {
+      "pageId": "troubleshooting",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "69cfd78a6a274917c60c7e6a5369488a9ba310c26c225cfccd2b8f7fd669e911",
+        "targetHash": "eb9c8a80f188bd945d442fcc53d3d5b01a173c4ced4dd8557c5715792622a69d",
+        "technicalDependencyHash": "a3a754a8a285d9bbc3865ebcd7b7a6bedd5756343d3de6949cad38ffc777f8a8"
+      },
+      "sourceHash": "69cfd78a6a274917c60c7e6a5369488a9ba310c26c225cfccd2b8f7fd669e911",
+      "targetHash": "769c49f9b6d6bb8802d60a42318ad7948bfa6c08ed9414c30953e67787c68153",
+      "technicalDependencyHash": "a3a754a8a285d9bbc3865ebcd7b7a6bedd5756343d3de6949cad38ffc777f8a8",
+      "openIssues": []
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0df2001e3ee18beafdb1986c9831d40ce684bcfde6a28b8be61fca4df3809c1d",
+        "targetHash": "27aecbcdfe936cb13940ddbd8bad84859708ee11edb8c53afadce9d516f8d554",
+        "technicalDependencyHash": "da20030b84972d65c2803c3ce648d5239fc2a074fcf451ac80e83e6fb2f1e34d"
+      },
+      "sourceHash": "0df2001e3ee18beafdb1986c9831d40ce684bcfde6a28b8be61fca4df3809c1d",
+      "targetHash": "2e26c9e37fc65d7517b10a32c56f40881c06f1189146981d0bcb2cd882b2267c",
+      "technicalDependencyHash": "da20030b84972d65c2803c3ce648d5239fc2a074fcf451ac80e83e6fb2f1e34d",
+      "openIssues": []
+    },
+    {
+      "pageId": "compatibility",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "0df2001e3ee18beafdb1986c9831d40ce684bcfde6a28b8be61fca4df3809c1d",
+        "targetHash": "c99c08d6c190328554b0f06f343cc0ac4b42497372df1800aba4acff67991de6",
+        "technicalDependencyHash": "dca63a58ac33ba9bca582b382bf8ad5b8c5d94bd6ba8af76953ca5562b60a35e"
+      },
+      "sourceHash": "0df2001e3ee18beafdb1986c9831d40ce684bcfde6a28b8be61fca4df3809c1d",
+      "targetHash": "9d5628f587c56e0fbccde8e00ef200d602545df336eee7c930491676cbcaec83",
+      "technicalDependencyHash": "dca63a58ac33ba9bca582b382bf8ad5b8c5d94bd6ba8af76953ca5562b60a35e",
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7dd171f814cfd9ba479c3dfaea2f615b6d05de6bb92f83c6cc6444808fcfb7d7",
+        "targetHash": "8df08e60d220d9fee69af6966d0eeacaaf2352fbc5c33feca5105f78d47054b5",
+        "technicalDependencyHash": "e764fcb3667f2089eaa188c651ebd7c144a803cb70f09766fcd9a08435a4123d"
+      },
+      "sourceHash": "7dd171f814cfd9ba479c3dfaea2f615b6d05de6bb92f83c6cc6444808fcfb7d7",
+      "targetHash": "7084e4ed59c52919d49d45e75add32fa7bf993b237fbc35a5da73278573f7679",
+      "technicalDependencyHash": "e764fcb3667f2089eaa188c651ebd7c144a803cb70f09766fcd9a08435a4123d",
+      "openIssues": []
+    },
+    {
+      "pageId": "rust-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "7dd171f814cfd9ba479c3dfaea2f615b6d05de6bb92f83c6cc6444808fcfb7d7",
+        "targetHash": "58aacce28dd54e3aaecb680707e8853feaa72952c5a05af04de296adab4cd68d",
+        "technicalDependencyHash": "dc9ffd78abab02776d3059088ee0df97bd0b7233b03878186c22fae6c0671b81"
+      },
+      "sourceHash": "7dd171f814cfd9ba479c3dfaea2f615b6d05de6bb92f83c6cc6444808fcfb7d7",
+      "targetHash": "8194aed130490e92e9770592449a9e1a294349c6c2d40c98d34ce5939a36c61b",
+      "technicalDependencyHash": "dc9ffd78abab02776d3059088ee0df97bd0b7233b03878186c22fae6c0671b81",
+      "openIssues": []
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "242b91f7575196c46b197a0cf97d7327554aaec1c7df081610b2b3433b750b34",
+        "targetHash": "c0c5a42e641a61b296a8ebc952977208d1d9d5a69f79c4d14c4bede9db98d314",
+        "technicalDependencyHash": "4660a3ffa23ee53d105deb0ba6b09731d4ab3db8a2a3fdb8140892678ed84db7"
+      },
+      "sourceHash": "242b91f7575196c46b197a0cf97d7327554aaec1c7df081610b2b3433b750b34",
+      "targetHash": "022bc7fd0194a0083ae1cbf945de52a6149a13144d2e1ff96428c7f778cf362f",
+      "technicalDependencyHash": "4660a3ffa23ee53d105deb0ba6b09731d4ab3db8a2a3fdb8140892678ed84db7",
+      "openIssues": []
+    },
+    {
+      "pageId": "node-quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "242b91f7575196c46b197a0cf97d7327554aaec1c7df081610b2b3433b750b34",
+        "targetHash": "365128d0408535261f79d2a2e866333b1858e09323b86bd739316e5a34c2c941",
+        "technicalDependencyHash": "763d485193bc1e5217a68695436f0e53b37acc7268bcc0145120c6892959b74f"
+      },
+      "sourceHash": "242b91f7575196c46b197a0cf97d7327554aaec1c7df081610b2b3433b750b34",
+      "targetHash": "3d01c0b3bd28c26b822ab73b98717a993ad27b6ed6e5236db8bc342cb2380a15",
+      "technicalDependencyHash": "763d485193bc1e5217a68695436f0e53b37acc7268bcc0145120c6892959b74f",
+      "openIssues": []
+    },
+    {
+      "pageId": "node-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c1afed92c67ff547a56a1011107395f14dd62da03ce1ec99bff8d8e5f5238c19",
+        "targetHash": "ba580e5b09d37895b31232e2197ca2c1669f662a3a74707187ecd368d7847cc8",
+        "technicalDependencyHash": "4fe2b7984520ce75221317401d8e8cd93c17cf4bcc511fa97e763db81a0b8728"
+      },
+      "sourceHash": "c1afed92c67ff547a56a1011107395f14dd62da03ce1ec99bff8d8e5f5238c19",
+      "targetHash": "84ac7f50b1a61aaebdefd5286914d385cab10debb628539537195e7c393e5d22",
+      "technicalDependencyHash": "4fe2b7984520ce75221317401d8e8cd93c17cf4bcc511fa97e763db81a0b8728",
+      "openIssues": []
+    },
+    {
+      "pageId": "node-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "c1afed92c67ff547a56a1011107395f14dd62da03ce1ec99bff8d8e5f5238c19",
+        "targetHash": "8dd77af818d4df4e30829583f81689fbff89960d85705541a6fa6b75a996ac0f",
+        "technicalDependencyHash": "07e37aaf758f42be2d897360451afac6aebc79a697c240f87ba6ae13afc7bdf5"
+      },
+      "sourceHash": "c1afed92c67ff547a56a1011107395f14dd62da03ce1ec99bff8d8e5f5238c19",
+      "targetHash": "35e5f03f1d5fee152436a5f19ad61aaff0ee136c135f1a23684b0c069c8f6a13",
+      "technicalDependencyHash": "07e37aaf758f42be2d897360451afac6aebc79a697c240f87ba6ae13afc7bdf5",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "17b7fc671298c23ade933cc990dc3e450a51e90df54713607cb1db5edae84186",
+        "targetHash": "1860a6d7ec3a7f08c4ed6f2ba13372e9aa1b7800e1769fddb20ac7f5b2cb6564",
+        "technicalDependencyHash": "a4f4782aef023681222ce8a65f87bd660582fd957e789158f20a5d89d6d9e5a3"
+      },
+      "sourceHash": "17b7fc671298c23ade933cc990dc3e450a51e90df54713607cb1db5edae84186",
+      "targetHash": "f1b2d6ed1361c3d816dcf784966a61c25bcc47934c42e745168f90d3c459c243",
+      "technicalDependencyHash": "a4f4782aef023681222ce8a65f87bd660582fd957e789158f20a5d89d6d9e5a3",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "17b7fc671298c23ade933cc990dc3e450a51e90df54713607cb1db5edae84186",
+        "targetHash": "7126a14eddc46b87fb7cfba1e7dc5b95b3e28ed9bdff4922ff8919b1dd2b010d",
+        "technicalDependencyHash": "4cc8211864ae822c22c22d7e0c7f48fd0b2e601d5937f21a35ad56282180c198"
+      },
+      "sourceHash": "17b7fc671298c23ade933cc990dc3e450a51e90df54713607cb1db5edae84186",
+      "targetHash": "8c651bccb5d8c2018ac059ab0a665f3793e7825c05fb513da3b062591a6371b0",
+      "technicalDependencyHash": "4cc8211864ae822c22c22d7e0c7f48fd0b2e601d5937f21a35ad56282180c198",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-api",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "23231361730fc86a9453f4e30d327071a5c1dffac04b7d8042231065b69feecd",
+        "targetHash": "80b630ef9af089e784291c65ff55fe7503dee1a3240c77c9bc671deb7d86e808",
+        "technicalDependencyHash": "8b9d6b35fc998b9f017dbb09002c8f5b5848fd9f01f51e6c98a1de5f52eafdc7"
+      },
+      "sourceHash": "23231361730fc86a9453f4e30d327071a5c1dffac04b7d8042231065b69feecd",
+      "targetHash": "671684d979711ea22807cbf0997062f4a98985fb4faeec9d742106377e4eb0e1",
+      "technicalDependencyHash": "8b9d6b35fc998b9f017dbb09002c8f5b5848fd9f01f51e6c98a1de5f52eafdc7",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-api",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "23231361730fc86a9453f4e30d327071a5c1dffac04b7d8042231065b69feecd",
+        "targetHash": "de1e979859f8a6961cae639982ce3c6caa2611a8e427110321d9adcc0846c0ff",
+        "technicalDependencyHash": "21e7a2f13d916f34a5eceeedad8a5708482a81af8f00a0ce4da9010c624be881"
+      },
+      "sourceHash": "23231361730fc86a9453f4e30d327071a5c1dffac04b7d8042231065b69feecd",
+      "targetHash": "c524d3b48eda5760f8dbd64a1ca2788ccdc5343a706a7a7847e030c011286a6d",
+      "technicalDependencyHash": "21e7a2f13d916f34a5eceeedad8a5708482a81af8f00a0ce4da9010c624be881",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6c6f50bebce899d752b3e01abe517fe9e91c367fb6e5e0554f2f30def48a7233",
+        "targetHash": "3556b497741df56bc94b36335ed22d59a8ca1888d5d0979857f9d47b2ee9c305",
+        "technicalDependencyHash": "7eb0dc332c45d3df78b3d4b680176b2c75b4cb7509d3598e818a5da4528e6027"
+      },
+      "sourceHash": "6c6f50bebce899d752b3e01abe517fe9e91c367fb6e5e0554f2f30def48a7233",
+      "targetHash": "c843111e69fa828b71b8954531edfb7830cfe502a0165f26c25dc71aabac0833",
+      "technicalDependencyHash": "7eb0dc332c45d3df78b3d4b680176b2c75b4cb7509d3598e818a5da4528e6027",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-diagnostics",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6c6f50bebce899d752b3e01abe517fe9e91c367fb6e5e0554f2f30def48a7233",
+        "targetHash": "f3fb5aaba0ce0307c7217c5c182e32e0ce4554cc6204d0b9d22836ac6a7ec1e9",
+        "technicalDependencyHash": "8c10dec3d5a703ee513013825a201df5982c8b6a90703526feb63e24ef70d623"
+      },
+      "sourceHash": "6c6f50bebce899d752b3e01abe517fe9e91c367fb6e5e0554f2f30def48a7233",
+      "targetHash": "ff5fec0a03f858a81bd9634ca40068461925681f65747d5548780a32ccbcb253",
+      "technicalDependencyHash": "8c10dec3d5a703ee513013825a201df5982c8b6a90703526feb63e24ef70d623",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "5ac48ffdc496d023f5ccbeba90d63a68f2d9bb0c22fadc369a23e6720ba7edda",
+        "targetHash": "876353e852d97228757540211e1f9cc8a78e9ba128d7815c31add08800dd5edd",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "sourceHash": "5ac48ffdc496d023f5ccbeba90d63a68f2d9bb0c22fadc369a23e6720ba7edda",
+      "targetHash": "0a2766df09308a94251e2b963967b036c9968a71214753216b0c95b4046dde95",
+      "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34",
+      "openIssues": []
+    },
+    {
+      "pageId": "python-migration",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "5ac48ffdc496d023f5ccbeba90d63a68f2d9bb0c22fadc369a23e6720ba7edda",
+        "targetHash": "64c243a786cf91ddd5e4c3cdcf9932d9aaab0d7f5fa972fda0736a2a6a53131d",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "sourceHash": "5ac48ffdc496d023f5ccbeba90d63a68f2d9bb0c22fadc369a23e6720ba7edda",
+      "targetHash": "368b199a5c991d8e619c707994ffa402d875a32780dada45b0d49798aca09cee",
+      "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05",
+      "openIssues": []
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ae4f1e925358257dca02be54f592a274c56cecf4384e4e7151e7f29c6b3fecdc",
+        "targetHash": "c6b33319ee5d015f60ddd0a0b9867e0501ffb6edfb5298c2bf37e6bb0d97e443",
+        "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34"
+      },
+      "sourceHash": "ae4f1e925358257dca02be54f592a274c56cecf4384e4e7151e7f29c6b3fecdc",
+      "targetHash": "8454764365c14549d118552a7363befd4648385b28ff7012c8e6e30e16b10da2",
+      "technicalDependencyHash": "865455ae7ec4445b411b29f51458b87cda3c19694170f01fc7e0dd6a9108da34",
+      "openIssues": []
+    },
+    {
+      "pageId": "genanki-migration",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "ae4f1e925358257dca02be54f592a274c56cecf4384e4e7151e7f29c6b3fecdc",
+        "targetHash": "8ffcb79788ca909162a190164b9159894ae332885ab72d1c5365f5735b7782d1",
+        "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05"
+      },
+      "sourceHash": "ae4f1e925358257dca02be54f592a274c56cecf4384e4e7151e7f29c6b3fecdc",
+      "targetHash": "c44bbe73cd76126d1cf2a5f2756a3465e0714d62af699ebf9caaefbb2a633a4f",
+      "technicalDependencyHash": "8fcfbe25e9f19fefd37c9ec58b0f40a2845a41d61fb4c5b43d64bdd2bb27bb05",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6ddb6fb238860e9f5d886f9269450f56c046f20a87a90657bd1850f78e19f7e2",
+        "targetHash": "dc8617fbda6631d8bd7ecd19de0ae938c23fa1ac35bbed3c02975b7f6cc08fbb",
+        "technicalDependencyHash": "096a5f96e0f36f385cb232693178422ab715da6eb7003dce7991e1205690fa98"
+      },
+      "sourceHash": "6ddb6fb238860e9f5d886f9269450f56c046f20a87a90657bd1850f78e19f7e2",
+      "targetHash": "02b6e10f026fb72353a8404f36dff6fb22e34babd9c864193586770911d10f89",
+      "technicalDependencyHash": "096a5f96e0f36f385cb232693178422ab715da6eb7003dce7991e1205690fa98",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog:your-first-anki-deck",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "6ddb6fb238860e9f5d886f9269450f56c046f20a87a90657bd1850f78e19f7e2",
+        "targetHash": "0b331910980be5195250d475ad57ba44866d0be7e9934a90fa45afcad362dd0a",
+        "technicalDependencyHash": "32e59ebb0fbcf2da3cd70de692a400485c7ee0e4169718c999e6058bfd8b40d4"
+      },
+      "sourceHash": "6ddb6fb238860e9f5d886f9269450f56c046f20a87a90657bd1850f78e19f7e2",
+      "targetHash": "56127c5ac787d9fe89f08e0467c93aaf8d7a487f1b4d80cd1ca143bbd773b0a2",
+      "technicalDependencyHash": "32e59ebb0fbcf2da3cd70de692a400485c7ee0e4169718c999e6058bfd8b40d4",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "en",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b3a9025cbfcd33da07b0b6a3b2216d5e619e015c0270b3c980f6406413536ad6",
+        "targetHash": "175cf14b19df701724258fa575172ddc2a46f76202d74b51b46d7e4c6f6de2a6",
+        "technicalDependencyHash": "118366f959246f646ec74374dfd973b39fcef063d57ae495c9d02873614dddc2"
+      },
+      "sourceHash": "b3a9025cbfcd33da07b0b6a3b2216d5e619e015c0270b3c980f6406413536ad6",
+      "targetHash": "f23eca86cafe0eec68bde27d539ff1961a36e1d5bcdcf9c0eb099a8d2d029e6c",
+      "technicalDependencyHash": "118366f959246f646ec74374dfd973b39fcef063d57ae495c9d02873614dddc2",
+      "openIssues": []
+    },
+    {
+      "pageId": "blog:stable-ids-and-deck-updates",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "b3a9025cbfcd33da07b0b6a3b2216d5e619e015c0270b3c980f6406413536ad6",
+        "targetHash": "b757504b8436de587ebf055b6113285da11a74aec090b480d580aa97fea3a9da",
+        "technicalDependencyHash": "b4e693171d28bc132925cc5e84d7c26a5ae8b1b2ab2825ff37312ee75d8d7c35"
+      },
+      "sourceHash": "b3a9025cbfcd33da07b0b6a3b2216d5e619e015c0270b3c980f6406413536ad6",
+      "targetHash": "b34928aabaed4458832ae1154b85e79bdffb91bdf67ae41dd744225d7b6555ed",
+      "technicalDependencyHash": "b4e693171d28bc132925cc5e84d7c26a5ae8b1b2ab2825ff37312ee75d8d7c35",
+      "openIssues": []
+    }
+  ]
+}

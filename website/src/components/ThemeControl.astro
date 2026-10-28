@@ -2,10 +2,10 @@
 import { createTranslator } from '../i18n/messages.mjs';
 import { localeFromPath } from '../../site-model.mjs';
 import Icon from './Icon.astro';
-interface Props { locale?: string }
-const { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;
+interface Props { locale?: string; scope?: 'header' | 'docs' }
+const { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL), scope = 'docs' } = Astro.props;
 const t = createTranslator(locale);
-const name = `theme-${crypto.randomUUID()}`;
+const name = `theme-${scope}-${locale}`;
 const options = [
   { value: 'light', icon: 'sun', label: t('nav.light') },
   { value: 'dark', icon: 'moon', label: t('nav.dark') },

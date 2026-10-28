@@ -95,11 +95,13 @@ jobs:
           SITE_DEPLOYMENT: preview
         run: |
           npm run build
+          npm run check:rebuild
           npm run verify:release
           npm run check:release
       - name: Verify root deployment and prepare the release artifact
         run: |
           npm run build
+          npm run check:rebuild
           npm run verify:release
           npm run check:release
       - uses: actions/upload-artifact@v4

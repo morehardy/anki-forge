@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "reviewerRun": "/root/independent_linguistic_source_review/2026-10-28/stable-theme-initial",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-stable-theme-34.json",
+    "sha256": "df72b9ecb3d8d65f96f328193fcef7231b08a469922ac81c92b1d15373cedd52"
+  },
+  "status": "pending",
+  "sourceDiff": "--- \n+++ \n@@ -4,9 +4,9 @@\n import Icon from './Icon.astro';\n interface Props { locale?: string }\n const { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;\n const t = createTranslator(locale);\n-const name = `theme-${crypto.randomUUID()}`;\n+const name = `theme-${locale}`;\n const options = [\n   { value: 'light', icon: 'sun', label: t('nav.light') },\n   { value: 'dark', icon: 'moon', label: t('nav.dark') },\n   { value: 'auto', icon: 'desktop', label: t('nav.auto') },\n",
+  "sourceSnapshot": {
+    "file": "website/src/components/ThemeControl.astro",
+    "sha256": "4998a9694b0497ddcaa37013f258e31bc12bd8c1e8a4ef5d562a31dbbd397501",
+    "text": "---\nimport { createTranslator } from '../i18n/messages.mjs';\nimport { localeFromPath } from '../../site-model.mjs';\nimport Icon from './Icon.astro';\ninterface Props { locale?: string }\nconst { locale = localeFromPath(Astro.url.pathname, import.meta.env.BASE_URL) } = Astro.props;\nconst t = createTranslator(locale);\nconst name = `theme-${locale}`;\nconst options = [\n  { value: 'light', icon: 'sun', label: t('nav.light') },\n  { value: 'dark', icon: 'moon', label: t('nav.dark') },\n  { value: 'auto', icon: 'desktop', label: t('nav.auto') },\n] as const;\n---\n<div class=\"theme-control\" role=\"radiogroup\" aria-label={t('nav.theme')} data-theme-control data-theme-choice=\"auto\">\n  {options.map(option => (\n    <label class=\"theme-option\">\n      <input class=\"sr-only\" type=\"radio\" name={name} value={option.value} aria-label={option.label} data-theme-option checked={option.value === 'auto'} disabled />\n      <span class=\"theme-option-face\"><Icon name={option.icon} /></span>\n      <span class=\"theme-tooltip\" aria-hidden=\"true\">{option.label}</span>\n    </label>\n  ))}\n</div>\n\n<style>\n  .theme-control {\n    --theme-option-size: 32px;\n    --theme-position: 2;\n    position: relative;\n    isolation: isolate;\n    display: grid;\n    grid-template-columns: repeat(3, var(--theme-option-size));\n    flex-shrink: 0;\n    padding: 4px;\n    border: 1px solid var(--af-line);\n    border-radius: 999px;\n    background: var(--af-soft);\n  }\n  .theme-control[data-theme-choice='light'] { --theme-position: 0; }\n  .theme-control[data-theme-choice='dark'] { --theme-position: 1; }\n  .theme-control::before {\n    content: '';\n    position: absolute;\n    inset: 4px auto auto 4px;\n    width: var(--theme-option-size);\n    height: var(--theme-option-size);\n    border-radius: 50%;\n    background: var(--af-paper);\n    box-shadow: 0 1px 4px #142d2914, inset 0 0 0 1px var(--af-line);\n    transform: translateX(calc(var(--theme-position) * 100%));\n    transition: transform 220ms cubic-bezier(.22, 1, .36, 1);\n    pointer-events: none;\n  }\n  .theme-option { position: relative; cursor: pointer; }\n  .theme-option-face {\n    position: relative;\n    display: grid;\n    place-items: center;\n    width: var(--theme-option-size);\n    height: var(--theme-option-size);\n    border-radius: 50%;\n    color: var(--af-muted);\n    font-size: 17px;\n    transition: color 160ms ease;\n  }\n  .theme-option:hover .theme-option-face,\n  input:checked + .theme-option-face { color: var(--af-accent); }\n  input:focus-visible + .theme-option-face { outline: 2px solid var(--af-accent); outline-offset: 2px; }\n  input:disabled + .theme-option-face { opacity: .5; cursor: default; }\n  .theme-tooltip {\n    position: absolute;\n    z-index: 1;\n    top: calc(100% + 12px);\n    left: 50%;\n    transform: translate(-50%, -3px);\n    padding: 5px 9px;\n    border: 1px solid var(--af-line);\n    border-radius: 6px;\n    background: var(--af-paper);\n    color: var(--af-ink);\n    box-shadow: 0 3px 12px #142d2910;\n    font: 12px/1.5 var(--af-font);\n    white-space: nowrap;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    transition: opacity 120ms ease, transform 120ms ease, visibility 120ms;\n  }\n  .theme-option:last-child .theme-tooltip { left: auto; right: -4px; transform: translateY(-3px); }\n  input:focus-visible ~ .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }\n  .theme-option:last-child input:focus-visible ~ .theme-tooltip { transform: translateY(0); }\n  @media (hover: hover) {\n    .theme-option:hover .theme-tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }\n    .theme-option:last-child:hover .theme-tooltip { transform: translateY(0); }\n  }\n  @media (pointer: coarse) { .theme-control { --theme-option-size: 40px; } }\n  @media (prefers-reduced-motion: reduce) {\n    .theme-control::before, .theme-option-face, .theme-tooltip { transition: none; }\n  }\n</style>\n"
+  },
+  "finding": {
+    "severity": "major",
+    "category": "interaction/radio-group-scope",
+    "explanation": "A docs page has two ThemeControl instances: Header.astro renders one, and the Starlight ThemeSelect component override renders another. They are separate radiogroups but have no form-owner isolation. A name derived only from locale collides across these instances. Existing rendered docs confirm both instances, with previously distinct UUID names.",
+    "proposedFix": "Use deterministic invocation scope plus locale for the radio name, e.g. header versus sidebar; keep the translated labels/options unchanged.",
+    "sourceLocations": [
+      "website/src/components/Header.astro:27",
+      "website/astro.config.mjs:24"
+    ],
+    "renderedEvidence": [
+      {
+        "file": "website/dist/docs/index.html",
+        "instances": 2
+      },
+      {
+        "file": "website/dist/zh-cn/docs/index.html",
+        "instances": 2
+      }
+    ],
+    "resolution": "unresolved"
+  },
+  "limits": "The existing dist files were read to confirm instance count/call context, not as a fresh artifact of this candidate. No browser/build or product change was performed. The previous complete main linguistic approval report is retained without rebinding this failed candidate."
+}

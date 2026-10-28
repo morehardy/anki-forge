@@ -130,15 +130,32 @@ loading and recovery behavior. Concept normalization and metadata ranking handle
 local expressions; `search-queries.json` is a separate frozen acceptance set,
 not a production query routing table or measured search-volume data.
 
-After a strict build, use `npm run verify:release`, followed by
+After a strict build, run `npm run check:rebuild` with the same environment. It
+really rebuilds and compares every HTML (including 404), Markdown and llms file
+byte for byte, along with the source identity. Theme controls use separate stable
+names for the site header and native documentation control. Random render IDs
+would fail this check even when both manifests are internally consistent.
+
+Then use `npm run verify:release`, followed by
 `npm run check:release` immediately before artifact upload. The first command
 actually executes source, site, historic surface, machine, schema, fault
 injection, browser and search checks. Reports and logs stay under
 `../target/website-localization/{root,prefix}`; they bind the manifest, current
 inputs and all artifact bytes without changing them. The second command rejects
 changed source, resources, manifest or evidence. CI runs this sequence for both
-deployment bases and uploads the evidence separately. Passing it establishes
-artifact engineering acceptance; production identity and HTTP behavior still
+deployment bases and uploads the evidence separately. Both commands also require
+the independent AI reports selected by `post-build-reviews.config.json`: six real
+usage tasks and four llms-to-Markdown reading tasks in every released language.
+Reports bind the actual reviewed manifest, inputs, configuration, resources and
+execution dependencies. Source and reviewed resource bytes must match for reuse
+after a commit-only change; the original manifest remains archived.
+
+For the first review of a new artifact, explicitly run
+`node scripts/release-evidence.mjs run --engineering-only`, have independent AI
+review the real artifact and save its reports, then run
+`node scripts/release-evidence.mjs finish`. Engineering-only evidence cannot pass
+`check:release`. No command manufactures passing AI reviews. Production identity
+and HTTP behavior still
 require `check:live` against the independently uploaded manifest after deployment.
 
 Useful checks:
