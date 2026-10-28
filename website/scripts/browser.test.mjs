@@ -148,7 +148,7 @@ for (const locale of localeIds) {
     const nativeCode = page.locator('.expressive-code').first();
     await nativeCode.locator('.copy button').click();
     await eventually(async () => (await page.evaluate(() => navigator.clipboard.readText())).trim() === (await nativeCode.locator('pre').innerText()).trim(), 'Native documentation code was not copied');
-    await page.locator('.site-header [data-theme-picker]').selectOption('dark');
+    await page.locator('.site-header .theme-option:has([value="dark"])').click();
     await page.goto(route('quickstart') + '?ref=parity#export-your-first-deck');
     await eventually(async () => (await page.locator('.site-header [data-language-switch]').getAttribute('href')).includes('#export-your-first-deck'), 'Language switch did not preserve the valid section');
     await follow(page, page.locator('.site-header [data-language-switch]'));
@@ -190,10 +190,19 @@ for (const locale of localeIds) {
     await page.goto(route('home') + '#workflow-heading');
     assert.equal(await page.locator('#workflow-heading').count(), 1);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+    const systemOption = page.getByRole('radio', { name: tr('nav.auto'), exact: true });
+    assert.equal(await systemOption.isChecked(), true);
+    await systemOption.focus();
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await page.getByRole('radio', { name: tr('nav.light'), exact: true }).isChecked(), true);
+    assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
+    await page.keyboard.press('ArrowLeft');
+    assert.equal(await systemOption.isChecked(), true);
+    assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
     await page.locator('.mobile-menu summary').click();
     await follow(page, page.locator('.mobile-menu [data-section="examples"]'));
     assert.equal(new URL(page.url()).pathname, new URL(route('examples')).pathname);
-    await page.locator('.site-header [data-theme-picker]').selectOption('light');
+    await page.locator('.site-header .theme-option:has([value="light"])').click();
     await page.locator('.mobile-menu summary').click();
     await follow(page, page.locator('.mobile-menu [data-section="docs"]'));
     assert.equal(new URL(page.url()).pathname, new URL(route('docs')).pathname);
@@ -203,7 +212,7 @@ for (const locale of localeIds) {
     await visible(page.locator('#starlight__sidebar'));
     await follow(page, page.locator('#starlight__sidebar a').filter({ hasText: locale === 'en' ? 'Core concepts' : '核心概念' }));
     assert.equal(new URL(page.url()).pathname, new URL(route('concepts')).pathname);
-    await page.locator('.site-header [data-theme-picker]').selectOption('auto');
+    await page.locator('.site-header .theme-option:has([value="auto"])').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
     await page.emulateMedia({ colorScheme: 'light' });
     await eventually(async () => (await page.locator('html').getAttribute('data-theme')) === 'light', 'System theme changes were ignored');

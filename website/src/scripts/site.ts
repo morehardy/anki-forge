@@ -5,18 +5,20 @@ import { renderPrompt } from '../lib/ai-quickstart.mjs';
 
 const root = document.documentElement;
 const darkPreference = window.matchMedia('(prefers-color-scheme: dark)');
-const themePickers = [...document.querySelectorAll<HTMLSelectElement>('[data-theme-picker]')];
+const themeControls = [...document.querySelectorAll<HTMLElement>('[data-theme-control]')];
+const themeOptions = [...document.querySelectorAll<HTMLInputElement>('[data-theme-option]')];
 let theme = 'auto';
 try { theme = localStorage.getItem('starlight-theme') || 'auto'; } catch { /* Storage is optional. */ }
 if (!['light', 'dark', 'auto'].includes(theme)) theme = 'auto';
 function applyTheme() {
   root.dataset.theme = theme === 'dark' || (theme === 'auto' && darkPreference.matches) ? 'dark' : 'light';
-  themePickers.forEach(picker => { picker.value = theme; picker.disabled = false; });
+  themeControls.forEach(control => { control.dataset.themeChoice = theme; });
+  themeOptions.forEach(option => { option.checked = option.value === theme; option.disabled = false; });
 }
 applyTheme();
 darkPreference.addEventListener('change', applyTheme);
-themePickers.forEach(themePicker => themePicker.addEventListener('change', () => {
-  theme = themePicker.value;
+themeOptions.forEach(option => option.addEventListener('change', () => {
+  theme = option.value;
   try { localStorage.setItem('starlight-theme', theme === 'auto' ? '' : theme); } catch { /* Respect storage restrictions. */ }
   applyTheme();
 }));

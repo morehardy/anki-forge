@@ -19,6 +19,10 @@ const locale = Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-CN' : 'en';
     .docs-header .wordmark > span:last-child { display: none; }
     .docs-header .wordmark svg { width: 24px; }
     .docs-header .header-tools { gap: 6px; }
-    .docs-header .theme-label select { max-width: 80px; }
+  }
+  @media (max-width: 374px) {
+    :root { --sl-nav-height: 8.5rem; }
+    .docs-header .docs-search { order: 0; width: auto; margin-left: auto; }
+    .docs-header .header-tools { order: 1; width: 100%; justify-content: space-between; }
   }
 </style>
