@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-acceptance",
+  "status": "passed",
+  "commit": "d988c4e4610e6a7d0904c4984b24572498acc090",
+  "inputSha256": "083ac8095ad2a6c7f641fc6ce0398f0a7164f946fbf7fc567243f71c39a3eec0",
+  "releaseLocales": [
+    "en",
+    "zh-CN"
+  ],
+  "topicsPerLocale": 34,
+  "normalHtml": 68,
+  "markdown": 62,
+  "llms": 2,
+  "unitTests": {
+    "passed": 136,
+    "failed": 0
+  },
+  "astro": {
+    "files": 120,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "browserTestsPerConfiguration": 16,
+  "actualUsageTasks": 24,
+  "independentAiMachineReadTasks": 16,
+  "search": {
+    "en": {
+      "core": "12/12",
+      "positive": "25/25",
+      "negative": "5/5"
+    },
+    "zh-CN": {
+      "core": "12/12",
+      "positive": "24/25",
+      "negative": "5/5"
+    }
+  },
+  "knownMinorLimitations": [
+    "zh-CN-variant-03: 示意图 遮名称 复习题 did not return image-occlusion in top3; accepted positive threshold is at least23/25.",
+    "Existing minor linguistic observations remain documented in the independent source review; no unresolved major or critical."
+  ],
+  "engineering": {
+    "root": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/engineering/root/release-evidence.json",
+      "sha256": "c83ee75d0c19b56aa9238abd32f034eba02829ddc1d16ac0736d12a3cdd38fb4",
+      "manifestSha256": "f54a7fe5c4fdfb0fc8fd1ea435f6d653be1b33f1b0a910be6108c13150c53c51",
+      "artifactSha256": "43f93e5cfee7468f48c6b77f16376c8188aec009b354d369531372426a0afbc7",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ]
+    },
+    "prefix": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/engineering/prefix/release-evidence.json",
+      "sha256": "642414b752c82ef9858a7d05beca209b64d60f88b1a5e4eb776680b768c79c98",
+      "manifestSha256": "04d4f3923b275af8f076dab11235a602cbd6d4f5c50ed914a1255925ba2e4eb4",
+      "artifactSha256": "6aaca93402be9b2e5a7008d1cb6c221e30ea75dc82b4d451c83cb7d9b5857eb5",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "notClaimed": [
+    "CI execution for these commits",
+    "production deployment or production MIME verification of new machine resources",
+    "new search-engine indexing, traffic, ranking or natural AI-platform recommendation improvement",
+    "new Anki desktop GUI import execution"
+  ]
+}
