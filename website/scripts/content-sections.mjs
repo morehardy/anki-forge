@@ -1,5 +1,6 @@
 import GithubSlugger from 'github-slugger';
 import contracts from '../section-contracts.json' with { type: 'json' };
+import { configuredLocales } from '../locale-model.mjs';
 
 const marker = /^\s*(?:<!--\s*section:\s*([a-z0-9][a-z0-9-]*)\s*-->|\{\/\*\s*section:\s*([a-z0-9][a-z0-9-]*)\s*\*\/\})\s*$/;
 const safeId = value => typeof value === 'string' && /^[^\s"'<>]+$/u.test(value);
@@ -59,6 +60,12 @@ export function sectionMapping(pageId, locale, markdown, legacy = {}, registry =
     mapping[alias] = target;
   }
   return mapping;
+}
+
+// Historic heading slugs exist only for the locale that published them.
+export function legacyAliases(registry, pageId, locale) {
+  for (const id of Object.keys(registry)) if (!Object.hasOwn(configuredLocales, id)) throw new Error(`Unknown legacy section locale: ${id}`);
+  return registry[locale]?.[pageId] ?? {};
 }
 
 export function addSectionAliases(markdown, mapping) {

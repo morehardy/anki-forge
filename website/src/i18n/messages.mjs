@@ -1,9 +1,10 @@
-import en from './en.json' with { type: 'json' };
-import zh from './zh-CN.json' with { type: 'json' };
+import { releaseLocales } from '../../locale-model.mjs';
 import { messageParameters, translatorFor } from './format-message.mjs';
 import { clientMessageKeys } from './client-messages.mjs';
 
-export const catalogs = { en, 'zh-CN': zh };
+// One catalog per release locale; configured but unreleased catalogs are never read.
+export const catalogs = Object.fromEntries(await Promise.all(releaseLocales.map(async locale =>
+  [locale, (await import(`./${locale}.json`, { with: { type: 'json' } })).default])));
 function forms(message, locale, key) {
   if (typeof message === 'string' && message.trim()) return [message];
   if (!message || message.type !== 'plural' || typeof message.variable !== 'string' || !message.forms) throw new Error(`${locale}: empty or invalid message ${key}`);

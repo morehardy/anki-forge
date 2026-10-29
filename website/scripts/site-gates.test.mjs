@@ -9,6 +9,7 @@ import { withBase, siteConfig } from '../site.config.mjs';
 import { generateMachineContent } from './machine-content.mjs';
 import { publishedPages } from './published-pages.mjs';
 import { machineGroups } from '../machine-content.config.mjs';
+import { pagePath } from '../site-model.mjs';
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const checker = fileURLToPath(new URL('./check-site.mjs', import.meta.url));
 for (const [name, mutate, expected] of [
@@ -69,8 +70,8 @@ const topics = await publishedPages();
 const sample = topics.find(page => page.type === 'docs' && page.id !== 'docs');
 const indexTopic = machineGroups.flatMap(group => group.ids).map(id => topics.find(page => page.id === id)).find(Boolean);
 if (!sample || !indexTopic) throw new Error('A published documentation article and curated topic are required for gate tests');
-const sampleDirectory = sample.en.slice(1);
-const indexTarget = `${indexTopic.en}index.md`;
+const sampleDirectory = pagePath(sample.id, 'en').slice(1);
+const indexTarget = `${pagePath(indexTopic.id, 'en')}index.md`;
 for (const [name, file, mutate, checker, message] of [
   ['missing Markdown', `${sampleDirectory}index.md`, null, machineChecker, /Markdown coverage/],
   ['broken AI index', 'llms.txt', text => text.replace(indexTarget, '/missing-machine-gate.md'), machineChecker, /curated links/],

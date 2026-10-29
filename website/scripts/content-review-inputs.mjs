@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { legacyAliases } from './content-sections.mjs';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
 export const rubricVersion = 'anki-forge-language-quality-v1';
@@ -62,15 +63,14 @@ function property(node, name) {
 
 function modelArray(declarations, name, allowTransform = false) {
   let node = declarations.get(name);
-  let transform, mapper;
+  let transform;
   if (node && ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === 'map') {
     if (!allowTransform) throw new Error(`Review model array must remain literal: ${name}`);
     transform = ts.createPrinter({ removeComments: true }).printList(ts.ListFormat.CommaListElements, node.arguments, node.getSourceFile());
-    mapper = node.arguments[0];
     node = node.expression.expression;
   }
   if (!node || !ts.isArrayLiteralExpression(node)) throw new Error(`Missing literal review model array: ${name}`);
-  return { nodes: node.elements, transform, mapper };
+  return { nodes: node.elements, transform };
 }
 
 function renderedModelInputs(files, page, locale) {
@@ -93,9 +93,6 @@ function renderedModelInputs(files, page, locale) {
   const ownDocument = documents.find(document => document.name === page.id);
   const ownCommon = common.find(item => item.id === page.id);
   const catalog = JSON.parse(files[`website/src/i18n/${locale}.json`]);
-  const localized = (document, field) => locale === 'en' ? document[field]
-    : locale === 'zh-CN' ? document[`zh${field[0].toUpperCase()}${field.slice(1)}`]
-      : document[`${field}s`]?.[locale];
   const result = {
     implementation: {
       site: modelImplementation(files['website/site-model.mjs'], 'site-model.mjs', ['documents', 'common', 'navigation', 'footerNavigation', 'nextTasks', 'docGroups', 'articles']),
@@ -104,8 +101,8 @@ function renderedModelInputs(files, page, locale) {
     metadata: {
       id: page.id, type: ownDocument ? 'docs' : ownCommon?.type ?? 'article', destination: destination(page.id),
       // Article metadata is already part of its exact source/frontmatter bytes.
-      title: ownDocument ? localized(ownDocument, 'title') : ownCommon ? catalog[`${page.id}.title`] : undefined,
-      description: ownDocument ? localized(ownDocument, 'description') : ownCommon ? catalog[`${page.id}.description`] : undefined,
+      title: ownDocument ? ownDocument.title[locale] : ownCommon ? catalog[`${page.id}.title`] : undefined,
+      description: ownDocument ? ownDocument.description[locale] : ownCommon ? catalog[`${page.id}.description`] : undefined,
     },
     locale: { current, menu: selected.map(id => { const entry = localeData(id); return { id, label: entry.label, prefix: entry.prefix, lang: entry.lang, dir: entry.dir }; }) },
     wordmark: destination('home'),
@@ -114,20 +111,18 @@ function renderedModelInputs(files, page, locale) {
   };
   if (page.type === 'home') result.nextTasks = values('nextTasks').map(item => ({ ...item, destination: destination(item.pageId) }));
   if (page.type === 'docs') {
-    const groups = modelArray(model, 'docGroups', true);
-    const body = groups.mapper?.body;
-    const labels = property(body && ts.isParenthesizedExpression(body) ? body.expression : body, 'labels');
-    const label = property(labels, locale);
-    if (!label) throw new Error(`Missing review sidebar label mapping: ${locale}`);
-    result.sidebar = { transform: groups.transform, groups: groups.nodes.map(literal).map(group => ({
-      label: ts.isPropertyAccessExpression(label) && ts.isIdentifier(label.expression) && label.expression.text === groups.mapper.parameters[0]?.name.text ? group[label.name.text] : literal(label),
-      collapsed: group.collapsed ?? false,
-      items: group.ids.map(id => {
-        const document = documents.find(item => item.name === id);
-        if (!document) throw new Error(`Unknown review sidebar document: ${id}`);
-        return { ...destination(id), label: locale === 'en' ? document.title : locale === 'zh-CN' ? document.zhTitle : document.titles?.[locale] };
-      }),
-    })) };
+    result.sidebar = { groups: values('docGroups').map(group => {
+      if (!group.labels?.[locale]) throw new Error(`Missing review sidebar label: ${locale}`);
+      return {
+        label: group.labels[locale],
+        collapsed: group.collapsed ?? false,
+        items: group.ids.map(id => {
+          const document = documents.find(item => item.name === id);
+          if (!document) throw new Error(`Unknown review sidebar document: ${id}`);
+          return { ...destination(id), label: document.title[locale] };
+        }),
+      };
+    }) };
   }
   return result;
 }
@@ -212,6 +207,6 @@ export async function reviewInputs(page, locale, root) {
   if (!briefs[locale] || briefs.version !== glossaryVersion) throw new Error(`${locale}: missing or stale language brief`);
   const references = new Set([...sourceReferences(files[page.sources.en]), ...sourceReferences(files[page.sources[locale]])]);
   const technicalInputs = Object.keys(files).filter(name => technicalFiles.includes(name) || name === 'anki_forge/examples/target_api_basic.rs' || name === 'docs/benchmark-presentation.json' || name === 'website/scripts/benchmark-presentation.mjs' || /^docs\/performance\//.test(name) || references.has(name));
-  const technicalDependencyHash = digest(JSON.stringify({ sections, legacy: JSON.parse(files['website/legacy-sections.json'])[page.id] || null, brief: briefs[locale], technical: technicalInputs.map(name => [name, digest(files[name])]) }));
+  const technicalDependencyHash = digest(JSON.stringify({ sections, legacy: legacyAliases(JSON.parse(files['website/legacy-sections.json']), page.id, locale), brief: briefs[locale], technical: technicalInputs.map(name => [name, digest(files[name])]) }));
   return { sourceHash, targetHash, technicalDependencyHash };
 }

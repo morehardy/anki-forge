@@ -43,7 +43,7 @@ export default defineConfig({
         },
       ],
       sidebar: docGroups.map(group => ({
-        label: group.label, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, group.labels[locale]])), collapsed: group.collapsed ?? false,
+        label: group.labels.en, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, group.labels[locale]])), collapsed: group.collapsed ?? false,
         items: group.ids.filter(id => publicTopics.has(id)).map(id => {
           const page = docPages.find(page => page.id === id);
           return { slug: page.route.slice(1, -1), label: page.title.en, translations: Object.fromEntries(localeIds.filter(locale => locale !== 'en').map(locale => [locale, page.title[locale]])) };

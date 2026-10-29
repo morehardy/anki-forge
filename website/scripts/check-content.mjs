@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { pages, docPages, localeIds, locales, docGroups, navigation, footerNavigation, nextTasks } from '../site-model.mjs';
 import { configuredLocales } from '../locale-model.mjs';
 import { validateMessages } from '../src/i18n/messages.mjs';
-import { sectionMapping } from './content-sections.mjs';
+import { legacyAliases, sectionMapping } from './content-sections.mjs';
 import { frontmatter } from './published-pages.mjs';
 import { digest, reviewInputs, rubricVersion, glossaryVersion } from './content-review-inputs.mjs';
 export { digest } from './content-review-inputs.mjs';
@@ -25,9 +25,11 @@ export async function checkContent(root = repository, { requireReviews = process
   validateMessages(Object.fromEntries(await Promise.all(localeIds.map(async locale => [locale, JSON.parse(await read(`website/src/content/i18n/${locale}.json`))]))));
   assert.equal(new Set(pages.map(page => page.id)).size, pages.length, 'Duplicate topic identity');
   assert.deepEqual(sorted(docGroups.flatMap(group => group.ids)), sorted(docPages.map(page => page.id)), 'Sidebar must contain every document exactly once');
+  for (const group of docGroups) for (const locale of localeIds) assert.ok(group.labels[locale]?.trim(), `${locale}: missing sidebar group label ${group.labels.en}`);
   for (const item of [...navigation, ...footerNavigation, ...nextTasks]) {
     if (item.pageId) assert.ok(pages.some(page => page.id === item.pageId), `Unregistered action: ${item.pageId}`);
     if (typeof item.label === 'string') for (const locale of localeIds) assert.ok(catalogs[locale][item.label], `${locale}: missing action message ${item.label}`);
+    else for (const locale of localeIds) assert.ok(item.label[locale]?.trim(), `${locale}: missing navigation label ${item.id}`);
   }
   const reviews = JSON.parse(await read('website/content-reviews.json'));
   const sections = JSON.parse(await read('website/section-contracts.json'));
@@ -68,7 +70,7 @@ export async function checkContent(root = repository, { requireReviews = process
     for (const locale of localeIds) {
       const target = await read(page.sources[locale]);
       if (['docs', 'article'].includes(page.type)) {
-        sectionMapping(page.id, locale, target, locale === 'zh-CN' ? legacy[page.id] : {}, sections);
+        sectionMapping(page.id, locale, target, legacyAliases(legacy, page.id, locale), sections);
         if (locale !== 'en') {
           assert.notEqual(prose(en), prose(target), `${page.id}/${locale}: fallback content`);
           if (page.sources.en.endsWith('.md')) assert.deepEqual(code(target), code(en), `${page.id}/${locale}: protected executable code differs between languages`);

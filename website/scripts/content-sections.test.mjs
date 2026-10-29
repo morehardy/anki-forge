@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { headings, sectionMapping, addSectionAliases } from './content-sections.mjs';
+import { headings, sectionMapping, addSectionAliases, legacyAliases } from './content-sections.mjs';
+import legacy from '../legacy-sections.json' with { type: 'json' };
 
 const registry = { entries: { example: { requiredSections: ['install', 'update'], locales: { en: { install: 'install', update: 'update' }, 'zh-CN': { '安装': 'install', '更新': 'update' } } } } };
 test('semantic section identity permits translated reordering and heading depth changes', () => {
@@ -30,4 +31,13 @@ test('fenced code markers and headings do not become real sections or aliases', 
 });
 test('an existing heading cannot silently capture another task stable alias', () => {
   assert.throws(() => addSectionAliases('## Install\n\n## Update\n', { install: 'update', update: 'install' }), /conflicts with another task/);
+});
+test('historic section aliases belong to the locale that published them', () => {
+  const registry = { 'zh-CN': { example: { '原安装': 'install' } } };
+  assert.deepEqual(legacyAliases(registry, 'example', 'zh-CN'), { '原安装': 'install' });
+  assert.deepEqual(legacyAliases(registry, 'example', 'es'), {});
+  assert.deepEqual(legacyAliases(registry, 'other', 'zh-CN'), {});
+  assert.throws(() => legacyAliases({ 'zh-cn': {} }, 'example', 'zh-CN'), /Unknown legacy section locale: zh-cn/);
+  assert.equal(legacyAliases(legacy, 'quickstart', 'zh-CN')['生成-apkg'], 'export-your-first-deck');
+  assert.deepEqual(legacyAliases(legacy, 'quickstart', 'en'), {});
 });

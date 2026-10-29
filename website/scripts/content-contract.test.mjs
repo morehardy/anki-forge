@@ -192,13 +192,10 @@ test('current-page metadata uses the supplied root without invalidating unrelate
   const original = await readFile(model, 'utf8');
   const before = await modelSamples(directory);
   const page = pages.find(page => page.id === 'concepts');
-  for (const [field, value, locale] of [
-    ['description', page.description.en, 'en'],
-    ['zhDescription', page.description['zh-CN'], 'zh-CN'],
-  ]) {
-    const from = `"${field}": ${JSON.stringify(value)}`;
+  for (const locale of ['en', 'zh-CN']) {
+    const from = `"${locale}": ${JSON.stringify(page.description[locale])}`;
     assert.ok(original.includes(from));
-    await writeFile(model, original.replace(from, `"${field}": "Changed current-page metadata in this supplied root."`));
+    await writeFile(model, original.replace(from, `"${locale}": "Changed current-page metadata in this supplied root."`));
     const after = await modelSamples(directory);
     for (const key of Object.keys(before)) {
       if (key === `concepts/${locale}`) assert.notEqual(after[key].targetHash, before[key].targetHash, key);
@@ -216,8 +213,8 @@ test('sidebar and next-task model changes invalidate only the page types that re
   const before = await modelSamples(directory);
   for (const [from, to, affected] of [
     ["'docs', 'languages', 'quickstart'", "'docs', 'quickstart', 'languages'", key => key.startsWith('concepts/')],
-    ["zh: '从这里开始'", "zh: '开始使用'", key => key === 'concepts/zh-CN'],
-    ['"title": "Choose your language"', '"title": "Select your SDK"', key => key === 'concepts/en'],
+    ["'zh-CN': '从这里开始'", "'zh-CN': '开始使用'", key => key === 'concepts/zh-CN'],
+    ['"en": "Choose your language"', '"en": "Select your SDK"', key => key === 'concepts/en'],
     ["{ pageId: 'json-to-anki', label: 'home.json'", "{ pageId: 'media', label: 'home.json'", key => key.startsWith('home/')],
   ]) {
     assert.ok(original.includes(from));
@@ -228,7 +225,9 @@ test('sidebar and next-task model changes invalidate only the page types that re
       else assert.equal(after[key].targetHash, before[key].targetHash, `${from}: unrelated ${key}`);
     }
   }
-  await writeFile(model, original.replace('"description": "Install the public Rust, Node or Python package', '"description": "An unrelated description: install the public Rust, Node or Python package') + '\n// Context-only model comment.\n');
+  const unrelated = '"en": "Install the public Rust, Node or Python package';
+  assert.ok(original.includes(unrelated));
+  await writeFile(model, original.replace(unrelated, '"en": "An unrelated description: install the public Rust, Node or Python package') + '\n// Context-only model comment.\n');
   assert.deepEqual(await modelSamples(directory), before, 'unrendered page descriptions and comments are not shared UI dependencies');
 });
 
@@ -247,17 +246,42 @@ test('release language menus fingerprint active locale data without reading plan
   assert.deepEqual(await modelSamples(directory), before, 'inactive locale records do not change selected-language review inputs');
 });
 
+test('a third release locale is fingerprinted from its own model data', async t => {
+  const directory = await fixture(t);
+  const website = path.join(directory, 'website');
+  await writeFile(path.join(website, 'release-locales.json'), JSON.stringify({ schemaVersion: 1, locales: ['en', 'zh-CN', 'es'] }));
+  for (const catalogs of ['src/i18n', 'src/content/i18n']) await copyFile(path.join(website, catalogs, 'en.json'), path.join(website, catalogs, 'es.json'));
+  const briefs = JSON.parse(await readFile(path.join(website, 'language-briefs.json'), 'utf8'));
+  await writeFile(path.join(website, 'language-briefs.json'), JSON.stringify({ ...briefs, es: briefs.en }));
+  const page = pages.find(page => page.id === 'concepts');
+  await mkdir(path.dirname(path.join(directory, page.sources.es)), { recursive: true });
+  await copyFile(path.join(directory, page.sources['zh-CN']), path.join(directory, page.sources.es));
+  const model = path.join(website, 'site-model.mjs');
+  const spanish = (await readFile(model, 'utf8')).replace(/(["'])zh-CN\1: (["'])(?:(?!\2)[^\\]|\\.)*\2/g, match => `${match}, "es": "Texto revisado"`);
+  const title = `"zh-CN": ${JSON.stringify(page.title['zh-CN'])}, "es": "Texto revisado"`;
+  assert.ok(spanish.includes(title));
+  const sample = async () => Object.fromEntries(await Promise.all(['en', 'zh-CN', 'es'].map(async locale => [locale, await reviewInputs(page, locale, directory)])));
+  await writeFile(model, spanish);
+  const before = await sample();
+  await writeFile(model, spanish.replace(title, title.replace('Texto revisado', 'Conceptos básicos')));
+  const after = await sample();
+  assert.notEqual(after.es.targetHash, before.es.targetHash, 'the Spanish title is a Spanish review input');
+  assert.deepEqual(after.en, before.en);
+  assert.deepEqual(after['zh-CN'], before['zh-CN']);
+});
+
 test('review model rejects untracked transformations and top-level data mutations', async t => {
   const directory = await fixture(t);
   const model = path.join(directory, 'website/site-model.mjs');
   const original = await readFile(model, 'utf8');
   const home = pages.find(page => page.id === 'home');
-  for (const name of ['documents', 'common', 'navigation', 'footerNavigation', 'nextTasks']) {
+  const sidebarPage = pages.find(page => page.id === 'concepts');
+  for (const name of ['documents', 'docGroups', 'common', 'navigation', 'footerNavigation', 'nextTasks']) {
     const start = original.indexOf(`const ${name} = [`);
     const end = original.indexOf('];', start);
     assert.ok(start >= 0 && end > start);
     await writeFile(model, original.slice(0, end) + '].map(item => ({ ...item, label: "Changed at render time" }));' + original.slice(end + 2));
-    await assert.rejects(reviewInputs(home, 'en', directory), /must remain literal/);
+    await assert.rejects(reviewInputs(name === 'docGroups' ? sidebarPage : home, 'en', directory), /must remain literal/);
   }
   await writeFile(model, original + '\nnavigation.push({ id: "docs", label: { en: "Unreviewed" } });\n');
   await assert.rejects(reviewInputs(home, 'en', directory), /must not mutate/);

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { pagePath } from '../site-model.mjs';
+import { pagePath, releaseLocales } from '../site-model.mjs';
 import { renderPrompt } from '../src/lib/ai-quickstart.mjs';
 import { importedDocs } from './content-links.mjs';
 import { verifySkill } from '../../skills/anki-forge/scripts/verify_quickstart.mjs';
@@ -17,7 +17,9 @@ export async function loadAiQuickstart(directory = root) {
   assert.equal(data.schemaVersion, 1, 'Unsupported AI quickstart schema');
   assert.match(data.publicVersion, /^\d+\.\d+\.\d+$/, 'Use a public package version');
   assert.deepEqual(Object.keys(data.languages), ['rust', 'node', 'python']);
-  assert.deepEqual(Object.keys(data.prompts), ['en', 'zh-CN']);
+  for (const field of ['prompts', 'requestPlaceholders', 'promptContracts']) {
+    assert.deepEqual(Object.keys(data[field] ?? {}), [...releaseLocales], `${field} must cover exactly the release locales`);
+  }
   const origin = new URL(data.sitePromptUrl);
   assert.equal(origin.protocol, 'https:');
   assert.equal(origin.hash, '#ai-quickstart');
@@ -39,18 +41,21 @@ export async function loadAiQuickstart(directory = root) {
     await stat(path.join(directory, doc ? doc.source : `website/src/content/docs${route.replace(/\/$/, '')}.mdx`));
   }
   for (const [locale, template] of Object.entries(data.prompts)) {
+    const contract = data.promptContracts[locale];
+    assert.ok(typeof data.requestPlaceholders[locale] === 'string' && data.requestPlaceholders[locale].trim(), `${locale}: missing request placeholder`);
+    assert.doesNotMatch(data.requestPlaceholders[locale], /[{}]/, `${locale}: Unsafe request placeholder: template syntax`);
+    assert.ok(Array.isArray(contract.required) && contract.required.length && contract.required.every(text => typeof text === 'string' && text.trim()), `${locale}: missing prompt requirements`);
+    assert.ok(Number.isInteger(contract.maxWords) !== Number.isInteger(contract.maxCharacters), `${locale}: choose one prompt length limit`);
     const tokens = [...template.matchAll(/\{([^{}]+)\}/g)].map(match => match[1]);
     assert.deepEqual([...new Set(tokens)].sort(), ['install', 'language', 'quickstart', 'request', 'runtime', 'version']);
     assert.equal(tokens.filter(token => token === 'request').length, 1, 'Render the request once');
     assert.doesNotMatch(template, /<\/?[a-z][^>]*>|sk-[A-Za-z0-9]+|Copy prompt for AI|Copied|maturin develop|internal-tools/, 'Unsafe prompt template: markup, credentials or UI text');
     for (const language of Object.keys(data.languages)) {
       const prompt = renderPrompt(data, language, '', locale);
-      const requirements = locale === 'en'
-        ? [/published/, /public API/, /persistent/, /stable namespace and note keys/, /run command/, /verification/, /original distribution APKG/]
-        : [/公开 API/, /持久化/, /namespace 和 note key/, /运行命令/, /验证步骤/, /原始分发 APKG/];
-      for (const requirement of requirements) assert.match(prompt, requirement, `${language}/${locale}: incomplete prompt contract`);
+      for (const requirement of contract.required) assert.ok(prompt.includes(requirement), `${language}/${locale}: incomplete prompt contract`);
       assert.ok(prompt.includes(data.languages[language].install) && prompt.includes(new URL(pagePath(language === 'rust' ? 'quickstart' : `${language}-quickstart`, locale), data.languages[language].quickstart).href));
-      assert.ok(locale === 'en' ? prompt.split(/\s+/).length <= 500 : prompt.length <= 700, `${language}/${locale}: prompt too long`);
+      const length = contract.maxWords ? prompt.split(/\s+/).length : prompt.length;
+      assert.ok(length <= (contract.maxWords ?? contract.maxCharacters), `${language}/${locale}: prompt too long`);
     }
   }
   return data;

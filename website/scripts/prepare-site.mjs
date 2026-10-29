@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rewriteMarkdown, stripDocumentTitle } from './content-links.mjs';
 import { documentationEntries, pages, localeIds, configuredLocales } from '../site-model.mjs';
-import { sectionMapping, addSectionAliases } from './content-sections.mjs';
+import { legacyAliases, sectionMapping, addSectionAliases } from './content-sections.mjs';
 import legacySections from '../legacy-sections.json' with { type: 'json' };
 import { siteConfig, repository } from '../site.config.mjs';
 import { prepareBrandAssets } from './social-image.mjs';
@@ -81,7 +81,7 @@ for (const page of pages.filter(page => page.type === 'docs' || page.type === 'a
   sections[page.id] = {};
   for (const locale of localeIds) {
     const source = await readFile(path.join(root, page.sources[locale]), 'utf8');
-    sections[page.id][locale] = sectionMapping(page.id, locale, source, locale === 'zh-CN' ? legacySections[page.id] : {});
+    sections[page.id][locale] = sectionMapping(page.id, locale, source, legacyAliases(legacySections, page.id, locale));
   }
 }
 await writeFile(path.join(generated, 'sections.json'), JSON.stringify(sections, null, 2) + '\n');

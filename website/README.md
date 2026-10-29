@@ -92,16 +92,22 @@ to the authored source. Blog posts require a matching `translationKey`, `locale`
 date and category in both language directories.
 
 Short UI messages, including clipboard failures, screen-reader feedback, social
-image text and search failures, live in `src/i18n/{en,zh-CN}.json`. Starlight and
+image text and search failures, live in `src/i18n/<locale>.json`. Starlight and
 Pagefind overrides live in `src/content/i18n/`. Both catalogs enforce identical
 keys and interpolation parameters. Shared SDK commands, executable examples,
 APKGs and benchmark values remain independent of translated prose.
 
 `locale-model.mjs` separates configured languages from `release-locales.json`.
 Only the latter drives the next complete artifact. Configuring a language does
-not read or publish incomplete sources. Historic published languages and routes
-are protected independently by `check:surface`; CI reads the base revision's
-contracts, with pinned independent captures for this first migration.
+not read or publish incomplete sources. Releasing one is a data change: both
+catalogs, its `language-briefs.json` entry, its key in the `site-model.mjs`
+title, description, sidebar and navigation maps, its prompt, request placeholder
+and prompt contract in `docs/ai-quickstart.json`, and its translated sources,
+then its ID in `release-locales.json`. `legacy-sections.json` is keyed by the locale that
+published each historic anchor, so a new language starts without aliases.
+Historic published languages and routes are protected independently by
+`check:surface`; CI reads the base revision's contracts, with pinned independent
+captures for this first migration.
 
 Source review is per topic and locale in `content-reviews.json` schema 2. Generate
 a pending evidence candidate with `scripts/content-review-candidates.mjs`, have

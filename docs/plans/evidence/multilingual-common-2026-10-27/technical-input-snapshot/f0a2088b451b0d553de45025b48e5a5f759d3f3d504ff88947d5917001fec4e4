@@ -1,0 +1,62 @@
+{
+  "name": "anki-forge-website",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "prepare:site": "node scripts/prepare-site.mjs",
+    "predev": "npm run prepare:site",
+    "dev": "astro dev --host 127.0.0.1",
+    "prebuild": "npm run prepare:site",
+    "build": "astro build && npm run generate:search && npm run generate:machine && npm run check:machine && npm run check:schema && node scripts/site-manifest.mjs",
+    "generate:search": "node scripts/search-documents.mjs",
+    "generate:machine": "node scripts/machine-content.mjs",
+    "check:machine": "node scripts/check-machine-content.mjs",
+    "check:schema": "node scripts/check-structured-data.mjs",
+    "preview": "astro preview --host 127.0.0.1",
+    "preview:stop": "astro preview stop",
+    "precheck": "npm run prepare:site",
+    "check": "astro check",
+    "check:site": "node scripts/check-site.mjs",
+    "check:surface": "node scripts/check-public-surface.mjs",
+    "check:search": "node scripts/check-search.mjs",
+    "check:rebuild": "node scripts/check-rebuild.mjs",
+    "verify:release": "node scripts/release-evidence.mjs run",
+    "check:release": "node scripts/release-evidence.mjs check",
+    "test": "node --test scripts/site-config.test.mjs scripts/locale-model.test.mjs scripts/third-locale.test.mjs scripts/content-links.test.mjs scripts/content-sections.test.mjs scripts/messages.test.mjs scripts/benchmark-presentation.test.mjs scripts/ai-quickstart.test.mjs scripts/content-contract.test.mjs scripts/machine-urls.test.mjs scripts/page-metadata.test.mjs scripts/machine-content.test.mjs scripts/structured-data.test.mjs scripts/machine-http.test.mjs scripts/published-pages.test.mjs scripts/indexability.test.mjs scripts/public-surface.test.mjs scripts/trusted-surface.test.mjs scripts/site-manifest.test.mjs scripts/check-rebuild.test.mjs scripts/robots-policy.test.mjs scripts/release-evidence.test.mjs scripts/post-build-reviews.test.mjs scripts/search-ranking.test.mjs scripts/heading-migrations.test.mjs",
+    "check:ai": "node scripts/ai-quickstart.mjs",
+    "sync:ai": "node scripts/ai-quickstart.mjs --write",
+    "check:docs": "node scripts/documentation.mjs",
+    "sync:docs": "node scripts/documentation.mjs --write",
+    "check:examples": "node scripts/verify-doc-examples.mjs",
+    "check:public-recipe": "node scripts/verify-public-recipe.mjs",
+    "check:live": "node scripts/check-live-site.mjs",
+    "test:browser": "node --test scripts/browser.test.mjs",
+    "check:content": "node scripts/check-content.mjs",
+    "check:gates": "node --test scripts/site-gates.test.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/starlight": "0.42.2",
+    "@phosphor-icons/core": "2.1.1",
+    "astro": "7.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@types/node": "24.13.6",
+    "cheerio": "1.2.0",
+    "github-slugger": "2.0.0",
+    "js-yaml": "4.3.2",
+    "micromark": "4.0.2",
+    "micromark-extension-gfm-table": "2.1.2",
+    "playwright": "1.62.1",
+    "sharp": "0.35.4",
+    "turndown": "7.2.2",
+    "turndown-plugin-gfm": "1.0.2",
+    "typescript": "6.0.3",
+    "@pagefind/default-ui": "1.5.2"
+  }
+}
