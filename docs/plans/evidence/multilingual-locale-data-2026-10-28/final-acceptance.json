@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-artifact-acceptance-with-actual-rebuild",
+  "status": "passed",
+  "commit": "6780f26e23e88c702dcbfd88e74bc29de60d95df",
+  "inputSha256": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00",
+  "sourceChange": "Locale-data refactor: adding a release locale is a data-only change; rendered HTML, Markdown and llms output byte-identical to the previous accepted artifact.",
+  "releaseLocales": [
+    "en",
+    "zh-CN"
+  ],
+  "topicsPerLocale": 34,
+  "normalHtml": 68,
+  "markdown": 62,
+  "llms": 2,
+  "unitTests": {
+    "passed": 144,
+    "failed": 0
+  },
+  "astro": {
+    "files": 123,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "actualRebuildFilesPerConfiguration": 133,
+  "browserTestsPerConfiguration": 16,
+  "actualUsageTasks": 24,
+  "independentAiMachineReadTasks": 16,
+  "search": {
+    "en": {
+      "core": "12/12",
+      "positive": "25/25",
+      "negative": "5/5"
+    },
+    "zh-CN": {
+      "core": "12/12",
+      "positive": "24/25",
+      "negative": "5/5"
+    }
+  },
+  "sourceReview": {
+    "round": "locale-data",
+    "candidate": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-locale-data-34.json",
+      "sha256": "57ed8ecdb4303fdc74183b5372c50f066b0cb5a58b68168d0bb9a4ce2d84b3e1"
+    },
+    "technical": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json",
+      "sha256": "e7567230ef8d3111efc85f32dce12621811fa359ed646c9e7783c410f8acaa1a"
+    },
+    "technicalAudit": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-34-audit.json",
+      "sha256": "0b4f864100a84ef9d77a21bbe1101670539f946529a38283bec484e94d496252"
+    },
+    "linguistic": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review.json",
+      "sha256": "8719c5d31e49da3164562efa7182d2124130f8a6646815d858c543d25dcc3d69"
+    },
+    "linguisticDelta": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-locale-data-review.json",
+      "sha256": "eb7cdba582f07c0e0cb58685e7d7f67e82fa96a2bc52644e2c02fcf7ed359fb7"
+    },
+    "records": 68,
+    "approved": 68
+  },
+  "freshExecutions": {
+    "publicVersion": "0.3.1",
+    "runner": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/run-basic-tasks.mjs",
+      "sha256": "c15430cec7da91c074b2541e2c56705aa69ba69d42509ce625bf41f551a411a1"
+    },
+    "inputs": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/execution-inputs.json",
+      "sha256": "eac34c08559670f7758e563ade4e358d10c8053f23713b6fb5e1c7dd129e6303"
+    },
+    "publicRecipeLog": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/public-recipe.log",
+      "sha256": "93778954b0e88e66d8d3ac38502727f39164b9ea8f2135303d34d45d54bbed37"
+    },
+    "logs": [
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/rust/basic.log",
+        "sha256": "fa64d5a61f62c654728c56bc11dc5d20c68363549f16ace5d3cb36c12733ce41"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/rust/inspection.log",
+        "sha256": "19934981768fbdd3fcdbfd94594ed04982d1c101a3685d9b2ee3e596535ff0fc"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/basic.log",
+        "sha256": "aea8ccae9a54172cda24a3ef109ca11b85e23fddc7cbe84db7225452d6a13bef"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/inspection.log",
+        "sha256": "7676445a891fa4ae5e05ff5aee60b3a9397c1830034e13eb5fae8a0ffbd74893"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/node/basic.log",
+        "sha256": "6551986be1a89f8ba5a29498c62cd3bceb1422136849f2b2e3e39dd0bd7ce6e5"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/node/inspection.log",
+        "sha256": "ff4a69395c3b4b03e0754cefb98b6eda517025a3fc911365d3b51d1572955fd9"
+      },
+      {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/troubleshooting.log",
+        "sha256": "8665e7865dba9a3a34353ecd6762e14fce7ba20e0e34c3bd0e027adf0d8197b3"
+      }
+    ]
+  },
+  "knownMinorLimitations": [
+    "zh-CN-variant-03 remains a recorded miss within the fixed at-least 23/25 positive threshold.",
+    "Existing 23 minor linguistic observations remain; no major/critical.",
+    "Three minor technical observations from the locale-data source audit (en legacy-alias fingerprint scope, legacyAliases registry root, README list) are recorded; the README item is fixed.",
+    "Machine-read and usage reviewers recorded minor and preference documentation observations only; none blocks a task."
+  ],
+  "engineering": {
+    "root": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/engineering/root/release-evidence.json",
+      "sha256": "30165122d569159e30c86bbb3a5e47dd9337690fcf8032f9dd135f13b522029b",
+      "manifestSha256": "3f8da811d44fc9fa238db9ef2fff238d16ba1cff64afb8cc16189c6ec44a400a",
+      "artifactSha256": "41385be789151120b98211e409dffca3a98bb44418800a19496ea76c1f16e67a",
+      "status": "passed",
+      "actualRebuildScopeFiles": 133,
+      "rebuild": {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/engineering/root/rebuild-results.json",
+        "sha256": "b3e73e46cb60361a1f34f09df23b642edcca19e1d3a0a64665610cff98bff1a3"
+      },
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "postBuildReviews": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/usage-tasks-root.json",
+          "sha256": "63a9f4aec51189cdffd2b52cc14a60050bd3e6b26094483aedd8e3066ece7e60",
+          "reviewerRun": "independent-usage-review-locale-data-root-2026-10-29"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-read-root.json",
+          "sha256": "ab498959eea339174f7b043f2155ebf6806b32920ac4e8790e99ce10e198a8e7",
+          "reviewerRun": "independent-machine-read-locale-data-root-2026-10-29"
+        }
+      ]
+    },
+    "prefix": {
+      "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/engineering/prefix/release-evidence.json",
+      "sha256": "0b683d8dc034b282624fb77c9b2cfe87f5e34e63cf9d78565fec8303d1a8e03b",
+      "manifestSha256": "5ac69b729169f6b30f6a9ddebb4fbfb7a04b279f5f54092ff89fa93ab3993db0",
+      "artifactSha256": "acc6581c51395dd39addd3bbd18b69baaa9453d2ba0eab4d710dbb4b4cc876b4",
+      "status": "passed",
+      "actualRebuildScopeFiles": 133,
+      "rebuild": {
+        "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/engineering/prefix/rebuild-results.json",
+        "sha256": "dcb6e7b182e3f7be06d9dc8c9c31d8fae304c05491b4f33a2b841c78f348c24f"
+      },
+      "checks": [
+        {
+          "name": "check:content",
+          "status": "passed"
+        },
+        {
+          "name": "check:site",
+          "status": "passed"
+        },
+        {
+          "name": "check:surface",
+          "status": "passed"
+        },
+        {
+          "name": "check:machine",
+          "status": "passed"
+        },
+        {
+          "name": "check:schema",
+          "status": "passed"
+        },
+        {
+          "name": "check:gates",
+          "status": "passed"
+        },
+        {
+          "name": "test:browser",
+          "status": "passed"
+        },
+        {
+          "name": "check:search",
+          "status": "passed"
+        }
+      ],
+      "postBuildReviews": [
+        {
+          "kind": "usage-tasks",
+          "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/usage-tasks-prefix.json",
+          "sha256": "0bb3fffacc6b908ee360597c654008f4e1e8e96a88ecc8b9e0123fae4af99640",
+          "reviewerRun": "independent-usage-review-locale-data-prefix-2026-10-29"
+        },
+        {
+          "kind": "machine-read",
+          "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-read-prefix.json",
+          "sha256": "d073c018fb54d7fe64a7775b0f87f14ae27fb9e14ed6680e7cf55a0df9f36da5",
+          "reviewerRun": "independent-machine-read-locale-data-prefix-2026-10-29"
+        }
+      ]
+    }
+  },
+  "notClaimed": [
+    "CI execution for this change",
+    "production deployment or new production machine-resource MIME verification",
+    "search-engine ranking, traffic or external AI recommendation improvement",
+    "new Anki GUI import execution"
+  ]
+}

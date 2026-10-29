@@ -1,0 +1,709 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "independent AI machine-read reviewer (Claude Code subagent)",
+  "readOrigin": "http://127.0.0.1:64397",
+  "configuration": {
+    "site": "https://morehardy.github.io",
+    "base": "/anki-forge",
+    "customDomain": ""
+  },
+  "environment": {
+    "SITE_URL": "https://morehardy.github.io",
+    "SITE_BASE": "/anki-forge",
+    "SITE_CUSTOM_DOMAIN": ""
+  },
+  "artifact": "/private/tmp/anki-forge-locale-data-prefix-artifact",
+  "originManifest": {
+    "path": "docs/plans/evidence/multilingual-locale-data-2026-10-28/prefix-origin-manifest.json",
+    "sha256": "5ac69b729169f6b30f6a9ddebb4fbfb7a04b279f5f54092ff89fa93ab3993db0",
+    "commit": "6780f26e23e88c702dcbfd88e74bc29de60d95df",
+    "inputSha256": "44821de01215cb0c93f8ba15f5608c3395602fd8715651dc5518409ccd059c00",
+    "releaseLocales": [
+      "en",
+      "zh-CN"
+    ]
+  },
+  "artifactEmbeddedManifestSha256": "5ac69b729169f6b30f6a9ddebb4fbfb7a04b279f5f54092ff89fa93ab3993db0",
+  "server": {
+    "module": "website/scripts/serve-built-site.mjs",
+    "moduleSha256": "8255e4a118f4558d32557811ecbf57902c2f6b41ff0a8122ee10c453b36f0565",
+    "wrapper": "serve.mjs",
+    "wrapperSha256": "7ebf37f1adf1951083be417d0c198dffa48fa054af56306f83ea9781ea55fd59",
+    "node": "v24.19.0",
+    "pid": 10160
+  },
+  "startedAt": "2026-10-29T07:07:01.940Z",
+  "fetches": [
+    {
+      "purpose": "en entry: read this locale's llms.txt first",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en entry: read this locale's llms.txt first",
+        "/anki-forge/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:07:17.684Z",
+      "results": [
+        {
+          "route": "/anki-forge/llms.txt",
+          "url": "http://127.0.0.1:64397/anki-forge/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "125cf597088728b4bf2a63bca176d08d50aeb25e8ab0672959673650585ba0b5",
+          "bytes": 5628,
+          "bodyFile": "001-anki-forge_llms.txt.body",
+          "metadataFile": "001-anki-forge_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "125cf597088728b4bf2a63bca176d08d50aeb25e8ab0672959673650585ba0b5",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:07:17.718Z"
+    },
+    {
+      "purpose": "en python-install: llms Quickstarts link 'Generate an Anki APKG with Python'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en python-install: llms Quickstarts link 'Generate an Anki APKG with Python'",
+        "/anki-forge/docs/python-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:07:25.580Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "990a13fbc615c96e8475b68e5474bda3da2ac099e2b0cf8ab10086ed3c2e325f",
+          "bytes": 2474,
+          "bodyFile": "002-anki-forge_docs_python-quickstart_index.md.body",
+          "metadataFile": "002-anki-forge_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "990a13fbc615c96e8475b68e5474bda3da2ac099e2b0cf8ab10086ed3c2e325f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:07:25.612Z"
+    },
+    {
+      "purpose": "en node-api: llms API references link 'Node and TypeScript API'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en node-api: llms API references link 'Node and TypeScript API'",
+        "/anki-forge/docs/node-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:07:50.334Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/node-api/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+          "bytes": 13196,
+          "bodyFile": "003-anki-forge_docs_node-api_index.md.body",
+          "metadataFile": "003-anki-forge_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "9039acac23249a11159622fa653c68f5bf3c30546c8ec6a1c60a720a17f04448",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:07:50.367Z"
+    },
+    {
+      "purpose": "en json-update: llms Task guides link 'Generate and update Anki decks from JSON'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en json-update: llms Task guides link 'Generate and update Anki decks from JSON'",
+        "/anki-forge/docs/json-to-anki/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:08:04.355Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+          "bytes": 11313,
+          "bodyFile": "004-anki-forge_docs_json-to-anki_index.md.body",
+          "metadataFile": "004-anki-forge_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "4e88fb00f313cdd4b8b0ed4e3f8a300dc01f70101614fcecb9e11f20d1cca73b",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:08:04.390Z"
+    },
+    {
+      "purpose": "en compatibility-constraints: llms Start here link 'Compatibility and releases' (also the Python quickstart 'verified environments' link)",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en compatibility-constraints: llms Start here link 'Compatibility and releases' (also the Python quickstart 'verified environments' link)",
+        "/anki-forge/docs/compatibility/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:08:24.298Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+          "bytes": 3374,
+          "bodyFile": "005-anki-forge_docs_compatibility_index.md.body",
+          "metadataFile": "005-anki-forge_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "4eb70e1ea9436502d7086ef5dd44c7a7cd80a0b39f8b5c64a38c76b912b8999e",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:08:24.330Z"
+    },
+    {
+      "purpose": "en json-update: JSON guide 'update conditions' link, read as Markdown (also llms Task guides link 'Update Anki decks with stable note IDs')",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en json-update: JSON guide 'update conditions' link, read as Markdown (also llms Task guides link 'Update Anki decks with stable note IDs')",
+        "/anki-forge/docs/updates/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:08:43.481Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/updates/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "e6cda4c1e5f7049dde6ac844bbed2a5ae9d341642ffbc800823df8dd6828a6eb",
+          "bytes": 7827,
+          "bodyFile": "006-anki-forge_docs_updates_index.md.body",
+          "metadataFile": "006-anki-forge_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e6cda4c1e5f7049dde6ac844bbed2a5ae9d341642ffbc800823df8dd6828a6eb",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:08:43.515Z"
+    },
+    {
+      "purpose": "en json-update: JSON guide 'Shared inputs' download links (shared, not locale-owned)",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en json-update: JSON guide 'Shared inputs' download links (shared, not locale-owned)",
+        "/anki-forge/generated/recipes/json-to-anki/v1.json",
+        "/anki-forge/generated/recipes/json-to-anki/v2.json",
+        "/anki-forge/generated/recipes/json-to-anki/cell.png",
+        "/anki-forge/generated/recipes/json-to-anki/tone.wav"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:08:43.577Z",
+      "results": [
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/v1.json",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/v1.json",
+          "status": 200,
+          "contentType": "application/json",
+          "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+          "bytes": 409,
+          "bodyFile": "007-anki-forge_generated_recipes_json-to-anki_v1.json.body",
+          "metadataFile": "007-anki-forge_generated_recipes_json-to-anki_v1.json.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/v2.json",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/v2.json",
+          "status": 200,
+          "contentType": "application/json",
+          "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+          "bytes": 443,
+          "bodyFile": "008-anki-forge_generated_recipes_json-to-anki_v2.json.body",
+          "metadataFile": "008-anki-forge_generated_recipes_json-to-anki_v2.json.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/cell.png",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/cell.png",
+          "status": 200,
+          "contentType": "image/png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "bytes": 178597,
+          "bodyFile": "009-anki-forge_generated_recipes_json-to-anki_cell.png.body",
+          "metadataFile": "009-anki-forge_generated_recipes_json-to-anki_cell.png.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": false,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/tone.wav",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/tone.wav",
+          "status": 200,
+          "contentType": "audio/wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "bytes": 16044,
+          "bodyFile": "010-anki-forge_generated_recipes_json-to-anki_tone.wav.body",
+          "metadataFile": "010-anki-forge_generated_recipes_json-to-anki_tone.wav.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": false,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:08:43.623Z"
+    },
+    {
+      "purpose": "zh-CN entry: read this locale's llms.txt first (independent of English)",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN entry: read this locale's llms.txt first (independent of English)",
+        "/anki-forge/zh-cn/llms.txt"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:09:41.377Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/llms.txt",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/llms.txt",
+          "status": 200,
+          "contentType": "text/plain; charset=utf-8",
+          "sha256": "6c3c67b6c117525c66ac2e3a5261d32884bef14e41d365bfdbf30eb4f0982aed",
+          "bytes": 5508,
+          "bodyFile": "011-anki-forge_zh-cn_llms.txt.body",
+          "metadataFile": "011-anki-forge_zh-cn_llms.txt.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "6c3c67b6c117525c66ac2e3a5261d32884bef14e41d365bfdbf30eb4f0982aed",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:09:41.410Z"
+    },
+    {
+      "purpose": "zh-CN python-install: zh llms 快速开始 link '用 Python 生成 Anki APKG'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN python-install: zh llms 快速开始 link '用 Python 生成 Anki APKG'",
+        "/anki-forge/zh-cn/docs/python-quickstart/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:09:50.766Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/python-quickstart/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "08391c6703df0ff74919bedad67e08b679139747d199df5a5c2dd3022595f319",
+          "bytes": 2489,
+          "bodyFile": "012-anki-forge_zh-cn_docs_python-quickstart_index.md.body",
+          "metadataFile": "012-anki-forge_zh-cn_docs_python-quickstart_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "08391c6703df0ff74919bedad67e08b679139747d199df5a5c2dd3022595f319",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:09:50.798Z"
+    },
+    {
+      "purpose": "zh-CN node-api: zh llms API 参考 link 'Node 与 TypeScript API'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN node-api: zh llms API 参考 link 'Node 与 TypeScript API'",
+        "/anki-forge/zh-cn/docs/node-api/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:09:57.669Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/node-api/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/node-api/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+          "bytes": 12218,
+          "bodyFile": "013-anki-forge_zh-cn_docs_node-api_index.md.body",
+          "metadataFile": "013-anki-forge_zh-cn_docs_node-api_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "589b85054b405392f85c1ff0136db59b6997d5e92a2f481748cfcc5516757a90",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:09:57.723Z"
+    },
+    {
+      "purpose": "zh-CN json-update: zh llms 任务指南 link '用 JSON 数据生成并更新 Anki 牌组'",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN json-update: zh llms 任务指南 link '用 JSON 数据生成并更新 Anki 牌组'",
+        "/anki-forge/zh-cn/docs/json-to-anki/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:10:07.408Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/json-to-anki/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+          "bytes": 11165,
+          "bodyFile": "014-anki-forge_zh-cn_docs_json-to-anki_index.md.body",
+          "metadataFile": "014-anki-forge_zh-cn_docs_json-to-anki_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "eca65a44b5ace7dc4589e18d8c24328118be12cfe2bd395caa8156237baa968d",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:10:07.444Z"
+    },
+    {
+      "purpose": "zh-CN compatibility-constraints: zh llms 从这里开始 link '兼容性与发布' (also zh Python quickstart '已验证环境' link)",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN compatibility-constraints: zh llms 从这里开始 link '兼容性与发布' (also zh Python quickstart '已验证环境' link)",
+        "/anki-forge/zh-cn/docs/compatibility/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:10:18.827Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/compatibility/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/compatibility/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+          "bytes": 3250,
+          "bodyFile": "015-anki-forge_zh-cn_docs_compatibility_index.md.body",
+          "metadataFile": "015-anki-forge_zh-cn_docs_compatibility_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "705d203966ebb50fa259a137696fe14dd6e5ff2f0728ceae25b24f33948c9141",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:10:18.896Z"
+    },
+    {
+      "purpose": "zh-CN json-update: zh JSON guide '更新条件' link, read as Markdown (also zh llms 任务指南 '用稳定笔记 ID 更新 Anki 牌组')",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN json-update: zh JSON guide '更新条件' link, read as Markdown (also zh llms 任务指南 '用稳定笔记 ID 更新 Anki 牌组')",
+        "/anki-forge/zh-cn/docs/updates/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:10:18.995Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/updates/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/updates/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "efa04044da6c358d43379b3db8468623170a7aee47b1e640cfba73b65b1ad00d",
+          "bytes": 7294,
+          "bodyFile": "016-anki-forge_zh-cn_docs_updates_index.md.body",
+          "metadataFile": "016-anki-forge_zh-cn_docs_updates_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "efa04044da6c358d43379b3db8468623170a7aee47b1e640cfba73b65b1ad00d",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:10:19.044Z"
+    },
+    {
+      "purpose": "en json-update: updates guide 'build lifecycle'/'build guarantees' link and llms Constraints 'Build and output guarantees', read as Markdown",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "en json-update: updates guide 'build lifecycle'/'build guarantees' link and llms Constraints 'Build and output guarantees', read as Markdown",
+        "/anki-forge/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:10:41.228Z",
+      "results": [
+        {
+          "route": "/anki-forge/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+          "bytes": 5608,
+          "bodyFile": "017-anki-forge_docs_build-guarantees_index.md.body",
+          "metadataFile": "017-anki-forge_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "e756fa92f20a031cc73df8af60bb7bfac1f8f53d510cb850c856eaf6c01c8b5f",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:10:41.265Z"
+    },
+    {
+      "purpose": "zh-CN json-update: zh updates guide '构建生命周期'/'构建保证' link and zh llms 限制与保障 '构建与输出保证', read as Markdown",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN json-update: zh updates guide '构建生命周期'/'构建保证' link and zh llms 限制与保障 '构建与输出保证', read as Markdown",
+        "/anki-forge/zh-cn/docs/build-guarantees/index.md"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:10:41.366Z",
+      "results": [
+        {
+          "route": "/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "url": "http://127.0.0.1:64397/anki-forge/zh-cn/docs/build-guarantees/index.md",
+          "status": 200,
+          "contentType": "text/markdown; charset=utf-8",
+          "sha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+          "bytes": 4902,
+          "bodyFile": "018-anki-forge_zh-cn_docs_build-guarantees_index.md.body",
+          "metadataFile": "018-anki-forge_zh-cn_docs_build-guarantees_index.md.http.json",
+          "checks": {
+            "machineContentType": true,
+            "utf8Charset": true,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "aded0b798edf5d202ff3d8a0969d7dcae57c9cde7216a431f2c900384a1e3051",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:10:41.398Z"
+    },
+    {
+      "purpose": "zh-CN json-update: zh JSON guide '共享输入' download links (shared, not locale-owned)",
+      "argv": [
+        "/Users/hp/Desktop/2026/anki-forge/docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-http-prefix",
+        "zh-CN json-update: zh JSON guide '共享输入' download links (shared, not locale-owned)",
+        "/anki-forge/generated/recipes/json-to-anki/v1.json",
+        "/anki-forge/generated/recipes/json-to-anki/v2.json",
+        "/anki-forge/generated/recipes/json-to-anki/cell.png",
+        "/anki-forge/generated/recipes/json-to-anki/tone.wav"
+      ],
+      "fetchScript": "fetch.mjs",
+      "fetchScriptSha256": "48b4350d45e0ff1717e4cc373f5dca51971b72966e67c5add11f04d4e49ad5ff",
+      "startedAt": "2026-10-29T07:12:36.451Z",
+      "results": [
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/v1.json",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/v1.json",
+          "status": 200,
+          "contentType": "application/json",
+          "sha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+          "bytes": 409,
+          "bodyFile": "019-anki-forge_generated_recipes_json-to-anki_v1.json.body",
+          "metadataFile": "019-anki-forge_generated_recipes_json-to-anki_v1.json.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "da3355441ae8a698f883f0828f0b84af235dc35a5a41e923dbf66ac856dfec87",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/v2.json",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/v2.json",
+          "status": 200,
+          "contentType": "application/json",
+          "sha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+          "bytes": 443,
+          "bodyFile": "020-anki-forge_generated_recipes_json-to-anki_v2.json.body",
+          "metadataFile": "020-anki-forge_generated_recipes_json-to-anki_v2.json.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": true,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "43a783aac2bfe0ae7ba14cc82daa8f722019c90e992da3ed41e35667a834ead0",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/cell.png",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/cell.png",
+          "status": 200,
+          "contentType": "image/png",
+          "sha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+          "bytes": 178597,
+          "bodyFile": "021-anki-forge_generated_recipes_json-to-anki_cell.png.body",
+          "metadataFile": "021-anki-forge_generated_recipes_json-to-anki_cell.png.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": false,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "717c3355d0fb41d55968814b99517330c4b3b567f0973f86f7308bdeb43df459",
+            "matchesManifest": true
+          }
+        },
+        {
+          "route": "/anki-forge/generated/recipes/json-to-anki/tone.wav",
+          "url": "http://127.0.0.1:64397/anki-forge/generated/recipes/json-to-anki/tone.wav",
+          "status": 200,
+          "contentType": "audio/wav",
+          "sha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+          "bytes": 16044,
+          "bodyFile": "022-anki-forge_generated_recipes_json-to-anki_tone.wav.body",
+          "metadataFile": "022-anki-forge_generated_recipes_json-to-anki_tone.wav.http.json",
+          "checks": {
+            "machineContentType": false,
+            "utf8Charset": false,
+            "attachmentDisposition": false,
+            "utf8Decodes": false,
+            "startsWithBom": false,
+            "manifestRoute": true,
+            "manifestSha256": "785f4399b9f381df26c4aedbc8a406adbb4e0a607af917c3f47dddafabe370ff",
+            "matchesManifest": true
+          }
+        }
+      ],
+      "finishedAt": "2026-10-29T07:12:36.496Z"
+    }
+  ],
+  "stoppedAt": "2026-10-29T07:14:08.488Z"
+}
