@@ -88,3 +88,23 @@ CTR、落地页后续动作。先建立发布前 28 天基线，索引稳定后�
 
 本轮未取得本站 Search Console / Bing 账户数据，没有测出排名提升，也没有进行
 Anki 客户端导入验收。实际索引、推荐和流量效果须以上线后的平台数据为准。
+
+## 验收后的增量修改（2026-10-29）
+
+上文验收、哈希与审校结论只覆盖本节修改之前的源码。本节修改未发布网站，也未发包。
+
+- 五个功能页补齐调研 4.3 要求的描述与开头段落：说明用代码批量生成，并链接
+  Python/Node.js 对应 API；图片遮挡页写明程序化生成、坐标由调用方提供、不自动识别
+  标签；媒体页写明只打包已有文件，不做语音合成；更新页写明稳定 ID 的作用及导入设置的限制。
+- 三个快速开始页标题由“生成 Anki APKG”改为“生成 Anki 卡片”；Python/Node 描述写明
+  PyPI/npm 包名。
+- 中英根 README 与 Rust/Python/Node 包 README 增加 CSV、JSON、AI 教程和比较页入口。
+  这些平台的 README 链接通常带 nofollow，作用主要是发现与引荐；包 README 随下次发包生效。
+- 未做：文档 `dateModified` 与 sitemap `lastmod`，与 `check-structured-data.mjs` 及
+  [GEO 方案](2026-10-25-geo-optimization-plan.md)一致，不输出无法准确维护的日期；
+  中文 CSV 示例本地化，多语言规格要求示例数据保持共同技术源。
+
+验证：`npm test` 144 项通过；`check:ai`、`check:docs` 通过。以生产域名配置完成预览构建，
+`check:schema` 68 页、`check:site` 69 页（含本地链接与锚点）、`check:gates` 15 项通过；
+后两项所需清单为临时生成，检查后已删除。`check:content` 发布模式因源码哈希变化失败，
+发布前需重新进行独立技术与语言审校；`check:search` 因本机缺少 Playwright 浏览器未运行。

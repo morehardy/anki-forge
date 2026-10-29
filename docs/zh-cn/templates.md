@@ -1,5 +1,7 @@
 # 模板包
 
+在多个牌组中复用同一套 Anki 卡片设计：把笔记类型的模板、CSS 和媒体放在同一目录中，用于普通卡片或 Cloze 卡片。示例使用 Rust；Python 和 Node.js 分别通过 `NoteType.from_bundle` 和 `NoteType.fromBundle` 加载模板包，参见 [Python API](../python/api.md#models-and-templates) 和 [Node API](../node/api.md#immutable-models)。
+
 模板包是一组可复用的模型声明、模板文本、CSS 和显式媒体依赖闭包。`NoteType::from_bundle(directory)` 校验完整模板包并取得拥有所有权的快照，再返回与内联编写相同的不可变 `NoteType`。它不会部分修改项目。
 
 ## 运行模板包示例

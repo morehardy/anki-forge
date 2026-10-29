@@ -24,7 +24,7 @@ const documents = [
     "name": "quickstart",
     "source": "website/src/content/docs/docs/quickstart.mdx",
     "route": "/docs/quickstart/",
-    "title": { "en": "Generate an Anki APKG with Rust", "zh-CN": "用 Rust 生成 Anki APKG" },
+    "title": { "en": "Generate Anki flashcards with Rust", "zh-CN": "用 Rust 生成 Anki 卡片" },
     "description": { "en": "Install the public Rust package, write a Spanish flashcard, and export a persistent APKG file.", "zh-CN": "安装公开 Rust 包，编写西班牙语卡片并导出持久保存的 APKG。" }
   },
   {
@@ -74,7 +74,7 @@ const documents = [
     "route": "/docs/templates/",
     "name": "templates",
     "title": { "en": "Reusable Anki card templates, CSS and media", "zh-CN": "复用 Anki 卡片模板、CSS 与媒体" },
-    "description": { "en": "Import complete reusable Cloze and normal templates, CSS and media.", "zh-CN": "导入完整的普通与 Cloze 模板、CSS 和媒体。" }
+    "description": { "en": "Load a reusable Anki note type from one bundle of card templates, CSS and media, for normal or Cloze cards, with Rust, Python or Node.js.", "zh-CN": "从一个模板包加载可复用的 Anki 笔记类型，包含卡片模板、CSS 和媒体，支持普通与 Cloze 卡片，可使用 Rust、Python 或 Node.js。" }
   },
   {
     "source": "docs/api-overview.md",
@@ -102,7 +102,7 @@ const documents = [
     "route": "/docs/cards/",
     "name": "cards",
     "title": { "en": "Generate Anki Basic and Cloze flashcards", "zh-CN": "生成 Anki 问答卡片与 Cloze 填空卡片" },
-    "description": { "en": "Build two notes and three cards with a complete verified Rust example.", "zh-CN": "运行完整 Rust 示例，用两个笔记生成三张卡片。" }
+    "description": { "en": "Generate Anki Basic question-and-answer and Cloze fill-in-the-blank cards from code. A verified Rust example builds two notes and three cards.", "zh-CN": "用代码批量生成 Anki 问答（Basic）卡片与 Cloze 填空卡片。经过验证的 Rust 示例用两条笔记生成三张卡片。" }
   },
   {
     "source": "docs/custom-notetypes.md",
@@ -116,21 +116,21 @@ const documents = [
     "route": "/docs/media/",
     "name": "media",
     "title": { "en": "Add images and audio to Anki cards", "zh-CN": "为 Anki 卡片添加图片与音频" },
-    "description": { "en": "Import images and audio, compose typed content, and manage export names, MIME types and media budgets.", "zh-CN": "导入图片和音频，组合类型化内容，并管理导出名称、MIME 类型与媒体预算。" }
+    "description": { "en": "Add images and audio to generated Anki cards with Rust, Python or Node.js. Import files, compose card content, and manage export names, MIME types and budgets.", "zh-CN": "用 Rust、Python 或 Node.js 为生成的 Anki 卡片添加图片和音频：导入文件、组合卡片内容，并管理导出名称、MIME 类型与媒体预算。" }
   },
   {
     "source": "docs/image-occlusion.md",
     "route": "/docs/image-occlusion/",
     "name": "image-occlusion",
     "title": { "en": "Generate Anki Image Occlusion cards", "zh-CN": "生成 Anki 图片遮挡卡片" },
-    "description": { "en": "Create rectangle-based image questions in both occlusion modes.", "zh-CN": "用矩形区域创建图像问题，了解两种遮挡模式。" }
+    "description": { "en": "Create Anki Image Occlusion cards programmatically from an image and the rectangle masks you supply, in either occlusion mode, with Rust, Python or Node.js.", "zh-CN": "用代码批量生成 Anki 图片遮挡卡片：提供图片和矩形遮罩坐标，支持两种遮挡模式，可使用 Rust、Python 或 Node.js。" }
   },
   {
     "source": "docs/updates.md",
     "route": "/docs/updates/",
     "name": "updates",
     "title": { "en": "Update Anki decks with stable note IDs", "zh-CN": "用稳定笔记 ID 更新 Anki 牌组" },
-    "description": { "en": "Compare and build releases using verified original APKG baselines.", "zh-CN": "以原始 APKG 为基线比较并构建新版本。" }
+    "description": { "en": "Release a new version of a generated Anki deck: keep stable note IDs, build from the previous original APKG and review the comparison before publishing.", "zh-CN": "发布生成牌组的新版本：保持稳定笔记 ID，以上一版原始 APKG 为基线构建，并在分发前检查比较结果。" }
   },
   {
     "source": "docs/build-guarantees.md",
@@ -164,8 +164,8 @@ const documents = [
     "source": "docs/node/quick-start.md",
     "route": "/docs/node-quickstart/",
     "name": "node-quickstart",
-    "title": { "en": "Generate an Anki APKG with Node.js", "zh-CN": "用 Node.js 生成 Anki APKG" },
-    "description": { "en": "Install the public Node package and export your first deck.", "zh-CN": "安装公开 Node 包并导出第一个牌组。" }
+    "title": { "en": "Generate Anki flashcards with Node.js", "zh-CN": "用 Node.js 生成 Anki 卡片" },
+    "description": { "en": "Install ankiforge from npm, generate Anki flashcards with Node.js or TypeScript, and export an APKG deck you can import into Anki.", "zh-CN": "从 npm 安装 ankiforge，用 Node.js 或 TypeScript 生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。" }
   },
   {
     "source": "docs/node/api.md",
@@ -178,8 +178,8 @@ const documents = [
     "source": "docs/python/quick-start.md",
     "route": "/docs/python-quickstart/",
     "name": "python-quickstart",
-    "title": { "en": "Generate an Anki APKG with Python", "zh-CN": "用 Python 生成 Anki APKG" },
-    "description": { "en": "Install the public Python wheel and generate your first Anki APKG.", "zh-CN": "安装公开 Python wheel 并生成第一个 Anki APKG。" }
+    "title": { "en": "Generate Anki flashcards with Python", "zh-CN": "用 Python 生成 Anki 卡片" },
+    "description": { "en": "Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.", "zh-CN": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。" }
   },
   {
     "source": "docs/python/api.md",

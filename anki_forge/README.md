@@ -56,6 +56,8 @@ Open the persistent `spanish.apkg` in Anki. It contains one Basic card in **Span
 ## Continue
 
 - [Complete quickstart](https://ankiforge.dev/docs/quickstart/)
+- [JSON to Anki with Rust](https://ankiforge.dev/docs/json-to-anki/#rust)
+- [AI-assisted Anki flashcards](https://ankiforge.dev/docs/ai-anki-cards/)
 - [Images and audio](https://ankiforge.dev/docs/media/)
 - [Custom note types](https://ankiforge.dev/docs/custom-notetypes/) and [template bundles](https://ankiforge.dev/docs/templates/)
 - [Image Occlusion](https://ankiforge.dev/docs/image-occlusion/)

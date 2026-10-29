@@ -1,4 +1,4 @@
-# 用 Node.js 生成 Anki APKG
+# 用 Node.js 生成 Anki 卡片
 
 使用 Node.js 22.13 或更高版本。在新的应用目录中运行：
 

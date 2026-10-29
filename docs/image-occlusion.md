@@ -1,9 +1,17 @@
 # Image Occlusion
 
+Generate Anki Image Occlusion cards programmatically: supply an image and
+rectangle coordinates, and Anki Forge builds a note with one card per mask,
+ready to import. Use it to produce diagram questions in batches without drawing
+masks in Anki's editor. It does not detect labels in the image; you provide the
+coordinates.
+
 Create a structured image-occlusion note from an owned image and rectangles.
 Each mask needs a stable key that continues to identify the same region through
 later versions. The note joins a project through the ordinary `add(key, note)`
-path.
+path. These examples use Rust; Python and Node.js provide the same builder in
+the [Python API](python/api.md#media-and-occlusion) and
+[Node API](node/api.md#media-and-image-occlusion).
 
 ## Run the example
 

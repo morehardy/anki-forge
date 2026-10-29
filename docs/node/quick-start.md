@@ -1,4 +1,4 @@
-# Generate an Anki APKG with Node.js
+# Generate Anki flashcards with Node.js
 
 Use Node.js 22.13 or later. In a new application directory:
 

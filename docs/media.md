@@ -1,5 +1,11 @@
 # Images and audio
 
+Package images and audio into generated Anki cards, such as vocabulary cards
+with pronunciation audio or diagram questions. Anki Forge copies the files you
+provide into the APKG; creating the audio or images, for example with
+text-to-speech, requires a separate tool. The examples use Rust; batch import
+below also shows the Python and Node.js calls.
+
 A `Media` value owns an immutable snapshot. Import files with `Media::file` or
 native bytes with an explicit MIME type via `Media::bytes`. After successful
 import, modifying or deleting the source file cannot change the asset. Clones

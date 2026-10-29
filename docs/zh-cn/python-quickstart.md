@@ -1,4 +1,4 @@
-# 用 Python 生成 Anki APKG
+# 用 Python 生成 Anki 卡片
 
 创建并激活虚拟环境，然后安装[公开 PyPI 包](https://pypi.org/project/ankiforge/)：
 

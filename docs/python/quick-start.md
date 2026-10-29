@@ -1,4 +1,4 @@
-# Generate an Anki APKG with Python
+# Generate Anki flashcards with Python
 
 Create and activate a virtual environment, then install the [public PyPI package](https://pypi.org/project/ankiforge/):
 

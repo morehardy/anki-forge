@@ -1,5 +1,10 @@
 # Update and distribute a publication
 
+Publish corrections or new cards for an Anki deck you have already distributed.
+Stable note IDs help Anki Forge and Anki recognize existing notes instead of
+treating them as new ones; Anki's import settings and newer local edits still
+affect what changes.
+
 Keep the project namespace and note/model/field/template keys stable. Build each
 new release from the previous **original distribution APKG**, which carries
 complete versioned identity evidence. Save that package with its source revision.

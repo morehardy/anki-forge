@@ -85,6 +85,11 @@ Anki Forge 是开源的 Anki APKG 生成库，以 Rust 为核心，提供 Rust�
 | Node / TypeScript | Node 22.13+ | [ankiforge 0.3.1](https://www.npmjs.com/package/ankiforge) | `npm install --include=optional ankiforge@0.3.1` | [Node](docs/node/quick-start.md) |
 | Python | CPython 3.11+ | [ankiforge 0.3.1](https://pypi.org/project/ankiforge/) | `python -m pip install ankiforge==0.3.1` | [Python](docs/python/quick-start.md) |
 
+常见任务：[CSV 转 Anki（Python）](https://ankiforge.dev/zh-cn/docs/csv-to-anki/) ·
+[JSON 转 Anki](https://ankiforge.dev/zh-cn/docs/json-to-anki/) ·
+[AI 辅助生成 Anki 卡片](https://ankiforge.dev/zh-cn/docs/ai-anki-cards/) ·
+[Anki Forge 与 genanki 比较](https://ankiforge.dev/zh-cn/docs/anki-forge-vs-genanki/)
+
 <!-- ai-quickstart:start -->
 ## 与 AI 编码助手一起使用
 
