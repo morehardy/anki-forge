@@ -179,7 +179,7 @@ const documents = [
     "route": "/docs/python-quickstart/",
     "name": "python-quickstart",
     "title": { "en": "Generate Anki flashcards with Python", "zh-CN": "用 Python 生成 Anki 卡片" },
-    "description": { "en": "Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.", "zh-CN": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。" }
+    "description": { "en": "Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.", "zh-CN": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。" }
   },
   {
     "source": "docs/python/api.md",

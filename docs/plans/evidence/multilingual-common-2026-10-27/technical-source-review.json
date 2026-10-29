@@ -3,7 +3,7 @@
   "rubricVersion": "anki-forge-language-quality-v1",
   "glossaryVersion": "anki-forge-technical-terms-v1",
   "reviewerType": "ai",
-  "reviewerRun": "/root/independent_technical_source_review/2026-10-29/task-descriptions-34",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-29/python-qa",
   "entries": {
     "home": {
       "en": {
@@ -13352,7 +13352,7 @@
       },
       "zh-CN": {
         "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
-        "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+        "targetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
         "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2",
         "inputFiles": [
           "anki_forge/examples/docs_workflow.rs",
@@ -13404,7 +13404,7 @@
         "technical": {
           "status": "reviewed",
           "reviewerType": "ai",
-          "reviewerRun": "/root/independent_technical_source_review/2026-10-29/task-descriptions-34",
+          "reviewerRun": "/root/independent_technical_source_review/2026-10-29/python-qa",
           "evidence": [
             "Prior full independent review retained at docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-64-topics-delta-3.json (SHA-256 d411eab3b5f987f679d3b846f69aec7ddfaf93d08c1ee6280dced8101c5ecfdc), entry python-quickstart/zh-CN/technical and its immutable source snapshot. Actual target longform/template source docs/zh-cn/python-quickstart.md is changed; the actual changes were read below. Prior source/target/dependency triple retained in technicalFinal34Review. Earlier UI implementation descriptions are historical; this final block supersedes them where the search component changed.",
             "Re-read complete updated English/Chinese Python quickstart. Only Continue adds CSV recipe and AI-assisted drafting links; those targets now exist and complete the advertised workflows. Original pinned0.3.1 install, CPython/wheel prerequisite, main.py, stable spanish/es:hola, persistent output and original JSON/media/update follow-ups are unchanged.",
@@ -13424,7 +13424,8 @@
             "Final closed rendered-model delta: actual unchanged python-quickstart/zh-CN content/model data remains reviewed. Root-authored normalized implementation fingerprint now captures unprojected initializer/function/import/export changes, with unsupported top-level execution rejected. See docs/plans/evidence/multilingual-common-2026-10-27/technical-rendered-model-34-closed-audit.json for actual5negative-test execution and author-scope disclosure. Source/target triples match the closed immutable candidate; original technical program facts remain unchanged. Exact input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-rendered-model-34-closed.json, SHA-256 33785a036a68592f9d74323080f0a0c50a4430ff068476b55292b0efb65274f0.",
             "Targeted stable-theme scope delta actually reviewed for python-quickstart/zh-CN: ThemeControl uses theme-${scope}-${locale}, Header explicitly passes header and Starlight ThemeSelect defaults docs. These distinct radio names retain cross-control synchronization in site.ts. The intermediate theme-${locale} candidate is not approved. Complete unchanged prose/program/model evidence reused by exact-byte comparison; only Header/ThemeControl changed. Actual script-level probe64checks passed; no browser/build/determinism test claim. Audit docs/plans/evidence/multilingual-common-2026-10-27/technical-stable-theme-scopes-34-audit.json; immutable input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-stable-theme-scopes-34.json, SHA-256 102ae86a3242300fb64c025245102831637560b6e2e32ca041c456d8dbe32622.",
             "Locale-data delta actually reviewed for python-quickstart/zh-CN by independent run /root/independent_technical_source_review/2026-10-28/locale-data-34 (did not author the change): metadata title “用 Python 生成 Anki APKG”, description “安装公开 Python wheel 并生成第一个 Anki APKG。” identical HEAD vs working tree; sidebar group “开发语言指南” with item label “用 Python 生成 Anki APKG” identical in model and Starlight config; 5 section-map ids including 3 zh-CN legacy aliases (安装→_top, 生成-apkg→export-a-deck, 继续完成实际任务→continue), alias anchors and language-switch data identical. Only representational inputs changed (site-model.mjs, messages.mjs, src/lib/ai-quickstart.mjs, docs/ai-quickstart.json, legacy-sections.json); projected review data identical, hash changes come from implementation bytes and locale-scoped legacy value. Two CONTENT_REVIEW_MODE=preview builds: /anki-forge/zh-cn/docs/python-quickstart/ byte-identical to the HEAD-input manifest (SHA-256 e5a21bb35402290b8bd61f9bac70a365194c582b6391ab5b31b4b0586dc35a69). Prior prose/program evidence reused by exact bytes. Audit docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-34-audit.json; probe docs/plans/evidence/multilingual-common-2026-10-27/technical-locale-data-probe.mjs (SHA-256 83148f67504ffdb56ce5f0b26d49448e85dc8f83d13a6a52e1b0f94104209060); input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-locale-data-34.json, SHA-256 4d3607950df598a2aa6eb3ff9e6f9fbf03ca11285e3250c1cf7b0b52b0b03105.",
-            "Task-descriptions delta actually reviewed for python-quickstart/zh-CN by independent run /root/independent_technical_source_review/2026-10-29/task-descriptions-34 (did not author 3cf5aed or 109c254): docs/zh-cn/python-quickstart.md:1 and website/site-model.mjs:181 retitle the page “用 Python 生成 Anki 卡片”; description “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。” matches en and the unchanged page (pip install ankiforge==0.3.1, short main.py exporting spanish.apkg). Shared docs chrome: sidebar items “用 Rust 生成 Anki 卡片”, “用 Node.js 生成 Anki 卡片”, “用 Python 生成 Anki 卡片” (were “用 Rust 生成 Anki APKG”, “用 Node.js 生成 Anki APKG”, “用 Python 生成 Anki APKG”) link to the unchanged quickstart routes; each names that page's task (install the public 0.3.1 package, write one Spanish card, export an APKG), and the Starlight options built by astro.config.mjs differ only in these three labels/zh-CN translations. Candidate triple reproduced from current bytes (d9f5354 bytes reproduce the prior triple); inputFiles unchanged; technicalDependencyHash unchanged. Built /anki-forge/zh-cn/docs/python-quickstart/ SHA-256 d29b83cf3f5398ccefb30669074a1706bf08a331ab71cc907374423384c9ac8b (identical in two HEAD preview builds); against the clean d9f5354 preview build (SHA-256 e5a21bb35402290b8bd61f9bac70a365194c582b6391ab5b31b4b0586dc35a69, equal to the locale-data release manifest) the only differences are the three sidebar labels, Starlight's sidebar-state hash, the page title (h1, <title>, og:title, JSON-LD name/headline) and the meta/og/JSON-LD description and the pagination link “用 Node.js 生成 Anki 卡片”; normalized HTML is byte-identical. All same-site content links and fragments on the site resolve. Prior prose/program evidence is reused by exact bytes for everything not quoted here. Audit docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json; probe docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-probe.mjs (SHA-256 53c030adbf3b0a682d0542425c4b7b0301c7092894cce1bfb2b34cdce887a0a8); input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json, SHA-256 293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae."
+            "Task-descriptions delta actually reviewed for python-quickstart/zh-CN by independent run /root/independent_technical_source_review/2026-10-29/task-descriptions-34 (did not author 3cf5aed or 109c254): docs/zh-cn/python-quickstart.md:1 and website/site-model.mjs:181 retitle the page “用 Python 生成 Anki 卡片”; description “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。” matches en and the unchanged page (pip install ankiforge==0.3.1, short main.py exporting spanish.apkg). Shared docs chrome: sidebar items “用 Rust 生成 Anki 卡片”, “用 Node.js 生成 Anki 卡片”, “用 Python 生成 Anki 卡片” (were “用 Rust 生成 Anki APKG”, “用 Node.js 生成 Anki APKG”, “用 Python 生成 Anki APKG”) link to the unchanged quickstart routes; each names that page's task (install the public 0.3.1 package, write one Spanish card, export an APKG), and the Starlight options built by astro.config.mjs differ only in these three labels/zh-CN translations. Candidate triple reproduced from current bytes (d9f5354 bytes reproduce the prior triple); inputFiles unchanged; technicalDependencyHash unchanged. Built /anki-forge/zh-cn/docs/python-quickstart/ SHA-256 d29b83cf3f5398ccefb30669074a1706bf08a331ab71cc907374423384c9ac8b (identical in two HEAD preview builds); against the clean d9f5354 preview build (SHA-256 e5a21bb35402290b8bd61f9bac70a365194c582b6391ab5b31b4b0586dc35a69, equal to the locale-data release manifest) the only differences are the three sidebar labels, Starlight's sidebar-state hash, the page title (h1, <title>, og:title, JSON-LD name/headline) and the meta/og/JSON-LD description and the pagination link “用 Node.js 生成 Anki 卡片”; normalized HTML is byte-identical. All same-site content links and fragments on the site resolve. Prior prose/program evidence is reused by exact bytes for everything not quoted here. Audit docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json; probe docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-probe.mjs (SHA-256 53c030adbf3b0a682d0542425c4b7b0301c7092894cce1bfb2b34cdce887a0a8); input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json, SHA-256 293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae.",
+            "Python Q&A description delta actually reviewed for python-quickstart/zh-CN by independent run /root/independent_technical_source_review/2026-10-29/python-qa (did not author the edit): website/site-model.mjs:182 changes only the zh-CN description, from “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。” to “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。”; the title “用 Python 生成 Anki 卡片”, the en metadata, route, sidebar and Starlight options, section mapping, search terms, the page source docs/zh-cn/python-quickstart.md and its program bindings/python/examples/quickstart.py are byte-identical to HEAD 86095ce. The program's only note is Note.basic('hola', 'hello'); at the 0.3.1 tag (480cfd0) Note.basic lowers to the stock normal note type “Basic” (fields Front/Back, one template “Card 1”: {{Front}} → {{FrontSide}}<hr id=answer>{{Back}}). Running the unchanged program with the published PyPI ankiforge 0.3.1 wheel wrote spanish.apkg whose collection holds one Basic note type (kind normal, original stock kind Basic), one note hola/hello and one card in deck Spanish, so “问答卡片” is accurate and matches the site's existing Basic = 问答 terminology (cards page “问答（Basic）卡片”). Candidate triple reproduced from current bytes (HEAD bytes reproduce the prior triple); only targetHash changes (5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e → 93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98); sourceHash, technicalDependencyHash and inputFiles unchanged. No build, search or browser run; the rendered description was not inspected. Prior prose/program evidence reused by exact bytes. Audit docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-audit.json (SHA-256 08dc7ec78750439641d5545b745d4248f327a99f2f4561fb3b1c8431c2ec7e5b); probe docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs (SHA-256 16dc7268f168eed3a6a901faf67f16f5ee6f0436ef35c55022187a652f192298); input snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json, SHA-256 293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae, with website/site-model.mjs now SHA-256 839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7."
           ],
           "openIssues": []
         },
@@ -13598,6 +13599,17 @@
           "priorInputs": {
             "sourceHash": "7f524b17352f880094d9da679d23a30872334c5aacb784658e3840b02230caad",
             "targetHash": "9ae6bd74d93fea1dde34082ca03dd0a36368a74fd11ae9c1028bcf613bfbaabb",
+            "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+          },
+          "openIssues": []
+        },
+        "technicalPythonQaReview": {
+          "reviewerRun": "/root/independent_technical_source_review/2026-10-29/python-qa",
+          "status": "reviewed",
+          "candidate": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+          "priorInputs": {
+            "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+            "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
             "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
           },
           "openIssues": []
@@ -16494,7 +16506,7 @@
     "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae",
     "scope": "Task-descriptions delta: 16 candidate inputs changed (site-model titles/descriptions, quickstart titles, opening paragraphs); 111 inputs byte-identical; 58 docs HTML pages differ from the d9f5354 build only by the reviewed text."
   },
-  "completedAt": "2026-10-29T13:32:13.373Z",
+  "completedAt": "2026-10-29T15:47:53.955Z",
   "closureAudit": {
     "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-closure-delta-2-audit.json",
     "sha256": "be7e6b27fb3651a3372f5f9a52df9a80d5bd8d7d7decb2214dd5eca82afb6dd3"
@@ -16531,5 +16543,9 @@
   "taskDescriptionsAudit": {
     "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
     "sha256": "a802efe2c1911942077ed3a98a23f29e6a8e70cd82351e0e2fab1d41767c8e5d"
+  },
+  "pythonQaAudit": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-audit.json",
+    "sha256": "08dc7ec78750439641d5545b745d4248f327a99f2f4561fb3b1c8431c2ec7e5b"
   }
 }

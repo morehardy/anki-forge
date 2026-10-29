@@ -30796,7 +30796,7 @@
       },
       "zh-CN": {
         "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
-        "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+        "targetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
         "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2",
         "inputFiles": [
           "anki_forge/examples/docs_workflow.rs",
@@ -31217,6 +31217,14 @@
               "span": "# 用 Python 生成 Anki 卡片",
               "judgement": "任务描述增量：Markdown 一级标题与站点标题一致，“用 Python 生成 Anki 卡片”自然。 另审：website/site-model.mjs:181（见 docs/plans/evidence/multilingual-common-2026-10-27/linguistic-task-descriptions-review.json）。",
               "reviewerRun": "/root/independent_linguistic_source_review/2026-10-29/task-descriptions"
+            },
+            {
+              "criterion": "python-qa/changed-description",
+              "file": "website/site-model.mjs",
+              "line": 182,
+              "span": "用简短的 Python 脚本生成 Anki 问答卡片",
+              "judgement": "Python 快速开始描述增量：只在“Anki”与“卡片”之间插入“问答”。“Anki 问答卡片”自然，与卡片页标题“生成 Anki 问答卡片与 Cloze 填空卡片”、卡片页“问答（Basic）卡片”和 CSV 指南“Basic 问答卡片”一致；本页唯一示例 Note.basic('hola', 'hello') 生成的正是问答卡片，描述准确，与标题“用 Python 生成 Anki 卡片”不冲突。作为搜索摘要清楚易懂。评分保持 5/5/5/5，无未关闭问题。见 docs/plans/evidence/multilingual-common-2026-10-27/linguistic-python-qa-review.json。",
+              "reviewerRun": "/root/independent_linguistic_source_review/2026-10-29/python-qa"
             }
           ],
           "openIssues": [],
@@ -31386,6 +31394,27 @@
                 "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-task-descriptions-review.json",
                 "sha256": "e6469cc63b2507a99bec1c7eaf5159ac1552dd84a66f23957c6f8afcb6f68918"
               }
+            },
+            {
+              "reviewerRun": "/root/independent_linguistic_source_review/2026-10-29/python-qa",
+              "priorEvidence": {
+                "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review-before-python-qa.json",
+                "sha256": "2469017f808b5fbc8cfa35ece6f5f9fb7f01ec5d18536cb523194ba586970d34"
+              },
+              "candidate": {
+                "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+                "sha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243"
+              },
+              "priorReviewedInput": {
+                "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+                "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+                "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+              },
+              "action": "Actual python-qa delta review: regenerated the candidate, reproduced all 68 prior values on the HEAD tree and all 68 candidate values on the working tree, isolated the single change (\"问答\" inserted into the zh-CN description at website/site-model.mjs:182), and judged the new description in page context against the title, H1, body, example code, language brief and every zh-CN use of 问答. Unchanged prose reused by exact-byte proof; score and open issues (none) retained.",
+              "evidence": {
+                "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-python-qa-review.json",
+                "sha256": "95a2b7e8b906b5592f3d87b0a1616ca3103a3e2cee2a6c11acb9c76448a8ef75"
+              }
             }
           ],
           "dependencyReview": {
@@ -31419,6 +31448,10 @@
           "taskDescriptionsReview": {
             "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-task-descriptions-review.json",
             "sha256": "e6469cc63b2507a99bec1c7eaf5159ac1552dd84a66f23957c6f8afcb6f68918"
+          },
+          "pythonQaReview": {
+            "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-python-qa-review.json",
+            "sha256": "95a2b7e8b906b5592f3d87b0a1616ca3103a3e2cee2a6c11acb9c76448a8ef75"
           }
         }
       }
@@ -40522,6 +40555,37 @@
       "unchangedInputFileCount": 111,
       "scope": "58 stale docs records (all docs topics x 2 locales). Read the 16 changed inputs with their diffs and full page context: new task-oriented intros and descriptions for cards, image-occlusion, media, templates and updates, and the quickstart retitles that also change every docs page's sidebar. Judged every changed passage and sidebar label in both languages. Unchanged prose reused by exact-byte proof. README additions read as supporting review. The 10 home/examples/blog/article records are unchanged and untouched.",
       "scoring": "Scores retained except image-occlusion/en register 4, media/en usability 4, media/zh-CN usability 4, templates/zh-CN syntax 4, updates/zh-CN syntax 4. 9 new minor issues (L016-L022); no issue resolved; L007-media relocated to line 86."
+    },
+    "pythonQaDelta": {
+      "reviewerRun": "/root/independent_linguistic_source_review/2026-10-29/python-qa",
+      "candidate": {
+        "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+        "sha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243"
+      },
+      "evidence": {
+        "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-python-qa-review.json",
+        "sha256": "95a2b7e8b906b5592f3d87b0a1616ca3103a3e2cee2a6c11acb9c76448a8ef75"
+      },
+      "prior68TopicEvidence": {
+        "path": "docs/plans/evidence/multilingual-common-2026-10-27/linguistic-source-review-before-python-qa.json",
+        "sha256": "2469017f808b5fbc8cfa35ece6f5f9fb7f01ec5d18536cb523194ba586970d34"
+      },
+      "changedFields": [
+        "targetHash"
+      ],
+      "changedRecords": 1,
+      "changedRecordIds": [
+        "python-quickstart/zh-CN"
+      ],
+      "unchangedRecordCount": 67,
+      "inputFilesUnchanged": true,
+      "technicalDependencyHashUnchanged": true,
+      "changedInputFiles": [
+        "website/site-model.mjs"
+      ],
+      "unchangedInputFileCount": 126,
+      "scope": "1 stale record (python-quickstart/zh-CN, targetHash only). Read the one-line diff of website/site-model.mjs:182 and judged the new zh-CN description (\"问答\" inserted before \"卡片\") in full page context and against the site-wide naming of Basic cards. Unchanged prose reused by exact-byte proof. The other 67 records and every technical axis are untouched.",
+      "scoring": "Score retained (5/5/5/5). No new, resolved or relocated issue."
     }
   },
   "sharedMessageReview": {

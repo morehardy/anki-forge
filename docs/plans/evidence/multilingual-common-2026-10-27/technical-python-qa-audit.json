@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 1,
+  "reviewerType": "ai",
+  "reviewerRun": "/root/independent_technical_source_review/2026-10-29/python-qa",
+  "reviewedAt": "2026-10-29T15:47:53.939Z",
+  "candidate": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json",
+    "sha256": "019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243"
+  },
+  "priorReview": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-before-python-qa.json",
+    "sha256": "3007f99bfec220d0a5f54cf9fbca80a8717252a5762f18a221e6e20f03486011"
+  },
+  "priorSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json",
+    "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae",
+    "scope": "Task-descriptions source set at 109c254 (127 candidate inputs, 17 supporting files); every candidate input and supporting file equals its HEAD 86095ce blob, the git-archive HEAD extraction and its content-addressed copy."
+  },
+  "scope": "Targeted technical delta review of the uncommitted website/site-model.mjs edit (HEAD 86095ce..working tree) for the single stale record python-quickstart/zh-CN (targetHash only): the new zh-CN description “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。” checked against docs/zh-cn/python-quickstart.md, its embedded program bindings/python/examples/quickstart.py, the ankiforge 0.3.1 release-tag sources and a run of that program with the published PyPI wheel, plus proof that no other page metadata, task, program, link, sidebar or fingerprint changed. The other 67 records are unchanged and not re-reviewed.",
+  "authorshipDisclosure": "This reviewer (run /root/independent_technical_source_review/2026-10-29/python-qa) did not author the website/site-model.mjs description edit (written by the coordinator after the fixed zh-CN search query zh-CN-core-03 stopped returning python-quickstart in its top three), the candidate docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json, the before copies, the website/post-build-reviews.config.json repointing, or any earlier evidence. This reviewer wrote only the probe docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs, this audit and the update of docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json, and changed no product, website or source file; it ran no build, no npm script and not record-content-review.mjs. Its temporary files (a git-archive HEAD extraction and the program run) lived under /private/tmp and were removed. This record is therefore an independent technical review of the python-quickstart/zh-CN record.",
+  "evidence": [
+    "Inputs: HEAD is 86095ce83a590fa3c027810a5fe64b4e487d275e. Tracked working-tree changes against HEAD are exactly website/site-model.mjs and website/post-build-reviews.config.json; every untracked file is under docs/plans/evidence/. All 127 candidate inputs equal their entry in the prior immutable snapshot docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json (SHA-256 293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae), their HEAD blob, the git-archive HEAD extraction and their content-addressed copy, except website/site-model.mjs (04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde → 839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7); the 17 supporting files of that snapshot (fingerprint, link and section implementation, astro.config.mjs, 0.3.1 API sources, READMEs) are unchanged, so 05dbba1 and 86095ce touched no review input. website/post-build-reviews.config.json is not a candidate input and is not read by content-review-inputs.mjs; its diff only repoints the four post-build taskReview/machineReview paths from multilingual-locale-data-2026-10-28 to multilingual-task-descriptions-2026-10-29 (outside this record).",
+    "Edit and fingerprints: site-model.mjs differs from HEAD only on line 182, and the whole-file difference is the python-quickstart zh-CN description “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。” → “从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。”, i.e. 问答 inserted before 卡片. Regenerating the candidate with node website/scripts/content-review-candidates.mjs to stdout gives SHA-256 019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243, identical to the file under review. HEAD bytes reproduce all 68 triples of the before copy docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review-before-python-qa.json (SHA-256 3007f99bfec220d0a5f54cf9fbca80a8717252a5762f18a221e6e20f03486011, equal to the committed technical-source-review.json and to the technical evidence digest of every website/content-reviews.json record); current bytes reproduce all 68 candidate triples and inputFiles. Exactly python-quickstart/zh-CN is stale and only its targetHash moves (5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e → 93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98); sourceHash 4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6, technicalDependencyHash 9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2 and the 45 inputFiles are unchanged.",
+    "Model, metadata and navigation: in the loaded site models only python-quickstart description.zh-CN and its metadata.zh-CN.description mirror differ. The en description (“Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki.”), both titles (“Generate Anki flashcards with Python”, “用 Python 生成 Anki 卡片”), route /zh-cn/docs/python-quickstart/, sources, order, type, capabilities, group “开发语言指南”, docGroups, navigation, footerNavigation, nextTasks, homepageModules and every page route are identical; documentationEntries differ only in entry 46 (python-quickstart/zh-CN) description; the Starlight options built by the actual astro.config.mjs (sidebar, labels, translations, locales) are identical. website/search-terms.json and website/search-concepts.json are unchanged, so the page's 12 zh-CN search terms are the same.",
+    "Page task and links: docs/zh-cn/python-quickstart.md, docs/python/quick-start.md and bindings/python/examples/quickstart.py are byte-identical to HEAD, and both pages embed exactly that program between their <!-- source: bindings/python/examples/quickstart.py --> markers. The zh-CN page installs the 公开 PyPI 包 (https://pypi.org/project/ankiforge/) with python -m pip install ankiforge==0.3.1, saves a five-line main.py whose only note is project.add('es:hola', Note.basic('hola', 'hello')), builds BuildOptions.to('spanish.apkg'), runs python main.py and opens the persistent spanish.apkg in Anki (deck Spanish, hola → hello). Headings 用 Python 生成 Anki 卡片 / 导出牌组 / 继续学习 are unchanged; the 15 links rewrite identically with HEAD and current code: the PyPI URL and 14 same-locale /anki-forge/zh-cn/docs/ routes (compatibility, csv-to-anki, ai-anki-cards, json-to-anki#python, media, python-api#media-and-occlusion, custom-notetypes, templates, image-occlusion, updates, python-api, python-diagnostics, genanki-migration, development), each resolving to a zh-CN page.",
+    "API truth at the 0.3.1 release tag 480cfd0e4947f88aef339740d0a27b3210e2b830 (python-v0.3.1 = anki-forge-v0.3.1 = npm-v0.3.1): bindings/python/src/ankiforge/note.py `def basic(front: str | Content, back: str | Content) -> Note:` returns `Note(_native.NativeNote.basic(_content(front)._handle, _content(back)._handle))`; anki_forge/src/note/mod.rs “Creates a Basic note” builds `crate::schema::stock::basic()` with fields front and back; anki_forge/src/schema/stock.rs `MODEL.get_or_init(|| stock(\"basic\", &[\"front\", \"back\"], None))` (no cloze field); anki_forge/src/authoring_core/stock.rs lowers basic to kind \"normal\", name \"Basic\", fields Front and Back and exactly one template \"Card 1\" with question {{Front}} and answer {{FrontSide}}<hr id=answer>{{Back}}, which is Anki's stock Basic question-and-answer note type. note.py and quickstart.py are unchanged since the tag, and the installed note.py equals the tag.",
+    "Runtime with the published package (not the repository build): the page's program, copied unchanged as main.py, was run with python -I in a fresh /private/tmp directory using the ankiforge 0.3.1 wheel installed by the locale-data acceptance in /private/tmp/anki-forge-locale-data-execution/python/venv (CPython 3.14.5; wheel https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl, SHA-256 632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1 per docs/plans/evidence/multilingual-locale-data-2026-10-28/executions/basic/python/pip-report.json; the 16 installed package files match the wheel RECORD). It printed the absolute path of the persistent spanish.apkg. Decoding the APKG's collection.anki21b (zstd → SQLite) shows one note type named Basic with protobuf kind 0 (normal, not Cloze) and original stock kind 1 (Basic), fields Front and Back, one template Card 1 with question {{Front}} and answer {{FrontSide}}\\n\\n<hr id=answer>\\n\\n{{Back}}; one note with fields hola and hello; one card (ord 0) in deck Spanish; ankiforge-identity.json maps es:hola to model basic (kind normal, one template card). The program therefore generates an Anki Basic question-and-answer card, so “生成 Anki 问答卡片” is accurate.",
+    "Terminology and remaining claims: the site's zh-CN sources already use 问答 for Basic: the cards page title “生成 Anki 问答卡片与 Cloze 填空卡片” and description “问答（Basic）卡片”, docs/zh-cn/csv-to-anki.md “生成 Basic 问答卡片”, docs/zh-cn/index.md “创建问答和填空卡片” and the catalog key card.basic “基础问答”. The new description matches them and what the page builds, and adds no API, package, version or capability claim. Its other clauses (从 PyPI 安装 ankiforge, 简短的 Python 脚本, 导出可导入 Anki 的 APKG 牌组) are unchanged from the task-descriptions approval and still hold. Two non-blocking observations, not issues: the en description keeps the generic “flashcards”, so zh-CN is now narrower than en, but both are true for this page (locale parity belongs to the linguistic reviewer); and the page body names the card type only through Note.basic and “hola → hello”, which supports the description.",
+    "Context, not a reviewed claim: the brief states the edit targets the fixed query zh-CN-core-03 “Python 问答 生成牌组” (expected page python-quickstart); docs/plans/evidence/multilingual-task-descriptions-2026-10-29/engineering/prefix/search-results.json records it failing with top three csv-to-anki, home and cards. This reviewer ran no search and makes no ranking claim; the technical judgment is only that the added word is true for the page.",
+    "Not verified by this reviewer: no build (preview or release), so the rendered meta/og/JSON-LD description, the Markdown export, zh-cn/llms.txt, generated/search-zh-cn.json and the Pagefind index were not inspected; no search ranking (check:search), browser run, root-origin artifact, release manifest or deployment; the evidence files that website/post-build-reviews.config.json now points to were not reviewed; linguistic quality stays with its independent reviewer.",
+    "This reviewer (run /root/independent_technical_source_review/2026-10-29/python-qa) did not author the website/site-model.mjs description edit (written by the coordinator after the fixed zh-CN search query zh-CN-core-03 stopped returning python-quickstart in its top three), the candidate docs/plans/evidence/multilingual-common-2026-10-27/source-review-python-qa-34.json, the before copies, the website/post-build-reviews.config.json repointing, or any earlier evidence. This reviewer wrote only the probe docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs, this audit and the update of docs/plans/evidence/multilingual-common-2026-10-27/technical-source-review.json, and changed no product, website or source file; it ran no build, no npm script and not record-content-review.mjs. Its temporary files (a git-archive HEAD extraction and the program run) lived under /private/tmp and were removed. This record is therefore an independent technical review of the python-quickstart/zh-CN record."
+  ],
+  "verification": {
+    "executed": true,
+    "environment": "v24.19.0 on darwin; git archive HEAD (86095ce) extracted to /private/tmp/anki-forge-python-qa-review/head with website/node_modules symlinked to the checkout's for plain module resolution (nothing built); published ankiforge 0.3.1 wheel in /private/tmp/anki-forge-locale-data-execution/python/venv (CPython 3.14.5); the program ran in a disposable /private/tmp directory; the extraction and run directories were removed; no build, npm script, browser, search or deployment.",
+    "checks": 1071,
+    "passed": true,
+    "script": {
+      "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs",
+      "sha256": "16dc7268f168eed3a6a901faf67f16f5ee6f0436ef35c55022187a652f192298"
+    },
+    "command": "node docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs /private/tmp/anki-forge-python-qa-review/head --python /private/tmp/anki-forge-locale-data-execution/python/venv/bin/python",
+    "probeResults": {
+      "inputs": {
+        "head": "86095ce83a590fa3c027810a5fe64b4e487d275e",
+        "trackedChanges": [
+          "website/post-build-reviews.config.json",
+          "website/site-model.mjs"
+        ],
+        "untrackedEvidence": 21,
+        "candidateInputs": 127,
+        "changed": [
+          {
+            "path": "website/site-model.mjs",
+            "previousSha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+            "currentSha256": "839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7"
+          }
+        ],
+        "unchanged": 126,
+        "supportingFiles": 17,
+        "supportingChangedSinceSnapshot": [],
+        "postBuildConfig": [
+          {
+            "key": "root.taskReview",
+            "from": "docs/plans/evidence/multilingual-locale-data-2026-10-28/usage-tasks-root.json",
+            "to": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/usage-tasks-root.json"
+          },
+          {
+            "key": "root.machineReview",
+            "from": "docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-read-root.json",
+            "to": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/machine-read-root.json"
+          },
+          {
+            "key": "prefix.taskReview",
+            "from": "docs/plans/evidence/multilingual-locale-data-2026-10-28/usage-tasks-prefix.json",
+            "to": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/usage-tasks-prefix.json"
+          },
+          {
+            "key": "prefix.machineReview",
+            "from": "docs/plans/evidence/multilingual-locale-data-2026-10-28/machine-read-prefix.json",
+            "to": "docs/plans/evidence/multilingual-task-descriptions-2026-10-29/machine-read-prefix.json"
+          }
+        ],
+        "siteModelChangedLines": [
+          182
+        ]
+      },
+      "fingerprints": {
+        "records": 68,
+        "stale": [
+          "python-quickstart/zh-CN"
+        ],
+        "changed": {
+          "sourceHash": 0,
+          "targetHash": 1,
+          "technicalDependencyHash": 0
+        },
+        "prior": {
+          "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+          "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+          "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+        },
+        "current": {
+          "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+          "targetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
+          "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+        }
+      },
+      "model": {
+        "changedPages": {
+          "python-quickstart": [
+            "description.zh-CN",
+            "metadata.zh-CN.description"
+          ]
+        },
+        "previous": {
+          "zh-CN": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。"
+        },
+        "current": {
+          "zh-CN": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。",
+          "en": "Install ankiforge from PyPI, generate Anki flashcards with a short Python script, and export an APKG deck you can import into Anki."
+        },
+        "title": {
+          "en": "Generate Anki flashcards with Python",
+          "zh-CN": "用 Python 生成 Anki 卡片"
+        },
+        "route": "/zh-cn/docs/python-quickstart/",
+        "group": "开发语言指南",
+        "documentationEntryIndex": 46,
+        "starlightOptionsIdentical": true
+      },
+      "sources": {
+        "zhHeadings": [
+          "# 用 Python 生成 Anki 卡片",
+          "## 导出牌组",
+          "## 继续学习"
+        ],
+        "programLines": 5,
+        "noteConstructors": [
+          "Note.basic"
+        ],
+        "links": [
+          {
+            "text": "公开 PyPI 包",
+            "href": "https://pypi.org/project/ankiforge/"
+          },
+          {
+            "text": "已验证环境",
+            "href": "/anki-forge/zh-cn/docs/compatibility/"
+          },
+          {
+            "text": "CSV 转 Anki",
+            "href": "/anki-forge/zh-cn/docs/csv-to-anki/"
+          },
+          {
+            "text": "AI 辅助制卡",
+            "href": "/anki-forge/zh-cn/docs/ai-anki-cards/"
+          },
+          {
+            "text": "JSON 到 Anki",
+            "href": "/anki-forge/zh-cn/docs/json-to-anki/#python"
+          },
+          {
+            "text": "图片与音频",
+            "href": "/anki-forge/zh-cn/docs/media/"
+          },
+          {
+            "text": "Python 媒体 API",
+            "href": "/anki-forge/zh-cn/docs/python-api/#media-and-occlusion"
+          },
+          {
+            "text": "自定义笔记类型",
+            "href": "/anki-forge/zh-cn/docs/custom-notetypes/"
+          },
+          {
+            "text": "模板包",
+            "href": "/anki-forge/zh-cn/docs/templates/"
+          },
+          {
+            "text": "图片遮挡",
+            "href": "/anki-forge/zh-cn/docs/image-occlusion/"
+          },
+          {
+            "text": "比较与更新",
+            "href": "/anki-forge/zh-cn/docs/updates/"
+          },
+          {
+            "text": "Python API",
+            "href": "/anki-forge/zh-cn/docs/python-api/"
+          },
+          {
+            "text": "诊断",
+            "href": "/anki-forge/zh-cn/docs/python-diagnostics/"
+          },
+          {
+            "text": "从 genanki 迁移",
+            "href": "/anki-forge/zh-cn/docs/genanki-migration/"
+          },
+          {
+            "text": "源码构建",
+            "href": "/anki-forge/zh-cn/docs/development/"
+          }
+        ],
+        "searchTermsUnchanged": true,
+        "searchTerms": [
+          "Python 快速开始",
+          "Python 记忆卡片生成",
+          "Python Anki 牌组脚本",
+          "pip install ankiforge",
+          "python -m venv",
+          "激活虚拟环境",
+          "Windows Activate.ps1",
+          "CPython 平台 wheel",
+          "main.py",
+          "python main.py",
+          "首次 Python 导出 APKG",
+          "from ankiforge import"
+        ]
+      },
+      "apiSources": {
+        "tag": "480cfd0e4947f88aef339740d0a27b3210e2b830",
+        "files": {
+          "bindings/python/src/ankiforge/note.py": 2,
+          "anki_forge/src/note/mod.rs": 5,
+          "anki_forge/src/schema/stock.rs": 1,
+          "anki_forge/src/authoring_core/stock.rs": 8
+        }
+      },
+      "runtime": {
+        "python": "3.14.5",
+        "ankiforge": "0.3.1",
+        "printed": "spanish.apkg (absolute path in the scratch directory)",
+        "apkgBytes": 57322,
+        "inspected": {
+          "cards": [
+            {
+              "deck": "Spanish",
+              "ord": 0
+            }
+          ],
+          "identityModels": {
+            "basic": {
+              "kind": "normal",
+              "templates": [
+                "card"
+              ]
+            }
+          },
+          "identityNotes": {
+            "es:hola": {
+              "cards": {
+                "template:card": 0
+              },
+              "model": "basic"
+            }
+          },
+          "members": [
+            "meta",
+            "collection.anki21b",
+            "ankiforge-identity.json",
+            "collection.anki2",
+            "media"
+          ],
+          "notes": [
+            {
+              "fields": [
+                "hola",
+                "hello"
+              ],
+              "tags": ""
+            }
+          ],
+          "notetypes": [
+            {
+              "fields": [
+                "Front",
+                "Back"
+              ],
+              "kind": 0,
+              "name": "Basic",
+              "originalStockKind": 1,
+              "templates": [
+                {
+                  "answer": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}",
+                  "name": "Card 1",
+                  "question": "{{Front}}"
+                }
+              ]
+            }
+          ]
+        },
+        "pythonRecordFiles": 16,
+        "wheel": {
+          "url": "https://files.pythonhosted.org/packages/27/4e/b507bd4f13c3e1ae2e7e843a8274fa3a143fd023b71e0c8b75188ff688c6/ankiforge-0.3.1-cp311-abi3-macosx_11_0_arm64.whl",
+          "sha256": "632c2dc0da33234ad0d9615092be9e218389077489723a0c00b90099c62dd5c1"
+        }
+      }
+    },
+    "builds": "none (not authorized for this review)",
+    "tests": [
+      {
+        "command": "node website/scripts/content-review-candidates.mjs (stdout only)",
+        "passed": true,
+        "detail": "SHA-256 019c3aa6f68418075b48da8bde9e4bb94597dfe4b97738fd6951664ae024f243, byte-identical to the candidate"
+      },
+      {
+        "command": "python -I main.py (bindings/python/examples/quickstart.py with the published ankiforge 0.3.1 wheel)",
+        "passed": true,
+        "detail": "one Basic note type (normal; Front/Back; template Card 1), one note hola/hello, one card in deck Spanish"
+      },
+      {
+        "command": "node docs/plans/evidence/multilingual-common-2026-10-27/technical-python-qa-probe.mjs",
+        "checks": 1071,
+        "passed": true
+      }
+    ]
+  },
+  "changedPriorFiles": [
+    {
+      "path": "website/site-model.mjs",
+      "role": "candidate-input",
+      "previousSha256": "04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde",
+      "currentSha256": "839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7"
+    }
+  ],
+  "nonInputChanges": [
+    {
+      "path": "website/post-build-reviews.config.json",
+      "role": "post-build evidence configuration; not a candidate input and not read by the review fingerprint",
+      "previousSha256": "456bbd546daab65d26dd023c0dc0b94249c8e9df6e274e9beb256a3884180d82",
+      "currentSha256": "137c896e28a09dfa853cbbf4524ef9cfe55d2d76cf89840002ae8b99fa87ba1e",
+      "note": "Repoints root/prefix taskReview and machineReview from multilingual-locale-data-2026-10-28 to multilingual-task-descriptions-2026-10-29; not reviewed here."
+    }
+  ],
+  "inputSnapshot": {
+    "path": "docs/plans/evidence/multilingual-common-2026-10-27/technical-source-input-snapshot-task-descriptions-34.json",
+    "sha256": "293e82dc61967d571e53884f5a0778c6c6c039a18a3ea47865092f8736a97cae",
+    "scope": "No new snapshot written: 126 of the 127 candidate inputs and all 17 supporting files equal this snapshot and HEAD 86095ce; the only changed input is website/site-model.mjs, pinned by changedPriorFiles (previous bytes at technical-input-snapshot/04d952f6f1201676addb125262a5f97304a5ea83c189bf8661a858571a44bfde; current working-tree bytes SHA-256 839dd854739b2155758f40392a04f7825f571e7cc3785ac55d26228d49e001e7)."
+  },
+  "priorIssues": [
+    {
+      "from": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
+      "scope": "docs/python/api.md:23 and docs/zh-cn/python-api.md:23 (NoteType.from_bundle limits spelling)",
+      "severity": "minor",
+      "status": "still applicable (both files unchanged since HEAD); not linked from or affecting this record"
+    },
+    {
+      "from": "docs/plans/evidence/multilingual-common-2026-10-27/technical-task-descriptions-34-audit.json",
+      "scope": "local build environment: website/public/generated/cell-diagram.png in the main checkout",
+      "severity": "minor",
+      "status": "still applicable (file still present, dated 2026-09-28); no record affected"
+    }
+  ],
+  "openIssues": [],
+  "unchangedRecords": [
+    "home/en",
+    "home/zh-CN",
+    "examples/en",
+    "examples/zh-CN",
+    "blog/en",
+    "blog/zh-CN",
+    "docs/en",
+    "docs/zh-CN",
+    "languages/en",
+    "languages/zh-CN",
+    "quickstart/en",
+    "quickstart/zh-CN",
+    "json-to-anki/en",
+    "json-to-anki/zh-CN",
+    "csv-to-anki/en",
+    "csv-to-anki/zh-CN",
+    "ai-anki-cards/en",
+    "ai-anki-cards/zh-CN",
+    "anki-forge-vs-genanki/en",
+    "anki-forge-vs-genanki/zh-CN",
+    "development/en",
+    "development/zh-CN",
+    "rust-guide/en",
+    "rust-guide/zh-CN",
+    "templates/en",
+    "templates/zh-CN",
+    "api/en",
+    "api/zh-CN",
+    "installation/en",
+    "installation/zh-CN",
+    "concepts/en",
+    "concepts/zh-CN",
+    "cards/en",
+    "cards/zh-CN",
+    "custom-notetypes/en",
+    "custom-notetypes/zh-CN",
+    "media/en",
+    "media/zh-CN",
+    "image-occlusion/en",
+    "image-occlusion/zh-CN",
+    "updates/en",
+    "updates/zh-CN",
+    "build-guarantees/en",
+    "build-guarantees/zh-CN",
+    "troubleshooting/en",
+    "troubleshooting/zh-CN",
+    "compatibility/en",
+    "compatibility/zh-CN",
+    "rust-api/en",
+    "rust-api/zh-CN",
+    "node-quickstart/en",
+    "node-quickstart/zh-CN",
+    "node-api/en",
+    "node-api/zh-CN",
+    "python-quickstart/en",
+    "python-api/en",
+    "python-api/zh-CN",
+    "python-diagnostics/en",
+    "python-diagnostics/zh-CN",
+    "python-migration/en",
+    "python-migration/zh-CN",
+    "genanki-migration/en",
+    "genanki-migration/zh-CN",
+    "blog:your-first-anki-deck/en",
+    "blog:your-first-anki-deck/zh-CN",
+    "blog:stable-ids-and-deck-updates/en",
+    "blog:stable-ids-and-deck-updates/zh-CN"
+  ],
+  "entries": [
+    {
+      "pageId": "python-quickstart",
+      "locale": "zh-CN",
+      "status": "reviewed",
+      "priorInputs": {
+        "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+        "targetHash": "5ab0772506e89b80155b9efd3ab4281af4e255807a591ced45b6e6274aeefa1e",
+        "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2"
+      },
+      "sourceHash": "4f0fd52621b8128ff968dc9be4cbf0fbb43706eac5f0e8a0282f2717918706a6",
+      "targetHash": "93f0d9c4e82e9861db7078d819f7851621c4286e03b93206e2ee38b6ba8c0a98",
+      "technicalDependencyHash": "9bca7b82702ed59b70aa1f4960caf5a9a2dbdef382645acf21d57abadaaf76a2",
+      "delta": "zh-CN page description only (问答 inserted before 卡片)",
+      "metadata": {
+        "previous": {
+          "title": "用 Python 生成 Anki 卡片",
+          "description": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 卡片，并导出可导入 Anki 的 APKG 牌组。"
+        },
+        "current": {
+          "title": "用 Python 生成 Anki 卡片",
+          "description": "从 PyPI 安装 ankiforge，用简短的 Python 脚本生成 Anki 问答卡片，并导出可导入 Anki 的 APKG 牌组。"
+        }
+      },
+      "inputFilesUnchanged": true,
+      "programFacts": {
+        "constructor": "Note.basic",
+        "noteType": "Basic",
+        "kind": "normal",
+        "fields": [
+          "Front",
+          "Back"
+        ],
+        "templates": [
+          "Card 1"
+        ],
+        "notes": 1,
+        "cards": 1,
+        "deck": "Spanish"
+      },
+      "builtPage": {
+        "route": "/anki-forge/zh-cn/docs/python-quickstart/",
+        "built": false,
+        "note": "No build was run by this reviewer; the rendered description was not inspected."
+      },
+      "verdict": "approved: “生成 Anki 问答卡片” is technically accurate for the page and the published ankiforge 0.3.1 package; nothing else about the page changed.",
+      "openIssues": []
+    }
+  ]
+}
