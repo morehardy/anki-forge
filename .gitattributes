@@ -20,3 +20,6 @@ benchmarks/results/20260907-inspection-parallel-hash/implementation.md -whitespa
 benchmarks/results/**/*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve the sealed generated table, including its recorded final blank line.
 benchmarks/results/20261008-rss-speed-exploration/tables.md -whitespace
+
+# Captured build and check logs in plan evidence keep the tools' exact output.
+docs/plans/evidence/**/*.log -whitespace
